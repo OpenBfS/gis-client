@@ -1,0 +1,37 @@
+@import "../view/Theme.scss"
+@import "../form/field/SearchCombo.scss"
+@import "../grid/MetadataSearch.scss"
+
+.x-title-icon-navigation {
+    font-family: FontAwesome;
+    color: #fff;
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.x-tab-icon-el-navigation {
+    font-family: FontAwesome;
+    color: #acacac;
+
+    .x-tab-over & {
+        color: #c4c4c4;
+    }
+
+    .x-tab-active & {
+        color: #fff;
+    }
+}
+
+.x-panel-header-title-navigation > .x-title-text-navigation:after {
+    top: 30px;
+    right: -24px;
+}
+
+.ol-scale-line {
+    bottom: 5px;
+    left: 50px;
+    background-color: $button-default-background-color;
+}
+.ol-scale-line.koala-scaline-adjusted {
+    left: 405px;
+}

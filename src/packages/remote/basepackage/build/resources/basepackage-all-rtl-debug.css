@@ -1,0 +1,52 @@
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/component/Map.scss:1 */
+div.feature-hover-popup {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 3px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    text-align: center;
+    color: #333;
+}
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/Header.scss:1 */
+.basepackage-header {
+    background-color: #fff;
+}
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LegendTree.scss:1 */
+.base-legend-panel {
+    bottom: 0 !important;
+    top: auto !important;
+    right: 0 !important;
+}
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LegendTree.scss:7 */
+.base-legend {
+    margin: 3px 0 0 0;
+    border: 1px solid transparent;
+    border-radius: 6px;
+}
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:1 */
+.base-map-tools {
+    right: 0 !important;
+    left: auto !important;
+    background-color: transparent;
+}
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:7 */
+.base-overview-map {
+    top: auto !important;
+    bottom: 0 !important;
+    background-color: white;
+}
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:13 */
+.base-overview-map-button {
+    top: auto !important;
+    bottom: 5px !important;
+    left: 5px !important;
+}
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:19 */
+.ol-scale-line {
+    bottom: 5px;
+    left: 50px;
+}
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:23 */
+.ol-scale-line.base-scaline-adjusted {
+    left: 405px;
+}

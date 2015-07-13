@@ -1,0 +1,40 @@
+{
+  "name": "basepackage",
+  "format": "1",
+  "version": "1.0.0.001",
+  "compatVersion": "1.0.0",
+  "creator": "GeoExt Contributors",
+  "summary": "Short summary",
+  "detailedDescription": "Long description of package",
+  "type": "code",
+  "requires": [
+    "GeoExt"
+  ],
+  "signatures": [
+    {
+      "name": "GeoExt Contributors",
+      "uuid": "7c375642-1f02-4b18-8988-cfbd4db49a9c",
+      "created": "2015-07-10T13:00:29Z",
+      "algorithm": "SHA1withRSA",
+      "nonce": "/vhyRqCNsmo\u003d",
+      "signature": "RZDNBVXLOTKexbOPqlSuL0gAVuxOcYyZeucSrERrG0fuNgNWm3kwuwSJlHX8K01tMtJOrIyjnSykEmkAjy2SyVtU/FnDRrTuEQWhep+kzun8w+PpZKRRqp0wcNph6RRWNLbZPs/4fS3Ea5Xt2aXtXujX+t0EdUQeuLbw+wNhEmLoJNmoy9b4Co+2IMEdd4wq0n1QAf3vFbEKJR7IK4/E1JfB/AO7NDekrLqRYgImdqNhyO8QtZI4/s2HktQVljVTAhbhNIsOkkI2e1DXKXfbkyWAfJTDpRfa3bvmFMIpuSKlEVG6O2MXcWpmWRygN+e6j3ALOLnakIHdIrsGjYhhvA\u003d\u003d"
+    }
+  ],
+  "slicer": {
+    "js": [
+      {
+        "path": "${package.dir}/sass/example/custom.js",
+        "isWidgetManifest": true
+      }
+    ]
+  },
+  "sass": {
+    "namespace": "Basepackage",
+    "etc": "sass/etc/all.scss",
+    "var": "sass/var",
+    "src": "sass/src"
+  },
+  "output": "${package.dir}/build",
+  "framework": "ext",
+  "toolkit": "classic"
+}
