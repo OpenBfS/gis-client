@@ -23,7 +23,7 @@ Ext.define('Koala.store.SpatialSearch', {
     },
 
     proxy : {
-        url : 'http://10.133.7.63/geoserver/BFS/ows',
+        url : 'http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows',
         method : 'GET',
         type : 'ajax',
         extraParams : {

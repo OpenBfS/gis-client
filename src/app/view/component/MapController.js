@@ -16,7 +16,7 @@ Ext.define('Koala.view.component.MapController', {
         var me = this;
         if(olFeat.get('layer').get('name') === 'Kartodiagramm') {
             me.openBarChartWindow(olFeat);
-        } else if(olFeat.get('layer').get('name') === 'Messtationen'){
+        } else if(olFeat.get('layer').get('name') === 'Messstationen'){
             me.openTimeseriesWindow(olFeat);
         } else {
             me.openGetFeatureInfoWindow(olFeat);

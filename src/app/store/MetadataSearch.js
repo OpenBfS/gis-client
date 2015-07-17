@@ -13,7 +13,7 @@ Ext.define('Koala.store.MetadataSearch', {
 
     proxy: {
         type: 'ajax',
-        url: 'http://10.133.7.63/geonetwork/srv/ger/csw?',
+        url: 'http://bfs-koala.intranet.terrestris.de/geonetwork/srv/ger/csw?',
         startParam: 'from',
         limitParam: 'to',
         pageParam: '', // Hack to satisfy GNos: empty string > do not send it

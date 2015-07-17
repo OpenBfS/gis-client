@@ -15,6 +15,7 @@ Ext.define('Koala.view.main.Main', {
 
         'Basepackage.view.panel.Header',
         'Basepackage.view.panel.MapContainer',
+        'Basepackage.util.Animate',
 
         'Koala.view.chart.TimeSeries',
         'Koala.view.main.MainController',
@@ -43,62 +44,75 @@ Ext.define('Koala.view.main.Main', {
         }
     },
 
-    items: [
-        {
-            xtype: 'base-panel-mapcontainer',
-            title: 'K-MapPanel',
-            region: 'center',
-            // we use our project specific map component
-            mapComponentConfig: {
-                xtype: 'k-component-map'
-            },
-            // define menu items
-            menuConfig: {
-                items: [
-                    {
-                        title: 'Teilen',
-                        html: 'Panel content!'
-                    },
-                    {
-                        xtype: 'base-form-print',
-                        url: 'http://10.133.7.63/print-servlet-3.3-SNAPSHOT/print/'
-                    },
-                    {
-                        title: 'Werkzeuge',
-                        items: [{
-                            xtype: 'base-button-addwms'
-                        },{
-                            xtype: 'button',
-                            text: 'Kartendruck',
-                            handler: function(){
-                                Ext.create('Koala.view.window.Print').show();
-                            }
-                        }]
-                    },
-                    {
-                        xtype: 'k-panel-themetree',
-                        title: 'Auswahl',
-                        tools:[{
-                            type:'collapse',
-                            bind: {tooltip: 'LayerSet wechseln'},
-                            handler: 'toggleLayerSetView'
-                        }]
+    items: [{
+        xtype: 'base-panel-mapcontainer',
+        title: 'K-MapPanel',
+        region: 'center',
+        // we use our project specific map component
+        mapComponentConfig: {
+            xtype: 'k-component-map'
+        },
+        // define menu items
+        menuConfig: {
+            dockedItems: [{
+                xtype: 'buttongroup',
+                columns: 2,
+                title: 'Werkzeuge',
+                dock: 'top',
+                defaults:{
+                    scale: 'medium'
+                },
+                items: [{
+                    xtype: 'base-button-addwms',
+                    glyph:'xf0ac@FontAwesome',
+                    viewModel: {
+                        data: {
+                            tooltip: 'WMS hinzufügen…',
+                            text: 'WMS'
+                        }
                     }
-                ]
-            },
-            legendPanelConfig: {
-                xtype: 'k-panel-routing-legendtree'
-            },
-            additionalItems: [{
-                xtype: 'k-panel-layersetchooser',
-                x: 300,
-                y: 0,
-                floating: true,
-                resizeHandles: 'se',
-                resizable: true
-            }]
-        }
-    ],
+                },{
+                    xtype: 'button',
+                    glyph:'xf02f@FontAwesome',
+                    text: 'Druck',
+                    handler: function(){
+                        var win = Ext.ComponentQuery
+                            .query('k-window-print')[0];
+                        if(!win){
+                            Ext.create('Koala.view.window.Print')
+                            .show();
+                        } else {
+                            Basepackage.util.Animate.shake(win);
+                        }
+                    }
+                }]
+            }],
+            items: [
+                // Add an empty hidden panel to be able to collapse the last
+                // accordion item
+                {xtype:'panel',hidden:true},
+                {
+                    xtype: 'k-panel-themetree',
+                    title: 'Auswahl',
+                    tools:[{
+                        type:'collapse',
+                        bind: {tooltip: 'LayerSet wechseln'},
+                        handler: 'toggleLayerSetView'
+                    }]
+                }]
+        },
+        legendPanelConfig: {
+            xtype: 'k-panel-routing-legendtree'
+        },
+        additionalItems: [{
+            xtype: 'k-panel-layersetchooser',
+            x: 300,
+            y: 0,
+            floating: true,
+            resizeHandles: 'se',
+            resizable: true
+        }]
+    }],
 
     /**
      *

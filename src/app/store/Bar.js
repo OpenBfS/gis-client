@@ -14,7 +14,8 @@ Ext.define('Koala.store.Bar', {
     useDefaultXhrHeader: false,
 
     proxy: {
-        url: 'http://10.133.7.63/geoserver/BFS/ows',
+//        url: 'http://10.133.7.63/geoserver/BFS/ows',
+        url: 'http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows',
         method: 'GET',
         type: 'ajax',
         extraParams: {

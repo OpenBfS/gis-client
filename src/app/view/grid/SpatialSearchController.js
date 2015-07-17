@@ -31,6 +31,6 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
         var view = map.getView();
 
         var extent = feature.getGeometry().getExtent();
-        view.fitExtent(extent, map.getSize());
+        view.fit(extent, map.getSize());
     }
 });

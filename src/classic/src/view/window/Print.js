@@ -19,20 +19,14 @@ Ext.define("Koala.view.window.Print",{
     },
 
     minWidth: 300,
-    maxWidth: 400,
+    maxWidth: 800,
     minHeight: 150,
-    maxHeight: 600,
-
-//    listeners: {
-//        afterlayout: function(){
-//            this.center();
-//        }
-//    },
+    maxHeight: 800,
 
     layout: 'fit',
     bodyPadding: '10px',
     items: [{
         xtype: 'k-form-print',
-        url: 'http://10.133.7.63/print-servlet-3.3-SNAPSHOT/print/'
+        url: 'http://bfs-koala.intranet.terrestris.de/print-servlet-3.3-SNAPSHOT/print/'
     }]
 });

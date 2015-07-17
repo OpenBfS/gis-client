@@ -23,7 +23,7 @@ Ext.define('Koala.store.TimeSeries', {
     useDefaultXhrHeader: false,
 
     proxy: {
-        url: 'http://10.133.7.63/geoserver/BFS/ows',
+        url: 'http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows',
         method: 'GET',
         type: 'ajax',
         extraParams: {

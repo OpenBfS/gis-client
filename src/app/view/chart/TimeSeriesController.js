@@ -79,7 +79,10 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                     var timestamp = record.get('end_measure');
                     var time = Ext.Date.parse(timestamp, "time");
                     var odl = record.get('value');
-                    tooltip.setHtml(Ext.Date.format(time, 'd.m.Y H:i') + '</br>' + odl + ' µSv/h');
+
+                    tooltip.setHtml(this.getTitle() + '</br>' +
+                            Ext.Date.format(time, 'd.m.Y H:i') +
+                            '</br>' + odl + ' µSv/h');
                 }
             }
         };
