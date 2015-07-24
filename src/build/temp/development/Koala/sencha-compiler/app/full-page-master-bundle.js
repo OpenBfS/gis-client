@@ -1,2 +1,2 @@
 // @tag full-page
-// @require /home/volland/workspace/bfs_koala/src/app.js
+// @require /home/jansen/eclipse-luna-workspace/bfs-hg-gis-client/src/app.js
