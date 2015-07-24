@@ -1,3 +1,5 @@
+syntax: glob
 src/bootstrap.css
 src/bootstrap.js
 src/classic.json
+src/packages/remote/*
