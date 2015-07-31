@@ -25,9 +25,9 @@
                 "type": "ImageWMS",
                 "topic": true,
                 "url": "http://bfs-koala.intranet.terrestris.de/geoserver/BFS/wms",
-                "legendUrl": "http://bfs-koala.intranet.terrestris.de/koala/classic/resources/karto_legend.png",
+                "legendUrl": "http://bfs-koala.intranet.terrestris.de/koala/classic/resources/carto_legend.png",
                 "legendHeight": 99,
-                "layers": "BFS:cartodiagram",
+                "layers": "BFS:carto_sql",
                 "crossOrigin": "Anonymous",
                 "transparent": true,
                 "visibility": false,
@@ -37,7 +37,7 @@
                     "treeMenu": true,
                     "allowDownload": true,
                     "hoverable": true,
-                    "hoverfield": "id"
+                    "hoverfield": "locality_name"
                 }
             }, {
                 "name": "Tagesmittelwerte in µSv/h",

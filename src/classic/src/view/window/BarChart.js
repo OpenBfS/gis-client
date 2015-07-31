@@ -25,23 +25,6 @@ Ext.define("Koala.view.window.BarChart", {
         constrainHeader: true,
         collapsible: true,
         layout: 'vbox'
-    },
+    }
 
-    items: [{
-        xtype: 'form',
-        layout: {
-            type: 'hbox',
-            align: 'middle'
-        },
-        padding: 5,
-        defaults: {
-            padding: '0 10 0 10'
-        },
-        items: [{
-            xtype: 'combo',
-            displayField: 'text',
-            queryMode: 'local',
-            emptyText: 'Chart hinzufügen'
-        }]
-    }]
 });

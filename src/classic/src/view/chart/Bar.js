@@ -11,7 +11,7 @@ Ext.define("Koala.view.chart.Bar",{
         "Ext.chart.interactions.ItemHighlight",
         "Ext.chart.interactions.CrossZoom",
         "Ext.chart.axis.Numeric",
-        "Ext.chart.axis.Time",
+        "Ext.chart.axis.Category",
         "Ext.chart.series.Bar"
     ],
 
@@ -27,22 +27,13 @@ Ext.define("Koala.view.chart.Bar",{
 
     config: {
         seriesType: 'bar',
-        showStep: true
+        showStep: true,
+        title: ''
     },
 
-    selectedStations: [],
-
+    selectedStation: null,
+ 
     width: '100%',
-
-//    interactions: {
-//        type: 'crosszoom',
-//        axes: {
-//            bottom: {
-//                maxZoom: 5,
-//                allowPan: true
-//            }
-//        }
-//    },
 
     legend: {
         docked: 'right'
@@ -51,14 +42,14 @@ Ext.define("Koala.view.chart.Bar",{
     axes: [{
         type: 'numeric',
         position: 'left',
+        fields: [],
         grid: true,
         minimum: 0,
-        maximum: 0.15,
         renderer: function (v, layoutContext) {
             return layoutContext.renderer(v) + ' µSv/h';
         }
     }, {
-        type: 'time',
+        type: 'category',
         position: 'bottom',
         grid: true,
         label: {
@@ -68,9 +59,6 @@ Ext.define("Koala.view.chart.Bar",{
         }
     }],
 
-    /**
-     *
-     */
     initComponent: function() {
         var me = this;
         var controller = me.getController();

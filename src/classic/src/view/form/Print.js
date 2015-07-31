@@ -187,10 +187,14 @@ Ext.define("Koala.view.form.Print",{
                         xtype: 'textfield',
                         name: 'OrganisationReporting',
                         fieldLabel: 'OrganisationReporting'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'ReportContext',
                         fieldLabel: 'ReportContext'
+                    }, {
+                        xtype: 'textfield',
+                        name: 'SequenceNumber',
+                        fieldLabel: 'SequenceNumber'
                     }, {
                         xtype: 'fieldset',
                         name: 'organisationcontact-fieldset',
@@ -296,30 +300,42 @@ Ext.define("Koala.view.form.Print",{
     setUpIrixJson: function(mapfishPrint){
         var irixJson = {};
 
+        // Setup basic structure
+
+        // Set printapp field on toplevel from combo
+        irixJson.printapp = "" + this.down('combo[name=appCombo]').getValue();
+        // TODO hardcoded request type for now
+        irixJson['request-type'] = 'upload/respond';
+
+        // Main irix object
+        irixJson.irix = {};
+        // subobjects
+        irixJson.irix.Identification = {};
+        irixJson.irix.Identification.OrganisationContact = {};
+        irixJson.irix.DokpoolMeta = {};
+        // on top-level, the array of mapfish-print
+        irixJson['mapfish-print'] = mapfishPrint;
+
+        // fill created irix structure
         var irixFields = this.query('fieldset[name=irix-fieldset] > field');
         Ext.each(irixFields, function(field){
-            irixJson[field.getName()] = field.getValue();
+            // currently 'Title' & 'User'
+            irixJson.irix[field.getName()] = "" + field.getValue();
         });
-
-        irixJson.irix = {};
-        irixJson.irix.identification = {};
-        irixJson.irix.identification.organisationcontact = {};
-        irixJson.irix.dokpoolmeta = {};
-        irixJson['mapfish-print'] = mapfishPrint;
 
         var identificationFields = this.query('fieldset[name=identification-fieldset] > field');
         Ext.each(identificationFields, function(field){
-            irixJson.irix.identification[field.getName()] = field.getValue();
+            irixJson.irix.Identification[field.getName()] = "" + field.getValue();
         });
 
         var organisationcontactFields = this.query('fieldset[name=organisationcontact-fieldset] > field');
         Ext.each(organisationcontactFields, function(field){
-            irixJson.irix.identification.organisationcontact[field.getName()] = field.getValue();
+            irixJson.irix.Identification.OrganisationContact[field.getName()] = "" + field.getValue();
         });
 
         var dokpoolmetaFields = this.query('fieldset[name=dokpoolmeta-fieldset] > field');
         Ext.each(dokpoolmetaFields, function(field){
-            irixJson.irix.dokpoolmeta[field.getName()] = field.getValue();
+            irixJson.irix.DokpoolMeta[field.getName()] = "" + field.getValue();
         });
 
         return irixJson;
