@@ -1,14 +1,47 @@
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 Ext.define('Koala.view.window.TimeSeriesWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-timeserieswindow',
-
+    requires: [
+        'Koala.util.String'
+    ],
     /**
      *
      */
     createTimeSeriesChart: function(olLayer) {
+        var chartConfig = olLayer.get('timeSeriesChartProperties');
+        var interactions = null;
+        if (Ext.isEmpty(chartConfig.allowCrossZoom) ||
+            Koala.util.String.getBool(chartConfig.allowCrossZoom)) {
+            interactions = {
+               type: 'crosszoom',
+               axes: {
+                   bottom: {
+                       maxZoom: 5,
+                       allowPan: true
+                   }
+               }
+           };
+        }
         var chart = {
             xtype: 'k-chart-timeseries',
             name: olLayer.get('name'),
+            layer: olLayer,
+            interactions: interactions,
             height: 200,
             width: 700
         };
@@ -24,9 +57,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var store = Ext.create('Ext.data.Store', {
             fields: ['abbr', 'name'],
             data: [
-                {"abbr":"AL", "name":"Alabama"},
-                {"abbr":"AK", "name":"Alaska"},
-                {"abbr":"AZ", "name":"Arizona"}
+                {"abbr": "AL", "name": "Alabama"},
+                {"abbr": "AK", "name": "Alaska"},
+                {"abbr": "AZ", "name": "Arizona"}
             ]
         });
         var combo = {
@@ -50,7 +83,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     onTimeSeriesComboSelect: function(combo, rec, evt, olLayer) {
         var me = this;
         var olFeat = rec;
-        me.updateTimeSeriesChartStore(olLayer, olFeat);
+        me.updateTimeSeriesChart(olLayer, olFeat);
     },
 
     /**
@@ -59,10 +92,18 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     createTimeSeriesChartPanel: function(olLayer) {
         var me = this;
         var chart = me.createTimeSeriesChart(olLayer);
-        var combo = me.createTimeSeriesCombo(olLayer);
+        var chartConfig = olLayer.get('timeSeriesChartProperties');
+        var combo;
+        if (Ext.isEmpty(chartConfig.allowAddSeries) ||
+            Koala.util.String.getBool(chartConfig.allowAddSeries)) {
+                combo = me.createTimeSeriesCombo(olLayer);
+        }
+        var title = !Ext.isEmpty(chartConfig.titleTpl) ?
+            Koala.util.String.replaceTemplateStrings(
+            chartConfig.titleTpl, olLayer) : olLayer.get('name');
         var panel = {
             xtype: 'panel',
-            title: olLayer.get('name'),
+            title: title,
             collapsible: true,
             hideCollapseTool: true,
             titleCollapse: true,
@@ -72,15 +113,18 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 type: 'hbox',
                 align: 'middle'
             },
-            items: [chart, combo]
+            items: [chart]
         };
+        if (!Ext.isEmpty(combo)) {
+            panel.items.push(combo);
+        }
         return panel;
     },
 
     /**
      *
      */
-    updateTimeSeriesChartStore: function(olLayer, olFeat) {
+    updateTimeSeriesChart: function(olLayer, olFeat) {
         // don't proceed if we don't get a olFeat, e.g. if we were called
         // by the selectChartLayerCombo
         if (!olFeat) {
@@ -91,17 +135,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var view = me.getView();
         var layerName = olLayer.get('name');
         var chart = view.down('chart[name=' + layerName + ']');
-        var chartStore = chart.getStore();
-        var stationIds = [];
+        var timeSeriesView = Ext.ComponentQuery.query('k-chart-timeseries')[0];
+        var controller = timeSeriesView.getController();
 
         chart.selectedStation = olFeat;
 
-        var viewParams = 'nuclide:' + '909;' + 'geo_id:' + olFeat.get('geo_id');
-
-        chartStore.getProxy().setExtraParam('viewParams', viewParams);
-        chartStore.load({
-            addRecords: true
-        });
+        controller.prepareTimeSeriesLoad();
     },
 
     /**
@@ -143,7 +182,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     /**
      *
      */
-    onResetFilterBtnClick: function(btn) {
+    onResetFilterBtnClick: function() {
         var me = this;
         var view = me.getView();
         var charts = view.query('chart');
@@ -163,8 +202,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     setAbscissaRange: function(chart, minVal, maxVal) {
         var abscissa = chart.getAxis(1);
-        abscissa.setMinimum(minVal);
-        abscissa.setMaximum(maxVal);
+        abscissa.setFromDate(minVal);
+        abscissa.setToDate(maxVal);
         chart.redraw();
     },
 
@@ -197,12 +236,21 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         // same layer as the given olFeat already, load a new timeseries into
         // the existing chart
         if (layerChartRendered) {
-            me.updateTimeSeriesChartStore(olLayer, olFeat);
+            me.updateTimeSeriesChart(olLayer, olFeat);
         } else {
             // otherwise create a new chart for the olFeat and add it to the
             // window and update the store
+
+            // The below line removes any formpanels taht may be existing at
+            // this point. If we do not remove them we'll see duplicate filter
+            // forms with every click...
+            // TODO MJ rework and only add if it is needed
+            if (view.items && view.items.items && view.items.items.length > 1) {
+                view.items.remove(view.items.items[0]);
+            }
+
             view.add(me.createTimeSeriesChartPanel(olLayer));
-            me.updateTimeSeriesChartStore(olLayer, olFeat);
+            me.updateTimeSeriesChart(olLayer, olFeat);
         }
     }
 

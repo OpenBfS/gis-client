@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "Koala",
+  "version": "0.0.1",
+  "description": "Koala WebGIS",
+  "scripts": {
+    "lint": "eslint -c .eslintrc app/ classic/"
+  },
+  "repository": {
+    "type": "svn",
+    "url": "https://svn.intranet.terrestris.de/svn/bfs_koala/trunk/src"
+  },
+  "author": "terrestris GmbH & Co. KG <info@terrestris.de",
+  "license": "gpl-3",
+  "devDependencies": {
+    "eslint": "~0.20"
+  }
+}

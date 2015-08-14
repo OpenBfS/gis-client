@@ -1,10 +1,24 @@
-
-Ext.define("Koala.view.form.field.LanguageCombo",{
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+Ext.define("Koala.view.form.field.LanguageCombo", {
     extend: "Ext.form.field.ComboBox",
     xtype: "k-form-field-languagecombo",
     requires: [
         "Koala.store.Language",
-        
+
         "Koala.view.form.field.LanguageComboController",
         "Koala.view.form.field.LanguageComboModel"
     ],
@@ -13,7 +27,7 @@ Ext.define("Koala.view.form.field.LanguageCombo",{
     viewModel: {
         type: "k-form-field-languagecombo"
     },
-    
+
     fields: ['code', 'name'],
     queryMode: 'local',
     displayField: 'name',
@@ -21,12 +35,18 @@ Ext.define("Koala.view.form.field.LanguageCombo",{
     autoSelect: true,
     forceSelection: true,
     editable: false,
-    //width: 60,
     grow: true,
     store: {
         type: 'k-language'
     },
-    bind: {
-        value: '{defaultLanguage}'
+    config: {
+        defaultLanguage: 'de'
+    },
+    listeners: {
+        change: 'onLanguageChange'
+    },
+    initComponent: function() {
+        this.callParent();
+        this.setValue(this.getDefaultLanguage());
     }
 });

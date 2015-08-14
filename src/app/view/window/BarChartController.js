@@ -1,38 +1,37 @@
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 Ext.define('Koala.view.window.BarChartController', {
-    extend : 'Ext.app.ViewController',
-    alias : 'controller.k-window-barchart',
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.k-window-barchart',
 
-    createBarChart : function(olLayer) {
+    createBarChart: function(olLayer) {
+        var props = olLayer.get('barChartProperties');
+        var categoryCount = props.chartFieldSequence.split(",").length;
+        var chartWidth = 200 + categoryCount * 30;
         var chart = {
-            xtype : 'k-chart-bar',
-            name : olLayer.get('name'),
-            height : 350,
-            width : 500
+            xtype: 'k-chart-bar',
+            name: olLayer.get('name'),
+            layer: olLayer,
+            height: 350,
+            width: chartWidth
         };
         return chart;
     },
 
-    createBarChartPanel : function(olLayer) {
-        var me = this;
-        var chart = me.createBarChart(olLayer);
-        var panel = {
-            xtype : 'panel',
-            title : olLayer.get('name'),
-            collapsible : true,
-            hideCollapseTool : true,
-            titleCollapse : true,
-            closable : true,
-            titleAlign : 'center',
-            layout : {
-                type : 'hbox',
-                align : 'middle'
-            },
-            items : [ chart ]
-        };
-        return panel;
-    },
-
-    updateBarChartStore : function(olLayer, olFeat) {
+    updateBarChartStore: function(olLayer, olFeat) {
         if (!olFeat) {
             return false;
         }
@@ -41,24 +40,15 @@ Ext.define('Koala.view.window.BarChartController', {
         var view = me.getView();
         var layerName = olLayer.get('name');
         var chart = view.down('chart[name=' + layerName + ']');
-        var chartStore = chart.getStore();
-        var stationIds = [];
+        var chartView = Ext.ComponentQuery.query('k-chart-bar')[0];
+        var controller = chartView.getController();
 
         chart.selectedStation = olFeat;
 
-        var dtUser = new Date(olFeat.get('end_measure'));
-        dtUser.setTime(dtUser.getTime() + dtUser.getTimezoneOffset()*60*1000);
-        var dtFormatted = Ext.Date.format(dtUser, 'Y-m-d H:i:s');
-        
-        var viewParams = 'locality_code:' + olFeat.get('locality_code')
-                          + ';end_measure:' + dtFormatted;
-        chartStore.getProxy().setExtraParam('viewParams', viewParams);
-        chartStore.load({
-            addRecords: true
-        });
+        controller.prepareBarSeriesLoad();
     },
 
-    isLayerChartRendered : function(layerName) {
+    isLayerChartRendered: function(layerName) {
         var me = this;
         var view = me.getView();
         var existingCharts = view ? view.query('chart') : [];
@@ -74,15 +64,14 @@ Ext.define('Koala.view.window.BarChartController', {
         return isRendered;
     },
 
-    createOrUpdateChart : function(olLayer, olFeat) {
+    createOrUpdateChart: function(olLayer, olFeat) {
         var me = this;
         var view = me.getView();
         var layerName = olLayer.get('name');
         var layerChartRendered = me.isLayerChartRendered(layerName);
 
-        if (layerChartRendered) {   
-        } else {
-            view.add(me.createBarChartPanel(olLayer));
+        if (!layerChartRendered) {
+            view.add(me.createBarChart(olLayer));
             me.updateBarChartStore(olLayer, olFeat);
         }
     }

@@ -53,6 +53,14 @@ remote resource as zip-file:
     sencha package build
     sencha package add /path/to/workspace/build/basepackage/basepackage.pkg
 
+If you have access to the related git repository you can do it like:
+
+    cd /path/to/workspace/packages/
+    git clone http://gitlab.intranet.terrestris.de/myUserName/basepackage.git
+    cd basepackage
+    sencha package build
+    sencha package add /path/to/workspace/build/basepackage/basepackage.pkg
+
 ## Refresh the application
 
 If existing from a previous build, remove the folders 

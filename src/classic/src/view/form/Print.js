@@ -1,4 +1,19 @@
-Ext.define("Koala.view.form.Print",{
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+Ext.define("Koala.view.form.Print", {
     extend: "Basepackage.view.form.Print",
     xtype: "k-form-print",
 
@@ -76,7 +91,7 @@ Ext.define("Koala.view.form.Print",{
         // Get all Fields except the DPI Field
         // TODO This query should be optimized or changed into some
         // different kind of logic
-        var additionalFields =view.query(
+        var additionalFields = view.query(
             'fieldset[name=attributes]>field[name!=dpi]'
         );
         Ext.each(additionalFields, function(field){
@@ -175,7 +190,7 @@ Ext.define("Koala.view.form.Print",{
                     xtype: 'textfield',
                     name: 'Title',
                     fieldLabel: 'Titel'
-                },{
+                }, {
                     xtype: 'textfield',
                     name: 'User',
                     fieldLabel: 'Benutzer'
@@ -203,17 +218,17 @@ Ext.define("Koala.view.form.Print",{
                             xtype: 'textfield',
                             name: 'Name',
                             fieldLabel: 'Name'
-                        },{
+                        }, {
                             xtype: 'textfield',
                             name: 'OrganisationID',
                             fieldLabel: 'OrganisationID'
-                        },{
+                        }, {
                             xtype: 'textfield',
                             name: 'Country',
                             fieldLabel: 'Country'
                         }]
                     }]
-                },{
+                }, {
                     xtype: 'fieldset',
                     name: 'dokpoolmeta-fieldset',
                     title: 'DokpoolMeta',
@@ -221,71 +236,71 @@ Ext.define("Koala.view.form.Print",{
                         xtype: 'textfield',
                         name: 'Purpose',
                         fieldLabel: 'Purpose'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'DokpoolContentType',
                         fieldLabel: 'DokpoolContentType'
-                    },{
+                    }, {
                         xtype: 'checkbox',
                         checked: true,
                         name: 'IsElan',
                         fieldLabel: 'IsElan',
                         boxLabel: ' '
-                    },{
+                    }, {
                         xtype: 'checkbox',
                         checked: true,
                         name: 'IsDoksys',
                         fieldLabel: 'IsDoksys',
                         boxLabel: ' '
-                    },{
+                    }, {
                         xtype: 'checkbox',
                         checked: true,
                         name: 'IsRodos',
                         fieldLabel: 'IsRodos',
                         boxLabel: ' '
-                    },{
+                    }, {
                         xtype: 'checkbox',
                         checked: true,
                         name: 'IsRei',
                         fieldLabel: 'IsRei',
                         boxLabel: ' '
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'NetworkOperator',
                         fieldLabel: 'NetworkOperator'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'SampleTypeId',
                         fieldLabel: 'SampleTypeId'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'SampleType',
                         fieldLabel: 'SampleType'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'Dom',
                         fieldLabel: 'Dom'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'DataType',
                         fieldLabel: 'DataType'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'LegalBase',
                         fieldLabel: 'LegalBase'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'MeasuringProgram',
                         fieldLabel: 'MeasuringProgram'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'Status',
                         fieldLabel: 'Status'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'SamplingBegin',
                         fieldLabel: 'SamplingBegin'
-                    },{
+                    }, {
                         xtype: 'textfield',
                         name: 'SamplingEnd',
                         fieldLabel: 'SamplingEnd'

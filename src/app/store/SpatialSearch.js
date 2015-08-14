@@ -1,9 +1,28 @@
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 Ext.define('Koala.store.SpatialSearch', {
-    extend : 'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
-    alias : 'store.k-spatialsearch',
+    alias: 'store.k-spatialsearch',
 
-    storeID : 'spatialsearch',
+    requires: [
+        'Basepackage.util.Layer'
+    ],
+
+    storeID: 'spatialsearch',
 
     layer: null,
 
@@ -17,26 +36,34 @@ Ext.define('Koala.store.SpatialSearch', {
             this.layer = new ol.layer.Vector({
                 source: new ol.source.Vector()
             });
+            var displayInLayerSwitcherKey = Basepackage.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
+            this.layer.set(displayInLayerSwitcherKey, false);
             this.map.addLayer(this.layer);
         }
+
+
         this.callParent([config]);
+
+        var appContext = Basepackage.view.component.Map.guess().appContext;
+        var urls = appContext.data.merge.urls;
+        this.proxy.url = urls['spatial-search'];
     },
 
-    proxy : {
-        url : 'http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows',
-        method : 'GET',
-        type : 'ajax',
-        extraParams : {
-            service : 'WFS',
-            version : '1.0.0',
-            request : 'GetFeature',
-            outputFormat : 'application/json',
-            typeName : 'BFS:verwaltung_4326_geozg_sort'
+    proxy: {
+        url: null, // set in the constructor
+        method: 'GET',
+        type: 'ajax',
+        extraParams: {
+            service: 'WFS',
+            version: '1.0.0',
+            request: 'GetFeature',
+            outputFormat: 'application/json',
+            typeName: 'BFS:verwaltung_4326_geozg_sort'
         },
-        limitParam : 'maxFeatures',
-        reader : {
-            type : 'json',
-            rootProperty : 'features'
+        limitParam: 'maxFeatures',
+        reader: {
+            type: 'json',
+            rootProperty: 'features'
         }
     },
 
@@ -45,12 +72,12 @@ Ext.define('Koala.store.SpatialSearch', {
         mapping: function(data) {
             return data.properties.MYNAME;
         }
-    },{
+    }, {
         name: 'wkt',
         mapping: function(data) {
             return data.properties.BOX_GEO;
         }
-    },{
+    }, {
         name: 'nnid',
         mapping: function(data) {
             return data.properties.NNID;

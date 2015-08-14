@@ -1,8 +1,23 @@
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 Ext.define('Koala.UTCUtil', {
     // from bfs.geozg.Util
     /**
      * Returns an adjusted date.
-     * 
+     *
      * If the user has toggled the time button to use local time (initial
      * state), we return the adjusted date. This will be the UTC date,
      * derived from a given local time. If the button is pressed to use UTC
@@ -17,7 +32,7 @@ Ext.define('Koala.UTCUtil', {
         if (timeBtn.pressed) { //using UTC time
             return date;
         } else { // using local time, returning adjusted date
-            var utcoffsetinminutes = bfs.geozg.Util.getUTCOffsetInMinutes(date),
+            var utcoffsetinminutes = Koala.UTCUtil.getUTCOffsetInMinutes(date),
                 utcdate;
             utcdate = Ext.Date.add(date, Ext.Date.MINUTE, (-1 * utcoffsetinminutes));
             return utcdate;
@@ -68,14 +83,14 @@ Ext.define('Koala.UTCUtil', {
         if (timeBtn.pressed) { //using UTC time
             return date;
         } else { // using local time, returning adjusted date
-            var utcoffsetinminutes = bfs.geozg.Util.getUTCOffsetInMinutes(date),
+            var utcoffsetinminutes = Koala.UTCUtil.getUTCOffsetInMinutes(date),
                 utcdate;
             utcdate = Ext.Date.add(date, Ext.Date.MINUTE, utcoffsetinminutes);
             return utcdate;
         }
 
     },
-    
+
     // from bfs.geozg.controller.MainController
     /**
      * checks the legend tree and tries to correct dates to utc time or to local
@@ -91,7 +106,7 @@ Ext.define('Koala.UTCUtil', {
                 utcDateStr = extDateSpanElem.getAttribute('data-utcdate'),
                 utcDateFormat = extDateSpanElem.getAttribute('data-utcformat'),
                 utcDate = Ext.Date.parse(utcDateStr, utcDateFormat),
-                offset = bfs.geozg.Util.getUTCOffsetInMinutes(utcDate),
+                offset = Koala.UTCUtil.getUTCOffsetInMinutes(utcDate),
                 adjusted,
                 adjustedDspDate;
 
@@ -107,17 +122,15 @@ Ext.define('Koala.UTCUtil', {
             extDateSpanElem.setHTML(adjustedDspDate);
         });
     },
-    
+
     /**
      * Handles filter settings for a selected layer and sets the apply layer button
      * according to these settings.
      *
      * @param {Object} selModel
      * @param {Object} record
-     * @param {Object} idx
-     * @param {Object} eOpts
      */
-    treepanelItemSelected: function(selModel, record, idx, eOpts) {
+    treepanelItemSelected: function(selModel, record) {
         var me = this,
             name = record.get("dspTxt"),
             isLeaf = !!record.get('leaf'),
@@ -157,17 +170,16 @@ Ext.define('Koala.UTCUtil', {
 
                 // we have a valid date-like filter
 
-                var now = new Date(),
-                    defaultStart = dateParse(amsDefaultStart, amsDateFormat),
+                var defaultStart = dateParse(amsDefaultStart, amsDateFormat),
                     minDate = dateParse(layerConfig.wms.timeExtendStart, amsDateFormat),
                     toMaxDate = dateParse(layerConfig.wms.timeExtendEnd, amsDateFormat),
                     maxDate = dateParse(layerConfig.wms.timeExtendEnd, amsDateFormat);
 
                 //before setting the default start, we have to consider utc times
-                defaultStart = bfs.geozg.Util.getLocalTimeFromUTC(defaultStart);
-                minDate = bfs.geozg.Util.getLocalTimeFromUTC(minDate);
-                toMaxDate = bfs.geozg.Util.getLocalTimeFromUTC(toMaxDate);
-                maxDate = bfs.geozg.Util.getLocalTimeFromUTC(maxDate);
+                defaultStart = Koala.UTCUtil.getLocalTimeFromUTC(defaultStart);
+                minDate = Koala.UTCUtil.getLocalTimeFromUTC(minDate);
+                toMaxDate = Koala.UTCUtil.getLocalTimeFromUTC(toMaxDate);
+                maxDate = Koala.UTCUtil.getLocalTimeFromUTC(maxDate);
 
                 // use the original maxDate for the to fields:
                 dateToField.dateField.setMaxValue(toMaxDate);
@@ -244,7 +256,7 @@ Ext.define('Koala.UTCUtil', {
         applyBtn.defaultStart = amsDefaultStart;
         applyBtn.inspireId = inspireId;
     },
-    
+
     /**
      * Adjusts given date by a certain amount to satisfy certain services like
      * WFS and WMS-Time. See
@@ -257,7 +269,7 @@ Ext.define('Koala.UTCUtil', {
     adjustEndTime: function(dateValue){
         return this.calculateTimeRange(dateValue, 'second', -1);
     },
-    
+
     /**
      * Adds or subtracts a given interval to a date
      *

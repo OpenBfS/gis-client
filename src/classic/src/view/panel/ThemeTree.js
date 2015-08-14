@@ -1,5 +1,19 @@
-
-Ext.define("Koala.view.panel.ThemeTree",{
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+Ext.define("Koala.view.panel.ThemeTree", {
     extend: "Ext.tree.Panel",
     xtype: 'k-panel-themetree',
 
@@ -13,43 +27,32 @@ Ext.define("Koala.view.panel.ThemeTree",{
         type: "k-panel-themetree"
     },
 
+    bind: {
+        title: '{title}'
+    },
+
     rootVisible: false,
-    
+
     autoScroll: true,
-    
+
     height: 200,
-    
+
+    tools: [{
+        type: 'collapse',
+        bind: {
+            tooltip: '{tooltip}'
+        },
+        handler: 'toggleLayerSetView'
+    }],
+
     initComponent: function(){
         var store = Ext.create('Ext.data.TreeStore', {
-//            proxy: {
-//                type: 'ajax',
-//                url : 'icons.json',
-//                reader: {
-//                    type: 'json',
-////                    root: '',
-////                    totalProperty:  'recordCount',
-////                    successProperty: 'success'
-//                }
-//            }
-            root: {
-                expanded: true,
-                children: [ {
-                    text: 'aaa',
-                    leaf: true
-                }, {
-                    text: 'bbb',
-                    expanded: true,
-                    children: [ {
-                        text: 'bbb 1',
-                        leaf: true
-                    }, {
-                        text: 'bbb 2',
-                        leaf: true
-                    } ]
-                }, {
-                    text: 'ccc',
-                    leaf: true
-                } ]
+            proxy: {
+                type: 'ajax',
+                url: 'classic/resources/layerset.json',
+                reader: {
+                    type: 'json'
+                }
             }
         });
         this.store = store;

@@ -1,8 +1,24 @@
-Ext.define("Koala.view.chart.TimeSeries",{
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+Ext.define("Koala.view.chart.TimeSeries", {
     extend: "Ext.chart.CartesianChart",
     xtype: "k-chart-timeseries",
 
     requires: [
+        "Koala.util.Object",
         "Koala.view.chart.TimeSeriesController",
         "Koala.view.chart.TimeSeriesModel",
 
@@ -30,60 +46,57 @@ Ext.define("Koala.view.chart.TimeSeries",{
         showStep: true
     },
 
-//    selectedStations: [],
     selectedStation: null,
 
-    width: '100%',
+    layer: null,
 
-    interactions: {
-        type: 'crosszoom',
-        axes: {
-            bottom: {
-                maxZoom: 5,
-                allowPan: true
-            }
-        }
-    },
+    width: '100%',
 
     legend: {
         docked: 'right'
     },
 
-    axes: [{
-        type: 'numeric',
-        position: 'left',
-        grid: true,
-        minimum: 0,
-        maximum: 0.2,
-        renderer: function (v, layoutContext) {
-            return layoutContext.renderer(v) + ' µSv/h';
-        }
-    }, {
-        type: 'time',
-        position: 'bottom',
-        grid: true,
-        label: {
-            rotate: {
-                degrees: -45
+    constructor: function(cfg) {
+        var chartConfig = cfg.layer.get('timeSeriesChartProperties');
+        var xConfig = Koala.util.Object.getConfigByPrefix(
+            chartConfig, "xAxis_", true);
+        var yConfig = Koala.util.Object.getConfigByPrefix(
+            chartConfig, "yAxis_", true);
+        var xLabelRotation = Koala.util.String.coerce(
+            chartConfig.xAxisLabelRotation);
+        var yLabelRotation = Koala.util.String.coerce(
+            chartConfig.yAxisLabelRotation);
+        var dspUnit = chartConfig.dspUnit || '';
+
+        var defaultXAxis = {
+            type: 'time',
+            position: 'bottom',
+            grid: true,
+            label: {
+                rotate: {
+                    degrees: xLabelRotation || -45
+                }
             }
-        }
-    }],
+        };
+        Ext.apply(defaultXAxis, xConfig);
 
-    /**
-     *
-     */
-    initComponent: function() {
-        var me = this;
-        var controller = me.getController();
-        var store = me.getStore();
-
-        store.on({
-            beforeload: controller.onTimeSeriesBeforeLoad,
-            load: controller.onTimeSeriesStoreLoad,
-            scope: controller
-        });
-
-        me.callParent();
+        var defaultYAxis = {
+            type: 'numeric',
+            position: 'left',
+            grid: true,
+            minimum: 0,
+            maximum: 0.2,
+            renderer: function (v, layoutContext) {
+                return layoutContext.renderer(v) + ' ' + dspUnit;
+            },
+            label: {
+                rotate: {
+                    degrees: yLabelRotation || 0
+                }
+            }
+        };
+        Ext.apply(defaultYAxis, yConfig);
+        cfg.axes = [defaultYAxis, defaultXAxis];
+        this.callParent([cfg]);
     }
-
 });

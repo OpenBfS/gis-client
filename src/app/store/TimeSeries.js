@@ -1,20 +1,32 @@
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 Ext.define('Koala.store.TimeSeries', {
     extend: 'Ext.data.Store',
 
     alias: 'store.k-timeseries',
 
-    fields: [{
-        name:'value',
-        mapping: function(dataRec){
-            return dataRec.properties.result_value;
+    fields: [
+        {
+            name: 'end_measure',
+            type: 'date',
+            mapping: function(dataRec){
+                return dataRec.properties.end_measure;
+            }
         }
-    },{
-        name:'end_measure',
-        type: 'date',
-        mapping: function(dataRec){
-            return dataRec.properties.end_measure;
-        }
-    }],
+    ],
 
     autoLoad: false,
 
@@ -23,21 +35,10 @@ Ext.define('Koala.store.TimeSeries', {
     useDefaultXhrHeader: false,
 
     proxy: {
-        url: 'http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows',
-        method: 'GET',
-        type: 'ajax',
-        extraParams: {
-            service: 'WFS',
-            version: '1.1.0',
-            request: 'GetFeature',
-            typeName: 'BFS:result',
-            outputFormat: 'application/json',
-            maxFeatures: 5000
-        },
+        type: 'memory',
         reader: {
             type: 'json',
             rootProperty: 'features'
         }
     }
-
 });

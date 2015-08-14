@@ -1,8 +1,25 @@
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 Ext.define('Koala.view.component.MapController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-component-map',
 
     requires: [
+        "Basepackage.util.Controller",
+
         "Koala.view.window.TimeSeriesWindow",
         "Koala.view.window.BarChart"
     ],
@@ -14,10 +31,12 @@ Ext.define('Koala.view.component.MapController', {
      */
     onHoverFeatureClick: function(olFeat) {
         var me = this;
-        if(olFeat.get('layer').get('name') === 'Kartodiagramm') {
-            me.openBarChartWindow(olFeat);
-        } else if(olFeat.get('layer').get('name') === 'Messstationen'){
+        var layer = olFeat.get('layer');
+
+        if (Ext.Object.getSize(layer.get("timeSeriesChartProperties")) > 0) {
             me.openTimeseriesWindow(olFeat);
+        } else if (Ext.Object.getSize(layer.get("barChartProperties")) > 0) {
+            me.openBarChartWindow(olFeat);
         } else {
             me.openGetFeatureInfoWindow(olFeat);
         }
@@ -34,7 +53,7 @@ Ext.define('Koala.view.component.MapController', {
 
         Ext.each(layers, function(layer, index, allItems){
             var hoverfield = layer.get('hoverfield');
-            innerHtml += '<b>'+layer.get('name')+'</b>';
+            innerHtml += '<b>' + layer.get('name') + '</b>';
             Ext.each(features, function(feat){
                 // we check for existing feature first as there maybe strange
                 // situations (e.g. when zooming while hovering)
@@ -46,7 +65,7 @@ Ext.define('Koala.view.component.MapController', {
             if(treeSelection.length === 0){
                 return false;
             }
-            if(!(index+1 === allItems.length)){
+            if(index + 1 !== allItems.length){
                 innerHtml += '<br />';
             }
         });
@@ -58,9 +77,8 @@ Ext.define('Koala.view.component.MapController', {
     *
     */
     openBarChartWindow: function(olFeat) {
-       var me = this;
        var olLayer = olFeat.get('layer');
-       win = Ext.create("Koala.view.window.BarChart");
+       var win = Ext.create("Koala.view.window.BarChart");
        win.getController().createOrUpdateChart(olLayer, olFeat);
 
        // show the window itself
@@ -77,7 +95,7 @@ Ext.define('Koala.view.component.MapController', {
 
         // create the window if it doesn't exist already
         if (!win) {
-            win = me.createTimeSeriesChartWindow();
+            win = me.createTimeSeriesChartWindow(olLayer);
         }
 
         win.getController().createOrUpdateChart(olLayer, olFeat);
@@ -89,8 +107,7 @@ Ext.define('Koala.view.component.MapController', {
     /**
     *
     */
-   openGetFeatureInfoWindow: function(olFeat) {
-       var me = this;
+   openGetFeatureInfoWindow: function() {
        var win = Ext.ComponentQuery.query('window[name=getfeatureinfowin]')[0];
 
        // create the window if it doesn't exist already
@@ -103,102 +120,30 @@ Ext.define('Koala.view.component.MapController', {
     /**
      *
      */
-    createTimeSeriesChartWindow: function() {
-        var win = Ext.create("Koala.view.window.TimeSeriesWindow");
+    createTimeSeriesChartWindow: function(olLayer) {
+        var chartConfig = olLayer.get('timeSeriesChartProperties');
+        var addFilterForm = !Ext.isEmpty(chartConfig.allowFilterForm) ?
+            Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
+
+        var win = Ext.create("Koala.view.window.TimeSeriesWindow", {
+            addFilterForm: addFilterForm
+        });
         return win;
-    },
-
-    // THE FOLLOWING METHODS WILL SIMPLY CALL THE CORRESPONDING METHODS
-    // OF THE VIEW. THIS WILL USUALLY BY CODE THAT IS IMPLEMENTED IN
-    // Basepackage.view.component.Map
-    // We have to implement this as we are using defaultListenerScope=false
-    // in Koala.view.component.Map
-    /**
-     *
-     */
-    addHoverVectorLayerInteraction: function() {
-        var me = this;
-        var view = me.getView();
-
-        view.addHoverVectorLayerInteraction();
-    },
-
-    /**
-     *
-     */
-    onFeatureClicked: function(olEvt) {
-        var me = this;
-        var view = me.getView();
-
-        view.onFeatureClicked(olEvt);
-    },
-
-    /**
-     *
-     */
-    addHoverVectorLayerSource: function() {
-        var me = this;
-        var view = me.getView();
-
-        view.addHoverVectorLayerSource();
-    },
-
-    /**
-     *
-     */
-    addHoverVectorLayer: function() {
-        var me = this;
-        var view = me.getView();
-
-        view.addHoverVectorLayer();
-    },
-
-    /**
-     *
-     */
-    clearPendingRequests: function() {
-        var me = this;
-        var view = me.getView();
-
-        view.clearPendingRequests();
-    },
-
-    /**
-     *
-     */
-    requestAsynchronously: function(url, cb) {
-        var me = this;
-        var view = me.getView();
-
-        view.requestAsynchronously(url, cb);
-    },
-
-    /**
-     */
-    onPointerRest: function(evt){
-        var me = this;
-        var view = me.getView();
-
-        view.onPointerRest(evt);
-    },
-
-    /**
-     *
-     */
-    showHoverFeature: function(layer, features) {
-        var me = this;
-        var view = me.getView();
-
-        view.showHoverFeature(layer, features);
-    },
-
-    /**
-     *
-     */
-    showHoverToolTip: function(evt, layer, features) {
-        var me = this;
-        var view = me.getView();
-
-        view.showHoverToolTip(evt, layer, features);
     }
+}, function(cls) {
+    // create forwarding methods on the controller which call their pendant
+    // on the associated view.
+    var viewMethodNames = [
+        'cleanupHoverArtifacts',
+        'addHoverVectorLayerInteraction',
+        'onFeatureClicked',
+        'addHoverVectorLayerSource',
+        'addHoverVectorLayer',
+        'clearPendingRequests',
+        'requestAsynchronously',
+        'onPointerRest',
+        'showHoverFeature',
+        'showHoverToolTip'
+    ];
+    Basepackage.util.Controller.borrowViewMethods(viewMethodNames, cls);
 });

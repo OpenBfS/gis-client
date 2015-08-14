@@ -1,3 +1,18 @@
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 /**
  * This class is the main view for the application. It is specified in app.js as the
  * "mainView" property. That setting automatically applies the "viewport"
@@ -24,7 +39,9 @@ Ext.define('Koala.view.main.Main', {
     ],
 
     controller: 'main',
-    viewModel: 'main',
+    viewModel: {
+        type: "app-main"
+    },
 
     ui: 'navigation',
 
@@ -57,24 +74,28 @@ Ext.define('Koala.view.main.Main', {
             dockedItems: [{
                 xtype: 'buttongroup',
                 columns: 2,
-                title: 'Werkzeuge',
+                bind: {
+                    title: '{buttonGroupTopTitle}'
+                },
                 dock: 'top',
-                defaults:{
+                defaults: {
                     scale: 'medium'
                 },
                 items: [{
                     xtype: 'base-button-addwms',
-                    glyph:'xf0ac@FontAwesome',
+                    glyph: 'xf0ac@FontAwesome',
                     viewModel: {
                         data: {
-                            tooltip: 'WMS hinzufügen…',
-                            text: 'WMS'
+                            tooltip: '',
+                            text: ''
                         }
                     }
-                },{
+                }, {
                     xtype: 'button',
-                    glyph:'xf02f@FontAwesome',
-                    text: 'Druck',
+                    glyph: 'xf02f@FontAwesome',
+                    bind: {
+                        text: '{printButtonText}'
+                    },
                     handler: function(){
                         var win = Ext.ComponentQuery
                             .query('k-window-print')[0];
@@ -90,15 +111,12 @@ Ext.define('Koala.view.main.Main', {
             items: [
                 // Add an empty hidden panel to be able to collapse the last
                 // accordion item
-                {xtype:'panel',hidden:true},
                 {
-                    xtype: 'k-panel-themetree',
-                    title: 'Auswahl',
-                    tools:[{
-                        type:'collapse',
-                        bind: {tooltip: 'LayerSet wechseln'},
-                        handler: 'toggleLayerSetView'
-                    }]
+                    xtype: 'panel',
+                    hidden: true
+                },
+                {
+                    xtype: 'k-panel-themetree'
                 }]
         },
         legendPanelConfig: {
@@ -106,6 +124,7 @@ Ext.define('Koala.view.main.Main', {
         },
         additionalItems: [{
             xtype: 'k-panel-layersetchooser',
+            hidden: true,
             x: 300,
             y: 0,
             floating: true,
@@ -129,8 +148,6 @@ Ext.define('Koala.view.main.Main', {
      *
      */
     getAdditionalHeaderItems: function() {
-        var me = this;
-
         var searchFieldCombo = {
             xtype: 'k-form-field-searchcombo',
             width: 500
@@ -138,11 +155,11 @@ Ext.define('Koala.view.main.Main', {
 
         var clearSearchButton = {
             xtype: 'button',
-            glyph:'xf057@FontAwesome',
+            glyph: 'xf057@FontAwesome',
             style: {
                 borderRadius: 0
             },
-            handler: function(btn, evt){
+            handler: function(btn){
                 btn.up().down('k-form-field-searchcombo').clearValue();
             }
         };

@@ -1,3 +1,18 @@
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 Ext.define('Koala.view.chart.BarController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-chart-bar',
@@ -5,76 +20,105 @@ Ext.define('Koala.view.chart.BarController', {
     /**
      *
      */
-    onBarBeforeLoad: function(store) {
+    prepareBarSeriesLoad: function() {
         var me = this;
         var view = me.getView();
+        var layer = view.selectedStation.get('layer');
+        var chartConfig = layer.get('barChartProperties');
+        var paramConfig = Koala.util.Object.getConfigByPrefix(
+            chartConfig, "param_", true);
+        Ext.iterate(paramConfig, function(k, v) {
+            paramConfig[k] = Koala.util.String.replaceTemplateStrings(
+                v, view.selectedStation);
+        });
 
-        view.getAxes()[0].getFields().push(
-                'Pb214' + view.selectedStation.get('locality_name'),
-                'Te132', 'Bi214', 'Ru103', 'I131', 'Pb212', 'Cs137', 'Pb214',
-//                The following elements might be null
-                'Bi212', 'Zr97', 'Mn54', 'Na22', 'Te123m', 'Cs134', 'Nb95',
-                'Ce144', 'Co58', 'Sb125', 'Zn65'
-        );
+        if (Ext.isEmpty(chartConfig.dataFeatureType) ||
+            Ext.isEmpty(chartConfig.chartFieldSequence)) {
+                Ext.log.error('chart configuration of layer is invalid!');
+                return;
+        }
+
+        var requestParams = {
+            service: 'WFS',
+            version: '1.1.0',
+            request: 'GetFeature',
+            typeName: chartConfig.dataFeatureType,
+            outputFormat: 'application/json'
+        };
+        Ext.apply(requestParams, paramConfig);
+
+        // determined from wms url
+        var url = (layer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs");
+
+        Ext.Ajax.request({
+            url: url,
+            method: 'GET',
+            type: 'ajax',
+            params: requestParams,
+            success: function(res) {
+
+                var json = Ext.decode(res.responseText),
+                    chart = Ext.ComponentQuery.query('k-chart-bar')[0],
+                    store = chart.getStore();
+
+                // move the values from props one level up as we have no model
+                Ext.each(json.features, function(feat) {
+                    Ext.iterate(feat.properties, function(k, v) {
+                        // check if we have an fieldtitle or defaultvalue to set
+                        var fields = chartConfig.chartFieldSequence.split(",");
+                        var index = Ext.Array.indexOf(fields, k);
+                        var defaultValue;
+                        if (index >= 0) {
+                            var replacedTitle = Koala.util.String.getValueFromSequence(
+                                chartConfig.chartFieldTitleSequence, index,
+                                feat[k + '_name'] = k);
+                            defaultValue = Koala.util.String.getValueFromSequence(
+                                chartConfig.chartFieldDefaultsSequence, index);
+
+                            feat[k + '_name'] = replacedTitle;
+                        } else {
+                            feat[k + '_name'] = k;
+                        }
+
+                        if (!Ext.isNumeric(v)) {
+                            feat[k + '_value'] = defaultValue;
+                        } else {
+                            feat[k + '_value'] = v;
+                        }
+                    });
+                    delete feat.properties;
+                });
+                store.add(json.features);
+                me.onBarStoreLoad(chartConfig);
+            },
+            failure: function() {
+                Ext.log.error("failure on chartdata load");
+            }
+        });
+
+        var sequence = chartConfig.chartFieldSequence.split(",");
+        Ext.each(sequence, function(fieldName) {
+            view.getAxes()[0].getFields().push(fieldName + '_value');
+        });
+
         view.setLoading(true);
     },
 
     /**
      *
      */
-    onBarStoreLoad: function(store) {
+    onBarStoreLoad: function(chartConfig) {
         var me = this;
         var view = me.getView();
-        var station = view.selectedStation;
-
-        var newSeries1 = me.createNewBarSeries("Te132", "#d2564a", "Te_132", "Te132");
-        var newSeries2 = me.createNewBarSeries("Bi214", "#6e4b61", "Bi_214", "Bi214");
-        var newSeries3 = me.createNewBarSeries("Ru103", "#cabd61", "Ru_103", "Ru103");
-        var newSeries4 = me.createNewBarSeries( "I131", "#d2564a",  "I_131",  "I131");
-        var newSeries5 = me.createNewBarSeries("Pb212", "#6e4b61", "Pb_212", "Pb212");
-        var newSeries6 = me.createNewBarSeries("Cs137", "#cabd61", "Cs_137", "Cs137");
-        var newSeries7 = me.createNewBarSeries("Pb214", "#d2564a", "Pb_214", "Pb214");
-        if(newSeries1){
-            view.addSeries(newSeries1);
-            view.addSeries(newSeries2);
-            view.addSeries(newSeries3);
-            view.addSeries(newSeries4);
-            view.addSeries(newSeries5);
-            view.addSeries(newSeries6);
-            view.addSeries(newSeries7);
-        }
-
-//      The following elements might be null
-        if(store.data.items[0].get('Bi212')) {
-            var newSeries = me.createNewBarSeries("Bi212", "#6e4b61", "Bi_212", "Bi212");
+        var sequence = chartConfig.chartFieldSequence.split(",");
+        var i = 0;
+        Ext.each(sequence, function(fieldName) {
+            var title = Koala.util.String.getValueFromSequence(
+                chartConfig.chartFieldTitleSequence, i, fieldName);
+            var newSeries = me.createNewBarSeries(title, fieldName, chartConfig, i);
             view.addSeries(newSeries);
-        } else {
-            console.log('Bi212 is: ' + store.data.items[0].get('Bi212'));
-        }
-        if(store.data.items[0].get('Zr97')) {
-            var newSeries = me.createNewBarSeries("Zr97", "#6e4b61", "Zr97", "Zr97");
-            view.addSeries(newSeries);
-        } else {
-            console.log('Zr97 is: ' + store.data.items[0].get('Zr97'));
-        }
-        if(store.data.items[0].get('Mn54')) {
-            var newSeries = me.createNewBarSeries("Mn54", "#6e4b61", "Mn54", "Mn54");
-            view.addSeries(newSeries);
-        } else {
-            console.log('Mn54 is: ' + store.data.items[0].get('Mn54'));
-        }
-        if(store.data.items[0].get('Na22')) {
-            var newSeries = me.createNewBarSeries("Na22", "#6e4b61", "Na_22", "Na22");
-            view.addSeries(newSeries);
-        } else {
-            console.log('Na22 is: ' + store.data.items[0].get('Na22'));
-        }
-//        TODO check all elements which might be null
-
-        var dtUser = new Date(station.get('end_measure'));
-        dtUser.setTime(dtUser.getTime() + dtUser.getTimezoneOffset()*60*1000);
-        var dtFormatted = Ext.Date.format(dtUser, 'Y-m-d H:i:s');
-        view.setTitle(station.get('locality_name') + ' - ' + dtFormatted);
+            i++;
+        });
 
         view.setLoading(false);
     },
@@ -82,43 +126,80 @@ Ext.define('Koala.view.chart.BarController', {
     /**
      *
      */
-    createNewBarSeries: function(title, fillStyle, xField, yField) {
+    getRandomColor: function() {
+       var letters = '0123456789ABCDEF'.split('');
+       var color = '#';
+       for (var i = 0; i < 6; i++ ) {
+           color += letters[Math.floor(Math.random() * 16)];
+       }
+       return color;
+    },
+
+    /**
+     *
+     */
+    createNewBarSeries: function(title, field, chartConfig, seriesIndex) {
         var me = this;
         var view = me.getView();
+        var strokeStyle = Koala.util.String.getValueFromSequence(
+            chartConfig.colorSequence, seriesIndex, me.getRandomColor());
+        var strokeWidth = parseInt(Koala.util.String.getValueFromSequence(
+            chartConfig.strokeWidthSequence, seriesIndex, 1), 10);
+        var fillOpacity = parseFloat(Koala.util.String.getValueFromSequence(
+            chartConfig.fillOpacitySequence, seriesIndex, 0.8));
+
+        // check if we have generic series properties
+        var seriesProperties =
+            Koala.util.Object.getConfigByPrefix(chartConfig, "ui_series_", true);
+
         var newSeries = {
             type: view.getSeriesType(),
             title: title,
-            xField: xField,
-            yField: yField,
-            step: view.getShowStep(),
+            xField: field + '_name',
+            yField: field + '_value',
             style: {
-                lineWidth: 1,
-                fillStyle: fillStyle,
-                strokeStyle: '#7f8b43'
+                lineWidth: strokeWidth,
+                fillStyle: strokeStyle,
+                strokeStyle: strokeStyle,
+                fillOpacity: fillOpacity
             },
             marker: {
                 radius: 0
             },
             selectionTolerance: 5,
             highlight: {
-                fillStyle: '#e0e0e0',
+                fillStyle: strokeStyle,
+                fillOpacity: fillOpacity,
                 radius: 5,
-                lineWidth: 1,
-                strokeStyle: '#7f8b43'
+                lineWidth: strokeWidth + 2,
+                strokeStyle: strokeStyle
             },
             tooltip: {
                 trackMouse: true,
-                showDelay: 0,
-                dismissDelay: 0,
-                hideDelay: 0,
-                renderer: function (storeitem, item) {
-                    var me = this;
-                    var element = this.getConfig('yField');
-                    var value = item.get(element);
-                    me.getConfig('tooltip').setHtml(element + ': ' + value + ' µSv/h');
+                renderer: function (tooltip, record) {
+                    var key = record.get(this.getXField());
+                    var value = record.get(this.getYField());
+                    var unit = chartConfig.dspUnit ? chartConfig.dspUnit : '';
+                    var defaultTemplate = //this.getTitle() + '<br/>' +
+                            key + ' : ' + value + " " + unit;
+
+                    if (!Ext.isEmpty(chartConfig.tooltipTpl)) {
+                        var tpl = Koala.util.String.replaceTemplateStrings(
+                            chartConfig.tooltipTpl, view.selectedStation, false);
+                        tpl = Koala.util.String.replaceTemplateStrings(
+                            tpl, record, false);
+                        tooltip.setHtml(tpl);
+                    } else {
+                        tooltip.setHtml(defaultTemplate);
+                    }
                 }
             }
         };
+        if (Koala.util.String.coerce(chartConfig.hasToolTip) === false) {
+            delete newSeries.tooltip;
+        }
+        // apply / override additional properties
+        newSeries = Ext.apply(newSeries, seriesProperties);
         return newSeries;
     }
 });

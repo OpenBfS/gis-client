@@ -1,4 +1,19 @@
-Ext.define("Koala.view.form.field.SearchCombo",{
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+Ext.define("Koala.view.form.field.SearchCombo", {
     extend: "Ext.form.field.ComboBox",
     xtype: "k-form-field-searchcombo",
 
@@ -24,7 +39,7 @@ Ext.define("Koala.view.form.field.SearchCombo",{
     },
 
     listeners: {
-        change: function(combo, newValue, oldValue){
+        change: function(combo, newValue){
             var multiPanel = Ext.ComponentQuery.query('k-panel-multisearch')[0];
             if(newValue){
                 if(multiPanel) {
@@ -36,7 +51,7 @@ Ext.define("Koala.view.form.field.SearchCombo",{
                 if(multiPanel) {
                     multiPanel.getEl().slideOut('t', {
                         duration: 250,
-                        callback:function(){
+                        callback: function(){
                             multiPanel.hide();
                         }
                     });

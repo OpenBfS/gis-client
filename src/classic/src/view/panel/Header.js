@@ -1,5 +1,19 @@
-
-Ext.define("Koala.view.panel.Header",{
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+Ext.define("Koala.view.panel.Header", {
     extend: "Ext.panel.Panel",
     xtype: "k-panel-header",
 
@@ -9,15 +23,7 @@ Ext.define("Koala.view.panel.Header",{
         "Koala.view.form.field.LanguageCombo",
         "Koala.view.form.field.SearchCombo",
         "Koala.view.toolbar.Header"
-
-//        "Koala.view.panel.HeaderController",
-//        "Koala.view.panel.HeaderModel"
     ],
-
-//    controller: "k-panel-header",
-//    viewModel: {
-//        type: "k-panel-header"
-//    },
 
     layout: {
         type: 'hbox',
@@ -53,11 +59,11 @@ Ext.define("Koala.view.panel.Header",{
                 },
                 {
                     xtype: 'button',
-                    glyph:'xf057@FontAwesome',
+                    glyph: 'xf057@FontAwesome',
                     style: {
                         borderRadius: 0
                     },
-                    handler: function(btn, evt){
+                    handler: function(btn){
                         btn.up().down('k-form-field-searchcombo').clearValue();
                     }
                 }

@@ -1,4 +1,3 @@
-@import "../view/Theme.scss"
 @import "../form/field/SearchCombo.scss"
 @import "../grid/MetadataSearch.scss"
 
@@ -34,4 +33,18 @@
 }
 .ol-scale-line.koala-scaline-adjusted {
     left: 405px;
+}
+
+.ol-attribution.ol-uncollapsible {
+    height: 1.4em;
+    right: 250px;
+    color: #333;
+    background: rgba(255,255,255,.7);
+}
+.ol-attribution.ol-uncollapsible a,
+.ol-attribution.ol-uncollapsible a:link
+.ol-attribution.ol-uncollapsible a:visited,
+.ol-attribution.ol-uncollapsible a:hover,
+.ol-attribution.ol-uncollapsible a:active {
+    color: #333;
 }
