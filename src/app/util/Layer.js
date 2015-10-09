@@ -179,19 +179,12 @@ Ext.define('Koala.util.Layer', {
                 Ext.log.error('Failed to find layerConfig object in metadata');
             }
 
-            var VectorLayerClazz = ol.layer.Vector;
-            var WmtsLayerClazz = ol.layer.Tile;
-            var WmsLayerClazz = ol.layer.Tile;
-            var hintVector = 'vector';
-            var hintWmts = 'wmts';
-            var hintWms = 'wms';
-
             var LayerClazz;
             var hint;
 
-            var cntVector = Ext.Object.getSize(layerCfg[hintVector]);
-            var cntWms = Ext.Object.getSize(layerCfg[hintWms]);
-            var cntWmts = Ext.Object.getSize(layerCfg[hintWmts]);
+            var cntVector = Ext.Object.getSize(layerCfg['vector']);
+            var cntWms = Ext.Object.getSize(layerCfg['wms']);
+            var cntWmts = Ext.Object.getSize(layerCfg['wmts']);
 
             if (cntVector === 0 && cntWms === 0 && cntWmts === 0) {
                 Ext.log.error('Non-deterministic layer config in metadata');
@@ -199,41 +192,26 @@ Ext.define('Koala.util.Layer', {
 
             if (cntVector > cntWms && cntVector > cntWmts) {
                 // vector biggest of all
-                LayerClazz = VectorLayerClazz;
-                hint = hintVector;
+                LayerClazz = ol.layer.Vector;
+                hint = 'vector';
             } else if (cntWms > cntVector && cntWms > cntWmts) {
                 // wms biggest of all
-                LayerClazz = WmsLayerClazz;
-                hint = hintWms;
+                LayerClazz = ol.layer.Tile;
+                hint = 'wms';
             } else if (cntWmts > cntVector && cntWmts > cntWms) {
                 // wmts biggest of all
-                LayerClazz = WmtsLayerClazz;
-                hint = hintWmts;
+                LayerClazz = ol.layer.Tile;
+                hint = 'wmts';
             }
 
             if (!LayerClazz) {
-                // we had a tie between at least two counts
-                var allEqual = (cntVector === cntWmts && cntVector === cntWms);
-                var vecOrWmts = (!allEqual && cntVector === cntWmts);
-                var vecOrWms = (!allEqual && cntVector === cntWms);
-                var wmsOrWmts = (!allEqual && cntVector === cntWmts);
-                if (allEqual) {
-                    // prefer wms
-                    LayerClazz = WmsLayerClazz;
-                    hint = hintWms;
-                } else if (vecOrWmts) {
-                    // prefer wms
-                    LayerClazz = WmsLayerClazz;
-                    hint = hintWms;
-                } else if (vecOrWms) {
-                    // prefer wms
-                    LayerClazz = WmsLayerClazz;
-                    hint = hintWms;
-                } else if (wmsOrWmts) {
-                    // prefer wms
-                    LayerClazz = WmsLayerClazz;
-                    hint = hintWms;
-                }
+                LayerClazz = ol.layer.Tile;
+                hint = 'wms';
+            }
+
+            if(hint === 'wms' && layerCfg.olProperties &&
+                layerCfg.olProperties.singleTile === 'true'){
+                LayerClazz = ol.layer.Image;
             }
 
             return {
@@ -258,6 +236,8 @@ Ext.define('Koala.util.Layer', {
                 SourceClazz = ol.source.Vector;
             } else if (LayerClazz === ol.layer.Tile && hint === 'wms') {
                 SourceClazz = ol.source.TileWMS;
+            } else if (LayerClazz === ol.layer.Image && hint === 'wms') {
+                SourceClazz = ol.source.ImageWMS;
             } else if (LayerClazz === ol.layer.Tile && hint === 'wmts') {
                 SourceClazz = ol.source.WMTS;
             }
@@ -280,8 +260,7 @@ Ext.define('Koala.util.Layer', {
             }
 
             return {
-                // Workaround for buggy json from geonetwork
-                name: JSON.parse('"' + metadata.dspTxt + '"'),
+                name: metadata.dspTxt,
                 legendUrl: olProps.legendUrl || '',
                 legendHeight: olProps.legendHeight || 40,
                 topic: isTopic, // TODO: rename this prop in the application
@@ -351,7 +330,7 @@ Ext.define('Koala.util.Layer', {
                         maxZoom: 28
                     }))
                 };
-            } else if (SourceClass === ol.source.TileWMS) {
+            } else if (SourceClass === ol.source.TileWMS || SourceClass === ol.source.ImageWMS) {
 
                 cfg = {
                     url: md.layerConfig.wms.url,
