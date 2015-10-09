@@ -1,0 +1,15 @@
+{
+    "globals": {
+        "Basepackage": false,
+        "Ext": false,
+        "GeoExt": false,
+        "ol": false,
+
+        "Koala": true
+    },
+    "rules": {
+        "no-underscore-dangle": false,
+        "quotes": "single",
+        "strict": "never"
+    }
+}

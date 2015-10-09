@@ -28,6 +28,7 @@ Ext.define('Koala.view.main.Main', {
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
 
+        'Basepackage.plugin.Hover',
         'Basepackage.view.panel.Header',
         'Basepackage.view.panel.MapContainer',
         'Basepackage.util.Animate',
@@ -65,9 +66,24 @@ Ext.define('Koala.view.main.Main', {
         xtype: 'base-panel-mapcontainer',
         title: 'K-MapPanel',
         region: 'center',
-        // we use our project specific map component
         mapComponentConfig: {
-            xtype: 'k-component-map'
+            xtype: 'k-component-map',
+            plugins: [{
+                    ptype: 'hover',
+                    selectStyleFunction: function(feature){
+                        return [new ol.style.Style({
+                             image: new ol.style.Circle({
+                                 radius: 6,
+                                 fill: new ol.style.Fill({
+                                     color: "rgba(0, 0, 255, 0.6)"
+                                 }),
+                                 stroke: new ol.style.Stroke({
+                                     color: 'gray'
+                                 })
+                             })
+                         })]
+                    }
+            }]
         },
         // define menu items
         menuConfig: {
@@ -79,7 +95,8 @@ Ext.define('Koala.view.main.Main', {
                 },
                 dock: 'top',
                 defaults: {
-                    scale: 'medium'
+                    scale: 'small',
+                    width: 100
                 },
                 items: [{
                     xtype: 'base-button-addwms',

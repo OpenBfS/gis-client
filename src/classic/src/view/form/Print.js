@@ -17,6 +17,13 @@ Ext.define("Koala.view.form.Print", {
     extend: "Basepackage.view.form.Print",
     xtype: "k-form-print",
 
+    requires: [
+        'GeoExt.data.MapfishPrintProvider',
+        'GeoExt.data.serializer.ImageWMS',
+        'GeoExt.data.serializer.TileWMS',
+        'GeoExt.data.serializer.Vector'
+    ],
+
     maxHeight: null,
     maxWidth: 800,
 
@@ -59,14 +66,10 @@ Ext.define("Koala.view.form.Print", {
         var projection = mapView.getProjection().getCode();
         var rotation = mapView.getRotation();
 
-        var printLayers =
-            Ext.Array.filter(mapComponent.getLayers().getArray(),
-            this.layerFilter);
-
         var serializedLayers =
             GeoExt.data.MapfishPrintProvider.getSerializedLayers(
-                printLayers
-        );
+                mapComponent, this.layerFilter, this
+            );
 
         var fieldsets =
             view.query('fieldset[name=attributes] fieldset');

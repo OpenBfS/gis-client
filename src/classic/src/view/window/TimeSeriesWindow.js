@@ -48,7 +48,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
 
     initComponent: function() {
         if (this.addFilterForm) {
-            this.items.push({
+            this.items = [{
                 xtype: 'form',
                 layout: {
                     type: 'hbox',
@@ -103,7 +103,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                         beforerender: 'bindSelectChartLayerStore'
                     }
                 }]
-            });
+            }];
         }
         this.callParent(arguments);
     }

@@ -35,7 +35,7 @@ Ext.define('Koala.util.String', {
          * TODO: enhance and respect demorgan rules
          */
         replaceTemplateStrings: function(tpl, getable, showWarnings) {
-            var regex = /\{\{([a-zA-Z_-])+?\}\}/gi;
+            var regex = /\{\{([a-zA-Z0-9_-])+?\}\}/gi;
             var matches = tpl.match(regex);
             var keys = [];
             Ext.each(matches, function(match) {

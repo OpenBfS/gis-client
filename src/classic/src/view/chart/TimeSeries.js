@@ -86,8 +86,11 @@ Ext.define("Koala.view.chart.TimeSeries", {
             grid: true,
             minimum: 0,
             maximum: 0.2,
-            renderer: function (v, layoutContext) {
-                return layoutContext.renderer(v) + ' ' + dspUnit;
+            renderer: function (axis, idx, data, v) {
+                if (v === null) {
+                    return '';
+                }
+                return data.renderer(v) + ' ' + dspUnit;
             },
             label: {
                 rotate: {

@@ -17,13 +17,13 @@ Ext.define('Koala.view.window.BarChartController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-barchart',
 
-    createBarChart: function(olLayer) {
+    createBarChart: function(olLayer, chartId) {
         var props = olLayer.get('barChartProperties');
         var categoryCount = props.chartFieldSequence.split(",").length;
         var chartWidth = 200 + categoryCount * 30;
         var chart = {
             xtype: 'k-chart-bar',
-            name: olLayer.get('name'),
+            name: chartId,
             layer: olLayer,
             height: 350,
             width: chartWidth
@@ -31,16 +31,15 @@ Ext.define('Koala.view.window.BarChartController', {
         return chart;
     },
 
-    updateBarChartStore: function(olLayer, olFeat) {
+    updateBarChartStore: function(olFeat, chartId) {
         if (!olFeat) {
             return false;
         }
 
         var me = this;
         var view = me.getView();
-        var layerName = olLayer.get('name');
-        var chart = view.down('chart[name=' + layerName + ']');
-        var chartView = Ext.ComponentQuery.query('k-chart-bar')[0];
+        var chart = view.down('chart[name=' + chartId + ']');
+        var chartView = view.down('k-chart-bar');
         var controller = chartView.getController();
 
         chart.selectedStation = olFeat;
@@ -48,14 +47,12 @@ Ext.define('Koala.view.window.BarChartController', {
         controller.prepareBarSeriesLoad();
     },
 
-    isLayerChartRendered: function(layerName) {
-        var me = this;
-        var view = me.getView();
-        var existingCharts = view ? view.query('chart') : [];
+    isLayerChartRendered: function(chartId) {
+        var existingCharts = Ext.ComponentQuery.query('k-chart-bar');
         var isRendered = false;
 
         Ext.each(existingCharts, function(chart) {
-            if (chart.name === layerName) {
+            if (chart.name === chartId) {
                 isRendered = true;
                 return;
             }
@@ -64,15 +61,18 @@ Ext.define('Koala.view.window.BarChartController', {
         return isRendered;
     },
 
-    createOrUpdateChart: function(olLayer, olFeat) {
+    createOrUpdateChart: function(olLayer, olFeat, uniqueId) {
         var me = this;
         var view = me.getView();
-        var layerName = olLayer.get('name');
-        var layerChartRendered = me.isLayerChartRendered(layerName);
+        var layerChartRendered = me.isLayerChartRendered(uniqueId);
 
         if (!layerChartRendered) {
-            view.add(me.createBarChart(olLayer));
-            me.updateBarChartStore(olLayer, olFeat);
+            view.add(me.createBarChart(olLayer, uniqueId));
+            me.updateBarChartStore(olFeat, uniqueId);
+            view.show();
+        } else {
+            // close the newly opened, empty window
+            view.destroy();
         }
     }
 });

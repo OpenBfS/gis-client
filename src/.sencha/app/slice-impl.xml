@@ -33,10 +33,18 @@
             path="${build.out.resources.dir}" 
             property="image.search.path"/>
 
-        <condition property="theme.name.suffix" value="!dynamic">
+        <local name="var.begin"/>
+        <local name="var.end"/>
+
+        <condition property="var.begin" value="dynamic(">
             <isset property="framework.isV6"/>
         </condition>
-        <property name="theme.name.suffix" value="!default"/>
+        <condition property="var.end" value=")">
+            <isset property="framework.isV6"/>
+        </condition>
+
+        <property name="var.begin" value=""/>
+        <property name="var.end" value="!default"/>
 
         <x-compile refid="${compiler.ref.id}">
             <![CDATA[
@@ -51,9 +59,9 @@
                     +etc
                     +vars
                     +rules
-                    -variable=$app-name: '${app.name}' ${theme.name.suffix}
+                    -variable=$app-name: ${var.begin} '${app.name}' ${var.end}
                     -variable=$image-search-path:'${image.search.path}'
-                    -variable=$theme-name: '${theme.name}' ${theme.name.suffix}
+                    -variable=$theme-name: ${var.begin} '${theme.name}' ${var.end}
                     -output=${app.example.scss.tmp}
                     -forward=${app.sass.dynamic}
                 and
@@ -110,7 +118,8 @@
                     <else>
                         <x-sass-build input="${app.example.build.dir}"
                                       output="${app.example.build.dir}"
-                                      refId="app.web.server"/>
+                                      refId="app.web.server"
+                                      compress="false"/>
                     </else>
                 </if>
             </then>

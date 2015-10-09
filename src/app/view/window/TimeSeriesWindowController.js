@@ -240,15 +240,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         } else {
             // otherwise create a new chart for the olFeat and add it to the
             // window and update the store
-
-            // The below line removes any formpanels taht may be existing at
-            // this point. If we do not remove them we'll see duplicate filter
-            // forms with every click...
-            // TODO MJ rework and only add if it is needed
-            if (view.items && view.items.items && view.items.items.length > 1) {
-                view.items.remove(view.items.items[0]);
-            }
-
             view.add(me.createTimeSeriesChartPanel(olLayer));
             me.updateTimeSeriesChart(olLayer, olFeat);
         }

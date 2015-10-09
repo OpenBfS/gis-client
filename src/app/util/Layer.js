@@ -88,7 +88,8 @@ Ext.define('Koala.util.Layer', {
          */
         bindLayerVisibilityHandlers: function(layer, mapComp){
             var me = this;
-            layer.on('change:visible', mapComp.cleanupHoverArtifacts, mapComp);
+            var hoverPlugin = mapComp.getPlugin('hover');
+            layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts, hoverPlugin);
             if (layer instanceof ol.layer.Group) {
                 // additionally, if the new layer is a group layer, we need to
                 // bind ourself for all sublayers
@@ -274,12 +275,13 @@ Ext.define('Koala.util.Layer', {
             var getBool = Koala.util.String.getBool;
 
             var isTopic = false;
-            if (!Ext.isEmpty(olProps.hoverfield) && olProps.allowHover !== false) {
+            if (!Ext.isEmpty(olProps.hoverTpl) && olProps.allowHover !== false) {
                 isTopic = true;
             }
 
             return {
-                name: metadata.dspTxt,
+                // Workaround for buggy json from geonetwork
+                name: JSON.parse('"' + metadata.dspTxt + '"'),
                 legendUrl: olProps.legendUrl || '',
                 legendHeight: olProps.legendHeight || 40,
                 topic: isTopic, // TODO: rename this prop in the application
@@ -290,7 +292,7 @@ Ext.define('Koala.util.Layer', {
                 allowShortInfo: getBool(olProps.allowShortInfo, true),
                 allowPrint: getBool(olProps.allowPrint, true),
                 allowOpacityChange: getBool(olProps.allowOpacityChange, true),
-                hoverfield: olProps.hoverfield,
+                hoverTpl: olProps.hoverTpl,
                 hasLegend: getBool(olProps.hasLegend, true),
                 downloadUrl: metadata.layerConfig.download.url,
                 // "treeId": metadata.inspireId, //TODO: is now routeId
@@ -310,7 +312,7 @@ Ext.define('Koala.util.Layer', {
             var olProps = md.layerConfig.olProperties;
             var extraParams = Koala.util.Object.getConfigByPrefix(
                     olProps, "param_");
-            var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
+            var map = Ext.ComponentQuery.query('base-component-map')[0].getMap();
             var projection = map.getView().getProjection();
             var projCode = map.getView().getProjection().getCode();
             var mdLayerCfg;

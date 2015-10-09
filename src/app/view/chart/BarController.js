@@ -58,8 +58,7 @@ Ext.define('Koala.view.chart.BarController', {
             success: function(res) {
 
                 var json = Ext.decode(res.responseText),
-                    chart = Ext.ComponentQuery.query('k-chart-bar')[0],
-                    store = chart.getStore();
+                    store = view.getStore();
 
                 // move the values from props one level up as we have no model
                 Ext.each(json.features, function(feat) {

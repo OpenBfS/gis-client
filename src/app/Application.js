@@ -160,6 +160,9 @@ Ext.define('Koala.Application', {
             Ext.create('Ext.window.Window', {
                 title: 'Layer Profilwahl',
                 modal: true,
+                layout: 'fit',
+                minWidth: 250,
+                minHeight: 300,
                 items: [{
                     xtype: 'k-panel-layersetchooser',
                     showLayerProfiles: true,

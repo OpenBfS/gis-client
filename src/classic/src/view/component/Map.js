@@ -22,32 +22,24 @@ Ext.define("Koala.view.component.Map", {
     ],
 
     /**
-     * As we use a controller for this class, we have to set this to false.
-     * Otherwise this would be true (which is the default in the parent class
-     * Basepackage.view.component.Map.
-     */
-    defaultListenerScope: false,
-
-    /**
      *
      */
     controller: "k-component-map",
 
-    /**
-     * This overwrites the default value from config in parent class
-     * Basepackage.view.component.Map
-     */
-    pointerRestInterval: 100,
+    initComponent: function(){
+        this.callParent(arguments);
+        this.on('hoverfeaturesclick', this.onHoverFeatureClick, this);
+    },
 
     /**
      * We overwrite this method from the superclass.
      * We simply call the controller which contains the logic.
      */
-    onHoverFeatureClick: function(olFeat) {
+    onHoverFeatureClick: function(olFeatures) {
         var me = this;
         var controller = me.getController();
 
-        controller.onHoverFeatureClick(olFeat);
+        controller.onHoverFeatureClick(olFeatures[0]);
     },
 
     /**

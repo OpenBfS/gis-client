@@ -44,24 +44,24 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
     onSelectionChange: function(selectionModel, selectedRecords){
         var store = this.getView().getStore();
 
-        // Sets topic to false on every not selected layer that has an hoverfield
+        // Sets topic to false on every not selected layer that has an hoverTpl
         if(selectedRecords.length > 0){
             store.each(function(layerRec){
-                if(layerRec.getOlLayer().get('hoverfield')){
+                if(layerRec.getOlLayer().get('hoverTpl')){
                     layerRec.getOlLayer().set('topic', false);
                 }
             });
-            // Sets topic to true for the selected layers that have an hoverfield
+            // Sets topic to true for the selected layers that have an hoverTpl
             Ext.each(selectedRecords, function(selectedRecord){
                 var olLayer = selectedRecord.getOlLayer();
-                if(olLayer && olLayer.get('hoverfield')){
+                if(olLayer && olLayer.get('hoverTpl')){
                     olLayer.set('topic', true);
                 }
             });
-        // Sets topic to true on every layer that has an hoverfield, if none is selected
+        // Sets topic to true on every layer that has an hoverTpl, if none is selected
         } else {
             store.each(function(layerRec){
-                if(layerRec.getOlLayer().get('hoverfield')){
+                if(layerRec.getOlLayer().get('hoverTpl')){
                     layerRec.getOlLayer().set('topic', true);
                 }
             });

@@ -55,11 +55,11 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         reorganizeMenu: function(comp){
             var olLayer = comp.layerRec.getOlLayer();
 
-            var allowShortInfo = olLayer.get('allowShortInfo');
-            var allowDownload = olLayer.get('allowDownload');
-            var allowRemoval = olLayer.get('allowRemoval');
-            var allowOpacityChange = olLayer.get('allowOpacityChange');
-            var hasLegend = olLayer.get('hasLegend');
+            var allowShortInfo = olLayer.get('allowShortInfo') || false;
+            var allowDownload = olLayer.get('allowDownload') || false;
+            var allowRemoval = olLayer.get('allowRemoval') || false;
+            var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
+            var hasLegend = olLayer.get('hasLegend') || false;
 
             var shortInfoBtn = comp.down('button[name="shortInfo"]');
             var downloadBtn = comp.down('button[name="download"]');
@@ -67,11 +67,21 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             var opacitySlider = comp.down('slider[name="opacityChange"]');
             var legend = comp.up().down('image[name="legend"]');
 
-            shortInfoBtn.setVisible(allowShortInfo);
-            downloadBtn.setVisible(allowDownload);
-            removalBtn.setVisible(allowRemoval);
-            opacitySlider.setVisible(allowOpacityChange);
-            legend.setVisible(hasLegend);
+            if(shortInfoBtn){
+                shortInfoBtn.setVisible(allowShortInfo);
+            }
+            if(downloadBtn){
+                downloadBtn.setVisible(allowDownload);
+            }
+            if(removalBtn){
+                removalBtn.setVisible(allowRemoval);
+            }
+            if(opacitySlider){
+                opacitySlider.setVisible(allowOpacityChange);
+            }
+            if(legend){
+                legend.setVisible(hasLegend);
+            }
         },
 
         getFilterText: function(record){
@@ -128,7 +138,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         removalHandler: function(btn){
             var layer = btn.layerRec.getOlLayer();
-            var map = Ext.ComponentQuery.query('k-component-map')[0]
+            var map = Ext.ComponentQuery.query('base-component-map')[0]
                 .getMap();
 
             Ext.Msg.show({

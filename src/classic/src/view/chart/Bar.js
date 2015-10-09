@@ -85,8 +85,11 @@ Ext.define("Koala.view.chart.Bar", {
             position: 'left',
             grid: true,
             minimum: 0,
-            renderer: function (v, layoutContext) {
-                return layoutContext.renderer(v) + ' ' + dspUnit;
+            renderer: function (axis, idx, data, v) {
+                if (v === null) {
+                    return '';
+                }
+                return data.renderer(v) + ' ' + dspUnit;
             },
             label: {
                 rotate: {

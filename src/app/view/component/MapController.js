@@ -52,14 +52,17 @@ Ext.define('Koala.view.component.MapController', {
             .query("base-panel-legendtree")[0].getSelection();
 
         Ext.each(layers, function(layer, index, allItems){
-            var hoverfield = layer.get('hoverfield');
-            innerHtml += '<b>' + layer.get('name') + '</b>';
+            var hoverTpl = layer.get('hoverTpl');
             Ext.each(features, function(feat){
                 // we check for existing feature first as there maybe strange
                 // situations (e.g. when zooming while hovering)
                 // where feat is undefined and feat.get would throw an error
                 if(feat && feat.get('layer') === layer){
-                    innerHtml += '<br />' + feat.get(hoverfield) + '<br />';
+                    var tpl = Koala.util.String.replaceTemplateStrings(
+                        hoverTpl, layer, false);
+                    tpl = Koala.util.String.replaceTemplateStrings(
+                        tpl, feat, false);
+                    innerHtml += tpl;
                 }
             });
             if(treeSelection.length === 0){
@@ -78,11 +81,9 @@ Ext.define('Koala.view.component.MapController', {
     */
     openBarChartWindow: function(olFeat) {
        var olLayer = olFeat.get('layer');
+       var uniqueId = this.getUniqueIdByFeature(olFeat);
        var win = Ext.create("Koala.view.window.BarChart");
-       win.getController().createOrUpdateChart(olLayer, olFeat);
-
-       // show the window itself
-       win.show();
+       win.getController().createOrUpdateChart(olLayer, olFeat, uniqueId);
    },
 
     /**
@@ -129,6 +130,19 @@ Ext.define('Koala.view.component.MapController', {
             addFilterForm: addFilterForm
         });
         return win;
+    },
+
+    /**
+     *
+     */
+    getUniqueIdByFeature: function(olFeat) {
+        var geom = olFeat.getGeometry();
+        if (geom && geom.getExtent) {
+            var extent = geom.getExtent();
+            return extent.join("-");
+        } else {
+            return olFeat.getId();
+        }
     }
 }, function(cls) {
     // create forwarding methods on the controller which call their pendant

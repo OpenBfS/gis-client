@@ -392,7 +392,8 @@
                   portPropertyName="build.web.port"
                   defaultSassFile="${app.out.scss}"
                   defaultCssFile="${app.out.css}"
-                  refid="app.web.server">
+                  refid="app.web.server"
+                  saveVariablesProp="app.sass.save">
             <mapping name="~cmd" path="${cmd.dir}"/>
             <mapping name="" path="${build.web.root}"/>
         </x-server>
