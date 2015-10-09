@@ -50,11 +50,6 @@ Ext.define("Koala.view.toolbar.Header", {
             }
         },
         {
-            bind: {
-                text: '{btnTextMobile}'
-            }
-        },
-        {
             xtype: 'k-form-field-languagecombo'
         }
     ]
