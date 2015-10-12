@@ -26,6 +26,12 @@ Ext.define('Koala.store.MetadataSearch', {
 
     groupField: 'type',
 
+    /**
+     * Stores the last request to be able to abort it manually.
+     * @private
+     */
+    _lastRequest: null,
+
     constructor: function() {
         this.callParent(arguments);
 
@@ -72,7 +78,11 @@ Ext.define('Koala.store.MetadataSearch', {
                         return false; // return early
                     }
                 });
-                return root;
+                if(Ext.Object.isEmpty(root)){
+                    return null;
+                } else {
+                    return root;
+                }
             }
         }
     }

@@ -35,12 +35,28 @@ Ext.define("Koala.view.panel.MultiSearch", {
 
     layout: 'vbox',
 
+    defaults: {
+        listeners: {
+            close: function(){
+                if(this.up('panel').query('grid[hidden=false]').length < 2){
+                    var combo = Ext.ComponentQuery.query(
+                        'k-form-field-searchcombo')[0];
+                    combo.clearValue();
+                }
+            }
+        }
+    },
+
     items: [{
         xtype: 'k-grid-spatialsearch',
+        closable: true,
+        closeAction: 'hide',
         maxHeight: 200,
         width: 600
     }, {
         xtype: 'k-grid-metadatasearch',
+        closable: true,
+        closeAction: 'hide',
         maxHeight: 200,
         width: 600
     }]

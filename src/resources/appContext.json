@@ -7,6 +7,7 @@
                 "spatial-search": "http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows",
                 "print-servlet": "http://bfs-koala.intranet.terrestris.de/print-servlet-3.3-SNAPSHOT/print/"
             },
+            "metadataSearchFields": ["title", "abstract"],
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
             "mapLayers": [

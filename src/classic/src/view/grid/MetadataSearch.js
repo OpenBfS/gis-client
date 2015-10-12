@@ -64,8 +64,8 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             dataIndex: 'name',
             flex: 3,
             renderer: function (value, metadata) {
-                metadata.tdAttr = 'data-qtip="' + value + '"';
-                return value;
+                return '<div style="white-space:normal !important;">'
+                    + value +'</div>';
             }
         }, {
             text: 'Service',

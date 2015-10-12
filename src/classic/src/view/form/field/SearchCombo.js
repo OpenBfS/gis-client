@@ -18,7 +18,8 @@ Ext.define("Koala.view.form.field.SearchCombo", {
     xtype: "k-form-field-searchcombo",
 
     requires: [
-        "Ext.window.Toast"
+        "Ext.window.Toast",
+        "Ext.util.KeyNav"
     ],
 
     controller: "k-form-field-searchcombo",
@@ -57,6 +58,14 @@ Ext.define("Koala.view.form.field.SearchCombo", {
                     });
                 }
             }
+        },
+        boxready: function(combo){
+            combo.nav = Ext.create('Ext.util.KeyNav', combo.el, {
+                esc: function(){
+                    combo.clearValue();
+                },
+                scope: combo
+            });
         }
     },
 
@@ -64,16 +73,25 @@ Ext.define("Koala.view.form.field.SearchCombo", {
         var spatialGrid = Ext.ComponentQuery.query('k-grid-spatialsearch')[0];
         var spatialStore = spatialGrid.getStore();
 
+        spatialGrid.show();
+        Ext.Ajax.abort(spatialStore._lastRequest);
         spatialStore.getProxy().setExtraParam('cql_filter', "NAME ilike '%" + value + "%'");
         spatialStore.load();
+        spatialStore._lastRequest = Ext.Ajax.getLatest();
     },
 
     doMetadataSearch: function(value){
         var metadataGrid = Ext.ComponentQuery.query('k-grid-metadatasearch')[0];
         var metadataStore = metadataGrid.getStore();
 
-        metadataStore.getProxy().setExtraParam('constraint', "AnyText like '%" + value + "%'");
+        metadataGrid.show();
+        Ext.Ajax.abort(metadataStore._lastRequest);
+        var appContext = Basepackage.view.component.Map.guess().appContext;
+        var fields = appContext.data.merge.metadataSearchFields;
+        var cql = this.getMetadataCql(fields, value);
+        metadataStore.getProxy().setExtraParam('constraint', cql);
         metadataStore.load();
+        metadataStore._lastRequest = Ext.Ajax.getLatest();
     },
 
     /**
@@ -83,6 +101,20 @@ Ext.define("Koala.view.form.field.SearchCombo", {
     setEmptyText: function(txt){
         this.emptyText = txt;
         this.applyEmptyText();
+    },
+
+    /**
+     * 
+     */
+    getMetadataCql: function(fields, value){
+        var cql = "";
+        Ext.each(fields, function(field, idx, fields){
+            cql += field + " like '%" + value + "%'";
+            if(idx < fields.length-1){
+                cql += " OR ";
+            }
+        });
+        return cql;
     }
 
 

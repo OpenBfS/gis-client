@@ -28,6 +28,12 @@ Ext.define('Koala.store.SpatialSearch', {
 
     map: null,
 
+    /**
+     * Stores the last request to be able to abort it manually.
+     * @private
+     */
+    _lastRequest: null,
+
     constructor: function(config){
         if(!this.map){
             this.map = Basepackage.view.component.Map.guess().getMap();
