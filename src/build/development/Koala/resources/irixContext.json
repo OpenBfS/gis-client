@@ -1,0 +1,210 @@
+{
+    "data": {
+        "fields" : [{
+                "name": "Title",
+                "label": "Titel",
+                "type": "text"
+            },{
+                "name": "User",
+                "label": "Benutzer",
+                "type": "text"
+            },{
+                "name": "requestType",
+                "label": "Request Type",
+                "type": "combo",
+                "values": [
+                    "upload",
+                    "respond",
+                    "upload/respond"
+                ],
+                "defaultValue": "upload"
+            },{
+                "type": "fieldset",
+                "name": "Identification",
+                "label": "Identification",
+                "fields": [{
+                    "name": "OrganisationReporting",
+                    "label": "OrganisationReporting",
+                    "type": "text"
+                },{
+                    "name": "ReportContextType",
+                    "label": "Report Inhaltstyp",
+                    "type": "combo",
+                    "values": [
+                        "Emergency",
+                        "Routine",
+                        "Exercise",
+                        "Test"
+                    ],
+                    "defaultValue": "Test"
+                },{
+                    "name": "SequenceNumber",
+                    "label": "SequenceNumber",
+                    "type": "number",
+                    "minValue": 1,
+                    "maxValue": 99,
+                    "defaultValue": 1
+                },{
+                    "type": "fieldset",
+                    "name": "OrganisationContact",
+                    "label": "OrganisationContact",
+                    "fields":[{
+                        "name": "Name",
+                        "label": "Name",
+                        "type": "text"
+                    },{
+                        "name": "OrganistationID",
+                        "label": "OrganistationID",
+                        "type": "text"
+                    },{
+                        "name": "Country",
+                        "label": "Land",
+                        "type": "text"
+                    }]
+                }]
+            },{
+                "type": "fieldset",
+                "name" : "DokpoolMeta",
+                "label" : "DokpoolMeta",
+                "fields": [{
+                    "name": "purpose",
+                    "label": "Zweck",
+                    "type": "combo",
+                    "values": [
+                        "Standard-Info",
+                        "Bundesmessnetze",
+                        "Standard-Info DWD"
+                    ],
+                    "defaultValue": "Standard-Info"
+                },{
+                    "name": "DokpoolContentType",
+                    "label": "Inhaltstyp",
+                    "type": "combo",
+                    "values": [
+                        "eventinformation",
+                        "notification",
+                        "nppinformation",
+                        "weatherinformation",
+                        "trajectory",
+                        "nppprojection",
+                        "rodosprojection",
+                        "otherprojection",
+                        "gammadoserate",
+                        "airactivity",
+                        "groundcontamination",
+                        "mresult_feed",
+                        "mresult_food",
+                        "mresult_water",
+                        "situationreport",
+                        "instructions",
+                        "protectiveactions",
+                        "mediarelease"
+                    ],
+                    "defaultValue": "eventinformation"
+                },{
+                    "name": "IsElan",
+                    "label": "Is Elan",
+                    "type": "checkbox",
+                    "defaultValue": false
+                },{
+                    "name": "IsDoksys",
+                    "label": "Is Doksys",
+                    "type": "checkbox",
+                    "defaultValue": false
+                },{
+                    "name": "IsRodos",
+                    "label": "Is Rodos",
+                    "type": "checkbox",
+                    "defaultValue": true
+                },{
+                    "name": "IsRei",
+                    "label": "Is Rei",
+                    "type": "checkbox",
+                    "defaultValue": false
+                },{
+                    "name": "NetworkOperator",
+                    "label": "Netzwerkopertor",
+                    "type": "combo",
+                    "values": [
+                        "U - BfS (ABI)",
+                        "W - DWD",
+                        "X - ausländ. Messnetze",
+                        "Z - BfS (ODL)"
+                    ],
+                    "defaultValue": "U - BfS (ABI)"
+                },{
+                    "name": "SampleType",
+                    "label": "Probentyp",
+                    "type": "combo",
+                    "values": [
+                        "L5 - Niederschlag",
+                        "L51 - Niederschlag (Aktivitätskonzentration)",
+                        "L52 - nasse Niederschläge (Deposition)",
+                        "L53 - trockene Niederschläge (Deposition)"
+                    ],
+                    "defaultValue": "L5 - Niederschlag"
+                },{
+                    "name": "Dom",
+                    "label": "Dom",
+                    "type": "combo",
+                    "values": [
+                        "Gamma-Spektrometrie",
+                        "Gesamt-Beta / Gesamt-Alpha"
+                    ],
+                    "defaultValue": "Gamma-Spektrometrie"
+                },{
+                    "name": "LegalBase",
+                    "label": "Gesetzesgrundlage",
+                    "type": "combo",
+                    "values": [
+                        "§2",
+                        "§3",
+                        "§7",
+                        "DENSE",
+                        "Europa",
+                        "KFÜ",
+                        "Land",
+                        "REI-E",
+                        "REI-I",
+                        "SPARSE"
+                    ],
+                    "defaultValue": "Europa"
+                },{
+                    "name": "MeasuringProgram",
+                    "label": "Mess Programm",
+                    "type": "combo",
+                    "values": [
+                        "Intensivmessprogramm",
+                        "REI",
+                        "Routinemessprogramm",
+                        "Routinemeßprogramm",
+                        "Spontanproben Bund"
+                    ],
+                    "defaultValue": "Intensivmessprogramm"
+                },{
+                    "name": "Status",
+                    "label": "Status",
+                    "type": "combo",
+                    "values": [
+                        "0 - nicht vergeben",
+                        "1 - plausibel",
+                        "2 - nicht repräsentativ",
+                        "3 - nicht plausibel",
+                        "4 - Rückfrage abgesetzt",
+                        "6 - Rücklauf bearbeitet"
+                    ],
+                    "defaultValue": "0 - nicht vergeben"
+                },{
+                    "name": "SamplingBegin",
+                    "label": "Messungsbeginn",
+                    "type": "datetime"
+                },{
+                    "name": "SamplingEnd",
+                    "label": "Messungsende",
+                    "type": "datetime"
+                }]
+            }
+        ]
+    },
+    "success": true
+}

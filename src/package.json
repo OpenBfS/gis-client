@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "Koala WebGIS",
   "scripts": {
-    "lint": "eslint -c .eslintrc app/ classic/"
+    "lint-js": "eslint -c .eslintrc app/ classic/"
   },
   "repository": {
     "type": "svn",

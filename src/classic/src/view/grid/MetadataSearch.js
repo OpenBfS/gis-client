@@ -63,7 +63,7 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             text: 'Name',
             dataIndex: 'name',
             flex: 3,
-            renderer: function (value, metadata) {
+            renderer: function (value) {
                 return '<div style="white-space:normal !important;">'
                     + value +'</div>';
             }

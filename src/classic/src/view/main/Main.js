@@ -70,7 +70,7 @@ Ext.define('Koala.view.main.Main', {
             xtype: 'k-component-map',
             plugins: [{
                     ptype: 'hover',
-                    selectStyleFunction: function(feature){
+                    selectStyleFunction: function(){
                         return [new ol.style.Style({
                              image: new ol.style.Circle({
                                  radius: 6,
@@ -81,7 +81,7 @@ Ext.define('Koala.view.main.Main', {
                                      color: 'gray'
                                  })
                              })
-                         })]
+                         })];
                     }
             }]
         },

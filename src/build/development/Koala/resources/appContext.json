@@ -5,8 +5,10 @@
                 "metadata-xml2json": "http://bfs-koala.intranet.terrestris.de/geonetwork/srv/ger/xml_iso19139Tojson",
                 "metadata-search": "http://bfs-koala.intranet.terrestris.de/geonetwork/srv/ger/csw?",
                 "spatial-search": "http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows",
-                "print-servlet": "http://bfs-koala.intranet.terrestris.de/print-servlet-3.3-SNAPSHOT/print/"
+                "print-servlet": "http://bfs-koala.intranet.terrestris.de/print-servlet-3.3-SNAPSHOT/print/",
+                "irix-servlet": "/irix-servlet"
             },
+            "metadataSearchFields": ["title", "abstract"],
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
             "mapLayers": [
@@ -26,5 +28,6 @@
                 "zoom": 0
             }
         }
-    }
+    },
+    "success": true
 }

@@ -104,18 +104,17 @@ Ext.define("Koala.view.form.field.SearchCombo", {
     },
 
     /**
-     * 
+     *
      */
     getMetadataCql: function(fields, value){
         var cql = "";
-        Ext.each(fields, function(field, idx, fields){
+        Ext.each(fields, function(field, idx, fieldsArray){
             cql += field + " like '%" + value + "%'";
-            if(idx < fields.length-1){
+            if(idx < fieldsArray.length-1){
                 cql += " OR ";
             }
         });
         return cql;
     }
-
 
 });

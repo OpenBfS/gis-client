@@ -34,9 +34,9 @@ Ext.define("Koala.view.window.Print", {
     },
 
     minWidth: 300,
-    maxWidth: 800,
+    maxWidth: window.innerWidth - 100,
     minHeight: 150,
-    maxHeight: 800,
+    maxHeight: window.innerHeight - 100,
 
     layout: 'fit',
     bodyPadding: '10px',
