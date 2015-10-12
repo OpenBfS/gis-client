@@ -1,0 +1,55 @@
+{
+  "name": "basepackage",
+  "format": "1",
+  "version": "0.0.1",
+  "compatVersion": "1.0.0",
+  "creator": "GeoExt Contributors",
+  "summary": "Short summary",
+  "detailedDescription": "Long description of package",
+  "type": "code",
+  "requires": [
+    "GeoExt"
+  ],
+  "signatures": [
+    {
+      "name": "GeoExt Contributors",
+      "uuid": "7c375642-1f02-4b18-8988-cfbd4db49a9c",
+      "created": "2015-10-08T13:29:45Z",
+      "algorithm": "SHA1withRSA",
+      "nonce": "BHal3pCN22U\u003d",
+      "signature": "OFPEk7szrQIEcaaUMm0PLmv+p2P7h9YcO/0iB3ML02FXe+TzcYRA6Bz/QcyEv2reuauW7C8hCNM5mHxDHDK232hkLfynzvkGAZAKdjBE9Y5NpCW9wGVsVlBoncueGQxH4j7oCbk7RAft8+LgezhIohAEIxu//MEumNIg7bcGi5uYStHuaTkSzeqxICUGYFfpkEjDyJhPbQHtw1p+sjYVYBzKvLB/ciWcn6Bqjo6iaEtUohUTYNoTeySxiWCcou5Fd2W7SE8vCIRuS7XDL5zXTTENxbJDb/nZl6TKTs4YFakCH+rpAL0MtYf0hNsNNVp4BH/h3GbS8pXDwwDXJGZvdQ\u003d\u003d"
+    }
+  ],
+  "slicer": {
+    "js": [
+      {
+        "path": "${package.dir}/sass/example/custom.js",
+        "isWidgetManifest": true
+      }
+    ]
+  },
+  "sass": {
+    "namespace": "Basepackage",
+    "etc": "sass/etc/all.scss",
+    "var": "sass/var",
+    "src": "sass/src"
+  },
+  "output": "${package.dir}/build",
+  "framework": "ext",
+  "toolkit": "classic",
+  "theme": "theme-neptune",
+  "private": true,
+  "description": "Basiskomponenten von terrestris",
+  "scripts": {
+    "lint-js": "eslint -c .eslintrc src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.intranet.terrestris.de:terrestris/basepackage.git"
+  },
+  "author": "terrestris GmbH \u0026 Co. KG \u003cinfo@terrestris.de",
+  "license": "gpl-3",
+  "devDependencies": {
+    "eslint": "^1.2.1"
+  }
+}
