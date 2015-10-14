@@ -166,6 +166,17 @@ Ext.define('Koala.util.Layer', {
             var layer = new LayerClass(layerConfig);
             layer.metadata = metadata;
 
+            if(metadata.layerConfig.olProperties.printLayer){
+                var printUuid = metadata.layerConfig.olProperties.printLayer;
+                var printLayer;
+
+                this.getMetadataFromUuidAndThen(printUuid, function(md){
+                        printLayer = this.layerFromMetadata(md);
+                        layer.set('printLayer', printLayer);
+                    }
+                );
+            }
+
             return layer;
         },
 

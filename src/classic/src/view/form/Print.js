@@ -49,6 +49,7 @@ Ext.define("Koala.view.form.Print", {
         var appCombo = this.down('combo[name=appCombo]');
         appCombo.setFieldLabel('Printapp');
         appCombo.setWidth(248);
+        appCombo.getStore().sort('field1', 'ASC');
         appCombo.on('select', this.addIrixFieldset, this);
 
     },
@@ -67,16 +68,55 @@ Ext.define("Koala.view.form.Print", {
         var spec = {};
         var mapComponent = view.getMapComponent();
         var mapView = mapComponent.getMap().getView();
-        var layout = view.down('combo[name="layout"]').getValue();
-        var format = view.down('combo[name="format"]').getValue();
+        var viewRes = mapView.getResolution();
+        var layoutCombo = view.down('combo[name="layout"]');
+        var layout = layoutCombo.getValue();
+        var formatCombo = view.down('combo[name="format"]');
+        var format = formatCombo.getValue();
         var attributes = {};
         var projection = mapView.getProjection().getCode();
         var rotation = mapView.getRotation();
 
-        var serializedLayers =
-            GeoExt.data.MapfishPrintProvider.getSerializedLayers(
-                mapComponent, this.layerFilter, this
-            );
+        layoutCombo.getStore().sort('name', 'ASC');
+        formatCombo.getStore().sort('field1', 'ASC');
+
+        var printLayers = [];
+        var serializedLayers = [];
+
+        mapComponent.getLayers().forEach(function(layer){
+            if(layer.get('printLayer')){
+                printLayers.push(layer.get('printLayer'));
+            } else {
+                var isChecked = !!layer.checked;
+                var hasName = isChecked && !!layer.get('name');
+                var nonOpaque = hasName && (layer.get('opacity') > 0);
+                var inTree = nonOpaque && (layer.get(
+                    Basepackage.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER
+                ) !== false); // may be undefined for certain layers
+
+                if (isChecked && hasName && nonOpaque && inTree) {
+                    if(layer instanceof ol.layer.Vector &&
+                        layer.getSource().getFeatures().length < 1){
+                        return false;
+                    }
+                    printLayers.push(layer);
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        Ext.each(printLayers, function(layer){
+            var source = layer.getSource();
+            var serialized = {};
+
+            var serializer = GeoExt.data.MapfishPrintProvider
+                .findSerializerBySource(source);
+            if (serializer) {
+                serialized = serializer.serialize(layer, source, viewRes);
+                serializedLayers.push(serialized);
+            }
+        }, this);
 
         var fieldsets =
             view.query('fieldset[name=attributes] fieldset');
@@ -120,6 +160,7 @@ Ext.define("Koala.view.form.Print", {
         var url = view.getUrl() + app + '/buildreport.' + format;
         spec.attributes = attributes;
         spec.layout = layout;
+        spec.outputFilename = layout;
 
         var irixCheckBox = this.down('[name="irix-fieldset-checkbox"]');
         var submitForm;

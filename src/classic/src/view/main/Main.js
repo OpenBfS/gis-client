@@ -113,12 +113,11 @@ Ext.define('Koala.view.main.Main', {
                     bind: {
                         text: '{printButtonText}'
                     },
-                    handler: function(){
-                        var win = Ext.ComponentQuery
-                            .query('k-window-print')[0];
+                    handler: function(btn){
+                        var win = Ext.ComponentQuery.query('k-window-print')[0];
                         if(!win){
                             Ext.create('Koala.view.window.Print')
-                            .show();
+                            .showBy(btn.up('base-panel-menu'), 'tr');
                         } else {
                             Basepackage.util.Animate.shake(win);
                         }
