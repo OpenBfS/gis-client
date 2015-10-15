@@ -52,6 +52,7 @@ Ext.define("Basepackage.view.form.Print", {
             title: 'Drucken',
             labelDpi: 'DPI',
             printButtonSuffix: 'anfordern',
+            downloadButtonPrefix: 'Download',
             printFormat: 'pdf',
             genericFieldSetTitle: 'Einstellungen'
         }
@@ -162,6 +163,22 @@ Ext.define("Basepackage.view.form.Print", {
             this.up('form').createPrint();
         },
         disabled: true
+    },{
+        xtype: 'button',
+        name: 'downloadPrint',
+        hidden: true,
+        glyph: 'xf019@FontAwesome',
+        bind: {
+            text: '{downloadButtonPrefix} {printFormat:uppercase} '
+        },
+        link: null, // this has to be filled in application
+        handler: function(btn){
+            if(btn.link){
+                window.open(btn.link);
+            } else {
+                Ext.raise('No downloadlink defined');
+            }
+        }
     }],
 
     createPrint: function(){

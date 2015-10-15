@@ -1,3 +1,4 @@
+/*global setTimeout*/
 /* Copyright (c) 2015 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
@@ -51,7 +52,6 @@ Ext.define("Koala.view.form.Print", {
         appCombo.setWidth(248);
         appCombo.getStore().sort('field1', 'ASC');
         appCombo.on('select', this.addIrixFieldset, this);
-
     },
 
     listeners: {
@@ -184,20 +184,69 @@ Ext.define("Koala.view.form.Print", {
                     value: Ext.encode(irixJson)
                 }]
             });
+            submitForm.submit();
         } else {
-            submitForm = Ext.create('Ext.form.Panel', {
-                standardSubmit: true,
-                url: url,
+            var startTime = new Date().getTime();
+
+            Ext.Ajax.request({
+                url: view.getUrl() + app + '/report.' + format,
                 method: 'POST',
-                items: [{
-                    xtype: 'textfield',
-                    name: 'spec',
-                    value: Ext.encode(spec)
-                }]
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                jsonData: Ext.encode(spec),
+                success: function(response) {
+                    var data = Ext.decode(response.responseText);
+                    view.setLoading(format + ' wird vorbereitet.');
+                    view.downloadWhenReady(startTime, data);
+                },
+                failure: function(response) {
+                    Ext.raise('server-side failure with status code ' +
+                        response.status);
+                }
             });
         }
-        submitForm.submit();
 
+    },
+
+    downloadWhenReady: function(startTime, data){
+        var me = this;
+        var elapsedMs = (new Date().getTime() - startTime);
+        var format = me.down('combo[name="format"]')
+            .getValue();
+
+        me.setLoading(format + ' wird vorbereitet: '+ elapsedMs/1000 + 's');
+
+        if (elapsedMs > 30000) {
+            Ext.raise('Download aborted after ' + elapsedMs/1000 + ' seconds.');
+        } else {
+            setTimeout(function () {
+                Ext.Ajax.request({
+                    url: me.getUrl() + 'status/' + data.ref + '.json',
+                    success: function(response) {
+                        var statusData = Ext.decode(response.responseText);
+                        if(statusData.done){
+                            me.setLoading(false);
+                            var dlBtn = me.down('button[name="downloadPrint"]');
+                            dlBtn.link = me.getUrl() + 'report/' + data.ref;
+                            dlBtn.show();
+                            var fields = dlBtn.up('k-form-print').query('field');
+                            Ext.each(fields, function(field){
+                                field.on('change', function(){
+                                    dlBtn.hide();
+                                });
+                            });
+                        } else {
+                            me.downloadWhenReady(startTime, data);
+                        }
+                    },
+                    failure: function(response) {
+                        Ext.raise('server-side failure with status code '
+                            + response.status);
+                    }
+                });
+            }, 500);
+        }
     },
 
     addIrixCheckbox: function(){
