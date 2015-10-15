@@ -78,10 +78,7 @@ Ext.define("Basepackage.view.form.Print", {
         '#CCFF66'
     ],
 
-    layout: 'anchor',
-    defaults: {
-        anchor: '100%'
-    },
+    layout: 'vbox',
 
     bodyPadding: '0 5px 0 0',
 
@@ -121,20 +118,7 @@ Ext.define("Basepackage.view.form.Print", {
             }
         });
 
-        var formContainer = this.add({
-            xtype: 'fieldcontainer',
-            name: 'formContainer',
-            layout: 'hbox'
-        });
-
-        var fieldcontainer = formContainer.add({
-            xtype: 'fieldcontainer',
-            name: 'defaultFieldContainer',
-            layout: 'auto',
-            flex: 1
-        });
-
-        fieldcontainer.add({
+        var appCombo = this.add({
             xtype: 'combo',
             name: 'appCombo',
             allowBlank: false,
@@ -144,6 +128,18 @@ Ext.define("Basepackage.view.form.Print", {
                 select: 'onAppSelected',
                 scope: this
             }
+        });
+
+        var formContainer = this.add({
+            xtype: 'fieldcontainer',
+            name: 'formContainer',
+            layout: 'hbox'
+        });
+
+        var fieldcontainer = formContainer.add({
+            xtype: 'fieldcontainer',
+            name: 'defaultFieldContainer',
+            layout: 'form'
         });
 
         this.on('afterrender', this.addExtentLayer, this);

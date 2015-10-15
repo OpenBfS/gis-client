@@ -49,7 +49,6 @@ Ext.define("Koala.view.form.Print", {
 
         var appCombo = this.down('combo[name=appCombo]');
         appCombo.setFieldLabel('Printapp');
-        appCombo.setWidth(248);
         appCombo.getStore().sort('field1', 'ASC');
         appCombo.on('select', this.addIrixFieldset, this);
     },
@@ -184,7 +183,7 @@ Ext.define("Koala.view.form.Print", {
                     value: Ext.encode(irixJson)
                 }]
             });
-            submitForm.submit();
+            submitForm.submit({target:'_blank'});
         } else {
             var startTime = new Date().getTime();
 
@@ -259,10 +258,8 @@ Ext.define("Koala.view.form.Print", {
                 var irixFieldset = me.down("k-form-irixfieldset");
                 if(checked){
                     irixFieldset.show();
-                    me.setWidth(me.getWidth() * 3);
                 } else{
                     irixFieldset.hide();
-                    me.setWidth(me.getWidth() / 3);
                 }
             }
         });
@@ -274,12 +271,15 @@ Ext.define("Koala.view.form.Print", {
         var me = this;
         var fs = me.down("k-form-irixfieldset");
         var formContainer = me.down('[name="formContainer"]');
+        var checkBox = me.down('[name="irix-fieldset-checkbox"]');
 
         if (!fs) {
             var irixFieldset = Ext.create('Koala.view.form.IrixFieldSet',{
                 flex: 2
             });
             formContainer.add(irixFieldset);
+        } else {
+            checkBox.setValue(false);
         }
 
     },
