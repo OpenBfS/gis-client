@@ -1,4 +1,4 @@
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/button/Measure.scss:1 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/button/Measure.scss:1 */
 .tooltip {
     position: relative;
     background: rgba(0, 0, 0, 0.5);
@@ -8,18 +8,18 @@
     opacity: 0.7;
     white-space: nowrap;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/button/Measure.scss:10 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/button/Measure.scss:10 */
 .tooltip-measure {
     opacity: 1;
     font-weight: bold;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/button/Measure.scss:14 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/button/Measure.scss:14 */
 .tooltip-static {
     background-color: #fc3;
     color: black;
     border: 1px solid white;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/button/Measure.scss:19 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/button/Measure.scss:19 */
 .tooltip-measure:before,
 .tooltip-static:before {
     border-top: 6px solid rgba(0, 0, 0, 0.5);
@@ -31,11 +31,11 @@
     margin-left: -7px;
     left: 50%;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/button/Measure.scss:30 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/button/Measure.scss:30 */
 .tooltip-static:before {
     border-top-color: #fc3;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/component/Map.scss:1 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/component/Map.scss:1 */
 div.feature-hover-popup {
     background: rgba(255, 255, 255, 0.8);
     padding: 3px;
@@ -44,7 +44,7 @@ div.feature-hover-popup {
     text-align: center;
     color: #333;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/container/LayerSlider.scss:8 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/container/LayerSlider.scss:8 */
 .layerSlider {
     padding: 5px 5px 5px 5px;
     margin-left: 50%;
@@ -52,29 +52,29 @@ div.feature-hover-popup {
     background: #fff;
     background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.7) 55%);
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/container/LayerSlider.scss:16 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/container/LayerSlider.scss:16 */
 .sliderTopTitle {
     text-align: center;
     font-weight: bold;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/container/LayerSlider.scss:21 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/container/LayerSlider.scss:21 */
 .sliderLabel {
     text-align: center;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/Header.scss:1 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/Header.scss:1 */
 .basepackage-header {
     background-color: #fff;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:1 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:1 */
 .img-chooser-view {
     background: white;
     font: 11px Arial, Helvetica, sans-serif;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:6 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:6 */
 .img-chooser-view .thumb {
     padding: 3px;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:10 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:10 */
 .img-chooser-view .thumb-wrap {
     height: 90px;
     float: left;
@@ -84,33 +84,33 @@ div.feature-hover-popup {
     -webkit-transition: background-color 1s, border-color 0.5s;
     transition: background-color 1s, border-color 0.5s;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:20 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:20 */
 .img-chooser-view .thumb-wrap span {
     display: block;
     overflow: hidden;
     text-align: center;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:26 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:26 */
 .img-chooser-view .x-view-over {
     border: 1px solid #ddd;
     background-color: #efefef;
     padding: 4px;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:32 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:32 */
 .img-chooser-view .x-item-selected {
     background: #dfedff;
     border: 1px solid #6593cf;
     padding: 4px;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:38 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:38 */
 .img-chooser-view .x-item-selected .thumb {
     background: transparent;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:42 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:42 */
 .img-chooser-view .x-item-selected span {
     color: #1a4d8f;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:46 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:46 */
 .img-chooser-view .loading-indicator {
     font-size: 11px;
     background-image: url('../../resources/images/grid/loading.gif');
@@ -119,57 +119,57 @@ div.feature-hover-popup {
     padding-left: 20px;
     margin: 10px;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:55 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LayerSetChooser.scss:55 */
 #images img {
     margin: 20px;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LegendTree.scss:1 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LegendTree.scss:1 */
 .base-legend-panel {
     bottom: 0 !important;
     top: auto !important;
     right: 0 !important;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/LegendTree.scss:7 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/LegendTree.scss:7 */
 .base-legend {
     margin: 3px 0 0 0;
     border: 1px solid transparent;
     border-radius: 6px;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:1 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:1 */
 .base-map-tools {
     right: 0 !important;
     left: auto !important;
     background-color: transparent;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:7 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:7 */
 .base-overview-map {
     top: auto !important;
     bottom: 0 !important;
     background-color: white;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:13 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:13 */
 .base-overview-map-button {
     top: auto !important;
     bottom: 5px !important;
     left: 5px !important;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:19 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:19 */
 .ol-scale-line {
     bottom: 5px;
     left: 50px;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:23 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:23 */
 .ol-scale-line.base-scaline-adjusted {
     left: 405px;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:27 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:27 */
 .base-combo-scale {
     top: auto;
     bottom: 5px;
     left: 50px;
     background-color: white;
 }
-/* http://localhost:1842/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:34 */
+/* http://localhost:1841/packages/local/basepackage/sass/src/view/panel/MapContainer.scss:34 */
 .base-combo-scale-adjusted {
     left: 405px;
 }

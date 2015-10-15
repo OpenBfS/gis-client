@@ -198,7 +198,9 @@ Ext.define('Basepackage.plugin.Hover', {
                            projCode,
                            {'INFO_FORMAT': 'application/json'}
                    );
-                   me.requestAsynchronously(url, function(resp) {
+                   var urlWithParams = url + '&FEATURE_COUNT=50';
+                   
+                   me.requestAsynchronously(urlWithParams, function(resp) {
                        // TODO: replace evt/coords with real response geometry
                        var respFeatures = (new ol.format.GeoJSON())
                            .readFeatures(resp.responseText);
@@ -207,10 +209,12 @@ Ext.define('Basepackage.plugin.Hover', {
 
                        me.showHoverFeature(layer, respFeatures, respProjection);
 
-                       respFeatures[0].set('layer', layer);
+                       Ext.each(respFeatures, function(feature){
+                           feature.set('layer', layer);
+                           hoverFeatures.push(feature);
+                       });
                        hoverLayers.push(layer);
-                       hoverFeatures.push(respFeatures[0]);
-
+                       
                        me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
                    });
                } else if (source instanceof ol.source.Vector) {

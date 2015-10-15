@@ -54,7 +54,7 @@ Ext.define('Basepackage.plugin.Hover', {
         if (!me.getHoverVectorLayerInteraction()) {
             var interaction = new ol.interaction.Select({
                     multi: true,
-                    style: me.clusterSelectStyleFunction,
+                    style: me.selectStyleFunction,
                     layers: [
                         me.getHoverVectorLayer()
                     ]
@@ -169,13 +169,17 @@ Ext.define('Basepackage.plugin.Hover', {
                     var url = source.getGetFeatureInfoUrl(evt.coordinate, resolution, projCode, {
                             'INFO_FORMAT': 'application/json'
                         });
-                    me.requestAsynchronously(url, function(resp) {
+                    var urlWithParams = url + '&FEATURE_COUNT=50';
+                    me.requestAsynchronously(urlWithParams, function(resp) {
                         // TODO: replace evt/coords with real response geometry
                         var respFeatures = (new ol.format.GeoJSON()).readFeatures(resp.responseText);
-                        me.showHoverFeature(layer, respFeatures);
-                        respFeatures[0].set('layer', layer);
+                        var respProjection = (new ol.format.GeoJSON()).readProjection(resp.responseText);
+                        me.showHoverFeature(layer, respFeatures, respProjection);
+                        Ext.each(respFeatures, function(feature) {
+                            feature.set('layer', layer);
+                            hoverFeatures.push(feature);
+                        });
                         hoverLayers.push(layer);
-                        hoverFeatures.push(respFeatures[0]);
                         me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
                     });
                 } else if (source instanceof ol.source.Vector) {
@@ -185,7 +189,7 @@ Ext.define('Basepackage.plugin.Hover', {
                             var hvl = me.getHoverVectorLayer();
                             // TODO This should be dynamically generated
                             // from the clusterStyle
-                            hvl.setStyle(me.clusterHighlightStyleFunction);
+                            hvl.setStyle(me.highlightStyleFunction);
                         }
                         var featureClone = feat.clone();
                         featureClone.set('layer', layer);
@@ -210,14 +214,18 @@ Ext.define('Basepackage.plugin.Hover', {
     /**
     *
     */
-    showHoverFeature: function(layer, features) {
+    showHoverFeature: function(layer, features, projection) {
         var me = this;
         var mapComponent = me.getCmp();
         var map = mapComponent.getMap();
+        var proj = me.getFeatureInfoEpsg();
+        if (projection) {
+            proj = projection;
+        }
         Ext.each(features, function(feat) {
             var g = feat.getGeometry();
             if (g) {
-                g.transform(me.getFeatureInfoEpsg(), map.getView().getProjection());
+                g.transform(proj, map.getView().getProjection());
             }
             if (!Ext.Array.contains(me.getHoverVectorLayerSource().getFeatures(), feat)) {
                 me.getHoverVectorLayerSource().addFeature(feat);
@@ -283,7 +291,7 @@ Ext.define('Basepackage.plugin.Hover', {
         });
         return innerHtml;
     },
-    clusterHighlightStyleFunction: function(feature) {
+    highlightStyleFunction: function(feature) {
         var count = feature.get('count'),
             radius = 14,
             fontSize = 10;
@@ -325,7 +333,7 @@ Ext.define('Basepackage.plugin.Hover', {
             })
         ];
     },
-    clusterSelectStyleFunction: function(feature) {
+    selectStyleFunction: function(feature) {
         var count = feature.get('count'),
             radius = 14,
             fontSize = 10;
@@ -380,7 +388,7 @@ Ext.define('Basepackage.plugin.Hover', {
             return;
         } else {
             var hvl = wmsHoverPlugin.getHoverVectorLayer();
-            hvl.setStyle(me.clusterHighlightStyleFunction);
+            hvl.setStyle(me.highlightStyleFunction);
             var hvlSource = wmsHoverPlugin.getHoverVectorLayerSource();
             wmsHoverPlugin.cleanupHoverArtifacts();
             hvlSource.addFeature(feature);
@@ -6402,6 +6410,7 @@ Ext.define("Basepackage.view.form.Print", {
             title: 'Drucken',
             labelDpi: 'DPI',
             printButtonSuffix: 'anfordern',
+            downloadButtonPrefix: 'Download',
             printFormat: 'pdf',
             genericFieldSetTitle: 'Einstellungen'
         }
@@ -6493,6 +6502,24 @@ Ext.define("Basepackage.view.form.Print", {
                 this.up('form').createPrint();
             },
             disabled: true
+        },
+        {
+            xtype: 'button',
+            name: 'downloadPrint',
+            hidden: true,
+            glyph: 'xf019@FontAwesome',
+            bind: {
+                text: '{downloadButtonPrefix} {printFormat:uppercase} '
+            },
+            link: null,
+            // this has to be filled in application
+            handler: function(btn) {
+                if (btn.link) {
+                    window.open(btn.link);
+                } else {
+                    Ext.raise('No downloadlink defined');
+                }
+            }
         }
     ],
     createPrint: function() {
