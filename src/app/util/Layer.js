@@ -266,6 +266,7 @@ Ext.define('Koala.util.Layer', {
             var getBool = Koala.util.String.getBool;
 
             var isTopic = false;
+//            TODO Is a hoverTpl rly required to hover?
             if (!Ext.isEmpty(olProps.hoverTpl) && olProps.allowHover !== false) {
                 isTopic = true;
             }

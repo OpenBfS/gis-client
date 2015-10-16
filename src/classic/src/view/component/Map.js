@@ -29,6 +29,25 @@ Ext.define("Koala.view.component.Map", {
     initComponent: function(){
         this.callParent(arguments);
         this.on('hoverfeaturesclick', this.onHoverFeatureClick, this);
+
+        var hoverPlugin =  this.getPlugin('hover');
+        if(hoverPlugin){
+            hoverPlugin.selectStyleFunction = function(){
+                return [new ol.style.Style({
+                     image: new ol.style.Circle({
+                         radius: 6,
+                         fill: new ol.style.Fill({
+                             color: "rgba(0, 0, 255, 0.6)"
+                         }),
+                         stroke: new ol.style.Stroke({
+                             color: 'gray'
+                         })
+                     })
+                 })];
+            };
+
+            hoverPlugin.getToolTipHtml = this.getController().getToolTipHtml;
+        }
     },
 
     /**
@@ -40,17 +59,6 @@ Ext.define("Koala.view.component.Map", {
         var controller = me.getController();
 
         controller.onHoverFeatureClick(olFeatures[0]);
-    },
-
-    /**
-     * Overrides the basepackage method.
-     * TODO Push this to controller.
-     */
-    getToolTipHtml: function(layers, features){
-        var me = this;
-        var controller = me.getController();
-
-        return controller.getToolTipHtml(layers, features);
     }
 
 });

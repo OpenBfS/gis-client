@@ -199,7 +199,7 @@ Ext.define('Basepackage.plugin.Hover', {
                            {'INFO_FORMAT': 'application/json'}
                    );
                    var urlWithParams = url + '&FEATURE_COUNT=50';
-                   
+
                    me.requestAsynchronously(urlWithParams, function(resp) {
                        // TODO: replace evt/coords with real response geometry
                        var respFeatures = (new ol.format.GeoJSON())
@@ -214,7 +214,7 @@ Ext.define('Basepackage.plugin.Hover', {
                            hoverFeatures.push(feature);
                        });
                        hoverLayers.push(layer);
-                       
+
                        me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
                    });
                } else if (source instanceof ol.source.Vector) {
@@ -240,16 +240,21 @@ Ext.define('Basepackage.plugin.Hover', {
                }
            }
 
-       }, this, function(candidate) {
-           if(candidate.get('hoverable') ||
-               candidate.get('type') === 'WFSCluster'){
-               return true;
-           } else {
-               return false;
-           }
-       });
+       }, this, me.hoverLayerFilter);
 
        me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
+   },
+
+   /**
+    *
+    */
+   hoverLayerFilter: function(candidate) {
+       if(candidate.get('hoverable') ||
+           candidate.get('type') === 'WFSCluster'){
+           return true;
+       } else {
+           return false;
+       }
    },
 
    /**

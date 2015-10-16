@@ -69,20 +69,7 @@ Ext.define('Koala.view.main.Main', {
         mapComponentConfig: {
             xtype: 'k-component-map',
             plugins: [{
-                    ptype: 'hover',
-                    selectStyleFunction: function(){
-                        return [new ol.style.Style({
-                             image: new ol.style.Circle({
-                                 radius: 6,
-                                 fill: new ol.style.Fill({
-                                     color: "rgba(0, 0, 255, 0.6)"
-                                 }),
-                                 stroke: new ol.style.Stroke({
-                                     color: 'gray'
-                                 })
-                             })
-                         })];
-                    }
+                    ptype: 'hover'
             }]
         },
         // define menu items
