@@ -67,7 +67,7 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
     /**
      *
      */
-    //TODO The layerorder of the json is not respected. 
+    //TODO The layerorder of the json is not respected.
     addLayers: function(layers) {
         var me = this;
         Ext.each(layers, function(layer) {

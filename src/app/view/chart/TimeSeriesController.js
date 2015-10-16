@@ -168,6 +168,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                 strokeStyle: strokeStyle,
                 strokeOpacity: strokeOpacity
             },
+            colors: [strokeStyle],
             marker: {
                 radius: 0
             },
