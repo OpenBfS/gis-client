@@ -30,7 +30,7 @@ Ext.define("Koala.view.component.Map", {
         this.callParent(arguments);
         this.on('hoverfeaturesclick', this.onHoverFeatureClick, this);
 
-        var hoverPlugin =  this.getPlugin('hover');
+        var hoverPlugin = this.getPlugin('hover');
         if(hoverPlugin){
             hoverPlugin.selectStyleFunction = function(){
                 return [new ol.style.Style({

@@ -168,22 +168,24 @@ Ext.define("Koala.view.form.Print", {
             var irixJson = {};
             var mapfishPrint = [];
 
-            spec.outputFormat = format;
-            mapfishPrint[0] = spec;
-            irixJson = this.setUpIrixJson(mapfishPrint);
-            url = this.getIrixUrl();
+            if(view.isValid()){
+                spec.outputFormat = format;
+                mapfishPrint[0] = spec;
+                irixJson = this.setUpIrixJson(mapfishPrint);
+                url = this.getIrixUrl();
 
-            submitForm = Ext.create('Ext.form.Panel', {
-                standardSubmit: true,
-                url: url,
-                method: 'POST',
-                items: [{
-                    xtype: 'textfield',
-                    name: 'irixJson',
-                    value: Ext.encode(irixJson)
-                }]
-            });
-            submitForm.submit({target:'_blank'});
+                submitForm = Ext.create('Ext.form.Panel', {
+                    standardSubmit: true,
+                    url: url,
+                    method: 'POST',
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'irixJson',
+                        value: Ext.encode(irixJson)
+                    }]
+                });
+                submitForm.submit({target:'_blank'});
+            }
         } else {
             var startTime = new Date().getTime();
 

@@ -85,7 +85,8 @@ Ext.define("Koala.view.form.IrixFieldSet",{
         return Ext.create('Ext.form.field.Text', {
             name: config.name,
             fieldLabel: config.label,
-            value: config.defaultValue
+            value: config.defaultValue,
+            allowBlank: config.allowBlank
         });
     },
 
@@ -95,7 +96,8 @@ Ext.define("Koala.view.form.IrixFieldSet",{
             fieldLabel: config.label,
             minValue: config.minValue,
             maxValue: config.maxValue,
-            value: config.defaultValue
+            value: config.defaultValue,
+            allowBlank: config.allowBlank
         });
     },
 
@@ -104,10 +106,12 @@ Ext.define("Koala.view.form.IrixFieldSet",{
             name: config.name,
             fieldLabel: config.label,
             store: config.values,
-            value: config.defaultValue
+            value: config.defaultValue,
+            allowBlank: config.allowBlank
         });
-        // "field1" is created when using an an array as store for the combo
-        combo.getStore().sort('field1', 'ASC');
+        // "field1" and "field2" are created when using an an 2-dimensional
+        // array as store for the combo. "field1"=value "field2"=displayValue
+        combo.getStore().sort('field2', 'ASC');
         return combo;
     },
 
