@@ -211,7 +211,18 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      *
      */
     bindSelectChartLayerStore: function(combo) {
-        combo.bindStore(Basepackage.view.component.Map.guess().getStore());
+        var layerStore = Basepackage.view.component.Map.guess().getStore();
+        var comboStore = Ext.clone(layerStore);
+        comboStore.filterBy(function(record){
+            if(record.data.get('timeSeriesChartProperties') &&
+               !Ext.Object.isEmpty(record.data.get('timeSeriesChartProperties'))
+               ){
+                return true;
+            } else {
+                return false;
+            }
+        });
+        combo.bindStore(comboStore);
     },
 
     /**
