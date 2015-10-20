@@ -3,6 +3,7 @@ src/bootstrap.css
 src/bootstrap.js
 src/classic.json
 src/build/*
+src/packages/*
 
 node_modules
 .project
