@@ -23,7 +23,7 @@ Ext.define('Koala.util.Layer', {
         getMetadataFromUuidAndThen: function(uuid, ajaxCb) {
             var me = this;
 
-            var appContext = Basepackage.view.component.Map.guess().appContext;
+            var appContext = BasiGX.view.component.Map.guess().appContext;
             var urls = appContext.data.merge.urls;
 
             Ext.Ajax.request({
@@ -76,7 +76,7 @@ Ext.define('Koala.util.Layer', {
             var me = this;
             // TODO in the future we aren't allowed to guess here, as there will
             // be multiple maps!
-            var mapComp = Ext.ComponentQuery.query('base-component-map')[0];
+            var mapComp = Ext.ComponentQuery.query('basigx-component-map')[0];
             // attach a listener to the new layer, so that hover artifacts on
             // the get cleaned up when visibility changes base-component-map
             me.bindLayerVisibilityHandlers(layer, mapComp);
@@ -303,7 +303,7 @@ Ext.define('Koala.util.Layer', {
             var olProps = md.layerConfig.olProperties;
             var extraParams = Koala.util.Object.getConfigByPrefix(
                     olProps, "param_");
-            var map = Ext.ComponentQuery.query('base-component-map')[0].getMap();
+            var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
             var projection = map.getView().getProjection();
             var projCode = map.getView().getProjection().getCode();
             var mdLayerCfg;

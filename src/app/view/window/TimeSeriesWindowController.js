@@ -53,25 +53,58 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     createTimeSeriesCombo: function(olLayer) {
         var me = this;
-        // TODO: insert real data given by the layer
-        var store = Ext.create('Ext.data.Store', {
-            fields: ['abbr', 'name'],
-            data: [
-                {"abbr": "AL", "name": "Alabama"},
-                {"abbr": "AK", "name": "Alaska"},
-                {"abbr": "AZ", "name": "Arizona"}
-            ]
+
+        var stationModel = Ext.define('Station', {
+            extend: 'Ext.data.Model',
+            fields: [{
+                 name: 'geo_id',
+                 mapping: function(dataRec){
+                     return dataRec.properties.geo_id;
+                 }
+            },{
+                name: 'locality_name',
+                mapping: function(dataRec){
+                    return dataRec.properties.locality_name;
+                }
+           }]
         });
+
+        var url = (olLayer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs");
+
+        var store = Ext.create('Ext.data.Store', {
+            model: 'Station',
+            proxy: {
+                type: 'ajax',
+                url: url,
+                reader: {
+                    type: 'json',
+                    rootProperty: 'features'
+                },
+                noCache: false,
+                extraParams: {
+                    service: 'WFS',
+                    version: '1.1.0',
+                    request: 'GetFeature',
+                    typeName: olLayer.getSource().getParams().LAYERS,
+                    outputFormat: 'application/json'
+                }
+            }
+        });
+
         var combo = {
             xtype: 'combo',
             name: 'add-series-combo-' + olLayer.get('name'),
             store: store,
-            displayField: 'name',
-            queryMode: 'local',
+            displayField: 'locality_name',
             emptyText: 'Serie hinzufügen',
+            queryParam: 'CQL_FILTER',
             listeners: {
                 select: Ext.Function.bind(me.onTimeSeriesComboSelect,
-                    me, [olLayer], true)
+                    me, [olLayer], true),
+                beforequery: function(queryPlan, eOpts){
+                    queryPlan.query = "locality_name ILIKE '%" +
+                        queryPlan.query + "%'";
+                }
             }
         };
         return combo;
@@ -82,7 +115,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     onTimeSeriesComboSelect: function(combo, rec, evt, olLayer) {
         var me = this;
-        var olFeat = rec;
+        var format = new ol.format.GeoJSON();
+        var olFeat = format.readFeature(rec.data);
+        olFeat.set('layer', olLayer);
+
         me.updateTimeSeriesChart(olLayer, olFeat);
     },
 
@@ -211,7 +247,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      *
      */
     bindSelectChartLayerStore: function(combo) {
-        var layerStore = Basepackage.view.component.Map.guess().getStore();
+        var layerStore = BasiGX.view.component.Map.guess().getStore();
         var comboStore = Ext.clone(layerStore);
         comboStore.filterBy(function(record){
             if(record.data.get('timeSeriesChartProperties') &&

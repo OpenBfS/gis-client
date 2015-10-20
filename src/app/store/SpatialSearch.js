@@ -19,7 +19,7 @@ Ext.define('Koala.store.SpatialSearch', {
     alias: 'store.k-spatialsearch',
 
     requires: [
-        'Basepackage.util.Layer'
+        'BasiGX.util.Layer'
     ],
 
     storeID: 'spatialsearch',
@@ -36,13 +36,13 @@ Ext.define('Koala.store.SpatialSearch', {
 
     constructor: function(config){
         if(!this.map){
-            this.map = Basepackage.view.component.Map.guess().getMap();
+            this.map = BasiGX.view.component.Map.guess().getMap();
         }
         if(!this.layer){
             this.layer = new ol.layer.Vector({
                 source: new ol.source.Vector()
             });
-            var displayInLayerSwitcherKey = Basepackage.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
+            var displayInLayerSwitcherKey = BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
             this.layer.set(displayInLayerSwitcherKey, false);
             this.map.addLayer(this.layer);
         }
@@ -50,7 +50,7 @@ Ext.define('Koala.store.SpatialSearch', {
 
         this.callParent([config]);
 
-        var appContext = Basepackage.view.component.Map.guess().appContext;
+        var appContext = BasiGX.view.component.Map.guess().appContext;
         var urls = appContext.data.merge.urls;
         this.proxy.url = urls['spatial-search'];
     },

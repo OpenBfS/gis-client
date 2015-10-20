@@ -18,7 +18,7 @@ Ext.define('Koala.view.component.MapController', {
     alias: 'controller.k-component-map',
 
     requires: [
-        "Basepackage.util.Controller",
+        "BasiGX.util.Controller",
 
         "Koala.view.window.TimeSeriesWindow",
         "Koala.view.window.BarChart"
@@ -44,12 +44,12 @@ Ext.define('Koala.view.component.MapController', {
 
     /**
      * This is finally a complete OVERRIDE of the getToolTipHtml function from
-     * the base class Basepackage.view.component.Map!
+     * the base class BasiGX.view.component.Map!
      */
     getToolTipHtml: function(layers, features){
         var innerHtml = '';
         var treeSelection = Ext.ComponentQuery
-            .query("base-panel-legendtree")[0].getSelection();
+            .query("basigx-panel-legendtree")[0].getSelection();
 
         Ext.each(layers, function(layer, index, allItems){
             var hoverTpl = layer.get('hoverTpl');
@@ -159,5 +159,5 @@ Ext.define('Koala.view.component.MapController', {
         'showHoverFeature',
         'showHoverToolTip'
     ];
-    Basepackage.util.Controller.borrowViewMethods(viewMethodNames, cls);
+    BasiGX.util.Controller.borrowViewMethods(viewMethodNames, cls);
 });

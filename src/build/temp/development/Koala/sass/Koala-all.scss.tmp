@@ -1,44 +1,44 @@
 $app-name:  dynamic( 'Koala' );
 $image-search-path: '/home/volland/workspace/bfs_koala_hg/src/build/development/Koala/resources';
 $theme-name:  dynamic( 'theme-neptune' );
-$include-basepackage-plugin-hover: dynamic(true);;
-$include-basepackage-plugin-wfscluster: dynamic(true);;
-$include-basepackage-util-animate: dynamic(true);;
-$include-basepackage-util-application: dynamic(true);;
-$include-basepackage-util-configparser: dynamic(true);;
-$include-basepackage-util-controller: dynamic(true);;
-$include-basepackage-util-layer: dynamic(true);;
-$include-basepackage-util-url: dynamic(true);;
-$include-basepackage-ux-contextsensitivehelp: dynamic(true);;
-$include-basepackage-ux-rowexpanderwithcomponents: dynamic(true);;
-$include-basepackage-view-button-addwms: dynamic(true);;
-$include-basepackage-view-button-coordinatetransform: dynamic(true);;
-$include-basepackage-view-button-help: dynamic(true);;
-$include-basepackage-view-button-hsi: dynamic(true);;
-$include-basepackage-view-button-measure: dynamic(true);;
-$include-basepackage-view-button-permalink: dynamic(true);;
-$include-basepackage-view-button-togglelegend: dynamic(true);;
-$include-basepackage-view-button-zoomin: dynamic(true);;
-$include-basepackage-view-button-zoomout: dynamic(true);;
-$include-basepackage-view-button-zoomtoextent: dynamic(true);;
-$include-basepackage-view-combo-scalecombo: dynamic(true);;
-$include-basepackage-view-component-map: dynamic(true);;
-$include-basepackage-view-container-layerslider: dynamic(true);;
-$include-basepackage-view-container-nominatimsearch: dynamic(true);;
-$include-basepackage-view-container-overpasssearch: dynamic(true);;
-$include-basepackage-view-container-wfssearch: dynamic(true);;
-$include-basepackage-view-form-addwms: dynamic(true);;
-$include-basepackage-view-form-coordinatetransform: dynamic(true);;
-$include-basepackage-view-form-csvimport: dynamic(true);;
-$include-basepackage-view-form-permalink: dynamic(true);;
-$include-basepackage-view-form-print: dynamic(true);;
-$include-basepackage-view-grid-featurepropertygrid: dynamic(true);;
-$include-basepackage-view-panel-header: dynamic(true);;
-$include-basepackage-view-panel-layersetchooser: dynamic(true);;
-$include-basepackage-view-panel-legendtree: dynamic(true);;
-$include-basepackage-view-panel-mapcontainer: dynamic(true);;
-$include-basepackage-view-panel-menu: dynamic(true);;
-$include-basepackage-view-view-layerset: dynamic(true);;
+$include-basigx-plugin-hover: dynamic(true);;
+$include-basigx-plugin-wfscluster: dynamic(true);;
+$include-basigx-util-animate: dynamic(true);;
+$include-basigx-util-application: dynamic(true);;
+$include-basigx-util-configparser: dynamic(true);;
+$include-basigx-util-controller: dynamic(true);;
+$include-basigx-util-layer: dynamic(true);;
+$include-basigx-util-url: dynamic(true);;
+$include-basigx-ux-contextsensitivehelp: dynamic(true);;
+$include-basigx-ux-rowexpanderwithcomponents: dynamic(true);;
+$include-basigx-view-button-addwms: dynamic(true);;
+$include-basigx-view-button-coordinatetransform: dynamic(true);;
+$include-basigx-view-button-help: dynamic(true);;
+$include-basigx-view-button-hsi: dynamic(true);;
+$include-basigx-view-button-measure: dynamic(true);;
+$include-basigx-view-button-permalink: dynamic(true);;
+$include-basigx-view-button-togglelegend: dynamic(true);;
+$include-basigx-view-button-zoomin: dynamic(true);;
+$include-basigx-view-button-zoomout: dynamic(true);;
+$include-basigx-view-button-zoomtoextent: dynamic(true);;
+$include-basigx-view-combo-scalecombo: dynamic(true);;
+$include-basigx-view-component-map: dynamic(true);;
+$include-basigx-view-container-layerslider: dynamic(true);;
+$include-basigx-view-container-nominatimsearch: dynamic(true);;
+$include-basigx-view-container-overpasssearch: dynamic(true);;
+$include-basigx-view-container-wfssearch: dynamic(true);;
+$include-basigx-view-form-addwms: dynamic(true);;
+$include-basigx-view-form-coordinatetransform: dynamic(true);;
+$include-basigx-view-form-csvimport: dynamic(true);;
+$include-basigx-view-form-permalink: dynamic(true);;
+$include-basigx-view-form-print: dynamic(true);;
+$include-basigx-view-grid-featurepropertygrid: dynamic(true);;
+$include-basigx-view-panel-header: dynamic(true);;
+$include-basigx-view-panel-layersetchooser: dynamic(true);;
+$include-basigx-view-panel-legendtree: dynamic(true);;
+$include-basigx-view-panel-mapcontainer: dynamic(true);;
+$include-basigx-view-panel-menu: dynamic(true);;
+$include-basigx-view-view-layerset: dynamic(true);;
 $include-ext-abstractcomponent: dynamic(true);;
 $include-ext-abstractcontainer: dynamic(true);;
 $include-ext-abstractmanager: dynamic(true);;
@@ -1159,6 +1159,7 @@ $include-koala-view-window-printmodel: dynamic(true);;
 $include-koala-view-window-timeserieswindow: dynamic(true);;
 $include-koala-view-window-timeserieswindowcontroller: dynamic(true);;
 $include-koala-view-window-timeserieswindowmodel: dynamic(true);;
+$include-station: dynamic(true);;
 
 
 /* ======================== ETC ======================== */
@@ -1211,13 +1212,13 @@ $current-resource-root: $GeoExt-resource-root;
 $relative-image-path-for-uis: $GeoExt-resource-path;
 @import '../../../../../packages/remote/GeoExt/sass/etc/all';
 
-/* including package basepackage */
-$basepackage-resource-root: 'basepackage' !default;
-$basepackage-resource-path: 'basepackage/images' !default;
-$current-package: 'basepackage';
-$current-resource-root: $basepackage-resource-root;
-$relative-image-path-for-uis: $basepackage-resource-path;
-@import '../../../../../packages/remote/basepackage/sass/etc/all';
+/* including package BasiGX */
+$BasiGX-resource-root: 'BasiGX' !default;
+$BasiGX-resource-path: 'BasiGX/images' !default;
+$current-package: 'BasiGX';
+$current-resource-root: $BasiGX-resource-root;
+$relative-image-path-for-uis: $BasiGX-resource-path;
+@import '../../../../../packages/remote/BasiGX/sass/etc/all';
 
 /* including package charts */
 $charts-resource-root: 'charts' !default;
@@ -1551,19 +1552,19 @@ $relative-image-path-for-uis: $theme-neptune-resource-path;
 @import '../../../../../ext/classic/theme-neptune/sass/src/grid/column/Column';
 @import '../../../../../ext/classic/theme-neptune/sass/src/resizer/Resizer';
 
-/* including package basepackage */
-$basepackage-resource-root: 'basepackage' !default;
-$basepackage-resource-path: 'basepackage/images' !default;
-$current-package: 'basepackage';
-$current-resource-root: $basepackage-resource-root;
-$relative-image-path-for-uis: $basepackage-resource-path;
-@import '../../../../../packages/remote/basepackage/sass/src/view/button/Measure';
-@import '../../../../../packages/remote/basepackage/sass/src/view/component/Map';
-@import '../../../../../packages/remote/basepackage/sass/src/view/container/LayerSlider';
-@import '../../../../../packages/remote/basepackage/sass/src/view/panel/Header';
-@import '../../../../../packages/remote/basepackage/sass/src/view/panel/LayerSetChooser';
-@import '../../../../../packages/remote/basepackage/sass/src/view/panel/LegendTree';
-@import '../../../../../packages/remote/basepackage/sass/src/view/panel/MapContainer';
+/* including package BasiGX */
+$BasiGX-resource-root: 'BasiGX' !default;
+$BasiGX-resource-path: 'BasiGX/images' !default;
+$current-package: 'BasiGX';
+$current-resource-root: $BasiGX-resource-root;
+$relative-image-path-for-uis: $BasiGX-resource-path;
+@import '../../../../../packages/remote/BasiGX/sass/src/view/button/Measure';
+@import '../../../../../packages/remote/BasiGX/sass/src/view/component/Map';
+@import '../../../../../packages/remote/BasiGX/sass/src/view/container/LayerSlider';
+@import '../../../../../packages/remote/BasiGX/sass/src/view/panel/Header';
+@import '../../../../../packages/remote/BasiGX/sass/src/view/panel/LayerSetChooser';
+@import '../../../../../packages/remote/BasiGX/sass/src/view/panel/LegendTree';
+@import '../../../../../packages/remote/BasiGX/sass/src/view/panel/MapContainer';
 
 /* including package charts */
 $charts-resource-root: 'charts' !default;

@@ -47,7 +47,7 @@ Ext.define("Koala.view.window.Print", {
     constructor: function(){
         this.callParent(arguments);
 
-        var appContext = Basepackage.view.component.Map.guess().appContext;
+        var appContext = BasiGX.view.component.Map.guess().appContext;
         var urls = appContext.data.merge.urls;
         this.add({
             xtype: 'k-form-print',

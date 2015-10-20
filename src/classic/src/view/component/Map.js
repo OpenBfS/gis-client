@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 Ext.define("Koala.view.component.Map", {
-    extend: "Basepackage.view.component.Map",
+    extend: "BasiGX.view.component.Map",
     xtype: "k-component-map",
 
     requires: [

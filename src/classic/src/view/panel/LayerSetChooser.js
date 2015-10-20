@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 Ext.define("Koala.view.panel.LayerSetChooser", {
-    extend: "Basepackage.view.panel.LayerSetChooser",
+    extend: "BasiGX.view.panel.LayerSetChooser",
     xtype: 'k-panel-layersetchooser',
 
     requires: [
@@ -53,7 +53,7 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
         var me = this,
             tree = Ext.ComponentQuery.query('k-panel-themetree')[0];
         me.items = [{
-            xtype: 'base-view-layerset',
+            xtype: 'basigx-view-layerset',
             tpl: [
                   '<tpl for=".">',
                     me.showLayerProfiles ? '<tpl if="isLayerProfile">' :
@@ -82,7 +82,6 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
             change: 'filterLayerSetsByText'
         });
         if (tree && !me.showLayerProfiles) {
-//            var layersetview = me.down('base-view-layerset');
             tree.on('select', function(treepanel, item) {
                 me.currentTask = new Ext.util.DelayedTask(function(){
                     me.singleTreeClick(item);

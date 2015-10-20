@@ -19,8 +19,8 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
 
     toggleLayerSetView: function () {
         var view = this.getView();
-        var menu = view.up('base-panel-menu');
-        var mapContainer = view.up('base-panel-mapcontainer');
+        var menu = view.up('basigx-panel-menu');
+        var mapContainer = view.up('basigx-panel-mapcontainer');
         var layersetchooser = mapContainer.down('k-panel-layersetchooser');
 
         if (layersetchooser.isVisible()) {

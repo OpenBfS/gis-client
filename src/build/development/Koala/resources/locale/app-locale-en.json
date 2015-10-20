@@ -129,7 +129,7 @@
     },
 
 
-    "Basepackage.view.button.AddWms": {
+    "BasiGX.view.button.AddWms": {
         "config": {
             "data": {
                 "tooltip": "en:WMS hinzufügen...",
@@ -137,14 +137,14 @@
             }
         }
     },
-    "Basepackage.view.panel.MapContainer": {
+    "BasiGX.view.panel.MapContainer": {
         "config": {
             "data": {
                 "titleLegendPanel": "en:Legende"
             }
         }
     },
-    "Basepackage.view.panel.Menu": {
+    "BasiGX.view.panel.Menu": {
         "config": {
             "data": {
                 "closedMenuTitle": "en:Menu schließen",

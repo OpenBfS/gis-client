@@ -86,8 +86,8 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
     registerMenuBehaviour: function(layersetchooser){
         var view = this.getView();
         if (!view.showLayerProfiles) {
-            var mapContainer = layersetchooser.up('base-panel-mapcontainer');
-            var menu = mapContainer.down('base-panel-menu');
+            var mapContainer = layersetchooser.up('basigx-panel-mapcontainer');
+            var menu = mapContainer.down('basigx-panel-menu');
             menu.on('collapse', function() {
                 if (!layersetchooser.isHidden()) {
                     layersetchooser.hide(menu);

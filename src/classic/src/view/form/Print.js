@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 Ext.define("Koala.view.form.Print", {
-    extend: "Basepackage.view.form.Print",
+    extend: "BasiGX.view.form.Print",
     xtype: "k-form-print",
 
     requires: [
@@ -42,7 +42,7 @@ Ext.define("Koala.view.form.Print", {
          */
         this.setBind();
 
-        var appContext = Basepackage.view.component.Map.guess().appContext;
+        var appContext = BasiGX.view.component.Map.guess().appContext;
         if(appContext && appContext.data.merge.urls["irix-servlet"]){
             this.setIrixUrl(appContext.data.merge.urls["irix-servlet"]);
         }
@@ -90,7 +90,7 @@ Ext.define("Koala.view.form.Print", {
                 var hasName = isChecked && !!layer.get('name');
                 var nonOpaque = hasName && (layer.get('opacity') > 0);
                 var inTree = nonOpaque && (layer.get(
-                    Basepackage.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER
+                    BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER
                 ) !== false); // may be undefined for certain layers
 
                 if (isChecked && hasName && nonOpaque && inTree) {

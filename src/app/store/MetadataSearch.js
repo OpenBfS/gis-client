@@ -35,7 +35,7 @@ Ext.define('Koala.store.MetadataSearch', {
     constructor: function() {
         this.callParent(arguments);
 
-        var appContext = Basepackage.view.component.Map.guess().appContext;
+        var appContext = BasiGX.view.component.Map.guess().appContext;
         var urls = appContext.data.merge.urls;
         this.proxy.url = urls['metadata-search'];
     },

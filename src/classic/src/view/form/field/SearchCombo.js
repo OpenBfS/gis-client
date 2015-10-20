@@ -86,7 +86,7 @@ Ext.define("Koala.view.form.field.SearchCombo", {
 
         metadataGrid.show();
         Ext.Ajax.abort(metadataStore._lastRequest);
-        var appContext = Basepackage.view.component.Map.guess().appContext;
+        var appContext = BasiGX.view.component.Map.guess().appContext;
         var fields = appContext.data.merge.metadataSearchFields;
         var cql = this.getMetadataCql(fields, value);
         metadataStore.getProxy().setExtraParam('constraint', cql);

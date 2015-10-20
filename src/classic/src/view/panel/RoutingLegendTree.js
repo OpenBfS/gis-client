@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 Ext.define("Koala.view.panel.RoutingLegendTree", {
-    extend: "Basepackage.view.panel.LegendTree",
+    extend: "BasiGX.view.panel.LegendTree",
     xtype: "k-panel-routing-legendtree",
 
     requires: [
@@ -138,7 +138,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         removalHandler: function(btn){
             var layer = btn.layerRec.getOlLayer();
-            var map = Ext.ComponentQuery.query('base-component-map')[0]
+            var map = Ext.ComponentQuery.query('basigx-component-map')[0]
                 .getMap();
 
             Ext.Msg.show({

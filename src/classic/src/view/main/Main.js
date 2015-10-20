@@ -28,10 +28,10 @@ Ext.define('Koala.view.main.Main', {
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
 
-        'Basepackage.plugin.Hover',
-        'Basepackage.view.panel.Header',
-        'Basepackage.view.panel.MapContainer',
-        'Basepackage.util.Animate',
+        'BasiGX.plugin.Hover',
+        'BasiGX.view.panel.Header',
+        'BasiGX.view.panel.MapContainer',
+        'BasiGX.util.Animate',
 
         'Koala.view.chart.TimeSeries',
         'Koala.view.main.MainController',
@@ -49,7 +49,7 @@ Ext.define('Koala.view.main.Main', {
     layout: 'border',
 
     header: {
-        xtype: 'base-panel-header',
+        xtype: 'basigx-panel-header',
         logoUrl: 'classic/resources/img/bfs-logo.png',
         logoHeight: 78,
         logoAltText: 'Logo Bundesamt für Strahlenschutz',
@@ -63,7 +63,7 @@ Ext.define('Koala.view.main.Main', {
     },
 
     items: [{
-        xtype: 'base-panel-mapcontainer',
+        xtype: 'basigx-panel-mapcontainer',
         title: 'K-MapPanel',
         region: 'center',
         mapComponentConfig: {
@@ -86,7 +86,7 @@ Ext.define('Koala.view.main.Main', {
                     width: 100
                 },
                 items: [{
-                    xtype: 'base-button-addwms',
+                    xtype: 'basigx-button-addwms',
                     glyph: 'xf0ac@FontAwesome',
                     viewModel: {
                         data: {
@@ -104,9 +104,9 @@ Ext.define('Koala.view.main.Main', {
                         var win = Ext.ComponentQuery.query('k-window-print')[0];
                         if(!win){
                             Ext.create('Koala.view.window.Print')
-                            .showBy(btn.up('base-panel-menu'), 'tr');
+                            .showBy(btn.up('basigx-panel-menu'), 'tr');
                         } else {
-                            Basepackage.util.Animate.shake(win);
+                            BasiGX.util.Animate.shake(win);
                         }
                     }
                 }]
