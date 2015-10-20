@@ -17,7 +17,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-timeserieswindow',
     requires: [
-        'Koala.util.String'
+        'Koala.util.String',
+        'Koala.model.Station'
     ],
     /**
      *
@@ -54,25 +55,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     createTimeSeriesCombo: function(olLayer) {
         var me = this;
 
-        var stationModel = Ext.define('Station', {
-            extend: 'Ext.data.Model',
-            fields: [{
-                 name: 'geo_id',
-                 mapping: function(dataRec){
-                     return dataRec.properties.geo_id;
-                 }
-            },{
-                name: 'locality_name',
-                mapping: function(dataRec){
-                    return dataRec.properties.locality_name;
-                }
-           }]
-        });
-
         var url = (olLayer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs");
 
         var store = Ext.create('Ext.data.Store', {
-            model: 'Station',
+            model: 'Koala.model.Station',
             proxy: {
                 type: 'ajax',
                 url: url,
