@@ -85,11 +85,6 @@ Ext.define("Koala.view.chart.Bar", {
             position: 'left',
             grid: true,
             minimum: 0,
-            // The parameters in the documentation are wrong. Guess the order is
-            // correct like this.
-            renderer: function (axis, label) {
-                return Math.round(label*10,10)/10 + ' ' + dspUnit;
-            },
             label: {
                 rotate: {
                     degrees: yLabelRotation || 0
