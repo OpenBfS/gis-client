@@ -18,16 +18,6 @@ Ext.define('Koala.store.TimeSeries', {
 
     alias: 'store.k-timeseries',
 
-    fields: [
-        {
-            name: 'end_measure',
-            type: 'date',
-            mapping: function(dataRec){
-                return dataRec.properties.end_measure;
-            }
-        }
-    ],
-
     autoLoad: false,
 
     pageSize: 0,

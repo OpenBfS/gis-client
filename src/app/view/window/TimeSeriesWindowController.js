@@ -87,7 +87,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             listeners: {
                 select: Ext.Function.bind(me.onTimeSeriesComboSelect,
                     me, [olLayer], true),
-                beforequery: function(queryPlan, eOpts){
+                beforequery: function(queryPlan){
                     queryPlan.query = "locality_name ILIKE '%" +
                         queryPlan.query + "%'";
                 }

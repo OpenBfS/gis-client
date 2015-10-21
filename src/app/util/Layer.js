@@ -284,6 +284,8 @@ Ext.define('Koala.util.Layer', {
                 allowPrint: getBool(olProps.allowPrint, true),
                 allowOpacityChange: getBool(olProps.allowOpacityChange, true),
                 hoverTpl: olProps.hoverTpl,
+                hoverStyle: olProps.hoverStyle,
+                selectStyle: olProps.selectStyle || olProps.hoverStyle,
                 hasLegend: getBool(olProps.hasLegend, true),
                 downloadUrl: metadata.layerConfig.download.url,
                 // "treeId": metadata.inspireId, //TODO: is now routeId

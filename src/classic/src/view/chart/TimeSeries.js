@@ -37,9 +37,9 @@ Ext.define("Koala.view.chart.TimeSeries", {
         type: "k-chart-timeseries"
     },
 
-    store: {
-        type: 'k-timeseries'
-    },
+    // store: {
+    //     type: 'k-timeseries'
+    // },
 
     config: {
         seriesType: 'line',
@@ -72,6 +72,7 @@ Ext.define("Koala.view.chart.TimeSeries", {
             type: 'time',
             position: 'bottom',
             grid: true,
+            fields: ['foo'],
             label: {
                 rotate: {
                     degrees: xLabelRotation || -45
@@ -99,7 +100,35 @@ Ext.define("Koala.view.chart.TimeSeries", {
             }
         };
         Ext.apply(defaultYAxis, yConfig);
+
         cfg.axes = [defaultYAxis, defaultXAxis];
+
+        cfg.store = {
+            type: 'k-timeseries',
+            fields: [{
+                    name: 'foo',
+                    type: 'date',
+                    convert: function(a, dataRec){
+                        // debugger
+                        // console.log(dataRec.properties[chartConfig.xAxisAttribute]);
+                        return dataRec.data[chartConfig.xAxisAttribute];
+                    }
+                    // mapping: function(dataRec){
+                    //     return dataRec.data[chartConfig.xAxisAttribute];
+                    // }
+            }],
+            autoLoad: false,
+            pageSize: 0,
+            useDefaultXhrHeader: false,
+            proxy: {
+                type: 'memory',
+                reader: {
+                    type: 'json',
+                    rootProperty: 'features'
+                }
+            }
+        };
+
         this.callParent([cfg]);
     }
 });

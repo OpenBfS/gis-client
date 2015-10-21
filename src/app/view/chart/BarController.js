@@ -48,7 +48,9 @@ Ext.define('Koala.view.chart.BarController', {
         Ext.apply(requestParams, paramConfig);
 
         // determined from wms url
-        var url = (layer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs");
+        var url = layer.getSource() instanceof ol.source.TileWMS ?
+            (layer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs") :
+            (layer.getSource().getUrl()).replace(/\/wms/g, "/wfs");
 
         Ext.Ajax.request({
             url: url,
