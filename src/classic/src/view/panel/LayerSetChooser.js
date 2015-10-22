@@ -43,7 +43,8 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
     listeners: {
         afterrender: 'registerMenuBehaviour',
         select: 'handleLayerSetSelect',
-        itemdblclick: 'handleLayerSetDblClick'
+        itemdblclick: 'handleLayerSetDblClick',
+        selectionchange: 'handleLayerSetSelectionchange'
     },
 
     /**
