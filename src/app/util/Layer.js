@@ -274,7 +274,8 @@ Ext.define('Koala.util.Layer', {
             return {
                 name: metadata.dspTxt,
                 legendUrl: olProps.legendUrl || '',
-                legendHeight: olProps.legendHeight || 40,
+                legendHeight: olProps.legendHeight,
+                legendWidth: olProps.legendWidth,
                 topic: isTopic, // TODO: rename this prop in the application
                 hoverable: isTopic,
                 allowFeatureInfo: getBool(olProps.allowFeatureInfo, true),

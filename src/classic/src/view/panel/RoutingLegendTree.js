@@ -189,6 +189,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
     rowBodyCompTemplate: {
         xtype: 'container',
+        scrollable: true,
         items: [ {
             xtype: 'container',
             layout: 'hbox',
@@ -248,6 +249,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             name: 'legend',
             margin: '5px 0 0 0',
             src: '{{record.getOlLayer().get("legendUrl")}}',
+            width: '{{record.getOlLayer().get("legendWidth")}}',
             height: '{{record.getOlLayer().get("legendHeight")}}',
             alt: '{{record.getOlLayer().get("legendUrl")}}'
         }]
