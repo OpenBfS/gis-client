@@ -246,7 +246,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         },
         {
             xtype: 'image',
-            name: 'legend',
+            name: '{{record.getOlLayer().get("routeId") + "-legendImg"}}',
             margin: '5px 0 0 0',
             src: '{{record.getOlLayer().get("legendUrl")}}',
             width: '{{record.getOlLayer().get("legendWidth")}}',
@@ -274,6 +274,22 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         // configure rowexpanderwithcomponents-plugin
         me.plugins[0].hideExpandColumn = false;
+
+        // Register moveend to update legendUrls
+        var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
+        map.on('moveend', function () {
+            var store = this.getStore();
+
+            store.each(function (rec) {
+                var layer = rec.getOlLayer();
+                var selector = '[name=' + layer.get("routeId") + '-legendImg]';
+                var img = Ext.ComponentQuery.query(selector)[0];
+
+                if (img) {
+                    img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));
+                }
+            });
+        }, me);
     },
 
     applyRoutingEnabled: function(newVal){

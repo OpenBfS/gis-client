@@ -66,7 +66,7 @@ Ext.define("Koala.view.chart.Bar", {
             chartConfig.xAxisLabelRotation);
         var yLabelRotation = Koala.util.String.coerce(
             chartConfig.yAxisLabelRotation);
-        var dspUnit = chartConfig.dspUnit || '';
+        // var dspUnit = chartConfig.dspUnit || '';
 
         var defaultXAxis = {
             type: 'category',

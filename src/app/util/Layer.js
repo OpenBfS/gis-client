@@ -15,6 +15,8 @@
  */
 Ext.define('Koala.util.Layer', {
 
+    requires: ['BasiGX.util.Map'],
+
     statics: {
         /**
          * @param {string} uuid
@@ -125,6 +127,30 @@ Ext.define('Koala.util.Layer', {
          */
         showChangeFilterSettingsWinByUuid: function(uuid){
             this.getMetadataFromUuidAndThen(uuid, this.showChangeFilterSettingsWin);
+        },
+
+        /**
+         * @param ol.layer.Base
+         */
+        getCurrentLegendUrl: function (layer) {
+            var width = layer.get("legendWidth");
+            var height= layer.get("legendHeight");
+            var legendUrl = layer.get("legendUrl");
+            var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
+            var resolution = BasiGX.util.Map.getResolution(map);
+            var scale = BasiGX.util.Map.getScale(map);
+
+            if (width) {
+                legendUrl = Ext.String.urlAppend(legendUrl, "WIDTH="+width);
+            }
+            if (height){
+                legendUrl = Ext.String.urlAppend(legendUrl, "HEIGHT="+height);
+            }
+            if (resolution) {
+                legendUrl = Ext.String.urlAppend(legendUrl, "SCALE="+scale);
+            }
+
+            return legendUrl;
         },
 
         layerFromMetadata: function(metadata) {
