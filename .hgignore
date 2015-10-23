@@ -2,8 +2,8 @@ syntax: glob
 src/bootstrap.css
 src/bootstrap.js
 src/classic.json
-src/build/*
-src/packages/*
+src/build/**
+src/packages/**
 src/sass/example/bootstrap.js
 src/sass/example/bootstrap.json
 

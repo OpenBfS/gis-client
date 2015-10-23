@@ -3,42 +3,58 @@ Ext.define('Koala.view.form.LayerFilterController', {
     alias: 'controller.k-form-layerfilter',
 
     submitFilter: function(){
-        var view = this.getView();
+        var me = this;
+        var LayerUtil = Koala.util.Layer;
+        var view = me.getView();
         var metadata = view.getMetadata();
-        var keyVals = view.getValues();
-        // remove ignored values
-        var cleanKeyVals = {};
-        Ext.iterate(keyVals, function(key, value) {
-            if (!Ext.Array.contains(view.ignoreFields, key)) {
-                cleanKeyVals[key] = value;
+        var filters = view.getFilters();
+
+        // Iterate over all filters…
+        Ext.each(filters, function(filter, idx) {
+            // … grab the associated fieldset by attribute
+            var selector = "[filterIdx='" + idx +"']";
+            var fieldset = view.down(selector);
+            if (fieldset) {
+                var fields = fieldset.query('field');
+                var keyVals = {};
+                Ext.each(fields, function(field) {
+                    var key = field.getName();
+                    if (!Ext.Array.contains(view.ignoreFields, key)) {
+                        keyVals[key] = field.getValue();
+                        // console.log("+++ Keep field with key ", key, "of fieldset", selector);
+                    } else {
+                        // console.log("--- Ignore field with key ", key, "of fieldset", selector);
+                    }
+                });
+                filters = me.updateFilterValues(filters, idx, keyVals);
             }
         });
-
-        metadata = this.updateFilterValues(metadata, cleanKeyVals);
-
-        var layer = Koala.util.Layer.layerFromMetadata(metadata);
-
-        Koala.util.Layer.addOlLayerToMap(layer);
-
+        metadata.filters = filters;
+        var layer = LayerUtil.layerFromMetadata(metadata);
+        LayerUtil.addOlLayerToMap(layer);
         view.up('window').close();
     },
 
     /**
      *
      */
-    updateFilterValues: function(metadata, keyVals) {
-        var filter = metadata.filter;
-        if (filter.type === 'timerange') {
-            var paramArr = metadata.filter.param.split(",");
-            filter.mindatetimeinstant = keyVals[paramArr[0]];
-            filter.maxdatetimeinstant = keyVals[paramArr[1]];
-        } else if (filter.type === 'pointintime') {
-             filter.timeinstant = keyVals[filter.param];
-        } else if (filter.type === 'value') {
-            filter.value = keyVals[filter.param];
-        }
+    updateFilterValues: function(filters, idx, keyVals) {
+        var view = this.getView();
 
-        return metadata;
+        var filter = filters[idx];
+        var filterType = (filter.type || "").toLowerCase();
+        var param = filter.param;
+        if (filterType === 'timerange') {
+            var keys = view.startAndEndFieldnamesFromMetadataParam(param);
+            filter.mindatetimeinstant = keyVals[keys.startName];
+            filter.maxdatetimeinstant = keyVals[keys.endName];
+        } else if (filterType === 'pointintime') {
+            filter.timeinstant = keyVals[param];
+        } else if (filterType === 'value') {
+            filter.value = keyVals[param];
+        }
+        filters[idx] = filter;
+        return filters;
     },
 
     /**

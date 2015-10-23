@@ -18,6 +18,50 @@ Ext.define('Koala.util.Layer', {
     requires: ['BasiGX.util.Map'],
 
     statics: {
+
+        /**
+         * Returns whether tghe passed metadat objcet from GNOS has at least one
+         * filter configured.
+         *
+         * @param {object} metadata The metadata json object.
+         * @returns {boolean} Whether the metadat conatins at least one filter.
+         */
+        metadataHasFilters: function(metadata) {
+            // for backwards compatibility
+            var filter = metadata && metadata.filter;
+            // that is the new key
+            var filters = metadata && metadata.filters;
+            if (!!filter) {
+                return true;
+            }
+            if (!filters || !Ext.isArray(filters) || filters.length < 1) {
+                return false;
+            }
+            return true;
+        },
+
+        /**
+         * Returns an array of filters or null if there are no filters. Takes
+         * care of the old way of specifying only one filter under `filter` and
+         * the way of having an array of filters under `filters`.
+         *
+         * @param {object} metadata The metadata json object.
+         * @returns {Object[]} Always an array of filters, regardless where they
+         *     were found or null if the metadata did not contain either `filter`
+         *     or `filters`.
+         */
+        getFiltersFromMetadata: function(metadata) {
+            if (!this.metadataHasFilters(metadata)) {
+                return null;
+            }
+            var filter = metadata.filter;
+            var filters = metadata.filters || [];
+            if (filter) {
+                filters.push(filter);
+            }
+            return filters;
+        },
+
         /**
          * @param {string} uuid
          * @returns {object} metadata json object
@@ -102,16 +146,33 @@ Ext.define('Koala.util.Layer', {
         },
 
         showChangeFilterSettingsWin: function(metadata) {
-            if (Ext.isEmpty(metadata.filter)) {
+            var filters = this.getFiltersFromMetadata(metadata);
+            if (!filters) {
                 return;
             }
+
+            // TODO i18n
+            var title = Ext.String.format(
+                    'Layerfilter "{0}"',
+                    metadata.title || metadata.dspTxt || 'Unbekannt'
+                );
+            var winName = 'filter-win-' + metadata.id;
+            var cntExisting = Ext.ComponentQuery.query(
+                    '[name="' + winName + '"]'
+                ).length;
+            if (cntExisting > 0) {
+                title += " (#" + (cntExisting + 1) +")";
+            }
+
             Ext.create('Ext.window.Window', {
-                title: 'Layerfilter',
+                name: winName,
+                title: title,
                 layout: 'fit',
-                items: [{
+                items: {
                     xtype: 'k-form-layerfilter',
-                    metadata: metadata
-                }]
+                    metadata: metadata,
+                    filters: filters
+                }
             }).show();
         },
 
@@ -160,8 +221,8 @@ Ext.define('Koala.util.Layer', {
             var layerConfig = {};
             var sourceConfig = {};
 
-            // apply default filter to layer
-            metadata = Koala.util.Layer.moveFilterToParams(metadata);
+            // apply default filter to layer, if needed
+            metadata = Koala.util.Layer.adjustMetadatAccordingToFilters(metadata);
 
             var internalLayerConfig = this.getInternalLayerConfig(metadata); //TODO arguments?
             var internalSourceConfig = this.getInternalSourceConfig(metadata, SourceClass);
@@ -169,7 +230,6 @@ Ext.define('Koala.util.Layer', {
             var olProps = metadata.layerConfig ?
                     metadata.layerConfig.olProperties || {} :
                     {};
-
             var mdLayerConfig = Koala.util.Object.getConfigByPrefix(
                 olProps, "layer_", true);
 
@@ -177,7 +237,7 @@ Ext.define('Koala.util.Layer', {
                 olProps, "source_", true);
 
             var mdParamConfig = Koala.util.Object.getConfigByPrefix(
-                olProps, "param_", true);
+                olProps, "param_", false);
 
             layerConfig = Ext.apply(internalLayerConfig, mdLayerConfig);
             sourceConfig = Ext.apply(internalSourceConfig, mdSourceConfig);
@@ -325,7 +385,7 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
-         * TODO refactor into soingle methods
+         * TODO refactor into single methods
          */
         getInternalSourceConfig: function(md, SourceClass) {
             var cfg;
@@ -334,7 +394,7 @@ Ext.define('Koala.util.Layer', {
                     olProps, "param_");
             var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
             var projection = map.getView().getProjection();
-            var projCode = map.getView().getProjection().getCode();
+            var projCode = projection.getCode();
             var mdLayerCfg;
 
             if (SourceClass === ol.source.Vector) {
@@ -430,25 +490,217 @@ Ext.define('Koala.util.Layer', {
         /**
          *
          */
-        moveFilterToParams: function(metadata, keyVals) {
-            if (Ext.isEmpty(metadata.filter)) {
+        adjustMetadatAccordingToFilters: function(metadata) {
+            var me = this;
+            // if the olProperty encodeFilterInViewparams is 'true',
+            // we run this code, otherwise we will filter via dimension
+            // or sth. else
+            var encodeInViewParams = Koala.util.Object.getPathStrOr(
+                    metadata,
+                    "layerConfig/olProperties/encodeFilterInViewparams",
+                    "false"
+                );
+
+            var filters = this.getFiltersFromMetadata(metadata);
+
+            if (!filters) {
                 return metadata;
             }
 
-            if (!Ext.isDefined(keyVals) || Ext.Object.getSize(keyVals) === 0) {
-                keyVals = {};
-                var params = metadata.filter.param.split(",");
-                var type = metadata.filter.type;
-                // we need to check the metadata for default filters to apply
-                if (type === "timerange") {
-                    keyVals[params[0]] = metadata.filter.mindatetimeinstant;
-                    keyVals[params[1]] = metadata.filter.maxdatetimeinstant;
-                } else if (type === "pointintime") {
-                    keyVals[params[0]] = metadata.filter.timeinstant;
-                } else if (type === 'value') {
-                    keyVals[params[0]] = metadata.filter.value;
+            metadata = me.applyDefaultsIfNotChangedByUser(metadata, filters);
+
+            if (encodeInViewParams === "true") {
+                metadata = me.moveFiltersToViewparams(metadata, filters);
+            } else {
+                // The filters should not be encoded in the viewparams, but as
+                // WMS-T and friends
+                metadata = me.adjustMetadataFiltersToStandardLocations(
+                    metadata,
+                    filters
+                );
+            }
+            return metadata;
+        },
+
+        applyDefaultsIfNotChangedByUser: function(metadata, filters) {
+            var me = this;
+            var adjustedFilters = [];
+            Ext.each(filters, function(filter) {
+                var filterType = (filter.type || "").toLowerCase();
+                switch (filterType) {
+                    case 'timerange':
+                        adjFilter = me.applyDefaultsTimerangeFilter(filter);
+                        break;
+                    case 'pointintime':
+                        adjFilter = me.applyDefaultsPointInTimeFilter(filter);
+                        break;
+                    case 'value':
+                        adjFilter = me.applyDefaultsValueFilter(filter);
+                        break;
+                    default:
+                        break;
+                }
+                adjustedFilters.push(adjFilter);
+            });
+
+            metadata.filters = adjustedFilters;
+
+            return metadata;
+        },
+
+        applyDefaultsTimerangeFilter: function(filter){
+            if (!filter.mindatetimeinstant) {
+                if (filter.defaultstarttimeinstant) {
+                    try {
+                        filter.mindatetimeinstant = Ext.Date.parse(
+                            filter.defaultstarttimeinstant,
+                            filter.defaultstarttimeformat
+                        );
+                    } catch (e) {
+                        Ext.log.error('Could not set default timerange filter');
+                    }
+                } else {
+                    Ext.log.warn('No defined start value for timerange filter and no ' +
+                        'configured default start value for timerange filter');
                 }
             }
+            if (!filter.maxdatetimeinstant) {
+                if (filter.defaultendtimeinstant) {
+                    try {
+                        filter.maxdatetimeinstant = Ext.Date.parse(
+                            filter.defaultendtimeinstant,
+                            filter.defaultendtimeformat
+                        );
+                    } catch (e) {
+                        Ext.log.error('Could not set default timerange filter');
+                    }
+                } else {
+                    Ext.log.warn('No defined end value for timerange filter and no ' +
+                        'configured default end value for timerange filter');
+                }
+            }
+            return filter;
+        },
+
+        applyDefaultsPointInTimeFilter: function(filter){
+            if (!filter.timeinstant) {
+                if (filter.defaulttimeinstant) {
+                    try {
+                        filter.timeinstant = Ext.Date.parse(
+                            filter.defaulttimeinstant,
+                            filter.defaulttimeformat
+                        );
+                    } catch (e) {
+                        Ext.log.error('Could not set default point in time filter');
+                    }
+                } else {
+                    Ext.log.warn('No defined point in time filter and no ' +
+                        'configured default point in time filter')
+                }
+            }
+            return filter;
+        },
+
+        applyDefaultsValueFilter: function(filter){
+            if (!filter.value) {
+                filter.value = filter.defaultValue
+            }
+            return filter;
+        },
+
+        adjustMetadataFiltersToStandardLocations: function(metadata, filters){
+            var me = this;
+            Ext.each(filters, function(filter) {
+                var filterType = (filter.type || "").toLowerCase();
+                switch (filterType) {
+                    case 'timerange':
+                        metadata = me.configureMetadataWithTimerange(metadata, filter);
+                        break;
+                    case 'pointintime':
+                        metadata = me.configureMetadataWithPointInTime(metadata, filter);
+                        break;
+                    case 'value':
+                        metadata = me.configureMetadataWithValue(metadata, filter);
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            return metadata;
+        },
+
+        configureMetadataWithTimerange: function(metadata, filter) {
+            // timerange filter is an additional param TIME=start/end
+            var olProps = metadata.layerConfig.olProperties;
+            var wmstKey = 'param_TIME';
+            if (wmstKey in olProps) {
+                Ext.log.warn('Multiple time filters configured, ' +
+                    'only the last will win');
+            }
+            // TODO check UTC!
+            var start = filter.mindatetimeinstant;
+            var end = filter.maxdatetimeinstant;
+            var val = Ext.Date.format(start, 'C') + '/' + Ext.Date.format(end, 'C');
+            olProps[wmstKey] = val;
+            metadata.layerConfig.olProperties = olProps;
+            return metadata;
+        },
+
+        configureMetadataWithPointInTime: function(metadata, filter) {
+            // Point in time filter is an additional param TIME=timeinstant
+            var olProps = metadata.layerConfig.olProperties;
+            var wmstKey = 'param_TIME';
+            if (wmstKey in olProps) {
+                Ext.log.warn('Multiple time filters configured, ' +
+                    'only the last will win');
+            }
+            // TODO check UTC!
+            var dateValue = filter.timeinstant;
+            var val = Ext.Date.format(dateValue, 'C');
+            olProps[wmstKey] = val;
+            metadata.layerConfig.olProperties = olProps;
+            return metadata;
+        },
+
+        configureMetadataWithValue: function(metadata, filter) {
+            // VALUE becomes a CQL filter
+            var olProps = metadata.layerConfig.olProperties;
+            var cqlKey = 'param_cql_filter';
+            var val = "";
+            if (cqlKey in olProps) {
+                olProps[cqlKey];
+            }
+            if (val !== "") {
+                val += ";"
+            }
+            // TODO operators!
+            val += filter.param + "=" + filter.value
+            olProps[cqlKey] = val;
+            metadata.layerConfig.olProperties = olProps;
+            return metadata;
+        },
+
+        moveFiltersToViewparams: function(metadata, filters){
+            var keyVals = {};
+            Ext.each(filters, function(filter) {
+                var params = filter.param.split(",");
+                var type = filter.type;
+                // we need to check the metadata for default filters to apply
+                // TODO the format is surely totally off!!!
+                if (type === "timerange") {
+                    keyVals[params[0]] = filter.mindatetimeinstant;
+                    if(!params[1]) {
+                        keyVals[params[0]] += "/" + filter.maxdatetimeinstant;
+                    } else {
+                        keyVals[params[1]] = filter.maxdatetimeinstant;
+                    }
+                } else if (type === "pointintime") {
+                    keyVals[params[0]] = filter.timeinstant;
+                } else if (type === 'value') {
+                    keyVals[params[0]] = filter.value;
+                }
+            });
 
             var existingViewParams = decodeURIComponent(
                 Koala.util.Object.getPathStrOr(

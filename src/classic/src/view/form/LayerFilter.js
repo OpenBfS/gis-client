@@ -14,7 +14,11 @@ Ext.define("Koala.view.form.LayerFilter", {
     viewModel: {
         type: "k-form-layerfilter"
     },
-    layout: 'form',
+    layout: 'anchor',
+    defaults: {
+        anchor: '100%'
+    },
+    padding: 5,
 
     ignoreFields: [
         'minutespinner',
@@ -32,34 +36,40 @@ Ext.define("Koala.view.form.LayerFilter", {
 
     config: {
         metadata: null,
+        filters: null,
         format: null
     },
 
     initComponent: function(){
-        this.callParent();
-        var metadata = this.getMetadata();
-        var filter = metadata.filter;
+        var me = this;
+        me.callParent();
+        var metadata = me.getMetadata();
+        var filters = me.getFilters();
 
-        if(!filter){
-            this.html = 'No Filterobject provided!';
-            this.callParent();
+        if(!filters || filters-length < 1){
+            me.update('No valid filters provided!');
             return;
         }
 
-        switch(filter.type){
-            case "timerange":
-                this.createTimeRangeFilter(filter);
-                break;
-            case "pointintime":
-                this.createPointInTimeFilter(filter);
-                break;
-            case "rodos":
-                break;
-            case "value":
-                this.createValueFilter(filter);
-                break;
-            default:
-        }
+        Ext.each(filters, function(filter, idx) {
+            var type = (filter.type || "").toLowerCase();
+            switch(type){
+                case "timerange":
+                    me.createTimeRangeFilter(filter, idx);
+                    break;
+                case "pointintime":
+                    me.createPointInTimeFilter(filter, idx);
+                    break;
+                case "rodos":
+                    break;
+                case "value":
+                    me.createValueFilter(filter, idx);
+                    break;
+                default:
+                    Ext.log.warn('Unexpected filter type: ' + filter.type);
+                    break;
+            }
+        })
 
         var submitButton = Ext.create('Ext.button.Button', {
             bind: {
@@ -68,11 +78,11 @@ Ext.define("Koala.view.form.LayerFilter", {
             handler: 'submitFilter',
             formBind: true
         });
-        this.add(submitButton);
+        me.add(submitButton);
 
     },
 
-    createPointInTimeFilter: function(filter) {
+    createPointInTimeFilter: function(filter, idx) {
         var me = this;
         var value = Ext.Date.parse(filter.timeinstant,
             "Y-m-d\\TH:i:s");
@@ -84,6 +94,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             editable: false,
             labelWidth: 70,
             name: filter.param,
+            flex: 1,
             value: value,
             format: me.getFormat(),
             submitFormat: "c",
@@ -134,13 +145,18 @@ Ext.define("Koala.view.form.LayerFilter", {
             }
         });
 
-        var container = Ext.create("Ext.container.Container", {
+        var container = Ext.create("Ext.form.FieldContainer", { // Ext.container.Container
             name: 'pointintimecontainer',
+            anchor: '100%',
             layout: 'hbox',
             items: [dateField, hourSpinner, minuteSpinner]
         });
 
         var fieldSet = Ext.create('Ext.form.FieldSet', {
+            padding: 5,
+            // defaults: {anchor: '100%'},
+            layout: 'anchor',
+            filterIdx: idx,
             bind: {
                 title: '{pointInTimeFilter}'
             },
@@ -153,11 +169,52 @@ Ext.define("Koala.view.form.LayerFilter", {
 
     },
 
-    createTimeRangeFilter: function(filter){
+    /**
+     *
+     */
+    startAndEndFieldnamesFromMetadataParam: function(param){
+        var names = {
+            startName: '',
+            endName: ''
+        };
+        var differentiateSuffix = "__make-distinguishable__";
+
+        if (!param) {
+            Ext.log.warn('Illegal configuartion for timerange filter');
+            return names;
+        }
+
+        var trimmedParam = Ext.String.trim(param);
+        if (trimmedParam === "," || trimmedParam === "") {
+            Ext.log.warn('Illegal configuartion for timerange filter');
+            return names;
+        }
+
+        var params = trimmedParam.split(",");
+
+        // When we were configured with only one parameter, or if the two
+        // parameters have the same name, we need to create a unique fieldname
+        // for end…
+        if (params.length == 1 || params[0] === params[1]) {
+            params[1] = params[0] + differentiateSuffix;
+        }
+
+        names.startName = params[0];
+        names.endName = params[1];
+
+        return names;
+    },
+
+    createTimeRangeFilter: function(filter, idx){
         var me = this;
-        var names = filter.param.split(",");
-        var startName = names[0];
-        var endName = names[1];
+        // var names = filter.param.split(",");
+        // var startName = names[0];
+        // var endName = names[1];
+
+        var names = me.startAndEndFieldnamesFromMetadataParam(filter.param);
+        var startName = names.startName;
+        var endName = names.endName;
+
         var minValue = Ext.Date.parse(filter.mindatetimeinstant,
             "Y-m-d\\TH:i:s");
         var maxValue = Ext.Date.parse(filter.maxdatetimeinstant,
@@ -169,7 +226,8 @@ Ext.define("Koala.view.form.LayerFilter", {
             },
             name: startName,
             editable: false,
-            labelWidth: 35,
+            labelWidth: 70,
+            flex: 1,
             value: minValue,
             minValue: minValue,
             maxValue: maxValue,
@@ -231,8 +289,9 @@ Ext.define("Koala.view.form.LayerFilter", {
             }
         });
 
-        var minContainer = Ext.create("Ext.container.Container", {
+        var minContainer = Ext.create("Ext.form.FieldContainer", { // Ext.container.Container
             name: 'mincontainer',
+            anchor: '100%',
             layout: 'hbox',
             items: [minDateField, minHourSpinner, minMinuteSpinner]
         });
@@ -242,7 +301,8 @@ Ext.define("Koala.view.form.LayerFilter", {
             bind: {
                 fieldLabel: '{endLabel}'
             },
-            labelWidth: 35,
+            labelWidth: 70,
+            flex: 1,
             value: maxValue,
             minValue: minValue,
             maxValue: maxValue,
@@ -298,12 +358,17 @@ Ext.define("Koala.view.form.LayerFilter", {
                 }
             }
         });
-        var maxContainer = Ext.create("Ext.container.Container", {
+        var maxContainer = Ext.create("Ext.form.FieldContainer", { // Ext.container.Container
             name: 'maxcontainer',
+            anchor: '100%',
             layout: 'hbox',
             items: [maxDateField, maxHourSpinner, maxMinuteSpinner]
         });
         var fieldSet = Ext.create('Ext.form.FieldSet', {
+            padding: 5,
+            // defaults: {anchor: '100%'},
+            layout: 'anchor',
+            filterIdx: idx,
             bind: {
                 title: '{timeRangeFilter}'
             },
@@ -312,14 +377,19 @@ Ext.define("Koala.view.form.LayerFilter", {
         this.add(fieldSet);
     },
 
-    createValueFilter: function(filter) {
+    createValueFilter: function(filter, idx) {
         var fieldSet = Ext.create('Ext.form.FieldSet', {
+            padding: 5,
+            defaults: {anchor: '100%'},
+            layout: 'anchor',
+            filterIdx: idx,
             bind: {
                 title: '{valueFilter}'
             },
             items: [
                 {
                     xtype: 'textfield',
+                    labelWidth: 70,
                     name: filter.param,
                     fieldLabel: filter.param,
                     value: filter.value,
