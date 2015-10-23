@@ -127,7 +127,8 @@ Ext.define('Koala.view.component.MapController', {
             Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
 
         var win = Ext.create("Koala.view.window.TimeSeriesWindow", {
-            addFilterForm: addFilterForm
+            addFilterForm: addFilterForm,
+            initOlLayer: olLayer
         });
         return win;
     },

@@ -25,18 +25,20 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
      * Requesting the charts data through Ext.Ajax as we need to handle
      * the parse and filling strategy ourselves
      */
-    prepareTimeSeriesLoad: function() {
+    prepareTimeSeriesLoad: function(selectedStation) {
         var me = this;
         var view = me.getView();
-        var seriesIndex = view.getSeries().length;
-        var valueField = 'value_' + seriesIndex;
-        var layer = view.selectedStation.get('layer');
+        var valueField = 'value_' + selectedStation.get('geo_id');
+        var layer = view.layer;
         var chartConfig = layer.get('timeSeriesChartProperties');
         var paramConfig = Koala.util.Object.getConfigByPrefix(
             chartConfig, "param_", true);
+
+        view.setLoading(true);
+
         Ext.iterate(paramConfig, function(k, v) {
             paramConfig[k] = Koala.util.String.replaceTemplateStrings(
-                v, view.selectedStation);
+                v, selectedStation);
         });
 
         if (Ext.isEmpty(chartConfig.dataFeatureType) ||
@@ -46,12 +48,30 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                 return;
         }
 
+        // get the timerangefilter, actially we need the attribute param
+        // only
+        var filters = layer.metadata.filters,
+            timeRangeFilter;
+
+        Ext.each(filters, function(filter) {
+            if (filter && filter.type && filter.type === 'timerange') {
+                timeRangeFilter = filter;
+                return false;
+            } else {
+                // some mockup values, TODO: remove me later on?
+                timeRangeFilter = {
+                    param: 'end_measure'
+                };
+            }
+        });
+
         var requestParams = {
             service: 'WFS',
             version: '1.1.0',
             request: 'GetFeature',
             typeName: chartConfig.dataFeatureType,
-            outputFormat: 'application/json'
+            outputFormat: 'application/json',
+            filter: me.getDateTimeRangeFilter(timeRangeFilter)
         };
         Ext.apply(requestParams, paramConfig);
 
@@ -64,15 +84,15 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
             type: 'ajax',
             params: requestParams,
             success: function(res) {
-
                 var json = Ext.decode(res.responseText),
                     chart = Ext.ComponentQuery.query('k-chart-timeseries')[0],
                     store = chart.getStore();
 
                 var recs = [];
-                Ext.each(json.features, function(feat) {
+                Ext.each(json.features, function(feat, featIdx) {
                     var matchFound = false;
-                    Ext.each(store.data.items, function(item) {
+
+                    Ext.each(store.data.items, function(item, itemIdx) {
                         // we try to find a matching record in the store
                         // and append the new value if match is found
                         if (Ext.Date.isEqual(item.data[chartConfig.xAxisAttribute],
@@ -81,10 +101,12 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                             return false;
                         }
                     });
+
                     if (matchFound) {
-                        // TODO refactor JW weißs bescheid
+                        // TODO refactor JW, DK, KV wissen bescheid
                         matchFound.data[valueField] =
                             feat.properties[chartConfig.yAxisAttribute];
+                        return;
                     } else {
                         var newRec = Ext.create(store.getModel(),
                             feat.properties);
@@ -94,7 +116,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                     }
                 });
                 store.add(recs);
-                me.onTimeSeriesDataLoad(valueField, chartConfig);
+                me.onTimeSeriesDataLoad(selectedStation, valueField, chartConfig);
             },
             failure: function() {
                 Ext.log.error("failure on chartdata load");
@@ -102,20 +124,48 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         });
 
         view.getAxes()[0].getFields().push(valueField);
-
-        view.setLoading(true);
     },
 
     /**
      *
      */
-    onTimeSeriesDataLoad: function(valueField, chartConfig) {
+    getDateTimeRangeFilter: function(layerFilter) {
+        var me = this;
+        var timeSeriesWin = me.getView().up('window');
+        var filter;
+        var startDate;
+        var endDate;
+        var timeField;
+
+        startDate = timeSeriesWin.down('datefield[name=datestart]').getValue();
+        endDate = timeSeriesWin.down('datefield[name=dateend]').getValue();
+        timeField = layerFilter.param;
+
+        filter =
+            '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">' +
+            '    <ogc:PropertyIsBetween>' +
+            '        <ogc:PropertyName>' + timeField + '</ogc:PropertyName>' +
+            '        <ogc:LowerBoundary>'+
+            '            <ogc:Literal>' + startDate.toISOString() + '</ogc:Literal>' +
+            '        </ogc:LowerBoundary>' +
+            '        <ogc:UpperBoundary>' +
+            '            <ogc:Literal>' + endDate.toISOString() + '</ogc:Literal>' +
+            '        </ogc:UpperBoundary>' +
+            '    </ogc:PropertyIsBetween>' +
+            '</ogc:Filter>';
+
+        return filter;
+    },
+
+    /**
+     *
+     */
+    onTimeSeriesDataLoad: function(selectedStation, valueField, chartConfig) {
         var me = this;
         var view = me.getView();
-        var station = view.selectedStation;
         var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
             Koala.util.String.replaceTemplateStrings(
-                chartConfig.seriesTitleTpl, station) : "";
+                chartConfig.seriesTitleTpl, selectedStation) : "";
 
         var newSeries = me.createNewSeries(stationName,
             chartConfig, valueField);

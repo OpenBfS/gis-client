@@ -160,9 +160,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var timeSeriesView = Ext.ComponentQuery.query('k-chart-timeseries')[0];
         var controller = timeSeriesView.getController();
 
-        chart.selectedStation = olFeat;
+        if (!Ext.Array.contains(chart.selectedStations, olFeat)) {
+            chart.selectedStations.push(olFeat);
+        }
 
-        controller.prepareTimeSeriesLoad();
+        controller.prepareTimeSeriesLoad(olFeat);
     },
 
     /**
@@ -195,9 +197,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var charts = view.query('chart');
 
         Ext.each(charts, function(chart) {
-            var minVal = Date.parse(formValues.datestart);
-            var maxVal = Date.parse(formValues.dateend);
-            me.setAbscissaRange(chart, minVal, maxVal);
+            chart.getStore().removeAll();
+            chart.removeSeries(chart.getSeries());
+            Ext.each(chart.selectedStations, function(selectedStation) {
+                me.createOrUpdateChart(chart.layer, selectedStation);
+            });
         });
     },
 

@@ -44,9 +44,34 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         addFilterForm: true
     },
 
+    /**
+     * The olLayer we were constructed with
+     */
+    initOlLayer: null,
+
     items: [],
 
     initComponent: function() {
+
+        // get the default timerangefilter to set the initial values for
+        // the timeseries window
+        var filters = this.initOlLayer.metadata.filters,
+            timeRangeFilter;
+
+        Ext.each(filters, function(filter) {
+            if (filter && filter.type && filter.type === 'timerange') {
+                timeRangeFilter = filter;
+                return false;
+            } else {
+                // some mockup values, TODO: remove me later on?
+                timeRangeFilter = {
+                    parameter: 'end_measure',
+                    mindatetimeinstant: Ext.Date.add(new Date(), Ext.Date.DAY, -1),
+                    maxdatetimeinstant: new Date()
+                };
+            }
+        });
+
         if (this.addFilterForm) {
             this.items = [{
                 xtype: 'form',
@@ -63,18 +88,18 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     xtype: 'datefield',
                     bind: {
                         fieldLabel: '{dateFieldStartLabel}',
-                        value: '{startDateValue}',
                         maxValue: '{startDateMaxValue}'
                     },
+                    value: timeRangeFilter.mindatetimeinstant,
                     labelWidth: 35,
                     name: 'datestart',
                     format: 'j F Y, H:i'
                 }, {
                     xtype: 'datefield',
                     bind: {
-                        fieldLabel: '{dateFieldEndLabel}',
-                        value: '{endDateValue}'
+                        fieldLabel: '{dateFieldEndLabel}'
                     },
+                    value: timeRangeFilter.maxdatetimeinstant,
                     labelWidth: 38,
                     name: 'dateend',
                     format: 'j F Y, H:i'

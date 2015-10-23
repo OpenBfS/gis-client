@@ -37,16 +37,16 @@ Ext.define("Koala.view.chart.TimeSeries", {
         type: "k-chart-timeseries"
     },
 
-    // store: {
-    //     type: 'k-timeseries'
-    // },
+    store: {
+        type: 'k-timeseries'
+    },
 
     config: {
         seriesType: 'line',
         showStep: true
     },
 
-    selectedStation: null,
+    selectedStations: [],
 
     layer: null,
 
@@ -72,7 +72,7 @@ Ext.define("Koala.view.chart.TimeSeries", {
             type: 'time',
             position: 'bottom',
             grid: true,
-            fields: ['foo'],
+            fields: [chartConfig.xAxisAttribute],
             label: {
                 rotate: {
                     degrees: xLabelRotation || -45
@@ -86,7 +86,6 @@ Ext.define("Koala.view.chart.TimeSeries", {
             position: 'left',
             grid: true,
             minimum: 0,
-            maximum: 0.2,
             renderer: function (axis, idx, data, v) {
                 if (v === null) {
                     return '';
@@ -104,31 +103,17 @@ Ext.define("Koala.view.chart.TimeSeries", {
         cfg.axes = [defaultYAxis, defaultXAxis];
 
         cfg.store = {
-            type: 'k-timeseries',
             fields: [{
-                    name: 'foo',
-                    type: 'date',
-                    convert: function(a, dataRec){
-                        // debugger
-                        // console.log(dataRec.properties[chartConfig.xAxisAttribute]);
-                        return dataRec.data[chartConfig.xAxisAttribute];
-                    }
-                    // mapping: function(dataRec){
-                    //     return dataRec.data[chartConfig.xAxisAttribute];
-                    // }
-            }],
-            autoLoad: false,
-            pageSize: 0,
-            useDefaultXhrHeader: false,
-            proxy: {
-                type: 'memory',
-                reader: {
-                    type: 'json',
-                    rootProperty: 'features'
+                name: chartConfig.xAxisAttribute,
+                type: 'date',
+                dateFormat: 'c',
+                mapping: function(dataRec){
+                    return dataRec.properties[chartConfig.xAxisAttribute];
                 }
-            }
+            }]
         };
 
         this.callParent([cfg]);
+
     }
 });

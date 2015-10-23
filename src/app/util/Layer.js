@@ -82,7 +82,9 @@ Ext.define('Koala.util.Layer', {
                 success: function(response) {
                     var obj;
                     try {
-                        obj = Ext.decode(response.responseText);
+                        var txt = response.responseText.replace(/\\\\\{\\\\\{/g, '{{'),
+                            txt = txt.replace(/\\\\\}\\\\\}/g, '}}'),
+                            obj = Ext.decode(txt);
                     } catch(ex) {
                         // TODO i18n
                         Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
@@ -563,6 +565,12 @@ Ext.define('Koala.util.Layer', {
                     Ext.log.warn('No defined start value for timerange filter and no ' +
                         'configured default start value for timerange filter');
                 }
+            // TODO: MJ Fix fallback calc
+            } else if (Ext.isString(filter.mindatetimeinstant)) {
+                filter.mindatetimeinstant = Ext.Date.parse(
+                    filter.defaultstarttimeinstant,
+                    filter.defaultstarttimeformat
+                );
             }
             if (!filter.maxdatetimeinstant) {
                 if (filter.defaultendtimeinstant) {
@@ -578,6 +586,12 @@ Ext.define('Koala.util.Layer', {
                     Ext.log.warn('No defined end value for timerange filter and no ' +
                         'configured default end value for timerange filter');
                 }
+            // TODO: MJ Fix fallback calc
+            } else if (Ext.isString(filter.maxdatetimeinstant)) {
+                filter.maxdatetimeinstant = Ext.Date.parse(
+                    filter.defaultendtimeinstant,
+                    filter.defaultendtimeformat
+                );
             }
             return filter;
         },
