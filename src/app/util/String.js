@@ -118,7 +118,8 @@ Ext.define('Koala.util.String', {
                 return false;
             } else if (/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/.test(string)) {
                 return parseFloat(string);
-            } else if (Ext.String.startsWith(string, "[")) {
+            } else if (Ext.String.startsWith(string, "[") &&
+                !Ext.String.startsWith(string, "[[")) {
                 return Ext.decode(string);
             } else if (Ext.String.startsWith(string, "{") &&
                       !Ext.String.startsWith(string, "{{")) {
