@@ -189,11 +189,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     /**
      *
      */
-    onSetFilterBtnClick: function(btn) {
+    onSetFilterBtnClick: function() {
         var me = this;
         var view = me.getView();
-        var form = btn.up('form').getForm();
-        var formValues = form.getValues();
+        // var form = btn.up('form').getForm();
+        // var formValues = form.getValues();
         var charts = view.query('chart');
 
         Ext.each(charts, function(chart) {

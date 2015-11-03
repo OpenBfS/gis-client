@@ -20,7 +20,7 @@ Ext.define('Koala.util.Layer', {
     statics: {
 
         /**
-         * Returns whether tghe passed metadat objcet from GNOS has at least one
+         * Returns whether the passed metadat object from GNOS has at least one
          * filter configured.
          *
          * @param {object} metadata The metadata json object.
@@ -31,7 +31,7 @@ Ext.define('Koala.util.Layer', {
             var filter = metadata && metadata.filter;
             // that is the new key
             var filters = metadata && metadata.filters;
-            if (!!filter) {
+            if (filter) {
                 return true;
             }
             if (!filters || !Ext.isArray(filters) || filters.length < 1) {
@@ -82,9 +82,21 @@ Ext.define('Koala.util.Layer', {
                 success: function(response) {
                     var obj;
                     try {
-                        var txt = response.responseText.replace(/\\\\\{\\\\\{/g, '{{'),
-                            txt = txt.replace(/\\\\\}\\\\\}/g, '}}'),
-                            obj = Ext.decode(txt);
+                        // replace any occurencies of \{\{ (as it may still be
+                        // stored in db) with the new delimiters [[
+                        //
+                        // These arrive here as \\{\\{ (the backsölash has been
+                        // escaped for the JSON format)
+                        //
+                        // Since both { and \ have a special meaning in regular
+                        // expressions, wee need to escape them again with a \
+                        var escapedCurlyOpen = /\\\\\{\\\\\{/g;
+                        var escapedCurlyClose = /\\\\\}\\\\\}/g;
+                        var txt = response.responseText;
+
+                        txt = txt.replace(escapedCurlyOpen, '[[');
+                        txt = txt.replace(escapedCurlyClose, ']]');
+                        obj = Ext.decode(txt);
                     } catch(ex) {
                         // TODO i18n
                         Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
@@ -529,6 +541,7 @@ Ext.define('Koala.util.Layer', {
             var adjustedFilters = [];
             Ext.each(filters, function(filter) {
                 var filterType = (filter.type || "").toLowerCase();
+                var adjFilter;
                 switch (filterType) {
                     case 'timerange':
                         adjFilter = me.applyDefaultsTimerangeFilter(filter);
@@ -609,7 +622,7 @@ Ext.define('Koala.util.Layer', {
                     }
                 } else {
                     Ext.log.warn('No defined point in time filter and no ' +
-                        'configured default point in time filter')
+                        'configured default point in time filter');
                 }
             }
             return filter;
@@ -617,7 +630,7 @@ Ext.define('Koala.util.Layer', {
 
         applyDefaultsValueFilter: function(filter){
             if (!filter.value) {
-                filter.value = filter.defaultValue
+                filter.value = filter.defaultValue;
             }
             return filter;
         },
@@ -683,13 +696,13 @@ Ext.define('Koala.util.Layer', {
             var cqlKey = 'param_cql_filter';
             var val = "";
             if (cqlKey in olProps) {
-                olProps[cqlKey];
+                val = olProps[cqlKey];
             }
             if (val !== "") {
-                val += ";"
+                val += ";";
             }
             // TODO operators!
-            val += filter.param + "=" + filter.value
+            val += filter.param + "=" + filter.value;
             olProps[cqlKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;

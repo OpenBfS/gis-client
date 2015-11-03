@@ -43,10 +43,10 @@ Ext.define("Koala.view.form.LayerFilter", {
     initComponent: function(){
         var me = this;
         me.callParent();
-        var metadata = me.getMetadata();
+        // var metadata = me.getMetadata();
         var filters = me.getFilters();
 
-        if(!filters || filters-length < 1){
+        if(!filters || filters.length < 1){
             me.update('No valid filters provided!');
             return;
         }
@@ -69,7 +69,7 @@ Ext.define("Koala.view.form.LayerFilter", {
                     Ext.log.warn('Unexpected filter type: ' + filter.type);
                     break;
             }
-        })
+        });
 
         var submitButton = Ext.create('Ext.button.Button', {
             bind: {
@@ -195,7 +195,7 @@ Ext.define("Koala.view.form.LayerFilter", {
         // When we were configured with only one parameter, or if the two
         // parameters have the same name, we need to create a unique fieldname
         // for end…
-        if (params.length == 1 || params[0] === params[1]) {
+        if (params.length === 1 || params[0] === params[1]) {
             params[1] = params[0] + differentiateSuffix;
         }
 

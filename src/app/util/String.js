@@ -32,18 +32,24 @@ Ext.define('Koala.util.String', {
         }()),
 
         /**
-         * TODO: enhance and respect demorgan rules
+         * Replaces 'named' template strings in the given tpl with values
+         * derived fromn the passed gettable. A gettable is any object that
+         * exposes a method `get` to access properties. Both Ext.data.Model
+         * instances and o.Objects qualify as gettable.
          */
         replaceTemplateStrings: function(tpl, getable, showWarnings) {
-            var regex = /\{\{([a-zA-Z0-9_-])+?\}\}/gi;
+            // capture alphanumeric values in between double square brackets:
+            // will yield an array aof matches including their boundaries:
+            // tpl = "Hello [[whom-to-greet]], how are you [[another_string]]";
+            // matches = ["[[whom-to-greet]]", "[[another_string]]"]
+            var regex = /\[\[([a-zA-Z0-9_-])+?\]\]/gi;
             var matches = tpl.match(regex);
             var keys = [];
             Ext.each(matches, function(match) {
-                keys.push(match.replace(/[\}\{]/g, ""));
+                keys.push(match.replace(/[\]\[]/g, ""));
             });
-
             Ext.each(keys, function(key) {
-                var re = new RegExp("{{" + key + "}}");
+                var re = new RegExp("\\[\\[" + key + "\\]\\]");
                 var replacement = getable.get(key);
                 if (!Ext.isDefined(replacement)) {
                     if (showWarnings === true) {

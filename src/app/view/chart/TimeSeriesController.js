@@ -89,10 +89,10 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                     store = chart.getStore();
 
                 var recs = [];
-                Ext.each(json.features, function(feat, featIdx) {
+                Ext.each(json.features, function(feat) {
                     var matchFound = false;
 
-                    Ext.each(store.data.items, function(item, itemIdx) {
+                    Ext.each(store.data.items, function(item) {
                         // we try to find a matching record in the store
                         // and append the new value if match is found
                         if (Ext.Date.isEqual(item.data[chartConfig.xAxisAttribute],
