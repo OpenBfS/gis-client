@@ -30,7 +30,7 @@ describe('Koala.util.String', function() {
                     Koala.util.String.replaceTemplateStrings
                 ).to.be.a(Function);
             });
-            it('replaces strings in a tempate', function() {
+            it('replaces strings in a template', function() {
                 var tpl = "foo [[bar]]";
                 var result = Koala.util.String.replaceTemplateStrings(
                     tpl, obj, false
@@ -51,7 +51,7 @@ describe('Koala.util.String', function() {
                 );
                 expect(result).to.be("foo {{bar}}");
             });
-            it('replaces strings in complex tempate', function() {
+            it('replaces strings in complex template', function() {
                 var tpl = "foo [[bar]], baz [[beng]] {{gee}} [no-replace]";
                 var result = Koala.util.String.replaceTemplateStrings(
                     tpl, obj, false
