@@ -248,10 +248,12 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             xtype: 'image',
             name: '{{record.getOlLayer().get("routeId") + "-legendImg"}}',
             margin: '5px 0 0 0',
-            src: '{{record.getOlLayer().get("legendUrl")}}',
+            src: '{{' +
+                'Koala.util.Layer.getCurrentLegendUrl(record.getOlLayer())' +
+                '}}',
             width: '{{record.getOlLayer().get("legendWidth")}}',
             height: '{{record.getOlLayer().get("legendHeight")}}',
-            alt: '{{record.getOlLayer().get("legendUrl")}}'
+            alt: '{{"Legende " + record.getOlLayer().get("name")}}'
         }]
     },
 
@@ -277,19 +279,20 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         // Register moveend to update legendUrls
         var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
-        map.on('moveend', function () {
-            var store = this.getStore();
+        map.on('moveend', me.updateLegendsWithScale, me);
+    },
 
-            store.each(function (rec) {
-                var layer = rec.getOlLayer();
-                var selector = '[name=' + layer.get("routeId") + '-legendImg]';
-                var img = Ext.ComponentQuery.query(selector)[0];
+    updateLegendsWithScale: function () {
+        var store = this.getStore();
+        store.each(function (rec) {
+            var layer = rec.getOlLayer();
+            var selector = '[name=' + layer.get("routeId") + '-legendImg]';
+            var img = Ext.ComponentQuery.query(selector)[0];
 
-                if (img) {
-                    img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));
-                }
-            });
-        }, me);
+            if (img) {
+                img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));
+            }
+        });
     },
 
     applyRoutingEnabled: function(newVal){
