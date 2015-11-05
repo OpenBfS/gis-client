@@ -378,12 +378,12 @@ Ext.define("Koala.view.form.LayerFilter", {
     },
 
     createValueFilter: function(filter, idx) {
-        var allowedValues = null;
-        var isCombo = false
-        if (filter.allowedValues) {
-            allowedValues = filter.allowedValues.split(",");
-            isCombo = true;
-        }
+        // var allowedValues = null;
+        // var isCombo = false
+        // if (filter.allowedValues) {
+        //     allowedValues = filter.allowedValues.split(",");
+        //     isCombo = true;
+        // }
         var fieldSet = Ext.create('Ext.form.FieldSet', {
             padding: 5,
             defaults: {anchor: '100%'},
