@@ -7,5 +7,7 @@ src/packages/**
 src/sass/example/bootstrap.js
 src/sass/example/bootstrap.json
 
+**/.~lock*
+
 node_modules
 .project
