@@ -38,7 +38,7 @@ Ext.define("Koala.view.form.Print", {
         this.callParent();
 
         /**
-         * necessary to override the BasePackages bind.
+         * necessary to override the BasiGXs bind.
          */
         this.setBind();
 
