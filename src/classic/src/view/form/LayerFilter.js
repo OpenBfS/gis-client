@@ -7,7 +7,9 @@ Ext.define("Koala.view.form.LayerFilter", {
         "Koala.view.form.LayerFilterController",
         "Koala.view.form.LayerFilterModel",
 
-        "Ext.form.field.Date"
+        "Ext.form.field.Date",
+        "Ext.form.ComboBox",
+        "Ext.ux.form.MultiSelect"
     ],
 
     controller: "k-form-layerfilter",
@@ -38,6 +40,69 @@ Ext.define("Koala.view.form.LayerFilter", {
         metadata: null,
         filters: null,
         format: null
+    },
+
+    statics: {
+        COMBO_DSP_FIELD: "dsp",
+        COMBO_VAL_FIELD: "val",
+
+        getStoreFromAllowedValues: function(rawAllowedValues) {
+            var staticMe = this;
+            // two possibilities:
+            // 1) string separated values to display and submit,
+            // 2) an array with objects that have "val" and "dsp"
+            var data = null;
+            var VAL_FIELD = staticMe.COMBO_VAL_FIELD;
+            var DSP_FIELD = staticMe.COMBO_DSP_FIELD;
+            var allowedValues = Koala.util.String.coerce(rawAllowedValues);
+            if (Ext.isString(allowedValues)) {
+                data = [];
+                var arr = allowedValues.split(',');
+                Ext.each(arr, function(val) {
+                    var entry = {};
+                    entry[VAL_FIELD] = val;
+                    entry[DSP_FIELD] = val;
+                    data.push(entry);
+                });
+            } else if (Ext.isArray(allowedValues)) {
+                // validate structure
+                Ext.each(allowedValues, function(entry) {
+                    if(!(VAL_FIELD in entry) || !(DSP_FIELD in entry)) {
+                        Ext.log.warn("Missing any of the required keys (" +
+                            VAL_FIELD + ", " + DSP_FIELD + ") in " +
+                            "allowedValues configuration");
+                    }
+                });
+                data = allowedValues;
+            } else {
+                Ext.log.warn("Illegal 'allowedValues' configured: ",
+                    allowedValues);
+            }
+
+            var store = Ext.create("Ext.data.Store", {
+                fields: [VAL_FIELD, DSP_FIELD],
+                data : data
+            });
+            return store;
+        },
+
+        getComboFromAllowedValues: function(allowedValues, rawMulti) {
+            var staticMe = this;
+            var store = staticMe.getStoreFromAllowedValues(allowedValues);
+            var multi = Koala.util.String.coerce(rawMulti);
+            var xtype = multi ? "multiselect" : "combo";
+            var combo = {
+                xtype: xtype,
+                store: store,
+                queryMode: "local",
+                editable: false,
+                allowBlank: true,
+                forceSelection: true,
+                displayField: staticMe.COMBO_DSP_FIELD,
+                valueField: staticMe.COMBO_VAL_FIELD
+            };
+            return combo;
+        }
     },
 
     initComponent: function(){
@@ -377,13 +442,31 @@ Ext.define("Koala.view.form.LayerFilter", {
         this.add(fieldSet);
     },
 
+    /**
+     */
     createValueFilter: function(filter, idx) {
-        // var allowedValues = null;
-        // var isCombo = false
-        // if (filter.allowedValues) {
-        //     allowedValues = filter.allowedValues.split(",");
-        //     isCombo = true;
-        // }
+        var staticMe = this.self;
+        var field = null;
+        var sharedCfg = {
+            labelWidth: 70,
+            name: filter.param,
+            fieldLabel: filter.alias,
+            value: filter.value,
+            emptyText: filter.defaultValue
+        };
+        if (filter.allowedValues) {
+            field = staticMe.getComboFromAllowedValues(
+                filter.allowedValues,
+                filter.allowMultipleSelect
+            );
+        } else {
+            field = {
+                xtype: 'textfield'
+            };
+        }
+
+        field = Ext.apply(field, sharedCfg);
+
         var fieldSet = Ext.create('Ext.form.FieldSet', {
             padding: 5,
             defaults: {anchor: '100%'},
@@ -393,14 +476,7 @@ Ext.define("Koala.view.form.LayerFilter", {
                 title: '{valueFilter}'
             },
             items: [
-                {
-                    xtype: 'textfield',
-                    labelWidth: 70,
-                    name: filter.param,
-                    fieldLabel: filter.alias,
-                    value: filter.value,
-                    emptyText: filter.defaultValue
-                }
+                field
             ]
         });
         this.add(fieldSet);

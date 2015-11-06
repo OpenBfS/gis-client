@@ -236,7 +236,7 @@ Ext.define('Koala.util.Layer', {
             var sourceConfig = {};
 
             // apply default filter to layer, if needed
-            metadata = Koala.util.Layer.adjustMetadatAccordingToFilters(metadata);
+            metadata = Koala.util.Layer.adjustMetadataAccordingToFilters(metadata);
 
             var internalLayerConfig = this.getInternalLayerConfig(metadata); //TODO arguments?
             var internalSourceConfig = this.getInternalSourceConfig(metadata, SourceClass);
@@ -504,7 +504,7 @@ Ext.define('Koala.util.Layer', {
         /**
          *
          */
-        adjustMetadatAccordingToFilters: function(metadata) {
+        adjustMetadataAccordingToFilters: function(metadata) {
             var me = this;
             // if the olProperty encodeFilterInViewparams is 'true',
             // we run this code, otherwise we will filter via dimension
@@ -520,9 +520,8 @@ Ext.define('Koala.util.Layer', {
             if (!filters) {
                 return metadata;
             }
-
+encodeInViewParams = "false"; // REMOVEME
             metadata = me.applyDefaultsIfNotChangedByUser(metadata, filters);
-
             if (encodeInViewParams === "true") {
                 metadata = me.moveFiltersToViewparams(metadata, filters);
             } else {
@@ -701,8 +700,37 @@ Ext.define('Koala.util.Layer', {
             if (val !== "") {
                 val += ";";
             }
-            // TODO operators!
-            val += filter.param + "=" + filter.value;
+            var op = (filter.operator || '').toUpperCase();
+            var adjusted = false;
+
+            if (!Ext.isArray(filter.value)) {
+                if (op === '!=' || op === 'NEQ' || op === 'NOT IN') {
+                    op = "<>";
+                    adjusted = true;
+                } else if (op === '==' || op === 'EQ' || op === 'IN') {
+                    op = "=";
+                    adjusted = true;
+                }
+                // name='jubbes'
+                val += filter.param + op + filter.value;
+            } else {
+                // only makes sense for operator IN and NOT IN, let's adjust for
+                // common errors
+                if (op === '=' || op === '==' || op === 'EQ') {
+                    op = "IN";
+                    adjusted = true;
+                } else if (op === '!=' || op === '<>' || op === 'NEQ') {
+                    op = "NOT IN";
+                    adjusted = true;
+                }
+                val += filter.param +                   // name
+                    ' ' + op + ' ' +                    // NOT IN
+                    '(' + filter.value.join(',') + ')'; // ('kalle', 'jupp')
+            }
+            if (adjusted) {
+                Ext.log.info("Filter operator has been adjusted from " +
+                    "'" + filter.operator + "' to '" + op + "'");
+            }
             olProps[cqlKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;

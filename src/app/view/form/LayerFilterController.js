@@ -15,13 +15,13 @@ Ext.define('Koala.view.form.LayerFilterController', {
             var selector = "[filterIdx='" + idx +"']";
             var fieldset = view.down(selector);
             if (fieldset) {
-                var fields = fieldset.query('field');
+                var fields = fieldset.query('field, multiselect');
                 var keyVals = {};
                 Ext.each(fields, function(field) {
                     var key = field.getName();
                     if (!Ext.Array.contains(view.ignoreFields, key)) {
                         keyVals[key] = field.getValue();
-                        // console.log("+++ Keep field with key ", key, "of fieldset", selector);
+                        // console.log("+++ Keep field with key ", key, "of fieldset", selector, "value", keyVals[key]);
                     } else {
                         // console.log("--- Ignore field with key ", key, "of fieldset", selector);
                     }
