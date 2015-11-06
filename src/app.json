@@ -47,9 +47,9 @@
      */
     "requires": [
         "GeoExt",
-        //"basepackage",
         "BasiGX",
-        "charts"
+        "charts",
+        "ux"
     ],
 
     /**
