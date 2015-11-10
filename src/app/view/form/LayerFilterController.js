@@ -91,11 +91,18 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var me = this;
         var layerFilterView = this.getView();
         var dateFields = layerFilterView.query('datefield');
+
         var switchToUtc = Koala.Application.isUtc();
         var offsetMinutes = me.getUTCOffsetInMinutes(new Date());
 
         Ext.each(dateFields, function(dateField) {
             var currentDate = dateField.getValue();
+            if (!currentDate) {
+                return;
+            }
+            var accompanyingHourSpinner = dateField.up().down(
+                    'field[name="hourspinner"]'
+                );
             var newDate;
             if (switchToUtc) {
                 // subtract the utc offset in minutes
@@ -103,6 +110,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
             } else {
                 // add the utc offset in minutes
                 newDate = Ext.Date.add(currentDate, Ext.Date.MINUTE, offsetMinutes);
+            }
+            if (accompanyingHourSpinner) {
+                accompanyingHourSpinner.setValue(newDate.getHours());
             }
             dateField.setValue(newDate);
         });

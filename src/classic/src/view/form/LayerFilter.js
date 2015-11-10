@@ -149,8 +149,11 @@ Ext.define("Koala.view.form.LayerFilter", {
 
     createPointInTimeFilter: function(filter, idx) {
         var me = this;
-        var value = Ext.Date.parse(filter.timeinstant,
-            "Y-m-d\\TH:i:s");
+
+        var value = Ext.Date.parse(
+                filter.defaulttimeinstant,
+                filter.defaulttimeformat
+            );
 
         var dateField = Ext.create("Ext.form.field.Date", {
             bind: {
@@ -272,18 +275,27 @@ Ext.define("Koala.view.form.LayerFilter", {
 
     createTimeRangeFilter: function(filter, idx){
         var me = this;
-        // var names = filter.param.split(",");
-        // var startName = names[0];
-        // var endName = names[1];
 
         var names = me.startAndEndFieldnamesFromMetadataParam(filter.param);
         var startName = names.startName;
         var endName = names.endName;
 
-        var minValue = Ext.Date.parse(filter.mindatetimeinstant,
-            "Y-m-d\\TH:i:s");
-        var maxValue = Ext.Date.parse(filter.maxdatetimeinstant,
-            "Y-m-d\\TH:i:s");
+        var minValue = Ext.Date.parse(
+                filter.mindatetimeinstant,
+                filter.mindatetimeformat
+            );
+        var maxValue = Ext.Date.parse(
+                filter.maxdatetimeinstant,
+                filter.maxdatetimeformat
+            );
+        var defaultMinValue = Ext.Date.parse(
+                filter.defaultstarttimeinstant,
+                filter.defaultstarttimeformat
+            );
+        var defaultMaxValue = Ext.Date.parse(
+                filter.defaultendtimeinstant,
+                filter.defaultendtimeformat
+            );
 
         var minDateField = Ext.create("Ext.form.field.Date", {
             bind: {
@@ -293,7 +305,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             editable: false,
             labelWidth: 70,
             flex: 1,
-            value: minValue,
+            value: defaultMinValue,
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
@@ -368,7 +380,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             },
             labelWidth: 70,
             flex: 1,
-            value: maxValue,
+            value: defaultMaxValue,
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
@@ -451,7 +463,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             labelWidth: 70,
             name: filter.param,
             fieldLabel: filter.alias,
-            value: filter.value,
+            value: filter.value || filter.defaultValue,
             emptyText: filter.defaultValue
         };
         if (filter.allowedValues) {
