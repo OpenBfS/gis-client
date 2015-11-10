@@ -1,4 +1,15 @@
 {
+    "Koala.util.Layer": {
+        "statics": {
+            "txtUntil": "fr:bis",
+            "txtFilter": "fr:Filter",
+        }
+    },
+    "Koala.util.String": {
+        "statics": {
+            "defaultDateFormat": "d/m/Y H:i:s"
+        }
+    },
     "Koala.view.button.TimeReference": {
         "config": {
             "data":{
@@ -181,7 +192,7 @@
             "Mai": 4,
             "Juin": 5,
             "Juillet": 6,
-            "Juil": 6, 
+            "Juil": 6,
             "Août": 7,
             "Septembre": 8,
             "Sept": 8,

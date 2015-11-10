@@ -19,6 +19,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     xtype: "k-panel-routing-legendtree",
 
     requires: [
+        "Koala.util.Layer",
+
         "Koala.view.panel.RoutingLegendTreeController",
         "Koala.view.panel.RoutingLegendTreeModel"
     ],
@@ -86,41 +88,12 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         getFilterText: function(record){
             var layer = record.getOlLayer();
-            //var filter = layer.get('bfs_filter');
+            var LayerUtil = Koala.util.Layer;
 
-            if (!layer || !layer.metadata || !layer.metadata.filter){
+            if (!layer || !layer.metadata){
                 return '';
             }
-
-            var filter = layer.metadata.filter;
-            var text = "";
-
-            if (Ext.isDefined(filter)) {
-                var filterType = filter.type;
-                text = '<b>Filter (' + filterType + ') </b><br>';
-                //TODO
-//              if (filterType == "rodos") {
-//
-//              }
-
-                if (filterType === "value") {
-                    text += filter.param + " = " + filter.value;
-                } else if (filterType === "pointintime") {
-                    var time = Ext.Date.format(new Date(filter.timeinstant),
-                        filter.timeformat);
-                    text += time;
-                }
-                if (filterType === "timerange") {
-                    var startTime = Ext.Date.format(
-                        new Date(filter.mindatetimeinstant),
-                        filter.mindatetimeformat);
-                    var endTime = Ext.Date.format(
-                        new Date(filter.maxdatetimeinstant),
-                        filter.maxdatetimeformat);
-                        text += startTime + " bis " + endTime;
-                }
-            }
-            return text;
+            return LayerUtil.getFiltersTextFromMetadata(layer.metadata);
         },
 
         shortInfoHandler: function(btn){

@@ -15,9 +15,16 @@
  */
 Ext.define('Koala.util.Layer', {
 
-    requires: ['BasiGX.util.Map'],
+    requires: [
+        'BasiGX.util.Map',
+        'Koala.util.String'
+    ],
 
     statics: {
+        /* i18n */
+        txtUntil: "",
+        txtFilter: "",
+        /* i18n */
 
         /**
          * Returns whether the passed metadat object from GNOS has at least one
@@ -63,6 +70,66 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Returns a textual representation of the filters in the metadata
+         * object.
+         *
+         * @param {object} metadata The metadata json object.
+         * @returns {string} A textual representation of the filters or ''.
+         */
+        getFiltersTextFromMetadata: function(metadata) {
+            var staticMe = this;
+            var filters = staticMe.getFiltersFromMetadata(metadata);
+            if (filters === null) {
+                return "";
+            }
+
+            var defaultDateFormat = Koala.util.String.defaultDateFormat;
+
+            var filterTxts = [];
+
+            Ext.each(filters, function(filter){
+                if(!Ext.isDefined(filter)) {
+                    return;
+                }
+                var filterType = filter.type;
+                var filterTxt = '<b>' + staticMe.txtFilter +
+                    ' (' + filterType + ') </b><br />';
+
+                if (filterType === "rodos") {
+                    // TODO
+                } else if (filterType === "value") {
+                    filterTxt += staticMe.stringifyValueFilter(filter);
+                } else if (filterType === "pointintime") {
+                    var date, format, time;
+
+                    date = new Date(filter.timeinstant);
+                    format = filter.timeformat || defaultDateFormat;
+                    time = Ext.Date.format(date, format);
+                    filterTxt += time;
+                } else if (filterType === "timerange") {
+                    var startDate, startFormat, startTime;
+                    var endDate, endFormat, endTime;
+
+                    startDate = new Date(filter.mindatetimeinstant);
+                    startFormat = filter.mindatetimeformat || defaultDateFormat;
+                    startTime = Ext.Date.format(startDate, startFormat);
+
+                    endDate = new Date(filter.maxdatetimeinstant);
+                    endFormat = filter.maxdatetimeformat || defaultDateFormat;
+                    endTime = Ext.Date.format(endDate, endFormat);
+
+                    filterTxt += "" +
+                        startTime +
+                        " " + staticMe.txtUntil + " " +
+                        endTime;
+                }
+                filterTxts.push(filterTxt);
+            });
+
+            return filterTxts.join("<br />");
+        },
+
+        /**
          * @param {string} uuid
          * @returns {object} metadata json object
          */
@@ -85,11 +152,11 @@ Ext.define('Koala.util.Layer', {
                         // replace any occurencies of \{\{ (as it may still be
                         // stored in db) with the new delimiters [[
                         //
-                        // These arrive here as \\{\\{ (the backsölash has been
+                        // These arrive here as \\{\\{ (the backslash has been
                         // escaped for the JSON format)
                         //
                         // Since both { and \ have a special meaning in regular
-                        // expressions, wee need to escape them again with a \
+                        // expressions, we need to escape them again with a \
                         var escapedCurlyOpen = /\\\\\{\\\\\{/g;
                         var escapedCurlyClose = /\\\\\}\\\\\}/g;
                         var txt = response.responseText;
@@ -520,7 +587,7 @@ Ext.define('Koala.util.Layer', {
             if (!filters) {
                 return metadata;
             }
-encodeInViewParams = "false"; // REMOVEME
+
             metadata = me.applyDefaultsIfNotChangedByUser(metadata, filters);
             if (encodeInViewParams === "true") {
                 metadata = me.moveFiltersToViewparams(metadata, filters);
@@ -689,6 +756,45 @@ encodeInViewParams = "false"; // REMOVEME
             return metadata;
         },
 
+        /**
+         */
+        stringifyValueFilter: function(filter){
+            var op = (filter.operator || '').toUpperCase();
+            var adjusted = false;
+            var stringified = "";
+            if (!Ext.isArray(filter.value)) {
+                if (op === '!=' || op === 'NEQ' || op === 'NOT IN') {
+                    op = "<>";
+                    adjusted = true;
+                } else if (op === '==' || op === 'EQ' || op === 'IN') {
+                    op = "=";
+                    adjusted = true;
+                }
+                // name='jubbes'
+                stringified = filter.param + op + filter.value;
+            } else {
+                // only makes sense for operator IN and NOT IN, let's adjust for
+                // common errors
+                if (op === '=' || op === '==' || op === 'EQ') {
+                    op = "IN";
+                    adjusted = true;
+                } else if (op === '!=' || op === '<>' || op === 'NEQ') {
+                    op = "NOT IN";
+                    adjusted = true;
+                }
+                stringified = filter.param +                   // name
+                    ' ' + op + ' ' +                    // NOT IN
+                    '(' + filter.value.join(',') + ')'; // ('kalle', 'jupp')
+            }
+            if (adjusted) {
+                Ext.log.info("Filter operator has been adjusted from " +
+                    "'" + filter.operator + "' to '" + op + "'");
+            }
+            return stringified;
+        },
+
+        /**
+         */
         configureMetadataWithValue: function(metadata, filter) {
             // VALUE becomes a CQL filter
             var olProps = metadata.layerConfig.olProperties;
@@ -700,37 +806,10 @@ encodeInViewParams = "false"; // REMOVEME
             if (val !== "") {
                 val += ";";
             }
-            var op = (filter.operator || '').toUpperCase();
-            var adjusted = false;
 
-            if (!Ext.isArray(filter.value)) {
-                if (op === '!=' || op === 'NEQ' || op === 'NOT IN') {
-                    op = "<>";
-                    adjusted = true;
-                } else if (op === '==' || op === 'EQ' || op === 'IN') {
-                    op = "=";
-                    adjusted = true;
-                }
-                // name='jubbes'
-                val += filter.param + op + filter.value;
-            } else {
-                // only makes sense for operator IN and NOT IN, let's adjust for
-                // common errors
-                if (op === '=' || op === '==' || op === 'EQ') {
-                    op = "IN";
-                    adjusted = true;
-                } else if (op === '!=' || op === '<>' || op === 'NEQ') {
-                    op = "NOT IN";
-                    adjusted = true;
-                }
-                val += filter.param +                   // name
-                    ' ' + op + ' ' +                    // NOT IN
-                    '(' + filter.value.join(',') + ')'; // ('kalle', 'jupp')
-            }
-            if (adjusted) {
-                Ext.log.info("Filter operator has been adjusted from " +
-                    "'" + filter.operator + "' to '" + op + "'");
-            }
+            var stringified = this.stringifyValueFilter(filter);
+            val += stringified;
+
             olProps[cqlKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;

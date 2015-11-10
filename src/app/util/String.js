@@ -16,6 +16,10 @@
 Ext.define('Koala.util.String', {
 
     statics: {
+        /**
+         * The format to use as fallback when cobnverting dates to string.
+         */
+        defaultDateFormat: "", // actual value comes from locale
 
         /**
          * Checks whether a passed string is a valid level 1-5 uuid (RFC4122).

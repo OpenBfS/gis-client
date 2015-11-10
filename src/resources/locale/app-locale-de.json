@@ -1,4 +1,15 @@
 {
+    "Koala.util.Layer": {
+        "statics": {
+            "txtUntil": "bis",
+            "txtFilter": "Filter",
+        }
+    },
+    "Koala.util.String": {
+        "statics": {
+            "defaultDateFormat": "d.m.Y H:i:s"
+        }
+    },
     "Koala.view.button.TimeReference": {
         "config": {
             "data":{
