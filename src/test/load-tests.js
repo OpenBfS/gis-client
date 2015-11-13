@@ -4,6 +4,7 @@
     var specPath = './spec/',
         dependencies = [
             'basics.test.js',
+            'util/Layer.test.js',
             'util/String.test.js'
         ],
         getScriptTag = global.TestUtil.getExternalScriptTag,
