@@ -19,10 +19,10 @@
       "html-coverage": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && npm run instrument-js && npm run backup-js && npm run use-instrumented-js && istanbul cover npm run save-coverage && npm run un-use-instrumented-js && npm run restore-js && istanbul report --root ./coverage html && npm run rm-coverage-tmp-dirs"
   },
   "repository": {
-    "type": "svn",
-    "url": "https://svn.intranet.terrestris.de/svn/bfs_koala/trunk/src"
+    "type": "mercurial",
+    "url": "https://redmine-koala.bfs.de/hg/gis_client/"
   },
-  "author": "terrestris GmbH & Co. KG <info@terrestris.de",
+  "author": "terrestris GmbH & Co. KG <info@terrestris.de>",
   "license": "gpl-3",
   "devDependencies": {
     "eslint": "1.9.0",
