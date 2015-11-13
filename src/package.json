@@ -7,9 +7,16 @@
       "pretest": "npm run lint-js",
       "test": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true test/index.html",
       "lint-js": "eslint -c .eslintrc app/ classic/ && eslint -c test/.eslintrc test/",
+
       "save-coverage": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true --hooks ./test/phantom_hooks.js test/index.html",
-      "clean-coverage": "rm -rf src_instrumented src_old coverage",
-      "html-coverage": "npm run clean-coverage && istanbul instrument src -o src_instrumented && mv src src_old && mv src_instrumented src && istanbul cover npm run save-coverage && mv src src_instrumented && mv src_old src && istanbul report --root ./coverage html"
+      "rm-coverage": "rm -Rf coverage",
+      "rm-coverage-tmp-dirs": "rm -Rf app_instrumented app_old classic_instrumented classic_old",
+      "instrument-js": "istanbul instrument app -o app_instrumented && istanbul instrument classic -o classic_instrumented",
+      "backup-js": "mv app app_old && mv classic classic_old",
+      "restore-js": "mv app_old app && mv classic_old classic",
+      "use-instrumented-js": "mv app_instrumented app && mv classic_instrumented classic",
+      "un-use-instrumented-js": "mv app app_instrumented && mv classic classic_instrumented",
+      "html-coverage": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && npm run instrument-js && npm run backup-js && npm run use-instrumented-js && istanbul cover npm run save-coverage && npm run un-use-instrumented-js && npm run restore-js && istanbul report --root ./coverage html && npm run rm-coverage-tmp-dirs"
   },
   "repository": {
     "type": "svn",
@@ -18,9 +25,9 @@
   "author": "terrestris GmbH & Co. KG <info@terrestris.de",
   "license": "gpl-3",
   "devDependencies": {
-    "eslint": "1.7.3",
+    "eslint": "1.9.0",
     "expect.js": "0.3.1",
-    "istanbul": "0.3.18",
+    "istanbul": "0.4.0",
     "mocha": "2.3.3",
     "mocha-phantomjs": "4.0.1",
     "sinon": "1.17.2"
