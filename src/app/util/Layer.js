@@ -782,7 +782,7 @@ Ext.define('Koala.util.Layer', {
                     op = "NOT IN";
                     adjusted = true;
                 }
-                stringified = filter.param +                   // name
+                stringified = filter.param +            // name
                     ' ' + op + ' ' +                    // NOT IN
                     '(' + filter.value.join(',') + ')'; // ('kalle', 'jupp')
             }
