@@ -305,7 +305,7 @@ Ext.define("Koala.view.form.Print", {
      * method will adjust a JSON (e.g. from formItemToJson), and shuffle certain
      * key / value pairs around: currently only 'request-type'.
      *
-     * @param {object} irixJson The JSPN for the IRIX service, a representation
+     * @param {object} irixJson The JSON for the IRIX service, a representation
      *     of the form.
      * @return {object} The adjusted serialisation.
      */
