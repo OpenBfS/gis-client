@@ -134,7 +134,8 @@
                 "dateFieldEndLabel": "en:Ende",
                 "setFilterBtnText": "en:OK",
                 "resetFilterBtnText": "en:Reset",
-                "selectChartLayerComboLabel": ""
+                "selectChartLayerComboLabel": "",
+                "undoBtnText": "en:…zurückzoomen"
             }
         }
     },

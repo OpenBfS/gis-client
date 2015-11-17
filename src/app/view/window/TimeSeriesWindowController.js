@@ -45,6 +45,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             Koala.util.String.getBool(chartConfig.allowCrossZoom)) {
             interactions = {
                type: 'crosszoom',
+               // We need the tyoe below, as there is a bug inExtJS: see this
+               // lines: http://docs.sencha.com/extjs/6.0/6.0.0-classic/source/
+               // /AbstractChart.html
+               // #Ext-chart-AbstractChart-method-getInteraction
+               // That particular bug is fixed in non-GPL 6.0.1
+               tyoe: 'crosszoom',
                axes: {
                    bottom: {
                        maxZoom: 5,
@@ -128,6 +134,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     createTimeSeriesChartPanel: function(olLayer) {
         var me = this;
+        var viewModel = me.getViewModel();
         var chart = me.createTimeSeriesChart(olLayer);
         var chartConfig = olLayer.get('timeSeriesChartProperties');
         var combo;
@@ -140,6 +147,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             chartConfig.titleTpl, olLayer) : olLayer.get('name');
         var panel = {
             xtype: 'panel',
+            name: 'chart-composition',
             title: title,
             collapsible: true,
             hideCollapseTool: true,
@@ -152,10 +160,46 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             },
             items: [chart]
         };
+
+        var rightColumnWrapper = {
+            xtype: 'panel',
+            header: false,
+            layout: {
+                type: 'vbox',
+                align: 'end'
+            },
+            bodyPadding: 5,
+            items: []
+        };
+
+        var undoBtn = {
+            text: viewModel.get('undoBtnText'),
+            xtype: 'button',
+            handler: me.onUndoButtonClicked,
+            scope: me,
+            margin: '0 0 10px 0'
+        };
+
+        rightColumnWrapper.items.push(undoBtn);
         if (!Ext.isEmpty(combo)) {
-            panel.items.push(combo);
+            rightColumnWrapper.items.push(combo);
         }
+        panel.items.push(rightColumnWrapper);
+
         return panel;
+    },
+
+    /**
+     * Zoom back out after the button has been clicked.
+     *
+     * @ @param {Ext.button.Button} undoBtn The clicked undo button.
+     */
+    onUndoButtonClicked: function(undoBtn){
+        var chart = undoBtn.up('[name="chart-composition"]').down('chart');
+        var crossZoomInteraction = chart.getInteraction('crosszoom');
+        if (crossZoomInteraction && crossZoomInteraction.undoZoom) {
+            crossZoomInteraction.undoZoom();
+        }
     },
 
     /**

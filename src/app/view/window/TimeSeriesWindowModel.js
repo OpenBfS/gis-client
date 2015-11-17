@@ -24,6 +24,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
         setFilterBtnText: '',
         resetFilterBtnText: '',
         selectChartLayerComboLabel: '',
+        undoBtnText: '',
         startDateValue: new Date(),
         startDateMaxValue: new Date(),
         endDateValue: new Date()
