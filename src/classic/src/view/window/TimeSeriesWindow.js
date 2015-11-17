@@ -44,6 +44,10 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         addFilterForm: true
     },
 
+    listeners:{
+        close: 'onTimeseriesClose'
+    },
+
     /**
      * The olLayer we were constructed with
      */
