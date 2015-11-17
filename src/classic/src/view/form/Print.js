@@ -162,7 +162,7 @@ Ext.define("Koala.view.form.Print", {
         spec.outputFilename = layout;
 
         var irixCheckBox = this.down('[name="irix-fieldset-checkbox"]');
-        var submitForm;
+        // var submitForm;
 
         if(irixCheckBox.getValue()){
             var irixJson = {};
@@ -173,18 +173,46 @@ Ext.define("Koala.view.form.Print", {
                 mapfishPrint[0] = spec;
                 irixJson = this.setUpIrixJson(mapfishPrint);
                 url = this.getIrixUrl();
-
-                submitForm = Ext.create('Ext.form.Panel', {
-                    standardSubmit: true,
+                // The old way would worka against non-SOP URLs,
+                // but a top-level key with the complete JSON as value
+                // doesn't work right now.
+                //
+                // submitForm = Ext.create('Ext.form.Panel', {
+                //     standardSubmit: true,
+                //     url: url,
+                //     method: 'POST',
+                //     items: [{
+                //         xtype: 'textfield',
+                //         name: 'irixJson',
+                //         value: Ext.encode(irixJson)
+                //     }]
+                // });
+                // submitForm.submit({target:'_blank'});
+                Ext.Ajax.request({
                     url: url,
                     method: 'POST',
-                    items: [{
-                        xtype: 'textfield',
-                        name: 'irixJson',
-                        value: Ext.encode(irixJson)
-                    }]
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    jsonData: irixJson,
+                    success: function() {
+                        // Unclear what we can do here:
+                        //
+                        // it all boils down to the response type
+                        //
+                        // 'upload' has created a resource somewhere, but do we
+                        // know what and where?
+                        //
+                        // 'respond' will likely answer with the IROX document
+                        //
+                        // 'upload/respond' is likely to be handled like the
+                        // 'respond' type.
+                    },
+                    failure: function(response) {
+                        Ext.raise('server-side failure with status code ' +
+                            response.status);
+                    }
                 });
-                submitForm.submit({target:'_blank'});
             }
         } else {
             var startTime = new Date().getTime();
