@@ -287,10 +287,47 @@ Ext.define("Koala.view.form.Print", {
     },
 
     setUpIrixJson: function(mapfishPrint){
+        var me = this;
         var irixJson = {};
-        irixJson.irix = this.formItemToJson(this.down("k-form-irixfieldset"));
+        irixJson.irix = me.formItemToJson(me.down("k-form-irixfieldset"));
+        // the generic serialisation needs a little bit shuffeling
+        irixJson = me.adjustIrixSerialisation(irixJson);
+        // always add the printapp to the top-lvel for irix:
+        irixJson.printapp = me.down('[name="appCombo"]').getValue();
         irixJson['mapfish-print'] = mapfishPrint;
+        return irixJson;
+    },
 
+    /**
+     * Certain fields must live inside the irix fieldset, as they only make
+     * sense for this type of "print"; yet their serialisation cannot live in
+     * dedicted irix-object, as it is e.g. expected on the top-level. This
+     * method will adjust a JSON (e.g. from formItemToJson), and shuffle certain
+     * key / value pairs around: currently only 'request-type'.
+     *
+     * @param {object} irixJson The JSPN for the IRIX service, a representation
+     *     of the form.
+     * @return {object} The adjusted serialisation.
+     */
+    adjustIrixSerialisation: function(irixJson){
+        var irix = irixJson.irix;
+        // move requestType or request-type out of irix object to top-level
+        var correctRequestTypeKey = 'request-type';
+        // For backwards compatibility, we iterate over two variants
+        var keysReqestType = ['requestType', correctRequestTypeKey];
+        if (irix) {
+            var reqType;
+            Ext.each(keysReqestType, function(keyRequestType){
+                if (keyRequestType in irix) {
+                    // if both were present, the dashed version will win.
+                    reqType = irix[keyRequestType];
+                    // delete the one under key 'irix'
+                    delete irixJson.irix[keyRequestType];
+                    // set on top-level.
+                    irixJson[correctRequestTypeKey] = reqType;
+                }
+            });
+        }
         return irixJson;
     },
 
