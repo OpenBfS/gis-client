@@ -25,5 +25,5 @@ Ext.define('Koala.model.Station', {
         mapping: function(dataRec){
             return dataRec.properties.locality_name;
         }
-   }]
+    }]
 });
