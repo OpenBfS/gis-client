@@ -112,7 +112,7 @@ Ext.define('Koala.view.toolbar.HeaderController', {
 
     /**
      * TODO find a way to use a static method as handler.
-     * TODO doesn't work imn IE11
+     * TODO doesn't work in IE11
      */
     toggleFullscreen: function(){
         this.self.toggleFullscreen();
