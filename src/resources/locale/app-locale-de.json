@@ -45,6 +45,18 @@
             }
         }
     },
+    "Koala.view.form.Print": {
+        "config": {
+            "serverUploadSuccessTitle": "Druck erfolgreich",
+            "serverUploadSuccess": "Druck wurde erfolgreich initiiert.",
+            "serverErrorTitle": "Fehler beim Druck",
+            "serverError": "Ein serverseitiger Fehler trat bei der Bearbeitung des Drucks auf. Interner Status: {0}",
+            "disablePopupBlocker": "Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
+            "disablePopupBlockerTitle": "Popup-Blocker aktiviert?",
+            "unexpectedResponseTitle": "Unerwartete Antwort",
+            "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort."
+        }
+    },
     "Koala.view.grid.MetadataSearch": {
         "config": {
             "data": {

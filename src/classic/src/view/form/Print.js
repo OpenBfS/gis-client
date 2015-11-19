@@ -31,7 +31,15 @@ Ext.define("Koala.view.form.Print", {
     maxWidth: 800,
 
     config: {
-        irixUrl: '/irix-servlet'
+        irixUrl: '/irix-servlet',
+        serverUploadSuccessTitle: "",
+        serverUploadSuccess: "",
+        serverErrorTitle: "",
+        serverError: "",
+        disablePopupBlockerTitle: "",
+        disablePopupBlocker: "",
+        unexpectedResponseTitle: "",
+        unexpectedResponse: ""
     },
 
     initComponent: function() {
@@ -162,8 +170,6 @@ Ext.define("Koala.view.form.Print", {
         spec.outputFilename = layout;
 
         var irixCheckBox = this.down('[name="irix-fieldset-checkbox"]');
-        // var submitForm;
-
         if(irixCheckBox.getValue()){
             var irixJson = {};
             var mapfishPrint = [];
@@ -173,21 +179,6 @@ Ext.define("Koala.view.form.Print", {
                 mapfishPrint[0] = spec;
                 irixJson = this.setUpIrixJson(mapfishPrint);
                 url = this.getIrixUrl();
-                // The old way would worka against non-SOP URLs,
-                // but a top-level key with the complete JSON as value
-                // doesn't work right now.
-                //
-                // submitForm = Ext.create('Ext.form.Panel', {
-                //     standardSubmit: true,
-                //     url: url,
-                //     method: 'POST',
-                //     items: [{
-                //         xtype: 'textfield',
-                //         name: 'irixJson',
-                //         value: Ext.encode(irixJson)
-                //     }]
-                // });
-                // submitForm.submit({target:'_blank'});
                 Ext.Ajax.request({
                     url: url,
                     method: 'POST',
@@ -195,28 +186,13 @@ Ext.define("Koala.view.form.Print", {
                         'Content-Type' : 'application/json'
                     },
                     jsonData: irixJson,
-                    success: function() {
-                        // Unclear what we can do here:
-                        //
-                        // it all boils down to the response type
-                        //
-                        // 'upload' has created a resource somewhere, but do we
-                        // know what and where?
-                        //
-                        // 'respond' will likely answer with the IROX document
-                        //
-                        // 'upload/respond' is likely to be handled like the
-                        // 'respond' type.
-                    },
-                    failure: function(response) {
-                        Ext.raise('server-side failure with status code ' +
-                            response.status);
-                    }
+                    scope: view,
+                    success: view.irixPostSuccessHandler,
+                    failure: view.genericPostFailureHandler
                 });
             }
         } else {
             var startTime = new Date().getTime();
-
             Ext.Ajax.request({
                 url: view.getUrl() + app + '/report.' + format,
                 method: 'POST',
@@ -224,20 +200,96 @@ Ext.define("Koala.view.form.Print", {
                     'Content-Type' : 'application/json'
                 },
                 jsonData: Ext.encode(spec),
+                scope: view,
                 success: function(response) {
                     var data = Ext.decode(response.responseText);
                     view.setLoading(format + ' wird vorbereitet.');
                     view.downloadWhenReady(startTime, data);
                 },
-                failure: function(response) {
-                    Ext.raise('server-side failure with status code ' +
-                        response.status);
-                }
+                failure: view.genericPostFailureHandler
             });
         }
 
     },
 
+    /**
+     */
+    genericPostFailureHandler: function(response) {
+        var msg = this.getServerError();
+        msg = Ext.String.format(msg, response.status || 'n.a.');
+        Ext.Msg.show({
+            title: this.getServerErrorTitle(),
+            message: msg,
+            buttons: Ext.Msg.OK,
+            icon: Ext.Msg.WARNING
+        });
+    },
+
+    /**
+     */
+    irixPostSuccessHandler: function(response, options) {
+        var me = this;
+        var irixJson = options.jsonData;
+        var chosenRequestType = irixJson['request-type'];
+        var uploadOnly = 'upload';
+        var repondTypes = ['respond', 'upload/respond'];
+        var expectResponse = Ext.Array.contains(
+                repondTypes, chosenRequestType
+            );
+
+        if (chosenRequestType === uploadOnly) {
+            Ext.Msg.show({
+                title: me.getServerUploadSuccessTitle(),
+                message: me.getServerUploadSuccess(),
+                buttons: Ext.Msg.OK,
+                icon: Ext.Msg.INFO
+            });
+        } else if (expectResponse) {
+            var content = response.responseText;
+            if (content) {
+                var w;
+                var success = false;
+                try {
+                    w = window.open(
+                        'data:application/octet-stream;charset=utf-8,' +
+                        encodeURIComponent(content)
+                    );
+                    success = true;
+                } catch(e) {
+                    Ext.log.warn(e);
+                    try {
+                        w = window.open();
+                    } catch(e2) {
+                        Ext.log.warn(e2);
+                    }
+                    if (w && 'focus' in w && 'document' in w) {
+                         w.document.write(content);
+                         w.document.close();
+                         w.focus();
+                         success = true;
+                    }
+                }
+                if (!success) {
+                    Ext.Msg.show({
+                        title: me.getDisablePopupBlockerTitle(),
+                        message: me.getDisablePopupBlocker(),
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.Msg.INFO
+                    });
+                }
+            } else {
+                Ext.Msg.show({
+                    title: me.getUnexpectedResponseTitle(),
+                    message: me.getUnexpectedResponse(),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.Msg.WARNING
+                });
+            }
+        }
+    },
+
+    /**
+     */
     downloadWhenReady: function(startTime, data){
         var me = this;
         var elapsedMs = (new Date().getTime() - startTime);
