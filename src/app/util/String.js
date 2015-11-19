@@ -42,6 +42,10 @@ Ext.define('Koala.util.String', {
          * instances and o.Objects qualify as gettable.
          */
         replaceTemplateStrings: function(tpl, getable, showWarnings) {
+            if (getable && !('get' in getable)) {
+                getable = new ol.Object(getable);
+            }
+
             // capture alphanumeric values in between double square brackets:
             // will yield an array aof matches including their boundaries:
             // tpl = "Hello [[whom-to-greet]], how are you [[another_string]]";
@@ -120,7 +124,7 @@ Ext.define('Koala.util.String', {
                 return true;
             } else if (string.toLowerCase() === "false") {
                 return false;
-            } else if (/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/.test(string)) {
+            } else if (/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/.test(string)) {
                 return parseFloat(string);
             } else if (Ext.String.startsWith(string, "[") &&
                 !Ext.String.startsWith(string, "[[")) {
