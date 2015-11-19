@@ -43,14 +43,14 @@ Ext.define("Koala.view.chart.TimeSeries", {
 
     config: {
         seriesType: 'line',
-        showStep: true
+        showStep: true,
+        selectedStations: []
     },
 
-    selectedStations: [],
 
     layer: null,
 
-    width: '100%',
+    flex: 1,
 
     legend: {
         docked: 'right'
@@ -75,7 +75,7 @@ Ext.define("Koala.view.chart.TimeSeries", {
             fields: [chartConfig.xAxisAttribute],
             label: {
                 rotate: {
-                    degrees: xLabelRotation || -45
+                    degrees: xLabelRotation || -90
                 }
             }
         };
@@ -86,20 +86,16 @@ Ext.define("Koala.view.chart.TimeSeries", {
             position: 'left',
             grid: true,
             minimum: 0,
-            renderer: function (axis, idx, data, v) {
-                if (v === null) {
-                    return '';
-                }
-                return data.renderer(v) + ' ' + dspUnit;
+            renderer: function (axis, label) {
+                return label + ' ' + dspUnit;
             },
             label: {
                 rotate: {
-                    degrees: yLabelRotation || 0
+                    degrees: yLabelRotation !== undefined ? yLabelRotation : 0
                 }
             }
         };
         Ext.apply(defaultYAxis, yConfig);
-
         cfg.axes = [defaultYAxis, defaultXAxis];
 
         cfg.store = {

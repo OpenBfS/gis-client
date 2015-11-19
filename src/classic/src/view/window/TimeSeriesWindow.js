@@ -20,6 +20,8 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
     requires: [
         "Koala.view.window.TimeSeriesWindowController",
         "Koala.view.window.TimeSeriesWindowModel",
+        "Koala.util.Duration",
+        "Koala.util.String",
 
         "Ext.form.field.Date"
     ],
@@ -38,9 +40,17 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         name: 'timeserieswin',
         constrainHeader: true,
         collapsible: true,
-        layout: 'vbox',
+        maxHeight: 800,
+        width: 900,
         autoScroll: true,
-        maxHeight: 600,
+        layout: {
+            type: 'vbox'
+        },
+        defaults: {
+            flex: 1,
+            minHeight: 300,
+            width: '100%'
+        },
         addFilterForm: true
     },
 
@@ -55,38 +65,54 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
 
     items: [],
 
-    initComponent: function() {
-
-        // get the default timerangefilter to set the initial values for
-        // the timeseries window
-        var filters = this.initOlLayer.metadata.filters,
-            timeRangeFilter;
-
-        Ext.each(filters, function(filter) {
-            if (filter && filter.type && filter.type === 'timerange') {
-                timeRangeFilter = filter;
-                return false;
-            } else {
-                // some mockup values, TODO: remove me later on?
-                timeRangeFilter = {
-                    parameter: 'end_measure',
-                    mindatetimeinstant: Ext.Date.add(new Date(), Ext.Date.DAY, -1),
-                    maxdatetimeinstant: new Date()
-                };
+    statics: {
+        /**
+         */
+        getStartEndFilterFromMetadata: function(metadata){
+            var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
+            var endDate = Koala.util.String.coerce(timeseriesCfg.end_timestamp);
+            if (Ext.isString(endDate)) {
+                var format = timeseriesCfg.end_timestamp_format;
+                if (!format) {
+                    format = "Y-m-d\\TH:i:s"; // UTC
+                }
+                endDate = Ext.Date.parse(endDate, format);
             }
-        });
+            var duration = timeseriesCfg.duration;
+            var startDate = Koala.util.Duration.dateSubtractAbsoluteDuration(
+                endDate,
+                duration
+            );
+            var filter = {
+                parameter: timeseriesCfg.xAxisAttribute,
+                mindatetimeinstant: startDate,
+                maxdatetimeinstant: endDate
+            };
+            return filter;
+        }
+    },
 
-        if (this.addFilterForm) {
-            this.items = [{
+
+
+    initComponent: function() {
+        var me = this;
+        var metadata = me.initOlLayer.metadata;
+        var timeRangeFilter = me.self.getStartEndFilterFromMetadata(metadata);
+        if (me.addFilterForm) {
+            me.items = [{
                 xtype: 'form',
                 layout: {
                     type: 'hbox',
-                    align: 'middle'
+                    pack: 'center'
                 },
                 padding: 5,
                 defaults: {
-                    padding: '0 10 0 10'
+                    padding: 5
                 },
+                width: '100%',
+                height: 40,
+                maxHeight: 40,
+                minHeight: 40,
                 items: [{
                     // https://github.com/gportela85/DateTimeField
                     xtype: 'datefield',
@@ -97,7 +123,8 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     value: timeRangeFilter.mindatetimeinstant,
                     labelWidth: 35,
                     name: 'datestart',
-                    format: 'j F Y, H:i'
+                    format: 'j F Y, H:i',
+                    flex: 1
                 }, {
                     xtype: 'datefield',
                     bind: {
@@ -106,19 +133,22 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     value: timeRangeFilter.maxdatetimeinstant,
                     labelWidth: 38,
                     name: 'dateend',
-                    format: 'j F Y, H:i'
+                    format: 'j F Y, H:i',
+                    flex: 1
                 }, {
                     xtype: 'button',
                     bind: {
                         text: '{setFilterBtnText}'
                     },
-                    handler: 'onSetFilterBtnClick'
+                    handler: 'onSetFilterBtnClick',
+                    margin: '0 3px 0 0'
                 }, {
                     xtype: 'button',
                     bind: {
                         text: '{resetFilterBtnText}'
                     },
-                    handler: 'onResetFilterBtnClick'
+                    handler: 'onResetFilterBtnClick',
+                    margin: '0 3px 0 0'
                 }, {
                     xtype: 'combo',
                     displayField: 'text',
@@ -130,10 +160,11 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     listeners: {
                         select: 'onSelectChartLayerComboSelect',
                         beforerender: 'bindSelectChartLayerStore'
-                    }
+                    },
+                    flex: 1
                 }]
             }];
         }
-        this.callParent(arguments);
+        me.callParent();
     }
 });

@@ -76,10 +76,66 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     createTimeSeriesCombo: function(olLayer) {
         var me = this;
 
-        var url = (olLayer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs");
+        var chartConfig = olLayer.get('timeSeriesChartProperties');
+
+        // first try to read out explicitly configured WFS URL
+        var url = Koala.util.Object.getPathStrOr(
+                olLayer.metadata,
+                "layerConfig/wfs/url",
+                null
+            );
+        if (!url) {
+            // … otherwise determine from wms url
+            url = (olLayer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs");
+        }
+
+        var identifyField = chartConfig.featureIdentifyField || "id";
+        var idDataType = chartConfig.featureIdentifyFieldDataType || "string";
+        var dspField = chartConfig.featureShortDspField || "name";
+
+        var modelNamespace = Koala.model;
+        var modelName = 'FeatureType-' + olLayer.id;
+        var model;
+        if (modelName in modelNamespace) {
+            model = modelNamespace[modelName];
+        } else {
+            model = Ext.define('Koala.model.' + modelName, {
+                extend: 'Ext.data.Model',
+                fields: [{
+                     name: 'id',
+                     mapping: function(dataRec){
+                         return dataRec.properties[identifyField];
+                     }
+                },{
+                    name: 'dspName',
+                    mapping: function(dataRec){
+                        return dataRec.properties[dspField];
+                    }
+                }]
+            });
+        }
+
+        var extraParams = {
+            service: 'WFS',
+            version: '1.1.0',
+            request: 'GetFeature',
+            typeName: olLayer.getSource().getParams().LAYERS,
+            outputFormat: 'application/json'
+        };
+        var srcParams = olLayer.getSource().getParams();
+        if ('viewparams' in srcParams) {
+            extraParams.viewparams = srcParams.viewparams;
+        }
+        if ('TIME' in srcParams) {
+            extraParams.TIME = srcParams.TIME;
+        }
 
         var store = Ext.create('Ext.data.Store', {
-            model: 'Koala.model.Station',
+            model: model,
+            sorters: [{
+                property: 'dspName',
+                direction: 'ASC'
+            }],
             proxy: {
                 type: 'ajax',
                 url: url,
@@ -88,29 +144,45 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                     rootProperty: 'features'
                 },
                 noCache: false,
-                extraParams: {
-                    service: 'WFS',
-                    version: '1.1.0',
-                    request: 'GetFeature',
-                    typeName: olLayer.getSource().getParams().LAYERS,
-                    outputFormat: 'application/json'
-                }
+                extraParams: extraParams
             }
         });
-
         var combo = {
             xtype: 'combo',
             name: 'add-series-combo-' + olLayer.get('name'),
             store: store,
-            displayField: 'locality_name',
+            displayField: 'dspName',
+            valueField: 'id',
             emptyText: 'Serie hinzufügen',
             queryParam: 'CQL_FILTER',
             listeners: {
                 select: Ext.Function.bind(me.onTimeSeriesComboSelect,
                     me, [olLayer], true),
                 beforequery: function(queryPlan){
-                    queryPlan.query = "locality_name ILIKE '%" +
-                        queryPlan.query + "%'";
+                    var cqlParts = [];
+                    if (queryPlan.query) {
+                        cqlParts.push(
+                            dspField + " ILIKE '%" + queryPlan.query + "%'"
+                        );
+                    }
+                    // now filter out series already in the chart
+                    var chart = this.up(
+                            'panel[name="chart-composition"]'
+                        ).down('chart');
+                    var selectedStations = chart.getSelectedStations();
+                    var stationIds = [];
+                    Ext.each(selectedStations, function(selectedStation) {
+                        var stationId = selectedStation.get(identifyField);
+                        if (idDataType === 'string') {
+                            stationId = "'" + stationId + "'";
+                        }
+                        stationIds.push(stationId);
+                    });
+                    if (stationIds.length > 0) {
+                        var inPart = "IN (" + stationIds.join(",") + ")";
+                        cqlParts.push("NOT " + identifyField + " " + inPart);
+                    }
+                    queryPlan.query = cqlParts.join(" AND ");
                 }
             }
         };
@@ -154,9 +226,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             titleCollapse: true,
             closable: true,
             titleAlign: 'center',
+            flex: 1,
             layout: {
                 type: 'hbox',
-                align: 'middle'
+                align: 'stretch'
             },
             items: [chart]
         };
@@ -166,7 +239,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             header: false,
             layout: {
                 type: 'vbox',
-                align: 'end'
+                align: 'middle'
             },
             bodyPadding: 5,
             items: []
@@ -219,8 +292,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var timeSeriesView = Ext.ComponentQuery.query('k-chart-timeseries')[0];
         var controller = timeSeriesView.getController();
 
-        if (!Ext.Array.contains(chart.selectedStations, olFeat)) {
-            chart.selectedStations.push(olFeat);
+        if (!Ext.Array.contains(chart.getSelectedStations(), olFeat)) {
+            chart.getSelectedStations().push(olFeat);
         }
 
         controller.prepareTimeSeriesLoad(olFeat);
@@ -258,7 +331,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         Ext.each(charts, function(chart) {
             chart.getStore().removeAll();
             chart.removeSeries(chart.getSeries());
-            Ext.each(chart.selectedStations, function(selectedStation) {
+            Ext.each(chart.getSelectedStations(), function(selectedStation) {
                 me.createOrUpdateChart(chart.layer, selectedStation);
             });
         });
