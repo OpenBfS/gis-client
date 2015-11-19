@@ -251,7 +251,7 @@ Ext.define("Koala.view.form.Print", {
                 var success = false;
                 try {
                     w = window.open(
-                        'data:application/octet-stream;charset=utf-8,' +
+                        'data:text/xml,' +
                         encodeURIComponent(content)
                     );
                     success = true;
