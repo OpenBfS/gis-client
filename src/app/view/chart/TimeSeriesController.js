@@ -59,11 +59,14 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
 
         // get the timerangefilter, actually we need the attribute param
         // only
+
+        // TODO refactor this gathering of the needed filter attribute
         var filters = layer.metadata.filters;
         var timeRangeFilter;
 
         Ext.each(filters, function(filter) {
-            if (filter && filter.type && filter.type === 'timerange') {
+            var fType = (filter && filter.type) || '';
+            if (fType === 'timerange' || fType === 'pointintime') {
                 timeRangeFilter = filter;
                 return false;
             }
