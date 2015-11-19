@@ -433,7 +433,7 @@ Ext.define('Koala.util.Layer', {
             var getBool = Koala.util.String.getBool;
 
             var isTopic = false;
-//            TODO Is a hoverTpl rly required to hover?
+            // TODO Is a hoverTpl really required to hover?
             if (!Ext.isEmpty(olProps.hoverTpl) && olProps.allowHover !== false) {
                 isTopic = true;
             }
@@ -734,7 +734,7 @@ Ext.define('Koala.util.Layer', {
             // TODO check UTC!
             var start = filter.mindatetimeinstant;
             var end = filter.maxdatetimeinstant;
-            var val = Ext.Date.format(start, 'C') + '/' + Ext.Date.format(end, 'C');
+            var val = Ext.Date.format(start, 'Y-m-d\\TH:i:s') + '/' + Ext.Date.format(end, 'Y-m-d\\TH:i:s');
             olProps[wmstKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;
@@ -750,7 +750,7 @@ Ext.define('Koala.util.Layer', {
             }
             // TODO check UTC!
             var dateValue = filter.timeinstant;
-            var val = Ext.Date.format(dateValue, 'C');
+            var val = Ext.Date.format(dateValue, 'Y-m-d\\TH:i:s');
             olProps[wmstKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;
@@ -821,16 +821,30 @@ Ext.define('Koala.util.Layer', {
                 var params = filter.param.split(",");
                 var type = filter.type;
                 // we need to check the metadata for default filters to apply
-                // TODO the format is surely totally off!!!
+                // TODO The format should be put into a config and used all over
+                //      the place
                 if (type === "timerange") {
-                    keyVals[params[0]] = filter.mindatetimeinstant;
+                    keyVals[params[0]] = Ext.Date.format(
+                        filter.mindatetimeinstant,
+                        'Y-m-d\\TH:i:s'
+                    );
                     if(!params[1]) {
-                        keyVals[params[0]] += "/" + filter.maxdatetimeinstant;
+                        keyVals[params[0]] += "/" +
+                            Ext.Date.format(
+                                filter.maxdatetimeinstant,
+                                'Y-m-d\\TH:i:s'
+                            );
                     } else {
-                        keyVals[params[1]] = filter.maxdatetimeinstant;
+                        keyVals[params[1]] = Ext.Date.format(
+                                filter.maxdatetimeinstant,
+                                'Y-m-d\\TH:i:s'
+                            );
                     }
                 } else if (type === "pointintime") {
-                    keyVals[params[0]] = filter.timeinstant;
+                    keyVals[params[0]] = Ext.Date.format(
+                        filter.timeinstant,
+                        'Y-m-d\\TH:i:s'
+                    );
                 } else if (type === 'value') {
                     keyVals[params[0]] = filter.value;
                 }
@@ -848,9 +862,8 @@ Ext.define('Koala.util.Layer', {
             Ext.iterate(keyVals, function(key, value){
                 existingViewParams += key + ':' + value + ';';
             });
-            metadata.layerConfig.olProperties.param_viewparams =/* eslint camelcase:0 */
-                encodeURIComponent(existingViewParams);
-
+            /* eslint camelcase:0 */
+            metadata.layerConfig.olProperties.param_viewparams = existingViewParams;
             return metadata;
         }
     }
