@@ -8,6 +8,8 @@
       "test": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true test/index.html",
       "lint-js": "eslint -c .eslintrc app/ classic/ && eslint -c test/.eslintrc test/",
 
+      "test:watch": "watch 'npm test' app/ classic/ test/",
+
       "save-coverage": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true --hooks ./test/phantom_hooks.js test/index.html",
       "rm-coverage": "rm -Rf coverage",
       "rm-coverage-tmp-dirs": "rm -Rf app_instrumented app_old classic_instrumented classic_old",
@@ -30,6 +32,7 @@
     "istanbul": "0.4.0",
     "mocha": "2.3.3",
     "mocha-phantomjs": "4.0.1",
-    "sinon": "1.17.2"
+    "sinon": "1.17.2",
+    "watch": "0.16.0"
   }
 }
