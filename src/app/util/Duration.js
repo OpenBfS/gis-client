@@ -33,22 +33,49 @@ Ext.define('Koala.util.Duration', {
         },
 
         /**
-         * Based upon http://stackoverflow.com/a/29153059
+         */
+        zeroDurationObj: {
+            sign: '+',
+            years: 0,
+            months: 0,
+            weeks: 0,
+            days: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0
+        },
+
+        /**
+         * Turn the given ISO 8601 string duration into an object that has keys
+         * for all the parts that possibly make up a duration.Based upon this
+         * stackoverflow answer http://stackoverflow.com/a/29153059
+         *
+         * @param {string} isoDuration An ISO 8601 duration as string
+         * @return {object} An object with numbers for `years`, `month`, `weeks`,
+         *     `days`, `hours`, `minutes` and `seconds`. Also included is a key
+         *     `sign` which is either `'+'` or `'-'` for negative durations.
          */
         isoDurationToObject: function(isoDuration) {
-            var matches = isoDuration.match(this.durationRegex);
-            if (!matches) {
-                matches = []; // illegal format => 0 duration
+            var staticMe = this;
+            if (!Ext.isString(isoDuration)) {
+                // caled with undefined or other non-string => 0 duration
+                return Ext.clone(staticMe.zeroDurationObj);
             }
+            var matches = (isoDuration).match(staticMe.durationRegex);
+            if (!matches) {
+                // illegal format => 0 duration
+                return Ext.clone(staticMe.zeroDurationObj);
+            }
+            // all is fine, the string could be parsed:
             return {
                 sign: Ext.isDefined(matches[1]) ? '-' : '+',
-                years: Ext.isDefined(matches[2]) ? matches[2] : 0,
-                months: Ext.isDefined(matches[3]) ? matches[3] : 0,
-                weeks: Ext.isDefined(matches[4]) ? matches[4] : 0,
-                days: Ext.isDefined(matches[5]) ? matches[5] : 0,
-                hours: Ext.isDefined(matches[6]) ? matches[6] : 0,
-                minutes: Ext.isDefined(matches[7]) ? matches[7] : 0,
-                seconds: Ext.isDefined(matches[8]) ? matches[8] : 0
+                years: Ext.isDefined(matches[2]) ? parseFloat(matches[2]) : 0,
+                months: Ext.isDefined(matches[3]) ? parseFloat(matches[3]) : 0,
+                weeks: Ext.isDefined(matches[4]) ? parseFloat(matches[4]) : 0,
+                days: Ext.isDefined(matches[5]) ? parseFloat(matches[5]) : 0,
+                hours: Ext.isDefined(matches[6]) ? parseFloat(matches[6]) : 0,
+                minutes: Ext.isDefined(matches[7]) ? parseFloat(matches[7]) : 0,
+                seconds: Ext.isDefined(matches[8]) ? parseFloat(matches[8]) : 0
             };
         },
 
