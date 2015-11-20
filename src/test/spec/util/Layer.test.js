@@ -7,6 +7,7 @@ describe('Koala.util.Layer', function() {
         });
     });
     describe('Static functions', function(){
+
         describe('#metadataHasFilters', function() {
             it('is defined', function() {
                 expect(
@@ -86,6 +87,7 @@ describe('Koala.util.Layer', function() {
                 });
             });
         });
+
         describe('#getFiltersFromMetadata', function() {
             it('returns the filters if correctly configured', function() {
                 var filters = [{foo: 'bar'}, {humpty: 'dumpty'}];
@@ -143,6 +145,7 @@ describe('Koala.util.Layer', function() {
                 });
             });
         });
+
         describe('#getFiltersTextFromMetadata', function(){
             it('returns the empty string if no filter', function(){
                 var metadatas = [
