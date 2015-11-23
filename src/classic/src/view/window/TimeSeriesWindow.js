@@ -21,6 +21,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         "Koala.view.window.TimeSeriesWindowController",
         "Koala.view.window.TimeSeriesWindowModel",
         "Koala.util.Duration",
+        "Koala.util.Date",
         "Koala.util.String",
 
         "Ext.form.field.Date"
@@ -74,7 +75,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
             if (Ext.isString(endDate)) {
                 var format = timeseriesCfg.end_timestamp_format;
                 if (!format) {
-                    format = "Y-m-d\\TH:i:s"; // UTC
+                    format = Koala.util.Date.ISO_FORMAT;
                 }
                 endDate = Ext.Date.parse(endDate, format);
             }

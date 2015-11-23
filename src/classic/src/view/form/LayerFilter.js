@@ -7,6 +7,8 @@ Ext.define("Koala.view.form.LayerFilter", {
         "Koala.view.form.LayerFilterController",
         "Koala.view.form.LayerFilterModel",
 
+        "Koala.util.Date",
+
         "Ext.form.field.Date",
         "Ext.form.ComboBox",
         "Ext.ux.form.MultiSelect"
@@ -149,6 +151,7 @@ Ext.define("Koala.view.form.LayerFilter", {
 
     createPointInTimeFilter: function(filter, idx) {
         var me = this;
+        var format = Koala.util.Date.ISO_FORMAT;
 
         var value = Ext.Date.parse(
                 filter.defaulttimeinstant,
@@ -165,7 +168,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             flex: 1,
             value: value,
             format: me.getFormat(),
-            submitFormat: "c",
+            submitFormat: format,
             listeners: {
                 select: me.resetNumberFields
             }
@@ -275,6 +278,7 @@ Ext.define("Koala.view.form.LayerFilter", {
 
     createTimeRangeFilter: function(filter, idx){
         var me = this;
+        var format = Koala.util.Date.ISO_FORMAT;
 
         var names = me.startAndEndFieldnamesFromMetadataParam(filter.param);
         var startName = names.startName;
@@ -309,7 +313,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
-            submitFormat: "c",
+            submitFormat: format,
             listeners: {
                 select: me.resetNumberFields
             }
@@ -384,7 +388,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
-            submitFormat: "c",
+            submitFormat: format,
             listeners: {
                 select: me.resetNumberFields
             }

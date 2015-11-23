@@ -17,6 +17,7 @@ Ext.define('Koala.util.Layer', {
 
     requires: [
         'BasiGX.util.Map',
+        'Koala.util.Date',
         'Koala.util.String'
     ],
 
@@ -734,7 +735,8 @@ Ext.define('Koala.util.Layer', {
             // TODO check UTC!
             var start = filter.mindatetimeinstant;
             var end = filter.maxdatetimeinstant;
-            var val = Ext.Date.format(start, 'Y-m-d\\TH:i:s') + '/' + Ext.Date.format(end, 'Y-m-d\\TH:i:s');
+            var format = Koala.util.Date.ISO_FORMAT;
+            var val = Ext.Date.format(start, format) + '/' + Ext.Date.format(end, format);
             olProps[wmstKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;
@@ -750,7 +752,8 @@ Ext.define('Koala.util.Layer', {
             }
             // TODO check UTC!
             var dateValue = filter.timeinstant;
-            var val = Ext.Date.format(dateValue, 'Y-m-d\\TH:i:s');
+            var format = Koala.util.Date.ISO_FORMAT;
+            var val = Ext.Date.format(dateValue, format);
             olProps[wmstKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;
@@ -816,6 +819,7 @@ Ext.define('Koala.util.Layer', {
         },
 
         moveFiltersToViewparams: function(metadata, filters){
+            var format = Koala.util.Date.ISO_FORMAT;
             var keyVals = {};
             Ext.each(filters, function(filter) {
                 var params = filter.param.split(",");
@@ -826,24 +830,21 @@ Ext.define('Koala.util.Layer', {
                 if (type === "timerange") {
                     keyVals[params[0]] = Ext.Date.format(
                         filter.mindatetimeinstant,
-                        'Y-m-d\\TH:i:s'
+                        format
                     );
                     if(!params[1]) {
                         keyVals[params[0]] += "/" +
                             Ext.Date.format(
-                                filter.maxdatetimeinstant,
-                                'Y-m-d\\TH:i:s'
+                                filter.maxdatetimeinstant, format
                             );
                     } else {
                         keyVals[params[1]] = Ext.Date.format(
-                                filter.maxdatetimeinstant,
-                                'Y-m-d\\TH:i:s'
+                                filter.maxdatetimeinstant, format
                             );
                     }
                 } else if (type === "pointintime") {
                     keyVals[params[0]] = Ext.Date.format(
-                        filter.timeinstant,
-                        'Y-m-d\\TH:i:s'
+                        filter.timeinstant, format
                     );
                 } else if (type === 'value') {
                     keyVals[params[0]] = filter.value;
