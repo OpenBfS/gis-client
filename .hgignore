@@ -1,5 +1,6 @@
 syntax: glob
 
+src/apidoc
 src/bootstrap.css
 src/bootstrap.js
 src/build/**

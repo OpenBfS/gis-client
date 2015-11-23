@@ -18,7 +18,9 @@
       "restore-js": "mv app_old app && mv classic_old classic",
       "use-instrumented-js": "mv app_instrumented app && mv classic_instrumented classic",
       "un-use-instrumented-js": "mv app app_instrumented && mv classic classic_instrumented",
-      "html-coverage": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && npm run instrument-js && npm run backup-js && npm run use-instrumented-js && istanbul cover npm run save-coverage && npm run un-use-instrumented-js && npm run restore-js && istanbul report --root ./coverage html && npm run rm-coverage-tmp-dirs"
+      "html-coverage": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && npm run instrument-js && npm run backup-js && npm run use-instrumented-js && istanbul cover npm run save-coverage && npm run un-use-instrumented-js && npm run restore-js && istanbul report --root ./coverage html && npm run rm-coverage-tmp-dirs",
+
+      "apidoc": "jsduck --config jsduck-cfg.json"
   },
   "repository": {
     "type": "svn",
