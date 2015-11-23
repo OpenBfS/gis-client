@@ -14,6 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.component.Map
+ */
 Ext.define("Koala.view.component.Map", {
     extend: "BasiGX.view.component.Map",
     xtype: "k-component-map",

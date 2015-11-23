@@ -14,6 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.panel.RoutingLegendTree
+ */
 Ext.define("Koala.view.panel.RoutingLegendTree", {
     extend: "BasiGX.view.panel.LegendTree",
     xtype: "k-panel-routing-legendtree",

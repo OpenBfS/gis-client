@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.window.TimeSeriesWindow
+ */
 Ext.define("Koala.view.window.TimeSeriesWindow", {
     extend: "Ext.window.Window",
     xtype: "k-window-timeserieswindow",

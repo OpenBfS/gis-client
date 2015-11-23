@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.button.TimeReferenceModel
+ */
 Ext.define('Koala.view.button.TimeReferenceModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-button-timereference',
