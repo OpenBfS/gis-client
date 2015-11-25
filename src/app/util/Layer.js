@@ -691,7 +691,7 @@ Ext.define('Koala.util.Layer', {
                 filter.mindatetimeinstant = Koala.util.Date.makeLocal(
                     filter.mindatetimeinstant
                 );
-                filter.maxdatetimeinstant  = Koala.util.Date.makeLocal(
+                filter.maxdatetimeinstant = Koala.util.Date.makeLocal(
                     filter.maxdatetimeinstant
                 );
             }
