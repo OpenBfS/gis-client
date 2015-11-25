@@ -56,7 +56,6 @@ Ext.define('Koala.util.Date', {
          */
         makeLocal: function(utcDate){
             var offsetMinutes = this.getUTCOffsetInMinutes();
-            debugger;
             return Ext.Date.add(utcDate, Ext.Date.MINUTE, offsetMinutes);
         },
 
