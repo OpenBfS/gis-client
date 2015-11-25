@@ -20,6 +20,7 @@ Ext.define('Koala.util.Layer', {
 
     requires: [
         'BasiGX.util.Map',
+
         'Koala.util.Date',
         'Koala.util.String'
     ],
@@ -606,6 +607,9 @@ Ext.define('Koala.util.Layer', {
             return metadata;
         },
 
+        /**
+         *
+         */
         applyDefaultsIfNotChangedByUser: function(metadata, filters) {
             var me = this;
             var adjustedFilters = [];
@@ -633,6 +637,9 @@ Ext.define('Koala.util.Layer', {
             return metadata;
         },
 
+        /**
+         *
+         */
         applyDefaultsTimerangeFilter: function(filter){
             if (!filter.mindatetimeinstant) {
                 if (filter.defaultstarttimeinstant) {
@@ -645,8 +652,9 @@ Ext.define('Koala.util.Layer', {
                         Ext.log.error('Could not set default timerange filter');
                     }
                 } else {
-                    Ext.log.warn('No defined start value for timerange filter and no ' +
-                        'configured default start value for timerange filter');
+                    Ext.log.warn('No defined start value for timerange filter' +
+                        ' and no configured default start value for timerange' +
+                        ' filter');
                 }
             // TODO: MJ Fix fallback calc
             } else if (Ext.isString(filter.mindatetimeinstant)) {
@@ -666,8 +674,9 @@ Ext.define('Koala.util.Layer', {
                         Ext.log.error('Could not set default timerange filter');
                     }
                 } else {
-                    Ext.log.warn('No defined end value for timerange filter and no ' +
-                        'configured default end value for timerange filter');
+                    Ext.log.warn('No defined end value for timerange filter' +
+                        ' and no configured default end value for timerange' +
+                        ' filter');
                 }
             // TODO: MJ Fix fallback calc
             } else if (Ext.isString(filter.maxdatetimeinstant)) {
@@ -676,10 +685,23 @@ Ext.define('Koala.util.Layer', {
                     filter.defaultendtimeformat
                 );
             }
+
+            var appIsLocal = Koala.Application.isLocal();
+            if (appIsLocal) {
+                filter.mindatetimeinstant = Koala.util.Date.makeLocal(
+                    filter.mindatetimeinstant
+                );
+                filter.maxdatetimeinstant  = Koala.util.Date.makeLocal(
+                    filter.maxdatetimeinstant
+                );
+            }
+
+
             return filter;
         },
 
         applyDefaultsPointInTimeFilter: function(filter){
+
             if (!filter.timeinstant) {
                 if (filter.defaulttimeinstant) {
                     try {
@@ -694,6 +716,12 @@ Ext.define('Koala.util.Layer', {
                     Ext.log.warn('No defined point in time filter and no ' +
                         'configured default point in time filter');
                 }
+            }
+            var appIsLocal = Koala.Application.isLocal();
+            if (appIsLocal) {
+                filter.timeinstant = Koala.util.Date.makeLocal(
+                    filter.timeinstant
+                );
             }
             return filter;
         },
