@@ -28,7 +28,7 @@ Ext.define('Koala.Application', {
     name: 'Koala',
 
     requires: [
-        Koala.view.panel.LayerSetChooser
+        'Koala.view.panel.LayerSetChooser'
     ],
 
     statics: {
