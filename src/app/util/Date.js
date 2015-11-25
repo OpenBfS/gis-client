@@ -13,28 +13,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-Ext.define('Koala.store.TimeSeriesDummy', {
-    extend: 'Ext.data.Store',
+/**
+ * @class Koala.util.Date
+ */
+Ext.define('Koala.util.Date', {
 
-    alias: 'store.k-timeseriesdummy',
-
-    fields: [
-        'code', 'name'
-    ],
-
-    autoLoad: false,
-
-    proxy: {
-        url: 'resources/data/timeseries_odlinfo_data.json',
-        method: 'GET',
-        type: 'ajax',
-        extraParams: {
-            stationId: null
-        },
-        reader: {
-            type: 'json',
-            rootProperty: 'data'
-        }
+    statics: {
+        ISO_FORMAT: 'C' // New in Ext6, probably dependent of Date.toISOString
+        // ISO_FORMAT: 'Y-m-d\\TH:i:s\\Z' // missing milliseconds
     }
 
 });

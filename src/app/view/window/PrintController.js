@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.window.PrintController
+ */
 Ext.define('Koala.view.window.PrintController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-print'

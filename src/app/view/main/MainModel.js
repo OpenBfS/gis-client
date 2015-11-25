@@ -15,6 +15,8 @@
  */
 /**
  * This class is the view model for the Main view of the application.
+ *
+ * @class Koala.view.main.MainModel
  */
 Ext.define('Koala.view.main.MainModel', {
     extend: 'Ext.app.ViewModel',

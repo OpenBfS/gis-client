@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.chart.TimeSeriesController
+ */
 Ext.define('Koala.view.chart.TimeSeriesController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-chart-timeseries',
@@ -28,11 +31,20 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
     prepareTimeSeriesLoad: function(selectedStation) {
         var me = this;
         var view = me.getView();
-        var valueField = 'value_' + selectedStation.get('geo_id');
         var layer = view.layer;
         var chartConfig = layer.get('timeSeriesChartProperties');
+        var identifyField = chartConfig.featureIdentifyField || "id";
+        // var valueField = 'value_' + selectedStation.get(identifyField);
+        var valueField = chartConfig.yAxisAttribute + '_' +
+            selectedStation.get(identifyField);
         var paramConfig = Koala.util.Object.getConfigByPrefix(
             chartConfig, "param_", true);
+
+        var allValueFields = [];
+        // generate a list of all valueFields:
+        Ext.each(view.getSelectedStations(), function(oneStation) {
+            allValueFields.push('value_' + oneStation.get(identifyField));
+        });
 
         view.setLoading(true);
 
@@ -48,22 +60,23 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                 return;
         }
 
-        // get the timerangefilter, actially we need the attribute param
+        // get the timerangefilter, actually we need the attribute param
         // only
-        var filters = layer.metadata.filters,
-            timeRangeFilter;
+
+        // TODO refactor this gathering of the needed filter attribute
+        var filters = layer.metadata.filters;
+        var timeRangeFilter;
 
         Ext.each(filters, function(filter) {
-            if (filter && filter.type && filter.type === 'timerange') {
+            var fType = (filter && filter.type) || '';
+            if (fType === 'timerange' || fType === 'pointintime') {
                 timeRangeFilter = filter;
                 return false;
-            } else {
-                // some mockup values, TODO: remove me later on?
-                timeRangeFilter = {
-                    param: 'end_measure'
-                };
             }
         });
+        if (!timeRangeFilter) {
+            Ext.log.warn("Failed to determine a timerange filter");
+        }
 
         var requestParams = {
             service: 'WFS',
@@ -73,10 +86,21 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
             outputFormat: 'application/json',
             filter: me.getDateTimeRangeFilter(timeRangeFilter)
         };
+
         Ext.apply(requestParams, paramConfig);
 
-        // determined from wms url
-        var url = (layer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs");
+        // first try to read out explicitly configured WFS URL
+        var url = Koala.util.Object.getPathStrOr(
+                layer.metadata,
+                "layerConfig/wfs/url",
+                null
+            );
+        if (!url) {
+            // … otherwise determine from wms url
+            url = (layer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs");
+        }
+
+        view.getAxes()[0].getFields().push(valueField);
 
         Ext.Ajax.request({
             url: url,
@@ -84,46 +108,81 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
             type: 'ajax',
             params: requestParams,
             success: function(res) {
-                var json = Ext.decode(res.responseText),
-                    chart = Ext.ComponentQuery.query('k-chart-timeseries')[0],
-                    store = chart.getStore();
+                var json = Ext.decode(res.responseText);
+                var chart = view;
+                var store = chart.getStore();
+                var yAxisAttr = chartConfig.yAxisAttribute;
+                var xAxisAttr = chartConfig.xAxisAttribute;
+                var rawStoreData = [];
+                var cleanStoreData = [];
 
-                var recs = [];
+                // Here is the strategy:
+
+                // 1) keep raw copies of the already existing records in the
+                //    store, if any.
+                store.each(function(rec){
+                    rawStoreData.push(rec.getData());
+                });
+
+                // 2) next, empty the store, to start from a fresh one. It'll
+                //    be reloaded with cleaned-up data later
+                store.removeAll();
+
+                // 3) For every Feature of the new dataset, put its specific
+                //    value at valueField either into an existing clean data set
+                //    from above, or create a new object in this array
                 Ext.each(json.features, function(feat) {
-                    var matchFound = false;
-
-                    Ext.each(store.data.items, function(item) {
-                        // we try to find a matching record in the store
-                        // and append the new value if match is found
-                        if (Ext.Date.isEqual(item.data[chartConfig.xAxisAttribute],
-                                new Date(feat.properties[chartConfig.xAxisAttribute]))) {
-                            matchFound = item;
+                    var match = false;
+                    Ext.each(rawStoreData, function(item) {
+                        var d1 = item[xAxisAttr];
+                        var d2 = new Date(feat.properties[xAxisAttr]);
+                        if ( Ext.Date.isEqual(d1, d2) ) {
+                            match = item;
                             return false;
                         }
                     });
 
-                    if (matchFound) {
-                        // TODO refactor JW, DK, KV wissen bescheid
-                        matchFound.data[valueField] =
-                            feat.properties[chartConfig.yAxisAttribute];
-                        return;
+                    if (match) {
+                        // This feature from the new dataset, has a value at
+                        // a point in time that another seroies already used.
+                        // Set the series soeific valueField to the current
+                        // value
+                        match[valueField] = feat.properties[yAxisAttr];
+                        cleanStoreData.push(match);
                     } else {
-                        var newRec = Ext.create(store.getModel(),
-                            feat.properties);
-                        newRec.data[valueField] =
-                            feat.properties[chartConfig.yAxisAttribute];
-                        recs.push(newRec);
+                        // This is a new date with a value, set the unique
+                        // valueField simply to the current value …
+                        var newRawData = feat.properties;
+                        newRawData[valueField] = feat.properties[yAxisAttr];
+                        // … and add it
+                        cleanStoreData.push(newRawData);
                     }
                 });
-                store.add(recs);
-                me.onTimeSeriesDataLoad(selectedStation, valueField, chartConfig);
+
+                // 4) We now need to take care of items that weren't cobvered by
+                //    dataitems of the new dataset. Some items in cleanStoreData
+                //    may still miss either old or the new valueField.
+                Ext.each(cleanStoreData, function(cleanStoreDataItem){
+                    Ext.each(allValueFields, function(oneValueField) {
+                        if (cleanStoreDataItem[oneValueField] === undefined){
+                            cleanStoreDataItem[oneValueField] = false;
+                        }
+                    });
+                });
+
+                // 5) load the now ckeaned-up data into the store.
+                store.loadData(cleanStoreData);
+
+                // 6) enjoy and continue the original workflow:
+                me.onTimeSeriesDataLoad(
+                    selectedStation, valueField, chartConfig
+                );
             },
             failure: function() {
                 Ext.log.error("failure on chartdata load");
             }
         });
 
-        view.getAxes()[0].getFields().push(valueField);
     },
 
     /**
@@ -141,18 +200,18 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         endDate = timeSeriesWin.down('datefield[name=dateend]').getValue();
         timeField = layerFilter.param;
 
-        filter =
-            '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc">' +
-            '    <ogc:PropertyIsBetween>' +
-            '        <ogc:PropertyName>' + timeField + '</ogc:PropertyName>' +
-            '        <ogc:LowerBoundary>'+
-            '            <ogc:Literal>' + startDate.toISOString() + '</ogc:Literal>' +
-            '        </ogc:LowerBoundary>' +
-            '        <ogc:UpperBoundary>' +
-            '            <ogc:Literal>' + endDate.toISOString() + '</ogc:Literal>' +
-            '        </ogc:UpperBoundary>' +
-            '    </ogc:PropertyIsBetween>' +
-            '</ogc:Filter>';
+        filter = '' +
+            '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
+              '<a:PropertyIsBetween>' +
+                '<a:PropertyName>' + timeField + '</a:PropertyName>' +
+                '<a:LowerBoundary>'+
+                  '<a:Literal>' + startDate.toISOString() + '</a:Literal>' +
+                '</a:LowerBoundary>' +
+                '<a:UpperBoundary>' +
+                  '<a:Literal>' + endDate.toISOString() + '</a:Literal>' +
+                '</a:UpperBoundary>' +
+              '</a:PropertyIsBetween>' +
+            '</a:Filter>';
 
         return filter;
     },
@@ -166,12 +225,13 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
             Koala.util.String.replaceTemplateStrings(
                 chartConfig.seriesTitleTpl, selectedStation) : "";
-
-        var newSeries = me.createNewSeries(stationName,
-            chartConfig, valueField);
+        var newSeries = me.createNewSeries(
+                stationName, chartConfig, valueField, selectedStation
+            );
         if(newSeries){
             view.addSeries(newSeries);
         }
+        view.redraw();
         view.setLoading(false);
     },
 
@@ -190,7 +250,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
     /**
      *
      */
-    createNewSeries: function(title, chartConfig, valueField) {
+    createNewSeries: function(title, chartConfig, valueField, selectedStation) {
         var me = this;
         var view = me.getView();
         var seriesIndex = view.getSeries().length;
@@ -239,16 +299,27 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                     var timestamp = record.get(chartConfig.xAxisAttribute);
                     var time = timestamp.toLocaleDateString() + " " +
                         timestamp.toLocaleTimeString();
-                    var value = record.get(valueField);
+
+                    var identifyField = chartConfig.featureIdentifyField || "id";
+                    var seriesValueField = chartConfig.yAxisAttribute + '_' +
+                        selectedStation.get(identifyField);
+                    var value = record.get(seriesValueField);
                     var unit = chartConfig.dspUnit ? chartConfig.dspUnit : '';
                     var defaultTemplate = this.getTitle() + '<br/>' +
                             time + '<br/>' + value + " " + unit;
 
                     if (!Ext.isEmpty(chartConfig.tooltipTpl)) {
+
                         var tpl = Koala.util.String.replaceTemplateStrings(
-                            chartConfig.tooltipTpl, view.selectedStation, false);
+                            chartConfig.tooltipTpl, {
+                                value: value, // TODO this needs docs
+                                title: this.getTitle() // TODO this needs docs
+                            }, false);
                         tpl = Koala.util.String.replaceTemplateStrings(
                             tpl, record, false);
+                        tpl = Koala.util.String.replaceTemplateStrings(
+                            tpl, selectedStation, false);
+
                         tooltip.setHtml(tpl);
                     } else {
                         tooltip.setHtml(defaultTemplate);

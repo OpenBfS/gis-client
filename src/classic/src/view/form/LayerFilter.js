@@ -1,4 +1,21 @@
-
+/* Copyright (c) 2015 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/**
+ * @class Koala.view.form.LayerFilter
+ */
 Ext.define("Koala.view.form.LayerFilter", {
     extend: "Ext.form.Panel",
     xtype: "k-form-layerfilter",
@@ -6,6 +23,8 @@ Ext.define("Koala.view.form.LayerFilter", {
     requires: [
         "Koala.view.form.LayerFilterController",
         "Koala.view.form.LayerFilterModel",
+
+        "Koala.util.Date",
 
         "Ext.form.field.Date",
         "Ext.form.ComboBox",
@@ -149,6 +168,7 @@ Ext.define("Koala.view.form.LayerFilter", {
 
     createPointInTimeFilter: function(filter, idx) {
         var me = this;
+        var format = Koala.util.Date.ISO_FORMAT;
 
         var value = Ext.Date.parse(
                 filter.defaulttimeinstant,
@@ -165,7 +185,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             flex: 1,
             value: value,
             format: me.getFormat(),
-            submitFormat: "c",
+            submitFormat: format,
             listeners: {
                 select: me.resetNumberFields
             }
@@ -275,6 +295,7 @@ Ext.define("Koala.view.form.LayerFilter", {
 
     createTimeRangeFilter: function(filter, idx){
         var me = this;
+        var format = Koala.util.Date.ISO_FORMAT;
 
         var names = me.startAndEndFieldnamesFromMetadataParam(filter.param);
         var startName = names.startName;
@@ -309,7 +330,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
-            submitFormat: "c",
+            submitFormat: format,
             listeners: {
                 select: me.resetNumberFields
             }
@@ -384,7 +405,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
-            submitFormat: "c",
+            submitFormat: format,
             listeners: {
                 select: me.resetNumberFields
             }

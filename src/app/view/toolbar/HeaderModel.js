@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.toolbar.HeaderModel
+ */
 Ext.define('Koala.view.toolbar.HeaderModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-toolbar-header',
