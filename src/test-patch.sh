@@ -82,6 +82,16 @@ fi
 
 # This is the URL where we can get a uniied diff
 URL="https://patch-diff.githubusercontent.com/raw/$SLUG/pull/$PR.diff"
+URL_EXISTS=false
+
+# Check if the generated resource actually exists (by sending a HEAD request)
+wget --spider -q $URL
+if [ $? -eq 0 ]; then
+    URL_EXISTS=true
+else
+    echo "URL $URL seems to result in a 404"
+    exit 6
+fi
 
 # Create a temporary file
 PATCHFILE=$(mktemp --suffix .patch)
@@ -97,6 +107,7 @@ echo " target dir  = $TARGET_DIR"
 echo " reverse?    = $REVERSE"
 echo " dryrun?     = $DRYRUN"
 echo " patch-URL   = $URL"
+echo " url-exists? = $URL_EXISTS"
 echo " patch-file  = $PATCHFILE"
 
 
