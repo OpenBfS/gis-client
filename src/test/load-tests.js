@@ -7,6 +7,7 @@
             'util/Date.test.js',
             'util/Duration.test.js',
             'util/Layer.test.js',
+            'util/Object.test.js',
             'util/String.test.js'
         ],
         getScriptTag = global.TestUtil.getExternalScriptTag,
