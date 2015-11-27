@@ -27,6 +27,32 @@ Ext.define('Koala.util.Date', {
          * offset is positive for zones ahead of UTC-0 and negative for zones
          * behind UTC-0. For Germany, this will be e.g. `60` or `120` (both
          * positive).
+         *
+         * "Why is this method not using Date.prototype.getTimezoneOffset?", you
+         * may ask youself. According to [the MDN documentation][1], the support
+         * in browsers still isn't reliable, that's why. Why we chose to use a
+         * different 'view' on the offset (-60 versus 60) is another valid
+         * question. This basically comes from the original implementation in
+         * the GeoZG project. A future implementation should probably fix or
+         * harmonize this behaviour. On the other hand, our deviation makes the
+         * implementation of #makeLocal and #makeUtc very simple, because we can
+         * directly use `Ext.Date.add` with the return value from this method.
+         *
+         * Here is an untested reference implementation using the mentioned
+         * `Date.prototype.getTimezoneOffset`, which is API compatible:
+         *
+         *     var localDate = new Date();
+         *     if ('getTimezoneOffset' in localDate) {
+         *         return -1 * localDate.getTimezoneOffset();
+         *     }
+         *
+         * If we were to adopt our internal usage / expectations / change the
+         * API, the multiplication with `-1` could be removed.
+         *
+         * [1]: https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Date/getTimezoneOffset
+         *
+         * @return {number} The offset in minutes from a local date compared to
+         *     the UTC date.
          */
         getUTCOffsetInMinutes: function(){
             var localDate = new Date();
@@ -52,7 +78,7 @@ Ext.define('Koala.util.Date', {
          * the UTC offset.
          *
          * @param {Date} utcDate A date supposed to be in UTC. All dates coming
-         *     coming from the server are supposed to be UTC.
+         *     from the server are supposed to be UTC.
          */
         makeLocal: function(utcDate){
             var offsetMinutes = this.getUTCOffsetInMinutes();
@@ -71,7 +97,6 @@ Ext.define('Koala.util.Date', {
             var offsetMinutes = -1 * this.getUTCOffsetInMinutes();
             return Ext.Date.add(localDate, Ext.Date.MINUTE, offsetMinutes);
         }
-
 
     }
 
