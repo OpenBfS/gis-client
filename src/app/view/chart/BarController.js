@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.chart.BarController
+ */
 Ext.define('Koala.view.chart.BarController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-chart-bar',
@@ -47,10 +50,18 @@ Ext.define('Koala.view.chart.BarController', {
         };
         Ext.apply(requestParams, paramConfig);
 
-        // determined from wms url
-        var url = layer.getSource() instanceof ol.source.TileWMS ?
-            (layer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs") :
-            (layer.getSource().getUrl()).replace(/\/wms/g, "/wfs");
+        // first try to read out explicitly configured WFS URL
+        var url = Koala.util.Object.getPathStrOr(
+                layer.metadata,
+                "layerConfig/wfs/url",
+                null
+            );
+        if (!url) {
+            // … otherwise determine from wms url
+            url = layer.getSource() instanceof ol.source.TileWMS ?
+                (layer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs") :
+                (layer.getSource().getUrl()).replace(/\/wms/g, "/wfs");
+        }
 
         Ext.Ajax.request({
             url: url,

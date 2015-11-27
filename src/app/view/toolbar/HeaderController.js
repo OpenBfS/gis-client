@@ -14,6 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.toolbar.HeaderController
+ */
 Ext.define('Koala.view.toolbar.HeaderController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-toolbar-header',
@@ -112,7 +115,7 @@ Ext.define('Koala.view.toolbar.HeaderController', {
 
     /**
      * TODO find a way to use a static method as handler.
-     * TODO doesn't work imn IE11
+     * TODO doesn't work in IE11
      */
     toggleFullscreen: function(){
         this.self.toggleFullscreen();

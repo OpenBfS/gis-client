@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.toolbar.Header
+ */
 Ext.define("Koala.view.toolbar.Header", {
     extend: "Ext.toolbar.Toolbar",
     xtype: 'k-toolbar-header',

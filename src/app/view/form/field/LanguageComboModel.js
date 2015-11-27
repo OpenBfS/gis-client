@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.form.field.LanguageComboModel
+ */
 Ext.define('Koala.view.form.field.LanguageComboModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-form-field-languagecombo',

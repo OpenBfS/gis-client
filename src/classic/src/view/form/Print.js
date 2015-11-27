@@ -14,6 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.form.Print
+ */
 Ext.define("Koala.view.form.Print", {
     extend: "BasiGX.view.form.Print",
     xtype: "k-form-print",
@@ -31,7 +34,15 @@ Ext.define("Koala.view.form.Print", {
     maxWidth: 800,
 
     config: {
-        irixUrl: '/irix-servlet'
+        irixUrl: '/irix-servlet',
+        serverUploadSuccessTitle: "",
+        serverUploadSuccess: "",
+        serverErrorTitle: "",
+        serverError: "",
+        disablePopupBlockerTitle: "",
+        disablePopupBlocker: "",
+        unexpectedResponseTitle: "",
+        unexpectedResponse: ""
     },
 
     initComponent: function() {
@@ -162,8 +173,6 @@ Ext.define("Koala.view.form.Print", {
         spec.outputFilename = layout;
 
         var irixCheckBox = this.down('[name="irix-fieldset-checkbox"]');
-        var submitForm;
-
         if(irixCheckBox.getValue()){
             var irixJson = {};
             var mapfishPrint = [];
@@ -173,22 +182,20 @@ Ext.define("Koala.view.form.Print", {
                 mapfishPrint[0] = spec;
                 irixJson = this.setUpIrixJson(mapfishPrint);
                 url = this.getIrixUrl();
-
-                submitForm = Ext.create('Ext.form.Panel', {
-                    standardSubmit: true,
+                Ext.Ajax.request({
                     url: url,
                     method: 'POST',
-                    items: [{
-                        xtype: 'textfield',
-                        name: 'irixJson',
-                        value: Ext.encode(irixJson)
-                    }]
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    jsonData: irixJson,
+                    scope: view,
+                    success: view.irixPostSuccessHandler,
+                    failure: view.genericPostFailureHandler
                 });
-                submitForm.submit({target:'_blank'});
             }
         } else {
             var startTime = new Date().getTime();
-
             Ext.Ajax.request({
                 url: view.getUrl() + app + '/report.' + format,
                 method: 'POST',
@@ -196,20 +203,96 @@ Ext.define("Koala.view.form.Print", {
                     'Content-Type' : 'application/json'
                 },
                 jsonData: Ext.encode(spec),
+                scope: view,
                 success: function(response) {
                     var data = Ext.decode(response.responseText);
                     view.setLoading(format + ' wird vorbereitet.');
                     view.downloadWhenReady(startTime, data);
                 },
-                failure: function(response) {
-                    Ext.raise('server-side failure with status code ' +
-                        response.status);
-                }
+                failure: view.genericPostFailureHandler
             });
         }
 
     },
 
+    /**
+     */
+    genericPostFailureHandler: function(response) {
+        var msg = this.getServerError();
+        msg = Ext.String.format(msg, response.status || 'n.a.');
+        Ext.Msg.show({
+            title: this.getServerErrorTitle(),
+            message: msg,
+            buttons: Ext.Msg.OK,
+            icon: Ext.Msg.WARNING
+        });
+    },
+
+    /**
+     */
+    irixPostSuccessHandler: function(response, options) {
+        var me = this;
+        var irixJson = options.jsonData;
+        var chosenRequestType = irixJson['request-type'];
+        var uploadOnly = 'upload';
+        var repondTypes = ['respond', 'upload/respond'];
+        var expectResponse = Ext.Array.contains(
+                repondTypes, chosenRequestType
+            );
+
+        if (chosenRequestType === uploadOnly) {
+            Ext.Msg.show({
+                title: me.getServerUploadSuccessTitle(),
+                message: me.getServerUploadSuccess(),
+                buttons: Ext.Msg.OK,
+                icon: Ext.Msg.INFO
+            });
+        } else if (expectResponse) {
+            var content = response.responseText;
+            if (content) {
+                var w;
+                var success = false;
+                try {
+                    w = window.open(
+                        'data:text/xml,' +
+                        encodeURIComponent(content)
+                    );
+                    success = true;
+                } catch(e) {
+                    Ext.log.warn(e);
+                    try {
+                        w = window.open();
+                    } catch(e2) {
+                        Ext.log.warn(e2);
+                    }
+                    if (w && 'focus' in w && 'document' in w) {
+                         w.document.write(content);
+                         w.document.close();
+                         w.focus();
+                         success = true;
+                    }
+                }
+                if (!success) {
+                    Ext.Msg.show({
+                        title: me.getDisablePopupBlockerTitle(),
+                        message: me.getDisablePopupBlocker(),
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.Msg.INFO
+                    });
+                }
+            } else {
+                Ext.Msg.show({
+                    title: me.getUnexpectedResponseTitle(),
+                    message: me.getUnexpectedResponse(),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.Msg.WARNING
+                });
+            }
+        }
+    },
+
+    /**
+     */
     downloadWhenReady: function(startTime, data){
         var me = this;
         var elapsedMs = (new Date().getTime() - startTime);
@@ -287,10 +370,47 @@ Ext.define("Koala.view.form.Print", {
     },
 
     setUpIrixJson: function(mapfishPrint){
+        var me = this;
         var irixJson = {};
-        irixJson.irix = this.formItemToJson(this.down("k-form-irixfieldset"));
+        irixJson.irix = me.formItemToJson(me.down("k-form-irixfieldset"));
+        // the generic serialisation needs a little bit shuffeling
+        irixJson = me.adjustIrixSerialisation(irixJson);
+        // always add the printapp to the top-lvel for irix:
+        irixJson.printapp = me.down('[name="appCombo"]').getValue();
         irixJson['mapfish-print'] = mapfishPrint;
+        return irixJson;
+    },
 
+    /**
+     * Certain fields must live inside the irix fieldset, as they only make
+     * sense for this type of "print"; yet their serialisation cannot live in
+     * dedicted irix-object, as it is e.g. expected on the top-level. This
+     * method will adjust a JSON (e.g. from formItemToJson), and shuffle certain
+     * key / value pairs around: currently only 'request-type'.
+     *
+     * @param {object} irixJson The JSON for the IRIX service, a representation
+     *     of the form.
+     * @return {object} The adjusted serialisation.
+     */
+    adjustIrixSerialisation: function(irixJson){
+        var irix = irixJson.irix;
+        // move requestType or request-type out of irix object to top-level
+        var correctRequestTypeKey = 'request-type';
+        // For backwards compatibility, we iterate over two variants
+        var keysReqestType = ['requestType', correctRequestTypeKey];
+        if (irix) {
+            var reqType;
+            Ext.each(keysReqestType, function(keyRequestType){
+                if (keyRequestType in irix) {
+                    // if both were present, the dashed version will win.
+                    reqType = irix[keyRequestType];
+                    // delete the one under key 'irix'
+                    delete irixJson.irix[keyRequestType];
+                    // set on top-level.
+                    irixJson[correctRequestTypeKey] = reqType;
+                }
+            });
+        }
         return irixJson;
     },
 

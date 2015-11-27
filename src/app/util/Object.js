@@ -13,12 +13,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.util.Object
+ */
 Ext.define('Koala.util.Object', {
 
     statics: {
 
         /**
-         * Returns a deeply nessted value in the subobject specified by path,
+         * Returns a deeply nested value in the subobject specified by path,
          * which is basically the names of the keys of the objects in the
          * hierarchy divided by a forward slash (/).
          *
@@ -37,7 +40,7 @@ Ext.define('Koala.util.Object', {
         },
 
         /**
-         * Returns a deeply nessted value in the subobject specified by parts,
+         * Returns a deeply nested value in the subobject specified by parts,
          * which is basically a list of names of the keys of the objects in the
          * hierarchy..
          *

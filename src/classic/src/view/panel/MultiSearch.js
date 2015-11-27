@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.panel.MultiSearch
+ */
 Ext.define("Koala.view.panel.MultiSearch", {
     extend: "Ext.panel.Panel",
     xtype: "k-panel-multisearch",

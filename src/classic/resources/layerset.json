@@ -5,6 +5,37 @@
         "thumb": "are.jpg",
         "children": [
             {
+                "uuid": "f917f393-fb9b-4345-99cf-8d2fcfab8d3d",
+                "text": "BfS: niederschlag_24h",
+                "leaf": true
+            },
+            {
+                "uuid": "f0d702e8-4676-49a0-9f1a-bb25804b33e9",
+                "text": "BfS: odl_brutto_mobil",
+                "leaf": true
+            },
+            {
+                "uuid": "83cb1604-3d8c-490b-b807-5e7cb17f3b22",
+                "text": "BfS: odl_brutto_24h",
+                "leaf": true
+            },
+            {
+                "uuid": "08e36567-cf9a-4e22-8774-e83a3452da7b",
+                "text": "BfS: odl_brutto_10min",
+                "leaf": true
+            },
+
+            {
+                "uuid": "9ae663b4-b4e4-43dc-8aa5-e7a6fc9b79ba",
+                "text": "MJ",
+                "leaf": true
+            },
+            {
+                "uuid": "182d3f3d-8aab-4f1b-b775-182e14f6192c",
+                "text": "Messstationen zur Überwachung der Umweltradioaktivität in der Luft",
+                "leaf": true
+            },
+            {
                 "uuid": "7894bd4f-fa29-4256-98fa-79beb4ab1e2b",
                 "text": "Tagesmittelwerte in µSv/h",
                 "leaf": true

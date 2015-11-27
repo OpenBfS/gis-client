@@ -1,12 +1,30 @@
-Ext.Loader.syncRequire(['Koala.util.Layer']);
+Ext.Loader.syncRequire(['Koala.util.Layer', 'Koala.util.String']);
 
 describe('Koala.util.Layer', function() {
+    var oldTxtFilter = Koala.util.Layer.txtFilter;
+    var oldTxtUntil = Koala.util.Layer.txtUntil;
+    var oldDefaultFormat = Koala.util.String.defaultDateFormat;
+    beforeEach(function(){
+        // mock up successful i18n
+        Koala.util.Layer.txtFilter = "Filter";
+        Koala.util.Layer.txtUntil = "bis";
+        Koala.util.String.defaultDateFormat = "d.m.Y K\\o\\a\\l\\a";
+    });
+    afterEach(function(){
+        // un-mock successful i18n
+        Koala.util.Layer.txtFilter = oldTxtFilter;
+        Koala.util.Layer.txtUntil = oldTxtUntil;
+        Koala.util.String.defaultDateFormat = oldDefaultFormat;
+    });
+
+
     describe('Basics', function() {
         it('is defined', function() {
             expect(Koala.util.Layer).to.not.be(undefined);
         });
     });
     describe('Static functions', function(){
+
         describe('#metadataHasFilters', function() {
             it('is defined', function() {
                 expect(
@@ -86,6 +104,7 @@ describe('Koala.util.Layer', function() {
                 });
             });
         });
+
         describe('#getFiltersFromMetadata', function() {
             it('returns the filters if correctly configured', function() {
                 var filters = [{foo: 'bar'}, {humpty: 'dumpty'}];
@@ -143,6 +162,7 @@ describe('Koala.util.Layer', function() {
                 });
             });
         });
+
         describe('#getFiltersTextFromMetadata', function(){
             it('returns the empty string if no filter', function(){
                 var metadatas = [
@@ -164,6 +184,126 @@ describe('Koala.util.Layer', function() {
                     var got = Koala.util.Layer.getFiltersTextFromMetadata(md);
                     expect(got).to.be('');
                 });
+            });
+            it('returns a text for rodos-filter', function(){
+                var metadata = {
+                    filters: [{
+                        type: "rodos"
+                    }]
+                };
+                var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
+
+                var prefix = Koala.util.Layer.txtFilter;
+
+                expect(got).to.not.be("");
+                expect(got.indexOf(prefix)).to.not.be(-1);
+                expect(got.indexOf("rodos")).to.not.be(-1);
+            });
+            it('returns a text for key-value-filter', function(){
+                var metadata = {
+                    filters: [{
+                        type: "value",
+                        param: "foo",
+                        operator: "=",
+                        value: "'bar'"
+                    }]
+                };
+                var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
+
+                var prefix = Koala.util.Layer.txtFilter;
+                // #stringifyValueFilter shoudl be tested separately
+                var filterRepr = Koala.util.Layer.stringifyValueFilter(
+                        metadata.filters[0]
+                    );
+
+                expect(got).to.not.be("");
+                expect(got.indexOf(prefix)).to.not.be(-1);
+                expect(got.indexOf('value')).to.not.be(-1);
+                expect(got.indexOf(filterRepr)).to.not.be(-1);
+            });
+            it('returns a text for point-in-time-filter', function(){
+                var metadata = {
+                    filters: [{
+                        type: "pointintime",
+                        timeinstant: Ext.Date.parse("1980-11-28", "Y-m-d"),
+                        timeformat: "d.m.Y f\\o\\o"
+                    }]
+                };
+                var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
+
+                var prefix = Koala.util.Layer.txtFilter;
+
+                expect(got).to.not.be("");
+                expect(got.indexOf(prefix)).to.not.be(-1);
+                expect(got.indexOf("pointintime")).to.not.be(-1);
+                expect(got.indexOf("28.11.1980 foo")).to.not.be(-1);
+
+            });
+            it('returns a text for point-in-time-filter (no format)',
+                function(){
+                    var metadata = {
+                        filters: [{
+                            type: "pointintime",
+                            timeinstant: Ext.Date.parse("1980-11-28", "Y-m-d")
+                        }]
+                    };
+                    var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
+
+                    var prefix = Koala.util.Layer.txtFilter;
+
+                    expect(got).to.not.be("");
+                    expect(got.indexOf(prefix)).to.not.be(-1);
+                    expect(got.indexOf("pointintime")).to.not.be(-1);
+                    // d.m.Y Koala is the default (see beforeEach)
+                    expect(got.indexOf("28.11.1980 Koala")).to.not.be(-1);
+                }
+            );
+            it('returns a text for timerange-filter', function(){
+                var min = Ext.Date.parse("1980-11-28", "Y-m-d");
+                var max = Ext.Date.parse("1998-11-28", "Y-m-d");
+                var metadata = {
+                    filters: [{
+                        type: "timerange",
+                        mindatetimeinstant: min,
+                        mindatetimeformat: "d.m.Y f\\o\\o \\s\\t\\ar\\t",
+                        maxdatetimeinstant: max,
+                        maxdatetimeformat: "d.m.Y f\\o\\o e\\n\\d"
+                    }]
+                };
+                var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
+
+                var prefix = Koala.util.Layer.txtFilter;
+                var until = Koala.util.Layer.txtUntil;
+
+                expect(got).to.not.be("");
+                expect(got.indexOf(prefix)).to.not.be(-1);
+                expect(got.indexOf("timerange")).to.not.be(-1);
+                expect(got.indexOf("28.11.1980 foo start")).to.not.be(-1);
+                expect(got.indexOf(until)).to.not.be(-1);
+                expect(got.indexOf("28.11.1998 foo end")).to.not.be(-1);
+            });
+            it('returns a text for timerange-filter (no format)', function(){
+                var min = Ext.Date.parse("1980-11-28", "Y-m-d");
+                var max = Ext.Date.parse("1998-11-28", "Y-m-d");
+                var metadata = {
+                    filters: [{
+                        type: "timerange",
+                        mindatetimeinstant: min,
+                        maxdatetimeinstant: max
+                    }]
+                };
+                var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
+
+                var prefix = Koala.util.Layer.txtFilter;
+                var until = Koala.util.Layer.txtUntil;
+
+                expect(got).to.not.be("");
+                expect(got.indexOf(prefix)).to.not.be(-1);
+                expect(got.indexOf("timerange")).to.not.be(-1);
+                // d.m.Y Koala is the default (see beforeEach)
+                expect(got.indexOf("28.11.1980 Koala")).to.not.be(-1);
+                expect(got.indexOf(until)).to.not.be(-1);
+                expect(got.indexOf("28.11.1998 Koala")).to.not.be(-1);
             });
         });
     });

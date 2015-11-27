@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.window.TimeSeriesWindowModel
+ */
 Ext.define('Koala.view.window.TimeSeriesWindowModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-window-timeserieswindow',
@@ -24,6 +27,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
         setFilterBtnText: '',
         resetFilterBtnText: '',
         selectChartLayerComboLabel: '',
+        undoBtnText: '',
         startDateValue: new Date(),
         startDateMaxValue: new Date(),
         endDateValue: new Date()

@@ -13,6 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @class Koala.view.component.MapController
+ */
 Ext.define('Koala.view.component.MapController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-component-map',
