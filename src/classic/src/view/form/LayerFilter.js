@@ -62,14 +62,33 @@ Ext.define("Koala.view.form.LayerFilter", {
     },
 
     statics: {
+        /**
+         * The field configured as displayField for combos when only a number
+         * of values are allowed for selection.
+         */
         COMBO_DSP_FIELD: "dsp",
+
+        /**
+         * The field configured as valueField for combos when only a number
+         * of values are allowed for selection.
+         */
         COMBO_VAL_FIELD: "val",
 
+        /**
+         * Turns various ways of specifying a list of allowed values (coming
+         * from the GNOS) into a store suitable for a combo box. There are
+         * currently two possibilities:
+         *
+         * * string separated values to display and submit,
+         * * an array with objects that have "val" and "dsp" keys
+         *
+         * @param {string} rawAllowedValues A string with the raw allowed
+         *     values, must conform to any of the above mentioned formats.
+         * @return {Ext.data.Store} The created store.
+         */
         getStoreFromAllowedValues: function(rawAllowedValues) {
             var staticMe = this;
-            // two possibilities:
-            // 1) string separated values to display and submit,
-            // 2) an array with objects that have "val" and "dsp"
+
             var data = null;
             var VAL_FIELD = staticMe.COMBO_VAL_FIELD;
             var DSP_FIELD = staticMe.COMBO_DSP_FIELD;
