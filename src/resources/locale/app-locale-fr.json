@@ -47,14 +47,15 @@
     },
     "Koala.view.form.Print": {
         "config": {
-            "serverUploadSuccessTitle": "en:Druck erfolgreich",
-            "serverUploadSuccess": "en:Druck wurde erfolgreich initiiert.",
-            "serverErrorTitle": "en:Fehler beim Druck",
-            "serverError": "en:Ein serverseitiger Fehler trat bei der Bearbeitung des Drucks auf. Interner Status: {0}",
-            "disablePopupBlocker": "en:Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
-            "disablePopupBlockerTitle": "en:Popup-Blocker aktiviert?",
-            "unexpectedResponseTitle": "en:Unerwartete Antwort",
-            "unexpectedResponse": "en:Der Druck lieferte eine unerwartete Antwort."
+            "serverUploadSuccessTitle": "fr:Druck erfolgreich",
+            "serverUploadSuccess": "fr:Druck wurde erfolgreich initiiert.",
+            "serverErrorTitle": "fr:Fehler beim Druck",
+            "serverError": "fr:Ein serverseitiger Fehler trat bei der Bearbeitung des Drucks auf. Interner Status: {0}",
+            "disablePopupBlocker": "fr:Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
+            "disablePopupBlockerTitle": "fr:Popup-Blocker aktiviert?",
+            "unexpectedResponseTitle": "fr:Unerwartete Antwort",
+            "unexpectedResponse": "fr:Der Druck lieferte eine unerwartete Antwort.",
+            "printButtonPrefix": "fr:Dokument"
         }
     },
     "Koala.view.grid.MetadataSearch": {

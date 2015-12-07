@@ -42,7 +42,8 @@ Ext.define("Koala.view.form.Print", {
         disablePopupBlockerTitle: "",
         disablePopupBlocker: "",
         unexpectedResponseTitle: "",
-        unexpectedResponse: ""
+        unexpectedResponse: "",
+        printButtonPrefix: ""
     },
 
     initComponent: function() {
@@ -62,12 +63,30 @@ Ext.define("Koala.view.form.Print", {
         appCombo.setFieldLabel('Printapp');
         appCombo.getStore().sort('field1', 'ASC');
         appCombo.on('select', this.addIrixFieldset, this);
+
+        this.setFixedCreatePrintBtnText();
     },
 
     listeners: {
-        genericfieldsetadded: function(){
+        genericfieldsetadded: function() {
             this.addIrixCheckbox();
         }
+    },
+
+    /**
+     * Called in init component, this methdo removes the standard BasiGX binding
+     * of the createPrint button, and configures it to use a static text.
+     */
+    setFixedCreatePrintBtnText: function() {
+        var me = this;
+        var vm = me.getViewModel();
+        var createPrintBtn = me.down('button[name="createPrint"]');
+        createPrintBtn.setBind({
+            text: null
+        });
+        createPrintBtn.setText(
+            me.getPrintButtonPrefix() + " " + vm.get('printButtonSuffix')
+        );
     },
 
     /**

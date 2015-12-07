@@ -54,7 +54,8 @@
             "disablePopupBlocker": "Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
             "disablePopupBlockerTitle": "Popup-Blocker aktiviert?",
             "unexpectedResponseTitle": "Unerwartete Antwort",
-            "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort."
+            "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort.",
+            "printButtonPrefix": "Dokument"
         }
     },
     "Koala.view.grid.MetadataSearch": {
