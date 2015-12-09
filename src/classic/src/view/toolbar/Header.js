@@ -24,7 +24,9 @@ Ext.define("Koala.view.toolbar.Header", {
         "Koala.view.toolbar.HeaderController",
         "Koala.view.toolbar.HeaderModel",
 
-        "Koala.view.button.TimeReference"
+        "Koala.view.button.TimeReference",
+        
+        "Koala.view.window.HelpWindow"
     ],
 
     controller: "k-toolbar-header",
@@ -50,6 +52,15 @@ Ext.define("Koala.view.toolbar.Header", {
         {
             bind: {
                 text: '{btnTextHelp}'
+            },
+            handler: function(btn){
+                var win = Ext.ComponentQuery.query('k-window-help')[0];
+                if(!win){
+                    Ext.create('Koala.view.window.HelpWindow')
+                    .show();
+                } else {
+                    BasiGX.util.Animate.shake(win);
+                }
             }
         },
         {
