@@ -80,7 +80,7 @@ if [ ! -d "$TARGET_DIR" ]; then
     exit 5
 fi
 
-# This is the URL where we can get a uniied diff
+# This is the URL where we can get a unified diff
 URL="https://patch-diff.githubusercontent.com/raw/$SLUG/pull/$PR.diff"
 URL_EXISTS=false
 
