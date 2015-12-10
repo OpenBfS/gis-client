@@ -292,13 +292,13 @@ Ext.define("Koala.view.form.LayerFilter", {
         var differentiateSuffix = "__make-distinguishable__";
 
         if (!param) {
-            Ext.log.warn('Illegal configuartion for timerange filter');
+            Ext.log.warn('Illegal configuration for timerange filter');
             return names;
         }
 
         var trimmedParam = Ext.String.trim(param);
         if (trimmedParam === "," || trimmedParam === "") {
-            Ext.log.warn('Illegal configuartion for timerange filter');
+            Ext.log.warn('Illegal configuration for timerange filter');
             return names;
         }
 

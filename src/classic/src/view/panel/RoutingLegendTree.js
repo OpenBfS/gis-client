@@ -146,7 +146,10 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 },
                 fn: function(btnId){
                     if(btnId === "yes"){
-                        window.open(layer.get('downloadUrl'), '_blank');
+                        var url = Koala.util.Layer.getDownloadUrlWithFilter(
+                                layer
+                            );
+                        window.open(url, '_blank');
                     }
                 }
             });
