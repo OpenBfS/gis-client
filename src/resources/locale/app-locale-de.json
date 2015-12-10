@@ -55,7 +55,8 @@
             "disablePopupBlockerTitle": "Popup-Blocker aktiviert?",
             "unexpectedResponseTitle": "Unerwartete Antwort",
             "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort.",
-            "printButtonPrefix": "Dokument"
+            "printButtonPrefix": "Dokument",
+            "downloadButtonSuffix": "herunterladen"
         }
     },
     "Koala.view.grid.MetadataSearch": {
