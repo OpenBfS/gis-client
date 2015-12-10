@@ -41,11 +41,12 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     hasRoutingListeners: false,
 
     listeners: {
-        selectionchange: 'onSelectionChange'
+        selectionchange: 'onSelectionChange',
+        beforerender: 'bindUtcBtnToggleHandler',
+        beforedestroy: 'unbindUtcBtnToggleHandler'
     },
 
     statics: {
-
         findByProp: function(arr, key, val){
             var item = null;
             Ext.each(arr, function(obj){
@@ -168,6 +169,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
     rowBodyCompTemplate: {
         xtype: 'container',
+        name: 'legend-tree-row-component',
         scrollable: true,
         items: [ {
             xtype: 'container',
@@ -217,6 +219,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         },
         {
             xtype: 'component',
+            name: 'filtertext',
             layout: 'hbox',
             defaults: {
                 margin: '0 5px 0 0'
