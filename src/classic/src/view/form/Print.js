@@ -43,28 +43,31 @@ Ext.define("Koala.view.form.Print", {
         disablePopupBlocker: "",
         unexpectedResponseTitle: "",
         unexpectedResponse: "",
-        printButtonPrefix: ""
+        printButtonPrefix: "",
+        downloadButtonSuffix: ""
     },
 
     initComponent: function() {
-        this.callParent();
+        var me = this;
+        me.callParent();
 
         /**
          * necessary to override the BasiGXs bind.
          */
-        this.setBind();
+        me.setBind();
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
         if(appContext && appContext.data.merge.urls["irix-servlet"]){
-            this.setIrixUrl(appContext.data.merge.urls["irix-servlet"]);
+            me.setIrixUrl(appContext.data.merge.urls["irix-servlet"]);
         }
 
-        var appCombo = this.down('combo[name=appCombo]');
+        var appCombo = me.down('combo[name=appCombo]');
         appCombo.setFieldLabel('Printapp');
-        appCombo.getStore().sort('field1', 'ASC');
-        appCombo.on('select', this.addIrixFieldset, this);
+        appCombo.on('select', me.addIrixFieldset, me);
 
-        this.setFixedCreatePrintBtnText();
+        me.on('beforeattributefieldsadd', me.onBeforeAttributeFieldsAdd);
+
+        me.setFixedCreatePrintBtnText();
     },
 
     listeners: {
@@ -74,18 +77,54 @@ Ext.define("Koala.view.form.Print", {
     },
 
     /**
-     * Called in init component, this methdo removes the standard BasiGX binding
-     * of the createPrint button, and configures it to use a static text.
+     * Called before a `attributefields`-object is added to the fieldset. This
+     * method will hide the legend_template and map_template fields, but also
+     * set their respective value according to a convention.
+     *
+     * @param {BasiGX.view.form.Print} printForm The print form instance.
+     * @param {Object} attributefields An `attributefields`-object, which often
+     *     are formfields like `textfields`, `combos` etc.
+     */
+    onBeforeAttributeFieldsAdd: function(printForm, attributeFields) {
+        var name = attributeFields.name;
+        // For these two fields we need special handling…
+        if (name === "legend_template" || name === "map_template") {
+            // …hide both…
+            attributeFields.hidden = true;
+            // …set the value according to actual field and current layout
+            var layoutCombo = printForm.down('combo[name="layout"]');
+            var currentLayout = layoutCombo.getValue();
+            if (name === "legend_template") {
+                attributeFields.value = currentLayout + "_legend.jasper";
+            } else if(name === "map_template") {
+                attributeFields.value = currentLayout + "_map.jasper";
+            }
+        }
+    },
+
+    /**
+     * Called in init component, this method removes the standard BasiGX binding
+     * of the createPrint and downloadPrint buttona, and configures them to use
+     * a static text.
      */
     setFixedCreatePrintBtnText: function() {
         var me = this;
         var vm = me.getViewModel();
         var createPrintBtn = me.down('button[name="createPrint"]');
+        var downloadPrintBtn = me.down('button[name="downloadPrint"]');
+        // the create button
         createPrintBtn.setBind({
             text: null
         });
         createPrintBtn.setText(
             me.getPrintButtonPrefix() + " " + vm.get('printButtonSuffix')
+        );
+        // the download button
+        downloadPrintBtn.setBind({
+            text: null
+        });
+        downloadPrintBtn.setText(
+            me.getPrintButtonPrefix() + " " + me.getDownloadButtonSuffix()
         );
     },
 

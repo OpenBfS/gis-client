@@ -36,7 +36,7 @@ Ext.define("Koala.view.window.Print", {
         title: '{title}'
     },
 
-    minWidth: 300,
+    minWidth: 360,
     maxWidth: window.innerWidth - 100,
     minHeight: 150,
     maxHeight: window.innerHeight - 100,
