@@ -76,7 +76,8 @@ Ext.define('Koala.util.Layer', {
 
         /**
          * Returns a textual representation of the filters in the metadata
-         * object.
+         * object. This method is used for displaying the filters and as such it
+         * respects the current UTC setting of the application.
          *
          * @param {object} metadata The metadata json object.
          * @returns {string} A textual representation of the filters or ''.
@@ -108,6 +109,10 @@ Ext.define('Koala.util.Layer', {
                     var date, format, time;
 
                     date = new Date(filter.timeinstant);
+                    // respect the applications UTC setting
+                    if (Koala.Application.isLocal()) {
+                        date = Koala.util.Date.makeLocal(date);
+                    }
                     format = filter.timeformat || defaultDateFormat;
                     time = Ext.Date.format(date, format);
                     filterTxt += time;
@@ -116,11 +121,14 @@ Ext.define('Koala.util.Layer', {
                     var endDate, endFormat, endTime;
 
                     startDate = new Date(filter.mindatetimeinstant);
-                    startFormat = filter.mindatetimeformat || defaultDateFormat;
-                    startTime = Ext.Date.format(startDate, startFormat);
-
                     endDate = new Date(filter.maxdatetimeinstant);
+                    if (Koala.Application.isLocal()) {
+                        startDate = Koala.util.Date.makeLocal(startDate);
+                        endDate = Koala.util.Date.makeLocal(endDate);
+                    }
+                    startFormat = filter.mindatetimeformat || defaultDateFormat;
                     endFormat = filter.maxdatetimeformat || defaultDateFormat;
+                    startTime = Ext.Date.format(startDate, startFormat);
                     endTime = Ext.Date.format(endDate, endFormat);
 
                     filterTxt += "" +
