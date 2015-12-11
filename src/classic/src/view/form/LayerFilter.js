@@ -189,12 +189,14 @@ Ext.define("Koala.view.form.LayerFilter", {
         var me = this;
         var format = Koala.util.Date.ISO_FORMAT;
 
-        var value = Koala.util.Date.makeLocal(
-                Ext.Date.parse(
-                    filter.defaulttimeinstant,
-                    filter.defaulttimeformat
-                )
+        var value = Ext.Date.parse(
+                filter.defaulttimeinstant,
+                filter.defaulttimeformat
             );
+
+        if (Koala.Application.isLocal()) {
+            value = Koala.util.Date.makeLocal(value);
+        }
 
         // TODO check minimum / maximums?
 
@@ -277,8 +279,10 @@ Ext.define("Koala.view.form.LayerFilter", {
         me.add(fieldSet);
     },
 
+    /**
+     */
     createRODOSFilter: function(){
-
+        // TODO specify and implement
     },
 
     /**
@@ -325,30 +329,29 @@ Ext.define("Koala.view.form.LayerFilter", {
         var startName = names.startName;
         var endName = names.endName;
 
-        var minValue = Koala.util.Date.makeLocal(
-                Ext.Date.parse(
-                    filter.mindatetimeinstant,
-                    filter.mindatetimeformat
-                )
+        var minValue = Ext.Date.parse(
+                filter.mindatetimeinstant,
+                filter.mindatetimeformat
             );
-        var maxValue = Koala.util.Date.makeLocal(
-                Ext.Date.parse(
-                    filter.maxdatetimeinstant,
-                    filter.maxdatetimeformat
-                )
+        var maxValue = Ext.Date.parse(
+                filter.maxdatetimeinstant,
+                filter.maxdatetimeformat
             );
-        var defaultMinValue = Koala.util.Date.makeLocal(
-                Ext.Date.parse(
-                    filter.defaultstarttimeinstant,
-                    filter.defaultstarttimeformat
-                )
+        var defaultMinValue = Ext.Date.parse(
+                filter.defaultstarttimeinstant,
+                filter.defaultstarttimeformat
             );
-        var defaultMaxValue = Koala.util.Date.makeLocal(
-                Ext.Date.parse(
-                    filter.defaultendtimeinstant,
-                    filter.defaultendtimeformat
-                )
+        var defaultMaxValue = Ext.Date.parse(
+                filter.defaultendtimeinstant,
+                filter.defaultendtimeformat
             );
+
+        if (Koala.Application.isLocal()) {
+            minValue = Koala.util.Date.makeLocal(minValue);
+            maxValue = Koala.util.Date.makeLocal(maxValue);
+            defaultMinValue = Koala.util.Date.makeLocal(defaultMinValue);
+            defaultMaxValue = Koala.util.Date.makeLocal(defaultMaxValue);
+        }
 
         var minDateField = Ext.create("Ext.form.field.Date", {
             bind: {
