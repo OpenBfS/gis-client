@@ -75,6 +75,40 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * This static method is a wrapper around #Koala.Application.isLocal
+         * which we'll always have if we are working inside an Ext.Application,
+         * but never when we are running unit-tests. We cannot simply require
+         * `Koala.Application`, since this would lead to a circular dependency.
+         *
+         * @return {boolean} Whether the application is currently running in
+         *     local-mode.
+         */
+        appIsLocal: function() {
+            if ('Application' in Koala) {
+                return Koala.Application.isLocal();
+            }
+            return false;
+        },
+
+        /**
+         * This static method is a wrapper around #Koala.Application.isUtc
+         * which we'll always have if we are working inside an Ext.Application,
+         * but never when we are running unit-tests. We cannot simply require
+         * `Koala.Application`, since this would lead to a circular dependency.
+         *
+         * In unit tests this will simply return the opposite of #appIsLocal.
+         *
+         * @return {boolean} Whether the application is currently running in
+         *     utc-mode.
+         */
+        appIsUtc: function() {
+            if ('Application' in Koala) {
+                return Koala.Application.isUtc();
+            }
+            return !this.appIsLocal();
+        },
+
+        /**
          * Returns a textual representation of the filters in the metadata
          * object. This method is used for displaying the filters and as such it
          * respects the current UTC setting of the application.
@@ -110,7 +144,7 @@ Ext.define('Koala.util.Layer', {
 
                     date = new Date(filter.timeinstant);
                     // respect the applications UTC setting
-                    if (Koala.Application.isLocal()) {
+                    if (staticMe.appIsLocal()) {
                         date = Koala.util.Date.makeLocal(date);
                     }
                     format = filter.timeformat || defaultDateFormat;
@@ -122,7 +156,8 @@ Ext.define('Koala.util.Layer', {
 
                     startDate = new Date(filter.mindatetimeinstant);
                     endDate = new Date(filter.maxdatetimeinstant);
-                    if (Koala.Application.isLocal()) {
+                    // respect the applications UTC setting
+                    if (staticMe.appIsLocal()) {
                         startDate = Koala.util.Date.makeLocal(startDate);
                         endDate = Koala.util.Date.makeLocal(endDate);
                     }
