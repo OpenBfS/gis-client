@@ -38,7 +38,11 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 Ext.each(fields, function(field) {
                     var key = field.getName();
                     if (!Ext.Array.contains(view.ignoreFields, key)) {
-                        keyVals[key] = field.getValue();
+                        var val = field.getValue();
+                        if (Ext.isDate(val)) {
+                            val = me.adjustToUtcIfNeeded(val);
+                        }
+                        keyVals[key] = val;
                         // console.log("+++ Keep field with key ", key, "of fieldset", selector, "value", keyVals[key]);
                     } else {
                         // console.log("--- Ignore field with key ", key, "of fieldset", selector);
@@ -51,6 +55,22 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var layer = LayerUtil.layerFromMetadata(metadata);
         LayerUtil.addOlLayerToMap(layer);
         view.up('window').close();
+    },
+
+    /**
+     * Check if the application currently display local dates, and if so adjust
+     * the passed date to UTC since we always store in UTC.
+     *
+     * @param {Date} userDate A date entered in a filter which may be in local
+     *     time.
+     * @return {Date} The date which probably has been adjusted to UTC.
+     */
+    adjustToUtcIfNeeded: function(userDate){
+        if (Koala.Application.isLocal()) {
+            return Koala.util.Date.makeUtc(userDate);
+        }
+        // already UTC
+        return userDate;
     },
 
     /**
