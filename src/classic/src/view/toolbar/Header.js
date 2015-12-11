@@ -50,6 +50,7 @@ Ext.define("Koala.view.toolbar.Header", {
             xtype: 'k-button-timereference'
         },
         {
+        	xtype: 'button',
             bind: {
                 text: '{btnTextHelp}'
             },

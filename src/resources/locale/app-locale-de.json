@@ -152,7 +152,21 @@
             }
         }
     },
-
+	"Koala.view.window.HelpWindow": {
+        "config": {
+            "data": {
+		        "title": "Hilfe",
+		        "preface":{
+		        			"title": "Vorbemerkung",
+		        			"content": "Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen. Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur überwachung der Umweltradioaktivität“ (IMIS) betroffen. "
+		        		},
+		        "toolsTitle": "Werkzeuge",
+		        "layerSelectionTitle": "Auswahl",
+		        "mapNavigationTitle": "Navigation",
+		        "legendTitle": "Legende"
+            }
+        }	
+	},
 
     "BasiGX.view.button.AddWms": {
         "config": {
