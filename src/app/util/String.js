@@ -50,7 +50,7 @@ Ext.define('Koala.util.String', {
             }
 
             // capture alphanumeric values in between double square brackets:
-            // will yield an array aof matches including their boundaries:
+            // will yield an array of matches including their boundaries:
             // tpl = "Hello [[whom-to-greet]], how are you [[another_string]]";
             // matches = ["[[whom-to-greet]]", "[[another_string]]"]
             var regex = /\[\[([a-zA-Z0-9_-])+?\]\]/gi;
