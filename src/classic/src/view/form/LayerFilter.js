@@ -259,7 +259,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             }
         });
 
-        var container = Ext.create("Ext.form.FieldContainer", { // Ext.container.Container
+        var container = Ext.create("Ext.form.FieldContainer", {
             name: 'pointintimecontainer',
             anchor: '100%',
             layout: 'hbox',
@@ -377,7 +377,7 @@ Ext.define("Koala.view.form.LayerFilter", {
         var minHourSpinner = Ext.create("Ext.form.field.Number", {
             visible: true,
             name: 'minhourspinner',
-            value: minValue ? minValue.getHours() : 0,
+            value: defaultMinValue ? defaultMinValue.getHours() : 0,
             minValue: 0,
             maxValue: 23,
             step: hourStep,
@@ -401,7 +401,7 @@ Ext.define("Koala.view.form.LayerFilter", {
         var minMinuteSpinner = Ext.create("Ext.form.field.Number", {
             visible: true,
             name: 'minminutespinner',
-            value: minValue ? minValue.getMinutes() : 0,
+            value: defaultMinValue ? defaultMinValue.getMinutes() : 0,
             minValue: 0,
             maxValue: 59,
             step: minuteStep,
@@ -448,7 +448,7 @@ Ext.define("Koala.view.form.LayerFilter", {
         var maxHourSpinner = Ext.create("Ext.form.field.Number", {
             visible: true,
             name: 'maxhourspinner',
-            value: maxValue ? maxValue.getHours() : 0,
+            value: defaultMaxValue ? defaultMaxValue.getHours() : 0,
             minValue: 0,
             maxValue: 23,
             step: hourStep,
@@ -471,7 +471,7 @@ Ext.define("Koala.view.form.LayerFilter", {
         var maxMinuteSpinner = Ext.create("Ext.form.field.Number", {
             visible: true,
             name: 'maxminutespinner',
-            value: maxValue ? maxValue.getMinutes() : 0,
+            value: defaultMaxValue ? defaultMaxValue.getMinutes() : 0,
             minValue: 0,
             maxValue: 59,
             step: minuteStep,
