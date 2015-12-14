@@ -54,6 +54,7 @@ Ext.define("Koala.view.toolbar.Header", {
             bind: {
                 text: '{btnTextHelp}'
             },
+            // TODO: Implement button-handler in MVC pattern?
             handler: function(btn){
                 var win = Ext.ComponentQuery.query('k-window-help')[0];
                 if(!win){
