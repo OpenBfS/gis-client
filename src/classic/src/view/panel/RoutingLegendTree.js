@@ -35,7 +35,11 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     config: {
-        routingEnabled: false
+        routingEnabled: false,
+        selModel: {
+            allowDeselect: true,
+            mode: "SINGLE"
+        }
     },
 
     hasRoutingListeners: false,
@@ -239,6 +243,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         }]
     },
 
+    itemExpandedKey: 'koala-rowbody-expanded',
+
     /**
      * Initialize the component.
      */
@@ -259,9 +265,128 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         // configure rowexpanderwithcomponents-plugin
         me.plugins[0].hideExpandColumn = false;
 
-        // Register moveend to update legendUrls
+        me.bindUpdateHandlers();
+    },
+
+    /**
+     * Called at the end of the initComponent-sequence, this methods binds some
+     * some evenet handlers on verious components to react on a state change
+     * there. See #unbindUpdateHandlers for the unbind logic bound early in the
+     * destroy sequence.
+     *
+     * @private
+     */
+    bindUpdateHandlers: function() {
+        var me = this;
+        // TODO this needs to be changed once we handle more than one map
         var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
+        var treeView = me.getView();
+        var treeStore = me.getStore();
+
+        // Register moveend to update legendUrls
         map.on('moveend', me.updateLegendsWithScale, me);
+        // Ensure a previous selection is kept after datachange
+        treeStore.on('datachanged', me.layerDataChanged, me);
+        // store data on collapse/expand, and use it on drop to keep the
+        // expoanded collapsed state after drag and drop
+        treeView.on({
+            collapsebody: me.onCollapseBody,
+            expandbody: me.onExpandBody,
+            drop: me.layerDropped,
+            scope: me
+        });
+
+        // also bind our own unregistering here.
+        me.on('beforedestroy', me.unbindUpdateHandlers, me, {single: true});
+    },
+
+    /**
+     * Unbind the handlers that were bound in #bindUpdateHandlers during the
+     * initComponent sequence.
+     *
+     * @private
+     */
+    unbindUpdateHandlers: function(){
+        var me = this;
+        // TODO this needs to be changed once we handle more than one map
+        var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
+        var treeView = me.getView();
+        var treeStore = me.getStore();
+
+        // Unregister moveend to update legendUrls
+        map.un('moveend', me.updateLegendsWithScale, me);
+        treeStore.un('datachanged', me.layerDataChanged, me);
+        treeView.un({
+            collapsebody: me.onCollapseBody,
+            expandbody: me.onExpandBody,
+            drop: me.layerDropped,
+            scope: me
+        });
+    },
+
+    /**
+     * Whenever a rowbody collapses, store the current state.
+     *
+     * @param {HTMLElement} rowNode The `tr` element owning the expanded row.
+     * @param {Ext.data.Model} record The record providing the data.
+     */
+    onCollapseBody: function(rowNode, record){
+        record.set(this.itemExpandedKey, false);
+    },
+
+    /**
+     * Whenever a rowbody expands, store the current state.
+     *
+     * @param {HTMLElement} rowNode The `tr` element owning the expanded row.
+     * @param {Ext.data.Model} record The record providing the data.
+     */
+    onExpandBody: function(rowNode, record){
+        record.set(this.itemExpandedKey, true);
+    },
+
+    /**
+     * Restore the complete collapsed / expanded state of all rowbodies of the
+     * panel by cascading down the tree and double toggling all candidates. If
+     * someone finds a better and API-conformant way, that'd be great.
+     */
+    layerDropped: function(){
+        var me = this;
+        var view = me.getView();
+        var rowExpanderPlugin = me.getPlugin();
+        var rootNode = me.getRootNode();
+        var itemExpandedKey = me.itemExpandedKey;
+        rootNode.cascadeBy({
+            before: function(child) {
+                var idx = view.indexOfRow(child);
+                var targetState = child.get(itemExpandedKey);
+                if (idx !== -1 && Ext.isDefined(targetState)) {
+                    rowExpanderPlugin.toggleRow(idx, child);
+                    rowExpanderPlugin.toggleRow(idx, child);
+                }
+            },
+            scope: me
+        });
+    },
+
+    /**
+     * When the store has changed (because e.g. a layer was added), we need to
+     * do certain things to have a sane state with regard to for example
+     * hovering which is reconfigured on selection change on our side.
+     */
+    layerDataChanged: function() {
+        var me = this;
+        var selection = me.getSelection();
+        // nothing to do if the selection is empty.
+        if (Ext.isEmpty(selection)) {
+            return;
+        }
+        var selModel = me.getSelectionModel();
+        // Here is what we do:
+        // 1) unselect all records, but suppress event handler notification
+        selModel.deselectAll(true);
+        // 2) select what was previously selected, and trigger the hovering
+        //    configurator elsewhere
+        selModel.select(selection);
     },
 
     updateLegendsWithScale: function () {
