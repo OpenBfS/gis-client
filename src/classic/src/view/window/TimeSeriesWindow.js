@@ -96,8 +96,9 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         }
     },
 
-
-
+    /**
+     Initializes the component.
+     */
     initComponent: function() {
         var me = this;
         var metadata = me.initOlLayer.metadata;

@@ -202,6 +202,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         olFeat.set('layer', olLayer);
 
         me.updateTimeSeriesChart(olLayer, olFeat);
+        combo.reset();
     },
 
     /**
@@ -393,6 +394,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var me = this;
         var olLayer = rec.data;
         me.createOrUpdateChart(olLayer);
+        combo.reset();
     },
 
     /**
