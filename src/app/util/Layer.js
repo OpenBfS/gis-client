@@ -687,7 +687,7 @@ Ext.define('Koala.util.Layer', {
          *
          */
         applyDefaultsTimerangeFilter: function(filter){
-            if (!filter.mindatetimeinstant) {
+            if (!Ext.isDate(filter.mindatetimeinstant)) {
                 if (filter.defaultstarttimeinstant) {
                     try {
                         filter.mindatetimeinstant = Ext.Date.parse(
@@ -702,13 +702,8 @@ Ext.define('Koala.util.Layer', {
                         ' and no configured default start value for timerange' +
                         ' filter');
                 }
-            } else if (Ext.isString(filter.mindatetimeinstant)) {
-                filter.mindatetimeinstant = Ext.Date.parse(
-                    filter.mindatetimeinstant,
-                    filter.mindatetimeformat
-                );
             }
-            if (!filter.maxdatetimeinstant) {
+            if (!Ext.isDate(filter.maxdatetimeinstant)) {
                 if (filter.defaultendtimeinstant) {
                     try {
                         filter.maxdatetimeinstant = Ext.Date.parse(
@@ -723,17 +718,12 @@ Ext.define('Koala.util.Layer', {
                         ' and no configured default end value for timerange' +
                         ' filter');
                 }
-            } else if (Ext.isString(filter.maxdatetimeinstant)) {
-                filter.maxdatetimeinstant = Ext.Date.parse(
-                    filter.maxdatetimeinstant,
-                    filter.maxdatetimeformat
-                );
             }
             return filter;
         },
 
         applyDefaultsPointInTimeFilter: function(filter){
-            if (!filter.timeinstant) {
+            if (!Ext.isDate(filter.timeinstant)) {
                 if (filter.defaulttimeinstant) {
                     try {
                         filter.timeinstant = Ext.Date.parse(
@@ -741,7 +731,9 @@ Ext.define('Koala.util.Layer', {
                             filter.defaulttimeformat
                         );
                     } catch (e) {
-                        Ext.log.error('Could not set default point in time filter');
+                        Ext.log.error(
+                            'Could not set default point in time filter'
+                        );
                     }
                 } else {
                     Ext.log.warn('No defined point in time filter and no ' +
