@@ -46,26 +46,32 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
 
     onSelectionChange: function(selectionModel, selectedRecords){
         var store = this.getView().getStore();
-
-        // Sets topic to false on every not selected layer that has an hoverTpl
+        var keyHoverable = BasiGX.plugin.Hover.LAYER_HOVERABLE_PROPERTY_NAME;
+        var keyHovertpl = 'hoverTpl';
+        var olLayer;
         if(selectedRecords.length > 0){
+            // Sets keyHoverable to false on every not selected layer
             store.each(function(layerRec){
-                if(layerRec.getOlLayer().get('hoverTpl')){
-                    layerRec.getOlLayer().set('topic', false);
+                olLayer = layerRec.getOlLayer();
+                if(olLayer /* && olLayer.get(keyHovertpl) */ ) {
+                    olLayer.set(keyHoverable, false);
                 }
             });
-            // Sets topic to true for the selected layers that have an hoverTpl
+            // Sets keyHoverable to true for the selected layers that have an
+            // hoverTpl
             Ext.each(selectedRecords, function(selectedRecord){
-                var olLayer = selectedRecord.getOlLayer();
-                if(olLayer && olLayer.get('hoverTpl')){
-                    olLayer.set('topic', true);
+                olLayer = selectedRecord.getOlLayer();
+                if(olLayer && olLayer.get( keyHovertpl )){
+                    olLayer.set(keyHoverable, true);
                 }
             });
-        // Sets topic to true on every layer that has an hoverTpl, if none is selected
         } else {
+            // Sets keyHoverable to true on every layer that has an hoverTpl,
+            // if none is selected
             store.each(function(layerRec){
-                if(layerRec.getOlLayer().get('hoverTpl')){
-                    layerRec.getOlLayer().set('topic', true);
+                olLayer = layerRec.getOlLayer();
+                if(olLayer && olLayer.get( keyHovertpl )){
+                    olLayer.set(keyHoverable, true);
                 }
             });
         }

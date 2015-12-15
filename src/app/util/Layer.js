@@ -480,10 +480,10 @@ Ext.define('Koala.util.Layer', {
             olProps = Koala.util.Object.coerceAll(olProps);
             var getBool = Koala.util.String.getBool;
 
-            var isTopic = false;
+            var shallHover = false;
             // TODO Is a hoverTpl really required to hover?
             if (!Ext.isEmpty(olProps.hoverTpl) && olProps.allowHover !== false) {
-                isTopic = true;
+                shallHover = true;
             }
 
             return {
@@ -491,14 +491,13 @@ Ext.define('Koala.util.Layer', {
                 legendUrl: olProps.legendUrl || '',
                 legendHeight: olProps.legendHeight,
                 legendWidth: olProps.legendWidth,
-                topic: isTopic, // TODO: rename this prop in the application
-                hoverable: isTopic,
                 allowFeatureInfo: getBool(olProps.allowFeatureInfo, true),
                 allowDownload: getBool(olProps.allowDownload, true),
                 allowRemoval: getBool(olProps.allowRemoval, true),
                 allowShortInfo: getBool(olProps.allowShortInfo, true),
                 allowPrint: getBool(olProps.allowPrint, true),
                 allowOpacityChange: getBool(olProps.allowOpacityChange, true),
+                hoverable: shallHover,
                 hoverTpl: olProps.hoverTpl,
                 hoverStyle: olProps.hoverStyle,
                 selectStyle: olProps.selectStyle || olProps.hoverStyle,

@@ -49,30 +49,40 @@ Ext.define('Koala.view.component.MapController', {
      * This is finally a complete OVERRIDE of the getToolTipHtml function from
      * the base class BasiGX.view.component.Map!
      */
-    getToolTipHtml: function(layers, features){
-        var innerHtml = '';
-        var treeSelection = Ext.ComponentQuery
-            .query("basigx-panel-legendtree")[0].getSelection();
+    getToolTipHtml: function(layers, features) {
+        var innerHtml = "";
+        var lineBreak = "<br />";
+        var layersLen = layers && layers.length;
+        var featuresLen = features && features.length;
+        var replaceTemplateStrings = Koala.util.String.replaceTemplateStrings;
+        var tree = Ext.ComponentQuery.query("basigx-panel-legendtree")[0];
+        var treeSelection = tree ? tree.getSelection() : null;
 
-        Ext.each(layers, function(layer, index, allItems){
-            var hoverTpl = layer.get('hoverTpl');
-            Ext.each(features, function(feat){
+        Ext.each(layers, function(layer, layerIdx) {
+            var hoverTpl = layer.get("hoverTpl");
+            Ext.each(features, function(feature, featureIdx) {
                 // we check for existing feature first as there maybe strange
                 // situations (e.g. when zooming while hovering)
                 // where feat is undefined and feat.get would throw an error
-                if(feat && feat.get('layer') === layer){
-                    var tpl = Koala.util.String.replaceTemplateStrings(
-                        hoverTpl, layer, false);
-                    tpl = Koala.util.String.replaceTemplateStrings(
-                        tpl, feat, false);
-                    innerHtml += tpl;
+                if(feature && feature.get("layer") === layer) {
+                    var tooltipFeature = hoverTpl;
+                    tooltipFeature = replaceTemplateStrings(
+                        tooltipFeature, layer, false);
+                    tooltipFeature = replaceTemplateStrings(
+                        tooltipFeature, feature, false);
+                    innerHtml += tooltipFeature;
+                    if (featureIdx + 1 !== featuresLen) {
+                        // not the last feature, append linebreak
+                        innerHtml += lineBreak;
+                    }
                 }
             });
             if(treeSelection.length === 0){
                 return false;
             }
-            if(index + 1 !== allItems.length){
-                innerHtml += '<br />';
+            if(layerIdx + 1 !== layersLen){
+                // not the last layer, append linebreak
+                innerHtml += lineBreak;
             }
         });
 
