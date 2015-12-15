@@ -37,7 +37,7 @@ Ext.define('Koala.util.Duration', {
 
         /**
          */
-        zeroDurationObj: {
+        ZERO_DURATION_OBJECT: {
             sign: '+',
             years: 0,
             months: 0,
@@ -47,6 +47,8 @@ Ext.define('Koala.util.Duration', {
             minutes: 0,
             seconds: 0
         },
+
+        ZERO_DURATION_STRING: "",
 
         /**
          * Turn the given ISO 8601 string duration into an object that has keys
@@ -62,12 +64,12 @@ Ext.define('Koala.util.Duration', {
             var staticMe = this;
             if (!Ext.isString(isoDuration)) {
                 // caled with undefined or other non-string => 0 duration
-                return Ext.clone(staticMe.zeroDurationObj);
+                return Ext.clone(staticMe.ZERO_DURATION_OBJECT);
             }
             var matches = (isoDuration).match(staticMe.durationRegex);
             if (!matches) {
                 // illegal format => 0 duration
-                return Ext.clone(staticMe.zeroDurationObj);
+                return Ext.clone(staticMe.ZERO_DURATION_OBJECT);
             }
             // all is fine, the string could be parsed:
             return {
@@ -116,7 +118,7 @@ Ext.define('Koala.util.Duration', {
         /**
          */
         abs: function(duration){
-            if (duration[0] === '-') {
+            if (duration && duration[0] === '-') {
                 return duration.substr(1);
             }
             return duration;
