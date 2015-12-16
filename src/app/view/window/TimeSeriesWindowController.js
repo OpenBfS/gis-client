@@ -293,8 +293,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var view = me.getView();
         var layerName = olLayer.get('name');
         var chart = view.down('chart[name=' + layerName + ']');
-        var timeSeriesView = Ext.ComponentQuery.query('k-chart-timeseries')[0];
-        var controller = timeSeriesView.getController();
+        var controller = chart.getController();
 
         if (!Ext.Array.contains(chart.getSelectedStations(), olFeat)) {
             chart.getSelectedStations().push(olFeat);
