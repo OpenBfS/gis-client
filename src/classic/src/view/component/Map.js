@@ -40,7 +40,7 @@ Ext.define("Koala.view.component.Map", {
         me.callParent();
 
         // this event originates from an ol3 collection event and may be called
-        // too often… so we called it buffered after the specified amount of MS.
+        // too often… so we call it buffered after the specified amount of MS.
         me.on('hoverfeaturesclick', me.onHoverFeatureClick, me, {
             buffer: me.getHoverFeatureClickBufferMS()
         });
