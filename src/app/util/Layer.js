@@ -74,6 +74,23 @@ Ext.define('Koala.util.Layer', {
             return filters;
         },
 
+        getEffectiveTimeFilterFromMetadata: function(metadata) {
+            var filters = Ext.clone(this.getFiltersFromMetadata(metadata));
+            var timeTypes = ['pointintime', 'timerange'];
+            var effectiveFilter = null;
+            if (filters !== null) {
+                // The effective timefilter is the last pit or tr filter:
+                Ext.each(filters, function(filter){
+                    var type = (filter.type || '').toLowerCase();
+                    if (Ext.Array.contains(timeTypes, type)) {
+                        effectiveFilter = filter;
+                        return false; // stop iteration early;
+                    }
+                }, null, true);
+            }
+            return effectiveFilter;
+        },
+
         /**
          * This static method is a wrapper around #Koala.Application.isLocal
          * which we'll always have if we are working inside an Ext.Application,

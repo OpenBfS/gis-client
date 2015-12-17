@@ -73,6 +73,21 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         return chart;
     },
 
+    layerTimeFilterToCql: function(layer, urlParamTime) {
+        var util = Koala.util.Layer;
+        var filter = util.getEffectiveTimeFilterFromMetadata(layer.metadata);
+        var cql = "";
+        var paramName = filter && filter.param;
+        if (filter.type === "timerange") {
+            cql = paramName + " DURING " + urlParamTime;
+        } else if (filter.type === "pointintime") {
+            cql = paramName + " = " + urlParamTime;
+        } else {
+            cql = "1=1";
+        }
+        return cql;
+    },
+
     /**
      *
      */
@@ -129,8 +144,13 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         if ('viewparams' in srcParams) {
             extraParams.viewparams = srcParams.viewparams;
         }
+
+        var layerTimeFilterAsCql;
         if ('TIME' in srcParams) {
-            extraParams.TIME = srcParams.TIME;
+            // could otherwise check encodeFilterInViewparams
+            layerTimeFilterAsCql = me.layerTimeFilterToCql(
+                olLayer, srcParams.TIME
+            );
         }
 
         var store = Ext.create('Ext.data.Store', {
@@ -163,6 +183,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                     me, [olLayer], true),
                 beforequery: function(queryPlan){
                     var cqlParts = [];
+                    if (layerTimeFilterAsCql) {
+                        cqlParts.push(layerTimeFilterAsCql);
+                    }
                     if (queryPlan.query) {
                         cqlParts.push(
                             dspField + " ILIKE '%" + queryPlan.query + "%'"
@@ -213,10 +236,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var viewModel = me.getViewModel();
         var chart = me.createTimeSeriesChart(olLayer);
         var chartConfig = olLayer.get('timeSeriesChartProperties');
-        var combo;
-        if (Ext.isEmpty(chartConfig.allowAddSeries) ||
-            Koala.util.String.getBool(chartConfig.allowAddSeries)) {
-                combo = me.createTimeSeriesCombo(olLayer);
+        var addSeriesCombo;
+        if (Koala.util.String.getBool(chartConfig.allowAddSeries)) {
+            addSeriesCombo = me.createTimeSeriesCombo(olLayer);
         }
         var title = !Ext.isEmpty(chartConfig.titleTpl) ?
             Koala.util.String.replaceTemplateStrings(
@@ -258,8 +280,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         };
 
         rightColumnWrapper.items.push(undoBtn);
-        if (!Ext.isEmpty(combo)) {
-            rightColumnWrapper.items.push(combo);
+        if (addSeriesCombo) {
+            rightColumnWrapper.items.push(addSeriesCombo);
         }
         panel.items.push(rightColumnWrapper);
 
