@@ -33,6 +33,9 @@ Ext.define('Koala.view.component.MapController', {
      *
      */
     onHoverFeatureClick: function(olFeat) {
+        if (!olFeat){
+            return;
+        }
         var me = this;
         var layer = olFeat.get('layer');
         if (Ext.Object.getSize(layer.get("timeSeriesChartProperties")) > 0) {

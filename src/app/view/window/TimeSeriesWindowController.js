@@ -292,11 +292,14 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var me = this;
         var view = me.getView();
         var layerName = olLayer.get('name');
-        var chart = view.down('chart[name=' + layerName + ']');
+        var chart = view.down('chart[name="' + layerName + '"]');
         var controller = chart.getController();
 
-        if (!Ext.Array.contains(chart.getSelectedStations(), olFeat)) {
-            chart.getSelectedStations().push(olFeat);
+        var added = chart.addStation(olFeat);
+
+        if (!added) {
+            // chart already contains series for the new feature.
+            return;
         }
 
         controller.prepareTimeSeriesLoad(olFeat);
