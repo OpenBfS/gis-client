@@ -72,7 +72,9 @@ Ext.define('Koala.view.main.Main', {
         mapComponentConfig: {
             xtype: 'k-component-map',
             plugins: [{
-                    ptype: 'hover'
+                ptype: 'hover',
+                selectMulti: false,
+                selectEventOrigin: 'interaction'
             }]
         },
         // define menu items
