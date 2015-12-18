@@ -74,13 +74,14 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     },
 
     layerTimeFilterToCql: function(layer, urlParamTime) {
+        var cql = "";
         var util = Koala.util.Layer;
         var filter = util.getEffectiveTimeFilterFromMetadata(layer.metadata);
-        var cql = "";
         var paramName = filter && filter.param;
-        if (filter.type === "timerange") {
+        var filterType = filter && filter.type;
+        if (filterType === "timerange") {
             cql = paramName + " DURING " + urlParamTime;
-        } else if (filter.type === "pointintime") {
+        } else if (filterType === "pointintime") {
             cql = paramName + " = " + urlParamTime;
         } else {
             cql = "1=1";
