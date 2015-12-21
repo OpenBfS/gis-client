@@ -58,7 +58,10 @@ Ext.define('Koala.store.MetadataSearch', {
             // this application.
             // This paramter is AFAICT not documented, and was derived from
             // using the catalog search of the GNOS.
-            _schema: 'iso19139.bfs',
+            //
+            // Sadly this only works if we search against the API under URL
+            // `…/q?…` not against standard `…/csw?…`
+            // _schema: 'iso19139.bfs',
             version: '2.0.2',
             request: 'GetRecords',
             resultType: 'results',
