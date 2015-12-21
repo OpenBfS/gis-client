@@ -158,7 +158,7 @@ Ext.define('Koala.view.main.Main', {
     getAdditionalHeaderItems: function() {
         var searchFieldCombo = {
             xtype: 'k-form-field-searchcombo',
-            width: 500
+            flex: 1
         };
 
         var clearSearchButton = {
