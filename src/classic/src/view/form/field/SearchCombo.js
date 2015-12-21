@@ -44,6 +44,8 @@ Ext.define("Koala.view.form.field.SearchCombo", {
 
     listeners: {
         change: function(combo, newValue){
+            // TODO this will need to be changed once we have more than one
+            //      map/panel/composition
             var multiPanel = Ext.ComponentQuery.query('k-panel-multisearch')[0];
             if(newValue){
                 if(multiPanel) {
