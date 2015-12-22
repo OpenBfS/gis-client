@@ -131,6 +131,17 @@
             "data": {
                 "name": "Koala"
             }
+        },
+        "statics": {
+            "fieldNames": {
+                "type": "Typ",
+                "name": "Name",
+                "fileIdentifier": "ID",
+                "abstract": "Abstract",
+                "serviceType": "Servicetyp",
+                "source": "Quelle",
+                "contact": "Kontakt"
+            }
         }
     },
     "Koala.view.window.Print": {
