@@ -175,6 +175,47 @@ Ext.define("Koala.view.chart.TimeSeries", {
             added = true;
         }
         return added;
+    },
+
+    /**
+     * Remove a single station from the chart; removal includess the series and
+     * also the entry in the internal list of stations: #selectedStations.
+     *
+     * The parameter to this methdo is an id of the series, fuuture versions may
+     * want to also support an `ol.Feature`.
+     *
+     * @param {string} seriesIdentifier An id of a series, as it can be obtained
+     *     by calling `seriesInstance.getId()`.
+     */
+    removeStation: function(seriesIdentifier) {
+        var me = this;
+        var chartProps = me.layer.get("timeSeriesChartProperties");
+        var featureShortDspField = chartProps.featureShortDspField || "name";
+        var actualSeries = me.getSeries(seriesIdentifier)[0];
+        if (!actualSeries) {
+            return;
+        }
+        var actualSeriesTitle = actualSeries.getTitle();
+        var selectedStations = me.getSelectedStations();
+        var newSelected = Ext.Array.filter(selectedStations, function(station){
+            return station.get(featureShortDspField) !== actualSeriesTitle;
+        });
+        me.setSelectedStations(newSelected);
+        me.removeSeries(seriesIdentifier);
+    },
+
+    /**
+     * Removes all stations from the chart; removal includess the series and
+     * also the entries in the internal list of stations: #selectedStations.
+     *
+     * Delegates the work to the dedicated method #removeStation.
+     */
+    removeAllStations: function(){
+        var me = this;
+        var series = me.getSeries();
+        Ext.each(series, function(oneSeries) {
+            me.removeStation(oneSeries.getId());
+        });
     }
 
 });

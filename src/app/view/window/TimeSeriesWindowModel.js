@@ -28,8 +28,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
         resetFilterBtnText: '',
         selectChartLayerComboLabel: '',
         undoBtnText: '',
-        startDateValue: new Date(),
-        startDateMaxValue: new Date(),
-        endDateValue: new Date()
+        startDateValue: new Date(), // this is not in the locale files
+        startDateMaxValue: new Date(), // this is not in the locale files
+        endDateValue: new Date(), // this is not in the locale files
+        removeSeriesBtnText: '',
+        removeSeriesQuestionTitle: '',
+        removeSeriesQuestionTpl: ''
     }
 });

@@ -97,7 +97,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
     },
 
     /**
-     Initializes the component.
+     * Initializes the component.
      */
     initComponent: function() {
         var me = this;

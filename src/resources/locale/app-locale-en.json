@@ -160,7 +160,10 @@
                 "setFilterBtnText": "en:OK",
                 "resetFilterBtnText": "en:Reset",
                 "selectChartLayerComboLabel": "",
-                "undoBtnText": "en:…zurückzoomen"
+                "undoBtnText": "en:…zurückzoomen",
+                "removeSeriesBtnText": "en:Serie entfernen",
+                "removeSeriesQuestionTitle": "en:Rückfrage",
+                "removeSeriesQuestionTpl": "en:Serie '{0}' entfernen?"
             }
         }
     },

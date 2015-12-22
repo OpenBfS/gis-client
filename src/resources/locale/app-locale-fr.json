@@ -159,8 +159,11 @@
                 "dateFieldEndLabel": "fr:Ende",
                 "setFilterBtnText": "fr:OK",
                 "resetFilterBtnText": "fr:Reset",
-                "selectChartLayerComboLabel": "",
-                "undoBtnText": "…zurückzoomen"
+                "selectChartLayerComboLabel": "fr:",
+                "undoBtnText": "fr:…zurückzoomen",
+                "removeSeriesBtnText": "fr:Serie entfernen",
+                "removeSeriesQuestionTitle": "fr:Rückfrage",
+                "removeSeriesQuestionTpl": "fr:Serie '{0}' entfernen?"
             }
         }
     },
