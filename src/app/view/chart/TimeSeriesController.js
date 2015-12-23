@@ -84,7 +84,9 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
             request: 'GetFeature',
             typeName: chartConfig.dataFeatureType,
             outputFormat: 'application/json',
-            filter: me.getDateTimeRangeFilter(timeRangeFilter)
+            filter: me.getDateTimeRangeFilter(timeRangeFilter),
+            // see https://redmine-koala.bfs.de/issues/1080#note-36
+            sortBy: chartConfig.xAxisAttribute
         };
 
         Ext.apply(requestParams, paramConfig);
