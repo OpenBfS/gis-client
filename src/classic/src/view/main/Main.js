@@ -92,6 +92,7 @@ Ext.define('Koala.view.main.Main', {
         },
         // define menu items
         menuConfig: {
+            bodyPadding: 0,
             dockedItems: [{
                 xtype: 'buttongroup',
                 columns: 2,
