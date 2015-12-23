@@ -39,8 +39,10 @@ Ext.define("Koala.view.form.field.SearchCombo", {
     hideTrigger: true,
 
     bind: {
-        emptyText: '{emptyText}'
+        emptyText: '{emptyText}',
+        tooltip: '{tooltip}'
     },
+
 
     listeners: {
         change: function(combo, newValue){
@@ -72,6 +74,15 @@ Ext.define("Koala.view.form.field.SearchCombo", {
                 scope: combo
             });
         }
+    },
+
+    setTooltip: function() {
+        var el = this.getEl();
+        var viewModel = this.getViewModel();
+        Ext.QuickTips.register({
+            target: el,
+            text: viewModel.get('tooltip')
+        });
     },
 
     doSpatialSearch: function(value){

@@ -50,7 +50,8 @@
         "config": {
             "data": {
                 "emptyText": "fr:Multisuche",
-                "fieldLabel": ""
+                "fieldLabel": "",
+                "tooltip": "fr:Räumliche Suche und Suche in den daten und Diensten des BfS"
             }
         }
     },

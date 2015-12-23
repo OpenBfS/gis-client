@@ -22,7 +22,8 @@ Ext.define('Koala.view.form.field.SearchComboModel', {
 
     data: {
         emptyText: '',
-        fieldLabel: ''
+        fieldLabel: '',
+        tooltip: ''
     }
 
 });
