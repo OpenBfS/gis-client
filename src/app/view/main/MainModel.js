@@ -24,9 +24,10 @@ Ext.define('Koala.view.main.MainModel', {
     alias: 'viewmodel.app-main',
 
     data: {
+        addWmsButtonText: '',
+        addWmsButtonTooltip: '',
+        buttonGroupTopTitle: '',
         printButtonText: '',
-        buttonGroupTopTitle: ''
+        printButtonTooltip: ''
     }
-
-    //TODO - add data, formulas and/or methods to support your view
 });

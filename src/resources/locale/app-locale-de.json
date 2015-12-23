@@ -85,7 +85,10 @@
     "Koala.view.main.Main": {
         "config": {
             "data": {
+                "addWmsButtonText": "WMS",
+                "addWmsButtonTooltip": "Externen WMS hinzufügen",
                 "printButtonText": "Druck",
+                "printButtonTooltip": "Kartenauschnitt drucken",
                 "buttonGroupTopTitle": "Werkzeuge"
             }
         }

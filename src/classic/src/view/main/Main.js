@@ -93,17 +93,22 @@ Ext.define('Koala.view.main.Main', {
                 items: [{
                     xtype: 'basigx-button-addwms',
                     glyph: 'xf0ac@FontAwesome',
-                    viewModel: {
-                        data: {
-                            tooltip: '',
-                            text: ''
+                    listeners: {
+                        // This needs to happem in an afterrender handler, as
+                        // otherwise the BasiGX texts would count…
+                        afterrender: function(btn){
+                            btn.setBind({
+                                text: '{addWmsButtonText}',
+                                tooltip: '{addWmsButtonTooltip}'
+                            });
                         }
                     }
                 }, {
                     xtype: 'button',
                     glyph: 'xf02f@FontAwesome',
                     bind: {
-                        text: '{printButtonText}'
+                        text: '{printButtonText}',
+                        tooltip: '{printButtonTooltip}'
                     },
                     handler: function(btn){
                         var win = Ext.ComponentQuery.query('k-window-print')[0];
