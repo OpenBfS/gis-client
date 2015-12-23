@@ -21,7 +21,9 @@ Ext.define('Koala.view.button.TimeReferenceModel', {
     alias: 'viewmodel.k-button-timereference',
     data: {
         textUtc: '',
-        textLocal: ''
+        textLocal: '',
+        tooltipUtc: '',
+        tooltipLocal: ''
     }
 
 });

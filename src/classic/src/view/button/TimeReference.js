@@ -38,8 +38,8 @@ Ext.define("Koala.view.button.TimeReference", {
     enableToggle: true,
 
     listeners: {
-        afterrender: 'setTitleBind',
-        toggle: 'setTitleBind'
+        afterrender: 'setTextBinds',
+        toggle: 'setTextBinds'
     },
 
     config: {

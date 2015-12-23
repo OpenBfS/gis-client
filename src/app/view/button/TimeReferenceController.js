@@ -20,12 +20,15 @@ Ext.define('Koala.view.button.TimeReferenceController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-button-timereference',
 
-    setTitleBind: function(btn) {
-        var current = btn.getCurrent();
+    setTextBinds: function(btn) {
         var staticNs = Koala.view.button.TimeReference;
-        var bindProp = current === staticNs.UTC ? '{textUtc}' : '{textLocal}';
+        var curr = btn.getCurrent();
+        var currentlyUtc = curr === staticNs.UTC;
+        var bindPropText = currentlyUtc ? '{textUtc}' : '{textLocal}';
+        var bindPropTooltip = currentlyUtc ? '{tooltipUtc}' : '{tooltipLocal}';
         btn.setBind({
-            text: bindProp
+            text: bindPropText,
+            tooltip: bindPropTooltip
         });
         btn.blur();
     }

@@ -14,7 +14,9 @@
         "config": {
             "data":{
                 "textUtc": "en:Zeitbezug (UTC)",
-                "textLocal": "en:Zeitbezug (lokal)"
+                "textLocal": "en:Zeitbezug (lokal)",
+                "tooltipUtc": "en:Aktuell werden Zeiten in UTC angezeigt und eingestellt, klicken Sie zum Wechsel auf lokale Zeit",
+                "tooltipLocal": "en:Aktuell werden Zeiten gemäß lokaler Zeitzone angezeigt und eingestellt, klicken Sie zum Wechsel auf UTC Zeit"
             }
         }
     },
