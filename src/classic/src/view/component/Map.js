@@ -129,7 +129,9 @@ Ext.define("Koala.view.component.Map", {
     onHoverFeatureClick: function(olFeatures) {
         var me = this;
         var controller = me.getController();
-        controller.onHoverFeatureClick(olFeatures[0]);
+        Ext.each(olFeatures, function(olFeature) {
+            controller.onHoverFeatureClick(olFeature);
+        });
     }
 
 });

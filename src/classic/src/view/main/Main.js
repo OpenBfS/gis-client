@@ -73,7 +73,7 @@ Ext.define('Koala.view.main.Main', {
             xtype: 'k-component-map',
             plugins: [{
                 ptype: 'hover',
-                selectMulti: false,
+                selectMulti: true,
                 selectEventOrigin: 'interaction'
             }]
         },

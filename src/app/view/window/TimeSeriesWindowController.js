@@ -564,7 +564,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var view = me.getView();
         var layerName = olLayer.get('name');
         var layerChartRendered = me.isLayerChartRendered(layerName);
-
         // if the window contains a chart rendered for a feature from the
         // same layer as the given olFeat already, load a new timeseries into
         // the existing chart
