@@ -130,7 +130,8 @@ Ext.define('Koala.view.main.Main', {
                 },
                 {
                     xtype: 'k-panel-themetree'
-                }]
+                }
+            ]
         },
         legendPanelConfig: {
             xtype: 'k-panel-routing-legendtree'
