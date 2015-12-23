@@ -77,6 +77,19 @@ Ext.define('Koala.view.main.Main', {
                 selectEventOrigin: 'interaction'
             }]
         },
+        listeners: {
+            afterrender: function(){
+                // This needs to happen in an afterrender handler, as
+                // otherwise the BasiGX texts would count…
+                var toggleOverviewBtnSel = 'button[' +
+                    'helpKey="basigx-overview-map-button"' +
+                    ']';
+                var btn = Ext.ComponentQuery.query(toggleOverviewBtnSel)[0];
+                btn.setBind({
+                    tooltip: '{toogleOverviewBtnTooltip}'
+                });
+            }
+        },
         // define menu items
         menuConfig: {
             dockedItems: [{
@@ -94,7 +107,7 @@ Ext.define('Koala.view.main.Main', {
                     xtype: 'basigx-button-addwms',
                     glyph: 'xf0ac@FontAwesome',
                     listeners: {
-                        // This needs to happem in an afterrender handler, as
+                        // This needs to happen in an afterrender handler, as
                         // otherwise the BasiGX texts would count…
                         afterrender: function(btn){
                             btn.setBind({

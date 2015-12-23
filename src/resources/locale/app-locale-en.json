@@ -89,7 +89,8 @@
                 "addWmsButtonTooltip": "en:Externen WMS hinzufügen",
                 "printButtonText": "en:Druck",
                 "printButtonTooltip": "en:Kartenauschnitt drucken",
-                "buttonGroupTopTitle": "en:Werkzeuge"
+                "buttonGroupTopTitle": "en:Werkzeuge",
+                "toogleOverviewBtnTooltip": "en:Übersichtskarte ein-/ausblenden"
             }
         }
     },
