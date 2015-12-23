@@ -108,7 +108,8 @@
             "data": {
                 "btnTextFullscreen": "Vollbild",
                 "btnTextHelp": "Hilfe",
-                "btnTextMobile": "Mobile Version"
+                "btnTooltipFullscreen": "Zwischen Vollbildanzeige und Normalansicht wechseln",
+                "btnTooltipHelp": "Hilfe anzeigen"
             }
         }
     },

@@ -22,6 +22,7 @@ Ext.define('Koala.view.toolbar.HeaderModel', {
     data: {
         btnTextFullscreen: '',
         btnTextHelp: '',
-        btnTextMobile: ''
+        btnTooltipFullscreen: '',
+        btnTooltipHelp: ''
     }
 });

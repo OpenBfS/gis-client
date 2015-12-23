@@ -40,7 +40,8 @@ Ext.define("Koala.view.toolbar.Header", {
         '->',
         {
             bind: {
-                text: '{btnTextFullscreen}'
+                text: '{btnTextFullscreen}',
+                tooltip: '{btnTooltipFullscreen}'
             },
             handler: 'toggleFullscreen'
         },
@@ -49,7 +50,8 @@ Ext.define("Koala.view.toolbar.Header", {
         },
         {
             bind: {
-                text: '{btnTextHelp}'
+                text: '{btnTextHelp}',
+                tooltip: '{btnTooltipHelp}'
             }
         },
         {
