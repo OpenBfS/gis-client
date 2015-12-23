@@ -34,6 +34,13 @@
             }
         }
     },
+    "Koala.view.form.field.LanguageCombo": {
+        "config": {
+            "data": {
+                "tooltip": "en:Klicken, um Sprache auszuwählen"
+            }
+        }
+    },
     "Koala.view.form.LayerFilter": {
         "config": {
             "format": "m/d/Y g:i A"

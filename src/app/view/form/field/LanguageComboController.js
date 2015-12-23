@@ -25,6 +25,16 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
      */
     locale: null,
 
+    bindTooltip: function() {
+        var combo = this.getView();
+        var el = combo.getEl();
+        var viewModel = combo.getViewModel();
+        Ext.QuickTips.register({
+            target: el,
+            text: viewModel.get('tooltip')
+        });
+    },
+
     /**
      * @private
      */
@@ -79,6 +89,7 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
                 if (respObj) {
                     me.setAppLanguage(respObj);
                     me.recreateSingletons();
+                    me.bindTooltip();
                 }
             }
         }
