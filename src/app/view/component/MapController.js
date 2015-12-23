@@ -57,9 +57,6 @@ Ext.define('Koala.view.component.MapController', {
         var layersLen = layers && layers.length;
         var featuresLen = features && features.length;
         var replaceTemplateStrings = Koala.util.String.replaceTemplateStrings;
-        var tree = Ext.ComponentQuery.query("basigx-panel-legendtree")[0];
-        var treeSelection = tree ? tree.getSelection() : null;
-
         Ext.each(layers, function(layer, layerIdx) {
             var hoverTpl = layer.get("hoverTpl");
             Ext.each(features, function(feature, featureIdx) {
@@ -79,9 +76,7 @@ Ext.define('Koala.view.component.MapController', {
                     }
                 }
             });
-            if(treeSelection.length === 0){
-                return false;
-            }
+
             if(layerIdx + 1 !== layersLen){
                 // not the last layer, append linebreak
                 innerHtml += lineBreak;
@@ -113,7 +108,6 @@ Ext.define('Koala.view.component.MapController', {
         if (!win) {
             win = me.createTimeSeriesChartWindow(olLayer);
         }
-
         win.getController().createOrUpdateChart(olLayer, olFeat);
 
         // show the window itself
