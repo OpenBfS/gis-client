@@ -186,8 +186,7 @@ Ext.define("Koala.view.form.Print", {
             }
         }, this);
 
-        var fieldsets =
-            view.query('fieldset[name=attributes] fieldset');
+        var fieldsets = view.query('fieldset[name=attributes] fieldset');
 
         Ext.each(fieldsets, function(fs){
             var name = fs.name;
