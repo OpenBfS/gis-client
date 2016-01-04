@@ -21,6 +21,7 @@ Ext.define("Koala.view.panel.ThemeTree", {
     xtype: 'k-panel-themetree',
 
     requires: [
+        "Koala.view.component.TextTool",
         "Koala.view.panel.ThemeTreeController",
         "Koala.view.panel.ThemeTreeModel"
     ],
@@ -39,6 +40,18 @@ Ext.define("Koala.view.panel.ThemeTree", {
     autoScroll: true,
 
     height: 200,
+
+    header: {
+        items: [
+            {
+                xtype: 'k-component-texttool',
+                connectedToolType: 'collapse',
+                bind: {
+                    html: '{tooltext}'
+                }
+            }
+        ]
+    },
 
     tools: [{
         type: 'collapse',

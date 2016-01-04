@@ -113,7 +113,8 @@
         "config": {
             "data": {
                 "title": "fr:Auswahl",
-                "tooltip": "fr:LayerSet wechseln"
+                "tooltip": "fr:LayerSet wechseln",
+                "tooltext": "fr:Thema wechseln"
             }
         }
     },
