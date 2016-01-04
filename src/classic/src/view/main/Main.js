@@ -148,7 +148,14 @@ Ext.define('Koala.view.main.Main', {
             ]
         },
         legendPanelConfig: {
-            xtype: 'k-panel-routing-legendtree'
+            xtype: 'k-panel-routing-legendtree',
+            listeners: {
+                afterrender: {
+                    fn: 'resizeLegendTreeToMaxHeight',
+                    single: true,
+                    delay: 100
+                }
+            }
         },
         additionalItems: [{
             xtype: 'k-panel-layersetchooser',

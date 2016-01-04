@@ -25,5 +25,25 @@
 Ext.define('Koala.view.main.MainController', {
     extend: 'Ext.app.ViewController',
 
-    alias: 'controller.main'
+    alias: 'controller.main',
+
+    resizeLegendTreeToMaxHeight: function(legendTree){
+        var me = this;
+        var mapContainer = legendTree.up('basigx-panel-mapcontainer');
+        var toolBar = mapContainer.down('toolbar[cls="basigx-map-tools"]');
+        var mapContainerHeight = mapContainer.getHeight() || 0;
+        var toolbarHeight = toolBar.getHeight() || 0;
+        var gap = 20;
+        var h = mapContainerHeight - toolbarHeight - gap;
+        h = Ext.Number.constrain(h, 200, 1200); // minimum 300px, maximum 1200px
+        legendTree.setHeight(h);
+        // bind a listener here for resizing, but only once per instance
+        if (!legendTree.__hasMaximizeListenerBound) {
+            Ext.getBody().on('resize', me.resizeLegendTreeToMaxHeight, me, {
+                buffer: 100,
+                args: [legendTree]
+            });
+            legendTree.__hasMaximizeListenerBound = true;
+        }
+    }
 });
