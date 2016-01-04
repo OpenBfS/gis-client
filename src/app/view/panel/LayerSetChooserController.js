@@ -132,33 +132,36 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
         }
     },
 
-   /**
-    *
-    */
-    filterLayerSetsByText: function(textfield, newVal) {
-        var layerProfileView = textfield.up('k-panel-layersetchooser').down(
-                'base-view-layerset'),
-            store = layerProfileView.getStore();
-        store.getFilters().replaceAll([
-          function(item) {
-            var filterval = newVal.toLowerCase(),
-                text = item.get('text').toLowerCase();
-            if (text.indexOf(filterval) >= 0) {
-                return true;
+    /**
+     *
+     */
+    filterLayerSetsByText: function(filterField, newVal) {
+        var layerSetChooser = filterField.up('k-panel-layersetchooser');
+        var layerProfileView = layerSetChooser.down('basigx-view-layerset');
+        var store = layerProfileView.getStore();
+        var lowercaseEntered = (newVal || '').toLowerCase();
+
+        var nameFilterFunction = function(item) {
+            var text = item.get('text').toLowerCase();
+            var keepItem = false;
+
+            if (text.indexOf(lowercaseEntered) >= 0) {
+                // current item contains filter text
+                keepItem = true;
             } else if (item.get('children').length > 0) {
-              var matchFound = false;
+                var matchFound = false;
                 Ext.each(item.get('children'), function(child) {
-                  var childText = child.text.toLowerCase();
-                  if (childText.indexOf(filterval) >= 0) {
-                      matchFound = true;
-                      return false;
-                  }
+                    var childText = child.text.toLowerCase();
+                    if (childText.indexOf(lowercaseEntered) >= 0) {
+                        // at least one child contains filtertext
+                        matchFound = true;
+                        return false; // break early
+                    }
                 });
-                return matchFound;
-            } else {
-                return false;
+                keepItem = matchFound;
             }
-          }]
-      );
+            return keepItem;
+        };
+        store.getFilters().replaceAll([ nameFilterFunction ] );
     }
 });
