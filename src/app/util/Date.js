@@ -97,7 +97,7 @@ Ext.define('Koala.util.Date', {
          *     from the server are supposed to be UTC.
          */
         makeLocal: function(utcDate){
-            var offsetMinutes = this.getUTCOffsetInMinutes();
+            var offsetMinutes = Koala.util.Date.getUTCOffsetInMinutes();
             return Ext.Date.add(utcDate, Ext.Date.MINUTE, offsetMinutes);
         },
 
@@ -110,7 +110,7 @@ Ext.define('Koala.util.Date', {
          *     convert these to UTC.
          */
         makeUtc: function(localDate){
-            var offsetMinutes = -1 * this.getUTCOffsetInMinutes();
+            var offsetMinutes = -1 * Koala.util.Date.getUTCOffsetInMinutes();
             return Ext.Date.add(localDate, Ext.Date.MINUTE, offsetMinutes);
         }
 
