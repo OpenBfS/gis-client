@@ -22,10 +22,11 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     xtype: "k-panel-routing-legendtree",
 
     requires: [
+        "Koala.store.MetadataSearch",
         "Koala.util.Layer",
-
         "Koala.view.panel.RoutingLegendTreeController",
-        "Koala.view.panel.RoutingLegendTreeModel"
+        "Koala.view.panel.RoutingLegendTreeModel",
+        "Koala.view.window.MetadataInfo"
     ],
 
     controller: "k-panel-routing-legendtree",
@@ -106,15 +107,21 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         shortInfoHandler: function(btn){
             var record = btn.layerRec;
-            var layer = record.getOlLayer();
-            var text = layer.get('name') + '<br>';
-
-            if(Ext.isDefined(layer.metadata.filter)){
-                var filtertext = Koala.view.panel.RoutingLegendTree
-                    .getFilterText(record);
-                text = filtertext;
-            }
-            Ext.toast(text, layer.get('name'));
+            var cql = "Identifier = '" + record.get('metadata').id + "'";
+            var metadataStore = Ext.create('Koala.store.MetadataSearch');
+            metadataStore.getProxy().setExtraParam('constraint', cql);
+            metadataStore.on('load', function(store, recs) {
+                var rec = recs && recs[0];
+                if (rec) {
+                    Ext.create('Koala.view.window.MetadataInfo', {
+                        title: rec.get('name'),
+                        layout: 'fit',
+                        record: rec
+                    }).show();
+                }
+                Ext.defer(metadataStore.destroy, 1000, metadataStore);
+            }, this, {single: true});
+            metadataStore.load();
         },
 
         removalHandler: function(btn){
