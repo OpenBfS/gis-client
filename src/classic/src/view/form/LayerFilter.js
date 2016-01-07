@@ -280,12 +280,37 @@ Ext.define("Koala.view.form.LayerFilter", {
                 visible: true,
                 width: 50,
                 editable: false,
+                valueToRaw: staticMe.leadingZeroValueToRaw,
+                rawToValue: staticMe.leadingZeroRawToValue,
                 listeners: {
                     change: staticMe.handleSpinnerChange
                 }
             });
 
             return spinner;
+        },
+
+        /**
+         * Used as `valueToRaw`-configuration of the numberfields for hours and
+         * minutes, will give single digit numbers a leading zero.
+         *
+         * @return {String} The number as string, padded to size 2, with an
+         *     optional leading zero for numbers less than 10.
+         */
+        leadingZeroValueToRaw: function(val) {
+            return (val < 10) ? "0" + val : "" + val;
+        },
+
+        /**
+         * Used as `rawToValue`-configuration of the numberfields for hours and
+         * minutes, will return a number from an input which may have a leading
+         * zero.
+         *
+         * @return {Number} A number representation of the raw value, which may
+         *     have a leading zero
+         */
+        leadingZeroRawToValue: function(raw){
+            return parseInt("" + raw, 10);
         },
 
         /**
