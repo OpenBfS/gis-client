@@ -63,7 +63,7 @@ Ext.define('Koala.util.Duration', {
         isoDurationToObject: function(isoDuration) {
             var staticMe = this;
             if (!Ext.isString(isoDuration)) {
-                // caled with undefined or other non-string => 0 duration
+                // called with undefined or other non-string => 0 duration
                 return Ext.clone(staticMe.ZERO_DURATION_OBJECT);
             }
             var matches = (isoDuration).match(staticMe.durationRegex);
@@ -145,6 +145,31 @@ Ext.define('Koala.util.Duration', {
             var durationInSeconds = this.absoluteSecondsFromDuration(duration);
             var unit = Ext.Date.SECOND;
             return Ext.Date.add(baseDate, unit, durationInSeconds);
+        },
+
+        /**
+         * Checks whether the timespan between the given dates is within the
+         * passed duration.
+         *
+         * @param {Date} dateStart The startdate of the timespan.
+         * @param {Date} dateEnd The endate of the timespan.
+         * @param {String} duration The maximum duration.
+         * @return {Boolean} Whether the dates form a timespan that is not
+         *     longer than the duration.
+         */
+        datesWithinDuration: function(dateStart, dateEnd, duration) {
+            var start = Ext.clone(dateStart);
+            var end = Ext.clone(dateEnd);
+            if (end < start) {
+                return false;
+                // …or, if we want to swap:
+                //
+                // var temp = start;
+                // start = end;
+                // end = temp;
+            }
+            var maxEnd = this.dateAddAbsoluteDuration(start, duration);
+            return Ext.Date.between(end, start, maxEnd);
         }
     }
 });
