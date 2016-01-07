@@ -25,6 +25,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
         'Koala.util.Layer'
     ],
 
+    /**
+     * This is the actual handler when the 'Add to map' button is clicked. It
+     * will create a layer (via Koala.util.Layer#layerFromMetadata) with the
+     * currently displayed filters applied and add that layer to the map (via
+     * Koala.util.Layer#addOlLayerToMap)
+     */
     submitFilter: function(){
         var me = this;
         var LayerUtil = Koala.util.Layer;
@@ -84,7 +90,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var filterType = (filter.type || "").toLowerCase();
         var param = filter.param;
         if (filterType === 'timerange') {
-            var keys = view.startAndEndFieldnamesFromMetadataParam(param);
+            var keys = view.self.startAndEndFieldnamesFromMetadataParam(param);
             filter.mindatetimeinstant = keyVals[keys.startName];
             filter.maxdatetimeinstant = keyVals[keys.endName];
         } else if (filterType === 'pointintime') {
@@ -97,39 +103,68 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
-     *
+     * Called whenever any UTC button is toggled, this method will adjust the
+     * visually relevant (displayed or restricting the calendar) dates to the
+     * now active setting; either they wil be transformed to UTC or to the local
+     * timezone.
      */
     handleTimereferenceButtonToggled: function(){
         var layerFilterView = this.getView();
+        var dateUtil = Koala.util.Date;
+        var makeUtc = dateUtil.makeUtc;
+        var makeLocal = dateUtil.makeLocal;
         var dateFields = layerFilterView.query('datefield');
 
         var switchToUtc = Koala.Application.isUtc();
+        var converterMethod = switchToUtc ? makeUtc : makeLocal;
 
         Ext.each(dateFields, function(dateField) {
+            // The actual value of the field
             var currentDate = dateField.getValue();
             if (!currentDate) {
                 return;
             }
+            // Also update the minimum and maximums, as they need to be in sync
+            // wrt the UTC/local setting.
+            var currentMinValue = dateField.minValue; // no getter in ExtJS
+            var currentMaxValue = dateField.maxValue; // no getter in ExtJS
+
             var accompanyingHourSpinner = dateField.up().down(
-                    // all that end with the string 'hourspinner', will capture
-                    // all spinners including those from timerange-filters
-                    'field[name$="hourspinner"]'
-                );
+                // All that end with the string 'hourspinner', will capture all
+                // spinners including those from timerange-filters
+                'field[name$="hourspinner"]'
+            );
+
+            // The new value of the field
             var newDate;
-            if (switchToUtc) {
-                newDate = Koala.util.Date.makeUtc(currentDate);
-            } else {
-                newDate = Koala.util.Date.makeLocal(currentDate);
+            var newMinValue = currentMinValue; // to gracefully handle unset min
+            var newMaxValue = currentMaxValue; // to gracefully handle unset max
+
+            // Use the determined converter now to change new dates
+            newDate = converterMethod(currentDate);
+            if (!Ext.isEmpty(currentMinValue)) {
+                newMinValue = converterMethod(currentMinValue);
             }
+            if (!Ext.isEmpty(currentMaxValue)) {
+                newMaxValue = converterMethod(currentMaxValue);
+            }
+
+            // Update spinner if any
             if (accompanyingHourSpinner) {
                 accompanyingHourSpinner.setValue(newDate.getHours());
             }
+
+            // Actually set the new values for relevant properties
             dateField.setValue(newDate);
+            dateField.setMinValue(newMinValue);
+            dateField.setMaxValue(newMaxValue);
         });
     },
 
     /**
-     *
+     * Bound as handler for the beforerender event, this method registers the
+     * listener to react on any UTC-button changes (See also the atual
+     * method #handleTimereferenceButtonToggled).
      */
     onBeforeRenderLayerFilterForm: function(){
         var me = this;
@@ -140,7 +175,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
-     *
+     * Bound as handler in the destroy sequence, this method unregisters the
+     * listener to react on any UTC-button changes (See also the atual
+     * method #handleTimereferenceButtonToggled).
      */
     onBeforeDestroyLayerFilterForm: function(){
         var me = this;
