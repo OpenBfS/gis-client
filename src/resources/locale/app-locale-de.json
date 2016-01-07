@@ -43,7 +43,11 @@
     },
     "Koala.view.form.LayerFilter": {
         "config": {
-            "format": "d.m.Y H:i"
+            "format": "d.m.Y H:i",
+        },
+        "statics": {
+            "warnMsgEndBeforeStart": "Startwert muss vor Endwert liegen.",
+            "warnMsgExceedsMaxDuration": "Startwert und Endwert liegen zu weit auseinander.",
         }
     },
     "Koala.view.form.field.SearchCombo": {

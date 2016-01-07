@@ -400,7 +400,7 @@ Ext.define("Koala.view.form.LayerFilter", {
 
             if (startDate > endDate) {
                 // Invalid: start value after end value
-                return 'Startwert muss vor Endwert liegen.';
+                return staticMe.warnMsgEndBeforeStart;
             }
 
             var withinDuration = durationUtil.datesWithinDuration(
@@ -409,7 +409,7 @@ Ext.define("Koala.view.form.LayerFilter", {
 
             if (!withinDuration) {
                 // Invalid: Outside of allowed duration
-                return 'Startwert und Endwert liegen zu weit auseinander.';
+                return staticMe.warnMsgExceedsMaxDuration;
             }
 
             // Valid: all is fine!

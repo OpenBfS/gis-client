@@ -44,6 +44,10 @@
     "Koala.view.form.LayerFilter": {
         "config": {
             "format": "m/d/Y g:i A"
+        },
+        "statics": {
+            "warnMsgEndBeforeStart": "en:Startwert muss vor Endwert liegen.",
+            "warnMsgExceedsMaxDuration": "en:Startwert und Endwert liegen zu weit auseinander.",
         }
     },
     "Koala.view.form.field.SearchCombo": {
