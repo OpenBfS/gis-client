@@ -71,10 +71,19 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
 
     statics: {
         /**
+         * The string which we replace with the current date.
+         */
+        NOW_STRING: "now",
+
+        /**
          */
         getStartEndFilterFromMetadata: function(metadata){
             var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
             var endDate = Koala.util.String.coerce(timeseriesCfg.end_timestamp);
+            // replace "now" with current utc date
+            if (endDate === Koala.view.window.TimeSeriesWindow.NOW_STRING) {
+                endDate = Koala.util.Date.makeUtc(new Date());
+            }
             if (Ext.isString(endDate)) {
                 var format = timeseriesCfg.end_timestamp_format;
                 if (!format) {
