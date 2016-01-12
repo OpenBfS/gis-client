@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,16 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
      *
      */
     locale: null,
+
+    bindTooltip: function() {
+        var combo = this.getView();
+        var el = combo.getEl();
+        var viewModel = combo.getViewModel();
+        Ext.QuickTips.register({
+            target: el,
+            text: viewModel.get('tooltip')
+        });
+    },
 
     /**
      * @private
@@ -79,6 +89,7 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
                 if (respObj) {
                     me.setAppLanguage(respObj);
                     me.recreateSingletons();
+                    me.bindTooltip();
                 }
             }
         }
@@ -138,10 +149,11 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
             // 1. override the class itself
             Ext.define(className + '.locale.' + me.locale, baseLocaleObj);
 
-            // 2. Now we will handle the classes viewmodel, if exisiting.
+            // 2. Now we will handle the classes viewmodel, if existing.
             // The override has to be based on the unmodified classname in
             // this case
             var currentClass = Ext.ClassManager.get(className);
+
             if (currentClass && currentClass.getConfigurator) {
                 var configurator = currentClass.getConfigurator();
                 if (configurator && configurator.values &&

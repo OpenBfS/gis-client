@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,10 +71,19 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
 
     statics: {
         /**
+         * The string which we replace with the current date.
+         */
+        NOW_STRING: "now",
+
+        /**
          */
         getStartEndFilterFromMetadata: function(metadata){
             var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
             var endDate = Koala.util.String.coerce(timeseriesCfg.end_timestamp);
+            // replace "now" with current utc date
+            if (endDate === Koala.view.window.TimeSeriesWindow.NOW_STRING) {
+                endDate = Koala.util.Date.makeUtc(new Date());
+            }
             if (Ext.isString(endDate)) {
                 var format = timeseriesCfg.end_timestamp_format;
                 if (!format) {
@@ -96,8 +105,9 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         }
     },
 
-
-
+    /**
+     * Initializes the component.
+     */
     initComponent: function() {
         var me = this;
         var metadata = me.initOlLayer.metadata;

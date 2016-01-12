@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,8 @@ Ext.define("Koala.view.toolbar.Header", {
         '->',
         {
             bind: {
-                text: '{btnTextFullscreen}'
+                text: '{btnTextFullscreen}',
+                tooltip: '{btnTooltipFullscreen}'
             },
             handler: 'toggleFullscreen'
         },
@@ -52,7 +53,8 @@ Ext.define("Koala.view.toolbar.Header", {
         {
         	xtype: 'button',
             bind: {
-                text: '{btnTextHelp}'
+                text: '{btnTextHelp}',
+                tooltip: '{btnTooltipHelp}'
             },
             // TODO: Implement button-handler in MVC pattern?
             handler: function(btn){

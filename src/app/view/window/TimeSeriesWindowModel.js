@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
         resetFilterBtnText: '',
         selectChartLayerComboLabel: '',
         undoBtnText: '',
-        startDateValue: new Date(),
-        startDateMaxValue: new Date(),
-        endDateValue: new Date()
+        startDateValue: new Date(), // this is not in the locale files
+        startDateMaxValue: new Date(), // this is not in the locale files
+        endDateValue: new Date(), // this is not in the locale files
+        removeSeriesBtnText: '',
+        removeSeriesQuestionTitle: '',
+        removeSeriesQuestionTpl: ''
     }
 });

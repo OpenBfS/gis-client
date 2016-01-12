@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ Ext.define("Koala.view.window.Print", {
         title: '{title}'
     },
 
-    minWidth: 300,
+    minWidth: 360,
     maxWidth: window.innerWidth - 100,
     minHeight: 150,
     maxHeight: window.innerHeight - 100,

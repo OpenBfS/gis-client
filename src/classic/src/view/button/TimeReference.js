@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,8 +38,12 @@ Ext.define("Koala.view.button.TimeReference", {
     enableToggle: true,
 
     listeners: {
-        afterrender: 'setTitleBind',
-        toggle: 'setTitleBind'
+        afterrender: 'setTextBinds',
+        toggle: 'setTextBinds'
+    },
+
+    config: {
+        pressed: true
     },
 
     /**

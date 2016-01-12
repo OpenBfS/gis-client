@@ -1,14 +1,30 @@
 [
     {
+        "text": "MJ",
+        "isLayerProfile": true,
+        "thumb": "blw.jpg",
+        "children": [
+            {
+                "uuid": "f917f393-fb9b-4345-99cf-8d2fcfab8d3d",
+                "text": "BfS: niederschlag_24h",
+                "leaf": true
+            },
+            {
+                "uuid": "08e36567-cf9a-4e22-8774-e83a3452da7b",
+                "text": "BfS: odl_brutto_10min",
+                "leaf": true
+            }
+        ]
+    }, {
         "text": "Standard Profil",
         "isLayerProfile": true,
         "thumb": "blw.jpg",
         "children": [
-            /*{
+            {
                 "uuid": "7894bd4f-fa29-4256-98fa-79beb4ab1e2b",
                 "text": "Tagesmittelwerte in µSv/h",
                 "leaf": true
-            },*/
+            },
             {
                 "uuid": "9a872df7-5904-4b7f-ad34-bad82a37833c",
                 "text": "WMTS - ArcGIS world imagery",

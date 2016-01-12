@@ -1,5 +1,5 @@
 /* global window, location */
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -185,4 +185,15 @@ Ext.define('Koala.Application', {
             }
         );
     }
+}, function() {
+    // Remove the annyoing warning '[W] targetCls is missing. This may mean that
+    // getTargetEl() …' see: https://www.sencha.com/forum/showthread.php?288898-
+    // W-targetCls-is-missing.-This-may-mean-that-getTargetEl()-is-being-overrid
+    // den-but-no/page3
+    Ext.define('Ext.overrides.layout.container.Container', {
+        override: 'Ext.layout.container.Container',
+        notifyOwner: function() {
+            this.owner.afterLayout(this);
+        }
+    });
 });

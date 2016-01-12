@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ Ext.define('Koala.util.String', {
             }
 
             // capture alphanumeric values in between double square brackets:
-            // will yield an array aof matches including their boundaries:
+            // will yield an array of matches including their boundaries:
             // tpl = "Hello [[whom-to-greet]], how are you [[another_string]]";
             // matches = ["[[whom-to-greet]]", "[[another_string]]"]
             var regex = /\[\[([a-zA-Z0-9_-])+?\]\]/gi;

@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,11 +72,43 @@ Ext.define('Koala.view.main.Main', {
         mapComponentConfig: {
             xtype: 'k-component-map',
             plugins: [{
-                    ptype: 'hover'
+                ptype: 'hover',
+                selectMulti: true,
+                selectEventOrigin: 'interaction'
             }]
+        },
+        listeners: {
+            afterrender: function(){
+                // This needs to happen in an afterrender handler, as
+                // otherwise the BasiGX texts would count…
+                var toggleOverviewBtnSel = 'button[' +
+                    'helpKey="basigx-overview-map-button"' +
+                    ']';
+                var btn = Ext.ComponentQuery.query(toggleOverviewBtnSel)[0];
+                btn.setBind({
+                    tooltip: '{toogleOverviewBtnTooltip}'
+                });
+
+                // Bind the tooltops of certain map button
+                // TODO refactor BasiGX to do this in a more sane way
+                var btnSelectors = [
+                    "basigx-button-zoomin",
+                    "basigx-button-zoomout",
+                    "basigx-button-zoomtoextent",
+                    "basigx-button-togglelegend"
+                ];
+                var btns = this.query(btnSelectors.join(','));
+                Ext.each(btns, function(b) {
+                    var btnXtype = b.xtype;
+                    b.setBind({
+                        tooltip: '{' + btnXtype + '-tooltip}'
+                    });
+                });
+            }
         },
         // define menu items
         menuConfig: {
+            bodyPadding: 0,
             dockedItems: [{
                 xtype: 'buttongroup',
                 columns: 2,
@@ -91,17 +123,22 @@ Ext.define('Koala.view.main.Main', {
                 items: [{
                     xtype: 'basigx-button-addwms',
                     glyph: 'xf0ac@FontAwesome',
-                    viewModel: {
-                        data: {
-                            tooltip: '',
-                            text: ''
+                    listeners: {
+                        // This needs to happen in an afterrender handler, as
+                        // otherwise the BasiGX texts would count…
+                        afterrender: function(btn){
+                            btn.setBind({
+                                text: '{addWmsButtonText}',
+                                tooltip: '{addWmsButtonTooltip}'
+                            });
                         }
                     }
                 }, {
                     xtype: 'button',
                     glyph: 'xf02f@FontAwesome',
                     bind: {
-                        text: '{printButtonText}'
+                        text: '{printButtonText}',
+                        tooltip: '{printButtonTooltip}'
                     },
                     handler: function(btn){
                         var win = Ext.ComponentQuery.query('k-window-print')[0];
@@ -123,10 +160,18 @@ Ext.define('Koala.view.main.Main', {
                 },
                 {
                     xtype: 'k-panel-themetree'
-                }]
+                }
+            ]
         },
         legendPanelConfig: {
-            xtype: 'k-panel-routing-legendtree'
+            xtype: 'k-panel-routing-legendtree',
+            listeners: {
+                afterrender: {
+                    fn: 'resizeLegendTreeToMaxHeight',
+                    single: true,
+                    delay: 100
+                }
+            }
         },
         additionalItems: [{
             xtype: 'k-panel-layersetchooser',
@@ -156,7 +201,7 @@ Ext.define('Koala.view.main.Main', {
     getAdditionalHeaderItems: function() {
         var searchFieldCombo = {
             xtype: 'k-form-field-searchcombo',
-            width: 500
+            flex: 1
         };
 
         var clearSearchButton = {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,16 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         'Koala.util.String',
         'Koala.model.Station'
     ],
+
+    /**
+     * The delay in milliseconds to wait before disabling the remove series
+     * button after a legend item has been deselected. This is needed so that a
+     * click on the remove series button can have any effect at all, otherwise
+     * the eventhandlers on the legend would be disabling the button as soon as
+     * it is clicked since the legend item obviously lost the focus (the button
+     * has the focus now).
+     */
+    disableRemoveSeriesBtnDelay: 300,
 
     /**
      * Removes the previousy selected feature from the select interaction
@@ -71,6 +81,22 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             width: 700
         };
         return chart;
+    },
+
+    layerTimeFilterToCql: function(layer, urlParamTime) {
+        var cql = "";
+        var util = Koala.util.Layer;
+        var filter = util.getEffectiveTimeFilterFromMetadata(layer.metadata);
+        var paramName = filter && filter.param;
+        var filterType = filter && filter.type;
+        if (filterType === "timerange") {
+            cql = paramName + " DURING " + urlParamTime;
+        } else if (filterType === "pointintime") {
+            cql = paramName + " = " + urlParamTime;
+        } else {
+            cql = "1=1";
+        }
+        return cql;
     },
 
     /**
@@ -129,8 +155,13 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         if ('viewparams' in srcParams) {
             extraParams.viewparams = srcParams.viewparams;
         }
+
+        var layerTimeFilterAsCql;
         if ('TIME' in srcParams) {
-            extraParams.TIME = srcParams.TIME;
+            // could otherwise check encodeFilterInViewparams
+            layerTimeFilterAsCql = me.layerTimeFilterToCql(
+                olLayer, srcParams.TIME
+            );
         }
 
         var store = Ext.create('Ext.data.Store', {
@@ -163,6 +194,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                     me, [olLayer], true),
                 beforequery: function(queryPlan){
                     var cqlParts = [];
+                    if (layerTimeFilterAsCql) {
+                        cqlParts.push(layerTimeFilterAsCql);
+                    }
                     if (queryPlan.query) {
                         cqlParts.push(
                             dspField + " ILIKE '%" + queryPlan.query + "%'"
@@ -202,6 +236,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         olFeat.set('layer', olLayer);
 
         me.updateTimeSeriesChart(olLayer, olFeat);
+        combo.reset();
     },
 
     /**
@@ -212,10 +247,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var viewModel = me.getViewModel();
         var chart = me.createTimeSeriesChart(olLayer);
         var chartConfig = olLayer.get('timeSeriesChartProperties');
-        var combo;
-        if (Ext.isEmpty(chartConfig.allowAddSeries) ||
-            Koala.util.String.getBool(chartConfig.allowAddSeries)) {
-                combo = me.createTimeSeriesCombo(olLayer);
+        var addSeriesCombo;
+        if (Koala.util.String.getBool(chartConfig.allowAddSeries)) {
+            addSeriesCombo = me.createTimeSeriesCombo(olLayer);
         }
         var title = !Ext.isEmpty(chartConfig.titleTpl) ?
             Koala.util.String.replaceTemplateStrings(
@@ -256,9 +290,34 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             margin: '0 0 10px 0'
         };
 
+        var removeSeriesBtn = {
+            text: viewModel.get('removeSeriesBtnText'),
+            xtype: 'button',
+            name: 'remove-series',
+            disabled: true,
+            handler: me.onRemoveSeriesButtonClicked,
+            scope: me,
+            margin: '0 0 10px 0',
+            listeners: {
+                afterrender: {
+                    fn: me.registerFocusChangeLegendHandler,
+                    single: true
+                },
+                beforedestroy: {
+                    fn: me.unregisterFocusChangeLegendHandler,
+                    single: true
+                },
+                scope: me
+            }
+        };
+
         rightColumnWrapper.items.push(undoBtn);
-        if (!Ext.isEmpty(combo)) {
-            rightColumnWrapper.items.push(combo);
+        // TODO we may want to have this being configurable as the addSeries
+        //      combo below is.
+        rightColumnWrapper.items.push(removeSeriesBtn);
+
+        if (addSeriesCombo) {
+            rightColumnWrapper.items.push(addSeriesCombo);
         }
         panel.items.push(rightColumnWrapper);
 
@@ -266,9 +325,111 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     },
 
     /**
+     * Registers a listener for focuschange on legenditems, which enables or
+     * disables the remove series button. Called after the button was rendered.
+     *
+     * @param {Ext.button.Button} btn The remove-series button.
+     */
+    registerFocusChangeLegendHandler: function(btn){
+        var chart = btn.up('[name="chart-composition"]').down('chart');
+        var legend = chart && chart.getLegend();
+        if (legend) {
+            // store it in the btn, so that unregisterFocusChangeLegendHandler
+            // can access it, there seems to be no way around this, as the
+            // chart-composition is already destroyed at this point.
+            btn.legend = legend;
+            legend.on('focuschange', this.onLegendItemFocusChange, this);
+        }
+    },
+
+    /**
+     * Unregisters the listener for focuschange on legenditems, which enables or
+     * disables the remove series button. Called during the destroy of the
+     * button
+     *
+     * @param {Ext.button.Button} btn The remove-series button.
+     */
+    unregisterFocusChangeLegendHandler: function(btn){
+        var legend = btn && btn.legend;
+        // cancel any existing disable tasks first
+        if (btn && btn.disableTask) {
+            btn.disableTask.cancel();
+        }
+        if (legend) {
+            legend.un('focuschange', this.onLegendItemFocusChange, this);
+        }
+    },
+
+    /**
+     * Whenever the focus of the legend items changes, this method disables or
+     * enables the correct remove-series button.
+     *
+     * @param {Ext.selection.Model} selModel The selection model.
+     * @param {Ext.data.Model} oldFocused The previously focused record
+     * @param {Ext.data.Model} newFocused The newly focused record
+     */
+    onLegendItemFocusChange: function(selModel, oldFocused, newFocused){
+        var legend = selModel.view;
+        var chartWrap = legend && legend.up('[name="chart-composition"]');
+        var btn = chartWrap && chartWrap.down('button[name="remove-series"]');
+        var btnNowDisabled = !newFocused;
+        if (!btn){
+            return;
+        }
+        // cancel any existing disable tasks first
+        if (btn.disableTask) {
+            btn.disableTask.cancel();
+        }
+        // save the actual selection in the button, so the click handler
+        // there has a chance of knowing the last selection
+        if (newFocused) {
+            btn.lastLegendSelection = newFocused;
+        }
+
+        if (btnNowDisabled) {
+            // delay disabling so that clicks actually occur
+            var task = new Ext.util.DelayedTask(function(){
+                btn.setDisabled(true);
+            });
+            btn.disableTask = task;
+            task.delay(this.disableRemoveSeriesBtnDelay);
+        } else {
+            // enable fast!
+            btn.setDisabled(false);
+        }
+    },
+
+    /**
+     * This method actually removes a previously focused series of a chart. The
+     * main removal logic is handled in the chart see e.g.
+     * Koala.view.chart.TimeSeries#removeStation.
+     *
+     * @param {Ext.button.Button} btn The remove-series button.
+     */
+    onRemoveSeriesButtonClicked: function(removeBtn){
+        var lastLegendSelection = removeBtn.lastLegendSelection;
+        if (!lastLegendSelection) {
+            return;
+        }
+        var chart = removeBtn.up('[name="chart-composition"]').down('chart');
+        var series = lastLegendSelection.get('series');
+        var name = lastLegendSelection.get('name');
+        var viewModel = this.getViewModel();
+        var questionTpl = viewModel.get('removeSeriesQuestionTpl');
+        var questionTitle = viewModel.get('removeSeriesQuestionTitle');
+        var question = Ext.String.format(questionTpl, name);
+
+        Ext.Msg.confirm(questionTitle, question, function(doRemove){
+            if (doRemove === "yes") {
+                chart.removeStation(series);
+            }
+        });
+    },
+
+    /**
      * Zoom back out after the button has been clicked.
      *
-     * @ @param {Ext.button.Button} undoBtn The clicked undo button.
+     * @param {Ext.button.Button} undoBtn The clicked undo button.
      */
     onUndoButtonClicked: function(undoBtn){
         var chart = undoBtn.up('[name="chart-composition"]').down('chart');
@@ -291,12 +452,13 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var me = this;
         var view = me.getView();
         var layerName = olLayer.get('name');
-        var chart = view.down('chart[name=' + layerName + ']');
-        var timeSeriesView = Ext.ComponentQuery.query('k-chart-timeseries')[0];
-        var controller = timeSeriesView.getController();
+        var chart = view.down('chart[name="' + layerName + '"]');
+        var controller = chart.getController();
 
-        if (!Ext.Array.contains(chart.getSelectedStations(), olFeat)) {
-            chart.getSelectedStations().push(olFeat);
+        var added = chart.addStation(olFeat);
+        if (!added) {
+            // chart already contains series for the new feature.
+            return;
         }
 
         controller.prepareTimeSeriesLoad(olFeat);
@@ -327,14 +489,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     onSetFilterBtnClick: function() {
         var me = this;
         var view = me.getView();
-        // var form = btn.up('form').getForm();
-        // var formValues = form.getValues();
         var charts = view.query('chart');
-
         Ext.each(charts, function(chart) {
+            var selectedStations = chart.getSelectedStations();
+            chart.removeAllStations();
             chart.getStore().removeAll();
-            chart.removeSeries(chart.getSeries());
-            Ext.each(chart.getSelectedStations(), function(selectedStation) {
+            Ext.each(selectedStations, function(selectedStation) {
                 me.createOrUpdateChart(chart.layer, selectedStation);
             });
         });
@@ -393,6 +553,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var me = this;
         var olLayer = rec.data;
         me.createOrUpdateChart(olLayer);
+        combo.reset();
     },
 
     /**
@@ -403,7 +564,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var view = me.getView();
         var layerName = olLayer.get('name');
         var layerChartRendered = me.isLayerChartRendered(layerName);
-
         // if the window contains a chart rendered for a feature from the
         // same layer as the given olFeat already, load a new timeseries into
         // the existing chart

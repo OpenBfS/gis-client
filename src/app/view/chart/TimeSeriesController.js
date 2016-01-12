@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,7 +84,9 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
             request: 'GetFeature',
             typeName: chartConfig.dataFeatureType,
             outputFormat: 'application/json',
-            filter: me.getDateTimeRangeFilter(timeRangeFilter)
+            filter: me.getDateTimeRangeFilter(timeRangeFilter),
+            // see https://redmine-koala.bfs.de/issues/1080#note-36
+            sortBy: chartConfig.xAxisAttribute
         };
 
         Ext.apply(requestParams, paramConfig);

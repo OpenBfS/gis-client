@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,13 +47,13 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             '{name:this.formatName}', {
             formatName: function(name) {
                 if(name === "dataset") {
-                    return "Daten";
+                    return "Daten"; // TODO i18n
                 }
                 if(name === "series") {
-                    return "Datenserie";
+                    return "Datenserie"; // TODO i18n
                 }
                 if(name === "service") {
-                    return "Dienst";
+                    return "Dienst"; // TODO i18n
                 }
             }
         } ]
@@ -63,7 +63,7 @@ Ext.define("Koala.view.grid.MetadataSearch", {
 
     columns: {
         items: [{
-            text: 'Name',
+            text: 'Name', // TODO i18n
             dataIndex: 'name',
             flex: 3,
             renderer: function (value) {
@@ -71,7 +71,7 @@ Ext.define("Koala.view.grid.MetadataSearch", {
                     + value +'</div>';
             }
         }, {
-            text: 'Service',
+            text: 'Service', // TODO i18n
             dataIndex: 'serviceType',
             flex: 1
         }, {
@@ -80,7 +80,7 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             tdCls: 'k-action-column',
             items: [{
                 icon: 'classic/resources/img/map_add.png',
-                tooltip: 'Zur Karte hinzufügen',
+                tooltip: 'Zur Karte hinzufügen', // TODO i18n
                 handler: 'addToMap'
             }],
             renderer: function(value, meta, record) {
@@ -94,7 +94,7 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             tdCls: 'k-action-column',
             items: [{
                 icon: 'classic/resources/img/information.png',
-                tooltip: 'Info',
+                tooltip: 'Info', // TODO i18n
                 handler: 'getInfo'
             }]
         }]

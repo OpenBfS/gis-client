@@ -14,7 +14,9 @@
         "config": {
             "data":{
                 "textUtc": "en:Zeitbezug (UTC)",
-                "textLocal": "en:Zeitbezug (lokal)"
+                "textLocal": "en:Zeitbezug (lokal)",
+                "tooltipUtc": "en:Aktuell werden Zeiten in UTC angezeigt und eingestellt, klicken Sie zum Wechsel auf lokale Zeit",
+                "tooltipLocal": "en:Aktuell werden Zeiten gemäß lokaler Zeitzone angezeigt und eingestellt, klicken Sie zum Wechsel auf UTC Zeit"
             }
         }
     },
@@ -32,16 +34,28 @@
             }
         }
     },
+    "Koala.view.form.field.LanguageCombo": {
+        "config": {
+            "data": {
+                "tooltip": "en:Klicken, um Sprache auszuwählen"
+            }
+        }
+    },
     "Koala.view.form.LayerFilter": {
         "config": {
             "format": "m/d/Y g:i A"
+        },
+        "statics": {
+            "warnMsgEndBeforeStart": "en:Startwert muss vor Endwert liegen.",
+            "warnMsgExceedsMaxDuration": "en:Startwert und Endwert liegen zu weit auseinander.",
         }
     },
     "Koala.view.form.field.SearchCombo": {
         "config": {
             "data": {
                 "emptyText": "en:Multisuche",
-                "fieldLabel": ""
+                "fieldLabel": "",
+                "tooltip": "en:Räumliche Suche und Suche in den Daten und Diensten des BfS"
             }
         }
     },
@@ -55,7 +69,8 @@
             "disablePopupBlockerTitle": "en:Popup-Blocker aktiviert?",
             "unexpectedResponseTitle": "en:Unerwartete Antwort",
             "unexpectedResponse": "en:Der Druck lieferte eine unerwartete Antwort.",
-            "printButtonPrefix": "en:Dokument"
+            "printButtonPrefix": "en:Dokument",
+            "downloadButtonSuffix": "en:herunterladen"
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -75,8 +90,16 @@
     "Koala.view.main.Main": {
         "config": {
             "data": {
+                "addWmsButtonText": "en:WMS",
+                "addWmsButtonTooltip": "en:Externen WMS hinzufügen",
                 "printButtonText": "en:Druck",
-                "buttonGroupTopTitle": "en:Werkzeuge"
+                "printButtonTooltip": "en:Kartenauschnitt drucken",
+                "buttonGroupTopTitle": "en:Werkzeuge",
+                "toogleOverviewBtnTooltip": "en:Übersichtskarte ein-/ausblenden",
+                "basigx-button-zoomin-tooltip": "en:Hineinzoomen",
+                "basigx-button-zoomout-tooltip": "en:Herauszoomen",
+                "basigx-button-zoomtoextent-tooltip": "en:Auf Startkartenansicht rezentrieren",
+                "basigx-button-togglelegend-tooltip": "en:Legende ein-/ausklappen"
             }
         }
     },
@@ -98,7 +121,8 @@
         "config": {
             "data": {
                 "title": "en:Auswahl",
-                "tooltip": "en:LayerSet wechseln"
+                "tooltip": "en:LayerSet wechseln",
+                "tooltext": "en:Thema wechseln"
             }
         }
     },
@@ -107,7 +131,8 @@
             "data": {
                 "btnTextFullscreen": "en:Vollbild",
                 "btnTextHelp": "en:Hilfe",
-                "btnTextMobile": "en:Mobile Version"
+                "btnTooltipFullscreen": "en:Zwischen Vollbildanzeige und Normalansicht wechseln",
+                "btnTooltipHelp": "en:Hilfe anzeigen"
             }
         }
     },
@@ -130,6 +155,17 @@
             "data": {
                 "name": "en:Koala"
             }
+        },
+        "statics": {
+            "fieldNames": {
+                "type": "en:Typ",
+                "name": "en:Name",
+                "fileIdentifier": "en:ID",
+                "abstract": "en:Abstract",
+                "serviceType": "en:Servicetyp",
+                "source": "en:Quelle",
+                "contact": "en:Kontakt"
+            }
         }
     },
     "Koala.view.window.Print": {
@@ -148,7 +184,10 @@
                 "setFilterBtnText": "en:OK",
                 "resetFilterBtnText": "en:Reset",
                 "selectChartLayerComboLabel": "",
-                "undoBtnText": "en:…zurückzoomen"
+                "undoBtnText": "en:…zurückzoomen",
+                "removeSeriesBtnText": "en:Serie entfernen",
+                "removeSeriesQuestionTitle": "en:Rückfrage",
+                "removeSeriesQuestionTpl": "en:Serie '{0}' entfernen?"
             }
         }
     },

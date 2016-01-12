@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ Ext.define('Koala.util.Duration', {
 
         /**
          */
-        zeroDurationObj: {
+        ZERO_DURATION_OBJECT: {
             sign: '+',
             years: 0,
             months: 0,
@@ -47,6 +47,8 @@ Ext.define('Koala.util.Duration', {
             minutes: 0,
             seconds: 0
         },
+
+        ZERO_DURATION_STRING: "",
 
         /**
          * Turn the given ISO 8601 string duration into an object that has keys
@@ -61,13 +63,13 @@ Ext.define('Koala.util.Duration', {
         isoDurationToObject: function(isoDuration) {
             var staticMe = this;
             if (!Ext.isString(isoDuration)) {
-                // caled with undefined or other non-string => 0 duration
-                return Ext.clone(staticMe.zeroDurationObj);
+                // called with undefined or other non-string => 0 duration
+                return Ext.clone(staticMe.ZERO_DURATION_OBJECT);
             }
             var matches = (isoDuration).match(staticMe.durationRegex);
             if (!matches) {
                 // illegal format => 0 duration
-                return Ext.clone(staticMe.zeroDurationObj);
+                return Ext.clone(staticMe.ZERO_DURATION_OBJECT);
             }
             // all is fine, the string could be parsed:
             return {
@@ -116,7 +118,7 @@ Ext.define('Koala.util.Duration', {
         /**
          */
         abs: function(duration){
-            if (duration[0] === '-') {
+            if (duration && duration[0] === '-') {
                 return duration.substr(1);
             }
             return duration;
@@ -143,6 +145,31 @@ Ext.define('Koala.util.Duration', {
             var durationInSeconds = this.absoluteSecondsFromDuration(duration);
             var unit = Ext.Date.SECOND;
             return Ext.Date.add(baseDate, unit, durationInSeconds);
+        },
+
+        /**
+         * Checks whether the timespan between the given dates is within the
+         * passed duration.
+         *
+         * @param {Date} dateStart The startdate of the timespan.
+         * @param {Date} dateEnd The endate of the timespan.
+         * @param {String} duration The maximum duration.
+         * @return {Boolean} Whether the dates form a timespan that is not
+         *     longer than the duration.
+         */
+        datesWithinDuration: function(dateStart, dateEnd, duration) {
+            var start = Ext.clone(dateStart);
+            var end = Ext.clone(dateEnd);
+            if (end < start) {
+                return false;
+                // …or, if we want to swap:
+                //
+                // var temp = start;
+                // start = end;
+                // end = temp;
+            }
+            var maxEnd = this.dateAddAbsoluteDuration(start, duration);
+            return Ext.Date.between(end, start, maxEnd);
         }
     }
 });

@@ -14,7 +14,9 @@
         "config": {
             "data":{
                 "textUtc": "Zeitbezug (UTC)",
-                "textLocal": "Zeitbezug (lokal)"
+                "textLocal": "Zeitbezug (lokal)",
+                "tooltipUtc": "Aktuell werden Zeiten in UTC angezeigt und eingestellt, klicken Sie zum Wechsel auf lokale Zeit",
+                "tooltipLocal": "Aktuell werden Zeiten gemäß lokaler Zeitzone angezeigt und eingestellt, klicken Sie zum Wechsel auf UTC Zeit"
             }
         }
     },
@@ -32,16 +34,28 @@
             }
         }
     },
+    "Koala.view.form.field.LanguageCombo": {
+        "config": {
+            "data": {
+                "tooltip": "Klicken, um Sprache auszuwählen"
+            }
+        }
+    },
     "Koala.view.form.LayerFilter": {
         "config": {
-            "format": "d.m.Y H:i"
+            "format": "d.m.Y H:i",
+        },
+        "statics": {
+            "warnMsgEndBeforeStart": "Startwert muss vor Endwert liegen.",
+            "warnMsgExceedsMaxDuration": "Startwert und Endwert liegen zu weit auseinander.",
         }
     },
     "Koala.view.form.field.SearchCombo": {
         "config": {
             "data": {
                 "emptyText": "Multisuche",
-                "fieldLabel": ""
+                "fieldLabel": "",
+                "tooltip": "Räumliche Suche und Suche in den Daten und Diensten des BfS"
             }
         }
     },
@@ -55,7 +69,8 @@
             "disablePopupBlockerTitle": "Popup-Blocker aktiviert?",
             "unexpectedResponseTitle": "Unerwartete Antwort",
             "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort.",
-            "printButtonPrefix": "Dokument"
+            "printButtonPrefix": "Dokument",
+            "downloadButtonSuffix": "herunterladen"
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -75,8 +90,16 @@
     "Koala.view.main.Main": {
         "config": {
             "data": {
+                "addWmsButtonText": "WMS",
+                "addWmsButtonTooltip": "Externen WMS hinzufügen",
                 "printButtonText": "Druck",
-                "buttonGroupTopTitle": "Werkzeuge"
+                "printButtonTooltip": "Kartenauschnitt drucken",
+                "buttonGroupTopTitle": "Werkzeuge",
+                "toogleOverviewBtnTooltip": "Übersichtskarte ein-/ausblenden",
+                "basigx-button-zoomin-tooltip": "Hineinzoomen",
+                "basigx-button-zoomout-tooltip": "Herauszoomen",
+                "basigx-button-zoomtoextent-tooltip": "Auf Startkartenansicht rezentrieren",
+                "basigx-button-togglelegend-tooltip": "Legende ein-/ausklappen"
             }
         }
     },
@@ -98,7 +121,8 @@
         "config": {
             "data": {
                 "title": "Auswahl",
-                "tooltip": "LayerSet wechseln"
+                "tooltip": "LayerSet wechseln",
+                "tooltext": "Thema wechseln"
             }
         }
     },
@@ -107,7 +131,8 @@
             "data": {
                 "btnTextFullscreen": "Vollbild",
                 "btnTextHelp": "Hilfe",
-                "btnTextMobile": "Mobile Version"
+                "btnTooltipFullscreen": "Zwischen Vollbildanzeige und Normalansicht wechseln",
+                "btnTooltipHelp": "Hilfe anzeigen"
             }
         }
     },
@@ -130,6 +155,17 @@
             "data": {
                 "name": "Koala"
             }
+        },
+        "statics": {
+            "fieldNames": {
+                "type": "Typ",
+                "name": "Name",
+                "fileIdentifier": "ID",
+                "abstract": "Abstract",
+                "serviceType": "Servicetyp",
+                "source": "Quelle",
+                "contact": "Kontakt"
+            }
         }
     },
     "Koala.view.window.Print": {
@@ -148,7 +184,10 @@
                 "setFilterBtnText": "OK",
                 "resetFilterBtnText": "Reset",
                 "selectChartLayerComboLabel": "",
-                "undoBtnText": "…zurückzoomen"
+                "undoBtnText": "…zurückzoomen",
+                "removeSeriesBtnText": "Serie entfernen",
+                "removeSeriesQuestionTitle": "Rückfrage",
+                "removeSeriesQuestionTpl": "Serie '{0}' entfernen?"
             }
         }
     },

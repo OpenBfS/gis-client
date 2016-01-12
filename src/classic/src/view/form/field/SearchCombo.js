@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,11 +39,15 @@ Ext.define("Koala.view.form.field.SearchCombo", {
     hideTrigger: true,
 
     bind: {
-        emptyText: '{emptyText}'
+        emptyText: '{emptyText}',
+        tooltip: '{tooltip}'
     },
+
 
     listeners: {
         change: function(combo, newValue){
+            // TODO this will need to be changed once we have more than one
+            //      map/panel/composition
             var multiPanel = Ext.ComponentQuery.query('k-panel-multisearch')[0];
             if(newValue){
                 if(multiPanel) {
@@ -70,6 +74,15 @@ Ext.define("Koala.view.form.field.SearchCombo", {
                 scope: combo
             });
         }
+    },
+
+    setTooltip: function() {
+        var el = this.getEl();
+        var viewModel = this.getViewModel();
+        Ext.QuickTips.register({
+            target: el,
+            text: viewModel.get('tooltip')
+        });
     },
 
     doSpatialSearch: function(value){

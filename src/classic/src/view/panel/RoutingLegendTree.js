@@ -1,5 +1,5 @@
 /*global window*/
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,11 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     xtype: "k-panel-routing-legendtree",
 
     requires: [
+        "Koala.store.MetadataSearch",
         "Koala.util.Layer",
-
         "Koala.view.panel.RoutingLegendTreeController",
-        "Koala.view.panel.RoutingLegendTreeModel"
+        "Koala.view.panel.RoutingLegendTreeModel",
+        "Koala.view.window.MetadataInfo"
     ],
 
     controller: "k-panel-routing-legendtree",
@@ -35,17 +36,22 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     config: {
-        routingEnabled: false
+        routingEnabled: false,
+        selModel: {
+            allowDeselect: true,
+            mode: "SINGLE"
+        }
     },
 
     hasRoutingListeners: false,
 
     listeners: {
-        selectionchange: 'onSelectionChange'
+        selectionchange: 'onSelectionChange',
+        beforerender: 'bindUtcBtnToggleHandler',
+        beforedestroy: 'unbindUtcBtnToggleHandler'
     },
 
     statics: {
-
         findByProp: function(arr, key, val){
             var item = null;
             Ext.each(arr, function(obj){
@@ -101,15 +107,21 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         shortInfoHandler: function(btn){
             var record = btn.layerRec;
-            var layer = record.getOlLayer();
-            var text = layer.get('name') + '<br>';
-
-            if(Ext.isDefined(layer.metadata.filter)){
-                var filtertext = Koala.view.panel.RoutingLegendTree
-                    .getFilterText(record);
-                text = filtertext;
-            }
-            Ext.toast(text, layer.get('name'));
+            var cql = "Identifier = '" + record.get('metadata').id + "'";
+            var metadataStore = Ext.create('Koala.store.MetadataSearch');
+            metadataStore.getProxy().setExtraParam('constraint', cql);
+            metadataStore.on('load', function(store, recs) {
+                var rec = recs && recs[0];
+                if (rec) {
+                    Ext.create('Koala.view.window.MetadataInfo', {
+                        title: rec.get('name'),
+                        layout: 'fit',
+                        record: rec
+                    }).show();
+                }
+                Ext.defer(metadataStore.destroy, 1000, metadataStore);
+            }, this, {single: true});
+            metadataStore.load();
         },
 
         removalHandler: function(btn){
@@ -146,7 +158,10 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 },
                 fn: function(btnId){
                     if(btnId === "yes"){
-                        window.open(layer.get('downloadUrl'), '_blank');
+                        var url = Koala.util.Layer.getDownloadUrlWithFilter(
+                                layer
+                            );
+                        window.open(url, '_blank');
                     }
                 }
             });
@@ -165,6 +180,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
     rowBodyCompTemplate: {
         xtype: 'container',
+        name: 'legend-tree-row-component',
         scrollable: true,
         items: [ {
             xtype: 'container',
@@ -214,6 +230,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         },
         {
             xtype: 'component',
+            name: 'filtertext',
             layout: 'hbox',
             defaults: {
                 margin: '0 5px 0 0'
@@ -232,6 +249,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             alt: '{{"Legende " + record.getOlLayer().get("name")}}'
         }]
     },
+
+    itemExpandedKey: 'koala-rowbody-expanded',
 
     /**
      * Initialize the component.
@@ -253,9 +272,128 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         // configure rowexpanderwithcomponents-plugin
         me.plugins[0].hideExpandColumn = false;
 
-        // Register moveend to update legendUrls
+        me.bindUpdateHandlers();
+    },
+
+    /**
+     * Called at the end of the initComponent-sequence, this methods binds some
+     * some evenet handlers on verious components to react on a state change
+     * there. See #unbindUpdateHandlers for the unbind logic bound early in the
+     * destroy sequence.
+     *
+     * @private
+     */
+    bindUpdateHandlers: function() {
+        var me = this;
+        // TODO this needs to be changed once we handle more than one map
         var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
+        var treeView = me.getView();
+        var treeStore = me.getStore();
+
+        // Register moveend to update legendUrls
         map.on('moveend', me.updateLegendsWithScale, me);
+        // Ensure a previous selection is kept after datachange
+        treeStore.on('datachanged', me.layerDataChanged, me);
+        // store data on collapse/expand, and use it on drop to keep the
+        // expoanded collapsed state after drag and drop
+        treeView.on({
+            collapsebody: me.onCollapseBody,
+            expandbody: me.onExpandBody,
+            drop: me.layerDropped,
+            scope: me
+        });
+
+        // also bind our own unregistering here.
+        me.on('beforedestroy', me.unbindUpdateHandlers, me, {single: true});
+    },
+
+    /**
+     * Unbind the handlers that were bound in #bindUpdateHandlers during the
+     * initComponent sequence.
+     *
+     * @private
+     */
+    unbindUpdateHandlers: function(){
+        var me = this;
+        // TODO this needs to be changed once we handle more than one map
+        var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
+        var treeView = me.getView();
+        var treeStore = me.getStore();
+
+        // Unregister moveend to update legendUrls
+        map.un('moveend', me.updateLegendsWithScale, me);
+        treeStore.un('datachanged', me.layerDataChanged, me);
+        treeView.un({
+            collapsebody: me.onCollapseBody,
+            expandbody: me.onExpandBody,
+            drop: me.layerDropped,
+            scope: me
+        });
+    },
+
+    /**
+     * Whenever a rowbody collapses, store the current state.
+     *
+     * @param {HTMLElement} rowNode The `tr` element owning the expanded row.
+     * @param {Ext.data.Model} record The record providing the data.
+     */
+    onCollapseBody: function(rowNode, record){
+        record.set(this.itemExpandedKey, false);
+    },
+
+    /**
+     * Whenever a rowbody expands, store the current state.
+     *
+     * @param {HTMLElement} rowNode The `tr` element owning the expanded row.
+     * @param {Ext.data.Model} record The record providing the data.
+     */
+    onExpandBody: function(rowNode, record){
+        record.set(this.itemExpandedKey, true);
+    },
+
+    /**
+     * Restore the complete collapsed / expanded state of all rowbodies of the
+     * panel by cascading down the tree and double toggling all candidates. If
+     * someone finds a better and API-conformant way, that'd be great.
+     */
+    layerDropped: function(){
+        var me = this;
+        var view = me.getView();
+        var rowExpanderPlugin = me.getPlugin();
+        var rootNode = me.getRootNode();
+        var itemExpandedKey = me.itemExpandedKey;
+        rootNode.cascadeBy({
+            before: function(child) {
+                var idx = view.indexOfRow(child);
+                var targetState = child.get(itemExpandedKey);
+                if (idx !== -1 && Ext.isDefined(targetState)) {
+                    rowExpanderPlugin.toggleRow(idx, child);
+                    rowExpanderPlugin.toggleRow(idx, child);
+                }
+            },
+            scope: me
+        });
+    },
+
+    /**
+     * When the store has changed (because e.g. a layer was added), we need to
+     * do certain things to have a sane state with regard to for example
+     * hovering which is reconfigured on selection change on our side.
+     */
+    layerDataChanged: function() {
+        var me = this;
+        var selection = me.getSelection();
+        // nothing to do if the selection is empty.
+        if (Ext.isEmpty(selection)) {
+            return;
+        }
+        var selModel = me.getSelectionModel();
+        // Here is what we do:
+        // 1) unselect all records, but suppress event handler notification
+        selModel.deselectAll(true);
+        // 2) select what was previously selected, and trigger the hovering
+        //    configurator elsewhere
+        selModel.select(selection);
     },
 
     updateLegendsWithScale: function () {

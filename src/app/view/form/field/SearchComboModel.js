@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,8 @@ Ext.define('Koala.view.form.field.SearchComboModel', {
 
     data: {
         emptyText: '',
-        fieldLabel: ''
+        fieldLabel: '',
+        tooltip: ''
     }
 
 });

@@ -14,7 +14,9 @@
         "config": {
             "data":{
                 "textUtc": "fr:Zeitbezug (UTC)",
-                "textLocal": "fr:Zeitbezug (lokal)"
+                "textLocal": "fr:Zeitbezug (lokal)",
+                "tooltipUtc": "fr:Aktuell werden Zeiten in UTC angezeigt und eingestellt, klicken Sie zum Wechsel auf lokale Zeit",
+                "tooltipLocal": "fr:Aktuell werden Zeiten gemäß lokaler Zeitzone angezeigt und eingestellt, klicken Sie zum Wechsel auf UTC Zeit"
             }
         }
     },
@@ -32,16 +34,28 @@
             }
         }
     },
+    "Koala.view.form.field.LanguageCombo": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Klicken, um Sprache auszuwählen"
+            }
+        }
+    },
     "Koala.view.form.LayerFilter": {
         "config": {
             "format": "d/m/Y H:i"
+        },
+        "statics": {
+            "warnMsgEndBeforeStart": "fr:Startwert muss vor Endwert liegen.",
+            "warnMsgExceedsMaxDuration": "fr:Startwert und Endwert liegen zu weit auseinander.",
         }
     },
     "Koala.view.form.field.SearchCombo": {
         "config": {
             "data": {
                 "emptyText": "fr:Multisuche",
-                "fieldLabel": ""
+                "fieldLabel": "",
+                "tooltip": "fr:Räumliche Suche und Suche in den Daten und Diensten des BfS"
             }
         }
     },
@@ -55,7 +69,8 @@
             "disablePopupBlockerTitle": "fr:Popup-Blocker aktiviert?",
             "unexpectedResponseTitle": "fr:Unerwartete Antwort",
             "unexpectedResponse": "fr:Der Druck lieferte eine unerwartete Antwort.",
-            "printButtonPrefix": "fr:Dokument"
+            "printButtonPrefix": "fr:Dokument",
+            "downloadButtonSuffix": "fr:herunterladen"
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -75,8 +90,16 @@
     "Koala.view.main.Main": {
         "config": {
             "data": {
+                "addWmsButtonText": "fr:WMS",
+                "addWmsButtonTooltip": "fr:Externen WMS hinzufügen",
                 "printButtonText": "fr:Druck",
-                "buttonGroupTopTitle": "fr:Werkzeuge"
+                "printButtonTooltip": "fr:Kartenauschnitt drucken",
+                "buttonGroupTopTitle": "fr:Werkzeuge",
+                "toogleOverviewBtnTooltip": "fr:Übersichtskarte ein-/ausblenden",
+                "basigx-button-zoomin-tooltip": "fr:Hineinzoomen",
+                "basigx-button-zoomout-tooltip": "fr:Herauszoomen",
+                "basigx-button-zoomtoextent-tooltip": "fr:Auf Startkartenansicht rezentrieren",
+                "basigx-button-togglelegend-tooltip": "fr:Legende ein-/ausklappen"
             }
         }
     },
@@ -98,7 +121,8 @@
         "config": {
             "data": {
                 "title": "fr:Auswahl",
-                "tooltip": "fr:LayerSet wechseln"
+                "tooltip": "fr:LayerSet wechseln",
+                "tooltext": "fr:Thema wechseln"
             }
         }
     },
@@ -107,7 +131,8 @@
             "data": {
                 "btnTextFullscreen": "fr:Vollbild",
                 "btnTextHelp": "fr:Hilfe",
-                "btnTextMobile": "fr:Mobile Version"
+                "btnTooltipFullscreen": "fr:Zwischen Vollbildanzeige und Normalansicht wechseln",
+                "btnTooltipHelp": "fr:Hilfe anzeigen"
             }
         }
     },
@@ -130,6 +155,17 @@
             "data": {
                 "name": "fr:Koala"
             }
+        },
+        "statics": {
+            "fieldNames": {
+                "type": "fr:Typ",
+                "name": "fr:Name",
+                "fileIdentifier": "fr:ID",
+                "abstract": "fr:Abstract",
+                "serviceType": "fr:Servicetyp",
+                "source": "fr:Quelle",
+                "contact": "fr:Kontakt"
+            }
         }
     },
     "Koala.view.window.Print": {
@@ -147,8 +183,11 @@
                 "dateFieldEndLabel": "fr:Ende",
                 "setFilterBtnText": "fr:OK",
                 "resetFilterBtnText": "fr:Reset",
-                "selectChartLayerComboLabel": "",
-                "undoBtnText": "…zurückzoomen"
+                "selectChartLayerComboLabel": "fr:",
+                "undoBtnText": "fr:…zurückzoomen",
+                "removeSeriesBtnText": "fr:Serie entfernen",
+                "removeSeriesQuestionTitle": "fr:Rückfrage",
+                "removeSeriesQuestionTpl": "fr:Serie '{0}' entfernen?"
             }
         }
     },

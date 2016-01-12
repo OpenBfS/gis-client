@@ -1,5 +1,5 @@
 /*global document*/
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,22 +25,33 @@ Ext.define("Koala.view.component.Map", {
         "Koala.view.component.MapController"
     ],
 
+    config: {
+        hoverFeatureClickBufferMS: 250
+    },
+
     /**
      *
      */
     controller: "k-component-map",
 
     initComponent: function(){
-        this.callParent(arguments);
-        this.on('hoverfeaturesclick', this.onHoverFeatureClick, this);
+        var me = this;
+        var staticMe = Koala.view.component.Map;
+        me.callParent();
 
-        var hoverPlugin = this.getPlugin('hover');
+        // this event originates from an ol3 collection event and may be called
+        // too often… so we call it buffered after the specified amount of MS.
+        me.on('hoverfeaturesclick', me.onHoverFeatureClick, me, {
+            buffer: me.getHoverFeatureClickBufferMS()
+        });
+
+        var hoverPlugin = me.getPlugin('hover');
         if(hoverPlugin){
-            hoverPlugin.selectStyleFunction = Koala.view.component.Map
-                .styleFromGnos("selectStyle");
-            hoverPlugin.highlightStyleFunction = Koala.view.component.Map
-                .styleFromGnos("hoverStyle");
-            hoverPlugin.getToolTipHtml = this.getController().getToolTipHtml;
+            var selStyleFunction = staticMe.styleFromGnos("selectStyle");
+            var highlightStyleFunction = staticMe.styleFromGnos("hoverStyle");
+            hoverPlugin.selectStyleFunction = selStyleFunction;
+            hoverPlugin.highlightStyleFunction = highlightStyleFunction;
+            hoverPlugin.getToolTipHtml = me.getController().getToolTipHtml;
         }
     },
 
@@ -118,8 +129,9 @@ Ext.define("Koala.view.component.Map", {
     onHoverFeatureClick: function(olFeatures) {
         var me = this;
         var controller = me.getController();
-
-        controller.onHoverFeatureClick(olFeatures[0]);
+        Ext.each(olFeatures, function(olFeature) {
+            controller.onHoverFeatureClick(olFeature);
+        });
     }
 
 });

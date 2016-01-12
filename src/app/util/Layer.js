@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,9 +74,61 @@ Ext.define('Koala.util.Layer', {
             return filters;
         },
 
+        getEffectiveTimeFilterFromMetadata: function(metadata) {
+            var filters = Ext.clone(this.getFiltersFromMetadata(metadata));
+            var timeTypes = ['pointintime', 'timerange'];
+            var effectiveFilter = null;
+            if (filters !== null) {
+                // The effective timefilter is the last pit or tr filter:
+                Ext.each(filters, function(filter){
+                    var type = (filter.type || '').toLowerCase();
+                    if (Ext.Array.contains(timeTypes, type)) {
+                        effectiveFilter = filter;
+                        return false; // stop iteration early;
+                    }
+                }, null, true);
+            }
+            return effectiveFilter;
+        },
+
+        /**
+         * This static method is a wrapper around #Koala.Application.isLocal
+         * which we'll always have if we are working inside an Ext.Application,
+         * but never when we are running unit-tests. We cannot simply require
+         * `Koala.Application`, since this would lead to a circular dependency.
+         *
+         * @return {boolean} Whether the application is currently running in
+         *     local-mode.
+         */
+        appIsLocal: function() {
+            if ('Application' in Koala) {
+                return Koala.Application.isLocal();
+            }
+            return false;
+        },
+
+        /**
+         * This static method is a wrapper around #Koala.Application.isUtc
+         * which we'll always have if we are working inside an Ext.Application,
+         * but never when we are running unit-tests. We cannot simply require
+         * `Koala.Application`, since this would lead to a circular dependency.
+         *
+         * In unit tests this will simply return the opposite of #appIsLocal.
+         *
+         * @return {boolean} Whether the application is currently running in
+         *     utc-mode.
+         */
+        appIsUtc: function() {
+            if ('Application' in Koala) {
+                return Koala.Application.isUtc();
+            }
+            return !this.appIsLocal();
+        },
+
         /**
          * Returns a textual representation of the filters in the metadata
-         * object.
+         * object. This method is used for displaying the filters and as such it
+         * respects the current UTC setting of the application.
          *
          * @param {object} metadata The metadata json object.
          * @returns {string} A textual representation of the filters or ''.
@@ -108,6 +160,10 @@ Ext.define('Koala.util.Layer', {
                     var date, format, time;
 
                     date = new Date(filter.timeinstant);
+                    // respect the applications UTC setting
+                    if (staticMe.appIsLocal()) {
+                        date = Koala.util.Date.makeLocal(date);
+                    }
                     format = filter.timeformat || defaultDateFormat;
                     time = Ext.Date.format(date, format);
                     filterTxt += time;
@@ -116,11 +172,15 @@ Ext.define('Koala.util.Layer', {
                     var endDate, endFormat, endTime;
 
                     startDate = new Date(filter.mindatetimeinstant);
-                    startFormat = filter.mindatetimeformat || defaultDateFormat;
-                    startTime = Ext.Date.format(startDate, startFormat);
-
                     endDate = new Date(filter.maxdatetimeinstant);
+                    // respect the applications UTC setting
+                    if (staticMe.appIsLocal()) {
+                        startDate = Koala.util.Date.makeLocal(startDate);
+                        endDate = Koala.util.Date.makeLocal(endDate);
+                    }
+                    startFormat = filter.mindatetimeformat || defaultDateFormat;
                     endFormat = filter.maxdatetimeformat || defaultDateFormat;
+                    startTime = Ext.Date.format(startDate, startFormat);
                     endTime = Ext.Date.format(endDate, endFormat);
 
                     filterTxt += "" +
@@ -437,10 +497,10 @@ Ext.define('Koala.util.Layer', {
             olProps = Koala.util.Object.coerceAll(olProps);
             var getBool = Koala.util.String.getBool;
 
-            var isTopic = false;
+            var shallHover = false;
             // TODO Is a hoverTpl really required to hover?
             if (!Ext.isEmpty(olProps.hoverTpl) && olProps.allowHover !== false) {
-                isTopic = true;
+                shallHover = true;
             }
 
             return {
@@ -448,14 +508,13 @@ Ext.define('Koala.util.Layer', {
                 legendUrl: olProps.legendUrl || '',
                 legendHeight: olProps.legendHeight,
                 legendWidth: olProps.legendWidth,
-                topic: isTopic, // TODO: rename this prop in the application
-                hoverable: isTopic,
                 allowFeatureInfo: getBool(olProps.allowFeatureInfo, true),
                 allowDownload: getBool(olProps.allowDownload, true),
                 allowRemoval: getBool(olProps.allowRemoval, true),
                 allowShortInfo: getBool(olProps.allowShortInfo, true),
                 allowPrint: getBool(olProps.allowPrint, true),
                 allowOpacityChange: getBool(olProps.allowOpacityChange, true),
+                hoverable: shallHover,
                 hoverTpl: olProps.hoverTpl,
                 hoverStyle: olProps.hoverStyle,
                 selectStyle: olProps.selectStyle || olProps.hoverStyle,
@@ -594,6 +653,10 @@ Ext.define('Koala.util.Layer', {
             }
 
             metadata = me.applyDefaultsIfNotChangedByUser(metadata, filters);
+
+            // get them again, they may have changed…
+            filters = this.getFiltersFromMetadata(metadata);
+
             if (encodeInViewParams === "true") {
                 metadata = me.moveFiltersToViewparams(metadata, filters);
             } else {
@@ -641,7 +704,7 @@ Ext.define('Koala.util.Layer', {
          *
          */
         applyDefaultsTimerangeFilter: function(filter){
-            if (!filter.mindatetimeinstant) {
+            if (!Ext.isDate(filter.mindatetimeinstant)) {
                 if (filter.defaultstarttimeinstant) {
                     try {
                         filter.mindatetimeinstant = Ext.Date.parse(
@@ -656,14 +719,8 @@ Ext.define('Koala.util.Layer', {
                         ' and no configured default start value for timerange' +
                         ' filter');
                 }
-            // TODO: MJ Fix fallback calc
-            } else if (Ext.isString(filter.mindatetimeinstant)) {
-                filter.mindatetimeinstant = Ext.Date.parse(
-                    filter.defaultstarttimeinstant,
-                    filter.defaultstarttimeformat
-                );
             }
-            if (!filter.maxdatetimeinstant) {
+            if (!Ext.isDate(filter.maxdatetimeinstant)) {
                 if (filter.defaultendtimeinstant) {
                     try {
                         filter.maxdatetimeinstant = Ext.Date.parse(
@@ -678,31 +735,12 @@ Ext.define('Koala.util.Layer', {
                         ' and no configured default end value for timerange' +
                         ' filter');
                 }
-            // TODO: MJ Fix fallback calc
-            } else if (Ext.isString(filter.maxdatetimeinstant)) {
-                filter.maxdatetimeinstant = Ext.Date.parse(
-                    filter.defaultendtimeinstant,
-                    filter.defaultendtimeformat
-                );
             }
-
-            var appIsLocal = Koala.Application.isLocal();
-            if (appIsLocal) {
-                filter.mindatetimeinstant = Koala.util.Date.makeLocal(
-                    filter.mindatetimeinstant
-                );
-                filter.maxdatetimeinstant = Koala.util.Date.makeLocal(
-                    filter.maxdatetimeinstant
-                );
-            }
-
-
             return filter;
         },
 
         applyDefaultsPointInTimeFilter: function(filter){
-
-            if (!filter.timeinstant) {
+            if (!Ext.isDate(filter.timeinstant)) {
                 if (filter.defaulttimeinstant) {
                     try {
                         filter.timeinstant = Ext.Date.parse(
@@ -710,18 +748,14 @@ Ext.define('Koala.util.Layer', {
                             filter.defaulttimeformat
                         );
                     } catch (e) {
-                        Ext.log.error('Could not set default point in time filter');
+                        Ext.log.error(
+                            'Could not set default point in time filter'
+                        );
                     }
                 } else {
                     Ext.log.warn('No defined point in time filter and no ' +
                         'configured default point in time filter');
                 }
-            }
-            var appIsLocal = Koala.Application.isLocal();
-            if (appIsLocal) {
-                filter.timeinstant = Koala.util.Date.makeLocal(
-                    filter.timeinstant
-                );
             }
             return filter;
         },
@@ -763,9 +797,9 @@ Ext.define('Koala.util.Layer', {
                 Ext.log.warn('Multiple time filters configured, ' +
                     'only the last will win');
             }
-            // TODO check UTC!
             var start = filter.mindatetimeinstant;
             var end = filter.maxdatetimeinstant;
+
             var format = Koala.util.Date.ISO_FORMAT;
             var val = Ext.Date.format(start, format) + '/' + Ext.Date.format(end, format);
             olProps[wmstKey] = val;
@@ -781,7 +815,6 @@ Ext.define('Koala.util.Layer', {
                 Ext.log.warn('Multiple time filters configured, ' +
                     'only the last will win');
             }
-            // TODO check UTC!
             var dateValue = filter.timeinstant;
             var format = Koala.util.Date.ISO_FORMAT;
             var val = Ext.Date.format(dateValue, format);
@@ -791,6 +824,13 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Returns a stringified version of the passed value filter. The
+         * stringified version is a CQL and can be used for filtering (e.g. via
+         * the query parameter `CQL_FILTER`) or for displaying the filter (e.g.
+         * in the legendpanel).
+         *
+         * @param {object} filter The value-filter.
+         * @return {string} A stringified variant of the filter as CQL.
          */
         stringifyValueFilter: function(filter){
             var op = (filter.operator || '').toUpperCase();
@@ -828,6 +868,66 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Returns a stringified version of the passed pointintime filter. The
+         * stringified version is a CQL and can be used for filtering (e.g. via
+         * the query parameter `CQL_FILTER`) or for displaying the filter (e.g.
+         * in the legendpanel). For displaying a time-related filter, this may
+         * not be the best choice though.
+         *
+         * @param {object} filter The pointintime-filter.
+         * @return {string} A stringified variant of the filter as CQL.
+         */
+        stringifyPointInTimeFilter: function(filter) {
+            var format = Koala.util.Date.ISO_FORMAT;
+            var trimmedParam = Ext.String.trim(filter.param);
+            var timeinstant = filter.timeinstant;
+            var formattedTime = Ext.Date.format(timeinstant, format);
+            var cql = trimmedParam + "=" + formattedTime;
+            return cql;
+        },
+
+        /**
+         * Returns a stringified version of the passed timerange filter. The
+         * stringified version is a CQL and can be used for filtering (e.g. via
+         * the query parameter `CQL_FILTER`) or for displaying the filter (e.g.
+         * in the legendpanel). For displaying a time-related filter, this may
+         * not be the best choice though.
+         *
+         * @param {object} filter The timerange-filter.
+         * @return {string} A stringified variant of the filter as CQL.
+         */
+        stringifyTimeRangeFilter: function(filter) {
+            var format = Koala.util.Date.ISO_FORMAT;
+            var trimmedParam = Ext.String.trim(filter.param);
+            var params = trimmedParam.split(",");
+            var startParam = params[0];
+            var endParam = params[1] || params[0];
+            var mindatetimeinstant = filter.mindatetimeinstant;
+            var maxdatetimeinstant = filter.maxdatetimeinstant;
+            var formattedStart = Ext.Date.format(mindatetimeinstant, format);
+            var formattedEnd = Ext.Date.format(maxdatetimeinstant, format);
+            var cql = "";
+            if (startParam === endParam) {
+                // We'll often be filtering on actually one attribute.
+                // we then want to have the standard GeoServer functionality:
+                // http://docs.geoserver.org/stable/en/user/filter/ecql_reference.html#temporal-predicate
+                cql += startParam;
+                cql += " DURING ";
+                cql += formattedStart + "/" + formattedEnd;
+            } else {
+                // This will not often be the case, but we need to make sure to
+                // support it. If different attributes have the start/end values
+                // we make a AND connected less than /greater than filter.
+                cql += "(";
+                cql += startParam + ">" + formattedStart;
+                cql += " AND ";
+                cql += endParam + "<" + formattedEnd;
+                cql += ")";
+            }
+            return cql;
+        },
+
+        /**
          */
         configureMetadataWithValue: function(metadata, filter) {
             // VALUE becomes a CQL filter
@@ -855,29 +955,25 @@ Ext.define('Koala.util.Layer', {
             Ext.each(filters, function(filter) {
                 var params = filter.param.split(",");
                 var type = filter.type;
+
                 // we need to check the metadata for default filters to apply
-                // TODO The format should be put into a config and used all over
-                //      the place
                 if (type === "timerange") {
-                    keyVals[params[0]] = Ext.Date.format(
-                        filter.mindatetimeinstant,
-                        format
-                    );
+                    var rawDateMin = filter.mindatetimeinstant;
+                    keyVals[params[0]] = Ext.Date.format(rawDateMin, format);
+
+                    var rawDateMax = filter.maxdatetimeinstant;
                     if(!params[1]) {
                         keyVals[params[0]] += "/" +
-                            Ext.Date.format(
-                                filter.maxdatetimeinstant, format
-                            );
+                            Ext.Date.format(rawDateMax, format);
                     } else {
                         keyVals[params[1]] = Ext.Date.format(
-                                filter.maxdatetimeinstant, format
+                                rawDateMax, format
                             );
                     }
                 } else if (type === "pointintime") {
-                    keyVals[params[0]] = Ext.Date.format(
-                        filter.timeinstant, format
-                    );
-                } else if (type === 'value') {
+                    var rawDate = filter.timeinstant;
+                    keyVals[params[0]] = Ext.Date.format(rawDate, format);
+                } else if (type === "value") {
                     keyVals[params[0]] = filter.value;
                 }
             });
@@ -897,6 +993,78 @@ Ext.define('Koala.util.Layer', {
             /* eslint camelcase:0 */
             metadata.layerConfig.olProperties.param_viewparams = existingViewParams;
             return metadata;
+        },
+
+        /**
+         * Gets an appropriate URL where the current layer filters are
+         * respected. The Base URL can be configured in `downloadUrl` on the
+         * GNOS-side.
+         *
+         * @param {ol.layer.Base} layer The Layer to get the URL from. Any
+         *     active filters will be serialized as a CQL filter.
+         * @return {string} The download URL.
+         */
+        getDownloadUrlWithFilter: function(layer){
+            var staticMe = this;
+            var baseUrl = layer.get('downloadUrl');
+            var url = baseUrl;
+            var metadata = layer.metadata;
+            var filters = staticMe.getFiltersFromMetadata(metadata);
+            if (!filters) {
+                return url;
+            }
+            var cql = staticMe.filtersToCql(filters);
+            var param = "CQL_FILTER=" + encodeURIComponent(cql);
+            // TODO check if we already have a CQL_FILTER in layer or base-url?!?
+            url = Ext.String.urlAppend(url, param);
+
+            var existingViewParams = Koala.util.Object.getPathStrOr(
+                    metadata,
+                    "layerConfig/olProperties/param_viewparams",
+                    null
+                );
+            if (existingViewParams !== null) {
+                var viewParams = "VIEWPARAMS=" + existingViewParams;
+                url = Ext.String.urlAppend(url, viewParams);
+            }
+            return url;
+        },
+
+        filtersToCql: function(filters) {
+            var staticMe = this;
+            if (!filters || filters.length < 1) {
+                return "";
+            }
+            var cqlParts = [];
+            Ext.each(filters, function(filter){
+                cqlParts.push("(" + staticMe.filterToCql(filter) + ")");
+            });
+            return cqlParts.join(" AND ");
+        },
+
+        filterToCql: function(filter){
+            var staticMe = this;
+            var type = filter.type;
+            var cql = "";
+            switch(type) {
+                case "rodos":
+                    // TODO to be specified
+                    break;
+                case "value":
+                    cql = staticMe.stringifyValueFilter(filter);
+                    break;
+                case "pointintime":
+                    cql = staticMe.stringifyPointInTimeFilter(filter);
+                    break;
+                case "timerange":
+                    cql = staticMe.stringifyTimeRangeFilter(filter);
+                    break;
+                default:
+                    Ext.log.warn("Unexpected filter type " + type
+                        + " specified");
+                    break;
+            }
+            return cql;
         }
     }
 });

@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,10 @@ Ext.define('Koala.view.main.MainModel', {
     alias: 'viewmodel.app-main',
 
     data: {
+        addWmsButtonText: '',
+        addWmsButtonTooltip: '',
+        buttonGroupTopTitle: '',
         printButtonText: '',
-        buttonGroupTopTitle: ''
+        printButtonTooltip: ''
     }
-
-    //TODO - add data, formulas and/or methods to support your view
 });

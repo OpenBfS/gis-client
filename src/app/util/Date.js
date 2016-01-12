@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,24 @@
 Ext.define('Koala.util.Date', {
 
     statics: {
-        ISO_FORMAT: 'C', // New in Ext6, probably dependent of Date.toISOString
-        // ISO_FORMAT: 'Y-m-d\\TH:i:s\\Z' // missing milliseconds
+
+        /**
+         * The format string which we use at several places to format all local
+         * dates so that they are understood by the serverside. Most of the
+         * time, this will end up as aparameter to #Ext.Date.format. If you look
+         * a th the possibly formats from tghe doc, you'll probably notice 'C',
+         * which is new in Ext6, and probably dependent of `Date.toISOString`.
+         *
+         * If we use this, then the calculations with regard to adding and
+         * subtracting of offsets are done by the browser. Since we can change
+         * (via the button) if we are currently viewing utc dates or not, we
+         * cannot use it. We want to handle the calculations ourself and only
+         * a format string.
+         *
+         * @type {string} A format string, ready to be used with the
+         *     method #Ext.Date.format.
+         */
+        ISO_FORMAT: 'Y-m-d\\TH:i:s.u\\Z',
 
         /**
          * Returns an offset in minutes from a local date compared to UTC. The
@@ -81,7 +97,7 @@ Ext.define('Koala.util.Date', {
          *     from the server are supposed to be UTC.
          */
         makeLocal: function(utcDate){
-            var offsetMinutes = this.getUTCOffsetInMinutes();
+            var offsetMinutes = Koala.util.Date.getUTCOffsetInMinutes();
             return Ext.Date.add(utcDate, Ext.Date.MINUTE, offsetMinutes);
         },
 
@@ -94,7 +110,7 @@ Ext.define('Koala.util.Date', {
          *     convert these to UTC.
          */
         makeUtc: function(localDate){
-            var offsetMinutes = -1 * this.getUTCOffsetInMinutes();
+            var offsetMinutes = -1 * Koala.util.Date.getUTCOffsetInMinutes();
             return Ext.Date.add(localDate, Ext.Date.MINUTE, offsetMinutes);
         }
 

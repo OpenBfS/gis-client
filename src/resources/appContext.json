@@ -6,6 +6,12 @@
                 "metadata-search": "http://bfs-koala.intranet.terrestris.de/geonetwork/srv/ger/csw?",
                 "spatial-search": "http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows",
                 "print-servlet": "http://bfs-koala.intranet.terrestris.de/print-servlet-3.3-SNAPSHOT/print/",
+
+                "metadata-xml2json": "http://10.133.7.63/geonetwork/srv/ger/xml_iso19139Tojson",
+                "metadata-search": "http://10.133.7.63/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://10.133.7.63/geoserver/BFS/ows",
+                "print-servlet": "http://10.133.7.63/print-servlet-3.3-SNAPSHOT/print/",
+
                 "irix-servlet": "/irix-servlet"
             },
             "metadataSearchFields": ["title", "abstract"],

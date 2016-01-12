@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,15 @@ Ext.define('Koala.view.button.TimeReferenceController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-button-timereference',
 
-    setTitleBind: function(btn) {
-        var current = btn.getCurrent();
+    setTextBinds: function(btn) {
         var staticNs = Koala.view.button.TimeReference;
-        var bindProp = current === staticNs.UTC ? '{textUtc}' : '{textLocal}';
+        var curr = btn.getCurrent();
+        var currentlyUtc = curr === staticNs.UTC;
+        var bindPropText = currentlyUtc ? '{textUtc}' : '{textLocal}';
+        var bindPropTooltip = currentlyUtc ? '{tooltipUtc}' : '{tooltipLocal}';
         btn.setBind({
-            text: bindProp
+            text: bindPropText,
+            tooltip: bindPropTooltip
         });
         btn.blur();
     }
