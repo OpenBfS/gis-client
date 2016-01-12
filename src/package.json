@@ -22,7 +22,7 @@
 
       "apidoc": "jsduck --config jsduck-cfg.json",
 
-      "clean": "npm run rm-coverage-tmp-dirs  && npm run rm-coverage && rm -rf apidoc && rm -rf build/*"
+      "clean": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && rm -rf apidoc && rm -rf build/*"
   },
   "repository": {
     "type": "mercurial",
