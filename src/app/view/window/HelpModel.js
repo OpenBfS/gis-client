@@ -72,10 +72,10 @@ Ext.define('Koala.view.window.HelpModel', {
 					text: '{tools.title}',
 					content: '{tools.html}',
 					children: [{
-	    				text: 'Sub-Werkzeuge1',
+	    				text: 'WMS-Dienst',
 	    				leaf: true
 					}, {					
-	    				text: 'Sub-Werkzeuge2',
+	    				text: 'Druck-Dienst',
 	    				leaf: true				
 	    			}]
 	        		}, {

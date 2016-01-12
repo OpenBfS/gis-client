@@ -34,16 +34,18 @@ Ext.define("Koala.view.window.HelpWindow", {
         title: '{title}'
     },
     	
-    width: 750,
+    width: 1320,
     height: 450,
     layout: 'border',
     minWidth: 400,
-    maxWidth: window.innerWidth - 100,
+//    maxWidth: window.innerWidth - 100,
     minHeight: 300,
-    maxHeight: window.innerHeight - 100,
+//    maxHeight: window.innerHeight - 100,
 
     resizable: true,
     maximizable: true,
+    //TODO: implement minimize-function
+    minimizable: true,
 //    constrain: true,
 
     //Navigation-Panel

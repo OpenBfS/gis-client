@@ -164,41 +164,40 @@
             "data": {
 		        "preface":{
 		        	"title": "Vorbemerkung",
-		        	"html": "<h1> Vorbemerkung </h1>"+
+		        	"html": "<h2> Vorbemerkung </h2>"+
 		        			"<div>Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen.</div>"+
 		        			"<div>Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur überwachung der Umweltradioaktivität“ (IMIS) betroffen.</div>"+
-		        			"<div>Die Oberfläche ist in folgende Bereiche gegliedert:</div>"+
+		        			"<p style='font-weight:bold'>Die Oberfläche ist in folgende Bereiche gegliedert:</p>"+
 		        			"<ol>"+
-			        			"<li>Kopfzeile</li>"+
-			        			"<li>Info-Leiste</li>"+
-			        			"<li>Den Bereich zur fachlichen Auswahl von Daten</li>"+
-			        			"<ol type='a'>"+
-				        			"<li>Themenauswahl</li>"+
-				        			"<li>Filter</li>"+
-				        			"<li>Suche</li>"+
-			        			"</ol>"+
-			        			"<li>Zentraler Darstellungsbereich</li>"+
-			        			"<div>Karte</div>"+
-			        			"<ol type='a'>"+
-				        			"<li>Legende</li>"+
-				        			"<li>Geographische Suche</li>"+
-			        			"</ol>"+
-			        			"<li>Suchergebnisse</li>"+
-		        			"</ol>"+
-		        			"<img class='img' src='classic/resources/img/bfs-logo.png' title='TEST-Title' alt='TEST-alt' width='200' height='78'>",
-		        	"content": [
-		        		{"type": "text", "src": "Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen."},
-		        		{"type": "text", "src": "Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur überwachung der Umweltradioaktivität“ (IMIS) betroffen. "},
-		        		{"type": "text", "src": "Die Oberfläche ist in folgende Bereiche gegliedert:"},
-		        		{"type": "image", "src": "classic/resources/img/bfs-logo.png", "width": "200", "height": "78", "margin": "0 50px"},
-		        		{"type": "list", "src": [
-		        					{"item": "1.) Kopfzeile"},
-		        					{"item": "2.) Info-Leiste"},
-		        					{"item": "3.) Den Bereich zur fachlichen Auswahl von Daten %%% a.) Themenauswahl %%% b.) Filter %%% c.) Suche"},
-		        					{"item": "4.) Zentraler Darstellungsbereich"},
-		        					{"item": "Karte %%% a.) Legende %%% b.) Geographische Suche %%%&&& Suchergebnisse"}
-		        				]}
-		        			]        					
+		        				"<img class='img' src='classic/resources/img/helpPage/overview.png' title='Übersicht' alt='overview.png' width='835' height='459.5' style='float:right'>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Werkzeuge</li>"+
+			        			"<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
+			        			"<ul>"+
+			        				"<li>WMS (Web Map Service) einzubinden</li>"+
+			        				"<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten im PDF-, oder IRIX-Format</li>"+
+			        			"</ul>"+
+			        			"<li style='color:#157FCC'>Layer-Auswahl</li>"+
+			        			"<div>Die Layer-Auswahl bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden</div>"+
+			        			"<li style='color:#157FCC'>Suchleiste</li>"+
+			        			"<div>Die Suchleiste ermöglicht die Suche nach Daten, Diensten und geographischen Orten</div>"+
+			        			"<li style='color:#157FCC'>Einstellungen</li>"+
+			        			"<div>Folgende Einstellungen lassen sich für den gesamten Dienst vornehmen:</div>"+
+			        			"<ul>"+
+			        				"<li>Vollbild: Darstellung der Anwendung über den gesamten Bildschirm</li>"+
+			        				"<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale-Zeit (mitteleuropäische Zeit MEZ), oder auf UTC (Coordinated Universal Time)</li>"+
+			        				"<li>Hilfe: Öffnet das Hilfefenster</li>"+
+			        				"<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE), Englisch (EN) oder Französisch (FR)</li>"+
+			        			"</ul>"+
+			        			"<li style='color:#157FCC'>Navigationpanel</li>"+
+			        			"<div>Ermöglicht das Navigieren, Vergrößern, Verkleinern und Verschieben der Kartenansicht.</div>"+
+			        			"<div>Desweiteren kann die Legende geöffnet werden</div>"+
+			        			"<li style='color:#157FCC'>Legende</li>"+
+			        			"<div>Die Legende ermöglicht einzelne Layer darzustellen, als auch von der Ansicht zu entfernen.</div>"+
+			        			"<div>Informationen zu den jeweiligen Layern können angezeigt werden. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
+			        			"<div>Ferner ist es möglich, einzelne Layer zu speichern bzw. von der Legende zu entfernen.</div>"+
+			        			"<li style='color:#157FCC'>Geographische Übersicht</li>"+
+			        			"<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht.</div>"+
+		        			"</ol>"
 		        		},
 		        "tools":{
 		        	"title": "Werkzeuge",
