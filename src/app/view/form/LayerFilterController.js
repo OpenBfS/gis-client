@@ -62,15 +62,15 @@ Ext.define('Koala.view.form.LayerFilterController', {
         metadata.filters = filters;
         var layer = LayerUtil.layerFromMetadata(metadata);
         LayerUtil.addOlLayerToMap(layer);
-        me.deselectLegendtreeItems();
+        me.deselectThemeTreeItems();
         view.up('window').close();
     },
 
     /**
-     * Unselects all layers after a layer was added to the map.
+     * Unselects all items after a layer was added to the map.
      */
-    deselectLegendtreeItems: function() {
-        var tree = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+    deselectThemeTreeItems: function() {
+        var tree = Ext.ComponentQuery.query('k-panel-themetree')[0];
         var treeSelModel = tree && tree.getSelectionModel();
         var selection = treeSelModel && treeSelModel.getSelection();
         if (!Ext.isEmpty(selection)) {
