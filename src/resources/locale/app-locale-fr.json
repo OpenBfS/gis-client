@@ -95,7 +95,11 @@
                 "printButtonText": "fr:Druck",
                 "printButtonTooltip": "fr:Kartenauschnitt drucken",
                 "buttonGroupTopTitle": "fr:Werkzeuge",
-                "toogleOverviewBtnTooltip": "fr:Übersichtskarte ein-/ausblenden"
+                "toogleOverviewBtnTooltip": "fr:Übersichtskarte ein-/ausblenden",
+                "basigx-button-zoomin-tooltip": "fr:Hineinzoomen",
+                "basigx-button-zoomout-tooltip": "fr:Herauszoomen",
+                "basigx-button-zoomtoextent-tooltip": "fr:Auf Startkartenansicht rezentrieren",
+                "basigx-button-togglelegend-tooltip": "fr:Legende ein-/ausklappen"
             }
         }
     },

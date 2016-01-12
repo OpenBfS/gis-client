@@ -88,6 +88,22 @@ Ext.define('Koala.view.main.Main', {
                 btn.setBind({
                     tooltip: '{toogleOverviewBtnTooltip}'
                 });
+
+                // Bind the tooltops of certain map button
+                // TODO refactor BasiGX to do this in a more sane way
+                var btnSelectors = [
+                    "basigx-button-zoomin",
+                    "basigx-button-zoomout",
+                    "basigx-button-zoomtoextent",
+                    "basigx-button-togglelegend"
+                ];
+                var btns = this.query(btnSelectors.join(','));
+                Ext.each(btns, function(b) {
+                    var btnXtype = b.xtype;
+                    b.setBind({
+                        tooltip: '{' + btnXtype + '-tooltip}'
+                    });
+                });
             }
         },
         // define menu items
