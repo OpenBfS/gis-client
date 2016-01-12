@@ -164,23 +164,61 @@
             "data": {
 		        "preface":{
 		        	"title": "Vorbemerkung",
-		        	"content": "Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen. Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur überwachung der Umweltradioaktivität“ (IMIS) betroffen. "
-		        	},
+		        	"html": "<h1> Vorbemerkung </h1>"+
+		        			"<div>Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen.</div>"+
+		        			"<div>Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur überwachung der Umweltradioaktivität“ (IMIS) betroffen.</div>"+
+		        			"<div>Die Oberfläche ist in folgende Bereiche gegliedert:</div>"+
+		        			"<ol>"+
+			        			"<li>Kopfzeile</li>"+
+			        			"<li>Info-Leiste</li>"+
+			        			"<li>Den Bereich zur fachlichen Auswahl von Daten</li>"+
+			        			"<ol type='a'>"+
+				        			"<li>Themenauswahl</li>"+
+				        			"<li>Filter</li>"+
+				        			"<li>Suche</li>"+
+			        			"</ol>"+
+			        			"<li>Zentraler Darstellungsbereich</li>"+
+			        			"<div>Karte</div>"+
+			        			"<ol type='a'>"+
+				        			"<li>Legende</li>"+
+				        			"<li>Geographische Suche</li>"+
+			        			"</ol>"+
+			        			"<li>Suchergebnisse</li>"+
+		        			"</ol>"+
+		        			"<img class='img' src='classic/resources/img/bfs-logo.png' title='TEST-Title' alt='TEST-alt' width='200' height='78'>",
+		        	"content": [
+		        		{"type": "text", "src": "Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen."},
+		        		{"type": "text", "src": "Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur überwachung der Umweltradioaktivität“ (IMIS) betroffen. "},
+		        		{"type": "text", "src": "Die Oberfläche ist in folgende Bereiche gegliedert:"},
+		        		{"type": "image", "src": "classic/resources/img/bfs-logo.png", "width": "200", "height": "78", "margin": "0 50px"},
+		        		{"type": "list", "src": [
+		        					{"item": "1.) Kopfzeile"},
+		        					{"item": "2.) Info-Leiste"},
+		        					{"item": "3.) Den Bereich zur fachlichen Auswahl von Daten %%% a.) Themenauswahl %%% b.) Filter %%% c.) Suche"},
+		        					{"item": "4.) Zentraler Darstellungsbereich"},
+		        					{"item": "Karte %%% a.) Legende %%% b.) Geographische Suche %%%&&& Suchergebnisse"}
+		        				]}
+		        			]        					
+		        		},
 		        "tools":{
 		        	"title": "Werkzeuge",
-		        	"content": "Werzeug-Beschreibung..."
+		        	"html": "Werkzeuge-HTML",
+		        	"content": [{"type": "text", "src": "Werzeug-Beschreibung..."}]
 		        	},
 		        "layerSelection": {
 		        	"title": "Auswahl",
-		        	"content": "Auswahl-Beschreibung..."
+		        	"html": "Auswahl-HTML",
+		        	"content": [{"type": "text", "src": "Auswahl-Beschreibung..."}]
 		        	},
 		        "mapNavigation":{
 		        	"title": "Navigation",
-		        	"content": "Navigation-Beschreibung..."
+		        	"html": "Navigation-HTML",
+		        	"content": [{"type": "text", "src": "Navigation-Beschreibung..."}]
 		        	},
 		        "legend":{
 		        	"title": "Legende",
-		        	"content": "Legende-Beschreibung..."
+		        	"html": "Legende-HTML",
+		        	"content": [{"type": "text", "src": "Legende-Beschreibung..."}]
 		        	}
             }
         }
