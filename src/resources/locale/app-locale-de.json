@@ -203,23 +203,29 @@
             "data": {
 		        "preface":{
 		        	"title": "Vorbemerkung",
-		        	"html": "<h2> Vorbemerkung </h2>"+
+		        	"html": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
+		        			"<h2> Vorbemerkung </h2>"+		        			
 		        			"<div>Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen.</div>"+
-		        			"<div>Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur überwachung der Umweltradioaktivität“ (IMIS) betroffen.</div>"+
+		        			"<div>Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur überwachung der Umweltradioaktivität“ (IMIS) betroffen.</div>"
+		        		},
+		        "quickRef":{
+		        	"title": "Schnellübersicht",
+		        	"html": "<h2> Schnellübersicht </h2>"+
+		        			"<div>Nachfolgend wird eine kurze Übersicht der Anwendung dargestellt. Für eine detailierte Erläuterung der einzelnen Funktionalitäten, navigieren Sie bitte durch das Inhaltsverzeichnis auf der linken Seite und klicken auf das gewünschte Themenfeld.</div>"+
 		        			"<p style='font-weight:bold'>Die Oberfläche ist in folgende Bereiche gegliedert:</p>"+
 		        			"<ol>"+
-		        				"<img class='img' src='classic/resources/img/helpPage/overview.png' title='Übersicht' alt='overview.png' width='835' height='459.5' style='float:right'>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/overview.png' title='Übersicht' alt='overview.png' width='826.5' height='449' style='float:right'>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Werkzeuge</li>"+
 			        			"<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
 			        			"<ul>"+
 			        				"<li>WMS (Web Map Service) einzubinden</li>"+
 			        				"<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten im PDF-, oder IRIX-Format</li>"+
 			        			"</ul>"+
-			        			"<li style='color:#157FCC'>Layer-Auswahl</li>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Layer-Auswahl</li>"+
 			        			"<div>Die Layer-Auswahl bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden</div>"+
-			        			"<li style='color:#157FCC'>Suchleiste</li>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Suchleiste</li>"+
 			        			"<div>Die Suchleiste ermöglicht die Suche nach Daten, Diensten und geographischen Orten</div>"+
-			        			"<li style='color:#157FCC'>Einstellungen</li>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Einstellungen</li>"+
 			        			"<div>Folgende Einstellungen lassen sich für den gesamten Dienst vornehmen:</div>"+
 			        			"<ul>"+
 			        				"<li>Vollbild: Darstellung der Anwendung über den gesamten Bildschirm</li>"+
@@ -227,21 +233,38 @@
 			        				"<li>Hilfe: Öffnet das Hilfefenster</li>"+
 			        				"<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE), Englisch (EN) oder Französisch (FR)</li>"+
 			        			"</ul>"+
-			        			"<li style='color:#157FCC'>Navigationpanel</li>"+
-			        			"<div>Ermöglicht das Navigieren, Vergrößern, Verkleinern und Verschieben der Kartenansicht.</div>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Navigationpanel</li>"+
+			        			"<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
 			        			"<div>Desweiteren kann die Legende geöffnet werden</div>"+
-			        			"<li style='color:#157FCC'>Legende</li>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
 			        			"<div>Die Legende ermöglicht einzelne Layer darzustellen, als auch von der Ansicht zu entfernen.</div>"+
 			        			"<div>Informationen zu den jeweiligen Layern können angezeigt werden. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
 			        			"<div>Ferner ist es möglich, einzelne Layer zu speichern bzw. von der Legende zu entfernen.</div>"+
-			        			"<li style='color:#157FCC'>Geographische Übersicht</li>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Geographische Übersicht</li>"+
 			        			"<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht.</div>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
+			        			"<div>In der Karte können Sie gleichzeitig navigieren und einzelne Bereiche auswählen.</div>"+
 		        			"</ol>"
-		        		},
+		        },
 		        "tools":{
 		        	"title": "Werkzeuge",
-		        	"html": "Werkzeuge-HTML",
-		        	"content": [{"type": "text", "src": "Werzeug-Beschreibung..."}]
+		        	"html": "<h2> Werkzeuge </h2>"+
+		        			"<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
+		        			"<ul>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/wms_button.png' title='WMS-Button' alt='wms_button.png' width='103' height='26' style='float:right'>"+
+		        				"<li>WMS (Web Map Service) einzubinden</li><br />"+
+		        				"<img class='img' src='classic/resources/img/helpPage/print_button.png' title='Print-Button' alt='print_button.png' width='103' height='27' style='float:right'>"+
+		        				"<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten im PDF-, oder IRIX-Format</li>"+
+		        			"</ul>"+
+		        			"<div>Diese können über die Button die <b>WMS</b> bzw. <b>Druck</b> aufgerufen werden.</div>",
+		        	"wms":{
+		        		"title": "WMS-Dienst",
+		        		"html": "<hr style='color:#157FCC' />"+
+		        				"<h2> WMS-Dienst </h2>"+
+		        				"<div>Der WMS-Dienst ermöglicht das einbinden von WMS-Layern</div>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/wms_window_getLayers.png' title='WMS-getLayers' alt='wms_window_getLayers.png' width='502' height='421' style='float:left'>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/wms_window_addLayers.png' title='WMS-addLayers' alt='wms_window_addLayers.png' width='502' height='421' style='float:left'>"
+		        		}
 		        	},
 		        "layerSelection": {
 		        	"title": "Auswahl",

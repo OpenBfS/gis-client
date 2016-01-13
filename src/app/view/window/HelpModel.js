@@ -25,8 +25,6 @@ Ext.define('Koala.view.window.HelpModel', {
 		        var selection = get('treelist.selection'),
 		        content;
 		    if (selection) {
-		    	console.log(selection.getData());
-		    	console.log(selection.getPath('content'));
 		        content = selection.getPath('content');
 		        content = content.replace('//', '');
 //		        var xTemplate = new Ext.XTemplate(
@@ -69,10 +67,15 @@ Ext.define('Koala.view.window.HelpModel', {
     		    	content: '{preface.html}',
     		    	leaf: true
 	        		}, {
+	        		text: '{quickRef.title}',
+	        		content: '{quickRef.html}',
+	        		leaf: true
+	        		}, {
 					text: '{tools.title}',
 					content: '{tools.html}',
 					children: [{
-	    				text: 'WMS-Dienst',
+	    				text: '{tools.wms.title}',
+	    				content: '{tools.wms.html}',
 	    				leaf: true
 					}, {					
 	    				text: 'Druck-Dienst',
