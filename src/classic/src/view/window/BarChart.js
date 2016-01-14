@@ -34,14 +34,17 @@ Ext.define("Koala.view.window.BarChart", {
     },
 
     bind: {
-        title: '{title}'
+        title: "{title}"
     },
 
     config: {
-        name: 'barchartwin',
+        name: "barchartwin",
         constrainHeader: true,
         collapsible: true,
-        layout: 'fit'
-    }
+        layout: "fit"
+    },
 
+    listeners: {
+        close: "onBarchartWinClose"
+    }
 });
