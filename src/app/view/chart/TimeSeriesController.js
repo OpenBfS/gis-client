@@ -77,6 +77,20 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         if (!timeRangeFilter) {
             Ext.log.warn("Failed to determine a timerange filter");
         }
+        // don't accidently overwrite the configured filter…
+        timeRangeFilter = Ext.clone(timeRangeFilter);
+
+        // We may need to switch out the parameter that controls the time:
+        // The WMS (layer) may have a filter against attribute `abc`, while the
+        // WFS (data source for the chart) may have the time in a field `def`.
+        //
+        // In such a case, the `xAxisAttribute` of the GNOS chart config will
+        // differ from the `param` in the timerange-filter:
+        if (timeRangeFilter.param !== chartConfig.xAxisAttribute) {
+            // They were different, the explicitly configured one wins (we have
+            // already tested if the chartConfig.xAxisAttribute isn't empty)
+            timeRangeFilter.param = chartConfig.xAxisAttribute;
+        }
 
         var requestParams = {
             service: 'WFS',
