@@ -25,22 +25,8 @@ Ext.define('Koala.view.window.HelpModel', {
 		        var selection = get('treelist.selection'),
 		        content;
 		    if (selection) {
-		        content = selection.getPath('content');
-		        content = content.replace('//', '');
-//		        var xTemplate = new Ext.XTemplate(
-//	        		'<h1> {text} </h1>',
-//	        		'<tpl for="content">',
-//        			'<tpl switch="type">',
-//        				'<tpl case="image">',
-//        					'<img class="img" src="{content.src}" title="TEST-Title" alt="TEST-alt" width="{content.width}" height="{content.height}">',
-//        				'<tpl default>',
-//        					'<p> {content.src} </p>',
-//	        			'</tpl>',
-//	        		'</tpl>'
-//		        ).apply(selection.getData());
-		        //ERROR-Message: XTemplate evaluation exception: values.content is undefined
-		        //im Beispiel wird overwrite()-Function verwendet
-		        //vielleicht liegt hier der Fehler?!
+		        content = selection.getPath('content', '-sep-');
+		        content = content.replace(/-sep--sep-|-sep-/g, '');
 		        return content;
 		    } else {
 		        return 'No node selected';
@@ -57,9 +43,8 @@ Ext.define('Koala.view.window.HelpModel', {
 //        legendTitle: '',
     	
         navItems: {
-        	type: 'tree',
+        	type: 'tree',        	
         	root: {
-        		expanded: true,
         		children: [
         		    {
         		    itemId: 'preface',

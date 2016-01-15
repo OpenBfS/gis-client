@@ -51,7 +51,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     //Navigation-Panel
     items: [{
     	region: 'west',
-    	width: 250,
+    	width: 150,
     	split: true,
 //    	reference: 'treelistContainer',
 //    	layout: {
@@ -62,6 +62,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     	items: [{
     		xtype: 'treelist',
     		reference: 'treelist',
+    		expanderOnly: false,
 //        	listeners: {
 //        		afterrender: function(){
 //        			var initNode = this.getStore().getNodeById('preface');

@@ -212,24 +212,25 @@
 		        	"title": "Schnellübersicht",
 		        	"html": "<h2> Schnellübersicht </h2>"+
 		        			"<div>Nachfolgend wird eine kurze Übersicht der Anwendung dargestellt. Für eine detailierte Erläuterung der einzelnen Funktionalitäten, navigieren Sie bitte durch das Inhaltsverzeichnis auf der linken Seite und klicken auf das gewünschte Themenfeld.</div>"+
-		        			"<p style='font-weight:bold'>Die Oberfläche ist in folgende Bereiche gegliedert:</p>"+
+		        			"<h3>Die Oberfläche ist in folgende Bereiche gegliedert:</h3>"+
 		        			"<ol>"+
-		        				"<img class='img' src='classic/resources/img/helpPage/overview.png' title='Übersicht' alt='overview.png' width='826.5' height='449' style='float:right'>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/overview.png' title='Übersicht' alt='overview.png' width='826.5' height='449' style='float:right; margin:50px 0px 0px 0px'>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Werkzeuge</li>"+
 			        			"<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
 			        			"<ul>"+
-			        				"<li>WMS (Web Map Service) einzubinden</li>"+
+			        				"<li>WMS (Web Map Service) einbinden</li>"+
 			        				"<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten im PDF-, oder IRIX-Format</li>"+
 			        			"</ul>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Layer-Auswahl</li>"+
-			        			"<div>Die Layer-Auswahl bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden</div>"+
+			        			"<div>Die Layer-Auswahl bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
+			        			"<div>Ein Layer lässt sich über einen \"Doppelklick\" zur Legende hinzufügen. Gegebenenfalls öffnet sich ein Fenster um über Filter-Funktionen die Auswahl weiter einzuschränken.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Suchleiste</li>"+
-			        			"<div>Die Suchleiste ermöglicht die Suche nach Daten, Diensten und geographischen Orten</div>"+
+			        			"<div>Die Suchleiste ermöglicht die Suche nach Daten, Diensten und geographischen Orten.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Einstellungen</li>"+
 			        			"<div>Folgende Einstellungen lassen sich für den gesamten Dienst vornehmen:</div>"+
 			        			"<ul>"+
 			        				"<li>Vollbild: Darstellung der Anwendung über den gesamten Bildschirm</li>"+
-			        				"<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale-Zeit (mitteleuropäische Zeit MEZ), oder auf UTC (Coordinated Universal Time)</li>"+
+			        				"<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale Zeit (mitteleuropäische Zeit MEZ), oder auf UTC (Coordinated Universal Time)</li>"+
 			        				"<li>Hilfe: Öffnet das Hilfefenster</li>"+
 			        				"<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE), Englisch (EN) oder Französisch (FR)</li>"+
 			        			"</ul>"+
@@ -238,7 +239,7 @@
 			        			"<div>Desweiteren kann die Legende geöffnet werden</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
 			        			"<div>Die Legende ermöglicht einzelne Layer darzustellen, als auch von der Ansicht zu entfernen.</div>"+
-			        			"<div>Informationen zu den jeweiligen Layern können angezeigt werden. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
+			        			"<div>Informationen zu den jeweiligen Layern werden angezeigt. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte hierarchisch dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
 			        			"<div>Ferner ist es möglich, einzelne Layer zu speichern bzw. von der Legende zu entfernen.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Geographische Übersicht</li>"+
 			        			"<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht.</div>"+
@@ -251,19 +252,21 @@
 		        	"html": "<h2> Werkzeuge </h2>"+
 		        			"<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
 		        			"<ul>"+
-		        				"<img class='img' src='classic/resources/img/helpPage/wms_button.png' title='WMS-Button' alt='wms_button.png' width='103' height='26' style='float:right'>"+
-		        				"<li>WMS (Web Map Service) einzubinden</li><br />"+
-		        				"<img class='img' src='classic/resources/img/helpPage/print_button.png' title='Print-Button' alt='print_button.png' width='103' height='27' style='float:right'>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26' style='float:left; margin:0px 50px 0px 0px'>"+
+		        				"<li>WMS (Web Map Service) einbinden</li><br />"+
+		        				"<img class='img' src='classic/resources/img/helpPage/button_print.png' title='Print-Button' alt='button_print.png' width='103' height='27' style='float:left; margin:0px 50px 0px 0px'>"+
 		        				"<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten im PDF-, oder IRIX-Format</li>"+
 		        			"</ul>"+
-		        			"<div>Diese können über die Button die <b>WMS</b> bzw. <b>Druck</b> aufgerufen werden.</div>",
+		        			"<div>Diese können über die Button <b>WMS</b> bzw. <b>Druck</b> aufgerufen werden.</div><br />",
 		        	"wms":{
 		        		"title": "WMS-Dienst",
 		        		"html": "<hr style='color:#157FCC' />"+
-		        				"<h2> WMS-Dienst </h2>"+
-		        				"<div>Der WMS-Dienst ermöglicht das einbinden von WMS-Layern</div>"+
-		        				"<img class='img' src='classic/resources/img/helpPage/wms_window_getLayers.png' title='WMS-getLayers' alt='wms_window_getLayers.png' width='502' height='421' style='float:left'>"+
-		        				"<img class='img' src='classic/resources/img/helpPage/wms_window_addLayers.png' title='WMS-addLayers' alt='wms_window_addLayers.png' width='502' height='421' style='float:left'>"
+		        				"<h2> WMS-Dienst </h2><img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26'>"+
+		        				"<div>Der WMS-Dienst ermöglicht das hinzufügen von WMS-Layern innerhalb des BfS-WebGIS. Demnach sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar.</div>"+
+		        				"<div>Detailliertere Informationen rund um das Thema <i>Web Map Service</i> finden Sie unter folgender Adresse:  <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></div><br />"+
+		        				"<div>Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld <b>WMS-URL</b> eine gültige Anfrage ein und wählen anschließend eine entsprechende Version (\"v1.1.1\", \"v1.3.0\") durch betätigen des Optionfeldes (selektiert: <img class='img' src='classic/resources/img/helpPage/radioButton_on.png' title='Optionsfeld EIN' alt='radioButton_on.png' width='15' height='15' style='vertical-align:middle'>, nicht selektiert: <img class='img' src='classic/resources/img/helpPage/radioButton_off.png' title='Optionsfeld AUS' alt='radioButton_off.png' width='15' height='15' style='vertical-align:middle'>) aus.</div>"+
+		        				"<div>Anschließend drücken Sie auf den Schalter \"Verfügbare Layer abfragen\" <img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Schalter: Verfügbare Layer abfragen ' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'> und die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt.</div>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='WMS-Workflow' alt='graphic_wms_workflow.png' width='571' height='482' style='float:left'>"
 		        		}
 		        	},
 		        "layerSelection": {
