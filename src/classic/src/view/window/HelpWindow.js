@@ -35,7 +35,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     },
     	
     width: 1320,
-    height: 450,
+    height: 750,
     layout: 'border',
     minWidth: 400,
 //    maxWidth: window.innerWidth - 100,
@@ -51,13 +51,13 @@ Ext.define("Koala.view.window.HelpWindow", {
     //Navigation-Panel
     items: [{
     	region: 'west',
-    	width: 150,
+    	width: 250,
     	split: true,
 //    	reference: 'treelistContainer',
-//    	layout: {
-//    		type: 'vbox',
-//    		align: 'stretch'
-//    	},
+    	layout: {
+    		type: 'vbox',
+    		align: 'stretch'
+    	},
     	border: false,
     	items: [{
     		xtype: 'treelist',

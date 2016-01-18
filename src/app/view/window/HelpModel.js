@@ -56,6 +56,14 @@ Ext.define('Koala.view.window.HelpModel', {
 	        		content: '{quickRef.html}',
 	        		leaf: true
 	        		}, {
+	        		text: '{profileSelection.title}',
+	        		content: '{profileSelection.html}',
+	        		leaf: true
+	        		}, {
+	        		text: '{map.title}',
+	        		content: '{map.html}',
+	        		leaf: true
+	        		}, {
 					text: '{tools.title}',
 					content: '{tools.html}',
 					children: [{
@@ -63,7 +71,8 @@ Ext.define('Koala.view.window.HelpModel', {
 	    				content: '{tools.wms.html}',
 	    				leaf: true
 					}, {					
-	    				text: 'Druck-Dienst',
+	    				text: '{tools.print.title}',
+	    				content: '{tools.print.html}',
 	    				leaf: true				
 	    			}]
 	        		}, {
@@ -71,6 +80,14 @@ Ext.define('Koala.view.window.HelpModel', {
 					content: '{layerSelection.html}',
 					leaf: true
 	        		}, {
+	        		text: '{searchField.title}',
+	        		content: '{searchField.html}',
+	        		leaf: true
+	        		}, {
+	        		text: '{settings.title}',
+	        		content: '{settings.html}',
+	        		leaf: true
+	        		}, {	        			
 					text: '{mapNavigation.title}',
 					content: '{mapNavigation.html}',
 					children: [{
@@ -84,6 +101,10 @@ Ext.define('Koala.view.window.HelpModel', {
 	        		text: '{legend.title}',
 	        		content: '{legend.html}',
 		        	leaf: true	
+	        		}, {
+	        		text: '{geographicOverview.title}',
+	        		content: '{geographicOverview.html}',
+	        		leaf: true
 	        		}]
 		    }
 	    }

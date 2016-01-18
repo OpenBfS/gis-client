@@ -212,9 +212,9 @@
 		        	"title": "Schnellübersicht",
 		        	"html": "<h2> Schnellübersicht </h2>"+
 		        			"<div>Nachfolgend wird eine kurze Übersicht der Anwendung dargestellt. Für eine detailierte Erläuterung der einzelnen Funktionalitäten, navigieren Sie bitte durch das Inhaltsverzeichnis auf der linken Seite und klicken auf das gewünschte Themenfeld.</div>"+
-		        			"<h3>Die Oberfläche ist in folgende Bereiche gegliedert:</h3>"+
+		        			"<h4>Die Oberfläche ist in folgende Bereiche gegliedert:</h4>"+
 		        			"<ol>"+
-		        				"<img class='img' src='classic/resources/img/helpPage/overview.png' title='Übersicht' alt='overview.png' width='826.5' height='449' style='float:right; margin:50px 0px 0px 0px'>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' width='827' height='449' style='float:right; margin:50px 0px 0px 0px'>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Werkzeuge</li>"+
 			        			"<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
 			        			"<ul>"+
@@ -247,9 +247,33 @@
 			        			"<div>In der Karte können Sie gleichzeitig navigieren und einzelne Bereiche auswählen.</div>"+
 		        			"</ol>"
 		        },
+		        "profileSelection": {
+		        	"title": "1. Layer-Profilwahl",
+		        	"html": "<h2> 1. Layer-Profilwahl </h2>"+
+		        			"<div>Die Layer-Profilwahl ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich eine Hintergrundkarte geladen. Im Anschluss kann über die Auswahl, Layer manuell hinzugefügt werden.</div>"+
+		        			"<h4>Zur Auswahl stehen die Profile:</h4>"+
+		        			"<ul>"+
+		        				"<li>IMIS - Integriertes Mess- und Informationssystem</li>"+
+		        				"<li>GeoZG - Geodatenzugangsgesetz</li>"+
+		        				"<li>RODOS - Realtime Online Decision Support System</li>"+
+		        				"<li>INSPIRE - Infrastructure for Spatial Information in Europe</li>"+
+		        				"<li>§2 - § 2 Strahlenschutzvorsorgegesetz (StrVG), Aufgaben des Bundes</li>"+
+		        				"<li>§3 - § 3 Strahlenschutzvorsorgegesetz (StrVG), Aufgaben der Länder</li>"+
+		        			"</ul>"+
+		        			"<div>Unterhalb der Layer-Profile lässt sich über die Eingabe innerhalb einer Filterleiste die Auswahl der Profile einschränken.</div><br />"+
+		        			"<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer-Profilwahl' alt='window_profileSelection.png' width='366' height='335' style='float:left'>"
+		        },
+		        "map": {
+		        	"title": "2. Karte",
+		        	"html": "<h2> 2. Karte </h2>"+
+		        			"<div>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857).</div>"+
+		        			"<div>In der Karte kann mithilfe der Maus navigiert werden. Hält man die linke Maustaste gedrückt, kann die Kartenansicht verschoben werden. Das Mausrad steuert die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe 7. Navigation) steuern.</div>"+
+		        			"<div>Im rechten unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfachter Klick öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Angaben.</div>"+
+		        			"<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Karte' alt='graphic_map.png' width='829' height='488' style='float:left'>"
+		        },
 		        "tools":{
-		        	"title": "Werkzeuge",
-		        	"html": "<h2> Werkzeuge </h2>"+
+		        	"title": "3. Werkzeuge",
+		        	"html": "<h2> 3. Werkzeuge </h2>"+
 		        			"<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
 		        			"<ul>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26' style='float:left; margin:0px 50px 0px 0px'>"+
@@ -259,31 +283,48 @@
 		        			"</ul>"+
 		        			"<div>Diese können über die Button <b>WMS</b> bzw. <b>Druck</b> aufgerufen werden.</div><br />",
 		        	"wms":{
-		        		"title": "WMS-Dienst",
+		        		"title": "a) WMS-Dienst",
 		        		"html": "<hr style='color:#157FCC' />"+
-		        				"<h2> WMS-Dienst </h2><img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26'>"+
+		        				"<h2> a) WMS-Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26'> </h2>"+
 		        				"<div>Der WMS-Dienst ermöglicht das hinzufügen von WMS-Layern innerhalb des BfS-WebGIS. Demnach sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar.</div>"+
 		        				"<div>Detailliertere Informationen rund um das Thema <i>Web Map Service</i> finden Sie unter folgender Adresse:  <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></div><br />"+
-		        				"<div>Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld <b>WMS-URL</b> eine gültige Anfrage ein und wählen anschließend eine entsprechende Version (\"v1.1.1\", \"v1.3.0\") durch betätigen des Optionfeldes (selektiert: <img class='img' src='classic/resources/img/helpPage/radioButton_on.png' title='Optionsfeld EIN' alt='radioButton_on.png' width='15' height='15' style='vertical-align:middle'>, nicht selektiert: <img class='img' src='classic/resources/img/helpPage/radioButton_off.png' title='Optionsfeld AUS' alt='radioButton_off.png' width='15' height='15' style='vertical-align:middle'>) aus.</div>"+
-		        				"<div>Anschließend drücken Sie auf den Schalter \"Verfügbare Layer abfragen\" <img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Schalter: Verfügbare Layer abfragen ' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'> und die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt.</div>"+
-		        				"<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='WMS-Workflow' alt='graphic_wms_workflow.png' width='571' height='482' style='float:left'>"
+		        				"<div>Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld \"WMS-URL\" eine gültige Anfrage ein und wählen anschließend eine entsprechende Version (\"v1.1.1\", \"v1.3.0\") durch betätigen des Optionfeldes (selektiert: <img class='img' src='classic/resources/img/helpPage/radioButton_on.png' title='Optionsfeld EIN' alt='radioButton_on.png' width='15' height='15' style='vertical-align:middle'>, nicht selektiert: <img class='img' src='classic/resources/img/helpPage/radioButton_off.png' title='Optionsfeld AUS' alt='radioButton_off.png' width='15' height='15' style='vertical-align:middle'>) aus.</div>"+
+		        				"<div>In der Folge drücken Sie auf den Schalter \"Verfügbare Layer abfragen\" <img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Schalter: Verfügbare Layer abfragen' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'>. Die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt.</div>"+
+		        				"<div>Durch das Setzen von Häkchen können die Layer ausgewählt werden die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Schalter \"Ausgewählte Layer hinzufügen\" <img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Schalter: Ausgewählte Layer hinzufügen' alt='button_addLayers.png' width='198' height='24' style='vertical-align:middle'>. Diese werden initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</div>"+
+		        				"<div>Im unteren Beispiel werden die Layer <i>Bundesland</i> und <i>Name Bundesland</i> der Legende und somit der Karte hinzugefügt.</div><br />"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='WMS-Workflow' alt='graphic_wms_workflow.png' width='746' height='629' style='float:left'>"
+		        		},
+		        	"print":{
+		        		"title": "b) Druck-Dienst",
+		        		"html": "<hr style='color:#157FCC' />"+
+		        				"<h2> b) Druck-Dienst <img class='img' src='classic/resources/img/helpPage/button_print.png' title='Print-Button' alt='button_print.png' width='103' height='27'> </h2>"+
+		        				"<div><b>ToDo</b></div>"
 		        		}
-		        	},
+	        	},
 		        "layerSelection": {
-		        	"title": "Auswahl",
-		        	"html": "Auswahl-HTML",
-		        	"content": [{"type": "text", "src": "Auswahl-Beschreibung..."}]
-		        	},
+		        	"title": "4. Auswahl",
+		        	"html": "Auswahl-HTML"
+	        	},
+		        "searchField": {
+		        	"title": "5. Suchleiste",
+		        	"html": "Suchleiste-HTML"
+		        },
+		        "settings": {
+		        	"title": "6. Einstellungen",
+		        	"html": "Einstellungen-HTML"
+		        },
 		        "mapNavigation":{
-		        	"title": "Navigation",
-		        	"html": "Navigation-HTML",
-		        	"content": [{"type": "text", "src": "Navigation-Beschreibung..."}]
-		        	},
+		        	"title": "7. Navigation",
+		        	"html": "Navigation-HTML"
+	        	},
 		        "legend":{
-		        	"title": "Legende",
-		        	"html": "Legende-HTML",
-		        	"content": [{"type": "text", "src": "Legende-Beschreibung..."}]
-		        	}
+		        	"title": "8. Legende",
+		        	"html": "Legende-HTML"
+	        	},
+		        "geographicOverview":{
+		        	"title": "9. Geographische Übersicht",
+		        	"html": "Geographische Übersicht-HTML"
+		        }
             }
         }
 	},	
