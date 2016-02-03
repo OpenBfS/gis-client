@@ -14,3 +14,4 @@ src/sass/example/bootstrap.json
 
 node_modules
 .project
+.idea
