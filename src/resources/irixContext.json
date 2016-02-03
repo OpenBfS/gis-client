@@ -134,7 +134,7 @@
                     "defaultValue": false
                 },{
                     "name": "NetworkOperator",
-                    "label": "Netzwerkopertor",
+                    "label": "Netzwerkoperator",
                     "type": "combo",
                     "values": [
                         "U - BfS (ABI)",
