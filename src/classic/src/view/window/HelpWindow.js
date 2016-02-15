@@ -45,18 +45,18 @@ Ext.define("Koala.view.window.HelpWindow", {
     resizable: true,
     maximizable: true,
     //TODO: implement minimize-function
-    minimizable: true,
+//    minimizable: true,
 //    constrain: true,
 
     //Navigation-Panel
     items: [{
     	region: 'west',
-    	width: 250,
+    	width: 225,
     	split: true,
 //    	reference: 'treelistContainer',
     	layout: {
-    		type: 'vbox',
-    		align: 'stretch'
+    		type: 'vbox'
+//    		align: 'stretch'
     	},
     	border: false,
     	items: [{

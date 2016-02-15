@@ -24,6 +24,7 @@ Ext.define('Koala.view.window.HelpModel', {
     	selectionHtml: function(get) {
 		        var selection = get('treelist.selection'),
 		        content;
+		        console.log("get = " + get);
 		    if (selection) {
 		        content = selection.getPath('content', '-sep-');
 		        content = content.replace(/-sep--sep-|-sep-/g, '');

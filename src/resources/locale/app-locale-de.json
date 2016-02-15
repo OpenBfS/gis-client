@@ -214,43 +214,45 @@
 		        			"<div>Nachfolgend wird eine kurze Übersicht der Anwendung dargestellt. Für eine detailierte Erläuterung der einzelnen Funktionalitäten, navigieren Sie bitte durch das Inhaltsverzeichnis auf der linken Seite und klicken auf das gewünschte Themenfeld.</div>"+
 		        			"<h4>Die Oberfläche ist in folgende Bereiche gegliedert:</h4>"+
 		        			"<ol>"+
-		        				"<img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' width='827' height='449' style='float:right; margin:50px 0px 0px 0px'>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' width='826.5' height='449' style='float:right; margin:50px 10px 5px 10px'>"+
+		        				"<li style='color:#157FCC; font-weight:bold'>Layer Profilwahl</li>"+
+		        					"<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich eine Hintergrundkarte geladen.</div>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
+			        				"<div>In der Karte können Sie gleichzeitig navigieren und einzelne Bereiche auswählen.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Werkzeuge</li>"+
-			        			"<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
-			        			"<ul>"+
-			        				"<li>WMS (Web Map Service) einbinden</li>"+
-			        				"<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten im PDF-, oder IRIX-Format</li>"+
-			        			"</ul>"+
-			        			"<li style='color:#157FCC; font-weight:bold'>Layer-Auswahl</li>"+
-			        			"<div>Die Layer-Auswahl bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
-			        			"<div>Ein Layer lässt sich über einen \"Doppelklick\" zur Legende hinzufügen. Gegebenenfalls öffnet sich ein Fenster um über Filter-Funktionen die Auswahl weiter einzuschränken.</div>"+
-			        			"<li style='color:#157FCC; font-weight:bold'>Suchleiste</li>"+
-			        			"<div>Die Suchleiste ermöglicht die Suche nach Daten, Diensten und geographischen Orten.</div>"+
+			        				"<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
+				        			"<ul>"+
+				        				"<li>WMS (Web Map Service) einbinden</li>"+
+				        				"<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten im PDF-, oder IRIX-Format</li>"+
+				        			"</ul>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Layer Auswahl</li>"+
+			        				"<div>Die \"Layer Auswahl\" bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
+			        				"<div>Ein Layer lässt sich über einen \"Doppelklick\" zur Legende hinzufügen. Gegebenenfalls öffnet sich ein Fenster um über Filterfunktionen die Auswahl weiter einzuschränken.</div>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Multisuchleiste</li>"+
+			        				"<div>Die Suchleiste ermöglicht die Suche nach Daten, Diensten und geographischen Orten.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Einstellungen</li>"+
-			        			"<div>Folgende Einstellungen lassen sich für den gesamten Dienst vornehmen:</div>"+
+			        				"<div>Folgende Einstellungen lassen sich für den gesamten Dienst vornehmen:</div>"+
 			        			"<ul>"+
 			        				"<li>Vollbild: Darstellung der Anwendung über den gesamten Bildschirm</li>"+
 			        				"<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale Zeit (mitteleuropäische Zeit MEZ), oder auf UTC (Coordinated Universal Time)</li>"+
 			        				"<li>Hilfe: Öffnet das Hilfefenster</li>"+
 			        				"<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE), Englisch (EN) oder Französisch (FR)</li>"+
 			        			"</ul>"+
-			        			"<li style='color:#157FCC; font-weight:bold'>Navigationpanel</li>"+
-			        			"<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
-			        			"<div>Desweiteren kann die Legende geöffnet werden</div>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
+			        				"<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
+			        				"<div>Desweiteren kann die Legende geöffnet werden</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
-			        			"<div>Die Legende ermöglicht einzelne Layer darzustellen, als auch von der Ansicht zu entfernen.</div>"+
-			        			"<div>Informationen zu den jeweiligen Layern werden angezeigt. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte hierarchisch dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
-			        			"<div>Ferner ist es möglich, einzelne Layer zu speichern bzw. von der Legende zu entfernen.</div>"+
+			        				"<div>Die Legende ermöglicht einzelne Layer darzustellen, als auch von der Ansicht zu entfernen.</div>"+
+			        				"<div>Informationen zu den jeweiligen Layern werden angezeigt. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte hierarchisch dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
+			        				"<div>Ferner ist es möglich, einzelne Layer zu speichern bzw. von der Legende zu entfernen.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Geographische Übersicht</li>"+
-			        			"<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht.</div>"+
-			        			"<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
-			        			"<div>In der Karte können Sie gleichzeitig navigieren und einzelne Bereiche auswählen.</div>"+
+			        				"<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht.</div>"+
 		        			"</ol>"
 		        },
 		        "profileSelection": {
-		        	"title": "1. Layer-Profilwahl",
-		        	"html": "<h2> 1. Layer-Profilwahl </h2>"+
-		        			"<div>Die Layer-Profilwahl ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich eine Hintergrundkarte geladen. Im Anschluss kann über die Auswahl, Layer manuell hinzugefügt werden.</div>"+
+		        	"title": "1. Layer Profilwahl",
+		        	"html": "<h2> 1. Layer Profilwahl </h2>"+
+		        			"<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich eine Hintergrundkarte geladen. Im Anschluss kann über die Auswahl, Layer manuell hinzugefügt werden.</div>"+
 		        			"<h4>Zur Auswahl stehen die Profile:</h4>"+
 		        			"<ul>"+
 		        				"<li>IMIS - Integriertes Mess- und Informationssystem</li>"+
@@ -260,15 +262,15 @@
 		        				"<li>§2 - § 2 Strahlenschutzvorsorgegesetz (StrVG), Aufgaben des Bundes</li>"+
 		        				"<li>§3 - § 3 Strahlenschutzvorsorgegesetz (StrVG), Aufgaben der Länder</li>"+
 		        			"</ul>"+
-		        			"<div>Unterhalb der Layer-Profile lässt sich über die Eingabe innerhalb einer Filterleiste die Auswahl der Profile einschränken.</div><br />"+
-		        			"<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer-Profilwahl' alt='window_profileSelection.png' width='366' height='335' style='float:left'>"
+		        			"<div>Unterhalb der Profile lässt sich über die Eingabe innerhalb einer Filterleiste die Auswahl der Profile einschränken.</div><br />"+
+		        			"<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' width='366' height='335' style='float:left'>"
 		        },
 		        "map": {
 		        	"title": "2. Karte",
 		        	"html": "<h2> 2. Karte </h2>"+
 		        			"<div>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857).</div>"+
-		        			"<div>In der Karte kann mithilfe der Maus navigiert werden. Hält man die linke Maustaste gedrückt, kann die Kartenansicht verschoben werden. Das Mausrad steuert die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe 7. Navigation) steuern.</div>"+
-		        			"<div>Im rechten unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfachter Klick öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Angaben.</div>"+
+		        			"<div>In der Karte kann mithilfe der Maus navigiert werden. Hält man die linke Maustaste gedrückt, kann die Kartenansicht verschoben werden. Das Mausrad steuert die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe <i>7. Navigation</i>) steuern.</div>"+
+		        			"<div>Im rechten unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfachter Klick öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Angaben.</div><br />"+
 		        			"<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Karte' alt='graphic_map.png' width='829' height='488' style='float:left'>"
 		        },
 		        "tools":{
@@ -283,22 +285,48 @@
 		        			"</ul>"+
 		        			"<div>Diese können über die Button <b>WMS</b> bzw. <b>Druck</b> aufgerufen werden.</div><br />",
 		        	"wms":{
-		        		"title": "a) WMS-Dienst",
+		        		"title": "a) WMS Dienst",
 		        		"html": "<hr style='color:#157FCC' />"+
-		        				"<h2> a) WMS-Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26'> </h2>"+
-		        				"<div>Der WMS-Dienst ermöglicht das hinzufügen von WMS-Layern innerhalb des BfS-WebGIS. Demnach sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar.</div>"+
-		        				"<div>Detailliertere Informationen rund um das Thema <i>Web Map Service</i> finden Sie unter folgender Adresse:  <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></div><br />"+
-		        				"<div>Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld \"WMS-URL\" eine gültige Anfrage ein und wählen anschließend eine entsprechende Version (\"v1.1.1\", \"v1.3.0\") durch betätigen des Optionfeldes (selektiert: <img class='img' src='classic/resources/img/helpPage/radioButton_on.png' title='Optionsfeld EIN' alt='radioButton_on.png' width='15' height='15' style='vertical-align:middle'>, nicht selektiert: <img class='img' src='classic/resources/img/helpPage/radioButton_off.png' title='Optionsfeld AUS' alt='radioButton_off.png' width='15' height='15' style='vertical-align:middle'>) aus.</div>"+
-		        				"<div>In der Folge drücken Sie auf den Schalter \"Verfügbare Layer abfragen\" <img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Schalter: Verfügbare Layer abfragen' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'>. Die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt.</div>"+
-		        				"<div>Durch das Setzen von Häkchen können die Layer ausgewählt werden die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Schalter \"Ausgewählte Layer hinzufügen\" <img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Schalter: Ausgewählte Layer hinzufügen' alt='button_addLayers.png' width='198' height='24' style='vertical-align:middle'>. Diese werden initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</div>"+
-		        				"<div>Im unteren Beispiel werden die Layer <i>Bundesland</i> und <i>Name Bundesland</i> der Legende und somit der Karte hinzugefügt.</div><br />"+
-		        				"<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='WMS-Workflow' alt='graphic_wms_workflow.png' width='746' height='629' style='float:left'>"
+		        				"<h2> a) WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26' style='vertical-align:middle'> </h2>"+
+		        				"<div>"+
+		        				"<p>Der WMS Dienst ermöglicht das hinzufügen von WMS-Layern innerhalb des BfS-WebGIS. Demnach sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar. "+
+		        				"Detailliertere Informationen rund um das Thema <i>Web Map Service</i> finden Sie unter folgender Adresse:  <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></p>"+
+		        				"<p>Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld \"WMS-URL\" eine gültige Anfrage ein und wählen anschließend eine entsprechende Version (\"v1.1.1\", \"v1.3.0\") durch betätigen des Optionfeldes (selektiert: "+
+		        				"<img class='img' src='classic/resources/img/helpPage/radioButton_true.png' title='Optionsfeld EIN' alt='radioButton_true.png' width='15' height='15' style='vertical-align:middle'>"+
+		        				", nicht selektiert: "+
+		        				"<img class='img' src='classic/resources/img/helpPage/radioButton_false.png' title='Optionsfeld AUS' alt='radioButton_false.png' width='15' height='15' style='vertical-align:middle'>"+
+		        				") aus.</p>"+
+		        				"<p>In der Folge drücken Sie auf den Schalter \"Verfügbare Layer abfragen\" "+
+		        				"<img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Schalter: Verfügbare Layer abfragen' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'>"+
+		        				". Die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt.</p>"+
+		        				"<p>Durch das Setzen von Häkchen können die Layer ausgewählt werden die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Schalter \"Ausgewählte Layer hinzufügen\" "+
+		        				"<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Schalter: Ausgewählte Layer hinzufügen' alt='button_addLayers.png' width='198' height='24' style='vertical-align:middle'>"+
+		        				". Diese werden initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</p>"+
+		        				"<p>Im unteren Beispiel werden die Layer <i>Bundesland</i> und <i>Name Bundesland</i> der Legende und somit der Karte hinzugefügt.</p><br />"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='WMS-Workflow' alt='graphic_wms_workflow.png' width='746' height='629' style='float:left'>"+
+		        				"</div>"
 		        		},
 		        	"print":{
-		        		"title": "b) Druck-Dienst",
+		        		"title": "b) Druckdienst",
 		        		"html": "<hr style='color:#157FCC' />"+
-		        				"<h2> b) Druck-Dienst <img class='img' src='classic/resources/img/helpPage/button_print.png' title='Print-Button' alt='button_print.png' width='103' height='27'> </h2>"+
-		        				"<div><b>ToDo</b></div>"
+		        				"<h2> b) Druckdienst <img class='img' src='classic/resources/img/helpPage/button_print.png' title='Print-Button' alt='button_print.png' width='103' height='27' style='vertical-align:middle'> </h2>"+
+		        				"<div>"+
+		        				"<p>Der Dienstdienst ermöglicht einen Kartenausschnitt in verschiedenen Formaten zu erstellen und abzuspeichern. Der Dienst ist in zwei Hauptkomponenten untergliedert. Einerseits werden allgemein gebräuchliche Standards wie BMP, GIF, PDF, PNG, TIF und TIFF, andererseits der Standard für den Austausch radiologischer Informationen <i>IRIX</i> zur Verfügung gestellt. Das Vorgehen zur Erstellung eines IRIX-Dokumentes wird im Anschluss unter entsprechender Überschrift erläutert.</p>"+
+		        				"<p>Zunächst muss über das Auswahlmenü \"Printapp\" eine vordefinierte Ausschnittsgröße, beispielsweise <i>A4</i> gewählt werden. Dies stellt den Kartendruck nach DIN-Normen sicher. Im Anschluss erweitert sich das Fenster um Karteneigenschaften und -inhalte einzustellen. Überdies ist ein blaues Fenster, das den Kartenauschnitt repräsentiert sichtbar. Nun können die Inhalte der Karte auf das Auswahlfenster angepasst werden (siehe untere Graphik). Die Zoomstufe bestimmt letztlich den Kartenmaßstab. Beachten Sie, dass nur die Inhalte gedruckt werden die auf der Karte sichtbar sind.</p>"+
+		        				"<p>In der Gruppe \"Einstellungen\" wird definiert ob eine vollständige Karte (Legende und Kartenausschnitt), nur Legende beziehungsweise nur ein Kartenausschnitt erzeugt werden soll. Desweiteren kann der graphische Standard, mit dem der Kartendruck letztlich erzeugt werden soll, ausgewählt werden. Aktiviert man das Kontrollkästchen (aktiv: "+
+		        				"<img class='img' src='classic/resources/img/helpPage/checkbox_true.png' title='Kontrollkästchen - aktiv' alt='checkbox_true.png' width='17' height='16' style='vertical-align:middle'>"+
+		        				"; inaktiv: "+
+		        				"<img class='img' src='classic/resources/img/helpPage/checkbox_false.png' title='Kontrollkästchen - inaktiv' alt='checkbox_false.png' width='16' height='17' style='vertical-align:middle'>"+
+		        				") links neben \"IRIX\" wird das Kartenausdruckfenster um IRIX-Druckdienste erweitert (siehe <i>IRIX - International Radiation Information eXchange</i>).</p>"+
+		        				"<p>Die Gruppe der \"Eigenschaften\" stellt Funktionen der Darstellung beziehungsweise Inhalte bereit. Die Kontrollkästchen von \"northArrow\" und \"scalebar\" legen fest ob ein Nordpfeil respektive Maßstabsleiste im Kartendruck dargestellt werden oder nicht.</p>"+
+		        				"<p>Nachfolgende Felder bieten die Möglichkeit die Karte mit Informationen zu füllen. Folglich kann an dieser Stelle die Kartenzuordnung, Titel, Legende, Beschreibung, Kommentar, Impressum und Ersteller der Karte eingetragen werden. "+
+		        				"Jeder Eintrag kann mit Standard-HTML Tags versehen werden um Schriftformate festzulegen. Diese Funktion, sowie die Einträge sind optional.</p>"+ 
+		        				"<p>Mit Betätigen des Schalters \"Dokument anfordern\" wird die gewünschte Datei erzeugt. Sobald dieser Prozess abgeschlossen ist erscheint der Schalter \"Dokument herunterladen\". Dieser ermöglicht das Speichern bzw. Betrachten der erzeugten Datei.</p>"+ 
+		        				"<p>In folgender Graphik wird der Arbeitsablauf eines Kartendrucks mit Legende und Kartenausschnitt im PDF-Format dargestellt.</p>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_print.png' title='Druck Workflow' alt='graphic_print.png' width='1026.8' height='417.2'><br />"+
+		        				"<h3>IRIX - International Radiation Information eXchange</h3>"+
+		        				"<p><b>-TODO-</b></p>"+
+		        				"</div>"
 		        		}
 	        	},
 		        "layerSelection": {
