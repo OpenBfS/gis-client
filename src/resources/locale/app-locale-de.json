@@ -289,7 +289,7 @@
 		        		"html": "<hr style='color:#157FCC' />"+
 		        				"<h2> a) WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26' style='vertical-align:middle'> </h2>"+
 		        				"<div>"+
-		        				"<p>Der WMS Dienst ermöglicht das hinzufügen von WMS-Layern innerhalb des BfS-WebGIS. Demnach sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar. "+
+		        				"<p>Der WMS Dienst ermöglicht das Hinzufügen von WMS-Layern innerhalb des BfS-WebGIS. Demnach sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar. "+
 		        				"Detailliertere Informationen rund um das Thema <i>Web Map Service</i> finden Sie unter folgender Adresse:  <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></p>"+
 		        				"<p>Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld \"WMS-URL\" eine gültige Anfrage ein und wählen anschließend eine entsprechende Version (\"v1.1.1\", \"v1.3.0\") durch betätigen des Optionfeldes (selektiert: "+
 		        				"<img class='img' src='classic/resources/img/helpPage/radioButton_true.png' title='Optionsfeld EIN' alt='radioButton_true.png' width='15' height='15' style='vertical-align:middle'>"+
@@ -303,7 +303,7 @@
 		        				"<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Schalter: Ausgewählte Layer hinzufügen' alt='button_addLayers.png' width='198' height='24' style='vertical-align:middle'>"+
 		        				". Diese werden initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</p>"+
 		        				"<p>Im unteren Beispiel werden die Layer <i>Bundesland</i> und <i>Name Bundesland</i> der Legende und somit der Karte hinzugefügt.</p><br />"+
-		        				"<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='WMS-Workflow' alt='graphic_wms_workflow.png' width='746' height='629' style='float:left'>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='WMS-Workflow' alt='graphic_wms_workflow.png' width='803' height='578' style='float:left'>"+
 		        				"</div>"
 		        		},
 		        	"print":{
@@ -313,17 +313,17 @@
 		        				"<div>"+
 		        				"<p>Der Dienstdienst ermöglicht einen Kartenausschnitt in verschiedenen Formaten zu erstellen und abzuspeichern. Der Dienst ist in zwei Hauptkomponenten untergliedert. Einerseits werden allgemein gebräuchliche Standards wie BMP, GIF, PDF, PNG, TIF und TIFF, andererseits der Standard für den Austausch radiologischer Informationen <i>IRIX</i> zur Verfügung gestellt. Das Vorgehen zur Erstellung eines IRIX-Dokumentes wird im Anschluss unter entsprechender Überschrift erläutert.</p>"+
 		        				"<p>Zunächst muss über das Auswahlmenü \"Printapp\" eine vordefinierte Ausschnittsgröße, beispielsweise <i>A4</i> gewählt werden. Dies stellt den Kartendruck nach DIN-Normen sicher. Im Anschluss erweitert sich das Fenster um Karteneigenschaften und -inhalte einzustellen. Überdies ist ein blaues Fenster, das den Kartenauschnitt repräsentiert sichtbar. Nun können die Inhalte der Karte auf das Auswahlfenster angepasst werden (siehe untere Graphik). Die Zoomstufe bestimmt letztlich den Kartenmaßstab. Beachten Sie, dass nur die Inhalte gedruckt werden die auf der Karte sichtbar sind.</p>"+
-		        				"<p>In der Gruppe \"Einstellungen\" wird definiert ob eine vollständige Karte (Legende und Kartenausschnitt), nur Legende beziehungsweise nur ein Kartenausschnitt erzeugt werden soll. Desweiteren kann der graphische Standard, mit dem der Kartendruck letztlich erzeugt werden soll, ausgewählt werden. Aktiviert man das Kontrollkästchen (aktiv: "+
+		        				"<p>In der Gruppe \"Einstellungen\" wird definiert ob eine vollständige Karte (Legende und Kartenausschnitt), nur Legende bzw. nur ein Kartenausschnitt erzeugt werden soll. Desweiteren kann der graphische Standard, mit dem der Kartendruck letztlich erzeugt werden soll, ausgewählt werden. Aktiviert man das Kontrollkästchen (aktiv: "+
 		        				"<img class='img' src='classic/resources/img/helpPage/checkbox_true.png' title='Kontrollkästchen - aktiv' alt='checkbox_true.png' width='17' height='16' style='vertical-align:middle'>"+
 		        				"; inaktiv: "+
 		        				"<img class='img' src='classic/resources/img/helpPage/checkbox_false.png' title='Kontrollkästchen - inaktiv' alt='checkbox_false.png' width='16' height='17' style='vertical-align:middle'>"+
 		        				") links neben \"IRIX\" wird das Kartenausdruckfenster um IRIX-Druckdienste erweitert (siehe <i>IRIX - International Radiation Information eXchange</i>).</p>"+
-		        				"<p>Die Gruppe der \"Eigenschaften\" stellt Funktionen der Darstellung beziehungsweise Inhalte bereit. Die Kontrollkästchen von \"northArrow\" und \"scalebar\" legen fest ob ein Nordpfeil respektive Maßstabsleiste im Kartendruck dargestellt werden oder nicht.</p>"+
+		        				"<p>Die Gruppe der \"Eigenschaften\" stellt Funktionen der Darstellung bzw. Inhalte bereit. Die Kontrollkästchen von \"northArrow\" und \"scalebar\" legen fest ob ein Nordpfeil respektive Maßstabsleiste im Kartendruck dargestellt werden oder nicht.</p>"+
 		        				"<p>Nachfolgende Felder bieten die Möglichkeit die Karte mit Informationen zu füllen. Folglich kann an dieser Stelle die Kartenzuordnung, Titel, Legende, Beschreibung, Kommentar, Impressum und Ersteller der Karte eingetragen werden. "+
 		        				"Jeder Eintrag kann mit Standard-HTML Tags versehen werden um Schriftformate festzulegen. Diese Funktion, sowie die Einträge sind optional.</p>"+ 
 		        				"<p>Mit Betätigen des Schalters \"Dokument anfordern\" wird die gewünschte Datei erzeugt. Sobald dieser Prozess abgeschlossen ist erscheint der Schalter \"Dokument herunterladen\". Dieser ermöglicht das Speichern bzw. Betrachten der erzeugten Datei.</p>"+ 
 		        				"<p>In folgender Graphik wird der Arbeitsablauf eines Kartendrucks mit Legende und Kartenausschnitt im PDF-Format dargestellt.</p>"+
-		        				"<img class='img' src='classic/resources/img/helpPage/graphic_print.png' title='Druck Workflow' alt='graphic_print.png' width='1026.8' height='417.2'><br />"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_print.png' title='Druck Workflow' alt='graphic_print.png' width='1027' height='418'><br /><br />"+
 		        				"<h3>IRIX - International Radiation Information eXchange</h3>"+
 		        				"<p><b>-TODO-</b></p>"+
 		        				"</div>"
@@ -331,11 +331,41 @@
 	        	},
 		        "layerSelection": {
 		        	"title": "4. Auswahl",
-		        	"html": "Auswahl-HTML"
+		        	"html":     "<h2>4. Auswahl</h2>"+
+		        				"<div>"+
+		        				"<p>Die Auswahl gewährleistet das Hinzufügen von Layern in die Legende und somit in die geographische Karte. Das Auswahlfenster ist im Menü unterhalb des Bedienfeldes \"Werkzeug\" zu finden. Initial ist das Fenster geschlossen und kann mit einem einfachen Klick auf den Schriftzug \"Auswahl\" oder auf der türkisfarbene Leiste geöffnet werden (siehe Grafik).</p>"+
+		        				"<p>Jeder Layer befindet sich in einem Layer-Set. Dementsprechend sind die Layer nach Themen untergliedert. Möchte man beispielsweise den Layer des Niederschlags der Karte hinzufügen, findet man diesen unter dem Layer-Set \"Meteorologie\".</p>"+
+		        				"<p>Die Anordnung im Auswahlfenster entspricht der eines allgemeingebräuchlichen Dateisystems, mit Ordnern und Dateien. Die Layer-Sets entsprechen den Ordnern, während die Layer den Dateien gleich kommen. Möchte man einen Ordner ausklappen um sich die zugeordneten Layer anzeigen zu lassen, ist dies mit einem einfachen Klick auf das Plus-Symbol links neben des Ordnersymbols möglich. Alternativ kann auch ein Doppelklick auf die Ordnerbeschriftung ausgeführt werden.</p>"+
+		        				"<p>Ein Doppelklick auf die Layerbezeichnung fügt letztlich den Layer der Legende bzw. Karte hinzu. Je nach Semantik des Layers öffnet sich gegebenfalls ein Fenster um die Daten mithilfe eines Zeit- oder Wertefilters einzuschränken. Es ist auch möglich, dass Layer über beide Filter verfügen. Sofern sich kein Fenster öffnet, wird der Layer direkt eingefügt.</p>"+
+		        				"<p>In unterer Grafik ist das Hinzufügen der Ortsdosisleistung brutto mit einem Intervall von 10min dargestellt. Das einzustellende Datum bezieht sich auf den Zeitpunkt der Aufnahme der Daten. Die Festlegung des Datums kann entweder durch einfache Eingabe, oder durch die Auswahl eines Tages aus dem Kalender ausgeführt werden. Dieser öffnet sich mit einem Klick auf das Kalendersymbol "+
+		        				"<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Schalter: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
+		        				". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. ODL-brutto mobil). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereit gestellt. Der Wertefilter entspricht bei diesem Layer das Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Ein Klick auf den Schalter \"Filter übernehmen und Layer der Karte hinzufügen\" stellt den Layer zur Betrachtung bereit.</p>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_layer_selection.png' title='Auswahl Layer Workflow' alt='graphic_layer_selection.png' width='812' height='486'><br /><br />"+
+		        				"<h3>Layer-Set Auswahl</h3>"+
+		        				"<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe untere Grafik). In der türkisfarbenen Leiste der  \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster das ich Auswahl an Layer-Sets beinhaltet. KLickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Im unteren Teil des der Layer-Set Auswahl kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden.</p>"+
+		        				"<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem Doppelklick auf die Layerbeschriftung.</p>"+ 
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_layerSet_selection.png' title='Auswahl Layer-Set Workflow' alt='graphic_layerSet_selection.png' width='1004' height='542'>"+
+		        				"</div>"
 	        	},
 		        "searchField": {
-		        	"title": "5. Suchleiste",
-		        	"html": "Suchleiste-HTML"
+		        	"title": "5. Multisuchleiste",
+		        	"html":     "<h2>5. Multisuchleiste</h2>"+
+		        				"<div>"+
+		        				"<p>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS. Durch einfache Texteingabe innerhalb des Suchfeldes werden die Ergebnisse in einem Fenster unterhalb der Leiste gesondert angezeigt. Ein Klick auf das Kreuzsymbol "+
+		        				"<img class='img' src='classic/resources/img/helpPage/button_search_delete.png' title='Kreuzsymbol: Löschen der Eingabe' alt='button_search_delete.png' width='25' height='24' style='vertical-align:middle'>"+
+		        				" auf der rechten Seite des Suchfeldes löscht die Eingabe und schließt die Ergebnisfenster.</p>"+
+		        				"<h3>Räumliche Suche</h3>"+
+		        				"<p>Die Suche nach Orten erfolgt über die Multisuchleiste. Die Ergebnisse werden entsprechend der Texteingabe stets aktualisiert und erfordern demnach keiner weiteren Eingabe. Ist ein gewünschter Ort gefunden, genügt ein einfacher Klick um an die entsprechende Auswahl zu zoomen.</p>"+
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_search_location.png' title='Räumliche Suche' alt'graphic_search_location.png' width='483' height='131'><br /><br />"+
+		        				"<h3>Daten und Dienste des BfS</h3>"+
+		        				"<p>Neben der räumlichen Suche, wird parallel nach Daten und Diensten des BfS gesucht. Die Ergebnisse werden in die Bereiche \"Daten\", \"Datenserie\" und \"Dienst\" gegliedert. Demzufolge ist ersichtlich welche Information des jeweiligen Suchbegriffes zur Verfügung stehen.</p>"+
+		        				"<p>Weitere Information finden sich im Metadatenfenster das sich öffnet sobald man den Informationsschalter "+
+		        				"<img class='img' src='classic/resources/img/helpPage/button_search_info.png' title='Informationsschalter' alt='button_search_info.png' width='15' height='15' style='vertical-align:middle'>"+
+		        				" mit einem Klick betätigt. Daten, Datenserien und Dienste die mit folgendem Schalter "+
+		        				"<img class='img' src='classic/resources/img/helpPage/button_search_addData.png' title='Schalter: Füge Daten der Karte hinzu' alt='button_search_addData.png' width='17' height='17' style='vertical-align:middle'>"+
+		        				" versehen sind, lassen sich mit einem einfachen Klick zur Karte hinzufügen.</p>"+ 
+		        				"<img class='img' src='classic/resources/img/helpPage/graphic_search_data.png' title='Datensuche' alt'graphic_search_data.png' width='833' height='431'>"+
+		        				"</div>"
 		        },
 		        "settings": {
 		        	"title": "6. Einstellungen",
