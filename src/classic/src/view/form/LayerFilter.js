@@ -119,7 +119,7 @@ Ext.define("Koala.view.form.LayerFilter", {
 
             var store = Ext.create("Ext.data.Store", {
                 fields: [VAL_FIELD, DSP_FIELD],
-                data : data
+                data: data
             });
             return store;
         },
@@ -541,6 +541,11 @@ Ext.define("Koala.view.form.LayerFilter", {
             maxValue = Ext.Date.parse(
                 filter.maxdatetimeinstant, filter.maxdatetimeformat
             );
+
+            // Fix for the issue #1068-34
+            // Raises the maxDate by one day to avoid the bug with the datefield
+            // where maxDate = defaultValue leads to invalid input
+            maxValue.setDate(maxValue.getDate() + 1);
         }
 
         if (Koala.Application.isLocal()) {
@@ -639,6 +644,12 @@ Ext.define("Koala.view.form.LayerFilter", {
             filter.defaultendtimeformat
         );
 
+        // Fix for the issue #1068-34
+        // Raises the maxDate by one day to avoid the bug with the datefield
+        // where maxDate = defaultValue leads to invalid input
+        maxValue.setDate(maxValue.getDate() + 1);
+
+
         if (Koala.Application.isLocal()) {
             var makeLocal = Koala.util.Date.makeLocal;
             minValue = makeLocal(minValue);
@@ -662,7 +673,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             format: me.getFormat(),
             submitFormat: format,
             validator: staticMe.validateMaxDurationTimerange,
-            msgTarget: 'under',
+            msgTarget: "under",
             listeners: {
                 select: me.resetNumberFields,
                 validitychange: staticMe.revalidatePartnerField
