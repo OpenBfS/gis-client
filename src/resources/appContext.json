@@ -14,6 +14,10 @@
 
                 "irix-servlet": "/irix-servlet"
             },
+            "application_user": {
+                "username": "data_reader",
+                "password": "data_reader"
+            },
             "metadataSearchFields": ["title", "abstract"],
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
