@@ -111,6 +111,32 @@ Ext.define("Koala.view.form.Print", {
     },
 
     /**
+     * Filters the layer by properties or params. Used in getLegendObject.
+     * This method can/should be overriden in the application.
+     *
+     * @param ol.layer
+     */
+    legendLayerFilter: function(layer) {
+        var legendFieldset = Ext.ComponentQuery.
+                query('fieldset[name="legendsFieldset"]')[0];
+        var layerCheckbox = legendFieldset.
+            down('checkbox[name='+layer.get('name')+'_visible]');
+
+        if (layerCheckbox && !legendFieldset.getCollapsed() &&
+                layer.checked &&
+                layer.get('name') &&
+                layer.get('name') !== "Hintergrundkarte" &&
+                layer.get('opacity') > 0 &&
+                layer.get('allowPrint') &&
+                layerCheckbox.layer === layer &&
+                layerCheckbox.checked) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    /**
      * Update the content of the legendsFieldset. Remove all. Get visible and
      * printable Layers from Map. Add those to the fieldset.
      */
@@ -120,22 +146,17 @@ Ext.define("Koala.view.form.Print", {
             var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
             var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
 
-            var filteredLayers = Ext.Array.filter(layers,
-                this.legendLayerFilter);
-
-            if(filteredLayers.length > 0){
-                var items = [];
-                Ext.each(filteredLayers, function(layer){
-                    if(layer.get('visible') && layer.get('allowPrint')){
-                        items.push({
-                            xtype: 'checkbox',
-                            name: layer.get('name') + '_visible',
-                            layer: layer,
-                            fieldLabel: layer.get('name')
-                        });
-                    }
-                });
-            }
+            var items = [];
+            Ext.each(layers, function(layer){
+                if(layer.get('visible') && layer.get('allowPrint')){
+                    items.push({
+                        xtype: 'checkbox',
+                        name: layer.get('name') + '_visible',
+                        layer: layer,
+                        fieldLabel: layer.get('name')
+                    });
+                }
+            });
             if(items.length > 0){
                 legendsFieldset.show();
             } else {
@@ -283,10 +304,6 @@ Ext.define("Koala.view.form.Print", {
             'fieldset[name=attributes]>field[name!=dpi]'
         );
         Ext.each(additionalFields, function(field){
-            // debugger
-            // if(field.getName() === 'legend') {
-            //     attributes.legend = view.getLegendObject();
-            // } else
             if (field.getName() === 'scalebar') {
                 attributes.scalebar = view.getScaleBarObject();
             } else if (field.getName() === 'northArrow') {
@@ -298,19 +315,7 @@ Ext.define("Koala.view.form.Print", {
 
         var legendFieldset = view.down('fieldset[name="legendsFieldset"]');
         if(!legendFieldset.getCollapsed()){
-            var layerCheckboxes = legendFieldset.
-                    query('checkbox[name!=legendsFieldsetCheckBox]');
-
-            var legendLayers = [];
-            Ext.each(layerCheckboxes, function(checkbox){
-                if(checkbox.checked){
-                    var layer = checkbox.layer;
-                    legendLayers.push(layer);
-                }
-            });
-            if(legendLayers.length > 0){
-                attributes.legend = view.getLegendObject(legendLayers);
-            }
+            attributes.legend = view.getLegendObject();
         }
 
         var app = view.down('combo[name=appCombo]').getValue();
