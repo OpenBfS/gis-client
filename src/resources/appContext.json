@@ -10,7 +10,7 @@
                 "metadata-xml2json": "http://10.133.7.63/geonetwork/srv/ger/xml_iso19139Tojson",
                 "metadata-search": "http://10.133.7.63/geonetwork/srv/ger/csw?",
                 "spatial-search": "http://10.133.7.63/geoserver/BFS/ows",
-                "print-servlet": "http://10.133.7.63/print-servlet-3.3-SNAPSHOT/print/",
+                "print-servlet": "http://10.133.7.63:8080/print-servlet-3.4-SNAPSHOT/print/",
 
                 "irix-servlet": "/irix-servlet"
             },

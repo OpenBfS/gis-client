@@ -67,6 +67,7 @@
             "serverError": "Ein serverseitiger Fehler trat bei der Bearbeitung des Drucks auf. Interner Status: {0}",
             "disablePopupBlocker": "Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
             "disablePopupBlockerTitle": "Popup-Blocker aktiviert?",
+            "printLegendsFieldSetTitle": "Legenden drucken",
             "unexpectedResponseTitle": "Unerwartete Antwort",
             "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort.",
             "printButtonPrefix": "Dokument",

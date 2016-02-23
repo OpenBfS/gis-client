@@ -68,6 +68,7 @@
             "disablePopupBlocker": "en:Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
             "disablePopupBlockerTitle": "en:Popup-Blocker aktiviert?",
             "unexpectedResponseTitle": "en:Unerwartete Antwort",
+            "printLegendsFieldSetTitle": "en:Legenden drucken",
             "unexpectedResponse": "en:Der Druck lieferte eine unerwartete Antwort.",
             "printButtonPrefix": "en:Dokument",
             "downloadButtonSuffix": "en:herunterladen"

@@ -41,6 +41,7 @@ Ext.define("Koala.view.form.Print", {
         serverError: "",
         disablePopupBlockerTitle: "",
         disablePopupBlocker: "",
+        printLegendsFieldSetTitle: "",
         unexpectedResponseTitle: "",
         unexpectedResponse: "",
         printButtonPrefix: "",
@@ -73,6 +74,75 @@ Ext.define("Koala.view.form.Print", {
     listeners: {
         genericfieldsetadded: function() {
             this.addIrixCheckbox();
+        }
+    },
+
+    /**
+     * Create a fieldset instead of an checkbox because we want to choose which
+     * layerlegends we want to print and which not.
+     * @override
+     */
+    getLegendAttributeFields: function () {
+        var me = this;
+        var legendsFieldset = Ext.create('Ext.form.FieldSet', {
+            title: this.getPrintLegendsFieldSetTitle(),
+            name: 'legendsFieldset',
+            checkboxName: 'legendsFieldsetCheckBox',
+            checkboxToggle: true
+        });
+
+        var treePanel = Ext.ComponentQuery.
+                    query('k-panel-routing-legendtree')[0];
+
+        var listenerFunction = function(){
+            me.updateLegendsFieldset(legendsFieldset);
+        };
+
+        treePanel.getStore().on('update', listenerFunction);
+        treePanel.getStore().on('datachange', listenerFunction);
+        legendsFieldset.on('destroy', function(){
+            treePanel.getStore().un('update', listenerFunction);
+            treePanel.getStore().un('datachange', listenerFunction);
+        });
+
+        this.updateLegendsFieldset(legendsFieldset);
+
+        return legendsFieldset;
+    },
+
+    /**
+     * Update the content of the legendsFieldset. Remove all. Get visible and
+     * printable Layers from Map. Add those to the fieldset.
+     */
+    updateLegendsFieldset: function(legendsFieldset){
+        if(legendsFieldset){
+            legendsFieldset.removeAll();
+            var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
+            var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
+
+            var filteredLayers = Ext.Array.filter(layers,
+                this.legendLayerFilter);
+
+            if(filteredLayers.length > 0){
+                var items = [];
+                Ext.each(filteredLayers, function(layer){
+                    if(layer.get('visible') && layer.get('allowPrint')){
+                        items.push({
+                            xtype: 'checkbox',
+                            name: layer.get('name') + '_visible',
+                            layer: layer,
+                            fieldLabel: layer.get('name')
+                        });
+                    }
+                });
+            }
+            if(items.length > 0){
+                legendsFieldset.show();
+            } else {
+                legendsFieldset.hide();
+            }
+
+            legendsFieldset.add(items);
         }
     },
 
@@ -186,7 +256,8 @@ Ext.define("Koala.view.form.Print", {
             }
         }, this);
 
-        var fieldsets = view.query('fieldset[name=attributes] fieldset');
+        var fieldsets = view.
+                query('fieldset[name=attributes] fieldset[name=map]');
 
         Ext.each(fieldsets, function(fs){
             var name = fs.name;
@@ -212,9 +283,11 @@ Ext.define("Koala.view.form.Print", {
             'fieldset[name=attributes]>field[name!=dpi]'
         );
         Ext.each(additionalFields, function(field){
-            if(field.getName() === 'legend') {
-                attributes.legend = view.getLegendObject();
-            } else if (field.getName() === 'scalebar') {
+            // debugger
+            // if(field.getName() === 'legend') {
+            //     attributes.legend = view.getLegendObject();
+            // } else
+            if (field.getName() === 'scalebar') {
                 attributes.scalebar = view.getScaleBarObject();
             } else if (field.getName() === 'northArrow') {
                 attributes.scalebar = view.getNorthArrowObject();
@@ -222,6 +295,23 @@ Ext.define("Koala.view.form.Print", {
                 attributes[field.getName()] = field.getValue();
             }
         }, this);
+
+        var legendFieldset = view.down('fieldset[name="legendsFieldset"]');
+        if(!legendFieldset.getCollapsed()){
+            var layerCheckboxes = legendFieldset.
+                    query('checkbox[name!=legendsFieldsetCheckBox]');
+
+            var legendLayers = [];
+            Ext.each(layerCheckboxes, function(checkbox){
+                if(checkbox.checked){
+                    var layer = checkbox.layer;
+                    legendLayers.push(layer);
+                }
+            });
+            if(legendLayers.length > 0){
+                attributes.legend = view.getLegendObject(legendLayers);
+            }
+        }
 
         var app = view.down('combo[name=appCombo]').getValue();
         var url = view.getUrl() + app + '/buildreport.' + format;
