@@ -92,7 +92,7 @@ Ext.define("Koala.view.form.Print", {
         });
 
         var treePanel = Ext.ComponentQuery.
-                    query('k-panel-routing-legendtree')[0];
+                query('k-panel-routing-legendtree')[0];
 
         var listenerFunction = function(){
             me.updateLegendsFieldset(legendsFieldset);
@@ -314,7 +314,7 @@ Ext.define("Koala.view.form.Print", {
         }, this);
 
         var legendFieldset = view.down('fieldset[name="legendsFieldset"]');
-        if(!legendFieldset.getCollapsed()){
+        if(legendFieldset && !legendFieldset.getCollapsed()){
             attributes.legend = view.getLegendObject();
         }
 
