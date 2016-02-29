@@ -21,11 +21,11 @@ Ext.define("Koala.view.toolbar.Header", {
     xtype: 'k-toolbar-header',
 
     requires: [
+        "BasiGX.util.Animate",
+               
         "Koala.view.toolbar.HeaderController",
         "Koala.view.toolbar.HeaderModel",
-
-        "Koala.view.button.TimeReference",
-        
+        "Koala.view.button.TimeReference",        
         "Koala.view.window.HelpWindow"
     ],
 
@@ -62,6 +62,7 @@ Ext.define("Koala.view.toolbar.Header", {
                 if(!win){
                     Ext.create('Koala.view.window.HelpWindow')
                     .show();
+                    
                 } else {
                     BasiGX.util.Animate.shake(win);
                 }

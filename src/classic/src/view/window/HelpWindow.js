@@ -21,6 +21,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     xtype: "k-window-help",
 
     requires: [
+        "Ext.list.Tree",
         "Koala.view.window.HelpController",
         "Koala.view.window.HelpModel"
     ],
@@ -34,7 +35,7 @@ Ext.define("Koala.view.window.HelpWindow", {
         title: '{title}'
     },
     	
-    width: 1320,
+    width: 1325,
     height: 750,
     layout: 'border',
     minWidth: 400,
@@ -50,8 +51,9 @@ Ext.define("Koala.view.window.HelpWindow", {
 
     //Navigation-Panel
     items: [{
+    	xtype: 'panel',
     	region: 'west',
-    	width: 225,
+    	width: 250,
     	split: true,
 //    	reference: 'treelistContainer',
     	layout: {
@@ -63,23 +65,27 @@ Ext.define("Koala.view.window.HelpWindow", {
     		xtype: 'treelist',
     		reference: 'treelist',
     		expanderOnly: false,
-//        	listeners: {
-//        		afterrender: function(){
-//        			var initNode = this.getStore().getNodeById('preface');
-//        			this.setSelection(initNode);
-//        		}
-//        	},
     		bind: '{navItems}'
     	}]
-    }, 
+    },
     //Content
     {
     	region: 'center',
-    	autoScroll: true,//"This cfg has been deprecated since 5.1.0 - Use scrollable instead" -> but scrollable is not working"
+    	autoScroll: true,//"This cfg has been deprecated since 5.1.0 - Use scrollable instead" -> but scrollable is not working
     	bodyPadding: 10,
     	bind: {
     		html: '{selectionHtml}'
     	}
-    }] 
-    
+    }],
+    //select 'preface' at initialization
+    listeners:{
+	    afterlayout: function() {
+	    	var treelist = this.lookupReference('treelist');
+	    	var store = treelist.getStore();
+	    	if (store){
+		    	var node = treelist.getStore().getNodeById('select');
+		    	treelist.setSelection(node);
+	    	}
+	    }
+    }
 });

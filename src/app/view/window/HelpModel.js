@@ -34,23 +34,16 @@ Ext.define('Koala.view.window.HelpModel', {
 		}
     },
     stores: {
-//        title: '',
-//        prefaceTitle: '',
-//        preface: '',
-//        toolsTitle: '',
-//        layerSelectionTitle: '',
-//        mapNavigationTitle: '',
-//        legendTitle: '',
-    	
         navItems: {
         	type: 'tree',        	
         	root: {
         		children: [
         		    {
-        		    itemId: 'preface',
+        		    id: 'select',
     		    	text: '{preface.title}',
     		    	content: '{preface.html}',
-    		    	leaf: true
+    		    	leaf: true,
+    		    	rootVisible: true
 	        		}, {
 	        		text: '{quickRef.title}',
 	        		content: '{quickRef.html}',
@@ -62,7 +55,15 @@ Ext.define('Koala.view.window.HelpModel', {
 	        		}, {
 	        		text: '{map.title}',
 	        		content: '{map.html}',
-	        		leaf: true
+	        		children: [{
+	        			text: '{map.overview.title}',
+	        			content: '{map.overview.html}',
+	        			leaf: true
+	        		}, {
+	        			text: '{map.geoObjects.title}',
+	        			content: '{map.geoObjects.html}',
+	        			leaf: true
+	        		}]
 	        		}, {
 					text: '{tools.title}',
 					content: '{tools.html}',
@@ -86,17 +87,43 @@ Ext.define('Koala.view.window.HelpModel', {
 	        		}, {
 	        		text: '{settings.title}',
 	        		content: '{settings.html}',
-	        		leaf: true
+	        		children: [{
+	        			text: '{settings.fullScreen.title}',
+	        			content: '{settings.fullScreen.html}',
+	        			leaf: true
+	        		}, {
+	        			text: '{settings.timeRef.title}',
+	        			content: '{settings.timeRef.html}',
+	        			leaf: true
+	        		}, {
+	        			text: '{settings.help.title}',
+	        			content: '{settings.help.html}',
+	        			leaf: true
+	        		}, {
+	        			text: '{settings.language.title}',
+	        			content: '{settings.language.html}',
+	        			leaf: true
+	        		}]
 	        		}, {	        			
 					text: '{mapNavigation.title}',
 					content: '{mapNavigation.html}',
 					children: [{
-						text: 'Sub-Navigation1',
+						text: '{mapNavigation.zoomIn.title}',
+						content: '{mapNavigation.zoomIn.html}',
 						leaf: true
 					}, {
-						text: 'Sub-Navigation2',
+						text: '{mapNavigation.zoomOut.title}',
+						content: '{mapNavigation.zoomOut.html}',
 						leaf: true
-						}]
+					}, {
+						text: '{mapNavigation.initMapView.title}',
+						content: '{mapNavigation.initMapView.html}',
+						leaf: true
+					}, {
+						text: '{mapNavigation.openLegend.title}',
+						content: '{mapNavigation.openLegend.html}',
+						leaf: true
+					}]
 	        		}, {
 	        		text: '{legend.title}',
 	        		content: '{legend.html}',
