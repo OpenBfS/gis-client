@@ -35,10 +35,10 @@ Ext.define("Koala.view.window.HelpWindow", {
         title: '{title}'
     },
     	
-    width: 1325,
+    width: 1335,
     height: 750,
     layout: 'border',
-    minWidth: 400,
+    minWidth: 500,
 //    maxWidth: window.innerWidth - 100,
     minHeight: 300,
 //    maxHeight: window.innerHeight - 100,
@@ -53,7 +53,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     items: [{
     	xtype: 'panel',
     	region: 'west',
-    	width: 250,
+    	width: 260,
     	split: true,
 //    	reference: 'treelistContainer',
     	layout: {
@@ -80,9 +80,10 @@ Ext.define("Koala.view.window.HelpWindow", {
     //select 'preface' at initialization
     listeners:{
 	    afterlayout: function() {
-	    	var treelist = this.lookupReference('treelist');
-	    	var store = treelist.getStore();
-	    	if (store){
+	    	var treelist = this.lookupReference('treelist'),
+	    	store = treelist.getStore(),
+	    	selection = treelist.getSelection();
+	    	if (store && !selection){
 		    	var node = treelist.getStore().getNodeById('select');
 		    	treelist.setSelection(node);
 	    	}
