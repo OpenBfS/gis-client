@@ -6,7 +6,8 @@
         "window": true,
         "location": true,
         "Koala": true,
-        "BasiGX": true
+        "BasiGX": true,
+        "btoa": true
     },
     "rules": {
         "comma-dangle": 2,
