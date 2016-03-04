@@ -109,6 +109,7 @@ Ext.define('Koala.view.main.Main', {
         // define menu items
         menuConfig: {
             bodyPadding: 0,
+            resizable: true,
             dockedItems: [{
                 xtype: 'buttongroup',
                 columns: 2,
@@ -165,6 +166,7 @@ Ext.define('Koala.view.main.Main', {
         },
         legendPanelConfig: {
             xtype: 'k-panel-routing-legendtree',
+            resizable: true,
             listeners: {
                 afterrender: {
                     fn: 'resizeLegendTreeToMaxHeight',
