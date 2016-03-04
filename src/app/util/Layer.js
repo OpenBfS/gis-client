@@ -29,6 +29,9 @@ Ext.define('Koala.util.Layer', {
         /* i18n */
         txtUntil: "",
         txtFilter: "",
+        titleAddLayer: "",
+        titleAddLayerFilter: "",
+        textUnknownLayer: "",
         /* i18n */
 
         /**
@@ -292,15 +295,17 @@ Ext.define('Koala.util.Layer', {
         },
 
         showChangeFilterSettingsWin: function(metadata) {
-            var filters = this.getFiltersFromMetadata(metadata);
-            if (!filters) {
-                return;
-            }
+            var staticMe = this;
+            var filters = staticMe.getFiltersFromMetadata(metadata);
 
-            // TODO i18n
+            var titlePrefix = staticMe.titleAddLayer;
+            if (filters && filters.length > 0) {
+                titlePrefix = staticMe.titleAddLayerFilter;
+            }
+            var titleSuffix = metadata.title || metadata.dspTxt || staticMe.textUnknownLayer;
+
             var title = Ext.String.format(
-                    'Layerfilter "{0}"',
-                    metadata.title || metadata.dspTxt || 'Unbekannt'
+                    '{0} "{1}"', titlePrefix, titleSuffix
                 );
             var winName = 'filter-win-' + metadata.id;
             var cntExisting = Ext.ComponentQuery.query(

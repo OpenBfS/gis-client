@@ -475,7 +475,7 @@ Ext.define("Koala.view.form.LayerFilter", {
         var filters = me.getFilters();
 
         if(!filters || filters.length < 1){
-            me.update("No valid filters provided!");
+            me.addWithoutFilterBtn();
             return;
         }
 
@@ -509,6 +509,16 @@ Ext.define("Koala.view.form.LayerFilter", {
         me.add(submitButton);
         me.getForm().isValid();
 
+    },
+
+    addWithoutFilterBtn: function(){
+        var addWithoutFilterButton = Ext.create("Ext.button.Button", {
+            bind: {
+                text: "{buttonTextNoFilter}"
+            },
+            handler: "submitNoFilter"
+        });
+        this.add(addWithoutFilterButton);
     },
 
     /**

@@ -24,6 +24,7 @@ Ext.define('Koala.view.form.LayerFilterModel', {
         endLabel: 'Ende',
         timestampLabel: 'Zeitpunkt',
         buttonText: 'Filter übernehmen und Layer der Karte hinzufügen',
+        buttonTextNoFilter: 'Auswählen und in Karte übernehmen',
         valueFilter: 'Wertefilter',
         timeRangeFilter: 'Zeitraumfilter',
         pointInTimeFilter: 'Zeitpunktfilter'

@@ -3,6 +3,9 @@
         "statics": {
             "txtUntil": "bis",
             "txtFilter": "Filter",
+            "titleAddLayer": "Layer",
+            "titleAddLayerFilter": "Layerfilter",
+            "textUnknownLayer": "Unbekannt"
         }
     },
     "Koala.util.String": {
