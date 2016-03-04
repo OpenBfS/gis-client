@@ -111,6 +111,8 @@ Ext.define('Koala.view.main.Main', {
             bodyPadding: 0,
             resizable: true,
             resizeHandles: 'e',
+            minWidth: 220,
+            maxWidth: 700,
             dockedItems: [{
                 xtype: 'buttongroup',
                 columns: 2,
@@ -169,12 +171,15 @@ Ext.define('Koala.view.main.Main', {
             xtype: 'k-panel-routing-legendtree',
             resizable: true,
             resizeHandles: 'w',
+            minWidth: 200,
+            maxWidth: 700,
             listeners: {
                 afterrender: {
                     fn: 'resizeLegendTreeToMaxHeight',
                     single: true,
                     delay: 100
-                }
+                },
+                resize: 'repositionAttribution'
             }
         },
         additionalItems: [{
