@@ -48,6 +48,8 @@ Ext.define('Koala.store.MetadataSearch', {
 
         if(this.proxy.username && this.proxy.password){
             var tok = this.proxy.username + ':' + this.proxy.password;
+            // TODO we may want to use something UTF-8 safe:
+            // https://developer.mozilla.org/de/docs/Web/API/WindowBase64/btoa#Unicode-Zeichenketten
             var hash = btoa(tok);
             this.proxy.headers = {};
             this.proxy.headers.Authorization = "Basic " + hash;
