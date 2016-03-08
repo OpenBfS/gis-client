@@ -23,7 +23,7 @@ Ext.define('Koala.store.MetadataSearch', {
 
     alias: 'store.k-metadatasearch',
 
-    storeID: 'metadatasearch',
+    storeId: 'metadatasearch',
 
     model: 'Koala.model.MetadataRecord',
 
@@ -39,8 +39,21 @@ Ext.define('Koala.store.MetadataSearch', {
         this.callParent(arguments);
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
-        var urls = appContext.data.merge.urls;
+        var merge = appContext.data.merge;
+        var urls = merge.urls;
+
         this.proxy.url = urls['metadata-search'];
+        this.proxy.username = merge.application_user.username || null;
+        this.proxy.password = merge.application_user.password || null;
+
+        if(this.proxy.username && this.proxy.password){
+            var tok = this.proxy.username + ':' + this.proxy.password;
+            // TODO we may want to use something UTF-8 safe:
+            // https://developer.mozilla.org/de/docs/Web/API/WindowBase64/btoa#Unicode-Zeichenketten
+            var hash = btoa(tok);
+            this.proxy.headers = {};
+            this.proxy.headers.Authorization = "Basic " + hash;
+        }
     },
 
     proxy: {
@@ -49,6 +62,7 @@ Ext.define('Koala.store.MetadataSearch', {
         startParam: 'from',
         limitParam: 'to',
         pageParam: '', // Hack to satisfy GNos: empty string > do not send it
+        noCache: false,
         extraParams: {
             service: 'CSW',
             fast: 'index',
@@ -70,7 +84,6 @@ Ext.define('Koala.store.MetadataSearch', {
             outputSchema: 'http://www.isotc211.org/2005/gmd',
             typeNames: 'csw:Record'
         },
-        noCache: false,
         reader: {
             type: 'json',
             rootProperty: function(data){

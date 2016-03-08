@@ -123,6 +123,18 @@ Ext.define("Koala.view.component.Map", {
     },
 
     /**
+     * Removes the previousy selected features from the select interaction.
+     */
+    removeAllHoverFeatures: function(){
+        var p = this.getPlugin('hover');
+        var i = p && p.getHoverVectorLayerInteraction();
+        var f = i && i.getFeatures();
+        if (f) {
+            f.clear();
+        }
+    },
+
+    /**
      * We overwrite this method from the superclass.
      * We simply call the controller which contains the logic.
      */

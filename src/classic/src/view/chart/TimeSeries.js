@@ -159,7 +159,7 @@ Ext.define("Koala.view.chart.TimeSeries", {
      * By default the candidate will only be added, if it doesn't already
      * exist (see #containsSeriesFor), but this can be skipped if the second
      * argument (`allowDupes`) is passed as `true`. This method returns whether
-     * the feature was actually added
+     * the feature was actually added.
      *
      * @param {ol.Feature} candidate The feature to add.
      * @param {boolean} [allowDupes] Whether duplicates are allowed. Defaults to

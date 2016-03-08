@@ -39,7 +39,7 @@ Ext.define("Koala.view.panel.ThemeTree", {
 
     autoScroll: true,
 
-    height: 200,
+    height: 400,
 
     header: {
         items: [

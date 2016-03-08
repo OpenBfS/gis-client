@@ -27,6 +27,14 @@ Ext.define('Koala.view.main.MainController', {
 
     alias: 'controller.main',
 
+    /**
+     * Called after the first rendering of the legend tree and when the browser
+     * window changes size, this will change the panel height to the maximum
+     * available space.
+     *
+     * @param {Koala.view.panel.RoutingLegendTree} legendTree The tree whose
+     *     height we have to set.
+     */
     resizeLegendTreeToMaxHeight: function(legendTree){
         var me = this;
         var mapContainer = legendTree.up('basigx-panel-mapcontainer');
@@ -44,6 +52,23 @@ Ext.define('Koala.view.main.MainController', {
                 args: [legendTree]
             });
             legendTree.__hasMaximizeListenerBound = true;
+        }
+    },
+
+    /**
+     * Called when the legendTree was resized. We then need to adjust the
+     * absolute positioning of the attribution div.
+     *
+     * @param {Koala.view.panel.RoutingLegendTree} legendTree The tree which was
+     *     resized.
+     * @param {number} newWidth The new width in pixels.
+     */
+    repositionAttribution: function(legendTree, newWidth){
+        var selector = '.ol-attribution.ol-uncollapsible';
+        var node = Ext.DomQuery.selectNode(selector);
+        var attributionContainer = Ext.get(node);
+        if (attributionContainer) {
+            attributionContainer.setStyle('right', newWidth + 'px');
         }
     }
 });

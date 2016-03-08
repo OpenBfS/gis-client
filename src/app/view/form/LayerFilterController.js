@@ -67,6 +67,21 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
+     * This method handles the adding of layers without any filters. It is bound
+     * as handler for a button that is only visible when the filter form was
+     * created for a layer without filters.
+     */
+    submitNoFilter: function() {
+        var LayerUtil = Koala.util.Layer;
+        var view = this.getView();
+        var metadata = view.getMetadata();
+        var layer = LayerUtil.layerFromMetadata(metadata);
+        LayerUtil.addOlLayerToMap(layer);
+        this.deselectThemeTreeItems();
+        view.up('window').close();
+    },
+
+    /**
      * Unselects all items after a layer was added to the map.
      */
     deselectThemeTreeItems: function() {

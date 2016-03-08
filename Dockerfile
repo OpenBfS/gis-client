@@ -11,7 +11,15 @@
 FROM httpd:2.4
 MAINTAINER mlechner@bfs.de
 
-RUN apt-get update -y && apt-get install -y wget unzip openjdk-7-jre mercurial
+ENV DEBIAN_FRONTEND noninteractive
+
+#
+# Install dependencies
+#
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+    wget unzip openjdk-7-jre mercurial && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ADD . /usr/local/apache2/htdocs/
 WORKDIR /usr/local/apache2/htdocs/

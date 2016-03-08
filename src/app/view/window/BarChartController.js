@@ -20,6 +20,15 @@ Ext.define('Koala.view.window.BarChartController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-barchart',
 
+    /**
+     * Removes the previousy selected feature from the select interaction
+     */
+    onBarchartWinClose: function() {
+        // TODO prepare for multi map setup
+        var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
+        mapComp.removeAllHoverFeatures();
+    },
+
     createBarChart: function(olLayer, chartId) {
         var props = olLayer.get('barChartProperties');
         var categoryCount = props.chartFieldSequence.split(",").length;

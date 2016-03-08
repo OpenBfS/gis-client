@@ -37,6 +37,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         // var valueField = 'value_' + selectedStation.get(identifyField);
         var valueField = chartConfig.yAxisAttribute + '_' +
             selectedStation.get(identifyField);
+        var dataObject = 'data_' + selectedStation.get(identifyField);
         var paramConfig = Koala.util.Object.getConfigByPrefix(
             chartConfig, "param_", true);
 
@@ -77,6 +78,20 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         if (!timeRangeFilter) {
             Ext.log.warn("Failed to determine a timerange filter");
         }
+        // don't accidently overwrite the configured filter…
+        timeRangeFilter = Ext.clone(timeRangeFilter);
+
+        // We may need to switch out the parameter that controls the time:
+        // The WMS (layer) may have a filter against attribute `abc`, while the
+        // WFS (data source for the chart) may have the time in a field `def`.
+        //
+        // In such a case, the `xAxisAttribute` of the GNOS chart config will
+        // differ from the `param` in the timerange-filter:
+        if (timeRangeFilter.param !== chartConfig.xAxisAttribute) {
+            // They were different, the explicitly configured one wins (we have
+            // already tested if the chartConfig.xAxisAttribute isn't empty)
+            timeRangeFilter.param = chartConfig.xAxisAttribute;
+        }
 
         var requestParams = {
             service: 'WFS',
@@ -103,6 +118,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         }
 
         view.getAxes()[0].getFields().push(valueField);
+        view.getAxes()[0].getFields().push(dataObject);
 
         Ext.Ajax.request({
             url: url,
@@ -146,22 +162,25 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
 
                     if (match) {
                         // This feature from the new dataset, has a value at
-                        // a point in time that another seroies already used.
-                        // Set the series soeific valueField to the current
+                        // a point in time that another series already used.
+                        // Set the series specific valueField to the current
                         // value
                         match[valueField] = feat.properties[yAxisAttr];
+                        match[dataObject] = Ext.clone(feat.properties);
                         cleanStoreData.push(match);
                     } else {
                         // This is a new date with a value, set the unique
                         // valueField simply to the current value …
-                        var newRawData = feat.properties;
+                        var newRawData = {}; //feat.properties;
                         newRawData[valueField] = feat.properties[yAxisAttr];
+                        newRawData[xAxisAttr] = feat.properties[xAxisAttr];
+                        newRawData[dataObject] = Ext.clone(feat.properties);
                         // … and add it
                         cleanStoreData.push(newRawData);
                     }
                 });
 
-                // 4) We now need to take care of items that weren't cobvered by
+                // 4) We now need to take care of items that weren't covered by
                 //    dataitems of the new dataset. Some items in cleanStoreData
                 //    may still miss either old or the new valueField.
                 Ext.each(cleanStoreData, function(cleanStoreDataItem){
@@ -172,12 +191,12 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                     });
                 });
 
-                // 5) load the now ckeaned-up data into the store.
+                // 5) load the now cleaned-up data into the store.
                 store.loadData(cleanStoreData);
 
                 // 6) enjoy and continue the original workflow:
                 me.onTimeSeriesDataLoad(
-                    selectedStation, valueField, chartConfig
+                    selectedStation, valueField, dataObject, chartConfig
                 );
             },
             failure: function() {
@@ -221,14 +240,15 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
     /**
      *
      */
-    onTimeSeriesDataLoad: function(selectedStation, valueField, chartConfig) {
+    onTimeSeriesDataLoad: function(selectedStation, valueField, dataObject,
+            chartConfig) {
         var me = this;
         var view = me.getView();
         var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
             Koala.util.String.replaceTemplateStrings(
                 chartConfig.seriesTitleTpl, selectedStation) : "";
         var newSeries = me.createNewSeries(
-                stationName, chartConfig, valueField, selectedStation
+                stationName, chartConfig, valueField, dataObject, selectedStation
             );
         if(newSeries){
             view.addSeries(newSeries);
@@ -252,7 +272,8 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
     /**
      *
      */
-    createNewSeries: function(title, chartConfig, valueField, selectedStation) {
+    createNewSeries: function(title, chartConfig, valueField, dataObject,
+            selectedStation) {
         var me = this;
         var view = me.getView();
         var seriesIndex = view.getSeries().length;
@@ -311,18 +332,17 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                             time + '<br/>' + value + " " + unit;
 
                     if (!Ext.isEmpty(chartConfig.tooltipTpl)) {
-
                         var tpl = Koala.util.String.replaceTemplateStrings(
                             chartConfig.tooltipTpl, {
                                 value: value, // TODO this needs docs
                                 title: this.getTitle() // TODO this needs docs
                             }, false);
-                        tpl = Koala.util.String.replaceTemplateStrings(
-                            tpl, record, false);
-                        tpl = Koala.util.String.replaceTemplateStrings(
-                            tpl, selectedStation, false);
+                        var html = Koala.util.String.replaceTemplateStrings(
+                            tpl, record.data[dataObject], false);
 
-                        tooltip.setHtml(tpl);
+                        html = Koala.util.String.replaceTemplateStrings(
+                            html, selectedStation, false);
+                        tooltip.setHtml(html);
                     } else {
                         tooltip.setHtml(defaultTemplate);
                     }

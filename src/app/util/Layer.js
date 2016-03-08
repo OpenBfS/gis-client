@@ -29,6 +29,9 @@ Ext.define('Koala.util.Layer', {
         /* i18n */
         txtUntil: "",
         txtFilter: "",
+        titleAddLayer: "",
+        titleAddLayerFilter: "",
+        textUnknownLayer: "",
         /* i18n */
 
         /**
@@ -292,23 +295,43 @@ Ext.define('Koala.util.Layer', {
         },
 
         showChangeFilterSettingsWin: function(metadata) {
-            var filters = this.getFiltersFromMetadata(metadata);
-            if (!filters) {
-                return;
-            }
+            var staticMe = this;
+            var filters = staticMe.getFiltersFromMetadata(metadata);
 
-            // TODO i18n
-            var title = Ext.String.format(
-                    'Layerfilter "{0}"',
-                    metadata.title || metadata.dspTxt || 'Unbekannt'
-                );
-            var winName = 'filter-win-' + metadata.id;
-            var cntExisting = Ext.ComponentQuery.query(
-                    '[name="' + winName + '"]'
-                ).length;
-            if (cntExisting > 0) {
-                title += " (#" + (cntExisting + 1) +")";
+            var titlePrefix = staticMe.titleAddLayer;
+            if (filters && filters.length > 0) {
+                titlePrefix = staticMe.titleAddLayerFilter;
             }
+            var titleSuffix = metadata.title || metadata.dspTxt || staticMe.textUnknownLayer;
+
+			//          var title = Ext.String.format(
+			//          '{0} "{1}"', titlePrefix, titleSuffix
+			//      );
+			  var title = Ext.ComponentQuery.query(
+					  '[xtype="' + "k-panel-themetree" + '"]')[0].getSelection()[0].data.text;
+			
+			  var winName = 'filter-win-' + metadata.id;
+			  
+			//not needed if closing window before
+			//  var cntExisting = Ext.ComponentQuery.query(
+			//          '[name="' + winName + '"]'
+			//      ).length;
+			  
+			  //only allow one filter-window to be open
+			  var filterPanelExisting = Ext.ComponentQuery.query(
+			          '[xtype="' + "k-form-layerfilter" + '"]');            
+			  if (filterPanelExisting.length > 0){
+			  	filterPanelExisting[0].up('window').close();
+			  }
+			  
+			//not needed if closing window before
+			//  if (cntExisting > 0) {
+			//  	console.log("cnt");
+			//  	console.log(Ext.ComponentQuery.query(
+			//          '[name="' + winName + '"]'
+			//      ));
+			//      title += " (#" + (cntExisting + 1) +")";
+			//  }
 
             Ext.create('Ext.window.Window', {
                 name: winName,

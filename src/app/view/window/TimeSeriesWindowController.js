@@ -40,12 +40,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     onTimeseriesClose: function() {
         // TODO prepare for multi map setup
         var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
-        var p = mapComp && mapComp.getPlugin('hover');
-        var i = p && p.getHoverVectorLayerInteraction();
-        var f = i && i.getFeatures();
-        if (f) {
-            f.clear();
-        }
+        mapComp.removeAllHoverFeatures();
     },
 
     /**
