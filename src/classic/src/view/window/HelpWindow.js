@@ -34,7 +34,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     bind: {
         title: '{title}'
     },
-    	
+    constrainHeader: true,
     width: 1335,
     height: 750,
     layout: 'border',

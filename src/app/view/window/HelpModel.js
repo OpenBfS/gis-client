@@ -39,12 +39,11 @@ Ext.define('Koala.view.window.HelpModel', {
         	root: {
         		children: [
         		    {
-        		    id: 'select',
     		    	text: '{preface.title}',
     		    	content: '{preface.html}',
-    		    	leaf: true,
-    		    	rootVisible: true
+    		    	leaf: true
 	        		}, {
+	        		id: 'select',
 	        		text: '{quickRef.title}',
 	        		content: '{quickRef.html}',
 	        		leaf: true
