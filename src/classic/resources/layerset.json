@@ -1,599 +1,93 @@
 [
     {
-        "text": "Produktions- und Industrieanlagen",
+        "text": "LayerSet 1",
         "isLayerProfile": false,
-        "thumb": "layer_sets/industrie_thumb.png",
-        "children": [
-            {
-                "uuid": "1caed382-b7f7-497b-8f58-055d7e2eb309",
-                "text": "Standort Kernkraftwerk",
-                "leaf": true
-            },
-            {
-                "uuid": "f41a35c8-b398-48fa-a6af-7722d18b20d9",
-                "text": "Standort nukleare Entsorgung",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "BFS-Messnetz",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/imis_thumb.png",
-        "children": [
-            {
-                "uuid": "83cb1604-3d8c-490b-b807-5e7cb17f3b22",
-                "text": "ODL brutto 24h",
-                "leaf": true
-            },
-            {
-                "uuid": "dcfd9f9b-2f0d-4db8-a487-953ca2f3253e",
-                "text": "ODL brutto 24 Fläche",
-                "leaf": true
-            },
-            {
-                "uuid": "d311b73f-d25d-4f15-bff6-5abe418e2e72",
-                "text": "ODL brutto 1h",
-                "leaf": true
-            },
-            {
-                "uuid": "08e36567-cf9a-4e22-8774-e83a3452da7b",
-                "text": "ODL brutto 10min",
-                "leaf": true
-            },
-            {
-                "uuid": "f0d702e8-4676-49a0-9f1a-bb25804b33e9",
-                "text": "ODL brutto mobil",
-                "leaf": true
-            },
-            {
-                "uuid": "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
-                "text": "ODL netto 1h",
-                "leaf": true
-            },
-            {
-                "uuid": "",
-                "text": "Boden Insitu",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "DWD-Messdaten",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/dwd_thumb.png",
-        "children": [
-             {
-                "uuid": "",
-                "text": "Boden Insitu",
-                "leaf": true
-            },
-            {
-                "text": "Luft",
-                "leaf": false,
-                "children": [
-                    {
-                        "uuid": "",
-                        "text": "Aerosole Gamma nuklidspez. Säulen 24h",
-                        "leaf": true
-                    },
-                    {
-                        "uuid": "fef08fbd-4b5d-42a2-86c3-e78442626905",
-                        "text": "Aerosole Gamma nuklidspez. Säulen 2h",
-                        "leaf": true
-                    },
-                     {
-                        "uuid": "",
-                        "text": "Aerosole Gamma nuklidspez. 24h",
-                        "leaf": true
-                    },
-                    {
-                        "uuid": "e4b893b3-6181-4841-8f76-205c5c6e6a7e",
-                        "text": "Aerosole Gamma nuklidspez. 2h",
-                        "leaf": true
-                    },
-                      {
-                        "uuid": "",
-                        "text": "Jod gasförmig 24h",
-                        "leaf": true
-                    },                                               
-                     {
-                        "uuid": "",
-                        "text": "Jod gasförmig 2h",
-                        "leaf": true
-                    }, 
-                     {
-                        "uuid": "",
-                        "text": "Alpha/Beta Säulen 24h",
-                        "leaf": true
-                    },
-                     {
-                        "uuid": "",
-                        "text": "Alpha/Beta Säulen 2h",
-                        "leaf": true
-                    },
-                     {
-                        "uuid": "",
-                        "text": "Gesamt Beta künstlich 24h",
-                        "leaf": true
-                    },
-                     {
-                        "uuid": "",
-                        "text": "Gesamt Beta künstlich 2h",
-                        "leaf": true
-                    }
-            ]},
-            {
-                "text": "Niederschlag",
-                "leaf": false,
-                "children": [
-                     {
-                        "uuid": "",
-                        "text": "Alpha/Beta 24h Säulen",
-                        "leaf": true
-                    },
-                     {
-                        "uuid": "",
-                        "text": "Alpha/Beta 2h Säulen",
-                        "leaf": true
-                    },                                                        
-                    {
-                        "uuid": "",
-                        "text": "Niederschlagshöhe 24h",
-                        "leaf": true
-                    }
-            ]}
-        ]
-    },
-    {
-        "text": "Meteorologie",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/wetter_thumb.png",
+        "thumb": "are.jpg",
         "children": [
             {
                 "uuid": "f917f393-fb9b-4345-99cf-8d2fcfab8d3d",
-                "text": "Niederschlag",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "RODOS-Prognosen",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/rodos_thumb.png",
-        "children": [
-            {
-                "uuid": "899abc7c-a3fc-4dd8-b950-c18cc4684a32",
-                "text": "Wolkenankunft",
-                "leaf": true
-            },
-            {
-                "uuid": "c5ce0f0b-cd30-4833-aaad-5e7fd01e36a9",
-                "text": "Dosisleistung",
-                "leaf": true
-            },
-            {
-                "uuid": "391a96a0-e6f4-44f3-a3b3-947c7b74df18",
-                "text": "I131 - Deposition",
-                "leaf": true
-            },
-            {
-                "uuid": "c3fe8a71-ec9e-4820-813b-7929deff8fdb",
-                "text": "Cs137 - Deposition",
-                "leaf": true
-            },
-            {
-                "uuid": "4d39b015-fadd-423e-a2cb-5abc8596775e",
-                "text": "Massnahme: Verbleiben im Haus - Evakuierung / Erwachsene",
-                "leaf": true
-            },
-            {
-                "uuid": "0f9e24f8-4acd-4122-bda8-c8afaaae1082",
-                "text": "Massnahme: Verbleiben im Haus - Evakuierung / Kinder",
-                "leaf": true
-            },
-            {
-                "uuid": "9d8dd212-c719-4876-912c-72f4922ad903",
-                "text": "Massnahme: Jodtabletten / Erwachsene",
-                "leaf": true
-            },
-            {
-                "uuid": "0f9e24f8-4acd-4122-bda8-c8afaaae1082",
-                "text": "Massnahme: Jodtabletten / Kinder",
-                "leaf": true
-            },
-            {
-                "uuid": "ea5d3ac6-9893-4ea1-95e1-525c7795aa4c",
-                "text": "Massnahme: Vermarktungssperre Iod-Milch",
-                "leaf": true
-            },
-            {
-                "uuid": "db852744-a672-4cb7-85ee-846103727312",
-                "text": "Massnahme: Vermarktungssperre CS-Milch",
-                "leaf": true
-            },
-            {
-                "uuid": "c55bc548-edf5-42ee-bb0b-c0a37e7dbd03",
-                "text": "Vermarktungssperre Iod-Blattgemüse",
-                "leaf": true
-            },
-            {
-                "uuid": "7123cb9d-1ff0-425b-a28a-d2233855ffed",
-                "text": "Vermarktungssperre Cs-Blattgemüse ",
-                "leaf": true
-            },
-            {
-                "uuid": "c955db73-ed7b-4849-b10e-dc50fbd72b17",
-                "text": "Massnahmen / betroffene Landkreise",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "DWD-Prognosen",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/dwd_prognosen_thumb.png",
-        "children": [
-            {
-                "uuid": "",
-                "text": "Trajektorien",
-                "leaf": true
-           },        
-            {
-                "uuid": "2b628dcd-7af4-4f5a-9cc2-8d19cff168ee",
-                "text": "DWD Prognosen für CS-137",
-                "leaf": true
-           },
-            {
-                "uuid": "e70dd5fe-cf8f-4b9c-bdc3-c937659b7794",
-                "text": "DWD Prognosen für I-131",
-                "leaf": true
-            },
-            {
-                "uuid": "c69b21d3-cf0d-40f7-94fc-e6b4603e2348",
-                "text": "DWD Prognosen für Luft",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "Gewässer",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/gewaesser_thumb.png",
-        "children": [
-            {
-                "uuid": "8bb74031-7405-4adf-a6c1-1212a8e4aee8",
-                "text": "CS-137 in Abwasser",
-                "leaf": true
-            },
-            {
-                "uuid": "949d6c2b-6f49-432b-b496-5129a7208c75",
-                "text": "CS-137 in Gewässer",
-                "leaf": true
-            },
-            {
-                "uuid": "ff4de1a8-0d55-4b97-9aff-b44d754b425b",
-                "text": "CS-137 in Grund- und Rohwasser",
-                "leaf": true
-            },
-            {
-                "uuid": "4e735ea2-b536-4c2a-9b7c-652cb4bfe6ab",
-                "text": "CS-137 in Schwebstoffe",
-                "leaf": true
-            },
-            {
-                "uuid": "0b1edc6f-5028-4e92-9990-0a40ae71c3fb",
-                "text": "CS-137 in Sediment",
-                "leaf": true
-            },
-            {
-                "uuid": "226d7892-b6be-4996-8ece-d76510b32a5c",
-                "text": "Gesamt-Gamma künstl. Aktivität an BSH-Messstation",
-                "leaf": true
-            },
-            {
-                "uuid": "7ccd6965-92b1-4a61-801b-18a4385f1916",
-                "text": "Gesamt-Gamma Aktivität an BfG-Messstation",
-                "leaf": true
-            },
-            {
-                "uuid": "b4aa0fcf-f470-4f9a-b8b1-8fab99515a6a",
-                "text": "Gewässer Gesamtgamma",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "Nahrungsmittel",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/nahrung_thumb.png",
-        "children": [
-            {
-                "uuid": "1b77f10c-b2d6-457c-8b6a-2bd1e7a147a7",
-                "text": "CS-137 in Fisch",
-                "leaf": true
-            },
-            {
-                "uuid": "91a8ac71-33da-431a-9c54-01a7638204a4",
-                "text": "CS-137 in Fleisch",
-                "leaf": true
-            },
-            {
-                "uuid": "8685a3e1-a281-4e82-a0d2-b348d77fb7bf",
-                "text": "CS-137 in Gemüse",
-                "leaf": true
-            },
-            {
-                "uuid": "b1948033-6cdd-4330-8e45-046fdf444182",
-                "text": "I-131 in Gemüse",
-                "leaf": true
-            },
-            {
-                "uuid": "879a2e91-1967-4bbe-b80b-b9ddaada5be8",
-                "text": "CS-137 in Gesamtnahrung",
-                "leaf": true
-            },
-            {
-                "uuid": "d5059652-bada-42cc-a53c-1598c4826dc7",
-                "text": "CS-137 in Getreide",
-                "leaf": true
-            },
-            {
-                "uuid": "77d77699-daa5-4b67-a43e-b709f0b232fe",
-                "text": "CS-137 in Milch",
-                "leaf": true
-            },
-            {
-                "uuid": "a95b6cb4-7c1e-4c04-999b-d0a0e5498573",
-                "text": "I-131 in Milch",
-                "leaf": true
-            },
-            {
-                "uuid": "74713141-7a4f-463c-b33b-72c22a319fad",
-                "text": "CS-137 in Obst",
-                "leaf": true
-            },
-            {
-                "uuid": "2cbba9d9-ad8e-41dd-b622-d7cd9bf951aa",
-                "text": "CS-137 in Pilze",
-                "leaf": true
-            },
-            {
-                "uuid": "4046bd0d-5692-4e5d-8930-73dc5fc6bbc2",
-                "text": "CS-137 in Trinkwasser",
-                "leaf": true
-            },
-            {
-                "uuid": "acc49fda-3bdf-43d9-9987-32139f8f7905",
-                "text": "CS-137 in sonstiges Nahrungsmittel",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "Futtermittel",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/futter_thumb.png",
-        "children": [
-            {
-                "uuid": "42e97981-4aac-4c9f-a118-9e7e49641de0",
-                "text": "CS-137 in Futtermittel",
-                "leaf": true
-            },
-            {
-                "uuid": "2fed9113-9c89-45f8-b521-70fd40e199a6",
-                "text": "I-131 in Futtermittel",
-                "leaf": true
-            },
-            {
-                "uuid": "dffbcb10-fbde-4c51-8434-b455ffce7398",
-                "text": "CS-137 in Weide- und Wiesenbewuchs",
-                "leaf": true
-            },
-            {
-                "uuid": "1b62b738-d3e8-4f91-947e-0a0c68079df5",
-                "text": "I-131 in Weide- und Wiesenbewuchs",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "Sonst. Medien",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/sonst_medien_thumb.png",
-        "children": [
-            {
-                "uuid": "01e747be-02fc-4dba-93c1-8e064bc3638b",
-                "text": "CS-137 in Abfall",
-                "leaf": true
-            },
-            {
-                "uuid": "ba83aff4-84a9-4112-b8ef-108f93e608b6",
-                "text": "CS-137 in pflanzlichen Indikatoren",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "Ortsdosisleistung",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/odl_thumb.png",
-        "children": [
-            {
-                "uuid": "83cb1604-3d8c-490b-b807-5e7cb17f3b22",
-                "text": "ODL brutto 24h",
-                "leaf": true
-            },
-            {
-                "uuid": "dcfd9f9b-2f0d-4db8-a487-953ca2f3253e",
-                "text": "ODL brutto 24 Fläche",
-                "leaf": true
-            },
-            {
-                "uuid": "08e36567-cf9a-4e22-8774-e83a3452da7b",
-                "text": "ODL brutto 10min",
+                "text": "BfS: niederschlag_24h",
                 "leaf": true
             },
             {
                 "uuid": "f0d702e8-4676-49a0-9f1a-bb25804b33e9",
-                "text": "ODL brutto mobil",
+                "text": "BfS: odl_brutto_mobil",
                 "leaf": true
             },
-            {
-                "uuid": "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a",
-                "text": "ODL netto 1h",
-                "leaf": true
-            }            
-        ]
-    },
-    {
-        "text": "Luftüberwachung Routine",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/luftueberwachung_thumb.png",
-        "children": [
-            {
-                "uuid": "fe5a3120-9a55-4e76-9269-c411462cac9d",
-                "text": "CS-137 in Luft 24h",
-                "leaf": true
-            },
-            {
-                "uuid": "eec780a7-b584-46aa-968f-e37c49d20296",
-                "text": "Gamma Aerosole 24h",
-                "leaf": true
-            },
-            {
-                "uuid": "e4b893b3-6181-4841-8f76-205c5c6e6a7e",
-                "text": "Gamma Aerosole 2h",
-                "leaf": true
-            },
-            {
-                "uuid": "2f30477a-ca0a-43cb-a34b-fcee53e6bce7",
-                "text": "Radon-222 in Bodenluft",
-                "leaf": true
-            },
-            {
-                "uuid": "63454a77-db32-4917-b40d-6b46492fcbba",
-                "text": "Radon-222 in Freiluft",
-                "leaf": true
-            },
-            {
-                "uuid": "0d8d0f79-e5b7-45d2-bec4-9ba4546fdec6",
-                "text": "Radon-222 in Freiluft (interpoliert)",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "Boden",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/boden_thumb.png",
-        "children": [
-            {
-                "uuid": "9f26a7f2-332e-4f65-af5c-9acc399f7857",
-                "text": "CS-137 in Boden",
-                "leaf": true
-            },
-            {
-                "uuid": "e4d86354-1cd8-41ea-86b7-1f3aee00e178",
-                "text": "CS-137 in Bodenoberfläche",
-                "leaf": true
-            },
-            {
-                "uuid": "a462081e-cb4c-4def-8575-6b331d3e77a2",
-                "text": "Insitu 2h",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "INSPIRE",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/inspire_thumb.png",
-        "children": [
-            {
-                "uuid": "66506117-45f3-426e-8601-979e057ab9fb",
-                "text": "UV-Strahlung: Messstation zur Überwachung der UV-Strahlung",
-                "leaf": true
-            },
-            {
-                "uuid": "b9472223-7855-49b6-baca-3fd651ae4f9e",
-                "text": "Futtermittel: Probenahmeorte zur Überwachung der Umweltradioaktivität in Futtermitteln",
-                "leaf": true
-            },
-            {
-                "uuid": "1734e655-ccbf-45aa-892e-a22c6db56eb2",
-                "text": "Nahrungsmittel: Probenahmeorte zur Überwachung der Umweltradioaktivität in Nahrungsmitteln",
-                "leaf": true
-            },
-            {
-                "uuid": "42029f99-70a7-4d09-bb5e-3e43c1b29176",
-                "text": "Abwasser, Reststoffe und Abfall: Probenahmeorte zur Überwachung der Umweltradioaktivität in Abwasser, Reststoff und Abfall",
-                "leaf": true
-            },
-            {
-                "uuid": "401489f5-d57c-4b59-91cd-ea35034aa199",
-                "text": "Pflanzliche Indikatoren: Probenahmeorte zur Überwachung der Umweltradioaktivität in pflanzlichen Indikator",
-                "leaf": true
-            },
-            {
-                "uuid": "97250c6c-87db-436a-887f-84eb0b07f4c3",
-                "text": "Grund- und Rohwasser: Probenahmeorte zur Überwachung der Umweltradioaktivität in Grund- und Rohwasser",
-                "leaf": true
-            },
-            {
-                "uuid": "7dbc3232-252d-47b2-83c6-395c56606390",
-                "text": "Gewässer: Probenahmeorte zur Überwachung der Umweltradioaktivität in Gewässer",
-                "leaf": true
-            },
-            {
-                "uuid": "9c549da2-6b3b-40f9-a821-b764a9430911",
-                "text": "Boden: Probenahmeorte zur Überwachung der Umweltradioaktivität im Boden",
-                "leaf": true
-            },
-            {
-                "uuid": "8183f1ab-d11c-4727-88cc-eb958e138761",
-                "text": "Insitu: Messorte zur Überwachung der Umweltradioaktivität im Boden durch Insitu-Gammaspektrometrie",
-                "leaf": true
-            },
-            {
-                "uuid": "675da6c0-3381-491e-918d-feba3c2d8412",
-                "text": "Boden-/Freiluft: Karte zur Radonkonzentration in der Bodenluft / Freiluft",
-                "leaf": true
-            },
-            {
-                "uuid": "7fdbe988-fee5-4c5c-a093-dd4e0769244f",
-                "text": "ODL: Messstationen zur Überwachung der Gamma-Ortsdosisleistung",
-                "leaf": true
-            },
-            {
-                "uuid": "4c1cbfb2-a53a-412b-8efd-630334a56cdf",
-                "text": "Luft: Messstationen zur Überwachung der Umweltradioaktivität in der Luft",
-                "leaf": true
-            },
-            {
-                "uuid": "8b565ea8-51b0-4a6b-a865-3acd57538872",
-                "text": "BSH: Messstationen zur Überwachung der Umweltradioaktivität in der Nord- und Ostsee",
-                "leaf": true
-            },
-            {
-                "uuid": "9eded204-abd7-4d4a-9a8a-f2dd26c959bb",
-                "text": "BfG: Messstationen zur Überwachung der Umweltradioaktivität in den Bundeswasserstraßen",
-                "leaf": true
-            }
-        ]
-    },
-    {
-        "text": "Alle Daten",
-        "isLayerProfile": false,
-        "thumb": "layer_sets/radioaktivitaet_bfs_thumb.png",
-        "children": [
             {
                 "uuid": "83cb1604-3d8c-490b-b807-5e7cb17f3b22",
-                "text": "ODL_brutto_24h",
+                "text": "BfS: odl_brutto_24h",
+                "leaf": true
+            },
+            {
+                "uuid": "08e36567-cf9a-4e22-8774-e83a3452da7b",
+                "text": "BfS: odl_brutto_10min",
+                "leaf": true
+            },
+
+            {
+                "uuid": "9ae663b4-b4e4-43dc-8aa5-e7a6fc9b79ba",
+                "text": "MJ",
+                "leaf": true
+            },
+            {
+                "uuid": "182d3f3d-8aab-4f1b-b775-182e14f6192c",
+                "text": "Messstationen zur Überwachung der Umweltradioaktivität in der Luft",
+                "leaf": true
+            },
+            {
+                "uuid": "7894bd4f-fa29-4256-98fa-79beb4ab1e2b",
+                "text": "Tagesmittelwerte in µSv/h",
+                "leaf": true
+            },
+            {
+                "uuid": "45dd5d65-630a-42d9-9f86-6c718dab0412",
+                "text": "terrestris Test Cartodiagram",
+                "leaf": true
+            },
+            {
+                "uuid": "41134024-0e0f-4296-b23d-b0784909adde",
+                "text": "terrestris Test Result",
+                "leaf": true
+            },
+            {
+                "uuid": "25e17589-6694-4d58-8efb-0c400415aec3",
+                "text": "terrestris Test Vector",
+                "leaf": true
+            },
+            {
+                "uuid": "9a872df7-5904-4b7f-ad34-bad82a37833c",
+                "text": "terrestris Test WTMS",
+                "leaf": true
+            },
+            {
+                "text": "folderfalter",
+                "leaf": false,
+                "children": [
+                    {
+                        "uuid": "182d3f3d-8aab-4f1b-b775-182e14f6192c",
+                        "text": "messstation im Subfolder",
+                        "leaf": true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "text": "LayerSet 2",
+        "isLayerProfile": false,
+        "thumb": "bafu.jpg",
+        "children": [
+            {
+                "uuid": "550e8400-e29b-11d4-a716-446655440000",
+                "text": "Layer 2Uno",
+                "leaf": true
+            },
+            {
+                "uuid": "210a8301-f13b-83e4-b702-464655441234",
+                "text": "Layer 2Zwo",
                 "leaf": true
             }
         ]
     }
-
 ]
-
