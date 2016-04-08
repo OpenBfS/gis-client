@@ -19,7 +19,7 @@
                     ["respond", "respond"],
                     ["upload/respond", "upload/respond"]
                 ],
-                "defaultValue": "upload",
+                "defaultValue": "respond",
                 "allowBlank": true
             },{
                 "type": "fieldset",
@@ -31,7 +31,7 @@
                     "type": "text",
                     "allowBlank": true
                 },{
-                    "name": "ReportContextType",
+                    "name": "ReportContext",
                     "label": "Report Inhaltstyp",
                     "type": "combo",
                     "values": [
@@ -45,10 +45,8 @@
                 },{
                     "name": "SequenceNumber",
                     "label": "SequenceNumber",
-                    "type": "number",
-                    "minValue": 1,
-                    "maxValue": 99,
-                    "defaultValue": 1,
+                    "type": "text",
+                    "defaultValue": "42",
                     "allowBlank": true
                 },{
                     "type": "fieldset",
@@ -60,13 +58,13 @@
                         "type": "text",
                         "allowBlank": true
                     },{
-                        "name": "OrganistationID",
-                        "label": "OrganistationID",
+                        "name": "OrganisationID",
+                        "label": "OrganisationID",
                         "type": "text",
                         "allowBlank": true
                     },{
                         "name": "Country",
-                        "label": "Land",
+                        "label": "Land (ISO 3166-2)",
                         "type": "text",
                         "allowBlank": true
                     }]
@@ -115,23 +113,43 @@
                 },{
                     "name": "IsElan",
                     "label": "Is Elan",
-                    "type": "checkbox",
-                    "defaultValue": false
+                    "type": "combo",
+                    "values": [
+                        ["true", "ja"],
+                        ["false", "nein"]
+                    ],
+                    "defaultValue": "false",
+                    "allowBlank": false
                 },{
                     "name": "IsDoksys",
                     "label": "Is Doksys",
-                    "type": "checkbox",
-                    "defaultValue": false
+                    "type": "combo",
+                    "values": [
+                        ["true", "ja"],
+                        ["false", "nein"]
+                    ],
+                    "defaultValue": "false",
+                    "allowBlank": false
                 },{
                     "name": "IsRodos",
                     "label": "Is Rodos",
-                    "type": "checkbox",
-                    "defaultValue": true
+                    "type": "combo",
+                    "values": [
+                        ["true", "ja"],
+                        ["false", "nein"]
+                    ],
+                    "defaultValue": "false",
+                    "allowBlank": false
                 },{
                     "name": "IsRei",
                     "label": "Is Rei",
-                    "type": "checkbox",
-                    "defaultValue": false
+                    "type": "combo",
+                    "values": [
+                        ["true", "ja"],
+                        ["false", "nein"]
+                    ],
+                    "defaultValue": "false",
+                    "allowBlank": false
                 },{
                     "name": "NetworkOperator",
                     "label": "Netzwerkoperator",
@@ -143,6 +161,18 @@
                         "Z - BfS (ODL)"
                     ],
                     "defaultValue": "U - BfS (ABI)",
+                    "allowBlank": true
+                },{
+                    "name": "SampleTypeId",
+                    "label": "ProbentypID",
+                    "type": "combo",
+                    "values": [
+                        ["L5", "L5"],
+                        ["L51", "L51"],
+                        ["L52", "L52"],
+                        ["L53", "L53"]
+                    ],
+                    "defaultValue": "L5",
                     "allowBlank": true
                 },{
                     "name": "SampleType",
@@ -187,7 +217,7 @@
                         ["SPARSE", "SPARSE"]
                     ],
                     "defaultValue": "Europa",
-                    "allowBlank": true
+                    "allowBlank": false
                 },{
                     "name": "MeasuringProgram",
                     "label": "Mess Programm",
@@ -200,21 +230,21 @@
                         ["Spontanproben Bund", "Spontanproben Bund"]
                     ],
                     "defaultValue": "Intensivmessprogramm",
-                    "allowBlank": true
+                    "allowBlank": false
                 },{
                     "name": "Status",
                     "label": "Status",
                     "type": "combo",
                     "values": [
-                        ["0", "nicht vergeben"],
-                        ["1", "plausibel"],
-                        ["2", "nicht repräsentativ"],
-                        ["3", "nicht plausibel"],
-                        ["4", "Rückfrage abgesetzt"],
-                        ["6", "Rücklauf bearbeitet"]
+                        ["0 - nicht vergeben", "0 - nicht vergeben"],
+                        ["1 - plausibel", "1 - plausibel"],
+                        ["2 - nicht repräsentativ", "2 - nicht repräsentativ"],
+                        ["3 - nicht plausibel", "3 - nicht plausibel"],
+                        ["4 - Rückfrage abgesetzt", "4 - Rückfrage abgesetzt"],
+                        ["6 - Rücklauf bearbeitet", "6 - Rücklauf bearbeitet"]
                     ],
-                    "defaultValue": "0",
-                    "allowBlank": true
+                    "defaultValue": "0 - nicht vergeben",
+                    "allowBlank": false
                 },{
                     "name": "SamplingBegin",
                     "label": "Messungsbeginn",
