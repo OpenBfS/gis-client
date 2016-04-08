@@ -4,11 +4,13 @@
                 "name": "Title",
                 "label": "Titel",
                 "type": "text",
+                "defaultValue": "<b>Mein Titel</b>",
                 "allowBlank": false
             },{
                 "name": "User",
                 "label": "Benutzer",
                 "type": "text",
+                "defaultValue": "IMIS Testbenutzer",
                 "allowBlank": true
             },{
                 "name": "requestType",
@@ -29,6 +31,7 @@
                     "name": "OrganisationReporting",
                     "label": "OrganisationReporting",
                     "type": "text",
+                    "defaultValue": "imis.bfs.de",
                     "allowBlank": true
                 },{
                     "name": "ReportContext",
@@ -56,16 +59,19 @@
                         "name": "Name",
                         "label": "Name",
                         "type": "text",
+                        "defaultValue": "Bundesamt f&uuml;r Strahlenschutz",
                         "allowBlank": true
                     },{
                         "name": "OrganisationID",
                         "label": "OrganisationID",
                         "type": "text",
+                        "defaultValue": "imis.bfs.de",
                         "allowBlank": true
                     },{
                         "name": "Country",
                         "label": "Land (ISO 3166-2)",
                         "type": "text",
+                        "defaultValue": "DE",
                         "allowBlank": true
                     }]
                 }]
@@ -118,7 +124,7 @@
                         ["true", "ja"],
                         ["false", "nein"]
                     ],
-                    "defaultValue": "false",
+                    "defaultValue": "true",
                     "allowBlank": false
                 },{
                     "name": "IsDoksys",
