@@ -4,7 +4,7 @@
                 "name": "Title",
                 "label": "Titel",
                 "type": "text",
-                "defaultValue": "<b>Mein Titel</b>",
+                "defaultValue": "IMIS-GIS Kartendokument",
                 "allowBlank": false
             },{
                 "name": "User",
@@ -14,7 +14,7 @@
                 "allowBlank": true
             },{
                 "name": "requestType",
-                "label": "Request Type",
+                "label": "Anforderung",
                 "type": "combo",
                 "values": [
                     ["upload", "upload"],
@@ -26,12 +26,18 @@
             },{
                 "type": "fieldset",
                 "name": "Identification",
-                "label": "Identification",
+                "label": "Kopfinformation",
                 "fields": [{
                     "name": "OrganisationReporting",
-                    "label": "OrganisationReporting",
+                    "label": "Organisation",
                     "type": "text",
                     "defaultValue": "imis.bfs.de",
+                    "allowBlank": true
+                },{
+                    "name": "ReportingBasis",
+                    "label": "Report Basis",
+                    "type": "text",
+                    "defaultValue": "ESD",
                     "allowBlank": true
                 },{
                     "name": "ReportContext",
@@ -40,14 +46,14 @@
                     "values": [
                         ["Emergency", "Notfall"],
                         ["Routine", "Routine"],
-                        ["Exercise", "Aufgabe"],
+                        ["Exercise", "Übung"],
                         ["Test", "Test"]
                     ],
                     "defaultValue": "Test",
                     "allowBlank": true
                 },{
                     "name": "SequenceNumber",
-                    "label": "SequenceNumber",
+                    "label": "Laufende Nr.",
                     "type": "text",
                     "defaultValue": "42",
                     "allowBlank": true
@@ -59,7 +65,7 @@
                         "name": "Name",
                         "label": "Name",
                         "type": "text",
-                        "defaultValue": "Bundesamt f&uuml;r Strahlenschutz",
+                        "defaultValue": "Bundesamt für Strahlenschutz",
                         "allowBlank": true
                     },{
                         "name": "OrganisationID",
@@ -158,7 +164,7 @@
                     "allowBlank": false
                 },{
                     "name": "NetworkOperator",
-                    "label": "Netzwerkoperator",
+                    "label": "Messnetz",
                     "type": "combo",
                     "values": [
                         "U - BfS (ABI)",
@@ -170,7 +176,7 @@
                     "allowBlank": true
                 },{
                     "name": "SampleTypeId",
-                    "label": "ProbentypID",
+                    "label": "Umweltbereich ID",
                     "type": "combo",
                     "values": [
                         ["L5", "L5"],
@@ -182,7 +188,7 @@
                     "allowBlank": true
                 },{
                     "name": "SampleType",
-                    "label": "Probentyp",
+                    "label": "Umweltbereich",
                     "type": "combo",
                     "values": [
                         ["L5 - Niederschlag", "L5 - Niederschlag"],
@@ -197,7 +203,7 @@
                     "allowBlank": true
                 },{
                     "name": "Dom",
-                    "label": "Dom",
+                    "label": "Messmethode",
                     "type": "combo",
                     "values": [
                         ["Gamma-Spektrometrie", "Gamma-Spektrometrie"],
@@ -208,7 +214,7 @@
                     "allowBlank": true
                 },{
                     "name": "LegalBase",
-                    "label": "Gesetzesgrundlage",
+                    "label": "Gesetzl. Grundlage",
                     "type": "combo",
                     "values": [
                         ["§2", "§2"],
@@ -253,11 +259,11 @@
                     "allowBlank": false
                 },{
                     "name": "SamplingBegin",
-                    "label": "Messungsbeginn",
+                    "label": "Probeentnahme Beginn",
                     "type": "datetime"
                 },{
                     "name": "SamplingEnd",
-                    "label": "Messungsende",
+                    "label": "Probeentnahme Ende",
                     "type": "datetime"
                 }]
             }
