@@ -214,7 +214,7 @@
                     "allowBlank": true
                 },{
                     "name": "LegalBase",
-                    "label": "Gesetzl. Grundlage",
+                    "label": "Gesetzliche Grundlage",
                     "type": "combo",
                     "values": [
                         ["§2", "§2"],
@@ -232,7 +232,7 @@
                     "allowBlank": false
                 },{
                     "name": "MeasuringProgram",
-                    "label": "Mess Programm",
+                    "label": "Messprogramm",
                     "type": "combo",
                     "values": [
                         ["Intensivmessprogramm", "Intensivmessprogramm"],
