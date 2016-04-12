@@ -247,7 +247,7 @@
 			        				"<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE), Englisch (EN) oder Französisch (FR)</li>"+
 			        			"</ul>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
-			        				"<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
+			        				"<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
 			        				"<div>Desweiteren kann die Legende geöffnet werden.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
 			        				"<div>Die Legende ermöglicht einzelne Layer darzustellen, als auch von der Ansicht zu entfernen.</div>"+
@@ -394,7 +394,7 @@
 		        	"title": "4. Auswahl",
 		        	"html":     "<h2>4. Auswahl</h2>"+
 		        				"<div>"+
-		        				"<p>Die Auswahl gewährleistet das Hinzufügen von Layern in die Legende und somit in die geographische Karte. Das Auswahlfenster ist im Menü unterhalb des Bedienfeldes \"Werkzeug\" zu finden. Initial ist das Fenster geschlossen und kann mit einem einfachen Klick auf den Schriftzug \"Auswahl\" oder auf der türkisfarbene Leiste geöffnet werden (siehe Grafik <i>4. Arbeitsablauf der Layerauswahl</i>).</p>"+
+		        				"<p>Die Auswahl gewährleistet das Hinzufügen von Layern in die Legende und somit in die geographische Karte. Das Auswahlfenster ist im Menü unterhalb des Bedienfeldes \"Werkzeuge\" zu finden. Initial ist das Fenster geschlossen und kann mit einem einfachen Klick auf den Schriftzug \"Auswahl\" oder auf der türkisfarbene Leiste geöffnet werden (siehe Grafik <i>4. Arbeitsablauf der Layerauswahl</i>).</p>"+
 		        				"<p>Jeder Layer befindet sich in einem Layer-Set. Dementsprechend sind die Layer nach Themen untergliedert. Möchte man beispielsweise den Layer des Niederschlags der Karte hinzufügen, findet man diesen unter dem Layer-Set \"Meteorologie\".</p>"+
 		        				"<p>Die Anordnung im Auswahlfenster entspricht der eines allgemeingebräuchlichen Dateisystems, mit Ordnern und Dateien. Die Layer-Sets entsprechen den Ordnern, während die Layer den Dateien gleich kommen. Möchte man einen Ordner ausklappen um sich die zugeordneten Layer anzeigen zu lassen, ist dies mit einem einfachen Klick auf das Plus-Symbol links neben des Ordnersymbols möglich. Alternativ kann auch ein Doppelklick auf die Ordnerbeschriftung ausgeführt werden.</p>"+
 		        				"<p>Ein Doppelklick auf die Layerbezeichnung fügt letztlich den Layer der Legende bzw. Karte hinzu. Je nach Semantik des Layers öffnet sich gegebenfalls ein Fenster um die Daten mithilfe eines Zeit- oder Wertefilters einzuschränken. Es ist auch möglich, dass Layer über beide Filter verfügen. Sofern sich kein Fenster öffnet, wird der Layer direkt eingefügt.</p>"+
@@ -550,7 +550,7 @@
 	        				"<p>Die Legende beinhaltet sämtliche Layer die zur Darstellung verfügbar sind. Das Hinzufügen von Layern ist unter dem Punkt <i>4. Auswahl</i> beschrieben. Die Legende kann entweder über den Schalter "+
 	        				"<img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Schalter: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'>"+
 	        				", oder durch einen direkten Klick auf den blauen Balken mit der Aufschrift \"Legende\" geöffnet werden. </p>"+ 
-	        				"<p>Wie bereits in Punkt <i>2.b) Abfrage von BfS-Geoobjekten</i> erwähnt ist darauf zu achten, dass der entsprechende Layer für Abfragen der Geometrien selektiert ist. Ein ausgewählter Layer wird in der Legende mit einer türkisfarbenen Fläche markiert (siehe Grafik <i>8. Legende - Layer verschieben</i>). Das Kästchen auf der linken Seite des Layernamen steuert ob ein Layer in der Karte angezeigt wird (Häckchen gesetzt "+
+	        				"<p>Wie bereits in Punkt <i>2.2 Abfrage von BfS-Geoobjekten</i> erwähnt, ist darauf zu achten, dass der entsprechende Layer für Abfragen der Geometrien selektiert ist. Ein ausgewählter Layer wird in der Legende mit einer türkisfarbenen Fläche markiert (siehe Grafik <i>8. Legende - Layer verschieben</i>). Das Kästchen auf der linken Seite des Layernamen steuert ob ein Layer in der Karte angezeigt wird (Häckchen gesetzt "+
 	        				"<img class='img' src='classic/resources/img/helpPage/checkbox_true.png' title='Kontrollkästchen - aktiv' alt='checkbox_true.png' width='14' height='14' style='vertical-align:middle'>"+
 	        				" ), oder nicht (leeres Kästchen "+
 	        				"<img class='img' src='classic/resources/img/helpPage/checkbox_false.png' title='Kontrollkästchen - inaktiv' alt='checkbox_false.png' width='13' height='13' style='vertical-align:middle'>"+
