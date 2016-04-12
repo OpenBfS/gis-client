@@ -3,8 +3,8 @@
 CUR_DIR=`pwd`
 WORKSPACE=$CUR_DIR
 SCRIPT_DIR=`dirname $0`
-SENCHA_CMD_VERSION="6.0.2"
-SENCHA_CMD_MINOR_VERSION="6.0.2.14"
+SENCHA_CMD_VERSION="6.1.2"
+SENCHA_CMD_MINOR_VERSION="6.1.2.15"
 
 cd $SCRIPT_DIR
 wget http://cdn.sencha.com/cmd/$SENCHA_CMD_VERSION/no-jre/SenchaCmd-$SENCHA_CMD_VERSION-linux-amd64.sh.zip
@@ -24,10 +24,6 @@ $SENCHA_CMD package list
 
 if [ -f $WORKSPACE/$CONFIG/appContext.json ]; then
     cp $WORKSPACE/$CONFIG/appContext.json $WORKSPACE/src/resources/
-fi
-
-if [ -f $WORKSPACE/$CONFIG/irixContext.json ]; then
-    cp $WORKSPACE/$CONFIG/irixContext.json $WORKSPACE/src/resources/
 fi
 
 if [ -f $WORKSPACE/$CONFIG/layerprofile.json ]; then
