@@ -233,9 +233,9 @@
 				        				"<li>WMS (Web Map Service) einbinden</li>"+
 				        				"<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten in den Rastergrafiken BMP, GIF, PNG, TIF, TIFF, sowohl als PDF- oder IRIX-Datei</li>"+
 				        			"</ul>"+
-			        			"<li style='color:#157FCC; font-weight:bold'>Layer Auswahl</li>"+
-			        				"<div>Die \"Layer Auswahl\" bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
-			        				"<div>Ein Layer lässt sich über einen \"Doppelklick\" zur Legende hinzufügen. Gegebenenfalls öffnet sich ein Fenster um über Filterfunktionen die Auswahl weiter einzuschränken.</div>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Auswahl</li>"+
+			        				"<div>Die \"Auswahl\" bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
+			        				"<div>Das Hinzufügen eines Layers erfolgt mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Multisuchleiste</li>"+
 			        				"<div>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Einstellungen</li>"+
@@ -247,7 +247,7 @@
 			        				"<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE), Englisch (EN) oder Französisch (FR)</li>"+
 			        			"</ul>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
-			        				"<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
+			        				"<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
 			        				"<div>Desweiteren kann die Legende geöffnet werden.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
 			        				"<div>Die Legende ermöglicht einzelne Layer darzustellen, als auch von der Ansicht zu entfernen.</div>"+
@@ -263,15 +263,16 @@
 		        			"<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich eine Hintergrundkarte geladen. Im Anschluss kann über die Auswahl, Layer manuell hinzugefügt werden.</div>"+
 		        			"<h4>Zur Auswahl stehen die Profile:</h4>"+
 		        			"<ul>"+
-		        				"<li>IMIS - Integriertes Mess- und Informationssystem</li>"+
-		        				"<li>GeoZG - Geodatenzugangsgesetz</li>"+
+		        				"<li>IMIS - Bundesmessnetze Routine</li>"+
+		        				"<li>IMIS - Bundesmessnetze intensiv</li>"+
 		        				"<li>RODOS - Realtime Online Decision Support System</li>"+
+		        				"<li>Nahrungsmittel</li>"+
+		        				"<li>Futtermittel</li>"+
+		        				"<li>GeoZG - Geodatenzugangsgesetz</li>"+
 		        				"<li>INSPIRE - Infrastructure for Spatial Information in Europe</li>"+
-		        				"<li>§2 - § 2 Strahlenschutzvorsorgegesetz (StrVG), Aufgaben des Bundes</li>"+
-		        				"<li>§3 - § 3 Strahlenschutzvorsorgegesetz (StrVG), Aufgaben der Länder</li>"+
 		        			"</ul>"+
 		        			"<div>Unterhalb der Profile lässt sich über die Eingabe innerhalb einer Filterleiste die Auswahl der Profile einschränken.</div><br />"+
-		        			"<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' width='366' height='335' style='float:left'>"
+		        			"<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' width='366' height='337' style='float:left'>"
 		        },
 		        "map": {
 		        	"title": "2. Karte",
@@ -281,8 +282,12 @@
 		        		"title": "2.1 Übersicht",
 		        		"html": "<hr style='color:#157FCC' />"+
 		        				"<h2>2.1 Übersicht</h2>"+
-			        			"<div>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857).</div>"+
-			        			"<div>In der Karte kann mithilfe der Maus navigiert werden. Hält man die linke <i>Maustaste</i> gedrückt, kann die Kartenansicht verschoben werden. Ein Doppelklick zoomt an die Stelle, an der sich der <i>Mauszeiger</i> befindet. Das <i>Mausrad</i> steuert ebenfalls die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe <i>7. Navigation</i>) steuern.</div>"+
+			        			"<div>"+
+			        			"<p>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857).</p>"+
+			        			"<p>Innerhalb der Karte kann man mithilfe der <i>Maus</i> navigieren. Hält man die linke <i>Maustaste</i> gedrückt, kann die Kartenansicht verschoben werden. Ein Doppelklick zoomt an die Stelle, an der sich der <i>Mauszeiger</i> befindet. Möchte man auf eine bestimmte Ansicht zoomen, ist dies über ein Zoomfenster realisierbar. Mit gedrückter Shift-Taste (auch: "+
+			        			"<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
+			        			", Umstelltaste, Hochstelltaste), sowie linker <i>Maustaste</i> kann innerhalb der Karte ein Zoomfenster erzeugt werden.<br />"+
+			        			"Das <i>Mausrad</i> steuert ebenfalls die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe <i>7. Navigation</i>) steuern.</div>"+
 			        			"<div>Im rechten unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfacher Klick öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Angaben.</div><br />"+
 			        			"<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Karte' alt='graphic_map.png' width='829' height='488' style='float:left'><br />"
 		        	},
@@ -394,20 +399,30 @@
 		        	"title": "4. Auswahl",
 		        	"html":     "<h2>4. Auswahl</h2>"+
 		        				"<div>"+
-		        				"<p>Die Auswahl gewährleistet das Hinzufügen von Layern in die Legende und somit in die geographische Karte. Das Auswahlfenster ist im Menü unterhalb des Bedienfeldes \"Werkzeug\" zu finden. Initial ist das Fenster geschlossen und kann mit einem einfachen Klick auf den Schriftzug \"Auswahl\" oder auf der türkisfarbene Leiste geöffnet werden (siehe Grafik <i>4. Arbeitsablauf der Layerauswahl</i>).</p>"+
-		        				"<p>Jeder Layer befindet sich in einem Layer-Set. Dementsprechend sind die Layer nach Themen untergliedert. Möchte man beispielsweise den Layer des Niederschlags der Karte hinzufügen, findet man diesen unter dem Layer-Set \"Meteorologie\".</p>"+
+		        				"<p>Die Auswahl gewährleistet das Hinzufügen von Layern in die Legende und somit in die geographische Karte. Das Auswahlfenster ist im Menü unterhalb des Bedienfeldes \"Werkzeuge\" zu finden. Initial ist das Fenster geschlossen und kann mit einem einfachen Klick auf den Schriftzug \"Auswahl\" oder auf der türkisfarbene Leiste geöffnet werden (siehe Grafik <i>4. Arbeitsablauf der Layerauswahl</i>).</p>"+
+		        				"<p>Das Menü ist in der Breite anpassbar. Bewegt man den <i>Mauszeiger</i> an den rechten Rand des Menüs, ändert sich das Symbol zu einem Doppelpfeil "+
+		        				"<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
+		        				" und die Breite lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
+		        				"<p>Jeder Layer befindet sich in einem Layer-Set, das eine fachliche Einteilung widerspiegelt. Dementsprechend sind Layer nach Themen untergliedert und können in mehreren Layer-Sets auftreten. Möchte man beispielsweise den Layer der Ortsdosisleistung brutto für 24h (ODL brutto 24h) der Karte hinzufügen, findet man diesen unter den Layer-Sets \"BFS-Messnetz\", sowie \"Ortsdosisleistung\".</p>"+
 		        				"<p>Die Anordnung im Auswahlfenster entspricht der eines allgemeingebräuchlichen Dateisystems, mit Ordnern und Dateien. Die Layer-Sets entsprechen den Ordnern, während die Layer den Dateien gleich kommen. Möchte man einen Ordner ausklappen um sich die zugeordneten Layer anzeigen zu lassen, ist dies mit einem einfachen Klick auf das Plus-Symbol links neben des Ordnersymbols möglich. Alternativ kann auch ein Doppelklick auf die Ordnerbeschriftung ausgeführt werden.</p>"+
-		        				"<p>Ein Doppelklick auf die Layerbezeichnung fügt letztlich den Layer der Legende bzw. Karte hinzu. Je nach Semantik des Layers öffnet sich gegebenfalls ein Fenster um die Daten mithilfe eines Zeit- oder Wertefilters einzuschränken. Es ist auch möglich, dass Layer über beide Filter verfügen. Sofern sich kein Fenster öffnet, wird der Layer direkt eingefügt.</p>"+
+		        				"<p>Ein einfacher Klick auf die Layerbezeichnung öffnet ein layerspezifisches Fenster. Je nach Semantik des Layers beinhaltet ein Fenster gegebenenfalls Einstellungen um die Daten mithilfe eines Zeit- und/oder Wertefilters einzuschränken. Sofern ein Layer über keine Zeit- bzw. Wertefilter verfügt, enthält das Fenster lediglich einen Schalter für das Hinzufügen des entsprechenden Layers (siehe Grafik <i>4. layerspezifisches Fenster - Layer ohne Filter</i>).</p>"+
+                                "<div style='font-size:11px'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/window_layerNoFilter.png' title='layerspezifisches Fenster - Layer ohne Filter' alt'window_layerNoFilter.png' width='247' height='75'><br>"+
+                                "<b>4. layerspezifisches Fenster - Layer ohne Filter</b>"+
+                                "</div><br />"+	
+                                "<p>Ein Doppelklick auf die Layerbezeichnung fügt einen Layer der Karte unmittelbar hinzu. Hierbei werden Standardeinstellungen übernommen. Entsprechend werden Layer mit zeitlichem Bezug auf die aktuellsten Daten gesetzt.</p>"+	        				
 		        				"<p>In Grafik <i>4. Arbeitsablauf der Layerauswahl</i> ist das Hinzufügen der Ortsdosisleistung brutto mit einem Intervall von 10min dargestellt. Das einzustellende Datum bezieht sich auf den Zeitpunkt der Aufnahme der Daten. Die Festlegung des Datums kann entweder durch einfache Eingabe oder durch die Auswahl eines Tages aus dem Kalender ausgeführt werden. Dieser öffnet sich mit einem Klick auf das Kalendersymbol "+
 		        				"<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Schalter: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
-		        				". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. ODL-brutto mobil). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereit gestellt. Der Wertefilter entspricht bei diesem Layer das Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Ein Klick auf den Schalter \"Filter übernehmen und Layer der Karte hinzufügen\" stellt den Layer zur Betrachtung bereit.</p>"+
+		        				". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. ODL-brutto mobil). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereit gestellt. Der Wertefilter entspricht bei diesem Layer das Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Eine Mehrfachauswahl ist mit gedrückter Shift-Taste (auch: "+
+                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
+                                ", Umstelltaste, Hochstelltaste) möglich. Ein Klick auf den Schalter \"Filter übernehmen und Layer der Karte hinzufügen\" stellt den Layer zur Betrachtung bereit.</p>"+
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_layer_selection.png' title='Arbeitsablauf der Layerauswahl' alt='graphic_layer_selection.png' width='812' height='486'><br>"+
 		        				"<b>4. Arbeitsablauf der Layerauswahl</b>"+
 		        				"</div><br />"+
 		        				"<h3>Layer-Set Auswahl</h3>"+
 		        				"<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe Grafik <i>4. Arbeitsablauf der Layer-Set Auswahl</i>). In der türkisfarbenen Leiste der  \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster das eine Auswahl an Layer-Sets beinhaltet, die mit einem repräsentativen Bild des entsprechenden Themas versehen sind. Klickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Desweiteren kann mit einem Doppelklick auf ein Thema die gesamten korrespondierenden Layer der Legende hinzugefügt werden. Im unteren Teil der \"Layer-Set Auswahl\" kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden.</p>"+
-		        				"<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem Doppelklick auf die Layerbeschriftung.</p>"+ 
+		        				"<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</p>"+ 
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_layerSet_selection.png' title='Arbeitsablauf der Layer-Set Auswahl' alt='graphic_layerSet_selection.png' width='1004' height='542'><br>"+
 		        				"<b>4. Arbeitsablauf der Layer-Set Auswahl</b>"+
@@ -516,6 +531,9 @@
 		        				"<h2>7.1 Hineinzoomen <img class='img' src='classic/resources/img/helpPage/button_zoomIn.png' title='Schalter: Hineinzoomen' alt='button_zoomIn.png' width='28' height='28' style='vertical-align:middle'></h2>"+
 		        				"<div>"+
 		        				"<p>Der Schalter zoomt mit vordefinierter Stufe in die Karte hinein. Das heißt, dass der Maßstab der aktuellen Ansicht größer wird. Alternativ kann entweder ein Doppelklick mit der <i>Maus</i>, oder das <i>Mausrad</i> für das Hineinzoomen benutzt werden.</p>"+
+		        				"<p>Möchte man auf eine bestimmte Ansicht zoomen, ist dies über ein Zoomfenster realisierbar. Mit gedrückter Shift-Taste (auch: "+
+                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
+                                ", Umstelltaste, Hochstelltaste), sowie linker <i>Maustaste</i> kann innerhalb der Karte ein Zoomfenster erzeugt werden.</p>"+
 		        				"</div>"
 		        		},
 		        	"zoomOut": {
@@ -550,7 +568,10 @@
 	        				"<p>Die Legende beinhaltet sämtliche Layer die zur Darstellung verfügbar sind. Das Hinzufügen von Layern ist unter dem Punkt <i>4. Auswahl</i> beschrieben. Die Legende kann entweder über den Schalter "+
 	        				"<img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Schalter: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'>"+
 	        				", oder durch einen direkten Klick auf den blauen Balken mit der Aufschrift \"Legende\" geöffnet werden. </p>"+ 
-	        				"<p>Wie bereits in Punkt <i>2.b) Abfrage von BfS-Geoobjekten</i> erwähnt ist darauf zu achten, dass der entsprechende Layer für Abfragen der Geometrien selektiert ist. Ein ausgewählter Layer wird in der Legende mit einer türkisfarbenen Fläche markiert (siehe Grafik <i>8. Legende - Layer verschieben</i>). Das Kästchen auf der linken Seite des Layernamen steuert ob ein Layer in der Karte angezeigt wird (Häckchen gesetzt "+
+                            "<p>Die Legende ist in der Breite anpassbar. Bewegt man den <i>Mauszeiger</i> an den linken Rand der Legende, ändert sich das Symbol zu einem Doppelpfeil "+
+                            "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
+                            " und die Breite lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
+	        				"<p>Wie bereits in Punkt <i>2.2 Abfrage von BfS-Geoobjekten</i> erwähnt, ist darauf zu achten, dass der entsprechende Layer für Abfragen der Geometrien selektiert ist. Ein ausgewählter Layer wird in der Legende mit einer türkisfarbenen Fläche markiert (siehe Grafik <i>8. Legende - Layer verschieben</i>). Das Kästchen auf der linken Seite des Layernamen steuert ob ein Layer in der Karte angezeigt wird (Häckchen gesetzt "+
 	        				"<img class='img' src='classic/resources/img/helpPage/checkbox_true.png' title='Kontrollkästchen - aktiv' alt='checkbox_true.png' width='14' height='14' style='vertical-align:middle'>"+
 	        				" ), oder nicht (leeres Kästchen "+
 	        				"<img class='img' src='classic/resources/img/helpPage/checkbox_false.png' title='Kontrollkästchen - inaktiv' alt='checkbox_false.png' width='13' height='13' style='vertical-align:middle'>"+
