@@ -281,8 +281,12 @@
 		        		"title": "2.1 Übersicht",
 		        		"html": "<hr style='color:#157FCC' />"+
 		        				"<h2>2.1 Übersicht</h2>"+
-			        			"<div>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857).</div>"+
-			        			"<div>In der Karte kann mithilfe der Maus navigiert werden. Hält man die linke <i>Maustaste</i> gedrückt, kann die Kartenansicht verschoben werden. Ein Doppelklick zoomt an die Stelle, an der sich der <i>Mauszeiger</i> befindet. Das <i>Mausrad</i> steuert ebenfalls die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe <i>7. Navigation</i>) steuern.</div>"+
+			        			"<div>"+
+			        			"<p>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857).</p>"+
+			        			"<p>Innerhalb der Karte kann man mithilfe der <i>Maus</i> navigieren. Hält man die linke <i>Maustaste</i> gedrückt, kann die Kartenansicht verschoben werden. Ein Doppelklick zoomt an die Stelle, an der sich der <i>Mauszeiger</i> befindet. Möchte man auf eine bestimmte Ansicht zoomen, ist dies über ein Zoomfenster realisierbar. Mit gedrückter Shift-Taste (auch: "+
+			        			"<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
+			        			", Umstelltaste, Hochstelltaste), sowie linker <i>Maustaste</i> kann innerhalb der Karte ein Zoomfenster erzeugt werden.</p>"+
+			        			"<p>Das <i>Mausrad</i> steuert ebenfalls die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe <i>7. Navigation</i>) steuern.</div>"+
 			        			"<div>Im rechten unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfacher Klick öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Angaben.</div><br />"+
 			        			"<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Karte' alt='graphic_map.png' width='829' height='488' style='float:left'><br />"
 		        	},
@@ -524,6 +528,9 @@
 		        				"<h2>7.1 Hineinzoomen <img class='img' src='classic/resources/img/helpPage/button_zoomIn.png' title='Schalter: Hineinzoomen' alt='button_zoomIn.png' width='28' height='28' style='vertical-align:middle'></h2>"+
 		        				"<div>"+
 		        				"<p>Der Schalter zoomt mit vordefinierter Stufe in die Karte hinein. Das heißt, dass der Maßstab der aktuellen Ansicht größer wird. Alternativ kann entweder ein Doppelklick mit der <i>Maus</i>, oder das <i>Mausrad</i> für das Hineinzoomen benutzt werden.</p>"+
+		        				"<p>Möchte man auf eine bestimmte Ansicht zoomen, ist dies über ein Zoomfenster realisierbar. Mit gedrückter Shift-Taste (auch: "+
+                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
+                                ", Umstelltaste, Hochstelltaste), sowie linker <i>Maustaste</i> kann innerhalb der Karte ein Zoomfenster erzeugt werden.</p>"+
 		        				"</div>"
 		        		},
 		        	"zoomOut": {
