@@ -35,12 +35,22 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     disableRemoveSeriesBtnDelay: 300,
 
     /**
+     * Disable UTC-Button when TimeSeriesWindow is shown.
+     */
+    onTimeseriesShow: function () {
+        Ext.ComponentQuery.query('k-button-timereference')[0].disable();
+    },
+
+    /**
      * Removes the previousy selected feature from the select interaction
+     * Enable UTC-Button when TimeSeriesWindow is closed.
      */
     onTimeseriesClose: function() {
         // TODO prepare for multi map setup
         var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
         mapComp.removeAllHoverFeatures();
+
+        Ext.ComponentQuery.query('k-button-timereference')[0].enable();
     },
 
     /**

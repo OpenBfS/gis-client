@@ -59,6 +59,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
     },
 
     listeners:{
+        show: 'onTimeseriesShow',
         close: 'onTimeseriesClose'
     },
 

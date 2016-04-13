@@ -37,7 +37,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         // var valueField = 'value_' + selectedStation.get(identifyField);
         var valueField = chartConfig.yAxisAttribute + '_' +
             selectedStation.get(identifyField);
-        var dataObject = 'data_' + selectedStation.get(identifyField);
+        var dataObjectField = 'data_' + selectedStation.get(identifyField);
         var paramConfig = Koala.util.Object.getConfigByPrefix(
             chartConfig, "param_", true);
 
@@ -61,8 +61,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                 return;
         }
 
-        // get the timerangefilter, actually we need the attribute param
-        // only
+        // get the filter
 
         // TODO refactor this gathering of the needed filter attribute
         var filters = layer.metadata.filters;
@@ -118,7 +117,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         }
 
         view.getAxes()[0].getFields().push(valueField);
-        view.getAxes()[0].getFields().push(dataObject);
+        view.getAxes()[0].getFields().push(dataObjectField);
 
         Ext.Ajax.request({
             url: url,
@@ -129,74 +128,25 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                 var json = Ext.decode(res.responseText);
                 var chart = view;
                 var store = chart.getStore();
-                var yAxisAttr = chartConfig.yAxisAttribute;
-                var xAxisAttr = chartConfig.xAxisAttribute;
-                var rawStoreData = [];
-                var cleanStoreData = [];
 
                 // Here is the strategy:
 
-                // 1) keep raw copies of the already existing records in the
-                //    store, if any.
-                store.each(function(rec){
-                    rawStoreData.push(rec.getData());
-                });
+                // 1) Get the interval in which we have to create data records.
+                var intervalInSeconds = me.getIntervalInSeconds(
+                    timeRangeFilter.interval, timeRangeFilter.unit);
 
-                // 2) next, empty the store, to start from a fresh one. It'll
-                //    be reloaded with cleaned-up data later
-                store.removeAll();
+                // 2) Setup the store data for the given interval
+                var newStoreData = me.setupStoreData(json.features,
+                    dataObjectField, valueField, chartConfig, intervalInSeconds
+                    );
 
-                // 3) For every Feature of the new dataset, put its specific
-                //    value at valueField either into an existing clean data set
-                //    from above, or create a new object in this array
-                Ext.each(json.features, function(feat) {
-                    var match = false;
-                    Ext.each(rawStoreData, function(item) {
-                        var d1 = item[xAxisAttr];
-                        var d2 = new Date(feat.properties[xAxisAttr]);
-                        if ( Ext.Date.isEqual(d1, d2) ) {
-                            match = item;
-                            return false;
-                        }
-                    });
-
-                    if (match) {
-                        // This feature from the new dataset, has a value at
-                        // a point in time that another series already used.
-                        // Set the series specific valueField to the current
-                        // value
-                        match[valueField] = feat.properties[yAxisAttr];
-                        match[dataObject] = Ext.clone(feat.properties);
-                        cleanStoreData.push(match);
-                    } else {
-                        // This is a new date with a value, set the unique
-                        // valueField simply to the current value …
-                        var newRawData = {}; //feat.properties;
-                        newRawData[valueField] = feat.properties[yAxisAttr];
-                        newRawData[xAxisAttr] = feat.properties[xAxisAttr];
-                        newRawData[dataObject] = Ext.clone(feat.properties);
-                        // … and add it
-                        cleanStoreData.push(newRawData);
-                    }
-                });
-
-                // 4) We now need to take care of items that weren't covered by
-                //    dataitems of the new dataset. Some items in cleanStoreData
-                //    may still miss either old or the new valueField.
-                Ext.each(cleanStoreData, function(cleanStoreDataItem){
-                    Ext.each(allValueFields, function(oneValueField) {
-                        if (cleanStoreDataItem[oneValueField] === undefined){
-                            cleanStoreDataItem[oneValueField] = false;
-                        }
-                    });
-                });
-
-                // 5) load the now cleaned-up data into the store.
-                store.loadData(cleanStoreData);
+                // 3) load the now cleaned-up data into the store. Previous data
+                // will be automatically removed.
+                store.loadData(newStoreData);
 
                 // 6) enjoy and continue the original workflow:
                 me.onTimeSeriesDataLoad(
-                    selectedStation, valueField, dataObject, chartConfig
+                    selectedStation, valueField, dataObjectField, chartConfig
                 );
             },
             failure: function() {
@@ -204,6 +154,150 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
             }
         });
 
+    },
+
+    /**
+     * Creates data from the startDate to the endDate given in the filter.
+     * For every intervalInSeconds a record is created.
+     * If we find data for the given features we add this data to the record.
+     * If not we set the yAxisAttr to "undefined" to enable gaps in the data.
+     * @param {Array[ol.Feature]} features The features of the station.
+     * @param {String} dataObjectField The field where we store the dataObject.
+     * @param {String} valueField The field where we store the value.
+     * @param {Object} chartConfig Configobject which includes
+     *    xAxisAttr and yAxisAttr.
+     * @param {Integer} intervalInSeconds The Interval of records to be created.
+     */
+    setupStoreData: function(features,
+            dataObjectField, valueField, chartConfig,
+            intervalInSeconds){
+
+        var me = this;
+        var timeSeriesWin = me.getView().up('window');
+        var date = timeSeriesWin.down('datefield[name=datestart]').getValue();
+        var endDate = timeSeriesWin.down('datefield[name=dateend]').getValue();
+        var store = me.getView().getStore();
+
+        var xAxisAttr = chartConfig.xAxisAttribute;
+        var yAxisAttr = chartConfig.yAxisAttribute;
+        var mockUpData = [];
+
+        var snapObject = me.getTimeStampSnapObject(
+                date, intervalInSeconds, features, xAxisAttr);
+
+        var compareableDate, matchingFeature;
+
+        // We already got data
+        if (store.getCount() > 0) {
+            store.each(function (record) {
+                var recordDate = record.get(xAxisAttr);
+                compareableDate = Ext.Date.format(recordDate, "timestamp");
+                matchingFeature = snapObject[compareableDate];
+
+                record.set(valueField, undefined);
+                if(matchingFeature){
+                    record.set(valueField,
+                        matchingFeature.properties[yAxisAttr]);
+                    record.set(dataObjectField,
+                        Ext.clone(matchingFeature.properties));
+                }
+                mockUpData.push(record.getData());
+            });
+        // We don't have data in the store yet
+        } else {
+            while(date <= endDate){
+
+                var newRawData = {};
+
+                compareableDate = Ext.Date.format(date, "timestamp");
+                matchingFeature = snapObject[compareableDate];
+
+                // Why did we do this?
+                // Ext.Date.format(date, Koala.util.Date.ISO_FORMAT);
+                newRawData[xAxisAttr] = date;
+                newRawData[valueField] = undefined;
+
+                if(matchingFeature){
+                    newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+                    newRawData[dataObjectField] = Ext.clone(matchingFeature.properties);
+                }
+
+                mockUpData.push(newRawData);
+                date = Ext.Date.add(date, Ext.Date.SECOND, intervalInSeconds);
+            }
+        }
+
+        return mockUpData;
+    },
+
+    /**
+     * We create an object of the features where the key is a timestamp.
+     * You can then easily access the feature of a given date.
+     *
+     * @param startDate {Date}
+     * @param intervalInSeconds {Integer}
+     * @param features {Array[ol.Feature]}
+     * @param xAxisAttr {String}
+     */
+    getTimeStampSnapObject: function (startDate, intervalInSeconds, features,
+            xAxisAttr) {
+        var obj = {};
+        var startSeconds = parseInt(
+                Ext.Date.format(startDate, "timestamp"), 10);
+        var columnSeconds = intervalInSeconds / 2;
+
+        Ext.each(features, function(feat){
+            // "new Date" creates always local timestamp
+            var featDate = new Date(feat.properties[xAxisAttr]);
+
+            if (Koala.Application.isUtc()) {
+                var makeUtc = Koala.util.Date.makeUtc;
+                featDate = makeUtc(featDate);
+            }
+
+            var featDateSeconds = parseInt(
+                    Ext.Date.format(featDate, "timestamp"), 10);
+            var diffSeconds = featDateSeconds - startSeconds;
+            var modulos = diffSeconds % intervalInSeconds;
+            var snapSeconds;
+
+            if(modulos < columnSeconds){
+                snapSeconds = featDateSeconds - modulos;
+            } else {
+                snapSeconds = featDateSeconds + modulos;
+            }
+            obj[snapSeconds] = feat;
+        });
+
+        return obj;
+    },
+
+    /**
+     * Normalize interval and unit to seconds.
+     *
+     * @param interval {Integer}
+     * @param unit {String["seconds", "minutes", "hours", "days"]}
+     */
+    getIntervalInSeconds: function (interval, unit) {
+        var multiplier = 0;
+
+        switch (unit.toLowerCase()) {
+            case "seconds":
+                multiplier = 1;
+                break;
+            case "minutes":
+                multiplier = Koala.util.Duration.secondsInOne.MINUTE;
+                break;
+            case "hours":
+                multiplier = Koala.util.Duration.secondsInOne.HOUR;
+                break;
+            case "days":
+                multiplier = Koala.util.Duration.secondsInOne.DAY;
+                break;
+            default:
+                break;
+        }
+        return multiplier * interval;
     },
 
     /**
@@ -240,7 +334,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
     /**
      *
      */
-    onTimeSeriesDataLoad: function(selectedStation, valueField, dataObject,
+    onTimeSeriesDataLoad: function(selectedStation, valueField, dataObjectField,
             chartConfig) {
         var me = this;
         var view = me.getView();
@@ -248,7 +342,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
             Koala.util.String.replaceTemplateStrings(
                 chartConfig.seriesTitleTpl, selectedStation) : "";
         var newSeries = me.createNewSeries(
-                stationName, chartConfig, valueField, dataObject, selectedStation
+                stationName, chartConfig, valueField, dataObjectField, selectedStation
             );
         if(newSeries){
             view.addSeries(newSeries);
@@ -272,7 +366,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
     /**
      *
      */
-    createNewSeries: function(title, chartConfig, valueField, dataObject,
+    createNewSeries: function(title, chartConfig, valueField, dataObjectField,
             selectedStation) {
         var me = this;
         var view = me.getView();
@@ -338,7 +432,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
                                 title: this.getTitle() // TODO this needs docs
                             }, false);
                         var html = Koala.util.String.replaceTemplateStrings(
-                            tpl, record.data[dataObject], false);
+                            tpl, record.data[dataObjectField], false);
 
                         html = Koala.util.String.replaceTemplateStrings(
                             html, selectedStation, false);
