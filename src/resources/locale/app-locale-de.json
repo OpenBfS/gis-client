@@ -233,9 +233,9 @@
 				        				"<li>WMS (Web Map Service) einbinden</li>"+
 				        				"<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten in den Rastergrafiken BMP, GIF, PNG, TIF, TIFF, sowohl als PDF- oder IRIX-Datei</li>"+
 				        			"</ul>"+
-			        			"<li style='color:#157FCC; font-weight:bold'>Layer Auswahl</li>"+
-			        				"<div>Die \"Layer Auswahl\" bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
-			        				"<div>Ein Layer lässt sich über einen \"Doppelklick\" zur Legende hinzufügen. Gegebenenfalls öffnet sich ein Fenster um über Filterfunktionen die Auswahl weiter einzuschränken.</div>"+
+			        			"<li style='color:#157FCC; font-weight:bold'>Auswahl</li>"+
+			        				"<div>Die \"Auswahl\" bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
+			        				"<div>Das Hinzufügen eines Layers erfolgt mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Multisuchleiste</li>"+
 			        				"<div>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS.</div>"+
 			        			"<li style='color:#157FCC; font-weight:bold'>Einstellungen</li>"+
@@ -263,15 +263,16 @@
 		        			"<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich eine Hintergrundkarte geladen. Im Anschluss kann über die Auswahl, Layer manuell hinzugefügt werden.</div>"+
 		        			"<h4>Zur Auswahl stehen die Profile:</h4>"+
 		        			"<ul>"+
-		        				"<li>IMIS - Integriertes Mess- und Informationssystem</li>"+
-		        				"<li>GeoZG - Geodatenzugangsgesetz</li>"+
+		        				"<li>IMIS - Bundesmessnetze Routine</li>"+
+		        				"<li>IMIS - Bundesmessnetze intensiv</li>"+
 		        				"<li>RODOS - Realtime Online Decision Support System</li>"+
+		        				"<li>Nahrungsmittel</li>"+
+		        				"<li>Futtermittel</li>"+
+		        				"<li>GeoZG - Geodatenzugangsgesetz</li>"+
 		        				"<li>INSPIRE - Infrastructure for Spatial Information in Europe</li>"+
-		        				"<li>§2 - § 2 Strahlenschutzvorsorgegesetz (StrVG), Aufgaben des Bundes</li>"+
-		        				"<li>§3 - § 3 Strahlenschutzvorsorgegesetz (StrVG), Aufgaben der Länder</li>"+
 		        			"</ul>"+
 		        			"<div>Unterhalb der Profile lässt sich über die Eingabe innerhalb einer Filterleiste die Auswahl der Profile einschränken.</div><br />"+
-		        			"<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' width='366' height='335' style='float:left'>"
+		        			"<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' width='366' height='337' style='float:left'>"
 		        },
 		        "map": {
 		        	"title": "2. Karte",
@@ -285,8 +286,8 @@
 			        			"<p>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857).</p>"+
 			        			"<p>Innerhalb der Karte kann man mithilfe der <i>Maus</i> navigieren. Hält man die linke <i>Maustaste</i> gedrückt, kann die Kartenansicht verschoben werden. Ein Doppelklick zoomt an die Stelle, an der sich der <i>Mauszeiger</i> befindet. Möchte man auf eine bestimmte Ansicht zoomen, ist dies über ein Zoomfenster realisierbar. Mit gedrückter Shift-Taste (auch: "+
 			        			"<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
-			        			", Umstelltaste, Hochstelltaste), sowie linker <i>Maustaste</i> kann innerhalb der Karte ein Zoomfenster erzeugt werden.</p>"+
-			        			"<p>Das <i>Mausrad</i> steuert ebenfalls die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe <i>7. Navigation</i>) steuern.</div>"+
+			        			", Umstelltaste, Hochstelltaste), sowie linker <i>Maustaste</i> kann innerhalb der Karte ein Zoomfenster erzeugt werden.<br />"+
+			        			"Das <i>Mausrad</i> steuert ebenfalls die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe <i>7. Navigation</i>) steuern.</div>"+
 			        			"<div>Im rechten unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfacher Klick öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Angaben.</div><br />"+
 			        			"<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Karte' alt='graphic_map.png' width='829' height='488' style='float:left'><br />"
 		        	},
@@ -412,14 +413,16 @@
                                 "<p>Ein Doppelklick auf die Layerbezeichnung fügt einen Layer der Karte unmittelbar hinzu. Hierbei werden Standardeinstellungen übernommen. Entsprechend werden Layer mit zeitlichem Bezug auf die aktuellsten Daten gesetzt.</p>"+	        				
 		        				"<p>In Grafik <i>4. Arbeitsablauf der Layerauswahl</i> ist das Hinzufügen der Ortsdosisleistung brutto mit einem Intervall von 10min dargestellt. Das einzustellende Datum bezieht sich auf den Zeitpunkt der Aufnahme der Daten. Die Festlegung des Datums kann entweder durch einfache Eingabe oder durch die Auswahl eines Tages aus dem Kalender ausgeführt werden. Dieser öffnet sich mit einem Klick auf das Kalendersymbol "+
 		        				"<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Schalter: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
-		        				". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. ODL-brutto mobil). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereit gestellt. Der Wertefilter entspricht bei diesem Layer das Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Ein Klick auf den Schalter \"Filter übernehmen und Layer der Karte hinzufügen\" stellt den Layer zur Betrachtung bereit.</p>"+
+		        				". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. ODL-brutto mobil). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereit gestellt. Der Wertefilter entspricht bei diesem Layer das Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Eine Mehrfachauswahl ist mit gedrückter Shift-Taste (auch: "+
+                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
+                                ", Umstelltaste, Hochstelltaste) möglich. Ein Klick auf den Schalter \"Filter übernehmen und Layer der Karte hinzufügen\" stellt den Layer zur Betrachtung bereit.</p>"+
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_layer_selection.png' title='Arbeitsablauf der Layerauswahl' alt='graphic_layer_selection.png' width='812' height='486'><br>"+
 		        				"<b>4. Arbeitsablauf der Layerauswahl</b>"+
 		        				"</div><br />"+
 		        				"<h3>Layer-Set Auswahl</h3>"+
 		        				"<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe Grafik <i>4. Arbeitsablauf der Layer-Set Auswahl</i>). In der türkisfarbenen Leiste der  \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster das eine Auswahl an Layer-Sets beinhaltet, die mit einem repräsentativen Bild des entsprechenden Themas versehen sind. Klickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Desweiteren kann mit einem Doppelklick auf ein Thema die gesamten korrespondierenden Layer der Legende hinzugefügt werden. Im unteren Teil der \"Layer-Set Auswahl\" kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden.</p>"+
-		        				"<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem einfachen (Standardeinstellungen übernehmen) bzw. doppelten Klick auf die Layerbeschriftung.</p>"+ 
+		        				"<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</p>"+ 
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_layerSet_selection.png' title='Arbeitsablauf der Layer-Set Auswahl' alt='graphic_layerSet_selection.png' width='1004' height='542'><br>"+
 		        				"<b>4. Arbeitsablauf der Layer-Set Auswahl</b>"+
