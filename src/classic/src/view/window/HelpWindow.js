@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 	Marco Pochert, Bundesamt fuer Strahlenschutz
+/* Copyright (c) 2015     Marco Pochert, Bundesamt fuer Strahlenschutz
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,9 +39,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     height: 750,
     layout: 'border',
     minWidth: 500,
-//    maxWidth: window.innerWidth - 100,
     minHeight: 300,
-//    maxHeight: window.innerHeight - 100,
 
     resizable: true,
     maximizable: true,
@@ -51,42 +49,42 @@ Ext.define("Koala.view.window.HelpWindow", {
 
     //Navigation-Panel
     items: [{
-    	xtype: 'panel',
-    	region: 'west',
-    	width: 260,
-    	split: true,
-//    	reference: 'treelistContainer',
-    	layout: {
-    		type: 'vbox'
-//    		align: 'stretch'
-    	},
-    	border: false,
-    	items: [{
-    		xtype: 'treelist',
-    		reference: 'treelist',
-    		expanderOnly: false,
-    		bind: '{navItems}'
-    	}]
+        xtype: 'panel',
+        region: 'west',
+        width: 260,
+        split: true,
+//        reference: 'treelistContainer',
+        layout: {
+            type: 'vbox'
+//            align: 'stretch'
+        },
+        border: false,
+        items: [{
+            xtype: 'treelist',
+            reference: 'treelist',
+            expanderOnly: false,
+            bind: '{navItems}'
+        }]
     },
     //Content
     {
-    	region: 'center',
-    	autoScroll: true,//"This cfg has been deprecated since 5.1.0 - Use scrollable instead" -> but scrollable is not working
-    	bodyPadding: 10,
-    	bind: {
-    		html: '{selectionHtml}'
-    	}
+        region: 'center',
+        autoScroll: true,//"This cfg has been deprecated since 5.1.0 - Use scrollable instead" -> but scrollable is not working
+        bodyPadding: 10,
+        bind: {
+            html: '{selectionHtml}'
+        }
     }],
     //select 'preface' at initialization
     listeners:{
-	    afterlayout: function() {
-	    	var treelist = this.lookupReference('treelist'),
-	    	store = treelist.getStore(),
-	    	selection = treelist.getSelection();
-	    	if (store && !selection){
-		    	var node = treelist.getStore().getNodeById('select');
-		    	treelist.setSelection(node);
-	    	}
-	    }
+        afterlayout: function() {
+            var treelist = this.lookupReference('treelist'),
+            store = treelist.getStore(),
+            selection = treelist.getSelection();
+            if (store && !selection){
+                var node = treelist.getStore().getNodeById('select');
+                treelist.setSelection(node);
+            }
+        }
     }
 });
