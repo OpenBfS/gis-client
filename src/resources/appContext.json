@@ -19,6 +19,7 @@
                 "password": "data_reader"
             },
             "metadataSearchFields": ["title", "abstract"],
+            "spatialSearchTypeName": "BFS:verwaltung_4326_geozg_sort",
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
             "mapLayers": [
