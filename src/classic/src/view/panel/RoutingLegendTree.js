@@ -95,15 +95,15 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             }
         },
 
-        getFilterText: function(record){
-            var layer = record.getOlLayer();
-            var LayerUtil = Koala.util.Layer;
-
-            if (!layer || !layer.metadata){
-                return '';
-            }
-            return LayerUtil.getFiltersTextFromMetadata(layer.metadata);
-        },
+        // getFilterText: function(record){
+        //     var layer = record.getOlLayer();
+        //     var LayerUtil = Koala.util.Layer;
+        //
+        //     if (!layer || !layer.metadata){
+        //         return '';
+        //     }
+        //     return LayerUtil.getFiltersTextFromMetadata(layer.metadata);
+        // },
 
         shortInfoHandler: function(btn){
             var record = btn.layerRec;
@@ -228,15 +228,15 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 }
             }]
         },
-        {
-            xtype: 'component',
-            name: 'filtertext',
-            layout: 'hbox',
-            defaults: {
-                margin: '0 5px 0 0'
-            },
-            html: '{{Koala.view.panel.RoutingLegendTree.getFilterText(record)}}'
-        },
+        // {
+        //     xtype: 'component',
+        //     name: 'filtertext',
+        //     layout: 'hbox',
+        //     defaults: {
+        //         margin: '0 5px 0 0'
+        //     },
+        //     html: '{{Koala.view.panel.RoutingLegendTree.getFilterText(record)}}'
+        // },
         {
             xtype: 'image',
             name: '{{record.getOlLayer().get("routeId") + "-legendImg"}}',
@@ -251,6 +251,17 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     itemExpandedKey: 'koala-rowbody-expanded',
+
+    viewConfig: {
+        // TODO verbatim copied from LegendTree from BasiGX, make configurable
+        plugins: { ptype: 'treeviewdragdrop' },
+        getRowClass: function(record){
+            return this.up().getCssForRow(record);
+        },
+        listeners: {
+            drop: 'onLegendItemDrop'
+        }
+    },
 
     /**
      * Initialize the component.
@@ -277,8 +288,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
     /**
      * Called at the end of the initComponent-sequence, this methods binds some
-     * some evenet handlers on verious components to react on a state change
-     * there. See #unbindUpdateHandlers for the unbind logic bound early in the
+     * event handlers on various components to react on a state change there.
+     * See #unbindUpdateHandlers for the unbind logic bound early in the
      * destroy sequence.
      *
      * @private
@@ -319,6 +330,14 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
         var treeView = me.getView();
         var treeStore = me.getStore();
+
+        // unbind repaintLayerFilterIndication from the individually added
+        // layers
+        treeStore.each(function(layerNode) {
+            var ns = Koala.util.Layer;
+            var layer = layerNode.getOlLayer();
+            layer.un('change:visible', ns.repaintLayerFilterIndication, ns);
+        });
 
         // Unregister moveend to update legendUrls
         map.un('moveend', me.updateLegendsWithScale, me);

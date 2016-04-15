@@ -264,7 +264,50 @@ Ext.define('Koala.util.Layer', {
         addLayerToMap: function(metadata) {
             var me = this;
             var layer = me.layerFromMetadata(metadata);
+
+            var suffixId = me.getSuffixId();
+            var originalName = layer.get('name');
+            var suffix = me.getLayerNameSuffix(suffixId);
+
+            layer.set('__suffix_id__', suffixId);
+            layer.set('name', originalName + suffix);
+
+            var repaintTask = new Ext.util.DelayedTask(
+                me.repaintLayerFilterIndication, me
+            );
+            repaintTask.delay(50);
+
+            layer.on('change:visible', me.repaintLayerFilterIndication, me);
+
             me.addOlLayerToMap(layer);
+        },
+
+        repaintLayerFilterIndication: function() {
+            var me = this;
+            var selector = 'k-panel-routing-legendtree';
+            var treePanel = Ext.ComponentQuery.query(selector)[0];
+            var store = treePanel.getStore();
+            store.each(function(treeNode) {
+                var layer = treeNode.getOlLayer();
+                var suffixId = layer.get('__suffix_id__');
+                if (suffixId) {
+                    var txt = me.getFiltersTextFromMetadata(layer.metadata);
+                    console.log(suffixId + " => " + txt);
+                    Ext.get(suffixId).setHtml(txt);
+                }
+            });
+        },
+
+        getSuffixId: function() {
+            return 'layer-suffix-' + Ext.id();
+        },
+
+        getLayerNameSuffix: function (suffixId) {
+            return "" +
+                "<span" +
+                " class='layer-name-suffix'" +
+                " id='" + suffixId + "'>" +
+                "</span>";
         },
 
         addOlLayerToMap: function(layer){

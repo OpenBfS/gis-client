@@ -106,5 +106,10 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
                 filterComponent.setHtml(newFilterTxt);
             }
         });
+    },
+
+    onLegendItemDrop: function() {
+        var LayerUtil = Koala.util.Layer;
+        LayerUtil.repaintLayerFilterIndication();
     }
 });
