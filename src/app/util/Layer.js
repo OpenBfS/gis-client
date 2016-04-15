@@ -292,7 +292,6 @@ Ext.define('Koala.util.Layer', {
                 var suffixId = layer.get('__suffix_id__');
                 if (suffixId) {
                     var txt = me.getFiltersTextFromMetadata(layer.metadata);
-                    console.log(suffixId + " => " + txt);
                     Ext.get(suffixId).setHtml(txt);
                 }
             });
