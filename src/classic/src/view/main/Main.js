@@ -175,7 +175,7 @@ Ext.define('Koala.view.main.Main', {
             maxWidth: 700,
             listeners: {
                 afterrender: {
-                    fn: 'resizeLegendTreeToMaxHeight',
+                    fn: 'resizeAndRepositionLegendTree',
                     single: true,
                     delay: 100
                 },
