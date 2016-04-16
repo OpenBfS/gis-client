@@ -28,23 +28,21 @@ Ext.define('Koala.util.Layer', {
     statics: {
         /* i18n */
         txtUntil: "",
-        txtFilter: "",
         titleAddLayer: "",
         titleAddLayerFilter: "",
         textUnknownLayer: "",
-        dspSignEq: " = ",
-        dspSignNotEq: " ≠ ",
-        dspSignLtEq: " ≤ ",
-        dspSignGtEq: " ≥ ",
-        dspSignLt: " < ",
-        dspSignGt: " > ",
-        dspSignIn: "entweder ",
-        dspSignInJoiner: ", ",
-        dspSignInLastJoiner: " oder ",
-        dspSignNotIn: "weder ",
-        dspSignNotInJoiner: ",",
-        dspSignNotInLastJoiner: " noch ",
-
+        dspSignEq: "",
+        dspSignNotEq: "",
+        dspSignLtEq: "",
+        dspSignGtEq: "",
+        dspSignLt: "",
+        dspSignGt: "",
+        dspSignIn: "",
+        dspSignInJoiner: "",
+        dspSignInLastJoiner: "",
+        dspSignNotIn: "",
+        dspSignNotInJoiner: "",
+        dspSignNotInLastJoiner: "",
         /* i18n */
 
         /**

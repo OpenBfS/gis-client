@@ -2,10 +2,21 @@
     "Koala.util.Layer": {
         "statics": {
             "txtUntil": "fr:bis",
-            "txtFilter": "fr:Filter",
             "titleAddLayer": "fr:Layer",
             "titleAddLayerFilter": "fr:Layerfilter",
-            "textUnknownLayer": "fr:Unbekannt"
+            "textUnknownLayer": "fr:Unbekannt",
+            "dspSignEq": "fr: = ",
+            "dspSignNotEq": "fr: ≠ ",
+            "dspSignLtEq": "fr: ≤ ",
+            "dspSignGtEq": "fr: ≥ ",
+            "dspSignLt": "fr: < ",
+            "dspSignGt": "fr: > ",
+            "dspSignIn": "fr:entweder ",
+            "dspSignInJoiner": "fr:, ",
+            "dspSignInLastJoiner": "fr: oder ",
+            "dspSignNotInJoiner": "fr:,",
+            "dspSignNotIn": "fr:weder ",
+            "dspSignNotInLastJoiner": "fr: noch "
         }
     },
     "Koala.util.String": {

@@ -2,10 +2,21 @@
     "Koala.util.Layer": {
         "statics": {
             "txtUntil": "bis",
-            "txtFilter": "Filter",
             "titleAddLayer": "Layer",
             "titleAddLayerFilter": "Layerfilter",
-            "textUnknownLayer": "Unbekannt"
+            "textUnknownLayer": "Unbekannt",
+            "dspSignEq": " = ",
+            "dspSignNotEq": " ≠ ",
+            "dspSignLtEq": " ≤ ",
+            "dspSignGtEq": " ≥ ",
+            "dspSignLt": " < ",
+            "dspSignGt": " > ",
+            "dspSignIn": "entweder ",
+            "dspSignInJoiner": ", ",
+            "dspSignInLastJoiner": " oder ",
+            "dspSignNotInJoiner": ",",
+            "dspSignNotIn": "weder ",
+            "dspSignNotInLastJoiner": " noch "
         }
     },
     "Koala.util.String": {
@@ -200,7 +211,7 @@
             "data": {
 		        "title": "Hilfe"
             }
-        }	
+        }
 	},
 	"Koala.view.window.HelpModel": {
         "config": {
@@ -208,7 +219,7 @@
 		        "preface":{
 		        	"title": "Vorbemerkung",
 		        	"html": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
-		        			"<h2> Vorbemerkung </h2>"+		        			
+		        			"<h2> Vorbemerkung </h2>"+
 		        			"<div>"+
 		        			"<p>Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen. "+
 		        			"Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur Überwachung der Umweltradioaktivität“ (IMIS) betroffen.</p>"+
@@ -301,7 +312,7 @@
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_hoverGeometrie.png' title='Informationen zu einzelnen Geoobjekten' alt'graphic_hoverGeometrie.png' width='416' height='261'><br>"+
 		        				"<b>2.2 Informationen zu einzelnen Geoobjekten</b>"+
-		        				"</div><br />"+		        				
+		        				"</div><br />"+
 		        				"<p>Objekte bei denen Werte zugrunde liegen, können mit einem Klick auf die entsprechende Geometrie in einem Diagramm betrachtet werden. Diese sind bei Werten mit zeitlichem Bezug in einem Liniendiagramm (z.B. 10min-Ortsdosisleistungen) und für Wertereihen (z.B. Gamma-Aerosole) in einem Balkendiagramm dargestellt.</p>"+
 		        				"<p>Grafik <i>2.2 Zeitreihen</i> zeigt, an Beispielen der Tagesmittelwerte von Ortsdosisleistungen, Zeitreihen von drei verschiedenen Stationen. Es können jederzeit Stationen entweder über das Anklicken eines Geoobjektes auf der Karte, oder über das Feld \"Serie hinzufügen\" "+
 		        				"<img class='img' src='classic/resources/img/helpPage/selectionBox_addingSerial.png' title='Auswahlfeld: Serie hinzufügen' alt='selectionBox_addingSerial.png' width='170' height='24' style='vertical-align:middle'>"+
@@ -324,12 +335,12 @@
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_timeSeries.png' title='Zeitreihen' alt'graphic_timeSeries.png' width='741' height='301'><br>"+
 		        				"<b>2.2 Zeitreihen</b>"+
-		        				"</div><br />"+	
+		        				"</div><br />"+
 		        				"<p>Die Balkendiagramme, zur Darstellung der Wertereihen, sind in Grafik <i>2.2 Wertereihen</i> dargestellt. Bewegt man den <i>Mauszeiger</i> über einen Balken, wird in einem Fenster der exakte Wert mit Einheit zur entsprechenden Serie angezeigt. Wie bei den Zeitreihen kann jede Serie über die Diagrammlegende ein- und ausgeschaltet werden. Die y-Achse passt sich jeweils an den maximalen Wert der verbleibenden Serien an. Grafik <i>2.2 Wertereihen</i> zeigt, wie demnach die Funktion für detailierte Analysen genutzt werden kann.</p>"+
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_barChart.png' title='Wertereihen' alt'graphic_barChart.png' width='697' height='539'><br>"+
 		        				"<b>2.2 Wertereihen</b>"+
-		        				"</div>"+	
+		        				"</div>"+
 		        				"</div>"
 		        	}
 		        },
@@ -383,8 +394,8 @@
 		        				") links neben \"IRIX\" wird das Kartenausdruckfenster um IRIX-Druckdienste erweitert (siehe <i>IRIX - International Radiation Information eXchange</i>).</p>"+
 		        				"<p>Die Gruppe der \"Eigenschaften\" stellt Funktionen der Darstellung bzw. Inhalte bereit. Die Kontrollkästchen von \"northArrow\" und \"scalebar\" legen fest ob ein Nordpfeil respektive Maßstabsleiste im Kartendruck dargestellt werden oder nicht.</p>"+
 		        				"<p>Nachfolgende Felder bieten die Möglichkeit die Karte mit Informationen zu füllen. Folglich kann an dieser Stelle die Kartenzuordnung, Titel, Legende, Beschreibung, Kommentar, Impressum und Ersteller der Karte eingetragen werden. "+
-		        				"Jeder Eintrag kann mit Standard-HTML Tags versehen werden um Schriftformate festzulegen. Diese Funktion, sowie die Einträge sind optional.</p>"+ 
-		        				"<p>Mit Betätigen des Schalters \"Dokument anfordern\" wird die gewünschte Datei erzeugt. Sobald dieser Prozess abgeschlossen ist erscheint der Schalter \"Dokument herunterladen\". Dieser ermöglicht das Speichern bzw. Betrachten der erzeugten Datei.</p>"+ 
+		        				"Jeder Eintrag kann mit Standard-HTML Tags versehen werden um Schriftformate festzulegen. Diese Funktion, sowie die Einträge sind optional.</p>"+
+		        				"<p>Mit Betätigen des Schalters \"Dokument anfordern\" wird die gewünschte Datei erzeugt. Sobald dieser Prozess abgeschlossen ist erscheint der Schalter \"Dokument herunterladen\". Dieser ermöglicht das Speichern bzw. Betrachten der erzeugten Datei.</p>"+
 		        				"<p>In Grafik <i>3.2 Arbeitsablauf des Druckdienstes</i> wird der Arbeitsablauf eines Kartendrucks mit Legende und Kartenausschnitt im PDF-Format dargestellt.</p>"+
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_print.png' title='Arbeitsablauf des Druckdienstes' alt='graphic_print.png' width='1027' height='418'><br>"+
@@ -409,8 +420,8 @@
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/window_layerNoFilter.png' title='layerspezifisches Fenster - Layer ohne Filter' alt'window_layerNoFilter.png' width='247' height='75'><br>"+
                                 "<b>4. layerspezifisches Fenster - Layer ohne Filter</b>"+
-                                "</div><br />"+	
-                                "<p>Ein Doppelklick auf die Layerbezeichnung fügt einen Layer der Karte unmittelbar hinzu. Hierbei werden Standardeinstellungen übernommen. Entsprechend werden Layer mit zeitlichem Bezug auf die aktuellsten Daten gesetzt.</p>"+	        				
+                                "</div><br />"+
+                                "<p>Ein Doppelklick auf die Layerbezeichnung fügt einen Layer der Karte unmittelbar hinzu. Hierbei werden Standardeinstellungen übernommen. Entsprechend werden Layer mit zeitlichem Bezug auf die aktuellsten Daten gesetzt.</p>"+
 		        				"<p>In Grafik <i>4. Arbeitsablauf der Layerauswahl</i> ist das Hinzufügen der Ortsdosisleistung brutto mit einem Intervall von 10min dargestellt. Das einzustellende Datum bezieht sich auf den Zeitpunkt der Aufnahme der Daten. Die Festlegung des Datums kann entweder durch einfache Eingabe oder durch die Auswahl eines Tages aus dem Kalender ausgeführt werden. Dieser öffnet sich mit einem Klick auf das Kalendersymbol "+
 		        				"<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Schalter: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
 		        				". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. ODL-brutto mobil). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereit gestellt. Der Wertefilter entspricht bei diesem Layer das Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Eine Mehrfachauswahl ist mit gedrückter Shift-Taste (auch: "+
@@ -422,7 +433,7 @@
 		        				"</div><br />"+
 		        				"<h3>Layer-Set Auswahl</h3>"+
 		        				"<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe Grafik <i>4. Arbeitsablauf der Layer-Set Auswahl</i>). In der türkisfarbenen Leiste der  \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster das eine Auswahl an Layer-Sets beinhaltet, die mit einem repräsentativen Bild des entsprechenden Themas versehen sind. Klickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Desweiteren kann mit einem Doppelklick auf ein Thema die gesamten korrespondierenden Layer der Legende hinzugefügt werden. Im unteren Teil der \"Layer-Set Auswahl\" kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden.</p>"+
-		        				"<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</p>"+ 
+		        				"<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</p>"+
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_layerSet_selection.png' title='Arbeitsablauf der Layer-Set Auswahl' alt='graphic_layerSet_selection.png' width='1004' height='542'><br>"+
 		        				"<b>4. Arbeitsablauf der Layer-Set Auswahl</b>"+
@@ -448,7 +459,7 @@
 		        				"<img class='img' src='classic/resources/img/helpPage/button_search_info.png' title='Informationsschalter' alt='button_search_info.png' width='15' height='15' style='vertical-align:middle'>"+
 		        				" mit einem Klick betätigt. Datenserien und Dienste die mit einem Schalter in Form einer Karte und einem Plus-Symbol "+
 		        				"<img class='img' src='classic/resources/img/helpPage/button_search_addData.png' title='Schalter: Füge Daten der Karte hinzu' alt='button_search_addData.png' width='17' height='17' style='vertical-align:middle'>"+
-		        				" versehen sind, lassen sich mit einem Klick zur Karte hinzufügen.</p>"+ 
+		        				" versehen sind, lassen sich mit einem Klick zur Karte hinzufügen.</p>"+
 		        				"<div style='font-size:11px'>"+
 		        				"<img class='img' src='classic/resources/img/helpPage/graphic_search_data.png' title='Datensuche' alt'graphic_search_data.png' width='833' height='431'><br>"+
 		        				"<b>5. Datensuche</b>"+
@@ -567,7 +578,7 @@
 	        				"<div>"+
 	        				"<p>Die Legende beinhaltet sämtliche Layer die zur Darstellung verfügbar sind. Das Hinzufügen von Layern ist unter dem Punkt <i>4. Auswahl</i> beschrieben. Die Legende kann entweder über den Schalter "+
 	        				"<img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Schalter: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'>"+
-	        				", oder durch einen direkten Klick auf den blauen Balken mit der Aufschrift \"Legende\" geöffnet werden. </p>"+ 
+	        				", oder durch einen direkten Klick auf den blauen Balken mit der Aufschrift \"Legende\" geöffnet werden. </p>"+
                             "<p>Die Legende ist in der Breite anpassbar. Bewegt man den <i>Mauszeiger</i> an den linken Rand der Legende, ändert sich das Symbol zu einem Doppelpfeil "+
                             "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
                             " und die Breite lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
@@ -578,12 +589,12 @@
 	        				" ). In unterem Beispiel werden demnach nur die Layer \"RODOS: Wolkenauskunft\", \"odl_brutto_24h\" und \"Hintergrundkarte\" dargestellt.</p>"+
 	        				"<p>Die Reihenfolge der Layer bestimmt die Hierarchie der Kartenzeichnung. Entsprechend wird der oberste Layer über alle Folgenden gezeichnet. Die Reihenfolge kann geändert werden, indem man einen Layer mit gedrückter linker <i>Maustaste</i> wählt und an die gewünschte Position platziert.</p>"+
 	        				"<div style='font-size:11px'>"+
-	        				"<img class='img' src='classic/resources/img/helpPage/graphic_legend.png' title='Legende - Layer verschieben' alt'graphic_legend.png' width='696' height='380'><br>"+        				
+	        				"<img class='img' src='classic/resources/img/helpPage/graphic_legend.png' title='Legende - Layer verschieben' alt'graphic_legend.png' width='696' height='380'><br>"+
 	        				"<b>8. Legende - Layer verschieben</b>"+
 		        			"</div><br />"+
 	        				"<p>Die Zeichenerklärung eines Layers ist ersichtlich durch das Betätigen des Plussymboles "+
 	        				"<img class='img' src='classic/resources/img/helpPage/button_collapse_up.png' title='Schalter - zugeklappt' alt='button_collapse_up.png' width='11' height='11' style='vertical-align:middle'>"+
-	        				" auf der linken Seite einer Layerbezeichnung . Neben der beschreibenden Komponente hat jeder Layer die Schalter für das Aufrufen von Metainformationen "+ 
+	        				" auf der linken Seite einer Layerbezeichnung . Neben der beschreibenden Komponente hat jeder Layer die Schalter für das Aufrufen von Metainformationen "+
 	        				"<img class='img' src='classic/resources/img/helpPage/button_info.png' title='Schalter: Metadaten' alt='button_info.png' width='24' height='24' style='vertical-align:middle'>"+
 	        				", Layer zu speichern "+
 	        				"<img class='img' src='classic/resources/img/helpPage/button_save.png' title='Schalter: Layer speichern' alt='button_save.png' width='24' height='24' style='vertical-align:middle'>"+
@@ -599,7 +610,7 @@
 		        	"html": "<h2>9. Geographische Übersicht</h2>"+
 	        				"<div>"+
 	        				"<p>Die geographische Übersicht beinhaltet eine Übersichtskarte und eine Maßstabsleiste. Die Übersichtskarte kann mit einem Klick auf das Symbol der Weltkugel "+
-	        				"<img class='img' src='classic/resources/img/helpPage/button_overviewMap.png' title='Schalter: Übersichtskarte öffnen' alt='button_overviewMap.png' width='28' height='28' style='vertical-align:middle'>"+	        				
+	        				"<img class='img' src='classic/resources/img/helpPage/button_overviewMap.png' title='Schalter: Übersichtskarte öffnen' alt='button_overviewMap.png' width='28' height='28' style='vertical-align:middle'>"+
 	        				" geöffnet werden. Diese bietet eine Übersicht der aktuellen Ansicht in einem kleineren Maßstab. Das blaue Fenster inerhalb der Übersichtskarte repräsentiert den Ausschnitt der aktuellen Ansicht. Mit einem Klick in die gewünschte Region, wird die Ansicht auf diesen Punkt zentriert (siehe Grafik <i>9. Übersichtskarte</i>).</p>"+
 	        				"<div style='font-size:11px'>"+
 	        				"<img class='img' src='classic/resources/img/helpPage/graphic_overviewMap.png' title='Übersichtskarte' alt='graphic_overviewMap.png' width='610' height='106'><br>"+
@@ -607,7 +618,7 @@
 		        			"</div><br />"+
 	        				"<p>Die Maßstabsleiste "+
 	        				"<img class='img' src='classic/resources/img/helpPage/info_scaleBar.png' title='Maßstabsleiste' alt='info_scaleBar.png' width='72' height='24' style='vertical-align:middle'>"+
-	        				" dient als Referenz des aktuellen Kartenmaßstabs. Demzufolge bietet sie eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m), oder Kilometern (km).</p>"+ 
+	        				" dient als Referenz des aktuellen Kartenmaßstabs. Demzufolge bietet sie eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m), oder Kilometern (km).</p>"+
 	        				"</div>"
 		        }
             }
