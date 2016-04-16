@@ -45,8 +45,7 @@ Ext.define("Koala.view.chart.Bar", {
 
     config: {
         seriesType: 'bar',
-        showStep: true,
-        title: ''
+        showStep: true
     },
 
     selectedStation: null,

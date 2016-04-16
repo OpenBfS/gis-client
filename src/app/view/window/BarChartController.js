@@ -33,7 +33,12 @@ Ext.define('Koala.view.window.BarChartController', {
         var props = olLayer.get('barChartProperties');
         var categoryCount = props.chartFieldSequence.split(",").length;
         var chartWidth = 200 + categoryCount * 30;
+        var title = !Ext.isEmpty(props.titleTpl) ?
+            Koala.util.String.replaceTemplateStrings(
+            props.titleTpl, olLayer) : '';
+
         var chart = {
+            title: title,
             xtype: 'k-chart-bar',
             name: chartId,
             layer: olLayer,
