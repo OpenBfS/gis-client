@@ -185,7 +185,7 @@ describe('Koala.util.Layer', function() {
                     expect(got).to.be('');
                 });
             });
-            it('returns a text for rodos-filter', function(){
+            it('returns an empty text for rodos-filter', function(){
                 var metadata = {
                     filters: [{
                         type: "rodos"
@@ -193,11 +193,7 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
-
-                expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf("rodos")).to.not.be(-1);
+                expect(got).to.be("");
             });
             it('returns a text for key-value-filter', function(){
                 var metadata = {
@@ -210,15 +206,11 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
-                // #stringifyValueFilter shoudl be tested separately
+                // #stringifyValueFilter should be tested separately
                 var filterRepr = Koala.util.Layer.stringifyValueFilter(
-                        metadata.filters[0]
+                        metadata.filters[0], true
                     );
-
                 expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf('value')).to.not.be(-1);
                 expect(got.indexOf(filterRepr)).to.not.be(-1);
             });
             it('returns a text for point-in-time-filter', function(){
@@ -231,13 +223,8 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
-
                 expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf("pointintime")).to.not.be(-1);
                 expect(got.indexOf("28.11.1980 foo")).to.not.be(-1);
-
             });
             it('returns a text for point-in-time-filter (no format)',
                 function(){
@@ -249,11 +236,7 @@ describe('Koala.util.Layer', function() {
                     };
                     var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                    var prefix = Koala.util.Layer.txtFilter;
-
                     expect(got).to.not.be("");
-                    expect(got.indexOf(prefix)).to.not.be(-1);
-                    expect(got.indexOf("pointintime")).to.not.be(-1);
                     // d.m.Y Koala is the default (see beforeEach)
                     expect(got.indexOf("28.11.1980 Koala")).to.not.be(-1);
                 }
@@ -272,12 +255,9 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
                 var until = Koala.util.Layer.txtUntil;
 
                 expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf("timerange")).to.not.be(-1);
                 expect(got.indexOf("28.11.1980 foo start")).to.not.be(-1);
                 expect(got.indexOf(until)).to.not.be(-1);
                 expect(got.indexOf("28.11.1998 foo end")).to.not.be(-1);
@@ -294,12 +274,9 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
                 var until = Koala.util.Layer.txtUntil;
 
                 expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf("timerange")).to.not.be(-1);
                 // d.m.Y Koala is the default (see beforeEach)
                 expect(got.indexOf("28.11.1980 Koala")).to.not.be(-1);
                 expect(got.indexOf(until)).to.not.be(-1);

@@ -32,6 +32,19 @@ Ext.define('Koala.util.Layer', {
         titleAddLayer: "",
         titleAddLayerFilter: "",
         textUnknownLayer: "",
+        dspSignEq: " = ",
+        dspSignNotEq: " ≠ ",
+        dspSignLtEq: " ≤ ",
+        dspSignGtEq: " ≥ ",
+        dspSignLt: " < ",
+        dspSignGt: " > ",
+        dspSignIn: "entweder ",
+        dspSignInJoiner: ", ",
+        dspSignInLastJoiner: " oder ",
+        dspSignNotIn: "weder ",
+        dspSignNotInJoiner: ",",
+        dspSignNotInLastJoiner: " noch ",
+
         /* i18n */
 
         /**
@@ -152,13 +165,12 @@ Ext.define('Koala.util.Layer', {
                     return;
                 }
                 var filterType = filter.type;
-                var filterTxt = '<b>' + staticMe.txtFilter +
-                    ' (' + filterType + ') </b><br />';
+                var filterTxt = '';
 
                 if (filterType === "rodos") {
                     // TODO
                 } else if (filterType === "value") {
-                    filterTxt += staticMe.stringifyValueFilter(filter);
+                    filterTxt += staticMe.stringifyValueFilter(filter, true);
                 } else if (filterType === "pointintime") {
                     var date, format, time;
 
@@ -264,24 +276,15 @@ Ext.define('Koala.util.Layer', {
         addLayerToMap: function(metadata) {
             var me = this;
             var layer = me.layerFromMetadata(metadata);
-
-            var suffixId = me.getSuffixId();
-            var originalName = layer.get('name');
-            var suffix = me.getLayerNameSuffix(suffixId);
-
-            layer.set('__suffix_id__', suffixId);
-            layer.set('name', originalName + suffix);
-
-            var repaintTask = new Ext.util.DelayedTask(
-                me.repaintLayerFilterIndication, me
-            );
-            repaintTask.delay(50);
-
-            layer.on('change:visible', me.repaintLayerFilterIndication, me);
-
             me.addOlLayerToMap(layer);
         },
 
+        /**
+         * This method finds the first RoutingLegendTree and updates the filters
+         * text in the layer HTML suffix. This methdo is aclled multiple times,
+         * e.g. after drag 'n drop of layeritems. and right after new layers
+         * (E.g from the filterpanel) have been added to the map and the tree.
+         */
         repaintLayerFilterIndication: function() {
             var me = this;
             var selector = 'k-panel-routing-legendtree';
@@ -297,10 +300,28 @@ Ext.define('Koala.util.Layer', {
             });
         },
 
+        /**
+         * Returns a unique id that can be used to later identify generated
+         * layer suffix HTML. We don't use the metadata identifier hash as one
+         * layer may be multiple time in the application, with differing
+         * filters.
+         *
+         * @return {String} The id.
+         */
         getSuffixId: function() {
             return 'layer-suffix-' + Ext.id();
         },
 
+        /**
+         * Returns an HTML-fragment which will be appended to layernames. The
+         * passed `suffixId` can be used to update the actual content of the
+         * suffix
+         *
+         * @param {String} suffixId The string to use as `id` for the returned
+         *     element.
+         * @return {String} The HTML-fragment ready to be used as container for
+         *     additional layer information.
+         */
         getLayerNameSuffix: function (suffixId) {
             return "" +
                 "<span" +
@@ -311,6 +332,21 @@ Ext.define('Koala.util.Layer', {
 
         addOlLayerToMap: function(layer){
             var me = this;
+
+            var suffixId = me.getSuffixId();
+            var originalName = layer.get('name');
+            var suffix = me.getLayerNameSuffix(suffixId);
+
+            layer.set('__suffix_id__', suffixId);
+            layer.set('name', originalName + suffix);
+
+            var repaintTask = new Ext.util.DelayedTask(
+                me.repaintLayerFilterIndication, me
+            );
+            repaintTask.delay(50);
+
+            layer.on('change:visible', me.repaintLayerFilterIndication, me);
+
             // TODO in the future we aren't allowed to guess here, as there will
             // be multiple maps!
             var mapComp = Ext.ComponentQuery.query('basigx-component-map')[0];
@@ -887,15 +923,51 @@ Ext.define('Koala.util.Layer', {
          * Returns a stringified version of the passed value filter. The
          * stringified version is a CQL and can be used for filtering (e.g. via
          * the query parameter `CQL_FILTER`) or for displaying the filter (e.g.
-         * in the legendpanel).
+         * in the legendpanel). If the second parameter `displayFriendly` is
+         * set, you'll not receive technical-looking CQL, but instead a more
+         * user friendly variant which can be presented to users.
          *
          * @param {object} filter The value-filter.
-         * @return {string} A stringified variant of the filter as CQL.
+         * @param {boolean} [displayFriendly] Whether the string representation
+         *     shall be display friendly (used e.g. in the legendpanel).
+         *     Optional, defaults to `false`.
+         * @return {string} A stringified variant of the filter as CQL (or in a
+         *     display friendly format).
          */
-        stringifyValueFilter: function(filter){
+        stringifyValueFilter: function(filter, displayFriendly){
+            var LayerUtil = Koala.util.Layer;
+            if (!Ext.isDefined(displayFriendly)) {
+                displayFriendly = false;
+            }
+
+            // catch the cases where somebody submitted a (NOT) IN with
+            // only one value in the array for displaying, we then simply
+            // call ourself again with the only value or undefined as
+            // non-array
+            if (displayFriendly &&
+                Ext.isArray(filter.value) &&
+                filter.value.length < 2) {
+                var clone = Ext.clone(filter);
+                clone.value = filter.value[0];
+                return LayerUtil.stringifyValueFilter(
+                    clone, displayFriendly
+                );
+            }
+
+            var keyFriendly = 'alias';
+            var keyCql = 'param';
+
+            // Holds the key to use for lookup for the part before the
+            // operation…
+            var paramKey = displayFriendly ? keyFriendly : keyCql;
+            // …But since alias is optional, we need to check if isn't empty
+            if(paramKey === keyFriendly && Ext.isEmpty(filter[keyFriendly])) {
+                paramKey = keyCql;
+            }
             var op = (filter.operator || '').toUpperCase();
             var adjusted = false;
             var stringified = "";
+
             if (!Ext.isArray(filter.value)) {
                 if (op === '!=' || op === 'NEQ' || op === 'NOT IN') {
                     op = "<>";
@@ -904,8 +976,13 @@ Ext.define('Koala.util.Layer', {
                     op = "=";
                     adjusted = true;
                 }
+                // in case of userfriendly display, we need to adjust again, now
+                // taking the current language into account.
+                if (displayFriendly) {
+                    op = LayerUtil.getDisplayFriendlyOperation(op);
+                }
                 // name='jubbes'
-                stringified = filter.param + op + filter.value;
+                stringified = filter[paramKey] + op + filter.value;
             } else {
                 // only makes sense for operator IN and NOT IN, let's adjust for
                 // common errors
@@ -916,15 +993,110 @@ Ext.define('Koala.util.Layer', {
                     op = "NOT IN";
                     adjusted = true;
                 }
-                stringified = filter.param +            // name
+
+                var valuesPart = '(' + filter.value.join(',') + ')';
+
+                // in case of userfriendly display, we need to adjust again, now
+                // taking the current language into account, both for operation
+                // and the value part
+                if (displayFriendly) {
+                    valuesPart = LayerUtil.getDisplayFriendlyValuesPart(
+                        op, filter.value
+                    );
+                    op = LayerUtil.getDisplayFriendlyOperation(op);
+                }
+
+                stringified = filter[paramKey] +        // name
                     ' ' + op + ' ' +                    // NOT IN
-                    '(' + filter.value.join(',') + ')'; // ('kalle', 'jupp')
+                    valuesPart; // ('kalle', 'jupp')
             }
             if (adjusted) {
                 Ext.log.info("Filter operator has been adjusted from " +
                     "'" + filter.operator + "' to '" + op + "'");
             }
             return stringified;
+        },
+
+        /**
+         * @private
+         */
+        getDisplayFriendlyValuesPart: function(sanitizedOp, vals) {
+            var displayFriendly;
+            var LayerUtil = Koala.util.Layer;
+
+            switch (sanitizedOp) {
+                case 'IN':
+                    displayFriendly = LayerUtil.arrJoinWith(
+                        vals,
+                        LayerUtil.dspSignInJoiner,
+                        LayerUtil.dspSignInLastJoiner
+                    );
+                    break;
+                case 'NOT IN':
+                    displayFriendly = LayerUtil.arrJoinWith(
+                        vals,
+                        LayerUtil.dspSignNotInJoiner,
+                        LayerUtil.dspSignNotInLastJoiner
+                    );
+                    break;
+                default:
+                    // 'should never happen'™
+                    displayFriendly = LayerUtil.arrJoinWith(vals, ',', ',');
+            }
+            return displayFriendly;
+        },
+
+        /**
+         * @private
+         */
+        arrJoinWith: function(arr, joiner, lastJoiner) {
+            var len = arr.length;
+            var i = 0;
+            var joined = "";
+            for(; i < len - 2; i++) {
+                joined += arr[i] + joiner;
+            }
+            joined += arr[len - 2];
+            joined += lastJoiner;
+            joined += arr[len - 1];
+            return joined;
+        },
+
+        /**
+         * @private
+         */
+        getDisplayFriendlyOperation: function(sanitizedOp) {
+            var displayFriendly;
+            var LayerUtil = Koala.util.Layer;
+            switch (sanitizedOp) {
+                case '<>':
+                    displayFriendly = LayerUtil.dspSignNotEq;
+                    break;
+                case '=':
+                    displayFriendly = LayerUtil.dspSignEq;
+                    break;
+                case '<=':
+                    displayFriendly = LayerUtil.dspSignLtEq;
+                    break;
+                case '>=':
+                    displayFriendly = LayerUtil.dspSignGtEq;
+                    break;
+                case '<':
+                    displayFriendly = LayerUtil.dspSignLt;
+                    break;
+                case '>':
+                    displayFriendly = LayerUtil.dspSignGt;
+                    break;
+                case 'IN':
+                    displayFriendly = LayerUtil.dspSignIn;
+                    break;
+                case 'NOT IN':
+                    displayFriendly = LayerUtil.dspSignNotIn;
+                default:
+                    // catches some other unexpected filter
+                    displayFriendly = sanitizedOp;
+            }
+            return displayFriendly;
         },
 
         /**
