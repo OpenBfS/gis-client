@@ -21,7 +21,10 @@ Ext.define('Koala.view.panel.ThemeTreeModel', {
     alias: 'viewmodel.k-panel-themetree',
     data: {
         title: '',
-        tooltip: ''
+        tooltip: '',
+        tooltext: '',
+        btnTextResetThemeTreeFiltering: '',
+        btnTooltipResetThemeTreeFiltering: ''
     }
 
 });

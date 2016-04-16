@@ -31,5 +31,13 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         } else {
             layersetchooser.showAt(menu.getWidth(), view.getLocalY());
         }
+    },
+
+    resetThemeTreeFiltering: function (btn) {
+        var themeTree = this.getView();
+        var themeStore = themeTree.getStore();
+        themeStore.clearFilter();
+        themeStore.getRoot().expandChildren();
+        btn.disable();
     }
 });

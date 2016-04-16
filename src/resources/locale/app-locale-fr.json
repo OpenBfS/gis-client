@@ -137,7 +137,9 @@
             "data": {
                 "title": "fr:Auswahl",
                 "tooltip": "fr:LayerSet wechseln",
-                "tooltext": "fr:Thema wechseln"
+                "tooltext": "fr:Thema wechseln",
+                "btnTextResetThemeTreeFiltering": "fr:Alle Layer",
+                "btnTooltipResetThemeTreeFiltering": "fr:Hebt eine etwaige Filterung der verfügbaren Themen auf."
             }
         }
     },

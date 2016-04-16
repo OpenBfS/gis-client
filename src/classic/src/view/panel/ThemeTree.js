@@ -61,6 +61,19 @@ Ext.define("Koala.view.panel.ThemeTree", {
         handler: 'toggleLayerSetView'
     }],
 
+    fbar: [
+        {
+            type: 'button',
+            name: 'resetThemeTree',
+            bind: {
+                text: '{btnTextResetThemeTreeFiltering}',
+                tooltip: '{btnTooltipResetThemeTreeFiltering}'
+            },
+            handler: 'resetThemeTreeFiltering',
+            disabled: true
+        }
+    ],
+
     initComponent: function(){
         var store = Ext.create('Ext.data.TreeStore', {
             proxy: {

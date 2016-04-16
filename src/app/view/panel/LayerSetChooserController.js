@@ -39,7 +39,8 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
      */
     handleLayerSetSelectionchange: function() {
         var tree = Ext.ComponentQuery.query('k-panel-themetree')[0],
-            treeStore = tree.getStore();
+            treeStore = tree.getStore(),
+            resetFilteringBtn = tree.down('button[name="resetThemeTree"]');
 
         treeStore.each(function(item){
             if(item && item.collapse){
@@ -47,6 +48,7 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
             }
         });
         treeStore.clearFilter();
+        resetFilteringBtn.setDisabled(true);
     },
 
     /**
@@ -55,7 +57,8 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
     handleLayerSetClick: function(view, rec) {
         var me = this,
             tree = Ext.ComponentQuery.query('k-panel-themetree')[0],
-            treeStore = tree.getStore();
+            treeStore = tree.getStore(),
+            resetFilteringBtn = tree.down('button[name="resetThemeTree"]');
 
         if (me.getView().showLayerProfiles) {
             // handle singleclicks like dblclicks...
@@ -80,6 +83,8 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
             if (match && match.expand) {
                 match.expand();
             }
+
+            resetFilteringBtn.setDisabled(false);
         }
     },
 
