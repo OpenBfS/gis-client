@@ -68,6 +68,7 @@ Ext.define("Koala.view.form.Print", {
         appCombo.on('select', me.addIrixFieldset, me);
 
         me.on('beforeattributefieldsadd', me.onBeforeAttributeFieldsAdd);
+        me.on('attributefieldsadd', me.onAttributeFieldsAdd);
 
         me.setFixedCreatePrintBtnText();
     },
@@ -191,6 +192,18 @@ Ext.define("Koala.view.form.Print", {
             } else if(name === "map_template") {
                 attributeFields.value = currentLayout + "_map.jasper";
             }
+        }
+    },
+
+    /**
+     * Validate all fields on creation so they are marked as red if invalid.
+     *
+     * If https://github.com/terrestris/BasiGX/pull/74 is merged all fields are
+     * allowed to be Blank. Set mandatory fields here if you need some.
+     */
+    onAttributeFieldsAdd: function (printForm, attributeFields, addedField) {
+        if(Ext.isFunction(addedField.validate)){
+            addedField.validate();
         }
     },
 
