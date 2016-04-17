@@ -12,7 +12,8 @@
             {
                 "uuid": "08e36567-cf9a-4e22-8774-e83a3452da7b",
                 "text": "BfS: odl_brutto_10min",
-                "leaf": true
+                "leaf": true,
+                "visible": false
             }
         ]
     }, {
