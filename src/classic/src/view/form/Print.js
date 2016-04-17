@@ -177,9 +177,10 @@ Ext.define("Koala.view.form.Print", {
             if(layer.get('visible') && layer.get('allowPrint')){
                 items.push({
                     xtype: 'checkbox',
+                    checked: true,
                     name: layer.get('name') + '_visible',
                     layer: layer,
-                    fieldLabel: layer.get('name')
+                    boxLabel: layer.get('name')
                 });
             }
         });
