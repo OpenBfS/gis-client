@@ -511,16 +511,14 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     onResetFilterBtnClick: function() {
         var me = this;
         var view = me.getView();
-        var charts = view.query('chart');
-
-        Ext.each(charts, function(chart) {
-            var store = chart.getStore();
-            var storeData = store.getData();
-            var xField = chart.getSeries()[0].getXField();
-            var minVal = Date.parse(storeData.minItem(xField).get(xField));
-            var maxVal = Date.parse(storeData.maxItem(xField).get(xField));
-            me.setAbscissaRange(chart, minVal, maxVal);
-        });
+        var form = view.down('form');
+        var setFilterBtn = form.down('button[name="btn-set-filter"]');
+        if (form && form.reset) {
+            form.reset();
+            if (setFilterBtn) {
+                me.onSetFilterBtnClick(setFilterBtn);
+            }
+        }
     },
 
     /**
