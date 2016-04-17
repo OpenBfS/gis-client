@@ -42,20 +42,23 @@ Ext.define("Koala.view.form.Print", {
         irixUrl: '/irix-servlet',
         // can be overriden via appContext.json: print-timeout
         timeoutMilliseconds: 60000,
-        serverUploadSuccessTitle: "",
-        serverUploadSuccess: "",
-        serverErrorTitle: "",
-        serverError: "",
-        disablePopupBlockerTitle: "",
-        disablePopupBlocker: "",
-        printLegendsFieldSetTitle: "",
-        unexpectedResponseTitle: "",
-        unexpectedResponse: "",
-        printButtonPrefix: "",
-        downloadButtonSuffix: "",
-        downloadOngoingMiddleText: "",
-        warnPrintTimedOutTitle: "",
-        warnPrintTimedOutText: ""
+        // can be overriden via appContext.json: urls/print-transparent-img
+        transparentImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif',
+        transparentColor: 'rgba(0,0,0,0)',
+        serverUploadSuccessTitle: '',
+        serverUploadSuccess: '',
+        serverErrorTitle: '',
+        serverError: '',
+        disablePopupBlockerTitle: '',
+        disablePopupBlocker: '',
+        printLegendsFieldSetTitle: '',
+        unexpectedResponseTitle: '',
+        unexpectedResponse: '',
+        printButtonPrefix: '',
+        downloadButtonSuffix: '',
+        downloadOngoingMiddleText: '',
+        warnPrintTimedOutTitle: '',
+        warnPrintTimedOutText: ''
     },
 
     initComponent: function() {
@@ -75,12 +78,18 @@ Ext.define("Koala.view.form.Print", {
             var configuredPrintTimeout = Koala.util.Object.getPathStrOr(
                 appContext, 'data/merge/print-timeout', false
             );
+            var configuredTransparentImageUrl = Koala.util.Object.getPathStrOr(
+                appContext, 'data/merge/urls/print-transparent-img', false
+            );
 
             if (configuredIrixServlet) {
                 me.setIrixUrl(configuredIrixServlet);
             }
             if (configuredPrintTimeout) {
                 me.setTimeoutMilliseconds(configuredPrintTimeout);
+            }
+            if (configuredTransparentImageUrl) {
+                me.setTransparentImageUrl(configuredTransparentImageUrl);
             }
         }
 
@@ -344,8 +353,24 @@ Ext.define("Koala.view.form.Print", {
         Ext.each(additionalFields, function(field){
             if (field.getName() === 'scalebar') {
                 attributes.scalebar = view.getScaleBarObject();
+                // handle the desire to have a scalebar or not by setting
+                // colors to transparent, crude but we didn' find a better
+                // solution. See https://github.com/terrestris/BasiGX/pull/74#issuecomment-209954558
+                if (field.getValue() === false) {
+                    attributes.scalebar = view.setScalebarInvisible(
+                        attributes.scalebar
+                    );
+                }
             } else if (field.getName() === 'northArrow') {
-                attributes.scalebar = view.getNorthArrowObject();
+                attributes.northArrow = view.getNorthArrowObject();
+                // handle the desire to have a northArrow or not by setting
+                // colors to transparent, crude but we didn' find a better
+                // solution. See https://github.com/terrestris/BasiGX/pull/74#issuecomment-209954558
+                if (field.getValue() === false) {
+                    attributes.northArrow = view.setNorthArrowInvisible(
+                        attributes.northArrow
+                    );
+                }
             } else {
                 attributes[field.getName()] = field.getValue();
             }
@@ -406,6 +431,52 @@ Ext.define("Koala.view.form.Print", {
             });
         }
 
+    },
+
+    /**
+     * Returns and modifies the given MapFish Print 3 attribute `scalebar`
+     * (http://mapfish.github.io/mapfish-print-doc/attributes.html#!scalebar)
+     * to be invisible. This is done by setting various colors to a transparent
+     * value.
+     *
+     * @param {object} scalebar A scalebar object as it is returned from the
+     *     BasiGX method getScaleBarObject()
+     * @return {object} The scalebar object configured as invisible.
+     */
+    setScalebarInvisible: function(scalebar) {
+        var keys = [
+            'backgroundColor',
+            'barBgColor',
+            'color',
+            'fontColor'
+        ];
+        var newColor = this.getTransparentColor();
+        Ext.each(keys, function(key) {
+            scalebar[key] = newColor;
+        });
+        return scalebar;
+    },
+
+    /**
+     * Returns and modifies the given MapFish Print 3 attribute `northArrow`
+     * (http://mapfish.github.io/mapfish-print-doc/attributes.html#!northArrow)
+     * to be invisible. This is done by setting various colors to a transparent
+     * value and also by setting the `graphic` to a transparent image.
+     *
+     * @param {object} northArrow A northArrow object as it is returned from the
+     *     BasiGX method getNorthArrowObject()
+     * @return {object} The northArrow object configured as invisible.
+     */
+    setNorthArrowInvisible: function(northArrow) {
+        var keys = [
+            'backgroundColor'
+        ];
+        var newColor = this.getTransparentColor();
+        Ext.each(keys, function(key) {
+            northArrow[key] = newColor;
+        });
+        northArrow.graphic = this.getTransparentImageUrl();
+        return northArrow;
     },
 
     /**
