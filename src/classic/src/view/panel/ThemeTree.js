@@ -74,6 +74,11 @@ Ext.define("Koala.view.panel.ThemeTree", {
         }
     ],
 
+    listeners: {
+        select: 'setupShowFilterWinCheck',
+        itemdblclick: 'addLayerWithDefaultFilters'
+    },
+
     initComponent: function(){
         var store = Ext.create('Ext.data.TreeStore', {
             proxy: {

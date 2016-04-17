@@ -85,41 +85,5 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
             buffer: 200,
             change: 'filterLayerSetsByText'
         });
-        if (tree && !me.showLayerProfiles) {
-            // TODO this listener should probably better live inside of the
-            //      Koala.view.panel.ThemeTreeController
-            tree.on('select', function(treepanel, item) {
-                me.currentTask = new Ext.util.DelayedTask(function(){
-                    me.singleTreeClick(item);
-                });
-              me.currentTask.delay(200);
-            });
-            // TODO this listener should probably better live inside of the
-            //      Koala.view.panel.ThemeTreeController
-            tree.on('itemdblclick', function(treepanel, item) {
-                me.currentTask.cancel();
-                if (item.isLeaf()) {
-                    Koala.util.Layer.addLayerByUuid(item.get('uuid'));
-                } else {
-                    Ext.each(item.children, function(layer) {
-                        Koala.util.Layer.addLayerByUuid(layer.uuid);
-                    });
-                }
-                // TODO similar code is in the LayerFilterController, we should
-                //      try to reuse code there.
-                var treeSelModel = tree && tree.getSelectionModel();
-                if (treeSelModel) {
-                    treeSelModel.deselectAll();
-                }
-            });
-        }
-    },
-    /**
-     *
-     */
-    singleTreeClick: function(rec) {
-        if (rec.isLeaf()) {
-            Koala.util.Layer.showChangeFilterSettingsWinByUuid(rec.get('uuid'));
-        }
     }
 });

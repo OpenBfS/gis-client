@@ -39,5 +39,46 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         themeStore.clearFilter();
         themeStore.getRoot().expandChildren();
         btn.disable();
+    },
+
+    currentTask: null,
+
+    setupShowFilterWinCheck: function(treepanel, item) {
+        var me = this;
+        if (me.currentTask) {
+            me.currentTask.cancel();
+        }
+        me.currentTask = new Ext.util.DelayedTask(function(){
+            if (item.isLeaf()) {
+                Koala.util.Layer.showChangeFilterSettingsWinByUuid(
+                    item.get('uuid')
+                );
+            }
+        });
+        me.currentTask.delay(200);
+    },
+
+    addLayerWithDefaultFilters:  function(treepanel, item) {
+        // TODO if we want equal behaviour for sets and profiles, the
+        //      changes from https://redmine-koala.bfs.de/issues/1445
+        //      we have to share the logic in LayerSetChooserController
+        //      method addLayers (`visible` setting)
+        var me = this;
+        if (me.currentTask) {
+            me.currentTask.cancel();
+        }
+        if (item.isLeaf()) {
+            Koala.util.Layer.addLayerByUuid(item.get('uuid'));
+        } else {
+            Ext.each(item.children, function(layer) {
+                Koala.util.Layer.addLayerByUuid(layer.uuid);
+            });
+        }
+        // TODO similar code is in the LayerFilterController, we should
+        //      try to reuse code there.
+        var treeSelModel = treepanel && treepanel.getSelectionModel();
+        if (treeSelModel) {
+            treeSelModel.deselectAll();
+        }
     }
 });
