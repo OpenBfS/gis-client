@@ -54,8 +54,7 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
      *
      */
     initComponent: function() {
-        var me = this,
-            tree = Ext.ComponentQuery.query('k-panel-themetree')[0];
+        var me = this;
         me.items = [{
             xtype: 'basigx-view-layerset',
             tpl: [
