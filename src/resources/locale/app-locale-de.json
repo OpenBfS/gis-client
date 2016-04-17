@@ -85,7 +85,10 @@
             "unexpectedResponseTitle": "Unerwartete Antwort",
             "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort.",
             "printButtonPrefix": "Dokument",
-            "downloadButtonSuffix": "herunterladen"
+            "downloadButtonSuffix": "herunterladen",
+            "downloadOngoingMiddleText": " wird vorbereitet",
+            "warnPrintTimedOutTitle": "Druckfehler",
+            "warnPrintTimedOutText": "Die Druckerzeugung hat das erlaubte Zeitlimit überschritten."
         }
     },
     "Koala.view.grid.MetadataSearch": {

@@ -22,20 +22,26 @@ Ext.define("Koala.view.form.Print", {
     xtype: "k-form-print",
 
     requires: [
+        'BasiGX.util.Animate',
+
         'GeoExt.data.MapfishPrintProvider',
         'GeoExt.data.serializer.ImageWMS',
         'GeoExt.data.serializer.TileWMS',
         'GeoExt.data.serializer.Vector',
         'GeoExt.data.serializer.XYZ',
 
-        'Koala.view.form.IrixFieldSet'
+        'Koala.view.form.IrixFieldSet',
+        'Koala.util.Object'
     ],
 
     maxHeight: null,
     maxWidth: 800,
 
     config: {
+        // can be overriden via appContext.json: urls/irix-servlet
         irixUrl: '/irix-servlet',
+        // can be overriden via appContext.json: print-timeout
+        timeoutMilliseconds: 60000,
         serverUploadSuccessTitle: "",
         serverUploadSuccess: "",
         serverErrorTitle: "",
@@ -46,7 +52,10 @@ Ext.define("Koala.view.form.Print", {
         unexpectedResponseTitle: "",
         unexpectedResponse: "",
         printButtonPrefix: "",
-        downloadButtonSuffix: ""
+        downloadButtonSuffix: "",
+        downloadOngoingMiddleText: "",
+        warnPrintTimedOutTitle: "",
+        warnPrintTimedOutText: ""
     },
 
     initComponent: function() {
@@ -59,8 +68,20 @@ Ext.define("Koala.view.form.Print", {
         me.setBind();
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
-        if(appContext && appContext.data.merge.urls["irix-servlet"]){
-            me.setIrixUrl(appContext.data.merge.urls["irix-servlet"]);
+        if(appContext){
+            var configuredIrixServlet = Koala.util.Object.getPathStrOr(
+                appContext, 'data/merge/urls/irix-servlet', false
+            );
+            var configuredPrintTimeout = Koala.util.Object.getPathStrOr(
+                appContext, 'data/merge/print-timeout', false
+            );
+
+            if (configuredIrixServlet) {
+                me.setIrixUrl(configuredIrixServlet);
+            }
+            if (configuredPrintTimeout) {
+                me.setTimeoutMilliseconds(configuredPrintTimeout);
+            }
         }
 
         var appCombo = me.down('combo[name=appCombo]');
@@ -100,14 +121,15 @@ Ext.define("Koala.view.form.Print", {
             me.updateLegendsFieldset(legendsFieldset);
         };
 
-        treePanel.getStore().on('update', listenerFunction);
-        treePanel.getStore().on('datachange', listenerFunction);
+        var treeStore = treePanel.getStore();
+        treeStore.on('update', listenerFunction);
+        treeStore.on('datachange', listenerFunction);
         legendsFieldset.on('destroy', function(){
-            treePanel.getStore().un('update', listenerFunction);
-            treePanel.getStore().un('datachange', listenerFunction);
+            treeStore.un('update', listenerFunction);
+            treeStore.un('datachange', listenerFunction);
         });
 
-        this.updateLegendsFieldset(legendsFieldset);
+        me.updateLegendsFieldset(legendsFieldset);
 
         return legendsFieldset;
     },
@@ -119,10 +141,10 @@ Ext.define("Koala.view.form.Print", {
      * @param ol.layer
      */
     legendLayerFilter: function(layer) {
-        var legendFieldset = Ext.ComponentQuery.
-                query('fieldset[name="legendsFieldset"]')[0];
-        var layerCheckbox = legendFieldset.
-            down('checkbox[name='+layer.get('name')+'_visible]');
+        var fsSelector = 'fieldset[name="legendsFieldset"]';
+        var cbSelector = 'checkbox[name='+layer.get('name')+'_visible]';
+        var legendFieldset = Ext.ComponentQuery.query(fsSelector)[0];
+        var layerCheckbox = legendFieldset.down(cbSelector);
 
         if (layerCheckbox && !legendFieldset.getCollapsed() &&
                 layer.checked &&
@@ -143,30 +165,31 @@ Ext.define("Koala.view.form.Print", {
      * printable Layers from Map. Add those to the fieldset.
      */
     updateLegendsFieldset: function(legendsFieldset){
-        if(legendsFieldset){
-            legendsFieldset.removeAll();
-            var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
-            var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
-
-            var items = [];
-            Ext.each(layers, function(layer){
-                if(layer.get('visible') && layer.get('allowPrint')){
-                    items.push({
-                        xtype: 'checkbox',
-                        name: layer.get('name') + '_visible',
-                        layer: layer,
-                        fieldLabel: layer.get('name')
-                    });
-                }
-            });
-            if(items.length > 0){
-                legendsFieldset.show();
-            } else {
-                legendsFieldset.hide();
-            }
-
-            legendsFieldset.add(items);
+        if (!legendsFieldset) {
+            return;
         }
+        legendsFieldset.removeAll();
+        var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
+        var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
+
+        var items = [];
+        Ext.each(layers, function(layer){
+            if(layer.get('visible') && layer.get('allowPrint')){
+                items.push({
+                    xtype: 'checkbox',
+                    name: layer.get('name') + '_visible',
+                    layer: layer,
+                    fieldLabel: layer.get('name')
+                });
+            }
+        });
+        if(items.length > 0){
+            legendsFieldset.show();
+        } else {
+            legendsFieldset.hide();
+        }
+
+        legendsFieldset.add(items);
     },
 
     /**
@@ -209,7 +232,7 @@ Ext.define("Koala.view.form.Print", {
 
     /**
      * Called in init component, this method removes the standard BasiGX binding
-     * of the createPrint and downloadPrint buttona, and configures them to use
+     * of the createPrint and downloadPrint buttons, and configures them to use
      * a static text.
      */
     setFixedCreatePrintBtnText: function() {
@@ -291,8 +314,8 @@ Ext.define("Koala.view.form.Print", {
             }
         }, this);
 
-        var fieldsets = view.
-                query('fieldset[name=attributes] fieldset[name=map]');
+        var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
+        var fieldsets = view.query(fsSelector);
 
         Ext.each(fieldsets, function(fs){
             var name = fs.name;
@@ -357,7 +380,8 @@ Ext.define("Koala.view.form.Print", {
                     jsonData: irixJson,
                     scope: view,
                     success: view.irixPostSuccessHandler,
-                    failure: view.genericPostFailureHandler
+                    failure: view.genericPostFailureHandler,
+                    timeout: view.getTimeoutMilliseconds()
                 });
             }
         } else {
@@ -372,10 +396,12 @@ Ext.define("Koala.view.form.Print", {
                 scope: view,
                 success: function(response) {
                     var data = Ext.decode(response.responseText);
-                    view.setLoading(format + ' wird vorbereitet.');
+                    view.setLoading(format + ' ' +
+                        view.getDownloadOngoingMiddleText());
                     view.downloadWhenReady(startTime, data);
                 },
-                failure: view.genericPostFailureHandler
+                failure: view.genericPostFailureHandler,
+                timeout: view.getTimeoutMilliseconds()
             });
         }
 
@@ -465,10 +491,21 @@ Ext.define("Koala.view.form.Print", {
         var format = me.down('combo[name="format"]')
             .getValue();
 
-        me.setLoading(format + ' wird vorbereitet: '+ elapsedMs/1000 + 's');
+        var dspElapsedMs = (elapsedMs/1000).toFixed(3) + ' s';
+        var loadMsg = format + ' ' + me.getDownloadOngoingMiddleText() + ': ' +
+            dspElapsedMs;
+        me.setLoading(loadMsg);
 
-        if (elapsedMs > 30000) {
-            Ext.raise('Download aborted after ' + elapsedMs/1000 + ' seconds.');
+        if (elapsedMs > me.getTimeoutMilliseconds()) {
+            Ext.log.warn('Download aborted after ' + dspElapsedMs);
+            me.setLoading(false);
+            Ext.Msg.show({
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.ERROR,
+                title: me.getWarnPrintTimedOutTitle(),
+                message: me.getWarnPrintTimedOutText()
+            });
+
         } else {
             setTimeout(function () {
                 Ext.Ajax.request({
@@ -480,20 +517,22 @@ Ext.define("Koala.view.form.Print", {
                             var dlBtn = me.down('button[name="downloadPrint"]');
                             dlBtn.link = me.getUrl() + 'report/' + data.ref;
                             dlBtn.show();
+                            BasiGX.util.Animate.shake(dlBtn);
                             var fields = dlBtn.up('k-form-print').query('field');
                             Ext.each(fields, function(field){
                                 field.on('change', function(){
                                     dlBtn.hide();
-                                });
+                                }, field, {single: true});
                             });
                         } else {
                             me.downloadWhenReady(startTime, data);
                         }
                     },
                     failure: function(response) {
-                        Ext.raise('server-side failure with status code '
+                        Ext.log.warn('server-side failure with status code '
                             + response.status);
-                    }
+                    },
+                    timeout: 500
                 });
             }, 500);
         }

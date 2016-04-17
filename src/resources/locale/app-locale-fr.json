@@ -85,7 +85,10 @@
             "printLegendsFieldSetTitle": "fr:Legenden drucken",
             "unexpectedResponse": "fr:Der Druck lieferte eine unerwartete Antwort.",
             "printButtonPrefix": "fr:Dokument",
-            "downloadButtonSuffix": "fr:herunterladen"
+            "downloadButtonSuffix": "fr:herunterladen",
+            "downloadOngoingMiddleText": "fr: wird vorbereitet",
+            "warnPrintTimedOutTitle": "fr:Druckfehler",
+            "warnPrintTimedOutText": "fr:Die Druckerzeugung hat das erlaubte Zeitlimit überschritten."
         }
     },
     "Koala.view.grid.MetadataSearch": {
