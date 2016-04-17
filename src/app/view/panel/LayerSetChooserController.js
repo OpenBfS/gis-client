@@ -108,12 +108,23 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
     //TODO The layerorder of the json is not respected.
     addLayers: function(layers) {
         var me = this;
+        var LayerUtil = Koala.util.Layer;
         Ext.each(layers, function(layer) {
             if (!layer.leaf) {
                 me.addLayers(layer.children);
             } else {
                 var uuid = layer.uuid;
-                Koala.util.Layer.addLayerByUuid(uuid);
+                // handle layers which shall be added but not be visible
+                // initially, https://redmine-koala.bfs.de/issues/1445
+                var initiallyVisible = true;
+                if('visible' in layer) {
+                    initiallyVisible = layer.visible;
+                }
+                LayerUtil.getMetadataFromUuidAndThen(uuid, function(metadata) {
+                    var olLayer = LayerUtil.layerFromMetadata(metadata);
+                    olLayer.setVisible(initiallyVisible);
+                    LayerUtil.addOlLayerToMap(olLayer);
+                });
             }
         });
     },
