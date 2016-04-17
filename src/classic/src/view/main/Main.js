@@ -125,16 +125,33 @@ Ext.define('Koala.view.main.Main', {
                     width: 100
                 },
                 items: [{
-                    xtype: 'basigx-button-addwms',
+                    xtype: 'button',
                     glyph: 'xf0ac@FontAwesome',
-                    listeners: {
-                        // This needs to happen in an afterrender handler, as
-                        // otherwise the BasiGX texts would count…
-                        afterrender: function(btn){
-                            btn.setBind({
-                                text: '{addWmsButtonText}',
-                                tooltip: '{addWmsButtonTooltip}'
-                            });
+                    bind: {
+                        text: '{addWmsButtonText}',
+                        tooltip: '{addWmsButtonTooltip}'
+                    },
+                    handler: function(){
+                        var win = Ext.ComponentQuery.query(
+                            '[name=add-wms-window]')[0];
+                        if(!win){
+                            Ext.create('Ext.window.Window', {
+                                name: 'add-wms-window',
+                                title: 'WMS hinzufügen',
+                                width: 500,
+                                height: 400,
+                                layout: 'fit',
+                                items: [{
+                                    xtype: 'basigx-form-addwms',
+                                    listeners: {
+                                        beforewmsadd: function(olLayer){
+                                            olLayer.set('allowRemoval', true);
+                                        }
+                                    }
+                                }]
+                            }).show();
+                        } else {
+                            BasiGX.util.Animate.shake(win);
                         }
                     }
                 }, {
