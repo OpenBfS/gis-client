@@ -1,18 +1,15 @@
 Ext.Loader.syncRequire(['Koala.util.Layer', 'Koala.util.String']);
 
 describe('Koala.util.Layer', function() {
-    var oldTxtFilter = Koala.util.Layer.txtFilter;
     var oldTxtUntil = Koala.util.Layer.txtUntil;
     var oldDefaultFormat = Koala.util.String.defaultDateFormat;
     beforeEach(function(){
         // mock up successful i18n
-        Koala.util.Layer.txtFilter = "Filter";
         Koala.util.Layer.txtUntil = "bis";
         Koala.util.String.defaultDateFormat = "d.m.Y K\\o\\a\\l\\a";
     });
     afterEach(function(){
         // un-mock successful i18n
-        Koala.util.Layer.txtFilter = oldTxtFilter;
         Koala.util.Layer.txtUntil = oldTxtUntil;
         Koala.util.String.defaultDateFormat = oldDefaultFormat;
     });
