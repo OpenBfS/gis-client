@@ -126,6 +126,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
             params: requestParams,
             success: function(res) {
                 var json = Ext.decode(res.responseText);
+
                 var chart = view;
                 var store = chart.getStore();
 
@@ -133,12 +134,13 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
 
                 // 1) Get the interval in which we have to create data records.
                 var intervalInSeconds = me.getIntervalInSeconds(
-                    timeRangeFilter.interval, timeRangeFilter.unit);
+                    timeRangeFilter.interval, timeRangeFilter.unit
+                );
 
                 // 2) Setup the store data for the given interval
                 var newStoreData = me.setupStoreData(json.features,
                     dataObjectField, valueField, chartConfig, intervalInSeconds
-                    );
+                );
 
                 // 3) load the now cleaned-up data into the store. Previous data
                 // will be automatically removed.
@@ -168,8 +170,7 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
      *    xAxisAttr and yAxisAttr.
      * @param {Integer} intervalInSeconds The Interval of records to be created.
      */
-    setupStoreData: function(features,
-            dataObjectField, valueField, chartConfig,
+    setupStoreData: function(features, dataObjectField, valueField, chartConfig,
             intervalInSeconds){
 
         var me = this;
@@ -250,9 +251,9 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
             // "new Date" creates always local timestamp
             var featDate = new Date(feat.properties[xAxisAttr]);
 
-            if (Koala.Application.isUtc()) {
-                var makeUtc = Koala.util.Date.makeUtc;
-                featDate = makeUtc(featDate);
+            if (Koala.Application.isLocal()) {
+                var makeLocal = Koala.util.Date.makeLocal;
+                featDate = makeLocal(featDate);
             }
 
             var featDateSeconds = parseInt(
