@@ -22,7 +22,9 @@ Ext.define('Koala.util.Layer', {
         'BasiGX.util.Map',
 
         'Koala.util.Date',
+        'Koala.util.Filter',
         'Koala.util.String'
+
     ],
 
     statics: {
@@ -961,13 +963,17 @@ Ext.define('Koala.util.Layer', {
                     op = "=";
                     adjusted = true;
                 }
+                var value = filter.value;
                 // in case of userfriendly display, we need to adjust again, now
                 // taking the current language into account.
                 if (displayFriendly) {
                     op = LayerUtil.getDisplayFriendlyOperation(op);
+                    value = LayerUtil.getDisplayFriendlyValue(
+                        value, filter.allowedValues
+                    );
                 }
                 // name='jubbes'
-                stringified = filter[paramKey] + op + filter.value;
+                stringified = filter[paramKey] + op + value;
             } else {
                 // only makes sense for operator IN and NOT IN, let's adjust for
                 // common errors
@@ -986,7 +992,7 @@ Ext.define('Koala.util.Layer', {
                 // and the value part
                 if (displayFriendly) {
                     valuesPart = LayerUtil.getDisplayFriendlyValuesPart(
-                        op, filter.value
+                        op, filter.value, filter.allowedValues
                     );
                     op = LayerUtil.getDisplayFriendlyOperation(op);
                 }
@@ -1002,31 +1008,58 @@ Ext.define('Koala.util.Layer', {
             return stringified;
         },
 
+        getDisplayFriendlyValue: function(rawValue, allowedValues){
+            var displayFriendly = rawValue;
+            if (!allowedValues) {
+                return displayFriendly;
+            }
+            var FilterUtil = Koala.util.Filter;
+            var VAL_FIELD = FilterUtil.COMBO_VAL_FIELD;
+            var DSP_FIELD = FilterUtil.COMBO_DSP_FIELD;
+            var store = FilterUtil.getStoreFromAllowedValues(allowedValues);
+            var record = store.findRecord(VAL_FIELD, rawValue);
+            if (record) {
+                displayFriendly = record.get(DSP_FIELD);
+            }
+            return displayFriendly;
+        },
+
+        valsToDisplayVals: function(vals, allowedVals){
+            var staticMe = Koala.util.Layer;
+            var displayVals = [];
+            Ext.each(vals, function(val) {
+                var dspVal = staticMe.getDisplayFriendlyValue(val, allowedVals);
+                displayVals.push(dspVal);
+            });
+            return displayVals;
+        },
+
         /**
          * @private
          */
-        getDisplayFriendlyValuesPart: function(sanitizedOp, vals) {
+        getDisplayFriendlyValuesPart: function(sanitizedOp, vals, allowedVals) {
             var displayFriendly;
             var LayerUtil = Koala.util.Layer;
+            var dspVals = LayerUtil.valsToDisplayVals(vals, allowedVals);
 
             switch (sanitizedOp) {
                 case 'IN':
                     displayFriendly = LayerUtil.arrJoinWith(
-                        vals,
+                        dspVals,
                         LayerUtil.dspSignInJoiner,
                         LayerUtil.dspSignInLastJoiner
                     );
                     break;
                 case 'NOT IN':
                     displayFriendly = LayerUtil.arrJoinWith(
-                        vals,
+                        dspVals,
                         LayerUtil.dspSignNotInJoiner,
                         LayerUtil.dspSignNotInLastJoiner
                     );
                     break;
                 default:
                     // 'should never happen'™
-                    displayFriendly = LayerUtil.arrJoinWith(vals, ',', ',');
+                    displayFriendly = LayerUtil.arrJoinWith(dspVals, ',', ',');
             }
             return displayFriendly;
         },

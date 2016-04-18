@@ -22,6 +22,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
     requires: [
         'Koala.util.Date',
+        'Koala.util.Filter',
         'Koala.util.Layer'
     ],
 
@@ -113,12 +114,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
      *
      */
     updateFilterValues: function(filters, idx, keyVals) {
-        var view = this.getView();
+        var FilterUtil = Koala.util.Filter;
         var filter = filters[idx];
         var filterType = (filter.type || "").toLowerCase();
         var param = filter.param;
         if (filterType === 'timerange') {
-            var keys = view.self.startAndEndFieldnamesFromMetadataParam(param);
+            var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
             filter.mindatetimeinstant = keyVals[keys.startName];
             filter.maxdatetimeinstant = keyVals[keys.endName];
         } else if (filterType === 'pointintime') {
