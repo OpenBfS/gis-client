@@ -29,16 +29,16 @@ Ext.define('Koala.view.window.BarChartController', {
         mapComp.removeAllHoverFeatures();
     },
 
-    createBarChart: function(olLayer, chartId) {
+    createBarChart: function(olLayer, olFeat, chartId) {
         var props = olLayer.get('barChartProperties');
         var categoryCount = props.chartFieldSequence.split(",").length;
         var chartWidth = 200 + categoryCount * 30;
-        var title = !Ext.isEmpty(props.titleTpl) ?
-            Koala.util.String.replaceTemplateStrings(
-            props.titleTpl, olLayer) : '';
+        var titleTpl = 'titleTpl' in props ? props.titleTpl : '';
+        var title = Koala.util.String.replaceTemplateStrings(titleTpl, olLayer);
+        title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
 
         var chart = {
-            title: title,
+            title: Ext.isEmpty(title) ? undefined : title,
             xtype: 'k-chart-bar',
             name: chartId,
             layer: olLayer,
@@ -84,7 +84,7 @@ Ext.define('Koala.view.window.BarChartController', {
         var layerChartRendered = me.isLayerChartRendered(uniqueId);
 
         if (!layerChartRendered) {
-            view.add(me.createBarChart(olLayer, uniqueId));
+            view.add(me.createBarChart(olLayer, olFeat, uniqueId));
             me.updateBarChartStore(olFeat, uniqueId);
             view.show();
         } else {
