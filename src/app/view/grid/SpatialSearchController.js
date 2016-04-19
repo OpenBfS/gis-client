@@ -51,19 +51,6 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
         view.fit(extent, map.getSize());
     },
 
-    /**
-     * Before the store loads, we'll show the footer of the grid which contains
-     * the status line. We'll also update the visible text with something like
-     * 'Searching…'.
-     */
-    onMetadataStoreBeforeload: function() {
-        var grid = this.getView();
-        var footer = grid.down('toolbar[name="footer"]');
-        var statusLine = footer.down('[name="status-line"]');
-        statusLine.setHtml(grid.getViewModel().get('searchInProgressText'));
-        footer.show();
-    },
-
     // TODO onStoreBeforeload / onStoreLoad / setupStatusLineListeners and
     //      teardownStatusLineListeners are the same in the
     //      MetadataSearchController.
