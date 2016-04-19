@@ -248,7 +248,8 @@ Ext.define('Koala.view.chart.TimeSeriesController', {
         var columnSeconds = intervalInSeconds / 2;
 
         Ext.each(features, function(feat){
-            // "new Date" creates always local timestamp
+            // Dates in features are always in UTC, `new Date` seems to be
+            // respecting the format
             var featDate = new Date(feat.properties[xAxisAttr]);
 
             if (Koala.Application.isLocal()) {
