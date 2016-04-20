@@ -139,10 +139,13 @@ Ext.define('Koala.view.main.Main', {
                                 name: 'add-wms-window',
                                 title: 'WMS hinzufügen',
                                 width: 500,
-                                height: 400,
+                                height: 450,
                                 layout: 'fit',
                                 items: [{
                                     xtype: 'basigx-form-addwms',
+                                    hasCheckAllBtn: true,
+                                    hasUncheckAllBtn: true,
+                                    includeSubLayer: true,
                                     listeners: {
                                         beforewmsadd: function(olLayer){
                                             olLayer.set('allowRemoval', true);
