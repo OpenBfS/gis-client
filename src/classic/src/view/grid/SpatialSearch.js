@@ -52,7 +52,25 @@ Ext.define("Koala.view.grid.SpatialSearch", {
         }
     },
 
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'bottom',
+        ui: 'footer',
+        name: 'footer',
+        items: [
+            { xtype: 'tbfill' },
+            {
+                xtype: 'tbtext',
+                name: 'status-line',
+                html: ''
+            },
+            { xtype: 'tbfill' }
+        ]
+    }],
+
     listeners: {
+        boxready: 'setupStatusLineListeners',
+        beforedestroy: 'teardownStatusLineListeners',
         itemmouseenter: 'onItemMouseEnter',
         itemmouseleave: 'onItemMouseLeave',
         itemclick: 'onItemClick'

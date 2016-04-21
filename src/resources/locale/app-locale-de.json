@@ -94,14 +94,18 @@
     "Koala.view.grid.MetadataSearch": {
         "config": {
             "data": {
-                "metadataSearchTitle": "Daten und Dienste des BfS"
+                "metadataSearchTitle": "Daten und Dienste des BfS",
+                "searchInProgressText": "Suche läuft…",
+                "noRecordsFoundText": "Keine Datensätze gefunden"
             }
         }
     },
     "Koala.view.grid.SpatialSearch": {
         "config": {
             "data": {
-                "spatialSearchTitle": "Räumliche Suche"
+                "spatialSearchTitle": "Räumliche Suche",
+                "searchInProgressText": "Suche läuft…",
+                "noRecordsFoundText": "Keine Datensätze gefunden"
             }
         }
     },
