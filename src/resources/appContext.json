@@ -32,6 +32,7 @@
                     "legendUrl": "http://www.imis.bfs.de/mapcache/tms/1.0.0/osm_bfs_google@GoogleMapsCompatible/6/33/43.png",
                     "attribution": "<a href=\"http://www.imis.bfs.de/geozg/static/nutzungsbedingungen.html\" target=\"_blank\">© Bundesamt für Strahlenschutz</a>&nbsp;&nbsp;&#x007C;&nbsp;&nbsp;<a href=\"http://www.imis.bfs.de/geozg/static/license_de.html\" target=\"_blank\">OpenStreetMap  |  BKG  |  SRTM  |  USGS</a>",
                     "customParams": {
+                        "allowOpacityChange": true,
                         "treeId": "bkg"
                     }
                 }
