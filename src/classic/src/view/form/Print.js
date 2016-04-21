@@ -110,6 +110,55 @@ Ext.define("Koala.view.form.Print", {
     },
 
     /**
+     * @override Override to return an htmleditor instead of a textfield
+     */
+    getStringField: function (attributeRec) {
+        return {
+            xtype: 'textfield',
+            name: attributeRec.get('name'),
+            fieldLabel: attributeRec.get('name'),
+            value: attributeRec.get('default'),
+            allowBlank: true,
+            listeners: {
+                focus: this.onTextFieldFocus,
+                scope: this
+            }
+        };
+    },
+
+    /**
+     *
+     */
+    onTextFieldFocus: function(textfield){
+        Ext.create('Ext.window.Window', {
+            title: textfield.getFieldLabel() + ' HTML',
+            layout: 'fit',
+            modal: true,
+            autoShow: true,
+            correspondingTextfield: textfield,
+            items: [{
+                xtype: 'htmleditor',
+                value: textfield.getValue(),
+                enableFont: false, // TODO Remove if fonts are configured to
+                                   // match the server fonts,
+                enableAlignments: false
+            }],
+            bbar: ['->',
+            {
+                xtype: 'button',
+                text: 'OK',
+                name: 'setValueButton',
+                handler: function(button){
+                    var win = button.up('window');
+                    var editor = win.down('htmleditor');
+                    win.correspondingTextfield.setValue(editor.getValue());
+                    win.close();
+                }
+            }]
+        });
+    },
+
+    /**
      * Create a fieldset instead of an checkbox because we want to choose which
      * layerlegends we want to print and which not.
      * @override
