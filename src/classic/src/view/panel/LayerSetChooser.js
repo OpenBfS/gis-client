@@ -27,8 +27,12 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
 
     controller: 'k-panel-layersetchooser',
 
+    cls: 'k-panel-layersetchooser',
+
     minWidth: 150,
     minHeight: 170,
+    width: 410,
+    height: 300,
 
     viewModel: {
         data: {
@@ -55,29 +59,32 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
      */
     initComponent: function() {
         var me = this;
+        var tplIfStr = me.showLayerProfiles ?
+            '<tpl if="isLayerProfile">' :
+            '<tpl if="!isLayerProfile">';
+        var tplIfEndStr = '</tpl>';
         me.items = [{
             xtype: 'basigx-view-layerset',
             tpl: [
-                  '<tpl for=".">',
-                    me.showLayerProfiles ? '<tpl if="isLayerProfile">' :
-                      '<tpl if="!isLayerProfile">',
-                      '<div class="thumb-wrap">',
-                          '<div class="thumb">',
-                                  '<tpl if="thumb.indexOf(\'http\') &gt;= 0">',
-                                      '<img src="{thumb}" />',
-                                  '<tpl else>',
-                                      '<img src="classic/resources/img/themes/{thumb}" />',
-                                  '</tpl>',
-                          '</div>',
-                          '<span>{text}</span>',
-                      '</div>',
-                      '</tpl>',
-                  '</tpl>'
+                '<tpl for=".">',
+                tplIfStr,
+                '  <div class="thumb-wrap">',
+                '    <div class="thumb">',
+                '<tpl if="thumb.indexOf(\'http\') &gt;= 0">',
+                '      <img src="{thumb}" />',
+                '<tpl else>',
+                '      <img src="classic/resources/img/themes/{thumb}" />',
+                '</tpl>',
+                '    </div>',
+                '    <span>{text}</span>',
+                '  </div>',
+                tplIfEndStr,
+                '</tpl>'
             ],
             layerSetUrl: me.layerSetUrl
         }];
 
-        me.callParent(arguments);
+        me.callParent();
 
         // add listeners
         me.down('textfield[name=filter]').addListener({
