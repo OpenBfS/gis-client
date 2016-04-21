@@ -25,14 +25,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     ],
 
     /**
-     * The delay in milliseconds to wait before disabling the remove series
-     * button after a legend item has been deselected. This is needed so that a
-     * click on the remove series button can have any effect at all, otherwise
-     * the eventhandlers on the legend would be disabling the button as soon as
-     * it is clicked since the legend item obviously lost the focus (the button
-     * has the focus now).
+     * The CSS class we'll assign to 'selected' legend items.
      */
-    disableRemoveSeriesBtnDelay: 300,
+    legendSelectedCssClass: 'k-selected-chart-legend',
 
     /**
      * Disable UTC-Button when TimeSeriesWindow is shown.
@@ -336,6 +331,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      * @param {Ext.button.Button} btn The remove-series button.
      */
     registerFocusChangeLegendHandler: function(btn){
+        var me = this;
         var chart = btn.up('[name="chart-composition"]').down('chart');
         var legend = chart && chart.getLegend();
         if (legend) {
@@ -343,7 +339,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             // can access it, there seems to be no way around this, as the
             // chart-composition is already destroyed at this point.
             btn.legend = legend;
-            legend.on('focuschange', this.onLegendItemFocusChange, this);
+
+            legend.on({
+                itemclick: me.onLegendItemClick,
+                containerclick: me.onLegendContainerClick,
+                scope: me
+            });
         }
     },
 
@@ -355,51 +356,117 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      * @param {Ext.button.Button} btn The remove-series button.
      */
     unregisterFocusChangeLegendHandler: function(btn){
+        var me = this;
         var legend = btn && btn.legend;
-        // cancel any existing disable tasks first
-        if (btn && btn.disableTask) {
-            btn.disableTask.cancel();
-        }
         if (legend) {
-            legend.un('focuschange', this.onLegendItemFocusChange, this);
+            legend.un({
+                itemclick: me.onLegendItemClick,
+                containerclick: me.onLegendContainerClick,
+                scope: me
+            });
         }
     },
 
     /**
-     * Whenever the focus of the legend items changes, this method disables or
-     * enables the correct remove-series button.
+     * Called when the legend container is clicked and not a specific legend
+     * item, this method will visually deselect any ölegend items and also reset
+     * and disable the remove series button.
      *
-     * @param {Ext.selection.Model} selModel The selection model.
-     * @param {Ext.data.Model} oldFocused The previously focused record
-     * @param {Ext.data.Model} newFocused The newly focused record
+     * @param {Ext.chart.Legend} legend The legend.
      */
-    onLegendItemFocusChange: function(selModel, oldFocused, newFocused){
-        var legend = selModel.view;
-        var chartWrap = legend && legend.up('[name="chart-composition"]');
+    onLegendContainerClick: function(legend) {
+        var chartWrap = legend.up('[name="chart-composition"]');
         var btn = chartWrap && chartWrap.down('button[name="remove-series"]');
-        var btnNowDisabled = !newFocused;
-        if (!btn){
-            return;
+        if (btn) {
+            btn.lastLegendSelection = null;
+            btn.setDisabled(true);
+            this.removeAllLegendHiglighting(legend);
         }
-        // cancel any existing disable tasks first
-        if (btn.disableTask) {
-            btn.disableTask.cancel();
-        }
-        // save the actual selection in the button, so the click handler
-        // there has a chance of knowing the last selection
-        if (newFocused) {
-            btn.lastLegendSelection = newFocused;
+    },
+
+    /**
+     * Removes the CSS class #legendSelectedCssClass from any legend items which
+     * are children of the passed legend.
+     *
+     * @param {Ext.chart.Legend} legend The legend.
+     */
+    removeAllLegendHiglighting: function(legend) {
+        var cssClass = this.legendSelectedCssClass;
+        var legendDom = legend.getEl().dom;
+        var oldHighlighted = Ext.DomQuery.select(
+            '.' + cssClass,
+            legendDom
+        );
+        Ext.each(oldHighlighted, function(oldHighlight) {
+            Ext.get(oldHighlight).removeCls(cssClass);
+        });
+    },
+
+    /**
+     * Whenever a legenditem is clicked we do three things:
+     *
+     * 1) Disable or enable the associated series (one series mus always be
+     *    enabled).
+     * 2) Visually select the clicked legend element (to tell people which
+     *    series will be affected by the 'remove series' button).
+     * 3) Store the record of the clicked series inside a property of the
+     *    delete button, to correctly determine the layer to eventually delete.
+     *
+     * This method is bound to the `itemclick` event, because the previously
+     * used `focuschanged` event wouldn't be so easy to understand (with regard
+     * to the visual indcation of selection).
+     *
+     * See https://redmine-koala.bfs.de/issues/1394
+     *
+     * @param {Ext.chart.Legend} legend The legend.
+     * @param {Ext.data.Model} record The clicked record
+     */
+    onLegendItemClick: function(legend, record) {
+        var me = this;
+        var legendDom = legend.getEl().dom;
+        var chartWrap = legend.up('[name="chart-composition"]');
+        var btn = chartWrap && chartWrap.down('button[name="remove-series"]');
+        var cssClass = me.legendSelectedCssClass;
+
+        // 1) disable/enable the clicked series
+        if (record) {
+            var doAllowToggling = false;
+            var currentlyDisabled = record.get('disabled');
+            if (currentlyDisabled === true) {
+                doAllowToggling = true;
+            } else {
+                var store = legend.getStore();
+                var maxDisabledCnt = store.getCount() - 1;
+                var disabledCount = 0;
+                store.each(function(rec) {
+                    if (rec.get('disabled') === true) {
+                        disabledCount++;
+                    }
+                });
+                doAllowToggling = maxDisabledCnt > disabledCount;
+            }
+
+            if (doAllowToggling) {
+                record.set('disabled', !currentlyDisabled);
+            }
         }
 
-        if (btnNowDisabled) {
-            // delay disabling so that clicks actually occur
-            var task = new Ext.util.DelayedTask(function(){
-                btn.setDisabled(true);
-            });
-            btn.disableTask = task;
-            task.delay(this.disableRemoveSeriesBtnDelay);
+        // 2) visually select the legendDiv
+        me.removeAllLegendHiglighting(legend);
+        var legDom = Ext.DomQuery.select(
+            '[data-recordid=' + record.internalId + ']',
+            legendDom
+        )[0];
+        var legElement = Ext.get(legDom);
+        if (legElement) {
+            legElement.addCls(cssClass);
         } else {
-            // enable fast!
+            Ext.log.warn('Failed to determine a legend element to highlight');
+        }
+
+        // 3) store reference for removeBtn
+        if (btn) {
+            btn.lastLegendSelection = record;
             btn.setDisabled(false);
         }
     },

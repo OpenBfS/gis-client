@@ -20,6 +20,8 @@ Ext.define("Koala.view.chart.TimeSeries", {
     extend: "Ext.chart.CartesianChart",
     xtype: "k-chart-timeseries",
 
+    cls: "k-chart-timeseries",
+
     requires: [
         "Koala.util.Object",
         "Koala.view.chart.TimeSeriesController",
@@ -55,7 +57,9 @@ Ext.define("Koala.view.chart.TimeSeries", {
     flex: 1,
 
     legend: {
-        docked: "right"
+        docked: "right",
+        toggleable: false, // We handle this via our own logic and `itemclick`
+        padding: '20px 0' // To make it more easily clickable for unselection
     },
 
     constructor: function(cfg) {
