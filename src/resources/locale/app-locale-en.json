@@ -139,6 +139,18 @@
             }
         }
     },
+    "Koala.view.panel.RoutingLegendTree": {
+        "config": {
+            "data": {
+                "btnTxtCollapseAll": "en:",
+                "btnTooltipCollapseAll": "en:Alle Legenden einklappen.",
+                "btnTxtExpandAll": "en:",
+                "btnTooltipExpandAll": "en:Alle Legenden ausklappen.",
+                "btnTxtToggleAll": "en:",
+                "btnTooltipToggleAll": "en:Legendensichtbarkeit umkehren."
+            }
+        }
+    },
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {

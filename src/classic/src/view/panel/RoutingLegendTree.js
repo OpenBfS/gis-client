@@ -40,7 +40,10 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         selModel: {
             allowDeselect: true,
             mode: "SINGLE"
-        }
+        },
+        hasCollapseAllBtn: true,
+        hasExpandAllBtn: true,
+        hasToggleAllBtn: false
     },
 
     hasRoutingListeners: false,
@@ -272,6 +275,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         // call parent
         me.callParent();
 
+        me.checkAddCollapseExpandButtons();
+
         // See the comment above the constructor why we need this.
         if (me.initiallyCollapsed){
             me.on('afterlayout', function(){
@@ -284,6 +289,87 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         me.plugins[0].hideExpandColumn = false;
 
         me.bindUpdateHandlers();
+    },
+
+    /**
+     * Checks whether we shall add any of the collapse / expand / toggle buttons
+     * and also adds these as configured to the view in a footer toolbar.
+     */
+    checkAddCollapseExpandButtons: function() {
+        var me = this;
+        var hasCollapseAllBtn = me.getHasCollapseAllBtn();
+        var hasToggleAllBtn = me.getHasToggleAllBtn();
+        var hasExpandAllBtn = me.getHasExpandAllBtn();
+        if (!hasCollapseAllBtn && !hasToggleAllBtn && !hasExpandAllBtn){
+            return;
+        }
+
+        var items = [];
+
+        if (hasCollapseAllBtn) {
+            items.push(me.getModeBtnConfig('collapse'));
+        }
+        if (hasToggleAllBtn) {
+            items.push(me.getModeBtnConfig('toggle'));
+        }
+        if (hasExpandAllBtn) {
+            items.push(me.getModeBtnConfig('expand'));
+        }
+
+        var fbar = {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            ui: 'footer',
+            items: items
+        };
+        me.addDocked(fbar);
+    },
+
+    /**
+     * Returns a button config for the collapse / expand / toggle button.
+     *
+     * @param {String} mode The mode to get a config for; either `toggle`,
+     *     `expand` or `collapse`.
+     * @return {Object} The button config or `undefined` in case of an illegal
+     *     mode.
+     * @protected
+     */
+    getModeBtnConfig: function(mode) {
+        var me = this;
+        var cfg = {
+            xtype: 'button',
+            scope: me
+        };
+        switch(mode) {
+            case 'collapse':
+                cfg.glyph = 'xf147@FontAwesome';
+                cfg.bind = {
+                    text: '{btnTxtCollapseAll}',
+                    tooltip: '{btnTooltipCollapseAll}'
+                };
+                cfg.handler = me.collapseAllBodies;
+                break;
+            case 'toggle':
+                cfg.glyph = 'xf074@FontAwesome';
+                cfg.bind = {
+                    text: '{btnTxtToggleAll}',
+                    tooltip: '{btnTooltipToogleAll}'
+                };
+                cfg.handler = me.toggleAllBodies;
+                break;
+            case 'expand':
+                cfg.glyph = 'xf196@FontAwesome';
+                cfg.bind = {
+                    text: '{btnTxtExpandAll}',
+                    tooltip: '{btnTooltipExpandAll}'
+                };
+                cfg.handler = me.expandAllBodies;
+                break;
+            default:
+                Ext.log.warn('Unexpected mode for btn config ' + mode);
+                return;
+        }
+        return cfg;
     },
 
     /**
