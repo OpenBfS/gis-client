@@ -213,5 +213,17 @@ Ext.define('Koala.view.chart.BarController', {
         // apply / override additional properties
         newSeries = Ext.apply(newSeries, seriesProperties);
         return newSeries;
+    },
+
+    /**
+     * Change color of text when legenditem is disabled.
+     */
+    onLegendItemClick: function(view, record, item, index){
+        var el = view.all.elements[index];
+        if(record.get('disabled')) {
+            el.setAttribute("style", "color: #DDDDDD;");
+        } else {
+            el.setAttribute("style", "color: #000000;");
+        }
     }
 });

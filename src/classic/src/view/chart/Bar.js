@@ -55,7 +55,10 @@ Ext.define("Koala.view.chart.Bar", {
     width: '100%',
 
     legend: {
-        docked: 'right'
+        docked: 'right',
+        listeners: {
+            itemclick: 'onLegendItemClick'
+        }
     },
 
     constructor: function(cfg) {
@@ -68,7 +71,6 @@ Ext.define("Koala.view.chart.Bar", {
             chartConfig.xAxisLabelRotation);
         var yLabelRotation = Koala.util.String.coerce(
             chartConfig.yAxisLabelRotation);
-        // var dspUnit = chartConfig.dspUnit || '';
 
         var defaultXAxis = {
             type: 'category',
@@ -78,6 +80,15 @@ Ext.define("Koala.view.chart.Bar", {
                 rotate: {
                     degrees: xLabelRotation || -45
                 }
+            },
+            renderer: function(axis, curLabel) {
+                var series = axis.getChart().getSeries();
+                Ext.each(series, function(s){
+                    if(s.getTitle() === curLabel && s.getHidden()[0]){
+                        curLabel = "";
+                    }
+                });
+                return curLabel;
             }
         };
         Ext.apply(defaultXAxis, xConfig);
