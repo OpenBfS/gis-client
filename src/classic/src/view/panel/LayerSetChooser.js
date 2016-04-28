@@ -33,6 +33,9 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
     minHeight: 170,
     width: 410,
     height: 300,
+    
+    closable: true,
+    closeAction: 'hide',
 
     viewModel: {
         data: {
