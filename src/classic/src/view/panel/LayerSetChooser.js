@@ -33,7 +33,7 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
     minHeight: 170,
     width: 410,
     height: 300,
-    
+
     closable: true,
     closeAction: 'hide',
 
@@ -43,6 +43,8 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
         }
     },
 
+    // TODO shouldnt this be configurable dynamicable or in appContext.json
+    // TODO see as well layerprofile.json
     layerSetUrl: 'classic/resources/layerset.json',
 
     /**
