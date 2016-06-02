@@ -28,7 +28,10 @@
         "packages/remote/GeoExt/src/util",
         "packages/remote/GeoExt/src/mixin",
         "packages/remote/BasiGX/src/util",
-        "packages/remote/BasiGX/src/view/component"
+        "packages/remote/BasiGX/src/view/component",
+        "packages/remote/BasiGX/src/view/button/ZoomIn.js",
+        "packages/remote/BasiGX/src/view/button/ZoomOut.js",
+        "packages/remote/BasiGX/src/view/button/ZoomToExtent.js"
     ],
 
     /**
