@@ -39,6 +39,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.chart.TimeSeries',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
+        'Koala.view.panel.LayerSetChooser',
         'Koala.view.window.Print'
     ],
 
@@ -79,6 +80,23 @@ Ext.define('Koala.view.main.Main', {
         },
         listeners: {
             afterrender: function(){
+
+                if(!location.hash){
+                    Ext.create('Ext.window.Window', {
+                        title: 'Layer Profilwahl',
+                        modal: true,
+                        layout: 'fit',
+                        minWidth: 250,
+                        minHeight: 300,
+                        items: [{
+                            xtype: 'k-panel-layersetchooser',
+                            showLayerProfiles: true,
+                            header: false,
+                            layerSetUrl: 'classic/resources/layerprofile.json',
+                            layout: 'fit'
+                        }]
+                    }).show();
+                }
                 // This needs to happen in an afterrender handler, as
                 // otherwise the BasiGX texts would count…
                 var toggleOverviewBtnSel = 'button[' +
