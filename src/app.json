@@ -41,7 +41,10 @@
      * that override will in fact only be included in the build if the target class specified
      * in the "override" property is also included.
      */
-    "overrides": "overrides,${toolkit.name}/overrides",
+    "overrides": [
+        "overrides",
+        "${toolkit.name}/overrides"
+    ],
 
     /**
      * The Sencha Framework for this application: "ext" or "touch".
@@ -96,7 +99,10 @@
          *      | application     |
          *      +-----------------+
          */
-        "etc": "sass/etc/all.scss,${toolkit.name}/sass/etc/all.scss",
+        "etc": [
+            "sass/etc/all.scss",
+            "${toolkit.name}/sass/etc/all.scss"
+        ],
 
         /**
          * Comma-separated list of folders containing Sass variable definitions
@@ -115,7 +121,11 @@
          *      | packages        |  (in package dependency order)
          *      +-----------------+
          */
-        "var": "sass/var,${toolkit.name}/sass/var",
+        "var": [
+            "sass/var/all.scss",
+            "sass/var",
+            "${toolkit.name}/sass/var"
+        ],
 
         /**
          * Comma-separated list of folders containing Sass rule files.
@@ -133,7 +143,10 @@
          *      | application     |
          *      +-----------------+
          */
-        "src": "sass/src,${toolkit.name}/sass/src"
+        "src": [
+            "sass/src",
+            "${toolkit.name}/sass/src"
+        ]
     },
 
     /**
@@ -188,36 +201,24 @@
      * Settings specific to classic toolkit builds.
      */
     "classic": {
-        /**
-         * The toolkit to use. Select either "classic" or "modern".
-         */
-        "toolkit": "classic",
-
-        /**
-         * The name of the theme for this application.
-         */
-        "theme": "theme-neptune"
+        "js": [
+            // Remove this entry to individually load sources from the framework.
+            {
+                "path": "${framework.dir}/build/ext-all-debug.js"
+            }
+        ]
     },
 
     /**
      * Settings specific to modern toolkit builds.
      */
     "modern": {
-/*        "js": [
+        "js": [
+            // Remove this entry to individually load sources from the framework.
             {
-                // Remove this entry to individually load sources from the framework.
                 "path": "${framework.dir}/build/ext-modern-all-debug.js"
             }
-        ],*/
-        /**
-         * The toolkit to use. Select either "classic" or "modern".
-         */
-        "toolkit": "modern",
-
-        /**
-         * The name of the theme for this application.
-         */
-        "theme": "theme-triton"
+        ]
     },
 
     /**
@@ -251,7 +252,8 @@
             // value of the generated output css file for the app,
             // defined in .sencha/app/defaults.properties
             "path": "${build.out.css.path}",
-            "bundle": true
+            "bundle": true,
+            "exclude": ["fashion"]
         }
     ],
 
@@ -291,6 +293,9 @@
         },
         "cache": {
             "enable": true
+        },
+        "compressor": {
+            "type": "yui"
         }
     },
 
@@ -298,20 +303,19 @@
      * Settings specific to testing builds.
      */
     "testing": {
-        "output": {
-            "appCache": {
-                "enable": false
-            }
-        },
-        "cache": {
-            "enable": false
-        }
     },
 
     /**
      * Settings specific to development builds.
      */
     "development": {
+        "tags": [
+            // You can add this tag to enable Fashion when using app watch or
+            // you can add "?platformTags=fashion:1" to the URL to enable Fashion
+            // without changing this file.
+            //
+            // "fashion"
+        ]
     },
 
     /**
@@ -538,7 +542,7 @@
         },
         "modern": {
             "toolkit": "modern",
-            "theme": "theme-mountainview"
+            "theme": "theme-neptune"
         }
     },
 
