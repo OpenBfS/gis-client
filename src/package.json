@@ -6,9 +6,9 @@
   "scripts": {
       "pretest": "npm run lint-js",
       "test": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true test/index.html",
-      "lint-js": "eslint -c .eslintrc app/ classic/ && eslint -c test/.eslintrc test/",
+      "lint-js": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
 
-      "test:watch": "watch 'npm test' app/ classic/ test/",
+      "test:watch": "watch 'npm test' app/ classic/ modern/ test/",
 
       "save-coverage": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true --hooks ./test/phantom_hooks.js test/index.html",
       "rm-coverage": "rm -Rf coverage",
