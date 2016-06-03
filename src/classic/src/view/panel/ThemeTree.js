@@ -80,10 +80,17 @@ Ext.define("Koala.view.panel.ThemeTree", {
     },
 
     initComponent: function(){
+
+        // try to load layerset from appContext
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+        var merge = appContext.data.merge;
+        var urls = merge.urls;
+        var layerSetUrl = urls['layerset'] ? urls['layerset'] : 'classic/resources/layerset.json';
+
         var store = Ext.create('Ext.data.TreeStore', {
             proxy: {
                 type: 'ajax',
-                url: 'classic/resources/layerset.json',
+                url: layerSetUrl,
                 reader: {
                     type: 'json'
                 }
