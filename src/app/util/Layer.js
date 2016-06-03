@@ -289,6 +289,9 @@ Ext.define('Koala.util.Layer', {
             var me = this;
             var selector = 'k-panel-routing-legendtree';
             var treePanel = Ext.ComponentQuery.query(selector)[0];
+            if (!treePanel){
+                return;
+            }
             var store = treePanel.getStore();
             store.each(function(treeNode) {
                 var layer = treeNode.getOlLayer();
@@ -361,6 +364,9 @@ Ext.define('Koala.util.Layer', {
          */
         bindLayerVisibilityHandlers: function(layer, mapComp){
             var me = this;
+            if (!mapComp.getPlugin) {
+                return;
+            }
             var hoverPlugin = mapComp.getPlugin('hover');
             layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts, hoverPlugin);
             if (layer instanceof ol.layer.Group) {

@@ -38,6 +38,7 @@ Ext.define('Koala.store.SpatialSearch', {
     _lastRequest: null,
 
     constructor: function(config){
+        //TODO: this won't work if more than one map
         if(!this.map){
             this.map = BasiGX.view.component.Map.guess().getMap();
         }
