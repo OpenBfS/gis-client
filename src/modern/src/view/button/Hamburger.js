@@ -20,6 +20,6 @@ Ext.define('Koala.view.button.Hamburger', {
     html: '<i class="fa fa-bars fa-2x"></i>',
 
     listeners: {
-        tap: 'hello'
+        tap: 'showMobileMenu'
     }
 });

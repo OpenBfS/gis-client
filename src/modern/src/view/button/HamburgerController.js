@@ -20,7 +20,11 @@ Ext.define('Koala.view.button.HamburgerController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-button-hamburger',
 
-    hello: function() {
-        alert('hi');
+    showMobileMenu: function() {
+        var btn = this.getView();
+        var owningTabPanel = btn.up('tabpanel');
+        var menuCard = owningTabPanel.down('k-container-mobilemenu');
+        owningTabPanel.setActiveItem(menuCard);
+        menuCard.setHidden(false);
     }
 });

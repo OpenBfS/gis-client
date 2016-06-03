@@ -9,7 +9,13 @@ Ext.define('Koala.view.main.Main', {
         "BasiGX.view.button.ZoomOut",
         "BasiGX.view.button.ZoomToExtent",
 
-        'Koala.view.button.Hamburger'
+        'Koala.view.button.Hamburger',
+        'Koala.view.button.MobileAddLayer',
+        'Koala.view.button.MobileShowLegend',
+
+        'Koala.view.container.MobileLegend',
+        'Koala.view.container.MobileAddLayer',
+        'Koala.view.container.MobileMenu'
     ],
 
     fullscreen: true,
@@ -21,17 +27,8 @@ Ext.define('Koala.view.main.Main', {
 
     items: [
         {
-            title: 'Home',
-            iconCls: 'home',
-            html: 'Home Screen'
-        },
-        {
-            title: 'Contact',
-            iconCls: 'user',
-            html: 'Contact Screen'
-        },
-        {
-            title: 'GeoExt3 OL3 Map',
+            title: 'Map',
+            name: 'mapcontainer',
             iconCls: 'x-fa fa-map-marker',
             layout: 'fit',
             items: [{
@@ -103,10 +100,24 @@ Ext.define('Koala.view.main.Main', {
                 },
                 items: [
                     {
-                        xtype: 'k-button-mobilelegend'
+                        xtype: 'k-button-mobileaddlayer'
+                    },
+                    {
+                        xtype: 'k-button-mobileshowlegend'
                     }
                 ]
             }]
+        },
+        {
+            xtype: 'k-container-mobileaddlayer'
+        },
+        {
+            xtype: 'k-container-mobilelegend'
+        },
+        {
+            xtype: 'k-container-mobilemenu',
+            hidden: true
         }
+
     ]
 });
