@@ -12,6 +12,7 @@ src/sass/example/bootstrap.js
 src/sass/example/bootstrap.json
 
 **/.~lock*
+**/npm-debug.log
 
 node_modules
 .project
