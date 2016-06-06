@@ -66,5 +66,4 @@ Ext.define('Koala.view.container.MobileMenuController', {
         });
         return cql;
     }
-    
 });

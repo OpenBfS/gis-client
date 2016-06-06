@@ -52,7 +52,6 @@ Ext.define('Koala.view.main.Main', {
                     scale: 'large'
                 },
                 items: [
-
                     {
                         xtype: 'basigx-button-zoomin'
                     }, {
