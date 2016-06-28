@@ -17,6 +17,10 @@ Ext.define('Koala.view.panel.MobileMenu',{
         title: 'Menu'
     },
 
+    defaults: {
+        margin: '5 5 5 5'
+    },
+
     items: [{
         xtype: 'searchfield',
         name: 'searchVal',
@@ -52,6 +56,24 @@ Ext.define('Koala.view.panel.MobileMenu',{
         handler: function(btn){
             btn.up('app-main').down('k-panel-mobileaddlayer').show();
         }
+    }, {
+        xtype: 'button',
+        text: 'Weitere Themen',
+        // handler: function(btn){
+        //     btn.up('app-main').down('k-panel-mobileaddlayer').show();
+        // }
+    }, {
+        xtype: 'button',
+        text: 'Einstellungen',
+        // handler: function(btn){
+        //     btn.up('app-main').down('k-panel-mobileaddlayer').show();
+        // }
+    }, {
+        xtype: 'button',
+        text: 'Hilfe / Impressum',
+        // handler: function(btn){
+        //     btn.up('app-main').down('k-panel-mobileaddlayer').show();
+        // }
     }
 ]
 });

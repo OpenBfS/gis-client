@@ -8,6 +8,12 @@ Ext.define('Koala.view.panel.MobilePanel',{
     height: '100%',
     margin: 0,
     modal: true,
-    style: 'border: 0px;'
+    style: 'border: 0px;',
+
+    showAnimation: {
+        type: 'slideIn',
+        direction: 'right'
+    },
+    hideAnimation: 'slideOut'
 
 });

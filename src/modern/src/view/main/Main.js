@@ -32,7 +32,26 @@ Ext.define('Koala.view.main.Main', {
         items: [{
             xtype: 'basigx-component-map',
             appContextPath: 'resources/appContext.json',
-            height: '100%'
+            height: '100%',
+            listeners: {
+                painted: function(mapComponent){
+                    var map = this.getMap();
+                    map.getControls().clear();
+
+                    var attribution = new ol.control.Attribution({
+                        collapsible: false,
+                        logo: false,
+                        target: document.querySelector('#footer')
+                    });
+
+                    var scaleLine = new ol.control.ScaleLine({
+                        target: document.querySelector('#footer')
+                    });
+
+                    map.addControl(attribution);
+                    map.addControl(scaleLine);
+                }
+            }
         }, {
             xtype: 'container',
             layout: 'vbox',
@@ -68,7 +87,7 @@ Ext.define('Koala.view.main.Main', {
             iconCls: 'fa fa-list-alt fa-2x',
             style: {
                 position: 'absolute',
-                bottom: '20px',
+                bottom: '40px',
                 right: '20px'
             },
             handler: function(btn){
@@ -76,9 +95,23 @@ Ext.define('Koala.view.main.Main', {
             }
         }]
     }, {
+        xtype: 'container',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        height: '20px',
+        id: 'footer'
+    }, {
         xtype: 'k-panel-mobilelegend',
         right: 0,
-        hidden: true
+        hidden: true,
+        showAnimation: {
+            direction: 'left'
+        },
+        hideAnimation: {
+            type: 'slideOut',
+            direction: 'right'
+        }
     }, {
         xtype: 'k-panel-mobilemenu',
         left: 0,
