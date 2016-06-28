@@ -552,7 +552,7 @@
         "modern": {
             "toolkit": "modern",
             "theme": "theme-neptune",
-            "requires": ["GeoExt", "BasiGX"]
+            "requires": ["GeoExt"]
         }
     },
 

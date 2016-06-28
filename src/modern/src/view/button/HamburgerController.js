@@ -23,7 +23,7 @@ Ext.define('Koala.view.button.HamburgerController', {
     showMobileMenu: function() {
         var btn = this.getView();
         var owningTabPanel = btn.up('tabpanel');
-        var menuCard = owningTabPanel.down('k-container-mobilemenu');
+        var menuCard = owningTabPanel.down('k-panel-mobilemenu');
         owningTabPanel.setActiveItem(menuCard);
         menuCard.setHidden(false);
     }

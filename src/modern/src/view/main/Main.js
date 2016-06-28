@@ -13,9 +13,9 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.button.MobileAddLayer',
         'Koala.view.button.MobileShowLegend',
 
-        'Koala.view.container.MobileLegend',
-        'Koala.view.container.MobileAddLayer',
-        'Koala.view.container.MobileMenu'
+        'Koala.view.panel.MobileLegend',
+        'Koala.view.panel.MobileAddLayer',
+        'Koala.view.panel.MobileMenu'
     ],
 
     defaults: {
@@ -23,13 +23,16 @@ Ext.define('Koala.view.main.Main', {
     },
 
     layout: {
-        type: 'card'
+        type: 'float'
     },
 
     items: [{
         title: 'Map',
         name: 'mapcontainer',
-        // iconCls: 'x-fa fa-map-marker',
+        left: 0,
+        top: 0,
+        width: '100%',
+        height: '100%',
         items: [{
             xtype: 'basigx-component-map',
             appContextPath: 'resources/appContext.json',
@@ -69,6 +72,13 @@ Ext.define('Koala.view.main.Main', {
             }
         }]
     }, {
-        xtype: 'k-container-mobileaddlayer'
+        xtype: 'k-panel-mobilelegend',
+        right: 0,
+        top: 0,
+        width: '80%',
+        height: '100%',
+        margin: 0,
+        modal: true,
+        hidden: true
     }]
 });

@@ -1,18 +1,18 @@
 
-Ext.define('Koala.view.container.MobileMenu',{
+Ext.define('Koala.view.panel.MobileMenu',{
     extend: 'Ext.form.Panel',
-    xtype: 'k-container-mobilemenu',
+    xtype: 'k-panel-mobilemenu',
 
     requires: [
-        'Koala.view.container.MobileMenuController',
-        'Koala.view.container.MobileMenuModel',
+        'Koala.view.panel.MobileMenuController',
+        'Koala.view.panel.MobileMenuModel',
         'Koala.store.MetadataSearch',
         'Koala.store.SpatialSearch'
     ],
 
-    controller: 'k-container-mobilemenu',
+    controller: 'k-panel-mobilemenu',
     viewModel: {
-        type: 'k-container-mobilemenu'
+        type: 'k-panel-mobilemenu'
     },
     config: {
         title: 'Menu'

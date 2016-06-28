@@ -1,6 +1,6 @@
-Ext.define('Koala.view.container.MobileMenuController', {
+Ext.define('Koala.view.panel.MobileMenuController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.k-container-mobilemenu',
+    alias: 'controller.k-panel-mobilemenu',
 
     requires: [
         "Koala.store.SpatialSearch"
