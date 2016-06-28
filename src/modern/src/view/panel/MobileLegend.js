@@ -1,6 +1,5 @@
-
 Ext.define('Koala.view.panel.MobileLegend',{
-    extend: 'Ext.Panel',
+    extend: 'Koala.view.panel.MobilePanel',
     xtype: 'k-panel-mobilelegend',
 
     requires: [
@@ -15,8 +14,6 @@ Ext.define('Koala.view.panel.MobileLegend',{
     config: {
         title: 'Legend'
     },
-
-    style: 'border: 0px;',
 
     html: 'Hello Legend!!'
 });

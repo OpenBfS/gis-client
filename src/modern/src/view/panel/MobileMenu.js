@@ -1,6 +1,5 @@
-
 Ext.define('Koala.view.panel.MobileMenu',{
-    extend: 'Ext.form.Panel',
+    extend: 'Koala.view.panel.MobilePanel',
     xtype: 'k-panel-mobilemenu',
 
     requires: [
@@ -17,42 +16,42 @@ Ext.define('Koala.view.panel.MobileMenu',{
     config: {
         title: 'Menu'
     },
-    items: [
-        {
-            xtype: 'searchfield',
-            name: 'searchVal',
-            placeHolder: 'Suche in Daten und Diensten',
-            listeners: {
-                action: 'fetchNewData'
-            }
-        },
-        {
-            xtype: 'list',
-            itemTpl: '{name}',
-            name: 'spatialsearchlist',
-            hidden: true,
-            store: {
-                type: 'k-spatialsearch'
-            },
-            listeners: {
-                itemtap: 'zoomToRecord'
-            }
-        },
-        {
-            xtype: 'list',
-            itemTpl: '{name}',
-            name: 'metadatasearchlist',
-            hidden: true,
-            store: {
-                type: 'k-metadatasearch'
-            },
-            listeners: {
-                itemtap: 'addLayer'
-            }
-        },
-        {
-            xtype: 'k-button-mobileaddlayer',
-            text: 'Layer hinzufügen'
+
+    items: [{
+        xtype: 'searchfield',
+        name: 'searchVal',
+        placeHolder: 'Suche in Daten und Diensten',
+        listeners: {
+            action: 'fetchNewData'
         }
-    ]
+    }, {
+        xtype: 'list',
+        itemTpl: '{name}',
+        name: 'spatialsearchlist',
+        hidden: true,
+        store: {
+            type: 'k-spatialsearch'
+        },
+        listeners: {
+            itemtap: 'zoomToRecord'
+        }
+    }, {
+        xtype: 'list',
+        itemTpl: '{name}',
+        name: 'metadatasearchlist',
+        hidden: true,
+        store: {
+            type: 'k-metadatasearch'
+        },
+        listeners: {
+            itemtap: 'addLayer'
+        }
+    }, {
+        xtype: 'button',
+        text: 'Layer hinzufügen',
+        handler: function(btn){
+            btn.up('app-main').down('k-panel-mobileaddlayer').show();
+        }
+    }
+]
 });

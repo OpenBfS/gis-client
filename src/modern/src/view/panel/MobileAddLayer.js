@@ -1,6 +1,5 @@
-
 Ext.define('Koala.view.panel.MobileAddLayer',{
-    extend: 'Ext.Panel',
+    extend: 'Koala.view.panel.MobilePanel',
     xtype: 'k-panel-mobileaddlayer',
 
     requires: [
@@ -14,8 +13,5 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
     },
     config: {
         title: 'Add Layer'
-    },
-    bind: {
-        html: '<b>{content}</b>'
     }
 });

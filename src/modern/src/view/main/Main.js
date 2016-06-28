@@ -9,10 +9,6 @@ Ext.define('Koala.view.main.Main', {
         "BasiGX.view.button.ZoomOut",
         "BasiGX.view.button.ZoomToExtent",
 
-        'Koala.view.button.Hamburger',
-        'Koala.view.button.MobileAddLayer',
-        'Koala.view.button.MobileShowLegend',
-
         'Koala.view.panel.MobileLegend',
         'Koala.view.panel.MobileAddLayer',
         'Koala.view.panel.MobileMenu'
@@ -57,28 +53,39 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'basigx-button-zoomtoextent'
             }]
         }, {
-            xtype: 'k-button-hamburger',
+            xtype: 'button',
+            iconCls: 'fa fa-bars fa-2x',
             style: {
-                top: '20px',
                 position: 'absolute',
+                top: '20px',
                 left: '20px'
+            },
+            handler: function(btn){
+                btn.up('app-main').down('k-panel-mobilemenu').show();
             }
         }, {
-            xtype: 'k-button-mobileshowlegend',
+            xtype: 'button',
+            iconCls: 'fa fa-list-alt fa-2x',
             style: {
-                bottom: '20px',
                 position: 'absolute',
+                bottom: '20px',
                 right: '20px'
+            },
+            handler: function(btn){
+                btn.up('app-main').down('k-panel-mobilelegend').show();
             }
         }]
     }, {
         xtype: 'k-panel-mobilelegend',
         right: 0,
-        top: 0,
-        width: '80%',
-        height: '100%',
-        margin: 0,
-        modal: true,
+        hidden: true
+    }, {
+        xtype: 'k-panel-mobilemenu',
+        left: 0,
+        hidden: true
+    }, {
+        xtype: 'k-panel-mobileaddlayer',
+        left: 0,
         hidden: true
     }]
 });
