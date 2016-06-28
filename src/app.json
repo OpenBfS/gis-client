@@ -403,8 +403,13 @@
         "base": "${workspace.build.dir}/${build.environment}/${app.name}",
         "page": "index.html",
         "manifest": "${build.id}.json",
+        "js": "${build.id}/app.js",
         "appCache": {
             "enable": false
+        },
+        "resources": {
+            "path": "${build.id}/resources",
+            "shared": "resources"
         }
     },
 
@@ -455,7 +460,7 @@
      * Extra resources to be copied along when build
      */
     "resources": [
-        "classic/resources",
+        "${toolkit.name}/resources",
         "resources",
         "favicon.ico"
     ],
@@ -546,7 +551,8 @@
         },
         "modern": {
             "toolkit": "modern",
-            "theme": "theme-neptune"
+            "theme": "theme-neptune",
+            "requires": ["GeoExt", "BasiGX"]
         }
     },
 
