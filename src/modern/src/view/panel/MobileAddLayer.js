@@ -42,7 +42,7 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
 
     items: [{
         xtype: 'formpanel',
-        scrollable: false,
+        baseCls: 'add-wms-form',
         items: [{
             xtype: 'fieldset',
             defaults: {
@@ -90,7 +90,6 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
         }, {
             xtype: 'fieldset',
             name: 'fs-available-layers',
-            layout: 'vbox',
             bind: {
                 title: '{availableLayesFieldSetTitle}'
             }
@@ -108,5 +107,4 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
             }]
         }]
     }]
-
-    });
+});

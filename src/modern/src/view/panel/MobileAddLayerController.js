@@ -232,7 +232,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             scope: me
         });
 
-        view.add({
+        view.down('formpanel').add({
             xtype: 'toolbar',
             name: 'interact-w-available-layers',
             items: tbItems
