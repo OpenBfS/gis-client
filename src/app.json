@@ -32,10 +32,10 @@
         "packages/remote/BasiGX/src/util/Controller.js",
         "packages/remote/BasiGX/src/util/Layer.js",
         "packages/remote/BasiGX/src/util/Map.js",
-        "packages/remote/BasiGX/src/view/component",
         "packages/remote/BasiGX/src/view/button/ZoomIn.js",
         "packages/remote/BasiGX/src/view/button/ZoomOut.js",
-        "packages/remote/BasiGX/src/view/button/ZoomToExtent.js"
+        "packages/remote/BasiGX/src/view/button/ZoomToExtent.js",
+        "packages/remote/BasiGX/src/view/component"
     ],
 
     /**
@@ -460,8 +460,11 @@
      * Extra resources to be copied along when build
      */
     "resources": [
+        {
+            "path": "resources",
+            "output": "resources"
+        },
         "${toolkit.name}/resources",
-        "resources",
         "favicon.ico"
     ],
 
@@ -551,8 +554,8 @@
         },
         "modern": {
             "toolkit": "modern",
-            "theme": "theme-neptune",
-            "requires": ["GeoExt"]
+            "theme": "theme-neptune"
+            /*"requires": ["GeoExt", "BasiGX"]*/
         }
     },
 
