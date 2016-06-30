@@ -11,9 +11,8 @@ Ext.define('Koala.view.panel.MobileLegend',{
     viewModel: {
         type: 'k-panel-mobilelegend'
     },
+
     config: {
         title: 'Legend'
-    },
-
-    html: 'Hello Legend!!'
+    }
 });
