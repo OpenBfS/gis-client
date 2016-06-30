@@ -131,5 +131,9 @@ Ext.define('Koala.view.main.Main', {
         xtype: 'k-panel-settings',
         left: 0,
         hidden: true
+    }, {
+        xtype: 'k-panel-treepanel',
+        left: 0,
+        hidden: true
     }]
 });

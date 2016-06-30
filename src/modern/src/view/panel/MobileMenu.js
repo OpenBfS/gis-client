@@ -75,9 +75,9 @@ Ext.define('Koala.view.panel.MobileMenu',{
     }, {
         xtype: 'button',
         text: 'Weitere Themen',
-        // handler: function(btn){
-        //     btn.up('app-main').down('k-panel-mobileaddlayer').show();
-        // }
+        handler: function(btn){
+            btn.up('app-main').down('k-panel-treepanel').show();
+        }
     }, {
         xtype: 'button',
         text: 'Einstellungen',
