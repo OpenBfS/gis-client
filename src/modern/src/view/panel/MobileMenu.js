@@ -21,35 +21,51 @@ Ext.define('Koala.view.panel.MobileMenu',{
         margin: '5 5 5 5'
     },
 
+    layout: 'vbox',
+
+    scrollable: {
+        direction: 'vertical',
+        directionLock: true
+    },
+
     items: [{
-        xtype: 'searchfield',
-        name: 'searchVal',
-        placeHolder: 'Suche in Daten und Diensten',
-        listeners: {
-            action: 'fetchNewData'
-        }
-    }, {
-        xtype: 'list',
-        itemTpl: '{name}',
-        name: 'spatialsearchlist',
-        hidden: true,
-        store: {
-            type: 'k-spatialsearch'
-        },
-        listeners: {
-            itemtap: 'zoomToRecord'
-        }
-    }, {
-        xtype: 'list',
-        itemTpl: '{name}',
-        name: 'metadatasearchlist',
-        hidden: true,
-        store: {
-            type: 'k-metadatasearch'
-        },
-        listeners: {
-            itemtap: 'addLayer'
-        }
+        xtype: 'container',
+        name: 'searchcontainer',
+        items: [{
+            xtype: 'searchfield',
+            name: 'searchVal',
+            placeHolder: 'Suche in Daten und Diensten',
+            listeners: {
+                action: 'fetchNewData',
+                clearicontap: 'onClearIconTap'
+            }
+        }, {
+            xtype: 'dataview',
+            scrollable: false,
+            itemCls: 'koala-list-item koala-list-item-spatial',
+            itemTpl: '<i class="fa fa-map-marker" aria-hidden="true"></i> {name}',
+            name: 'spatialsearchlist',
+            hidden: true,
+            store: {
+                type: 'k-spatialsearch'
+            },
+            listeners: {
+                itemtap: 'zoomToRecord'
+            }
+        }, {
+            xtype: 'dataview',
+            scrollable: false,
+            itemCls: 'koala-list-item koala-list-item-metadata',
+            itemTpl: '<i class="fa fa-info" aria-hidden="true"></i> {name}',
+            name: 'metadatasearchlist',
+            hidden: true,
+            store: {
+                type: 'k-metadatasearch'
+            },
+            listeners: {
+                itemtap: 'addLayer'
+            }
+        }]
     }, {
         xtype: 'button',
         text: 'Layer hinzufügen',

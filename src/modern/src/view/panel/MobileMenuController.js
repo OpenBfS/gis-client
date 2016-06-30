@@ -7,17 +7,14 @@ Ext.define('Koala.view.panel.MobileMenuController', {
     ],
 
     fetchNewData: function(field) {
-        //var store = Ext.create('Koala.store.SpatialSearch');
-        var list = field.up().down('list[name=spatialsearchlist]');
+        var list = field.up().down('[name=spatialsearchlist]');
         list.setHidden(false);
         var store = list.getStore();
         var newVal = field.getValue();
-        //Ext.Ajax.abort(spatialStore._lastRequest);
         store.getProxy().setExtraParam('cql_filter', "NAME ilike '%" + newVal + "%'");
         store.load();
-        //spatialStore._lastRequest = Ext.Ajax.getLatest();
 
-        var metadatalist = field.up().down('list[name=metadatasearchlist]');
+        var metadatalist = field.up().down('[name=metadatasearchlist]');
         metadatalist.setHidden(false);
         var mdStore = metadatalist.getStore();
         //Ext.Ajax.abort(spatialStore._lastRequest);
@@ -26,8 +23,15 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var cql = this.getMetadataCql(fields, newVal);
         mdStore.getProxy().setExtraParam('constraint', cql);
         mdStore.load();
-
     },
+
+    onClearIconTap: function(field){
+        var list = field.up().down('[name=spatialsearchlist]');
+        var metadatalist = field.up().down('[name=metadatasearchlist]');
+        list.getStore().removeAll();
+        metadatalist.getStore().removeAll();
+    },
+
     zoomToRecord: function(list, index, target, record) {
         var store = list.getStore();
         var format = new ol.format.WKT();
@@ -38,9 +42,8 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var map = store.map;
         var view = map.getView();
         var mobilemenucard = this.getView();
-        var tabpanel = mobilemenucard.up('tabpanel');
-        var mapcard = tabpanel.down('[name=mapcontainer]');
-        tabpanel.setActiveItem(mapcard);
+        var mainView = mobilemenucard.up('app-main');
+        var mapcard = mainView.down('[name=mapcontainer]');
 
         var extent = feature.getGeometry().getExtent();
         view.fit(extent, map.getSize());
@@ -50,10 +53,10 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var uuid = record.get('fileIdentifier');
         Koala.util.Layer.addLayerByUuid(uuid);
 
-        var mobilemenucard = this.getView();
-        var tabpanel = mobilemenucard.up('tabpanel');
-        var mapcard = tabpanel.down('[name=mapcontainer]');
-        tabpanel.setActiveItem(mapcard);
+        // var mobilemenucard = this.getView();
+        // var tabpanel = mobilemenucard.up('tabpanel');
+        // var mapcard = tabpanel.down('[name=mapcontainer]');
+        // tabpanel.setActiveItem(mapcard);
     },
 
     getMetadataCql: function(fields, value){
