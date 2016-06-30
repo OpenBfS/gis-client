@@ -1,0 +1,30 @@
+#
+# Build and run gis-client
+#
+# Build with e.g. `docker build --force-rm=true -t bfs/gis_client .'
+# Run from the repository root-dir with e.g.
+# `docker run --name gis_client -p 8080:80 -d bfs/gis_client'
+#
+# The GIS-application will be available under http://yourdockerhost:8080
+#
+
+FROM httpd:2.4
+MAINTAINER mlechner@bfs.de
+
+ENV DEBIAN_FRONTEND noninteractive
+
+#
+# Install dependencies
+#
+
+ADD ./src/build/production/Koala /usr/local/apache2/htdocs/
+WORKDIR /usr/local/apache2/htdocs/
+
+#
+# httpd setup
+#
+RUN ln -sf $PWD/custom-httpd.conf $HTTPD_PREFIX/conf/httpd.conf
+RUN ln -sf $PWD/custom-vhosts.conf $HTTPD_PREFIX/conf/extra/httpd-vhosts.conf
+
+CMD ["httpd-foreground"]
+
