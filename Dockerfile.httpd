@@ -18,6 +18,8 @@ ENV DEBIAN_FRONTEND noninteractive
 #
 
 ADD ./src/build/production/Koala /usr/local/apache2/htdocs/
+ADD ./custom* /usr/local/apache2/htdocs/
+RUN ls /usr/local/apache2/htdocs/
 WORKDIR /usr/local/apache2/htdocs/
 
 #
