@@ -3,6 +3,8 @@ Ext.define('Koala.view.main.Main', {
     xtype: 'app-main',
 
     requires: [
+        'Koala.view.main.MainModel',
+
         'BasiGX.view.component.Map',
 
         "BasiGX.view.button.ZoomIn",
@@ -14,6 +16,10 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.panel.MobileMenu',
         'Koala.view.panel.Settings'
     ],
+
+    viewModel: {
+        type: "app-main"
+    },
 
     defaults: {
         styleHtmlContent: true

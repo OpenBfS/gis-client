@@ -24,6 +24,7 @@ Ext.define('Koala.view.main.MainModel', {
     alias: 'viewmodel.app-main',
 
     data: {
+        useUtc: false,
         addWmsButtonText: '',
         addWmsButtonTooltip: '',
         buttonGroupTopTitle: '',

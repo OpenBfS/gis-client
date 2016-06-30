@@ -12,11 +12,36 @@ Ext.define('Koala.view.panel.Settings',{
         type: 'k-panel-settings'
     },
 
-    config: {
-        title: 'Einstellungen'
+    bind: {
+        title: '{title}'
     },
 
     items: [{
-        xtype: 'k-field-languageselect'
+        xtype: 'k-field-languageselect',
+        margin: 10
+    },{
+        xtype: 'fieldset',
+        bind: {
+            title: '{timereferenceLabel}'
+        },
+        items: [{
+            xtype: 'radiofield',
+            name : 'timereference',
+            value: 'local',
+            bind: {
+                label: '{localLabel}'
+            },
+            checked: true
+        },{
+            xtype: 'radiofield',
+            name : 'timereference',
+            value: 'UTC',
+            bind: {
+                label: '{utcLabel}'
+            },
+            listeners: {
+                change: 'onUtcChanged',
+            }
+        }]
     }]
 });
