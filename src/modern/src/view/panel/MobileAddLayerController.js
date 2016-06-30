@@ -12,6 +12,10 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var form = view.down('formpanel');
         // if (form.isValid()) {
             // view.setLoading(true);
+            view.setMasked({
+                xtype: 'loadmask',
+                message: 'Loading'
+            });
             me.removeAddLayersComponents();
             var values = form.getValues();
             var url = values.url;
@@ -67,7 +71,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         }
         me.fillAvailableLayersFieldset(compatibleLayers);
         me.updateControlToolbarState();
-        // me.setLoading(false);
+        view.setMasked(false);
     },
 
     /**
@@ -76,7 +80,8 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
      * @param response {XMLHttpRequest} The response of the request.
      */
     onGetCapabilitiesFailure: function() {
-        this.setLoading(false);
+        var view = this.getView();
+        view.setMasked(false);
         console.log(this.getViewModel().get('errorRequestFailed'));
     },
 
