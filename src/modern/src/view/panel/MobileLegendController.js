@@ -79,10 +79,35 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var selection = treeList.getSelection();
         var layer = selection ? selection.getOlLayer() : null;
 
-        if (layer && layer instanceof ol.layer.Layer) {
-            layer.setVisible(!layer.getVisible());
-            me.setTreeItemCheckStatus(treeList.getItem(selection));
+        console.log(target.getAttribute("class"))
+
+        if(!target.getAttribute("class")){
+            return false;
         }
+
+        if(target.getAttribute("class").indexOf("fa-times") > 0){
+            me.removeLayer(layer);
+            return false;
+        }
+
+        if (target.getAttribute("class").indexOf("fa-eye") > 0){
+            if (layer && layer instanceof ol.layer.Layer) {
+                layer.setVisible(!layer.getVisible());
+                me.setTreeItemCheckStatus(treeList.getItem(selection));
+            }
+            return false;
+        }
+
+        console.log('expand legend');
+        if (target.getElementsByTagName("img").length > 0) {
+            var legend = target.getElementsByTagName("img")[0];
+            if (legend.style.display === 'none') {
+                legend.style.display = 'inherit';
+            } else {
+                legend.style.display = 'none';
+            }
+        }
+
     },
 
     getTreeListItemTpl: function() {
@@ -90,13 +115,16 @@ Ext.define('Koala.view.panel.MobileLegendController', {
 
         return new Ext.XTemplate(
             '<tpl if="this.isVisible(values)">',
-                '<i class="fa fa-eye"></i> {text} <br> <span style="color:#666;">{[this.getFilterText(values)]}</span>',
-                '<tpl if="this.isRemovable(values)">',
-                    '<i class="fa fa-times"></i>',
-                '</tpl>',
+                '<i class="fa fa-eye"></i> {text}',
             '<tpl else>',
                 '<i class="fa fa-eye-slash"></i> {text}',
-            '</tpl>', {
+            '</tpl>',
+            '<tpl if="this.isRemovable(values)">',
+                '<span style="float:right"><i class="fa fa-times"></i></span>',
+            '</tpl>',
+            '<br> <span style="color:#666;">{[this.getFilterText(values)]}</span>',
+            '<img style="display:none; max-width:80%;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
+             {
                 isVisible: function(layer) {
                     return layer.getVisible();
                 },
@@ -105,13 +133,17 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 },
                 isRemovable: function(layer) {
                     return layer.get('allowRemoval') || false;
+                },
+                getLegendGraphicUrl: function(layer) {
+                    console.log(Koala.util.Layer.getCurrentLegendUrl(layer));
+                    return Koala.util.Layer.getCurrentLegendUrl(layer);
+                    // return "peter";
                 }
             }
         );
     },
 
-    removalHandler: function(btn){
-        var layer = btn.layerRec.getOlLayer();
+    removeLayer: function(layer){
         var map = Ext.ComponentQuery.query('basigx-component-map')[0]
             .getMap();
 
@@ -119,12 +151,13 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             title: 'Info',
             message: 'Layer <b>' + layer.get('name') +
                 '</b> aus Karte entfernen?',
-            buttonText: {
-                yes: "Ja",
-                no: "Nein"
-            },
+            buttons: [{
+                text: "Ja"
+            },{
+                text: "Nein"
+            }],
             fn: function(btnId){
-                if(btnId === "yes"){
+                if(btnId === "Ja"){
                     map.removeLayer(layer);
                 }
             }

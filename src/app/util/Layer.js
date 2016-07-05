@@ -436,6 +436,9 @@ Ext.define('Koala.util.Layer', {
             var resolution = BasiGX.util.Map.getResolution(map);
             var scale = BasiGX.util.Map.getScale(map);
 
+            if(!legendUrl){
+                return "";
+            }
             if (width) {
                 legendUrl = Ext.String.urlAppend(legendUrl, "WIDTH="+width);
             }
