@@ -90,17 +90,33 @@ Ext.define('Koala.util.Filter', {
             var staticMe = this;
             var store = staticMe.getStoreFromAllowedValues(allowedValues);
             var multi = Koala.util.String.coerce(rawMulti);
-            var xtype = multi ? "multiselect" : "combo";
-            var combo = {
-                xtype: xtype,
-                store: store,
-                queryMode: "local",
-                editable: false,
-                allowBlank: true,
-                forceSelection: true,
-                displayField: staticMe.COMBO_DSP_FIELD,
-                valueField: staticMe.COMBO_VAL_FIELD
-            };
+            var combo;
+            var xtype;
+
+            if(!Ext.isModern){ // classic
+                xtype = multi ? "multiselect" : "combo";
+                combo = {
+                    xtype: xtype,
+                    store: store,
+                    queryMode: "local",
+                    editable: false,
+                    allowBlank: true,
+                    forceSelection: true,
+                    displayField: staticMe.COMBO_DSP_FIELD,
+                    valueField: staticMe.COMBO_VAL_FIELD
+                };
+            } else { // modern
+                combo = {
+                    xtype: "selectfield",
+                    store: store,
+                    queryMode: "local",
+                    editable: false,
+                    allowBlank: true,
+                    displayField: staticMe.COMBO_DSP_FIELD,
+                    valueField: staticMe.COMBO_VAL_FIELD
+                };
+            }
+
             return combo;
         },
 
@@ -220,7 +236,8 @@ Ext.define('Koala.util.Filter', {
                 maxValue = maxValue + curValRemainderStepSize;
             }
 
-            var spinner = Ext.create("Ext.form.field.Number", {
+            var spinner = Ext.create({
+                xtype: 'numberfield',
                 name: name,
                 spinnerType: spinnerType,
                 value: startValue,
@@ -273,8 +290,14 @@ Ext.define('Koala.util.Filter', {
         handleSpinnerChange: function(field, val, prevVal) {
             var self = Koala.util.Filter;
             var MINUTE_TYPE = self.SPINNERTYPE.MINUTES;
-            var selector = "fieldcontainer";
-            var datefield = field.up(selector).down("datefield");
+            var datefield;
+
+            if(!Ext.isModern){ // classic
+                datefield = field.up("fieldcontainer").down("datefield");
+            } else { // modern
+                datefield = field.up("container").down('datepickerfield');
+            }
+
             var dateVal = datefield.getValue();
             var diff = field.step;
             var unitOfSpinner;

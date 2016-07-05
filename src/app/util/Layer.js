@@ -1209,28 +1209,30 @@ Ext.define('Koala.util.Layer', {
             var format = Koala.util.Date.ISO_FORMAT;
             var keyVals = {};
             Ext.each(filters, function(filter) {
-                var params = filter.param.split(",");
-                var type = filter.type;
+                if (filter) {
+                    var params = filter.param.split(",");
+                    var type = filter.type;
 
-                // we need to check the metadata for default filters to apply
-                if (type === "timerange") {
-                    var rawDateMin = filter.mindatetimeinstant;
-                    keyVals[params[0]] = Ext.Date.format(rawDateMin, format);
+                    // we need to check the metadata for default filters to apply
+                    if (type === "timerange") {
+                        var rawDateMin = filter.mindatetimeinstant;
+                        keyVals[params[0]] = Ext.Date.format(rawDateMin, format);
 
-                    var rawDateMax = filter.maxdatetimeinstant;
-                    if(!params[1]) {
-                        keyVals[params[0]] += "/" +
+                        var rawDateMax = filter.maxdatetimeinstant;
+                        if(!params[1]) {
+                            keyVals[params[0]] += "/" +
                             Ext.Date.format(rawDateMax, format);
-                    } else {
-                        keyVals[params[1]] = Ext.Date.format(
+                        } else {
+                            keyVals[params[1]] = Ext.Date.format(
                                 rawDateMax, format
                             );
+                        }
+                    } else if (type === "pointintime") {
+                        var rawDate = filter.timeinstant;
+                        keyVals[params[0]] = Ext.Date.format(rawDate, format);
+                    } else if (type === "value") {
+                        keyVals[params[0]] = filter.value;
                     }
-                } else if (type === "pointintime") {
-                    var rawDate = filter.timeinstant;
-                    keyVals[params[0]] = Ext.Date.format(rawDate, format);
-                } else if (type === "value") {
-                    keyVals[params[0]] = filter.value;
                 }
             });
 

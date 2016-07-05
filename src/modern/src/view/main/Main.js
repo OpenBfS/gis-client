@@ -11,6 +11,7 @@ Ext.define('Koala.view.main.Main', {
         "BasiGX.view.button.ZoomOut",
         "BasiGX.view.button.ZoomToExtent",
 
+        'Koala.view.panel.MobilePanel',
         'Koala.view.panel.MobileLegend',
         'Koala.view.panel.MobileAddLayer',
         'Koala.view.panel.MobileMenu',
@@ -135,6 +136,10 @@ Ext.define('Koala.view.main.Main', {
         xtype: 'k-panel-treepanel',
         left: 0,
         hidden: true
-    }
-]
+    }, {
+        xtype: 'k-panel-mobilepanel',
+        name: 'filterContainer',
+        left: 0,
+        hidden: true
+    }]
 });

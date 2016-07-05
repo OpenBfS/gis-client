@@ -69,7 +69,6 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         var view = this.getView();
         var filters = Koala.util.Layer.getFiltersFromMetadata(metadata);
 
-        // TODO future enhancements may want to remove the ComponentQuery…
         var treelist = this.view.down('treelist');
 
         var currentSelection = treelist.getSelection()[0];
@@ -80,26 +79,20 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         var winName = 'filter-win-' + metadata.id;
 
         // only allow one filter-window to be open
-        var filterPanel = Ext.ComponentQuery.query('k-form-layerfilter');
-        if (filterPanel.length > 0){
-            filterPanel[0].up('basigx-panel-mobilewindow').destroy();
-        }
-
-        var win = Ext.create('BasiGX.view.panel.MobileWindow', {
-            width: '90%',
-            height: '90%',
-            maxWidth: '95%',
-            name: winName,
-            title: 'Layer Filter',
-            layout: 'fit',
-            modal: true,
-            items: {
-                xtype: 'k-form-layerfilter',
-                metadata: metadata,
-                filters: filters
-            }
+        var filterPanels = Ext.ComponentQuery.query('k-form-layerfilter');
+        Ext.each(filterPanels, function(panel){
+            panel.destroy();
         });
-        view.add(win);
-        win.show();
+
+        var filterContainer = view.up('app-main').down("[name=filterContainer]");
+
+        filterContainer.setTitle(title);
+        filterContainer.add({
+            xtype: 'k-form-layerfilter',
+            metadata: metadata,
+            filters: filters
+        });
+
+        filterContainer.show();
     }
 });

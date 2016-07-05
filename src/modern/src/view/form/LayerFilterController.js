@@ -27,6 +27,60 @@ Ext.define('Koala.view.form.LayerFilterController', {
     ],
 
     /**
+     * Initializes the LayerFilter.
+     */
+    initComponent: function(){
+        var me = this;
+        var view = this.getView();
+
+        var filters = view.getFilters();
+
+        if(!filters || filters.length < 1){
+            me.addWithoutFilterBtn();
+            return;
+        }
+
+        Ext.each(filters, function(filter, idx) {
+            var type = (filter.type || "").toLowerCase();
+            switch(type){
+                case "timerange":
+                    me.createTimeRangeFilter(filter, idx);
+                    break;
+                case "pointintime":
+                    me.createPointInTimeFilter(filter, idx);
+                    break;
+                case "rodos":
+                    break;
+                case "value":
+                    me.createValueFilter(filter, idx);
+                    break;
+                default:
+                    Ext.log.warn("Unexpected filter type: " + filter.type);
+                    break;
+            }
+        });
+
+        var submitButton = Ext.create("Ext.Button", {
+            viewModel: me.getViewModel(),
+            bind: {
+                text: "{buttonText}"
+            },
+            handler: "submitFilter",
+            margin: "0 20px",
+            formBind: true
+        });
+        view.add(submitButton);
+
+        // TODO Readd validation
+        // view.getForm().isValid();
+
+        var utcBtns = Ext.ComponentQuery.query('radiofield[originalValue=UTC]');
+        Ext.each(utcBtns, function(utcBtn) {
+            utcBtn.on('change', me.handleTimereferenceButtonToggled, me);
+        });
+    },
+
+    /**
      * This is the actual handler when the 'Add to map' button is clicked. It
      * will create a layer (via Koala.util.Layer#layerFromMetadata) with the
      * currently displayed filters applied and add that layer to the map (via
@@ -64,7 +118,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var layer = LayerUtil.layerFromMetadata(metadata);
         LayerUtil.addOlLayerToMap(layer);
         me.deselectThemeTreeItems();
-        view.up('window').close();
+
+        var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
+
+        Ext.each(mobilePanels, function(panel){
+            panel.hide();
+        })
     },
 
     /**
@@ -103,7 +162,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @return {Date} The date which probably has been adjusted to UTC.
      */
     adjustToUtcIfNeeded: function(userDate){
-        if (Koala.Application.isLocal()) {
+        var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
+            .getViewModel();
+        if (mainViewModel.get('useUtc')) {
             return Koala.util.Date.makeUtc(userDate);
         }
         // already UTC
@@ -142,9 +203,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var dateUtil = Koala.util.Date;
         var makeUtc = dateUtil.makeUtc;
         var makeLocal = dateUtil.makeLocal;
-        var dateFields = layerFilterView.query('datefield');
+        var dateFields = layerFilterView.query('datepicker');
 
-        var switchToUtc = Koala.Application.isUtc();
+        var switchToUtc = layerFilterView.up('app-main').getViewModel().get('useUtc');
         var converterMethod = switchToUtc ? makeUtc : makeLocal;
 
         Ext.each(dateFields, function(dateField) {
@@ -191,28 +252,323 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
-     * Bound as handler for the beforerender event, this method registers the
-     * listener to react on any UTC-button changes (See also the atual
-     * method #handleTimereferenceButtonToggled).
-     */
-    onBeforeRenderLayerFilterForm: function(){
-        var me = this;
-        var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
-        Ext.each(utcBtns, function(utcBtn) {
-            utcBtn.on('toggle', me.handleTimereferenceButtonToggled, me);
-        });
-    },
-
-    /**
      * Bound as handler in the destroy sequence, this method unregisters the
      * listener to react on any UTC-button changes (See also the atual
      * method #handleTimereferenceButtonToggled).
      */
     onBeforeDestroyLayerFilterForm: function(){
         var me = this;
-        var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
+        // var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
+        var utcBtns = Ext.ComponentQuery.query('radiofield[originalValue=UTC]');
         Ext.each(utcBtns, function(utcBtn) {
-            utcBtn.un('toggle', me.handleTimereferenceButtonToggled, me);
+            utcBtn.un('change', me.handleTimereferenceButtonToggled, me);
         });
+    },
+
+    /**
+     * Creates and adds a point in time filter at the specified index.
+     *
+     * @param {Object} filter A filter specification object of type
+     *     `pointintime`.
+     * @param {Number} idx The index of the filter in the list of all filters.
+     */
+    createPointInTimeFilter: function(filter, idx) {
+        var me = this;
+        var view = this.getView();
+        var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
+            .getViewModel();
+        var FilterUtil = Koala.util.Filter;
+        var format = Koala.util.Date.ISO_FORMAT;
+
+        var value = Ext.Date.parse(
+                filter.defaulttimeinstant, filter.defaulttimeformat
+            );
+
+        var minValue;
+        if (filter.mindatetimeinstant) {
+            // only fill lower boundary when defined
+            minValue = Ext.Date.parse(
+                filter.mindatetimeinstant, filter.mindatetimeformat
+            );
+        }
+
+        var maxValue;
+        if (filter.maxdatetimeinstant) {
+            // only fill upper boundary when defined
+            maxValue = Ext.Date.parse(
+                filter.maxdatetimeinstant, filter.maxdatetimeformat
+            );
+
+            // Fix for the issue #1068-34
+            // Raises the maxDate by one day to avoid the bug with the datefield
+            // where maxDate = defaultValue leads to invalid input
+            maxValue.setDate(maxValue.getDate() + 1);
+        }
+
+        if (!mainViewModel.get('useUtc')) {
+            var makeLocal = Koala.util.Date.makeLocal;
+            value = makeLocal(value);
+            minValue = minValue ? makeLocal(minValue) : undefined;
+            maxValue = maxValue ? makeLocal(maxValue) : undefined;
+        }
+
+        var dateField = Ext.create("Ext.field.DatePicker", {
+            viewModel: me.getViewModel(),
+            bind: {
+                label: "{timestampLabel}"
+            },
+            labelAlign: 'top',
+            editable: false,
+            name: filter.param,
+            flex: 1,
+            value: value,
+            minValue: minValue,
+            maxValue: maxValue,
+            dateFormat: view.getFormat(),
+            submitFormat: format,
+            listeners: {
+                select: me.resetNumberFields
+            }
+        });
+
+        var hourSpinner = FilterUtil.getSpinner(
+            filter, "hours", "hourspinner", value
+        );
+        var minuteSpinner = FilterUtil.getSpinner(
+            filter, "minutes", "minutespinner", value
+        );
+
+        var container = Ext.create("Ext.Container", {
+            name: "pointintimecontainer",
+            layout: "hbox",
+            items: [dateField, hourSpinner, minuteSpinner]
+        });
+
+        var fieldSet = Ext.create("Ext.form.FieldSet", {
+            viewModel: me.getViewModel(),
+            padding: 5,
+            filterIdx: idx,
+            bind: {
+                title: "{pointInTimeFilter}"
+            },
+            items: [container]
+        });
+        view.add(fieldSet);
+    },
+
+    /**
+     * Creates and adds a timerange filter at the specified index.
+     *
+     * @param {Object} filter A filter specification object of type timerange.
+     * @param {Number} idx The index of the filter in the list of all filters.
+     */
+    createTimeRangeFilter: function(filter, idx){
+        var me = this;
+        var view = this.getView();
+        var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
+            .getViewModel();
+        var FilterUtil = Koala.util.Filter;
+        var format = Koala.util.Date.ISO_FORMAT;
+        var param = filter.param;
+
+        var names = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
+        var startName = names.startName;
+        var endName = names.endName;
+
+        var minValue = Ext.Date.parse(
+            filter.mindatetimeinstant,
+            filter.mindatetimeformat
+        );
+        var maxValue = Ext.Date.parse(
+            filter.maxdatetimeinstant,
+            filter.maxdatetimeformat
+        );
+        var defaultMinValue = Ext.Date.parse(
+            filter.defaultstarttimeinstant,
+            filter.defaultstarttimeformat
+        );
+        var defaultMaxValue = Ext.Date.parse(
+            filter.defaultendtimeinstant,
+            filter.defaultendtimeformat
+        );
+
+        // Fix for the issue #1068-34
+        // Raises the maxDate by one day to avoid the bug with the datefield
+        // where maxDate = defaultValue leads to invalid input
+        if(maxValue){
+            maxValue.setDate(maxValue.getDate() + 1);
+        }
+
+        if (mainViewModel.get('useUtc')) {
+            var makeLocal = Koala.util.Date.makeLocal;
+            minValue = makeLocal(minValue);
+            maxValue = makeLocal(maxValue);
+            defaultMinValue = makeLocal(defaultMinValue);
+            defaultMaxValue = makeLocal(defaultMaxValue);
+        }
+
+        // --- MINIMUM ---
+        var minDateField = Ext.create("Ext.field.DatePicker", {
+            viewModel: me.getViewModel(),
+            bind: {
+                label: "{startLabel}"
+            },
+            labelAlign: 'top',
+            name: startName,
+            editable: false,
+            flex: 1,
+            value: defaultMinValue,
+            minValue: minValue,
+            maxValue: maxValue,
+            dateFormat: view.getFormat(),
+            submitFormat: format,
+            validator: FilterUtil.validateMaxDurationTimerange,
+            msgTarget: "under",
+            listeners: {
+                select: me.resetNumberFields,
+                validitychange: FilterUtil.revalidatePartnerField
+            }
+        });
+        var minHourSpinner = FilterUtil.getSpinner(
+            filter, "hours", "minhourspinner", defaultMinValue
+        );
+        var minMinuteSpinner = FilterUtil.getSpinner(
+            filter, "minutes", "minminutespinner", defaultMinValue
+        );
+        var minContainer = Ext.create("Ext.Container", {
+            name: "mincontainer",
+            anchor: "100%",
+            layout: "hbox",
+            items: [minDateField, minHourSpinner, minMinuteSpinner]
+        });
+
+        // --- MAXIMUM ---
+        var maxDateField = Ext.create("Ext.field.DatePicker", {
+            viewModel: me.getViewModel(),
+            name: endName,
+            editable: false,
+            bind: {
+                label: "{endLabel}"
+            },
+            labelAlign: 'top',
+            flex: 1,
+            value: defaultMaxValue,
+            minValue: minValue,
+            maxValue: maxValue,
+            dateFormat: view.getFormat(),
+            submitFormat: format,
+            validator: FilterUtil.validateMaxDurationTimerange,
+            msgTarget: 'under',
+            listeners: {
+                select: me.resetNumberFields,
+                validitychange: FilterUtil.revalidatePartnerField
+            }
+        });
+        var maxHourSpinner = FilterUtil.getSpinner(
+            filter, "hours", "maxhourspinner", defaultMaxValue
+        );
+        var maxMinuteSpinner = FilterUtil.getSpinner(
+            filter, "minutes", "maxminutespinner", defaultMaxValue
+        );
+
+        var maxContainer = Ext.create("Ext.Container", {
+            name: "maxcontainer",
+            layout: "hbox",
+            items: [maxDateField, maxHourSpinner, maxMinuteSpinner]
+        });
+
+        var fieldSet = Ext.create("Ext.form.FieldSet", {
+            viewModel: me.getViewModel(),
+            bind: {
+                title: "{timeRangeFilter}"
+            },
+            padding: 5,
+            filter: filter,
+            filterIdx: idx,
+            items: [minContainer, maxContainer]
+        });
+        view.add(fieldSet);
+    },
+
+    /**
+     * Creates and adds a value filter at the specified index.
+     *
+     * @param {Object} filter A filter specification object of type `value`.
+     * @param {Number} idx The index of the filter in the list of all filters.
+     */
+    createValueFilter: function(filter, idx) {
+        var me = this;
+        var view = this.getView();
+        var FilterUtil = Koala.util.Filter;
+        var field = null;
+        var sharedCfg = {
+            labelWidth: 70,
+            name: filter.param,
+            fieldLabel: filter.alias,
+            value: filter.value || filter.defaultValue,
+            emptyText: filter.defaultValue
+        };
+        if (filter.allowedValues) {
+            field = FilterUtil.getComboFromAllowedValues(
+                filter.allowedValues,
+                filter.allowMultipleSelect
+            );
+        } else {
+            field = {
+                xtype: "textfield"
+            };
+        }
+
+        field = Ext.apply(field, sharedCfg);
+
+        var fieldSet = Ext.create("Ext.form.FieldSet", {
+            viewModel: me.getViewModel(),
+            padding: 5,
+            filterIdx: idx,
+            bind: {
+                title: "{valueFilter}"
+            },
+            items: field
+        });
+        view.add(fieldSet);
+    },
+
+    /**
+     * Creates and adds a rodos filter at the specified index. Currently not
+     * doing anything.
+     *
+     * // TODO specify and implement
+     *
+     * @param {Object} filter A filter specification object of type rodos.
+     * @param {Number} idx The index of the filter in the list of all filters.
+     */
+    createRODOSFilter: function(){
+    },
+
+    /**
+     * Called whenever a date is selected, this methdo resets the associated
+     * sonners for minutes and hours.
+     *
+     * TODO check if we still need this / want this??? It may the way better
+     *      idea to set the minute and hour value of the selected date to be
+     *      the one that was previously selected in the spinners.
+     */
+    resetNumberFields: function(datefield) {
+        var numberFields = datefield.up("container").query("numberfield");
+        Ext.each(numberFields, function(field) {
+            field.suspendEvents(false);
+            field.setValue(0);
+            field.resumeEvents(true);
+        });
+    },
+
+    addWithoutFilterBtn: function(){
+        var addWithoutFilterButton = Ext.create("Ext.Button", {
+            bind: {
+                text: "{buttonTextNoFilter}"
+            },
+            handler: "submitNoFilter"
+        });
+        this.add(addWithoutFilterButton);
     }
 });
