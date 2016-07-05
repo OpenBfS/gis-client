@@ -135,5 +135,6 @@ Ext.define('Koala.view.main.Main', {
         xtype: 'k-panel-treepanel',
         left: 0,
         hidden: true
-    }]
+    }
+]
 });

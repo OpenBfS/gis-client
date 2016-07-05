@@ -35,6 +35,7 @@
         "packages/remote/BasiGX/src/view/button/ZoomIn.js",
         "packages/remote/BasiGX/src/view/button/ZoomOut.js",
         "packages/remote/BasiGX/src/view/button/ZoomToExtent.js",
+        "packages/remote/BasiGX/src/view/panel/MobileWindow.js",
         "packages/remote/BasiGX/src/view/component"
     ],
 
