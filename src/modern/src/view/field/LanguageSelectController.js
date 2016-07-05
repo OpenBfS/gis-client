@@ -5,6 +5,17 @@ Ext.define('Koala.view.field.LanguageSelectController', {
     /**
      *
      */
+    onInitialize: function(combo) {
+        var me = this;
+        var view = me.getView();
+
+        view.setValue(view.getDefaultLanguage());
+        me.requestLanguageFile(view.getDefaultLanguage());
+    },
+
+    /**
+     *
+     */
     onLanguageChange: function(combo, newValue) {
         var me = this;
         newValue = Ext.isString(newValue) ? newValue : newValue.get('code');

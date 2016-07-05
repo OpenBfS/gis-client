@@ -151,6 +151,13 @@
             }
         }
     },
+    "Koala.view.panel.MobileLegend": {
+        "config": {
+            "data": {
+                "title": "en:Legende"
+            }
+        }
+    },
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {

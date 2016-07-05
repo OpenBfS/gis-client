@@ -46,15 +46,12 @@ Ext.define("Koala.view.form.field.LanguageSelect", {
         defaultLanguage: 'de'
     },
     listeners: {
-        change: 'onLanguageChange'
+        change: 'onLanguageChange',
+        initialize: 'onInitialize'
     },
 
     bind: {
         label: '{fieldLabel}'
-    },
-
-    initComponent: function() {
-        this.callParent();
-        this.setValue(this.getDefaultLanguage());
     }
+
 });
