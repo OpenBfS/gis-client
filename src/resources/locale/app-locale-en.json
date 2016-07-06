@@ -257,7 +257,14 @@
     "Koala.view.panel.MobileLegend": {
         "config": {
             "data": {
-                "title": "en:Legende"
+                "title": "en:Legende",
+                "maxLayersMsgBoxTitle": "en:Hinweis",
+                "maxLayersMsgBoxMessage": "en:Nur {0} parallele WMS Layer erlaubt. Bitte deaktivieren Sie mindestens einen Layer bevor Sie fortfahren können.",
+                "maxLayersMsgBoxBtnText": "en:Ok",
+                "removeLayerMsgBoxTitle": "en:Info",
+                "removeLayerMsgBoxMessage": "en:Layer <b>{0}</b> aus Karte entfernen?",
+                "removeLayerMsgBoxYesBtnText": "en:Ja",
+                "removeLayerMsgBoxNoBtnText": "en:Nein"
             }
         }
     },
@@ -288,6 +295,20 @@
                 "utcLabel": "en:UTC",
                 "localLabel": "en:Lokal",
                 "languageSelectComboLabel": "en:Sprache"
+            }
+        }
+    },
+    "Koala.view.form.LayerFilter": {
+        "config": {
+            "data": {
+                "startLabel": "en:Start",
+                "endLabel": "en:Ende",
+                "timestampLabel": "en:Zeitpunkt",
+                "buttonText": "en:Add",
+                "buttonTextNoFilter": "en:Auswählen und in Karte übernehmen",
+                "valueFilter": "en:Wertefilter",
+                "timeRangeFilter": "en:Zeitraumfilter",
+                "pointInTimeFilter": "en:Zeitpunktfilter"
             }
         }
     },

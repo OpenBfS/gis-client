@@ -27,7 +27,7 @@ Ext.define('Koala.view.panel.MobileLegend',{
 
     controller: 'k-panel-mobilelegend',
     viewModel: {
-        type: 'k-panel-themetree'
+        type: 'k-panel-mobilelegend'
     },
 
     cls: 'k-panel-mobilelegend',

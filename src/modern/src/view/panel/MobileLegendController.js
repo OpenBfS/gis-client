@@ -106,29 +106,36 @@ Ext.define('Koala.view.panel.MobileLegendController', {
     onTreeItemTap: function(evt, target) {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var treeList = view.down('treelist');
         var selection = treeList.getSelection();
         var layer = selection ? selection.getOlLayer() : null;
 
-        if(!target.getAttribute("class")){
+        if (!target.getAttribute("class")) {
             return false;
         }
 
-        if(target.getAttribute("class").indexOf("fa-times") > 0){
+        if (target.getAttribute("class").indexOf("fa-times") > 0) {
             me.removeLayer(layer);
             return false;
         }
 
-        if (target.getAttribute("class").indexOf("fa-eye") > 0){
+        if (target.getAttribute("class").indexOf("fa-eye") > 0) {
             if (layer && layer instanceof ol.layer.Layer) {
 
                 if (me.isLayerAllowedToSetVisible(layer)) {
                     layer.setVisible(!layer.getVisible());
                     me.setTreeItemCheckStatus(treeList.getItem(selection));
                 } else {
-                    Ext.Msg.alert('Hinweis', 'Nur ' + view.getMaxVisibleLayers() +
-                        ' parallele WMS Layer erlaubt. Bitte deaktivieren Sie ' +
-                        'mindestens einen Layer bevor Sie fortfahren können.');
+                    Ext.Msg.show({
+                        title: viewModel.get('maxLayersMsgBoxTitle'),
+                        message: Ext.String.format(
+                                viewModel.get('maxLayersMsgBoxMessage'),
+                                view.getMaxVisibleLayers()),
+                        buttons: {
+                            text: viewModel.get('maxLayersMsgBoxBtnText')
+                        }
+                    });
                 }
 
             }
@@ -220,20 +227,23 @@ Ext.define('Koala.view.panel.MobileLegendController', {
     /**
      *
      */
-    removeLayer: function(layer){
+    removeLayer: function(layer) {
+        var me = this;
+        var viewModel = me.getViewModel();
         var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
 
         Ext.Msg.show({
-            title: 'Info',
-            message: 'Layer <b>' + layer.get('name') +
-                '</b> aus Karte entfernen?',
+            title: viewModel.get('removeLayerMsgBoxTitle'),
+            message: Ext.String.format(
+                    viewModel.get('removeLayerMsgBoxMessage'),
+                    layer.get('name')),
             buttons: [{
-                text: "Ja"
+                text: viewModel.get('removeLayerMsgBoxYesBtnText')
             },{
-                text: "Nein"
+                text: viewModel.get('removeLayerMsgBoxNoBtnText')
             }],
             fn: function(btnId){
-                if(btnId === "Ja"){
+                if (btnId === viewModel.get('removeLayerMsgBoxYesBtnText')) {
                     map.removeLayer(layer);
                 }
             }
