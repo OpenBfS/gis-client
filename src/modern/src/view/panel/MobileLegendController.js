@@ -46,17 +46,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var treePanel;
 
         treeStore = Ext.create('GeoExt.data.store.LayersTree', {
-            layerGroup: Ext.ComponentQuery.query('basigx-component-map')[0].getMap().getLayerGroup(),
-            filters: [
-                function(rec) {
-                    var layer = rec.getOlLayer();
-                    var showKey = 'bp_displayInLayerSwitcher';
-                    if (layer.get(showKey) === false) {
-                        return false;
-                    }
-                    return true;
-                }
-            ]
+            layerGroup: Ext.ComponentQuery.query('basigx-component-map')[0].getMap().getLayerGroup()
         });
 
         treePanel = Ext.create('Ext.list.Tree', {
@@ -188,22 +178,27 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      */
     getTreeListItemTpl: function() {
         return new Ext.XTemplate(
-            '<tpl if="this.isVisible(values)">',
-                '<i class="fa fa-eye" style="color:#157fcc;"></i> {text}',
-            '<tpl else>',
-                '<i class="fa fa-eye-slash" style="color:#808080;"></i> {text}',
+            '<tpl if="this.display(values)">',
+                '<tpl if="this.isVisible(values)">',
+                    '<i class="fa fa-eye" style="color:#157fcc;"></i> {text}',
+                '<tpl else>',
+                    '<i class="fa fa-eye-slash" style="color:#808080;"></i> {text}',
+                '</tpl>',
+                '<tpl if="this.isChartingLayer(values)">',
+                    ' <i class="fa fa-bar-chart"></i>',
+                '</tpl>',
+                '<tpl if="this.isRemovable(values)">',
+                    '<span style="float:right"><i class="fa fa-times" style="color:#157fcc;"></i></span>',
+                '</tpl>',
+                '<tpl if="this.getFilterText(values)">',
+                    '<div style="color:#666; margin-left:20px; white-space:pre-line;">{[this.getFilterText(values)]}</div>',
+                '</tpl>',
+                '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
             '</tpl>',
-            '<tpl if="this.isChartingLayer(values)">',
-                ' <i class="fa fa-bar-chart"></i>',
-            '</tpl>',
-            '<tpl if="this.isRemovable(values)">',
-                '<span style="float:right"><i class="fa fa-times" style="color:#157fcc;"></i></span>',
-            '</tpl>',
-            '<tpl if="this.getFilterText(values)">',
-                '<div style="color:#666; margin-left:20px; white-space:pre-line;">{[this.getFilterText(values)]}</div>',
-            '</tpl>',
-            '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
              {
+                display: function(layer) {
+                    return !!(layer instanceof ol.layer.Tile);
+                },
                 isVisible: function(layer) {
                     return layer.getVisible();
                 },
