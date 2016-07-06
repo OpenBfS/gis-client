@@ -121,8 +121,16 @@ Ext.define('Koala.view.panel.MobileLegendController', {
 
         if (target.getAttribute("class").indexOf("fa-eye") > 0){
             if (layer && layer instanceof ol.layer.Layer) {
-                layer.setVisible(!layer.getVisible());
-                me.setTreeItemCheckStatus(treeList.getItem(selection));
+
+                if (me.isLayerAllowedToSetVisible(layer)) {
+                    layer.setVisible(!layer.getVisible());
+                    me.setTreeItemCheckStatus(treeList.getItem(selection));
+                } else {
+                    Ext.Msg.alert('Hinweis', 'Nur ' + view.getMaxVisibleLayers() +
+                        ' parallele WMS Layer erlaubt. Bitte deaktivieren Sie ' +
+                        'mindestens einen Layer bevor Sie fortfahren können.');
+                }
+
             }
             return false;
         }
@@ -135,6 +143,37 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 legend.style.display = 'none';
             }
         }
+    },
+
+    /**
+     *
+     */
+    isLayerAllowedToSetVisible: function(layer) {
+        var me = this;
+        var view = me.getView();
+        var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
+        var mapLayers = map.getLayers();
+        var visibleLayers = 0;
+
+        // only check if the layer is requested to set visible
+        if (layer.getVisible()) {
+            return true;
+        }
+
+        // get the actual count of visible layers in the map
+        mapLayers.forEach(function(lyr) {
+            if ((lyr.getSource() instanceof ol.source.Image ||
+                    lyr.getSource() instanceof ol.source.Tile) &&
+                    lyr.getVisible()) {
+                visibleLayers++;
+            }
+        });
+
+        if (visibleLayers >= view.getMaxVisibleLayers()) {
+            return false;
+        }
+
+        return true;
     },
 
     /**

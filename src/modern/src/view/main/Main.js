@@ -58,6 +58,13 @@ Ext.define('Koala.view.main.Main', {
 
                     map.addControl(attribution);
                     map.addControl(scaleLine);
+
+                    // newly added layers shouldn't be visible due to potential
+                    // performance and bandwith restrictions on mobile devices
+                    map.getLayers().on('add', function(evt) {
+                        var layer = evt.element;
+                        layer.setVisible(false);
+                    });
                 }
             }
         }, {
