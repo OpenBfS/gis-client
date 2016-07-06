@@ -30,6 +30,8 @@ Ext.define('Koala.view.panel.MobileLegend',{
         type: 'k-panel-themetree'
     },
 
+    cls: 'k-panel-mobilelegend',
+
     bind: {
         title: '{title}'
     },

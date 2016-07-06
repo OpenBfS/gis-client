@@ -1,3 +1,21 @@
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/**
+ * @class Koala.view.panel.MobileLegendController
+ */
 Ext.define('Koala.view.panel.MobileLegendController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-panel-mobilelegend',
@@ -10,6 +28,9 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         me.createTreeList();
     },
 
+    /**
+     *
+     */
     onShow: function() {
         var me = this;
         me.setInitialCheckStatus();
@@ -52,6 +73,9 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         view.add(treePanel);
     },
 
+    /**
+     *
+     */
     setInitialCheckStatus: function() {
         var me = this;
         var view = me.getView();
@@ -66,20 +90,24 @@ Ext.define('Koala.view.panel.MobileLegendController', {
 
     },
 
+    /**
+     *
+     */
     setTreeItemCheckStatus: function(item) {
         var me = this;
         var layer = item.getNode().getOlLayer();
         item.setText(me.getTreeListItemTpl().apply(layer));
     },
 
+    /**
+     *
+     */
     onTreeItemTap: function(evt, target) {
         var me = this;
         var view = me.getView();
         var treeList = view.down('treelist');
         var selection = treeList.getSelection();
         var layer = selection ? selection.getOlLayer() : null;
-
-        console.log(target.getAttribute("class"))
 
         if(!target.getAttribute("class")){
             return false;
@@ -98,7 +126,6 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             return false;
         }
 
-        console.log('expand legend');
         if (target.getElementsByTagName("img").length > 0) {
             var legend = target.getElementsByTagName("img")[0];
             if (legend.style.display === 'none') {
@@ -107,9 +134,11 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 legend.style.display = 'none';
             }
         }
-
     },
 
+    /**
+     *
+     */
     getTreeListItemTpl: function() {
         var me = this;
 
@@ -119,10 +148,13 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             '<tpl else>',
                 '<i class="fa fa-eye-slash"></i> {text}',
             '</tpl>',
+            '<tpl if="this.isChartingLayer(values)">',
+                ' <i class="fa fa-bar-chart"></i>',
+            '</tpl>',
             '<tpl if="this.isRemovable(values)">',
                 '<span style="float:right"><i class="fa fa-times"></i></span>',
             '</tpl>',
-            '<br> <span style="color:#666;">{[this.getFilterText(values)]}</span>',
+            '<br><span style="color:#666;">{[this.getFilterText(values)]}</span>',
             '<img style="display:none; max-width:80%;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
              {
                 isVisible: function(layer) {
@@ -135,17 +167,21 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                     return layer.get('allowRemoval') || false;
                 },
                 getLegendGraphicUrl: function(layer) {
-                    console.log(Koala.util.Layer.getCurrentLegendUrl(layer));
                     return Koala.util.Layer.getCurrentLegendUrl(layer);
-                    // return "peter";
+                },
+                isChartingLayer: function(layer) {
+                    // TODO: set layer property accordingly
+                    return !!layer.hasActiveChart;
                 }
             }
         );
     },
 
+    /**
+     *
+     */
     removeLayer: function(layer){
-        var map = Ext.ComponentQuery.query('basigx-component-map')[0]
-            .getMap();
+        var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
 
         Ext.Msg.show({
             title: 'Info',
@@ -162,6 +198,6 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 }
             }
         });
-    },
+    }
 
 });
