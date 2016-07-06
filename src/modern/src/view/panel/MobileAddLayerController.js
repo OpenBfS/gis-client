@@ -37,7 +37,6 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
      * interact-toolbar.
      */
     removeAddLayersComponents: function() {
-        var me = this;
         var view = this.getView();
         var fs = view.down('[name=fs-available-layers]');
         var tb = view.down('toolbar[name=interact-w-available-layers]');
@@ -63,11 +62,11 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         try {
             result = parser.read(response.responseText);
         } catch(ex) {
-            console.log(viewModel.get('errorCouldntParseResponse'));
+            // console.log(viewModel.get('errorCouldntParseResponse'));
         }
         var compatibleLayers = me.isCompatibleCapabilityResponse(result);
         if (!compatibleLayers) {
-            console.log(viewModel.get('errorIncompatibleWMS'));
+            // console.log(viewModel.get('errorIncompatibleWMS'));
         }
         me.fillAvailableLayersFieldset(compatibleLayers);
         me.updateControlToolbarState();
@@ -82,7 +81,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
     onGetCapabilitiesFailure: function() {
         var view = this.getView();
         view.setMasked(false);
-        console.log(this.getViewModel().get('errorRequestFailed'));
+        // console.log(this.getViewModel().get('errorRequestFailed'));
     },
 
     /**
@@ -249,7 +248,6 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
      * checkboxes (e.g. check all, uncheck all, add selected).
      */
     updateControlToolbarState: function() {
-        var me = this;
         var view = this.getView();
         var fs = view.down('[name=fs-available-layers]');
         var allCbs = fs.query('checkboxfield');

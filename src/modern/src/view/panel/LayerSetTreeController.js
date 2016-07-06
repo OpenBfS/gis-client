@@ -6,8 +6,6 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
 
     onShow: function(){
         var view = this.getView();
-        var viewModel = this.getViewModel();
-        var mapComponent = view.up('app-main').down('basigx-component-map');
         var treeList = view.down('treelist');
 
         if(!view.down('treelist').getStore()){
@@ -75,8 +73,6 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         var title = currentSelection ?
             currentSelection.data.text :
             metadata.dspText;
-
-        var winName = 'filter-win-' + metadata.id;
 
         // only allow one filter-window to be open
         var filterPanels = Ext.ComponentQuery.query('k-form-layerfilter');

@@ -37,13 +37,13 @@ Ext.define('Koala.view.panel.LayerSetTree', {
         },
         listeners: {
             singletap: {
-                fn: function(event, element) {
+                fn: function() {
                     this.lookupController().setupShowFilterWinCheck();
                 },
                 element: 'element'
             },
             doubletap: {
-                fn: function(event, element) {
+                fn: function() {
                     this.lookupController().addLayerWithDefaultFilters();
                 },
                 element: 'element'

@@ -141,8 +141,6 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      *
      */
     getTreeListItemTpl: function() {
-        var me = this;
-
         return new Ext.XTemplate(
             '<tpl if="this.isVisible(values)">',
                 '<i class="fa fa-eye" style="color:#157fcc;"></i> {text}',

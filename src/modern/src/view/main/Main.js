@@ -42,7 +42,7 @@ Ext.define('Koala.view.main.Main', {
             appContextPath: 'resources/appContext.json',
             height: '100%',
             listeners: {
-                painted: function(mapComponent){
+                painted: function(){
                     var map = this.getMap();
                     map.getControls().clear();
 

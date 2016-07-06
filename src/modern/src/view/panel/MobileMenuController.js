@@ -41,9 +41,6 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         feature.getGeometry().transform('EPSG:4326', projection);
         var map = store.map;
         var view = map.getView();
-        var mobilemenucard = this.getView();
-        var mainView = mobilemenucard.up('app-main');
-        var mapcard = mainView.down('[name=mapcontainer]');
 
         var extent = feature.getGeometry().getExtent();
         view.fit(extent, map.getSize());

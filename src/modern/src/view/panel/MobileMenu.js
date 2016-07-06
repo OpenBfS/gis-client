@@ -35,7 +35,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
             xtype: 'searchfield',
             name: 'searchVal',
             bind: {
-                placeHolder: '{searchFieldPlaceHolderText}',
+                placeHolder: '{searchFieldPlaceHolderText}'
             },
             listeners: {
                 action: 'fetchNewData',

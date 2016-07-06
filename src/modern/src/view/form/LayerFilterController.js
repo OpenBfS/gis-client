@@ -123,7 +123,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         Ext.each(mobilePanels, function(panel){
             panel.hide();
-        })
+        });
     },
 
     /**
