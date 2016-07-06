@@ -18,7 +18,11 @@ Ext.define('Koala.view.panel.Settings',{
 
     items: [{
         xtype: 'k-field-languageselect',
-        margin: 10
+        bind: {
+            label: '{languageSelectComboLabel}'
+        },
+        labelWidth: 150,
+        margin: 15
     },{
         xtype: 'fieldset',
         bind: {
@@ -27,6 +31,7 @@ Ext.define('Koala.view.panel.Settings',{
         items: [{
             xtype: 'radiofield',
             name : 'timereference',
+            labelWidth: 150,
             value: 'local',
             bind: {
                 label: '{localLabel}'
@@ -35,12 +40,13 @@ Ext.define('Koala.view.panel.Settings',{
         },{
             xtype: 'radiofield',
             name : 'timereference',
+            labelWidth: 150,
             value: 'UTC',
             bind: {
                 label: '{utcLabel}'
             },
             listeners: {
-                change: 'onUtcChanged',
+                change: 'onUtcChanged'
             }
         }]
     }]

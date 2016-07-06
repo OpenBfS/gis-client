@@ -13,8 +13,13 @@ Ext.define('Koala.view.panel.LayerSetTree', {
     ],
 
     controller: 'k-panel-layersettree',
+    viewModel: {
+        type: 'k-panel-layersettree'
+    },
 
-    title: 'Themenwahl',
+    bind: {
+        title: '{panelTitleText}'
+    },
 
     name: 'treepanel',
 

@@ -13,8 +13,8 @@ Ext.define('Koala.view.panel.MobileMenu',{
     viewModel: {
         type: 'k-panel-mobilemenu'
     },
-    config: {
-        title: 'Menu'
+    bind: {
+        title: '{menuTitle}'
     },
 
     defaults: {
@@ -34,7 +34,9 @@ Ext.define('Koala.view.panel.MobileMenu',{
         items: [{
             xtype: 'searchfield',
             name: 'searchVal',
-            placeHolder: 'Suche in Daten und Diensten',
+            bind: {
+                placeHolder: '{searchFieldPlaceHolderText}',
+            },
             listeners: {
                 action: 'fetchNewData',
                 clearicontap: 'onClearIconTap'
@@ -68,25 +70,33 @@ Ext.define('Koala.view.panel.MobileMenu',{
         }]
     }, {
         xtype: 'button',
-        text: 'Layer hinzufügen',
+        bind: {
+            text: '{addLayerButtonText}'
+        },
         handler: function(btn){
             btn.up('app-main').down('k-panel-mobileaddlayer').show();
         }
     }, {
         xtype: 'button',
-        text: 'Weitere Themen',
+        bind: {
+            text: '{moreLayersButtonText}'
+        },
         handler: function(btn){
             btn.up('app-main').down('k-panel-treepanel').show();
         }
     }, {
         xtype: 'button',
-        text: 'Einstellungen',
+        bind: {
+            text: '{settingsButtonText}'
+        },
         handler: function(btn){
             btn.up('app-main').down('k-panel-settings').show();
         }
     }, {
         xtype: 'button',
-        text: 'Hilfe / Impressum',
+        bind: {
+            text: '{imprintButtonText}'
+        }
         // handler: function(btn){
         //     btn.up('app-main').down('k-panel-mobileaddlayer').show();
         // }

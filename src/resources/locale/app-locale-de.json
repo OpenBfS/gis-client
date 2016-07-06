@@ -151,13 +151,6 @@
             }
         }
     },
-    "Koala.view.panel.MobileLegend": {
-        "config": {
-            "data": {
-                "title": "Legende"
-            }
-        }
-    },
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {
@@ -672,6 +665,45 @@
             "data": {
                 "closedMenuTitle": "Menu schließen",
                 "openedMenuTitle": "Menu anzeigen"
+            }
+        }
+    },
+
+
+    "Koala.view.panel.MobileLegend": {
+        "config": {
+            "data": {
+                "title": "Legende"
+            }
+        }
+    },
+    "Koala.view.panel.MobileMenu": {
+        "config": {
+            "data": {
+                "menuTitle": "Menu",
+                "searchFieldPlaceHolderText": "Suche in Daten und Diensten",
+                "imprintButtonText": "Hilfe / Impressum",
+                "settingsButtonText": "Einstellungen",
+                "moreLayersButtonText": "Weitere Themen",
+                "addLayerButtonText": "Layer hinzufügen"
+            }
+        }
+    },
+    "Koala.view.panel.LayerSetTree": {
+        "config": {
+            "data": {
+                "panelTitleText": "Themenwahl"
+            }
+        }
+    },
+    "Koala.view.panel.Settings": {
+        "config": {
+            "data": {
+                "title": "Einstellungen",
+                "timereferenceLabel": "Zeitbezug",
+                "utcLabel": "UTC",
+                "localLabel": "Lokal",
+                "languageSelectComboLabel": "Sprache"
             }
         }
     },
