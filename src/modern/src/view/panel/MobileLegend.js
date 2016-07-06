@@ -36,6 +36,8 @@ Ext.define('Koala.view.panel.MobileLegend',{
         title: '{title}'
     },
 
+    scrollable: 'vertical',
+
     listeners: {
         initialize: 'onInitialize',
         show: 'onShow'

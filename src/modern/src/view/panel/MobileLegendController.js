@@ -61,6 +61,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
 
         treePanel = Ext.create('Ext.list.Tree', {
             store: treeStore,
+            width: 'calc(80vw)',
             listeners: {
                 tap: {
                     fn: me.onTreeItemTap,
@@ -144,18 +145,20 @@ Ext.define('Koala.view.panel.MobileLegendController', {
 
         return new Ext.XTemplate(
             '<tpl if="this.isVisible(values)">',
-                '<i class="fa fa-eye"></i> {text}',
+                '<i class="fa fa-eye" style="color:#157fcc;"></i> {text}',
             '<tpl else>',
-                '<i class="fa fa-eye-slash"></i> {text}',
+                '<i class="fa fa-eye-slash" style="color:#808080;"></i> {text}',
             '</tpl>',
             '<tpl if="this.isChartingLayer(values)">',
                 ' <i class="fa fa-bar-chart"></i>',
             '</tpl>',
             '<tpl if="this.isRemovable(values)">',
-                '<span style="float:right"><i class="fa fa-times"></i></span>',
+                '<span style="float:right"><i class="fa fa-times" style="color:#157fcc;"></i></span>',
             '</tpl>',
-            '<br><span style="color:#666;">{[this.getFilterText(values)]}</span>',
-            '<img style="display:none; max-width:80%;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
+            '<tpl if="this.getFilterText(values)">',
+                '<div style="color:#666; margin-left:20px; white-space:pre-line;">{[this.getFilterText(values)]}</div>',
+            '</tpl>',
+            '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
              {
                 isVisible: function(layer) {
                     return layer.getVisible();
