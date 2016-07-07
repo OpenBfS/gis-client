@@ -15,11 +15,12 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.panel.MobileLegend',
         'Koala.view.panel.MobileAddLayer',
         'Koala.view.panel.MobileMenu',
+        'Koala.view.panel.MobileImprint',
         'Koala.view.panel.Settings'
     ],
 
     viewModel: {
-        type: "app-main"
+        type: 'app-main'
     },
 
     defaults: {
@@ -137,6 +138,10 @@ Ext.define('Koala.view.main.Main', {
         hidden: true
     }, {
         xtype: 'k-panel-settings',
+        left: 0,
+        hidden: true
+    }, {
+        xtype: 'k-panel-mobileimprint',
         left: 0,
         hidden: true
     }, {

@@ -312,6 +312,17 @@
             }
         }
     },
+    "Koala.view.panel.MobileImprint": {
+        "config": {
+            "data": {
+                "title": "en:Hilfe / Impressum",
+                "helpTitle": "en:Hilfe",
+                "helpHtml": "en:Lorem ipsum dolor sit amet, et usu fugit virtute torquatos, ea veri nominavi mea, at has saepe tamquam sententiae. Habeo pertinax consequat ea usu. Ne pri mollis expetendis, nec et praesent deseruisse adipiscing, solet impetus euripidis id duo. Partem audiam noluisse vel ei, cu harum quidam constituto has, ridens omittam eu duo. Facilis fuisset est no, sit esse quas ut. Eos et ludus prodesset, modo sapientem eos te. Vis tritani eripuit et, eu ius aperiam delenit. Ei vis agam lorem. No bonorum recteque qui, has in rebum vidisse. Eam suscipit sapientem ne, an ubique apeirian constituto eum.",
+                "imprintTitle": "en:Impressum",
+                "imprintHtml": "en:Lorem ipsum dolor sit amet, et usu fugit virtute torquatos, ea veri nominavi mea, at has saepe tamquam sententiae. Habeo pertinax consequat ea usu. Ne pri mollis expetendis, nec et praesent deseruisse adipiscing, solet impetus euripidis id duo. Partem audiam noluisse vel ei, cu harum quidam constituto has, ridens omittam eu duo. Facilis fuisset est no, sit esse quas ut. Eos et ludus prodesset, modo sapientem eos te. Vis tritani eripuit et, eu ius aperiam delenit. Ei vis agam lorem. No bonorum recteque qui, has in rebum vidisse. Eam suscipit sapientem ne, an ubique apeirian constituto eum.",
+            }
+        }
+    },
 
 
     "Ext.Date": {
