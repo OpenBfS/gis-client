@@ -72,7 +72,7 @@ Ext.define('Koala.util.Route', {
          *
          */
         setRouteForView: function(route, view) {
-            var viewController = view.getController();
+            var viewController = view.getController() || view.lookupController();
             var finalRoute = Koala.util.Route.getHash(route);
             viewController.redirectTo(finalRoute);
         },

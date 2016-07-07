@@ -7,7 +7,7 @@ Ext.define('Koala.view.panel.MobileMenuController', {
     ],
 
     routes: {
-        'menu/:menu/:tree/:layer/:settings/:imprint': {
+        'menu/:menu/:tree/:filter/:layer/:settings/:imprint': {
             action: 'onMenuRoute'
         }
     },
@@ -17,6 +17,9 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         state: null
     }, {
         type: 'k-panel-treepanel',
+        state: null
+    }, {
+        type: 'k-panel-mobilepanel[name=filterContainer]',
         state: null
     }, {
         type: 'k-panel-mobileaddlayer',
@@ -40,13 +43,16 @@ Ext.define('Koala.view.panel.MobileMenuController', {
             var state = states[i] === "1";
             var menuView = Ext.ComponentQuery.query(me.routeMapping[i].type)[0];
 
+            if (!menuView) {
+                continue;
+            }
+
             if (state) {
                 menuView.show();
             } else {
                 menuView.hide();
             }
         }
-
     },
 
     /**

@@ -178,6 +178,13 @@ Ext.define('Koala.view.main.Main', {
         xtype: 'k-panel-mobilepanel',
         name: 'filterContainer',
         left: 0,
-        hidden: true
+        hidden: true,
+        config: {
+            route: 'menu/1/1/{0}/0/0/0'
+        },
+        listeners: {
+            show: 'onFilterContainerShow',
+            hide: 'onFilterContainerHide'
+        }
     }]
 });

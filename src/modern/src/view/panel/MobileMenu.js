@@ -25,7 +25,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
         /**
          * The route (template) to apply for this component.
          */
-        route: 'menu/{0}/0/0/0/0'
+        route: 'menu/{0}/0/0/0/0/0'
     },
 
     layout: 'vbox',

@@ -42,7 +42,7 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
         /**
          * The route (template) to apply for this menu component.
          */
-        route: 'menu/1/0/{0}/0/0'
+        route: 'menu/1/0/0/{0}/0/0'
     },
 
     listeners: {

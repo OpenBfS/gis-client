@@ -26,7 +26,7 @@ Ext.define('Koala.view.panel.LayerSetTree', {
         /**
          * The route (template) to apply for this menu component.
          */
-        route: 'menu/1/{0}/0/0/0'
+        route: 'menu/1/{0}/0/0/0/0'
     },
 
     name: 'treepanel',
