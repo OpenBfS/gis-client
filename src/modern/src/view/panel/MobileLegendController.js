@@ -20,12 +20,55 @@ Ext.define('Koala.view.panel.MobileLegendController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-panel-mobilelegend',
 
+    routes: {
+        'legend/:state': {
+            action: 'onLegendRoute'
+        }
+    },
+
+    /**
+     *
+     */
+    onLegendRoute: function(state) {
+        var me = this;
+        var view = me.getView();
+        var legendState = state === "1" ? true : false;
+
+        if (legendState) {
+            view.show();
+        } else {
+            view.hide();
+        }
+    },
+
     /**
      *
      */
     onInitialize: function() {
         var me = this;
+        var view = me.getView();
+
         me.createTreeList();
+
+        // set the route if not given already (e.g. by a link)
+        if (!Koala.util.Route.isRouteSet(Ext.String.format(
+                view.getRoute(), 0))) {
+            Koala.util.Route.setRouteForView(Ext.String.format(
+                    view.getRoute(), 0), view);
+        }
+    },
+
+    /**
+     *
+     */
+    onHide: function(panel) {
+        var me = this;
+        var view = me.getView();
+
+        if (panel.isRendered()) {
+            Koala.util.Route.setRouteForView(Ext.String.format(
+                    view.getRoute(), 0), view);
+        }
     },
 
     /**
@@ -33,7 +76,12 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      */
     onShow: function() {
         var me = this;
+        var view = me.getView();
+
         me.setInitialCheckStatus();
+
+        Koala.util.Route.setRouteForView(Ext.String.format(
+                view.getRoute(), 1), view);
     },
 
     /**

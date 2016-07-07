@@ -41,13 +41,19 @@ Ext.define('Koala.view.panel.MobileLegend',{
          * The maximal number of (non-vector) layers visible in the application
          * at one time.
          */
-        maxVisibleLayers: 5
+        maxVisibleLayers: 5,
+
+        /**
+         * The route (template) to apply for this component.
+         */
+        route: 'legend/{0}'
     },
 
     scrollable: 'vertical',
 
     listeners: {
         initialize: 'onInitialize',
-        show: 'onShow'
+        show: 'onShow',
+        hide: 'onHide'
     }
 });

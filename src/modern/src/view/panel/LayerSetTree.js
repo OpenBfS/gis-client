@@ -21,12 +21,20 @@ Ext.define('Koala.view.panel.LayerSetTree', {
         title: '{panelTitleText}'
     },
 
+    config: {
+        /**
+         * The route (template) to apply for this menu component.
+         */
+        route: 'menu/1/{0}/0/0/0'
+    },
+
     name: 'treepanel',
 
     scrollable: true,
 
     listeners: {
-        show: 'onShow'
+        show: 'onShow',
+        hide: 'onHide'
     },
 
     items: [{

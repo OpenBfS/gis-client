@@ -19,8 +19,16 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.panel.Settings'
     ],
 
+    controller: 'mobile-main',
     viewModel: {
         type: 'app-main'
+    },
+
+    config: {
+        /**
+         * The route (template) to apply for the map component.
+         */
+        mapRoute: 'map/{0}/{1}/{2}'
     },
 
     defaults: {
@@ -44,7 +52,11 @@ Ext.define('Koala.view.main.Main', {
             height: '100%',
             listeners: {
                 painted: function(){
-                    var map = this.getMap();
+                    var me = this;
+                    var viewCtrl = me.lookupController();
+                    var view = viewCtrl.getView();
+                    var map = me.getMap();
+
                     map.getControls().clear();
 
                     var attribution = new ol.control.Attribution({
@@ -65,6 +77,16 @@ Ext.define('Koala.view.main.Main', {
                     map.getLayers().on('add', function(evt) {
                         var layer = evt.element;
                         layer.setVisible(false);
+                    });
+
+                    map.on('moveend', function(evt) {
+                        var mapView = evt.map.getView();
+                        var mapCenter = mapView.getCenter();
+                        var mapZoom = mapView.getZoom();
+
+                        Koala.util.Route.setRouteForView(Ext.String.format(
+                                view.getMapRoute(), Math.round(mapCenter[0]),
+                                Math.round(mapCenter[1]), mapZoom), view);
                     });
                 }
             }

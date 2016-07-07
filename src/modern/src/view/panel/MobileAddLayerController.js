@@ -2,6 +2,22 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-panel-mobileaddlayer',
 
+    onShow: function() {
+        var me = this;
+        var view = me.getView();
+
+        Koala.util.Route.setRouteForView(Ext.String.format(view.getRoute(), 1), view);
+    },
+
+    onHide: function(panel) {
+        var me = this;
+        var view = me.getView();
+
+        if (panel.isRendered()) {
+            Koala.util.Route.setRouteForView(Ext.String.format(view.getRoute(), 0), view);
+        }
+    },
+
     /**
      * Will be called with the 'get layers' button. Issues a GetCapabilities
      * request and sets up handlewrs for reacting on the response.

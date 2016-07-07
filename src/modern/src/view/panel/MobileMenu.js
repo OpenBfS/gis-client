@@ -21,11 +21,24 @@ Ext.define('Koala.view.panel.MobileMenu',{
         margin: '5 5 5 5'
     },
 
+    config: {
+        /**
+         * The route (template) to apply for this component.
+         */
+        route: 'menu/{0}/0/0/0/0'
+    },
+
     layout: 'vbox',
 
     scrollable: {
         direction: 'vertical',
         directionLock: true
+    },
+
+    listeners: {
+        show: 'onShow',
+        hide: 'onHide',
+        initialize: 'onInitialize'
     },
 
     items: [{
