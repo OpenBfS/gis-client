@@ -71,18 +71,18 @@ Ext.define('Koala.view.panel.MobileMenu',{
     }, {
         xtype: 'button',
         bind: {
-            text: '{addLayerButtonText}'
-        },
-        handler: function(btn){
-            btn.up('app-main').down('k-panel-mobileaddlayer').show();
-        }
-    }, {
-        xtype: 'button',
-        bind: {
             text: '{moreLayersButtonText}'
         },
         handler: function(btn){
             btn.up('app-main').down('k-panel-treepanel').show();
+        }
+    }, {
+        xtype: 'button',
+        bind: {
+            text: '{addLayerButtonText}'
+        },
+        handler: function(btn){
+            btn.up('app-main').down('k-panel-mobileaddlayer').show();
         }
     }, {
         xtype: 'button',
