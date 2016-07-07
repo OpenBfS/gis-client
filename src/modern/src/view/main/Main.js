@@ -4,6 +4,7 @@ Ext.define('Koala.view.main.Main', {
 
     requires: [
         'Koala.view.main.MainModel',
+        'Koala.view.main.MobileMainController',
 
         'BasiGX.view.component.Map',
 
@@ -11,11 +12,14 @@ Ext.define('Koala.view.main.Main', {
         "BasiGX.view.button.ZoomOut",
         "BasiGX.view.button.ZoomToExtent",
 
+        'Koala.util.Route',
+
         'Koala.view.panel.MobilePanel',
         'Koala.view.panel.MobileLegend',
         'Koala.view.panel.MobileAddLayer',
         'Koala.view.panel.MobileMenu',
         'Koala.view.panel.MobileImprint',
+        'Koala.view.panel.LayerSetTree',
         'Koala.view.panel.Settings'
     ],
 

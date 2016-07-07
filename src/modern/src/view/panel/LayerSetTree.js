@@ -8,6 +8,7 @@ Ext.define('Koala.view.panel.LayerSetTree', {
 
     requires: [
         'Koala.view.panel.LayerSetTreeController',
+        'Koala.view.panel.LayerSetTreeModel',
 
         'Ext.list.Tree'
     ],

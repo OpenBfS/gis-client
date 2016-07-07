@@ -21,8 +21,12 @@ Ext.define('Koala.view.panel.MobileLegend',{
     xtype: 'k-panel-mobilelegend',
 
     requires: [
+        'GeoExt.data.store.LayersTree',
+
         'Koala.view.panel.MobileLegendController',
-        'Koala.view.panel.MobileLegendModel'
+        'Koala.view.panel.MobileLegendModel',
+
+        'Koala.util.Layer'
     ],
 
     controller: 'k-panel-mobilelegend',

@@ -4,7 +4,9 @@ Ext.define('Koala.view.panel.Settings',{
 
     requires: [
         'Koala.view.panel.SettingsController',
-        'Koala.view.panel.SettingsModel'
+        'Koala.view.panel.SettingsModel',
+
+        'Koala.view.form.field.LanguageSelect'
     ],
 
     controller: 'k-panel-settings',
