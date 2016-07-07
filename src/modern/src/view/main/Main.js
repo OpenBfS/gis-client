@@ -115,7 +115,7 @@ Ext.define('Koala.view.main.Main', {
             }]
         }, {
             xtype: 'button',
-            iconCls: 'fa fa-bars fa-2x',
+            html: '<i class="fa fa-bars fa-2x"></i>',
             style: {
                 position: 'absolute',
                 top: '20px',
@@ -126,10 +126,10 @@ Ext.define('Koala.view.main.Main', {
             }
         }, {
             xtype: 'button',
-            iconCls: 'fa fa-list-alt fa-2x',
+            html: '<i class="fa fa-list-alt fa-2x"></i>',
             style: {
                 position: 'absolute',
-                bottom: '40px',
+                bottom: '50px',
                 right: '20px'
             },
             handler: function(btn){
