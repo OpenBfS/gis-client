@@ -181,6 +181,7 @@ Ext.define('Koala.view.main.Main', {
         name: 'filterContainer',
         left: 0,
         hidden: true,
+        scrollable: 'vertical',
         config: {
             route: 'menu/1/1/{0}/0/0/0'
         },

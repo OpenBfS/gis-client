@@ -41,6 +41,8 @@ Ext.define("Koala.view.form.LayerFilter", {
     },
     padding: 5,
 
+    height: '95vh',
+
     ignoreFields: [
         "minutespinner",
         "hourspinner",

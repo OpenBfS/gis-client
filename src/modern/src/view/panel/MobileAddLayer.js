@@ -12,6 +12,8 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
         type: 'k-panel-mobileaddlayer'
     },
 
+    scrollable: true,
+
     config: {
         title: 'Add Layer',
 
@@ -58,6 +60,8 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
 
     items: [{
         xtype: 'formpanel',
+        height: '90vh',
+        width: '80vw',
         baseCls: 'add-wms-form',
         items: [{
             xtype: 'fieldset',
@@ -116,10 +120,6 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                     text: '{requestLayersBtnText}'
                 },
                 handler: 'requestGetCapabilities'
-                // function(btn){
-                //     var view = btn.up('basigx-form-addwms');
-                //     view.requestGetCapabilities();
-                // }
             }]
         }]
     }]
