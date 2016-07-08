@@ -18,7 +18,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
     },
 
     defaults: {
-        margin: '5 5 5 5'
+        margin: 5
     },
 
     config: {
@@ -45,6 +45,10 @@ Ext.define('Koala.view.panel.MobileMenu',{
         show: 'onShow',
         hide: 'onHide',
         initialize: 'onInitialize'
+    },
+
+    header: {
+        margin: 0
     },
 
     items: [{
