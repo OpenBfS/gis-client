@@ -12,6 +12,8 @@ Ext.define('Koala.view.main.Main', {
         "BasiGX.view.button.ZoomOut",
         "BasiGX.view.button.ZoomToExtent",
 
+        'Koala.view.form.LayerFilter',
+
         'Koala.util.Route',
 
         'Koala.view.panel.MobilePanel',
