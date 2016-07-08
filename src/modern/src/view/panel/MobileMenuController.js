@@ -79,7 +79,7 @@ Ext.define('Koala.view.panel.MobileMenuController', {
 
         if (panel.isRendered()) {
             Koala.util.Route.setRouteForView(Ext.String.format(
-                    view.getRoute(), 0), view);
+                    view.getRoute(), 0), view, 500);
         }
     },
 

@@ -24,7 +24,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         }
 
         Koala.util.Route.setRouteForView(Ext.String.format(
-            view.getRoute(), 1), view);
+                view.getRoute(), 1), view);
     },
 
     /**
@@ -36,7 +36,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
 
         if (panel.isRendered()) {
             Koala.util.Route.setRouteForView(Ext.String.format(
-                view.getRoute(), 0), view);
+                    view.getRoute(), 0), view, 500);
         }
     },
 

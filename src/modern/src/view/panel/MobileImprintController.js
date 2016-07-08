@@ -10,7 +10,7 @@ Ext.define('Koala.view.panel.MobileImprintController', {
         var view = me.getView();
 
         Koala.util.Route.setRouteForView(Ext.String.format(
-            view.getRoute(), 1), view);
+                view.getRoute(), 1), view);
     },
 
     /**
@@ -22,7 +22,7 @@ Ext.define('Koala.view.panel.MobileImprintController', {
 
         if (panel.isRendered()) {
             Koala.util.Route.setRouteForView(Ext.String.format(
-                view.getRoute(), 0), view);
+                    view.getRoute(), 0), view, 500);
         }
     }
 

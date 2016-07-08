@@ -6,7 +6,8 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var me = this;
         var view = me.getView();
 
-        Koala.util.Route.setRouteForView(Ext.String.format(view.getRoute(), 1), view);
+        Koala.util.Route.setRouteForView(Ext.String.format(
+                view.getRoute(), 1), view);
     },
 
     onHide: function(panel) {
@@ -14,7 +15,8 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var view = me.getView();
 
         if (panel.isRendered()) {
-            Koala.util.Route.setRouteForView(Ext.String.format(view.getRoute(), 0), view);
+            Koala.util.Route.setRouteForView(Ext.String.format(
+                    view.getRoute(), 0), view, 500);
         }
     },
 

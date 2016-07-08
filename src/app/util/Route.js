@@ -71,10 +71,17 @@ Ext.define('Koala.util.Route', {
         /**
          *
          */
-        setRouteForView: function(route, view) {
+        setRouteForView: function(route, view, delay) {
             var viewController = view.getController() || view.lookupController();
             var finalRoute = Koala.util.Route.getHash(route);
-            viewController.redirectTo(finalRoute);
+
+            if (Ext.isNumber(delay)) {
+                new Ext.util.DelayedTask(function(){
+                    viewController.redirectTo(finalRoute);
+                }).delay(delay);
+            } else {
+                viewController.redirectTo(finalRoute);
+            }
         },
 
         /**
