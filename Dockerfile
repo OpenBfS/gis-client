@@ -18,7 +18,7 @@ ENV DEBIAN_FRONTEND noninteractive
 #
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
-    wget unzip openjdk-7-jre mercurial && \
+    wget unzip openjdk-7-jre && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ADD . /usr/local/apache2/htdocs/
@@ -28,7 +28,7 @@ WORKDIR /usr/local/apache2/htdocs/
 # Optional clone Repo with custom configs into gis_client_configs at htdocs
 #
 
-RUN hg clone https://redmine-koala.bfs.de/hg/gis_client_configs gis_client_configs
+# RUN hg clone https://redmine-koala.bfs.de/hg/gis_client_configs gis_client_configs
 
 #
 # Install dependencies
