@@ -25,7 +25,13 @@ Ext.define('Koala.view.panel.MobileMenu',{
         /**
          * The route (template) to apply for this component.
          */
-        route: 'menu/{0}/0/0/0/0/0'
+        route: 'menu/{0}/0/0/0/0/0',
+
+        /**
+         * If set, a close/hide tool will be rendered to the desired panel header
+         * side (typically 'left' or 'right').
+         */
+        closeToolAlign: 'left'
     },
 
     layout: 'vbox',

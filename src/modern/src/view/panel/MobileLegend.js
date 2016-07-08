@@ -50,7 +50,13 @@ Ext.define('Koala.view.panel.MobileLegend',{
         /**
          * The route (template) to apply for this component.
          */
-        route: 'legend/{0}'
+        route: 'legend/{0}',
+
+        /**
+         * If set, a close/hide tool will be rendered to the desired panel header
+         * side (typically 'left' or 'right').
+         */
+        closeToolAlign: 'right'
     },
 
     scrollable: 'vertical',

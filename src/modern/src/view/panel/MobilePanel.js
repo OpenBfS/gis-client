@@ -14,6 +14,23 @@ Ext.define('Koala.view.panel.MobilePanel',{
         type: 'slideIn',
         direction: 'right'
     },
-    hideAnimation: 'slideOut'
+    hideAnimation: 'slideOut',
+
+    initialize: function(config) {
+        var me = this;
+
+        me.callParent([config]);
+
+        if (Ext.isFunction(me.getCloseToolAlign)) {
+            me.addTool({
+                type: me.getCloseToolAlign(),
+                docked: me.getCloseToolAlign(),
+                handler: function(panel) {
+                    panel.hide();
+                }
+            });
+        }
+
+    }
 
 });
