@@ -12,6 +12,9 @@
                 "spatial-search": "http://10.133.7.63/geoserver/BFS/ows",
                 "print-servlet": "http://10.133.7.63:8080/print-servlet-3.4-SNAPSHOT/print/",
 
+                "layerprofile": "classic/resources/layerprofile.json",
+                "layerset": "classic/resources/layerset.json",
+
                 "irix-servlet": "/irix-servlet",
                 "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
             },

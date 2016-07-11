@@ -43,10 +43,6 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
         }
     },
 
-    // TODO shouldnt this be configurable dynamicable or in appContext.json
-    // TODO see as well layerprofile.json
-    layerSetUrl: 'classic/resources/layerset.json',
-
     /**
      * flag used to indicate which items should be displayed through template
      */
@@ -64,6 +60,18 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
      */
     initComponent: function() {
         var me = this;
+
+        // try to load layerprofile from appContext
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+        var merge = appContext.data.merge;
+        var urls = merge.urls;
+        var layerSetUrl;
+        if (me.showLayerProfiles) {
+            layerSetUrl = urls['layerprofile'] ? urls['layerprofile'] : 'classic/resources/layerprofile.json';
+        } else {
+            layerSetUrl = urls['layerset'] ? urls['layerset'] : 'classic/resources/layerset.json';
+        }
+
         var tplIfStr = me.showLayerProfiles ?
             '<tpl if="isLayerProfile">' :
             '<tpl if="!isLayerProfile">';
@@ -86,7 +94,7 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
                 tplIfEndStr,
                 '</tpl>'
             ],
-            layerSetUrl: me.layerSetUrl
+            layerSetUrl: layerSetUrl
         }];
 
         me.callParent();

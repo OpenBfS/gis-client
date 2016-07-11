@@ -92,7 +92,6 @@ Ext.define('Koala.view.main.Main', {
                             xtype: 'k-panel-layersetchooser',
                             showLayerProfiles: true,
                             header: false,
-                            layerSetUrl: 'classic/resources/layerprofile.json',
                             layout: 'fit'
                         }]
                     }).show();
