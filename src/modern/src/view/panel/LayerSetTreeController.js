@@ -109,7 +109,8 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         filterContainer.add({
             xtype: 'k-form-layerfilter',
             metadata: metadata,
-            filters: filters
+            filters: filters,
+            format: 'j F Y'
         });
 
         filterContainer.show();
