@@ -138,7 +138,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var layer = LayerUtil.layerFromMetadata(metadata);
         LayerUtil.addOlLayerToMap(layer);
         this.deselectThemeTreeItems();
-        view.up('window').close();
+
+        var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
+
+        Ext.each(mobilePanels, function(panel){
+            panel.hide();
+        });
     },
 
     /**
@@ -562,13 +567,16 @@ Ext.define('Koala.view.form.LayerFilterController', {
         });
     },
 
-    addWithoutFilterBtn: function(){
+    addWithoutFilterBtn: function() {
+        var me = this;
+        var view = me.getView();
         var addWithoutFilterButton = Ext.create("Ext.Button", {
+            viewModel: me.getViewModel(),
             bind: {
                 text: "{buttonTextNoFilter}"
             },
             handler: "submitNoFilter"
         });
-        this.add(addWithoutFilterButton);
+        view.add(addWithoutFilterButton);
     }
 });

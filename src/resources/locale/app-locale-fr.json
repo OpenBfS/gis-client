@@ -304,8 +304,8 @@
                 "startLabel": "fr:Start",
                 "endLabel": "fr:Ende",
                 "timestampLabel": "fr:Zeitpunkt",
-                "buttonText": "fr:Add",
-                "buttonTextNoFilter": "fr:Auswählen und in Karte übernehmen",
+                "buttonText": "fr:Ausgewählten Layer hinzufügen",
+                "buttonTextNoFilter": "fr:Ausgewählten Layer hinzufügen",
                 "valueFilter": "fr:Wertefilter",
                 "timeRangeFilter": "fr:Zeitraumfilter",
                 "pointInTimeFilter": "fr:Zeitpunktfilter"

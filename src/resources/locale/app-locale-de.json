@@ -720,8 +720,8 @@
                 "startLabel": "Start",
                 "endLabel": "Ende",
                 "timestampLabel": "Zeitpunkt",
-                "buttonText": "Add",
-                "buttonTextNoFilter": "Auswählen und in Karte übernehmen",
+                "buttonText": "Ausgewählten Layer hinzufügen",
+                "buttonTextNoFilter": "Ausgewählten Layer hinzufügen",
                 "valueFilter": "Wertefilter",
                 "timeRangeFilter": "Zeitraumfilter",
                 "pointInTimeFilter": "Zeitpunktfilter"
