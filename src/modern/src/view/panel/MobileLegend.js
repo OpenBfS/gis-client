@@ -43,9 +43,9 @@ Ext.define('Koala.view.panel.MobileLegend',{
     config: {
         /**
          * The maximal number of (non-vector) layers visible in the application
-         * at one time.
+         * at one time. Set to null to disable check.
          */
-        maxVisibleLayers: 5,
+        maxVisibleLayers: null,
 
         /**
          * The route (template) to apply for this component.

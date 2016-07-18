@@ -200,6 +200,11 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var mapLayers = map.getLayers();
         var visibleLayers = 0;
 
+        // if maxVisibleLayers is falsy, no limitation is given
+        if (!view.getMaxVisibleLayers()) {
+            return true;
+        }
+
         // only check if the layer is requested to set visible
         if (layer.getVisible()) {
             return true;
