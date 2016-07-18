@@ -14,7 +14,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         var merge = appContext.data.merge;
         var urls = merge.urls;
         var layerSetUrl = urls['layerset'] ? urls['layerset'] : 'classic/resources/layerset.json';
-        
+
         if(!view.down('treelist').getStore()){
             var treeStore = Ext.create('Ext.data.TreeStore', {
                 proxy: {
@@ -92,7 +92,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
 
         var treelist = this.view.down('treelist');
 
-        var currentSelection = treelist.getSelection()[0];
+        var currentSelection = treelist.getSelection();
         var title = currentSelection ?
             currentSelection.data.text :
             metadata.dspText;
