@@ -16,15 +16,21 @@ Ext.define('Koala.view.panel.MobilePanel',{
     },
     hideAnimation: 'slideOut',
 
+    /**
+     * If set, a close/hide tool will be rendered to the desired panel header
+     * side (typically 'left' or 'right').
+     */
+    closeToolAlign: null,
+
     initialize: function(config) {
         var me = this;
 
         me.callParent([config]);
 
-        if (Ext.isFunction(me.getCloseToolAlign)) {
+        if (me.closeToolAlign) {
             me.addTool({
-                type: me.getCloseToolAlign(),
-                docked: me.getCloseToolAlign(),
+                type: me.closeToolAlign,
+                docked: me.closeToolAlign,
                 handler: function(panel) {
                     panel.hide();
                 }
