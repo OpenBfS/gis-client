@@ -16,21 +16,23 @@ Ext.define('Koala.view.panel.MobilePanel',{
     },
     hideAnimation: 'slideOut',
 
-    /**
-     * If set, a close/hide tool will be rendered to the desired panel header
-     * side (typically 'left' or 'right').
-     */
-    closeToolAlign: null,
+    config: {
+        /**
+         * If set, a close/hide tool will be rendered to the desired panel header
+         * side (typically 'left' or 'right').
+         */
+        closeToolAlign: null
+    },
 
     initialize: function(config) {
         var me = this;
 
         me.callParent([config]);
 
-        if (me.closeToolAlign) {
+        if (me.getCloseToolAlign()) {
             me.addTool({
-                type: me.closeToolAlign,
-                docked: me.closeToolAlign,
+                type: me.getCloseToolAlign(),
+                docked: me.getCloseToolAlign(),
                 handler: function(panel) {
                     panel.hide();
                 }
