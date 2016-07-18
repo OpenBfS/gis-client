@@ -40,6 +40,17 @@ Ext.define('Koala.view.form.LayerFilterController', {
             return;
         }
 
+        var submitButton = Ext.create("Ext.Button", {
+            viewModel: me.getViewModel(),
+            bind: {
+                text: "{buttonText}"
+            },
+            handler: "submitFilter",
+            margin: "0 20px",
+            formBind: true
+        });
+        view.add(submitButton);
+
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || "").toLowerCase();
             switch(type){
@@ -59,17 +70,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     break;
             }
         });
-
-        var submitButton = Ext.create("Ext.Button", {
-            viewModel: me.getViewModel(),
-            bind: {
-                text: "{buttonText}"
-            },
-            handler: "submitFilter",
-            margin: "0 20px",
-            formBind: true
-        });
-        view.add(submitButton);
 
         // TODO Readd validation
         // view.getForm().isValid();
