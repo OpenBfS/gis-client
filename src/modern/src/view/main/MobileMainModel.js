@@ -18,16 +18,12 @@
  *
  * @class Koala.view.main.MainModel
  */
-Ext.define('Koala.view.main.MainModel', {
+Ext.define('Koala.view.main.MobileMainModel', {
     extend: 'Ext.app.ViewModel',
 
-    alias: 'viewmodel.app-main',
+    alias: 'viewmodel.mobile-main',
 
     data: {
-        addWmsButtonText: '',
-        addWmsButtonTooltip: '',
-        buttonGroupTopTitle: '',
-        printButtonText: '',
-        printButtonTooltip: ''
+        useUtc: true
     }
 });

@@ -3,7 +3,7 @@ Ext.define('Koala.view.main.Main', {
     xtype: 'app-main',
 
     requires: [
-        'Koala.view.main.MainModel',
+        'Koala.view.main.MobileMainModel',
         'Koala.view.main.MobileMainController',
 
         'BasiGX.view.component.Map',
@@ -27,7 +27,7 @@ Ext.define('Koala.view.main.Main', {
 
     controller: 'mobile-main',
     viewModel: {
-        type: 'app-main'
+        type: 'mobile-main'
     },
 
     config: {
