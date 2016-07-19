@@ -291,26 +291,42 @@ Ext.define('Koala.util.Filter', {
             var self = Koala.util.Filter;
             var MINUTE_TYPE = self.SPINNERTYPE.MINUTES;
             var datefield;
+            var unitOfSpinner;
+            var dateVal;
 
             if(!Ext.isModern){ // classic
                 datefield = field.up("fieldcontainer").down("datefield");
-            } else { // modern
-                datefield = field.up("container").down('datepickerfield');
-            }
+                dateVal = datefield.getValue();
 
-            var dateVal = datefield.getValue();
-            var diff = field.step;
-            var unitOfSpinner;
-            if(field.spinnerType === MINUTE_TYPE){
-                unitOfSpinner = Ext.Date.MINUTE;
-            } else {
-                unitOfSpinner = Ext.Date.HOUR;
+                var diff = field.step;
+
+                if(field.spinnerType === MINUTE_TYPE){
+                    unitOfSpinner = Ext.Date.MINUTE;
+                } else {
+                    unitOfSpinner = Ext.Date.HOUR;
+                }
+                if (prevVal > val) {
+                    // spinned down, reduce date by step
+                    diff *= -1;
+                }
+                datefield.setValue(Ext.Date.add(dateVal, unitOfSpinner, diff));
+            } else { // modern
+
+                if (Ext.isEmpty(val)) {
+                    return false;
+                }
+
+                datefield = field.up("container").down('datepickerfield');
+                dateVal = datefield.getValue();
+
+                if(field.spinnerType === MINUTE_TYPE){
+                    dateVal.setMinutes(field.getValue());
+                } else {
+                    dateVal.setHours(field.getValue());
+                }
+
+                datefield.setValue(dateVal);
             }
-            if (prevVal > val) {
-                // spinned down, reduce date by step
-                diff *= -1;
-            }
-            datefield.setValue(Ext.Date.add(dateVal, unitOfSpinner, diff));
         },
 
         /**
