@@ -101,6 +101,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             if (fieldset) {
                 var fields = fieldset.query('field, multiselect');
                 var keyVals = {};
+
                 Ext.each(fields, function(field) {
                     var key = field.getName();
                     if (!Ext.Array.contains(view.ignoreFields, key)) {
@@ -114,8 +115,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 filters = me.updateFilterValues(filters, idx, keyVals);
             }
         });
+
         metadata.filters = filters;
         var layer = LayerUtil.layerFromMetadata(metadata);
+
         LayerUtil.addOlLayerToMap(layer);
         me.deselectThemeTreeItems();
 
@@ -169,7 +172,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
     adjustToUtcIfNeeded: function(userDate){
         var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
             .getViewModel();
-        if (mainViewModel.get('useUtc')) {
+        if (!mainViewModel.get('useUtc')) {
             return Koala.util.Date.makeUtc(userDate);
         }
         // already UTC
@@ -404,7 +407,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             maxValue.setDate(maxValue.getDate() + 1);
         }
 
-        if (mainViewModel.get('useUtc')) {
+        if (!mainViewModel.get('useUtc')) {
             var makeLocal = Koala.util.Date.makeLocal;
             minValue = makeLocal(minValue);
             maxValue = makeLocal(maxValue);
