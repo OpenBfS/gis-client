@@ -12,22 +12,10 @@ Ext.define('Koala.view.panel.MobileImprint',{
         type: 'k-panel-mobileimprint'
     },
 
-    config: {
-        /**
-         * The route (template) to apply for this menu component.
-         */
-        route: 'menu/1/0/0/0/0/{0}'
-    },
-
     closeToolAlign: 'left',
 
     bind: {
         title: '{title}'
-    },
-
-    listeners: {
-        show: 'onShow',
-        hide: 'onHide'
     },
 
     scrollable: 'y',

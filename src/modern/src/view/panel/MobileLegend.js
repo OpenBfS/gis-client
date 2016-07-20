@@ -45,12 +45,7 @@ Ext.define('Koala.view.panel.MobileLegend',{
          * The maximal number of (non-vector) layers visible in the application
          * at one time. Set to null to disable check.
          */
-        maxVisibleLayers: null,
-
-        /**
-         * The route (template) to apply for this component.
-         */
-        route: 'legend/{0}'
+        maxVisibleLayers: null
     },
 
     closeToolAlign: 'right',
@@ -59,7 +54,6 @@ Ext.define('Koala.view.panel.MobileLegend',{
 
     listeners: {
         initialize: 'onInitialize',
-        show: 'onShow',
-        hide: 'onHide'
+        show: 'onShow'
     }
 });

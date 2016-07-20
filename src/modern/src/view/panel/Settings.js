@@ -14,19 +14,7 @@ Ext.define('Koala.view.panel.Settings',{
         type: 'k-panel-settings'
     },
 
-    config: {
-        /**
-         * The route (template) to apply for this menu component.
-         */
-        route: 'menu/1/0/0/0/{0}/0'
-    },
-
     closeToolAlign: 'left',
-
-    listeners: {
-        show: 'onShow',
-        hide: 'onHide'
-    },
 
     bind: {
         title: '{title}'

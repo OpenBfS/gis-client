@@ -42,35 +42,6 @@ Ext.define('Koala.view.main.MobileMainController', {
 
         mapView.setCenter([lon, lat]);
         mapView.setZoom(zoom);
-    },
-
-    /**
-     *
-     */
-    onFilterContainerShow: function(panel) {
-        // this route is only available if directly called by the client,
-        // a permalink can't use this route, because we don't know the
-        // selected layer.
-        var routeValueToSet = 0;
-
-        if (panel.getRefItems().length > 0) {
-            routeValueToSet = 1;
-        }
-
-        // no getter for config available :/
-        Koala.util.Route.setRouteForView(Ext.String.format(
-                panel.config['route'], routeValueToSet), panel);
-    },
-
-    /**
-     *
-     */
-    onFilterContainerHide: function(panel) {
-        if (panel.isRendered()) {
-            // no getter for config available :/
-            Koala.util.Route.setRouteForView(Ext.String.format(
-                panel.config['route'], 0), panel);
-        }
     }
 
 });

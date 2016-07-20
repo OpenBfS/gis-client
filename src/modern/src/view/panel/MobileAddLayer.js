@@ -39,20 +39,10 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
          * Whether to include sublayers when creting the list of available
          * layers.
          */
-        includeSubLayer: false,
-
-        /**
-         * The route (template) to apply for this menu component.
-         */
-        route: 'menu/1/0/0/{0}/0/0'
+        includeSubLayer: false
     },
 
     closeToolAlign: 'left',
-
-    listeners: {
-        show: 'onShow',
-        hide: 'onHide'
-    },
 
     items: [{
         xtype: 'formpanel',

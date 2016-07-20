@@ -183,13 +183,6 @@ Ext.define('Koala.view.main.Main', {
         left: 0,
         hidden: true,
         scrollable: 'vertical',
-        closeToolAlign: 'left',
-        config: {
-            route: 'menu/1/1/{0}/0/0/0'
-        },
-        listeners: {
-            show: 'onFilterContainerShow',
-            hide: 'onFilterContainerHide'
-        }
+        closeToolAlign: 'left'
     }]
 });
