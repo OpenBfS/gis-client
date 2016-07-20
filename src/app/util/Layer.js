@@ -406,7 +406,8 @@ Ext.define('Koala.util.Layer', {
                 items: {
                     xtype: 'k-form-layerfilter',
                     metadata: metadata,
-                    filters: filters
+                    filters: filters,
+                    format: 'j F Y'
                 }
             }).show();
         },
