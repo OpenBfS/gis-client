@@ -24,11 +24,9 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
 ADD . /usr/local/apache2/htdocs/
 WORKDIR /usr/local/apache2/htdocs/
 
-#
-# Optional clone Repo with custom configs into gis_client_configs at htdocs
-#
-
-# RUN hg clone https://redmine-koala.bfs.de/hg/gis_client_configs gis_client_configs
+# add custom appContext.json
+RUN mv ./src/resources/appContext.json ./src/resources/appContext.json.orig
+ADD appContext.json ./src/resources/
 
 #
 # Install dependencies
