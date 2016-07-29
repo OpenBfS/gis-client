@@ -34,11 +34,16 @@
                     "defaultValue": "imis.bfs.de",
                     "allowBlank": true
                 },{
-                    "name": "ReportingBasis",
-                    "label": "Report Basis",
-                    "type": "text",
-                    "defaultValue": "ESD",
-                    "allowBlank": true
+                    "type": "fieldset",
+                    "name": "ReportingBases",
+                    "label": "Report Basen",
+                    "fields": [{
+                        "name": "ReportingBasis",
+                        "label": "Report Basis",
+                        "type": "text",
+                        "defaultValue": "ESD",
+                        "allowBlank": true
+                    }]
                 },{
                     "name": "ReportContext",
                     "label": "Report Inhaltstyp",
