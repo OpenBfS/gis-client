@@ -103,15 +103,33 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
     },
 
     /**
+     * Adds all passed layers in the correct order to the map.
      *
+     * This is how we do it:
+     * * We first flatten the list (so the hierarchical information is lost, but
+     *   order is kept).
+     * * Next we query for the metadata in parallel and asynchronous manner.
+     * * As the result come in, we create OpenLayers layers for the metadata and
+     *   store them at the correct position in an intermediate array.
+     * * Once the last metadata call was received, we can add all the layers to
+     *   the map.
+     *
+     * @param {Array} layers An array of layers. A layer has the key `leaf`
+     *   to determine if it ids a leaf or a folder. In case of a folder,
+     *   layers have a key `children` which again holds layers.
      */
-    //TODO The layerorder of the json is not respected.
     addLayers: function(layers) {
-        var me = this;
         var LayerUtil = Koala.util.Layer;
-        Ext.each(layers, function(layer) {
+
+        var orderedFlatLayers = LayerUtil.getOrderedFlatLayers(layers);
+        var orderedRealLayers = [];
+         // falsies are gone already
+        var numLayersToCreate = orderedFlatLayers.length;
+        var numLayersCreated = 0;
+
+        Ext.each(orderedFlatLayers, function(layer, index) {
             if (!layer.leaf) {
-                me.addLayers(layer.children);
+                Ext.log.error('getOrderedFlatLayers failed to flatten ', layer);
             } else {
                 var uuid = layer.uuid;
                 // handle layers which shall be added but not be visible
@@ -123,7 +141,13 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                 LayerUtil.getMetadataFromUuidAndThen(uuid, function(metadata) {
                     var olLayer = LayerUtil.layerFromMetadata(metadata);
                     olLayer.setVisible(initiallyVisible);
-                    LayerUtil.addOlLayerToMap(olLayer);
+                    orderedRealLayers[index] = olLayer;
+                    numLayersCreated++;
+                    if (numLayersCreated === numLayersToCreate) {
+                        // TODO we need to decide here if a reversal of the
+                        // array is wanted.
+                        LayerUtil.addOlLayersToMap(orderedRealLayers);
+                    }
                 });
             }
         });
