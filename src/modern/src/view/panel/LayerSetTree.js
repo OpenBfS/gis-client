@@ -38,6 +38,7 @@ Ext.define('Koala.view.panel.LayerSetTree', {
             type: 'vbox',
             align: 'stretch'
         },
+        selectOnExpander: true,
         listeners: {
             singletap: {
                 fn: function() {
