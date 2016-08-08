@@ -32,13 +32,27 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
 
     currentTask: null,
 
+    clearTask: function() {
+        var me = this;
+        console.log("Check clear task");
+        var task = me.currentTask;
+        if (task && task.cancel) {
+            task.cancel();
+            me.currentTask = null;
+        }
+    },
+
+    /**
+     * Called on singletap, this methdos sets up a delayed handler which may
+     * show the layerfilter window.
+     *
+     * @param {HTMLElement} node The target of the tap.
+     */
     setupShowFilterWinCheck: function() {
         var me = this;
-        var treelist = this.getView().down('treelist');
+        var treelist = me.getView().down('treelist');
+        me.clearTask();
         var selection = treelist.getSelection();
-        if (me.currentTask) {
-            me.currentTask.cancel();
-        }
         me.currentTask = new Ext.util.DelayedTask(function(){
             if (selection && selection.isLeaf()) {
                 Koala.util.Layer.getMetadataFromUuidAndThen(
@@ -54,11 +68,9 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         //      we have to share the logic in LayerSetChooserController
         //      method addLayers (`visible` setting)
         var me = this;
+        me.clearTask();
         var treelist = this.getView().down('treelist');
         var selection = treelist.getSelection();
-        if (me.currentTask) {
-            me.currentTask.cancel();
-        }
         if(selection){
             if (selection.isLeaf()) {
                 Koala.util.Layer.addLayerByUuid(selection.get('uuid'));
