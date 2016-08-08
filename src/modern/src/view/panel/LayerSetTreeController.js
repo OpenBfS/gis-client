@@ -34,7 +34,6 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
 
     clearTask: function() {
         var me = this;
-        console.log("Check clear task");
         var task = me.currentTask;
         if (task && task.cancel) {
             task.cancel();
