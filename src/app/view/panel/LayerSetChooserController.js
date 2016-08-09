@@ -127,6 +127,13 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
         var numLayersToCreate = orderedFlatLayers.length;
         var numLayersCreated = 0;
 
+        // Now that the array is filled in the right way, let's reverse it so
+        // that the configurable layers are looking like in a tree. This feels
+        // more natural to editors of the external sources.
+        //
+        // See also https://redmine-koala.bfs.de/issues/1491#note-6
+        orderedFlatLayers.reverse();
+
         Ext.each(orderedFlatLayers, function(layer, index) {
             if (!layer.leaf) {
                 Ext.log.error('getOrderedFlatLayers failed to flatten ', layer);
@@ -144,8 +151,6 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                     orderedRealLayers[index] = olLayer;
                     numLayersCreated++;
                     if (numLayersCreated === numLayersToCreate) {
-                        // TODO we need to decide here if a reversal of the
-                        // array is wanted.
                         LayerUtil.addOlLayersToMap(orderedRealLayers);
                     }
                 });
