@@ -36,7 +36,7 @@
     "istanbul": "0.4.4",
     "mocha": "3.0.2",
     "mocha-phantomjs": "4.1.0",
-    "sinon": "1.17.2",
+    "sinon": "1.17.5",
     "watch": "0.16.0"
   }
 }
