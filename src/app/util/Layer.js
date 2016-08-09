@@ -659,6 +659,10 @@ Ext.define('Koala.util.Layer', {
                             bbox: extent.join(',') + ',' + projCode
                         }, extraParams || {});
 
+                        // Fire an event that indicates loading has started.
+                        // This is essentially the same as the other sources
+                        // (ImageSource or TileSource) do it.
+                        vectorSource.dispatchEvent('vectorloadstart');
                         Ext.Ajax.request({
                             url: mdLayerCfg.url,
                             method: 'GET',
@@ -666,9 +670,19 @@ Ext.define('Koala.util.Layer', {
                             success: function(response) {
                                 var format = new ol.format.GeoJSON();
                                 var features = format.readFeatures(response.responseText);
+                                // Fire an event that indicates loading has
+                                // finished. This is essentially the same as the
+                                // other sources (ImageSource or TileSource) do
+                                // it.
+                                vectorSource.dispatchEvent('vectorloadend');
                                 vectorSource.addFeatures(features);
                             },
                             failure: function(response) {
+                                // Fire an event that indicates loading has
+                                // errored. This is essentially the same as the
+                                // other sources (ImageSource or TileSource) do
+                                // it.
+                                vectorSource.dispatchEvent('vectorloaderror');
                                 Ext.log.info('server-side failure with status code ' + response.status);
                             }
                         });
