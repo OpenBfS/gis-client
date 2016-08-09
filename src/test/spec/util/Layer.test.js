@@ -280,5 +280,94 @@ describe('Koala.util.Layer', function() {
                 expect(got.indexOf("28.11.1998 Koala")).to.not.be(-1);
             });
         });
+
+        describe('#getOrderedFlatLayers', function(){
+            it('returns a flat list for a basic array', function() {
+                var LayerUtil = Koala.util.Layer;
+                var layers = [{
+                    leaf: true
+                }, {
+                    leaf: true
+                }, {
+                    leaf: true
+                }];
+                var got = LayerUtil.getOrderedFlatLayers(layers);
+                expect(got).to.be.an('array');
+                expect(got).to.have.length(3);
+                expect(got[0]).to.be(layers[0]);
+                expect(got[1]).to.be(layers[1]);
+                expect(got[2]).to.be(layers[2]);
+            });
+            it('returns a flat list for a hierarchical array', function() {
+                var LayerUtil = Koala.util.Layer;
+                var layers = [{
+                    leaf: true
+                }, {
+                    leaf: false,
+                    children: [
+                        { leaf: true },
+                        { leaf: true }
+                    ]
+                }, {
+                    leaf: true
+                }];
+                var got = LayerUtil.getOrderedFlatLayers(layers);
+                expect(got).to.be.an('array');
+                expect(got).to.have.length(4);
+                expect(got[0]).to.be(layers[0]);
+                expect(got[1]).to.be(layers[1].children[0]);
+                expect(got[2]).to.be(layers[1].children[1]);
+                expect(got[3]).to.be(layers[2]);
+            });
+            it('returns a flat list for a deeply nested array', function() {
+                var LayerUtil = Koala.util.Layer;
+                var layers = [{
+                    leaf: true
+                }, {
+                    leaf: false,
+                    children: [{
+                        leaf: false,
+                        children: [{
+                            leaf: false,
+                            children: [{
+                                leaf: false,
+                                children: [{
+                                    leaf: false,
+                                    children: [{
+                                        leaf: true
+                                    }]
+                                }]
+                            }]
+                        }]
+                    }]
+                }, {
+                    leaf: true
+                }];
+                var got = LayerUtil.getOrderedFlatLayers(layers);
+                expect(got).to.be.an('array');
+                expect(got).to.have.length(3);
+                expect(got[0]).to.be(layers[0]);
+                var expected = layers[1].children[0].children[0].children[0]
+                    .children[0].children[0];
+                expect(got[1]).to.be(expected);
+                expect(got[2]).to.be(layers[2]);
+            });
+            it('returns a flat and skips falsy layers', function() {
+                var LayerUtil = Koala.util.Layer;
+                var layers = [{
+                        leaf: true
+                    },
+                    undefined,
+                    null,
+                    false,
+                    0,
+                    ''
+                ];
+                var got = LayerUtil.getOrderedFlatLayers(layers);
+                expect(got).to.be.an('array');
+                expect(got).to.have.length(1);
+                expect(got[0]).to.be(layers[0]);
+            });
+        });
     });
 });

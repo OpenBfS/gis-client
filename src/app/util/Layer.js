@@ -330,7 +330,26 @@ Ext.define('Koala.util.Layer', {
                 "</span>";
         },
 
-        addOlLayerToMap: function(layer){
+        /**
+         * Adds all the passed OpenLayers layers to the map.
+         *
+         * @param {Array<ol.layer.Base>} layers The array of layers to add.
+         */
+        addOlLayersToMap: function(layers) {
+            var me = Koala.util.Layer;
+            Ext.each(layers, function(layer) {
+                if (layer) {
+                    me.addOlLayerToMap(layer);
+                }
+            });
+        },
+
+        /**
+         * Adds the passed OpenLayers layer to the map.
+         *
+         * @param {ol.layer.Base} layer The layer to add.
+         */
+        addOlLayerToMap: function(layer) {
             var me = this;
 
             var suffixId = me.getSuffixId();
@@ -1335,6 +1354,41 @@ Ext.define('Koala.util.Layer', {
                     break;
             }
             return cql;
+        },
+
+        /**
+         * Returns a flattened array of all layers in the passed structure (may
+         * be hierarchical with children under the key `children`). This utility
+         * ensures that layers sets (also possibly with a deep hierarchy) can be
+         * added in the exoected order, even though we have to query in an
+         * asynchronous for their metadata. Undefined layers will be skipped.
+         *
+         * See also https://redmine-koala.bfs.de/issues/1491.
+         *
+         * @param {Array} layers An array of layers. A layer has the key `leaf`
+         *   to determine if it ids a leaf or a folder. In case of a folder,
+         *   layers have a key `children` which again holds layers.
+         * @return {Array} A flattened and correctly ordered list of plain
+         *   layers; e.g. no folders.
+         */
+        getOrderedFlatLayers: function(layers) {
+            var me = Koala.util.Layer;
+            var flatList = [];
+
+            Ext.each(layers, function(layer) {
+                if(layer) {
+                    if (!layer.leaf) {
+                        var flatChildren = me.getOrderedFlatLayers(
+                            layer.children
+                        );
+                        flatList = Ext.Array.push(flatList, flatChildren);
+                    } else {
+                        flatList.push(layer);
+                    }
+                }
+            });
+            return flatList;
         }
+
     }
 });

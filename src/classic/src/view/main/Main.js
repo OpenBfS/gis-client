@@ -238,7 +238,7 @@ Ext.define('Koala.view.main.Main', {
 
         me.header.additionalItems = me.getAdditionalHeaderItems();
 
-        this.callParent([config]);
+        me.callParent([config]);
     },
 
     /**
