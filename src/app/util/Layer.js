@@ -749,7 +749,7 @@ Ext.define('Koala.util.Layer', {
                     }
                     filters.splice(i, 1);
                     metadata = me.moveFiltersToViewparams(metadata, viewParamFilters);
-                } 
+                }
             }
             if (filters.length !== 0){
                 // The filters should not be encoded in the viewparams, but as
