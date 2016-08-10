@@ -55,6 +55,62 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     statics: {
+        /**
+         * This object holds the names for certain model fields we use to
+         * communicate the loading status of certain layers. The fields will
+         * be set on the `GeoExt.data.model.LayerTreeNode`-instances.
+         */
+        FIELDAMES_LOAD_INDICATION: {
+            /**
+             * Whether we have already bound listeners to this LayerTreeNode.
+             * Needed so we don't bind multiple times and to see if there is
+             * anythin we need to remove once the record is removed from the
+             * store.
+             */
+            IS_BOUND: '__load_indication_bound',
+            /**
+             * An array of Keys of the event handlers we need to remove added
+             * handlers when they are no longer needed.
+             */
+            LISTENER_KEYS: '__load_indication_keys',
+            /**
+             * The name of the field we set to true once loading starts; and to
+             * false, once we are done loading. Already provided by ExtJS.
+             */
+            IS_LOADING: 'loading'
+        },
+
+        /**
+         * Returns the prefix which should be used for the source when one wants
+         * to bind to the load events.
+         *
+         * @param {ol.source.Source} source The source to determine the
+         *   loadevent prefix for.
+         * @return {String} The prefix for the load event; can be either
+         *   `'tile'`, `'image'` (OpenLayers) or `'vector'` (our own).
+         */
+        getLoadEventPrefixBySource: function(source) {
+            var prefix;
+            if (!source) {
+                return prefix;
+            }
+
+            if (source instanceof ol.source.Tile) {
+                // E.g. TileWMS, XYZ, …
+                prefix = 'tile';
+            } else if (source instanceof ol.source.Image) {
+                // E.g. ImageWMS, …
+                prefix = 'image';
+            } else if (source instanceof ol.source.Vector) {
+                // These events are fired by ourself, not from OpenLayers. See the
+                // method Koala.util.Layer#getInternalSourceConfig where we setup a
+                // `loader` function with appropriate callbacks dispatching the
+                // vectorloadstart / … events.
+                prefix = 'vector';
+            }
+            return prefix;
+        },
+
         findByProp: function(arr, key, val){
             var item = null;
             Ext.each(arr, function(obj){
@@ -257,7 +313,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
     viewConfig: {
         // TODO verbatim copied from LegendTree from BasiGX, make configurable
-        plugins: { ptype: 'treeviewdragdrop' },
+        plugins: {
+            ptype: 'treeviewdragdrop'
+        },
         getRowClass: function(record){
             return this.up().getCssForRow(record);
         },
@@ -289,6 +347,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         me.plugins[0].hideExpandColumn = false;
 
         me.bindUpdateHandlers();
+        me.bindLoadIndicationHandlers();
     },
 
     /**
@@ -392,7 +451,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         // Ensure a previous selection is kept after datachange
         treeStore.on('datachanged', me.layerDataChanged, me);
         // store data on collapse/expand, and use it on drop to keep the
-        // expoanded collapsed state after drag and drop
+        // expanded / collapsed state after drag and drop
         treeView.on({
             collapsebody: me.onCollapseBody,
             expandbody: me.onExpandBody,
@@ -406,7 +465,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
     /**
      * Unbind the handlers that were bound in #bindUpdateHandlers during the
-     * initComponent sequence.
+     * `initComponent` sequence.
      *
      * @private
      */
@@ -437,6 +496,168 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     /**
+     * Called at the end of the initComponent-sequence, this methods binds some
+     * event handlers, that set the `loading` field of the layer records to
+     * `true` while tiles / images are loading via OpenLayers.
+     *
+     * @private
+     */
+    bindLoadIndicationHandlers: function() {
+        var me = this;
+        var store = me.getStore();
+        // First the initial state
+        store.each(me.bindLoadIndicationToRecord, me);
+        store.on({
+            add: me.handleLayerStoreAdd,
+            remove: me.handleLayerStoreRemove,
+            scope: me
+        });
+        me.on('beforedestroy', me.unbindLoadIndicationHandlers, me, {
+            single: true
+        });
+    },
+
+    /**
+     * Unbind the handlers that were bound in #bindLoadIndicationHandlers during
+     * the `initComponent` sequence.
+     *
+     * @private
+     */
+    unbindLoadIndicationHandlers: function(){
+        var me = this;
+        var store = me.getStore();
+        store.each(me.unbindLoadIndicationFromRecord, me);
+        store.un({
+            add: me.handleLayerStoreAdd,
+            remove: me.handleLayerStoreRemove,
+            scope: me
+        });
+    },
+
+    /**
+     * Bound as handler for the `add`-event of the store, this method binds
+     * listeners to all added records to show whether they are loading. See
+     * also the method #bindLoadIndicationToRecord.
+     *
+     * @param {GeoExt.data.store.LayersTree} store The store to which the
+     *   records have been added.
+     * @param {Array<GeoExt.data.model.LayerTreeNode>} recs The layer records
+     *   which were added.
+     * @private
+     */
+    handleLayerStoreAdd: function(store, recs) {
+        Ext.each(recs, this.bindLoadIndicationToRecord, this);
+    },
+
+    /**
+     * Bound as handler for the `remove`-event of the store, this method unbinds
+     * listeners that were added via #bindLoadIndicationToRecord. See also the
+     * method #unbindLoadIndicationFromRecord.
+     *
+     * @param {GeoExt.data.store.LayersTree} store The store from which the
+     *   records have been removed.
+     * @param {Array<GeoExt.data.model.LayerTreeNode>} recs The layer records
+     *   which were removed.
+     * @private
+     */
+    handleLayerStoreRemove: function(store, recs) {
+        Ext.each(recs, this.unbindLoadIndicationFromRecord, this);
+    },
+
+    /**
+     * Given a layer-record, this method will bind listeners (only once), on the
+     * layers' source to update the field `loading` of the layer-record. In case
+     * of an load-error, the `visible` field of the layer will be set to false.
+     *
+     * @param {GeoExt.data.model.LayerTreeNode} rec The layer record for which
+     *   we want to setup load-indication.
+     * @private
+     */
+    bindLoadIndicationToRecord: function(rec) {
+        var me = this;
+        var staticMe = me.self;
+        var fieldNames = staticMe.FIELDAMES_LOAD_INDICATION;
+        var fieldnameLoadIndicationBound = fieldNames.IS_BOUND;
+        var fieldnameLoadIndicationKeys = fieldNames.LISTENER_KEYS;
+        var fieldnameLoadIndicationLoading = fieldNames.IS_LOADING;
+        if (rec.get(fieldnameLoadIndicationBound) === true) {
+            // already bound for this record, exiting…
+            return;
+        }
+        var layer = rec.getOlLayer();
+        var source = layer && layer.getSource();
+
+        if (!source) {
+            // Rather unlikely but who knows…
+            Ext.log.warn('Unable to determine a source for load indication');
+            return;
+        }
+
+        var evtPrefix = staticMe.getLoadEventPrefixBySource(source);
+
+        if (!evtPrefix) {
+            // Rather unlikely but who knows…
+            Ext.log.warn('Unable to determine event for load indication');
+            return;
+        }
+
+        // These are the plain handlers that will work on both the layer record
+        // and on the layer itself.
+        var loadStartFunc = function() {
+            rec.set(fieldnameLoadIndicationLoading, true);
+            me.layerDropped(); // restores collapsed/expanded state
+        };
+        var loadEndFunc = function() {
+            rec.set(fieldnameLoadIndicationLoading, false);
+            me.layerDropped(); // restores collapsed/expanded state
+        };
+        var loadErrorFunc = function() {
+            loadEndFunc();
+            layer.set('visible', false);
+        };
+
+        // buffer the loadAnd function, so that the loading indicator doesn't
+        // 'flicker'
+        var bufferedLoadEndFunc = Ext.Function.createBuffered(loadEndFunc, 250);
+
+        // Here comes the actual binding to the appropriate events:
+        var startKey = source.on(evtPrefix + 'loadstart', loadStartFunc);
+        var endKey = source.on(evtPrefix + 'loadend', bufferedLoadEndFunc);
+        var errorKey = source.on(evtPrefix + 'loaderror', loadErrorFunc);
+
+        // Set the internal flags that loading indcation is bound and the
+        // associated event keys.
+        rec.set(fieldnameLoadIndicationBound, true);
+        rec.set(fieldnameLoadIndicationKeys, [startKey, endKey, errorKey]);
+    },
+
+    /**
+     * Given a layer-record, this method will unbind listeners that might have
+     * been bound by #bindLoadIndicationToRecord.
+     *
+     * @param {GeoExt.data.model.LayerTreeNode} rec The layer record for which
+     *   we want to destroy load-indication.
+     * @private
+     */
+    unbindLoadIndicationFromRecord: function(rec) {
+        var staticMe = Koala.view.panel.RoutingLegendTree;
+        var fieldNames = staticMe.FIELDAMES_LOAD_INDICATION;
+        var fieldnameLoadIndicationBound = fieldNames.IS_BOUND;
+        var fieldnameLoadIndicationKeys = fieldNames.LISTENER_KEYS;
+        if (rec.get(fieldnameLoadIndicationBound) !== true) {
+            return;
+        }
+        var listenerKeys = rec.get(fieldnameLoadIndicationKeys);
+        if (Ext.isArray(listenerKeys)) {
+            Ext.each(listenerKeys, function(listenerKey) {
+                ol.Observable.unByKey(listenerKey);
+            });
+        }
+        rec.set(fieldnameLoadIndicationBound, false);
+        rec.set(fieldnameLoadIndicationKeys, []);
+    },
+
+    /**
      * Whenever a rowbody collapses, store the current state.
      *
      * @param {HTMLElement} rowNode The `tr` element owning the expanded row.
@@ -464,7 +685,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     layerDropped: function(){
         var me = this;
         var view = me.getView();
-        var rowExpanderPlugin = me.getPlugin();
+        var rowExpanderPlugin = me.getPlugin('rowexpanderwithcomponents');
         var rootNode = me.getRootNode();
         var itemExpandedKey = me.itemExpandedKey;
         rootNode.cascadeBy({
