@@ -39,6 +39,7 @@ Ext.define("Koala.view.form.field.LanguageSelect", {
     forceSelection: true,
     editable: false,
     grow: true,
+    usePicker: false,
     store: {
         type: 'k-language'
     },
