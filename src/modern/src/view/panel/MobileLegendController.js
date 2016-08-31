@@ -32,7 +32,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
     /**
      *
      */
-    onShow: function() {
+    onPainted: function() {
         var me = this;
 
         me.setInitialCheckStatus();

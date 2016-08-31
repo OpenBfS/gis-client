@@ -54,6 +54,6 @@ Ext.define('Koala.view.panel.MobileLegend',{
 
     listeners: {
         initialize: 'onInitialize',
-        show: 'onShow'
+        painted: 'onPainted'
     }
 });
