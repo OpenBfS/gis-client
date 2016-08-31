@@ -204,7 +204,9 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             '</tpl>',
              {
                 display: function(layer) {
-                    return !!(layer instanceof ol.layer.Tile);
+                    return (layer.get(
+                        BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER
+                    ) !== false);
                 },
                 isVisible: function(layer) {
                     return layer.getVisible();
