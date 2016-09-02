@@ -752,17 +752,9 @@ Ext.define('Koala.util.Layer', {
          *
          */
         adjustMetadataAccordingToFilters: function(metadata) {
-            var me = this;
-            // if the olProperty encodeFilterInViewparams is 'true',
-            // we run this code, otherwise we will filter via dimension
-            // or sth. else
-//            var encodeInViewParams = Koala.util.Object.getPathStrOr(
-//                    metadata,
-//                    "layerConfig/olProperties/encodeFilterInViewparams",
-//                    "false"
-//                );
-
-            var filters = this.getFiltersFromMetadata(metadata);
+            var me = this,
+            filters = this.getFiltersFromMetadata(metadata),
+            viewParamFilters = [];
 
             if (!filters) {
                 return metadata;
@@ -773,11 +765,10 @@ Ext.define('Koala.util.Layer', {
             // get them again, they may have changed…
             filters = this.getFiltersFromMetadata(metadata);
 
-            var viewParamFilters = [];
             for (var i=0; i<filters.length; i++){
-                if (filters[i].param === "test_data"){
+                if (filters[i].encodeInViewParams === "true") {
                     viewParamFilters.push(filters[i]);
-                    if (filters[i].value === "true"){
+                    if (filters[i].param === "test_data" && filters[i].value === "true"){
                         metadata.dspTxt = "#TESTDATA# " + metadata.dspTxt;
                     }
                     filters.splice(i, 1);
@@ -792,17 +783,6 @@ Ext.define('Koala.util.Layer', {
                     filters
                 );
             }
-
-//            if (encodeInViewParams === "true") {
-//                metadata = me.moveFiltersToViewparams(metadata, filters);
-//            } else {
-                // The filters should not be encoded in the viewparams, but as
-                // WMS-T and friends
-//                metadata = me.adjustMetadataFiltersToStandardLocations(
-//                    metadata,
-//                    filters
-//                );
-//            }
             return metadata;
         },
 
