@@ -606,7 +606,7 @@ Ext.define('Koala.util.Layer', {
             }
 
             return {
-                name: metadata.dspTxt,
+                name: metadata.treeTitle,
                 legendUrl: olProps.legendUrl || '',
                 legendHeight: olProps.legendHeight,
                 legendWidth: olProps.legendWidth,
@@ -769,7 +769,7 @@ Ext.define('Koala.util.Layer', {
                 if (filters[i].encodeInViewParams === "true") {
                     viewParamFilters.push(filters[i]);
                     if (filters[i].param === "test_data" && filters[i].value === "true"){
-                        metadata.dspTxt = "#TESTDATA# " + metadata.dspTxt;
+                        metadata.treeTitle = "#TESTDATA# " + metadata.treeTitle;
                     }
                     filters.splice(i, 1);
                     metadata = me.moveFiltersToViewparams(metadata, viewParamFilters);

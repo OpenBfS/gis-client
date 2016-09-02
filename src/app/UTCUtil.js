@@ -132,7 +132,7 @@ Ext.define('Koala.UTCUtil', {
      */
     treepanelItemSelected: function(selModel, record) {
         var me = this,
-            name = record.get("dspTxt"),
+            name = record.get("treeTitle"),
             isLeaf = !!record.get('leaf'),
             isFolder = !isLeaf,
             filterConfig = record.get("filterConfig"),
