@@ -9,7 +9,8 @@
         "FileReader": true,
         "Koala": true,
         "BasiGX": true,
-        "btoa": true
+        "btoa": true,
+        "d3": false
     },
     "rules": {
         "comma-dangle": 2,
