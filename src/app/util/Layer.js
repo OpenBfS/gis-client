@@ -606,7 +606,7 @@ Ext.define('Koala.util.Layer', {
             }
 
             return {
-                name: metadata.treeTitle,
+                name: metadata.legendTitle,
                 legendUrl: olProps.legendUrl || '',
                 legendHeight: olProps.legendHeight,
                 legendWidth: olProps.legendWidth,
