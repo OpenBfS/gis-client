@@ -48,16 +48,16 @@ Ext.define('Koala.view.component.D3Chart',{
             xField: 'end_measure',
             yField: 'value',
             name: 'line 1',
-            color: '#00f',
-            width: 2.5
+            color: '#c0c',
+            width: 4
         }, {
             type: 'line',
             curve: 'curveStep',
             xField: 'end_measure',
             yField: 'value',
             name: 'stepline 1',
-            color: '#00eeff',
-            width: 1
+            color: '#0011ff',
+            width: 2
         }],
         // TODO:
         layer: '',
@@ -67,7 +67,7 @@ Ext.define('Koala.view.component.D3Chart',{
             top: 40,
             right: 200,
             bottom: 40,
-            left: 40
+            left: 60
         },
         title: {
             label: 'Verrückte Mongo',
@@ -94,7 +94,7 @@ Ext.define('Koala.view.component.D3Chart',{
                 tickPadding: null,
                 format: ',.0f',
                 label: 'Verrückte Mongo',
-                labelSize: 12,
+                labelSize: 35,
                 labelColor: '#000',
                 labelPadding: 25
             },

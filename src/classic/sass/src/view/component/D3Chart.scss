@@ -1,0 +1,20 @@
+svg .legend g {
+    cursor: pointer;
+}
+
+svg .k-d3-shape-path,
+svg .legend circle,
+svg .legend path,
+svg .legend text {
+    -webkit-transition: opacity 0.3s linear;
+    transition: opacity 0.3s linear;
+    opacity: 1;
+}
+svg .k-d3-hidden-shape-path {
+    opacity: 0;
+}
+svg .legend .k-d3-hidden-shape-path-legend circle,
+svg .legend .k-d3-hidden-shape-path-legend path,
+svg .legend .k-d3-hidden-shape-path-legend text {
+    opacity: 0.3 !important;
+}

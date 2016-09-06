@@ -92,11 +92,14 @@ Ext.define('Koala.view.main.Main', {
                         layout: 'fit',
                         minWidth: 250,
                         minHeight: 300,
+                        // items: [{
+                        //     xtype: 'k-panel-layersetchooser',
+                        //     showLayerProfiles: true,
+                        //     header: false,
+                        //     layout: 'fit'
+                        // }]
                         items: [{
-                            xtype: 'k-panel-layersetchooser',
-                            showLayerProfiles: true,
-                            header: false,
-                            layout: 'fit'
+                            xtype: 'd3-chart'
                         }]
                     }).show();
                 }
