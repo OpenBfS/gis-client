@@ -43,22 +43,33 @@ Ext.define('Koala.view.component.D3Chart',{
         // type: 'line',
         // curve: 'linear',
         shapes: [{
-            type: 'line',
+            type: 'area',
             curve: 'linear',
             xField: 'end_measure',
             yField: 'value',
-            name: 'line 1',
-            color: '#c0c',
+            name: 'area 1',
+            color: '#000',
             width: 4
-        }, {
+        },
+        {
             type: 'line',
-            curve: 'curveStep',
+            curve: 'linear',
             xField: 'end_measure',
             yField: 'value',
             name: 'stepline 1',
             color: '#0011ff',
             width: 2
-        }],
+        },
+        {
+            type: 'bar',
+            curve: 'linear',
+            xField: 'end_measure',
+            yField: 'value',
+            name: 'barchart 1',
+            color: '#ccc',
+            width: 2
+        }
+    ],
         // TODO: or complete layer obj?
         featureType: 'orig-f-bfs:niederschlag_24h',
         //store: 'k-timeseries',

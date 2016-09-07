@@ -54,9 +54,8 @@ Ext.define('Koala.view.component.D3ChartController', {
 
     TYPE: {
         line: d3.line,
-        area: d3.area
-        // bar
-        // step
+        area: d3.area,
+        bar: d3.line
     },
 
     CURVE: {
@@ -206,25 +205,72 @@ Ext.define('Koala.view.component.D3ChartController', {
             var yField = shapeConfig.yField;
             var orientX = me.getAxisByField(xField);
             var orientY = me.getAxisByField(yField);
+            var shape;
 
-            me.shapes.push({
-                config: shapeConfig,
-                shape: shapeType()
+            if (shapeType) {
+                shape = shapeType()
                     // set the curve interpolator
                     .curve(curveType)
+                    .defined(function(d) {
+                        return Ext.isDefined(d.value);
+                    })
                     // set the x accessor
                     .x(function(d) {
                         return me.scales[orientX](d[xField]);
                          //return me.scales.bottom(d.end_measure);
-                    })
-                    // set the y accessor
-                    .y(function(d) {
-                        return me.scales[orientY](d[yField]);
-                        // return me.scales.left(d.value);
-                    })
-                    .defined(function(d) {
-                        return Ext.isDefined(d.value);
-                    })
+                    });
+
+                if (shapeType === me.TYPE.line) {
+                    shape
+                        // set the y accessor
+                        .y(function(d) {
+                            return me.scales[orientY](d[yField]);
+                            // return me.scales.left(d.value);
+                        });
+                }
+
+                if (shapeType === me.TYPE.area) {
+                    shape
+                        .y1(function(d) {
+                            //line.y()
+                            return me.scales[orientY](d[yField]);
+                        })
+                        .y0(function() {
+                            return me.chartHeight;
+                            // return me.scales[orientY](0);
+                        });
+                }
+            } else {
+                shape = {};
+            }
+
+            me.shapes.push({
+                config: shapeConfig,
+                shape: shape
+                // shape: shapeType()
+                //     // set the curve interpolator
+                //     .curve(curveType)
+                //     // set the x accessor
+                //     .x(function(d) {
+                //         return me.scales[orientX](d[xField]);
+                //          //return me.scales.bottom(d.end_measure);
+                //     })
+                //     // set the y accessor
+                //     .y(function(d) {
+                //         return me.scales[orientY](d[yField]);
+                //         // return me.scales.left(d.value);
+                //     })
+                //     .y1(function(d) {
+                //         //line.y()
+                //         return me.scales[orientY](d[yField]);
+                //     })
+                //     .y0(function() {
+                //         return me.chartHeight;
+                //         // return me.scales[orientY](0);
+                //     })
+                //     .defined(function(d) {
+                //         return Ext.isDefined(d.value);
+                //     })
             });
 
             // TODO: add support for area shapes
@@ -373,60 +419,123 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
                     .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx);
 
-            // the actual path with the line
-            shapeGroup.append('path')
-                .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
-                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_PATH + idx)
-                .datum(me.data)
-                .style('fill', 'none')
-                .style('stroke', color)
-                .style('stroke-width', shape.config.width)
-                .attr('d', shape.shape);
-
-            var pointGroup = shapeGroup.append('g')
-                .attr('class', staticMe.CSS_CLASS.SHAPE_POINT_GROUP)
-                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP + idx);
-
-            // TODO refactor the selectAll method below; DK
-            //      pointGroup.enter()???
-            pointGroup.selectAll('circle')
-                .data(me.data)
-                .enter().append('circle')
-                    .filter(function(d) {
-                        return Ext.isDefined(d[yField]);
+            if (shape.config.type === 'bar') {
+                shapeGroup
+                    .selectAll("rect")
+                        .data(me.data)
+                    .enter().append("rect")
+                        .filter(function(d) {
+                            return Ext.isDefined(d[yField]);
+                        })
+                            .style("fill", color)
+                            .attr("x", function(d) {
+                                return me.scales[orientX](d[xField]);
+                            })
+                            .attr("width", (me.chartWidth / me.data.length) - 5)
+                            .attr("y", function(d) {
+                                return me.scales[orientY](d[yField]);
+                            })
+                            .attr("height", function(d) {
+                                return me.chartHeight - me.scales[orientY](d[yField]);
+                            })
+                            .on('mouseover', function(data) {
+                                var tooltip = me.tooltipCmp;
+                                var html = [
+                                    'Some content for series ' + idx,
+                                    '<br />',
+                                    '<ul>',
+                                    '  <li>',
+                                    '<strong>' + xField + '</strong>: ',
+                                    data[xField],
+                                    '  </li>',
+                                    '  <li>',
+                                    '<strong>' + yField + '</strong>: ',
+                                    data[yField],
+                                    '  </li>',
+                                    '</ul>'
+                                ].join('');
+                                tooltip.setHtml(html);
+                                tooltip.setTitle('Title for ' + shape.config.name);
+                                tooltip.setTarget(this);
+                                tooltip.show();
+                            });
+            } else {
+                shapeGroup.append('path')
+                    .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
+                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_PATH + idx)
+                    .datum(me.data)
+                    .style('fill', function() {
+                        switch (shape.config.type) {
+                            case 'line':
+                            return 'none';
+                            case 'area':
+                            return color;
+                        }
                     })
-                        .style('fill', color)
-                        .style('stroke', darkerColor)
-                        .style('stroke-width', 2)
-                        .style('cursor', 'help')
-                        .on('mouseover', function(data) {
-                            var tooltip = me.tooltipCmp;
-                            var html = [
-                                'Some content for series ' + idx,
-                                '<br />',
-                                '<ul>',
-                                '  <li>',
-                                '<strong>' + xField + '</strong>: ',
-                                data[xField],
-                                '  </li>',
-                                '  <li>',
-                                '<strong>' + yField + '</strong>: ',
-                                data[yField],
-                                '  </li>',
-                                '</ul>'
-                            ].join('');
-                            tooltip.setHtml(html);
-                            tooltip.setTitle('Title for ' + shape.config.name);
-                            tooltip.setTarget(this);
-                            tooltip.show();
+                    .style('stroke', function() {
+                        switch (shape.config.type) {
+                            case 'line':
+                            return color;
+                            case 'area':
+                            return 'none';
+                        }
+                    })
+                    .style('stroke-width', function() {
+                        switch (shape.config.type) {
+                            case 'line':
+                            return shape.config.width;
+                            case 'area':
+                            return 0;
+                        }
+                    })
+                    .attr('d', shape.shape);
+
+                var pointGroup = shapeGroup.append('g')
+                    .attr('class', staticMe.CSS_CLASS.SHAPE_POINT_GROUP)
+                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP + idx);
+
+                // TODO refactor the selectAll method below; DK
+                //      pointGroup.enter()???
+                pointGroup.selectAll('circle')
+                    .data(me.data)
+                    .enter().append('circle')
+                        .filter(function(d) {
+                            return Ext.isDefined(d[yField]);
                         })
-                        .attr('cx', function(d) {
-                            return me.scales[orientX](d[xField]);
-                        })
-                        .attr('cy', function(d) {
-                            return me.scales[orientY](d[yField]);
-                        })
-                        .attr('r', shape.config.width);
+                            .style('fill', color)
+                            .style('stroke', darkerColor)
+                            .style('stroke-width', 2)
+                            .style('cursor', 'help')
+                            .on('mouseover', function(data) {
+                                var tooltip = me.tooltipCmp;
+                                var html = [
+                                    'Some content for series ' + idx,
+                                    '<br />',
+                                    '<ul>',
+                                    '  <li>',
+                                    '<strong>' + xField + '</strong>: ',
+                                    data[xField],
+                                    '  </li>',
+                                    '  <li>',
+                                    '<strong>' + yField + '</strong>: ',
+                                    data[yField],
+                                    '  </li>',
+                                    '</ul>'
+                                ].join('');
+                                tooltip.setHtml(html);
+                                tooltip.setTitle('Title for ' + shape.config.name);
+                                tooltip.setTarget(this);
+                                tooltip.show();
+                            })
+                            .attr('cx', function(d) {
+                                return me.scales[orientX](d[xField]);
+                            })
+                            .attr('cy', function(d) {
+                                return me.scales[orientY](d[yField]);
+                            })
+                            .attr('r', shape.config.width);
+            }
+
         });
 
     },
@@ -451,7 +560,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                 // .attr('height', view.getHeight())
 
         Ext.each(me.shapes, function(shape, idx) {
-
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var shapeGroup = me.shapeGroupByIndex(idx);
@@ -473,10 +581,42 @@ Ext.define('Koala.view.component.D3ChartController', {
             //     .attr('r', 5);
 
             legendEntry.append('path')
-                .attr('d', 'M -12 0 l 12 -10 l 0 10 l 12 -10 l 0 12')
-                .style('stroke', shape.config.color)
-                .style('stroke-width', shape.config.width)
-                .style('fill', 'none');
+                .attr('d', function() {
+                    switch (shape.config.type) {
+                        case 'line':
+                            return 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6';
+                        case 'area':
+                            // return 'M-12 -12 H 4 V 4 H -12 Z';
+                            return 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6 M20 -6 v 6 h -20 v -6 Z';
+                        case 'bar':
+                            // M0 -10 h 12 v 12 h -12 Z
+                            return 'M0 -10 h 6 v 12 h -6 Z M7 -6 h 6 v 8 h -6 Z M14 -10 h 6 v 12 h -6 Z';
+                    }
+                })
+                .style('stroke', function() {
+                    switch (shape.config.type) {
+                        case 'line':
+                            return shape.config.color;
+                        default:
+                            return 'none';
+                    }
+                })
+                .style('stroke-width', function() {
+                    switch (shape.config.type) {
+                        case 'line':
+                            return shape.config.width;
+                        default:
+                            return 0;
+                    }
+                })
+                .style('fill', function() {
+                    switch (shape.config.type) {
+                        case 'line':
+                            return 'none';
+                        default:
+                            return shape.config.color;
+                    }
+                });
 
             legendEntry.append('text')
                 .text(shape.config.name)
@@ -525,7 +665,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var featureType = view.getFeatureType();
 
         var startDate = "2015-01-01T00:00:00.000Z";
-        var endDate = "2015-12-31T00:00:00.000Z";
+        var endDate = "2015-01-20T00:00:00.000Z";
         var timeField = "end_measure";
 
         Koala.util.Layer.addLayerToMap({
