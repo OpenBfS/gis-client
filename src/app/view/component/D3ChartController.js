@@ -136,7 +136,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawLegend();
     },
 
-    setupTooltip: function(){
+    createTooltip: function(){
         this.tooltipCmp = Ext.create('Ext.tip.ToolTip');
     },
 
@@ -221,6 +221,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .y(function(d) {
                         return me.scales[orientY](d[yField]);
                         // return me.scales.left(d.value);
+                    })
+                    .defined(function(d) {
+                        return Ext.isDefined(d.value);
                     })
             });
 
@@ -389,38 +392,41 @@ Ext.define('Koala.view.component.D3ChartController', {
             pointGroup.selectAll('circle')
                 .data(me.data)
                 .enter().append('circle')
-                    .style('fill', color)
-                    .style('stroke', darkerColor)
-                    .style('stroke-width', 2)
-                    .style('cursor', 'help')
-                    .on('mouseover', function(data) {
-                        var tooltip = me.tooltipCmp;
-                        var html = [
-                            'Some content for series ' + idx,
-                            '<br />',
-                            '<ul>',
-                            '  <li>',
-                            '<strong>' + xField + '</strong>: ',
-                            data[xField],
-                            '  </li>',
-                            '  <li>',
-                            '<strong>' + yField + '</strong>: ',
-                            data[yField],
-                            '  </li>',
-                            '</ul>'
-                        ].join('');
-                        tooltip.setHtml(html);
-                        tooltip.setTitle('Title for ' + shape.config.name);
-                        tooltip.setTarget(this);
-                        tooltip.show();
+                    .filter(function(d) {
+                        return Ext.isDefined(d[yField]);
                     })
-                    .attr('cx', function(d) {
-                        return me.scales[orientX](d[xField]);
-                    })
-                    .attr('cy', function(d) {
-                        return me.scales[orientY](d[yField]);
-                    })
-                    .attr('r', shape.config.width);
+                        .style('fill', color)
+                        .style('stroke', darkerColor)
+                        .style('stroke-width', 2)
+                        .style('cursor', 'help')
+                        .on('mouseover', function(data) {
+                            var tooltip = me.tooltipCmp;
+                            var html = [
+                                'Some content for series ' + idx,
+                                '<br />',
+                                '<ul>',
+                                '  <li>',
+                                '<strong>' + xField + '</strong>: ',
+                                data[xField],
+                                '  </li>',
+                                '  <li>',
+                                '<strong>' + yField + '</strong>: ',
+                                data[yField],
+                                '  </li>',
+                                '</ul>'
+                            ].join('');
+                            tooltip.setHtml(html);
+                            tooltip.setTitle('Title for ' + shape.config.name);
+                            tooltip.setTarget(this);
+                            tooltip.show();
+                        })
+                        .attr('cx', function(d) {
+                            return me.scales[orientX](d[xField]);
+                        })
+                        .attr('cy', function(d) {
+                            return me.scales[orientY](d[yField]);
+                        })
+                        .attr('r', shape.config.width);
         });
 
     },
@@ -515,6 +521,116 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     getChartData: function() {
         var me = this;
+        var view = me.getView();
+        var featureType = view.getFeatureType();
+
+        var startDate = "2015-01-01T00:00:00.000Z";
+        var endDate = "2015-12-31T00:00:00.000Z";
+        var timeField = "end_measure";
+
+        Koala.util.Layer.addLayerToMap({
+            "id": "f917f393-fb9b-4345-99cf-8d2fcfab8d3d",
+            "dspTxt": "niederschlag_24h",
+            "inspireId": "",
+            "filters": [
+                {
+                    "type":"pointintime",
+                    "param":"end_measure",
+                    "interval":"24",
+                    "unit":"hours",
+                    "mindatetimeformat":"Y-m-dTH:i:s",
+                    "mindatetimeinstant":"2015-01-01T09:00:00",
+                    "maxdatetimeformat":"Y-m-dTH:i:s",
+                    "maxdatetimeinstant":"2015-11-15T09:00:00",
+                    "defaulttimeformat":"Y-m-dTH:i:s",
+                    "defaulttimeinstant":"2015-11-15T09:00:00"
+                }
+            ],
+            "layerConfig":{
+                "wms":{
+                    "url":"http://10.133.7.63/geoserver/orig-f-bfs/wms" ,
+                    "layers":"orig-f-bfs:niederschlag_24h",
+                    "transparent":"true",
+                    "version":"1.3.0",
+                    "styles":"",
+                    "format":"image/png"
+                },
+                "wfs":{
+                    "url":"http://10.133.7.63/geoserver/orig-f-bfs/ows"
+                },
+                "download":{
+                    "url":"http://10.133.7.63/geoserver/orig-f-bfs/ows?service=WFS&request=GetFeature&version=2.0.0&typeNames=orig-f-bfs:niederschlag_24h",
+                    "filterFieldStart":"",
+                    "filterFieldEnd":""
+                },
+                "olProperties":{
+                    "hoverTpl":"<b>niederschlag<\/b>: [[locality_name]]<br>[[end_measure]]<br>Messwert (mm):[[value]]",
+                    "legendUrl":"http://10.133.7.63/geoserver/orig-f-bfs/ows?service=wms&request=GetLegendGraphic&layer=imis:niederschlag_24h&width=40&height=40&format=image/png",
+                    "allowHover":"true",
+                    "allowShortInfo":"true",
+                    "allowDownload":"true",
+                    "allowRemoval":"true",
+                    "allowOpacityChange":"true",
+                    "hasLegend":"true",
+                    "encodeFilterInViewparams":"true"
+                },
+                "timeSeriesChartProperties":{
+                    "xAxisAttribute":"end_measure",
+                    "yAxisAttribute":"value",
+                    "dspUnit":"mm",
+                    "yAxisLabelRotation":"0",
+                    "dataFeatureType":"orig-f-bfs:niederschlag_24h_timeseries",
+                    "colorSequence":"#5A005A,#0C2C84,#225EA8,#1D91C0,#41B6C4,#7FCDBB,#C7E9B4,#EDF8B1",
+                    "strokeWidthSequence":"2",
+                    "strokeOpacitySequence":"0.9",
+                    "titleTpl":"niederschlag_24h",
+                    "seriesTitleTpl":"[[locality_name]]",
+                    "ui_series_step":"false",
+                    "allowFilterForm":"true",
+                    "tooltipTpl":"Dies ist die Station [[title]]. Hier wurde am [[end_measure]] folgender Wert gemessen: [[value]]",
+                    "hasToolTip":"true",
+                    "yAxis_grid":"\\{\\\"odd\\\":\\{\\\"opacity\\\":1,\\\"fill\\\":\\\"#ddd\\\",\\\"stroke\\\":\\\"#bbb\\\",\\\"lineWidth\\\":1\\}\\}",
+                    "end_timestamp":"now",
+                    "duration":"P2WT",
+                    "end_timestamp_format":"Y-m-dTH:i:s",
+                    "featureIdentifyField":"id",
+                    "param_viewparams":"locality_code:[[id]]",
+                    "featureShortDspField":"locality_name",
+                    "featureIdentifyFieldDataType":"string"
+                },
+                "barChartProperties":{
+                }
+            }
+        });
+
+        var layer = BasiGX.util.Layer.getLayerByFeatureType(featureType);
+
+        // TODO refactor this gathering of the needed filter attribute
+        var filters = layer.metadata.filters;
+        var timeRangeFilter;
+
+        Ext.each(filters, function(filter) {
+            var fType = (filter && filter.type) || '';
+            if (fType === 'timerange' || fType === 'pointintime') {
+                timeRangeFilter = filter;
+                return false;
+            }
+        });
+        if (!timeRangeFilter) {
+            Ext.log.warn("Failed to determine a timerange filter");
+        }
+        // don't accidently overwrite the configured filter…
+        timeRangeFilter = Ext.clone(timeRangeFilter);
+
+        var intervalInSeconds = me.getIntervalInSeconds(
+            timeRangeFilter.interval, timeRangeFilter.unit
+        );
+
+        // getTime() TODO. sommer and wintertime?!
+        var start = Ext.Date.parse(startDate, Koala.util.Date.ISO_FORMAT);
+        var end = Ext.Date.parse(endDate, Koala.util.Date.ISO_FORMAT);
+        // var diff = Ext.Date.diff(start, end, Ext.Date.SECOND);
+        // var steps = diff / intervalInSeconds;
 
         var url = "http://10.133.7.63/geoserver/orig-f-bfs/ows?";
 
@@ -525,8 +641,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             // TODO: replace with real layer
             typeName: 'orig-f-bfs:niederschlag_24h_timeseries',
             outputFormat: 'application/json',
-            filter: me.getDateTimeRangeFilter(),
-            // TODO: replace with value from metadata
+            filter: me.getDateTimeRangeFilter(startDate, endDate, timeField),
+            // TODO: replace with value from metadata timeRangeFilter.param
             sortBy: 'end_measure'
         };
 
@@ -537,13 +653,40 @@ Ext.define('Koala.view.component.D3ChartController', {
             success: function(resp) {
                 var jsonObj = Ext.decode(resp.responseText);
 
-                Ext.each(jsonObj.features, function(feat) {
-                    me.data.push({
-                        // TODO: replace with defined values
-                        end_measure: d3.isoParse(feat.properties.end_measure),
-                        value: feat.properties.value
-                    });
-                });
+                var snapObject = me.getTimeStampSnapObject(
+                        start, intervalInSeconds, jsonObj.features, 'end_measure');
+
+                var compareableDate, matchingFeature;
+
+                var xAxisAttr = 'end_measure';
+                var valueField = 'value';
+                var yAxisAttr = 'value';
+                // var dataObjectField = 'value';
+
+                var mockUpData = [];
+
+                while(start <= end){
+
+                    var newRawData = {};
+
+                    compareableDate = Ext.Date.format(start, "timestamp");
+                    matchingFeature = snapObject[compareableDate];
+
+                    // Why did we do this?
+                    // Ext.Date.format(date, Koala.util.Date.ISO_FORMAT);
+                    newRawData[xAxisAttr] = start;
+                    newRawData[valueField] = undefined;
+
+                    if(matchingFeature){
+                        newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+                        //newRawData[dataObjectField] = Ext.clone(matchingFeature.properties);
+                    }
+
+                    mockUpData.push(newRawData);
+                    start = Ext.Date.add(start, Ext.Date.SECOND, intervalInSeconds);
+                }
+
+                me.data = mockUpData;
 
                 me.fireEvent('chartdatachanged');
 
@@ -555,21 +698,85 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
+     * We create an object of the features where the key is a timestamp.
+     * You can then easily access the feature of a given date.
+     *
+     * @param startDate {Date}
+     * @param intervalInSeconds {Integer}
+     * @param features {Array[ol.Feature]}
+     * @param xAxisAttr {String}
+     */
+    getTimeStampSnapObject: function (startDate, intervalInSeconds, features,
+            xAxisAttr) {
+        var obj = {};
+        var startSeconds = parseInt(
+                Ext.Date.format(startDate, "timestamp"), 10);
+        var columnSeconds = intervalInSeconds / 2;
+
+        Ext.each(features, function(feat){
+            // Dates in features are always in UTC, `new Date` seems to be
+            // respecting the format
+            var featDate = new Date(feat.properties[xAxisAttr]);
+
+            if (Koala.Application.isLocal()) {
+                var makeLocal = Koala.util.Date.makeLocal;
+                featDate = makeLocal(featDate);
+            }
+
+            var featDateSeconds = parseInt(
+                    Ext.Date.format(featDate, "timestamp"), 10);
+            var diffSeconds = featDateSeconds - startSeconds;
+            var modulos = diffSeconds % intervalInSeconds;
+            var snapSeconds;
+
+            if(modulos < columnSeconds){
+                snapSeconds = featDateSeconds - modulos;
+            } else {
+                snapSeconds = featDateSeconds + modulos;
+            }
+            obj[snapSeconds] = feat;
+        });
+
+        return obj;
+    },
+
+    /**
+     * Normalize interval and unit to seconds.
+     *
+     * @param interval {Integer}
+     * @param unit {String["seconds", "minutes", "hours", "days"]}
+     */
+    getIntervalInSeconds: function (interval, unit) {
+        var multiplier = 0;
+
+        switch (unit.toLowerCase()) {
+            case "seconds":
+                multiplier = 1;
+                break;
+            case "minutes":
+                multiplier = Koala.util.Duration.secondsInOne.MINUTE;
+                break;
+            case "hours":
+                multiplier = Koala.util.Duration.secondsInOne.HOUR;
+                break;
+            case "days":
+                multiplier = Koala.util.Duration.secondsInOne.DAY;
+                break;
+            default:
+                break;
+        }
+        return multiplier * interval;
+    },
+
+    /**
      *
      */
-    getDateTimeRangeFilter: function() {
+    getDateTimeRangeFilter: function(startDate, endDate, timeField) {
         var filter;
-        var startDate;
-        var endDate;
-        var timeField;
 
         // startDate = timeSeriesWin.down('datefield[name=datestart]').getValue();
         // endDate = timeSeriesWin.down('datefield[name=dateend]').getValue();
         // timeField = layerFilter.param;
-
-        startDate = "2015-02-28T23:00:00.000Z";
-        endDate = "2015-03-30T22:00:00.000Z";
-        timeField = "end_measure";
 
         filter = '' +
             '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +

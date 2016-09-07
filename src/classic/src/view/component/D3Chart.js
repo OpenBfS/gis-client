@@ -39,7 +39,7 @@ Ext.define('Koala.view.component.D3Chart',{
     margin: 5,
 
     config: {
-        showLoadMask: false,
+        showLoadMask: true,
         // type: 'line',
         // curve: 'linear',
         shapes: [{
@@ -59,8 +59,8 @@ Ext.define('Koala.view.component.D3Chart',{
             color: '#0011ff',
             width: 2
         }],
-        // TODO:
-        layer: '',
+        // TODO: or complete layer obj?
+        featureType: 'orig-f-bfs:niederschlag_24h',
         //store: 'k-timeseries',
         // TODO adjust dynamically in relation to axes/title label size
         chartMargin: {
@@ -81,7 +81,7 @@ Ext.define('Koala.view.component.D3Chart',{
                 top: 10,
                 right: 10,
                 bottom: 10,
-                left: 10
+                left: 30
             }
         },
         axes: {
