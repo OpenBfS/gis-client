@@ -75,6 +75,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         chartHeight: null,
         scales: {},
         shapes: [],
+        tooltipCmp: null,
         data: []
     },
 
@@ -110,6 +111,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         me.createScales();
         me.createShapes();
+        me.createTooltip();
 
         Ext.iterate(me.scales, function(orient) {
             Ext.each(view.getShapes(), function() {
@@ -132,6 +134,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawShapes();
 
         me.drawLegend();
+    },
+
+    setupTooltip: function(){
+        this.tooltipCmp = Ext.create('Ext.tip.ToolTip');
     },
 
     /**
@@ -388,10 +394,25 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .style('stroke-width', 2)
                     .style('cursor', 'help')
                     .on('mouseover', function(data) {
-                        console.log(idx, data[xField] + ': ' +data[yField]);
-                    })
-                    .on('mouseout', function() {
-                        console.log("OUT");
+                        var tooltip = me.tooltipCmp;
+                        var html = [
+                            'Some content for series ' + idx,
+                            '<br />',
+                            '<ul>',
+                            '  <li>',
+                            '<strong>' + xField + '</strong>: ',
+                            data[xField],
+                            '  </li>',
+                            '  <li>',
+                            '<strong>' + yField + '</strong>: ',
+                            data[yField],
+                            '  </li>',
+                            '</ul>'
+                        ].join('');
+                        tooltip.setHtml(html);
+                        tooltip.setTitle('Title for ' + shape.config.name);
+                        tooltip.setTarget(this);
+                        tooltip.show();
                     })
                     .attr('cx', function(d) {
                         return me.scales[orientX](d[xField]);

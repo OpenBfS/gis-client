@@ -6,16 +6,39 @@ svg .k-d3-shape-group,
 svg .k-d3-shape-group-legend circle,
 svg .k-d3-shape-group-legend path,
 svg .k-d3-shape-group-legend text {
-// svg .k-d3-shape-group-legend {
-    -webkit-transition: opacity 0.3s linear;
-    transition: opacity 0.3s linear;
+    /**
+     * The transitions below need some explanation, I guess:
+     *
+     * We transition two properties: visibility and opacity.
+     *   * opacity for a nice fade-out / fade-in effect
+     *   * visibility so that no mouseover / mouseout events are being fired
+     *
+     * We generally use the shorthand notation 'transition' for the basic setup,
+     * but as visibility is a value that can only be tarnsitioned between
+     * 'hidden' and 'visible' (no values inbetween), we have to use the
+     * 'transition-delay' to mangle with the delay of the visibility.
+     *
+     * The setting here are for showing, where we immidiately want the
+     * 'visibility: visible' but want to have some time (0.3s) for the opacity
+     * animation.
+     *
+     * In the case where we want to hide, svg .k-d3-shape-group-hidden below,
+     * the delay is set to something else.
+     *
+     * Inspiration: http://www.greywyvern.com/?post=337
+     */
+    transition: visibility 0s linear 0s, opacity 0.3s linear 0s;
     opacity: 1;
+    visibility: visible;
 }
 svg .k-d3-shape-group-hidden {
     opacity: 0;
+    visibility: hidden;
+    transition-delay: 0.4s, 0s;
+
 }
 svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden circle,
 svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden path,
 svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden text {
-    opacity: 0.3 !important;
+    opacity: 0.3;
 }
