@@ -22,9 +22,16 @@ Ext.define('Koala.view.component.D3ChartController', {
 
     statics: {
         CSS_CLASS: {
+            SHAPE_GROUP: 'k-d3-shape-group',
             SHAPE_PATH: 'k-d3-shape-path',
-            HIDDEN_SHAPE_PATH: 'k-d3-hidden-shape-path',
-            HIDDEN_SHAPE_PATH_LEGEND: 'k-d3-hidden-shape-path-legend'
+            SHAPE_POINT_GROUP: 'k-d3-shape-points',
+
+            PREFIX_IDX_SHAPE_GROUP: 'shape-group-',
+            PREFIX_IDX_SHAPE_PATH: 'shape-path-',
+            PREFIX_IDX_SHAPE_POINT_GROUP: 'shape-points-',
+
+            SUFFIX_LEGEND: '-legend',
+            SUFFIX_HIDDEN: '-hidden'
         }
     },
 
@@ -343,37 +350,40 @@ Ext.define('Koala.view.component.D3ChartController', {
         var staticMe = Koala.view.component.D3ChartController;
         var view = me.getView();
         var viewId = '#' + view.getId();
-        // TODO: render shapes in own wrapper group
-        // d3.select('svg > g')
-        //     .append('g')
-        //         .attr('class', 'shapes');
 
         Ext.each(me.shapes, function(shape, idx) {
-            d3.select(viewId + ' svg > g')
-                .append('path')
-                    .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
-                    .attr('idx', 'shape-' + idx)
-                    .datum(me.data)
-                    .style('fill', 'none')
-                    .style('stroke', shape.config.color)
-                    .style('stroke-width', shape.config.width)
-                    .attr('d', shape.shape);
-
             var xField = shape.config.xField;
             var yField = shape.config.yField;
             var orientX = me.getAxisByField(xField);
             var orientY = me.getAxisByField(yField);
+            var color = shape.config.color;
+            var darkerColor = d3.color(color).darker();
 
-            var darkerColor = d3.color(shape.config.color).darker();
+            var shapeGroup = d3.select(viewId + ' svg > g')
+                .append('g')
+                    .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
+                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx);
 
-            var pointGroup = d3.select(viewId + ' svg > g ').append('g')
-                    .attr('class', 'k-d3-shape-path-points')
-                    .attr('idx', 'shape-points-' + idx); // TODO move to static
+            // the actual path with the line
+            shapeGroup.append('path')
+                .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
+                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_PATH + idx)
+                .datum(me.data)
+                .style('fill', 'none')
+                .style('stroke', color)
+                .style('stroke-width', shape.config.width)
+                .attr('d', shape.shape);
 
+            var pointGroup = shapeGroup.append('g')
+                .attr('class', staticMe.CSS_CLASS.SHAPE_POINT_GROUP)
+                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP + idx);
+
+            // TODO refactor the selectAll method below; DK
+            //      pointGroup.enter()???
             pointGroup.selectAll('circle')
                 .data(me.data)
                 .enter().append('circle')
-                    .style('fill', shape.config.color)
+                    .style('fill', color)
                     .style('stroke', darkerColor)
                     .style('stroke-width', 2)
                     .style('cursor', 'help')
@@ -399,6 +409,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     drawLegend: function() {
         var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var legendConfig = view.getLegend();
@@ -406,7 +418,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         var legend = d3.select(viewId + ' svg > g')
             .append('g')
-                .attr('class', 'legend')
+                .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
                 .attr('transform', 'translate(' + (me.chartWidth + legendMargin.left) + ',' + (legendMargin.bottom) + ')');
                 // .attr('width', view.getWidth())
                 // .attr('height', view.getHeight())
@@ -415,9 +427,9 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             var toggleVisibilityFunc = (function() {
                 return function() {
-                    var shapePath = me.shapePathByIndex(idx);
-                    me.toggleShapePathVisibility(
-                        shapePath, // the real shapepath
+                    var shapeGroup = me.shapeGroupByIndex(idx);
+                    me.toggleShapeGroupVisibility(
+                        shapeGroup, // the real group, containg shapepath & points
                         d3.select(this) // legend entry
                     );
                 };
@@ -451,15 +463,15 @@ Ext.define('Koala.view.component.D3ChartController', {
 
     /**
      */
-    shapePathByIndex: function(idx) {
+    shapeGroupByIndex: function(idx) {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
         var viewId = '#' + me.getView().getId();
-        var clsShapePath = staticMe.CSS_CLASS.SHAPE_PATH;
-        var idxVal = 'shape-' + idx;
+        var clsShapeGroup = staticMe.CSS_CLASS.SHAPE_GROUP;
+        var idxVal = staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx;
         var selector = [
             viewId,                      // only capture our view…
-            ' svg path.' + clsShapePath, // only capture shapepaths…
+            ' svg g.' + clsShapeGroup, // only capture shapepaths…
             '[idx="' + idxVal + '"]'     // only capture the right index
         ].join('');
         return d3.select(selector);
@@ -467,12 +479,13 @@ Ext.define('Koala.view.component.D3ChartController', {
 
     /**
      */
-    toggleShapePathVisibility: function(shapePath, legendElement) {
+    toggleShapeGroupVisibility: function(shapeGroup, legendElement) {
         var staticMe = Koala.view.component.D3ChartController;
-        var hideClsName = staticMe.CSS_CLASS.HIDDEN_SHAPE_PATH;
-        var hideClsNameLegend = staticMe.CSS_CLASS.HIDDEN_SHAPE_PATH_LEGEND;
-        var isHidden = shapePath.classed(hideClsName);
-        shapePath.classed(hideClsName, !isHidden);
+        var CSS = staticMe.CSS_CLASS;
+        var hideClsName = CSS.SHAPE_GROUP + CSS.SUFFIX_HIDDEN;
+        var hideClsNameLegend = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND + CSS.SUFFIX_HIDDEN;
+        var isHidden = shapeGroup.classed(hideClsName);
+        shapeGroup.classed(hideClsName, !isHidden);
         legendElement.classed(hideClsNameLegend, !isHidden);
     },
 

@@ -1,20 +1,21 @@
-svg .legend g {
+svg .k-d3-shape-group-legend g {
     cursor: pointer;
 }
 
-svg .k-d3-shape-path,
-svg .legend circle,
-svg .legend path,
-svg .legend text {
+svg .k-d3-shape-group,
+svg .k-d3-shape-group-legend circle,
+svg .k-d3-shape-group-legend path,
+svg .k-d3-shape-group-legend text {
+// svg .k-d3-shape-group-legend {
     -webkit-transition: opacity 0.3s linear;
     transition: opacity 0.3s linear;
     opacity: 1;
 }
-svg .k-d3-hidden-shape-path {
+svg .k-d3-shape-group-hidden {
     opacity: 0;
 }
-svg .legend .k-d3-hidden-shape-path-legend circle,
-svg .legend .k-d3-hidden-shape-path-legend path,
-svg .legend .k-d3-hidden-shape-path-legend text {
+svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden circle,
+svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden path,
+svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden text {
     opacity: 0.3 !important;
 }
