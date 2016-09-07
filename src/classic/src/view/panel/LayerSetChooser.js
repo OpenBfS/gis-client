@@ -63,13 +63,18 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
 
         // try to load layerprofile from appContext
         var appContext = BasiGX.view.component.Map.guess().appContext;
-        var merge = appContext.data.merge;
-        var urls = merge.urls;
+        var path = [
+            'data',
+            'merge',
+            'urls',
+            'layerset'
+        ];
         var layerSetUrl;
         if (me.showLayerProfiles) {
-            layerSetUrl = urls['layerprofile'] ? urls['layerprofile'] : 'classic/resources/layerprofile.json';
+            path[path.indexOf('layerset')] = 'layerprofile';
+            layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerprofile.json');
         } else {
-            layerSetUrl = urls['layerset'] ? urls['layerset'] : 'classic/resources/layerset.json';
+            layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerset.json');
         }
 
         var tplIfStr = me.showLayerProfiles ?
