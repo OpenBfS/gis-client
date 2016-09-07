@@ -400,7 +400,7 @@ Ext.define('Koala.util.Layer', {
             var currentSelection = themeTree.getSelection()[0];
             var title = currentSelection ?
                 currentSelection.data.text :
-                metadata.dspText;
+                metadata.treeTitle;
 
             var winName = 'filter-win-' + metadata.id;
 
