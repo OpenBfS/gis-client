@@ -36,6 +36,81 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             SUFFIX_LEGEND: '-legend',
             SUFFIX_HIDDEN: '-hidden'
+        },
+
+        /**
+         * Given a SVG `<path>` (from a d3 selection), modify the start point by
+         * `offsetX` and `offsetY`.
+         *
+         * Directly modifies the `d`-attribute.
+         *
+         * @param {Selection} d3Path The path to modify.
+         * @param {Number} offsetX The offset in horizontal direction.
+         * @param {Number} offsetX The offset in vertical direction.
+         */
+        adjustPathStart: function(d3Path, offsetX, offsetY) {
+            var currentD = d3Path.attr('d');
+            var startCoords = currentD.match(/^M([+-]?\d*\.?\d+),([+-]?\d*\.?\d+)/);
+            var xCoord = parseFloat(startCoords[1], 10);
+            var yCoord = parseFloat(startCoords[2], 10);
+            var newX = xCoord + offsetX;
+            var newY = yCoord + offsetY;
+            var newD = currentD.replace(startCoords[0], 'M' + newX + ',' + newY);
+            d3Path.attr('d', newD);
+        },
+
+        /**
+         * This method will take a d3 object (e.g. from a selection) and adjust its
+         * transfrom element to move it on the canvas. The modification is
+         * controlled by a `diffObj` which looks like:
+         *
+         *     {
+         *         translate: {
+         *             x: -15,
+         *             y: 7
+         *         }
+         *     }
+         *
+         * The above object means move the object 15 units to the left and seven to
+         * the top.
+         *
+         * The transform attribute is modified directly.
+         *
+         * @param {Selection} d3Obj The object to manipulate.
+         * @param {Object} diffObj A specification which attribute how to modify.
+         */
+        adjustTransformTranslate: function (d3Obj, diffObj) {
+            var staticMe = Koala.view.component.D3ChartController;
+            var makeTranslate = staticMe.makeTranslate;
+            var currentTransform = d3Obj.attr('transform');
+
+            var regEx = /translate\((\d+),(\d+)\)/;
+            if (!currentTransform) {
+                currentTransform = makeTranslate(0, 0);
+            }
+            var newTransform = currentTransform;
+            var matches = regEx.exec(currentTransform);
+            if (matches) {
+                var x = parseFloat(matches[1], 10);
+                var y = parseFloat(matches[2], 10);
+                x += 'translate' in diffObj ? diffObj.translate.x || 0 : 0;
+                y += 'translate' in diffObj ? diffObj.translate.y || 0 : 0;
+                var newTranslate = makeTranslate(x, y);
+                newTransform = currentTransform.replace(matches[0], newTranslate);
+            }
+            d3Obj.attr('transform', newTransform);
+        },
+
+        /**
+         * Returns a string ready to be used in a transform-attribute for the
+         * passed parameters `x` and `y`.
+         *
+         * @param {Number} x The amount to translate in horizontal direction.
+         * @param {Number} y The amount to translate in vertical direction.
+         * @return {String} A string ready to be used in a transform-attribute.
+         */
+        makeTranslate: function(x, y) {
+            return "translate(" + x + "," + y + ")";
         }
     },
 
@@ -411,7 +486,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var staticMe = Koala.view.component.D3ChartController;
         var view = me.getView();
         var viewId = '#' + view.getId();
-
+        var barWidth;
         Ext.each(me.shapes, function(shape, idx) {
             var xField = shape.config.xField;
             var yField = shape.config.yField;
@@ -423,9 +498,11 @@ Ext.define('Koala.view.component.D3ChartController', {
             var shapeGroup = d3.select(viewId + ' svg > g')
                 .append('g')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx);
+                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx)
+                    .attr('shape-type', shape.config.type);
 
             if (shape.config.type === 'bar') {
+                barWidth = (me.chartWidth / me.data.length) - 5;
                 shapeGroup
                     .selectAll("rect")
                         .data(me.data)
@@ -437,7 +514,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .attr("x", function(d) {
                                 return me.scales[orientX](d[xField]);
                             })
-                            .attr("width", (me.chartWidth / me.data.length) - 5)
+                            .attr("width", barWidth)
                             .attr("y", function(d) {
                                 return me.scales[orientY](d[yField]);
                             })
@@ -543,7 +620,79 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
 
         });
+        if (barWidth !== undefined) {
+            me.adjustForBarchart(barWidth);
+        }
+    },
 
+    /**
+     * When we render at least one bar chart, we need to move certain SVG
+     * elements so that the center of the bars lies directly atop the
+     * corresponding tick. Things like the x-axis, the legend and all non bar
+     * charts will be moved by the amount of half a width of a bar.
+     *
+     * @param {Number} barWidth The width of one bar in the chart.
+     */
+    adjustForBarchart: function(barWidth) {
+        var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var additionalOffset = 2;
+        var xOffset = (barWidth / 2) + additionalOffset;
+        var diffObj = {
+            translate: {
+                x: xOffset,
+                y: 0
+            }
+        };
+
+        var chartSel = viewId + ' svg g.' + CSS.SHAPE_GROUP;
+        // move line charts
+        var lineSel = chartSel + '[shape-type="line"]';
+        var lines = d3.selectAll(lineSel);
+        lines.each(function() {
+            var line = d3.select(this);
+            staticMe.adjustTransformTranslate(line, diffObj);
+        });
+
+        // move area charts
+        var areaSel = chartSel + '[shape-type="area"]';
+        var areas = d3.selectAll(areaSel);
+        areas.each(function() {
+            var area = d3.select(this);
+            staticMe.adjustTransformTranslate(area, diffObj);
+        });
+
+        // move barcharts but only by the additional offset!
+        var barSel = chartSel + '[shape-type="bar"]';
+        var bars = d3.selectAll(barSel);
+        bars.each(function() {
+            var bar = d3.select(this);
+            staticMe.adjustTransformTranslate(bar, {
+                translate: {
+                    x: additionalOffset
+                }
+            });
+        });
+
+        // move legends
+        var legSel = chartSel + CSS.SUFFIX_LEGEND;
+        var legends = d3.selectAll(legSel);
+        legends.each(function() {
+            var legend = d3.select(this);
+            staticMe.adjustTransformTranslate(legend, diffObj);
+        });
+
+        // move x-axis
+        var xAxisSel = viewId + ' svg g.' + CSS.AXIS_X;
+        var xAxis = d3.select(xAxisSel);
+        staticMe.adjustTransformTranslate(xAxis, diffObj);
+
+        // finally make the x-axis slightly longer on the left side by
+        // adjusting the start point
+        staticMe.adjustPathStart(xAxis.select('path'), -xOffset, 0);
     },
 
     /**
