@@ -444,7 +444,7 @@ Ext.define('Koala.util.Layer', {
         getCurrentLegendUrl: function (layer) {
             var width = layer.get("legendWidth");
             var height= layer.get("legendHeight");
-            var legendUrl = layer.get("legendUrl");
+            var legendUrl = layer.get("legendUrl") || "";
             var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
             var resolution = BasiGX.util.Map.getResolution(map);
             var scale = BasiGX.util.Map.getScale(map);
