@@ -48,7 +48,7 @@ Ext.define('Koala.view.component.D3Chart',{
             xField: 'end_measure',
             yField: 'value',
             name: 'area 1',
-            color: '#000',
+            color: '#6C3483',
             width: 4
         },
         {
@@ -57,8 +57,8 @@ Ext.define('Koala.view.component.D3Chart',{
             xField: 'end_measure',
             yField: 'value',
             name: 'stepline 1',
-            color: '#0011ff',
-            width: 2
+            color: '#1F618D',
+            width: 3
         },
         {
             type: 'bar',
@@ -66,8 +66,8 @@ Ext.define('Koala.view.component.D3Chart',{
             xField: 'end_measure',
             yField: 'value',
             name: 'barchart 1',
-            color: '#ccc',
-            width: 2
+            color: '#117A65',
+            width: 3
         }
     ],
         // TODO: or complete layer obj?

@@ -286,6 +286,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             var yField = shapeConfig.yField;
             var orientX = me.getAxisByField(xField);
             var orientY = me.getAxisByField(yField);
+            var normalizeX = me.scales[orientX];
+            var normalizeY = me.scales[orientY];
             var shape;
 
             if (shapeType) {
@@ -297,29 +299,23 @@ Ext.define('Koala.view.component.D3ChartController', {
                     })
                     // set the x accessor
                     .x(function(d) {
-                        return me.scales[orientX](d[xField]);
-                         //return me.scales.bottom(d.end_measure);
+                        return normalizeX(d[xField]);
                     });
 
                 if (shapeType === me.TYPE.line) {
                     shape
                         // set the y accessor
                         .y(function(d) {
-                            return me.scales[orientY](d[yField]);
-                            // return me.scales.left(d.value);
+                            return normalizeY(d[yField]);
                         });
                 }
 
                 if (shapeType === me.TYPE.area) {
                     shape
                         .y1(function(d) {
-                            //line.y()
-                            return me.scales[orientY](d[yField]);
+                            return normalizeY(d[yField]);
                         })
-                        .y0(function() {
-                            return me.chartHeight;
-                            // return me.scales[orientY](0);
-                        });
+                        .y0(me.chartHeight);
                 }
             } else {
                 shape = {};
@@ -328,51 +324,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             me.shapes.push({
                 config: shapeConfig,
                 shape: shape
-                // shape: shapeType()
-                //     // set the curve interpolator
-                //     .curve(curveType)
-                //     // set the x accessor
-                //     .x(function(d) {
-                //         return me.scales[orientX](d[xField]);
-                //          //return me.scales.bottom(d.end_measure);
-                //     })
-                //     // set the y accessor
-                //     .y(function(d) {
-                //         return me.scales[orientY](d[yField]);
-                //         // return me.scales.left(d.value);
-                //     })
-                //     .y1(function(d) {
-                //         //line.y()
-                //         return me.scales[orientY](d[yField]);
-                //     })
-                //     .y0(function() {
-                //         return me.chartHeight;
-                //         // return me.scales[orientY](0);
-                //     })
-                //     .defined(function(d) {
-                //         return Ext.isDefined(d.value);
-                //     })
             });
-
-            // TODO: add support for area shapes
-            // TODO add shapeType to shapeConfig
-            // me.shapes.push(shapeType()
-            //     // set the curve interpolator
-            //     .curve(curveType)
-            //     // set the x accessor
-            //     .x(function(d) {
-            //         return me.scales[orientX](d[xField]);
-            //          //return me.scales.bottom(d.end_measure);
-            //     })
-            //     // set the y accessor
-            //     .y(function(d) {
-            //         return me.scales[orientY](d[yField]);
-            //         // return me.scales.left(d.value);
-            //     })
-            //     // .defined(function() {
-            //     //     return true;
-            //     // })
-            // );
         });
     },
 
@@ -380,14 +332,13 @@ Ext.define('Koala.view.component.D3ChartController', {
      *
      */
     getAxisByField: function(field) {
-        var me = this;
-        var view = me.getView();
+        var view = this.getView();
         var axisOrientation;
 
         Ext.iterate(view.getAxes(), function(orient, axisConfig) {
             if (axisConfig.dataIndex === field) {
                 axisOrientation = orient;
-                return false;
+                return false; // break early
             }
         });
 
@@ -409,8 +360,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         Ext.iterate(axesConfig, function(orient, axisConfig) {
             var axis = me.ORIENTATION[orient];
             var scale = me.scales[orient];
-            // var scale = me.SCALE[axisConfig.scale];
-            // var range;
             var axisTransform;
             var labelTransform;
             var labelPadding;
@@ -420,8 +369,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
                 axisTransform = (orient === 'bottom') ?
                         'translate(0,' + me.chartHeight + ')' : undefined;
-                // range = [0, me.chartWidth];
-
                 labelTransform = 'translate(' + (me.chartWidth / 2) + ', 0)';
                 labelPadding = (axisConfig.labelPadding || '35px');
             }
@@ -440,7 +387,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .append('g')
                     .attr('class', cssClass)
                     .attr('transform', axisTransform)
-                    // .call(axis(scale().range(range))
                     .call(axis(scale)
                         .ticks(axisConfig.ticks)
                         .tickValues(axisConfig.values)
@@ -553,25 +499,25 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .style('fill', function() {
                         switch (shape.config.type) {
                             case 'line':
-                            return 'none';
+                                return 'none';
                             case 'area':
-                            return color;
+                                return color;
                         }
                     })
                     .style('stroke', function() {
                         switch (shape.config.type) {
                             case 'line':
-                            return color;
+                                return color;
                             case 'area':
-                            return 'none';
+                                return 'none';
                         }
                     })
                     .style('stroke-width', function() {
                         switch (shape.config.type) {
                             case 'line':
-                            return shape.config.width;
+                                return shape.config.width;
                             case 'area':
-                            return 0;
+                                return 0;
                         }
                     })
                     .attr('d', shape.shape);
@@ -652,6 +598,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         };
 
         var chartSel = viewId + ' svg g.' + CSS.SHAPE_GROUP;
+
         // move line charts
         var lineSel = chartSel + '[shape-type="line"]';
         var lines = d3.selectAll(lineSel);
@@ -714,15 +661,13 @@ Ext.define('Koala.view.component.D3ChartController', {
             .append('g')
                 .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
                 .attr('transform', 'translate(' + (me.chartWidth + legendMargin.left) + ',' + (legendMargin.bottom) + ')');
-                // .attr('width', view.getWidth())
-                // .attr('height', view.getHeight())
 
         Ext.each(me.shapes, function(shape, idx) {
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var shapeGroup = me.shapeGroupByIndex(idx);
                     me.toggleShapeGroupVisibility(
-                        shapeGroup, // the real group, containg shapepath & points
+                        shapeGroup, // the real group, containig shapepath & points
                         d3.select(this) // legend entry
                     );
                 };
@@ -733,21 +678,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .on('click', toggleVisibilityFunc)
                 .attr('transform', 'translate(0, ' + (idx * 30) + ')');
 
-            // legendEntry.append('circle')
-            //     .style('fill', shape.config.color)
-            //     .style('stroke', shape.config.color)
-            //     .attr('r', 5);
-
             legendEntry.append('path')
                 .attr('d', function() {
                     switch (shape.config.type) {
                         case 'line':
                             return 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6';
                         case 'area':
-                            // return 'M-12 -12 H 4 V 4 H -12 Z';
                             return 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6 M20 -6 v 6 h -20 v -6 Z';
                         case 'bar':
-                            // M0 -10 h 12 v 12 h -12 Z
                             return 'M0 -10 h 6 v 12 h -6 Z M7 -6 h 6 v 8 h -6 Z M14 -10 h 6 v 12 h -6 Z';
                     }
                 })
@@ -781,8 +719,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .attr('text-anchor', 'start')
                 .attr('dy', '0')
                 .attr('dx', '25');
-                // .attr('dy', '.32em')
-                // .attr('dx', '8');
         });
     },
 
