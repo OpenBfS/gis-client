@@ -1,6 +1,10 @@
 svg .k-d3-shape-group-legend g {
     cursor: pointer;
 }
+svg .k-d3-shape-group rect,
+svg .k-d3-shape-group circle {
+    cursor: help;
+}
 
 svg .k-d3-shape-group,
 svg .k-d3-shape-group-legend circle,

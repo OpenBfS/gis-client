@@ -537,7 +537,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .style('fill', color)
                             .style('stroke', darkerColor)
                             .style('stroke-width', 2)
-                            .style('cursor', 'help')
                             .on('mouseover', function(data) {
                                 var tooltip = me.tooltipCmp;
                                 var html = [
