@@ -38,6 +38,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             SUFFIX_HIDDEN: '-hidden'
         },
 
+        ADDITIONAL_BAR_MARGIN: 5,
+
         /**
          * Given a SVG `<path>` (from a d3 selection), modify the start point by
          * `offsetX` and `offsetY`.
@@ -502,7 +504,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .attr('shape-type', shape.config.type);
 
             if (shape.config.type === 'bar') {
-                barWidth = (me.chartWidth / me.data.length) - 5;
+                barWidth = (me.chartWidth / me.data.length);
+                barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
                 shapeGroup
                     .selectAll("rect")
                         .data(me.data)
