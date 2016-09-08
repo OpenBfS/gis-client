@@ -22,6 +22,10 @@ Ext.define('Koala.view.component.D3ChartController', {
 
     statics: {
         CSS_CLASS: {
+            AXIS: 'k-d3-axis',
+            AXIS_X: 'k-d3-axis-x',
+            AXIS_Y: 'k-d3-axis-y',
+
             SHAPE_GROUP: 'k-d3-shape-group',
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
@@ -318,6 +322,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     drawAxes: function() {
         var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
 
@@ -334,7 +340,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var cssClass;
 
             if (orient === 'top' || orient === 'bottom') {
-                cssClass = 'axis axis--x';
+                cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
                 axisTransform = (orient === 'bottom') ?
                         'translate(0,' + me.chartHeight + ')' : undefined;
                 // range = [0, me.chartWidth];
@@ -344,7 +350,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
 
             if (orient === 'left' || orient === 'right') {
-                cssClass = 'axis axis--y';
+                cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
                 axisTransform = (orient === 'right') ?
                         'translate(' + me.chartWidth + ', 0)' : undefined;
                 // range = [me.chartHeight, 0];
