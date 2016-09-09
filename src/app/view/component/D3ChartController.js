@@ -329,6 +329,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = me.getView();
         var viewId = '#' + view.getId();
         var chartMargin = view.getChartMargin();
+        var chartSize = me.getChartSize();
         var translate = 'translate(' + chartMargin.left + ',' +
                 chartMargin.top + ')';
 
@@ -343,8 +344,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             .append('rect')
                 .style('fill', view.getBackgroundColor())
                 .attr('class', CSS.PLOT_BACKGROUND)
-                .attr('width', 553)
-                .attr('height', 420)
+                .attr('width', chartSize[0])
+                .attr('height', chartSize[1])
                 .attr('pointer-events', 'all');
 
         // register zoom interaction if requested
@@ -604,16 +605,16 @@ Ext.define('Koala.view.component.D3ChartController', {
         var staticMe = Koala.view.component.D3ChartController;
         var view = me.getView();
         var viewId = '#' + view.getId();
-        var barWidth;
         var chartSize = me.getChartSize();
+        var barWidth;
 
         // Wrap the shapes in its own <svg> element.
         var shapeSvg = d3.select(viewId + ' svg > g')
             .append('svg')
                 .attr('top', 0)
                 .attr('left', 0)
-                .attr('width', 553)
-                .attr('height', 420);
+                .attr('width', chartSize[0])
+                .attr('height', chartSize[1]);
                 // .attr('viewBox', '0 0 550 420');
 
         Ext.each(me.shapes, function(shape, idx) {
