@@ -699,7 +699,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                         .style("font-family", "sans-serif")
                         .style("font-size", "11px")
                         .style("font-weight", "bold")
-                        .style("fill", "white");
+                        .style("fill", "white")
+                        .style("unselectable", "on");
             } else {
                 shapeGroup.append('path')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
