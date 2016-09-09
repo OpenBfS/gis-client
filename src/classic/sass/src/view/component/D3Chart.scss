@@ -59,3 +59,15 @@ svg text {
   user-select: none;           /* Non-prefixed version, currently
                                   not supported by any browser */
 }
+
+svg .k-d3-grid {
+    pointer-events: none;
+}
+
+svg .k-d3-grid line {
+  shape-rendering: crispEdges;
+}
+
+svg .k-d3-grid path {
+  stroke-width: 0;
+}

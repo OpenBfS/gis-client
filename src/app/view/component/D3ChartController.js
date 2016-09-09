@@ -33,6 +33,10 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             PLOT_BACKGROUND: 'k-d3-plot-background',
 
+            GRID: 'k-d3-grid',
+            GRID_X: 'k-d3-grid-x',
+            GRID_Y: 'k-d3-grid-y',
+
             SHAPE_GROUP: 'k-d3-shape-group',
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
@@ -221,12 +225,12 @@ Ext.define('Koala.view.component.D3ChartController', {
     privates: {
         scales: {},
         shapes: [],
+        axes: {},
+        gridAxes: {},
         tooltipCmp: null,
         zoomInteraction: null,
         initialPlotTransform: null,
-        data: [],
-        // TODO: needed?
-        axes: {}
+        data: []
     },
 
     /**
@@ -279,6 +283,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         me.createScales();
         me.createAxes();
+        me.createGridAxes();
         me.createShapes();
         me.createTooltip();
 
@@ -286,6 +291,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         me.drawTitle();
         me.drawAxes();
+        me.drawGridAxes();
         me.drawShapes();
 
         me.drawLegend();
@@ -379,13 +385,13 @@ Ext.define('Koala.view.component.D3ChartController', {
         var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
-
+        var gridConfig = view.getGrid();
         // var chartSize = me.getChartSize();
-        //var extent = [[0,0], [600 - 50, 400 - 50]];
+        // var extent = [[0,0], [600 - 50, 400 - 50]];
 
         return d3.zoom()
             //.scaleExtent([1, 5])
-            //.translateExtent(extent)
+            // .translateExtent(extent)
             .on('zoom', function() {
                 d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP)
                     .attr('transform', d3.event.transform);
@@ -406,6 +412,30 @@ Ext.define('Koala.view.component.D3ChartController', {
                             d3.event.transform.rescaleY(scaleGenerator)));
                     }
                 });
+
+                if (gridConfig.show) {
+                    Ext.iterate(me.gridAxes, function(orient) {
+                        var axis;
+                        var axisSelector = 'svg g.' + CSS.GRID;
+                        var axisGenerator = me.gridAxes[orient];
+                        var scaleGenerator = me.scales[orient];
+
+                        if (orient === 'top' || orient === 'bottom') {
+                            axis = d3.select(axisSelector + '.' + CSS.GRID_X);
+                            axis.call(axisGenerator.scale(
+                                d3.event.transform.rescaleX(scaleGenerator)));
+                        } else if (orient === 'left' || orient === 'right') {
+                            axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
+                            axis.call(axisGenerator.scale(
+                                d3.event.transform.rescaleY(scaleGenerator)));
+                        }
+                    });
+
+                    d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
+                        .style('stroke-width', gridConfig.width)
+                        .style('stroke', gridConfig.color)
+                        .style('stroke-opacity', gridConfig.opacity);
+                }
             });
     },
 
@@ -422,13 +452,9 @@ Ext.define('Koala.view.component.D3ChartController', {
             var scaleType = staticMe.SCALE[axisConfig.scale];
             var range;
 
-            // The x axes
             if (orient === 'top' || orient === 'bottom') {
                 range = [0, chartSize[0]];
-            }
-
-            // The y axes
-            if (orient === 'left' || orient === 'right') {
+            } else if (orient === 'left' || orient === 'right') {
                 range = [chartSize[1], 0];
             }
 
@@ -561,9 +587,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                 labelTransform = 'translate(' + (chartSize[0] / 2) + ', 0)';
                 labelPadding = (axisConfig.labelPadding || '35px');
-            }
-
-            if (orient === 'left' || orient === 'right') {
+            } else if (orient === 'left' || orient === 'right') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
                 axisTransform = (orient === 'right') ?
                         'translate(' + chartSize[0] + ', 0)' : undefined;
@@ -585,6 +609,82 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .style('font-weight', 'bold')
                     .style('font-size', axisConfig.labelSize || 12)
                     .text(axisConfig.label);
+
+        });
+    },
+
+    /**
+     * [createGridAxes description]
+     * @return {[type]} [description]
+     */
+    createGridAxes: function() {
+        var me = this;
+        var view = me.getView();
+        var gridConfig = view.getGrid();
+
+        if (!gridConfig.show) {
+            return false;
+        }
+
+        var staticMe = Koala.view.component.D3ChartController;
+        var chartSize = me.getChartSize();
+        var orientations = ['bottom', 'left'];
+
+        Ext.each(orientations, function(orient) {
+            var axis = staticMe.ORIENTATION[orient];
+            var scale = me.scales[orient];
+            var tickSize;
+
+            if (orient === 'top' || orient === 'bottom') {
+                tickSize = chartSize[1];
+            } else if (orient === 'left' || orient === 'right') {
+                tickSize = chartSize[0] * -1;
+            }
+
+            var chartAxis = axis(scale)
+                .tickFormat('')
+                .tickSize(tickSize);
+
+            me.gridAxes[orient] = chartAxis;
+        });
+    },
+
+    /**
+     * [drawGridAxes description]
+     * @return {[type]} [description]
+     */
+    drawGridAxes: function() {
+        var me = this;
+        var view = me.getView();
+        var gridConfig = view.getGrid();
+
+        if (!gridConfig.show) {
+            return false;
+        }
+
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var viewId = '#' + view.getId();
+        var orientations = ['bottom', 'left'];
+
+        Ext.each(orientations, function(orient) {
+            var cssClass;
+
+            if (orient === 'bottom') {
+                cssClass = CSS.GRID + ' ' + CSS.GRID_X;
+            } else if (orient === 'left') {
+                cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
+            }
+
+            d3.select(viewId + ' svg > g')
+                .append('g')
+                    .attr('class', cssClass)
+                    .call(me.gridAxes[orient]);
+
+            d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
+                .style('stroke-width', gridConfig.width)
+                .style('stroke', gridConfig.color)
+                .style('stroke-opacity', gridConfig.opacity);
 
         });
     },
