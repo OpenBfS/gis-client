@@ -860,6 +860,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .on('click', toggleVisibilityFunc)
                 .attr('transform', 'translate(0, ' + (idx * 30) + ')');
 
+            // background for the concrete legend icon, to widen clickable area.
+            legendEntry.append('path')
+                .attr('d', 'M-3 -14 h 25 v 16 h -25 Z')
+                .style('stroke', 'none')
+                // invisible, but still triggering events
+                .style('fill', 'rgba(0,0,0,0)');
+
             legendEntry.append('path')
                 .attr('d', function() {
                     switch (shape.config.type) {
