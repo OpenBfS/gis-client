@@ -674,6 +674,32 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 tooltip.setTarget(this);
                                 tooltip.show();
                             });
+                shapeGroup.selectAll("text")
+                    .data(me.data)
+                    .enter()
+                    .append("text")
+                        .filter(function(d) {
+                            return Ext.isDefined(d[yField]);
+                        })
+                        .text(function(d) {
+                            return d[yField];
+                        })
+                        .attr("transform", function(d) {
+                            var x = me.scales[orientX](d[xField]);
+                            var y = me.scales[orientY](d[yField]);
+                            return "rotate(-90," + x + "," + y + ") translate(-15,15)";
+                        })
+                        .attr("x", function(d) {
+                             return me.scales[orientX](d[xField]);
+                        })
+                        .attr("y", function(d) {
+                             return me.scales[orientY](d[yField]);
+                        })
+                        .attr("text-anchor", "middle")
+                        .style("font-family", "sans-serif")
+                        .style("font-size", "11px")
+                        .style("font-weight", "bold")
+                        .style("fill", "white");
             } else {
                 shapeGroup.append('path')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
