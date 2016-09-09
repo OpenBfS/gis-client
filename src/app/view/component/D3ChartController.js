@@ -222,6 +222,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         scales: {},
         shapes: [],
         tooltipCmp: null,
+        zoomInteraction: null,
+        initialPlotTransform: null,
         data: [],
         // TODO: needed?
         axes: {}
@@ -272,6 +274,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     drawChart: function() {
         var me = this;
 
+        me.createInteractions();
         me.drawSvgContainer();
 
         me.createScales();
@@ -286,6 +289,16 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawShapes();
 
         me.drawLegend();
+    },
+
+    /**
+     * [createInteractions description]
+     * @return {[type]} [description]
+     */
+    createInteractions: function() {
+        var me = this;
+
+        me.zoomInteraction = me.createZoomInteraction();
     },
 
     /**
@@ -352,7 +365,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         // register zoom interaction if requested
         if (view.getZoomEnabled()) {
             var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
-            plot.call(me.createZoomInteraction());
+            plot.call(me.zoomInteraction);
         }
     },
 
@@ -530,7 +543,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
         var CSS = staticMe.CSS_CLASS;
-        // var staticMe = Koala.view.component.D3ChartController;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var axesConfig = view.getAxes();
@@ -636,21 +648,22 @@ Ext.define('Koala.view.component.D3ChartController', {
                 barWidth = (chartSize[0] / me.data.length);
                 barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
                 shapeGroup
-                    .selectAll("rect")
+                    .selectAll('rect')
                         .data(me.data)
-                    .enter().append("rect")
+                    .enter().append('rect')
                         .filter(function(d) {
                             return Ext.isDefined(d[yField]);
                         })
-                            .style("fill", color)
-                            .attr("x", function(d) {
+                            .style('fill', color)
+                            .attr('x', function(d) {
                                 return me.scales[orientX](d[xField]);
                             })
-                            .attr("width", barWidth)
-                            .attr("y", function(d) {
+                            .attr('y', function(d) {
                                 return me.scales[orientY](d[yField]);
                             })
-                            .attr("height", function(d) {
+                            .attr('transform', 'translate(' + ((barWidth / 2) * -1) + ', 0)')
+                            .attr('width', barWidth)
+                            .attr('height', function(d) {
                                 return chartSize[1] - me.scales[orientY](d[yField]);
                             })
                             .on('mouseover', function(data) {
@@ -778,9 +791,56 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
 
         });
+
         if (barWidth !== undefined) {
-            me.adjustForBarchart(barWidth);
+            me.initialPlotTransform = {
+                x: (barWidth / 2),
+                y: 0,
+                k: 1
+            };
+            me.transformPlot(me.initialPlotTransform, 0);
         }
+    },
+
+    /**
+     * [transformPlot description]
+     * @return {[type]} [description]
+     */
+    transformPlot: function(transform, duration) {
+        var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var viewId = '#' + me.getView().getId();
+        var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
+
+        if (duration && duration > 0) {
+            plot
+                .transition()
+                .duration(duration)
+                .call(
+                    me.zoomInteraction.transform,
+                    d3.zoomIdentity
+                        .translate(transform.x, transform.y)
+                        .scale(transform.k)
+                );
+        } else {
+            plot
+                .call(
+                    me.zoomInteraction.transform,
+                    d3.zoomIdentity
+                        .translate(transform.x, transform.y)
+                        .scale(transform.k)
+                );
+        }
+    },
+
+    /**
+     * [resetZoom description]
+     */
+    resetZoom: function() {
+        var me = this;
+
+        this.transformPlot(me.initialPlotTransform, 500);
     },
 
     /**
