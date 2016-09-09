@@ -1038,9 +1038,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         var CSS = staticMe.CSS_CLASS;
         var hideClsName = CSS.SHAPE_GROUP + CSS.SUFFIX_HIDDEN;
         var hideClsNameLegend = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND + CSS.SUFFIX_HIDDEN;
-        var isHidden = shapeGroup.classed(hideClsName);
-        shapeGroup.classed(hideClsName, !isHidden);
-        legendElement.classed(hideClsNameLegend, !isHidden);
+        if (shapeGroup) {
+            var isHidden = shapeGroup.classed(hideClsName);
+            shapeGroup.classed(hideClsName, !isHidden);
+            legendElement.classed(hideClsNameLegend, !isHidden);
+        }
     },
 
     /**
