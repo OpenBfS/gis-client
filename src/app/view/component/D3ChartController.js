@@ -21,10 +21,17 @@ Ext.define('Koala.view.component.D3ChartController', {
     alias: 'controller.component-d3chart',
 
     statics: {
+
+        /**
+         * [CSS_CLASS description]
+         * @type {Object}
+         */
         CSS_CLASS: {
             AXIS: 'k-d3-axis',
             AXIS_X: 'k-d3-axis-x',
             AXIS_Y: 'k-d3-axis-y',
+
+            PLOT_BACKGROUND: 'k-d3-plot-background',
 
             SHAPE_GROUP: 'k-d3-shape-group',
             SHAPE_PATH: 'k-d3-shape-path',
@@ -38,6 +45,10 @@ Ext.define('Koala.view.component.D3ChartController', {
             SUFFIX_HIDDEN: '-hidden'
         },
 
+        /**
+         * [ADDITIONAL_BAR_MARGIN description]
+         * @type {Number}
+         */
         ADDITIONAL_BAR_MARGIN: 5,
 
         /**
@@ -113,50 +124,121 @@ Ext.define('Koala.view.component.D3ChartController', {
          */
         makeTranslate: function(x, y) {
             return "translate(" + x + "," + y + ")";
+        },
+
+        /**
+         * Static mapping of supported D3 axis generators. See the
+         * {@link https://github.com/d3/d3-axis/blob/master/README.md#axisTop|D3 API documentation}
+         * for further details.
+         *
+         * @type {function} top - Return a top-oriented axis generator.
+         * @type {function} right - Return a right-oriented axis generator.
+         * @type {function} bottom - Return a bottom-oriented axis generator.
+         * @type {function} left - Return a left-oriented axis generator.
+         */
+        ORIENTATION: {
+            top: d3.axisTop,
+            right: d3.axisRight,
+            bottom: d3.axisBottom,
+            left: d3.axisLeft
+        },
+
+        /**
+         * Static mapping of supported d3 scales. In D3 Scales are functions that
+         * map from an input domain to an output range. See the
+         * {@link https://github.com/d3/d3/blob/master/API.md#scales-d3-scale|D3 API documentation}
+         * for further details.
+         *
+         * @type {function} linear - Return a quantitative linear scale.
+         * @type {function} pow - Return a quantitative power scale.
+         * @type {function} sqrt - Return a quantitative power scale with exponent 0.5.
+         * @type {function} log - Return a quantitative logarithmic scale.
+         * @type {function} ident - Return a quantitative identity scale.
+         * @type {function} time - Return a linear scale for time.
+         * @type {function} utc - Return a linear scale for UTC.
+         */
+        SCALE: {
+            linear: d3.scaleLinear,
+            pow: d3.scalePow,
+            sqrt: d3.scaleSqrt,
+            log: d3.scaleLog,
+            ident: d3.scaleIdentity,
+            time: d3.scaleTime,
+            utc: d3.scaleUtc
+        },
+
+        /**
+         * Static mapping of supported d3 shape types. See the
+         * {@link https://github.com/d3/d3/blob/master/API.md#shapes-d3-shape|D3 API documentation}
+         * for further details.
+         *
+         * @type {function} line - Return a line generator.
+         * @type {function} area - Return an area generator.
+         * @type {function} bar - TODO
+         */
+        TYPE: {
+            line: d3.line,
+            area: d3.area,
+            // TODO: set another type?!
+            bar: d3.line
+        },
+
+        /**
+         * Static mapping of supported d3 curve types. In D3 the curve type
+         * represents the interpolation between points in a continous shape. See
+         * the {@link https://github.com/d3/d3/blob/master/API.md#curves|D3 API documentation}
+         * for further details.
+         *
+         * @type {function} linear - A polyline through specified points.
+         * @type {function} cubicBasisSpline - A cubic basis spline using the
+         *       specified control points.
+         * @type {function} curveMonotoneX - A cubic spline that preserves
+         *       monotonicity in y, assuming monotonicity in x.
+         * @type {function} naturalCubicSpline - A natural cubic spline with the
+         *       second derivative of the spline set to zero at the endpoints.
+         * @type {function} curveStep - A piecewise constant function. The y-value
+         *       changes at the midpoint of each pair of adjacent x-values.
+         * @type {function} curveStepAfter - A piecewise constant function. The
+         *       y-value changes after the x-value.
+         * @type {function} curveStepBefore - A piecewise constant function. The
+         *       y-value changes before the x-value.
+         */
+        CURVE: {
+            linear: d3.curveLinear,
+            cubicBasisSpline: d3.curveBasis,
+            curveMonotoneX: d3.curveMonotoneX,
+            naturalCubicSpline: d3.curveNatural,
+            curveStep: d3.curveStep,
+            curveStepAfter: d3.curveStepAfter,
+            curveStepBefore: d3.curveStepBefore
         }
     },
 
-    ORIENTATION: {
-        top: d3.axisTop,
-        right: d3.axisRight,
-        bottom: d3.axisBottom,
-        left: d3.axisLeft
-    },
-
-    SCALE: {
-        linear: d3.scaleLinear,
-        pow: d3.scalePow,
-        sqrt: d3.scaleSqrt,
-        log: d3.scaleLog,
-        ident: d3.scaleIdentity,
-        time: d3.scaleTime,
-        utc: d3.scaleUtc
-    },
-
-    TYPE: {
-        line: d3.line,
-        area: d3.area,
-        bar: d3.line
-    },
-
-    CURVE: {
-        linear: d3.curveLinear,
-        cubicBasisSpline: d3.curveBasis,
-        curveMonotoneX: d3.curveMonotoneX,
-        naturalCubicSpline: d3.curveNatural,
-        curveStep: d3.curveStep,
-        curveStepAfter: d3.curveStepAfter,
-        curveStepBefore: d3.curveStepBefore
-    },
-
+    /**
+     *
+     */
     privates: {
-        svgElemNode: null,
-        chartWidth: null,
-        chartHeight: null,
         scales: {},
         shapes: [],
         tooltipCmp: null,
-        data: []
+        data: [],
+        // TODO: needed?
+        axes: {}
+    },
+
+    /**
+     * [getChartSize description]
+     * @return {[type]} [description]
+     */
+    getChartSize: function() {
+        var me = this;
+        var view = me.getView();
+        var chartMargin = view.getChartMargin();
+
+        return [
+            view.getWidth() - chartMargin.left - chartMargin.right,
+            view.getHeight() - chartMargin.top - chartMargin.bottom
+        ];
     },
 
     /**
@@ -183,31 +265,20 @@ Ext.define('Koala.view.component.D3ChartController', {
 
     },
 
+    /**
+     *
+     */
     drawChart: function() {
         var me = this;
-        var view = me.getView();
 
         me.drawSvgContainer();
 
         me.createScales();
+        me.createAxes();
         me.createShapes();
         me.createTooltip();
 
-        Ext.iterate(me.scales, function(orient) {
-            Ext.each(view.getShapes(), function() {
-                me.scales[orient].domain(d3.extent(me.data, function(d) {
-                    return d[view.getAxes()[orient].dataIndex];
-                }));
-            });
-        });
-
-        // me.scales.bottom.domain(d3.extent(me.data, function(d) {
-        //     return d.end_measure;
-        // }));
-        //
-        // me.scales.left.domain(d3.extent(me.data, function(d) {
-        //     return d.value;
-        // }));
+        me.setDomainForScales();
 
         me.drawTitle();
         me.drawAxes();
@@ -216,15 +287,45 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawLegend();
     },
 
-    createTooltip: function(){
+    /**
+     * Sets the domain for each scale in the chart by the use of the extent of
+     * the given input data values.
+     */
+    setDomainForScales: function() {
+        var me = this;
+        var view = me.getView();
+        var shapeConfig = view.getShapes();
+
+        // iterate over all scales/axis orientations and all shapes to find the
+        // corresponding data index for each scale. Set the extent (max/min range
+        // in this data index) for each scale.
+        Ext.iterate(me.scales, function(orient) {
+            // TODO: is it safe to iterate over the config?
+            Ext.each(shapeConfig, function() {
+                me.scales[orient].domain(d3.extent(me.data, function(d) {
+                    return d[view.getAxes()[orient].dataIndex];
+                }));
+            });
+        });
+    },
+
+    /**
+     * Creates a simple ExtJS tooltip, see the
+     * {@link http://docs.sencha.com/extjs/6.0.0/classic/Ext.tip.ToolTip.html|ExtJS API documentation}
+     * for further details and config options.
+     */
+    createTooltip: function() {
         this.tooltipCmp = Ext.create('Ext.tip.ToolTip');
     },
 
     /**
-     *
+     * Draws the root <svg>-element into the <div>-element rendered by the Ext
+     * component.
      */
     drawSvgContainer: function() {
         var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var chartMargin = view.getChartMargin();
@@ -238,13 +339,59 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .attr('width', view.getWidth())
                 .attr('height', view.getHeight())
             .append('g')
-                .attr('transform', translate);
+                .attr('transform', translate)
+            .append('rect')
+                .style('fill', view.getBackgroundColor())
+                .attr('class', CSS.PLOT_BACKGROUND)
+                .attr('width', 553)
+                .attr('height', 420)
+                .attr('pointer-events', 'all');
 
-        // Set references to the SVG element node itself and the final chart
-        // dimensions
-        me.svgElemNode = d3.select(viewId + ' svg').node();
-        me.chartWidth = view.getWidth() - chartMargin.left - chartMargin.right;
-        me.chartHeight = view.getHeight() - chartMargin.top - chartMargin.bottom;
+        // register zoom interaction if requested
+        if (view.getZoomEnabled()) {
+            var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
+            plot.call(me.createZoomInteraction());
+        }
+    },
+
+    /**
+     * [createZoomInteraction description]
+     * @return {[type]} [description]
+     */
+    createZoomInteraction: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+
+        // var chartSize = me.getChartSize();
+        //var extent = [[0,0], [600 - 50, 400 - 50]];
+
+        return d3.zoom()
+            //.scaleExtent([1, 5])
+            //.translateExtent(extent)
+            .on('zoom', function() {
+                d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP)
+                    .attr('transform', d3.event.transform);
+
+                Ext.iterate(me.axes, function(orient) {
+                    var axis;
+                    var axisSelector = 'svg g.' + CSS.AXIS;
+                    var axisGenerator = me.axes[orient];
+                    var scaleGenerator = me.scales[orient];
+
+                    if (orient === 'top' || orient === 'bottom') {
+                        axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
+                        axis.call(axisGenerator.scale(
+                            d3.event.transform.rescaleX(scaleGenerator)));
+                    } else if (orient === 'left' || orient === 'right') {
+                        axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
+                        axis.call(axisGenerator.scale(
+                            d3.event.transform.rescaleY(scaleGenerator)));
+                    }
+                });
+            });
     },
 
     /**
@@ -252,20 +399,22 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     createScales: function() {
         var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
         var view = me.getView();
+        var chartSize = me.getChartSize();
 
         Ext.iterate(view.getAxes(), function(orient, axisConfig) {
-            var scaleType = me.SCALE[axisConfig.scale];
+            var scaleType = staticMe.SCALE[axisConfig.scale];
             var range;
 
-            // x axes
+            // The x axes
             if (orient === 'top' || orient === 'bottom') {
-                range = [0, me.chartWidth];
+                range = [0, chartSize[0]];
             }
 
-            // y axes
+            // The y axes
             if (orient === 'left' || orient === 'right') {
-                range = [me.chartHeight, 0];
+                range = [chartSize[1], 0];
             }
 
             me.scales[orient] = scaleType().range(range);
@@ -277,11 +426,13 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     createShapes: function() {
         var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
         var view = me.getView();
+        var chartSize = me.getChartSize();
 
         Ext.each(view.getShapes(), function(shapeConfig) {
-            var shapeType = me.TYPE[shapeConfig.type];
-            var curveType = me.CURVE[shapeConfig.curve];
+            var shapeType = staticMe.TYPE[shapeConfig.type];
+            var curveType = staticMe.CURVE[shapeConfig.curve];
             var xField = shapeConfig.xField;
             var yField = shapeConfig.yField;
             var orientX = me.getAxisByField(xField);
@@ -302,7 +453,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         return normalizeX(d[xField]);
                     });
 
-                if (shapeType === me.TYPE.line) {
+                if (shapeType === staticMe.TYPE.line) {
                     shape
                         // set the y accessor
                         .y(function(d) {
@@ -310,12 +461,12 @@ Ext.define('Koala.view.component.D3ChartController', {
                         });
                 }
 
-                if (shapeType === me.TYPE.area) {
+                if (shapeType === staticMe.TYPE.area) {
                     shape
                         .y1(function(d) {
                             return normalizeY(d[yField]);
                         })
-                        .y0(me.chartHeight);
+                        .y0(chartSize[1]);
                 }
             } else {
                 shape = {};
@@ -346,20 +497,44 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
+     * [createAxes description]
+     * @return {[type]} [description]
+     */
+    createAxes: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var view = me.getView();
+        var axesConfig = view.getAxes();
+
+        Ext.iterate(axesConfig, function(orient, axisConfig) {
+            var axis = staticMe.ORIENTATION[orient];
+            var scale = me.scales[orient];
+
+            var chartAxis = axis(scale)
+                .ticks(axisConfig.ticks)
+                .tickValues(axisConfig.values)
+                .tickFormat(axisConfig.format ? d3.format(axisConfig.format) : undefined)
+                .tickSize(axisConfig.tickSize || 6)
+                .tickPadding(axisConfig.tickPadding || 3);
+
+            me.axes[orient] = chartAxis;
+        });
+    },
+
+    /**
      *
      */
     drawAxes: function() {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
         var CSS = staticMe.CSS_CLASS;
+        // var staticMe = Koala.view.component.D3ChartController;
         var view = me.getView();
         var viewId = '#' + view.getId();
-
         var axesConfig = view.getAxes();
+        var chartSize = me.getChartSize();
 
         Ext.iterate(axesConfig, function(orient, axisConfig) {
-            var axis = me.ORIENTATION[orient];
-            var scale = me.scales[orient];
             var axisTransform;
             var labelTransform;
             var labelPadding;
@@ -368,18 +543,18 @@ Ext.define('Koala.view.component.D3ChartController', {
             if (orient === 'top' || orient === 'bottom') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
                 axisTransform = (orient === 'bottom') ?
-                        'translate(0,' + me.chartHeight + ')' : undefined;
-                labelTransform = 'translate(' + (me.chartWidth / 2) + ', 0)';
+                        'translate(0,' + chartSize[1] + ')' : undefined;
+
+                labelTransform = 'translate(' + (chartSize[0] / 2) + ', 0)';
                 labelPadding = (axisConfig.labelPadding || '35px');
             }
 
             if (orient === 'left' || orient === 'right') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
                 axisTransform = (orient === 'right') ?
-                        'translate(' + me.chartWidth + ', 0)' : undefined;
-                // range = [me.chartHeight, 0];
+                        'translate(' + chartSize[0] + ', 0)' : undefined;
 
-                labelTransform = 'rotate(-90), translate(' + (me.chartHeight / 2 * -1) + ', 0)';
+                labelTransform = 'rotate(-90), translate(' + (chartSize[1] / 2 * -1) + ', 0)';
                 labelPadding = (axisConfig.labelPadding || '25px') * -1;
             }
 
@@ -387,13 +562,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .append('g')
                     .attr('class', cssClass)
                     .attr('transform', axisTransform)
-                    .call(axis(scale)
-                        .ticks(axisConfig.ticks)
-                        .tickValues(axisConfig.values)
-                        .tickFormat(axisConfig.format ? d3.format(axisConfig.format) : undefined)
-                        .tickSize(axisConfig.tickSize || 6)
-                        .tickPadding(axisConfig.tickPadding || 3)
-                    )
+                    .call(me.axes[orient])
                 .append('text')
                     .attr('transform', labelTransform)
                     .attr('dy', labelPadding)
@@ -414,10 +583,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = me.getView();
         var viewId = '#' + view.getId();
         var titleConfig = view.getTitle();
+        var chartSize = me.getChartSize();
 
         d3.select(viewId + ' svg > g')
             .append('text')
-                .attr('transform', 'translate(' + (me.chartWidth / 2) + ', 0)')
+                .attr('transform', 'translate(' + (chartSize[0] / 2) + ', 0)')
                 .attr('dy', (titleConfig.labelPadding || 18) * -1)
                 .attr('fill', titleConfig.labelColor || '#000')
                 .style('text-anchor', 'middle')
@@ -435,6 +605,17 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = me.getView();
         var viewId = '#' + view.getId();
         var barWidth;
+        var chartSize = me.getChartSize();
+
+        // Wrap the shapes in its own <svg> element.
+        var shapeSvg = d3.select(viewId + ' svg > g')
+            .append('svg')
+                .attr('top', 0)
+                .attr('left', 0)
+                .attr('width', 553)
+                .attr('height', 420);
+                // .attr('viewBox', '0 0 550 420');
+
         Ext.each(me.shapes, function(shape, idx) {
             var xField = shape.config.xField;
             var yField = shape.config.yField;
@@ -443,14 +624,14 @@ Ext.define('Koala.view.component.D3ChartController', {
             var color = shape.config.color;
             var darkerColor = d3.color(color).darker();
 
-            var shapeGroup = d3.select(viewId + ' svg > g')
+            var shapeGroup = shapeSvg
                 .append('g')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
                     .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx)
                     .attr('shape-type', shape.config.type);
 
             if (shape.config.type === 'bar') {
-                barWidth = (me.chartWidth / me.data.length);
+                barWidth = (chartSize[0] / me.data.length);
                 barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
                 shapeGroup
                     .selectAll("rect")
@@ -468,7 +649,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 return me.scales[orientY](d[yField]);
                             })
                             .attr("height", function(d) {
-                                return me.chartHeight - me.scales[orientY](d[yField]);
+                                return chartSize[1] - me.scales[orientY](d[yField]);
                             })
                             .on('mouseover', function(data) {
                                 var tooltip = me.tooltipCmp;
@@ -655,11 +836,12 @@ Ext.define('Koala.view.component.D3ChartController', {
         var viewId = '#' + view.getId();
         var legendConfig = view.getLegend();
         var legendMargin = legendConfig.legendMargin;
+        var chartSize = me.getChartSize();
 
         var legend = d3.select(viewId + ' svg > g')
             .append('g')
                 .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
-                .attr('transform', 'translate(' + (me.chartWidth + legendMargin.left) + ',' + (legendMargin.bottom) + ')');
+                .attr('transform', 'translate(' + (chartSize[0] + legendMargin.left) + ',' + (legendMargin.bottom) + ')');
 
         Ext.each(me.shapes, function(shape, idx) {
             var toggleVisibilityFunc = (function() {

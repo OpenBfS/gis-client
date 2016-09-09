@@ -39,7 +39,10 @@ Ext.define('Koala.view.component.D3Chart',{
     margin: 5,
 
     config: {
+        // TODO: not working at the moment?!
         showLoadMask: true,
+        zoomEnabled: true,
+        backgroundColor: '#EEE',
         // type: 'line',
         // curve: 'linear',
         shapes: [{
