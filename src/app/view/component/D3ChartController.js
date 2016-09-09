@@ -36,6 +36,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             SHAPE_GROUP: 'k-d3-shape-group',
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
+            DELETE_ICON: 'k-d3-delete-icon',
 
             PREFIX_IDX_SHAPE_GROUP: 'shape-group-',
             PREFIX_IDX_SHAPE_PATH: 'shape-path-',
@@ -827,9 +828,30 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
+     * Removes the current legend from the chart (if it exists) and redraws the
+     * legend by looking atour internal data.
+     */
+    redrawLegend: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var legendCls = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND;
+        var legend = d3.select(viewId + ' svg g.' + legendCls);
+        if (legend) {
+            var legendNode = legend.node();
+            legendNode.parentNode.removeChild(legendNode);
+        }
+        me.drawLegend();
+    },
+
+    /**
      *
      */
     drawLegend: function() {
+        Ext.log.warn('TODO: Since the internal datastructure is currently not' +
+            ' updated, the legend will possibly not reflect what you expect.');
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
         var CSS = staticMe.CSS_CLASS;
@@ -847,6 +869,13 @@ Ext.define('Koala.view.component.D3ChartController', {
         Ext.each(me.shapes, function(shape, idx) {
             var toggleVisibilityFunc = (function() {
                 return function() {
+                    var target = d3.select(d3.event.target);
+                    if (target && target.classed(CSS.DELETE_ICON)) {
+                        // click happened on the delete icon, no visibility
+                        // toggling. The deletion is handled in an own event
+                        // handler
+                        return;
+                    }
                     var shapeGroup = me.shapeGroupByIndex(idx);
                     me.toggleShapeGroupVisibility(
                         shapeGroup, // the real group, containig shapepath & points
@@ -908,7 +937,82 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .attr('text-anchor', 'start')
                 .attr('dy', '0')
                 .attr('dx', '25');
+
+            legendEntry.append('text')
+                .text('✖')
+                .attr('class', CSS.DELETE_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '150') // TODO will be hard to do dynamically…
+                .on('click', me.generateDeleteCallback(shape, idx));
         });
+    },
+
+    /**
+     * Generates a callback that can be used for the click event on the delete
+     * icon. Inside this callback all relevant parts of the series are removed.
+     *
+     * @param {Object} shape The current shape object to handle.
+     * @param {[type]} idx The index of the shape object in the array of all
+     *     shapes.
+     * @return {Function} The callback to be used as click handler on the delete
+     *     icon.
+     */
+    generateDeleteCallback: function(shape, idx) {
+        var me = this;
+        var deleteCallback = function() {
+            var name = shape.config.name;
+            var title = 'Serie "' + name + '" entfernen?';
+            var msg = 'Möchten sie die Serie <b>' + name + '</b>' +
+                ' aus dem Graphen entfernen?';
+            var confirmCallback = function(buttonId) {
+                if (buttonId === 'ok' || buttonId === 'yes') {
+                    me.deleteLegendEntry(this.parentNode);
+                    me.deleteShapeSeriesByIdx(idx);
+                }
+            };
+            Ext.Msg.confirm(title, msg, confirmCallback, this);
+        };
+        return deleteCallback;
+    },
+
+    /**
+     * Deletes the legendentry passed from the DOM.
+     *
+     * @param  {DOMElement} legendEntry The DOM element to remove.
+     */
+    deleteLegendEntry: function (legendEntry) {
+        var parent = legendEntry && legendEntry.parentNode;
+        if (parent) {
+            parent.removeChild(legendEntry);
+        }
+    },
+
+    /**
+     * Removes the shape series specified by the given `idx`. Will remove the
+     * SVG node and the entry in our internal dataset.
+     *
+     * @param {Number} idx The index of the data entry to remove.
+     */
+    deleteShapeSeriesByIdx: function(idx) {
+        var me = this;
+        var shapeGroupNode = me.shapeGroupByIndex(idx).node();
+        shapeGroupNode.parentNode.removeChild(shapeGroupNode);
+        me.removeDataEntryByIdx(idx);
+        me.redrawLegend();
+    },
+
+    /**
+     * Remove the actual data at the specified index.
+     *
+     * TODO implement once the datastructure is set.
+     *
+     * @param {Number} idx The index of the data entry to remove.
+     */
+    removeDataEntryByIdx: function(idx) {
+        Ext.log.warn('TODO: Delete the array of data at the index ' +
+            '"' + idx + '". This is not implemented yet because the storage' +
+            ' will change soon');
     },
 
     /**
