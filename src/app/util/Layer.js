@@ -213,8 +213,12 @@ Ext.define('Koala.util.Layer', {
          * @param {string} uuid
          * @returns {object} metadata json object
          */
-        getMetadataFromUuidAndThen: function(uuid, ajaxCb) {
+        getMetadataFromUuidAndThen: function(uuid, ajaxCb, errCb) {
             var me = this;
+
+            if (!Ext.isFunction(errCb)) {
+                errCb = Ext.emptyFn;
+            }
 
             var appContext = BasiGX.view.component.Map.guess().appContext;
             var urls = appContext.data.merge.urls;
@@ -258,7 +262,10 @@ Ext.define('Koala.util.Layer', {
                 },
 
                 failure: function(response) {
-                    Ext.raise('server-side failure with status code ' + response.status);
+                    var msg = 'server-side failure with status code ' +
+                        response.status;
+                    Ext.log.error(msg);
+                    errCb();
                 }
             });
         },

@@ -145,15 +145,39 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                 if('visible' in layer) {
                     initiallyVisible = layer.visible;
                 }
-                LayerUtil.getMetadataFromUuidAndThen(uuid, function(metadata) {
-                    var olLayer = LayerUtil.layerFromMetadata(metadata);
-                    olLayer.setVisible(initiallyVisible);
-                    orderedRealLayers[index] = olLayer;
+                var increaseAndCheckIfDone = function() {
                     numLayersCreated++;
                     if (numLayersCreated === numLayersToCreate) {
                         LayerUtil.addOlLayersToMap(orderedRealLayers);
                     }
-                });
+                };
+                /**
+                 * This is the success callback for the fetching of metadata:
+                 *
+                 * Add the layer to the list of layers and check if we are
+                 * done yet.
+                 */
+                var successCallback = function(metadata) {
+                    var olLayer = LayerUtil.layerFromMetadata(metadata);
+                    olLayer.setVisible(initiallyVisible);
+                    orderedRealLayers[index] = olLayer;
+                    increaseAndCheckIfDone();
+                };
+                /**
+                 * This is the error callback for the fetching of metadata:
+                 *
+                 * In case of errors, we have to count up as well, otherwise
+                 * one erroring layer will lead not a single layer being
+                 * loaded.
+                 */
+                var errorCallback = function() {
+                    orderedRealLayers[index] = null;
+                    increaseAndCheckIfDone();
+                };
+
+                LayerUtil.getMetadataFromUuidAndThen(
+                    uuid, successCallback, errorCallback
+                );
             }
         });
     },
