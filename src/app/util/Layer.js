@@ -281,8 +281,8 @@ Ext.define('Koala.util.Layer', {
 
         /**
          * This method finds the first RoutingLegendTree and updates the filters
-         * text in the layer HTML suffix. This methdo is aclled multiple times,
-         * e.g. after drag 'n drop of layeritems. and right after new layers
+         * text in the layer HTML suffix. This method is called multiple times,
+         * e.g. after drag 'n drop of layeritems and right after new layers
          * (E.g from the filterpanel) have been added to the map and the tree.
          */
         repaintLayerFilterIndication: function() {
