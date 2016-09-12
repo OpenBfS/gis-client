@@ -699,6 +699,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             },
             scope: me
         });
+        Koala.util.Layer.repaintLayerFilterIndication();
     },
 
     /**
