@@ -605,6 +605,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         // and on the layer itself.
         var loadStartFunc = function() {
             rec.set(fieldnameLoadIndicationLoading, true);
+            var row = Ext.get(me.getView().getRowByRecord(rec));
+            row.removeCls('k-loading-failed');
             me.layerDropped(); // restores collapsed/expanded state
         };
         var loadEndFunc = function() {
@@ -614,9 +616,14 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var loadErrorFunc = function() {
             loadEndFunc();
             layer.set('visible', false);
+            var row = Ext.get(me.getView().getRowByRecord(rec));
+            var task = new Ext.util.DelayedTask(function(){
+                row.addCls('k-loading-failed');
+            });
+            task.delay(150);
         };
 
-        // buffer the loadAnd function, so that the loading indicator doesn't
+        // buffer the loadEnd function, so that the loading indicator doesn't
         // 'flicker'
         var bufferedLoadEndFunc = Ext.Function.createBuffered(loadEndFunc, 250);
 
@@ -625,7 +632,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var endKey = source.on(evtPrefix + 'loadend', bufferedLoadEndFunc);
         var errorKey = source.on(evtPrefix + 'loaderror', loadErrorFunc);
 
-        // Set the internal flags that loading indcation is bound and the
+        // Set the internal flags that loading indication is bound and the
         // associated event keys.
         rec.set(fieldnameLoadIndicationBound, true);
         rec.set(fieldnameLoadIndicationKeys, [startKey, endKey, errorKey]);
