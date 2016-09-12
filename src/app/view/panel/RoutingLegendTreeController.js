@@ -21,6 +21,7 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
     alias: 'controller.k-panel-routing-legendtree',
 
     requires: [
+        'Koala.util.Layer',
         'Koala.util.String'
     ],
 
@@ -78,33 +79,18 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
     },
 
     bindUtcBtnToggleHandler: function() {
-        var me = this;
+        var util = Koala.util.Layer;
         var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
         Ext.each(utcBtns, function(utcBtn) {
-            utcBtn.on('toggle', me.handleTimereferenceButtonToggled, me);
+            utcBtn.on('toggle', util.repaintLayerFilterIndication, util);
         });
     },
 
     unbindUtcBtnToggleHandler: function() {
-        var me = this;
+        var util = Koala.util.Layer;
         var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
         Ext.each(utcBtns, function(utcBtn) {
-            utcBtn.un('toggle', me.handleTimereferenceButtonToggled, me);
-        });
-    },
-
-    handleTimereferenceButtonToggled: function() {
-        var treePanel = this.getView();
-        var selector = 'component[name="legend-tree-row-component"]';
-        // TODO why can't we query relative to ourself?
-        var components = Ext.ComponentQuery.query(selector);
-        Ext.each(components, function(component) {
-            var rec = component && component.layerRec;
-            var filterComponent = rec && component.down('[name="filtertext"]');
-            if (rec && filterComponent) {
-                var newFilterTxt = treePanel.self.getFilterText(rec);
-                filterComponent.setHtml(newFilterTxt);
-            }
+            utcBtn.un('toggle', util.repaintLayerFilterIndication, util);
         });
     },
 
