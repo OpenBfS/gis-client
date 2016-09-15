@@ -86,6 +86,19 @@ Ext.define('Koala.view.component.MapController', {
         return innerHtml;
     },
 
+    onDroppedExternalVectorData: function(event) {
+        var map = this.getView().getMap();
+        // TODO will use the utilities in Layer.js soon
+
+        var vectorSource = new ol.source.Vector({
+          features: event.features
+        });
+        var vectorLayer = new ol.layer.Vector({
+          source: vectorSource
+        });
+        map.addLayer(vectorLayer);
+    },
+
     /**
     *
     */

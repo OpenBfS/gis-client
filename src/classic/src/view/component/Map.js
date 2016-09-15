@@ -53,6 +53,25 @@ Ext.define("Koala.view.component.Map", {
             hoverPlugin.highlightStyleFunction = highlightStyleFunction;
             hoverPlugin.getToolTipHtml = me.getController().getToolTipHtml;
         }
+
+        me.setupDragDropFunctionality();
+    },
+
+    setupDragDropFunctionality: function() {
+        var me = this;
+        var controller = me.getController();
+        var dragAndDropInteraction = new ol.interaction.DragAndDrop({
+            formatConstructors: [
+                ol.format.GeoJSON,
+                ol.format.KML,
+                ol.format.GML3,
+                ol.format.GML2
+            ]
+        });
+        dragAndDropInteraction.on(
+            'addfeatures', controller.onDroppedExternalVectorData, controller
+        );
+        me.map.addInteraction(dragAndDropInteraction);
     },
 
     statics:{
