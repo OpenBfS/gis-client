@@ -42,8 +42,9 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
-        'Koala.view.window.Print'
+        'Koala.view.window.Print',
 
+        'Koala.util.Layer'
     ],
 
     controller: 'main',
@@ -85,26 +86,28 @@ Ext.define('Koala.view.main.Main', {
         listeners: {
             afterrender: function(){
 
-                if(!location.hash){
-                    window.setTimeout(function(){
-                        Ext.create('Ext.window.Window', {
-                            title: 'Layer Profilwahl',
-                            modal: true,
-                            layout: 'fit',
-                            minWidth: 250,
-                            minHeight: 300,
-                            // items: [{
-                            //     xtype: 'k-panel-layersetchooser',
-                            //     showLayerProfiles: true,
-                            //     header: false,
-                            //     layout: 'fit'
-                            // }]
-                            items: [{
-                                xtype: 'd3-chart'
-                            }]
-                        }).show();
-                    }, 1500);
-                }
+
+                window.setTimeout(function(){
+                    Koala.util.Layer.addLayerByUuid('45dd5d65-630a-42d9-9f86-6c718dab0412');
+                }, 1500)
+
+                // if(!location.hash){
+                //     window.setTimeout(function(){
+                //         Ext.create('Ext.window.Window', {
+                //             title: 'Layer Profilwahl',
+                //             modal: true,
+                //             layout: 'fit',
+                //             minWidth: 250,
+                //             minHeight: 300,
+                //             items: [{
+                //                 xtype: 'k-panel-layersetchooser',
+                //                 showLayerProfiles: true,
+                //                 header: false,
+                //                 layout: 'fit'
+                //             }]
+                //         }).show();
+                //     }, 1500);
+                // }
                 // This needs to happen in an afterrender handler, as
                 // otherwise the BasiGX texts would count…
                 var toggleOverviewBtnSel = 'button[' +

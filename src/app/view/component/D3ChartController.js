@@ -45,6 +45,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             PREFIX_IDX_SHAPE_GROUP: 'shape-group-',
             PREFIX_IDX_SHAPE_PATH: 'shape-path-',
             PREFIX_IDX_SHAPE_POINT_GROUP: 'shape-points-',
+            PREFIX_IDX_LEGEND_GROUP: 'legend-group-',
 
             SUFFIX_LEGEND: '-legend',
             SUFFIX_HIDDEN: '-hidden'
@@ -169,7 +170,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             log: d3.scaleLog,
             ident: d3.scaleIdentity,
             time: d3.scaleTime,
-            utc: d3.scaleUtc
+            utc: d3.scaleUtc,
+            ordinal: d3.scaleOrdinal
         },
 
         /**
@@ -222,16 +224,17 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    privates: {
-        scales: {},
-        shapes: [],
-        axes: {},
-        gridAxes: {},
-        tooltipCmp: null,
-        zoomInteraction: null,
-        initialPlotTransform: null,
-        data: []
-    },
+    scales: {},
+    shapes: [],
+    axes: {},
+    gridAxes: {},
+    tooltipCmp: null,
+    zoomInteraction: null,
+    initialPlotTransform: null,
+    data: {},
+    // data: [],
+    chartRendered: false,
+    ajaxCounter: 0,
 
     /**
      * [getChartSize description]
@@ -255,21 +258,94 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         var view = me.getView();
 
+        // We have to cleanup manually.  WHY?!
+        this.scales = {};
+        this.shapes = [];
+        this.axes = {};
+        this.gridAxes =  {};
+        this.data = {};
+
         if (view.getShowLoadMask()) {
             view.setLoading(true);
         }
 
-        me.on('chartdatachanged', function() {
+        // me.on('chartdatachanged', function() {
+        me.on('chartdataprepared', function() {
+            console.log('event fired')
 
-            me.drawChart();
+            if (me.chartRendered) {
+                me.redrawChart();
+            } else {
+                me.drawChart();
+            }
 
             if (view.getShowLoadMask()) {
                 view.setLoading(false);
             }
         });
 
-        me.getChartData();
+        if (view.chartType === 'bar') {
+            var targetLayer = view.getTargetLayer();
+            var chartConfig = targetLayer.metadata.layerConfig.barChartProperties;
+            var selectedStation = view.getSelectedStations()[0];
+            var props = selectedStation.getProperties();
 
+            var data = {};
+            Ext.each(chartConfig.chartFieldSequence.split(','), function(field) {
+                data[field] = props[field];
+            });
+
+            // var dataObj = {};
+            me.data[props.locality_code] = data;
+
+            // me.fireEvent('chartdataprepared');
+
+
+
+        } else {
+            me.getChartData();
+        }
+
+    },
+
+    /**
+     *
+     */
+    redrawChart: function() {
+        var me = this;
+
+        // Reset the shapes and scales
+        me.shapes = [];
+        me.scales = {};
+
+        me.deleteSvg();
+
+        me.createScales();
+        me.createShapes();
+
+        me.setDomainForScales();
+
+        me.drawShapes();
+
+        me.redrawLegend();
+
+        // TODO: Zoom to the new chart extent
+        // me.transformPlot({
+        //     x: 0,
+        //     y: 0,
+        //     k: 1
+        // }, 500);
+    },
+
+    /**
+     *
+     */
+    deleteSvg: function(){
+        var me = this;
+        var view = me.getView();
+
+        var svg = d3.select('#' + view.getId() + ' svg svg');
+        svg.node().remove();
     },
 
     /**
@@ -295,6 +371,52 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawShapes();
 
         me.drawLegend();
+
+        me.chartRendered = true;
+    },
+
+    /**
+     * Add a station to the list of managed stations for this chart. Please note
+     * that this does not actually render a new series for the station, callers
+     * (like e.g. the timeseries window controller) need to ensure that the data
+     * is actually fetched and drawn.
+     *
+     * TODO We may want to refactor this, so the last note isn't needed any
+     *      longer. the twc currently simply calls into our own controller and
+     *      issues `prepareTimeSeriesLoad`, which we might do as well here…
+     *
+     * By default the candidate will only be added, if it doesn't already
+     * exist (see #containsSeriesFor), but this can be skipped if the second
+     * argument (`allowDupes`) is passed as `true`. This method returns whether
+     * the feature was actually added.
+     *
+     * @param {ol.Feature} candidate The feature to add.
+     * @param {boolean} [allowDupes] Whether duplicates are allowed. Defaults to
+     *     `true`.
+     * @return {boolean} Whether the candidate was added.
+     */
+    addShape: function(shapeConfig, selectedStation, allowDupes) {
+        var me = this;
+        var view = me.getView();
+        var shapes = view.getShapes();
+        var added = false;
+        allowDupes = Ext.isDefined(allowDupes) ? allowDupes : false;
+
+        if (allowDupes === true || !me.containsStation(selectedStation)) {
+
+            view.getSelectedStations().push(selectedStation);
+
+            shapes.push(shapeConfig)
+
+            view.setShapes(shapes);
+
+            // update the chart to reflect the changes
+            me.getChartData();
+
+            added = true;
+        }
+
+        return added;
     },
 
     /**
@@ -314,15 +436,14 @@ Ext.define('Koala.view.component.D3ChartController', {
     setDomainForScales: function() {
         var me = this;
         var view = me.getView();
-        var shapeConfig = view.getShapes();
 
         // iterate over all scales/axis orientations and all shapes to find the
         // corresponding data index for each scale. Set the extent (max/min range
         // in this data index) for each scale.
         Ext.iterate(me.scales, function(orient) {
-            // TODO: is it safe to iterate over the config?
-            Ext.each(shapeConfig, function() {
-                me.scales[orient].domain(d3.extent(me.data, function(d) {
+            Ext.each(me.shapes, function(shape) {
+                var data = me.data[shape.config.id];
+                me.scales[orient].domain(d3.extent(data, function(d) {
                     return d[view.getAxes()[orient].dataIndex];
                 }));
             });
@@ -586,14 +707,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                         'translate(0,' + chartSize[1] + ')' : undefined;
 
                 labelTransform = 'translate(' + (chartSize[0] / 2) + ', 0)';
-                labelPadding = (axisConfig.labelPadding || '35px');
+                labelPadding = axisConfig.labelPadding || 35;
             } else if (orient === 'left' || orient === 'right') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
                 axisTransform = (orient === 'right') ?
                         'translate(' + chartSize[0] + ', 0)' : undefined;
 
                 labelTransform = 'rotate(-90), translate(' + (chartSize[1] / 2 * -1) + ', 0)';
-                labelPadding = (axisConfig.labelPadding || '25px') * -1;
+                labelPadding = (axisConfig.labelPadding || 25) * -1;
             }
 
             d3.select(viewId + ' svg > g')
@@ -608,7 +729,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .style('text-anchor', 'middle')
                     .style('font-weight', 'bold')
                     .style('font-size', axisConfig.labelSize || 12)
-                    .text(axisConfig.label);
+                    .text(axisConfig.label || '');
 
         });
     },
@@ -731,30 +852,32 @@ Ext.define('Koala.view.component.D3ChartController', {
                 // .attr('viewBox', '0 0 550 420');
 
         Ext.each(me.shapes, function(shape, idx) {
-            var xField = shape.config.xField;
-            var yField = shape.config.yField;
+            var shapeConfig = shape.config;
+            var xField = shapeConfig.xField;
+            var yField = shapeConfig.yField;
             var orientX = me.getAxisByField(xField);
             var orientY = me.getAxisByField(yField);
-            var color = shape.config.color;
+            var color = shapeConfig.color;
             var darkerColor = d3.color(color).darker();
 
             var shapeGroup = shapeSvg
                 .append('g')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
                     .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx)
-                    .attr('shape-type', shape.config.type);
+                    .attr('shape-type', shapeConfig.type);
 
-            if (shape.config.type === 'bar') {
-                barWidth = (chartSize[0] / me.data.length);
+            if (shapeConfig.type === 'bar') {
+                barWidth = (chartSize[0] / me.data[shapeConfig.id].length);
                 barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
                 shapeGroup
                     .selectAll('rect')
-                        .data(me.data)
+                        .data(me.data[shapeConfig.id])
                     .enter().append('rect')
                         .filter(function(d) {
                             return Ext.isDefined(d[yField]);
                         })
                             .style('fill', color)
+                            .style('opacity', shapeConfig.opacity)
                             .attr('x', function(d) {
                                 return me.scales[orientX](d[xField]);
                             })
@@ -783,12 +906,12 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     '</ul>'
                                 ].join('');
                                 tooltip.setHtml(html);
-                                tooltip.setTitle('Title for ' + shape.config.name);
+                                tooltip.setTitle('Title for ' + shapeConfig.name);
                                 tooltip.setTarget(this);
                                 tooltip.show();
                             });
                 shapeGroup.selectAll("text")
-                    .data(me.data)
+                    .data(me.data[shapeConfig.id])
                     .enter()
                     .append("text")
                         .filter(function(d) {
@@ -818,9 +941,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 shapeGroup.append('path')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
                     .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_PATH + idx)
-                    .datum(me.data)
+                    .datum(me.data[shapeConfig.id])
                     .style('fill', function() {
-                        switch (shape.config.type) {
+                        switch (shapeConfig.type) {
                             case 'line':
                                 return 'none';
                             case 'area':
@@ -828,7 +951,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         }
                     })
                     .style('stroke', function() {
-                        switch (shape.config.type) {
+                        switch (shapeConfig.type) {
                             case 'line':
                                 return color;
                             case 'area':
@@ -836,13 +959,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                         }
                     })
                     .style('stroke-width', function() {
-                        switch (shape.config.type) {
+                        switch (shapeConfig.type) {
                             case 'line':
-                                return shape.config.width;
+                                return shapeConfig.width;
                             case 'area':
                                 return 0;
                         }
                     })
+                    .style('stroke-opacity', shapeConfig.opacity)
                     .attr('d', shape.shape);
 
                 var pointGroup = shapeGroup.append('g')
@@ -852,7 +976,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 // TODO refactor the selectAll method below; DK
                 //      pointGroup.enter()???
                 pointGroup.selectAll('circle')
-                    .data(me.data)
+                    .data(me.data[shapeConfig.id])
                     .enter().append('circle')
                         .filter(function(d) {
                             return Ext.isDefined(d[yField]);
@@ -877,7 +1001,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     '</ul>'
                                 ].join('');
                                 tooltip.setHtml(html);
-                                tooltip.setTitle('Title for ' + shape.config.name);
+                                tooltip.setTitle('Title for ' + shapeConfig.name);
                                 tooltip.setTarget(this);
                                 tooltip.show();
                             })
@@ -887,7 +1011,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .attr('cy', function(d) {
                                 return me.scales[orientY](d[yField]);
                             })
-                            .attr('r', shape.config.width);
+                            .attr('r', shapeConfig.width);
             }
 
         });
@@ -941,77 +1065,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
 
         this.transformPlot(me.initialPlotTransform, 500);
-    },
-
-    /**
-     * When we render at least one bar chart, we need to move certain SVG
-     * elements so that the center of the bars lies directly atop the
-     * corresponding tick. Things like the x-axis, the legend and all non bar
-     * charts will be moved by the amount of half a width of a bar.
-     *
-     * @param {Number} barWidth The width of one bar in the chart.
-     */
-    adjustForBarchart: function(barWidth) {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var additionalOffset = 2;
-        var xOffset = (barWidth / 2) + additionalOffset;
-        var diffObj = {
-            translate: {
-                x: xOffset,
-                y: 0
-            }
-        };
-
-        var chartSel = viewId + ' svg g.' + CSS.SHAPE_GROUP;
-
-        // move line charts
-        var lineSel = chartSel + '[shape-type="line"]';
-        var lines = d3.selectAll(lineSel);
-        lines.each(function() {
-            var line = d3.select(this);
-            staticMe.adjustTransformTranslate(line, diffObj);
-        });
-
-        // move area charts
-        var areaSel = chartSel + '[shape-type="area"]';
-        var areas = d3.selectAll(areaSel);
-        areas.each(function() {
-            var area = d3.select(this);
-            staticMe.adjustTransformTranslate(area, diffObj);
-        });
-
-        // move barcharts but only by the additional offset!
-        var barSel = chartSel + '[shape-type="bar"]';
-        var bars = d3.selectAll(barSel);
-        bars.each(function() {
-            var bar = d3.select(this);
-            staticMe.adjustTransformTranslate(bar, {
-                translate: {
-                    x: additionalOffset
-                }
-            });
-        });
-
-        // move legends
-        var legSel = chartSel + CSS.SUFFIX_LEGEND;
-        var legends = d3.selectAll(legSel);
-        legends.each(function() {
-            var legend = d3.select(this);
-            staticMe.adjustTransformTranslate(legend, diffObj);
-        });
-
-        // move x-axis
-        var xAxisSel = viewId + ' svg g.' + CSS.AXIS_X;
-        var xAxis = d3.select(xAxisSel);
-        staticMe.adjustTransformTranslate(xAxis, diffObj);
-
-        // finally make the x-axis slightly longer on the left side by
-        // adjusting the start point
-        staticMe.adjustPathStart(xAxis.select('path'), -xOffset, 0);
     },
 
     /**
@@ -1074,7 +1127,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             var legendEntry = legend
                 .append('g')
                 .on('click', toggleVisibilityFunc)
-                .attr('transform', 'translate(0, ' + (idx * 30) + ')');
+                .attr('transform', 'translate(0, ' + (idx * 30) + ')')
+                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_LEGEND_GROUP + idx);
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
@@ -1154,13 +1208,58 @@ Ext.define('Koala.view.component.D3ChartController', {
                 ' aus dem Graphen entfernen?';
             var confirmCallback = function(buttonId) {
                 if (buttonId === 'ok' || buttonId === 'yes') {
-                    me.deleteLegendEntry(this.parentNode);
-                    me.deleteShapeSeriesByIdx(idx);
+                    me.deleteEverything(idx, shape, this.parentNode);
+                    me.redrawLegend();
                 }
             };
             Ext.Msg.confirm(title, msg, confirmCallback, this);
         };
         return deleteCallback;
+    },
+
+    /**
+     *
+     */
+    deleteEverything: function(idx, shape, legendElement){
+        // ShapeConfig
+        this.deleteShapeConfig(shape.config.id);
+        // Data
+        this.deleteData(shape.config.id);
+        // selectedStation
+        this.deleteSelectedStation(shape.config.id);
+        // Shape
+        this.deleteShapeSeriesByIdx(idx);
+        // Legend
+        this.deleteLegendEntry(legendElement);
+    },
+
+    /**
+     *
+     */
+    deleteShapeConfig: function(shapeId){
+        var shapeConfigs = this.getView().getShapes();
+        var shapeConfigToRemove = Ext.Array.findBy(shapeConfigs, function(shapeConfig){
+            return shapeConfig.id === shapeId;
+        });
+        Ext.Array.remove(shapeConfigs, shapeConfigToRemove);
+    },
+
+    /**
+     *
+     */
+    deleteData: function(shapeId){
+        delete this.data[shapeId];
+    },
+
+    /**
+     *
+     */
+    deleteSelectedStation: function(shapeId){
+        var stations = this.getView().getSelectedStations()
+        var stationToRemove = Ext.Array.findBy(stations, function(station){
+            return station.get('id') === shapeId;
+        });
+        Ext.Array.remove(stations, stationToRemove);
     },
 
     /**
@@ -1183,26 +1282,13 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     deleteShapeSeriesByIdx: function(idx) {
         var me = this;
+        Ext.Array.removeAt(me.shapes, idx);
         var shapeGroupNode = me.shapeGroupByIndex(idx).node();
         shapeGroupNode.parentNode.removeChild(shapeGroupNode);
-        me.removeDataEntryByIdx(idx);
-        me.redrawLegend();
     },
 
     /**
-     * Remove the actual data at the specified index.
      *
-     * TODO implement once the datastructure is set.
-     *
-     * @param {Number} idx The index of the data entry to remove.
-     */
-    removeDataEntryByIdx: function(idx) {
-        Ext.log.warn('TODO: Delete the array of data at the index ' +
-            '"' + idx + '". This is not implemented yet because the storage' +
-            ' will change soon');
-    },
-
-    /**
      */
     shapeGroupByIndex: function(idx) {
         var me = this;
@@ -1219,6 +1305,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
+     *
      */
     toggleShapeGroupVisibility: function(shapeGroup, legendElement) {
         var staticMe = Koala.view.component.D3ChartController;
@@ -1238,91 +1325,44 @@ Ext.define('Koala.view.component.D3ChartController', {
     getChartData: function() {
         var me = this;
         var view = me.getView();
-        var featureType = view.getFeatureType();
 
-        var startDate = "2015-01-01T00:00:00.000Z";
-        var endDate = "2015-01-20T00:00:00.000Z";
-        var timeField = "end_measure";
+        me.data = {};
 
-        Koala.util.Layer.addLayerToMap({
-            "id": "f917f393-fb9b-4345-99cf-8d2fcfab8d3d",
-            "dspTxt": "niederschlag_24h",
-            "inspireId": "",
-            "filters": [
-                {
-                    "type":"pointintime",
-                    "param":"end_measure",
-                    "interval":"24",
-                    "unit":"hours",
-                    "mindatetimeformat":"Y-m-dTH:i:s",
-                    "mindatetimeinstant":"2015-01-01T09:00:00",
-                    "maxdatetimeformat":"Y-m-dTH:i:s",
-                    "maxdatetimeinstant":"2015-11-15T09:00:00",
-                    "defaulttimeformat":"Y-m-dTH:i:s",
-                    "defaulttimeinstant":"2015-11-15T09:00:00"
-                }
-            ],
-            "layerConfig":{
-                "wms":{
-                    "url":"http://10.133.7.63/geoserver/orig-f-bfs/wms" ,
-                    "layers":"orig-f-bfs:niederschlag_24h",
-                    "transparent":"true",
-                    "version":"1.3.0",
-                    "styles":"",
-                    "format":"image/png"
-                },
-                "wfs":{
-                    "url":"http://10.133.7.63/geoserver/orig-f-bfs/ows"
-                },
-                "download":{
-                    "url":"http://10.133.7.63/geoserver/orig-f-bfs/ows?service=WFS&request=GetFeature&version=2.0.0&typeNames=orig-f-bfs:niederschlag_24h",
-                    "filterFieldStart":"",
-                    "filterFieldEnd":""
-                },
-                "olProperties":{
-                    "hoverTpl":"<b>niederschlag<\/b>: [[locality_name]]<br>[[end_measure]]<br>Messwert (mm):[[value]]",
-                    "legendUrl":"http://10.133.7.63/geoserver/orig-f-bfs/ows?service=wms&request=GetLegendGraphic&layer=imis:niederschlag_24h&width=40&height=40&format=image/png",
-                    "allowHover":"true",
-                    "allowShortInfo":"true",
-                    "allowDownload":"true",
-                    "allowRemoval":"true",
-                    "allowOpacityChange":"true",
-                    "hasLegend":"true",
-                    "encodeFilterInViewparams":"true"
-                },
-                "timeSeriesChartProperties":{
-                    "xAxisAttribute":"end_measure",
-                    "yAxisAttribute":"value",
-                    "dspUnit":"mm",
-                    "yAxisLabelRotation":"0",
-                    "dataFeatureType":"orig-f-bfs:niederschlag_24h_timeseries",
-                    "colorSequence":"#5A005A,#0C2C84,#225EA8,#1D91C0,#41B6C4,#7FCDBB,#C7E9B4,#EDF8B1",
-                    "strokeWidthSequence":"2",
-                    "strokeOpacitySequence":"0.9",
-                    "titleTpl":"niederschlag_24h",
-                    "seriesTitleTpl":"[[locality_name]]",
-                    "ui_series_step":"false",
-                    "allowFilterForm":"true",
-                    "tooltipTpl":"Dies ist die Station [[title]]. Hier wurde am [[end_measure]] folgender Wert gemessen: [[value]]",
-                    "hasToolTip":"true",
-                    "yAxis_grid":"\\{\\\"odd\\\":\\{\\\"opacity\\\":1,\\\"fill\\\":\\\"#ddd\\\",\\\"stroke\\\":\\\"#bbb\\\",\\\"lineWidth\\\":1\\}\\}",
-                    "end_timestamp":"now",
-                    "duration":"P2WT",
-                    "end_timestamp_format":"Y-m-dTH:i:s",
-                    "featureIdentifyField":"id",
-                    "param_viewparams":"locality_code:[[id]]",
-                    "featureShortDspField":"locality_name",
-                    "featureIdentifyFieldDataType":"string"
-                },
-                "barChartProperties":{
-                }
-            }
+        me.ajaxCounter = 0;
+
+        Ext.each(view.getSelectedStations(), function(station/*, i, stations*/) {
+            // var lastRequest = (stations.length - 1) === i;
+            me.getChartDataForStation(station);
+        });
+    },
+
+    /**
+     *
+     */
+    getChartDataForStation: function(selectedStation) {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+
+        //TODO Check if timeseries or barchart
+        var chartType = "timeSeriesChartProperties";
+        var chartConfig = targetLayer.get(chartType);
+
+        var filterConfig= Koala.view.window.TimeSeriesWindow.getStartEndFilterFromMetadata(targetLayer.metadata);
+        var startDate = view.getStartDate(); // || filterConfig.mindatetimeinstant;
+        var endDate = view.getEndDate(); // || filterConfig.maxdatetimeinstant;
+        var timeField = filterConfig.parameter;
+
+        var paramConfig = Koala.util.Object.getConfigByPrefix(
+            chartConfig, "param_", true);
+
+        Ext.iterate(paramConfig, function(k, v) {
+            paramConfig[k] = Koala.util.String.replaceTemplateStrings(
+                v, selectedStation);
         });
 
-        var layer = BasiGX.util.Layer.getLayerByFeatureType(featureType);
-
         // TODO refactor this gathering of the needed filter attribute
-        var filters = layer.metadata.filters;
+        var filters = targetLayer.metadata.filters;
         var timeRangeFilter;
 
         Ext.each(filters, function(filter) {
@@ -1342,25 +1382,22 @@ Ext.define('Koala.view.component.D3ChartController', {
             timeRangeFilter.interval, timeRangeFilter.unit
         );
 
-        // getTime() TODO. sommer and wintertime?!
-        var start = Ext.Date.parse(startDate, Koala.util.Date.ISO_FORMAT);
-        var end = Ext.Date.parse(endDate, Koala.util.Date.ISO_FORMAT);
-        // var diff = Ext.Date.diff(start, end, Ext.Date.SECOND);
-        // var steps = diff / intervalInSeconds;
+        var startString = Ext.Date.format(startDate, targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
+        var endString = Ext.Date.format(endDate, targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
 
-        var url = "http://10.133.7.63/geoserver/orig-f-bfs/ows?";
+        var url = targetLayer.metadata.layerConfig.wfs.url; //"http://10.133.7.63/geoserver/orig-f-bfs/ows?";
 
         var requestParams = {
             service: 'WFS',
             version: '1.1.0',
             request: 'GetFeature',
-            // TODO: replace with real layer
-            typeName: 'orig-f-bfs:niederschlag_24h_timeseries',
+            typeName: chartConfig.dataFeatureType, //'orig-f-bfs:niederschlag_24h_timeseries',
             outputFormat: 'application/json',
-            filter: me.getDateTimeRangeFilter(startDate, endDate, timeField),
-            // TODO: replace with value from metadata timeRangeFilter.param
-            sortBy: 'end_measure'
+            filter: me.getDateTimeRangeFilter(startString, endString, timeField),
+            sortBy: timeField, //'end_measure'
         };
+
+        Ext.apply(requestParams, paramConfig);
 
         Ext.Ajax.request({
             url: url,
@@ -1370,27 +1407,26 @@ Ext.define('Koala.view.component.D3ChartController', {
                 var jsonObj = Ext.decode(resp.responseText);
 
                 var snapObject = me.getTimeStampSnapObject(
-                        start, intervalInSeconds, jsonObj.features, 'end_measure');
+                        startDate, intervalInSeconds, jsonObj.features, timeField); // 'end_measure'
 
                 var compareableDate, matchingFeature;
 
-                var xAxisAttr = 'end_measure';
-                var valueField = 'value';
-                var yAxisAttr = 'value';
-                // var dataObjectField = 'value';
+                var xAxisAttr = chartConfig.xAxisAttribute; //'end_measure';
+                var yAxisAttr = chartConfig.yAxisAttribute; //'value';
+                var valueField = chartConfig.yAxisAttribute; //'value';
 
                 var mockUpData = [];
 
-                while(start <= end){
+                while(startDate <= endDate){
 
                     var newRawData = {};
 
-                    compareableDate = Ext.Date.format(start, "timestamp");
+                    compareableDate = Ext.Date.format(startDate, 'timestamp');
                     matchingFeature = snapObject[compareableDate];
 
                     // Why did we do this?
                     // Ext.Date.format(date, Koala.util.Date.ISO_FORMAT);
-                    newRawData[xAxisAttr] = start;
+                    newRawData[xAxisAttr] = startDate;
                     newRawData[valueField] = undefined;
 
                     if(matchingFeature){
@@ -1399,12 +1435,24 @@ Ext.define('Koala.view.component.D3ChartController', {
                     }
 
                     mockUpData.push(newRawData);
-                    start = Ext.Date.add(start, Ext.Date.SECOND, intervalInSeconds);
+                    startDate = Ext.Date.add(startDate, Ext.Date.SECOND, intervalInSeconds);
                 }
 
-                me.data = mockUpData;
+                // me.data = mockUpData;
 
-                me.fireEvent('chartdatachanged');
+                // me.fireEvent('chartdatachanged', mockUpData);
+                // Note: id is field locality_code
+                console.log('before me prepare chartdata')
+
+                // me.prepareChartData(mockUpData, selectedStation.get('id'), idx);
+
+                me.data[selectedStation.get('id')] = mockUpData;
+
+                me.ajaxCounter++;
+
+                if (me.ajaxCounter === view.getSelectedStations().length) {
+                    me.fireEvent('chartdataprepared');
+                }
 
             },
             failure: function() {
@@ -1490,10 +1538,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     getDateTimeRangeFilter: function(startDate, endDate, timeField) {
         var filter;
 
-        // startDate = timeSeriesWin.down('datefield[name=datestart]').getValue();
-        // endDate = timeSeriesWin.down('datefield[name=dateend]').getValue();
-        // timeField = layerFilter.param;
-
         filter = '' +
             '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
               '<a:PropertyIsBetween>' +
@@ -1508,6 +1552,41 @@ Ext.define('Koala.view.component.D3ChartController', {
             '</a:Filter>';
 
         return filter;
+    },
+
+    /**
+     * Returns whether this chart currently contains a series for the passed
+     * feature or not. In order for this method to properly work, you will need
+     * to specify a valid `featureIdentifyField` in the current layers
+     * `timeSeriesChartProperties`.
+     *
+     * @param {ol.Feature} candidate The feature to check.
+     * @return {boolean} Whether the candidate is already represented inside
+     *     this chart.
+     */
+    containsStation: function(candidate) {
+        var me = this;
+        var view = me.getView();
+        var chartingMetadata = view.getTargetLayer().get("timeSeriesChartProperties");
+        var identifyField = chartingMetadata.featureIdentifyField || "id";
+        var candidateIdVal = candidate.get(identifyField);
+        var doesContainSeries = false;
+
+        if (!Ext.isDefined(candidateIdVal)){
+            Ext.log.warn("Failed to determine if chart contains a series for " +
+                "the passed feature. Does it expose a field '" + identifyField +
+                "' with a sane value?");
+        } else {
+            var currentStations = view.getSelectedStations();
+            Ext.each(currentStations, function(currentStation) {
+                var currentStationIdVal = currentStation.get(identifyField);
+                if (currentStationIdVal === candidateIdVal) {
+                    doesContainSeries = true;
+                    return false; // …stop iterating
+                }
+            });
+        }
+        return doesContainSeries;
     }
 
 });

@@ -30,21 +30,102 @@ Ext.define('Koala.view.window.BarChartController', {
     },
 
     createBarChart: function(olLayer, olFeat, chartId) {
-        var props = olLayer.get('barChartProperties');
-        var categoryCount = props.chartFieldSequence.split(",").length;
+        // var props = olLayer.get('barChartProperties');
+        // var categoryCount = props.chartFieldSequence.split(",").length;
+        // var chartWidth = 200 + categoryCount * 30;
+        // var titleTpl = 'titleTpl' in props ? props.titleTpl : '';
+        // var title = Koala.util.String.replaceTemplateStrings(titleTpl, olLayer);
+        // title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
+        //
+        // var chart = {
+        //     title: Ext.isEmpty(title) ? undefined : title,
+        //     xtype: 'k-chart-bar',
+        //     name: chartId,
+        //     layer: olLayer,
+        //     height: 350,
+        //     width: chartWidth
+        // };
+
+        var me = this;
+        var view = me.getView();
+        var chartConfig = olLayer.get('barChartProperties');
+        var categoryCount = chartConfig.chartFieldSequence.split(",").length;
         var chartWidth = 200 + categoryCount * 30;
-        var titleTpl = 'titleTpl' in props ? props.titleTpl : '';
-        var title = Koala.util.String.replaceTemplateStrings(titleTpl, olLayer);
-        title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
+        var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
+        var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
+        var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
+            Koala.util.String.replaceTemplateStrings(
+                chartConfig.seriesTitleTpl, olFeat) : "";
+        var valFromSeq = Koala.util.String.getValueFromSequence;
+
+        // var startDate = view.down('datefield[name=datestart]').getValue();
+        // var endDate = view.down('datefield[name=dateend]').getValue();
+
+
+        var shapes = [];
+        Ext.each(chartConfig.chartFieldSequence.split(','), function(yField) {
+            shapes.push({
+                type: 'bar',
+                curve: 'linear',
+                xField: yField,
+                yField: yField,
+                name: stationName,
+                id: olFeat.get('id')
+                // color: valFromSeq(chartConfig.colorSequence, 0, 'red'),
+                // opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
+                // width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1)
+            });
+        });
+
 
         var chart = {
-            title: Ext.isEmpty(title) ? undefined : title,
-            xtype: 'k-chart-bar',
-            name: chartId,
-            layer: olLayer,
+            xtype: 'd3-barchart',
+            zoomEnabled: true,
+            name: olLayer.get('name'),
             height: 350,
-            width: chartWidth
+            width: chartWidth,
+            startDate: olFeat.get('end_measure'),
+            endDate: olFeat.get('end_measure'),
+            targetLayer: olLayer,
+            selectedStation: olFeat,
+            chartMargin: {
+                top: 10,
+                right: 200,
+                bottom: 20,
+                left: 40
+            },
+            shapes: [{
+                type: 'bar',
+                curve: 'linear',
+                // xField: yField,
+                // yField: yField,
+                name: stationName,
+                id: olFeat.get('id')
+                // color: valFromSeq(chartConfig.colorSequence, 0, 'red'),
+                // opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
+                // width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1)
+            }],
+            grid: {
+                show: true, // neue Config ?
+                color: '#d3d3d3', // neue Config ?
+                width: 1, // neue Config ?
+                opacity: 0.7 // neue Config ?
+            },
+            axes: {
+                left: {
+                    scale: 'linear',
+                    dataIndex: 'Te132', //chartConfig.yAxisAttribute, //'value',
+                    format: ',.0f',
+                    label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || '')
+                },
+                bottom: {
+                    scale: 'ordinal',
+                    dataIndex: 'Te132', //chartConfig.xAxisAttribute, //'end_measure',
+                    label: chartConfig.xAxisLabel || ''
+                }
+            }
         };
+
         return chart;
     },
 
@@ -97,7 +178,7 @@ Ext.define('Koala.view.window.BarChartController', {
 
         if (!layerChartRendered) {
             view.add(me.createBarChart(olLayer, olFeat, uniqueId));
-            me.updateBarChartStore(olFeat, uniqueId);
+            // me.updateBarChartStore(olFeat, uniqueId);
             view.show();
             me.updateBarChartWin(view, lastChart, olLayer.qtitle);
         } else {

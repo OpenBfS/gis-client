@@ -38,6 +38,7 @@ Ext.define('Koala.view.component.MapController', {
         }
         var me = this;
         var layer = olFeat.get('layer');
+
         if (Ext.Object.getSize(layer.get("timeSeriesChartProperties")) > 0) {
             me.openTimeseriesWindow(olFeat);
         } else if (Ext.Object.getSize(layer.get("barChartProperties")) > 0) {

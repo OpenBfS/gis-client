@@ -21,7 +21,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     alias: 'controller.k-window-timeserieswindow',
     requires: [
         'Koala.util.String',
-        'Koala.model.Station'
+        'Koala.model.Station',
+        'Koala.view.component.D3Chart'
     ],
 
     /**
@@ -51,35 +52,90 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     /**
      *
      */
-    createTimeSeriesChart: function(olLayer) {
+    createTimeSeriesChart: function(olLayer, olFeat) {
+        var me = this;
+        var view = me.getView();
         var chartConfig = olLayer.get('timeSeriesChartProperties');
-        var interactions = null;
-        if (Ext.isEmpty(chartConfig.allowCrossZoom) ||
-            Koala.util.String.getBool(chartConfig.allowCrossZoom)) {
-            interactions = {
-               type: 'crosszoom',
-               // We need the tyoe below, as there is a bug inExtJS: see this
-               // lines: http://docs.sencha.com/extjs/6.0/6.0.0-classic/source/
-               // /AbstractChart.html
-               // #Ext-chart-AbstractChart-method-getInteraction
-               // That particular bug is fixed in non-GPL 6.0.1
-               tyoe: 'crosszoom',
-               axes: {
-                   bottom: {
-                       maxZoom: 5,
-                       allowPan: true
-                   }
-               }
-           };
-        }
+        var valFromSeq = Koala.util.String.getValueFromSequence;
+        var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
+            Koala.util.String.replaceTemplateStrings(
+                chartConfig.seriesTitleTpl, olFeat) : "";
+        var startDate = view.down('datefield[name=datestart]').getValue();
+        var endDate = view.down('datefield[name=dateend]').getValue();
+
         var chart = {
-            xtype: 'k-chart-timeseries',
+            xtype: 'd3-chart',
             name: olLayer.get('name'),
-            layer: olLayer,
-            interactions: interactions,
             height: 200,
-            width: 700
+            width: 700,
+            startDate: startDate,
+            endDate: endDate,
+            targetLayer: olLayer,
+            selectedStations: [olFeat],
+            chartMargin: {
+                top: 10,
+                right: 200,
+                bottom: 20,
+                left: 40
+            },
+            shapes: [{
+                type: 'line',
+                curve: 'linear',
+                xField: chartConfig.xAxisAttribute,
+                yField: chartConfig.yAxisAttribute,
+                name: stationName,
+                id: olFeat.get('id'),
+                color: valFromSeq(chartConfig.colorSequence, 0, 'red'),
+                opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
+                width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1)
+            }],
+            grid: {
+                show: true, // neue Config ?
+                color: '#d3d3d3', // neue Config ?
+                width: 1, // neue Config ?
+                opacity: 0.7 // neue Config ?
+            },
+            axes: {
+                left: {
+                    scale: 'linear',
+                    dataIndex: chartConfig.yAxisAttribute, //'value',
+                    format: ',.0f',
+                    label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || '')
+                },
+                bottom: {
+                    scale: 'time',
+                    dataIndex: chartConfig.xAxisAttribute, //'end_measure',
+                    label: chartConfig.xAxisLabel || ''
+                }
+            }
         };
+
+        // if (Ext.isEmpty(chartConfig.allowCrossZoom) ||
+        //     Koala.util.String.getBool(chartConfig.allowCrossZoom)) {
+        //     interactions = {
+        //        type: 'crosszoom',
+        //        // We need the tyoe below, as there is a bug inExtJS: see this
+        //        // lines: http://docs.sencha.com/extjs/6.0/6.0.0-classic/source/
+        //        // /AbstractChart.html
+        //        // #Ext-chart-AbstractChart-method-getInteraction
+        //        // That particular bug is fixed in non-GPL 6.0.1
+        //        tyoe: 'crosszoom',
+        //        axes: {
+        //            bottom: {
+        //                maxZoom: 5,
+        //                allowPan: true
+        //            }
+        //        }
+        //    };
+        // }
+        // var chart = {
+        //     xtype: 'k-chart-timeseries',
+        //     name: olLayer.get('name'),
+        //     layer: olLayer,
+        //     interactions: interactions,
+        //     height: 200,
+        //     width: 700
+        // };
         return chart;
     },
 
@@ -206,7 +262,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                     var chart = this.up(
                             'panel[name="chart-composition"]'
                         ).down('chart');
-                    var selectedStations = chart.getSelectedStations();
+                    // var selectedStations = chart.getSelectedStations();
+                    var selectedStations = [];
                     var stationIds = [];
                     Ext.each(selectedStations, function(selectedStation) {
                         var stationId = selectedStation.get(identifyField);
@@ -242,10 +299,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     /**
      *
      */
-    createTimeSeriesChartPanel: function(olLayer) {
+    createTimeSeriesChartPanel: function(olLayer, olFeat) {
         var me = this;
         var viewModel = me.getViewModel();
-        var chart = me.createTimeSeriesChart(olLayer);
+        var chart = me.createTimeSeriesChart(olLayer, olFeat);
         var chartConfig = olLayer.get('timeSeriesChartProperties');
         var addSeriesCombo;
         if (Koala.util.String.getBool(chartConfig.allowAddSeries)) {
@@ -254,6 +311,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var title = !Ext.isEmpty(chartConfig.titleTpl) ?
             Koala.util.String.replaceTemplateStrings(
             chartConfig.titleTpl, olLayer) : olLayer.get('name');
+
         var panel = {
             xtype: 'panel',
             name: 'chart-composition',
@@ -524,16 +582,27 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var me = this;
         var view = me.getView();
         var layerName = olLayer.get('name');
-        var chart = view.down('chart[name="' + layerName + '"]');
-        var controller = chart.getController();
+        var chartConfig = olLayer.get('timeSeriesChartProperties');
+        var chart = view.down('d3-chart[name="' + layerName + '"]');
+        var chartController = chart.getController();
+        var valFromSeq = Koala.util.String.getValueFromSequence;
+        var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
+            Koala.util.String.replaceTemplateStrings(
+                chartConfig.seriesTitleTpl, olFeat) : "";
 
-        var added = chart.addStation(olFeat);
-        if (!added) {
-            // chart already contains series for the new feature.
-            return;
-        }
+        // console.log(chart.getSelectedStations().length - 1)
+        chartController.addShape({
+            type: 'line',
+            curve: 'linear',
+            xField: chartConfig.xAxisAttribute, //'end_measure'
+            yField: chartConfig.yAxisAttribute, //'value'
+            name: stationName,
+            id: olFeat.get('id'),
+            color: valFromSeq(chartConfig.colorSequence, chart.getSelectedStations().length, 'red'),
+            opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
+            width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1)
+        }, olFeat, false);
 
-        controller.prepareTimeSeriesLoad(olFeat);
     },
 
     /**
@@ -542,7 +611,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     isLayerChartRendered: function(layerName) {
         var me = this;
         var view = me.getView();
-        var existingCharts = view ? view.query('chart') : [];
+        var existingCharts = view ? view.query('d3-chart') : [];
         var isRendered = false;
 
         Ext.each(existingCharts, function(chart) {
@@ -560,15 +629,31 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     onSetFilterBtnClick: function() {
         var me = this;
+        var staticChartController = Koala.view.component.D3ChartController;
         var view = me.getView();
-        var charts = view.query('chart');
-        Ext.each(charts, function(chart) {
-            var selectedStations = chart.getSelectedStations();
-            chart.removeAllStations();
-            chart.getStore().removeAll();
-            Ext.each(selectedStations, function(selectedStation) {
-                me.createOrUpdateChart(chart.layer, selectedStation);
-            });
+        var charts = view.query('d3-chart');
+        var startDate = view.down('datefield[name=datestart]').getValue();
+        var endDate = view.down('datefield[name=dateend]').getValue();
+
+        Ext.each(charts, function(chart, idx) {
+            var chartController = chart.getController();
+
+            // update the time range for the chart
+            chart.setStartDate(startDate);
+            chart.setEndDate(endDate);
+
+            chartController.deleteShapeSeriesByIdx(idx);
+            chartController.deleteLegendEntry(staticChartController.CSS_CLASS.PREFIX_IDX_LEGEND_GROUP + idx);
+
+            // update the chart to reflect the changes
+            chart.getController().getChartData();
+
+            // var selectedStations = chart.getSelectedStations();
+            // chart.removeAllStations();
+            // chart.getStore().removeAll();
+            // Ext.each(selectedStations, function(selectedStation) {
+            //     me.createOrUpdateChart(chart.layer, selectedStation);
+            // });
         });
     },
 
@@ -634,6 +719,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var view = me.getView();
         var layerName = olLayer.get('name');
         var layerChartRendered = me.isLayerChartRendered(layerName);
+
         // if the window contains a chart rendered for a feature from the
         // same layer as the given olFeat already, load a new timeseries into
         // the existing chart
@@ -642,8 +728,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         } else {
             // otherwise create a new chart for the olFeat and add it to the
             // window and update the store
-            view.add(me.createTimeSeriesChartPanel(olLayer));
-            me.updateTimeSeriesChart(olLayer, olFeat);
+            view.add(me.createTimeSeriesChartPanel(olLayer, olFeat));
+            // me.updateTimeSeriesChart(olLayer, olFeat);
         }
     }
 
