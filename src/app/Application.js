@@ -45,8 +45,11 @@ Ext.define('Koala.Application', {
          * Return whether the current time reference is UTC.
          */
         isUtc: function(){
-            var btnClass = Koala.view.button.TimeReference;
-            return this.getTimereference() === btnClass.UTC;
+            if (Ext.isModern) {
+                return Ext.ComponentQuery.query('app-main')[0].getViewModel().get('useUtc');
+            } else {
+                return this.getTimereference() === Koala.view.button.TimeReference.UTC;
+            }
         },
         /**
          * Return whether the current time reference is local.

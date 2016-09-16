@@ -296,6 +296,9 @@ Ext.define('Koala.util.Layer', {
             var me = this;
             var selector = 'k-panel-routing-legendtree';
             var treePanel = Ext.ComponentQuery.query(selector)[0];
+            if (!treePanel){
+                return;
+            }
             var store = treePanel.getStore();
             store.each(function(treeNode) {
                 var layer = treeNode.getOlLayer();
@@ -387,6 +390,9 @@ Ext.define('Koala.util.Layer', {
          */
         bindLayerVisibilityHandlers: function(layer, mapComp){
             var me = this;
+            if (!mapComp.getPlugin) {
+                return;
+            }
             var hoverPlugin = mapComp.getPlugin('hover');
             layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts, hoverPlugin);
             if (layer instanceof ol.layer.Group) {
@@ -426,7 +432,8 @@ Ext.define('Koala.util.Layer', {
                 items: {
                     xtype: 'k-form-layerfilter',
                     metadata: metadata,
-                    filters: filters
+                    filters: filters,
+                    format: 'j F Y'
                 }
             }).show();
         },
@@ -456,6 +463,9 @@ Ext.define('Koala.util.Layer', {
             var resolution = BasiGX.util.Map.getResolution(map);
             var scale = BasiGX.util.Map.getScale(map);
 
+            if(!legendUrl){
+                return "";
+            }
             if (width) {
                 legendUrl = Ext.String.urlAppend(legendUrl, "WIDTH="+width);
             }
@@ -1243,28 +1253,30 @@ Ext.define('Koala.util.Layer', {
             var format = Koala.util.Date.ISO_FORMAT;
             var keyVals = {};
             Ext.each(filters, function(filter) {
-                var params = filter.param.split(",");
-                var type = filter.type;
+                if (filter) {
+                    var params = filter.param.split(",");
+                    var type = filter.type;
 
-                // we need to check the metadata for default filters to apply
-                if (type === "timerange") {
-                    var rawDateMin = filter.mindatetimeinstant;
-                    keyVals[params[0]] = Ext.Date.format(rawDateMin, format);
+                    // we need to check the metadata for default filters to apply
+                    if (type === "timerange") {
+                        var rawDateMin = filter.mindatetimeinstant;
+                        keyVals[params[0]] = Ext.Date.format(rawDateMin, format);
 
-                    var rawDateMax = filter.maxdatetimeinstant;
-                    if(!params[1]) {
-                        keyVals[params[0]] += "/" +
+                        var rawDateMax = filter.maxdatetimeinstant;
+                        if(!params[1]) {
+                            keyVals[params[0]] += "/" +
                             Ext.Date.format(rawDateMax, format);
-                    } else {
-                        keyVals[params[1]] = Ext.Date.format(
+                        } else {
+                            keyVals[params[1]] = Ext.Date.format(
                                 rawDateMax, format
                             );
+                        }
+                    } else if (type === "pointintime") {
+                        var rawDate = filter.timeinstant;
+                        keyVals[params[0]] = Ext.Date.format(rawDate, format);
+                    } else if (type === "value") {
+                        keyVals[params[0]] = filter.value;
                     }
-                } else if (type === "pointintime") {
-                    var rawDate = filter.timeinstant;
-                    keyVals[params[0]] = Ext.Date.format(rawDate, format);
-                } else if (type === "value") {
-                    keyVals[params[0]] = filter.value;
                 }
             });
 
