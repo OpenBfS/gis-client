@@ -175,10 +175,11 @@ Ext.define("Koala.view.form.LayerFilter", {
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
-            submitFormat: format,
-            listeners: {
-                select: me.resetNumberFields
-            }
+            submitFormat: format
+            // Removed because of https://redmine-koala.bfs.de/issues/1493#note-7
+            // listeners: {
+            //     select: me.resetNumberFields
+            // }
         });
 
         var hourSpinner = FilterUtil.getSpinner(
