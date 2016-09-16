@@ -127,12 +127,14 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             var olLayer = comp.layerRec.getOlLayer();
 
             var allowShortInfo = olLayer.get('allowShortInfo') || false;
+            var allowChangeFilter = olLayer.metadata || false;
             var allowDownload = olLayer.get('allowDownload') || false;
             var allowRemoval = olLayer.get('allowRemoval') || false;
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
             var hasLegend = olLayer.get('hasLegend') || false;
 
             var shortInfoBtn = comp.down('button[name="shortInfo"]');
+            var changeFilterBtn = comp.down('button[name="filter"]');
             var downloadBtn = comp.down('button[name="download"]');
             var removalBtn = comp.down('button[name="removal"]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
@@ -140,6 +142,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
             if(shortInfoBtn){
                 shortInfoBtn.setVisible(allowShortInfo);
+            }
+            if(changeFilterBtn) {
+                changeFilterBtn.setVisible(allowChangeFilter);
             }
             if(downloadBtn){
                 downloadBtn.setVisible(allowDownload);
@@ -164,6 +169,14 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         //     }
         //     return LayerUtil.getFiltersTextFromMetadata(layer.metadata);
         // },
+
+        changeFilterHandler: function(btn){
+            var record = btn.layerRec;
+            var layer = btn.layerRec.getOlLayer();
+            Koala.util.Layer.showChangeFilterSettingsWin(
+                record.get('metadata'), layer
+            );
+        },
 
         shortInfoHandler: function(btn){
             var record = btn.layerRec;
@@ -261,6 +274,13 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 // class is defined and we can access the static methods
             }, {
                 xtype: 'button',
+                name: 'filter',
+                glyph: 'xf0b0@FontAwesome',
+                tooltip: 'Layerfilter ändern'
+                // We'll assign a handler to handle clicks here once the
+                // class is defined and we can access the static methods
+            }, {
+                xtype: 'button',
                 name: 'download',
                 glyph: 'xf0c7@FontAwesome',
                 tooltip: 'Daten speichern'
@@ -276,7 +296,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             }, {
                 xtype: 'slider',
                 name: 'opacityChange',
-                width: 100,
+                width: 80,
                 value: 100,
                 tipText: function(thumb){
                     return String(thumb.value) + '% Sichtbarkeit';
@@ -809,6 +829,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     var layerMenuCfg = cls.prototype.rowBodyCompTemplate.items[0];
     var menuItems = layerMenuCfg.items;
 
+    var filterBtnCfg = cls.findByProp(menuItems, 'name', 'filter');
     var infoBtnCfg = cls.findByProp(menuItems, 'name', 'shortInfo');
     var downloadBtnCfg = cls.findByProp(menuItems, 'name', 'download');
     var removalBtnCfg = cls.findByProp(menuItems, 'name', 'removal');
@@ -816,6 +837,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
     if (layerMenuCfg) {
         layerMenuCfg.listeners.beforerender = cls.reorganizeMenu;
+    }
+    if (filterBtnCfg) {
+        filterBtnCfg.handler = cls.changeFilterHandler;
     }
     if (infoBtnCfg) {
         infoBtnCfg.handler = cls.shortInfoHandler;

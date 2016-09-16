@@ -27,6 +27,32 @@ Ext.define('Koala.view.form.LayerFilterController', {
     ],
 
     /**
+     * This is the handler if we want to update the filters of an
+     * existing layer.
+     */
+    changeFilterForLayer: function(){
+        var me = this;
+        var LayerUtil = Koala.util.Layer;
+        var view = me.getView();
+        var existingLayer = view.getLayer();
+        var metadata = view.getMetadata();
+        var filters = view.getFilters();
+        filters = me.updateFiltersFromForm(filters);
+        metadata.filters = filters;
+
+        // Create a complete new layer to get its source…
+        var newLayer = LayerUtil.layerFromMetadata(metadata);
+        // … this is the trick to update the filter but reuse all the
+        // utility logic.
+        existingLayer.setSource(newLayer.getSource());
+
+        me.updateMetadataLegendTree(existingLayer, metadata);
+        me.deselectThemeTreeItems();
+        LayerUtil.repaintLayerFilterIndication();
+        view.up('window').close();
+    },
+
+    /**
      * This is the actual handler when the 'Add to map' button is clicked. It
      * will create a layer (via Koala.util.Layer#layerFromMetadata) with the
      * currently displayed filters applied and add that layer to the map (via
@@ -39,7 +65,26 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var view = me.getView();
         var metadata = view.getMetadata();
         var filters = view.getFilters();
+        filters = me.updateFiltersFromForm(filters);
+        metadata.filters = filters;
+        var layer = LayerUtil.layerFromMetadata(metadata);
+        LayerUtil.addOlLayerToMap(layer);
+        me.deselectThemeTreeItems();
+        view.up('window').close();
+    },
 
+    /**
+     * Given the set of original filters (from metadata), this method
+     * queries the complete filter form and tries to gather values from
+     * its elements. Will return a changed filter where the filter
+     * conditions match those of the form.
+     *
+     * @param {Array<Object>} filters The filters.
+     * @return {Array<Object>} The updated filters.
+     */
+    updateFiltersFromForm: function(filters) {
+        var me = this;
+        var view = me.getView();
         // Iterate over all filters…
         Ext.each(filters, function(filter, idx) {
             // … grab the associated fieldset by attribute
@@ -64,11 +109,32 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 filters = me.updateFilterValues(filters, idx, keyVals);
             }
         });
-        metadata.filters = filters;
-        var layer = LayerUtil.layerFromMetadata(metadata);
-        LayerUtil.addOlLayerToMap(layer);
-        me.deselectThemeTreeItems();
-        view.up('window').close();
+        return filters;
+    },
+
+    /**
+     * Called during the update of a filter of an existing layer, this
+     * method will upodate the metadata of the layer everywhere it might
+     * be used.
+     *
+     * @param {ol.layer.Layer} layer The layer whose metadata (filter)
+     *     has changed.
+     * @param {Object} metadata The new metadata of the layer.
+     */
+    updateMetadataLegendTree: function(layer, metadata){
+        layer.metadata = metadata;
+        // find all legendpanels:
+        var legends = Ext.ComponentQuery.query('k-panel-routing-legendtree');
+        Ext.each(legends, function(legend) {
+            // find the correct record for the given layer
+            legend.getStore().each(function(rec) {
+                var layerInTree = rec.getOlLayer && rec.getOlLayer();
+                if (layerInTree && layerInTree === layer) {
+                    rec.set('metadata', metadata);
+                    layerInTree.metadata = metadata;
+                }
+            });
+        });
     },
 
     /**

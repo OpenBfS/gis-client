@@ -726,7 +726,8 @@
                 "buttonTextNoFilter": "Ausgewählten Layer hinzufügen",
                 "valueFilter": "Wertefilter",
                 "timeRangeFilter": "Zeitraumfilter",
-                "pointInTimeFilter": "Zeitpunktfilter"
+                "pointInTimeFilter": "Zeitpunktfilter",
+                "buttonTextChangeFilter": "Filter auf Layer anwenden"
             }
         }
     },

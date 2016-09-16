@@ -404,8 +404,21 @@ Ext.define('Koala.util.Layer', {
             }
         },
 
-        showChangeFilterSettingsWin: function(metadata) {
+        /**
+         * layer will be undefined in the case that we actiually want
+         * to add a layer with the filter. It might also be a layer
+         * if we actually want to show the filter window to change the
+         * filter of a layer.
+         *
+         * @param {Object} metadata The metadata to construct the
+         *     filter window from.
+         * @param {ol.layer.layer} [layer] The layer (if any) whose
+         *     filter we want to change. Optional, don't pass if you want a new
+         *     layer with the filter added to the map.
+         */
+        showChangeFilterSettingsWin: function(metadata, layer) {
             var staticMe = this;
+            var existingLayer = layer ? layer : null;
             var filters = staticMe.getFiltersFromMetadata(metadata);
 
             // TODO future enhancements may want to remove the ComponentQuery…
@@ -433,7 +446,8 @@ Ext.define('Koala.util.Layer', {
                     xtype: 'k-form-layerfilter',
                     metadata: metadata,
                     filters: filters,
-                    format: Ext.Date.defaultFormat
+                    format: Ext.Date.defaultFormat,
+                    layer: existingLayer
                 }
             }).show();
         },

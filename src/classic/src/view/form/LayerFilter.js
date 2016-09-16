@@ -60,7 +60,14 @@ Ext.define("Koala.view.form.LayerFilter", {
     config: {
         metadata: null,
         filters: null,
-        format: null
+        format: null,
+        /**
+         * This config determines if we are to add a new layer with folter on
+         * form submission or if we need to update an existing one.
+         *
+         * @type {ol.layer.Layer}
+         */
+        layer: null
     },
 
     /**
@@ -97,16 +104,39 @@ Ext.define("Koala.view.form.LayerFilter", {
             }
         });
 
-        var submitButton = Ext.create("Ext.button.Button", {
-            bind: {
-                text: "{buttonText}"
-            },
-            handler: "submitFilter",
-            formBind: true
-        });
+        var submitButton = me.getSubmitButton();
         me.add(submitButton);
         me.getForm().isValid();
 
+    },
+
+    /**
+     * Returns a button for submitting the filter and handling the submssion via
+     * correctly bound handlers. If thsi panel was cosntructed with a `layer`,
+     * it will update the filter of that layer. If it was created without a
+     * layer, the handler will create one and add it to the map.
+     *
+     * @return {Ext.button.Button} The button to submit the form, will either
+     *     add anew layer with an appropriate filter or update the filter of
+     *     an existing layer.
+     */
+    getSubmitButton: function() {
+        var handler;
+        var textBind;
+        if (!this.getLayer()) {
+            handler = "submitFilter";
+            textBind = "{buttonText}";
+        } else {
+            handler = "changeFilterForLayer";
+            textBind = "{buttonTextChangeFilter}";
+        }
+        return Ext.create("Ext.button.Button", {
+            formBind: true,
+            handler: handler,
+            bind: {
+                text: textBind
+            }
+        });
     },
 
     addWithoutFilterBtn: function(){
@@ -131,7 +161,7 @@ Ext.define("Koala.view.form.LayerFilter", {
         var FilterUtil = Koala.util.Filter;
         var format = Koala.util.Date.ISO_FORMAT;
 
-        var value = Ext.Date.parse(
+        var value = filter.timeinstant || Ext.Date.parse(
                 filter.defaulttimeinstant, filter.defaulttimeformat
             );
 
@@ -250,6 +280,9 @@ Ext.define("Koala.view.form.LayerFilter", {
             filter.defaultendtimeformat
         );
 
+        var startValue = filter.mindatetimeinstant.getDate ? filter.mindatetimeinstant : defaultMinValue;
+        var endValue = filter.maxdatetimeinstant.getDate ? filter.maxdatetimeinstant : defaultMaxValue;
+
         // Fix for the issue #1068-34
         // Raises the maxDate by one day to avoid the bug with the datefield
         // where maxDate = defaultValue leads to invalid input
@@ -286,7 +319,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             editable: false,
             labelWidth: 70,
             flex: 1,
-            value: defaultMinValue,
+            value: startValue,
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
@@ -319,7 +352,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             },
             labelWidth: 70,
             flex: 1,
-            value: defaultMaxValue,
+            value: endValue,
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
