@@ -147,7 +147,11 @@
                 "btnTxtExpandAll": "en:",
                 "btnTooltipExpandAll": "en:Alle Legenden ausklappen.",
                 "btnTxtToggleAll": "en:",
-                "btnTooltipToggleAll": "en:Legendensichtbarkeit umkehren."
+                "btnTooltipToggleAll": "en:Legendensichtbarkeit umkehren.",
+                "btnTxtRemoveAllLayers": "en:",
+                "btnTooltipRemoveAllLayers": "en:Alle Layer entfernen",
+                "confirmTitleRemoveAllLayersAll": "en:Alle Layer entfernen",
+                "confirmMsgRemoveAllLayers": "en:Sind sie sicher, dass sie alle Layer (sofern möglich) entfernen wollen?"
             }
         }
     },
