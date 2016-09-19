@@ -176,10 +176,6 @@ Ext.define("Koala.view.form.LayerFilter", {
             maxValue: maxValue,
             format: me.getFormat(),
             submitFormat: format
-            // Removed because of https://redmine-koala.bfs.de/issues/1493#note-7
-            // listeners: {
-            //     select: me.resetNumberFields
-            // }
         });
 
         var hourSpinner = FilterUtil.getSpinner(
@@ -284,7 +280,6 @@ Ext.define("Koala.view.form.LayerFilter", {
             validator: FilterUtil.validateMaxDurationTimerange,
             msgTarget: "under",
             listeners: {
-                select: me.resetNumberFields,
                 validitychange: FilterUtil.revalidatePartnerField
             }
         });
@@ -318,7 +313,6 @@ Ext.define("Koala.view.form.LayerFilter", {
             validator: FilterUtil.validateMaxDurationTimerange,
             msgTarget: 'under',
             listeners: {
-                select: me.resetNumberFields,
                 validitychange: FilterUtil.revalidatePartnerField
             }
         });
@@ -391,22 +385,5 @@ Ext.define("Koala.view.form.LayerFilter", {
             items: field
         });
         this.add(fieldSet);
-    },
-
-    /**
-     * Called whenever a date is selected, this methdo resets the associated
-     * sonners for minutes and hours.
-     *
-     * TODO check if we still need this / want this??? It may the way better
-     *      idea to set the minute and hour value of the selected date to be
-     *      the one that was previously selected in the spinners.
-     */
-    resetNumberFields: function(datefield) {
-        var numberFields = datefield.up("fieldcontainer").query("numberfield");
-        Ext.each(numberFields, function(field) {
-            field.suspendEvents(false);
-            field.setValue(0);
-            field.resumeEvents(true);
-        });
     }
 });

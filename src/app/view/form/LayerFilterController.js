@@ -35,6 +35,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
     submitFilter: function(){
         var me = this;
         var LayerUtil = Koala.util.Layer;
+        var FilterUtil = Koala.util.Filter;
         var view = me.getView();
         var metadata = view.getMetadata();
         var filters = view.getFilters();
@@ -52,6 +53,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     if (!Ext.Array.contains(view.ignoreFields, key)) {
                         var val = field.getValue();
                         if (Ext.isDate(val)) {
+                            // we have to add hours & minutes, the date field
+                            // has precision DAY:
+                            val = FilterUtil.addHoursAndMinutes(val, field);
                             val = me.adjustToUtcIfNeeded(val);
                         }
                         keyVals[key] = val;
@@ -138,7 +142,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * timezone.
      */
     handleTimereferenceButtonToggled: function(){
-        var layerFilterView = this.getView();
+        var me = this;
+        var FilterUtil = Koala.util.Filter;
+        var layerFilterView = me.getView();
         var dateUtil = Koala.util.Date;
         var makeUtc = dateUtil.makeUtc;
         var makeLocal = dateUtil.makeLocal;
@@ -153,6 +159,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
             if (!currentDate) {
                 return;
             }
+            // we have to add hours & minutes, the date field has precision DAY:
+            currentDate = FilterUtil.addHoursAndMinutes(currentDate, dateField);
+
             // Also update the minimum and maximums, as they need to be in sync
             // wrt the UTC/local setting.
             var currentMinValue = dateField.minValue; // no getter in ExtJS

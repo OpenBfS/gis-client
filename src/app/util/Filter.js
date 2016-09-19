@@ -196,7 +196,7 @@ Ext.define('Koala.util.Filter', {
             }
 
             // default to one for other spinners than the one we need according
-            // to tghe filter unit, otherwise use provided filter interval
+            // to the filter unit, otherwise use provided filter interval
             var stepSize = unit === spinnerType ? interval : 1;
 
             // Determine the start value of the spinner
@@ -282,34 +282,50 @@ Ext.define('Koala.util.Filter', {
         },
 
         /**
+         * Given a date and the Ext.form.field.Date it is coming from, this method
+         * searches the surroundings of the datefield to find the accompanying
+         * (if any) minute and hour spinners. The datefield will report with a
+         * precision of DAY (Time will always be 00:00) so we need to add hours and
+         * minutes accordingly.
+         *
+         * @param {Date} date The date to adjust (has 00:00 as time part)
+         * @param {Ext.form.field.Date} dateField The field where the date comes
+         *     from
+         * @return {Date} An adjsuted date, with hours and minurtes set as requested
+         *     from the accompanying spinners.
+         */
+        addHoursAndMinutes: function(date, dateField) {
+            var container = dateField.up();
+            // the selectors mean '… ending with hourspinner' / 'minutespinner'
+            var hourspinner = container.down('[name$="hourspinner"]');
+            var minutespinner = container.down('[name$="minutespinner"]');
+            var addHours = hourspinner && hourspinner.getValue() || 0;
+            var addMinutes = minutespinner && minutespinner.getValue() || 0;
+            date = Ext.Date.add(date, Ext.Date.HOUR, addHours);
+            date = Ext.Date.add(date, Ext.Date.MINUTE, addMinutes);
+            return date;
+        },
+
+        /**
          * A reusable eventhandler for the `change` event of the spinners for
          * hours or minutes that are inside of an `fieldcontainer` which holds
          * associated `datefield`. Will update the value of the `datefield` on
          * change.
          */
-        handleSpinnerChange: function(field, val, prevVal) {
+        handleSpinnerChange: function(field, val) {
             var self = Koala.util.Filter;
             var MINUTE_TYPE = self.SPINNERTYPE.MINUTES;
             var datefield;
-            var unitOfSpinner;
             var dateVal;
 
             if(!Ext.isModern){ // classic
                 datefield = field.up("fieldcontainer").down("datefield");
                 dateVal = datefield.getValue();
-
-                var diff = field.step;
-
-                if(field.spinnerType === MINUTE_TYPE){
-                    unitOfSpinner = Ext.Date.MINUTE;
-                } else {
-                    unitOfSpinner = Ext.Date.HOUR;
-                }
-                if (prevVal > val) {
-                    // spinned down, reduce date by step
-                    diff *= -1;
-                }
-                datefield.setValue(Ext.Date.add(dateVal, unitOfSpinner, diff));
+                // Fix the date by starting with the old values from h and min
+                dateVal = self.addHoursAndMinutes(dateVal, datefield);
+                datefield.setValue(dateVal);
+                // setting it is basically not needed, since the values cannot
+                // be read out
             } else { // modern
 
                 if (Ext.isEmpty(val)) {
