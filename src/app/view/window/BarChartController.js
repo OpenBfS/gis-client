@@ -50,33 +50,13 @@ Ext.define('Koala.view.window.BarChartController', {
         var view = me.getView();
         var chartConfig = olLayer.get('barChartProperties');
         var categoryCount = chartConfig.chartFieldSequence.split(",").length;
-        var chartWidth = 200 + categoryCount * 30;
+        var chartWidth = 200 + categoryCount * 50;
         var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
         var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
         var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
             Koala.util.String.replaceTemplateStrings(
                 chartConfig.seriesTitleTpl, olFeat) : "";
         var valFromSeq = Koala.util.String.getValueFromSequence;
-
-        // var startDate = view.down('datefield[name=datestart]').getValue();
-        // var endDate = view.down('datefield[name=dateend]').getValue();
-
-
-        var shapes = [];
-        Ext.each(chartConfig.chartFieldSequence.split(','), function(yField) {
-            shapes.push({
-                type: 'bar',
-                curve: 'linear',
-                xField: yField,
-                yField: yField,
-                name: stationName,
-                id: olFeat.get('id')
-                // color: valFromSeq(chartConfig.colorSequence, 0, 'red'),
-                // opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
-                // width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1)
-            });
-        });
-
 
         var chart = {
             xtype: 'd3-barchart',
@@ -88,23 +68,26 @@ Ext.define('Koala.view.window.BarChartController', {
             endDate: olFeat.get('end_measure'),
             targetLayer: olLayer,
             selectedStation: olFeat,
-            chartMargin: {
-                top: 10,
-                right: 200,
-                bottom: 20,
-                left: 40
+            title: {
+                label: title,
+                labelSize: 20,
+                labelColor: '#000',
+                labelPadding: 18
             },
-            shapes: [{
+            chartMargin: {
+                top: 50,
+                right: 200,
+                bottom: 50,
+                left: 50
+            },
+            shape: {
                 type: 'bar',
                 curve: 'linear',
-                // xField: yField,
-                // yField: yField,
-                name: stationName,
-                id: olFeat.get('id')
-                // color: valFromSeq(chartConfig.colorSequence, 0, 'red'),
-                // opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
-                // width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1)
-            }],
+                id: olFeat.get('id'),
+                color: valFromSeq(chartConfig.colorSequence, 0, 'red'),
+                opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 1),
+                tooltipTpl: chartConfig.tooltipTpl
+            },
             grid: {
                 show: true, // neue Config ?
                 color: '#d3d3d3', // neue Config ?
@@ -114,13 +97,11 @@ Ext.define('Koala.view.window.BarChartController', {
             axes: {
                 left: {
                     scale: 'linear',
-                    dataIndex: 'Te132', //chartConfig.yAxisAttribute, //'value',
                     format: ',.0f',
                     label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || '')
                 },
                 bottom: {
                     scale: 'ordinal',
-                    dataIndex: 'Te132', //chartConfig.xAxisAttribute, //'end_measure',
                     label: chartConfig.xAxisLabel || ''
                 }
             }

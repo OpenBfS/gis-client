@@ -86,8 +86,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 name: stationName,
                 id: olFeat.get('id'),
                 color: valFromSeq(chartConfig.colorSequence, 0, 'red'),
-                opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
-                width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1)
+                opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 1),
+                width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1),
+                tooltipTpl: chartConfig.tooltipTpl
             }],
             grid: {
                 show: true, // neue Config ?

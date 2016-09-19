@@ -38,6 +38,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             GRID_Y: 'k-d3-grid-y',
 
             SHAPE_GROUP: 'k-d3-shape-group',
+            BAR: 'k-d3-bar',
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
             DELETE_ICON: 'k-d3-delete-icon',
@@ -205,12 +206,14 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var selectedStation = view.getSelectedStation();
         var chartConfig = targetLayer.metadata.layerConfig.barChartProperties;
         var featureProps = selectedStation.getProperties();
+        var fields = chartConfig.chartFieldSequence.split(',');
+        var colors = chartConfig.colorSequence.split(',');
 
-        Ext.each(chartConfig.chartFieldSequence.split(','), function(field) {
+        Ext.each(fields, function(field, idx) {
             var dataObj = {};
             dataObj.key = field;
             dataObj.value = featureProps[field];
-            dataObj.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+            dataObj.color = colors[idx] || '#'+(Math.random()*0xFFFFFF<<0).toString(16);
             me.data.push(dataObj);
         });
     },
@@ -227,7 +230,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.createScales();
         me.createAxes();
         me.createGridAxes();
-        me.createShapes();
         me.createTooltip();
 
         me.setDomainForScales();
@@ -268,6 +270,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         // additional group element to it.
         d3.select(viewId)
             .append('svg')
+                .attr('viewBox', "0 0 " + view.getWidth() + " " + view.getHeight())
                 .attr('width', view.getWidth())
                 .attr('height', view.getHeight())
             .append('g')
@@ -279,10 +282,32 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('height', chartSize[1])
                 .attr('pointer-events', 'all');
 
+        //Add a "defs" element to the svg
+        var defs = d3.select(viewId + ' svg')
+            .append("defs");
+
+        //Append a clipPath element to the defs element, and a Shape
+        // to define the cliping area
+        defs
+            // .append("clipPath")
+                // .attr('id', 'my-clip-path')
+            .append('rect')
+                .attr('width', chartSize[0]) //Set the width of the clipping area
+                .attr('height', chartSize[1]); // set the height of the clipping area
+
+        //clip path for x axis
+        defs
+            // .append("clipPath")
+                // .attr('id', 'x-clip-path')
+            .append('rect')
+                .attr('width', chartSize[0]) //Set the width of the clipping area
+                .attr('height', chartSize[1] + chartMargin.bottom); // set the height of the clipping area
+
         // register zoom interaction if requested
         if (view.getZoomEnabled() && me.zoomInteraction) {
-            var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
-            plot.call(me.zoomInteraction);
+            // var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
+            var plot = d3.select(viewId + ' svg');
+            // plot.call(me.zoomInteraction);
         }
     },
 
@@ -323,31 +348,18 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var axis = staticMe.ORIENTATION[orient];
             var scale = me.scales[orient];
 
-            var chartAxis = axis(scale)
+            if(orient === "left"){
+                var chartAxis = axis(scale);
+            } else {
+                var chartAxis = axis(scale)
                 .ticks(axisConfig.ticks)
                 .tickValues(axisConfig.values)
                 .tickFormat(axisConfig.format ? d3.format(axisConfig.format) : undefined)
                 .tickSize(axisConfig.tickSize || 6)
                 .tickPadding(axisConfig.tickPadding || 3);
+            }
 
             me.axes[orient] = chartAxis;
-        });
-    },
-
-    /**
-     *
-     */
-    createShapes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var view = me.getView();
-        var chartSize = me.getChartSize();
-
-        Ext.each(view.getShapes(), function(shapeConfig) {
-            me.shapes.push({
-                config: shapeConfig,
-                shape: {}
-            });
         });
     },
 
@@ -378,7 +390,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 }));
             } else if (orient === 'left' || orient === 'right') {
                 me.scales[orient].domain([0, d3.max(me.data, function(d) {
-                    return d.value;
+                    return d.value + d.value/20;
                 })]);
             }
         });
@@ -402,7 +414,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .style('text-anchor', 'middle')
                 .style('font-weight', 'bold')
                 .style('font-size', titleConfig.labelSize || 20)
-                .text(titleConfig.label);
+                .text(titleConfig.label || '');
     },
 
     /**
@@ -422,6 +434,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var labelTransform;
             var labelPadding;
             var cssClass;
+            var clipPath;
 
             if (orient === 'top' || orient === 'bottom') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
@@ -430,6 +443,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
                 labelTransform = 'translate(' + (chartSize[0] / 2) + ', 0)';
                 labelPadding = axisConfig.labelPadding || 35;
+                // clipPath = 'url(#x-clip-path)';
             } else if (orient === 'left' || orient === 'right') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
                 axisTransform = (orient === 'right') ?
@@ -439,19 +453,24 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 labelPadding = (axisConfig.labelPadding || 25) * -1;
             }
 
-            d3.select(viewId + ' svg > g')
-                .append('g')
-                    .attr('class', cssClass)
-                    .attr('transform', axisTransform)
-                    .call(me.axes[orient])
-                .append('text')
-                    .attr('transform', labelTransform)
-                    .attr('dy', labelPadding)
-                    .attr('fill', axisConfig.labelColor || '#000')
-                    .style('text-anchor', 'middle')
-                    .style('font-weight', 'bold')
-                    .style('font-size', axisConfig.labelSize || 12)
-                    .text(axisConfig.label || '');
+            // We draw the left axis in the grid part as it fits our needs for barcharts.
+            if (orient === 'top' || orient === 'bottom') {
+                d3.select(viewId + ' svg > g')
+                    // .append('g')
+                        // .attr('clip-path', clipPath)
+                    .append('g')
+                        .attr('class', cssClass)
+                        .attr('transform', axisTransform)
+                        .call(me.axes[orient])
+                    .append('text')
+                        .attr('transform', labelTransform)
+                        .attr('dy', labelPadding)
+                        .attr('fill', axisConfig.labelColor || '#000')
+                        .style('text-anchor', 'middle')
+                        .style('font-weight', 'bold')
+                        .style('font-size', axisConfig.labelSize || 12)
+                        .text(axisConfig.label || '');
+            }
 
         });
     },
@@ -463,113 +482,105 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
+        var selectedStation = view.getSelectedStation();
         var viewId = '#' + view.getId();
         var chartSize = me.getChartSize();
         var barWidth;
 
         // Wrap the shapes in its own <svg> element.
-        var shapeSvg = d3.select(viewId + ' svg > g')
-            .append('svg')
-                .attr('top', 0)
-                .attr('left', 0)
-                .attr('width', chartSize[0])
-                .attr('height', chartSize[1]);
+        // var shapeSvg = d3.select(viewId + ' svg > g')
+        //     .append('svg')
+        //         .attr('top', 0)
+        //         .attr('left', 0)
+        //         .attr('width', chartSize[0])
+        //         .attr('height', chartSize[1]);
                 // .attr('viewBox', '0 0 550 420');
 
-        Ext.each(me.shapes, function(shape, idx) {
-            var shapeConfig = shape.config;
-            // var xField = shapeConfig.xField;
-            // var yField = shapeConfig.yField;
-            var xField = 'key';
-            var yField = 'value';
-            // var orientX = me.getAxisByField(xField);
-            // var orientY = me.getAxisByField(yField);
-            var orientX = 'bottom';
-            var orientY = 'left';
-            // var color = shapeConfig.color;
+        var shapeConfig = view.getShape();
+        // var xField = shapeConfig.xField;
+        // var yField = shapeConfig.yField;
+        var xField = 'key';
+        var yField = 'value';
+        // var orientX = me.getAxisByField(xField);
+        // var orientY = me.getAxisByField(yField);
+        var orientX = 'bottom';
+        var orientY = 'left';
+        // var color = shapeConfig.color;
 
-            var shapeGroup = shapeSvg
-                .append('g')
-                    .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx)
-                    .attr('shape-type', shapeConfig.type);
+        var shapeGroup = d3.select(viewId + ' svg > g')
+        // var shapeGroup = shapeSvg
+            .append('g')
+                .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP);
+                // .attr('clip-path','url(#my-clip-path)');
 
-            barWidth = (chartSize[0] / me.data.length);
-            barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
-            shapeGroup
-                .selectAll('rect')
-                    .data(me.data)
-                .enter().append('rect')
-                    .filter(function(d) {
-                        return Ext.isDefined(d[yField]);
-                    })
-                        .attr('id', function(d) {
-                            return d[xField];
-                        })
-                        .style('fill', function(d) {
-                            return d.color;
-                        })
-                        .style('opacity', shapeConfig.opacity)
-                        .attr('x', function(d) {
-                            return me.scales[orientX](d[xField]);
-                        })
-                        .attr('y', function(d) {
-                            return me.scales[orientY](d[yField]);
-                        })
-                        .attr('transform', 'translate(' + ((barWidth / 2) * -1) + ', 0)')
-                        .attr('width', barWidth)
-                        .attr('height', function(d) {
-                            return chartSize[1] - me.scales[orientY](d[yField]);
-                        })
-                        .on('mouseover', function(data) {
-                            var tooltip = me.tooltipCmp;
-                            var html = [
-                                'Some content for series ' + idx,
-                                '<br />',
-                                '<ul>',
-                                '  <li>',
-                                '<strong>' + xField + '</strong>: ',
-                                data[xField],
-                                '  </li>',
-                                '  <li>',
-                                '<strong>' + yField + '</strong>: ',
-                                data[yField],
-                                '  </li>',
-                                '</ul>'
-                            ].join('');
-                            tooltip.setHtml(html);
-                            tooltip.setTitle('Title for ' + shapeConfig.name);
-                            tooltip.setTarget(this);
-                            tooltip.show();
-                        });
-            shapeGroup.selectAll("text")
+        barWidth = (chartSize[0] / me.data.length);
+        barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
+        shapeGroup
+            .selectAll('rect')
                 .data(me.data)
-                .enter()
-                .append("text")
-                    .filter(function(d) {
-                        return Ext.isDefined(d[yField]);
+            .enter().append('g')
+                .attr('class', staticMe.CSS_CLASS.BAR)
+                .attr('id', function(d) {
+                    return d[xField];
+                })
+                .append('rect')
+                .filter(function(d) {
+                    return Ext.isDefined(d[yField]);
+                })
+                    .style('fill', function(d) {
+                        return d.color;
                     })
-                    .text(function(d) {
-                        return d[yField];
+                    .style('opacity', shapeConfig.opacity)
+                    .attr('x', function(d) {
+                        return me.scales[orientX](d[xField]);
                     })
-                    .attr("transform", function(d) {
-                        var x = me.scales[orientX](d[xField]);
-                        var y = me.scales[orientY](d[yField]);
-                        return "rotate(-90," + x + "," + y + ") translate(-15,15)";
+                    .attr('y', function(d) {
+                        return me.scales[orientY](d[yField]);
                     })
-                    .attr("x", function(d) {
-                         return me.scales[orientX](d[xField]);
+                    // .attr('transform', 'translate(' + ((barWidth / 2) * -1) + ', 0)')
+                    .attr('width', barWidth)
+                    .attr('height', function(d) {
+                        return chartSize[1] - me.scales[orientY](d[yField]);
                     })
-                    .attr("y", function(d) {
-                         return me.scales[orientY](d[yField]);
-                    })
-                    .attr("text-anchor", "middle")
-                    .style("font-family", "sans-serif")
-                    .style("font-size", "11px")
-                    .style("font-weight", "bold")
-                    .style("fill", "white")
-                    .style("unselectable", "on");
-        });
+                    .on('mouseover', function(data) {
+                        var tooltipCmp = me.tooltipCmp;
+                        var tooltipTpl = shapeConfig.tooltipTpl;
+
+                        // Seperate prereplacements. Not sure if this could be done by replaceTemplateStrings util
+                        tooltipTpl = tooltipTpl.replace("[[xAxisAttribute]]", data[xField]);
+                        tooltipTpl = tooltipTpl.replace("[[yAxisAttribute]]", data[yField]);
+
+                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                        tooltipCmp.setHtml(html);
+                        // tooltip.setTitle('Title for ' + shapeConfig.name);
+                        tooltipCmp.setTarget(this);
+                        tooltipCmp.show();
+                    });
+
+        var bars = d3.selectAll('.k-d3-bar');
+
+        bars.append("text")
+            // TODO add configurable labelfunc e.g. unter nachweisgrenze
+            .text(function(d){
+                return d[yField];
+            })
+            .filter(function(d) {
+                return Ext.isDefined(d[yField]);
+            })
+            .attr("x", function(d) {
+                 return me.scales[orientX](d[xField]);
+            })
+            .attr("y", function(d) {
+                 return me.scales[orientY](d[yField]);
+            })
+            .attr('transform', 'translate(' + (barWidth / 2) + ', -5)')
+            .attr("text-anchor", "middle")
+            // TODO make configurable. Generic from css config
+            .style("font-family", "sans-serif")
+            .style("font-size", "11px")
+            .style("fill", "#000")
+            .style("font-weight", "bold")
+            .style("unselectable", "on");
 
         if (barWidth !== undefined) {
             me.initialPlotTransform = {
@@ -577,7 +588,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 y: 0,
                 k: 1
             };
-            me.transformPlot(me.initialPlotTransform, 0);
+            // me.transformPlot(me.initialPlotTransform, 0);
         }
     },
 
@@ -594,9 +605,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var gridConfig = view.getGrid();
 
         return d3.zoom()
+            .extent([0, 0], [0, 0])
+            .scaleExtent([1, 10])
             .on('zoom', function() {
-                d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP)
-                    .attr('transform', d3.event.transform);
+                // d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP)
+                //     .attr('transform', d3.event.transform);
+
+                var zoomTransform = d3.event.transform;
 
                 Ext.iterate(me.axes, function(orient) {
                     var axis;
@@ -605,48 +620,30 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     var scaleGenerator = me.scales[orient];
 
                     if (orient === 'top' || orient === 'bottom') {
-
                         axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
+                        var zoomTransform = d3.event.transform;
 
                         // axis.call(axisGenerator.scale(
                         //     d3.event.transform.rescaleX(scaleGenerator)));
 
-                        var bars = d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP + ' rect');
-                        var zoomTransform = d3.event.transform;
-
-                        // bars
-                        //     .attr("transform", "translate(" + zoomTransform.x +",0)scale(" + zoomTransform.k + ",1)");
+                        var bars = d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP + ' g');
+                        bars.attr("transform", "translate(" + zoomTransform.x + ",0)scale(" + zoomTransform.k + ",1)");
 
                         axis
-                            //.attr("transform", "translate(" + zoomTransform.x + "," + (me.getChartSize()[1]) + ")")
+                            .attr("transform", "translate(" + zoomTransform.x + "," + (me.getChartSize()[1]) + ")")
                             .call(axisGenerator.scale(scaleGenerator.range([0, me.getChartSize()[0] * zoomTransform.k])));
+
+                        // axis.call(axisGenerator);
 
                     } else if (orient === 'left' || orient === 'right') {
                         axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
-                        axis.call(axisGenerator.scale(
-                            d3.event.transform.rescaleY(scaleGenerator)));
+
+                        // axis.call(axisGenerator.scale(
+                        //     d3.event.transform.rescaleY(scaleGenerator)));
+
+                        axis.call(axisGenerator);
                     }
                 });
-
-                if (gridConfig.show) {
-                    Ext.iterate(me.gridAxes, function(orient) {
-                        var axis;
-                        var axisSelector = 'svg g.' + CSS.GRID;
-                        var axisGenerator = me.gridAxes[orient];
-                        var scaleGenerator = me.scales[orient];
-
-                        if (orient === 'left' || orient === 'right') {
-                            axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
-                            axis.call(axisGenerator.scale(
-                                d3.event.transform.rescaleY(scaleGenerator)));
-                        }
-                    });
-
-                    d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
-                        .style('stroke-width', gridConfig.width)
-                        .style('stroke', gridConfig.color)
-                        .style('stroke-opacity', gridConfig.opacity);
-                }
             });
     },
 
@@ -682,25 +679,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         var staticMe = Koala.view.component.D3BarChartController;
         var chartSize = me.getChartSize();
-        var orientations = ['bottom', 'left'];
 
-        Ext.each(orientations, function(orient) {
-            var axis = staticMe.ORIENTATION[orient];
-            var scale = me.scales[orient];
-            var tickSize;
+        var axis = staticMe.ORIENTATION.left;
+        var scale = me.scales.left;
+        var tickSize = chartSize[0] * -1;
 
-            if (orient === 'top' || orient === 'bottom') {
-                tickSize = chartSize[1];
-            } else if (orient === 'left' || orient === 'right') {
-                tickSize = chartSize[0] * -1;
-            }
-
-            var chartAxis = axis(scale)
-                .tickFormat('')
-                .tickSize(tickSize);
-
-            me.gridAxes[orient] = chartAxis;
-        });
+        me.gridAxes.left = axis(scale)
+            .tickSize(tickSize);
     },
 
     /**
@@ -719,27 +704,18 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
         var viewId = '#' + view.getId();
-        var orientations = ['bottom', 'left'];
 
-        Ext.each(orientations, function(orient) {
-            var cssClass;
+        cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
 
-            if (orient === 'bottom') {
-                cssClass = CSS.GRID + ' ' + CSS.GRID_X;
-            } else if (orient === 'left') {
-                cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
-            }
+        d3.select(viewId + ' svg > g')
+            .append('g')
+                .attr('class', cssClass)
+                .call(me.gridAxes.left);
 
-            d3.select(viewId + ' svg > g')
-                .append('g')
-                    .attr('class', cssClass)
-                    .call(me.gridAxes[orient]);
-
-            d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
-                .style('stroke-width', gridConfig.width)
-                .style('stroke', gridConfig.color)
-                .style('stroke-opacity', gridConfig.opacity);
-        });
+        d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
+            .style('stroke-width', gridConfig.width)
+            .style('stroke', gridConfig.color)
+            .style('stroke-opacity', gridConfig.opacity);
     },
 
     /**
@@ -829,9 +805,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                         // handler
                         return;
                     }
-                    var rect = me.getRectByKey(dataObj['key']);
-                    me.toggleRectVisibility(
-                        rect, // the real group, containig shapepath & points
+                    var barGroup = me.getBarGroupByKey(dataObj['key']);
+                    me.toggleBarGroupVisibility(
+                        barGroup, // the real group, containig shapepath & points
                         d3.select(this) // legend entry
                     );
                 };
@@ -905,7 +881,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         // Data
         this.deleteData(dataObj.key);
         // Shape
-        this.deleteRect(dataObj.key);
+        this.deleteBarGroup(dataObj.key);
         // Legend
         this.deleteLegendEntry(legendElement);
     },
@@ -934,41 +910,39 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
-     * Removes the shape series specified by the given `idx`. Will remove the
-     * SVG node and the entry in our internal dataset.
+     * Removes the barGroup series specified by the given dataKey.
      *
-     * @param {Number} idx The index of the data entry to remove.
      */
-    deleteRect: function(dataKey) {
+    deleteBarGroup: function(dataKey) {
         var me = this;
-        var rect = me.getRectByKey(dataKey);
-        rect.node().remove();
+        var barGroup = me.getBarGroupByKey(dataKey);
+        barGroup.node().remove();
     },
 
     /**
      *
      */
-    getRectByKey: function(key) {
+    getBarGroupByKey: function(key) {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
 
-        return d3.select(viewId + ' svg g.' + CSS.SHAPE_GROUP + ' rect[id=' + key + ']');
+        return d3.select(viewId + ' svg g.' + CSS.SHAPE_GROUP + ' g[id=' + key + ']');
     },
 
     /**
      *
      */
-    toggleRectVisibility: function(shapeGroup, legendElement) {
+    toggleBarGroupVisibility: function(barGroup, legendElement) {
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
         var hideClsName = CSS.SHAPE_GROUP + CSS.SUFFIX_HIDDEN;
         var hideClsNameLegend = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND + CSS.SUFFIX_HIDDEN;
-        if (shapeGroup) {
-            var isHidden = shapeGroup.classed(hideClsName);
-            shapeGroup.classed(hideClsName, !isHidden);
+        if (barGroup) {
+            var isHidden = barGroup.classed(hideClsName);
+            barGroup.classed(hideClsName, !isHidden);
             legendElement.classed(hideClsNameLegend, !isHidden);
         }
     }

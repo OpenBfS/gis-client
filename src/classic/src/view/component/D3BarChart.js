@@ -54,7 +54,7 @@ Ext.define('Koala.view.component.D3BarChart',{
         },
         startDate: null,
         endDate: null,
-        shapes: [],
+        shape: {},
         selectedStation: null,
         // TODO adjust dynamically in relation to axes/title label size
         chartMargin: {

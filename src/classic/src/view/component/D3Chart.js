@@ -96,6 +96,7 @@ Ext.define('Koala.view.component.D3Chart',{
             labelSize: 20,
             labelColor: '#000',
             labelPadding: 18
+            // TODO seriesTitleTpl
         },
         legend: {
             legendMargin: {
@@ -114,7 +115,6 @@ Ext.define('Koala.view.component.D3Chart',{
                 // tickSize: null,
                 // tickPadding: null,
                 // format: ',.0f',
-                // label: 'Verrückte Mongo',
                 // labelSize: 35,
                 // labelColor: '#000',
                 // labelPadding: 25

@@ -300,8 +300,6 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // me.fireEvent('chartdataprepared');
 
-
-
         } else {
             me.getChartData();
         }
@@ -890,25 +888,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 return chartSize[1] - me.scales[orientY](d[yField]);
                             })
                             .on('mouseover', function(data) {
-                                var tooltip = me.tooltipCmp;
-                                var html = [
-                                    'Some content for series ' + idx,
-                                    '<br />',
-                                    '<ul>',
-                                    '  <li>',
-                                    '<strong>' + xField + '</strong>: ',
-                                    data[xField],
-                                    '  </li>',
-                                    '  <li>',
-                                    '<strong>' + yField + '</strong>: ',
-                                    data[yField],
-                                    '  </li>',
-                                    '</ul>'
-                                ].join('');
-                                tooltip.setHtml(html);
-                                tooltip.setTitle('Title for ' + shapeConfig.name);
-                                tooltip.setTarget(this);
-                                tooltip.show();
+                                var tooltipCmp = me.tooltipCmp;
+                                var tooltipTpl = shapeConfig.tooltipTpl;
+                                var selectedStation = me.getView().getSelectedStations()[idx];
+
+                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                                tooltipCmp.setHtml(html);
+                                tooltipCmp.setTarget(this);
+                                tooltipCmp.show();
                             });
                 shapeGroup.selectAll("text")
                     .data(me.data[shapeConfig.id])
@@ -985,25 +972,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .style('stroke', darkerColor)
                             .style('stroke-width', 2)
                             .on('mouseover', function(data) {
-                                var tooltip = me.tooltipCmp;
-                                var html = [
-                                    'Some content for series ' + idx,
-                                    '<br />',
-                                    '<ul>',
-                                    '  <li>',
-                                    '<strong>' + xField + '</strong>: ',
-                                    data[xField],
-                                    '  </li>',
-                                    '  <li>',
-                                    '<strong>' + yField + '</strong>: ',
-                                    data[yField],
-                                    '  </li>',
-                                    '</ul>'
-                                ].join('');
-                                tooltip.setHtml(html);
-                                tooltip.setTitle('Title for ' + shapeConfig.name);
-                                tooltip.setTarget(this);
-                                tooltip.show();
+                                var tooltipCmp = me.tooltipCmp;
+                                var tooltipTpl = shapeConfig.tooltipTpl;
+                                var selectedStation = me.getView().getSelectedStations()[idx];
+
+                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                                tooltipCmp.setHtml(html);
+                                tooltipCmp.setTarget(this);
+                                tooltipCmp.show();
                             })
                             .attr('cx', function(d) {
                                 return me.scales[orientX](d[xField]);

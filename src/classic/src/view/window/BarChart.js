@@ -37,6 +37,8 @@ Ext.define("Koala.view.window.BarChart", {
         title: "{title}"
     },
 
+    resizable: false,
+
     config: {
         name: "barchartwin",
         constrainHeader: true,
