@@ -43,7 +43,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         },
         hasCollapseAllBtn: true,
         hasExpandAllBtn: true,
-        hasToggleAllBtn: false
+        hasToggleAllBtn: false,
+        hasRemoveAllLayersBtn: true
     },
 
     hasRoutingListeners: false,
@@ -359,6 +360,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var hasCollapseAllBtn = me.getHasCollapseAllBtn();
         var hasToggleAllBtn = me.getHasToggleAllBtn();
         var hasExpandAllBtn = me.getHasExpandAllBtn();
+        var hasRemoveAllLayersBtn = me.getHasRemoveAllLayersBtn();
         if (!hasCollapseAllBtn && !hasToggleAllBtn && !hasExpandAllBtn){
             return;
         }
@@ -373,6 +375,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         }
         if (hasExpandAllBtn) {
             items.push(me.getModeBtnConfig('expand'));
+        }
+        if (hasRemoveAllLayersBtn) {
+            items.push(me.getModeBtnConfig('remove-layers'));
         }
 
         var fbar = {
@@ -424,11 +429,49 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 };
                 cfg.handler = me.expandAllBodies;
                 break;
+            case 'remove-layers':
+                cfg.glyph = 'xf1f8@FontAwesome';
+                cfg.bind = {
+                    text: '{btnTxtRemoveAllLayers}',
+                    tooltip: '{btnTooltipRemoveAllLayers}'
+                };
+                cfg.handler = me.removeAllLayers;
+                break;
             default:
                 Ext.log.warn('Unexpected mode for btn config ' + mode);
                 return;
         }
         return cfg;
+    },
+
+    /**
+     * Removes all activated layers with 'allowRemoval=true' from the map.
+     */
+    removeAllLayers: function(){
+        var viewModel = this.getViewModel();
+        var store = this.getStore();
+        var map = Ext.ComponentQuery.query('basigx-component-map')[0]
+            .getMap();
+        var layersToRemove = [];
+
+        Ext.Msg.confirm(
+            viewModel.get('confirmTitleRemoveAllLayersAll'),
+            viewModel.get('confirmMsgRemoveAllLayers'),
+            function(btnId){
+                if(btnId === "yes"){
+                    store.each(function(rec){
+                        var layer = rec.getOlLayer();
+                        if(layer.get("allowRemoval")){
+                            layersToRemove.push(layer);
+                        }
+                    });
+
+                    Ext.each(layersToRemove, function(layer){
+                        map.removeLayer(layer);
+                    });
+                }
+        });
+
     },
 
     /**
