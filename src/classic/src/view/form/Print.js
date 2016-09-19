@@ -204,6 +204,9 @@ Ext.define("Koala.view.form.Print", {
         var legendFieldset = Ext.ComponentQuery.query(fsSelector)[0];
         var layerCheckbox = legendFieldset.down(cbSelector);
 
+        if (layer.metadata){
+            layer.set('name', layer.metadata.printTitle + Koala.util.Layer.getLayerNameSuffix(layer.get('__suffix_id__')));
+        }
         if (layerCheckbox && !legendFieldset.getCollapsed() &&
                 layer.checked &&
                 layer.get('name') &&
@@ -233,6 +236,9 @@ Ext.define("Koala.view.form.Print", {
         var items = [];
         Ext.each(layers, function(layer){
             if(layer.get('visible') && layer.get('allowPrint')){
+                if (layer.metadata){
+                    layer.set('name', layer.metadata.printTitle + Koala.util.Layer.getLayerNameSuffix(layer.get('__suffix_id__')));
+                }
                 items.push({
                     xtype: 'checkbox',
                     checked: true,

@@ -413,7 +413,7 @@ Ext.define('Koala.util.Layer', {
             var currentSelection = themeTree.getSelection()[0];
             var title = currentSelection ?
                 currentSelection.data.text :
-                metadata.dspTxt;
+                metadata.treeTitle;
 
             var winName = 'filter-win-' + metadata.id;
 
@@ -623,7 +623,7 @@ Ext.define('Koala.util.Layer', {
             }
 
             return {
-                name: metadata.dspTxt,
+                name: metadata.legendTitle,
                 legendUrl: olProps.legendUrl || '',
                 legendHeight: olProps.legendHeight,
                 legendWidth: olProps.legendWidth,
@@ -786,7 +786,7 @@ Ext.define('Koala.util.Layer', {
                 if (filters[i].encodeInViewParams === "true") {
                     viewParamFilters.push(filters[i]);
                     if (filters[i].param === "test_data" && filters[i].value === "true"){
-                        metadata.dspTxt = "#TESTDATA# " + metadata.dspTxt;
+                        metadata.treeTitle = "#TESTDATA# " + metadata.treeTitle;
                     }
                     filters.splice(i, 1);
                     metadata = me.moveFiltersToViewparams(metadata, viewParamFilters);
