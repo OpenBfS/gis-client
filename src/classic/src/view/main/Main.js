@@ -136,14 +136,13 @@ Ext.define('Koala.view.main.Main', {
             maxWidth: 700,
             dockedItems: [{
                 xtype: 'buttongroup',
-                columns: 2,
+                columns: 3,
                 bind: {
                     title: '{buttonGroupTopTitle}'
                 },
                 dock: 'top',
                 defaults: {
-                    scale: 'small',
-                    width: 100
+                    scale: 'small'
                 },
                 items: [{
                     xtype: 'button',
@@ -200,6 +199,29 @@ Ext.define('Koala.view.main.Main', {
                         } else {
                             BasiGX.util.Animate.shake(win);
                         }
+                    }
+                }, {
+                    xtype: 'button',
+                    glyph: 'xf093@FontAwesome',
+                    bind: {
+                        text: '{importLocalDataButtonText}',
+                        tooltip: '{importLocalDataButtonTooltip}'
+                    },
+                    handler: function(){
+                            var win = Ext.ComponentQuery.query(
+                                '[name=add-wms-window]')[0];
+                            if(!win){
+                                Ext.create('Ext.window.Window', {
+                                    name: 'add-wms-window',
+                                    title: 'Lokale daten importieren.',
+                                    layout: 'fit',
+                                    items: [{
+                                        xtype: 'k-form-importLocalData'
+                                    }]
+                                }).show();
+                            } else {
+                                BasiGX.util.Animate.shake(win);
+                            }
                     }
                 }]
             }],

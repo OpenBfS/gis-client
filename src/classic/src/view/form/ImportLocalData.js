@@ -46,6 +46,18 @@ Ext.define("Koala.view.form.ImportLocalData",{
             title: 'Upload of {file.name}'
         },
         items: [{
+            xtype: 'filefield',
+            // TODO i18n
+            buttonText: 'Durchsuchen',
+            bind: {
+                fieldLabel: '{fileFieldLabel}',
+                hidden: '{layerName}'
+            },
+            name: 'file',
+            listeners: {
+                change: 'fileFieldChanged'
+            }
+        }, {
             xtype: 'textfield',
             name: 'layerName',
             bind: {
@@ -80,6 +92,4 @@ Ext.define("Koala.view.form.ImportLocalData",{
         },
         handler: 'importClicked'
     }]
-
-
 });

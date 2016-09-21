@@ -5,6 +5,7 @@
         "ol": true,
         "window": true,
         "location": true,
+        "FileReader": true,
         "Koala": true,
         "BasiGX": true,
         "btoa": true,

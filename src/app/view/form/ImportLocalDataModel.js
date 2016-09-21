@@ -29,7 +29,9 @@ Ext.define('Koala.view.form.ImportLocalDataModel', {
         cancelButtonText: 'Cancel',
         importButtonText: 'Import',
         layerNameLabel: 'Layername',
-        templateLabel: 'Template'
+        templateLabel: 'Template',
+        fileFieldLabel: 'Datei',
+        fileFieldButtonText: 'Durchsuchen'
     }
 
 });

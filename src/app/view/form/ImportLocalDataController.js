@@ -30,6 +30,69 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         viewModel.set('layerName', fileName);
     },
 
+    fileFieldChanged: function(filefield){
+        var me = this;
+        var file = filefield.getEl().down('input[type=file]').dom.files[0];
+        var reader = new FileReader();
+        reader.addEventListener("load", me.readFile.bind(this, file));
+        // function(this.handleResult_.bind(this, file)){
+        //
+        // });
+        reader.readAsText(file);
+    },
+
+    /**
+    * Copy of https://github.com/openlayers/ol3/blob/v3.18.2/src/ol/interaction/draganddrop.js#L97
+    */
+    readFile: function(file, event){
+        var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
+        var me = this;
+        var viewModel = me.getViewModel();
+        var result = event.target.result;
+        var formatConstructors = [
+            ol.format.GeoJSON,
+            ol.format.KML,
+            ol.format.GML3,
+            ol.format.GML2
+        ];
+
+        var projection = this.getViewModel().get('projection');
+        if (!projection) {
+            var view = map.getView();
+            projection = view.getProjection();
+        }
+        var features = [];
+        var i, ii;
+        for (i = 0, ii = formatConstructors.length; i < ii; ++i) {
+            var formatConstructor = formatConstructors[i];
+            var format = new formatConstructor();
+            features = me.tryReadFeatures(format, result, {
+                featureProjection: projection
+            });
+            if (features && features.length > 0) {
+                break;
+            }
+        }
+
+        viewModel.set('features', features);
+        viewModel.set('file', file);
+        viewModel.set('layerName', file.name);
+    },
+
+    /**
+    * Copy of https://github.com/openlayers/ol3/blob/v3.18.2/src/ol/interaction/draganddrop.js#L170
+    */
+    tryReadFeatures: function(format, text, options){
+        try {
+            return format.readFeatures(text, options);
+        } catch (e) {
+            return null;
+        }
+    },
+
+    /**
+     *
+     */
     importClicked: function(){
         var viewModel = this.getViewModel();
         var layerUtil = Koala.util.Layer;
@@ -73,8 +136,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     },
 
     /**
-     * Copy of "Koala.util.Layer.getInternalLayerConfig" but diffrent defaults.
-     */
+    * Copy of "Koala.util.Layer.getInternalLayerConfig" but diffrent defaults.
+    */
     getInternalLayerConfig: function(metadata) {
         var olProps = metadata.layerConfig.olProperties;
         olProps = Koala.util.Object.coerceAll(olProps);
