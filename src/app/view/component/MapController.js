@@ -68,7 +68,11 @@ Ext.define('Koala.view.component.MapController', {
                     tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, layer, false);
                     tooltipFeature = replaceTemplateStrings(
+                        tooltipFeature, layer, false, "layer.");
+                    tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, feature, false);
+                    tooltipFeature = replaceTemplateStrings(
+                        tooltipFeature, feature, false, "feature.");
                     innerHtml += tooltipFeature;
                     if (featureIdx + 1 !== featuresLen) {
                         // not the last feature, append linebreak
@@ -87,16 +91,21 @@ Ext.define('Koala.view.component.MapController', {
     },
 
     onDroppedExternalVectorData: function(event) {
-        var map = this.getView().getMap();
-        // TODO will use the utilities in Layer.js soon
-
-        var vectorSource = new ol.source.Vector({
-          features: event.features
+        Ext.create("Ext.window.Window", {
+            // TODO i18n
+            title: 'Upload local data',
+            autoShow: true,
+            items: [{
+                xtype: 'k-form-importLocalData',
+                viewModel: {
+                    data: {
+                        file: event.file,
+                        features: event.features,
+                        projection: event.projection
+                    }
+                }
+            }]
         });
-        var vectorLayer = new ol.layer.Vector({
-          source: vectorSource
-        });
-        map.addLayer(vectorLayer);
     },
 
     /**

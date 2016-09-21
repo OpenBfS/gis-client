@@ -139,7 +139,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             var downloadBtn = comp.down('button[name="download"]');
             var removalBtn = comp.down('button[name="removal"]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
-            var legend = comp.up().down('image[name="legend"]');
+            var legend = comp.up().down('image[name="' + olLayer.get("routeId") + '-legendImg"]');
 
             if(shortInfoBtn){
                 shortInfoBtn.setVisible(allowShortInfo);
