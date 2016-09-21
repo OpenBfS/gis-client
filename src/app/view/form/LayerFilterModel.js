@@ -20,14 +20,14 @@ Ext.define('Koala.view.form.LayerFilterModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-form-layerfilter',
     data: {
-        startLabel: 'Start',
-        endLabel: 'Ende',
-        timestampLabel: 'Zeitpunkt',
-        buttonText: 'Filter übernehmen und Layer der Karte hinzufügen',
-        buttonTextNoFilter: 'Auswählen und in Karte übernehmen',
-        valueFilter: 'Wertefilter',
-        timeRangeFilter: 'Zeitraumfilter',
-        pointInTimeFilter: 'Zeitpunktfilter'
+        startLabel: '',
+        endLabel: '',
+        timestampLabel: '',
+        buttonText: '',
+        buttonTextNoFilter: '',
+        valueFilter: '',
+        timeRangeFilter: '',
+        pointInTimeFilter: ''
     }
 
 });

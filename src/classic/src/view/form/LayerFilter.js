@@ -149,20 +149,18 @@ Ext.define("Koala.view.form.LayerFilter", {
             maxValue = Ext.Date.parse(
                 filter.maxdatetimeinstant, filter.maxdatetimeformat
             );
-
-            // Fix for the issue #1068-34
-            // Raises the maxDate by one day to avoid the bug with the datefield
-            // where maxDate = defaultValue leads to invalid input
-            maxValue.setDate(maxValue.getDate() + 1);
         }
 
-        if (Koala.Application.isLocal()) {
+        var appIsLocal = Koala.Application.isLocal();
+        if (appIsLocal) {
             var makeLocal = Koala.util.Date.makeLocal;
             value = makeLocal(value);
             minValue = minValue ? makeLocal(minValue) : undefined;
             maxValue = maxValue ? makeLocal(maxValue) : undefined;
         }
 
+        var minClone = minValue ? Ext.Date.clone(minValue) : undefined;
+        var maxClone = maxValue ? Ext.Date.clone(maxValue) : undefined;
         var dateField = Ext.create("Ext.form.field.Date", {
             bind: {
                 fieldLabel: "{timestampLabel}"
@@ -171,9 +169,12 @@ Ext.define("Koala.view.form.LayerFilter", {
             labelWidth: 70,
             name: filter.param,
             flex: 1,
-            value: value,
-            minValue: minValue,
-            maxValue: maxValue,
+            value: Ext.Date.clone(value),
+            minValue: minClone,
+            maxValue: maxClone,
+            validator: FilterUtil.makeDateValidator(
+                minClone, maxClone, appIsLocal
+            ),
             format: me.getFormat(),
             submitFormat: format
         });
@@ -254,8 +255,8 @@ Ext.define("Koala.view.form.LayerFilter", {
         // where maxDate = defaultValue leads to invalid input
         maxValue.setDate(maxValue.getDate() + 1);
 
-
-        if (Koala.Application.isLocal()) {
+        var appIsLocal = Koala.Application.isLocal();
+        if (appIsLocal) {
             var makeLocal = Koala.util.Date.makeLocal;
             minValue = makeLocal(minValue);
             maxValue = makeLocal(maxValue);
@@ -263,6 +264,19 @@ Ext.define("Koala.view.form.LayerFilter", {
             defaultMaxValue = makeLocal(defaultMaxValue);
         }
 
+        var minClone = minValue ? Ext.Date.clone(minValue) : undefined;
+        var maxClone = maxValue ? Ext.Date.clone(maxValue) : undefined;
+
+        var minMaxValidator = FilterUtil.makeDateValidator(
+            minClone, maxClone, appIsLocal
+        );
+        var minMaxDurationAndOrderValidator = function() {
+            var ok = minMaxValidator.call(this);
+            if (ok === true) {
+                ok = FilterUtil.validateMaxDurationTimerange.call(this);
+            }
+            return ok;
+        };
         // --- MINIMUM ---
         var minDateField = Ext.create("Ext.form.field.Date", {
             bind: {
@@ -277,7 +291,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             maxValue: maxValue,
             format: me.getFormat(),
             submitFormat: format,
-            validator: FilterUtil.validateMaxDurationTimerange,
+            validator: minMaxDurationAndOrderValidator,
             msgTarget: "under",
             listeners: {
                 validitychange: FilterUtil.revalidatePartnerField
@@ -310,7 +324,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             maxValue: maxValue,
             format: me.getFormat(),
             submitFormat: format,
-            validator: FilterUtil.validateMaxDurationTimerange,
+            validator: minMaxDurationAndOrderValidator,
             msgTarget: 'under',
             listeners: {
                 validitychange: FilterUtil.revalidatePartnerField
