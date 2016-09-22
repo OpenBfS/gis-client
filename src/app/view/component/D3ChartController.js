@@ -17,209 +17,8 @@
  * @class Koala.view.component.D3ChartController
  */
 Ext.define('Koala.view.component.D3ChartController', {
-    extend: 'Ext.app.ViewController',
+    extend: 'Koala.view.component.D3BaseController',
     alias: 'controller.component-d3chart',
-
-    statics: {
-
-        /**
-         * [CSS_CLASS description]
-         * @type {Object}
-         */
-        CSS_CLASS: {
-            AXIS: 'k-d3-axis',
-            AXIS_X: 'k-d3-axis-x',
-            AXIS_Y: 'k-d3-axis-y',
-
-            PLOT_BACKGROUND: 'k-d3-plot-background',
-
-            GRID: 'k-d3-grid',
-            GRID_X: 'k-d3-grid-x',
-            GRID_Y: 'k-d3-grid-y',
-
-            SHAPE_GROUP: 'k-d3-shape-group',
-            SHAPE_PATH: 'k-d3-shape-path',
-            SHAPE_POINT_GROUP: 'k-d3-shape-points',
-            DELETE_ICON: 'k-d3-delete-icon',
-
-            PREFIX_IDX_SHAPE_GROUP: 'shape-group-',
-            PREFIX_IDX_SHAPE_PATH: 'shape-path-',
-            PREFIX_IDX_SHAPE_POINT_GROUP: 'shape-points-',
-            PREFIX_IDX_LEGEND_GROUP: 'legend-group-',
-
-            SUFFIX_LEGEND: '-legend',
-            SUFFIX_HIDDEN: '-hidden'
-        },
-
-        /**
-         * [ADDITIONAL_BAR_MARGIN description]
-         * @type {Number}
-         */
-        ADDITIONAL_BAR_MARGIN: 5,
-
-        /**
-         * Given a SVG `<path>` (from a d3 selection), modify the start point by
-         * `offsetX` and `offsetY`.
-         *
-         * Directly modifies the `d`-attribute.
-         *
-         * @param {Selection} d3Path The path to modify.
-         * @param {Number} offsetX The offset in horizontal direction.
-         * @param {Number} offsetX The offset in vertical direction.
-         */
-        adjustPathStart: function(d3Path, offsetX, offsetY) {
-            var currentD = d3Path.attr('d');
-            var startCoords = currentD.match(/^M([+-]?\d*\.?\d+),([+-]?\d*\.?\d+)/);
-            var xCoord = parseFloat(startCoords[1], 10);
-            var yCoord = parseFloat(startCoords[2], 10);
-            var newX = xCoord + offsetX;
-            var newY = yCoord + offsetY;
-            var newD = currentD.replace(startCoords[0], 'M' + newX + ',' + newY);
-            d3Path.attr('d', newD);
-        },
-
-        /**
-         * This method will take a d3 object (e.g. from a selection) and adjust its
-         * transfrom element to move it on the canvas. The modification is
-         * controlled by a `diffObj` which looks like:
-         *
-         *     {
-         *         translate: {
-         *             x: -15,
-         *             y: 7
-         *         }
-         *     }
-         *
-         * The above object means move the object 15 units to the left and seven to
-         * the top.
-         *
-         * The transform attribute is modified directly.
-         *
-         * @param {Selection} d3Obj The object to manipulate.
-         * @param {Object} diffObj A specification which attribute how to modify.
-         */
-        adjustTransformTranslate: function (d3Obj, diffObj) {
-            var staticMe = Koala.view.component.D3ChartController;
-            var makeTranslate = staticMe.makeTranslate;
-            var currentTransform = d3Obj.attr('transform');
-
-            var regEx = /translate\((\d+),(\d+)\)/;
-            if (!currentTransform) {
-                currentTransform = makeTranslate(0, 0);
-            }
-            var newTransform = currentTransform;
-            var matches = regEx.exec(currentTransform);
-            if (matches) {
-                var x = parseFloat(matches[1], 10);
-                var y = parseFloat(matches[2], 10);
-                x += 'translate' in diffObj ? diffObj.translate.x || 0 : 0;
-                y += 'translate' in diffObj ? diffObj.translate.y || 0 : 0;
-                var newTranslate = makeTranslate(x, y);
-                newTransform = currentTransform.replace(matches[0], newTranslate);
-            }
-            d3Obj.attr('transform', newTransform);
-        },
-
-        /**
-         * Returns a string ready to be used in a transform-attribute for the
-         * passed parameters `x` and `y`.
-         *
-         * @param {Number} x The amount to translate in horizontal direction.
-         * @param {Number} y The amount to translate in vertical direction.
-         * @return {String} A string ready to be used in a transform-attribute.
-         */
-        makeTranslate: function(x, y) {
-            return "translate(" + x + "," + y + ")";
-        },
-
-        /**
-         * Static mapping of supported D3 axis generators. See the
-         * {@link https://github.com/d3/d3-axis/blob/master/README.md#axisTop|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} top - Return a top-oriented axis generator.
-         * @type {function} right - Return a right-oriented axis generator.
-         * @type {function} bottom - Return a bottom-oriented axis generator.
-         * @type {function} left - Return a left-oriented axis generator.
-         */
-        ORIENTATION: {
-            top: d3.axisTop,
-            right: d3.axisRight,
-            bottom: d3.axisBottom,
-            left: d3.axisLeft
-        },
-
-        /**
-         * Static mapping of supported d3 scales. In D3 Scales are functions that
-         * map from an input domain to an output range. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#scales-d3-scale|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - Return a quantitative linear scale.
-         * @type {function} pow - Return a quantitative power scale.
-         * @type {function} sqrt - Return a quantitative power scale with exponent 0.5.
-         * @type {function} log - Return a quantitative logarithmic scale.
-         * @type {function} ident - Return a quantitative identity scale.
-         * @type {function} time - Return a linear scale for time.
-         * @type {function} utc - Return a linear scale for UTC.
-         */
-        SCALE: {
-            linear: d3.scaleLinear,
-            pow: d3.scalePow,
-            sqrt: d3.scaleSqrt,
-            log: d3.scaleLog,
-            ident: d3.scaleIdentity,
-            time: d3.scaleTime,
-            utc: d3.scaleUtc,
-            ordinal: d3.scaleOrdinal
-        },
-
-        /**
-         * Static mapping of supported d3 shape types. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#shapes-d3-shape|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} line - Return a line generator.
-         * @type {function} area - Return an area generator.
-         * @type {function} bar - TODO
-         */
-        TYPE: {
-            line: d3.line,
-            area: d3.area,
-            // TODO: set another type?!
-            bar: d3.line
-        },
-
-        /**
-         * Static mapping of supported d3 curve types. In D3 the curve type
-         * represents the interpolation between points in a continous shape. See
-         * the {@link https://github.com/d3/d3/blob/master/API.md#curves|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - A polyline through specified points.
-         * @type {function} cubicBasisSpline - A cubic basis spline using the
-         *       specified control points.
-         * @type {function} curveMonotoneX - A cubic spline that preserves
-         *       monotonicity in y, assuming monotonicity in x.
-         * @type {function} naturalCubicSpline - A natural cubic spline with the
-         *       second derivative of the spline set to zero at the endpoints.
-         * @type {function} curveStep - A piecewise constant function. The y-value
-         *       changes at the midpoint of each pair of adjacent x-values.
-         * @type {function} curveStepAfter - A piecewise constant function. The
-         *       y-value changes after the x-value.
-         * @type {function} curveStepBefore - A piecewise constant function. The
-         *       y-value changes before the x-value.
-         */
-        CURVE: {
-            linear: d3.curveLinear,
-            cubicBasisSpline: d3.curveBasis,
-            curveMonotoneX: d3.curveMonotoneX,
-            naturalCubicSpline: d3.curveNatural,
-            curveStep: d3.curveStep,
-            curveStepAfter: d3.curveStepAfter,
-            curveStepBefore: d3.curveStepBefore
-        }
-    },
 
     /**
      *
@@ -232,7 +31,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
-    // data: [],
     chartRendered: false,
     ajaxCounter: 0,
 
@@ -259,11 +57,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = me.getView();
 
         // We have to cleanup manually.  WHY?!
-        this.scales = {};
-        this.shapes = [];
-        this.axes = {};
-        this.gridAxes = {};
-        this.data = {};
+        me.scales = {};
+        me.shapes = [];
+        me.axes = {};
+        me.gridAxes = {};
+        me.data = {};
 
         if (view.getShowLoadMask()) {
             view.setLoading(true);
@@ -337,9 +135,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      *
      */
     deleteSvg: function(){
-        var me = this;
-        var view = me.getView();
-
+        var view = this.getView();
         var svg = d3.select('#' + view.getId() + ' svg svg');
         svg.node().remove();
     },
@@ -399,16 +195,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         allowDupes = Ext.isDefined(allowDupes) ? allowDupes : false;
 
         if (allowDupes === true || !me.containsStation(selectedStation)) {
-
             view.getSelectedStations().push(selectedStation);
-
             shapes.push(shapeConfig);
-
             view.setShapes(shapes);
-
             // update the chart to reflect the changes
             me.getChartData();
-
             added = true;
         }
 
@@ -420,9 +211,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @return {[type]} [description]
      */
     createInteractions: function() {
-        var me = this;
-
-        me.zoomInteraction = me.createZoomInteraction();
+        this.zoomInteraction = this.createZoomInteraction();
     },
 
     /**
@@ -503,12 +292,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = me.getView();
         var viewId = '#' + view.getId();
         var gridConfig = view.getGrid();
-        // var chartSize = me.getChartSize();
-        // var extent = [[0,0], [600 - 50, 400 - 50]];
 
         return d3.zoom()
-            //.scaleExtent([1, 5])
-            // .translateExtent(extent)
             .on('zoom', function() {
                 d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP)
                     .attr('transform', d3.event.transform);
@@ -685,6 +470,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     drawAxes: function() {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
+        var makeTranslate = staticMe.makeTranslate;
         var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
@@ -700,16 +486,16 @@ Ext.define('Koala.view.component.D3ChartController', {
             if (orient === 'top' || orient === 'bottom') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
                 axisTransform = (orient === 'bottom') ?
-                        'translate(0,' + chartSize[1] + ')' : undefined;
+                        makeTranslate(0, chartSize[1]) : undefined;
 
-                labelTransform = 'translate(' + (chartSize[0] / 2) + ', 0)';
+                labelTransform = makeTranslate(chartSize[0] / 2, 0);
                 labelPadding = axisConfig.labelPadding || 35;
             } else if (orient === 'left' || orient === 'right') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
                 axisTransform = (orient === 'right') ?
-                        'translate(' + chartSize[0] + ', 0)' : undefined;
-
-                labelTransform = 'rotate(-90), translate(' + (chartSize[1] / 2 * -1) + ', 0)';
+                        makeTranslate(chartSize[0], 0) : undefined;
+                var translate = makeTranslate(chartSize[1] / -2, 0);
+                labelTransform = 'rotate(-90), ' + translate;
                 labelPadding = (axisConfig.labelPadding || 25) * -1;
             }
 
@@ -811,6 +597,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     drawTitle: function() {
         var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var makeTranslate = staticMe.makeTranslate;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var titleConfig = view.getTitle();
@@ -818,7 +606,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         d3.select(viewId + ' svg > g')
             .append('text')
-                .attr('transform', 'translate(' + (chartSize[0] / 2) + ', 0)')
+                .attr('transform', makeTranslate(chartSize[0] / 2, 0))
                 .attr('dy', (titleConfig.labelPadding || 18) * -1)
                 .attr('fill', titleConfig.labelColor || '#000')
                 .style('text-anchor', 'middle')
@@ -853,7 +641,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var yField = shapeConfig.yField;
             var orientX = me.getAxisByField(xField);
             var orientY = me.getAxisByField(yField);
-            var color = shapeConfig.color;
+            var color = shapeConfig.color || staticMe.getRandomColor();
             var darkerColor = d3.color(color).darker();
 
             var shapeGroup = shapeSvg
@@ -1114,6 +902,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             legendEntry.append('path')
                 .attr('d', function() {
                     switch (shape.config.type) {
+                        // TODO make statics
                         case 'line':
                             return 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6';
                         case 'area':

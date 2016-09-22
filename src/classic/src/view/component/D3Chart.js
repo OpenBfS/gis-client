@@ -56,34 +56,6 @@ Ext.define('Koala.view.component.D3Chart',{
         endDate: null,
         shapes: [],
         selectedStations: [],
-        // shapes: [{
-        //     type: 'area',
-        //     curve: 'linear',
-        //     xField: 'end_measure',
-        //     yField: 'value',
-        //     name: 'area 1',
-        //     color: '#6C3483',
-        //     opacity: 1,
-        //     width: 4
-        // },
-        // {
-        //     type: 'line',
-        //     curve: 'linear',
-        //     xField: 'end_measure',
-        //     yField: 'value',
-        //     name: 'stepline 1',
-        //     color: '#1F618D',
-        //     width: 3
-        // },
-        // {
-        //     type: 'bar',
-        //     curve: 'linear',
-        //     xField: 'end_measure',
-        //     yField: 'value',
-        //     name: 'barchart 1',
-        //     color: '#117A65',
-        //     width: 3
-        // }],
         // TODO adjust dynamically in relation to axes/title label size
         chartMargin: {
             top: 40,
@@ -107,23 +79,6 @@ Ext.define('Koala.view.component.D3Chart',{
             }
         },
         axes: {
-            // left: {
-                // scale: 'linear',
-                // dataIndex: 'value',
-                // ticks: null,
-                // tickValues: null,
-                // tickSize: null,
-                // tickPadding: null,
-                // format: ',.0f',
-                // labelSize: 35,
-                // labelColor: '#000',
-                // labelPadding: 25
-            // },
-            // bottom: {
-                // scale: 'time',
-                // dataIndex: 'end_measure',
-                // label: 'Datum'
-            // }
         }
     }
 });

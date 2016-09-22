@@ -17,135 +17,8 @@
  * @class Koala.view.component.D3BarChartController
  */
 Ext.define('Koala.view.component.D3BarChartController', {
-    extend: 'Ext.app.ViewController',
+    extend: 'Koala.view.component.D3BaseController',
     alias: 'controller.component-d3barchart',
-
-    statics: {
-
-        /**
-         * [CSS_CLASS description]
-         * @type {Object}
-         */
-        CSS_CLASS: {
-            AXIS: 'k-d3-axis',
-            AXIS_X: 'k-d3-axis-x',
-            AXIS_Y: 'k-d3-axis-y',
-
-            PLOT_BACKGROUND: 'k-d3-plot-background',
-
-            GRID: 'k-d3-grid',
-            GRID_X: 'k-d3-grid-x',
-            GRID_Y: 'k-d3-grid-y',
-
-            SHAPE_GROUP: 'k-d3-shape-group',
-            BAR: 'k-d3-bar',
-            SHAPE_PATH: 'k-d3-shape-path',
-            SHAPE_POINT_GROUP: 'k-d3-shape-points',
-            DELETE_ICON: 'k-d3-delete-icon',
-
-            PREFIX_IDX_SHAPE_GROUP: 'shape-group-',
-            PREFIX_IDX_SHAPE_PATH: 'shape-path-',
-            PREFIX_IDX_SHAPE_POINT_GROUP: 'shape-points-',
-            PREFIX_IDX_LEGEND_GROUP: 'legend-group-',
-
-            SUFFIX_LEGEND: '-legend',
-            SUFFIX_HIDDEN: '-hidden'
-        },
-
-        /**
-         * [ADDITIONAL_BAR_MARGIN description]
-         * @type {Number}
-         */
-        ADDITIONAL_BAR_MARGIN: 5,
-
-        /**
-         * Static mapping of supported D3 axis generators. See the
-         * {@link https://github.com/d3/d3-axis/blob/master/README.md#axisTop|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} top - Return a top-oriented axis generator.
-         * @type {function} right - Return a right-oriented axis generator.
-         * @type {function} bottom - Return a bottom-oriented axis generator.
-         * @type {function} left - Return a left-oriented axis generator.
-         */
-        ORIENTATION: {
-            top: d3.axisTop,
-            right: d3.axisRight,
-            bottom: d3.axisBottom,
-            left: d3.axisLeft
-        },
-
-        /**
-         * Static mapping of supported d3 scales. In D3 Scales are functions that
-         * map from an input domain to an output range. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#scales-d3-scale|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - Return a quantitative linear scale.
-         * @type {function} pow - Return a quantitative power scale.
-         * @type {function} sqrt - Return a quantitative power scale with exponent 0.5.
-         * @type {function} log - Return a quantitative logarithmic scale.
-         * @type {function} ident - Return a quantitative identity scale.
-         * @type {function} time - Return a linear scale for time.
-         * @type {function} utc - Return a linear scale for UTC.
-         */
-        SCALE: {
-            linear: d3.scaleLinear,
-            pow: d3.scalePow,
-            sqrt: d3.scaleSqrt,
-            log: d3.scaleLog,
-            ident: d3.scaleIdentity,
-            time: d3.scaleTime,
-            utc: d3.scaleUtc,
-            ordinal: d3.scaleBand
-        },
-
-        /**
-         * Static mapping of supported d3 shape types. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#shapes-d3-shape|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} line - Return a line generator.
-         * @type {function} area - Return an area generator.
-         * @type {function} bar - TODO
-         */
-        TYPE: {
-            line: d3.line,
-            area: d3.area,
-            // TODO: set another type?!
-            bar: d3.line
-        },
-
-        /**
-         * Static mapping of supported d3 curve types. In D3 the curve type
-         * represents the interpolation between points in a continous shape. See
-         * the {@link https://github.com/d3/d3/blob/master/API.md#curves|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - A polyline through specified points.
-         * @type {function} cubicBasisSpline - A cubic basis spline using the
-         *       specified control points.
-         * @type {function} curveMonotoneX - A cubic spline that preserves
-         *       monotonicity in y, assuming monotonicity in x.
-         * @type {function} naturalCubicSpline - A natural cubic spline with the
-         *       second derivative of the spline set to zero at the endpoints.
-         * @type {function} curveStep - A piecewise constant function. The y-value
-         *       changes at the midpoint of each pair of adjacent x-values.
-         * @type {function} curveStepAfter - A piecewise constant function. The
-         *       y-value changes after the x-value.
-         * @type {function} curveStepBefore - A piecewise constant function. The
-         *       y-value changes before the x-value.
-         */
-        CURVE: {
-            linear: d3.curveLinear,
-            cubicBasisSpline: d3.curveBasis,
-            curveMonotoneX: d3.curveMonotoneX,
-            naturalCubicSpline: d3.curveNatural,
-            curveStep: d3.curveStep,
-            curveStepAfter: d3.curveStepAfter,
-            curveStepBefore: d3.curveStepBefore
-        }
-    },
 
     /**
      *
@@ -155,10 +28,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
     axes: {},
     gridAxes: {},
     tooltipCmp: null,
-    zoomInteraction: null,
+    // zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
-    // data: [],
     chartRendered: false,
     ajaxCounter: 0,
     chartConfig: null,
@@ -186,11 +58,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
 
         // We have to cleanup manually.  WHY?!
-        this.scales = {};
-        this.shapes = [];
-        this.axes = {};
-        this.gridAxes = {};
-        this.data = [];
+        me.scales = {};
+        me.shapes = [];
+        me.axes = {};
+        me.gridAxes = {};
+        me.data = [];
 
         me.prepareData();
         me.drawChart();
@@ -199,8 +71,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
     /**
      *
      */
-    prepareData: function() {
+     prepareData: function() {
         var me = this;
+        var staticMe = me.self;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
         var selectedStation = view.getSelectedStation();
@@ -213,7 +86,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var dataObj = {};
             dataObj.key = field;
             dataObj.value = featureProps[field];
-            dataObj.color = colors[idx] || '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+            dataObj.color = colors[idx] || staticMe.getRandomColor();
             me.data.push(dataObj);
         });
     },
@@ -224,7 +97,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
     drawChart: function() {
         var me = this;
 
-        me.createInteractions();
         me.drawSvgContainer();
 
         me.createScales();
@@ -243,17 +115,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
-     * [createInteractions description]
-     * @return {[type]} [description]
-     */
-    createInteractions: function() {
-        var me = this;
-        me.zoomInteraction = me.createZoomInteraction();
-    },
-
-    /**
-     * Draws the root <svg>-element into the <div>-element rendered by the Ext
-     * component.
+     * Draws the root <svg>-element into the <div>-element rendered by the
+     * Ext component.
      */
     drawSvgContainer: function() {
         var me = this;
@@ -281,28 +144,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('width', chartSize[0])
                 .attr('height', chartSize[1])
                 .attr('pointer-events', 'all');
-
-        //Add a "defs" element to the svg
-        var defs = d3.select(viewId + ' svg')
-            .append("defs");
-
-        //Append a clipPath element to the defs element, and a Shape
-        // to define the cliping area
-        defs
-            // .append("clipPath")
-                // .attr('id', 'my-clip-path')
-            .append('rect')
-                .attr('width', chartSize[0]) //Set the width of the clipping area
-                .attr('height', chartSize[1]); // set the height of the clipping area
-
-        //clip path for x axis
-        defs
-            // .append("clipPath")
-                // .attr('id', 'x-clip-path')
-            .append('rect')
-                .attr('width', chartSize[0]) //Set the width of the clipping area
-                .attr('height', chartSize[1] + chartMargin.bottom); // set the height of the clipping area
-
     },
 
     /**
@@ -368,8 +209,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
-     * Sets the domain for each scale in the chart by the use of the extent of
-     * the given input data values.
+     * Sets the domain for each scale in the chart by the use of the extent
+     * of the given input data values.
      */
     setDomainForScales: function() {
         var me = this;
@@ -379,13 +220,18 @@ Ext.define('Koala.view.component.D3BarChartController', {
         // in this data index) for each scale.
         Ext.iterate(me.scales, function(orient) {
             if (orient === 'top' || orient === 'bottom') {
-                me.scales[orient].domain(me.data.map(function(d) {
+                var topBottomDomain = me.data.map(function(d) {
                     return d.key;
-                }));
+                });
+                me.scales[orient].domain(topBottomDomain);
             } else if (orient === 'left' || orient === 'right') {
-                me.scales[orient].domain([0, d3.max(me.data, function(d) {
-                    return d.value + d.value/20;
-                })]);
+                var minOffsetTopFactor = 0.1; // was 0.05 ~ val/20
+                var min = 0;
+                var max = d3.max(me.data, function(d) {
+                    return d.value + d.value * minOffsetTopFactor;
+                });
+                // max = Math.ceil(max);
+                me.scales[orient].domain([min, max]);
             }
         });
     },
@@ -436,7 +282,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
                 labelTransform = 'translate(' + (chartSize[0] / 2) + ', 0)';
                 labelPadding = axisConfig.labelPadding || 35;
-                // clipPath = 'url(#x-clip-path)';
             } else if (orient === 'left' || orient === 'right') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
                 axisTransform = (orient === 'right') ?
@@ -449,8 +294,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             // We draw the left axis in the grid part as it fits our needs for barcharts.
             if (orient === 'top' || orient === 'bottom') {
                 d3.select(viewId + ' svg > g')
-                    // .append('g')
-                        // .attr('clip-path', clipPath)
                     .append('g')
                         .attr('class', cssClass)
                         .attr('transform', axisTransform)
@@ -480,31 +323,15 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var chartSize = me.getChartSize();
         var barWidth;
 
-        // Wrap the shapes in its own <svg> element.
-        // var shapeSvg = d3.select(viewId + ' svg > g')
-        //     .append('svg')
-        //         .attr('top', 0)
-        //         .attr('left', 0)
-        //         .attr('width', chartSize[0])
-        //         .attr('height', chartSize[1]);
-                // .attr('viewBox', '0 0 550 420');
-
         var shapeConfig = view.getShape();
-        // var xField = shapeConfig.xField;
-        // var yField = shapeConfig.yField;
         var xField = 'key';
         var yField = 'value';
-        // var orientX = me.getAxisByField(xField);
-        // var orientY = me.getAxisByField(yField);
         var orientX = 'bottom';
         var orientY = 'left';
-        // var color = shapeConfig.color;
 
         var shapeGroup = d3.select(viewId + ' svg > g')
-        // var shapeGroup = shapeSvg
             .append('g')
                 .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP);
-                // .attr('clip-path','url(#my-clip-path)');
 
         barWidth = (chartSize[0] / me.data.length);
         barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
@@ -530,7 +357,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     .attr('y', function(d) {
                         return me.scales[orientY](d[yField]);
                     })
-                    // .attr('transform', 'translate(' + ((barWidth / 2) * -1) + ', 0)')
                     .attr('width', barWidth)
                     .attr('height', function(d) {
                         return chartSize[1] - me.scales[orientY](d[yField]);
@@ -545,20 +371,24 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
                         var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
                         tooltipCmp.setHtml(html);
-                        // tooltip.setTitle('Title for ' + shapeConfig.name);
                         tooltipCmp.setTarget(this);
                         tooltipCmp.show();
                     });
 
         var bars = d3.selectAll('.k-d3-bar');
 
+        // TODO for DK, get property just as we doi it elsewhere
+        var labelFunc = Koala.util.String.coerce(
+            view.getTargetLayer().metadata.layerConfig.barChartProperties.labelFunc
+        ) || staticMe.identity;
+
         bars.append("text")
-            // TODO add configurable labelfunc e.g. unter nachweisgrenze
-            .text(function(d){
-                return d[yField];
-            })
             .filter(function(d) {
                 return Ext.isDefined(d[yField]);
+            })
+            // TODO add configurable labelfunc e.g. unter nachweisgrenze
+            .text(function(d){
+                return labelFunc(d[yField]);
             })
             .attr("x", function(d) {
                  return me.scales[orientX](d[xField]);
@@ -574,67 +404,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .style("fill", "#000")
             .style("font-weight", "bold")
             .style("unselectable", "on");
-
-        if (barWidth !== undefined) {
-            me.initialPlotTransform = {
-                x: (barWidth / 2),
-                y: 0,
-                k: 1
-            };
-            // me.transformPlot(me.initialPlotTransform, 0);
-        }
-    },
-
-    /**
-     * [createZoomInteraction description]
-     * @return {[type]} [description]
-     */
-    createZoomInteraction: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-
-        return d3.zoom()
-            .extent([0, 0], [0, 0])
-            .scaleExtent([1, 10])
-            .on('zoom', function() {
-                // d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP)
-                //     .attr('transform', d3.event.transform);
-
-                Ext.iterate(me.axes, function(orient) {
-                    var axis;
-                    var axisSelector = 'svg g.' + CSS.AXIS;
-                    var axisGenerator = me.axes[orient];
-                    var scaleGenerator = me.scales[orient];
-
-                    if (orient === 'top' || orient === 'bottom') {
-                        axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
-                        var zoomTransform = d3.event.transform;
-
-                        // axis.call(axisGenerator.scale(
-                        //     d3.event.transform.rescaleX(scaleGenerator)));
-
-                        var bars = d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP + ' g');
-                        bars.attr("transform", "translate(" + zoomTransform.x + ",0)scale(" + zoomTransform.k + ",1)");
-
-                        axis
-                            .attr("transform", "translate(" + zoomTransform.x + "," + (me.getChartSize()[1]) + ")")
-                            .call(axisGenerator.scale(scaleGenerator.range([0, me.getChartSize()[0] * zoomTransform.k])));
-
-                        // axis.call(axisGenerator);
-
-                    } else if (orient === 'left' || orient === 'right') {
-                        axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
-
-                        // axis.call(axisGenerator.scale(
-                        //     d3.event.transform.rescaleY(scaleGenerator)));
-
-                        axis.call(axisGenerator);
-                    }
-                });
-            });
     },
 
     /**
@@ -706,46 +475,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .style('stroke-width', gridConfig.width)
             .style('stroke', gridConfig.color)
             .style('stroke-opacity', gridConfig.opacity);
-    },
-
-    /**
-     * [transformPlot description]
-     * @return {[type]} [description]
-     */
-    transformPlot: function(transform, duration) {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var viewId = '#' + me.getView().getId();
-        var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
-
-        if (duration && duration > 0) {
-            plot
-                .transition()
-                .duration(duration)
-                .call(
-                    me.zoomInteraction.transform,
-                    d3.zoomIdentity
-                        .translate(transform.x, transform.y)
-                        .scale(transform.k)
-                );
-        } else {
-            plot
-                .call(
-                    me.zoomInteraction.transform,
-                    d3.zoomIdentity
-                        .translate(transform.x, transform.y)
-                        .scale(transform.k)
-                );
-        }
-    },
-
-    /**
-     * [resetZoom description]
-     */
-    resetZoom: function() {
-        var me = this;
-        this.transformPlot(me.initialPlotTransform, 500);
     },
 
     /**
@@ -850,6 +579,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var deleteCallback = function() {
             var name = dataObj.key;
+            // TODO i18n
             var title = 'Serie "' + name + '" entfernen?';
             var msg = 'Möchten sie die Serie <b>' + name + '</b>' +
                 ' aus dem Graphen entfernen?';
@@ -901,11 +631,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
     /**
      * Removes the barGroup series specified by the given dataKey.
-     *
      */
     deleteBarGroup: function(dataKey) {
-        var me = this;
-        var barGroup = me.getBarGroupByKey(dataKey);
+        var barGroup = this.getBarGroupByKey(dataKey);
         barGroup.node().remove();
     },
 
@@ -919,7 +647,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var view = me.getView();
         var viewId = '#' + view.getId();
 
-        return d3.select(viewId + ' svg g.' + CSS.SHAPE_GROUP + ' g[id=' + key + ']');
+        return d3.select(viewId + ' svg g.' + CSS.SHAPE_GROUP + ' g[id="' + key + '"]');
     },
 
     /**
