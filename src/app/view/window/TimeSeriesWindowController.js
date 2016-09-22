@@ -260,9 +260,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                         );
                     }
                     // now filter out series already in the chart
-                    var chart = this.up(
-                            'panel[name="chart-composition"]'
-                        ).down('chart');
+                    // var chart = this.up(
+                    //         'panel[name="chart-composition"]'
+                    //     ).down('chart');
                     // var selectedStations = chart.getSelectedStations();
                     var selectedStations = [];
                     var stationIds = [];
