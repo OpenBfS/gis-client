@@ -262,7 +262,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         this.scales = {};
         this.shapes = [];
         this.axes = {};
-        this.gridAxes =  {};
+        this.gridAxes = {};
         this.data = {};
 
         if (view.getShowLoadMask()) {
@@ -271,8 +271,6 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // me.on('chartdatachanged', function() {
         me.on('chartdataprepared', function() {
-            console.log('event fired')
-
             if (me.chartRendered) {
                 me.redrawChart();
             } else {
@@ -404,7 +402,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             view.getSelectedStations().push(selectedStation);
 
-            shapes.push(shapeConfig)
+            shapes.push(shapeConfig);
 
             view.setShapes(shapes);
 
@@ -887,7 +885,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .attr('height', function(d) {
                                 return chartSize[1] - me.scales[orientY](d[yField]);
                             })
-                            .on('mouseover', function(data) {
+                            .on('mouseover', function() {
                                 var tooltipCmp = me.tooltipCmp;
                                 var tooltipTpl = shapeConfig.tooltipTpl;
                                 var selectedStation = me.getView().getSelectedStations()[idx];
@@ -971,7 +969,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .style('fill', color)
                             .style('stroke', darkerColor)
                             .style('stroke-width', 2)
-                            .on('mouseover', function(data) {
+                            .on('mouseover', function() {
                                 var tooltipCmp = me.tooltipCmp;
                                 var tooltipTpl = shapeConfig.tooltipTpl;
                                 var selectedStation = me.getView().getSelectedStations()[idx];
@@ -1231,7 +1229,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      *
      */
     deleteSelectedStation: function(shapeId){
-        var stations = this.getView().getSelectedStations()
+        var stations = this.getView().getSelectedStations();
         var stationToRemove = Ext.Array.findBy(stations, function(station){
             return station.get('id') === shapeId;
         });
@@ -1370,7 +1368,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             typeName: chartConfig.dataFeatureType, //'orig-f-bfs:niederschlag_24h_timeseries',
             outputFormat: 'application/json',
             filter: me.getDateTimeRangeFilter(startString, endString, timeField),
-            sortBy: timeField, //'end_measure'
+            sortBy: timeField //'end_measure'
         };
 
         Ext.apply(requestParams, paramConfig);
@@ -1418,7 +1416,6 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                 // me.fireEvent('chartdatachanged', mockUpData);
                 // Note: id is field locality_code
-                console.log('before me prepare chartdata')
 
                 // me.prepareChartData(mockUpData, selectedStation.get('id'), idx);
 
