@@ -24,27 +24,41 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         'Koala.util.Layer'
     ],
 
+    /**
+     *
+     */
     onBoxReady: function(){
         var viewModel = this.getViewModel();
         var fileName = viewModel.get('file.name');
         viewModel.set('layerName', fileName);
     },
 
+    /**
+     *
+     */
     fileFieldChanged: function(filefield){
-        var me = this;
         var file = filefield.getEl().down('input[type=file]').dom.files[0];
+        var viewModel = this.getViewModel();
+        viewModel.set('file', file);
+        var fileName = viewModel.get('file.name');
+        viewModel.set('layerName', fileName);
+    },
+
+    /**
+     *
+     */
+    readFile: function(){
+        var me = this;
+        var file = this.getViewModel().get('file');
         var reader = new FileReader();
-        reader.addEventListener("load", me.readFile.bind(this, file));
-        // function(this.handleResult_.bind(this, file)){
-        //
-        // });
+        reader.addEventListener("load", me.parseFeatures.bind(this));
         reader.readAsText(file);
     },
 
     /**
     * Copy of https://github.com/openlayers/ol3/blob/v3.18.2/src/ol/interaction/draganddrop.js#L97
     */
-    readFile: function(file, event){
+    parseFeatures: function(event){
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
         var me = this;
         var viewModel = me.getViewModel();
@@ -52,14 +66,13 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var formatConstructors = [
             ol.format.GeoJSON,
             ol.format.KML,
-            ol.format.GML3,
-            ol.format.GML2
+            ol.format.GML3
         ];
 
-        var projection = this.getViewModel().get('projection');
-        if (!projection) {
-            var view = map.getView();
-            projection = view.getProjection();
+        var targetProjection = this.getViewModel().get('targetProjection');
+        if (!targetProjection) {
+            var mapProjection = map.getView().getProjection();
+            this.getViewModel().set('targetProjection', mapProjection);
         }
         var features = [];
         var i, ii;
@@ -67,7 +80,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             var formatConstructor = formatConstructors[i];
             var format = new formatConstructor();
             features = me.tryReadFeatures(format, result, {
-                featureProjection: projection
+                dataProjection: this.getViewModel().get('projection'),
+                featureProjection: this.getViewModel().get('targetProjection')
             });
             if (features && features.length > 0) {
                 break;
@@ -75,8 +89,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         }
 
         viewModel.set('features', features);
-        viewModel.set('file', file);
-        viewModel.set('layerName', file.name);
+        this.createLayer();
     },
 
     /**
@@ -94,6 +107,13 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
      *
      */
     importClicked: function(){
+        this.readFile();
+    },
+
+    /**
+     *
+     */
+    createLayer: function(){
         var viewModel = this.getViewModel();
         var layerUtil = Koala.util.Layer;
         var uuid = viewModel.get('templateUuid');

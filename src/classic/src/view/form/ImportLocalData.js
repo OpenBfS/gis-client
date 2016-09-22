@@ -66,6 +66,20 @@ Ext.define("Koala.view.form.ImportLocalData",{
             }
         }, {
             xtype: 'combobox',
+            name: 'projection',
+            allowBlank: false,
+            bind: {
+                fieldLabel: '{projectionLabel}',
+                value: '{projection}'
+            },
+            // TODO extract to real store
+            store: [
+                ["EPSG:3857", "EPSG:3857"],
+                ["EPSG:4326", "EPSG:4326"],
+                ["EPSG:25832", "EPSG:25832"]
+            ]
+        }, {
+            xtype: 'combobox',
             name: 'template',
             allowBlank: false,
             bind: {

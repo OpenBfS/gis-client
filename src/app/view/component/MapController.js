@@ -100,8 +100,7 @@ Ext.define('Koala.view.component.MapController', {
                 viewModel: {
                     data: {
                         file: event.file,
-                        features: event.features,
-                        projection: event.projection
+                        targetProjection: event.projection
                     }
                 }
             }]

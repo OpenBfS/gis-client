@@ -23,6 +23,7 @@ Ext.define('Koala.view.form.ImportLocalDataModel', {
         file: null,
         features: null,
         projection: null,
+        targetProjection: null,
         layerName: null,
         templateUuid: null,
         // TODO add to locales
@@ -30,6 +31,7 @@ Ext.define('Koala.view.form.ImportLocalDataModel', {
         importButtonText: 'Import',
         layerNameLabel: 'Layername',
         templateLabel: 'Template',
+        projectionLabel: 'Projection',
         fileFieldLabel: 'Datei',
         fileFieldButtonText: 'Durchsuchen'
     }

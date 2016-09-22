@@ -54,6 +54,8 @@ Ext.define("Koala.view.component.Map", {
             hoverPlugin.getToolTipHtml = me.getController().getToolTipHtml;
         }
 
+        // TODO We should may move this to another place.
+        ol.proj.get('EPSG:25832').setExtent([-1878007.03, 3932282.86, 831544.53, 9437501.55]);
         me.setupDragDropFunctionality();
     },
 
@@ -64,8 +66,7 @@ Ext.define("Koala.view.component.Map", {
             formatConstructors: [
                 ol.format.GeoJSON,
                 ol.format.KML,
-                ol.format.GML3,
-                ol.format.GML2
+                ol.format.GML3
             ]
         });
         dragAndDropInteraction.on(
