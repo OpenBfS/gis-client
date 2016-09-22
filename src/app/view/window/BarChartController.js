@@ -29,7 +29,8 @@ Ext.define('Koala.view.window.BarChartController', {
         mapComp.removeAllHoverFeatures();
     },
 
-    createBarChart: function(olLayer, olFeat, chartId) {
+    createBarChart: function(olLayer, olFeat) {
+        /** also receives a chartId as thrid parameter **/
         // var props = olLayer.get('barChartProperties');
         // var categoryCount = props.chartFieldSequence.split(",").length;
         // var chartWidth = 200 + categoryCount * 30;
@@ -46,16 +47,14 @@ Ext.define('Koala.view.window.BarChartController', {
         //     width: chartWidth
         // };
 
-        var me = this;
-        var view = me.getView();
         var chartConfig = olLayer.get('barChartProperties');
         var categoryCount = chartConfig.chartFieldSequence.split(",").length;
         var chartWidth = 200 + categoryCount * 50;
         var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
         var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
-        var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
-            Koala.util.String.replaceTemplateStrings(
-                chartConfig.seriesTitleTpl, olFeat) : "";
+        // var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
+        //     Koala.util.String.replaceTemplateStrings(
+        //         chartConfig.seriesTitleTpl, olFeat) : "";
         var valFromSeq = Koala.util.String.getValueFromSequence;
 
         var chart = {
