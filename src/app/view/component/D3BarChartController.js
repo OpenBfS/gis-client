@@ -189,7 +189,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         this.scales = {};
         this.shapes = [];
         this.axes = {};
-        this.gridAxes =  {};
+        this.gridAxes = {};
         this.data = [];
 
         me.prepareData();
@@ -303,12 +303,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('width', chartSize[0]) //Set the width of the clipping area
                 .attr('height', chartSize[1] + chartMargin.bottom); // set the height of the clipping area
 
-        // register zoom interaction if requested
-        if (view.getZoomEnabled() && me.zoomInteraction) {
-            // var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
-            var plot = d3.select(viewId + ' svg');
-            // plot.call(me.zoomInteraction);
-        }
     },
 
     /**
@@ -347,16 +341,17 @@ Ext.define('Koala.view.component.D3BarChartController', {
         Ext.iterate(axesConfig, function(orient, axisConfig) {
             var axis = staticMe.ORIENTATION[orient];
             var scale = me.scales[orient];
-
+            var chartAxis;
             if(orient === "left"){
-                var chartAxis = axis(scale);
+                chartAxis = axis(scale);
             } else {
-                var chartAxis = axis(scale)
-                .ticks(axisConfig.ticks)
-                .tickValues(axisConfig.values)
-                .tickFormat(axisConfig.format ? d3.format(axisConfig.format) : undefined)
-                .tickSize(axisConfig.tickSize || 6)
-                .tickPadding(axisConfig.tickPadding || 3);
+                var tickFormat = axisConfig.format ? d3.format(axisConfig.format) : undefined;
+                chartAxis = axis(scale)
+                    .ticks(axisConfig.ticks)
+                    .tickValues(axisConfig.values)
+                    .tickFormat(tickFormat)
+                    .tickSize(axisConfig.tickSize || 6)
+                    .tickPadding(axisConfig.tickPadding || 3);
             }
 
             me.axes[orient] = chartAxis;
@@ -378,7 +373,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     setDomainForScales: function() {
         var me = this;
-        var view = me.getView();
 
         // iterate over all scales/axis orientations and all shapes to find the
         // corresponding data index for each scale. Set the extent (max/min range
@@ -434,7 +428,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var labelTransform;
             var labelPadding;
             var cssClass;
-            var clipPath;
 
             if (orient === 'top' || orient === 'bottom') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
@@ -602,7 +595,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
-        var gridConfig = view.getGrid();
 
         return d3.zoom()
             .extent([0, 0], [0, 0])
@@ -610,8 +602,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .on('zoom', function() {
                 // d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP)
                 //     .attr('transform', d3.event.transform);
-
-                var zoomTransform = d3.event.transform;
 
                 Ext.iterate(me.axes, function(orient) {
                     var axis;
@@ -705,7 +695,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var CSS = staticMe.CSS_CLASS;
         var viewId = '#' + view.getId();
 
-        cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
+        var cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
 
         d3.select(viewId + ' svg > g')
             .append('g')
