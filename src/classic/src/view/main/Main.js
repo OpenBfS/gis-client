@@ -86,10 +86,10 @@ Ext.define('Koala.view.main.Main', {
         listeners: {
             afterrender: function(){
 
-
+                // TODO remove!!!!
                 window.setTimeout(function(){
                     Koala.util.Layer.addLayerByUuid('45dd5d65-630a-42d9-9f86-6c718dab0412');
-                }, 1500)
+                }, 1500);
 
                 // if(!location.hash){
                 //     window.setTimeout(function(){
