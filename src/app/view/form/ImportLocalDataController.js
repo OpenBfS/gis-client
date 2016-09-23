@@ -58,6 +58,11 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         viewModel.set('file', file);
         var fileName = viewModel.get('file.name');
         viewModel.set('layerName', fileName);
+        var couldBeGml = fileName.endsWith('gml') || fileName.endsWith('xml');
+
+        if(!couldBeGml){
+            viewModel.set('projection', 'EPSG:4326');
+        }
     },
 
     /**

@@ -35,6 +35,14 @@ Ext.define('Koala.view.form.ImportLocalDataModel', {
         projectionLabel: 'Projection',
         fileFieldLabel: 'Datei',
         fileFieldButtonText: 'Durchsuchen'
+    },
+
+    formulas: {
+        couldBeGml: function(get){
+            var fileName = get('file.name');
+            var couldBeGml = fileName.endsWith('gml') || fileName.endsWith('xml');
+            return couldBeGml;
+        }
     }
 
 });

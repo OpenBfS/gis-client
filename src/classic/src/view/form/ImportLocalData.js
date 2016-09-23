@@ -73,7 +73,8 @@ Ext.define("Koala.view.form.ImportLocalData",{
             allowBlank: false,
             bind: {
                 fieldLabel: '{projectionLabel}',
-                value: '{projection}'
+                value: '{projection}',
+                disabled: '{!couldBeGml}'
             },
             valueField: 'code',
             displayField: 'label',
