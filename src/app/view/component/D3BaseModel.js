@@ -14,10 +14,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.component.D3ChartModel
+ * @class Koala.view.component.D3BaseModel
  */
-Ext.define('Koala.view.component.D3BarChartModel', {
-    extend: 'Koala.view.component.D3BaseModel',
-    alias: 'viewmodel.component-d3barchart',
-    data: {}
+Ext.define('Koala.view.component.D3BaseModel', {
+    extend: 'Ext.app.ViewModel',
+    alias: 'viewmodel.component-d3base',
+    data: {
+        confirmDeleteTitleTpl: '',
+        confirmDeleteMsgTpl: ''
+    }
 });

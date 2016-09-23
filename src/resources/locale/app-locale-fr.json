@@ -49,6 +49,14 @@
             }
         }
     },
+    "Koala.view.component.D3Chart": {
+        "config": {
+            "data": {
+                "confirmDeleteTitleTpl": "fr:Serie {0} entfernen?",
+                "confirmDeleteMsgTpl": "fr:Möchten sie die Serie <b>{0}</b> aus dem Graphen entfernen?"
+            }
+        }
+    },
     "Koala.view.chart.Bar": {
         "config": {
             "data": {

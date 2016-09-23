@@ -395,5 +395,99 @@ Ext.define('Koala.view.component.D3BaseController', {
             .attr('viewBox', "0 0 " + legWidth + " " + legHeight)
             .attr('width', legWidth)
             .attr('height', legHeight);
+    },
+
+    /**
+     * Generates a callback that can be used for the click event on the delete
+     * icon. Inside this callback all relevant parts of the series/bar are
+     * removed by eventually calling into the concrete #deleteEverything
+     * and #redrawLegend implementations of child classes
+     *
+     * @param {Object} shape The current shape object to handle.
+     * @param {[Number]} idx The index of the shape object in the array of all
+     *     shapes.
+     * @return {Function} The callback to be used as click handler on the delete
+     *     icon.
+     */
+    generateDeleteCallback: function(dataObj, idx) {
+        var me = this;
+        var deleteCallback = function() {
+            var name;
+            // decide if we want to generate a deletion handler for bars or series:
+            if (Ext.isDefined(idx) && 'config' in dataObj && 'name' in dataObj.config) {
+                // a timeseries deletion handler
+                name = dataObj.config.name;
+            } else if (!Ext.isDefined(idx) && 'key' in dataObj) {
+                // a bar deletion handler
+                name = dataObj.key;
+            }
+            // get these here, not in the closure, to have access to the current
+            // language
+            var viewModel = me.getView().getViewModel();
+            var title = viewModel.get('confirmDeleteTitleTpl');
+            var msg = viewModel.get('confirmDeleteMsgTpl');
+            title = Ext.String.format(title, name);
+            msg = Ext.String.format(msg, name);
+
+            var confirmCallback = function(buttonId) {
+                if (buttonId === 'ok' || buttonId === 'yes') {
+                    me.deleteEverything(idx, dataObj, this.parentNode);
+                    me.redrawLegend();
+                }
+            };
+            Ext.Msg.confirm(title, msg, confirmCallback, this);
+        };
+        return deleteCallback;
+    },
+
+    /**
+     * A placeholder method to be implemented by subclasses.
+     *
+     * @param {Number} idx The index, only relevant for series, undefined for
+     *     bars.
+     * @param {Object} dataObj The data object, either a 'bar' or a 'series'.
+     * @param {Element} legendElement The legend element which is now obsolete.
+     */
+    deleteEverything: function(idx, dataObj, legendElement) {
+        Ext.log.info('deleteEverything received', idx, dataObj, legendElement);
+        Ext.raise('deleteEverything must be overridden by child controllers');
+    },
+
+
+    /**
+     * Deletes the legendentry passed from the DOM.
+     *
+     * @param {DOMElement} legendEntry The DOM element to remove.
+     */
+    deleteLegendEntry: function (legendEntry) {
+        var parent = legendEntry && legendEntry.parentNode;
+        if (parent) {
+            parent.removeChild(legendEntry);
+        }
+    },
+
+    /**
+     * Toggles an SVG g element's visibility and the appropriate legend entry
+     * the g ususally grouops a bar and its label or a series.
+     */
+    toggleGroupVisibility: function(group, legendElement) {
+        var staticMe = Koala.view.component.D3BaseController;
+        var CSS = staticMe.CSS_CLASS;
+        var SHAPE_GROUP = CSS.SHAPE_GROUP;
+        var SUFFIX_HIDDEN = CSS.SUFFIX_HIDDEN;
+        var hideClsName = SHAPE_GROUP + SUFFIX_HIDDEN;
+        var hideClsNameLegend = SHAPE_GROUP + CSS.SUFFIX_LEGEND + SUFFIX_HIDDEN;
+        if (group) {
+            var isHidden = group.classed(hideClsName);
+            group.classed(hideClsName, !isHidden);
+            legendElement.classed(hideClsNameLegend, !isHidden);
+        }
+    },
+
+    /**
+     * A placeholder method to be implemented by subclasses.
+     */
+    redrawLegend: function() {
+        Ext.raise('redrawLegend must be overridden by child controllers');
     }
 });

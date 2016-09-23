@@ -838,7 +838,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         return;
                     }
                     var shapeGroup = me.shapeGroupByIndex(idx);
-                    me.toggleShapeGroupVisibility(
+                    me.toggleGroupVisibility(
                         shapeGroup, // the real group, containig shapepath & points
                         d3.select(this) // legend entry
                     );
@@ -906,43 +906,15 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * Generates a callback that can be used for the click event on the delete
-     * icon. Inside this callback all relevant parts of the series are removed.
-     *
-     * @param {Object} shape The current shape object to handle.
-     * @param {[type]} idx The index of the shape object in the array of all
-     *     shapes.
-     * @return {Function} The callback to be used as click handler on the delete
-     *     icon.
-     */
-    generateDeleteCallback: function(shape, idx) {
-        var me = this;
-        var deleteCallback = function() {
-            var name = shape.config.name;
-            var title = 'Serie "' + name + '" entfernen?';
-            var msg = 'Möchten sie die Serie <b>' + name + '</b>' +
-                ' aus dem Graphen entfernen?';
-            var confirmCallback = function(buttonId) {
-                if (buttonId === 'ok' || buttonId === 'yes') {
-                    me.deleteEverything(idx, shape, this.parentNode);
-                    me.redrawLegend();
-                }
-            };
-            Ext.Msg.confirm(title, msg, confirmCallback, this);
-        };
-        return deleteCallback;
-    },
-
-    /**
      *
      */
-    deleteEverything: function(idx, shape, legendElement){
+    deleteEverything: function(idx, dataObj, legendElement){
         // ShapeConfig
-        this.deleteShapeConfig(shape.config.id);
+        this.deleteShapeConfig(dataObj.config.id);
         // Data
-        this.deleteData(shape.config.id);
+        this.deleteData(dataObj.config.id);
         // selectedStation
-        this.deleteSelectedStation(shape.config.id);
+        this.deleteSelectedStation(dataObj.config.id);
         // Shape
         this.deleteShapeSeriesByIdx(idx);
         // Legend
@@ -979,18 +951,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * Deletes the legendentry passed from the DOM.
-     *
-     * @param  {DOMElement} legendEntry The DOM element to remove.
-     */
-    deleteLegendEntry: function (legendEntry) {
-        var parent = legendEntry && legendEntry.parentNode;
-        if (parent) {
-            parent.removeChild(legendEntry);
-        }
-    },
-
-    /**
      * Removes the shape series specified by the given `idx`. Will remove the
      * SVG node and the entry in our internal dataset.
      *
@@ -1018,21 +978,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             '[idx="' + idxVal + '"]'     // only capture the right index
         ].join('');
         return d3.select(selector);
-    },
-
-    /**
-     *
-     */
-    toggleShapeGroupVisibility: function(shapeGroup, legendElement) {
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var hideClsName = CSS.SHAPE_GROUP + CSS.SUFFIX_HIDDEN;
-        var hideClsNameLegend = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND + CSS.SUFFIX_HIDDEN;
-        if (shapeGroup) {
-            var isHidden = shapeGroup.classed(hideClsName);
-            shapeGroup.classed(hideClsName, !isHidden);
-            legendElement.classed(hideClsNameLegend, !isHidden);
-        }
     },
 
     /**

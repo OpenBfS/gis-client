@@ -14,10 +14,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.component.D3ChartModel
+ * @class Koala.view.component.D3Base
  */
-Ext.define('Koala.view.component.D3BarChartModel', {
-    extend: 'Koala.view.component.D3BaseModel',
-    alias: 'viewmodel.component-d3barchart',
-    data: {}
+Ext.define('Koala.view.component.D3Base',{
+    extend: 'Ext.Component',
+    xtype: 'd3-base',
+
+    listeners: {
+        boxready: 'onShow'
+    }
 });

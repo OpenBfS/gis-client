@@ -17,10 +17,7 @@
  * @class Koala.view.component.D3ChartModel
  */
 Ext.define('Koala.view.component.D3ChartModel', {
-    extend: 'Ext.app.ViewModel',
+    extend: 'Koala.view.component.D3BaseModel',
     alias: 'viewmodel.component-d3chart',
-    data: {
-        name: 'Koala'
-    }
-
+    data: {}
 });

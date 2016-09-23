@@ -478,7 +478,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                         return;
                     }
                     var barGroup = me.getBarGroupByKey(dataObj['key']);
-                    me.toggleBarGroupVisibility(
+                    me.toggleGroupVisibility(
                         barGroup, // the real group, containig shapepath & points
                         d3.select(this) // legend entry
                     );
@@ -520,39 +520,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
-     * Generates a callback that can be used for the click event on the delete
-     * icon. Inside this callback all relevant parts of the series are removed.
-     *
-     * @param {Object} shape The current shape object to handle.
-     * @param {[type]} idx The index of the shape object in the array of all
-     *     shapes.
-     * @return {Function} The callback to be used as click handler on the delete
-     *     icon.
-     */
-    generateDeleteCallback: function(dataObj) {
-        var me = this;
-        var viewModel = me.getView().getViewModel();
-        var deleteCallback = function() {
-            var name = dataObj.key;
-            var title = viewModel.get('confirmDeleteTitleTpl');
-            var msg = viewModel.get('confirmDeleteMsgTpl');
-            title = Ext.String.format(title, name);
-            msg = Ext.String.format(msg, name);
-            var confirmCallback = function(buttonId) {
-                if (buttonId === 'ok' || buttonId === 'yes') {
-                    me.deleteEverything(dataObj, this.parentNode);
-                    me.redrawLegend();
-                }
-            };
-            Ext.Msg.confirm(title, msg, confirmCallback, this);
-        };
-        return deleteCallback;
-    },
-
-    /**
      *
      */
-    deleteEverything: function(dataObj, legendElement) {
+    deleteEverything: function(idx, dataObj, legendElement) {
         // Data
         this.deleteData(dataObj.key);
         // Shape
@@ -570,18 +540,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             return dataObj.key === dataKey;
         });
         Ext.Array.remove(me.data, dataObjToDelete);
-    },
-
-    /**
-     * Deletes the legendentry passed from the DOM.
-     *
-     * @param  {DOMElement} legendEntry The DOM element to remove.
-     */
-    deleteLegendEntry: function (legendEntry) {
-        var parent = legendEntry && legendEntry.parentNode;
-        if (parent) {
-            parent.removeChild(legendEntry);
-        }
     },
 
     /**
@@ -604,23 +562,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var selector = viewId + ' svg g.' + CSS.SHAPE_GROUP +
             ' g[id="' + key + '"]';
         return d3.select(selector);
-    },
-
-    /**
-     *
-     */
-    toggleBarGroupVisibility: function(barGroup, legendElement) {
-        var staticMe = Koala.view.component.D3BarChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var SHAPE_GROUP = CSS.SHAPE_GROUP;
-        var SUFFIX_HIDDEN = CSS.SUFFIX_HIDDEN;
-        var hideClsName = SHAPE_GROUP + SUFFIX_HIDDEN;
-        var hideClsNameLegend = SHAPE_GROUP + CSS.SUFFIX_LEGEND + SUFFIX_HIDDEN;
-        if (barGroup) {
-            var isHidden = barGroup.classed(hideClsName);
-            barGroup.classed(hideClsName, !isHidden);
-            legendElement.classed(hideClsNameLegend, !isHidden);
-        }
     }
 
 });

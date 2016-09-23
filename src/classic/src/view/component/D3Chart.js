@@ -17,7 +17,7 @@
  * @class Koala.view.component.D3Chart
  */
 Ext.define('Koala.view.component.D3Chart',{
-    extend: 'Ext.Component',
+    extend: 'Koala.view.component.D3Base',
     xtype: 'd3-chart',
 
     requires: [
@@ -28,10 +28,6 @@ Ext.define('Koala.view.component.D3Chart',{
     controller: 'component-d3chart',
     viewModel: {
         type: 'component-d3chart'
-    },
-
-    listeners: {
-        boxready: 'onShow'
     },
 
     width: 800,
