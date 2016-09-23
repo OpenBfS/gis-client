@@ -335,6 +335,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         barWidth = (chartSize[0] / me.data.length);
         barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
+
         shapeGroup
             .selectAll('rect')
                 .data(me.data)
@@ -375,9 +376,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                         tooltipCmp.show();
                     });
 
-        var bars = d3.selectAll('.k-d3-bar');
+        var bars = d3.selectAll(viewId + ' .k-d3-bar');
 
-        // TODO for DK, get property just as we doi it elsewhere
+        // TODO for DK, get property just as we do it elsewhere
         var labelFunc = Koala.util.String.coerce(
             view.getTargetLayer().metadata.layerConfig.barChartProperties.labelFunc
         ) || staticMe.identity;
