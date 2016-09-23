@@ -55,6 +55,20 @@
             }
         }
     },
+    "Koala.view.form.ImportLocalDataModel": {
+        "config": {
+            "data": {
+                "fieldSetTitle": "en:Import von",
+                "cancelButtonText": "en:Abbrechen",
+                "importButtonText": "en:Import",
+                "layerNameLabel": "en:Layername",
+                "templateLabel": "en:Template",
+                "projectionLabel": "en:Projektion",
+                "fileFieldLabel": "en:Datei",
+                "fileFieldButtonText": "en:Durchsuchen"
+            }
+        }
+    },
     "Koala.view.form.field.LanguageCombo": {
         "config": {
             "data": {
@@ -119,7 +133,10 @@
                 "basigx-button-zoomin-tooltip": "en:Hineinzoomen",
                 "basigx-button-zoomout-tooltip": "en:Herauszoomen",
                 "basigx-button-zoomtoextent-tooltip": "en:Auf Startkartenansicht rezentrieren",
-                "basigx-button-togglelegend-tooltip": "en:Legende ein-/ausklappen"
+                "basigx-button-togglelegend-tooltip": "en:Legende ein-/ausklappen",
+                "importLocalDataButtonText": "en:Import",
+                "importLocalDataButtonTooltip": "en:Lokale Dateien importieren",
+                "importLocalDataWindowText": "en:Import"
             }
         }
     },

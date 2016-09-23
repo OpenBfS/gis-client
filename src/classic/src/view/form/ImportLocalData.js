@@ -23,7 +23,10 @@ Ext.define("Koala.view.form.ImportLocalData",{
 
     requires: [
         "Koala.view.form.ImportLocalDataController",
-        "Koala.view.form.ImportLocalDataModel"
+        "Koala.view.form.ImportLocalDataModel",
+
+        "Koala.store.Projections",
+        "Koala.store.VectorTemplates"
     ],
 
     controller: "k-form-importlocaldata",
@@ -43,7 +46,7 @@ Ext.define("Koala.view.form.ImportLocalData",{
         xtype: 'fieldset',
         layout: 'form',
         bind: {
-            title: 'Upload of {file.name}'
+            title: '{fieldSetTitle} {file.name}'
         },
         items: [{
             xtype: 'filefield',
@@ -72,12 +75,16 @@ Ext.define("Koala.view.form.ImportLocalData",{
                 fieldLabel: '{projectionLabel}',
                 value: '{projection}'
             },
-            // TODO extract to real store
-            store: [
-                ["EPSG:3857", "EPSG:3857"],
-                ["EPSG:4326", "EPSG:4326"],
-                ["EPSG:25832", "EPSG:25832"]
-            ]
+            valueField: 'code',
+            displayField: 'label',
+            queryMode: 'local',
+            store: {
+                // TODO This has to be replaced when we will have multiple maps
+                type: 'k-projections'
+            },
+            listeners: {
+                beforerender: 'beforeProjectionComboRendered'
+            }
         }, {
             xtype: 'combobox',
             name: 'template',
@@ -86,12 +93,17 @@ Ext.define("Koala.view.form.ImportLocalData",{
                 fieldLabel: '{templateLabel}',
                 value: '{templateUuid}'
             },
-            // TODO extract to real store
-            store: [
-                ["241ae25f-c180-475b-9734-4947f75137e1", "Local Vector Data Template (drinkwater)"],
-                ["5fdc824d-dc67-46cc-a87e-1c99f13557cf", "Local Vector Data Template (buildings)"],
-                ["0613135b-8a4a-496d-b4a2-bf67831c620d", "Local Vector Data Template (bundeslaender)"]
-            ]
+            valueField: 'uuid',
+            displayField: 'label',
+            queryMode: 'local',
+            store: {
+                autoLoad: true,
+                // TODO This has to be replaced when we will have multiple maps
+                type: 'k-vectortemplates'
+            },
+            listeners: {
+                beforerender: 'beforeVectorTemplateComboRendered'
+            }
         }]
     }],
 

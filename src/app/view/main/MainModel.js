@@ -29,7 +29,6 @@ Ext.define('Koala.view.main.MainModel', {
         buttonGroupTopTitle: '',
         printButtonText: '',
         printButtonTooltip: '',
-        // TODO i18n
         importLocalDataButtonText: 'Import',
         importLocalDataButtonTooltip: 'Import local data',
         importLocalDataWindowText: 'Import'

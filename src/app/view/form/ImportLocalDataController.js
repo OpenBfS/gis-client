@@ -36,6 +36,22 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
      *
      */
+    beforeProjectionComboRendered: function(combo){
+        var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
+        combo.getStore().setData(appContext.data.merge.vectorProjections);
+    },
+
+    /**
+     *
+     */
+    beforeVectorTemplateComboRendered: function(combo){
+        var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
+        combo.getStore().setData(appContext.data.merge.vectorTemplates);
+    },
+
+    /**
+     *
+     */
     fileFieldChanged: function(filefield){
         var file = filefield.getEl().down('input[type=file]').dom.files[0];
         var viewModel = this.getViewModel();

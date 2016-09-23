@@ -14,27 +14,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.ImportLocalDataModel
+ * @class Koala.store.Projections
  */
-Ext.define('Koala.view.form.ImportLocalDataModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-form-importlocaldata',
-    data: {
-        file: null,
-        features: null,
-        projection: null,
-        targetProjection: null,
-        layerName: null,
-        templateUuid: null,
-        // TODO add to locales
-        fieldSetTitle: 'Upload of',
-        cancelButtonText: 'Cancel',
-        importButtonText: 'Import',
-        layerNameLabel: 'Layername',
-        templateLabel: 'Template',
-        projectionLabel: 'Projection',
-        fileFieldLabel: 'Datei',
-        fileFieldButtonText: 'Durchsuchen'
-    }
+Ext.define('Koala.store.Projections', {
+    extend: 'Ext.data.Store',
 
+    alias: 'store.k-projections',
+
+    pageSize: 0,
+
+    useDefaultXhrHeader: false,
+
+    fields: [{
+         name: 'code',
+         type: 'string'
+    },{
+        name: 'label',
+        type: 'string'
+    }],
+
+    proxy: {
+        type: 'memory',
+        reader: {
+            type: 'json'
+        }
+    }
 });

@@ -213,7 +213,9 @@ Ext.define('Koala.view.main.Main', {
                             if(!win){
                                 Ext.create('Ext.window.Window', {
                                     name: 'add-wms-window',
-                                    title: 'Lokale daten importieren.',
+                                    bind: {
+                                        title: '{importLocalDataButtonText}',
+                                    },
                                     layout: 'fit',
                                     items: [{
                                         xtype: 'k-form-importLocalData'
