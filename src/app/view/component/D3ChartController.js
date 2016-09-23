@@ -35,21 +35,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     ajaxCounter: 0,
 
     /**
-     * [getChartSize description]
-     * @return {[type]} [description]
-     */
-    getChartSize: function() {
-        var me = this;
-        var view = me.getView();
-        var chartMargin = view.getChartMargin();
-
-        return [
-            view.getWidth() - chartMargin.left - chartMargin.right,
-            view.getHeight() - chartMargin.top - chartMargin.bottom
-        ];
-    },
-
-    /**
      *
      */
     onShow: function() {
@@ -145,6 +130,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         me.createInteractions();
         me.drawSvgContainer();
+        me.drawLegendContainer();
 
         me.createScales();
         me.createAxes();
@@ -232,14 +218,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         });
     },
 
-    /**
-     * Creates a simple ExtJS tooltip, see the
-     * {@link http://docs.sencha.com/extjs/6.0.0/classic/Ext.tip.ToolTip.html|ExtJS API documentation}
-     * for further details and config options.
-     */
-    createTooltip: function() {
-        this.tooltipCmp = Ext.create('Ext.tip.ToolTip');
-    },
 
     /**
      * Draws the root <svg>-element into the <div>-element rendered by the Ext
@@ -251,25 +229,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
-        var chartMargin = view.getChartMargin();
-        var chartSize = me.getChartSize();
-        var translate = 'translate(' + chartMargin.left + ',' +
-                chartMargin.top + ')';
 
-        // Get the container view by its ID and append the SVG including an
-        // additional group element to it.
-        d3.select(viewId)
-            .append('svg')
-                .attr('width', view.getWidth())
-                .attr('height', view.getHeight())
-            .append('g')
-                .attr('transform', translate)
-            .append('rect')
-                .style('fill', view.getBackgroundColor())
-                .attr('class', CSS.PLOT_BACKGROUND)
-                .attr('width', chartSize[0])
-                .attr('height', chartSize[1])
-                .attr('pointer-events', 'all');
+        me.callParent();
 
         // register zoom interaction if requested
         if (view.getZoomEnabled()) {
@@ -821,9 +782,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      * [resetZoom description]
      */
     resetZoom: function() {
-        var me = this;
-
-        this.transformPlot(me.initialPlotTransform, 500);
+        this.transformPlot(this.initialPlotTransform, 500);
     },
 
     /**
@@ -849,21 +808,24 @@ Ext.define('Koala.view.component.D3ChartController', {
      *
      */
     drawLegend: function() {
-        Ext.log.warn('TODO: Since the internal datastructure is currently not' +
-            ' updated, the legend will possibly not reflect what you expect.');
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
+        var makeTranslate = staticMe.makeTranslate;
         var CSS = staticMe.CSS_CLASS;
+        var SVG_DEFS = staticMe.SVG_DEFS;
         var view = me.getView();
-        var viewId = '#' + view.getId();
         var legendConfig = view.getLegend();
         var legendMargin = legendConfig.legendMargin;
-        var chartSize = me.getChartSize();
 
-        var legend = d3.select(viewId + ' svg > g')
+        var legendEntryHeight = me.legendEntryTargetHeight;
+
+        var legendParent = me.legendSvg;
+        var legend = legendParent
             .append('g')
                 .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
-                .attr('transform', 'translate(' + (chartSize[0] + legendMargin.left) + ',' + (legendMargin.bottom) + ')');
+                .attr('transform', makeTranslate(legendMargin.left || 10, 0));
+
+        me.updateLegendContainerDimensions();
 
         Ext.each(me.shapes, function(shape, idx) {
             var toggleVisibilityFunc = (function() {
@@ -883,30 +845,24 @@ Ext.define('Koala.view.component.D3ChartController', {
                 };
             }());
 
+            var curTranslateY = (idx + 1) * legendEntryHeight;
             var legendEntry = legend
                 .append('g')
-                .on('click', toggleVisibilityFunc)
-                .attr('transform', 'translate(0, ' + (idx * 30) + ')')
-                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_LEGEND_GROUP + idx);
+                    .on('click', toggleVisibilityFunc)
+                    .attr('transform', staticMe.makeTranslate(0, curTranslateY))
+                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + idx);
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
-                .attr('d', 'M-3 -14 h 25 v 16 h -25 Z')
+                .attr('d', SVG_DEFS.LEGEND_ICON_BACKGROUND)
                 .style('stroke', 'none')
                 // invisible, but still triggering events
                 .style('fill', 'rgba(0,0,0,0)');
 
             legendEntry.append('path')
                 .attr('d', function() {
-                    switch (shape.config.type) {
-                        // TODO make statics
-                        case 'line':
-                            return 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6';
-                        case 'area':
-                            return 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6 M20 -6 v 6 h -20 v -6 Z';
-                        case 'bar':
-                            return 'M0 -10 h 6 v 12 h -6 Z M7 -6 h 6 v 8 h -6 Z M14 -10 h 6 v 12 h -6 Z';
-                    }
+                    var typeUppercase = shape.config.type.toUpperCase();
+                    return SVG_DEFS['LEGEND_ICON_' + typeUppercase];
                 })
                 .style('stroke', function() {
                     switch (shape.config.type) {

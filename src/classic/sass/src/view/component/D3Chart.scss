@@ -74,7 +74,7 @@ svg .k-d3-grid path {
 
 .k-d3-scrollable-legend-container {
     position: absolute;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     top: 0;
     /* other properties set dynamically */

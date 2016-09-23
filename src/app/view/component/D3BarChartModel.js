@@ -20,7 +20,7 @@ Ext.define('Koala.view.component.D3BarChartModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.component-d3barchart',
     data: {
-        name: 'Koala'
+        confirmDeleteTitleTpl: '',
+        confirmDeleteMsgTpl: ''
     }
-
 });

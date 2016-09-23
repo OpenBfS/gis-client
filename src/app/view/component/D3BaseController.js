@@ -23,8 +23,9 @@ Ext.define('Koala.view.component.D3BaseController', {
     inheritableStatics: {
         SVG_DEFS: {
             LEGEND_ICON_BACKGROUND: 'M-3 -14 h 25 v 16 h -25 Z',
-
-            LEGEND_ICON_BAR: 'M0 -10 h 6 v 12 h -6 Z M7 -6 h 6 v 8 h -6 Z M14 -10 h 6 v 12 h -6 Z'
+            LEGEND_ICON_AREA: 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6 M20 -6 v 6 h -20 v -6 Z',
+            LEGEND_ICON_BAR: 'M0 -10 h 6 v 12 h -6 Z M7 -6 h 6 v 8 h -6 Z M14 -10 h 6 v 12 h -6 Z',
+            LEGEND_ICON_LINE: 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6'
         },
         /**
          * An object containing CSS classes and parts (suffixes, prefixes) to
@@ -233,21 +234,166 @@ Ext.define('Koala.view.component.D3BaseController', {
         /**
          * Returns a random color in hexadecimal form '#063EAA'.
          *
-         * @retun {String} color The random color, e.g. '#6580C6' or '#AC3A97'.
+         * @return {String} color The random color, e.g. '#6580C6' or '#AC3A97'.
          */
-        getRandomColor: function() {
-            // An alternative approach:
-            // return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+        getRandomColor: (function(){
             var letters = '0123456789ABCDEF'.split('');
-            var color = '#';
-            for (var i = 0; i < 6; i++ ) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        },
+            return function() {
+                // An alternative approach:
+                // return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+                var color = '#';
+                for (var i = 0; i < 6; i++ ) {
+                    var idx = Math.floor(Math.random() * 16);
+                    color += letters[idx];
+                }
+                return color;
+            };
+        }()),
 
+        /**
+         * Used as the fallback for labeling when no explicity function is
+         * provided.
+         *
+         * @param {mixed} val The value for labeling.
+         * @return {mixed} The exact same value that was passed in.
+         */
         identity: function(val) {
             return val;
         }
+    },
+
+    /**
+     * The SVG element for the legend as returned by d3.
+     *
+     * @type {Selection} https://developer.mozilla.org/docs/Web/API/Selection
+     */
+    legendSvg: null,
+
+    /**
+     * The width in pixels of the legend.
+     *
+     * @type {Number}
+     */
+    legendTargetWidth: 200,
+
+    /**
+     * The height of one legend entry in pixels.
+     *
+     * @type {Number}
+     */
+    legendEntryTargetHeight: 30,
+
+    /**
+     * Returns the chart size as array of width at index 0 & height at index 1.
+     * @return {Array<Number>} An array of width (index 0) and height (index 1).
+     */
+    getChartSize: function() {
+        var me = this;
+        var view = me.getView();
+        var chartMargin = view.getChartMargin();
+
+        return [
+            view.getWidth() - chartMargin.left - chartMargin.right,
+            view.getHeight() - chartMargin.top - chartMargin.bottom
+        ];
+    },
+
+    /**
+     * Creates a simple ExtJS tooltip, see the
+     * {@link http://docs.sencha.com/extjs/6.0.0/classic/Ext.tip.ToolTip.html|ExtJS API documentation}
+     * for further details and config options.
+     */
+    createTooltip: function() {
+        this.tooltipCmp = Ext.create('Ext.tip.ToolTip');
+    },
+
+    /**
+     * Draws the root <svg>-element into the <div>-element rendered by the
+     * Ext component.
+     */
+    drawSvgContainer: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3BaseController;
+        var CSS = staticMe.CSS_CLASS;
+        var makeTranslate = staticMe.makeTranslate;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var chartMargin = view.getChartMargin();
+        var chartSize = me.getChartSize();
+        var translate = makeTranslate(chartMargin.left, chartMargin.top);
+
+        // Get the container view by its ID and append the SVG including an
+        // additional group element to it.
+        d3.select(viewId)
+            .append('svg')
+                .attr('viewBox', "0 0 " + view.getWidth() + " " + view.getHeight())
+                .attr('width', view.getWidth())
+                .attr('height', view.getHeight())
+            .append('g')
+                .attr('transform', translate)
+            .append('rect')
+                .style('fill', view.getBackgroundColor())
+                .attr('class', CSS.PLOT_BACKGROUND)
+                .attr('width', chartSize[0])
+                .attr('height', chartSize[1])
+                .attr('pointer-events', 'all');
+    },
+
+    drawLegendContainer: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3BaseController;
+        var CSS = staticMe.CSS_CLASS;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var viewWidth = view.getWidth();
+        var viewHeight = view.getHeight();
+
+        var legWidth = me.legendTargetWidth;
+        var legLeft = viewWidth - legWidth;
+        var legHeight = viewHeight;
+
+        d3.select(viewId)
+            .append('div')
+                .attr('class', CSS.LEGEND_CONTAINER)
+                .style('width', legWidth + 'px')
+                .style('height', legHeight + 'px')
+                .style('left', legLeft + "px" )
+            // values below will be updated in #updateLegendContainerDimensions
+            .append('svg')
+                .attr('viewBox', '0 0 ' + legWidth + ' 100')
+                .attr('width', legWidth)
+                .attr('height', '100');
+        var legSvg = d3.select(viewId + ' .' + CSS.LEGEND_CONTAINER + ' svg');
+
+        me.legendSvg = legSvg;
+    },
+
+    /**
+     * The legend entries for all elements is in its own svg, which itself lives
+     * in a scrollable div. For the SVG to be actually scrollable, we have to
+     * give it the real dimensions of all the legend element it contains. This
+     * way the svg is (sometimes) bigger in height than the containg div, and
+     * the browser shows the scrollbar.
+     */
+    updateLegendContainerDimensions: function() {
+        var me = this;
+        var legendParent = me.legendSvg;
+        var elems = 'data' in me ? me.data : me.shapes;
+        var numLegends;
+        if (Ext.isArray(elems)) { // for barcharts
+            numLegends = elems.length;
+        } else if(Ext.isObject(elems)) { // for timeseries
+            numLegends = Object.keys(elems).length;
+        } else {
+            // Ouch, shouldn't happen.
+            numLegends = 0;
+        }
+        var heightEach = me.legendEntryTargetHeight;
+        var legWidth = me.legendTargetWidth;
+        var legHeight = heightEach + heightEach * numLegends;
+        legendParent
+            .attr('viewBox', "0 0 " + legWidth + " " + legHeight)
+            .attr('width', legWidth)
+            .attr('height', legHeight);
     }
 });

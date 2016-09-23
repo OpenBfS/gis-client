@@ -36,25 +36,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
     chartConfig: null,
     featureProps: null,
 
-    legendTargetWidth: 200,
-
-    legendEntryTargetHeight: 30,
-
-    /**
-     * [getChartSize description]
-     * @return {[type]} [description]
-     */
-    getChartSize: function() {
-        var me = this;
-        var view = me.getView();
-        var chartMargin = view.getChartMargin();
-
-        return [
-            view.getWidth() - chartMargin.left - chartMargin.right,
-            view.getHeight() - chartMargin.top - chartMargin.bottom
-        ];
-    },
-
     /**
      *
      */
@@ -120,66 +101,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
-     * Draws the root <svg>-element into the <div>-element rendered by the
-     * Ext component.
-     */
-    drawSvgContainer: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var makeTranslate = staticMe.makeTranslate;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var chartMargin = view.getChartMargin();
-        var chartSize = me.getChartSize();
-        var translate = makeTranslate(chartMargin.left, chartMargin.top);
-
-        // Get the container view by its ID and append the SVG including an
-        // additional group element to it.
-        d3.select(viewId)
-            .append('svg')
-                .attr('viewBox', "0 0 " + view.getWidth() + " " + view.getHeight())
-                .attr('width', view.getWidth())
-                .attr('height', view.getHeight())
-            .append('g')
-                .attr('transform', translate)
-            .append('rect')
-                .style('fill', view.getBackgroundColor())
-                .attr('class', CSS.PLOT_BACKGROUND)
-                .attr('width', chartSize[0])
-                .attr('height', chartSize[1])
-                .attr('pointer-events', 'all');
-    },
-
-    drawLegendContainer: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var viewWidth = view.getWidth();
-        var viewHeight = view.getHeight();
-
-        var legWidth = me.legendTargetWidth;
-        var legLeft = viewWidth - legWidth;
-        var legHeight = viewHeight;
-
-        d3.select(viewId)
-            .append('div')
-                .attr('class', CSS.LEGEND_CONTAINER)
-                .style('width', legWidth + 'px')
-                .style('height', legHeight + 'px')
-                .style('left', legLeft + "px" )
-            // values below will be updated in #updateLegendContainerDimensions
-            .append('svg')
-                .attr('viewBox', '0 0 ' + legWidth + ' 100')
-                .attr('width', legWidth)
-                .attr('height', '100');
-        var legSvg = d3.select(viewId + ' .' + CSS.LEGEND_CONTAINER + ' svg');
-        this.legendSvg = legSvg;
-    },
-
-    /**
      *
      */
     createScales: function() {
@@ -230,15 +151,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             me.axes[orient] = chartAxis;
         });
-    },
-
-    /**
-     * Creates a simple ExtJS tooltip, see the
-     * {@link http://docs.sencha.com/extjs/6.0.0/classic/Ext.tip.ToolTip.html|ExtJS API documentation}
-     * for further details and config options.
-     */
-    createTooltip: function() {
-        this.tooltipCmp = Ext.create('Ext.tip.ToolTip');
     },
 
     /**
@@ -517,7 +429,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
     /**
      * Removes the current legend from the chart (if it exists) and redraws the
-     * legend by looking atour internal data.
+     * legend by looking at our internal data (by calling #drawLegend).
      */
     redrawLegend: function() {
         var me = this;
@@ -532,25 +444,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.drawLegend();
     },
 
-    updateLegendContainerDimensions: function() {
-        var me = this;
-        var legendParent = me.legendSvg;
-        var numLegends = me.data.length;
-        var heightEach = me.legendEntryTargetHeight;
-        var legWidth = me.legendTargetWidth;
-        var legHeight = heightEach + heightEach * numLegends;
-        legendParent
-            .attr('viewBox', "0 0 " + legWidth + " " + legHeight)
-            .attr('width', legWidth)
-            .attr('height', legHeight);
-    },
-
     /**
      *
      */
     drawLegend: function() {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
+        var makeTranslate = staticMe.makeTranslate;
         var CSS = staticMe.CSS_CLASS;
         var SVG_DEFS = staticMe.SVG_DEFS;
         var view = me.getView();
@@ -563,7 +463,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var legend = legendParent
             .append('g')
                 .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
-                .attr('transform', staticMe.makeTranslate(legendMargin.left || 10, 0));
+                .attr('transform', makeTranslate(legendMargin.left || 10, 0));
 
         me.updateLegendContainerDimensions();
 
@@ -631,12 +531,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     generateDeleteCallback: function(dataObj) {
         var me = this;
+        var viewModel = me.getView().getViewModel();
         var deleteCallback = function() {
             var name = dataObj.key;
-            // TODO i18n
-            var title = 'Serie "' + name + '" entfernen?';
-            var msg = 'Möchten sie die Serie <b>' + name + '</b>' +
-                ' aus dem Graphen entfernen?';
+            var title = viewModel.get('confirmDeleteTitleTpl');
+            var msg = viewModel.get('confirmDeleteMsgTpl');
+            title = Ext.String.format(title, name);
+            msg = Ext.String.format(msg, name);
             var confirmCallback = function(buttonId) {
                 if (buttonId === 'ok' || buttonId === 'yes') {
                     me.deleteEverything(dataObj, this.parentNode);
@@ -700,8 +601,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
-
-        return d3.select(viewId + ' svg g.' + CSS.SHAPE_GROUP + ' g[id="' + key + '"]');
+        var selector = viewId + ' svg g.' + CSS.SHAPE_GROUP +
+            ' g[id="' + key + '"]';
+        return d3.select(selector);
     },
 
     /**
@@ -710,8 +612,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
     toggleBarGroupVisibility: function(barGroup, legendElement) {
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
-        var hideClsName = CSS.SHAPE_GROUP + CSS.SUFFIX_HIDDEN;
-        var hideClsNameLegend = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND + CSS.SUFFIX_HIDDEN;
+        var SHAPE_GROUP = CSS.SHAPE_GROUP;
+        var SUFFIX_HIDDEN = CSS.SUFFIX_HIDDEN;
+        var hideClsName = SHAPE_GROUP + SUFFIX_HIDDEN;
+        var hideClsNameLegend = SHAPE_GROUP + CSS.SUFFIX_LEGEND + SUFFIX_HIDDEN;
         if (barGroup) {
             var isHidden = barGroup.classed(hideClsName);
             barGroup.classed(hideClsName, !isHidden);
