@@ -175,7 +175,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('viewBox', '0 0 ' + legWidth + ' 100')
                 .attr('width', legWidth)
                 .attr('height', '100');
-        var legSvg = d3.select(viewId + ' .k-scrollable-legend-container svg');
+        var legSvg = d3.select(viewId + ' .' + CSS.LEGEND_CONTAINER + ' svg');
         this.legendSvg = legSvg;
     },
 
@@ -425,7 +425,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .filter(function(d) {
                 return Ext.isDefined(d[yField]);
             })
-            // TODO add configurable labelfunc e.g. unter nachweisgrenze
             .text(function(d){
                 return labelFunc(d[yField]);
             })
@@ -553,6 +552,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
+        var SVG_DEFS = staticMe.SVG_DEFS;
         var view = me.getView();
         var legendConfig = view.getLegend();
         var legendMargin = legendConfig.legendMargin;
@@ -560,9 +560,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var legendEntryHeight = me.legendEntryTargetHeight;
 
         var legendParent = me.legendSvg;
-        var legend = legendParent.append('g')
-            .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
-            .attr('transform', staticMe.makeTranslate(legendMargin.left || 10, 0));
+        var legend = legendParent
+            .append('g')
+                .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
+                .attr('transform', staticMe.makeTranslate(legendMargin.left || 10, 0));
 
         me.updateLegendContainerDimensions();
 
@@ -587,19 +588,19 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var curTranslateY = (idx + 1) * legendEntryHeight;
             var legendEntry = legend
                 .append('g')
-                .on('click', toggleVisibilityFunc)
-                .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_LEGEND_GROUP + idx);
+                    .on('click', toggleVisibilityFunc)
+                    .attr('transform', staticMe.makeTranslate(0, curTranslateY))
+                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + idx);
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
-                .attr('d', 'M-3 -14 h 25 v 16 h -25 Z')
+                .attr('d', SVG_DEFS.LEGEND_ICON_BACKGROUND)
                 .style('stroke', 'none')
                 // invisible, but still triggering events
                 .style('fill', 'rgba(0,0,0,0)');
 
             legendEntry.append('path')
-                .attr('d', 'M0 -10 h 6 v 12 h -6 Z M7 -6 h 6 v 8 h -6 Z M14 -10 h 6 v 12 h -6 Z')
+                .attr('d', SVG_DEFS.LEGEND_ICON_BAR)
                 .style('fill', dataObj.color);
 
             legendEntry.append('text')
