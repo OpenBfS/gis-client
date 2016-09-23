@@ -89,7 +89,8 @@ Ext.define("Koala.view.form.ImportLocalData",{
             // TODO extract to real store
             store: [
                 ["241ae25f-c180-475b-9734-4947f75137e1", "Local Vector Data Template (drinkwater)"],
-                ["5fdc824d-dc67-46cc-a87e-1c99f13557cf", "Local Vector Data Template (buildings)"]
+                ["5fdc824d-dc67-46cc-a87e-1c99f13557cf", "Local Vector Data Template (buildings)"],
+                ["0613135b-8a4a-496d-b4a2-bf67831c620d", "Local Vector Data Template (bundeslaender)"]
             ]
         }]
     }],
