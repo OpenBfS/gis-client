@@ -91,11 +91,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 data[field] = props[field];
             });
 
-            // var dataObj = {};
+            // TODO double check locality_code, is this hardcoded?
             me.data[props.locality_code] = data;
-
-            // me.fireEvent('chartdataprepared');
-
         } else {
             me.getChartData();
         }

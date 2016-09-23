@@ -74,7 +74,7 @@ Ext.define('Koala.view.component.D3BarChart',{
                 top: 10,
                 right: 10,
                 bottom: 10,
-                left: 30
+                left: 10
             }
         },
         axes: {

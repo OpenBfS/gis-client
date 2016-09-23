@@ -1,3 +1,23 @@
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ /**
+  * A base class for both the D3ChartController and the D3BarChartController.
+  *
+  * @class Koala.view.component.D3BaseController
+  */
 Ext.define('Koala.view.component.D3BaseController', {
     extend: 'Ext.app.ViewController',
     inheritableStatics: {
@@ -22,6 +42,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             BAR: 'k-d3-bar',
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
+            LEGEND_CONTAINER: 'k-d3-scrollable-legend-container',
             DELETE_ICON: 'k-d3-delete-icon',
 
             PREFIX_IDX_SHAPE_GROUP: 'shape-group-',

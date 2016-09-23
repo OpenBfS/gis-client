@@ -36,6 +36,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
     chartConfig: null,
     featureProps: null,
 
+    legendTargetWidth: 200,
+
+    legendEntryTargetHeight: 30,
+
     /**
      * [getChartSize description]
      * @return {[type]} [description]
@@ -98,6 +102,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
 
         me.drawSvgContainer();
+        me.drawLegendContainer();
 
         me.createScales();
         me.createAxes();
@@ -122,12 +127,12 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
+        var makeTranslate = staticMe.makeTranslate;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var chartMargin = view.getChartMargin();
         var chartSize = me.getChartSize();
-        var translate = 'translate(' + chartMargin.left + ',' +
-                chartMargin.top + ')';
+        var translate = makeTranslate(chartMargin.left, chartMargin.top);
 
         // Get the container view by its ID and append the SVG including an
         // additional group element to it.
@@ -144,6 +149,34 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('width', chartSize[0])
                 .attr('height', chartSize[1])
                 .attr('pointer-events', 'all');
+    },
+
+    drawLegendContainer: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3BarChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var viewWidth = view.getWidth();
+        var viewHeight = view.getHeight();
+
+        var legWidth = me.legendTargetWidth;
+        var legLeft = viewWidth - legWidth;
+        var legHeight = viewHeight;
+
+        d3.select(viewId)
+            .append('div')
+                .attr('class', CSS.LEGEND_CONTAINER)
+                .style('width', legWidth + 'px')
+                .style('height', legHeight + 'px')
+                .style('left', legLeft + "px" )
+            // values below will be updated in #updateLegendContainerDimensions
+            .append('svg')
+                .attr('viewBox', '0 0 ' + legWidth + ' 100')
+                .attr('width', legWidth)
+                .attr('height', '100');
+        var legSvg = d3.select(viewId + ' .k-scrollable-legend-container svg');
+        this.legendSvg = legSvg;
     },
 
     /**
@@ -241,14 +274,16 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     drawTitle: function() {
         var me = this;
+        var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var titleConfig = view.getTitle();
         var chartSize = me.getChartSize();
+        var translate = staticMe.makeTranslate(chartSize[0] / 2, 0);
 
         d3.select(viewId + ' svg > g')
             .append('text')
-                .attr('transform', 'translate(' + (chartSize[0] / 2) + ', 0)')
+                .attr('transform', translate)
                 .attr('dy', (titleConfig.labelPadding || 18) * -1)
                 .attr('fill', titleConfig.labelColor || '#000')
                 .style('text-anchor', 'middle')
@@ -263,6 +298,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     drawAxes: function() {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
+        var makeTranslate = staticMe.makeTranslate;
         var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
@@ -277,17 +313,19 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             if (orient === 'top' || orient === 'bottom') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
-                axisTransform = (orient === 'bottom') ?
-                        'translate(0,' + chartSize[1] + ')' : undefined;
 
-                labelTransform = 'translate(' + (chartSize[0] / 2) + ', 0)';
+                axisTransform = (orient === 'bottom') ?
+                        makeTranslate(0, chartSize[1]) : undefined;
+
+                labelTransform = makeTranslate(chartSize[0] / 2, 0);
                 labelPadding = axisConfig.labelPadding || 35;
             } else if (orient === 'left' || orient === 'right') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
                 axisTransform = (orient === 'right') ?
-                        'translate(' + chartSize[0] + ', 0)' : undefined;
+                        makeTranslate(chartSize[0], 0) : undefined;
 
-                labelTransform = 'rotate(-90), translate(' + (chartSize[1] / 2 * -1) + ', 0)';
+                var labelTranslate = makeTranslate(chartSize[1] / -2, 0);
+                labelTransform = 'rotate(-90), ' + labelTranslate;
                 labelPadding = (axisConfig.labelPadding || 25) * -1;
             }
 
@@ -486,15 +524,26 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
         var legendCls = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND;
-        var legend = d3.select(viewId + ' svg g.' + legendCls);
+        var legend = this.legendSvg.select('g.' + legendCls);
         if (legend) {
             var legendNode = legend.node();
             legendNode.parentNode.removeChild(legendNode);
         }
         me.drawLegend();
+    },
+
+    updateLegendContainerDimensions: function() {
+        var me = this;
+        var legendParent = me.legendSvg;
+        var numLegends = me.data.length;
+        var heightEach = me.legendEntryTargetHeight;
+        var legWidth = me.legendTargetWidth;
+        var legHeight = heightEach + heightEach * numLegends;
+        legendParent
+            .attr('viewBox', "0 0 " + legWidth + " " + legHeight)
+            .attr('width', legWidth)
+            .attr('height', legHeight);
     },
 
     /**
@@ -505,15 +554,17 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
-        var viewId = '#' + view.getId();
         var legendConfig = view.getLegend();
         var legendMargin = legendConfig.legendMargin;
-        var chartSize = me.getChartSize();
 
-        var legend = d3.select(viewId + ' svg > g')
-            .append('g')
-                .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
-                .attr('transform', 'translate(' + (chartSize[0] + legendMargin.left) + ',' + (legendMargin.bottom) + ')');
+        var legendEntryHeight = me.legendEntryTargetHeight;
+
+        var legendParent = me.legendSvg;
+        var legend = legendParent.append('g')
+            .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
+            .attr('transform', staticMe.makeTranslate(legendMargin.left || 10, 0));
+
+        me.updateLegendContainerDimensions();
 
         Ext.each(me.data, function(dataObj, idx) {
             var toggleVisibilityFunc = (function() {
@@ -533,10 +584,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 };
             }());
 
+            var curTranslateY = (idx + 1) * legendEntryHeight;
             var legendEntry = legend
                 .append('g')
                 .on('click', toggleVisibilityFunc)
-                .attr('transform', 'translate(0, ' + (idx * 30) + ')')
+                .attr('transform', staticMe.makeTranslate(0, curTranslateY))
                 .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_LEGEND_GROUP + idx);
 
             // background for the concrete legend icon, to widen clickable area.
