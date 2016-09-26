@@ -715,12 +715,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .style('fill', color)
                             .style('stroke', darkerColor)
                             .style('stroke-width', 2)
-                            .on('mouseover', function() {
+                            .on('mouseover', function(data) {
                                 var tooltipCmp = me.tooltipCmp;
                                 var tooltipTpl = shapeConfig.tooltipTpl;
                                 var selectedStation = me.getView().getSelectedStations()[idx];
 
-                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, data);
+                                html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
                                 tooltipCmp.setHtml(html);
                                 tooltipCmp.setTarget(this);
                                 tooltipCmp.show();

@@ -315,12 +315,12 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     .on('mouseover', function(data) {
                         var tooltipCmp = me.tooltipCmp;
                         var tooltipTpl = shapeConfig.tooltipTpl;
-
-                        // Seperate prereplacements. Not sure if this could be done by replaceTemplateStrings util
-                        tooltipTpl = tooltipTpl.replace("[[xAxisAttribute]]", data[xField]);
-                        tooltipTpl = tooltipTpl.replace("[[yAxisAttribute]]", data[yField]);
-
-                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, {
+                            xAxisAttribute: data[xField],
+                            yAxisAttribute: data[yField]
+                        });
+                        html = Koala.util.String.replaceTemplateStrings(html, data);
+                        html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
                         tooltipCmp.setHtml(html);
                         tooltipCmp.setTarget(this);
                         tooltipCmp.show();
