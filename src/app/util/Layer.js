@@ -784,8 +784,8 @@ Ext.define('Koala.util.Layer', {
          */
         adjustMetadataAccordingToFilters: function(metadata) {
             var me = this,
-            filters = this.getFiltersFromMetadata(metadata),
-            viewParamFilters = [];
+                filters = this.getFiltersFromMetadata(metadata),
+                viewParamFilters = [];
 
             if (!filters) {
                 return metadata;
@@ -1247,18 +1247,17 @@ Ext.define('Koala.util.Layer', {
             // VALUE becomes a CQL filter
             var olProps = metadata.layerConfig.olProperties;
             var cqlKey = 'param_cql_filter';
-            var val = "";
-            if (cqlKey in olProps) {
-                val = olProps[cqlKey];
-            }
-            if (val !== "") {
-                val += ";";
-            }
-
             var stringified = this.stringifyValueFilter(filter);
-            val += stringified;
+            if (cqlKey in olProps) {
+                Ext.log.info("Overwriting existing CQL Filter in URL." +
+                    " Is this intentional? If you changed a filter, the" +
+                    " answer is likely yes, else it might lead to " +
+                    " misbehaviour of this layer.");
+                Ext.log.info("Existing value is " + olProps[cqlKey]);
+                Ext.log.info("New value is " + stringified);
+            }
+            olProps[cqlKey] = stringified;
 
-            olProps[cqlKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;
         },
