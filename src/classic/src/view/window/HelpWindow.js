@@ -35,8 +35,8 @@ Ext.define("Koala.view.window.HelpWindow", {
         title: '{title}'
     },
     constrainHeader: true,
-    width: 1335,
-    height: 750,
+    width: 1050,
+    height: 580,
     layout: 'border',
     minWidth: 500,
     minHeight: 300,
@@ -69,7 +69,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     //Content
     {
         region: 'center',
-        autoScroll: true,//"This cfg has been deprecated since 5.1.0 - Use scrollable instead" -> but scrollable is not working
+        scrollable: 'vertical',
         bodyPadding: 10,
         bind: {
             html: '{selectionHtml}'
