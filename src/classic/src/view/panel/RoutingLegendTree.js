@@ -231,10 +231,17 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 Ext.create('Ext.window.Window', {
                     name: 'style-layer',
                     title: 'Layer Style',
-                    width: 500,
+                    width: 800,
                     height: 450,
                     layout: 'fit',
-                    items: []
+                    items: [{
+                        xtype: 'k_container_styler_styler',
+                        viewModel:{
+                            data: {
+                                layer: layer
+                            }
+                        }
+                    }]
                 }).show();
             } else {
                 BasiGX.util.Animate.shake(win);

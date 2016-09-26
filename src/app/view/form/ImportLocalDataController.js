@@ -90,10 +90,10 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             ol.format.GML3
         ];
 
-        var targetProjection = this.getViewModel().get('targetProjection');
+        var targetProjection = viewModel.get('targetProjection');
         if (!targetProjection) {
             var mapProjection = map.getView().getProjection();
-            this.getViewModel().set('targetProjection', mapProjection);
+            viewModel.set('targetProjection', mapProjection);
         }
         var features = [];
         var i, ii;
@@ -101,8 +101,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             var formatConstructor = formatConstructors[i];
             var format = new formatConstructor();
             features = me.tryReadFeatures(format, result, {
-                dataProjection: this.getViewModel().get('projection'),
-                featureProjection: this.getViewModel().get('targetProjection')
+                dataProjection: viewModel.get('projection'),
+                featureProjection: viewModel.get('targetProjection')
             });
             if (features && features.length > 0) {
                 break;
