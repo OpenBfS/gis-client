@@ -503,18 +503,31 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('d', SVG_DEFS.LEGEND_ICON_BAR)
                 .style('fill', dataObj.color);
 
+            // TODO for DK, get property just as we do it elsewhere
+            var legendEntryMaxLength = Koala.util.String.coerce(
+                view.getTargetLayer().metadata.layerConfig.barChartProperties.legendEntryMaxLength
+            );
+
+            var nameAsTooltip = dataObj.key;
+            var visualLabel = staticMe.labelEnsureMaxLength(
+                nameAsTooltip, legendEntryMaxLength
+            );
+
             legendEntry.append('text')
-                .text(dataObj.key)
+                .text(visualLabel)
                 .attr('text-anchor', 'start')
                 .attr('dy', '0')
                 .attr('dx', '25');
+
+            legendEntry.append('title')
+                .text(nameAsTooltip);
 
             legendEntry.append('text')
                 .text('✖')
                 .attr('class', CSS.DELETE_ICON)
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
-                .attr('dx', '150') // TODO will be hard to do dynamically…
+                .attr('dx', '160') // TODO Discuss, do we need this dynamically?
                 .on('click', me.generateDeleteCallback(dataObj));
         });
     },

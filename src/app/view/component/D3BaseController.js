@@ -259,6 +259,26 @@ Ext.define('Koala.view.component.D3BaseController', {
          */
         identity: function(val) {
             return val;
+        },
+
+        /**
+         * Ensures that the given label is not longer than the specified max
+         * length and returns a shortened string (maxLength chars + '…') to be
+         * used for labeling.
+         *
+         * @param {String} labelText The text to use as label.
+         * @param {Number} [maxLength] The maximum length, optional.
+         * @return {String} A possibly shortened labeltext with an added … if
+         *     the input was longer than allowed.
+         */
+        labelEnsureMaxLength: function(labelText, maxLength) {
+            var ensured = labelText || "";
+            var maxLen = !Ext.isEmpty(maxLength) ? maxLength : Infinity;
+            if (ensured.length > maxLen) {
+                ensured = ensured.substring(0, maxLen);
+                ensured += '…';
+            }
+            return ensured;
         }
     },
 
