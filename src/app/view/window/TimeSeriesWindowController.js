@@ -26,11 +26,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     ],
 
     /**
-     * The CSS class we'll assign to 'selected' legend items.
-     */
-    legendSelectedCssClass: 'k-selected-chart-legend',
-
-    /**
      * Disable UTC-Button when TimeSeriesWindow is shown.
      */
     onTimeseriesShow: function () {
@@ -79,8 +74,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 left: 40
             },
             shapes: [{
-                type: 'line',
-                curve: 'linear',
+                type: 'line', // TODO for DK make this configurable
+                curve: 'linear', // TODO for DK make this configurable
                 xField: chartConfig.xAxisAttribute,
                 yField: chartConfig.yAxisAttribute,
                 name: stationName,
@@ -349,31 +344,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             margin: '0 0 10px 0'
         };
 
-        var removeSeriesBtn = {
-            text: viewModel.get('removeSeriesBtnText'),
-            xtype: 'button',
-            name: 'remove-series',
-            disabled: true,
-            handler: me.onRemoveSeriesButtonClicked,
-            scope: me,
-            margin: '0 0 10px 0',
-            listeners: {
-                afterrender: {
-                    fn: me.registerFocusChangeLegendHandler,
-                    single: true
-                },
-                beforedestroy: {
-                    fn: me.unregisterFocusChangeLegendHandler,
-                    single: true
-                },
-                scope: me
-            }
-        };
-
         rightColumnWrapper.items.push(undoBtn);
-        // TODO we may want to have this being configurable as the addSeries
-        //      combo below is.
-        rightColumnWrapper.items.push(removeSeriesBtn);
 
         if (addSeriesCombo) {
             rightColumnWrapper.items.push(addSeriesCombo);
@@ -384,185 +355,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     },
 
     /**
-     * Registers a listener for focuschange on legenditems, which enables or
-     * disables the remove series button. Called after the button was rendered.
-     *
-     * @param {Ext.button.Button} btn The remove-series button.
-     */
-    registerFocusChangeLegendHandler: function(btn){
-        var me = this;
-        var chart = btn.up('[name="chart-composition"]').down('chart');
-        var legend = chart && chart.getLegend();
-        if (legend) {
-            // store it in the btn, so that unregisterFocusChangeLegendHandler
-            // can access it, there seems to be no way around this, as the
-            // chart-composition is already destroyed at this point.
-            btn.legend = legend;
-
-            legend.on({
-                itemclick: me.onLegendItemClick,
-                containerclick: me.onLegendContainerClick,
-                scope: me
-            });
-        }
-    },
-
-    /**
-     * Unregisters the listener for focuschange on legenditems, which enables or
-     * disables the remove series button. Called during the destroy of the
-     * button
-     *
-     * @param {Ext.button.Button} btn The remove-series button.
-     */
-    unregisterFocusChangeLegendHandler: function(btn){
-        var me = this;
-        var legend = btn && btn.legend;
-        if (legend) {
-            legend.un({
-                itemclick: me.onLegendItemClick,
-                containerclick: me.onLegendContainerClick,
-                scope: me
-            });
-        }
-    },
-
-    /**
-     * Called when the legend container is clicked and not a specific legend
-     * item, this method will visually deselect any ölegend items and also reset
-     * and disable the remove series button.
-     *
-     * @param {Ext.chart.Legend} legend The legend.
-     */
-    onLegendContainerClick: function(legend) {
-        var chartWrap = legend.up('[name="chart-composition"]');
-        var btn = chartWrap && chartWrap.down('button[name="remove-series"]');
-        if (btn) {
-            btn.lastLegendSelection = null;
-            btn.setDisabled(true);
-            this.removeAllLegendHiglighting(legend);
-        }
-    },
-
-    /**
-     * Removes the CSS class #legendSelectedCssClass from any legend items which
-     * are children of the passed legend.
-     *
-     * @param {Ext.chart.Legend} legend The legend.
-     */
-    removeAllLegendHiglighting: function(legend) {
-        var cssClass = this.legendSelectedCssClass;
-        var legendDom = legend.getEl().dom;
-        var oldHighlighted = Ext.DomQuery.select(
-            '.' + cssClass,
-            legendDom
-        );
-        Ext.each(oldHighlighted, function(oldHighlight) {
-            Ext.get(oldHighlight).removeCls(cssClass);
-        });
-    },
-
-    /**
-     * Whenever a legenditem is clicked we do three things:
-     *
-     * 1) Disable or enable the associated series (one series mus always be
-     *    enabled).
-     * 2) Visually select the clicked legend element (to tell people which
-     *    series will be affected by the 'remove series' button).
-     * 3) Store the record of the clicked series inside a property of the
-     *    delete button, to correctly determine the layer to eventually delete.
-     *
-     * This method is bound to the `itemclick` event, because the previously
-     * used `focuschanged` event wouldn't be so easy to understand (with regard
-     * to the visual indcation of selection).
-     *
-     * See https://redmine-koala.bfs.de/issues/1394
-     *
-     * @param {Ext.chart.Legend} legend The legend.
-     * @param {Ext.data.Model} record The clicked record
-     */
-    onLegendItemClick: function(legend, record) {
-        var me = this;
-        var legendDom = legend.getEl().dom;
-        var chartWrap = legend.up('[name="chart-composition"]');
-        var btn = chartWrap && chartWrap.down('button[name="remove-series"]');
-        var cssClass = me.legendSelectedCssClass;
-
-        // 1) disable/enable the clicked series
-        if (record) {
-            var doAllowToggling = false;
-            var currentlyDisabled = record.get('disabled');
-            if (currentlyDisabled === true) {
-                doAllowToggling = true;
-            } else {
-                var store = legend.getStore();
-                var maxDisabledCnt = store.getCount() - 1;
-                var disabledCount = 0;
-                store.each(function(rec) {
-                    if (rec.get('disabled') === true) {
-                        disabledCount++;
-                    }
-                });
-                doAllowToggling = maxDisabledCnt > disabledCount;
-            }
-
-            if (doAllowToggling) {
-                record.set('disabled', !currentlyDisabled);
-            }
-        }
-
-        // 2) visually select the legendDiv
-        me.removeAllLegendHiglighting(legend);
-        var legDom = Ext.DomQuery.select(
-            '[data-recordid=' + record.internalId + ']',
-            legendDom
-        )[0];
-        var legElement = Ext.get(legDom);
-        if (legElement) {
-            legElement.addCls(cssClass);
-        } else {
-            Ext.log.warn('Failed to determine a legend element to highlight');
-        }
-
-        // 3) store reference for removeBtn
-        if (btn) {
-            btn.lastLegendSelection = record;
-            btn.setDisabled(false);
-        }
-    },
-
-    /**
-     * This method actually removes a previously focused series of a chart. The
-     * main removal logic is handled in the chart see e.g.
-     * Koala.view.chart.TimeSeries#removeStation.
-     *
-     * @param {Ext.button.Button} btn The remove-series button.
-     */
-    onRemoveSeriesButtonClicked: function(removeBtn){
-        var lastLegendSelection = removeBtn.lastLegendSelection;
-        if (!lastLegendSelection) {
-            return;
-        }
-        var chart = removeBtn.up('[name="chart-composition"]').down('chart');
-        var series = lastLegendSelection.get('series');
-        var name = lastLegendSelection.get('name');
-        var viewModel = this.getViewModel();
-        var questionTpl = viewModel.get('removeSeriesQuestionTpl');
-        var questionTitle = viewModel.get('removeSeriesQuestionTitle');
-        var question = Ext.String.format(questionTpl, name);
-
-        Ext.Msg.confirm(questionTitle, question, function(doRemove){
-            if (doRemove === "yes") {
-                chart.removeStation(series);
-            }
-        });
-    },
-
-    /**
      * Zoom back out after the button has been clicked.
      *
      * @param {Ext.button.Button} undoBtn The clicked undo button.
      */
     onUndoButtonClicked: function(undoBtn){
+        // TODO for DK: call into existing function
         var chart = undoBtn.up('[name="chart-composition"]').down('chart');
         var crossZoomInteraction = chart.getInteraction('crosszoom');
         if (crossZoomInteraction && crossZoomInteraction.undoZoom) {
@@ -593,8 +391,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
 
         // console.log(chart.getSelectedStations().length - 1)
         chartController.addShape({
-            type: 'line',
-            curve: 'linear',
+            type: 'line', // TODO for DK make this configurable
+            curve: 'linear', // TODO for DK make this configurable
             xField: chartConfig.xAxisAttribute, //'end_measure'
             yField: chartConfig.yAxisAttribute, //'value'
             name: stationName,
@@ -672,16 +470,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 me.onSetFilterBtnClick(setFilterBtn);
             }
         }
-    },
-
-    /**
-     *
-     */
-    setAbscissaRange: function(chart, minVal, maxVal) {
-        var abscissa = chart.getAxis(1);
-        abscissa.setFromDate(minVal);
-        abscissa.setToDate(maxVal);
-        chart.redraw();
     },
 
     /**
