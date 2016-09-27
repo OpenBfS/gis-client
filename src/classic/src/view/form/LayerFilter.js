@@ -283,11 +283,6 @@ Ext.define("Koala.view.form.LayerFilter", {
         var startValue = filter.mindatetimeinstant.getDate ? filter.mindatetimeinstant : defaultMinValue;
         var endValue = filter.maxdatetimeinstant.getDate ? filter.maxdatetimeinstant : defaultMaxValue;
 
-        // Fix for the issue #1068-34
-        // Raises the maxDate by one day to avoid the bug with the datefield
-        // where maxDate = defaultValue leads to invalid input
-        maxValue.setDate(maxValue.getDate() + 1);
-
         var appIsLocal = Koala.Application.isLocal();
         if (appIsLocal) {
             var makeLocal = Koala.util.Date.makeLocal;
@@ -320,8 +315,8 @@ Ext.define("Koala.view.form.LayerFilter", {
             labelWidth: 70,
             flex: 1,
             value: startValue,
-            minValue: minValue,
-            maxValue: maxValue,
+            minValue: minClone,
+            maxValue: maxClone,
             format: me.getFormat(),
             submitFormat: format,
             validator: minMaxDurationAndOrderValidator,
@@ -353,8 +348,8 @@ Ext.define("Koala.view.form.LayerFilter", {
             labelWidth: 70,
             flex: 1,
             value: endValue,
-            minValue: minValue,
-            maxValue: maxValue,
+            minValue: minClone,
+            maxValue: maxClone,
             format: me.getFormat(),
             submitFormat: format,
             validator: minMaxDurationAndOrderValidator,
