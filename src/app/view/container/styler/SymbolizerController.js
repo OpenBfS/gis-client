@@ -19,9 +19,11 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         var styleUtil = Koala.util.Style;
         var layer = viewModel.get('layer');
         var symbolType = styleUtil.symbolTypeFromVectorLayer(layer);
+        var symbolizerFromRule = viewModel.get('rule').getSymbolizer();
 
-        viewModel.set('olStyle', layer.getStyle());
-        viewModel.set('symbolType', symbolType);
+        viewModel.set('symbolizer', symbolizerFromRule);
+        symbolizerFromRule.set('olStyle', layer.getStyle());
+        symbolizerFromRule.set('symbolType', symbolType);
 
         var added = view.add({
             xtype: 'fieldset',
@@ -34,7 +36,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
             layout: 'center',
             items: [{
                 xtype: 'gx_renderer',
-                symbolizers: viewModel.get('olStyle'),
+                symbolizers: symbolizerFromRule.get('olStyle'),
                 symbolType: symbolType,
                 minWidth: 80,
                 minHeight: 80,
@@ -49,7 +51,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         });
 
         // if we were given a style with an image, we need to check the size…
-        Ext.each(viewModel.get('olStyle'), function(style){
+        Ext.each(symbolizerFromRule.get('olStyle'), function(style){
             me.checkAddResizeListener(style, added.down('gx_renderer'));
         });
     },
@@ -111,8 +113,8 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         var view = this.getView();
         var userGroupId = view.getViewModel().get('selectedUserGroup');
         var viewModel = this.getViewModel();
-        var symbolType = viewModel.get('symbolType');
-        var olStyle = viewModel.get('olStyle');
+        var symbolType = viewModel.get('symbolizer.symbolType');
+        var olStyle = viewModel.get('symbolizer.olStyle');
 
         var win = Ext.ComponentQuery.query('[name=symbolizer-edit-window]')[0];
 
@@ -175,13 +177,13 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         var win = btn.up('[name=symbolizer-edit-window]');
         var editorRenderer = win.down('gx_renderer');
 
-        viewModel.set('olStyle', editorRenderer.getSymbolizers());
+        viewModel.set('symbolizer.olStyle', editorRenderer.getSymbolizers());
 
         symbolizerRenderer.update({
-            symbolizers: viewModel.get('olStyle')
+            symbolizers: viewModel.get('symbolizer.olStyle')
         });
 
-        view.fireEvent('olstylechanged', viewModel.get('olStyle'));
+        view.fireEvent('olstylechanged', viewModel.get('symbolizer.olStyle'));
         win.close();
     }
 });

@@ -3,7 +3,8 @@ Ext.define('Koala.view.container.styler.StylerController', {
     alias: 'controller.container.styler.styler',
 
     requires: [
-        'Koala.view.container.styler.Rules'
+        'Koala.view.container.styler.Rules',
+        'Koala.util.Style'
     ],
 
     /**
@@ -23,77 +24,76 @@ Ext.define('Koala.view.container.styler.StylerController', {
     rebuildCheckInterval: 25,
 
     onBoxReady: function(){
+        var view = this.getView();
         var viewModel = this.getViewModel();
         var layer = viewModel.get('layer');
+        var style = layer.get('koalaStyle') || Ext.create('Koala.model.Style');
 
         if(!layer){
             debugger
         }
 
         viewModel.set('layer', layer);
-
-        this.rebuildUserInterface();
+        viewModel.set('style', style);
+        view.add({
+            xtype: 'k_container_styler_rules'
+        });
     },
 
-    /**
-     * Called when the configured value for layerName changes in the view, this
-     * method checks if and how the user interface can be rebuild.
-     *
-     * @param {String} layerName The fully qualified name of the layer, e.g.
-     *     'namespace:featuretype'.
-     */
-    checkRebuildUserInterface: function(layerName) {
-        var me = this;
-        if (me.rebuildTask) {
-            me.rebuildTask.cancel();
-        }
-        var view = me.getView();
-        if (view.isConfiguring) {
-            me.rebuildTask = new Ext.util.DelayedTask(
-                me.checkRebuildUserInterface, me, [layerName]
-            );
-            me.rebuildTask.delay(me.rebuildCheckInterval);
-        } else {
-            me.rebuildUserInterface(layerName);
-        }
-    },
+    // /**
+    //  * Called when the configured value for layerName changes in the view, this
+    //  * method checks if and how the user interface can be rebuild.
+    //  */
+    // checkRebuildUserInterface: function() {
+    //     var me = this;
+    //     if (me.rebuildTask) {
+    //         me.rebuildTask.cancel();
+    //     }
+    //     var view = me.getView();
+    //     if (view.isConfiguring) {
+    //         me.rebuildTask = new Ext.util.DelayedTask(
+    //             me.checkRebuildUserInterface, me, []
+    //         );
+    //         me.rebuildTask.delay(me.rebuildCheckInterval);
+    //     } else {
+    //         me.rebuildUserInterface();
+    //     }
+    // },
 
-    /**
-     * Rebuilds the SLD container according to the passed layerName.
-     *
-     * @param {String} layerName The fully qualified name of the layer, e.g.
-     *     'namespace:featuretype'.
-     */
-    rebuildUserInterface: function() {
-        var me = this;
-        var view = me.getView();
-        var viewModel = me.getViewModel();
-
-        view.removeAll();
-        view.setHtml('');
-        // view.setLoading(true);
-
-        var style = viewModel.get('style');
-        if(!style){
-            viewModel.set('style', Ext.create('Koala.model.Style'));
-            view.add({
-                xtype: 'k_container_styler_rules'
-            });
-        } else {
-            debugger
-        }
-    },
+    // /**
+    //  *
+    //  */
+    // rebuildUserInterface: function() {
+    //     var me = this;
+    //     var view = me.getView();
+    //     var viewModel = me.getViewModel();
+    //
+    //     view.removeAll();
+    //     view.setHtml('');
+    //     // view.setLoading(true);
+    //
+    //     var style = viewModel.get('style');
+    //     if(!style){
+            // viewModel.set('style', Ext.create('Koala.model.Style'));
+            // view.add({
+            //     xtype: 'k_container_styler_rules'
+            // });
+    //     } else {
+    //         debugger
+    //     }
+    // },
 
     applyAndSave: function() {
-        var me = this;
-        var view = me.getView();
-        var rulesContainer = view.down('k_container_styler_rules');
-        var rules = rulesPanel.rules;
-        var sldObj = rulesPanel.sldObj;
+        var viewModel = this.getViewModel();
+        var layer = viewModel.get('layer');
+        var style = viewModel.get('style');
+        layer.set('koalaStyle', style);
+
+        Koala.util.Style.applyKoalaStyleToLayer(style, layer);
     },
 
     /**
-     * Marks the main SLD styler container as currently being incorrectly
+     * Marks the main styler container as currently being incorrectly
      * configured, usually from an unexpected layerName configuration or after a
      * request for getting styles failed.
      */

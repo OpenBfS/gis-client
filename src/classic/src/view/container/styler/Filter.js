@@ -3,7 +3,6 @@ Ext.define('Koala.view.container.styler.Filter', {
     xtype: 'k_container_styler_filter',
 
     requires: [
-        'Koala.store.LayerAttributes',
         'Koala.store.FilterOperators'
     ],
 
@@ -45,21 +44,12 @@ Ext.define('Koala.view.container.styler.Filter', {
         items: [{
             xtype: 'combobox',
             name: 'attributeCombo',
-            displayField: 'name',
-            valueField: 'name',
             editable: false,
             bind: {
-                fieldLabel: '{attributeComboLabel}'
+                fieldLabel: '{attributeComboLabel}',
+                value: '{filter.attribute}'
             },
-            tpl: new Ext.XTemplate(
-                '<tpl for=".">',
-                    '<div class="x-boundlist-item">{name}' +
-                    '({[values.type.split("xsd:")[1]]})</div>',
-                '</tpl>'
-            ),
-            store: {
-                type: 'layerattributes'
-            },
+            store: [],
             listeners: {
                 boxready: 'attributeComboBoxReady'
             }
@@ -68,7 +58,8 @@ Ext.define('Koala.view.container.styler.Filter', {
             name: 'literalNumberField1',
             value: 0,
             bind: {
-                fieldLabel: '{literalNumberField1Label}'
+                fieldLabel: '{literalNumberField1Label}',
+                value: '{filter.number1}'
             },
             hidden: true,
             flex: 5
@@ -80,30 +71,9 @@ Ext.define('Koala.view.container.styler.Filter', {
             valueField: 'ogcType',
             editable: false,
             bind: {
-                fieldLabel: '{operatorComboLabel}'
+                fieldLabel: '{operatorComboLabel}',
+                value: '{filter.operator}'
             },
-            tpl: new Ext.XTemplate(
-                '<tpl for=".">',
-                    '<div class="x-boundlist-item" ',
-                    '<tpl if="!this.propertyFitsOperator(dataTypes)">',
-                        'style="color:red; background-color: lightgray;"',
-                        'title="Not an appropriate operator for the selected ',
-                        'property.";',
-                    '</tpl>',
-                    '>{operator}</div>',
-                '</tpl>',
-                {
-                    propertyFitsOperator: function(dataTypes){
-                        var attrCombo = this.field.up('k_container_styler_filter')
-                                .down('combobox[name="attributeCombo"]');
-                        if(attrCombo){
-                            var attr = attrCombo.getSelection().get('type');
-                            return Ext.Array.contains(dataTypes, attr);
-                        }
-                        return true;
-                    }
-                }
-            ),
             store: {
                 type: 'filterOperators'
             },
@@ -115,7 +85,8 @@ Ext.define('Koala.view.container.styler.Filter', {
             name: 'literalNumberField2',
             value: 0,
             bind: {
-                fieldLabel: '{literalNumberField2Label}'
+                fieldLabel: '{literalNumberField2Label}',
+                value: '{filter.number2}'
             },
             hidden: true,
             flex: 5
@@ -124,7 +95,8 @@ Ext.define('Koala.view.container.styler.Filter', {
             name: 'literalTextField',
             value: "",
             bind: {
-                fieldLabel: '{literalTextFieldLabel}'
+                fieldLabel: '{literalTextFieldLabel}',
+                value: '{filter.text}'
             },
             hidden: true,
             flex: 5

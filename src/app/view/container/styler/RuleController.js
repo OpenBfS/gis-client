@@ -28,12 +28,8 @@ Ext.define('Koala.view.container.styler.RuleController', {
     onOlStyleChanged: function(olStyle){
         var view = this.getView();
         var viewModel = this.getViewModel();
-        var symbolizer = viewModel.get('rule').getSymbolizer();
-
-        if(olStyle && symbolizer){
-            symbolizer.set('olStyle', olStyle);
-            view.fireEvent('rulechanged', viewModel.get('rule'));
-        }
+        var rule = viewModel.get('rule');
+        view.fireEvent('rulechanged', rule);
     },
 
     /**

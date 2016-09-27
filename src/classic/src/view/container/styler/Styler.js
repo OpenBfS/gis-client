@@ -1,5 +1,5 @@
 Ext.define('Koala.view.container.styler.Styler', {
-    extend: 'Ext.container.Container',
+    extend: 'Ext.panel.Panel',
     xtype: 'k_container_styler_styler',
 
     requires: [
@@ -12,24 +12,12 @@ Ext.define('Koala.view.container.styler.Styler', {
         type: 'container.styler.styler'
     },
 
-    bodyStyle: {
-        background: '#f6f6f6'
-    },
-
-    /**
-     * Fired when the layername changes.
-     *
-     * @param {String} layerName The new layername or null if it was not valid.
-     * @event layerNameChange
-     */
+    scrollable: "vertical",
 
     bbar: {
         reference: 'styler-toolbar',
         bodyStyle: {
             background: '#f6f6f6'
-        },
-        bind: {
-            hidden: '{uploadIsNotStylable}'
         },
         items: [{
             xtype: 'button',
@@ -50,15 +38,6 @@ Ext.define('Koala.view.container.styler.Styler', {
 
     listeners: {
         boxready: 'onBoxReady'
-    },
-
-    /**
-     * Initializes the SLD styler. Will check if the required configuration
-     * option `layerName` is passed and valid.
-     */
-    initComponent: function() {
-        var me = this;
-        me.callParent();
     }
 
 });

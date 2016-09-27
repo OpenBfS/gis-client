@@ -25,7 +25,6 @@ Ext.define('Koala.view.container.styler.Rules', {
         },
         items: [{
             xtype: 'button',
-            ui: 'mapmavin',
             bind: {
                 text: '{addRuleButtonText}',
                 iconCls: '{addRuleButtonIconCls}'

@@ -55,42 +55,8 @@ Ext.define('Koala.view.container.styler.Rule', {
                     align: 'center'
                 },
                 defaultType: 'textfield',
-                items: [
-                //     {
-                //     fieldLabel: 'Name',
-                //     labelAlign: 'right',
-                //     bind: {
-                //         value: '{rule.name}'
-                //     },
-                //     margin: '0 10px 0 0',
-                //     flex: 1,
-                //     listeners: {
-                //         change: function(){
-                //             var view = this.up('k_container_styler_rule');
-                //             var rule = this.getViewModel().get('rule');
-                //             view.fireEvent('rulechanged', rule);
-                //         }
-                //     }
-                // },
-                // {
-                //     fieldLabel: 'Symbol Description',
-                //     labelAlign: 'right',
-                //     bind: {
-                //         value: '{rule.title}'
-                //     },
-                //     margin: '0 10px 0 0',
-                //     flex: 1,
-                //     listeners: {
-                //         change: function(){
-                //             var view = this.up('k_container_styler_rule');
-                //             var rule = this.getViewModel().get('rule');
-                //             view.fireEvent('rulechanged', rule);
-                //         }
-                //     }
-                // },
-                {
+                items: [{
                     xtype: 'button',
-                    ui: 'mapmavin',
                     bind: {
                         text: '{removeRuleButtonText}',
                         iconCls: '{removeRuleButtonIconCls}'

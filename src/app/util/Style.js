@@ -371,6 +371,25 @@ Ext.define('Koala.util.Style', {
             return layer.getSource().getFeatures()[0].getGeometry().getType()
         },
 
+        /**
+         *
+         */
+        getAttributeKeysFromVetorLayer: function(layer){
+            if(!layer || !(layer instanceof ol.layer.Vector)){
+                return;
+            }
+            return layer.getSource().getFeatures()[0].getKeys();
+        },
+
+        /**
+         *
+         */
+        applyKoalaStyleToLayer: function(style, layer){
+            console.log('Write olStyle function!');
+            console.log('style:', style);
+            console.log('layer:', layer);
+        },
+
         // /**
         //  * returns "Point", "Line", "Polygon", "Text" or "Raster"
         //  */

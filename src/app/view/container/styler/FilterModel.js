@@ -3,6 +3,7 @@ Ext.define('Koala.view.container.styler.FilterModel', {
     alias: 'viewmodel.container.styler.filter',
 
     data: {
+        filter: Ext.create('Koala.model.StyleFilter'),
         title: 'Use Filter',
         attributeComboLabel: 'Attribute',
         operatorComboLabel: 'Operator',

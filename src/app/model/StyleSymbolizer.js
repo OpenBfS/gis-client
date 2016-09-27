@@ -4,6 +4,9 @@ Ext.define('Koala.model.StyleSymbolizer', {
     fields: [{
          name: 'olStyle',
          type: 'auto'
+    },{
+         name: 'symbolType',
+         type: 'string'
     }]
 
 });

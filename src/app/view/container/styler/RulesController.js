@@ -10,10 +10,11 @@ Ext.define('Koala.view.container.styler.RulesController', {
      *
      */
     addRule: function(){
+        var me = this;
         var view = this.getView();
         var viewModel = this.getViewModel();
         var rules = viewModel.get('style').rules();
-        var rule = Ext.create('Koala.model.StyleRule')
+        var rule = Ext.create('Koala.model.StyleRule');
 
         rules.add(rule);
         view.insert(0, {
@@ -23,24 +24,12 @@ Ext.define('Koala.view.container.styler.RulesController', {
                 data: {
                     rule: rule
                 }
+            },
+            listeners: {
+                rulechanged: function(){
+                    view.fireEvent('rulesChanged', rules);
+                }
             }
         });
-    },
-
-    /**
-     *
-     */
-    onRuleChanged: function(){
-        this.updateRules();
-    },
-
-    /**
-     *
-     */
-    updateRules: function(){
-        var view = this.getView();
-        var rulePanels = view.query('k_container_styler_rule');
-        view.rules = Ext.Array.pluck(rulePanels, 'rule');
     }
-
 });

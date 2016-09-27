@@ -6,7 +6,16 @@ Ext.define('Koala.model.StyleFilter', {
          type: 'string',
          default: 'IsEqualTo'
     },{
-        name: 'property',
+        name: 'attribute',
+        type: 'string'
+    }, {
+        name: 'number1',
+        type: 'int'
+    }, {
+        name: 'number2',
+        type: 'int'
+    }, {
+        name: 'text',
         type: 'string'
     }],
 
