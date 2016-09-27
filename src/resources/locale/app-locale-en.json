@@ -45,7 +45,8 @@
         "config": {
             "data": {
                 "confirmDeleteTitleTpl": "en:Serie {0} entfernen?",
-                "confirmDeleteMsgTpl": "en:Möchten sie die Serie <b>{0}</b> aus dem Graphen entfernen?"
+                "confirmDeleteMsgTpl": "en:Möchten sie die Serie <b>{0}</b> aus dem Graphen entfernen?",
+                "noDataAvailableText": "en:Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
             }
         }
     },
