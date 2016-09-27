@@ -162,15 +162,15 @@ Ext.define("Koala.view.component.Map", {
         var me = this;
         var controller = me.getController();
 
+        if (olFeatures.length === 0) {
+            return;
+        }
+
         if (olFeatures.length === 1) {
             controller.onHoverFeatureClick(olFeatures[0]);
         } else {
             Ext.Msg.alert('Hinweis', 'Bitte wählen Sie zum Fortfahren genau eine Messstation aus.');
         }
-
-        // Ext.each(olFeatures, function(olFeature) {
-        //     controller.onHoverFeatureClick(olFeature);
-        // });
     }
 
 });
