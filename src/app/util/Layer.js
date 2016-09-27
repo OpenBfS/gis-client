@@ -48,6 +48,73 @@ Ext.define('Koala.util.Layer', {
         /* i18n */
 
         /**
+         * A unique key for originally received and parsed GNOS metadata, will
+         * be used as key in a `ol.Collection` (the layer, more specifically).
+         */
+        FIELDNAME_ORIGINAL_METADATA: 'k-originally-parsed-untainted-metadata',
+
+        /**
+         * Stores the passed metadata, which must be a clone of the originally
+         * received and parsed metadata object from GNOS in the layer. We need
+         * to have this in order to easily change active filters from the layer.
+         *
+         * Callers need to ensure that the passed object is not fiddled with and
+         * is a clone (`Ext.clone`) of the originally received and parsed
+         * metadata object from GNOS.
+         *
+         * @param {ol.layer.Layer} layer The layer where we will store the
+         *     metadata on.
+         * @param {Object} originalMetadata The metadata object to store. Must
+         *     be a clone of the originally received and parsed GNOS Metadata.
+         */
+        setOriginalMetadata: function(layer, originalMetadata) {
+            if(layer && layer.set) {
+                layer.set(
+                    Koala.util.Layer.FIELDNAME_ORIGINAL_METADATA,
+                    originalMetadata
+                );
+            }
+        },
+
+        /**
+         * Returns a previously stored metadata object. For further notes see
+         * the documentation of #setOriginalMetadata.
+         *
+         * @param {ol.layer.Layer} layer The layer where we want the original
+         *     metadata from.
+         * @return {Object} the metadata object that was once stored.
+         */
+        getOriginalMetadata: function(layer) {
+            return layer && layer.get && layer.get(
+                Koala.util.Layer.FIELDNAME_ORIGINAL_METADATA
+            );
+        },
+
+        /**
+         * Checks whether the passed layer has it's original metadata stored at
+         * teh exected location. we need this methdo so that we can check the
+         * various layers that might be passed to layer utility methods.
+         *
+         * @param {ol.layer.Layer} layer The layer where we want to check.
+         * @return {boolean} Whether the layer had metdata at the expected
+         *     location.
+         */
+        hasOriginalMetadata: function(layer) {
+            var hasOriginalMetadata = false;
+            var fieldname = Koala.util.Layer.FIELDNAME_ORIGINAL_METADATA;
+            if (layer && layer.getKeys && layer.get) {
+                var keys = layer.getKeys();
+                var keyContained = Ext.Array.contains(keys, fieldname);
+                if (keyContained) {
+                    hasOriginalMetadata = Ext.isObject(
+                        layer.get(fieldname)
+                    );
+                }
+            }
+            return hasOriginalMetadata;
+        },
+
+        /**
          * Returns whether the passed metadat object from GNOS has at least one
          * filter configured.
          *
@@ -282,7 +349,9 @@ Ext.define('Koala.util.Layer', {
 
         addLayerToMap: function(metadata) {
             var me = this;
+            var metadataClone = Ext.clone(metadata);
             var layer = me.layerFromMetadata(metadata);
+            me.setOriginalMetadata(layer, metadataClone);
             me.addOlLayerToMap(layer);
         },
 
@@ -361,6 +430,11 @@ Ext.define('Koala.util.Layer', {
          */
         addOlLayerToMap: function(layer) {
             var me = this;
+
+            if (!me.hasOriginalMetadata(layer)) {
+                Ext.log.warn('Layer did not have original GNOS metadata ' +
+                    'at the expected location');
+            }
 
             var suffixId = me.getSuffixId();
             var originalName = layer.get('name');
@@ -535,10 +609,12 @@ Ext.define('Koala.util.Layer', {
                 var printUuid = metadata.layerConfig.olProperties.printLayer;
                 var printLayer;
 
-                this.getMetadataFromUuidAndThen(printUuid, function(md){
+                this.getMetadataFromUuidAndThen(printUuid, (function(md){
+                        var metadataClone = Ext.clone(md);
                         printLayer = this.layerFromMetadata(md);
+                        this.setOriginalMetadata(printLayer, metadataClone);
                         layer.set('printLayer', printLayer);
-                    }
+                    }).bind(this)
                 );
             }
 

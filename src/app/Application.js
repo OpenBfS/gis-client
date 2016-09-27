@@ -98,14 +98,17 @@ Ext.define('Koala.Application', {
         var expectedLayers = 0;
         var gotLayers = 0;
         var routeCreatedLayers = {};
+        var LayerUtil = Koala.util.Layer;
 
         Ext.each(layerUuidsWithStates, function(uuidWithState) {
             var uuid = uuidWithState.split("_")[0];
             if (Koala.util.String.isUuid(uuid)) {
                 expectedLayers++;
-                Koala.util.Layer.getMetadataFromUuidAndThen(uuid, function(md){
-                   gotLayers++;
-                    var olLayer = Koala.util.Layer.layerFromMetadata(md);
+                LayerUtil.getMetadataFromUuidAndThen(uuid, function(md){
+                    gotLayers++;
+                    var metadataClone = Ext.clone(md);
+                    var olLayer = LayerUtil.layerFromMetadata(md);
+                    LayerUtil.setOriginalMetadata(olLayer, metadataClone);
                     routeCreatedLayers[uuid] = olLayer;
                     if (gotLayers === expectedLayers) {
                         me.routeCreatedLayers = routeCreatedLayers;

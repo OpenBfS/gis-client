@@ -35,7 +35,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var LayerUtil = Koala.util.Layer;
         var view = me.getView();
         var existingLayer = view.getLayer();
-        var metadata = view.getMetadata();
+        // view.getMetadata() might be tainted, i.e. changed in place
+        var metadata = LayerUtil.getOriginalMetadata(existingLayer);
         var filters = view.getFilters();
         filters = me.updateFiltersFromForm(filters);
         metadata.filters = filters;
@@ -63,10 +64,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var LayerUtil = Koala.util.Layer;
         var view = me.getView();
         var metadata = view.getMetadata();
+        var metadataClone = Ext.clone(metadata);
         var filters = view.getFilters();
         filters = me.updateFiltersFromForm(filters);
         metadata.filters = filters;
         var layer = LayerUtil.layerFromMetadata(metadata);
+        LayerUtil.setOriginalMetadata(layer, metadataClone);
         LayerUtil.addOlLayerToMap(layer);
         me.deselectThemeTreeItems();
         view.up('window').close();
@@ -146,7 +149,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var LayerUtil = Koala.util.Layer;
         var view = this.getView();
         var metadata = view.getMetadata();
+        var metadataClone = Ext.clone(metadata);
         var layer = LayerUtil.layerFromMetadata(metadata);
+        LayerUtil.setOriginalMetadata(layer, metadataClone);
         LayerUtil.addOlLayerToMap(layer);
         this.deselectThemeTreeItems();
         view.up('window').close();

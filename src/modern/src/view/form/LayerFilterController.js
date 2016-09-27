@@ -91,6 +91,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var LayerUtil = Koala.util.Layer;
         var view = me.getView();
         var metadata = view.getMetadata();
+        var metadataClone = Ext.clone(metadata);
         var filters = view.getFilters();
 
         // Iterate over all filters…
@@ -118,7 +119,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         metadata.filters = filters;
         var layer = LayerUtil.layerFromMetadata(metadata);
-
+        LayerUtil.setOriginalMetadata(layer, metadataClone);
         LayerUtil.addOlLayerToMap(layer);
         me.deselectThemeTreeItems();
 
@@ -138,7 +139,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var LayerUtil = Koala.util.Layer;
         var view = this.getView();
         var metadata = view.getMetadata();
+        var metadataClone = Ext.clone();
         var layer = LayerUtil.layerFromMetadata(metadata);
+        LayerUtil.setOriginalMetadata(layer, metadataClone);
         LayerUtil.addOlLayerToMap(layer);
         this.deselectThemeTreeItems();
 
