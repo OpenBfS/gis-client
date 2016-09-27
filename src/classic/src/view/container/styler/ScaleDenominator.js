@@ -25,7 +25,7 @@ Ext.define('Koala.view.container.styler.ScaleDenominator', {
         bind:{
             title: '{title}'
         },
-        name: 'comparison-fieldset',
+        name: 'scaledenominator-fieldset',
         collapsed: true,
         checkboxToggle: true,
         checkboxName: 'useScaleDenominatorCheckbox',
@@ -40,7 +40,8 @@ Ext.define('Koala.view.container.styler.ScaleDenominator', {
         items: [{
             xtype: 'numberfield',
             name: 'literalNumberField1',
-            value: 0,
+            minValue: 0,
+            step: 5000,
             bind: {
                 fieldLabel: '{literalNumberField1Label}',
                 value: '{scaleDenominator.number1}'
@@ -67,7 +68,8 @@ Ext.define('Koala.view.container.styler.ScaleDenominator', {
         }, {
             xtype: 'numberfield',
             name: 'literalNumberField2',
-            value: 0,
+            minValue: 0,
+            step: 5000,
             bind: {
                 fieldLabel: '{literalNumberField2Label}',
                 value: '{scaleDenominator.number2}'

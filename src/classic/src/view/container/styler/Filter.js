@@ -25,7 +25,7 @@ Ext.define('Koala.view.container.styler.Filter', {
         bind:{
             title: '{title}'
         },
-        name: 'comparison-fieldset',
+        name: 'filter-fieldset',
         collapsed: true,
         checkboxToggle: true,
         checkboxName: 'useFilterCheckbox',

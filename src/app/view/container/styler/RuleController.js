@@ -5,6 +5,137 @@ Ext.define('Koala.view.container.styler.RuleController', {
     /**
      *
      */
+    onBoxReady: function(){
+        var me = this;
+        var view = me.getView();
+        var rule = me.getViewModel().get('rule');
+
+        var hasFilter = !!rule.getFilter();
+        var hasSymbolizer = !!rule.getSymbolizer();
+        var hasScaleDenominator = !!rule.getScaleDenominator();
+
+        if(!hasFilter){
+            rule.setFilter(Ext.create('Koala.model.StyleFilter'));
+        }
+        if(!hasSymbolizer){
+            rule.setSymbolizer(Ext.create('Koala.model.StyleSymbolizer'));
+        }
+        if(!hasScaleDenominator){
+            rule.setScaleDenominator(Ext.create('Koala.model.StyleScaleDenominator'));
+        }
+
+        me.initBaseFieldset();
+        me.initComponents();
+
+        if(hasFilter && rule.getFilter().get('operator')){
+            var filterFieldset = view.down('fieldset[name="filter-fieldset"]');
+            filterFieldset.expand();
+        }
+        if(hasScaleDenominator && rule.getScaleDenominator().get('operator')){
+            var scaleDenominatorFieldset = view.down('fieldset[name="scaledenominator-fieldset"]');
+            scaleDenominatorFieldset.expand();
+        }
+    },
+
+    /**
+     *
+     */
+    initBaseFieldset: function(){
+        var view = this.getView();
+        var viewModel = this.getViewModel();
+
+        view.add({
+            xtype: 'fieldset',
+            title: viewModel.get('titlePrefix'),
+            bind: {
+                title: '{titlePrefix} {fieldsetTitle}'
+            },
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox',
+                    align: 'center'
+                },
+                defaultType: 'textfield',
+                items: [{
+                    xtype: 'button',
+                    bind: {
+                        text: '{removeRuleButtonText}',
+                        iconCls: '{removeRuleButtonIconCls}'
+                    },
+                    handler: 'removeRule'
+                }]
+            }]
+        });
+    },
+
+    /**
+     *
+     */
+    initComponents: function() {
+        var view = this.getView();
+        var viewModel = this.getViewModel();
+        var rule = viewModel.get('rule');
+
+        view.down('fieldset').add({
+            xtype: 'container',
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+            margin: '10px 0 0 0',
+            items: [{
+                xtype: 'k_container_styler_symbolizer',
+                flex: 1,
+                viewModel: {
+                    data: {
+                        symbolizer: rule.getSymbolizer()
+                    }
+                },
+                listeners: {
+                    olstylechanged: 'onOlStyleChanged'
+                }
+            },{
+                xtype: 'container',
+                flex: 3,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                items: [{
+                    xtype: 'k_container_styler_scaledenominator',
+                    viewModel: {
+                        data: {
+                            scaleDenominator: rule.getScaleDenominator()
+                        }
+                    },
+                    margin: '0 10px',
+                    listeners: {
+                        scaledenominatorchanged: 'onScaleDenominatorChanged'
+                    }
+                }, {
+                    xtype: 'k_container_styler_filter',
+                    viewModel: {
+                        data: {
+                            filter: rule.getFilter()
+                        }
+                    },
+                    margin: '0 10px',
+                    listeners: {
+                        filterchanged: 'onFilterChanged'
+                    }
+                }]
+            }]
+        });
+    },
+
+    /**
+     *
+     */
     removeRule: function(){
         var view = this.getView();
         var viewModel = this.getViewModel();
@@ -25,7 +156,7 @@ Ext.define('Koala.view.container.styler.RuleController', {
     /**
      *
      */
-    onOlStyleChanged: function(olStyle){
+    onOlStyleChanged: function(){
         var view = this.getView();
         var viewModel = this.getViewModel();
         var rule = viewModel.get('rule');

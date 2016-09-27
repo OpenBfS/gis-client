@@ -29,59 +29,12 @@ Ext.define('Koala.view.container.styler.StylerController', {
         var layer = viewModel.get('layer');
         var style = layer.get('koalaStyle') || Ext.create('Koala.model.Style');
 
-        if(!layer){
-            debugger
-        }
-
         viewModel.set('layer', layer);
         viewModel.set('style', style);
         view.add({
             xtype: 'k_container_styler_rules'
         });
     },
-
-    // /**
-    //  * Called when the configured value for layerName changes in the view, this
-    //  * method checks if and how the user interface can be rebuild.
-    //  */
-    // checkRebuildUserInterface: function() {
-    //     var me = this;
-    //     if (me.rebuildTask) {
-    //         me.rebuildTask.cancel();
-    //     }
-    //     var view = me.getView();
-    //     if (view.isConfiguring) {
-    //         me.rebuildTask = new Ext.util.DelayedTask(
-    //             me.checkRebuildUserInterface, me, []
-    //         );
-    //         me.rebuildTask.delay(me.rebuildCheckInterval);
-    //     } else {
-    //         me.rebuildUserInterface();
-    //     }
-    // },
-
-    // /**
-    //  *
-    //  */
-    // rebuildUserInterface: function() {
-    //     var me = this;
-    //     var view = me.getView();
-    //     var viewModel = me.getViewModel();
-    //
-    //     view.removeAll();
-    //     view.setHtml('');
-    //     // view.setLoading(true);
-    //
-    //     var style = viewModel.get('style');
-    //     if(!style){
-            // viewModel.set('style', Ext.create('Koala.model.Style'));
-            // view.add({
-            //     xtype: 'k_container_styler_rules'
-            // });
-    //     } else {
-    //         debugger
-    //     }
-    // },
 
     applyAndSave: function() {
         var viewModel = this.getViewModel();

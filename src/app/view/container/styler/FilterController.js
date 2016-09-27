@@ -29,19 +29,18 @@ Ext.define('Koala.view.container.styler.FilterController', {
         });
     },
 
+    /**
+     *
+     */
     attributeComboBoxReady: function(combo){
-        var styler = combo.up('k_container_styler_styler');
-        var store = combo.getStore();
-
         var layer = this.getViewModel().get('layer');
         var attributeKeys = Koala.util.Style.getAttributeKeysFromVetorLayer(layer);
         Ext.Array.remove(attributeKeys, 'geometry');
 
-        combo.setStore(attributeKeys)
+        combo.setStore(attributeKeys);
     },
 
     setFilterComponents: function() {
-        var me = this;
         var viewModel = this.getViewModel();
         var filter = viewModel.get('filter');
         var stylerUtil = Koala.util.Style;
@@ -61,7 +60,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
         var me = this;
         var view = me.getView();
         var combo = view.down('combo[name="operatorCombo"]');
-        var fieldset = view.down('fieldset[name="comparison-fieldset"]');
+        var fieldset = view.down('fieldset[name="filter-fieldset"]');
 
         // If we load a filter from an SLD we have to fill up the value fields
         if(filter){
@@ -83,7 +82,6 @@ Ext.define('Koala.view.container.styler.FilterController', {
         var literalNumberField2 = view.down(
                 'numberfield[name="literalNumberField2"]');
         var literalTextField = view.down('textfield[name="literalTextField"]');
-        var literalValues;
 
         switch(newValue) {
         case "PropertyIsEqualTo":

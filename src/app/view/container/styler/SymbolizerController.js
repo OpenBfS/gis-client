@@ -22,10 +22,14 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         var symbolizerFromRule = viewModel.get('rule').getSymbolizer();
 
         viewModel.set('symbolizer', symbolizerFromRule);
-        symbolizerFromRule.set('olStyle', layer.getStyle());
-        symbolizerFromRule.set('symbolType', symbolType);
 
-        var added = view.add({
+        // Check if we get a real symbolizer or just a blank one
+        if(!symbolizerFromRule.get('symbolType')){
+            symbolizerFromRule.set('olStyle', layer.getStyle());
+            symbolizerFromRule.set('symbolType', symbolType);
+        }
+
+        view.add({
             xtype: 'fieldset',
             bind:{
                 title: '{title}',
@@ -49,60 +53,6 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
                 }
             }]
         });
-
-        // if we were given a style with an image, we need to check the size…
-        Ext.each(symbolizerFromRule.get('olStyle'), function(style){
-            me.checkAddResizeListener(style, added.down('gx_renderer'));
-        });
-    },
-
-    /**
-     * For every style that we gathered by evaluating the SLD, we need to check
-     * if the style contained an icon (`ol.style.Icon`). If that is the case, we
-     * have to ensure that the SLD handling of `<size>` is reflected in the
-     * ol.style.Icon. In SLD, for rectangular images, the `<size>` means height,
-     * the width will be set accordingly in the correct ratio. For OpenLayers,
-     * we can have the same effect f we set a new symbolizer, which has an
-     * approprooiate ratio.
-     *
-     * Here is how we achebve this:
-     * Render an image to the dom with the desired height (jsut as in SLD). Once
-     * the image has loaded, gather the rendered width. From these two
-     * dimensions, we calculate the ratio and set a nearly identical style, only
-     * this time with a ratio.
-     *
-     * TODO This needs t be checked with mutliple images stacked on top of each
-     *      other.
-     * TODO We also should check why there seems to be a max width for the
-     *      gx_renderer?
-     */
-    checkAddResizeListener: function(style, rendererCmp){
-        var img = style && style.getImage && style.getImage();
-        if (img && img instanceof ol.style.Icon) {
-            var size = img.getSize();
-            var height = size && size[1];
-            var src = img.getSrc();
-            if (!height || !src) {
-                return;
-            }
-            var imgElem = document.createElement('img');
-            imgElem.height = height + "";
-            imgElem.onload = function() {
-                var imgW = this.width;
-                var imgH = this.height;
-                rendererCmp.setSize(imgW, imgH);
-                var adjustedStyle = new ol.style.Style({
-                    image: new ol.style.Icon({
-                        src: src,
-                        scale: (imgH/imgW)
-                    })
-                });
-                rendererCmp.update({symbolizers:adjustedStyle});
-                // rendererCmp.setRendererDimensions();
-                imgElem = null;
-            };
-            imgElem.src = src;
-        }
     },
 
     /**
@@ -110,17 +60,15 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
      */
     symbolizerClicked: function(){
         var me = this;
-        var view = this.getView();
-        var userGroupId = view.getViewModel().get('selectedUserGroup');
         var viewModel = this.getViewModel();
         var symbolType = viewModel.get('symbolizer.symbolType');
         var olStyle = viewModel.get('symbolizer.olStyle');
 
         var win = Ext.ComponentQuery.query('[name=symbolizer-edit-window]')[0];
 
-        var redlinePointStyle = symbolType.toUpperCase() == 'POINT' ? olStyle : undefined;
-        var redlineLineStringStyle = symbolType.toUpperCase() == 'LINESTRING' ? olStyle : undefined;
-        var redlinePolygonStyle = symbolType.toUpperCase() == 'POLYGON' ? olStyle : undefined;
+        var redlinePointStyle = symbolType.toUpperCase() === 'POINT' ? olStyle : undefined;
+        var redlineLineStringStyle = symbolType.toUpperCase() === 'LINESTRING' ? olStyle : undefined;
+        var redlinePolygonStyle = symbolType.toUpperCase() === 'POLYGON' ? olStyle : undefined;
 
         var styleEditor = {
             xtype: 'k_container_styler_styleditor',

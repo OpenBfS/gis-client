@@ -214,7 +214,7 @@ Ext.define('Koala.view.main.Main', {
                                 Ext.create('Ext.window.Window', {
                                     name: 'add-wms-window',
                                     bind: {
-                                        title: '{importLocalDataButtonText}',
+                                        title: '{importLocalDataButtonText}'
                                     },
                                     layout: 'fit',
                                     items: [{

@@ -2,14 +2,20 @@ Ext.define('Koala.view.container.styler.ScaleDenominatorController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.container.styler.scaledenominator',
 
+    /**
+     *
+     */
     onBoxReady: function() {
         var viewModel = this.getViewModel();
         var scaleDenominatorFromRule = viewModel.get('rule').getScaleDenominator();
         viewModel.set('scaleDenominator', scaleDenominatorFromRule);
-        this.setScaleDenominatorComponents();
+        // this.setScaleDenominatorComponents();
         this.applyListeners();
     },
 
+    /**
+     *
+     */
     applyListeners: function(){
         var view = this.getView();
         var viewModel = this.getViewModel();
@@ -29,43 +35,38 @@ Ext.define('Koala.view.container.styler.ScaleDenominatorController', {
         });
     },
 
-    attributeComboBoxReady: function(combo){
-        var styler = combo.up('k_container_styler_styler');
-        var store = combo.getStore();
+    // /**
+    //  *
+    //  */
+    // setScaleDenominatorComponents: function() {
+    //     var me = this;
+    //     var scaleDenominator = me.getViewModel().get('scaleDenominator');
+    //     this.addScaleDenominator(scaleDenominator);
+    // },
+    //
+    // /**
+    //  *
+    //  */
+    // addScaleDenominator: function(scaleDenominator) {
+    //     var me = this;
+    //     var view = me.getView();
+    //     var combo = view.down('combo[name="operatorCombo"]');
+    //     var fieldset = view.down('fieldset[name="scaledenominator-fieldset"]');
+    //
+    //     // TODO refactor
+    //     if(scaleDenominator){
+    //         // var operator = scaleDenominator.comparisonOps.name.localPart;
+    //         // combo.setValue(operator);
+    //         // fieldset.expand();
+    //     }
+    // },
 
-        var layer = this.getViewModel().get('layer');
-        var attributeKeys = Koala.util.Style.getAttributeKeysFromVetorLayer(layer);
-        Ext.Array.remove(attributeKeys, 'geometry');
-
-        combo.setStore(attributeKeys)
-    },
-
-    setScaleDenominatorComponents: function() {
-        var me = this;
-        var scaleDenominator = me.getViewModel().get('scaleDenominator');
-        var stylerUtil = Koala.util.Style;
-
-        this.addScaleDenominator(scaleDenominator);
-    },
-
-    addScaleDenominator: function(scaleDenominator) {
-        var me = this;
-        var view = me.getView();
-        var combo = view.down('combo[name="operatorCombo"]');
-        var fieldset = view.down('fieldset[name="comparison-fieldset"]');
-
-        // TODO refactor
-        if(scaleDenominator){
-            // var operator = scaleDenominator.comparisonOps.name.localPart;
-            // combo.setValue(operator);
-            // fieldset.expand();
-        }
-    },
-
+    /**
+     *
+     */
     operatorComboChanged: function(combo, newValue){
         var view = this.getView();
         var viewModel = this.getViewModel();
-        var scaleDenominator = viewModel.get('scaleDenominator');
         var literalNumberField1 = view.down(
                 'numberfield[name="literalNumberField1"]');
         var literalNumberField2 = view.down(
