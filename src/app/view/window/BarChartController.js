@@ -30,79 +30,80 @@ Ext.define('Koala.view.window.BarChartController', {
     },
 
     createBarChart: function(olLayer, olFeat) {
-        /** also receives a chartId as thrid parameter **/
-        // var props = olLayer.get('barChartProperties');
-        // var categoryCount = props.chartFieldSequence.split(",").length;
-        // var chartWidth = 200 + categoryCount * 30;
-        // var titleTpl = 'titleTpl' in props ? props.titleTpl : '';
-        // var title = Koala.util.String.replaceTemplateStrings(titleTpl, olLayer);
-        // title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
-        //
-        // var chart = {
-        //     title: Ext.isEmpty(title) ? undefined : title,
-        //     xtype: 'k-chart-bar',
-        //     name: chartId,
-        //     layer: olLayer,
-        //     height: 350,
-        //     width: chartWidth
-        // };
-
         var chartConfig = olLayer.get('barChartProperties');
         var categoryCount = chartConfig.chartFieldSequence.split(",").length;
         var chartWidth = 200 + categoryCount * 50;
         var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
         var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
-        // var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
-        //     Koala.util.String.replaceTemplateStrings(
-        //         chartConfig.seriesTitleTpl, olFeat) : "";
-        var valFromSeq = Koala.util.String.getValueFromSequence;
+        var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
+        var chartMarginObj;
+
+        if (chartMargin.length > 0) {
+            chartMarginObj = {
+                top: chartMargin[0],
+                right: chartMargin[1],
+                bottom: chartMargin[2],
+                left: chartMargin[3]
+            };
+        }
 
         var chart = {
             xtype: 'd3-barchart',
-            zoomEnabled: true,
             name: olLayer.get('name'),
+            zoomEnabled: Koala.util.String.coerce(chartConfig.allowZoom),
             height: 350,
             width: chartWidth,
             startDate: olFeat.get('end_measure'),
             endDate: olFeat.get('end_measure'),
             targetLayer: olLayer,
             selectedStation: olFeat,
-            title: {
-                label: title,
-                labelSize: 20,
-                labelColor: '#000',
-                labelPadding: 18
-            },
-            chartMargin: {
-                top: 50,
-                right: 200,
-                bottom: 50,
-                left: 50
-            },
+            backgroundColor: chartConfig.backgroundColor,
+            chartMargin: chartMarginObj,
+            labelFunc: Koala.util.String.coerce(chartConfig.labelFunc),
+            chartFieldSequence: chartConfig.chartFieldSequence,
             shape: {
                 type: 'bar',
                 curve: 'linear',
                 id: olFeat.get('id'),
-                color: valFromSeq(chartConfig.colorSequence, 0, 'red'),
-                opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 1),
+                color: chartConfig.colorSequence,
                 tooltipTpl: chartConfig.tooltipTpl
             },
             grid: {
-                show: true, // neue Config ?
-                color: '#d3d3d3', // neue Config ?
-                width: 1, // neue Config ?
-                opacity: 0.7 // neue Config ?
+                show: Koala.util.String.coerce(chartConfig.showGrid),
+                color: chartConfig.gridStrokeColor,
+                width: chartConfig.gridStrokeWidth,
+                opacity: chartConfig.gridStrokeOpacity
             },
             axes: {
                 left: {
-                    scale: 'linear',
-                    format: ',.0f',
-                    label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || '')
+                    scale: chartConfig.yAxisScale || 'linear',
+                    format: chartConfig.yAxisFormat,
+                    label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
+                    labelPadding: chartConfig.labelPadding,
+                    labelColor: chartConfig.labelColor,
+                    labelSize: chartConfig.labelSize,
+                    tickSize: chartConfig.tickSize,
+                    tickPadding: chartConfig.tickPadding
                 },
                 bottom: {
-                    scale: 'ordinal',
-                    label: chartConfig.xAxisLabel || ''
+                    scale: chartConfig.xAxisScale || 'ordinal',
+                    format: chartConfig.xAxisFormat,
+                    label: (chartConfig.xAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
+                    labelPadding: chartConfig.labelPadding,
+                    labelColor: chartConfig.labelColor,
+                    labelSize: chartConfig.labelSize,
+                    tickSize: chartConfig.tickSize,
+                    tickPadding: chartConfig.tickPadding
                 }
+            },
+            legend: {
+                legendEntryMaxLength: Koala.util.String.coerce(chartConfig.legendEntryMaxLength)
+            },
+            title: {
+                label: title,
+                labelSize: chartConfig.titleSize,
+                labelColor: chartConfig.titleColor,
+                labelPadding: chartConfig.titlePadding
             }
         };
 

@@ -33,6 +33,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     data: {},
     chartRendered: false,
     ajaxCounter: 0,
+    chartDataAvailable: false,
 
     /**
      *
@@ -48,23 +49,21 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.gridAxes = {};
         me.data = {};
 
-        if (view.getShowLoadMask()) {
-            view.setLoading(true);
-        }
-
-        // me.on('chartdatachanged', function() {
         me.on('chartdataprepared', function() {
-            if (me.chartRendered) {
-                me.redrawChart();
+            if (!me.chartDataAvailable) {
+                view.setHtml(me.getViewModel().get('noDataAvailableText'));
+                me.chartRendered = false;
             } else {
-                me.drawChart();
-            }
-
-            if (view.getShowLoadMask()) {
-                view.setLoading(false);
+                if (me.chartRendered) {
+                    me.redrawChart();
+                } else {
+                    view.setHtml('');
+                    me.drawChart();
+                }
             }
         });
 
+        // TODO Move to barchart!
         if (view.chartType === 'bar') {
             var targetLayer = view.getTargetLayer();
             var chartConfig = targetLayer.metadata.layerConfig.barChartProperties;
@@ -97,29 +96,20 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.deleteSvg();
 
         me.createScales();
+        me.createAxes();
+        me.createGridAxes();
         me.createShapes();
 
         me.setDomainForScales();
 
+        me.redrawAxes();
+        me.redrawGridAxes();
         me.drawShapes();
 
         me.redrawLegend();
 
-        // TODO: Zoom to the new chart extent
-        // me.transformPlot({
-        //     x: 0,
-        //     y: 0,
-        //     k: 1
-        // }, 500);
-    },
-
-    /**
-     *
-     */
-    deleteSvg: function(){
-        var view = this.getView();
-        var svg = d3.select('#' + view.getId() + ' svg svg');
-        svg.node().remove();
+        // Zoom to the new chart extent
+        me.resetZoom();
     },
 
     /**
@@ -148,6 +138,78 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawLegend();
 
         me.chartRendered = true;
+    },
+
+    /**
+     * [redrawAxes description]
+     * @return {[type]} [description]
+     */
+    redrawAxes: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var axesConfig = view.getAxes();
+        var axisSelector = viewId + ' svg g.' + CSS.AXIS;
+
+        Ext.iterate(axesConfig, function(orient) {
+            var axisGenerator = me.axes[orient];
+            var axis;
+
+            if (orient === 'top' || orient === 'bottom') {
+                axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
+            } else if (orient === 'left' || orient === 'right') {
+                axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
+            }
+
+            axis.call(axisGenerator);
+        });
+    },
+
+    /**
+     * [redrawGridAxes description]
+     * @return {[type]} [description]
+     */
+    redrawGridAxes: function() {
+        var me = this;
+        var view = me.getView();
+        var gridConfig = view.getGrid();
+
+        if (!gridConfig.show) {
+            return false;
+        }
+
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var viewId = '#' + view.getId();
+        var axisSelector = viewId + ' svg g.' + CSS.GRID;
+        var orientations = ['bottom', 'left'];
+
+        Ext.each(orientations, function(orient) {
+            var axisGenerator = me.gridAxes[orient];
+            var axis;
+
+            if (orient === 'top' || orient === 'bottom') {
+                axis = d3.select(axisSelector + '.' + CSS.GRID_X);
+            } else if (orient === 'left' || orient === 'right') {
+                axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
+            }
+
+            axis.call(axisGenerator);
+        });
+    },
+
+    /**
+     *
+     */
+    deleteSvg: function() {
+        var view = this.getView();
+        var svg = d3.select('#' + view.getId() + ' svg svg');
+        if (svg && !svg.empty()) {
+            svg.node().remove();
+            this.chartRendered = false;
+        }
     },
 
     /**
@@ -211,9 +273,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         Ext.iterate(me.scales, function(orient) {
             Ext.each(me.shapes, function(shape) {
                 var data = me.data[shape.config.id];
-                me.scales[orient].domain(d3.extent(data, function(d) {
-                    return d[view.getAxes()[orient].dataIndex];
-                }));
+                me.scales[orient]
+                    .domain(d3.extent(data, function(d) {
+                        return d[view.getAxes()[orient].dataIndex];
+                    }))
+                    .nice();
             });
         });
     },
@@ -250,26 +314,55 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = me.getView();
         var viewId = '#' + view.getId();
         var gridConfig = view.getGrid();
+        var chartSize = me.getChartSize();
 
         return d3.zoom()
+            .scaleExtent([1, 200])
+            .translateExtent([[0, 0], [chartSize[0], chartSize[1]]])
+            .extent([[0, 0], [chartSize[0], chartSize[1]]])
             .on('zoom', function() {
-                d3.selectAll(viewId + ' svg g.' + CSS.SHAPE_GROUP)
-                    .attr('transform', d3.event.transform);
+                var transform = d3.event.transform;
+                var shapeGroupSelectorTpl = viewId + ' .' + CSS.SHAPE_GROUP +
+                        '[idx=' + CSS.PREFIX_IDX_SHAPE_GROUP + '{0}]';
 
                 Ext.iterate(me.axes, function(orient) {
                     var axis;
-                    var axisSelector = 'svg g.' + CSS.AXIS;
+                    var axisSelector = viewId + ' svg g.' + CSS.AXIS;
                     var axisGenerator = me.axes[orient];
                     var scaleGenerator = me.scales[orient];
 
                     if (orient === 'top' || orient === 'bottom') {
                         axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
-                        axis.call(axisGenerator.scale(
-                            d3.event.transform.rescaleX(scaleGenerator)));
+                        var scaleX = transform.rescaleX(scaleGenerator);
+
+                        Ext.each(me.shapes, function(shape, idx) {
+                            var shapePathSelector = Ext.String.format(shapeGroupSelectorTpl, idx) +
+                                    ' .' + CSS.SHAPE_PATH;
+                            var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, idx) +
+                                    ' .' + CSS.SHAPE_POINT_GROUP + ' circle';
+
+                            d3.select(shapePathSelector)
+                                .attr('d', shape.shape.x(function(d) {
+                                    return scaleX(d[shape.config.xField]);
+                                }));
+
+                            d3.selectAll(shapePointsSelector)
+                                .attr('cx', function(d) {
+                                    return scaleX(d[shape.config.xField]);
+                                });
+                        });
+
+                        axis.call(axisGenerator.scale(scaleX));
                     } else if (orient === 'left' || orient === 'right') {
-                        axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
-                        axis.call(axisGenerator.scale(
-                            d3.event.transform.rescaleY(scaleGenerator)));
+                        // axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
+                        //
+                        // axis.call(axisGenerator.scale(
+                        //     d3.event.transform.rescaleY(scaleGenerator)));
+
+                        // d3.selectAll('circle')
+                        //     .attr('cy', function(d) {
+                        //         return scaleGenerator(d.value);
+                        //     });
                     }
                 });
 
@@ -285,16 +378,16 @@ Ext.define('Koala.view.component.D3ChartController', {
                             axis.call(axisGenerator.scale(
                                 d3.event.transform.rescaleX(scaleGenerator)));
                         } else if (orient === 'left' || orient === 'right') {
-                            axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
-                            axis.call(axisGenerator.scale(
-                                d3.event.transform.rescaleY(scaleGenerator)));
+                            // axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
+                            // axis.call(axisGenerator.scale(
+                            //     d3.event.transform.rescaleY(scaleGenerator)));
                         }
                     });
 
                     d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
-                        .style('stroke-width', gridConfig.width)
-                        .style('stroke', gridConfig.color)
-                        .style('stroke-opacity', gridConfig.opacity);
+                        .style('stroke-width', gridConfig.width || 1)
+                        .style('stroke', gridConfig.color || '#d3d3d3')
+                        .style('stroke-opacity', gridConfig.opacity || 0.7);
                 }
             });
     },
@@ -309,7 +402,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var chartSize = me.getChartSize();
 
         Ext.iterate(view.getAxes(), function(orient, axisConfig) {
-            var scaleType = staticMe.SCALE[axisConfig.scale];
+            var scaleType = staticMe.SCALE[axisConfig.scale || 'linear'];
             var range;
 
             if (orient === 'top' || orient === 'bottom') {
@@ -332,8 +425,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         var chartSize = me.getChartSize();
 
         Ext.each(view.getShapes(), function(shapeConfig) {
-            var shapeType = staticMe.TYPE[shapeConfig.type];
-            var curveType = staticMe.CURVE[shapeConfig.curve];
+            var shapeType = staticMe.TYPE[shapeConfig.type || 'line'];
+            var curveType = staticMe.CURVE[shapeConfig.curve || 'linear'];
             var xField = shapeConfig.xField;
             var yField = shapeConfig.yField;
             var orientX = me.getAxisByField(xField);
@@ -410,16 +503,49 @@ Ext.define('Koala.view.component.D3ChartController', {
         Ext.iterate(axesConfig, function(orient, axisConfig) {
             var axis = staticMe.ORIENTATION[orient];
             var scale = me.scales[orient];
+            // https://github.com/d3/d3-format
+            var tickFormatter = axisConfig.scale === 'time' ?
+                    me.getMultiScaleTimeFormatter :
+                    d3.format(axisConfig.format || ',.0f');
 
             var chartAxis = axis(scale)
                 .ticks(axisConfig.ticks)
                 .tickValues(axisConfig.values)
-                .tickFormat(axisConfig.format ? d3.format(axisConfig.format) : undefined)
+                .tickFormat(tickFormatter)
                 .tickSize(axisConfig.tickSize || 6)
                 .tickPadding(axisConfig.tickPadding || 3);
 
             me.axes[orient] = chartAxis;
         });
+    },
+
+    /**
+     * Method that can be adjusted to generate a custom multi scale time formatter
+     * function, based on https://github.com/d3/d3-time-format
+     *
+     * See https://github.com/d3/d3-time-format/blob/master/README.md#locale_format
+     * for available D3 datetime formats.
+     *
+     * @param  {Date} date The current Date object.
+     * @return {function} The multi-scale time format function.
+     */
+    getMultiScaleTimeFormatter: function(date) {
+        var formatMillisecond = d3.timeFormat(".%L"),
+            formatSecond = d3.timeFormat(":%S"),
+            formatMinute = d3.timeFormat("%H:%M"),
+            formatHour = d3.timeFormat("%H:%M"),
+            formatDay = d3.timeFormat("%a %d"),
+            formatWeek = d3.timeFormat("%b %d"),
+            formatMonth = d3.timeFormat("%B"),
+            formatYear = d3.timeFormat("%Y");
+
+        return (d3.timeSecond(date) < date ? formatMillisecond
+          : d3.timeMinute(date) < date ? formatSecond
+          : d3.timeHour(date) < date ? formatMinute
+          : d3.timeDay(date) < date ? formatHour
+          : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
+          : d3.timeYear(date) < date ? formatMonth
+          : formatYear)(date);
     },
 
     /**
@@ -543,10 +669,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .call(me.gridAxes[orient]);
 
             d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
-                .style('stroke-width', gridConfig.width)
-                .style('stroke', gridConfig.color)
-                .style('stroke-opacity', gridConfig.opacity);
-
+                .style('stroke-width', gridConfig.width || 1)
+                .style('stroke', gridConfig.color || '#d3d3d3')
+                .style('stroke-opacity', gridConfig.opacity || 0.7);
         });
     },
 
@@ -758,6 +883,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         var viewId = '#' + me.getView().getId();
         var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
 
+        if (!me.zoomInteraction) {
+            return;
+        }
+
         if (duration && duration > 0) {
             plot
                 .transition()
@@ -780,10 +909,14 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * [resetZoom description]
+     * Reset the zoom status to the initial zoom (after changing the data).
      */
     resetZoom: function() {
-        this.transformPlot(this.initialPlotTransform, 500);
+        this.transformPlot({
+            x: 0,
+            y: 0,
+            k: 1
+        }, 500);
     },
 
     /**
@@ -798,7 +931,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var viewId = '#' + view.getId();
         var legendCls = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND;
         var legend = d3.select(viewId + ' svg g.' + legendCls);
-        if (legend) {
+        if (legend && !legend.empty()) {
             var legendNode = legend.node();
             legendNode.parentNode.removeChild(legendNode);
         }
@@ -817,9 +950,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = me.getView();
         var legendConfig = view.getLegend();
         var legendMargin = legendConfig.legendMargin;
-
         var legendEntryHeight = me.legendEntryTargetHeight;
-
         var legendParent = me.legendSvg;
         var legend = legendParent
             .append('g')
@@ -890,14 +1021,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                     }
                 });
 
-            // TODO for DK, get property just as we do it elsewhere
-            var legendEntryMaxLength = Koala.util.String.coerce(
-                view.getTargetLayer().metadata.layerConfig.timeSeriesChartProperties.legendEntryMaxLength
-            );
-
             var nameAsTooltip = shape.config.name;
             var visualLabel = staticMe.labelEnsureMaxLength(
-                nameAsTooltip, legendEntryMaxLength
+                nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
             );
 
             legendEntry.append('text')
@@ -938,7 +1064,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    deleteShapeConfig: function(shapeId){
+    deleteShapeConfig: function(shapeId) {
         var shapeConfigs = this.getView().getShapes();
         var shapeConfigToRemove = Ext.Array.findBy(shapeConfigs, function(shapeConfig){
             return shapeConfig.id === shapeId;
@@ -974,7 +1100,9 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         Ext.Array.removeAt(me.shapes, idx);
         var shapeGroupNode = me.shapeGroupByIndex(idx).node();
-        shapeGroupNode.parentNode.removeChild(shapeGroupNode);
+        if (shapeGroupNode && shapeGroupNode.parentNode) {
+            shapeGroupNode.parentNode.removeChild(shapeGroupNode);
+        }
     },
 
     /**
@@ -1001,12 +1129,15 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         var view = me.getView();
 
-        me.data = {};
+        if (view.getShowLoadMask() && view.getSelectedStations().length > 0) {
+            view.setLoading(true);
+        }
 
+        me.data = {};
+        me.chartDataAvailable = false;
         me.ajaxCounter = 0;
 
-        Ext.each(view.getSelectedStations(), function(station/*, i, stations*/) {
-            // var lastRequest = (stations.length - 1) === i;
+        Ext.each(view.getSelectedStations(), function(station) {
             me.getChartDataForStation(station);
         });
     },
@@ -1018,14 +1149,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
-
-        //TODO Check if timeseries or barchart
-        var chartType = "timeSeriesChartProperties";
-        var chartConfig = targetLayer.get(chartType);
-
+        var chartConfig = targetLayer.get("timeSeriesChartProperties");
         var filterConfig= Koala.view.window.TimeSeriesWindow.getStartEndFilterFromMetadata(targetLayer.metadata);
-        var startDate = view.getStartDate(); // || filterConfig.mindatetimeinstant;
-        var endDate = view.getEndDate(); // || filterConfig.maxdatetimeinstant;
+        var startDate = view.getStartDate();
+        var endDate = view.getEndDate();
         var timeField = filterConfig.parameter;
 
         var paramConfig = Koala.util.Object.getConfigByPrefix(
@@ -1060,16 +1187,16 @@ Ext.define('Koala.view.component.D3ChartController', {
         var startString = Ext.Date.format(startDate, targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
         var endString = Ext.Date.format(endDate, targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
 
-        var url = targetLayer.metadata.layerConfig.wfs.url; //"http://10.133.7.63/geoserver/orig-f-bfs/ows?";
+        var url = targetLayer.metadata.layerConfig.wfs.url;
 
         var requestParams = {
             service: 'WFS',
             version: '1.1.0',
             request: 'GetFeature',
-            typeName: chartConfig.dataFeatureType, //'orig-f-bfs:niederschlag_24h_timeseries',
+            typeName: chartConfig.dataFeatureType,
             outputFormat: 'application/json',
             filter: me.getDateTimeRangeFilter(startString, endString, timeField),
-            sortBy: timeField //'end_measure'
+            sortBy: timeField
         };
 
         Ext.apply(requestParams, paramConfig);
@@ -1082,49 +1209,43 @@ Ext.define('Koala.view.component.D3ChartController', {
                 var jsonObj = Ext.decode(resp.responseText);
 
                 var snapObject = me.getTimeStampSnapObject(
-                        startDate, intervalInSeconds, jsonObj.features, timeField); // 'end_measure'
+                        startDate, intervalInSeconds, jsonObj.features, timeField);
 
                 var compareableDate, matchingFeature;
 
-                var xAxisAttr = chartConfig.xAxisAttribute; //'end_measure';
-                var yAxisAttr = chartConfig.yAxisAttribute; //'value';
-                var valueField = chartConfig.yAxisAttribute; //'value';
+                var xAxisAttr = chartConfig.xAxisAttribute;
+                var yAxisAttr = chartConfig.yAxisAttribute;
+                var valueField = chartConfig.yAxisAttribute;
 
                 var mockUpData = [];
 
-                while(startDate <= endDate){
+                while (startDate <= endDate) {
 
                     var newRawData = {};
 
                     compareableDate = Ext.Date.format(startDate, 'timestamp');
                     matchingFeature = snapObject[compareableDate];
 
-                    // Why did we do this?
-                    // Ext.Date.format(date, Koala.util.Date.ISO_FORMAT);
                     newRawData[xAxisAttr] = startDate;
                     newRawData[valueField] = undefined;
 
-                    if(matchingFeature){
+                    if (matchingFeature) {
+                        me.chartDataAvailable = true;
                         newRawData[valueField] = matchingFeature.properties[yAxisAttr];
-                        //newRawData[dataObjectField] = Ext.clone(matchingFeature.properties);
                     }
 
                     mockUpData.push(newRawData);
                     startDate = Ext.Date.add(startDate, Ext.Date.SECOND, intervalInSeconds);
                 }
 
-                // me.data = mockUpData;
-
-                // me.fireEvent('chartdatachanged', mockUpData);
-                // Note: id is field locality_code
-
-                // me.prepareChartData(mockUpData, selectedStation.get('id'), idx);
-
                 me.data[selectedStation.get('id')] = mockUpData;
 
                 me.ajaxCounter++;
 
                 if (me.ajaxCounter === view.getSelectedStations().length) {
+                    if (view.getShowLoadMask()) {
+                        view.setLoading(false);
+                    }
                     me.fireEvent('chartdataprepared');
                 }
 

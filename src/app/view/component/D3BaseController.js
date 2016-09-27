@@ -106,7 +106,6 @@ Ext.define('Koala.view.component.D3BaseController', {
             log: d3.scaleLog,
             ident: d3.scaleIdentity,
             time: d3.scaleTime,
-            utc: d3.scaleUtc,
             ordinal: d3.scaleBand
         },
 
@@ -304,13 +303,25 @@ Ext.define('Koala.view.component.D3BaseController', {
     legendEntryTargetHeight: 30,
 
     /**
+     * The default chart margin to apply.
+     *
+     * @type {Object}
+     */
+    defaultChartMargin: {
+        top: 10,
+        right: 200,
+        bottom: 20,
+        left: 40
+    },
+
+    /**
      * Returns the chart size as array of width at index 0 & height at index 1.
      * @return {Array<Number>} An array of width (index 0) and height (index 1).
      */
     getChartSize: function() {
         var me = this;
         var view = me.getView();
-        var chartMargin = view.getChartMargin();
+        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
 
         return [
             view.getWidth() - chartMargin.left - chartMargin.right,
@@ -338,7 +349,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var makeTranslate = staticMe.makeTranslate;
         var view = me.getView();
         var viewId = '#' + view.getId();
-        var chartMargin = view.getChartMargin();
+        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
         var chartSize = me.getChartSize();
         var translate = makeTranslate(chartMargin.left, chartMargin.top);
 
@@ -352,7 +363,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             .append('g')
                 .attr('transform', translate)
             .append('rect')
-                .style('fill', view.getBackgroundColor())
+                .style('fill', view.getBackgroundColor() || '#EEE')
                 .attr('class', CSS.PLOT_BACKGROUND)
                 .attr('width', chartSize[0])
                 .attr('height', chartSize[1])
@@ -479,7 +490,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      *
      * @param {DOMElement} legendEntry The DOM element to remove.
      */
-    deleteLegendEntry: function (legendEntry) {
+    deleteLegendEntry: function(legendEntry) {
         var parent = legendEntry && legendEntry.parentNode;
         if (parent) {
             parent.removeChild(legendEntry);

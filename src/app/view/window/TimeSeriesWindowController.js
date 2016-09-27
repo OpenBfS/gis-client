@@ -52,86 +52,98 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var view = me.getView();
         var chartConfig = olLayer.get('timeSeriesChartProperties');
         var valFromSeq = Koala.util.String.getValueFromSequence;
-        var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
-            Koala.util.String.replaceTemplateStrings(
-                chartConfig.seriesTitleTpl, olFeat) : "";
         var startDate = view.down('datefield[name=datestart]').getValue();
         var endDate = view.down('datefield[name=dateend]').getValue();
+        var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
+        var chartMarginObj;
+        var stationName;
+        var shapes = [];
+        var selectedStations = [];
+
+        if (chartMargin.length > 0) {
+            chartMarginObj = {
+                top: chartMargin[0],
+                right: chartMargin[1],
+                bottom: chartMargin[2],
+                left: chartMargin[3]
+            };
+        }
+
+        if (olFeat) {
+            stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
+                Koala.util.String.replaceTemplateStrings(
+                    chartConfig.seriesTitleTpl, olFeat) : "";
+
+            shapes = [{
+                type: chartConfig.shapeType,
+                curve: chartConfig.curveType,
+                xField: chartConfig.xAxisAttribute,
+                yField: chartConfig.yAxisAttribute,
+                name: stationName,
+                id: olFeat.get('id'),
+                color: valFromSeq(chartConfig.colorSequence, 0, '#F00'),
+                opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 1),
+                width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1),
+                tooltipTpl: chartConfig.tooltipTpl
+            }];
+
+            selectedStations = [olFeat];
+        }
 
         var chart = {
             xtype: 'd3-chart',
             name: olLayer.get('name'),
+            zoomEnabled: Koala.util.String.coerce(chartConfig.allowZoom),
             height: 200,
             width: 700,
             startDate: startDate,
             endDate: endDate,
             targetLayer: olLayer,
-            selectedStations: [olFeat],
-            chartMargin: {
-                top: 10,
-                right: 200,
-                bottom: 20,
-                left: 40
-            },
-            shapes: [{
-                type: 'line', // TODO for DK make this configurable
-                curve: 'linear', // TODO for DK make this configurable
-                xField: chartConfig.xAxisAttribute,
-                yField: chartConfig.yAxisAttribute,
-                name: stationName,
-                id: olFeat.get('id'),
-                color: valFromSeq(chartConfig.colorSequence, 0, 'red'),
-                opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 1),
-                width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1),
-                tooltipTpl: chartConfig.tooltipTpl
-            }],
+            selectedStations: selectedStations,
+            backgroundColor: chartConfig.backgroundColor,
+            chartMargin: chartMarginObj,
+            shapes: shapes,
             grid: {
-                show: true, // neue Config ?
-                color: '#d3d3d3', // neue Config ?
-                width: 1, // neue Config ?
-                opacity: 0.7 // neue Config ?
+                show: Koala.util.String.coerce(chartConfig.showGrid),
+                color: chartConfig.gridStrokeColor,
+                width: chartConfig.gridStrokeWidth,
+                opacity: chartConfig.gridStrokeOpacity
             },
             axes: {
                 left: {
-                    scale: 'linear',
-                    dataIndex: chartConfig.yAxisAttribute, //'value',
-                    format: ',.0f',
-                    label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || '')
+                    scale: chartConfig.yAxisScale,
+                    dataIndex: chartConfig.yAxisAttribute,
+                    format: chartConfig.yAxisFormat,
+                    label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
+                    labelPadding: chartConfig.labelPadding,
+                    labelColor: chartConfig.labelColor,
+                    labelSize: chartConfig.labelSize,
+                    tickSize: chartConfig.tickSize,
+                    tickPadding: chartConfig.tickPadding
                 },
                 bottom: {
-                    scale: 'time',
-                    dataIndex: chartConfig.xAxisAttribute, //'end_measure',
-                    label: chartConfig.xAxisLabel || ''
+                    scale: chartConfig.xAxisScale,
+                    dataIndex: chartConfig.xAxisAttribute,
+                    format: chartConfig.xAxisFormat,
+                    label: (chartConfig.xAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
+                    labelPadding: chartConfig.labelPadding,
+                    labelColor: chartConfig.labelColor,
+                    labelSize: chartConfig.labelSize,
+                    tickSize: chartConfig.tickSize,
+                    tickPadding: chartConfig.tickPadding
                 }
+            },
+            legend: {
+                legendEntryMaxLength: Koala.util.String.coerce(chartConfig.legendEntryMaxLength)
+            },
+            title: {
+                label: stationName,
+                labelSize: chartConfig.titleSize,
+                labelColor: chartConfig.titleColor,
+                labelPadding: chartConfig.titlePadding
             }
         };
 
-        // if (Ext.isEmpty(chartConfig.allowCrossZoom) ||
-        //     Koala.util.String.getBool(chartConfig.allowCrossZoom)) {
-        //     interactions = {
-        //        type: 'crosszoom',
-        //        // We need the tyoe below, as there is a bug inExtJS: see this
-        //        // lines: http://docs.sencha.com/extjs/6.0/6.0.0-classic/source/
-        //        // /AbstractChart.html
-        //        // #Ext-chart-AbstractChart-method-getInteraction
-        //        // That particular bug is fixed in non-GPL 6.0.1
-        //        tyoe: 'crosszoom',
-        //        axes: {
-        //            bottom: {
-        //                maxZoom: 5,
-        //                allowPan: true
-        //            }
-        //        }
-        //    };
-        // }
-        // var chart = {
-        //     xtype: 'k-chart-timeseries',
-        //     name: olLayer.get('name'),
-        //     layer: olLayer,
-        //     interactions: interactions,
-        //     height: 200,
-        //     width: 700
-        // };
         return chart;
     },
 
@@ -360,12 +372,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      * @param {Ext.button.Button} undoBtn The clicked undo button.
      */
     onUndoButtonClicked: function(undoBtn){
-        // TODO for DK: call into existing function
-        var chart = undoBtn.up('[name="chart-composition"]').down('chart');
-        var crossZoomInteraction = chart.getInteraction('crosszoom');
-        if (crossZoomInteraction && crossZoomInteraction.undoZoom) {
-            crossZoomInteraction.undoZoom();
-        }
+        var chart = undoBtn.up('[name="chart-composition"]').down('d3-chart');
+        var chartCtrl = chart.getController();
+        chartCtrl.resetZoom();
     },
 
     /**
@@ -391,15 +400,16 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
 
         // console.log(chart.getSelectedStations().length - 1)
         chartController.addShape({
-            type: 'line', // TODO for DK make this configurable
-            curve: 'linear', // TODO for DK make this configurable
-            xField: chartConfig.xAxisAttribute, //'end_measure'
-            yField: chartConfig.yAxisAttribute, //'value'
+            type: chartConfig.shapeType || 'line',
+            curve: chartConfig.curveType || 'linear',
+            xField: chartConfig.xAxisAttribute,
+            yField: chartConfig.yAxisAttribute,
             name: stationName,
             id: olFeat.get('id'),
             color: valFromSeq(chartConfig.colorSequence, chart.getSelectedStations().length, 'red'),
             opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
-            width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1)
+            width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1),
+            tooltipTpl: chartConfig.tooltipTpl
         }, olFeat, false);
 
     },

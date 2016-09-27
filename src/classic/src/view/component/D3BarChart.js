@@ -38,15 +38,16 @@ Ext.define('Koala.view.component.D3BarChart',{
 
     config: {
         targetLayer: null,
-        // TODO: not working at the moment?!
         showLoadMask: true,
-        zoomEnabled: true,
-        backgroundColor: '#EEE',
+        zoomEnabled: false,
+        backgroundColor: null,
+        labelFunc: null,
+        chartFieldSequence: null,
         grid: {
             show: false,
-            color: '#d3d3d3',
-            width: 1,
-            opacity: 0.7
+            color: null,
+            width: null,
+            opacity: null
         },
         startDate: null,
         endDate: null,
@@ -54,18 +55,19 @@ Ext.define('Koala.view.component.D3BarChart',{
         selectedStation: null,
         // TODO adjust dynamically in relation to axes/title label size
         chartMargin: {
-            top: 40,
-            right: 200,
-            bottom: 40,
-            left: 60
+            top: null,
+            right: null,
+            bottom: null,
+            left: null
         },
         title: {
-            label: '',
-            labelSize: 20,
-            labelColor: '#000',
-            labelPadding: 18
+            label: null,
+            labelSize: null,
+            labelColor: null,
+            labelPadding: null
         },
         legend: {
+            legendEntryMaxLength: null,
             legendMargin: {
                 top: 10,
                 right: 10,

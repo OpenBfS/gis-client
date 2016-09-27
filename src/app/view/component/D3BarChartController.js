@@ -37,6 +37,18 @@ Ext.define('Koala.view.component.D3BarChartController', {
     featureProps: null,
 
     /**
+     * The default chart margin to apply.
+     *
+     * @type {Object}
+     */
+    defaultChartMargin: {
+        top: 50,
+        right: 200,
+        bottom: 50,
+        left: 50
+    },
+
+    /**
      *
      */
     onShow: function() {
@@ -60,12 +72,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var staticMe = me.self;
         var view = me.getView();
-        var targetLayer = view.getTargetLayer();
         var selectedStation = view.getSelectedStation();
-        var chartConfig = targetLayer.metadata.layerConfig.barChartProperties;
         var featureProps = selectedStation.getProperties();
-        var fields = chartConfig.chartFieldSequence.split(',');
-        var colors = chartConfig.colorSequence.split(',');
+        var fields = view.getChartFieldSequence().split(',');
+        var colors = view.getShape().color.split(',');
 
         Ext.each(fields, function(field, idx) {
             var dataObj = {};
@@ -136,18 +146,16 @@ Ext.define('Koala.view.component.D3BarChartController', {
         Ext.iterate(axesConfig, function(orient, axisConfig) {
             var axis = staticMe.ORIENTATION[orient];
             var scale = me.scales[orient];
-            var chartAxis;
-            if(orient === "left"){
-                chartAxis = axis(scale);
-            } else {
-                var tickFormat = axisConfig.format ? d3.format(axisConfig.format) : undefined;
-                chartAxis = axis(scale)
-                    .ticks(axisConfig.ticks)
-                    .tickValues(axisConfig.values)
-                    .tickFormat(tickFormat)
-                    .tickSize(axisConfig.tickSize || 6)
-                    .tickPadding(axisConfig.tickPadding || 3);
-            }
+
+            // https://github.com/d3/d3-format
+            var tickFormatter = axisConfig.format ? d3.format(axisConfig.format) : undefined;
+
+            var chartAxis = axis(scale)
+                .ticks(axisConfig.ticks)
+                .tickValues(axisConfig.values)
+                .tickFormat(tickFormatter)
+                .tickSize(axisConfig.tickSize || 6)
+                .tickPadding(axisConfig.tickPadding || 3);
 
             me.axes[orient] = chartAxis;
         });
@@ -225,7 +233,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             if (orient === 'top' || orient === 'bottom') {
                 cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
-
                 axisTransform = (orient === 'bottom') ?
                         makeTranslate(0, chartSize[1]) : undefined;
 
@@ -241,22 +248,19 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 labelPadding = (axisConfig.labelPadding || 25) * -1;
             }
 
-            // We draw the left axis in the grid part as it fits our needs for barcharts.
-            if (orient === 'top' || orient === 'bottom') {
-                d3.select(viewId + ' svg > g')
-                    .append('g')
-                        .attr('class', cssClass)
-                        .attr('transform', axisTransform)
-                        .call(me.axes[orient])
-                    .append('text')
-                        .attr('transform', labelTransform)
-                        .attr('dy', labelPadding)
-                        .attr('fill', axisConfig.labelColor || '#000')
-                        .style('text-anchor', 'middle')
-                        .style('font-weight', 'bold')
-                        .style('font-size', axisConfig.labelSize || 12)
-                        .text(axisConfig.label || '');
-            }
+            d3.select(viewId + ' svg > g')
+                .append('g')
+                    .attr('class', cssClass)
+                    .attr('transform', axisTransform)
+                    .call(me.axes[orient])
+                .append('text')
+                    .attr('transform', labelTransform)
+                    .attr('dy', labelPadding)
+                    .attr('fill', axisConfig.labelColor || '#000')
+                    .style('text-anchor', 'middle')
+                    .style('font-weight', 'bold')
+                    .style('font-size', axisConfig.labelSize || 12)
+                    .text(axisConfig.label || '');
 
         });
     },
@@ -301,7 +305,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     .style('fill', function(d) {
                         return d.color;
                     })
-                    .style('opacity', shapeConfig.opacity)
+                    // .style('opacity', shapeConfig.opacity)
                     .attr('x', function(d) {
                         return me.scales[orientX](d[xField]);
                     })
@@ -327,11 +331,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     });
 
         var bars = d3.selectAll(viewId + ' .k-d3-bar');
-
-        // TODO for DK, get property just as we do it elsewhere
-        var labelFunc = Koala.util.String.coerce(
-            view.getTargetLayer().metadata.layerConfig.barChartProperties.labelFunc
-        ) || staticMe.identity;
+        var labelFunc = view.getLabelFunc() || staticMe.identity;
 
         bars.append("text")
             .filter(function(d) {
@@ -357,23 +357,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
-     *
-     */
-    getAxisByField: function(field) {
-        var view = this.getView();
-        var axisOrientation;
-
-        Ext.iterate(view.getAxes(), function(orient, axisConfig) {
-            if (axisConfig.dataIndex === field) {
-                axisOrientation = orient;
-                return false; // break early
-            }
-        });
-
-        return axisOrientation;
-    },
-
-    /**
      * [createGridAxes description]
      * @return {[type]} [description]
      */
@@ -386,15 +369,27 @@ Ext.define('Koala.view.component.D3BarChartController', {
             return false;
         }
 
-        var staticMe = Koala.view.component.D3BarChartController;
+        var staticMe = Koala.view.component.D3ChartController;
         var chartSize = me.getChartSize();
+        var orientations = ['bottom', 'left'];
 
-        var axis = staticMe.ORIENTATION.left;
-        var scale = me.scales.left;
-        var tickSize = chartSize[0] * -1;
+        Ext.each(orientations, function(orient) {
+            var axis = staticMe.ORIENTATION[orient];
+            var scale = me.scales[orient];
+            var tickSize;
 
-        me.gridAxes.left = axis(scale)
-            .tickSize(tickSize);
+            if (orient === 'top' || orient === 'bottom') {
+                tickSize = chartSize[1];
+            } else if (orient === 'left' || orient === 'right') {
+                tickSize = chartSize[0] * -1;
+            }
+
+            var chartAxis = axis(scale)
+                .tickFormat('')
+                .tickSize(tickSize);
+
+            me.gridAxes[orient] = chartAxis;
+        });
     },
 
     /**
@@ -410,21 +405,30 @@ Ext.define('Koala.view.component.D3BarChartController', {
             return false;
         }
 
-        var staticMe = Koala.view.component.D3BarChartController;
+        var staticMe = Koala.view.component.D3ChartController;
         var CSS = staticMe.CSS_CLASS;
         var viewId = '#' + view.getId();
+        var orientations = ['bottom', 'left'];
 
-        var cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
+        Ext.each(orientations, function(orient) {
+            var cssClass;
 
-        d3.select(viewId + ' svg > g')
-            .append('g')
-                .attr('class', cssClass)
-                .call(me.gridAxes.left);
+            if (orient === 'bottom') {
+                cssClass = CSS.GRID + ' ' + CSS.GRID_X;
+            } else if (orient === 'left') {
+                cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
+            }
 
-        d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
-            .style('stroke-width', gridConfig.width)
-            .style('stroke', gridConfig.color)
-            .style('stroke-opacity', gridConfig.opacity);
+            d3.select(viewId + ' svg > g')
+                .append('g')
+                    .attr('class', cssClass)
+                    .call(me.gridAxes[orient]);
+
+            d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
+                .style('stroke-width', gridConfig.width || 1)
+                .style('stroke', gridConfig.color || '#d3d3d3')
+                .style('stroke-opacity', gridConfig.opacity || 0.7);
+        });
     },
 
     /**
@@ -503,14 +507,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('d', SVG_DEFS.LEGEND_ICON_BAR)
                 .style('fill', dataObj.color);
 
-            // TODO for DK, get property just as we do it elsewhere
-            var legendEntryMaxLength = Koala.util.String.coerce(
-                view.getTargetLayer().metadata.layerConfig.barChartProperties.legendEntryMaxLength
-            );
-
             var nameAsTooltip = dataObj.key;
             var visualLabel = staticMe.labelEnsureMaxLength(
-                nameAsTooltip, legendEntryMaxLength
+                nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
             );
 
             legendEntry.append('text')

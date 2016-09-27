@@ -19,5 +19,7 @@
 Ext.define('Koala.view.component.D3ChartModel', {
     extend: 'Koala.view.component.D3BaseModel',
     alias: 'viewmodel.component-d3chart',
-    data: {}
+    data: {
+        noDataAvailableText: ''
+    }
 });
