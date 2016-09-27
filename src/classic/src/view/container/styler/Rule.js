@@ -19,8 +19,6 @@ Ext.define('Koala.view.container.styler.Rule', {
         background: '#f6f6f6'
     },
 
-    layout: 'fit',
-
     listeners: {
         boxready: 'onBoxReady'
     }

@@ -35,7 +35,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
                 title: '{title}',
                 html: '{symbolizerFieldSetHtml}'
             },
-            height: 140,
+            height: 170,
             name: 'symbolizer-fieldset',
             layout: 'center',
             items: [{

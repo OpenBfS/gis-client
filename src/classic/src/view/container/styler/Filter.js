@@ -21,7 +21,7 @@ Ext.define('Koala.view.container.styler.Filter', {
 
     items: [{
         xtype: 'fieldset',
-        height: 140,
+        height: 80,
         bind:{
             title: '{title}'
         },

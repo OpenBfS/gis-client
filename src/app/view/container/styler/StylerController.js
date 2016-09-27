@@ -23,6 +23,9 @@ Ext.define('Koala.view.container.styler.StylerController', {
      */
     rebuildCheckInterval: 25,
 
+    /**
+     *
+     */
     onBoxReady: function(){
         var view = this.getView();
         var viewModel = this.getViewModel();
@@ -36,6 +39,9 @@ Ext.define('Koala.view.container.styler.StylerController', {
         });
     },
 
+    /**
+     *
+     */
     applyAndSave: function() {
         var viewModel = this.getViewModel();
         var layer = viewModel.get('layer');

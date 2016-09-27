@@ -13,10 +13,6 @@ Ext.define('Koala.view.container.styler.Rules', {
         type: 'container.styler.rules'
     },
 
-    bodyStyle: {
-        background: '#f6f6f6'
-    },
-
     items: [{
         xtype: 'container',
         layout: {
@@ -37,31 +33,4 @@ Ext.define('Koala.view.container.styler.Rules', {
         boxready: 'onBoxReady'
     }
 
-    // initComponent: function() {
-    //     var me = this;
-    //     me.callParent();
-    //     me.initRuleComponents();
-    // },
-    //
-    // initRuleComponents: function() {
-    //     var me = this;
-    //     var viewModel = me.getViewModel();
-    //     var style = viewModel.get('style');
-    //     var rules = style.rules();
-    //
-    //     rules.each(function(rule) {
-    //         me.add({
-    //             xtype: 'k_container_styler_rule',
-    //             margin: 10,
-    //             viewModel: {
-    //                 data: {
-    //                     rule: rule
-    //                 }
-    //             },
-    //             listeners: {
-    //                 rulechanged: 'onRuleChanged'
-    //             }
-    //         });
-    //     })
-    // }
 });
