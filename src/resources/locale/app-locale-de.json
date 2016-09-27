@@ -19,6 +19,13 @@
             "dspSignNotInLastJoiner": " noch "
         }
     },
+    "Koala.util.Filter": {
+        "statics": {
+            "warnMsgEndBeforeStart": "Startwert muss vor Endwert liegen.",
+            "warnMsgExceedsMaxDuration": "Startwert und Endwert liegen zu weit auseinander.",
+            "msgNotBetweenMinMax": "Datum/Uhrzeit liegen nicht im erlaubten Wertebereich"
+        }
+    },
     "Koala.util.String": {
         "statics": {
             "defaultDateFormat": "d.m.Y H:i:s"
@@ -53,15 +60,6 @@
             "data": {
                 "tooltip": "Klicken, um Sprache auszuwählen"
             }
-        }
-    },
-    "Koala.view.form.LayerFilter": {
-        "config": {
-            "format": "d.m.Y H:i"
-        },
-        "statics": {
-            "warnMsgEndBeforeStart": "Startwert muss vor Endwert liegen.",
-            "warnMsgExceedsMaxDuration": "Startwert und Endwert liegen zu weit auseinander."
         }
     },
     "Koala.view.form.field.SearchCombo": {
@@ -258,7 +256,7 @@
                             "<div>Nachfolgend wird eine kurze Übersicht der Anwendung dargestellt. Für eine detailierte Erläuterung der einzelnen Funktionalitäten, navigieren Sie bitte durch das Inhaltsverzeichnis auf der linken Seite und klicken auf das gewünschte Themenfeld.</div>"+
                             "<h4>Die Oberfläche ist in folgende Bereiche gegliedert:</h4>"+
                             "<ol>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' width='827' height='449' style='float:right; margin:50px 10px 5px 10px'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'>"+
                                 "<li style='color:#157FCC; font-weight:bold'>Layer Profilwahl</li>"+
                                     "<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich eine Hintergrundkarte geladen.</div>"+
                                 "<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
@@ -308,7 +306,7 @@
                                 "<li>INSPIRE - Infrastructure for Spatial Information in Europe</li>"+
                             "</ul>"+
                             "<div>Unterhalb der Profile lässt sich über die Eingabe innerhalb einer Filterleiste die Auswahl der Profile einschränken.</div><br />"+
-                            "<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' width='366' height='337' style='float:left'>"
+                            "<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' style='max-height: 100%; max-width: 100%;'>"
                 },
                 "map": {
                     "title": "2. Karte",
@@ -325,7 +323,7 @@
                                 ", Umstelltaste, Hochstelltaste), sowie linker <i>Maustaste</i> kann innerhalb der Karte ein Zoomfenster erzeugt werden.<br />"+
                                 "Das <i>Mausrad</i> steuert ebenfalls die Zoomstufen und folglich kann der Kartenmaßstab vergrößert bzw. verkleinert werden. Alternativ lassen sich diese Funktionen auch über die Navigationsleiste  (siehe <i>7. Navigation</i>) steuern.</div>"+
                                 "<div>Im rechten unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfacher Klick öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Angaben.</div><br />"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Karte' alt='graphic_map.png' width='829' height='488' style='float:left'><br />"
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Karte' alt='graphic_map.png' style='max-height: 100%; max-width: 100%;'><br />"
                     },
                     "geoObjects": {
                         "title": "2.2 Abfrage von BfS-Geoobjekten",
@@ -335,7 +333,7 @@
                                 "<p>Zur Abfrage von BfS-Geoobjekten ist es wichtig, dass der entsprechende Layer in der Legende ausgewählt ist. Ein ausgewählter Layer ist mit einer türkisfarbenen Fläche markiert (siehe Grafik: <i>2.2 Informationen zu einzelnen Geoobjekten</i>).</p>"+
                                 "<p>Um Informationen von einzelnen Geoobjekten zu erhalten (beispielsweise die aktuellen Tagesmittelwerte der Ortsdosisleistung einer bestimmten Station), bewegen Sie den <i>Mauszeiger</i> über die entsprechende Geometrie. Das Objekt wird farblich hervorgehoben und die entsprechenden Informationen erscheinen in einem Fenster auf der rechten Seite der Geometrie. Je nach Zoomstufe ist es möglich, dass mehrere Geometrien selektiert und die Informationen präsentiert werden. Zoomen Sie in diesem Fall zum gewünschten Objekt, für eine eindeutige Auswahl.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_hoverGeometrie.png' title='Informationen zu einzelnen Geoobjekten' alt'graphic_hoverGeometrie.png' width='416' height='261'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_hoverGeometrie.png' title='Informationen zu einzelnen Geoobjekten' alt'graphic_hoverGeometrie.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Informationen zu einzelnen Geoobjekten</b>"+
                                 "</div><br />"+
                                 "<p>Objekte bei denen Werte zugrunde liegen, können mit einem Klick auf die entsprechende Geometrie in einem Diagramm betrachtet werden. Diese sind bei Werten mit zeitlichem Bezug in einem Liniendiagramm (z.B. 10min-Ortsdosisleistungen) und für Wertereihen (z.B. Gamma-Aerosole) in einem Balkendiagramm dargestellt.</p>"+
@@ -358,12 +356,12 @@
                                 "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingChart.png' title='Auswahlfeld: Chart hinzufügen' alt='selectionBox_addingChart.png' width='250' height='24' style='vertical-align:middle'>"+
                                 " beinhaltet sämtliche Layer die in der Legende dargestellt sind. Entsprechend kann ein neues Diagramm unterhalb der aktuellen Zeitreihendarstellung für weitere Analysen hinzugefügt werden.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_timeSeries.png' title='Zeitreihen' alt'graphic_timeSeries.png' width='741' height='301'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_timeSeries.png' title='Zeitreihen' alt'graphic_timeSeries.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Zeitreihen</b>"+
                                 "</div><br />"+
                                 "<p>Die Balkendiagramme, zur Darstellung der Wertereihen, sind in Grafik <i>2.2 Wertereihen</i> dargestellt. Bewegt man den <i>Mauszeiger</i> über einen Balken, wird in einem Fenster der exakte Wert mit Einheit zur entsprechenden Serie angezeigt. Wie bei den Zeitreihen kann jede Serie über die Diagrammlegende ein- und ausgeschaltet werden. Die y-Achse passt sich jeweils an den maximalen Wert der verbleibenden Serien an. Grafik <i>2.2 Wertereihen</i> zeigt, wie demnach die Funktion für detailierte Analysen genutzt werden kann.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_barChart.png' title='Wertereihen' alt'graphic_barChart.png' width='697' height='539'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_barChart.png' title='Wertereihen' alt'graphic_barChart.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Wertereihen</b>"+
                                 "</div>"+
                                 "</div>"
@@ -400,7 +398,7 @@
                                 ". Diese werden initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</p>"+
                                 "<p>In Grafik <i>3.1 Arbeitsablauf des WMS-Dienstes</i> werden die Layer <i>Bundesland</i> und <i>Name Bundesland</i> der Legende bzw. der Karte hinzugefügt.</p><br />"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='Arbeitsablauf des WMS-Dienstes' alt='graphic_wms_workflow.png' width='803' height='578'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='Arbeitsablauf des WMS-Dienstes' alt='graphic_wms_workflow.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>3.1 Arbeitsablauf des WMS-Dienstes</b>"+
                                 "</div>"+
                                 "</div>"
@@ -423,7 +421,7 @@
                                 "<p>Mit Betätigen des Schalters \"Dokument anfordern\" wird die gewünschte Datei erzeugt. Sobald dieser Prozess abgeschlossen ist erscheint der Schalter \"Dokument herunterladen\". Dieser ermöglicht das Speichern bzw. Betrachten der erzeugten Datei.</p>"+
                                 "<p>In Grafik <i>3.2 Arbeitsablauf des Druckdienstes</i> wird der Arbeitsablauf eines Kartendrucks mit Legende und Kartenausschnitt im PDF-Format dargestellt.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_print.png' title='Arbeitsablauf des Druckdienstes' alt='graphic_print.png' width='1027' height='418'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_print.png' title='Arbeitsablauf des Druckdienstes' alt='graphic_print.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>3.2 Arbeitsablauf des Druckdienstes</b>"+
                                 "</div><br />"+
                                 "<h3>IRIX - International Radiation Information eXchange</h3>"+
@@ -443,7 +441,7 @@
                                 "<p>Die Anordnung im Auswahlfenster entspricht der eines allgemeingebräuchlichen Dateisystems, mit Ordnern und Dateien. Die Layer-Sets entsprechen den Ordnern, während die Layer den Dateien gleich kommen. Möchte man einen Ordner ausklappen um sich die zugeordneten Layer anzeigen zu lassen, ist dies mit einem einfachen Klick auf das Plus-Symbol links neben des Ordnersymbols möglich. Alternativ kann auch ein Doppelklick auf die Ordnerbeschriftung ausgeführt werden.</p>"+
                                 "<p>Ein einfacher Klick auf die Layerbezeichnung öffnet ein layerspezifisches Fenster. Je nach Semantik des Layers beinhaltet ein Fenster gegebenenfalls Einstellungen um die Daten mithilfe eines Zeit- und/oder Wertefilters einzuschränken. Sofern ein Layer über keine Zeit- bzw. Wertefilter verfügt, enthält das Fenster lediglich einen Schalter für das Hinzufügen des entsprechenden Layers (siehe Grafik <i>4. layerspezifisches Fenster - Layer ohne Filter</i>).</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/window_layerNoFilter.png' title='layerspezifisches Fenster - Layer ohne Filter' alt'window_layerNoFilter.png' width='247' height='75'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/window_layerNoFilter.png' title='layerspezifisches Fenster - Layer ohne Filter' alt'window_layerNoFilter.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>4. layerspezifisches Fenster - Layer ohne Filter</b>"+
                                 "</div><br />"+
                                 "<p>Ein Doppelklick auf die Layerbezeichnung fügt einen Layer der Karte unmittelbar hinzu. Hierbei werden Standardeinstellungen übernommen. Entsprechend werden Layer mit zeitlichem Bezug auf die aktuellsten Daten gesetzt.</p>"+
@@ -453,14 +451,14 @@
                                 "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
                                 ", Umstelltaste, Hochstelltaste) möglich. Ein Klick auf den Schalter \"Filter übernehmen und Layer der Karte hinzufügen\" stellt den Layer zur Betrachtung bereit.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_layer_selection.png' title='Arbeitsablauf der Layerauswahl' alt='graphic_layer_selection.png' width='812' height='486'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_layer_selection.png' title='Arbeitsablauf der Layerauswahl' alt='graphic_layer_selection.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>4. Arbeitsablauf der Layerauswahl</b>"+
                                 "</div><br />"+
                                 "<h3>Layer-Set Auswahl</h3>"+
                                 "<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe Grafik <i>4. Arbeitsablauf der Layer-Set Auswahl</i>). In der türkisfarbenen Leiste der  \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster das eine Auswahl an Layer-Sets beinhaltet, die mit einem repräsentativen Bild des entsprechenden Themas versehen sind. Klickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Desweiteren kann mit einem Doppelklick auf ein Thema die gesamten korrespondierenden Layer der Legende hinzugefügt werden. Im unteren Teil der \"Layer-Set Auswahl\" kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden.</p>"+
                                 "<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_layerSet_selection.png' title='Arbeitsablauf der Layer-Set Auswahl' alt='graphic_layerSet_selection.png' width='1004' height='542'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_layerSet_selection.png' title='Arbeitsablauf der Layer-Set Auswahl' alt='graphic_layerSet_selection.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>4. Arbeitsablauf der Layer-Set Auswahl</b>"+
                                 "</div><br />"+
                                 "</div>"
@@ -475,7 +473,7 @@
                                 "<h3>Räumliche Suche</h3>"+
                                 "<p>Die Suche nach Orten erfolgt über die Multisuchleiste (siehe Grafik <i>5. Räumliche Suche</i>). Die Ergebnisse werden entsprechend der Texteingabe stets aktualisiert und erfordern demnach keiner weiteren Eingabe. Ist ein gewünschter Ort gefunden, genügt ein einfacher Klick um an die entsprechende Auswahl zu zoomen.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_search_location.png' title='Räumliche Suche' alt'graphic_search_location.png' width='483' height='131'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_search_location.png' title='Räumliche Suche' alt'graphic_search_location.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>5. Räumliche Suche</b>"+
                                 "</div><br />"+
                                 "<h3>Daten und Dienste des BfS</h3>"+
@@ -486,7 +484,7 @@
                                 "<img class='img' src='classic/resources/img/helpPage/button_search_addData.png' title='Schalter: Füge Daten der Karte hinzu' alt='button_search_addData.png' width='17' height='17' style='vertical-align:middle'>"+
                                 " versehen sind, lassen sich mit einem Klick zur Karte hinzufügen.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_search_data.png' title='Datensuche' alt'graphic_search_data.png' width='833' height='431'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_search_data.png' title='Datensuche' alt'graphic_search_data.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>5. Datensuche</b>"+
                                 "</div>"+
                                 "</div>"
@@ -523,7 +521,7 @@
                                 "<p>Der Zeitbezug ist standardmäßig auf <i>koordinierter Weltzeit - UTC</i> eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen.</p>"+
                                 "<p>Betätigt man den Schalter \"Zeitbezug (UTC)\" wird die Zeit auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt (siehe Grafik <i>6.2 Zeitbezug</i>). Das bedeutet im Einzelnen, dass die Uhrzeit vom PC-Standortes des Nutzers bezogen wird. Die lokale Uhrzeit bezieht sich lediglich auf die Anzeige des Klienten.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_timeRef.png' title='Zeitbezug' alt'graphic_timeRef.png' width='288' height='176'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_timeRef.png' title='Zeitbezug' alt'graphic_timeRef.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>6.2 Zeitbezug</b>"+
                                 "</div><br />"+
                                 "</div>"
@@ -542,7 +540,7 @@
                                 "<h2>6.4 Sprache <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Schalter: Sprache' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend kann mit einem Klick auf das referenzierte Kürzel die Sprache gewählt werden. Ein Klick auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"DE\" entspricht Deutsch, \"EN\" Englisch und \"FR\" Französisch.</p>"+
-                                "<img class='img' src='classic/resources/img/helpPage/button_settings_language_all.png' title='Sprache' alt'button_settings_language_all.png' width='55' height='97'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_settings_language_all.png' title='Sprache' alt'button_settings_language_all.png' style='max-height: 100%; max-width: 100%;'>"+
                                 "</div>"
                         }
                 },
@@ -614,7 +612,7 @@
                             " ). In unterem Beispiel werden demnach nur die Layer \"RODOS: Wolkenauskunft\", \"odl_brutto_24h\" und \"Hintergrundkarte\" dargestellt.</p>"+
                             "<p>Die Reihenfolge der Layer bestimmt die Hierarchie der Kartenzeichnung. Entsprechend wird der oberste Layer über alle Folgenden gezeichnet. Die Reihenfolge kann geändert werden, indem man einen Layer mit gedrückter linker <i>Maustaste</i> wählt und an die gewünschte Position platziert.</p>"+
                             "<div style='font-size:11px'>"+
-                            "<img class='img' src='classic/resources/img/helpPage/graphic_legend.png' title='Legende - Layer verschieben' alt'graphic_legend.png' width='696' height='380'><br>"+
+                            "<img class='img' src='classic/resources/img/helpPage/graphic_legend.png' title='Legende - Layer verschieben' alt'graphic_legend.png' style='max-height: 100%; max-width: 100%;'><br>"+
                             "<b>8. Legende - Layer verschieben</b>"+
                             "</div><br />"+
                             "<p>Die Zeichenerklärung eines Layers ist ersichtlich durch das Betätigen des Plussymboles "+
@@ -638,7 +636,7 @@
                             "<img class='img' src='classic/resources/img/helpPage/button_overviewMap.png' title='Schalter: Übersichtskarte öffnen' alt='button_overviewMap.png' width='28' height='28' style='vertical-align:middle'>"+
                             " geöffnet werden. Diese bietet eine Übersicht der aktuellen Ansicht in einem kleineren Maßstab. Das blaue Fenster inerhalb der Übersichtskarte repräsentiert den Ausschnitt der aktuellen Ansicht. Mit einem Klick in die gewünschte Region, wird die Ansicht auf diesen Punkt zentriert (siehe Grafik <i>9. Übersichtskarte</i>).</p>"+
                             "<div style='font-size:11px'>"+
-                            "<img class='img' src='classic/resources/img/helpPage/graphic_overviewMap.png' title='Übersichtskarte' alt='graphic_overviewMap.png' width='610' height='106'><br>"+
+                            "<img class='img' src='classic/resources/img/helpPage/graphic_overviewMap.png' title='Übersichtskarte' alt='graphic_overviewMap.png' style='max-height: 100%; max-width: 100%;'><br>"+
                             "<b>9. Übersichtskarte</b>"+
                             "</div><br />"+
                             "<p>Die Maßstabsleiste "+

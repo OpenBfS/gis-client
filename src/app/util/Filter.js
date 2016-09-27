@@ -4,6 +4,12 @@ Ext.define('Koala.util.Filter', {
         'Koala.util.String'
     ],
     statics: {
+        /* begin i18n */
+        warnMsgEndBeforeStart: "",
+        warnMsgExceedsMaxDuration: "",
+        msgNotBetweenMinMax: "",
+        /* end i18n */
+
         /**
          * The field configured as displayField for combos when only a number
          * of values are allowed for selection.
@@ -196,7 +202,7 @@ Ext.define('Koala.util.Filter', {
             }
 
             // default to one for other spinners than the one we need according
-            // to tghe filter unit, otherwise use provided filter interval
+            // to the filter unit, otherwise use provided filter interval
             var stepSize = unit === spinnerType ? interval : 1;
 
             // Determine the start value of the spinner
@@ -282,34 +288,55 @@ Ext.define('Koala.util.Filter', {
         },
 
         /**
+         * Given a date and the Ext.form.field.Date it is coming from, this
+         * method searches the surroundings of the datefield to find the
+         * accompanying (if any) minute and hour spinners. The datefield will
+         * report with a precision of DAY (Time will always be 00:00) so we need
+         * to add hours and minutes accordingly.
+         *
+         * @param {Date} date The date to adjust (has 00:00 as time part)
+         * @param {Ext.form.field.Date} dateField The field where the date comes
+         *     from
+         * @return {Date} An adjusted date, with hours and minutes set as
+         *     requested from the accompanying spinners.
+         */
+        addHoursAndMinutes: function(date, dateField) {
+            var dateClone = Ext.Date.clone(date);
+            // TODO we might want to remove the hoour part, just to be extra
+            //      sure we always have the right date.
+            // Ext.date.clearTime(dateClone);
+            var container = dateField.up();
+            // the selectors mean '… ending with hourspinner' / 'minutespinner'
+            var hourspinner = container.down('[name$="hourspinner"]');
+            var minutespinner = container.down('[name$="minutespinner"]');
+            var addHours = hourspinner && hourspinner.getValue() || 0;
+            var addMinutes = minutespinner && minutespinner.getValue() || 0;
+            dateClone = Ext.Date.add(dateClone, Ext.Date.HOUR, addHours);
+            dateClone = Ext.Date.add(dateClone, Ext.Date.MINUTE, addMinutes);
+            return dateClone;
+        },
+
+        /**
          * A reusable eventhandler for the `change` event of the spinners for
          * hours or minutes that are inside of an `fieldcontainer` which holds
          * associated `datefield`. Will update the value of the `datefield` on
          * change.
          */
-        handleSpinnerChange: function(field, val, prevVal) {
+        handleSpinnerChange: function(field, val) {
             var self = Koala.util.Filter;
             var MINUTE_TYPE = self.SPINNERTYPE.MINUTES;
             var datefield;
-            var unitOfSpinner;
             var dateVal;
 
             if(!Ext.isModern){ // classic
                 datefield = field.up("fieldcontainer").down("datefield");
                 dateVal = datefield.getValue();
-
-                var diff = field.step;
-
-                if(field.spinnerType === MINUTE_TYPE){
-                    unitOfSpinner = Ext.Date.MINUTE;
-                } else {
-                    unitOfSpinner = Ext.Date.HOUR;
-                }
-                if (prevVal > val) {
-                    // spinned down, reduce date by step
-                    diff *= -1;
-                }
-                datefield.setValue(Ext.Date.add(dateVal, unitOfSpinner, diff));
+                // Fix the date by starting with the old values from h and min
+                dateVal = self.addHoursAndMinutes(dateVal, datefield);
+                datefield.setValue(dateVal);
+                datefield.validate();
+                // setting it is basically not needed, since the values cannot
+                // be read out
             } else { // modern
 
                 if (Ext.isEmpty(val)) {
@@ -378,6 +405,65 @@ Ext.define('Koala.util.Filter', {
         },
 
         /**
+         * The fields values for min and max cannot be trusted, they
+         * might e.g. be stripped of the hours if the format had no
+         * hours. als we mus create a function that knows in which form the min
+         * and max were once passed (UTC or local).
+         */
+        makeDateValidator: function(min, max, minMaxAreLocal) {
+            var staticMe = Koala.util.Filter;
+
+            // min and max might be undefined, in that case we set them to
+            // values that are hard to ever reach.
+            if (!min) {
+                min = new Date('1970-01-02T12:00:00');
+            }
+            if (!max) {
+                max = Ext.Date.add(new Date(), Ext.Date.YEAR, 1000);
+            }
+
+            // get clones of once passed in min and max:
+            var minClone = Ext.Date.clone(min);
+            var maxClone = Ext.Date.clone(max);
+
+            /**
+             * @this {Ext.form.field.Date}
+             */
+            var validator = function() {
+                var DateUtil = Koala.util.Date;
+                var FilterUtil = Koala.util.Filter;
+                var field = this;
+                var rawDate = field.getValue();
+
+                var makeUtc = DateUtil.makeUtc;
+                var realDate = FilterUtil.addHoursAndMinutes(rawDate, field);
+                // we need to check if we need to transform dates before
+                // comparing, we only know at consutruction time whether the
+                // min and max values passed are local or not. The realdate is
+                // either local or not, but the min and max values never change
+                // their value when the UTC button is toggled.
+                var adjustedMin = Ext.Date.clone(minClone);
+                var adjustedMax = Ext.Date.clone(maxClone);
+                if (minMaxAreLocal) {
+                    // min/max dates were local, transform to utc
+                    adjustedMin = makeUtc(adjustedMin);
+                    adjustedMax = makeUtc(adjustedMax);
+                }
+                if (Koala.Application.isLocal()) {
+                    // realdate is local, transform to UTC
+                    realDate = makeUtc(realDate);
+                }
+                // all the dates are UTC now
+                if (Ext.Date.between(realDate, adjustedMin, adjustedMax)) {
+                    return true;
+                } else {
+                    return staticMe.msgNotBetweenMinMax;
+                }
+            };
+            return validator;
+        },
+
+        /**
          * This method is bound as Ext.form.field.Date#validator of the two
          * datefields that make up a timerange fieldset. It checks if the
          * current range determine by start- and enddate is not larger than the
@@ -390,17 +476,6 @@ Ext.define('Koala.util.Filter', {
             var fieldset = field.up('fieldset[filter]');
             var filter = fieldset && fieldset.filter;
             var maxDuration = filter && filter.maxduration;
-
-            if (Ext.isEmpty(maxDuration)) {
-                // Valid: no explicitly configured maximum duration
-                return true;
-            }
-            if (durationUtil.absoluteSecondsFromDuration(maxDuration) === 0) {
-                // Valid: the maximum duration is set to 0 seconds, this
-                // may be e.g. if only a number was entered instead of a
-                // vaild duration string.
-                return true;
-            }
 
             var names = staticMe.startAndEndFieldnamesFromMetadataParam(
                 filter.param
@@ -416,6 +491,17 @@ Ext.define('Koala.util.Filter', {
             if (startDate > endDate) {
                 // Invalid: start value after end value
                 return staticMe.warnMsgEndBeforeStart;
+            }
+
+            if (Ext.isEmpty(maxDuration)) {
+                // Valid: no explicitly configured maximum duration
+                return true;
+            }
+            if (durationUtil.absoluteSecondsFromDuration(maxDuration) === 0) {
+                // Valid: the maximum duration is set to 0 seconds, this
+                // may be e.g. if only a number was entered instead of a
+                // vaild duration string.
+                return true;
             }
 
             var withinDuration = durationUtil.datesWithinDuration(

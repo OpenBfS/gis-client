@@ -19,6 +19,13 @@
             "dspSignNotInLastJoiner": "en: noch "
         }
     },
+    "Koala.util.Filter": {
+        "statics": {
+            "warnMsgEndBeforeStart": "en:Startwert muss vor Endwert liegen.",
+            "warnMsgExceedsMaxDuration": "en:Startwert und Endwert liegen zu weit auseinander.",
+            "msgNotBetweenMinMax": "en:Datum/Uhrzeit liegen nicht im erlaubten Wertebereich"
+        }
+    },
     "Koala.util.String": {
         "statics": {
             "defaultDateFormat": "Y/m/d H:i:s"
@@ -53,15 +60,6 @@
             "data": {
                 "tooltip": "en:Klicken, um Sprache auszuwählen"
             }
-        }
-    },
-    "Koala.view.form.LayerFilter": {
-        "config": {
-            "format": "m/d/Y g:i A"
-        },
-        "statics": {
-            "warnMsgEndBeforeStart": "en:Startwert muss vor Endwert liegen.",
-            "warnMsgExceedsMaxDuration": "en:Startwert und Endwert liegen zu weit auseinander.",
         }
     },
     "Koala.view.form.field.SearchCombo": {
@@ -313,6 +311,7 @@
                 "valueFilter": "en:Wertefilter",
                 "timeRangeFilter": "en:Zeitraumfilter",
                 "pointInTimeFilter": "en:Zeitpunktfilter"
+
             }
         }
     },

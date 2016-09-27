@@ -433,7 +433,7 @@ Ext.define('Koala.util.Layer', {
                     xtype: 'k-form-layerfilter',
                     metadata: metadata,
                     filters: filters,
-                    format: 'j F Y'
+                    format: Ext.Date.defaultFormat
                 }
             }).show();
         },
