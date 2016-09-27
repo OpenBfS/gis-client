@@ -61,7 +61,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
     submitFilter: function(){
         var me = this;
         var LayerUtil = Koala.util.Layer;
-        var FilterUtil = Koala.util.Filter;
         var view = me.getView();
         var metadata = view.getMetadata();
         var filters = view.getFilters();
@@ -84,6 +83,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      */
     updateFiltersFromForm: function(filters) {
         var me = this;
+        var FilterUtil = Koala.util.Filter;
         var view = me.getView();
         // Iterate over all filters…
         Ext.each(filters, function(filter, idx) {
