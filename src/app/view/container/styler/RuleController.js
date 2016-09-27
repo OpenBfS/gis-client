@@ -49,6 +49,25 @@ Ext.define('Koala.view.container.styler.RuleController', {
             }
             view.fireEvent('rulechanged', rule);
         }
+    },
+
+    /**
+     *
+     */
+    onScaleDenominatorChanged: function(scaleDenominator){
+        var view = this.getView();
+        var viewModel = this.getViewModel();
+        var rule = viewModel.get('rule');
+        var scaleDenominatorCheckbox = view.down('checkbox[name="useScaleDenominatorCheckbox"]');
+
+        if(rule && scaleDenominator){
+            if(scaleDenominatorCheckbox.checked){
+                rule.setScaleDenominator(scaleDenominator);
+            } else {
+                delete rule.setScaleDenominator(null);
+            }
+            view.fireEvent('rulechanged', rule);
+        }
     }
 
 });

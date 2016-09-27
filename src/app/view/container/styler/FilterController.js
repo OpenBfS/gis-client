@@ -42,8 +42,9 @@ Ext.define('Koala.view.container.styler.FilterController', {
 
     setFilterComponents: function() {
         var me = this;
-        var filter = me.getView().getFilter();
-        var stylerUtil = Koala.util.Styler;
+        var viewModel = this.getViewModel();
+        var filter = viewModel.get('filter');
+        var stylerUtil = Koala.util.Style;
 
         if(filter){
             if (stylerUtil.isComparisonFilter(filter)) {
@@ -73,8 +74,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
     operatorComboChanged: function(combo, newValue){
         var view = this.getView();
         var viewModel = this.getViewModel();
-
-        var filter = view.filter;
+        var filter = viewModel.get('filter');
 
         var attributeCombo = view.down(
                 'combobox[name="attributeCombo"]');
@@ -87,52 +87,14 @@ Ext.define('Koala.view.container.styler.FilterController', {
 
         switch(newValue) {
         case "PropertyIsEqualTo":
-            if(filter){
-                literalValues = Koala.util.Style.getLiteralValuesFromFilter(filter);
-                if(literalValues){
-                    literalTextField.setValue(literalValues[0]);
-                }
-            }
-            literalNumberField1.hide();
-            literalNumberField2.hide();
-            literalTextField.show();
-            break;
         case "PropertyIsNotEqualTo":
-            if(filter){
-                literalValues = Koala.util.Style.getLiteralValuesFromFilter(filter);
-                if(literalValues){
-                    literalTextField.setValue(literalValues[0]);
-                }
-            }
-            literalNumberField1.hide();
-            literalNumberField2.hide();
-            literalTextField.show();
-            break;
         case "PropertyIsLike":
-            if(filter){
-                literalValues = Koala.util.Style.getLiteralValuesFromFilter(filter);
-                if(literalValues){
-                    literalTextField.setValue(literalValues[0]);
-                }
-            }
-            literalNumberField1.hide();
-            literalNumberField2.hide();
-            literalTextField.show();
-            break;
         case "PropertyIsNull":
             literalNumberField1.hide();
             literalNumberField2.hide();
-            literalTextField.hide();
+            literalTextField.show();
             break;
         case "PropertyIsBetween":
-            if(filter){
-                literalValues = Koala.util.Style.getLiteralValuesFromFilter(filter);
-                if(literalValues && Ext.isNumeric(literalValues[0]) &&
-                        Ext.isNumeric(literalValues[1])){
-                    literalNumberField1.setValue(literalValues[0]);
-                    literalNumberField2.setValue(literalValues[1]);
-                }
-            }
             literalNumberField1.show();
             literalNumberField2.show();
             literalTextField.hide();
@@ -142,13 +104,6 @@ Ext.define('Koala.view.container.styler.FilterController', {
         case "PropertyIsLessThanOrEqualTo":
         case "PropertyIsGreaterThan":
         case "PropertyIsGreaterThanOrEqualTo":
-            if(filter){
-                literalValues = Koala.util.Style.getLiteralValuesFromFilter(filter);
-
-                if(literalValues && Ext.isNumeric(literalValues[0])){
-                    literalNumberField2.setValue(literalValues[0]);
-                }
-            }
             literalNumberField2.show();
             literalNumberField1.hide();
             literalTextField.hide();
@@ -159,8 +114,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
         }
 
         if(filter){
-            var propertyName = Koala.util.Style.getPropertyNameFromFilter(filter);
-            attributeCombo.setValue(propertyName);
+            attributeCombo.setValue(filter.get('attribute'));
         }
     },
 

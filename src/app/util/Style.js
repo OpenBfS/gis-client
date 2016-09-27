@@ -75,32 +75,28 @@ Ext.define('Koala.util.Style', {
         },
 
         getLiteralValuesFromFilter: function(filter){
-            var operator = filter.comparisonOps.name.localPart;
+            var operator = filter.get('operator');
             var literalValues = [];
             switch(operator) {
             case "PropertyIsNull":
                 literalValues = null;
                 break;
             case "PropertyIsLike":
-                literalValues.push(
-                        filter.comparisonOps.value.literal.content[0]);
+                literalValues.push(filter.get('text'));
                 break;
             case "PropertyIsBetween":
-                literalValues.push(filter.comparisonOps.value.lowerBoundary
-                        .expression.value.content[0]);
-                literalValues.push(filter.comparisonOps.value.upperBoundary
-                        .expression.value.content[0]);
+                literalValues.push(filter.get('number1'));
+                literalValues.push(filter.get('number2'));
                 break;
             default:
-                literalValues.push(filter.comparisonOps.value
-                        .expression[1].value.content[0]);
+                literalValues.push(filter.get('text'));
                 break;
             }
             return literalValues;
         },
 
         styleFromSymbolizers: function(symbolizers) {
-            var styleUtil = Koala.util.Sld;
+            var styleUtil = Koala.util.Style;
             if (!Ext.isArray(symbolizers)) {
                 symbolizers = [symbolizers];
             }

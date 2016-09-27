@@ -10,51 +10,35 @@ Ext.define('Koala.store.FilterOperators', {
     },{
         name: "operator",
         type: 'string'
-    },{
-        name: "dataTypes",
-        type: 'auto'
     }],
 
     data : [{
         ogcType: "PropertyIsEqualTo",
-        operator: "=",
-        dataTypes: ["xsd:int", "xsd:double", "xsd:string", "xsd:boolean"]
+        operator: "="
     },{
         ogcType: "PropertyIsNotEqualTo",
-        operator: "!=",
-        dataTypes: ["xsd:int", "xsd:double", "xsd:string", "xsd:boolean"]
+        operator: "!="
     },{
         ogcType: "PropertyIsLessThan",
-        operator: "<",
-        dataTypes: ["xsd:int", "xsd:double"]
+        operator: "<"
     },{
         ogcType: "PropertyIsLessThanOrEqualTo",
-        operator: "≤",
-        dataTypes: ["xsd:int", "xsd:double"]
+        operator: "≤"
     },{
         ogcType: "PropertyIsBetween",
-        operator: "≤ x ≤",
-        dataTypes: ["xsd:int", "xsd:double"]
+        operator: "≤ x ≤"
     },{
         ogcType: "PropertyIsGreaterThan",
-        operator: ">",
-        dataTypes: ["xsd:int", "xsd:double"]
+        operator: ">"
     },{
         ogcType: "PropertyIsGreaterThanOrEqualTo",
-        operator: "≥",
-        dataTypes: ["xsd:int", "xsd:double"]
-    },{
-        ogcType: "PropertyIsGreaterThanOrEqualTo",
-        operator: "≥",
-        dataTypes: ["xsd:int", "xsd:double"]
+        operator: "≥"
     },{
         ogcType: "PropertyIsLike",
-        operator: "is Like",
-        dataTypes: ["xsd:string"]
+        operator: "is Like"
     },{
         ogcType: "PropertyIsNull",
-        operator: "isNull",
-        dataTypes: ["xsd:int", "xsd:double", "xsd:string", "xsd:boolean"]
+        operator: "isNull"
     }]
 
 });

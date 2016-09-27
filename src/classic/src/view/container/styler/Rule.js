@@ -32,6 +32,9 @@ Ext.define('Koala.view.container.styler.Rule', {
         if(!rule.getSymbolizer()){
             rule.setSymbolizer(Ext.create('Koala.model.StyleSymbolizer'));
         }
+        if(!rule.getScaleDenominator()){
+            rule.setScaleDenominator(Ext.create('Koala.model.StyleScaleDenominator'));
+        }
 
         me.initBaseFieldset();
         me.initFilterSymbolizerComponents();
@@ -90,17 +93,35 @@ Ext.define('Koala.view.container.styler.Rule', {
                     olstylechanged: 'onOlStyleChanged'
                 }
             },{
-                xtype: 'k_container_styler_filter',
-                viewModel: {
-                    data: {
-                        filter: rule.getFilter()
-                    }
+                xtype: 'container',
+                flex: 3,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
                 },
-                flex: 1,
-                margin: '0 10px 0 0',
-                listeners: {
-                    filterchanged: 'onFilterChanged'
-                }
+                items: [{
+                    xtype: 'k_container_styler_scaledenominator',
+                    viewModel: {
+                        data: {
+                            scaleDenominator: rule.getScaleDenominator()
+                        }
+                    },
+                    margin: '0 10px',
+                    listeners: {
+                        scaledenominatorchanged: 'onScaleDenominatorChanged'
+                    }
+                }, {
+                    xtype: 'k_container_styler_filter',
+                    viewModel: {
+                        data: {
+                            filter: rule.getFilter()
+                        }
+                    },
+                    margin: '0 10px',
+                    listeners: {
+                        filterchanged: 'onFilterChanged'
+                    }
+                }]
             }]
         });
     }

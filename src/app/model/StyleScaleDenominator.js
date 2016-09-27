@@ -5,7 +5,10 @@ Ext.define('Koala.model.StyleScaleDenominator', {
          name: 'operator',
          type: 'string'
     }, {
-        name: 'scale',
+        name: 'number1',
+        type: 'int'
+    }, {
+        name: 'number2',
         type: 'int'
     }],
 

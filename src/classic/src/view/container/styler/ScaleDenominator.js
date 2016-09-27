@@ -1,14 +1,14 @@
-Ext.define('Koala.view.container.styler.Filter', {
+Ext.define('Koala.view.container.styler.ScaleDenominator', {
     extend: 'Ext.container.Container',
-    xtype: 'k_container_styler_filter',
+    xtype: 'k_container_styler_scaledenominator',
 
     requires: [
-        'Koala.store.FilterOperators'
+        'Koala.store.ScaleDenominatorOperators'
     ],
 
-    controller: 'container.styler.filter',
+    controller: 'container.styler.scaledenominator',
     viewModel: {
-        type: 'container.styler.filter'
+        type: 'container.styler.scaledenominator'
     },
 
     listeners: {
@@ -28,7 +28,7 @@ Ext.define('Koala.view.container.styler.Filter', {
         name: 'comparison-fieldset',
         collapsed: true,
         checkboxToggle: true,
-        checkboxName: 'useFilterCheckbox',
+        checkboxName: 'useScaleDenominatorCheckbox',
         layout: {
             type: 'hbox',
             align: 'stretchmax'
@@ -38,28 +38,16 @@ Ext.define('Koala.view.container.styler.Filter', {
             labelAlign: 'top'
         },
         items: [{
-            xtype: 'combobox',
-            name: 'attributeCombo',
-            editable: false,
-            bind: {
-                fieldLabel: '{attributeComboLabel}',
-                value: '{filter.attribute}'
-            },
-            store: [],
-            listeners: {
-                boxready: 'attributeComboBoxReady'
-            }
-        }, {
             xtype: 'numberfield',
             name: 'literalNumberField1',
             value: 0,
             bind: {
                 fieldLabel: '{literalNumberField1Label}',
-                value: '{filter.number1}'
+                value: '{scaleDenominator.number1}'
             },
             hidden: true,
             flex: 5
-        },{
+        }, {
             xtype: 'combobox',
             name: 'operatorCombo',
             width: '100px',
@@ -68,31 +56,21 @@ Ext.define('Koala.view.container.styler.Filter', {
             editable: false,
             bind: {
                 fieldLabel: '{operatorComboLabel}',
-                value: '{filter.operator}'
+                value: '{scaleDenominator.operator}'
             },
             store: {
-                type: 'filterOperators'
+                type: 'scaleDenominatorOperators'
             },
             listeners: {
                 change: 'operatorComboChanged'
             }
-        },{
+        }, {
             xtype: 'numberfield',
             name: 'literalNumberField2',
             value: 0,
             bind: {
                 fieldLabel: '{literalNumberField2Label}',
-                value: '{filter.number2}'
-            },
-            hidden: true,
-            flex: 5
-        },{
-            xtype: 'textfield',
-            name: 'literalTextField',
-            value: "",
-            bind: {
-                fieldLabel: '{literalTextFieldLabel}',
-                value: '{filter.text}'
+                value: '{scaleDenominator.number2}'
             },
             hidden: true,
             flex: 5
