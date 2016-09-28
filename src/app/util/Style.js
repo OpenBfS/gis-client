@@ -68,7 +68,7 @@ Ext.define('Koala.util.Style', {
          */
         evaluateScaleDenom: function(scaleDenom) {
             // Only evaluate the scale denominator if a scale is given
-            if (!scaleDenom.operator) {
+            if (!scaleDenom || !scaleDenom.operator) {
                 return true;
             }
 
@@ -120,7 +120,7 @@ Ext.define('Koala.util.Style', {
          */
         evaluateFilter: function(filter, feature) {
             // Only evaluate the filter if a filter is given
-            if (!filter.operator) {
+            if (!filter || !filter.operator) {
                 return true;
             }
 
