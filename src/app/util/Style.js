@@ -20,7 +20,8 @@ Ext.define('Koala.util.Style', {
             if(!layer || !(layer instanceof ol.layer.Vector)){
                 return;
             }
-            return layer.getSource().getFeatures()[0].getGeometry().getType();
+            var geomType = layer.getSource().getFeatures()[0].getGeometry().getType();
+            return geomType.replace("Multi","");
         },
 
         /**
@@ -125,7 +126,7 @@ Ext.define('Koala.util.Style', {
             }
 
             // Return if no feature is given
-            if (!feature || !feature instanceof ol.Feature) {
+            if (!feature instanceof ol.Feature) {
                 return false;
             }
 

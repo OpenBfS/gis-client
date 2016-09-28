@@ -66,6 +66,13 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
 
         var win = Ext.ComponentQuery.query('[name=symbolizer-edit-window]')[0];
 
+        // If the layer has a style function we call it with the first feat of the
+        // layer to get a real ol.Style
+        if(Ext.isFunction(olStyle)){
+            var firstFeat = viewModel.get('layer').getSource().getFeatures()[0];
+            olStyle = olStyle(firstFeat)[0];
+        }
+
         var redlinePointStyle = symbolType.toUpperCase() === 'POINT' ? olStyle : undefined;
         var redlineLineStringStyle = symbolType.toUpperCase() === 'LINESTRING' ? olStyle : undefined;
         var redlinePolygonStyle = symbolType.toUpperCase() === 'POLYGON' ? olStyle : undefined;
