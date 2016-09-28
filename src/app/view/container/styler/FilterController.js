@@ -86,17 +86,27 @@ Ext.define('Koala.view.container.styler.FilterController', {
         switch(newValue) {
         case "PropertyIsEqualTo":
         case "PropertyIsNotEqualTo":
-        case "PropertyIsLike":
-        case "PropertyIsNull":
             literalNumberField1.hide();
             literalNumberField2.hide();
             literalTextField.show();
+            viewModel.set('literalTextFieldLabel', viewModel.get('valueText'));
+            break;
+        case "PropertyIsLike":
+            literalNumberField1.hide();
+            literalNumberField2.hide();
+            literalTextField.show();
+            viewModel.set('literalTextFieldLabel', viewModel.get('isLikeText'));
+            break;
+        case "PropertyIsNull":
+            literalNumberField1.hide();
+            literalNumberField2.hide();
+            literalTextField.hide();
             break;
         case "PropertyIsBetween":
             literalNumberField1.show();
             literalNumberField2.show();
             literalTextField.hide();
-            viewModel.set('literalNumberField2Label', 'Upper boundary');
+            viewModel.set('literalNumberField2Label', viewModel.get('upperBoundaryText'));
             break;
         case "PropertyIsLessThan":
         case "PropertyIsLessThanOrEqualTo":
@@ -105,7 +115,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
             literalNumberField2.show();
             literalNumberField1.hide();
             literalTextField.hide();
-            viewModel.set('literalNumberField2Label', 'Value');
+            viewModel.set('literalNumberField2Label', viewModel.get('valueText'));
             break;
         default:
             break;

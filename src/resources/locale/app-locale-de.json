@@ -55,6 +55,67 @@
             }
         }
     },
+    "Koala.view.container.styler.Filter": {
+        "config": {
+            "data": {
+                "attributeComboLabel": "Attribut",
+                "operatorComboLabel": "Operator",
+                "literalNumberField1Label": "Untere Grenze",
+                "literalNumberField2Label": "Wert",
+                "literalTextFieldLabel": "'Is like' Muster",
+                "upperBoundaryText": "Obere Grenze",
+                "valueText": "Wert",
+                "isLikeText": "'Is like' Muster"
+            }
+        }
+    },
+    "Koala.view.container.styler.Rule": {
+        "config": {
+            "data": {
+                "titlePrefix": "Feature Style Regel",
+                "removeRuleButtonText": "Diese Regel entfernen"
+            }
+        }
+    },
+    "Koala.view.container.styler.Rules": {
+        "config": {
+            "data": {
+                "addRuleButtonText": "Regel hinzufügen"
+            }
+        }
+    },
+    "Koala.view.container.styler.ScaleDenominator": {
+        "config": {
+            "data": {
+                "title": "Maßstabsbegrenzung verwenden",
+                "operatorComboLabel": "Operator",
+                "literalNumberField1Label": "Untere Grenze",
+                "literalNumberField2Label": "Obere Grenze"
+            }
+        }
+    },
+    "Koala.view.container.styler.Styler": {
+        "config": {
+            "data": {
+                "missingOrInvalidLayerName": "'layerName' ist obligatorisch und muss einen NameSpace beinhalten",
+                "genericError": "Ein unbekannter Fehler ist aufgetreten",
+                "failedToFetch": "Der aktuelle Style konnte nicht gelesen werden",
+                "titlePrefix": "Styling ",
+                "btnTextReloadCurrentStyle": "Auf original Style zurücksetzen",
+                "btnTextApplyAndSave": "Style speichern",
+                "dspLayerName": ""
+            }
+        }
+    },
+    "Koala.view.container.styler.Symbolizer": {
+        "config": {
+            "data": {
+                "title": "Symbol",
+                "windowTitle": "Symbol",
+                "symbolizerFieldSetHtml": "Zum bearbeiten klicken"
+            }
+        }
+    },
     "Koala.view.form.ImportLocalDataModel": {
         "config": {
             "data": {
