@@ -64,6 +64,15 @@ Ext.define('Koala.view.window.BarChartController', {
         controller.prepareBarSeriesLoad();
     },
 
+    updateBarChartWin: function(view, lastChart, layerTitle) {
+        if (layerTitle) {
+            view.setBind({title: layerTitle});
+        }
+        if (lastChart){
+            view.setPosition(lastChart.getX() + 20, lastChart.getY() + 20);
+        }
+    },
+
     isLayerChartRendered: function(chartId) {
         var existingCharts = Ext.ComponentQuery.query('k-chart-bar');
         var isRendered = false;
@@ -82,11 +91,15 @@ Ext.define('Koala.view.window.BarChartController', {
         var me = this;
         var view = me.getView();
         var layerChartRendered = me.isLayerChartRendered(uniqueId);
+        //used for offsetting following windows
+        var existingCharts = Ext.ComponentQuery.query('k-chart-bar');
+        var lastChart = existingCharts[existingCharts.length - 1];
 
         if (!layerChartRendered) {
             view.add(me.createBarChart(olLayer, olFeat, uniqueId));
             me.updateBarChartStore(olFeat, uniqueId);
             view.show();
+            me.updateBarChartWin(view, lastChart, olLayer.qtitle);
         } else {
             // close the newly opened, empty window
             view.destroy();
