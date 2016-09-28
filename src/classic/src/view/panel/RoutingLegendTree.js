@@ -846,8 +846,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             var layer = rec.getOlLayer();
             var selector = '[name=' + layer.get("routeId") + '-legendImg]';
             var img = Ext.ComponentQuery.query(selector)[0];
-
-            if (img) {
+            if (img && img.el && img.el.dom) {
                 img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));
             }
         });
