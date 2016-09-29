@@ -116,6 +116,23 @@
             }
         }
     },
+    "Koala.view.container.styler.Label": {
+        "config": {
+            "data": {
+                "labelFieldSetTitle": "fr:Beschriftung",
+                "textFieldLabel": "fr:Text/Template",
+                "fontFamilyFieldLabel": "fr:Schriftfamilie",
+                "fontStyleFieldLabel": "fr:Schriftstil",
+                "fontSizeFieldLabel": "fr:Schriftgröße",
+                "fontColorFieldLabel": "fr:Schriftfarbe:",
+                "fontStrokeColorFieldLabel": "fr:Schriftumrandung:",
+                "rotationFieldLabel": "fr:Rotation",
+                "offsetXFieldLabel": "fr:Versatz X",
+                "offsetYFieldLabel": "fr:Versatz Y"
+            }
+        }
+    },
+
     "Koala.view.form.ImportLocalDataModel": {
         "config": {
             "data": {
