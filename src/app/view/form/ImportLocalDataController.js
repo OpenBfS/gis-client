@@ -24,6 +24,45 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         'Koala.util.Layer'
     ],
 
+    statics: {
+        /**
+         *
+         */
+        KEY_FLIP_COORDS_PROJECTION: 'EPSG:4326-enu'
+        /**
+         *
+         */
+        retransformFlipAndTransform: function(features, projection, targetProjection) {
+            var staticMe = Koala.view.form.ImportLocalDataController;
+            Ext.each(features, function(feature) {
+                var geometry = feature.getGeometry().clone();
+                geometry.transform(targetProjection, projection);
+                var coordinates = geometry.getCoordinates();
+                geometry.setCoordinates(staticMe.flipCoords(coordinates));
+                geometry.transform(projection, targetProjection);
+                feature.setGeometry(geometry);
+            });
+        },
+
+        /**
+         *
+         */
+        flipCoords: function(coords) {
+            var staticMe = Koala.view.form.ImportLocalDataController;
+            var flipped = [];
+            if (coords && !Ext.isArray(coords[0])) {
+                flipped[0] = coords[1];
+                flipped[1] = coords[0];
+                flipped[2] = coords[2];
+            } else {
+                Ext.each(coords, function(coord) {
+                    flipped.push(staticMe.flipCoords(coord));
+                });
+            }
+            return flipped;
+        }
+    },
+
     /**
      *
      */
@@ -80,8 +119,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     * Copy of https://github.com/openlayers/ol3/blob/v3.18.2/src/ol/interaction/draganddrop.js#L97
     */
     parseFeatures: function(event){
-        var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
         var me = this;
+        var staticMe = Koala.view.form.ImportLocalDataController;
+        var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
         var viewModel = me.getViewModel();
         var result = event.target.result;
         var formatConstructors = [
@@ -97,14 +137,26 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         }
         var features = [];
         var i, ii;
+
         for (i = 0, ii = formatConstructors.length; i < ii; ++i) {
             var formatConstructor = formatConstructors[i];
             var format = new formatConstructor();
+
+            var dataProjection = viewModel.get('projection');
+            var featureProjection = viewModel.get('targetProjection');
+
             features = me.tryReadFeatures(format, result, {
-                dataProjection: viewModel.get('projection'),
-                featureProjection: viewModel.get('targetProjection')
+                dataProjection: dataProjection,
+                featureProjection: featureProjection
             });
             if (features && features.length > 0) {
+                if (viewModel.get('projection') === staticMe.KEY_FLIP_COORDS_PROJECTION) {
+                    staticMe.retransformFlipAndTransform(
+                        features,
+                        dataProjection,
+                        featureProjection
+                    );
+                }
                 break;
             }
         }
@@ -161,7 +213,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             // TODO this has to be replaced once we have multiple maps
             var layer = evt.element;
             var extent = layer.getSource().getExtent();
-            map.getView().fit(extent, map.getSize());
+            map.getView().fit(extent, map.getSize(), {
+                maxZoom: 16
+            });
             me.getView().up('window').close();
         });
     },

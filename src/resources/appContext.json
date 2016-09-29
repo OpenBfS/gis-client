@@ -62,7 +62,10 @@
                 "label": "EPSG:3857"
             }, {
                 "code": "EPSG:4326",
-                "label": "EPSG:4326"
+                "label": "EPSG:4326 (lon/lat)"
+            }, {
+                "code": "EPSG:4326-enu",
+                "label": "EPSG:4326 (lat/lon)"
             }, {
                 "code": "EPSG:25832",
                 "label": "EPSG:25832"
