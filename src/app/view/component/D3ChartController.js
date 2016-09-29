@@ -271,17 +271,58 @@ Ext.define('Koala.view.component.D3ChartController', {
         // corresponding data index for each scale. Set the extent (max/min range
         // in this data index) for each scale.
         Ext.iterate(me.scales, function(orient) {
-            Ext.each(me.shapes, function(shape) {
-                var data = me.data[shape.config.id];
-                me.scales[orient]
-                    .domain(d3.extent(data, function(d) {
-                        return d[view.getAxes()[orient].dataIndex];
-                    }))
-                    .nice();
-            });
+            var axis = view.getAxes()[orient];
+            var axisDomain;
+            var makeDomainNice = true;
+            var min;
+            var max;
+            if (Ext.isDefined(axis.min)) {
+                min = Koala.util.String.coerce(axis.min);
+                makeDomainNice = false; // if one was given, don't auto-enhance
+            }
+            if (Ext.isDefined(axis.min)) {
+                max = Koala.util.String.coerce(axis.max);
+                makeDomainNice = false; // if one was given, don't auto-enhance
+            }
+            if (Ext.isDefined(min) && Ext.isDefined(max)) {
+                // We're done for this axis, both min and max were given
+                axisDomain = [min, max];
+            } else {
+                // Otherwise we have to find min and max from the data in all
+                // shapes.
+                Ext.each(me.shapes, function(shape) {
+                    var data = me.data[shape.config.id];
+                    var extent = d3.extent(data, function(d) {
+                        return d[axis.dataIndex];
+                    });
+
+                    if(!axisDomain) {
+                        // first iteration / shape
+                        axisDomain = [extent[0], extent[1]];
+                    } else {
+                        // any other run, take the new min and max if they are
+                        // actually bigger or smaller.
+                        axisDomain[0] = Math.min(extent[0], axisDomain[0]);
+                        axisDomain[1] = Math.max(extent[1], axisDomain[1]);
+                    }
+                });
+                // now we need to check again, if either min and max were
+                // explicitly passed. The values from GNOS, if they exist,
+                // always take precedence.
+                if (Ext.isDefined(min)) {
+                    axisDomain[0] = min;
+                }
+                if (Ext.isDefined(max)) {
+                    axisDomain[1] = max;
+                }
+            }
+            // actually set the domain
+            var domain = me.scales[orient].domain(axisDomain);
+            if (makeDomainNice) {
+                domain.nice();
+            }
         });
     },
-
 
     /**
      * Draws the root <svg>-element into the <div>-element rendered by the Ext

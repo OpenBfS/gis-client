@@ -161,7 +161,9 @@ Ext.define('Koala.view.component.D3Chart',{
                         labelColor: chartConfig.labelColor,
                         labelSize: chartConfig.labelSize,
                         tickSize: chartConfig.tickSize,
-                        tickPadding: chartConfig.tickPadding
+                        tickPadding: chartConfig.tickPadding,
+                        min: chartConfig.yAxisMin,
+                        max: chartConfig.yAxisMax
                     },
                     bottom: {
                         scale: chartConfig.xAxisScale,
