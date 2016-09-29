@@ -40,7 +40,7 @@ Ext.define('Koala.view.container.styler.Filter', {
         items: [{
             xtype: 'combobox',
             name: 'attributeCombo',
-            editable: false,
+            editable: true,
             bind: {
                 fieldLabel: '{attributeComboLabel}',
                 value: '{filter.attribute}'

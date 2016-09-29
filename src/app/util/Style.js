@@ -193,18 +193,17 @@ Ext.define('Koala.util.Style', {
 
             var field = filter.attribute;
             var candidate = feature.get(field);
-
-            // Return if the feature hasn't set the attribute field to evaluate
-            // against
-            if (!candidate) {
-                return false;
-            }
-
             var numberOperandA = filter.number1;
             var numberOperandB = filter.number2;
             var type = filter.operator;
             var textOperand = filter.text;
             var result;
+
+            // Return if the feature hasn't set the attribute field to evaluate
+            // against
+            if (!candidate && type!='PropertyIsNull') {
+                return false;
+            }
 
             switch(type) {
                 case 'PropertyIsEqualTo':
@@ -236,7 +235,7 @@ Ext.define('Koala.util.Style', {
                     result = regExp.test(candidate);
                     break;
                 case 'PropertyIsNull':
-                    result = candidate === null;
+                    result = !!candidate;
                     break;
                 default:
                     result = false;
