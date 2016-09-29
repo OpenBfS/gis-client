@@ -2,6 +2,10 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
     extend: "BasiGX.view.container.RedlineStyler",
     xtype: "k_container_styler_styleditor",
 
+    requires: [
+        'Ext.form.field.FileButton'
+    ],
+
     /**
      * @overwrite
      */
@@ -74,12 +78,40 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
     */
     onChooseGraphicClick: function() {
         var me = this;
+        // TODO This has to be replaced when we have multiple maps.
+        var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
+        var vectorIcons = appContext.data.merge.vectorIcons;
 
-        var okClickCallbackFn = function(pictureRec) {
+        var imageTpl = new Ext.XTemplate(
+            '<tpl for=".">',
+                '<div class="thumb-wrap">',
+                    '<div class="thumb">',
+                        '<img src="{src}" height="60px" />',
+                    '</div>',
+                    '<span>{caption}</span>',
+                '</div>',
+            '</tpl>'
+        );
+
+        var onUploadChange = function(btn, event){
+            var file = event.target.files[0];
+            var fileReader = new FileReader();
+
+            fileReader.readAsDataURL(file);
+
+            fileReader.addEventListener("load", function () {
+                var imageObj = {
+                    src: fileReader.result,
+                    caption: file.name
+                }
+                dataView.getStore().add(imageObj);
+            }, false);
+        };
+
+        var okHandler = function(){
             var renderer = me.down('gx_renderer[name=pointRenderPreview]');
-            var pictureUrl = BasiGX.util.Url.getWebProjectBaseUrl() +
-                me.getBackendUrls().pictureSrc.url +
-                pictureRec.get('id');
+            var rec = dataView.selectionModel.getSelection()[0];
+            var pictureUrl = rec.get('src');
             var imageValues = me.getImageAttributes();
             var imageStyle = new ol.style.Style({
                 image: new ol.style.Icon({
@@ -93,28 +125,59 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
             });
             me.setRedlinePointStyle(imageStyle);
             renderer.setSymbolizers(imageStyle);
+            this.up('window').close();
         };
 
-        var deleteClickCallbackFn = function() {
-            Ext.toast(
-                me.getViewModel().get('pointGrapicDeletedSuccessMsgText'),
-                me.getViewModel().get('pointGrapicDeletedSuccessMsgTitle'),
-                't'
-            );
-        };
-
-        var graphicPool = Ext.create('BasiGX.view.panel.GraphicPool', {
-            backendUrls: me.getBackendUrls(),
-            okClickCallbackFn: okClickCallbackFn,
-            deleteClickCallbackFn: deleteClickCallbackFn,
-            useCsrfToken: true
+        var dataView = Ext.create('Ext.view.View', {
+            cls: 'img-chooser-view',
+            minWidth: 150,
+            minHeight: 170,
+            width: 410,
+            height: 300,
+            store: {
+                data: vectorIcons
+            },
+            tpl: imageTpl,
+            itemSelector: 'div.thumb-wrap',
+            emptyText: 'No images available',
+            listeners: {
+                itemdblclick: okHandler
+            }
         });
 
         var graphicPoolWin = Ext.create('Ext.window.Window', {
             title: me.getViewModel().get('graphicPoolWindowTitle'),
             constrained: true,
             modal: true,
-            items: [graphicPool]
+            items: [dataView],
+            viewModel: {
+                data: {
+                    okText: 'Ok',
+                    cancelText: 'Abbrechen',
+                    uploadText: 'Bild hochladen'
+                }
+            },
+            bbar: [{
+                bind: {
+                    text: '{cancelText}'
+                },
+                handler: function(){
+                    this.up('window').close();
+                }
+            },{
+                bind: {
+                    text: '{okText}',
+                },
+                handler: okHandler
+            }, '->', {
+                xtype: 'filebutton',
+                bind: {
+                    text: '{uploadText}'
+                },
+                listeners: {
+                    change: onUploadChange
+                }
+            }]
         });
         graphicPoolWin.show();
     }

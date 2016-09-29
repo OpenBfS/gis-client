@@ -10,10 +10,10 @@ Ext.define('Koala.model.StyleFilter', {
         type: 'string'
     }, {
         name: 'number1',
-        type: 'int'
+        type: 'number'
     }, {
         name: 'number2',
-        type: 'int'
+        type: 'number'
     }, {
         name: 'text',
         type: 'string'

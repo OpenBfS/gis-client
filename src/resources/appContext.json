@@ -50,6 +50,13 @@
                 "printBtn"
             ],
 
+            "vectorIcons": [
+                {
+                    "src": "resources/vectorIcons/atomicon.png",
+                    "caption": "Atom"
+                }
+            ],
+
             "vectorProjections": [{
                 "code": "EPSG:3857",
                 "label": "EPSG:3857"

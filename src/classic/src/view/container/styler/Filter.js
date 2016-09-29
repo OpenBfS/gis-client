@@ -52,6 +52,7 @@ Ext.define('Koala.view.container.styler.Filter', {
         }, {
             xtype: 'numberfield',
             name: 'literalNumberField1',
+            decimalSeparator: '.',
             value: 0,
             bind: {
                 fieldLabel: '{literalNumberField1Label}',
@@ -79,6 +80,7 @@ Ext.define('Koala.view.container.styler.Filter', {
         },{
             xtype: 'numberfield',
             name: 'literalNumberField2',
+            decimalSeparator: '.',
             value: 0,
             bind: {
                 fieldLabel: '{literalNumberField2Label}',
