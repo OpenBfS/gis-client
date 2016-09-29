@@ -169,7 +169,7 @@ Ext.define('Koala.view.component.D3Chart',{
                         scale: chartConfig.xAxisScale,
                         dataIndex: chartConfig.xAxisAttribute,
                         format: chartConfig.xAxisFormat,
-                        label: (chartConfig.xAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
+                        label: chartConfig.xAxisLabel,
                         labelPadding: chartConfig.labelPadding,
                         labelColor: chartConfig.labelColor,
                         labelSize: chartConfig.labelSize,
