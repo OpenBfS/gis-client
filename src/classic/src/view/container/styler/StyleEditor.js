@@ -112,6 +112,7 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
     */
     onChooseGraphicClick: function() {
         var me = this;
+        var dataView;
         // TODO This has to be replaced when we have multiple maps.
         var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
         var vectorIcons = appContext.data.merge.vectorIcons;
@@ -137,7 +138,7 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
                 var imageObj = {
                     src: fileReader.result,
                     caption: file.name
-                }
+                };
                 dataView.getStore().add(imageObj);
             }, false);
         };
@@ -162,7 +163,7 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
             this.up('window').close();
         };
 
-        var dataView = Ext.create('Ext.view.View', {
+        dataView = Ext.create('Ext.view.View', {
             cls: 'img-chooser-view',
             minWidth: 150,
             minHeight: 170,
@@ -200,7 +201,7 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
                 }
             },{
                 bind: {
-                    text: '{okText}',
+                    text: '{okText}'
                 },
                 handler: okHandler
             }, '->', {

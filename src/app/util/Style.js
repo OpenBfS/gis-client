@@ -201,7 +201,7 @@ Ext.define('Koala.util.Style', {
 
             // Return if the feature hasn't set the attribute field to evaluate
             // against
-            if (!candidate && type!='PropertyIsNull') {
+            if (!candidate && type !== 'PropertyIsNull') {
                 return false;
             }
 
