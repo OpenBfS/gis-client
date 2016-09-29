@@ -338,7 +338,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return Ext.isDefined(d[yField]);
             })
             .text(function(d){
-                return labelFunc(d[yField]);
+                return labelFunc(d[yField], d);
             })
             .attr("x", function(d) {
                  return me.scales[orientX](d[xField]);
