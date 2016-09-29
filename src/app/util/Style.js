@@ -21,7 +21,9 @@ Ext.define('Koala.util.Style', {
                 return;
             }
             var geomType = layer.getSource().getFeatures()[0].getGeometry().getType();
-            return geomType.replace("Multi","");
+            // The GeoExt FeatureRenderer only knows non-multi geometries and
+            // handles "LineString" as "Line"
+            return geomType.replace("Multi", "").replace("String", "");
         },
 
         /**
@@ -41,10 +43,14 @@ Ext.define('Koala.util.Style', {
             var me = this;
 
             var rules = style.getAssociatedData().rules;
+            // Save a reference to the configured olStyleText text placeholder,
+            // otherwise it would be overwritten in the resolveTextStylePlaceholder()
+            // method
+            var placerHolder = me.getTextStylePlaceholder(rules);
 
             var styleFunction = function(feature) {
                 var olStyles = [];
-                Ext.each(rules, function(rule) {
+                Ext.each(rules, function(rule, idx) {
                     var scaleDenom = rule.scaleDenominator;
                     var symbolizer = rule.symbolizer;
                     var filter = rule.filter;
@@ -52,6 +58,7 @@ Ext.define('Koala.util.Style', {
 
                     if (me.evaluateFilter(filter, feature) &&
                             me.evaluateScaleDenom(scaleDenom)) {
+                        me.resolveTextStylePlaceholder(olStyle, feature, placerHolder[idx]);
                         olStyles.push(olStyle);
                     }
                 });
@@ -59,6 +66,60 @@ Ext.define('Koala.util.Style', {
             };
 
             layer.setStyle(styleFunction);
+        },
+
+        /**
+         *
+         */
+        getTextStylePlaceholder: function(rules) {
+            var textStylePlaceholder = [];
+
+            Ext.each(rules, function(rule) {
+                var symbolizer = rule.symbolizer;
+                var olStyle = symbolizer.olStyle;
+                var olTextStyle = olStyle.getText();
+                var olText = olTextStyle.getText();
+                textStylePlaceholder.push(olText);
+            });
+
+            return textStylePlaceholder;
+        },
+
+        /**
+         *
+         */
+        resolveTextStylePlaceholder: function(olStyle, feature, placerHolder) {
+            if (!olStyle.getText() instanceof ol.style.Text) {
+                return false;
+            }
+
+            if (Ext.isEmpty(placerHolder)) {
+                return false;
+            }
+
+            var olStyleText = olStyle.getText();
+            var labelTextTpl = placerHolder;
+            // Find any character between two square brackets
+            var placeHolderPrefix = '\\[\\[';
+            var placeHolderSuffix = '\\]\\]';
+            var regExp = new RegExp(placeHolderPrefix + '(.*?)' + placeHolderSuffix, 'g');
+            var regExpRes = labelTextTpl.match(regExp);
+
+            // If we have a regex result, it means we found a placeholder
+            // in the template and we have to replace the placeholder with its
+            // appropriate value
+            if (regExpRes) {
+                // Iterate over all regex match results and find the proper
+                // attribute for the given placeholder, finally set the desired
+                // value to the hover field text
+                Ext.each(regExpRes, function(res) {
+                    // Remove the pre- and suffix
+                    var placeHolderName = res.slice(2, res.length - 2);
+                    labelTextTpl = labelTextTpl.replace(res, feature.get(placeHolderName));
+                });
+            }
+
+            olStyleText.setText(labelTextTpl);
         },
 
         /**
