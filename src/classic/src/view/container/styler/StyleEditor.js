@@ -3,13 +3,32 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
     xtype: "k_container_styler_styleditor",
 
     requires: [
-        'Ext.form.field.FileButton'
+        'Ext.form.field.FileButton',
+        'Koala.view.container.styler.Label'
     ],
+
+    initComponent: function(config) {
+        var me = this;
+
+        me.callParent([config]);
+        me.on('afterrender', function() {
+            var panel;
+            if (me.getRedlinePointStyle()) {
+                panel = me.down('fieldset[name=pointstyle] > tabpanel > panel');
+            } else if (me.getRedlineLineStringStyle()) {
+                panel = me.down('fieldset[name=linestringstyle]');
+            } else if (me.getRedlinePolygonStyle()) {
+                panel = me.down('fieldset[name=polygonstyle]');
+            }
+            var labelContainer = Ext.create('Koala.view.container.styler.Label');
+            panel.add(labelContainer);
+        });
+    },
 
     /**
      * @overwrite
      */
-    updateStyle: function(pointStyle, lineStyle, polygonStyle) {
+    updateStyle: function(pointStyle, lineStyle, polygonStyle, textStyleCb) {
         var redLineStyler = this;
         var oldStyle;
         var style;
@@ -20,18 +39,33 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
             renderer = redLineStyler.down(
                     'gx_renderer[name=pointRenderPreview]');
             style = redLineStyler.generatePointStyle(oldStyle, pointStyle);
+
+            if (Ext.isFunction(textStyleCb)) {
+                style = textStyleCb(style);
+            }
+
             redLineStyler.setRedlinePointStyle(style);
         } else if (lineStyle) {
             oldStyle = redLineStyler.getRedlineLineStringStyle();
             renderer = redLineStyler.down(
                     'gx_renderer[name=lineRenderPreview]');
             style = redLineStyler.generateLineStringStyle(oldStyle, lineStyle);
+
+            if (Ext.isFunction(textStyleCb)) {
+                style = textStyleCb(style);
+            }
+
             redLineStyler.setRedlineLineStringStyle(style);
         } else {
             oldStyle = redLineStyler.getRedlinePolygonStyle();
             renderer = redLineStyler.down(
                     'gx_renderer[name=polygonRenderPreview]');
             style = redLineStyler.generatePolygonStyle(oldStyle, polygonStyle);
+
+            if (Ext.isFunction(textStyleCb)) {
+                style = textStyleCb(style);
+            }
+
             redLineStyler.setRedlinePolygonStyle(style);
         }
 
