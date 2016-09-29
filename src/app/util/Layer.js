@@ -115,6 +115,100 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Checks the properties of the layer to see if it configured to draw
+         * timeseries or bar charts.
+         *
+         * @param {ol.layer.Layer} layer The layer to check.
+         * @return {boolean} Whether the layer allows to draw timeseries or bar
+         *     charts.
+         */
+        isChartableLayer: function(l) {
+            var me = Koala.util.Layer;
+            return me.isTimeseriesChartLayer(l) || me.isBarChartLayer(l);
+        },
+
+        /**
+         * Checks the properties of the layer to see if it configured to draw
+         * timeseries charts.
+         *
+         * @param {ol.layer.Layer} layer The layer to check.
+         * @return {boolean} Whether the layer allows to draw timeseries charts.
+         */
+        isTimeseriesChartLayer: function(layer){
+            var timeseriesProps = layer.get("timeSeriesChartProperties") || {};
+            var numTimeseriesProps = Ext.Object.getSize(timeseriesProps);
+            return numTimeseriesProps > 0;
+        },
+
+        /**
+         * Checks the properties of the layer to see if it configured to draw
+         * bar charts.
+         *
+         * @param {ol.layer.Layer} layer The layer to check.
+         * @return {boolean} Whether the layer allows to draw bar charts.
+         */
+        isBarChartLayer: function(layer){
+            var barProps = layer.get("barChartProperties") || {};
+            var numBarProps = Ext.Object.getSize(barProps);
+            return numBarProps > 0;
+        },
+
+        /**
+         * Returns whether the specified layer is using a WMS source, i.e. is
+         * this a WMS layer?
+         *
+         * @param {ol.layer.Layer} layer The layer to check.
+         * @return {boolean} Whether the layer is a WMS layer.
+         */
+        isWmsLayer: (function() {
+            var wmsSourceNames = ['TileWMS', 'ImageWMS'];
+            var wmsSources = [];
+            Ext.each(wmsSourceNames, function(wmsSourceName) {
+                if (wmsSourceName in ol.source) {
+                    wmsSources.push(ol.source[wmsSourceName]);
+                }
+            });
+            return function(layer) {
+                var isWmsLayer = false;
+                if (layer) {
+                    var source = layer.getSource();
+                    Ext.each(wmsSources, function (wmsSource) {
+                        if (source instanceof wmsSource) {
+                            isWmsLayer = true;
+                        }
+                    });
+                }
+                return isWmsLayer;
+            };
+        }()),
+
+        /**
+         * Returns whether the specified layer is using a vector source, i.e. is
+         * this a vector layer?
+         *
+         * @param {ol.layer.Layer} layer The layer to check.
+         * @return {boolean} Whether the layer is a vector layer.
+         */
+        isVectorLayer: (function() {
+            var vectorSources = [];
+            if ('Vector' in ol.source) {
+                vectorSources.push(ol.source.Vector);
+            }
+            return function(layer) {
+                var isVectorLayer = false;
+                if (layer) {
+                    var source = layer.getSource();
+                    Ext.each(vectorSources, function (vectorSource) {
+                        if (source instanceof vectorSource) {
+                            isVectorLayer = true;
+                        }
+                    });
+                }
+                return isVectorLayer;
+            };
+        }()),
+
+        /**
          * Returns whether the passed metadat object from GNOS has at least one
          * filter configured.
          *
@@ -538,23 +632,6 @@ Ext.define('Koala.util.Layer', {
          */
         showChangeFilterSettingsWinByUuid: function(uuid){
             this.getMetadataFromUuidAndThen(uuid, this.showChangeFilterSettingsWin);
-        },
-
-        /**
-         * Returns `true` if the passed layer is a WMS layer, `false` otherwise.
-         *
-         * @param {ol.layer.Base} l The layer to check.
-         * @return {Boolean} Whether the layer is a WMS layer.
-         */
-        isWmsLayer: function(l) {
-            var isWms = false;
-            var source = l && l instanceof ol.layer.Base && l.getSource();
-            var ImageWMS = ol.source.ImageWMS;
-            var TileWMS = ol.source.TileWMS;
-            if (source instanceof ImageWMS || source instanceof TileWMS) {
-                isWms = true;
-            }
-            return isWms;
         },
 
         /**

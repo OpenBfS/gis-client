@@ -786,6 +786,22 @@
     },
 
 
+    "Koala.view.form.TimeseriesFilterControl": {
+        "config": {
+            "data": {
+                "labelStartDate": "Startdatum",
+                "labelEndDate": "Enddatum",
+                "setFilterButtonText": "Anwenden"
+            }
+        }
+    },
+    "Koala.view.panel.BarChart":{
+        "config": {
+            "data": {
+                "panelTitleText": "Säulendiagramm"
+            }
+        }
+    },
     "Koala.view.panel.MobileLegend": {
         "config": {
             "data": {
@@ -827,6 +843,13 @@
                 "utcLabel": "UTC",
                 "localLabel": "Lokal",
                 "languageSelectComboLabel": "Sprache"
+            }
+        }
+    },
+    "Koala.view.panel.TimeseriesChart":{
+        "config": {
+            "data": {
+                "panelTitleText": "Zeitreihe"
             }
         }
     },

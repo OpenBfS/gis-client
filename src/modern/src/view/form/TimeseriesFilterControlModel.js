@@ -14,13 +14,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.component.D3Base
+ * @class Koala.view.form.TimeseriesFilterControlModel
  */
-Ext.define('Koala.view.component.D3Base',{
-    extend: 'Ext.Component',
-    xtype: 'd3-base',
-
-    listeners: {
-        boxready: 'onShow'
+Ext.define('Koala.view.form.TimeseriesFilterControlModel', {
+    extend: 'Ext.app.ViewModel',
+    alias: 'viewmodel.k-form-timeseriesfiltercontrol',
+    data: {
+        labelStartDate: "",
+        labelEndDate: "",
+        setFilterButtonText: ""
     }
 });

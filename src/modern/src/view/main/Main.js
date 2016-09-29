@@ -1,3 +1,21 @@
+/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/**
+ * @class Koala.view.main.Main
+ */
 Ext.define('Koala.view.main.Main', {
     extend: 'Ext.Panel',
     xtype: 'app-main',
@@ -16,13 +34,15 @@ Ext.define('Koala.view.main.Main', {
 
         'Koala.util.Route',
 
+        'Koala.view.panel.BarChart',
         'Koala.view.panel.MobilePanel',
         'Koala.view.panel.MobileLegend',
         'Koala.view.panel.MobileAddLayer',
         'Koala.view.panel.MobileMenu',
         'Koala.view.panel.MobileImprint',
         'Koala.view.panel.LayerSetTree',
-        'Koala.view.panel.Settings'
+        'Koala.view.panel.Settings',
+        'Koala.view.panel.TimeseriesChart'
     ],
 
     controller: 'mobile-main',
@@ -43,6 +63,10 @@ Ext.define('Koala.view.main.Main', {
 
     layout: {
         type: 'float'
+    },
+
+    listeners: {
+        painted: 'onMainPanelPainted'
     },
 
     items: [{
@@ -175,6 +199,14 @@ Ext.define('Koala.view.main.Main', {
         hidden: true
     }, {
         xtype: 'k-panel-treepanel',
+        left: 0,
+        hidden: true
+    }, {
+        xtype: 'k-panel-barchart',
+        left: 0,
+        hidden: true
+    }, {
+        xtype: 'k-panel-timeserieschart',
         left: 0,
         hidden: true
     }, {

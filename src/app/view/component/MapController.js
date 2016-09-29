@@ -23,6 +23,7 @@ Ext.define('Koala.view.component.MapController', {
     requires: [
         "BasiGX.util.Controller",
 
+        "Koala.util.Layer",
         "Koala.view.window.TimeSeriesWindow",
         "Koala.view.window.BarChart"
     ],
@@ -37,11 +38,12 @@ Ext.define('Koala.view.component.MapController', {
             return;
         }
         var me = this;
+        var LayerUtil = Koala.util.Layer;
         var layer = olFeat.get('layer');
 
-        if (Ext.Object.getSize(layer.get("timeSeriesChartProperties")) > 0) {
+        if (LayerUtil.isTimeseriesChartLayer(layer)) {
             me.openTimeseriesWindow(olFeat);
-        } else if (Ext.Object.getSize(layer.get("barChartProperties")) > 0) {
+        } else if (LayerUtil.isBarChartLayer(layer)) {
             me.openBarChartWindow(olFeat);
         } else {
             me.openGetFeatureInfoWindow(olFeat);

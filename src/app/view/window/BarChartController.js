@@ -20,6 +20,10 @@ Ext.define('Koala.view.window.BarChartController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-barchart',
 
+    requires: [
+        "Koala.view.component.D3BarChart"
+    ],
+
     /**
      * Removes the previousy selected feature from the select interaction
      */
@@ -30,84 +34,7 @@ Ext.define('Koala.view.window.BarChartController', {
     },
 
     createBarChart: function(olLayer, olFeat) {
-        var chartConfig = olLayer.get('barChartProperties');
-        var categoryCount = chartConfig.chartFieldSequence.split(",").length;
-        var chartWidth = 200 + categoryCount * 50;
-        var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
-        var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
-        var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
-        var chartMarginObj;
-
-        if (chartMargin.length > 0) {
-            chartMarginObj = {
-                top: chartMargin[0],
-                right: chartMargin[1],
-                bottom: chartMargin[2],
-                left: chartMargin[3]
-            };
-        }
-
-        var chart = {
-            xtype: 'd3-barchart',
-            name: olLayer.get('name'),
-            zoomEnabled: Koala.util.String.coerce(chartConfig.allowZoom),
-            height: 350,
-            width: chartWidth,
-            startDate: olFeat.get('end_measure'),
-            endDate: olFeat.get('end_measure'),
-            targetLayer: olLayer,
-            selectedStation: olFeat,
-            backgroundColor: chartConfig.backgroundColor,
-            chartMargin: chartMarginObj,
-            labelFunc: Koala.util.String.coerce(chartConfig.labelFunc),
-            chartFieldSequence: chartConfig.chartFieldSequence,
-            shape: {
-                type: 'bar',
-                curve: 'linear',
-                id: olFeat.get('id'),
-                color: chartConfig.colorSequence,
-                tooltipTpl: chartConfig.tooltipTpl
-            },
-            grid: {
-                show: Koala.util.String.coerce(chartConfig.showGrid),
-                color: chartConfig.gridStrokeColor,
-                width: chartConfig.gridStrokeWidth,
-                opacity: chartConfig.gridStrokeOpacity
-            },
-            axes: {
-                left: {
-                    scale: chartConfig.yAxisScale || 'linear',
-                    format: chartConfig.yAxisFormat,
-                    label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
-                    labelPadding: chartConfig.labelPadding,
-                    labelColor: chartConfig.labelColor,
-                    labelSize: chartConfig.labelSize,
-                    tickSize: chartConfig.tickSize,
-                    tickPadding: chartConfig.tickPadding
-                },
-                bottom: {
-                    scale: chartConfig.xAxisScale || 'ordinal',
-                    format: chartConfig.xAxisFormat,
-                    label: (chartConfig.xAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
-                    labelPadding: chartConfig.labelPadding,
-                    labelColor: chartConfig.labelColor,
-                    labelSize: chartConfig.labelSize,
-                    tickSize: chartConfig.tickSize,
-                    tickPadding: chartConfig.tickPadding
-                }
-            },
-            legend: {
-                legendEntryMaxLength: Koala.util.String.coerce(chartConfig.legendEntryMaxLength)
-            },
-            title: {
-                label: title,
-                labelSize: chartConfig.titleSize,
-                labelColor: chartConfig.titleColor,
-                labelPadding: chartConfig.titlePadding
-            }
-        };
-
-        return chart;
+        return Koala.view.component.D3BarChart.create(olLayer, olFeat);
     },
 
     updateBarChartStore: function(olFeat, chartId) {

@@ -1147,10 +1147,11 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     getChartDataForStation: function(selectedStation) {
         var me = this;
+        var FilterUtil = Koala.util.Filter;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
         var chartConfig = targetLayer.get("timeSeriesChartProperties");
-        var filterConfig= Koala.view.window.TimeSeriesWindow.getStartEndFilterFromMetadata(targetLayer.metadata);
+        var filterConfig = FilterUtil.getStartEndFilterFromMetadata(targetLayer.metadata);
         var startDate = view.getStartDate();
         var endDate = view.getEndDate();
         var timeField = filterConfig.parameter;

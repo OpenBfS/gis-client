@@ -48,103 +48,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      *
      */
     createTimeSeriesChart: function(olLayer, olFeat) {
-        var me = this;
-        var view = me.getView();
-        var chartConfig = olLayer.get('timeSeriesChartProperties');
-        var valFromSeq = Koala.util.String.getValueFromSequence;
-        var startDate = view.down('datefield[name=datestart]').getValue();
-        var endDate = view.down('datefield[name=dateend]').getValue();
-        var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
-        var chartMarginObj;
-        var stationName;
-        var shapes = [];
-        var selectedStations = [];
-
-        if (chartMargin.length > 0) {
-            chartMarginObj = {
-                top: chartMargin[0],
-                right: chartMargin[1],
-                bottom: chartMargin[2],
-                left: chartMargin[3]
-            };
-        }
-
-        if (olFeat) {
-            stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
-                Koala.util.String.replaceTemplateStrings(
-                    chartConfig.seriesTitleTpl, olFeat) : "";
-
-            shapes = [{
-                type: chartConfig.shapeType,
-                curve: chartConfig.curveType,
-                xField: chartConfig.xAxisAttribute,
-                yField: chartConfig.yAxisAttribute,
-                name: stationName,
-                id: olFeat.get('id'),
-                color: valFromSeq(chartConfig.colorSequence, 0, '#F00'),
-                opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 1),
-                width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1),
-                tooltipTpl: chartConfig.tooltipTpl
-            }];
-
-            selectedStations = [olFeat];
-        }
-
-        var chart = {
-            xtype: 'd3-chart',
-            name: olLayer.get('name'),
-            zoomEnabled: Koala.util.String.coerce(chartConfig.allowZoom),
-            height: 200,
-            width: 700,
-            startDate: startDate,
-            endDate: endDate,
-            targetLayer: olLayer,
-            selectedStations: selectedStations,
-            backgroundColor: chartConfig.backgroundColor,
-            chartMargin: chartMarginObj,
-            shapes: shapes,
-            grid: {
-                show: Koala.util.String.coerce(chartConfig.showGrid),
-                color: chartConfig.gridStrokeColor,
-                width: chartConfig.gridStrokeWidth,
-                opacity: chartConfig.gridStrokeOpacity
-            },
-            axes: {
-                left: {
-                    scale: chartConfig.yAxisScale,
-                    dataIndex: chartConfig.yAxisAttribute,
-                    format: chartConfig.yAxisFormat,
-                    label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
-                    labelPadding: chartConfig.labelPadding,
-                    labelColor: chartConfig.labelColor,
-                    labelSize: chartConfig.labelSize,
-                    tickSize: chartConfig.tickSize,
-                    tickPadding: chartConfig.tickPadding
-                },
-                bottom: {
-                    scale: chartConfig.xAxisScale,
-                    dataIndex: chartConfig.xAxisAttribute,
-                    format: chartConfig.xAxisFormat,
-                    label: (chartConfig.xAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
-                    labelPadding: chartConfig.labelPadding,
-                    labelColor: chartConfig.labelColor,
-                    labelSize: chartConfig.labelSize,
-                    tickSize: chartConfig.tickSize,
-                    tickPadding: chartConfig.tickPadding
-                }
-            },
-            legend: {
-                legendEntryMaxLength: Koala.util.String.coerce(chartConfig.legendEntryMaxLength)
-            },
-            title: {
-                label: stationName,
-                labelSize: chartConfig.titleSize,
-                labelColor: chartConfig.titleColor,
-                labelPadding: chartConfig.titlePadding
-            }
-        };
-
-        return chart;
+        var view = this.getView();
+        var start = view.down('datefield[name=datestart]').getValue();
+        var end = view.down('datefield[name=dateend]').getValue();
+        return Koala.view.component.D3Chart.create(olLayer, olFeat, start, end);
     },
 
     layerTimeFilterToCql: function(layer, urlParamTime) {
