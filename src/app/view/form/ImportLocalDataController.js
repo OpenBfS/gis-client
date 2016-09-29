@@ -28,7 +28,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         /**
          *
          */
-        KEY_FLIP_COORDS_PROJECTION: 'EPSG:4326-enu'
+        KEY_FLIP_COORDS_PROJECTION: 'EPSG:4326-enu',
+
         /**
          *
          */
