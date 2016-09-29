@@ -10,6 +10,11 @@ svg .k-d3-shape-group circle {
     cursor: help;
 }
 
+svg .k-d3-shape-group circle:hover {
+    fill: #FF7700 !important;
+    stroke: #FF7700 !important;
+}
+
 svg .k-d3-shape-group,
 svg .k-d3-shape-group-legend circle,
 svg .k-d3-shape-group-legend path,
