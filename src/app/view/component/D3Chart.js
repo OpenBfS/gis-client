@@ -95,6 +95,8 @@ Ext.define('Koala.view.component.D3Chart',{
             var chartConfig = olLayer.get('timeSeriesChartProperties');
             var StringUtil = Koala.util.String;
             var valFromSeq = StringUtil.getValueFromSequence;
+            var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
+            var title = Koala.util.String.replaceTemplateStrings(titleTpl, olLayer);
             var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
             var chartMarginObj;
             var stationName;
@@ -181,7 +183,7 @@ Ext.define('Koala.view.component.D3Chart',{
                     legendEntryMaxLength: StringUtil.coerce(chartConfig.legendEntryMaxLength)
                 },
                 title: {
-                    label: stationName,
+                    label: title,
                     labelSize: chartConfig.titleSize,
                     labelColor: chartConfig.titleColor,
                     labelPadding: chartConfig.titlePadding
