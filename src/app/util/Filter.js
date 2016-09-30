@@ -117,6 +117,8 @@ Ext.define('Koala.util.Filter', {
                     store: store,
                     queryMode: "local",
                     editable: false,
+                    //TODO: true is better for mobile devices, but see open issue: https://www.sencha.com/forum/showthread.php?306158-selectfield-selector-hides-item
+                    usePicker: false,
                     allowBlank: true,
                     displayField: staticMe.COMBO_DSP_FIELD,
                     valueField: staticMe.COMBO_VAL_FIELD

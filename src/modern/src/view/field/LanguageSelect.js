@@ -39,6 +39,7 @@ Ext.define("Koala.view.form.field.LanguageSelect", {
     forceSelection: true,
     editable: false,
     grow: true,
+    //TODO: true is better for mobile devices, but see open issue: https://www.sencha.com/forum/showthread.php?306158-selectfield-selector-hides-item
     usePicker: false,
     store: {
         type: 'k-language'
