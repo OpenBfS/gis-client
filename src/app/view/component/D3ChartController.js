@@ -1118,6 +1118,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.deleteShapeSeriesById(id);
         // Legend
         me.deleteLegendEntry(id);
+        // …now redraw the chart
+        me.redrawChart();
     },
 
     /**
