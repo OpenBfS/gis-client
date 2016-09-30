@@ -125,8 +125,8 @@ Ext.define('Koala.view.component.D3Chart',{
                     name: stationName,
                     id: olFeat.get('id'),
                     color: valFromSeq(chartConfig.colorSequence, 0, '#F00'),
-                    opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 1),
-                    width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1),
+                    opacity: chartConfig.strokeOpacity || 1,
+                    width: chartConfig.strokeWidth || 1,
                     tooltipTpl: chartConfig.tooltipTpl
                 }];
 

@@ -912,7 +912,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .attr('cy', function(d) {
                                 return me.scales[orientY](d[yField]);
                             })
-                            .attr('r', shapeConfig.width);
+                            .attr('r', 3);
             }
 
         });
