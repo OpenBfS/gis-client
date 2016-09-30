@@ -443,30 +443,8 @@ Ext.define('Koala.view.component.D3BaseController', {
     generateDeleteCallback: function(dataObj, idx) {
         var me = this;
         var deleteCallback = function() {
-            var name;
-            // decide if we want to generate a deletion handler for bars or series:
-            if (Ext.isDefined(idx) && 'config' in dataObj && 'name' in dataObj.config) {
-                // a timeseries deletion handler
-                name = dataObj.config.name;
-            } else if (!Ext.isDefined(idx) && 'key' in dataObj) {
-                // a bar deletion handler
-                name = dataObj.key;
-            }
-            // get these here, not in the closure, to have access to the current
-            // language
-            var viewModel = me.getView().getViewModel();
-            var title = viewModel.get('confirmDeleteTitleTpl');
-            var msg = viewModel.get('confirmDeleteMsgTpl');
-            title = Ext.String.format(title, name);
-            msg = Ext.String.format(msg, name);
-
-            var confirmCallback = function(buttonId) {
-                if (buttonId === 'ok' || buttonId === 'yes') {
-                    me.deleteEverything(idx, dataObj, this.parentNode);
-                    me.redrawLegend();
-                }
-            };
-            Ext.Msg.confirm(title, msg, confirmCallback, this);
+            me.deleteEverything(idx, dataObj, this.parentNode);
+            me.redrawLegend();
         };
         return deleteCallback;
     },

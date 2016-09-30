@@ -44,8 +44,6 @@
     "Koala.view.component.D3BarChart": {
         "config": {
             "data": {
-                "confirmDeleteTitleTpl": "Serie {0} entfernen?",
-                "confirmDeleteMsgTpl": "Möchten sie die Serie <b>{0}</b> aus dem Graphen entfernen?",
                 "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
             }
         }
@@ -53,8 +51,6 @@
     "Koala.view.component.D3Chart": {
         "config": {
             "data": {
-                "confirmDeleteTitleTpl": "Serie {0} entfernen?",
-                "confirmDeleteMsgTpl": "Möchten sie die Serie <b>{0}</b> aus dem Graphen entfernen?",
                 "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
             }
         }
