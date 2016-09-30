@@ -1077,7 +1077,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .text(nameAsTooltip);
 
             legendEntry.append('text')
-                .text('✖')
+                // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('')
                 .attr('class', CSS.DELETE_ICON)
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
