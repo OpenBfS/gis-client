@@ -10,9 +10,27 @@ svg .k-d3-shape-group circle {
     cursor: help;
 }
 
-svg .k-d3-shape-group circle:hover {
-    fill: #FF7700 !important;
-    stroke: #FF7700 !important;
+@keyframes blinkoutline {
+    0% {
+        stroke: #0B77FF;
+    }
+    25% {
+        stroke: #0AE83E;
+    }
+    50% {
+        stroke: #FFE517;
+    }
+    75% {
+        stroke: #E8520A;
+    }
+    100% {
+        stroke: #D917FF;
+    }
+}
+
+svg .k-d3-shape-group circle:hover,
+svg .k-d3-shape-group rect:hover {
+    animation: blinkoutline 10s infinite;
 }
 
 svg .k-d3-shape-group,
