@@ -396,6 +396,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                         });
 
                         axis.call(axisGenerator.scale(scaleX));
+
+                        if (view.getAxes()[orient].rotateXAxisLabel) {
+                            d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_X + ' > g > text')
+                                .attr('transform', 'rotate(-55)')
+                                .attr('dx', '-10px')
+                                .attr('dy', '1px')
+                                .style('text-anchor', 'end');
+                        }
+
                     } else if (orient === 'left' || orient === 'right') {
                         // axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
                         //
@@ -645,6 +654,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .style('font-weight', 'bold')
                     .style('font-size', axisConfig.labelSize || 12)
                     .text(axisConfig.label || '');
+
+            if (axisConfig.rotateXAxisLabel && (orient === 'top' || orient === 'bottom')) {
+                d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_X + ' > g > text')
+                    .attr('transform', 'rotate(-55)')
+                    .attr('dx', '-10px')
+                    .attr('dy', '1px')
+                    .style('text-anchor', 'end');
+            }
 
         });
     },
