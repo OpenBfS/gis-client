@@ -86,21 +86,19 @@ Ext.define('Koala.view.main.Main', {
         listeners: {
             afterrender: function(){
                 if(!location.hash){
-                    window.setTimeout(function(){
-                        Ext.create('Ext.window.Window', {
-                            title: 'Layer Profilwahl',
-                            modal: true,
-                            layout: 'fit',
-                            minWidth: 250,
-                            minHeight: 300,
-                            items: [{
-                                xtype: 'k-panel-layersetchooser',
-                                showLayerProfiles: true,
-                                header: false,
-                                layout: 'fit'
-                            }]
-                        }).show();
-                    }, 1500);
+                    Ext.create('Ext.window.Window', {
+                        title: 'Layer Profilwahl',
+                        modal: true,
+                        layout: 'fit',
+                        minWidth: 250,
+                        minHeight: 300,
+                        items: [{
+                            xtype: 'k-panel-layersetchooser',
+                            showLayerProfiles: true,
+                            header: false,
+                            layout: 'fit'
+                        }]
+                    }).show();
                 }
                 // This needs to happen in an afterrender handler, as
                 // otherwise the BasiGX texts would count…

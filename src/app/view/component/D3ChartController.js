@@ -134,7 +134,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawAxes();
         me.drawGridAxes();
         me.drawShapes();
-
         me.drawLegend();
 
         me.chartRendered = true;
@@ -271,6 +270,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         // corresponding data index for each scale. Set the extent (max/min range
         // in this data index) for each scale.
         Ext.iterate(me.scales, function(orient) {
+            // solution with min and max
             var axis = view.getAxes()[orient];
             var axisDomain;
             var makeDomainNice = true;
@@ -280,7 +280,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 min = Koala.util.String.coerce(axis.min);
                 makeDomainNice = false; // if one was given, don't auto-enhance
             }
-            if (Ext.isDefined(axis.min)) {
+            if (Ext.isDefined(axis.max)) {
                 max = Koala.util.String.coerce(axis.max);
                 makeDomainNice = false; // if one was given, don't auto-enhance
             }
@@ -321,6 +321,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             if (makeDomainNice) {
                 domain.nice();
             }
+
         });
     },
 
@@ -376,10 +377,11 @@ Ext.define('Koala.view.component.D3ChartController', {
                         axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
                         var scaleX = transform.rescaleX(scaleGenerator);
 
-                        Ext.each(me.shapes, function(shape, idx) {
-                            var shapePathSelector = Ext.String.format(shapeGroupSelectorTpl, idx) +
+                        Ext.each(me.shapes, function(shape) {
+                            var shapeId = shape.config.id;
+                            var shapePathSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
                                     ' .' + CSS.SHAPE_PATH;
-                            var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, idx) +
+                            var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
                                     ' .' + CSS.SHAPE_POINT_GROUP + ' circle';
 
                             d3.select(shapePathSelector)
@@ -465,6 +467,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = me.getView();
         var chartSize = me.getChartSize();
 
+        // Start from scratch, we'll assign new shapes below.
+        // Alternatively we could reuse the `shape`, if we detect that
+        // it already exists in the `shapes` array.
+        me.shapes = [];
+
         Ext.each(view.getShapes(), function(shapeConfig) {
             var shapeType = staticMe.TYPE[shapeConfig.type || 'line'];
             var curveType = staticMe.CURVE[shapeConfig.curve || 'linear'];
@@ -504,6 +511,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         .y0(chartSize[1]);
                 }
             } else {
+                // TODO: check if this can be removed
                 shape = {};
             }
 
@@ -757,9 +765,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .attr('left', 0)
                 .attr('width', chartSize[0])
                 .attr('height', chartSize[1]);
-                // .attr('viewBox', '0 0 550 420');
 
-        Ext.each(me.shapes, function(shape, idx) {
+        Ext.each(me.shapes, function(shape) {
             var shapeConfig = shape.config;
             var xField = shapeConfig.xField;
             var yField = shapeConfig.yField;
@@ -767,19 +774,20 @@ Ext.define('Koala.view.component.D3ChartController', {
             var orientY = me.getAxisByField(yField);
             var color = shapeConfig.color || staticMe.getRandomColor();
             var darkerColor = d3.color(color).darker();
+            var shapeId = shapeConfig.id;
 
             var shapeGroup = shapeSvg
                 .append('g')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx)
+                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + shapeId)
                     .attr('shape-type', shapeConfig.type);
 
             if (shapeConfig.type === 'bar') {
-                barWidth = (chartSize[0] / me.data[shapeConfig.id].length);
+                barWidth = (chartSize[0] / me.data[shapeId].length);
                 barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
                 shapeGroup
                     .selectAll('rect')
-                        .data(me.data[shapeConfig.id])
+                        .data(me.data[shapeId])
                     .enter().append('rect')
                         .filter(function(d) {
                             return Ext.isDefined(d[yField]);
@@ -800,7 +808,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .on('mouseover', function() {
                                 var tooltipCmp = me.tooltipCmp;
                                 var tooltipTpl = shapeConfig.tooltipTpl;
-                                var selectedStation = me.getView().getSelectedStations()[idx];
+
+                                var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
+                                    return station.get('id') === shapeId;
+                                });
 
                                 var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
                                 tooltipCmp.setHtml(html);
@@ -808,7 +819,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 tooltipCmp.show();
                             });
                 shapeGroup.selectAll("text")
-                    .data(me.data[shapeConfig.id])
+                    .data(me.data[shapeId])
                     .enter()
                     .append("text")
                         .filter(function(d) {
@@ -837,8 +848,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             } else {
                 shapeGroup.append('path')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_PATH + idx)
-                    .datum(me.data[shapeConfig.id])
+                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_PATH + shapeId)
+                    .datum(me.data[shapeId])
                     .style('fill', function() {
                         switch (shapeConfig.type) {
                             case 'line':
@@ -868,12 +879,12 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                 var pointGroup = shapeGroup.append('g')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_POINT_GROUP)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP + idx);
+                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP + shapeId);
 
                 // TODO refactor the selectAll method below; DK
                 //      pointGroup.enter()???
                 pointGroup.selectAll('circle')
-                    .data(me.data[shapeConfig.id])
+                    .data(me.data[shapeId])
                     .enter().append('circle')
                         .filter(function(d) {
                             return Ext.isDefined(d[yField]);
@@ -884,7 +895,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .on('mouseover', function(data) {
                                 var tooltipCmp = me.tooltipCmp;
                                 var tooltipTpl = shapeConfig.tooltipTpl;
-                                var selectedStation = me.getView().getSelectedStations()[idx];
+
+                                var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
+                                    return station.get('id') === shapeId;
+                                });
 
                                 var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, data);
                                 html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
@@ -962,7 +976,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
     /**
      * Removes the current legend from the chart (if it exists) and redraws the
-     * legend by looking atour internal data.
+     * legend by looking at our internal data.
      */
     redrawLegend: function() {
         var me = this;
@@ -1001,6 +1015,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.updateLegendContainerDimensions();
 
         Ext.each(me.shapes, function(shape, idx) {
+            var shapeId = shape.config.id;
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
@@ -1010,7 +1025,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         // handler
                         return;
                     }
-                    var shapeGroup = me.shapeGroupByIndex(idx);
+                    var shapeGroup = me.shapeGroupById(shapeId);
                     me.toggleGroupVisibility(
                         shapeGroup, // the real group, containig shapepath & points
                         d3.select(this) // legend entry
@@ -1023,7 +1038,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .append('g')
                     .on('click', toggleVisibilityFunc)
                     .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + idx);
+                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + shapeId);
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
@@ -1083,24 +1098,26 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
                 .attr('dx', '160') // TODO Discuss, do we need this dynamically?
-                .on('click', me.generateDeleteCallback(shape, idx));
+                .on('click', me.generateDeleteCallback(shape));
         });
     },
 
     /**
      *
      */
-    deleteEverything: function(idx, dataObj, legendElement){
+    deleteEverything: function(dataObj){
+        var id = dataObj.config.id;
+        var me = this;
         // ShapeConfig
-        this.deleteShapeConfig(dataObj.config.id);
+        me.deleteShapeConfig(id);
         // Data
-        this.deleteData(dataObj.config.id);
+        me.deleteData(id);
         // selectedStation
-        this.deleteSelectedStation(dataObj.config.id);
+        me.deleteSelectedStation(id);
         // Shape
-        this.deleteShapeSeriesByIdx(idx);
+        me.deleteShapeSeriesById(id);
         // Legend
-        this.deleteLegendEntry(legendElement);
+        me.deleteLegendEntry(id);
     },
 
     /**
@@ -1136,12 +1153,15 @@ Ext.define('Koala.view.component.D3ChartController', {
      * Removes the shape series specified by the given `idx`. Will remove the
      * SVG node and the entry in our internal dataset.
      *
-     * @param {Number} idx The index of the data entry to remove.
+     * @param {Number} id The id of the shape config.
      */
-    deleteShapeSeriesByIdx: function(idx) {
+    deleteShapeSeriesById: function(id) {
         var me = this;
-        Ext.Array.removeAt(me.shapes, idx);
-        var shapeGroupNode = me.shapeGroupByIndex(idx).node();
+        var shapeToRemove = Ext.Array.findBy(me.shapes, function(shape){
+            return shape.config.id === id;
+        });
+        Ext.Array.remove(me.shapes, shapeToRemove);
+        var shapeGroupNode = me.shapeGroupById(id).node();
         if (shapeGroupNode && shapeGroupNode.parentNode) {
             shapeGroupNode.parentNode.removeChild(shapeGroupNode);
         }
@@ -1150,15 +1170,15 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    shapeGroupByIndex: function(idx) {
+    shapeGroupById: function(id) {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
         var viewId = '#' + me.getView().getId();
         var clsShapeGroup = staticMe.CSS_CLASS.SHAPE_GROUP;
-        var idxVal = staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + idx;
+        var idxVal = staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + id;
         var selector = [
             viewId,                      // only capture our view…
-            ' svg g.' + clsShapeGroup, // only capture shapepaths…
+            ' svg g.' + clsShapeGroup,   // only capture shapepaths…
             '[idx="' + idxVal + '"]'     // only capture the right index
         ].join('');
         return d3.select(selector);

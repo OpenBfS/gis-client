@@ -345,21 +345,24 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     onSetFilterBtnClick: function() {
         var me = this;
-        var staticChartController = Koala.view.component.D3ChartController;
         var view = me.getView();
         var charts = view.query('d3-chart');
         var startDate = view.down('datefield[name=datestart]').getValue();
         var endDate = view.down('datefield[name=dateend]').getValue();
 
-        Ext.each(charts, function(chart, idx) {
+        Ext.each(charts, function(chart) {
             var chartController = chart.getController();
 
             // update the time range for the chart
             chart.setStartDate(startDate);
             chart.setEndDate(endDate);
 
-            chartController.deleteShapeSeriesByIdx(idx);
-            chartController.deleteLegendEntry(staticChartController.CSS_CLASS.PREFIX_IDX_LEGEND_GROUP + idx);
+            var shapes = chart.getShapes();
+
+            Ext.each(shapes, function(shape) {
+                chartController.deleteShapeSeriesById(shape.id);
+                chartController.deleteLegendEntry(shape.id);
+            });
 
             // update the chart to reflect the changes
             chart.getController().getChartData();

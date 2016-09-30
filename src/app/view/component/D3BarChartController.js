@@ -494,7 +494,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .append('g')
                     .on('click', toggleVisibilityFunc)
                     .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + idx);
+                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + dataObj.key);
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
@@ -535,13 +535,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
     /**
      *
      */
-    deleteEverything: function(idx, dataObj, legendElement) {
+    deleteEverything: function(dataObj) {
         // Data
         this.deleteData(dataObj.key);
         // Shape
         this.deleteBarGroup(dataObj.key);
         // Legend
-        this.deleteLegendEntry(legendElement);
+        this.deleteLegendEntry(dataObj.key);
     },
 
     /**

@@ -440,10 +440,10 @@ Ext.define('Koala.view.component.D3BaseController', {
      * @return {Function} The callback to be used as click handler on the delete
      *     icon.
      */
-    generateDeleteCallback: function(dataObj, idx) {
+    generateDeleteCallback: function(dataObj) {
         var me = this;
         var deleteCallback = function() {
-            me.deleteEverything(idx, dataObj, this.parentNode);
+            me.deleteEverything(dataObj);
             me.redrawLegend();
         };
         return deleteCallback;
@@ -452,23 +452,29 @@ Ext.define('Koala.view.component.D3BaseController', {
     /**
      * A placeholder method to be implemented by subclasses.
      *
-     * @param {Number} idx The index, only relevant for series, undefined for
-     *     bars.
      * @param {Object} dataObj The data object, either a 'bar' or a 'series'.
-     * @param {Element} legendElement The legend element which is now obsolete.
      */
-    deleteEverything: function(idx, dataObj, legendElement) {
-        Ext.log.info('deleteEverything received', idx, dataObj, legendElement);
+    deleteEverything: function(dataObj) {
+        Ext.log.info('deleteEverything received', dataObj);
         Ext.raise('deleteEverything must be overridden by child controllers');
     },
-
 
     /**
      * Deletes the legendentry passed from the DOM.
      *
-     * @param {DOMElement} legendEntry The DOM element to remove.
+     * @param {id} id The id of the associated series.
      */
-    deleteLegendEntry: function(legendEntry) {
+    deleteLegendEntry: function(id) {
+        var me = this;
+        var CSS = Koala.view.component.D3BaseController.CSS_CLASS;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var selectorTpl = '{0} g[idx="{1}{2}"]';
+        var selector = Ext.String.format(
+            selectorTpl,
+            viewId, CSS.PREFIX_IDX_LEGEND_GROUP, id
+        );
+        var legendEntry = d3.select(selector).node();
         var parent = legendEntry && legendEntry.parentNode;
         if (parent) {
             parent.removeChild(legendEntry);
