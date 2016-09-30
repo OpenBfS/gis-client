@@ -113,6 +113,37 @@ Ext.define('Koala.view.component.D3BarChartController', {
     /**
      *
      */
+    redrawChart: function() {
+        var me = this;
+
+        me.deleteSvg();
+
+        me.createScales();
+        me.createAxes();
+        me.createGridAxes();
+
+        me.setDomainForScales();
+
+        me.redrawAxes();
+        me.redrawGridAxes();
+        me.redrawShapes();
+    },
+
+    /**
+     *
+     */
+    deleteSvg: function() {
+        var view = this.getView();
+        var svg = d3.select('#' + view.getId() + ' svg svg');
+        if (svg && !svg.empty()) {
+            svg.node().remove();
+            this.chartRendered = false;
+        }
+    },
+
+    /**
+     *
+     */
     createScales: function() {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
@@ -181,6 +212,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 var minOffsetTopFactor = 0.1; // was 0.05 ~ val/20
                 var min = 0;
                 var max = d3.max(me.data, function(d) {
+                    if (d.hidden) {
+                        return;
+                    }
                     return d.value + d.value * minOffsetTopFactor;
                 });
                 // max = Math.ceil(max);
@@ -266,6 +300,22 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
+     * [redrawShapes description]
+     * @return {[type]} [description]
+     */
+    redrawShapes: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3BarChartController;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var shapeGroup = d3.select(viewId + ' .' + staticMe.CSS_CLASS.SHAPE_GROUP);
+
+        shapeGroup.node().remove();
+
+        me.drawShapes();
+    },
+
+    /**
      *
      */
     drawShapes: function() {
@@ -300,7 +350,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 })
                 .append('rect')
                 .filter(function(d) {
-                    return Ext.isDefined(d[yField]);
+                    return (Ext.isDefined(d[yField]) && !d.hidden);
                 })
                     .style('fill', function(d) {
                         return d.color;
@@ -432,6 +482,70 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
+     * [redrawAxes description]
+     * @return {[type]} [description]
+     */
+    redrawAxes: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var axesConfig = view.getAxes();
+        var axisSelector = viewId + ' svg g.' + CSS.AXIS;
+
+        Ext.iterate(axesConfig, function(orient) {
+            var axisGenerator = me.axes[orient];
+            var axis;
+
+            if (orient === 'top' || orient === 'bottom') {
+                axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
+            } else if (orient === 'left' || orient === 'right') {
+                axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
+            }
+
+            axis
+                .transition()
+                .call(axisGenerator);
+        });
+    },
+
+    /**
+     * [redrawGridAxes description]
+     * @return {[type]} [description]
+     */
+    redrawGridAxes: function() {
+        var me = this;
+        var view = me.getView();
+        var gridConfig = view.getGrid();
+
+        if (!gridConfig.show) {
+            return false;
+        }
+
+        var staticMe = Koala.view.component.D3ChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var viewId = '#' + view.getId();
+        var axisSelector = viewId + ' svg g.' + CSS.GRID;
+        var orientations = ['bottom', 'left'];
+
+        Ext.each(orientations, function(orient) {
+            var axisGenerator = me.gridAxes[orient];
+            var axis;
+
+            if (orient === 'top' || orient === 'bottom') {
+                axis = d3.select(axisSelector + '.' + CSS.GRID_X);
+            } else if (orient === 'left' || orient === 'right') {
+                axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
+            }
+
+            axis
+                .transition()
+                .call(axisGenerator);
+        });
+    },
+
+    /**
      * Removes the current legend from the chart (if it exists) and redraws the
      * legend by looking at our internal data (by calling #drawLegend).
      */
@@ -483,9 +597,15 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     }
                     var barGroup = me.getBarGroupByKey(dataObj['key']);
                     me.toggleGroupVisibility(
-                        barGroup, // the real group, containig shapepath & points
+                        barGroup,       // the real group, containig shapepath & points
                         d3.select(this) // legend entry
                     );
+                    var SHAPE_GROUP = CSS.SHAPE_GROUP;
+                    var SUFFIX_HIDDEN = CSS.SUFFIX_HIDDEN;
+                    var hideClsNameLegend = SHAPE_GROUP + CSS.SUFFIX_LEGEND + SUFFIX_HIDDEN;
+                    d3.select(this).classed(hideClsNameLegend, !dataObj.hidden);
+                    dataObj.hidden = !dataObj.hidden;
+                    me.redrawChart();
                 };
             }());
 
@@ -542,6 +662,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
         this.deleteBarGroup(dataObj.key);
         // Legend
         this.deleteLegendEntry(dataObj.key);
+
+        this.redrawChart();
+        this.redrawLegend();
     },
 
     /**
