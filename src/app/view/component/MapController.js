@@ -40,7 +40,7 @@ Ext.define('Koala.view.component.MapController', {
             return;
         }
 
-        Ext.each(olFeats, function(olFeat, index, olFeats){
+        Ext.each(olFeats, function(olFeat, index) {
             var layer = olFeat.get('layer');
 
             // TimeSeries
@@ -64,7 +64,7 @@ Ext.define('Koala.view.component.MapController', {
             } else {
                 win = me.openGetFeatureInfoWindow(olFeat);
             }
-        })
+        });
 
     },
 
