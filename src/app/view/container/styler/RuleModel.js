@@ -5,7 +5,8 @@ Ext.define('Koala.view.container.styler.RuleModel', {
     data: {
         titlePrefix: 'Feature Style Rule',
         removeRuleButtonText: 'Remove this rule',
-        removeRuleButtonIconCls: 'fa fa-minus'
+        removeRuleButtonIconCls: 'fa fa-minus',
+        oneRuleRequiredWarning: 'At least one rule is required.'
     },
 
     formulas: {

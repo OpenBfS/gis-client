@@ -73,7 +73,8 @@
         "config": {
             "data": {
                 "titlePrefix": "fr:Feature Style Regel",
-                "removeRuleButtonText": "fr:Diese Regel entfernen"
+                "removeRuleButtonText": "fr:Diese Regel entfernen",
+                "oneRuleRequiredWarning": "fr:Es wird mindestens eine Regel benötigt."
             }
         }
     },

@@ -149,7 +149,8 @@ Ext.define('Koala.view.container.styler.RuleController', {
             rules.remove(rule);
             view.fireEvent('rulechanged', rule);
         } else {
-            Ext.toast('At least one rule is required.');
+            var text = viewModel.get('oneRuleRequiredWarning');
+            Ext.toast(text);
         }
     },
 
