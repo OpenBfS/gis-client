@@ -49,7 +49,7 @@ Ext.define('Koala.view.component.MapController', {
                 if(index === 0){
                     win = me.openTimeseriesWindow(olFeat);
                 // just add any further series to the existing window
-                } else if (win && win instanceof Koala.view.window.TimeSeriesWindow()) {
+                } else if (win && (win instanceof Koala.view.window.TimeSeriesWindow)) {
                     win.getController().updateTimeSeriesChart(layer, olFeat);
                 }
             // Open new BarchartWindow for each featuere. Move if overlapping.
