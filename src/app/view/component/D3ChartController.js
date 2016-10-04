@@ -284,38 +284,49 @@ Ext.define('Koala.view.component.D3ChartController', {
                 max = Koala.util.String.coerce(axis.max);
                 makeDomainNice = false; // if one was given, don't auto-enhance
             }
-            if (Ext.isDefined(min) && Ext.isDefined(max)) {
-                // We're done for this axis, both min and max were given
-                axisDomain = [min, max];
-            } else {
-                // Otherwise we have to find min and max from the data in all
-                // shapes.
-                Ext.each(me.shapes, function(shape) {
-                    var data = me.data[shape.config.id];
-                    var extent = d3.extent(data, function(d) {
-                        return d[axis.dataIndex];
-                    });
-
-                    if(!axisDomain) {
-                        // first iteration / shape
-                        axisDomain = [extent[0], extent[1]];
-                    } else {
-                        // any other run, take the new min and max if they are
-                        // actually bigger or smaller.
-                        axisDomain[0] = Math.min(extent[0], axisDomain[0]);
-                        axisDomain[1] = Math.max(extent[1], axisDomain[1]);
-                    }
-                });
-                // now we need to check again, if either min and max were
-                // explicitly passed. The values from GNOS, if they exist,
-                // always take precedence.
-                if (Ext.isDefined(min)) {
-                    axisDomain[0] = min;
+            // We have to check if min and max make sense in relation to
+            // the scale; 0 doesn't make sense if scale is logarithmic
+            if (axis.scale === "log" && (min === 0 || max === 0)) {
+                Ext.log.warn("Correcting min/max value for y-axis as" +
+                    " logarithmic scales don't work with 0");
+                if (min === 0) {
+                    min = 0.00000001;
                 }
-                if (Ext.isDefined(max)) {
-                    axisDomain[1] = max;
+                if (max === 0) {
+                    max = 0.00000001;
                 }
             }
+
+            if (Ext.isDefined(min) && Ext.isDefined(max)) {
+                // We're basically done for this axis, both min and max were
+                // given. We need to iterate over the data nonetheless, so as to
+                // extend the minimim and maximum in case of outliers.
+                axisDomain = [min, max];
+            }
+
+            Ext.each(me.shapes, function(shape) {
+                var data = me.data[shape.config.id];
+                var extent = d3.extent(data, function(d) {
+                    return d[axis.dataIndex];
+                });
+
+                if(!axisDomain) {
+                    // first iteration / shape
+                    axisDomain = [extent[0], extent[1]];
+                } else {
+                    // any other run, take the new min and max if they are
+                    // actually bigger or smaller.
+                    // This may lead to the fact that configured min/may values
+                    // do *not* take precedence, which is intended
+                    axisDomain[0] = Math.min(extent[0], axisDomain[0]);
+                    axisDomain[1] = Math.max(extent[1], axisDomain[1]);
+                    // TODO once we have this for xAxis, we need to be more
+                    //      verbose here…
+                    // TODO double check that Math.min also works for dates,
+                    //      first checks look good, though.
+                }
+            });
+
             // actually set the domain
             var domain = me.scales[orient].domain(axisDomain);
             if (makeDomainNice) {
