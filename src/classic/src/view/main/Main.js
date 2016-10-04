@@ -38,7 +38,6 @@ Ext.define('Koala.view.main.Main', {
 
         'Koala.util.AppContext',
 
-        'Koala.view.chart.TimeSeries',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
