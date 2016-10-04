@@ -54,6 +54,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         return Koala.view.component.D3Chart.create(olLayer, olFeat, start, end);
     },
 
+    /**
+     *
+     */
     layerTimeFilterToCql: function(layer, urlParamTime) {
         var cql = "";
         var util = Koala.util.Layer;
@@ -295,17 +298,26 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         }
 
         var me = this;
+        var StringUtil = Koala.util.String;
         var view = me.getView();
         var layerName = olLayer.get('name');
         var chartConfig = olLayer.get('timeSeriesChartProperties');
         var chart = view.down('d3-chart[name="' + layerName + '"]');
         var chartController = chart.getController();
-        var valFromSeq = Koala.util.String.getValueFromSequence;
-        var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
-            Koala.util.String.replaceTemplateStrings(
-                chartConfig.seriesTitleTpl, olFeat) : "";
+        var valFromSeq = StringUtil.getValueFromSequence;
+        var coerce = StringUtil.coerce;
+        var stationName = "";
+        if(!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
+            stationName =StringUtil.replaceTemplateStrings(
+                chartConfig.seriesTitleTpl, olFeat
+            );
+        }
+        var currentSeqIndex = chart.getSelectedStations().length;
+        var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, "");
+        if (!color) {
+            color = chartController.getRandomColor();
+        }
 
-        // console.log(chart.getSelectedStations().length - 1)
         chartController.addShape({
             type: chartConfig.shapeType || 'line',
             curve: chartConfig.curveType || 'linear',
@@ -313,20 +325,18 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             yField: chartConfig.yAxisAttribute,
             name: stationName,
             id: olFeat.get('id'),
-            color: valFromSeq(chartConfig.colorSequence, chart.getSelectedStations().length, 'red'),
-            opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
-            width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1),
+            color: color,
+            opacity: coerce(chartConfig.strokeOpacity) || 1,
+            width: coerce(chartConfig.strokeWidth) || 1,
             tooltipTpl: chartConfig.tooltipTpl
         }, olFeat, false);
-
     },
 
     /**
      *
      */
     isLayerChartRendered: function(layerName) {
-        var me = this;
-        var view = me.getView();
+        var view = this.getView();
         var existingCharts = view ? view.query('d3-chart') : [];
         var isRendered = false;
 
@@ -366,13 +376,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
 
             // update the chart to reflect the changes
             chart.getController().getChartData();
-
-            // var selectedStations = chart.getSelectedStations();
-            // chart.removeAllStations();
-            // chart.getStore().removeAll();
-            // Ext.each(selectedStations, function(selectedStation) {
-            //     me.createOrUpdateChart(chart.layer, selectedStation);
-            // });
         });
     },
 
@@ -438,7 +441,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             // otherwise create a new chart for the olFeat and add it to the
             // window and update the store
             view.add(me.createTimeSeriesChartPanel(olLayer, olFeat));
-            // me.updateTimeSeriesChart(olLayer, olFeat);
         }
     }
 

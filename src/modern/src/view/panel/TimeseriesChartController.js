@@ -85,17 +85,26 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         }
 
         var me = this;
+        var StringUtil = Koala.util.String;
         var view = me.getView();
-        // var layerName = olLayer.get('name');
+        var layerName = olLayer.get('name');
         var chartConfig = olLayer.get('timeSeriesChartProperties');
-        var chart = view.down('d3-chart');
+        var chart = view.down('d3-chart[name="' + layerName + '"]');
         var chartController = chart.getController();
-        var valFromSeq = Koala.util.String.getValueFromSequence;
-        var stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
-            Koala.util.String.replaceTemplateStrings(
-                chartConfig.seriesTitleTpl, olFeat) : "";
+        var valFromSeq = StringUtil.getValueFromSequence;
+        var coerce = StringUtil.coerce;
+        var stationName = "";
+        if(!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
+            stationName =StringUtil.replaceTemplateStrings(
+                chartConfig.seriesTitleTpl, olFeat
+            );
+        }
+        var currentSeqIndex = chart.getSelectedStations().length;
+        var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, "");
+        if (!color) {
+            color = chartController.getRandomColor();
+        }
 
-        // console.log(chart.getSelectedStations().length - 1)
         chartController.addShape({
             type: chartConfig.shapeType || 'line',
             curve: chartConfig.curveType || 'linear',
@@ -103,9 +112,9 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
             yField: chartConfig.yAxisAttribute,
             name: stationName,
             id: olFeat.get('id'),
-            color: valFromSeq(chartConfig.colorSequence, chart.getSelectedStations().length, 'red'),
-            opacity: valFromSeq(chartConfig.strokeOpacitySequence, 0, 0),
-            width: valFromSeq(chartConfig.strokeWidthSequence, 0, 1),
+            color: color,
+            opacity: coerce(chartConfig.strokeOpacity) || 1,
+            width: coerce(chartConfig.strokeWidth) || 1,
             tooltipTpl: chartConfig.tooltipTpl
         }, olFeat, false);
     },
