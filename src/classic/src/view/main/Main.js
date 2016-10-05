@@ -72,6 +72,7 @@ Ext.define('Koala.view.main.Main', {
         region: 'center',
         mapComponentConfig: {
             xtype: 'k-component-map',
+            appContextPath: Koala.appContextUrl || 'resources/appContext.json',
             plugins: [{
                 ptype: 'hover',
                 selectMulti: true,
