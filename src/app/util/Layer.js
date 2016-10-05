@@ -541,6 +541,23 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Returns `true` if the passed layer is a WMS layer, `false` otherwise.
+         *
+         * @param {ol.layer.Base} l The layer to check.
+         * @return {Boolean} Whether the layer is a WMS layer.
+         */
+        isWmsLayer: function(l) {
+            var isWms = false;
+            var source = l && l instanceof ol.layer.Base && l.getSource();
+            var ImageWMS = ol.source.ImageWMS;
+            var TileWMS = ol.source.TileWMS;
+            if (source instanceof ImageWMS || source instanceof TileWMS) {
+                isWms = true;
+            }
+            return isWms;
+        },
+
+        /**
          * @param ol.layer.Base
          */
         getCurrentLegendUrl: function (layer) {
@@ -550,8 +567,19 @@ Ext.define('Koala.util.Layer', {
             var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
             var resolution = BasiGX.util.Map.getResolution(map);
             var scale = BasiGX.util.Map.getScale(map);
+            var style;
 
-            if(!legendUrl){
+            // determine the style to add
+            if (Koala.util.Layer.isWmsLayer(layer)) {
+                var source = layer.getSource();
+                var params = source.getParams();
+                var styles = params && 'STYLES' in params && params.STYLES;
+                if (styles) {
+                    style = styles.split(",")[0];
+                }
+            }
+
+            if (!legendUrl){
                 return "";
             }
             if (width) {
@@ -563,7 +591,9 @@ Ext.define('Koala.util.Layer', {
             if (resolution) {
                 legendUrl = Ext.String.urlAppend(legendUrl, "SCALE="+scale);
             }
-
+            if (style) {
+                legendUrl = Ext.String.urlAppend(legendUrl, "STYLE=" + style);
+            }
             return legendUrl;
         },
 
@@ -856,12 +886,131 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Given a GNOS filter, this method checks if it is the one special case
+         * defined by BfS where the STYLES (for WMS GetMap, e.g.) is being set.
+         *
+         * @param {Object} f The filter object to check.
+         * @return {boolean} Whether the filter is the specially handled STYLES
+         *     filter.
+         */
+        isSpecialStylesValueFilter: function(f) {
+            var me = this;
+            if (me.isViewParamFilter(f) &&
+                f.type === 'value' &&
+                f.param === "STYLES") {
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Given a GNOS filter, this method checks if it is the one special case
+         * defined by BfS where the param is `'test_data'` (for marking the
+         * layer in the tree, e.g.).
+         *
+         * @param {Object} f The filter object to check.
+         * @return {boolean} Whether the filter is the specially handled
+         *     `'test_data'`-filter.
+         */
+        isSpecialTestDataValueFilter: function(f) {
+            var me = this;
+            if (me.isViewParamFilter(f) &&
+                f.type === 'value' &&
+                f.param === 'test_data' &&
+                f.value === 'true') {
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Given a GNOS filter, this method checks if it is to be encoded in the
+         * viewparams of any request.
+         *
+         * @param {Object} f The filter object to check.
+         * @return {boolean} Whether the filter shall be encoded in the
+         *     viewparams of any request.
+         */
+        isViewParamFilter: function(f){
+            return f.encodeInViewParams === "true";
+        },
+
+        /**
+         * Given a GNOS filter, this method checks if it is to be encoded in the
+         * 'standard' location (e.g. CQL filter parameter) of any request.
+         *
+         * @param {Object} f The filter object to check.
+         * @return {boolean} Whether the filter shall be encoded at the standard
+         *     location of any request.
+         */
+        isStandardLocationFilter: function(f){
+            return !this.isViewParamFilter(f);
+        },
+
+        /**
+         * Checks the passed metadata and adjusts it according to the special
+         * 'STYLES' value-filter defined by BfS.
+         *
+         * Will return a possibly altered metadata object, where the STYLES of
+         * the OpenLayers layer will contain the value of the special styles
+         * filter.
+         *
+         * @param {Object} The metadata object of the GNOS containing filters.
+         * @return {Object} The possibly altered metadata object.
+         */
+        handleSpecialStylesViewParamFilter: function(metadata) {
+            var me = this;
+            var filters = Ext.Array.clone(metadata.filters);
+            var stylesFilter;
+            Ext.each(filters, function(filter) {
+                if (me.isSpecialStylesValueFilter(filter)) {
+                    stylesFilter = filter;
+                }
+            });
+
+            if (stylesFilter) {
+                // move it to the layerConfig…
+                metadata.layerConfig.olProperties.param_STYLES = stylesFilter.value;
+            }
+
+            return metadata;
+        },
+
+        /**
+         * Checks the passed metadata and adjusts it according to the special
+         * 'test_data' value-filter defined by BfS.
+         *
+         * Will return a possibly altered metadata object, where the
+         * `legendTitle` is prefixed with a String indicating that the layer
+         * contains test data.
+         *
+         * @param {Object} The metadata object of the GNOS containing filters.
+         * @return {Object} The possibly altered metadata object.
+         */
+        handleSpecialTestDataViewParamFilter: function(metadata){
+            var me = this;
+            var filters = Ext.Array.clone(metadata.filters);
+            var testDataFilter;
+            Ext.each(filters, function(filter) {
+                if (me.isSpecialTestDataValueFilter(filter)) {
+                    testDataFilter = filter;
+                }
+            });
+
+            if (testDataFilter) {
+                // adjust the legend title
+                metadata.legendTitle = "#TESTDATA# " + metadata.legendTitle;
+            }
+
+            return metadata;
+        },
+
+        /**
          *
          */
         adjustMetadataAccordingToFilters: function(metadata) {
-            var me = this,
-                filters = this.getFiltersFromMetadata(metadata),
-                viewParamFilters = [];
+            var me = this;
+            var filters = this.getFiltersFromMetadata(metadata);
 
             if (!filters) {
                 return metadata;
@@ -869,19 +1018,16 @@ Ext.define('Koala.util.Layer', {
 
             metadata = me.applyDefaultsIfNotChangedByUser(metadata, filters);
 
-            // get them again, they may have changed…
-            filters = this.getFiltersFromMetadata(metadata);
+            // TODO Rethink this handling, special wish by SB to get this in
+            //      fast; building upon the handling of 'test_data' by BfS
+            metadata = me.handleSpecialStylesViewParamFilter(metadata);
+            metadata = me.handleSpecialTestDataViewParamFilter(metadata);
 
-            for (var i=0; i<filters.length; i++){
-                if (filters[i].encodeInViewParams === "true") {
-                    viewParamFilters.push(filters[i]);
-                    if (filters[i].param === "test_data" && filters[i].value === "true"){
-                        metadata.legendTitle = "#TESTDATA# " + metadata.legendTitle;
-                    }
-                    filters.splice(i, 1);
-                    metadata = me.moveFiltersToViewparams(metadata, viewParamFilters);
-                }
-            }
+            // get them again, they may have changed…
+            filters = me.getFiltersFromMetadata(metadata);
+
+            metadata = me.moveFiltersToViewparams(metadata, filters);
+
             if (filters.length !== 0){
                 // The filters should not be encoded in the viewparams, but as
                 // WMS-T and friends
@@ -993,6 +1139,10 @@ Ext.define('Koala.util.Layer', {
         adjustMetadataFiltersToStandardLocations: function(metadata, filters){
             var me = this;
             Ext.each(filters, function(filter) {
+                if (!me.isStandardLocationFilter(filter)) {
+                    // any non-standard, e.g. viewparam filters, are ignored.
+                    return;
+                }
                 var filterType = (filter.type || "").toLowerCase();
                 switch (filterType) {
                     case 'timerange':
@@ -1339,10 +1489,18 @@ Ext.define('Koala.util.Layer', {
         },
 
         moveFiltersToViewparams: function(metadata, filters){
+            var me = this;
             var format = Koala.util.Date.ISO_FORMAT;
             var keyVals = {};
             Ext.each(filters, function(filter) {
-                if (filter) {
+                // Only consider viewparam filters here
+                var isViewParam = filter && me.isViewParamFilter(filter);
+                // do not handle STYLES filter, this is done elsewhere
+                var isSpecialStyles = filter && me.isSpecialStylesValueFilter(filter);
+                // do not handle test_data filter, this is done elsewhere
+                var isSpecialTestData = filter && me.isSpecialStylesValueFilter(filter);
+
+                if (isViewParam && !isSpecialStyles && !isSpecialTestData) {
                     var params = filter.param.split(",");
                     var type = filter.type;
 
