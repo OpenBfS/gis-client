@@ -48,14 +48,19 @@ Ext.define('Koala.util.AppContext', {
          */
         generateCheckToolVisibility: function(tool) {
             var errTpl = "Wanted to set visibility of instance of {0} to" +
-                " {1} but could not find method `setVisibility`.";
+                " {1} but could not find method `{2}`.";
             return function() {
                 var me = this;
                 var visible = Koala.util.AppContext.hasTool(tool);
-                if ('setVisible' in me && Ext.isFunction(me.setVisible)) {
-                    me.setVisible(visible);
+                // modern toolkit uses `setVisibility`, classic `setVisible`
+                var fn = 'setVisible' in me ? 'setVisible' : 'setVisibility';
+
+                if (fn in me && Ext.isFunction(me[fn])) {
+                    me[fn](visible);
                 } else {
-                    var msg = Ext.String.format(errTpl, me.$className, visible);
+                    var msg = Ext.String.format(
+                        errTpl, me.$className, visible, fn
+                    );
                     Ext.log.error(msg);
                 }
             };
