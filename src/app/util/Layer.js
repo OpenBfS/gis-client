@@ -1497,10 +1497,8 @@ Ext.define('Koala.util.Layer', {
                 var isViewParam = filter && me.isViewParamFilter(filter);
                 // do not handle STYLES filter, this is done elsewhere
                 var isSpecialStyles = filter && me.isSpecialStylesValueFilter(filter);
-                // do not handle test_data filter, this is done elsewhere
-                var isSpecialTestData = filter && me.isSpecialStylesValueFilter(filter);
 
-                if (isViewParam && !isSpecialStyles && !isSpecialTestData) {
+                if (isViewParam && !isSpecialStyles) {
                     var params = filter.param.split(",");
                     var type = filter.type;
 
