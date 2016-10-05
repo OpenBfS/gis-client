@@ -3,10 +3,13 @@ Ext.define('Koala.view.panel.MobileMenu',{
     xtype: 'k-panel-mobilemenu',
 
     requires: [
-        'Koala.view.panel.MobileMenuController',
-        'Koala.view.panel.MobileMenuModel',
         'Koala.store.MetadataSearch',
-        'Koala.store.SpatialSearch'
+        'Koala.store.SpatialSearch',
+
+        'Koala.util.AppContext',
+
+        'Koala.view.panel.MobileMenuController',
+        'Koala.view.panel.MobileMenuModel'
     ],
 
     controller: 'k-panel-mobilemenu',
@@ -89,6 +92,9 @@ Ext.define('Koala.view.panel.MobileMenu',{
         },
         handler: function(btn){
             btn.up('app-main').down('k-panel-mobileaddlayer').show();
+        },
+        listeners: {
+            painted: Koala.util.AppContext.generateCheckToolVisibility('addWmsBtn')
         }
     }, {
         xtype: 'button',
