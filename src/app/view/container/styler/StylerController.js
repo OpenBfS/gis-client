@@ -34,8 +34,38 @@ Ext.define('Koala.view.container.styler.StylerController', {
 
         viewModel.set('layer', layer);
         viewModel.set('style', style);
+
+        if(!layer.get('originalStyle')){
+            layer.set('originalStyle', layer.getStyle());
+        }
+
         view.add({
             xtype: 'k_container_styler_rules'
+        });
+    },
+
+    /**
+     *
+     */
+    reloadCurrentStyle: function(){
+        var me = this;
+        var viewModel = this.getViewModel();
+        var layer = viewModel.get('layer');
+        Ext.Msg.show({
+            title: 'Info',
+            message: 'Stil von <b>' + layer.get('name') +
+                '</b> zurücksetzen?',
+            buttonText: {
+                yes: "Ja",
+                no: "Nein"
+            },
+            fn: function(btnId){
+                if(btnId === "yes"){
+                    layer.setStyle(layer.get('originalStyle'));
+                    layer.set('koalaStyle', undefined);
+                    me.getView().up('window').close();
+                }
+            }
         });
     },
 

@@ -48,7 +48,7 @@ Ext.define('Koala.util.Style', {
             // method
             var placeHolder = me.getTextStylePlaceholder(rules, new ol.Feature());
 
-            var styleFunction = function(feature, resolution) {
+            var styleFunction = function(feature) {
                 var olStyles = [];
 
                 rules.each(function(rule, idx){
@@ -58,7 +58,7 @@ Ext.define('Koala.util.Style', {
                     var olStyle = symbolizer.get('olStyle');
 
                     if (me.evaluateFilter(filter, feature) && me.evaluateScaleDenom(scaleDenom)) {
-                        // me.resolveTextStylePlaceholder(olStyle, feature, placeHolder[idx]);
+                        me.resolveTextStylePlaceholder(olStyle, feature, placeHolder[idx]);
                         olStyles.push(olStyle);
                     }
                 });
@@ -72,7 +72,7 @@ Ext.define('Koala.util.Style', {
         /**
          *
          */
-        getTextStylePlaceholder: function(rules, feature) {
+        getTextStylePlaceholder: function(rules) {
             var textStylePlaceholder = [];
 
             rules.each(function(rule) {
