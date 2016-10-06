@@ -48,6 +48,73 @@ Ext.define('Koala.util.Layer', {
         /* i18n */
 
         /**
+         * A unique key for originally received and parsed GNOS metadata, will
+         * be used as key in a `ol.Collection` (the layer, more specifically).
+         */
+        FIELDNAME_ORIGINAL_METADATA: 'k-originally-parsed-untainted-metadata',
+
+        /**
+         * Stores the passed metadata, which must be a clone of the originally
+         * received and parsed metadata object from GNOS in the layer. We need
+         * to have this in order to easily change active filters from the layer.
+         *
+         * Callers need to ensure that the passed object is not fiddled with and
+         * is a clone (`Ext.clone`) of the originally received and parsed
+         * metadata object from GNOS.
+         *
+         * @param {ol.layer.Layer} layer The layer where we will store the
+         *     metadata on.
+         * @param {Object} originalMetadata The metadata object to store. Must
+         *     be a clone of the originally received and parsed GNOS Metadata.
+         */
+        setOriginalMetadata: function(layer, originalMetadata) {
+            if(layer && layer.set) {
+                layer.set(
+                    Koala.util.Layer.FIELDNAME_ORIGINAL_METADATA,
+                    originalMetadata
+                );
+            }
+        },
+
+        /**
+         * Returns a previously stored metadata object. For further notes see
+         * the documentation of #setOriginalMetadata.
+         *
+         * @param {ol.layer.Layer} layer The layer where we want the original
+         *     metadata from.
+         * @return {Object} the metadata object that was once stored.
+         */
+        getOriginalMetadata: function(layer) {
+            return layer && layer.get && layer.get(
+                Koala.util.Layer.FIELDNAME_ORIGINAL_METADATA
+            );
+        },
+
+        /**
+         * Checks whether the passed layer has it's original metadata stored at
+         * teh exected location. we need this methdo so that we can check the
+         * various layers that might be passed to layer utility methods.
+         *
+         * @param {ol.layer.Layer} layer The layer where we want to check.
+         * @return {boolean} Whether the layer had metdata at the expected
+         *     location.
+         */
+        hasOriginalMetadata: function(layer) {
+            var hasOriginalMetadata = false;
+            var fieldname = Koala.util.Layer.FIELDNAME_ORIGINAL_METADATA;
+            if (layer && layer.getKeys && layer.get) {
+                var keys = layer.getKeys();
+                var keyContained = Ext.Array.contains(keys, fieldname);
+                if (keyContained) {
+                    hasOriginalMetadata = Ext.isObject(
+                        layer.get(fieldname)
+                    );
+                }
+            }
+            return hasOriginalMetadata;
+        },
+
+        /**
          * Returns whether the passed metadat object from GNOS has at least one
          * filter configured.
          *
@@ -282,7 +349,9 @@ Ext.define('Koala.util.Layer', {
 
         addLayerToMap: function(metadata) {
             var me = this;
+            var metadataClone = Ext.clone(metadata);
             var layer = me.layerFromMetadata(metadata);
+            me.setOriginalMetadata(layer, metadataClone);
             me.addOlLayerToMap(layer);
         },
 
@@ -362,6 +431,11 @@ Ext.define('Koala.util.Layer', {
         addOlLayerToMap: function(layer) {
             var me = this;
 
+            if (!me.hasOriginalMetadata(layer)) {
+                Ext.log.warn('Layer did not have original GNOS metadata ' +
+                    'at the expected location');
+            }
+
             var suffixId = me.getSuffixId();
             var originalName = layer.get('name');
             var suffix = me.getLayerNameSuffix(suffixId);
@@ -404,8 +478,21 @@ Ext.define('Koala.util.Layer', {
             }
         },
 
-        showChangeFilterSettingsWin: function(metadata) {
+        /**
+         * layer will be undefined in the case that we actiually want
+         * to add a layer with the filter. It might also be a layer
+         * if we actually want to show the filter window to change the
+         * filter of a layer.
+         *
+         * @param {Object} metadata The metadata to construct the
+         *     filter window from.
+         * @param {ol.layer.layer} [layer] The layer (if any) whose
+         *     filter we want to change. Optional, don't pass if you want a new
+         *     layer with the filter added to the map.
+         */
+        showChangeFilterSettingsWin: function(metadata, layer) {
             var staticMe = this;
+            var existingLayer = layer ? layer : null;
             var filters = staticMe.getFiltersFromMetadata(metadata);
 
             // TODO future enhancements may want to remove the ComponentQuery…
@@ -413,7 +500,7 @@ Ext.define('Koala.util.Layer', {
             var currentSelection = themeTree.getSelection()[0];
             var title = currentSelection ?
                 currentSelection.data.text :
-                metadata.treeTitle;
+                metadata.legendTitle;
 
             var winName = 'filter-win-' + metadata.id;
 
@@ -433,7 +520,8 @@ Ext.define('Koala.util.Layer', {
                     xtype: 'k-form-layerfilter',
                     metadata: metadata,
                     filters: filters,
-                    format: Ext.Date.defaultFormat
+                    format: Ext.Date.defaultFormat,
+                    layer: existingLayer
                 }
             }).show();
         },
@@ -453,6 +541,23 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Returns `true` if the passed layer is a WMS layer, `false` otherwise.
+         *
+         * @param {ol.layer.Base} l The layer to check.
+         * @return {Boolean} Whether the layer is a WMS layer.
+         */
+        isWmsLayer: function(l) {
+            var isWms = false;
+            var source = l && l instanceof ol.layer.Base && l.getSource();
+            var ImageWMS = ol.source.ImageWMS;
+            var TileWMS = ol.source.TileWMS;
+            if (source instanceof ImageWMS || source instanceof TileWMS) {
+                isWms = true;
+            }
+            return isWms;
+        },
+
+        /**
          * @param ol.layer.Base
          */
         getCurrentLegendUrl: function (layer) {
@@ -462,8 +567,19 @@ Ext.define('Koala.util.Layer', {
             var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
             var resolution = BasiGX.util.Map.getResolution(map);
             var scale = BasiGX.util.Map.getScale(map);
+            var style;
 
-            if(!legendUrl){
+            // determine the style to add
+            if (Koala.util.Layer.isWmsLayer(layer)) {
+                var source = layer.getSource();
+                var params = source.getParams();
+                var styles = params && 'STYLES' in params && params.STYLES;
+                if (styles) {
+                    style = styles.split(",")[0];
+                }
+            }
+
+            if (!legendUrl){
                 return "";
             }
             if (width) {
@@ -475,7 +591,15 @@ Ext.define('Koala.util.Layer', {
             if (resolution) {
                 legendUrl = Ext.String.urlAppend(legendUrl, "SCALE="+scale);
             }
-
+            if (style) {
+                legendUrl = Ext.String.urlAppend(legendUrl, "STYLE=" + style);
+                // requested by SB: replace any [[STYLES]] placeholders with the
+                // current style
+                legendUrl = Koala.util.String.replaceTemplateStrings(
+                    legendUrl,
+                    {STYLES: style}
+                );
+            }
             return legendUrl;
         },
 
@@ -521,10 +645,12 @@ Ext.define('Koala.util.Layer', {
                 var printUuid = metadata.layerConfig.olProperties.printLayer;
                 var printLayer;
 
-                this.getMetadataFromUuidAndThen(printUuid, function(md){
+                this.getMetadataFromUuidAndThen(printUuid, (function(md){
+                        var metadataClone = Ext.clone(md);
                         printLayer = this.layerFromMetadata(md);
+                        this.setOriginalMetadata(printLayer, metadataClone);
                         layer.set('printLayer', printLayer);
-                    }
+                    }).bind(this)
                 );
             }
 
@@ -766,12 +892,131 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Given a GNOS filter, this method checks if it is the one special case
+         * defined by BfS where the STYLES (for WMS GetMap, e.g.) is being set.
+         *
+         * @param {Object} f The filter object to check.
+         * @return {boolean} Whether the filter is the specially handled STYLES
+         *     filter.
+         */
+        isSpecialStylesValueFilter: function(f) {
+            var me = this;
+            if (me.isViewParamFilter(f) &&
+                f.type === 'value' &&
+                f.param === "STYLES") {
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Given a GNOS filter, this method checks if it is the one special case
+         * defined by BfS where the param is `'test_data'` (for marking the
+         * layer in the tree, e.g.).
+         *
+         * @param {Object} f The filter object to check.
+         * @return {boolean} Whether the filter is the specially handled
+         *     `'test_data'`-filter.
+         */
+        isSpecialTestDataValueFilter: function(f) {
+            var me = this;
+            if (me.isViewParamFilter(f) &&
+                f.type === 'value' &&
+                f.param === 'test_data' &&
+                f.value === 'true') {
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Given a GNOS filter, this method checks if it is to be encoded in the
+         * viewparams of any request.
+         *
+         * @param {Object} f The filter object to check.
+         * @return {boolean} Whether the filter shall be encoded in the
+         *     viewparams of any request.
+         */
+        isViewParamFilter: function(f){
+            return f.encodeInViewParams === "true";
+        },
+
+        /**
+         * Given a GNOS filter, this method checks if it is to be encoded in the
+         * 'standard' location (e.g. CQL filter parameter) of any request.
+         *
+         * @param {Object} f The filter object to check.
+         * @return {boolean} Whether the filter shall be encoded at the standard
+         *     location of any request.
+         */
+        isStandardLocationFilter: function(f){
+            return !this.isViewParamFilter(f);
+        },
+
+        /**
+         * Checks the passed metadata and adjusts it according to the special
+         * 'STYLES' value-filter defined by BfS.
+         *
+         * Will return a possibly altered metadata object, where the STYLES of
+         * the OpenLayers layer will contain the value of the special styles
+         * filter.
+         *
+         * @param {Object} The metadata object of the GNOS containing filters.
+         * @return {Object} The possibly altered metadata object.
+         */
+        handleSpecialStylesViewParamFilter: function(metadata) {
+            var me = this;
+            var filters = Ext.Array.clone(metadata.filters);
+            var stylesFilter;
+            Ext.each(filters, function(filter) {
+                if (me.isSpecialStylesValueFilter(filter)) {
+                    stylesFilter = filter;
+                }
+            });
+
+            if (stylesFilter) {
+                // move it to the layerConfig…
+                metadata.layerConfig.olProperties.param_STYLES = stylesFilter.value;
+            }
+
+            return metadata;
+        },
+
+        /**
+         * Checks the passed metadata and adjusts it according to the special
+         * 'test_data' value-filter defined by BfS.
+         *
+         * Will return a possibly altered metadata object, where the
+         * `legendTitle` is prefixed with a String indicating that the layer
+         * contains test data.
+         *
+         * @param {Object} The metadata object of the GNOS containing filters.
+         * @return {Object} The possibly altered metadata object.
+         */
+        handleSpecialTestDataViewParamFilter: function(metadata){
+            var me = this;
+            var filters = Ext.Array.clone(metadata.filters);
+            var testDataFilter;
+            Ext.each(filters, function(filter) {
+                if (me.isSpecialTestDataValueFilter(filter)) {
+                    testDataFilter = filter;
+                }
+            });
+
+            if (testDataFilter) {
+                // adjust the legend title
+                metadata.legendTitle = "#TESTDATA# " + metadata.legendTitle;
+            }
+
+            return metadata;
+        },
+
+        /**
          *
          */
         adjustMetadataAccordingToFilters: function(metadata) {
-            var me = this,
-            filters = this.getFiltersFromMetadata(metadata),
-            viewParamFilters = [];
+            var me = this;
+            var filters = this.getFiltersFromMetadata(metadata);
 
             if (!filters) {
                 return metadata;
@@ -779,19 +1024,16 @@ Ext.define('Koala.util.Layer', {
 
             metadata = me.applyDefaultsIfNotChangedByUser(metadata, filters);
 
-            // get them again, they may have changed…
-            filters = this.getFiltersFromMetadata(metadata);
+            // TODO Rethink this handling, special wish by SB to get this in
+            //      fast; building upon the handling of 'test_data' by BfS
+            metadata = me.handleSpecialStylesViewParamFilter(metadata);
+            metadata = me.handleSpecialTestDataViewParamFilter(metadata);
 
-            for (var i=0; i<filters.length; i++){
-                if (filters[i].encodeInViewParams === "true") {
-                    viewParamFilters.push(filters[i]);
-                    if (filters[i].param === "test_data" && filters[i].value === "true"){
-                        metadata.treeTitle = "#TESTDATA# " + metadata.treeTitle;
-                    }
-                    filters.splice(i, 1);
-                    metadata = me.moveFiltersToViewparams(metadata, viewParamFilters);
-                }
-            }
+            // get them again, they may have changed…
+            filters = me.getFiltersFromMetadata(metadata);
+
+            metadata = me.moveFiltersToViewparams(metadata, filters);
+
             if (filters.length !== 0){
                 // The filters should not be encoded in the viewparams, but as
                 // WMS-T and friends
@@ -903,6 +1145,10 @@ Ext.define('Koala.util.Layer', {
         adjustMetadataFiltersToStandardLocations: function(metadata, filters){
             var me = this;
             Ext.each(filters, function(filter) {
+                if (!me.isStandardLocationFilter(filter)) {
+                    // any non-standard, e.g. viewparam filters, are ignored.
+                    return;
+                }
                 var filterType = (filter.type || "").toLowerCase();
                 switch (filterType) {
                     case 'timerange':
@@ -1233,27 +1479,32 @@ Ext.define('Koala.util.Layer', {
             // VALUE becomes a CQL filter
             var olProps = metadata.layerConfig.olProperties;
             var cqlKey = 'param_cql_filter';
-            var val = "";
-            if (cqlKey in olProps) {
-                val = olProps[cqlKey];
-            }
-            if (val !== "") {
-                val += ";";
-            }
-
             var stringified = this.stringifyValueFilter(filter);
-            val += stringified;
+            if (cqlKey in olProps) {
+                Ext.log.info("Overwriting existing CQL Filter in URL." +
+                    " Is this intentional? If you changed a filter, the" +
+                    " answer is likely yes, else it might lead to " +
+                    " misbehaviour of this layer.");
+                Ext.log.info("Existing value is " + olProps[cqlKey]);
+                Ext.log.info("New value is " + stringified);
+            }
+            olProps[cqlKey] = stringified;
 
-            olProps[cqlKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;
         },
 
         moveFiltersToViewparams: function(metadata, filters){
+            var me = this;
             var format = Koala.util.Date.ISO_FORMAT;
             var keyVals = {};
             Ext.each(filters, function(filter) {
-                if (filter) {
+                // Only consider viewparam filters here
+                var isViewParam = filter && me.isViewParamFilter(filter);
+                // do not handle STYLES filter, this is done elsewhere
+                var isSpecialStyles = filter && me.isSpecialStylesValueFilter(filter);
+
+                if (isViewParam && !isSpecialStyles) {
                     var params = filter.param.split(",");
                     var type = filter.type;
 

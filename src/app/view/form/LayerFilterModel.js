@@ -27,7 +27,8 @@ Ext.define('Koala.view.form.LayerFilterModel', {
         buttonTextNoFilter: '',
         valueFilter: '',
         timeRangeFilter: '',
-        pointInTimeFilter: ''
+        pointInTimeFilter: '',
+        buttonTextChangeFilter: ''
     }
 
 });
