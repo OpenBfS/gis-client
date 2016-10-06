@@ -343,7 +343,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     drawSvgContainer: function() {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
 
@@ -351,7 +350,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // register zoom interaction if requested
         if (view.getZoomEnabled()) {
-            var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
+            var plot = d3.select(viewId + ' svg');
             plot.call(me.zoomInteraction);
         }
     },
