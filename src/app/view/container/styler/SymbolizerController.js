@@ -25,7 +25,10 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
 
         // Check if we get a real symbolizer or just a blank one
         if(!symbolizerFromRule.get('symbolType')){
-            symbolizerFromRule.set('olStyle', layer.getStyle());
+            var style = layer.getStyle();
+            if(!Ext.isFunction(style)){
+                symbolizerFromRule.set('olStyle', style);
+            }
             symbolizerFromRule.set('symbolType', symbolType);
         }
 

@@ -1,9 +1,13 @@
 Ext.define('Koala.model.StyleScaleDenominator', {
     extend: 'Koala.model.Base',
 
+    require: [
+        'Ext.data.validator.Inclusion'
+    ],
+
     fields: [{
-         name: 'operator',
-         type: 'string'
+        name: 'operator',
+        type: 'string'
     }, {
         name: 'number1',
         type: 'int'

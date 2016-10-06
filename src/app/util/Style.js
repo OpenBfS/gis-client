@@ -41,27 +41,28 @@ Ext.define('Koala.util.Style', {
          */
         applyKoalaStyleToLayer: function(style, layer) {
             var me = this;
+            var rules = style.rules();
 
-            var rules = style.getAssociatedData().rules;
             // Save a reference to the configured olStyleText text placeholder,
             // otherwise it would be overwritten in the resolveTextStylePlaceholder()
             // method
-            var placerHolder = me.getTextStylePlaceholder(rules);
+            var placeHolder = me.getTextStylePlaceholder(rules, new ol.Feature());
 
-            var styleFunction = function(feature) {
+            var styleFunction = function(feature, resolution) {
                 var olStyles = [];
-                Ext.each(rules, function(rule, idx) {
-                    var scaleDenom = rule.scaleDenominator;
-                    var symbolizer = rule.symbolizer;
-                    var filter = rule.filter;
-                    var olStyle = symbolizer.olStyle;
 
-                    if (me.evaluateFilter(filter, feature) &&
-                            me.evaluateScaleDenom(scaleDenom)) {
-                        me.resolveTextStylePlaceholder(olStyle, feature, placerHolder[idx]);
+                rules.each(function(rule, idx){
+                    var scaleDenom = rule.getScaleDenominator();
+                    var symbolizer = rule.getSymbolizer();
+                    var filter = rule.getFilter();
+                    var olStyle = symbolizer.get('olStyle');
+
+                    if (me.evaluateFilter(filter, feature) && me.evaluateScaleDenom(scaleDenom)) {
+                        // me.resolveTextStylePlaceholder(olStyle, feature, placeHolder[idx]);
                         olStyles.push(olStyle);
                     }
                 });
+
                 return olStyles;
             };
 
@@ -71,13 +72,22 @@ Ext.define('Koala.util.Style', {
         /**
          *
          */
-        getTextStylePlaceholder: function(rules) {
+        getTextStylePlaceholder: function(rules, feature) {
             var textStylePlaceholder = [];
 
-            Ext.each(rules, function(rule) {
-                var symbolizer = rule.symbolizer;
-                var olStyle = symbolizer.olStyle;
-                var olTextStyle = olStyle.getText();
+            rules.each(function(rule) {
+                var symbolizer = rule.getSymbolizer();
+                var olStyle = symbolizer.get('olStyle');
+
+                var olTextStyle;
+
+                if(olStyle && olStyle.getText){
+                    olTextStyle = olStyle.getText();
+                }
+                if(!olTextStyle){
+                    olTextStyle = new ol.style.Text();
+                }
+
                 var olText = olTextStyle.getText();
                 textStylePlaceholder.push(olText);
             });
@@ -88,17 +98,17 @@ Ext.define('Koala.util.Style', {
         /**
          *
          */
-        resolveTextStylePlaceholder: function(olStyle, feature, placerHolder) {
+        resolveTextStylePlaceholder: function(olStyle, feature, placeHolder) {
             if (!olStyle.getText() instanceof ol.style.Text) {
                 return false;
             }
 
-            if (Ext.isEmpty(placerHolder)) {
+            if (Ext.isEmpty(placeHolder)) {
                 return false;
             }
 
             var olStyleText = olStyle.getText();
-            var labelTextTpl = placerHolder;
+            var labelTextTpl = placeHolder;
             // Find any character between two square brackets
             var placeHolderPrefix = '\\[\\[';
             var placeHolderSuffix = '\\]\\]';
@@ -130,7 +140,7 @@ Ext.define('Koala.util.Style', {
          */
         evaluateScaleDenom: function(scaleDenom) {
             // Only evaluate the scale denominator if a scale is given
-            if (!scaleDenom || !scaleDenom.operator) {
+            if (!scaleDenom || !scaleDenom.get('operator')) {
                 return true;
             }
 
@@ -143,9 +153,9 @@ Ext.define('Koala.util.Style', {
 
             var map = mapComponent[0].map;
             var currentMapScale = BasiGX.util.Map.getScale(map);
-            var numberOperandA = scaleDenom.number1;
-            var numberOperandB = scaleDenom.number2;
-            var type = scaleDenom.operator;
+            var numberOperandA = scaleDenom.get('number1');
+            var numberOperandB = scaleDenom.get('number2');
+            var type = scaleDenom.get('operator');
             var result;
 
             switch(type) {
@@ -157,7 +167,7 @@ Ext.define('Koala.util.Style', {
                     break;
                 case 'ScaleIsBetween':
                     result = (currentMapScale >= numberOperandA) &&
-                            (currentMapScale <= numberOperandB);
+                        (currentMapScale <= numberOperandB);
                     break;
                 case 'ScaleIsGreaterThan':
                     result = currentMapScale > (numberOperandA || numberOperandB);
@@ -182,21 +192,21 @@ Ext.define('Koala.util.Style', {
          */
         evaluateFilter: function(filter, feature) {
             // Only evaluate the filter if a filter is given
-            if (!filter || !filter.operator) {
+            if (!filter || !filter.get('operator')) {
                 return true;
             }
 
             // Return if no feature is given
-            if (!feature instanceof ol.Feature) {
+            if (!(feature instanceof ol.Feature)) {
                 return false;
             }
 
-            var field = filter.attribute;
+            var field = filter.get('attribute');
             var candidate = feature.get(field);
-            var numberOperandA = filter.number1;
-            var numberOperandB = filter.number2;
-            var type = filter.operator;
-            var textOperand = filter.text;
+            var numberOperandA = filter.get('number1');
+            var numberOperandB = filter.get('number2');
+            var type = filter.get('operator');
+            var textOperand = filter.get('text');
             var result;
 
             // Return if the feature hasn't set the attribute field to evaluate

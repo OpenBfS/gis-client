@@ -80,7 +80,6 @@ Ext.define("Koala.view.form.ImportLocalData",{
             displayField: 'label',
             queryMode: 'local',
             store: {
-                // TODO This has to be replaced when we will have multiple maps
                 type: 'k-projections'
             },
             listeners: {
@@ -99,7 +98,6 @@ Ext.define("Koala.view.form.ImportLocalData",{
             queryMode: 'local',
             store: {
                 autoLoad: true,
-                // TODO This has to be replaced when we will have multiple maps
                 type: 'k-vectortemplates'
             },
             listeners: {

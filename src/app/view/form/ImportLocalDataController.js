@@ -83,8 +83,11 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
      *
      */
     beforeVectorTemplateComboRendered: function(combo){
+        var viewModel = this.getViewModel();
+        var store = combo.getStore();
         var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
-        combo.getStore().setData(appContext.data.merge.vectorTemplates);
+        store.setData(appContext.data.merge.vectorTemplates);
+        viewModel.set('templateUuid', store.first().get('uuid'));
     },
 
     /**
