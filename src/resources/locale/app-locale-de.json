@@ -691,7 +691,7 @@
             "data": {
                 "menuTitle": "Menu",
                 "searchFieldPlaceHolderText": "Suche in Daten und Diensten",
-                "imprintButtonText": "Hilfe / Impressum",
+                "imprintButtonText": "Hilfe",
                 "settingsButtonText": "Einstellungen",
                 "moreLayersButtonText": "Weitere Themen",
                 "addLayerButtonText": "Externen Layer hinzufügen"
@@ -733,16 +733,32 @@
     "Koala.view.panel.MobileImprint": {
         "config": {
             "data": {
-                "title": "Hilfe / Impressum",
-                "helpTitle": "Hilfe",
-                "helpHtml": "Lorem ipsum dolor sit amet, et usu fugit virtute torquatos, ea veri nominavi mea, at has saepe tamquam sententiae. Habeo pertinax consequat ea usu. Ne pri mollis expetendis, nec et praesent deseruisse adipiscing, solet impetus euripidis id duo. Partem audiam noluisse vel ei, cu harum quidam constituto has, ridens omittam eu duo. Facilis fuisset est no, sit esse quas ut. Eos et ludus prodesset, modo sapientem eos te. Vis tritani eripuit et, eu ius aperiam delenit. Ei vis agam lorem. No bonorum recteque qui, has in rebum vidisse. Eam suscipit sapientem ne, an ubique apeirian constituto eum.",
-                "imprintTitle": "Impressum",
-                "imprintHtml": "Lorem ipsum dolor sit amet, et usu fugit virtute torquatos, ea veri nominavi mea, at has saepe tamquam sententiae. Habeo pertinax consequat ea usu. Ne pri mollis expetendis, nec et praesent deseruisse adipiscing, solet impetus euripidis id duo. Partem audiam noluisse vel ei, cu harum quidam constituto has, ridens omittam eu duo. Facilis fuisset est no, sit esse quas ut. Eos et ludus prodesset, modo sapientem eos te. Vis tritani eripuit et, eu ius aperiam delenit. Ei vis agam lorem. No bonorum recteque qui, has in rebum vidisse. Eam suscipit sapientem ne, an ubique apeirian constituto eum.",
+                "title": "Hilfe",
+                "overviewTitle": "Übersicht",
+                "prefaceTitle": "Vorbemerkung",
+                "prefaceHtml": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39'><br>"+
+                        "Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen.<br>Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur Überwachung der Umweltradioaktivität“ (IMIS) betroffen.<br>Seit <b>2018</b> basiert die aktuelle Applikation auf Strategien der KOALA (<i>Komponenten-orientierte Architektur mit langfristiger Ausrichtung</i>)-Entwicklungszyklen. Das Hauptaugenmerk richtet sich hierbei auf die Modularisierung der einzelnen Softwarekomponenten.<br><b><i>...Informationen zur Open Source-Strategie? Link zum Repository?</i></b>",
+                "quickRefTitle": "Schnellübersicht",
+                "quickRefHtml": "<img class='img' src='classic/resources/img/helpPage/mobile/mobile_graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'>"+
+                            "<ol>"+
+                            "<li style='color:#157FCC; font-weight:bold'>1. Menü</li>"+
+                                "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen. Diese können von interner als auch von externen Quellen bezogen werden. Eine Suche von Orten und Daten ist über die Eingabe innerhalb eines Suchfeldes möglich. Desweiteren kann die Sprache sowie der Zeitbezug der Anwendung eingestellt werden.</div><br />"+
+                            "<li style='color:#157FCC; font-weight:bold'>2. Navigation</li>"+
+                                "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div><br />"+
+                            "<li style='color:#157FCC; font-weight:bold'>3. Karte</li>"+
+                                "<div>In der Karte können Sie mit Fingergesten navigieren und die Informationen mit georäumlichen Bezug betrachten. Darüber hinaus sind die Daten der BfS-Geoobjekte abrufbar. Eine Berührung auf eine Geometrie liefert Informationen des entsprechenden Objektes. Es öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereit stellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />"+
+                            "<li style='color:#157FCC; font-weight:bold'>4. Urheberrechtsangaben</li>"+
+                            "<div>Im linken unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Eine Berührung öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Angaben.</div><br />"+
+                            "<li style='color:#157FCC; font-weight:bold'>5. Legende</li>"+
+                                "<div>Die Legende ermöglicht das Ein- bzw. Ausschalten einzelner Layer.</div>"+
+                                "<div>Informationen zu den jeweiligen Layern werden angezeigt. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte hierarchisch dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
+                                "<div>Ferner ist es möglich, einzelne Layer von der Legende zu entfernen.</div><br />"+
+                            "<li style='color:#157FCC; font-weight:bold'>6. Maßstabsleiste</li>"+
+                                "<div>Die Maßstabsleiste dient als Referenz des aktuellen Kartenmaßstabs. Demzufolge bietet sie eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m), oder Kilometern (km).</div>"+
+                            "</ol>"
             }
         }
     },
-
-
     "Ext.Date": {
         "monthNames": [
             "Januar",

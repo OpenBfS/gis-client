@@ -24,15 +24,15 @@ Ext.define('Koala.view.panel.MobileImprint',{
         xtype: 'fieldset',
         padding: 5,
         bind: {
-            title: '{helpTitle}',
-            html: '{helpHtml}'
+            title: '{prefaceTitle}',
+            html: '{prefaceHtml}'
         }
     }, {
         xtype: 'fieldset',
         padding: 5,
         bind: {
-            title: '{imprintTitle}',
-            html: '{imprintHtml}'
+            title: '{quickRefTitle}',
+            html: '{quickRefHtml}'
         }
     }]
 });
