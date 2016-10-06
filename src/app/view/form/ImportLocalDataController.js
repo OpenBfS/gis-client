@@ -24,44 +24,27 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         'Koala.util.Layer'
     ],
 
-    statics: {
-        /**
-         *
-         */
-        KEY_FLIP_COORDS_PROJECTION: 'EPSG:4326-enu',
+    /**
+     *
+     */
+    KEY_FLIP_COORDS_PROJECTION: 'EPSG:4326-enu',
 
-        /**
-         *
-         */
-        retransformFlipAndTransform: function(features, projection, targetProjection) {
-            var staticMe = Koala.view.form.ImportLocalDataController;
-            Ext.each(features, function(feature) {
-                var geometry = feature.getGeometry().clone();
-                geometry.transform(targetProjection, projection);
-                var coordinates = geometry.getCoordinates();
-                geometry.setCoordinates(staticMe.flipCoords(coordinates));
-                geometry.transform(projection, targetProjection);
-                feature.setGeometry(geometry);
+    /**
+     *
+     */
+    flipCoords: function(coords) {
+        var me = this;
+        var flipped = [];
+        if (coords && !Ext.isArray(coords[0])) {
+            flipped[0] = coords[1];
+            flipped[1] = coords[0];
+            flipped[2] = coords[2];
+        } else {
+            Ext.each(coords, function(coord) {
+                flipped.push(me.flipCoords(coord));
             });
-        },
-
-        /**
-         *
-         */
-        flipCoords: function(coords) {
-            var staticMe = Koala.view.form.ImportLocalDataController;
-            var flipped = [];
-            if (coords && !Ext.isArray(coords[0])) {
-                flipped[0] = coords[1];
-                flipped[1] = coords[0];
-                flipped[2] = coords[2];
-            } else {
-                Ext.each(coords, function(coord) {
-                    flipped.push(staticMe.flipCoords(coord));
-                });
-            }
-            return flipped;
         }
+        return flipped;
     },
 
     /**
@@ -71,6 +54,21 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var viewModel = this.getViewModel();
         var fileName = viewModel.get('file.name');
         viewModel.set('layerName', fileName);
+    },
+
+    /**
+     *
+     */
+    retransformFlipAndTransform: function(features, projection, targetProjection) {
+        var me = this;
+        Ext.each(features, function(feature) {
+            var geometry = feature.getGeometry().clone();
+            geometry.transform(targetProjection, projection);
+            var coordinates = geometry.getCoordinates();
+            geometry.setCoordinates(me.flipCoords(coordinates));
+            geometry.transform(projection, targetProjection);
+            feature.setGeometry(geometry);
+        });
     },
 
     /**
@@ -98,11 +96,6 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         viewModel.set('file', file);
         var fileName = viewModel.get('file.name');
         viewModel.set('layerName', fileName);
-        var couldBeGml = fileName.endsWith('gml') || fileName.endsWith('xml');
-
-        if(!couldBeGml){
-            viewModel.set('projection', 'EPSG:4326');
-        }
     },
 
     /**
@@ -121,7 +114,6 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     */
     parseFeatures: function(event){
         var me = this;
-        var staticMe = Koala.view.form.ImportLocalDataController;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
         var viewModel = me.getViewModel();
         var result = event.target.result;
@@ -151,8 +143,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
                 featureProjection: featureProjection
             });
             if (features && features.length > 0) {
-                if (viewModel.get('projection') === staticMe.KEY_FLIP_COORDS_PROJECTION) {
-                    staticMe.retransformFlipAndTransform(
+                if (viewModel.get('projection') === me.KEY_FLIP_COORDS_PROJECTION) {
+                    me.retransformFlipAndTransform(
                         features,
                         dataProjection,
                         featureProjection
