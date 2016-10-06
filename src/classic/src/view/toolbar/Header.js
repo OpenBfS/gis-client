@@ -22,10 +22,10 @@ Ext.define("Koala.view.toolbar.Header", {
 
     requires: [
         "BasiGX.util.Animate",
-               
+
         "Koala.view.toolbar.HeaderController",
         "Koala.view.toolbar.HeaderModel",
-        "Koala.view.button.TimeReference",        
+        "Koala.view.button.TimeReference",
         "Koala.view.window.HelpWindow"
     ],
 
@@ -56,13 +56,10 @@ Ext.define("Koala.view.toolbar.Header", {
                 text: '{btnTextHelp}',
                 tooltip: '{btnTooltipHelp}'
             },
-            // TODO: Implement button-handler in MVC pattern?
-            handler: function(btn){
+            handler: function(){
                 var win = Ext.ComponentQuery.query('k-window-help')[0];
                 if(!win){
-                    Ext.create('Koala.view.window.HelpWindow')
-                    .show();
-                    
+                    Ext.create('Koala.view.window.HelpWindow').show();
                 } else {
                     BasiGX.util.Animate.shake(win);
                 }

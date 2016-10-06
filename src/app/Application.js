@@ -27,9 +27,6 @@ Ext.define('Koala.Application', {
 
     name: 'Koala',
 
-    requires: [
-        'Koala.view.panel.LayerSetChooser'
-    ],
 
     statics: {
         /**
@@ -48,8 +45,11 @@ Ext.define('Koala.Application', {
          * Return whether the current time reference is UTC.
          */
         isUtc: function(){
-            var btnClass = Koala.view.button.TimeReference;
-            return this.getTimereference() === btnClass.UTC;
+            if (Ext.isModern) {
+                return Ext.ComponentQuery.query('app-main')[0].getViewModel().get('useUtc');
+            } else {
+                return this.getTimereference() === Koala.view.button.TimeReference.UTC;
+            }
         },
         /**
          * Return whether the current time reference is local.
@@ -156,25 +156,6 @@ Ext.define('Koala.Application', {
     stores: [
         // TODO: add global / shared stores here
     ],
-
-    launch: function () {
-        if(!location.hash){
-            Ext.create('Ext.window.Window', {
-                title: 'Layer Profilwahl',
-                modal: true,
-                layout: 'fit',
-                minWidth: 250,
-                minHeight: 300,
-                items: [{
-                    xtype: 'k-panel-layersetchooser',
-                    showLayerProfiles: true,
-                    header: false,
-                    layerSetUrl: 'classic/resources/layerprofile.json',
-                    layout: 'fit'
-                }]
-            }).show();
-        }
-    },
 
     onAppUpdate: function () {
         Ext.Msg.confirm('Application Update', 'This application has an update, reload?',

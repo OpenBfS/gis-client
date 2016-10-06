@@ -30,24 +30,36 @@ Ext.define('Koala.view.main.MainController', {
     /**
      * Called after the first rendering of the legend tree and when the browser
      * window changes size, this will change the panel height to the maximum
-     * available space.
+     * available space and also ensure the legend tree is anhcored at the bottom
+     * right corner.
      *
      * @param {Koala.view.panel.RoutingLegendTree} legendTree The tree whose
      *     height we have to set.
      */
-    resizeLegendTreeToMaxHeight: function(legendTree){
+    resizeAndRepositionLegendTree: function(legendTree){
         var me = this;
         var mapContainer = legendTree.up('basigx-panel-mapcontainer');
         var toolBar = mapContainer.down('toolbar[cls="basigx-map-tools"]');
         var mapContainerHeight = mapContainer.getHeight() || 0;
         var toolbarHeight = toolBar.getHeight() || 0;
         var gap = 20;
+        // resize the tree within sane bounds to the maximum height available
         var h = mapContainerHeight - toolbarHeight - gap;
-        h = Ext.Number.constrain(h, 200, 1200); // minimum 300px, maximum 1200px
+        h = Ext.Number.constrain(h, 200, 1200); // minimum 200px, maximum 1200px
         legendTree.setHeight(h);
+        // …also check whether the tree is still anchored at the bottom-right
+        // corner
+        var legendTreePos = legendTree.getPosition();
+        if (legendTreePos) {
+            var currentX = legendTreePos[0];
+            var expectedX = mapContainer.getWidth() - legendTree.getWidth();
+            if (currentX !== expectedX) {
+                legendTree.setPosition(expectedX);
+            }
+        }
         // bind a listener here for resizing, but only once per instance
         if (!legendTree.__hasMaximizeListenerBound) {
-            Ext.getBody().on('resize', me.resizeLegendTreeToMaxHeight, me, {
+            Ext.getBody().on('resize', me.resizeAndRepositionLegendTree, me, {
                 buffer: 100,
                 args: [legendTree]
             });

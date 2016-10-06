@@ -1,0 +1,19 @@
+syntax: glob
+
+src/apidoc
+src/bootstrap.css
+src/bootstrap.js
+src/build/**
+src/classic.json
+src/modern.json
+src/coverage
+src/packages/**
+src/sass/example/bootstrap.js
+src/sass/example/bootstrap.json
+
+**/.~lock*
+**/npm-debug.log
+
+node_modules
+.project
+.idea

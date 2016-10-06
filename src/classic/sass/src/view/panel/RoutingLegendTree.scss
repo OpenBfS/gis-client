@@ -1,0 +1,14 @@
+/** Hide the layername suffix spans everywhere… **/
+.x-window-body .layer-name-suffix {
+    display: none;
+}
+/** … except when they are shown inside of the RoutingLegendTree **/
+.basigx-legend-panel .layer-name-suffix {
+    color: #666;
+    display: block;
+    opacity: 0.8;
+    padding-left: 21px;
+}
+.basigx-legend-panel  .k-loading-failed .x-tree-icon-leaf {
+    background-image: url('../classic/resources/img/leaf-errored.png');
+}

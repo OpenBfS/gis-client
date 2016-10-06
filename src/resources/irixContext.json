@@ -1,0 +1,278 @@
+{
+    "data": {
+        "fields" : [{
+                "name": "Title",
+                "label": "Titel",
+                "type": "text",
+                "defaultValue": "IMIS-GIS Kartendokument",
+                "allowBlank": false
+            },{
+                "name": "User",
+                "label": "Benutzer",
+                "type": "text",
+                "defaultValue": "IMIS Testbenutzer",
+                "allowBlank": true
+            },{
+                "name": "requestType",
+                "label": "Anforderung",
+                "type": "combo",
+                "values": [
+                    ["upload", "upload"],
+                    ["respond", "respond"],
+                    ["upload/respond", "upload/respond"]
+                ],
+                "defaultValue": "respond",
+                "allowBlank": true
+            },{
+                "type": "fieldset",
+                "name": "Identification",
+                "label": "Kopfinformation",
+                "fields": [{
+                    "name": "OrganisationReporting",
+                    "label": "Organisation",
+                    "type": "text",
+                    "defaultValue": "imis.bfs.de",
+                    "allowBlank": true
+                },{
+                    "type": "fieldset",
+                    "name": "ReportingBases",
+                    "label": "Report Basen",
+                    "fields": [{
+                        "name": "ReportingBasis",
+                        "label": "Report Basis",
+                        "type": "text",
+                        "defaultValue": "ESD",
+                        "allowBlank": true
+                    }]
+                },{
+                    "name": "ReportContext",
+                    "label": "Report Inhaltstyp",
+                    "type": "combo",
+                    "values": [
+                        ["Emergency", "Notfall"],
+                        ["Routine", "Routine"],
+                        ["Exercise", "Übung"],
+                        ["Test", "Test"]
+                    ],
+                    "defaultValue": "Test",
+                    "allowBlank": true
+                },{
+                    "name": "SequenceNumber",
+                    "label": "Laufende Nr.",
+                    "type": "text",
+                    "defaultValue": "42",
+                    "allowBlank": true
+                },{
+                    "type": "fieldset",
+                    "name": "OrganisationContact",
+                    "label": "OrganisationContact",
+                    "fields":[{
+                        "name": "Name",
+                        "label": "Name",
+                        "type": "text",
+                        "defaultValue": "Bundesamt für Strahlenschutz",
+                        "allowBlank": true
+                    },{
+                        "name": "OrganisationID",
+                        "label": "OrganisationID",
+                        "type": "text",
+                        "defaultValue": "imis.bfs.de",
+                        "allowBlank": true
+                    },{
+                        "name": "Country",
+                        "label": "Land (ISO 3166-2)",
+                        "type": "text",
+                        "defaultValue": "DE",
+                        "allowBlank": true
+                    }]
+                }]
+            },{
+                "type": "fieldset",
+                "name" : "DokpoolMeta",
+                "label" : "DokpoolMeta",
+                "fields": [{
+                    "name": "purpose",
+                    "label": "Zweck",
+                    "type": "combo",
+                    "values": [
+                        ["Standard-Info", "Standard-Info"],
+                        ["Bundesmessnetze", "Bundesmessnetze"],
+                        ["Standard-Info DWD", "Standard-Info DWD"]
+                    ],
+                    "defaultValue": "Standard-Info",
+                    "allowBlank": true
+                },{
+                    "name": "DokpoolContentType",
+                    "label": "Inhaltstyp",
+                    "type": "combo",
+                    "values": [
+                        ["eventinformation", "eventinformation"],
+                        ["notification", "notification"],
+                        ["nppinformation", "nppinformation"],
+                        ["weatherinformation", "weatherinformation"],
+                        ["trajectory", "trajectory"],
+                        ["nppprojection", "nppprojection"],
+                        ["rodosprojection", "rodosprojection"],
+                        ["otherprojection", "otherprojection"],
+                        ["gammadoserate", "gammadoserate"],
+                        ["airactivity", "airactivity"],
+                        ["groundcontamination", "groundcontamination"],
+                        ["mresult_feed", "mresult_feed"],
+                        ["mresult_food", "mresult_food"],
+                        ["mresult_water", "mresult_water"],
+                        ["situationreport", "situationreport"],
+                        ["instructions", "instructions"],
+                        ["protectiveactions", "protectiveactions"],
+                        ["mediarelease", "mediarelease"]
+                    ],
+                    "defaultValue": "eventinformation",
+                    "allowBlank": true
+                },{
+                    "name": "IsElan",
+                    "label": "Is Elan",
+                    "type": "combo",
+                    "values": [
+                        ["true", "ja"],
+                        ["false", "nein"]
+                    ],
+                    "defaultValue": "true",
+                    "allowBlank": false
+                },{
+                    "name": "IsDoksys",
+                    "label": "Is Doksys",
+                    "type": "combo",
+                    "values": [
+                        ["true", "ja"],
+                        ["false", "nein"]
+                    ],
+                    "defaultValue": "false",
+                    "allowBlank": false
+                },{
+                    "name": "IsRodos",
+                    "label": "Is Rodos",
+                    "type": "combo",
+                    "values": [
+                        ["true", "ja"],
+                        ["false", "nein"]
+                    ],
+                    "defaultValue": "false",
+                    "allowBlank": false
+                },{
+                    "name": "IsRei",
+                    "label": "Is Rei",
+                    "type": "combo",
+                    "values": [
+                        ["true", "ja"],
+                        ["false", "nein"]
+                    ],
+                    "defaultValue": "false",
+                    "allowBlank": false
+                },{
+                    "name": "NetworkOperator",
+                    "label": "Messnetz",
+                    "type": "combo",
+                    "values": [
+                        "U - BfS (ABI)",
+                        "W - DWD",
+                        "X - ausländ. Messnetze",
+                        "Z - BfS (ODL)"
+                    ],
+                    "defaultValue": "U - BfS (ABI)",
+                    "allowBlank": true
+                },{
+                    "name": "SampleTypeId",
+                    "label": "Umweltbereich ID",
+                    "type": "combo",
+                    "values": [
+                        ["L5", "L5"],
+                        ["L51", "L51"],
+                        ["L52", "L52"],
+                        ["L53", "L53"]
+                    ],
+                    "defaultValue": "L5",
+                    "allowBlank": true
+                },{
+                    "name": "SampleType",
+                    "label": "Umweltbereich",
+                    "type": "combo",
+                    "values": [
+                        ["L5 - Niederschlag", "L5 - Niederschlag"],
+                        ["L51 - Niederschlag (Aktivitätskonzentration)",
+                        "L51 - Niederschlag (Aktivitätskonzentration)"],
+                        ["L52 - nasse Niederschläge (Deposition)",
+                        "L52 - nasse Niederschläge (Deposition)"],
+                        ["L53 - trockene Niederschläge (Deposition)",
+                        "L53 - trockene Niederschläge (Deposition)"]
+                    ],
+                    "defaultValue": "L5 - Niederschlag",
+                    "allowBlank": true
+                },{
+                    "name": "Dom",
+                    "label": "Messmethode",
+                    "type": "combo",
+                    "values": [
+                        ["Gamma-Spektrometrie", "Gamma-Spektrometrie"],
+                        ["Gesamt-Beta / Gesamt-Alpha",
+                        "Gesamt-Beta / Gesamt-Alpha"]
+                    ],
+                    "defaultValue": "Gamma-Spektrometrie",
+                    "allowBlank": true
+                },{
+                    "name": "LegalBase",
+                    "label": "Gesetzliche Grundlage",
+                    "type": "combo",
+                    "values": [
+                        ["§2", "§2"],
+                        ["§3", "§3"],
+                        ["§7", "§7"],
+                        ["DENSE", "DENSE"],
+                        ["Europa", "Europa"],
+                        ["KFÜ", "KFÜ"],
+                        ["Land", "Land"],
+                        ["REI-E", "REI-E"],
+                        ["REI-I", "REI-I"],
+                        ["SPARSE", "SPARSE"]
+                    ],
+                    "defaultValue": "Europa",
+                    "allowBlank": false
+                },{
+                    "name": "MeasuringProgram",
+                    "label": "Messprogramm",
+                    "type": "combo",
+                    "values": [
+                        ["Intensivmessprogramm", "Intensivmessprogramm"],
+                        ["REI", "REI"],
+                        ["Routinemessprogramm", "Routinemessprogramm"],
+                        ["Routinemeßprogramm", "Routinemeßprogramm"],
+                        ["Spontanproben Bund", "Spontanproben Bund"]
+                    ],
+                    "defaultValue": "Intensivmessprogramm",
+                    "allowBlank": false
+                },{
+                    "name": "Status",
+                    "label": "Status",
+                    "type": "combo",
+                    "values": [
+                        ["0 - nicht vergeben", "0 - nicht vergeben"],
+                        ["1 - plausibel", "1 - plausibel"],
+                        ["2 - nicht repräsentativ", "2 - nicht repräsentativ"],
+                        ["3 - nicht plausibel", "3 - nicht plausibel"],
+                        ["4 - Rückfrage abgesetzt", "4 - Rückfrage abgesetzt"],
+                        ["6 - Rücklauf bearbeitet", "6 - Rücklauf bearbeitet"]
+                    ],
+                    "defaultValue": "0 - nicht vergeben",
+                    "allowBlank": false
+                },{
+                    "name": "SamplingBegin",
+                    "label": "Probeentnahme Beginn",
+                    "type": "datetime"
+                },{
+                    "name": "SamplingEnd",
+                    "label": "Probeentnahme Ende",
+                    "type": "datetime"
+                }]
+            }
+        ]
+    },
+    "success": true
+}

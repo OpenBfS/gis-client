@@ -2,10 +2,28 @@
     "Koala.util.Layer": {
         "statics": {
             "txtUntil": "en:bis",
-            "txtFilter": "en:Filter",
             "titleAddLayer": "en:Layer",
             "titleAddLayerFilter": "en:Layerfilter",
-            "textUnknownLayer": "en:Unbekannt"
+            "textUnknownLayer": "en:Unbekannt",
+            "dspSignEq": "en: = ",
+            "dspSignNotEq": "en: ≠ ",
+            "dspSignLtEq": "en: ≤ ",
+            "dspSignGtEq": "en: ≥ ",
+            "dspSignLt": "en: < ",
+            "dspSignGt": "en: > ",
+            "dspSignIn": "en:entweder ",
+            "dspSignInJoiner": "en:, ",
+            "dspSignInLastJoiner": "en: oder ",
+            "dspSignNotInJoiner": "en:,",
+            "dspSignNotIn": "en:weder ",
+            "dspSignNotInLastJoiner": "en: noch "
+        }
+    },
+    "Koala.util.Filter": {
+        "statics": {
+            "warnMsgEndBeforeStart": "en:Startwert muss vor Endwert liegen.",
+            "warnMsgExceedsMaxDuration": "en:Startwert und Endwert liegen zu weit auseinander.",
+            "msgNotBetweenMinMax": "en:Datum/Uhrzeit liegen nicht im erlaubten Wertebereich"
         }
     },
     "Koala.util.String": {
@@ -44,15 +62,6 @@
             }
         }
     },
-    "Koala.view.form.LayerFilter": {
-        "config": {
-            "format": "m/d/Y g:i A"
-        },
-        "statics": {
-            "warnMsgEndBeforeStart": "en:Startwert muss vor Endwert liegen.",
-            "warnMsgExceedsMaxDuration": "en:Startwert und Endwert liegen zu weit auseinander.",
-        }
-    },
     "Koala.view.form.field.SearchCombo": {
         "config": {
             "data": {
@@ -74,20 +83,27 @@
             "printLegendsFieldSetTitle": "en:Legenden drucken",
             "unexpectedResponse": "en:Der Druck lieferte eine unerwartete Antwort.",
             "printButtonPrefix": "en:Dokument",
-            "downloadButtonSuffix": "en:herunterladen"
+            "downloadButtonSuffix": "en:herunterladen",
+            "downloadOngoingMiddleText": "en: wird vorbereitet",
+            "warnPrintTimedOutTitle": "en:Druckfehler",
+            "warnPrintTimedOutText": "en:Die Druckerzeugung hat das erlaubte Zeitlimit überschritten."
         }
     },
     "Koala.view.grid.MetadataSearch": {
         "config": {
             "data": {
-                "metadataSearchTitle": "en:Daten und Dienste des BfS"
+                "metadataSearchTitle": "en:Daten und Dienste des BfS",
+                "searchInProgressText": "en:Suche läuft…",
+                "noRecordsFoundText": "en:Keine Datensätze gefunden"
             }
         }
     },
     "Koala.view.grid.SpatialSearch": {
         "config": {
             "data": {
-                "spatialSearchTitle": "en:Räumliche Suche"
+                "spatialSearchTitle": "en:Räumliche Suche",
+                "searchInProgressText": "en:Suche läuft…",
+                "noRecordsFoundText": "en:Keine Datensätze gefunden"
             }
         }
     },
@@ -121,12 +137,30 @@
             }
         }
     },
+    "Koala.view.panel.RoutingLegendTree": {
+        "config": {
+            "data": {
+                "btnTxtCollapseAll": "en:",
+                "btnTooltipCollapseAll": "en:Alle Legenden einklappen.",
+                "btnTxtExpandAll": "en:",
+                "btnTooltipExpandAll": "en:Alle Legenden ausklappen.",
+                "btnTxtToggleAll": "en:",
+                "btnTooltipToggleAll": "en:Legendensichtbarkeit umkehren.",
+                "btnTxtRemoveAllLayers": "en:",
+                "btnTooltipRemoveAllLayers": "en:Alle Layer entfernen",
+                "confirmTitleRemoveAllLayersAll": "en:Alle Layer entfernen",
+                "confirmMsgRemoveAllLayers": "en:Sind sie sicher, dass sie alle Layer (sofern möglich) entfernen wollen?"
+            }
+        }
+    },
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {
                 "title": "en:Auswahl",
                 "tooltip": "en:LayerSet wechseln",
-                "tooltext": "en:Thema wechseln"
+                "tooltext": "en:Thema wechseln",
+                "btnTextResetThemeTreeFiltering": "en:Alle Layer",
+                "btnTooltipResetThemeTreeFiltering": "en:Hebt eine etwaige Filterung der verfügbaren Themen auf."
             }
         }
     },
@@ -217,6 +251,78 @@
             "data": {
                 "closedMenuTitle": "en:Menu schließen",
                 "openedMenuTitle": "en:Menu anzeigen"
+            }
+        }
+    },
+
+
+    "Koala.view.panel.MobileLegend": {
+        "config": {
+            "data": {
+                "title": "en:Legende",
+                "maxLayersMsgBoxTitle": "en:Hinweis",
+                "maxLayersMsgBoxMessage": "en:Nur {0} parallele WMS Layer erlaubt. Bitte deaktivieren Sie mindestens einen Layer bevor Sie fortfahren können.",
+                "maxLayersMsgBoxBtnText": "en:Ok",
+                "removeLayerMsgBoxTitle": "en:Info",
+                "removeLayerMsgBoxMessage": "en:Layer <b>{0}</b> aus Karte entfernen?",
+                "removeLayerMsgBoxYesBtnText": "en:Ja",
+                "removeLayerMsgBoxNoBtnText": "en:Nein"
+            }
+        }
+    },
+    "Koala.view.panel.MobileMenu": {
+        "config": {
+            "data": {
+                "menuTitle": "en:Menu",
+                "searchFieldPlaceHolderText": "en:Suche in Daten und Diensten",
+                "imprintButtonText": "en:Hilfe / Impressum",
+                "settingsButtonText": "en:Einstellungen",
+                "moreLayersButtonText": "en:Weitere Themen",
+                "addLayerButtonText": "en:Externen Layer hinzufügen"
+            }
+        }
+    },
+    "Koala.view.panel.LayerSetTree": {
+        "config": {
+            "data": {
+                "panelTitleText": "en:Themenwahl"
+            }
+        }
+    },
+    "Koala.view.panel.Settings": {
+        "config": {
+            "data": {
+                "title": "en:Einstellungen",
+                "timereferenceLabel": "en:Zeitbezug",
+                "utcLabel": "en:UTC",
+                "localLabel": "en:Lokal",
+                "languageSelectComboLabel": "en:Sprache"
+            }
+        }
+    },
+    "Koala.view.form.LayerFilter": {
+        "config": {
+            "data": {
+                "startLabel": "en:Start",
+                "endLabel": "en:Ende",
+                "timestampLabel": "en:Zeitpunkt",
+                "buttonText": "en:Ausgewählten Layer hinzufügen",
+                "buttonTextNoFilter": "en:Ausgewählten Layer hinzufügen",
+                "valueFilter": "en:Wertefilter",
+                "timeRangeFilter": "en:Zeitraumfilter",
+                "pointInTimeFilter": "en:Zeitpunktfilter"
+
+            }
+        }
+    },
+    "Koala.view.panel.MobileImprint": {
+        "config": {
+            "data": {
+                "title": "en:Hilfe / Impressum",
+                "helpTitle": "en:Hilfe",
+                "helpHtml": "en:Lorem ipsum dolor sit amet, et usu fugit virtute torquatos, ea veri nominavi mea, at has saepe tamquam sententiae. Habeo pertinax consequat ea usu. Ne pri mollis expetendis, nec et praesent deseruisse adipiscing, solet impetus euripidis id duo. Partem audiam noluisse vel ei, cu harum quidam constituto has, ridens omittam eu duo. Facilis fuisset est no, sit esse quas ut. Eos et ludus prodesset, modo sapientem eos te. Vis tritani eripuit et, eu ius aperiam delenit. Ei vis agam lorem. No bonorum recteque qui, has in rebum vidisse. Eam suscipit sapientem ne, an ubique apeirian constituto eum.",
+                "imprintTitle": "en:Impressum",
+                "imprintHtml": "en:Lorem ipsum dolor sit amet, et usu fugit virtute torquatos, ea veri nominavi mea, at has saepe tamquam sententiae. Habeo pertinax consequat ea usu. Ne pri mollis expetendis, nec et praesent deseruisse adipiscing, solet impetus euripidis id duo. Partem audiam noluisse vel ei, cu harum quidam constituto has, ridens omittam eu duo. Facilis fuisset est no, sit esse quas ut. Eos et ludus prodesset, modo sapientem eos te. Vis tritani eripuit et, eu ius aperiam delenit. Ei vis agam lorem. No bonorum recteque qui, has in rebum vidisse. Eam suscipit sapientem ne, an ubique apeirian constituto eum.",
             }
         }
     },

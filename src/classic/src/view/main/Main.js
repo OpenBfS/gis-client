@@ -39,6 +39,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.chart.TimeSeries',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
+        'Koala.view.panel.LayerSetChooser',
         'Koala.view.window.Print'
     ],
 
@@ -79,6 +80,22 @@ Ext.define('Koala.view.main.Main', {
         },
         listeners: {
             afterrender: function(){
+
+                if(!location.hash){
+                    Ext.create('Ext.window.Window', {
+                        title: 'Layer Profilwahl',
+                        modal: true,
+                        layout: 'fit',
+                        minWidth: 250,
+                        minHeight: 300,
+                        items: [{
+                            xtype: 'k-panel-layersetchooser',
+                            showLayerProfiles: true,
+                            header: false,
+                            layout: 'fit'
+                        }]
+                    }).show();
+                }
                 // This needs to happen in an afterrender handler, as
                 // otherwise the BasiGX texts would count…
                 var toggleOverviewBtnSel = 'button[' +
@@ -125,16 +142,36 @@ Ext.define('Koala.view.main.Main', {
                     width: 100
                 },
                 items: [{
-                    xtype: 'basigx-button-addwms',
+                    xtype: 'button',
                     glyph: 'xf0ac@FontAwesome',
-                    listeners: {
-                        // This needs to happen in an afterrender handler, as
-                        // otherwise the BasiGX texts would count…
-                        afterrender: function(btn){
-                            btn.setBind({
-                                text: '{addWmsButtonText}',
-                                tooltip: '{addWmsButtonTooltip}'
-                            });
+                    bind: {
+                        text: '{addWmsButtonText}',
+                        tooltip: '{addWmsButtonTooltip}'
+                    },
+                    handler: function(){
+                        var win = Ext.ComponentQuery.query(
+                            '[name=add-wms-window]')[0];
+                        if(!win){
+                            Ext.create('Ext.window.Window', {
+                                name: 'add-wms-window',
+                                title: 'WMS hinzufügen',
+                                width: 500,
+                                height: 450,
+                                layout: 'fit',
+                                items: [{
+                                    xtype: 'basigx-form-addwms',
+                                    hasCheckAllBtn: true,
+                                    hasUncheckAllBtn: true,
+                                    includeSubLayer: true,
+                                    listeners: {
+                                        beforewmsadd: function(olLayer){
+                                            olLayer.set('allowRemoval', true);
+                                        }
+                                    }
+                                }]
+                            }).show();
+                        } else {
+                            BasiGX.util.Animate.shake(win);
                         }
                     }
                 }, {
@@ -175,7 +212,7 @@ Ext.define('Koala.view.main.Main', {
             maxWidth: 700,
             listeners: {
                 afterrender: {
-                    fn: 'resizeLegendTreeToMaxHeight',
+                    fn: 'resizeAndRepositionLegendTree',
                     single: true,
                     delay: 100
                 },
@@ -201,7 +238,7 @@ Ext.define('Koala.view.main.Main', {
 
         me.header.additionalItems = me.getAdditionalHeaderItems();
 
-        this.callParent([config]);
+        me.callParent([config]);
     },
 
     /**

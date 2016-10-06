@@ -29,11 +29,16 @@ Ext.define('Koala.view.window.BarChartController', {
         mapComp.removeAllHoverFeatures();
     },
 
-    createBarChart: function(olLayer, chartId) {
+    createBarChart: function(olLayer, olFeat, chartId) {
         var props = olLayer.get('barChartProperties');
         var categoryCount = props.chartFieldSequence.split(",").length;
         var chartWidth = 200 + categoryCount * 30;
+        var titleTpl = 'titleTpl' in props ? props.titleTpl : '';
+        var title = Koala.util.String.replaceTemplateStrings(titleTpl, olLayer);
+        title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
+
         var chart = {
+            title: Ext.isEmpty(title) ? undefined : title,
             xtype: 'k-chart-bar',
             name: chartId,
             layer: olLayer,
@@ -59,6 +64,15 @@ Ext.define('Koala.view.window.BarChartController', {
         controller.prepareBarSeriesLoad();
     },
 
+    updateBarChartWin: function(view, lastChart, layerTitle) {
+        if (layerTitle) {
+            view.setBind({title: layerTitle});
+        }
+        if (lastChart){
+            view.setPosition(lastChart.getX() + 20, lastChart.getY() + 20);
+        }
+    },
+
     isLayerChartRendered: function(chartId) {
         var existingCharts = Ext.ComponentQuery.query('k-chart-bar');
         var isRendered = false;
@@ -77,11 +91,15 @@ Ext.define('Koala.view.window.BarChartController', {
         var me = this;
         var view = me.getView();
         var layerChartRendered = me.isLayerChartRendered(uniqueId);
+        //used for offsetting following windows
+        var existingCharts = Ext.ComponentQuery.query('k-chart-bar');
+        var lastChart = existingCharts[existingCharts.length - 1];
 
         if (!layerChartRendered) {
-            view.add(me.createBarChart(olLayer, uniqueId));
+            view.add(me.createBarChart(olLayer, olFeat, uniqueId));
             me.updateBarChartStore(olFeat, uniqueId);
             view.show();
+            me.updateBarChartWin(view, lastChart, olLayer.qtitle);
         } else {
             // close the newly opened, empty window
             view.destroy();

@@ -59,6 +59,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
     },
 
     listeners:{
+        show: 'onTimeseriesShow',
         close: 'onTimeseriesClose'
     },
 
@@ -151,6 +152,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     flex: 1
                 }, {
                     xtype: 'button',
+                    name: 'btn-set-filter',
                     bind: {
                         text: '{setFilterBtnText}'
                     },
@@ -158,6 +160,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     margin: '0 3px 0 0'
                 }, {
                     xtype: 'button',
+                    name: 'btn-reset-filter',
                     bind: {
                         text: '{resetFilterBtnText}'
                     },

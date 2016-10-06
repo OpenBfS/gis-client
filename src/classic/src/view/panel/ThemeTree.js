@@ -61,11 +61,40 @@ Ext.define("Koala.view.panel.ThemeTree", {
         handler: 'toggleLayerSetView'
     }],
 
+    fbar: [
+        {
+            type: 'button',
+            name: 'resetThemeTree',
+            bind: {
+                text: '{btnTextResetThemeTreeFiltering}',
+                tooltip: '{btnTooltipResetThemeTreeFiltering}'
+            },
+            handler: 'resetThemeTreeFiltering',
+            disabled: true
+        }
+    ],
+
+    listeners: {
+        select: 'setupShowFilterWinCheck',
+        itemdblclick: 'addLayerWithDefaultFilters'
+    },
+
     initComponent: function(){
+
+        // try to load layerset from appContext
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+        var path = [
+            'data',
+            'merge',
+            'urls',
+            'layerset'
+        ];
+        var layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerset.json');
+
         var store = Ext.create('Ext.data.TreeStore', {
             proxy: {
                 type: 'ajax',
-                url: 'classic/resources/layerset.json',
+                url: layerSetUrl,
                 reader: {
                     type: 'json'
                 }

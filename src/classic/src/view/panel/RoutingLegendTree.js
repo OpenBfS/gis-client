@@ -40,7 +40,11 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         selModel: {
             allowDeselect: true,
             mode: "SINGLE"
-        }
+        },
+        hasCollapseAllBtn: true,
+        hasExpandAllBtn: true,
+        hasToggleAllBtn: false,
+        hasRemoveAllLayersBtn: true
     },
 
     hasRoutingListeners: false,
@@ -52,6 +56,62 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     statics: {
+        /**
+         * This object holds the names for certain model fields we use to
+         * communicate the loading status of certain layers. The fields will
+         * be set on the `GeoExt.data.model.LayerTreeNode`-instances.
+         */
+        FIELDAMES_LOAD_INDICATION: {
+            /**
+             * Whether we have already bound listeners to this LayerTreeNode.
+             * Needed so we don't bind multiple times and to see if there is
+             * anythin we need to remove once the record is removed from the
+             * store.
+             */
+            IS_BOUND: '__load_indication_bound',
+            /**
+             * An array of Keys of the event handlers we need to remove added
+             * handlers when they are no longer needed.
+             */
+            LISTENER_KEYS: '__load_indication_keys',
+            /**
+             * The name of the field we set to true once loading starts; and to
+             * false, once we are done loading. Already provided by ExtJS.
+             */
+            IS_LOADING: 'loading'
+        },
+
+        /**
+         * Returns the prefix which should be used for the source when one wants
+         * to bind to the load events.
+         *
+         * @param {ol.source.Source} source The source to determine the
+         *   loadevent prefix for.
+         * @return {String} The prefix for the load event; can be either
+         *   `'tile'`, `'image'` (OpenLayers) or `'vector'` (our own).
+         */
+        getLoadEventPrefixBySource: function(source) {
+            var prefix;
+            if (!source) {
+                return prefix;
+            }
+
+            if (source instanceof ol.source.Tile) {
+                // E.g. TileWMS, XYZ, …
+                prefix = 'tile';
+            } else if (source instanceof ol.source.Image) {
+                // E.g. ImageWMS, …
+                prefix = 'image';
+            } else if (source instanceof ol.source.Vector) {
+                // These events are fired by ourself, not from OpenLayers. See the
+                // method Koala.util.Layer#getInternalSourceConfig where we setup a
+                // `loader` function with appropriate callbacks dispatching the
+                // vectorloadstart / … events.
+                prefix = 'vector';
+            }
+            return prefix;
+        },
+
         findByProp: function(arr, key, val){
             var item = null;
             Ext.each(arr, function(obj){
@@ -95,15 +155,15 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             }
         },
 
-        getFilterText: function(record){
-            var layer = record.getOlLayer();
-            var LayerUtil = Koala.util.Layer;
-
-            if (!layer || !layer.metadata){
-                return '';
-            }
-            return LayerUtil.getFiltersTextFromMetadata(layer.metadata);
-        },
+        // getFilterText: function(record){
+        //     var layer = record.getOlLayer();
+        //     var LayerUtil = Koala.util.Layer;
+        //
+        //     if (!layer || !layer.metadata){
+        //         return '';
+        //     }
+        //     return LayerUtil.getFiltersTextFromMetadata(layer.metadata);
+        // },
 
         shortInfoHandler: function(btn){
             var record = btn.layerRec;
@@ -228,15 +288,15 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 }
             }]
         },
-        {
-            xtype: 'component',
-            name: 'filtertext',
-            layout: 'hbox',
-            defaults: {
-                margin: '0 5px 0 0'
-            },
-            html: '{{Koala.view.panel.RoutingLegendTree.getFilterText(record)}}'
-        },
+        // {
+        //     xtype: 'component',
+        //     name: 'filtertext',
+        //     layout: 'hbox',
+        //     defaults: {
+        //         margin: '0 5px 0 0'
+        //     },
+        //     html: '{{Koala.view.panel.RoutingLegendTree.getFilterText(record)}}'
+        // },
         {
             xtype: 'image',
             name: '{{record.getOlLayer().get("routeId") + "-legendImg"}}',
@@ -252,6 +312,19 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
     itemExpandedKey: 'koala-rowbody-expanded',
 
+    viewConfig: {
+        // TODO verbatim copied from LegendTree from BasiGX, make configurable
+        plugins: {
+            ptype: 'treeviewdragdrop'
+        },
+        getRowClass: function(record){
+            return this.up().getCssForRow(record);
+        },
+        listeners: {
+            drop: 'onLegendItemDrop'
+        }
+    },
+
     /**
      * Initialize the component.
      */
@@ -260,6 +333,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         // call parent
         me.callParent();
+
+        me.checkAddCollapseExpandButtons();
 
         // See the comment above the constructor why we need this.
         if (me.initiallyCollapsed){
@@ -273,12 +348,136 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         me.plugins[0].hideExpandColumn = false;
 
         me.bindUpdateHandlers();
+        me.bindLoadIndicationHandlers();
+    },
+
+    /**
+     * Checks whether we shall add any of the collapse / expand / toggle buttons
+     * and also adds these as configured to the view in a footer toolbar.
+     */
+    checkAddCollapseExpandButtons: function() {
+        var me = this;
+        var hasCollapseAllBtn = me.getHasCollapseAllBtn();
+        var hasToggleAllBtn = me.getHasToggleAllBtn();
+        var hasExpandAllBtn = me.getHasExpandAllBtn();
+        var hasRemoveAllLayersBtn = me.getHasRemoveAllLayersBtn();
+        if (!hasCollapseAllBtn && !hasToggleAllBtn && !hasExpandAllBtn){
+            return;
+        }
+
+        var items = [];
+
+        if (hasCollapseAllBtn) {
+            items.push(me.getModeBtnConfig('collapse'));
+        }
+        if (hasToggleAllBtn) {
+            items.push(me.getModeBtnConfig('toggle'));
+        }
+        if (hasExpandAllBtn) {
+            items.push(me.getModeBtnConfig('expand'));
+        }
+        if (hasRemoveAllLayersBtn) {
+            items.push(me.getModeBtnConfig('remove-layers'));
+        }
+
+        var fbar = {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            ui: 'footer',
+            items: items
+        };
+        me.addDocked(fbar);
+    },
+
+    /**
+     * Returns a button config for the collapse / expand / toggle button.
+     *
+     * @param {String} mode The mode to get a config for; either `toggle`,
+     *     `expand` or `collapse`.
+     * @return {Object} The button config or `undefined` in case of an illegal
+     *     mode.
+     * @protected
+     */
+    getModeBtnConfig: function(mode) {
+        var me = this;
+        var cfg = {
+            xtype: 'button',
+            scope: me
+        };
+        switch(mode) {
+            case 'collapse':
+                cfg.glyph = 'xf147@FontAwesome';
+                cfg.bind = {
+                    text: '{btnTxtCollapseAll}',
+                    tooltip: '{btnTooltipCollapseAll}'
+                };
+                cfg.handler = me.collapseAllBodies;
+                break;
+            case 'toggle':
+                cfg.glyph = 'xf074@FontAwesome';
+                cfg.bind = {
+                    text: '{btnTxtToggleAll}',
+                    tooltip: '{btnTooltipToogleAll}'
+                };
+                cfg.handler = me.toggleAllBodies;
+                break;
+            case 'expand':
+                cfg.glyph = 'xf196@FontAwesome';
+                cfg.bind = {
+                    text: '{btnTxtExpandAll}',
+                    tooltip: '{btnTooltipExpandAll}'
+                };
+                cfg.handler = me.expandAllBodies;
+                break;
+            case 'remove-layers':
+                cfg.glyph = 'xf1f8@FontAwesome';
+                cfg.bind = {
+                    text: '{btnTxtRemoveAllLayers}',
+                    tooltip: '{btnTooltipRemoveAllLayers}'
+                };
+                cfg.handler = me.removeAllLayers;
+                break;
+            default:
+                Ext.log.warn('Unexpected mode for btn config ' + mode);
+                return;
+        }
+        return cfg;
+    },
+
+    /**
+     * Removes all activated layers with 'allowRemoval=true' from the map.
+     */
+    removeAllLayers: function(){
+        var viewModel = this.getViewModel();
+        var store = this.getStore();
+        var map = Ext.ComponentQuery.query('basigx-component-map')[0]
+            .getMap();
+        var layersToRemove = [];
+
+        Ext.Msg.confirm(
+            viewModel.get('confirmTitleRemoveAllLayersAll'),
+            viewModel.get('confirmMsgRemoveAllLayers'),
+            function(btnId){
+                if(btnId === "yes"){
+                    store.each(function(rec){
+                        var layer = rec.getOlLayer();
+                        if(layer.get("allowRemoval")){
+                            layersToRemove.push(layer);
+                        }
+                    });
+
+                    Ext.each(layersToRemove, function(layer){
+                        map.removeLayer(layer);
+                    });
+                }
+        });
+
     },
 
     /**
      * Called at the end of the initComponent-sequence, this methods binds some
-     * some evenet handlers on verious components to react on a state change
-     * there. See #unbindUpdateHandlers for the unbind logic bound early in the
+     * event handlers on various components to react on a state change there.
+     * See #unbindUpdateHandlers for the unbind logic bound early in the
      * destroy sequence.
      *
      * @private
@@ -295,7 +494,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         // Ensure a previous selection is kept after datachange
         treeStore.on('datachanged', me.layerDataChanged, me);
         // store data on collapse/expand, and use it on drop to keep the
-        // expoanded collapsed state after drag and drop
+        // expanded / collapsed state after drag and drop
         treeView.on({
             collapsebody: me.onCollapseBody,
             expandbody: me.onExpandBody,
@@ -309,7 +508,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
     /**
      * Unbind the handlers that were bound in #bindUpdateHandlers during the
-     * initComponent sequence.
+     * `initComponent` sequence.
      *
      * @private
      */
@@ -320,6 +519,14 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var treeView = me.getView();
         var treeStore = me.getStore();
 
+        // unbind repaintLayerFilterIndication from the individually added
+        // layers
+        treeStore.each(function(layerNode) {
+            var ns = Koala.util.Layer;
+            var layer = layerNode.getOlLayer();
+            layer.un('change:visible', ns.repaintLayerFilterIndication, ns);
+        });
+
         // Unregister moveend to update legendUrls
         map.un('moveend', me.updateLegendsWithScale, me);
         treeStore.un('datachanged', me.layerDataChanged, me);
@@ -329,6 +536,175 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             drop: me.layerDropped,
             scope: me
         });
+    },
+
+    /**
+     * Called at the end of the initComponent-sequence, this methods binds some
+     * event handlers, that set the `loading` field of the layer records to
+     * `true` while tiles / images are loading via OpenLayers.
+     *
+     * @private
+     */
+    bindLoadIndicationHandlers: function() {
+        var me = this;
+        var store = me.getStore();
+        // First the initial state
+        store.each(me.bindLoadIndicationToRecord, me);
+        store.on({
+            add: me.handleLayerStoreAdd,
+            remove: me.handleLayerStoreRemove,
+            scope: me
+        });
+        me.on('beforedestroy', me.unbindLoadIndicationHandlers, me, {
+            single: true
+        });
+    },
+
+    /**
+     * Unbind the handlers that were bound in #bindLoadIndicationHandlers during
+     * the `initComponent` sequence.
+     *
+     * @private
+     */
+    unbindLoadIndicationHandlers: function(){
+        var me = this;
+        var store = me.getStore();
+        store.each(me.unbindLoadIndicationFromRecord, me);
+        store.un({
+            add: me.handleLayerStoreAdd,
+            remove: me.handleLayerStoreRemove,
+            scope: me
+        });
+    },
+
+    /**
+     * Bound as handler for the `add`-event of the store, this method binds
+     * listeners to all added records to show whether they are loading. See
+     * also the method #bindLoadIndicationToRecord.
+     *
+     * @param {GeoExt.data.store.LayersTree} store The store to which the
+     *   records have been added.
+     * @param {Array<GeoExt.data.model.LayerTreeNode>} recs The layer records
+     *   which were added.
+     * @private
+     */
+    handleLayerStoreAdd: function(store, recs) {
+        Ext.each(recs, this.bindLoadIndicationToRecord, this);
+    },
+
+    /**
+     * Bound as handler for the `remove`-event of the store, this method unbinds
+     * listeners that were added via #bindLoadIndicationToRecord. See also the
+     * method #unbindLoadIndicationFromRecord.
+     *
+     * @param {GeoExt.data.store.LayersTree} store The store from which the
+     *   records have been removed.
+     * @param {Array<GeoExt.data.model.LayerTreeNode>} recs The layer records
+     *   which were removed.
+     * @private
+     */
+    handleLayerStoreRemove: function(store, recs) {
+        Ext.each(recs, this.unbindLoadIndicationFromRecord, this);
+    },
+
+    /**
+     * Given a layer-record, this method will bind listeners (only once), on the
+     * layers' source to update the field `loading` of the layer-record. In case
+     * of an load-error, the `visible` field of the layer will be set to false.
+     *
+     * @param {GeoExt.data.model.LayerTreeNode} rec The layer record for which
+     *   we want to setup load-indication.
+     * @private
+     */
+    bindLoadIndicationToRecord: function(rec) {
+        var me = this;
+        var staticMe = me.self;
+        var fieldNames = staticMe.FIELDAMES_LOAD_INDICATION;
+        var fieldnameLoadIndicationBound = fieldNames.IS_BOUND;
+        var fieldnameLoadIndicationKeys = fieldNames.LISTENER_KEYS;
+        var fieldnameLoadIndicationLoading = fieldNames.IS_LOADING;
+        if (rec.get(fieldnameLoadIndicationBound) === true) {
+            // already bound for this record, exiting…
+            return;
+        }
+        var layer = rec.getOlLayer();
+        var source = layer && layer.getSource();
+
+        if (!source) {
+            // Rather unlikely but who knows…
+            Ext.log.warn('Unable to determine a source for load indication');
+            return;
+        }
+
+        var evtPrefix = staticMe.getLoadEventPrefixBySource(source);
+
+        if (!evtPrefix) {
+            // Rather unlikely but who knows…
+            Ext.log.warn('Unable to determine event for load indication');
+            return;
+        }
+
+        // These are the plain handlers that will work on both the layer record
+        // and on the layer itself.
+        var loadStartFunc = function() {
+            rec.set(fieldnameLoadIndicationLoading, true);
+            var row = Ext.get(me.getView().getRowByRecord(rec));
+            row.removeCls('k-loading-failed');
+            me.layerDropped(); // restores collapsed/expanded state
+        };
+        var loadEndFunc = function() {
+            rec.set(fieldnameLoadIndicationLoading, false);
+            me.layerDropped(); // restores collapsed/expanded state
+        };
+        var loadErrorFunc = function() {
+            loadEndFunc();
+            layer.set('visible', false);
+            var row = Ext.get(me.getView().getRowByRecord(rec));
+            var task = new Ext.util.DelayedTask(function(){
+                row.addCls('k-loading-failed');
+            });
+            task.delay(150);
+        };
+
+        // buffer the loadEnd function, so that the loading indicator doesn't
+        // 'flicker'
+        var bufferedLoadEndFunc = Ext.Function.createBuffered(loadEndFunc, 250);
+
+        // Here comes the actual binding to the appropriate events:
+        var startKey = source.on(evtPrefix + 'loadstart', loadStartFunc);
+        var endKey = source.on(evtPrefix + 'loadend', bufferedLoadEndFunc);
+        var errorKey = source.on(evtPrefix + 'loaderror', loadErrorFunc);
+
+        // Set the internal flags that loading indication is bound and the
+        // associated event keys.
+        rec.set(fieldnameLoadIndicationBound, true);
+        rec.set(fieldnameLoadIndicationKeys, [startKey, endKey, errorKey]);
+    },
+
+    /**
+     * Given a layer-record, this method will unbind listeners that might have
+     * been bound by #bindLoadIndicationToRecord.
+     *
+     * @param {GeoExt.data.model.LayerTreeNode} rec The layer record for which
+     *   we want to destroy load-indication.
+     * @private
+     */
+    unbindLoadIndicationFromRecord: function(rec) {
+        var staticMe = Koala.view.panel.RoutingLegendTree;
+        var fieldNames = staticMe.FIELDAMES_LOAD_INDICATION;
+        var fieldnameLoadIndicationBound = fieldNames.IS_BOUND;
+        var fieldnameLoadIndicationKeys = fieldNames.LISTENER_KEYS;
+        if (rec.get(fieldnameLoadIndicationBound) !== true) {
+            return;
+        }
+        var listenerKeys = rec.get(fieldnameLoadIndicationKeys);
+        if (Ext.isArray(listenerKeys)) {
+            Ext.each(listenerKeys, function(listenerKey) {
+                ol.Observable.unByKey(listenerKey);
+            });
+        }
+        rec.set(fieldnameLoadIndicationBound, false);
+        rec.set(fieldnameLoadIndicationKeys, []);
     },
 
     /**
@@ -359,7 +735,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     layerDropped: function(){
         var me = this;
         var view = me.getView();
-        var rowExpanderPlugin = me.getPlugin();
+        var rowExpanderPlugin = me.getPlugin('rowexpanderwithcomponents');
         var rootNode = me.getRootNode();
         var itemExpandedKey = me.itemExpandedKey;
         rootNode.cascadeBy({
@@ -373,6 +749,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             },
             scope: me
         });
+        Koala.util.Layer.repaintLayerFilterIndication();
     },
 
     /**

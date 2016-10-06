@@ -38,6 +38,7 @@ Ext.define('Koala.store.SpatialSearch', {
     _lastRequest: null,
 
     constructor: function(config){
+        //TODO: this won't work if more than one map
         if(!this.map){
             this.map = BasiGX.view.component.Map.guess().getMap();
         }
@@ -55,7 +56,9 @@ Ext.define('Koala.store.SpatialSearch', {
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
         var urls = appContext.data.merge.urls;
+        var spatialsearchtypename = appContext.data.merge['spatialSearchTypeName'];
         this.proxy.url = urls['spatial-search'];
+        this.proxy.extraParams.typeName = spatialsearchtypename;
     },
 
     proxy: {
@@ -67,7 +70,7 @@ Ext.define('Koala.store.SpatialSearch', {
             version: '1.0.0',
             request: 'GetFeature',
             outputFormat: 'application/json',
-            typeName: 'BFS:verwaltung_4326_geozg_sort'
+            typeName: 'BFS:verwaltung_4326_geozg_sort' // set in the constructor but left as default for compatibility reasons
         },
         limitParam: 'maxFeatures',
         reader: {

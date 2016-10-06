@@ -22,30 +22,43 @@ Ext.define("Koala.view.form.Print", {
     xtype: "k-form-print",
 
     requires: [
+        'BasiGX.util.Animate',
+
         'GeoExt.data.MapfishPrintProvider',
         'GeoExt.data.serializer.ImageWMS',
         'GeoExt.data.serializer.TileWMS',
         'GeoExt.data.serializer.Vector',
+        'GeoExt.data.serializer.XYZ',
 
-        'Koala.view.form.IrixFieldSet'
+        'Koala.view.form.IrixFieldSet',
+        'Koala.util.Object'
     ],
 
     maxHeight: null,
     maxWidth: 800,
 
     config: {
+        // can be overriden via appContext.json: urls/irix-servlet
         irixUrl: '/irix-servlet',
-        serverUploadSuccessTitle: "",
-        serverUploadSuccess: "",
-        serverErrorTitle: "",
-        serverError: "",
-        disablePopupBlockerTitle: "",
-        disablePopupBlocker: "",
-        printLegendsFieldSetTitle: "",
-        unexpectedResponseTitle: "",
-        unexpectedResponse: "",
-        printButtonPrefix: "",
-        downloadButtonSuffix: ""
+        // can be overriden via appContext.json: print-timeout
+        timeoutMilliseconds: 60000,
+        // can be overriden via appContext.json: urls/print-transparent-img
+        transparentImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif',
+        transparentColor: 'rgba(0,0,0,0)',
+        serverUploadSuccessTitle: '',
+        serverUploadSuccess: '',
+        serverErrorTitle: '',
+        serverError: '',
+        disablePopupBlockerTitle: '',
+        disablePopupBlocker: '',
+        printLegendsFieldSetTitle: '',
+        unexpectedResponseTitle: '',
+        unexpectedResponse: '',
+        printButtonPrefix: '',
+        downloadButtonSuffix: '',
+        downloadOngoingMiddleText: '',
+        warnPrintTimedOutTitle: '',
+        warnPrintTimedOutText: ''
     },
 
     initComponent: function() {
@@ -58,8 +71,26 @@ Ext.define("Koala.view.form.Print", {
         me.setBind();
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
-        if(appContext && appContext.data.merge.urls["irix-servlet"]){
-            me.setIrixUrl(appContext.data.merge.urls["irix-servlet"]);
+        if(appContext){
+            var configuredIrixServlet = Koala.util.Object.getPathStrOr(
+                appContext, 'data/merge/urls/irix-servlet', false
+            );
+            var configuredPrintTimeout = Koala.util.Object.getPathStrOr(
+                appContext, 'data/merge/print-timeout', false
+            );
+            var configuredTransparentImageUrl = Koala.util.Object.getPathStrOr(
+                appContext, 'data/merge/urls/print-transparent-img', false
+            );
+
+            if (configuredIrixServlet) {
+                me.setIrixUrl(configuredIrixServlet);
+            }
+            if (configuredPrintTimeout) {
+                me.setTimeoutMilliseconds(configuredPrintTimeout);
+            }
+            if (configuredTransparentImageUrl) {
+                me.setTransparentImageUrl(configuredTransparentImageUrl);
+            }
         }
 
         var appCombo = me.down('combo[name=appCombo]');
@@ -67,6 +98,7 @@ Ext.define("Koala.view.form.Print", {
         appCombo.on('select', me.addIrixFieldset, me);
 
         me.on('beforeattributefieldsadd', me.onBeforeAttributeFieldsAdd);
+        me.on('attributefieldsadd', me.onAttributeFieldsAdd);
 
         me.setFixedCreatePrintBtnText();
     },
@@ -75,6 +107,55 @@ Ext.define("Koala.view.form.Print", {
         genericfieldsetadded: function() {
             this.addIrixCheckbox();
         }
+    },
+
+    /**
+     * @override Override to return an htmleditor instead of a textfield
+     */
+    getStringField: function (attributeRec) {
+        return {
+            xtype: 'textfield',
+            name: attributeRec.get('name'),
+            fieldLabel: attributeRec.get('name'),
+            value: attributeRec.get('default'),
+            allowBlank: true,
+            listeners: {
+                focus: this.onTextFieldFocus,
+                scope: this
+            }
+        };
+    },
+
+    /**
+     *
+     */
+    onTextFieldFocus: function(textfield){
+        Ext.create('Ext.window.Window', {
+            title: textfield.getFieldLabel() + ' HTML',
+            layout: 'fit',
+            modal: true,
+            autoShow: true,
+            correspondingTextfield: textfield,
+            items: [{
+                xtype: 'htmleditor',
+                value: textfield.getValue(),
+                enableFont: false, // TODO Remove if fonts are configured to
+                                   // match the server fonts,
+                enableAlignments: false
+            }],
+            bbar: ['->',
+            {
+                xtype: 'button',
+                text: 'OK',
+                name: 'setValueButton',
+                handler: function(button){
+                    var win = button.up('window');
+                    var editor = win.down('htmleditor');
+                    win.correspondingTextfield.setValue(editor.getValue());
+                    win.close();
+                }
+            }]
+        });
     },
 
     /**
@@ -98,14 +179,15 @@ Ext.define("Koala.view.form.Print", {
             me.updateLegendsFieldset(legendsFieldset);
         };
 
-        treePanel.getStore().on('update', listenerFunction);
-        treePanel.getStore().on('datachange', listenerFunction);
+        var treeStore = treePanel.getStore();
+        treeStore.on('update', listenerFunction);
+        treeStore.on('datachange', listenerFunction);
         legendsFieldset.on('destroy', function(){
-            treePanel.getStore().un('update', listenerFunction);
-            treePanel.getStore().un('datachange', listenerFunction);
+            treeStore.un('update', listenerFunction);
+            treeStore.un('datachange', listenerFunction);
         });
 
-        this.updateLegendsFieldset(legendsFieldset);
+        me.updateLegendsFieldset(legendsFieldset);
 
         return legendsFieldset;
     },
@@ -117,11 +199,14 @@ Ext.define("Koala.view.form.Print", {
      * @param ol.layer
      */
     legendLayerFilter: function(layer) {
-        var legendFieldset = Ext.ComponentQuery.
-                query('fieldset[name="legendsFieldset"]')[0];
-        var layerCheckbox = legendFieldset.
-            down('checkbox[name='+layer.get('name')+'_visible]');
+        var fsSelector = 'fieldset[name="legendsFieldset"]';
+        var cbSelector = 'checkbox[name='+layer.get('name')+'_visible]';
+        var legendFieldset = Ext.ComponentQuery.query(fsSelector)[0];
+        var layerCheckbox = legendFieldset.down(cbSelector);
 
+        if (layer.metadata){
+            layer.set('name', layer.metadata.printTitle + Koala.util.Layer.getLayerNameSuffix(layer.get('__suffix_id__')));
+        }
         if (layerCheckbox && !legendFieldset.getCollapsed() &&
                 layer.checked &&
                 layer.get('name') &&
@@ -141,30 +226,35 @@ Ext.define("Koala.view.form.Print", {
      * printable Layers from Map. Add those to the fieldset.
      */
     updateLegendsFieldset: function(legendsFieldset){
-        if(legendsFieldset){
-            legendsFieldset.removeAll();
-            var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
-            var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
-
-            var items = [];
-            Ext.each(layers, function(layer){
-                if(layer.get('visible') && layer.get('allowPrint')){
-                    items.push({
-                        xtype: 'checkbox',
-                        name: layer.get('name') + '_visible',
-                        layer: layer,
-                        fieldLabel: layer.get('name')
-                    });
-                }
-            });
-            if(items.length > 0){
-                legendsFieldset.show();
-            } else {
-                legendsFieldset.hide();
-            }
-
-            legendsFieldset.add(items);
+        if (!legendsFieldset) {
+            return;
         }
+        legendsFieldset.removeAll();
+        var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
+        var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
+
+        var items = [];
+        Ext.each(layers, function(layer){
+            if(layer.get('visible') && layer.get('allowPrint')){
+                if (layer.metadata){
+                    layer.set('name', layer.metadata.printTitle + Koala.util.Layer.getLayerNameSuffix(layer.get('__suffix_id__')));
+                }
+                items.push({
+                    xtype: 'checkbox',
+                    checked: true,
+                    name: layer.get('name') + '_visible',
+                    layer: layer,
+                    boxLabel: layer.get('name')
+                });
+            }
+        });
+        if(items.length > 0){
+            legendsFieldset.show();
+        } else {
+            legendsFieldset.hide();
+        }
+
+        legendsFieldset.add(items);
     },
 
     /**
@@ -194,8 +284,20 @@ Ext.define("Koala.view.form.Print", {
     },
 
     /**
+     * Validate all fields on creation so they are marked as red if invalid.
+     *
+     * If https://github.com/terrestris/BasiGX/pull/74 is merged all fields are
+     * allowed to be Blank. Set mandatory fields here if you need some.
+     */
+    onAttributeFieldsAdd: function (printForm, attributeFields, addedField) {
+        if(Ext.isFunction(addedField.validate)){
+            addedField.validate();
+        }
+    },
+
+    /**
      * Called in init component, this method removes the standard BasiGX binding
-     * of the createPrint and downloadPrint buttona, and configures them to use
+     * of the createPrint and downloadPrint buttons, and configures them to use
      * a static text.
      */
     setFixedCreatePrintBtnText: function() {
@@ -277,8 +379,8 @@ Ext.define("Koala.view.form.Print", {
             }
         }, this);
 
-        var fieldsets = view.
-                query('fieldset[name=attributes] fieldset[name=map]');
+        var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
+        var fieldsets = view.query(fsSelector);
 
         Ext.each(fieldsets, function(fs){
             var name = fs.name;
@@ -306,8 +408,24 @@ Ext.define("Koala.view.form.Print", {
         Ext.each(additionalFields, function(field){
             if (field.getName() === 'scalebar') {
                 attributes.scalebar = view.getScaleBarObject();
+                // handle the desire to have a scalebar or not by setting
+                // colors to transparent, crude but we didn' find a better
+                // solution. See https://github.com/terrestris/BasiGX/pull/74#issuecomment-209954558
+                if (field.getValue() === false) {
+                    attributes.scalebar = view.setScalebarInvisible(
+                        attributes.scalebar
+                    );
+                }
             } else if (field.getName() === 'northArrow') {
-                attributes.scalebar = view.getNorthArrowObject();
+                attributes.northArrow = view.getNorthArrowObject();
+                // handle the desire to have a northArrow or not by setting
+                // colors to transparent, crude but we didn' find a better
+                // solution. See https://github.com/terrestris/BasiGX/pull/74#issuecomment-209954558
+                if (field.getValue() === false) {
+                    attributes.northArrow = view.setNorthArrowInvisible(
+                        attributes.northArrow
+                    );
+                }
             } else {
                 attributes[field.getName()] = field.getValue();
             }
@@ -343,7 +461,8 @@ Ext.define("Koala.view.form.Print", {
                     jsonData: irixJson,
                     scope: view,
                     success: view.irixPostSuccessHandler,
-                    failure: view.genericPostFailureHandler
+                    failure: view.genericPostFailureHandler,
+                    timeout: view.getTimeoutMilliseconds()
                 });
             }
         } else {
@@ -358,13 +477,61 @@ Ext.define("Koala.view.form.Print", {
                 scope: view,
                 success: function(response) {
                     var data = Ext.decode(response.responseText);
-                    view.setLoading(format + ' wird vorbereitet.');
+                    view.setLoading(format + ' ' +
+                        view.getDownloadOngoingMiddleText());
                     view.downloadWhenReady(startTime, data);
                 },
-                failure: view.genericPostFailureHandler
+                failure: view.genericPostFailureHandler,
+                timeout: view.getTimeoutMilliseconds()
             });
         }
 
+    },
+
+    /**
+     * Returns and modifies the given MapFish Print 3 attribute `scalebar`
+     * (http://mapfish.github.io/mapfish-print-doc/attributes.html#!scalebar)
+     * to be invisible. This is done by setting various colors to a transparent
+     * value.
+     *
+     * @param {object} scalebar A scalebar object as it is returned from the
+     *     BasiGX method getScaleBarObject()
+     * @return {object} The scalebar object configured as invisible.
+     */
+    setScalebarInvisible: function(scalebar) {
+        var keys = [
+            'backgroundColor',
+            'barBgColor',
+            'color',
+            'fontColor'
+        ];
+        var newColor = this.getTransparentColor();
+        Ext.each(keys, function(key) {
+            scalebar[key] = newColor;
+        });
+        return scalebar;
+    },
+
+    /**
+     * Returns and modifies the given MapFish Print 3 attribute `northArrow`
+     * (http://mapfish.github.io/mapfish-print-doc/attributes.html#!northArrow)
+     * to be invisible. This is done by setting various colors to a transparent
+     * value and also by setting the `graphic` to a transparent image.
+     *
+     * @param {object} northArrow A northArrow object as it is returned from the
+     *     BasiGX method getNorthArrowObject()
+     * @return {object} The northArrow object configured as invisible.
+     */
+    setNorthArrowInvisible: function(northArrow) {
+        var keys = [
+            'backgroundColor'
+        ];
+        var newColor = this.getTransparentColor();
+        Ext.each(keys, function(key) {
+            northArrow[key] = newColor;
+        });
+        northArrow.graphic = this.getTransparentImageUrl();
+        return northArrow;
     },
 
     /**
@@ -451,10 +618,21 @@ Ext.define("Koala.view.form.Print", {
         var format = me.down('combo[name="format"]')
             .getValue();
 
-        me.setLoading(format + ' wird vorbereitet: '+ elapsedMs/1000 + 's');
+        var dspElapsedMs = (elapsedMs/1000).toFixed(3) + ' s';
+        var loadMsg = format + ' ' + me.getDownloadOngoingMiddleText() + ': ' +
+            dspElapsedMs;
+        me.setLoading(loadMsg);
 
-        if (elapsedMs > 30000) {
-            Ext.raise('Download aborted after ' + elapsedMs/1000 + ' seconds.');
+        if (elapsedMs > me.getTimeoutMilliseconds()) {
+            Ext.log.warn('Download aborted after ' + dspElapsedMs);
+            me.setLoading(false);
+            Ext.Msg.show({
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.ERROR,
+                title: me.getWarnPrintTimedOutTitle(),
+                message: me.getWarnPrintTimedOutText()
+            });
+
         } else {
             setTimeout(function () {
                 Ext.Ajax.request({
@@ -466,20 +644,22 @@ Ext.define("Koala.view.form.Print", {
                             var dlBtn = me.down('button[name="downloadPrint"]');
                             dlBtn.link = me.getUrl() + 'report/' + data.ref;
                             dlBtn.show();
+                            BasiGX.util.Animate.shake(dlBtn);
                             var fields = dlBtn.up('k-form-print').query('field');
                             Ext.each(fields, function(field){
                                 field.on('change', function(){
                                     dlBtn.hide();
-                                });
+                                }, field, {single: true});
                             });
                         } else {
                             me.downloadWhenReady(startTime, data);
                         }
                     },
                     failure: function(response) {
-                        Ext.raise('server-side failure with status code '
+                        Ext.log.warn('server-side failure with status code '
                             + response.status);
-                    }
+                    },
+                    timeout: 500
                 });
             }, 500);
         }

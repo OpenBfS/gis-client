@@ -27,16 +27,21 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
 
     controller: 'k-panel-layersetchooser',
 
+    cls: 'k-panel-layersetchooser',
+
     minWidth: 150,
     minHeight: 170,
+    width: 410,
+    height: 300,
+
+    closable: true,
+    closeAction: 'hide',
 
     viewModel: {
         data: {
             title: 'Layer-Set Auswahl'
         }
     },
-
-    layerSetUrl: 'classic/resources/layerset.json',
 
     /**
      * flag used to indicate which items should be displayed through template
@@ -54,72 +59,55 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
      *
      */
     initComponent: function() {
-        var me = this,
-            tree = Ext.ComponentQuery.query('k-panel-themetree')[0];
+        var me = this;
+
+        // try to load layerprofile from appContext
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+        var path = [
+            'data',
+            'merge',
+            'urls',
+            'layerset'
+        ];
+        var layerSetUrl;
+        if (me.showLayerProfiles) {
+            path[path.indexOf('layerset')] = 'layerprofile';
+            layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerprofile.json');
+        } else {
+            layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerset.json');
+        }
+
+        var tplIfStr = me.showLayerProfiles ?
+            '<tpl if="isLayerProfile">' :
+            '<tpl if="!isLayerProfile">';
+        var tplIfEndStr = '</tpl>';
         me.items = [{
             xtype: 'basigx-view-layerset',
             tpl: [
-                  '<tpl for=".">',
-                    me.showLayerProfiles ? '<tpl if="isLayerProfile">' :
-                      '<tpl if="!isLayerProfile">',
-                      '<div class="thumb-wrap">',
-                          '<div class="thumb">',
-                                  '<tpl if="thumb.indexOf(\'http\') &gt;= 0">',
-                                      '<img src="{thumb}" />',
-                                  '<tpl else>',
-                                      '<img src="classic/resources/img/themes/{thumb}" />',
-                                  '</tpl>',
-                          '</div>',
-                          '<span>{text}</span>',
-                      '</div>',
-                      '</tpl>',
-                  '</tpl>'
+                '<tpl for=".">',
+                tplIfStr,
+                '  <div class="thumb-wrap">',
+                '    <div class="thumb">',
+                '<tpl if="thumb.indexOf(\'http\') &gt;= 0">',
+                '      <img src="{thumb}" />',
+                '<tpl else>',
+                '      <img src="classic/resources/img/themes/{thumb}" />',
+                '</tpl>',
+                '    </div>',
+                '    <span>{text}</span>',
+                '  </div>',
+                tplIfEndStr,
+                '</tpl>'
             ],
-            layerSetUrl: me.layerSetUrl
+            layerSetUrl: layerSetUrl
         }];
 
-        me.callParent(arguments);
+        me.callParent();
 
         // add listeners
         me.down('textfield[name=filter]').addListener({
             buffer: 200,
             change: 'filterLayerSetsByText'
         });
-        if (tree && !me.showLayerProfiles) {
-            // TODO this listener should probably better live inside of the
-            //      Koala.view.panel.ThemeTreeController
-            tree.on('select', function(treepanel, item) {
-                me.currentTask = new Ext.util.DelayedTask(function(){
-                    me.singleTreeClick(item);
-                });
-              me.currentTask.delay(200);
-            });
-            // TODO this listener should probably better live inside of the
-            //      Koala.view.panel.ThemeTreeController
-            tree.on('itemdblclick', function(treepanel, item) {
-                me.currentTask.cancel();
-                if (item.isLeaf()) {
-                    Koala.util.Layer.addLayerByUuid(item.get('uuid'));
-                } else {
-                    Ext.each(item.children, function(layer) {
-                        Koala.util.Layer.addLayerByUuid(layer.uuid);
-                    });
-                }
-                // TODO similar code is in the LayerFilterController, we should
-                //      try to reuse code there.
-                var treeSelModel = tree && tree.getSelectionModel();
-                if (treeSelModel) {
-                    treeSelModel.deselectAll();
-                }
-            });
-        }
-    },
-    /**
-     *
-     */
-    singleTreeClick: function(rec) {
-        if (rec.isLeaf()) {
-            Koala.util.Layer.showChangeFilterSettingsWinByUuid(rec.get('uuid'));
-        }
     }
 });

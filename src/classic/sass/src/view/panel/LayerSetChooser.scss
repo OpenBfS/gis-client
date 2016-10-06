@@ -1,3 +1,13 @@
-#img-chooser-view .thumb-wrap {
-    height: 90px;
+.k-panel-layersetchooser .x-panel-body {
+    background-color: white !important;
+}
+
+.k-panel-layersetchooser .img-chooser-view {
+    height: auto !important;
+}
+
+.k-panel-layersetchooser .img-chooser-view .x-item-focused,
+.k-panel-layersetchooser .img-chooser-view .x-view-item-focused,
+.k-panel-layersetchooser .img-chooser-view .x-item-selected {
+    outline: none !important;
 }

@@ -1,18 +1,15 @@
 Ext.Loader.syncRequire(['Koala.util.Layer', 'Koala.util.String']);
 
 describe('Koala.util.Layer', function() {
-    var oldTxtFilter = Koala.util.Layer.txtFilter;
     var oldTxtUntil = Koala.util.Layer.txtUntil;
     var oldDefaultFormat = Koala.util.String.defaultDateFormat;
     beforeEach(function(){
         // mock up successful i18n
-        Koala.util.Layer.txtFilter = "Filter";
         Koala.util.Layer.txtUntil = "bis";
         Koala.util.String.defaultDateFormat = "d.m.Y K\\o\\a\\l\\a";
     });
     afterEach(function(){
         // un-mock successful i18n
-        Koala.util.Layer.txtFilter = oldTxtFilter;
         Koala.util.Layer.txtUntil = oldTxtUntil;
         Koala.util.String.defaultDateFormat = oldDefaultFormat;
     });
@@ -185,7 +182,7 @@ describe('Koala.util.Layer', function() {
                     expect(got).to.be('');
                 });
             });
-            it('returns a text for rodos-filter', function(){
+            it('returns an empty text for rodos-filter', function(){
                 var metadata = {
                     filters: [{
                         type: "rodos"
@@ -193,11 +190,7 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
-
-                expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf("rodos")).to.not.be(-1);
+                expect(got).to.be("");
             });
             it('returns a text for key-value-filter', function(){
                 var metadata = {
@@ -210,15 +203,11 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
-                // #stringifyValueFilter shoudl be tested separately
+                // #stringifyValueFilter should be tested separately
                 var filterRepr = Koala.util.Layer.stringifyValueFilter(
-                        metadata.filters[0]
+                        metadata.filters[0], true
                     );
-
                 expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf('value')).to.not.be(-1);
                 expect(got.indexOf(filterRepr)).to.not.be(-1);
             });
             it('returns a text for point-in-time-filter', function(){
@@ -231,13 +220,8 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
-
                 expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf("pointintime")).to.not.be(-1);
                 expect(got.indexOf("28.11.1980 foo")).to.not.be(-1);
-
             });
             it('returns a text for point-in-time-filter (no format)',
                 function(){
@@ -249,11 +233,7 @@ describe('Koala.util.Layer', function() {
                     };
                     var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                    var prefix = Koala.util.Layer.txtFilter;
-
                     expect(got).to.not.be("");
-                    expect(got.indexOf(prefix)).to.not.be(-1);
-                    expect(got.indexOf("pointintime")).to.not.be(-1);
                     // d.m.Y Koala is the default (see beforeEach)
                     expect(got.indexOf("28.11.1980 Koala")).to.not.be(-1);
                 }
@@ -272,12 +252,9 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
                 var until = Koala.util.Layer.txtUntil;
 
                 expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf("timerange")).to.not.be(-1);
                 expect(got.indexOf("28.11.1980 foo start")).to.not.be(-1);
                 expect(got.indexOf(until)).to.not.be(-1);
                 expect(got.indexOf("28.11.1998 foo end")).to.not.be(-1);
@@ -294,16 +271,102 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                var prefix = Koala.util.Layer.txtFilter;
                 var until = Koala.util.Layer.txtUntil;
 
                 expect(got).to.not.be("");
-                expect(got.indexOf(prefix)).to.not.be(-1);
-                expect(got.indexOf("timerange")).to.not.be(-1);
                 // d.m.Y Koala is the default (see beforeEach)
                 expect(got.indexOf("28.11.1980 Koala")).to.not.be(-1);
                 expect(got.indexOf(until)).to.not.be(-1);
                 expect(got.indexOf("28.11.1998 Koala")).to.not.be(-1);
+            });
+        });
+
+        describe('#getOrderedFlatLayers', function(){
+            it('returns a flat list for a basic array', function() {
+                var LayerUtil = Koala.util.Layer;
+                var layers = [{
+                    leaf: true
+                }, {
+                    leaf: true
+                }, {
+                    leaf: true
+                }];
+                var got = LayerUtil.getOrderedFlatLayers(layers);
+                expect(got).to.be.an('array');
+                expect(got).to.have.length(3);
+                expect(got[0]).to.be(layers[0]);
+                expect(got[1]).to.be(layers[1]);
+                expect(got[2]).to.be(layers[2]);
+            });
+            it('returns a flat list for a hierarchical array', function() {
+                var LayerUtil = Koala.util.Layer;
+                var layers = [{
+                    leaf: true
+                }, {
+                    leaf: false,
+                    children: [
+                        { leaf: true },
+                        { leaf: true }
+                    ]
+                }, {
+                    leaf: true
+                }];
+                var got = LayerUtil.getOrderedFlatLayers(layers);
+                expect(got).to.be.an('array');
+                expect(got).to.have.length(4);
+                expect(got[0]).to.be(layers[0]);
+                expect(got[1]).to.be(layers[1].children[0]);
+                expect(got[2]).to.be(layers[1].children[1]);
+                expect(got[3]).to.be(layers[2]);
+            });
+            it('returns a flat list for a deeply nested array', function() {
+                var LayerUtil = Koala.util.Layer;
+                var layers = [{
+                    leaf: true
+                }, {
+                    leaf: false,
+                    children: [{
+                        leaf: false,
+                        children: [{
+                            leaf: false,
+                            children: [{
+                                leaf: false,
+                                children: [{
+                                    leaf: false,
+                                    children: [{
+                                        leaf: true
+                                    }]
+                                }]
+                            }]
+                        }]
+                    }]
+                }, {
+                    leaf: true
+                }];
+                var got = LayerUtil.getOrderedFlatLayers(layers);
+                expect(got).to.be.an('array');
+                expect(got).to.have.length(3);
+                expect(got[0]).to.be(layers[0]);
+                var expected = layers[1].children[0].children[0].children[0]
+                    .children[0].children[0];
+                expect(got[1]).to.be(expected);
+                expect(got[2]).to.be(layers[2]);
+            });
+            it('returns a flat and skips falsy layers', function() {
+                var LayerUtil = Koala.util.Layer;
+                var layers = [{
+                        leaf: true
+                    },
+                    undefined,
+                    null,
+                    false,
+                    0,
+                    ''
+                ];
+                var got = LayerUtil.getOrderedFlatLayers(layers);
+                expect(got).to.be.an('array');
+                expect(got).to.have.length(1);
+                expect(got[0]).to.be(layers[0]);
             });
         });
     });

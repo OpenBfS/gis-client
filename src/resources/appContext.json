@@ -1,0 +1,50 @@
+{
+    "data": {
+        "merge": {
+            "urls": {
+                "metadata-xml2json": "http://bfs-koala.intranet.terrestris.de/geonetwork/srv/ger/xml_iso19139Tojson",
+                "metadata-search": "http://bfs-koala.intranet.terrestris.de/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows",
+                "print-servlet": "http://bfs-koala.intranet.terrestris.de/print-servlet-3.3-SNAPSHOT/print/",
+
+                "metadata-xml2json": "http://10.133.7.63/geonetwork/srv/ger/xml_iso19139Tojson",
+                "metadata-search": "http://10.133.7.63/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://10.133.7.63/geoserver/BFS/ows",
+                "print-servlet": "http://10.133.7.63:8080/print-servlet-3.4-SNAPSHOT/print/",
+
+                "layerprofile": "classic/resources/layerprofile.json",
+                "layerset": "classic/resources/layerset.json",
+
+                "irix-servlet": "/irix-servlet",
+                "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
+            },
+            "application_user": {
+                "username": "data_reader",
+                "password": "data_reader"
+            },
+            "print-timeout": 60000,
+            "metadataSearchFields": ["title", "abstract"],
+            "spatialSearchTypeName": "BFS:verwaltung_4326_geozg_sort",
+            "startCenter": [1234075.4566814213, 6706481.04685707],
+            "startZoom": 6,
+            "mapLayers": [
+                {
+                    "name": "Hintergrundkarte",
+                    "type": "XYZ",
+                    "url": "http://www.imis.bfs.de/mapcache/tms/1.0.0/osm_bfs_google@GoogleMapsCompatible/{z}/{x}/{-y}.png",
+                    "legendUrl": "http://www.imis.bfs.de/mapcache/tms/1.0.0/osm_bfs_google@GoogleMapsCompatible/6/33/43.png",
+                    "attribution": "<a href=\"http://www.imis.bfs.de/geozg/static/nutzungsbedingungen.html\" target=\"_blank\">© Bundesamt für Strahlenschutz</a>&nbsp;&nbsp;&#x007C;&nbsp;&nbsp;<a href=\"http://www.imis.bfs.de/geozg/static/license_de.html\" target=\"_blank\">OpenStreetMap  |  BKG  |  SRTM  |  USGS</a>",
+                    "customParams": {
+                        "allowOpacityChange": true,
+                        "treeId": "bkg"
+                    }
+                }
+            ],
+            "mapConfig": {
+                "projection": "EPSG:3857",
+                "zoom": 0
+            }
+        }
+    },
+    "success": true
+}

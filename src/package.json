@@ -1,14 +1,14 @@
 {
   "private": true,
   "name": "Koala",
-  "version": "0.0.1",
+  "version": "1.5.0",
   "description": "Koala WebGIS",
   "scripts": {
       "pretest": "npm run lint-js",
       "test": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true test/index.html",
-      "lint-js": "eslint -c .eslintrc app/ classic/ && eslint -c test/.eslintrc test/",
+      "lint-js": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
 
-      "test:watch": "watch 'npm test' app/ classic/ test/",
+      "test:watch": "watch 'npm test' app/ classic/ modern/ test/",
 
       "save-coverage": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true --hooks ./test/phantom_hooks.js test/index.html",
       "rm-coverage": "rm -Rf coverage",
@@ -31,12 +31,12 @@
   "author": "terrestris GmbH & Co. KG <info@terrestris.de>",
   "license": "gpl-3",
   "devDependencies": {
-    "eslint": "1.9.0",
+    "eslint": "3.2.2",
     "expect.js": "0.3.1",
-    "istanbul": "0.4.0",
-    "mocha": "2.3.3",
-    "mocha-phantomjs": "4.0.1",
-    "sinon": "1.17.2",
-    "watch": "0.16.0"
+    "istanbul": "0.4.4",
+    "mocha": "3.0.2",
+    "mocha-phantomjs": "4.1.0",
+    "sinon": "1.17.5",
+    "watch": "0.19.1"
   }
 }

@@ -1,0 +1,43 @@
+.ol-control {
+}
+
+.ol-scale-line {
+    margin: 5px;
+    bottom: 0px;
+    right: 0px;
+    left: initial;
+    background: rgba(255,255,255,.8);
+}
+
+.ol-scale-line-inner {
+    border: 1px solid #666;
+    border-top: none;
+    color: #666;
+}
+
+.ol-attribution.ol-uncollapsible {
+    margin: 5px;
+    height: initial;
+    text-align: left;
+    bottom: 0px;
+    left: 0px;
+    max-width: 50%;
+    max-height: 60px;
+    border-radius: 4px;
+}
+
+.ol-attribution.ol-uncollapsible a:link, a:visited {
+    color: #666;
+}
+
+.add-wms-form-inner {
+    width: 100% !important;
+}
+
+.koala-list-item {
+    color: black;
+    padding: 5px;
+    border-color: lightgrey;
+    border-style: solid;
+    border-width: 1px 0px 0px 0px;
+}

@@ -39,6 +39,26 @@ Ext.define("Koala.view.grid.MetadataSearch", {
     bind: {
         title: '{metadataSearchTitle}'
     },
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'bottom',
+        ui: 'footer',
+        name: 'footer',
+        items: [
+            { xtype: 'tbfill' },
+            {
+                xtype: 'tbtext',
+                name: 'status-line',
+                html: ''
+            },
+            { xtype: 'tbfill' }
+        ]
+    }],
+
+    listeners: {
+        boxready: 'setupStatusLineListeners',
+        beforedestroy: 'teardownStatusLineListeners'
+    },
 
     features: [{
         id: 'group',

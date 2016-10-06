@@ -35,13 +35,79 @@ Ext.define('Koala.view.grid.MetadataSearchController', {
             layout: 'fit',
             record: record
         }).show();
+    },
+
+    // TODO onStoreBeforeload / onStoreLoad / setupStatusLineListeners and
+    //      teardownStatusLineListeners are the same in the
+    //      SpatialSearchController.
+
+    /**
+     * Before the store loads, we'll show the footer of the grid which contains
+     * the status line. We'll also update the visible text with something like
+     * 'Searching…'.
+     */
+    onStoreBeforeload: function() {
+        var grid = this.getView();
+        var footer = grid.down('toolbar[name="footer"]');
+        var statusLine = footer.down('[name="status-line"]');
+        statusLine.setHtml(grid.getViewModel().get('searchInProgressText'));
+        footer.show();
+    },
+
+    /**
+     * Whenever the store has loaded, we examine the resulting records. If we
+     * haven't received any records, we'll tell the user (e.g. 'nothing found').
+     * Otherwise we'll hide the statusbar (shown before the query was issued),
+     * so that the user can browse the results.
+     *
+     * @param {Ext.data.Store} store The store that just loaded.
+     * @param {Ext.data.Model[]} records The records that the last query
+     *     returned.
+     */
+    onStoreLoad: function(store, records){
+        var grid = this.getView();
+        var footer = grid.down('toolbar[name="footer"]');
+        var statusLine = footer.down('[name="status-line"]');
+        if (!records || records.length < 1) {
+            statusLine.setHtml(grid.getViewModel().get('noRecordsFoundText'));
+            footer.show();
+        } else {
+            statusLine.setHtml('');
+            footer.hide();
+        }
+    },
+
+    /**
+     * Called on the `boxready`-event, this methods adds listeners to store
+     * events, which will update the status line of the grids (e.g. 'no data
+     * found'), see also #teardownStatusLineListeners.
+     *
+     * @private
+     */
+    setupStatusLineListeners: function() {
+        var me = this;
+        var store = me.getView().getStore();
+        store.on({
+            load: me.onStoreLoad,
+            beforeload: me.onStoreBeforeload,
+            scope: me
+        });
+    },
+
+    /**
+     * Called on the beforedestroy event, this methods removes listeners to
+     * store events, which we added to show information in the status line
+     * (see #setupStatusLineListeners).
+     *
+     * @private
+     */
+    teardownStatusLineListeners: function() {
+        var me = this;
+        var store = me.getView().getStore();
+        store.un({
+            load: me.onStoreLoad,
+            beforeload: me.onStoreBeforeload,
+            scope: me
+        });
     }
-//
-//    getLegendUrlFromRecord: function(record){
-//        var legendURL = record.get('source') +
-//            '?service=' + record.get('serviceType').split(' ')[0] +
-//            '&version=' + record.get('serviceType').split(' ')[1] +
-//            '&request=GetLegendGraphic&layer=WMS&width=40&height=40&format=image/png';
-//        return legendURL;
-//    }
 });
