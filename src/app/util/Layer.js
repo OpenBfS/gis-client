@@ -593,6 +593,12 @@ Ext.define('Koala.util.Layer', {
             }
             if (style) {
                 legendUrl = Ext.String.urlAppend(legendUrl, "STYLE=" + style);
+                // requested by SB: replace any [[STYLES]] placeholders with the
+                // current style
+                legendUrl = Koala.util.String.replaceTemplateStrings(
+                    legendUrl,
+                    {STYLES: style}
+                );
             }
             return legendUrl;
         },
