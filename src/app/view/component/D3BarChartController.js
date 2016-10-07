@@ -385,7 +385,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         bars.append("text")
             .filter(function(d) {
-                return Ext.isDefined(d[yField]);
+                return (Ext.isDefined(d[yField]) && !d.hidden);
             })
             .text(function(d){
                 return labelFunc(d[yField], d);
