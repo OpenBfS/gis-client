@@ -44,7 +44,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         hasCollapseAllBtn: true,
         hasExpandAllBtn: true,
         hasToggleAllBtn: false,
-        hasRemoveAllLayersBtn: true
+        hasRemoveAllLayersBtn: true,
+        textProperty: 'nameWithSuffix'
     },
 
     hasRoutingListeners: false,
@@ -350,6 +351,10 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
      */
     initComponent: function() {
         var me = this;
+        var store = me.getStore();
+
+        // Use the configured textProperty
+        store.setTextProperty(me.getTextProperty());
 
         // call parent
         me.callParent();

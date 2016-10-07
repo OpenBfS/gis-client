@@ -172,6 +172,7 @@ Ext.define('Koala.view.main.Main', {
                                     includeSubLayer: true,
                                     listeners: {
                                         beforewmsadd: function(olLayer){
+                                            olLayer.set('nameWithSuffix', olLayer.get('name'));
                                             olLayer.set('allowRemoval', true);
                                         }
                                     }

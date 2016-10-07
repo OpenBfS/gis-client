@@ -204,9 +204,6 @@ Ext.define("Koala.view.form.Print", {
         var legendFieldset = Ext.ComponentQuery.query(fsSelector)[0];
         var layerCheckbox = legendFieldset.down(cbSelector);
 
-        if (layer.metadata){
-            layer.set('name', layer.metadata.printTitle + Koala.util.Layer.getLayerNameSuffix(layer.get('__suffix_id__')));
-        }
         if (layerCheckbox && !legendFieldset.getCollapsed() &&
                 layer.checked &&
                 layer.get('name') &&
@@ -226,6 +223,7 @@ Ext.define("Koala.view.form.Print", {
      * printable Layers from Map. Add those to the fieldset.
      */
     updateLegendsFieldset: function(legendsFieldset){
+        var me = this;
         if (!legendsFieldset) {
             return;
         }
@@ -236,18 +234,29 @@ Ext.define("Koala.view.form.Print", {
         var items = [];
         Ext.each(layers, function(layer){
             if(layer.get('visible') && layer.get('allowPrint')){
-                if (layer.metadata){
-                    layer.set('name', layer.metadata.printTitle + Koala.util.Layer.getLayerNameSuffix(layer.get('__suffix_id__')));
-                }
+                var legendTextHtml = me.prepareLegendTextHtml(layer);
+
                 items.push({
                     xtype: 'checkbox',
                     checked: true,
                     name: layer.get('name') + '_visible',
                     layer: layer,
                     boxLabel: layer.get('name')
+                }, {
+                    xtype: 'textfield',
+                    name: layer.get('name') + '_legendtext',
+                    // TODO i18n
+                    fieldLabel: 'Legendtext',
+                    value: legendTextHtml,
+                    allowBlank: true,
+                    listeners: {
+                        focus: me.onTextFieldFocus,
+                        scope: me
+                    }
                 });
             }
         });
+
         if(items.length > 0){
             legendsFieldset.show();
         } else {
@@ -255,6 +264,23 @@ Ext.define("Koala.view.form.Print", {
         }
 
         legendsFieldset.add(items);
+    },
+
+    /**
+     * Prepares the content of the legendTextHtml field by adding the filter from
+     * the RoutingLegendTree text.
+     */
+    prepareLegendTextHtml: function(layer){
+        var layerName = layer.get('name');
+        var text = layerName;
+        var legendSpan = Ext.getDom(layer.get('__suffix_id__'));
+
+        if(legendSpan){
+            var filterText = legendSpan.innerHTML;
+            text = layerName + '<br/><font color="#999999">' + filterText + '<font>';
+        }
+
+        return text;
     },
 
     /**
@@ -434,6 +460,17 @@ Ext.define("Koala.view.form.Print", {
         var legendFieldset = view.down('fieldset[name="legendsFieldset"]');
         if(legendFieldset && !legendFieldset.getCollapsed()){
             attributes.legend = view.getLegendObject();
+
+            // Override layer name in legend with valze from legendTextField
+            Ext.each(attributes.legend.classes, function(clazz){
+                var legendTextField = legendFieldset.down(
+                        'textfield[name=' + clazz.name + '_legendtext]');
+
+                if(legendTextField){
+                    clazz.name = legendTextField.getValue();
+                }
+            });
+
         }
 
         var app = view.down('combo[name=appCombo]').getValue();

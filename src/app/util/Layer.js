@@ -437,11 +437,11 @@ Ext.define('Koala.util.Layer', {
             }
 
             var suffixId = me.getSuffixId();
-            var originalName = layer.get('name');
             var suffix = me.getLayerNameSuffix(suffixId);
 
             layer.set('__suffix_id__', suffixId);
-            layer.set('name', originalName + suffix);
+            layer.set('suffix', suffix);
+            layer.set('nameWithSuffix', layer.get('name') + suffix);
 
             var repaintTask = new Ext.util.DelayedTask(
                 me.repaintLayerFilterIndication, me
@@ -749,7 +749,7 @@ Ext.define('Koala.util.Layer', {
             }
 
             return {
-                name: metadata.legendTitle,
+                name: metadata.legendTitle || metadata.treeTitle,
                 legendUrl: olProps.legendUrl || '',
                 legendHeight: olProps.legendHeight,
                 legendWidth: olProps.legendWidth,
