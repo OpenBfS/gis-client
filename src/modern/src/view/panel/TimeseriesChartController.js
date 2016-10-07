@@ -102,7 +102,7 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         var currentSeqIndex = chart.getSelectedStations().length;
         var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, "");
         if (!color) {
-            color = chartController.getRandomColor();
+            color = Koala.view.component.D3BaseController.getRandomColor();
         }
 
         chartController.addShape({

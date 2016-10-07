@@ -116,15 +116,18 @@ Ext.define('Koala.view.component.D3Chart',{
                 stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
                     StringUtil.replaceTemplateStrings(
                         chartConfig.seriesTitleTpl, olFeat) : "";
-
+                var color = valFromSeq(chartConfig.colorSequence, 0, "");
+                if (!color) {
+                    color = Koala.view.component.D3BaseController.getRandomColor();
+                }
                 shapes = [{
-                    type: chartConfig.shapeType,
-                    curve: chartConfig.curveType,
+                    type: chartConfig.shapeType || 'line',
+                    curve: chartConfig.curveType || 'linear',
                     xField: chartConfig.xAxisAttribute,
                     yField: chartConfig.yAxisAttribute,
                     name: stationName,
                     id: olFeat.get('id'),
-                    color: valFromSeq(chartConfig.colorSequence, 0, '#F00'),
+                    color: color,
                     opacity: chartConfig.strokeOpacity || 1,
                     width: chartConfig.strokeWidth || 1,
                     tooltipTpl: chartConfig.tooltipTpl

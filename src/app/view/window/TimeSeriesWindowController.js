@@ -308,16 +308,15 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var coerce = StringUtil.coerce;
         var stationName = "";
         if(!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
-            stationName =StringUtil.replaceTemplateStrings(
+            stationName = StringUtil.replaceTemplateStrings(
                 chartConfig.seriesTitleTpl, olFeat
             );
         }
         var currentSeqIndex = chart.getSelectedStations().length;
         var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, "");
         if (!color) {
-            color = chartController.getRandomColor();
+            color = Koala.view.component.D3BaseController.getRandomColor();
         }
-
         chartController.addShape({
             type: chartConfig.shapeType || 'line',
             curve: chartConfig.curveType || 'linear',

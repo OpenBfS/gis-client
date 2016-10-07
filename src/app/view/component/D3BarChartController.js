@@ -353,7 +353,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     return (Ext.isDefined(d[yField]) && !d.hidden);
                 })
                     .style('fill', function(d) {
-                        return d.color;
+                        return d.color || staticMe.getRandomColor();
                     })
                     // .style('opacity', shapeConfig.opacity)
                     .attr('x', function(d) {
