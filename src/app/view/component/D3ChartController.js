@@ -31,9 +31,47 @@ Ext.define('Koala.view.component.D3ChartController', {
     zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
+
+    /**
+     * Whether the chart is actually being rendered.
+     *
+     * @type {Boolean}
+     */
     chartRendered: false,
+    /**
+     * An object that holds all requests we issue for fetching series data. It
+     * is keyed by the id of a selectedStation. We need this in order to be able
+     * to manually abort pending requests in the case of repeatedly adding
+     * series.
+     *
+     * It is filled in #getChartDataForStation, updated once any data request
+     * finishes and fully emptied in #getChartData via #abortPendingRequests.
+     *
+     * @type {Object}
+     */
+    ajaxRequests: {},
+
+    /**
+     * A counter for all our data requests. Increased in #getChartDataForStation
+     * and reset in #getChartData. Once all expected chart data has arrived, we
+     * set #chartDataAvailable to true and fire #chartdataprepared.
+     * @type {Number}
+     */
     ajaxCounter: 0,
+
+    /**
+     * Whether all data requests have finished and the chart data is actually
+     * available.
+     *
+     * @type {Boolean}
+     */
     chartDataAvailable: false,
+
+    /**
+     * Fired once all chart data is available from the data requests.
+     *
+     * @event chartdataprepared
+     */
 
     /**
      *
@@ -76,6 +114,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
 
             // TODO double check locality_code, is this hardcoded?
+            //      Shouldn't this be selectedStation.get('id')?
             me.data[props.locality_code] = data;
         } else {
             me.getChartData();
@@ -1218,18 +1257,32 @@ Ext.define('Koala.view.component.D3ChartController', {
     getChartData: function() {
         var me = this;
         var view = me.getView();
-
         if (view.getShowLoadMask() && view.getSelectedStations().length > 0) {
             view.setLoading(true);
         }
 
         me.data = {};
         me.chartDataAvailable = false;
-        me.ajaxCounter = 0;
+        me.abortPendingRequests();
 
         Ext.each(view.getSelectedStations(), function(station) {
             me.getChartDataForStation(station);
         });
+    },
+
+    /**
+     * Aborts any loading requests in our internal pending requests object and
+     * resets both #ajaxRequests and #ajaxCounter.
+     */
+    abortPendingRequests: function() {
+        var me = this;
+        Ext.iterate(me.ajaxRequests, function(id, ajaxRequest) {
+            if (ajaxRequest && ajaxRequest.isLoading()) {
+                ajaxRequest.abort();
+            }
+        });
+        me.ajaxRequests = {};
+        me.ajaxCounter = 0;
     },
 
     /**
@@ -1292,10 +1345,23 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         Ext.apply(requestParams, paramConfig);
 
-        Ext.Ajax.request({
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var selId = selectedStation.get('id');
+
+        // store the actual request object, so we are able to abort it if we are
+        // called faster than the response arrives.
+        var ajaxRequest = Ext.Ajax.request({
             url: url,
             method: 'GET',
             params: requestParams,
+            callback: function() {
+                // Called for both success and failure, this will delete the
+                // entry in the pending requests object.
+                if(selId in me.ajaxRequests) {
+                    delete me.ajaxRequests[selId];
+                }
+            },
             success: function(resp) {
                 var jsonObj = Ext.decode(resp.responseText);
 
@@ -1308,7 +1374,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 var yAxisAttr = chartConfig.yAxisAttribute;
                 var valueField = chartConfig.yAxisAttribute;
 
-                var mockUpData = [];
+                var seriesData = [];
 
                 while (startDate <= endDate) {
 
@@ -1325,11 +1391,11 @@ Ext.define('Koala.view.component.D3ChartController', {
                         newRawData[valueField] = matchingFeature.properties[yAxisAttr];
                     }
 
-                    mockUpData.push(newRawData);
+                    seriesData.push(newRawData);
                     startDate = Ext.Date.add(startDate, Ext.Date.SECOND, intervalInSeconds);
                 }
 
-                me.data[selectedStation.get('id')] = mockUpData;
+                me.data[selId] = seriesData;
 
                 me.ajaxCounter++;
 
@@ -1341,10 +1407,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                 }
 
             },
-            failure: function() {
-                Ext.log.error('Failure on chartdata load');
+            failure: function(response) {
+                if(!response.aborted) { // aborted requests aren't failures
+                    Ext.log.error('Failure on chartdata load');
+                }
             }
         });
+        // Put the current request into our storage for possible abortion.
+        me.ajaxRequests[selId] = ajaxRequest;
     },
 
     /**
