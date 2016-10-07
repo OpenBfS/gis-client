@@ -23,5 +23,23 @@ Ext.define('Koala.view.component.D3Base',{
     listeners: {
         boxready: 'onShow',
         painted: 'onShow'
+    },
+
+    inheritableStatics: {
+        DEFAULTS: {
+            CHART: {
+                LEFT_AXIS_TYPE: 'line',
+                LEFT_AXIS_CURVE: 'linear',
+                STROKE_OPACITY: 1,
+                STROKE_WIDTH: 1
+            },
+            BARCHART: {
+                LEFT_AXIS_TYPE: 'bar',
+                LEFT_AXIS_CURVE: 'linear',
+                LEFT_AXIS_SCALE: 'linear', // TODO are these always same?
+                LEFT_AXIS_FORMAT: ',.0f',
+                BOTTOM_AXIS_SCALE: 'ordinal'
+            }
+        }
     }
 });

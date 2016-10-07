@@ -92,6 +92,7 @@ Ext.define('Koala.view.component.D3Chart',{
          * @return {Koala.view.component.D3Chart} The created chart.
          */
         create: function(olLayer, olFeat, startDate, endDate) {
+            var DEFAULTS = Koala.view.component.D3Base.DEFAULTS.CHART;
             var chartConfig = olLayer.get('timeSeriesChartProperties');
             var StringUtil = Koala.util.String;
             var valFromSeq = StringUtil.getValueFromSequence;
@@ -121,15 +122,15 @@ Ext.define('Koala.view.component.D3Chart',{
                     color = Koala.view.component.D3BaseController.getRandomColor();
                 }
                 shapes = [{
-                    type: chartConfig.shapeType || 'line',
-                    curve: chartConfig.curveType || 'linear',
+                    type: chartConfig.shapeType || DEFAULTS.LEFT_AXIS_TYPE,
+                    curve: chartConfig.curveType || DEFAULTS.LEFT_AXIS_CURVE,
                     xField: chartConfig.xAxisAttribute,
                     yField: chartConfig.yAxisAttribute,
                     name: stationName,
                     id: olFeat.get('id'),
                     color: color,
-                    opacity: chartConfig.strokeOpacity || 1,
-                    width: chartConfig.strokeWidth || 1,
+                    opacity: chartConfig.strokeOpacity || DEFAULTS.STROKE_OPACITY,
+                    width: chartConfig.strokeWidth || DEFAULTS.STROKE_WIDTH,
                     tooltipTpl: chartConfig.tooltipTpl
                 }];
 

@@ -90,6 +90,7 @@ Ext.define('Koala.view.component.D3BarChart',{
          * @return {Koala.view.component.D3BarChart} The created chart.
          */
         create: function(olLayer, olFeat) {
+            var DEFAULTS = Koala.view.component.D3Base.DEFAULTS.BARCHART;
             var chartConfig = olLayer.get('barChartProperties');
             var categoryCount = chartConfig.chartFieldSequence.split(",").length;
             var chartWidth = 200 + categoryCount * 50;
@@ -122,8 +123,8 @@ Ext.define('Koala.view.component.D3BarChart',{
                 labelFunc: Koala.util.String.coerce(chartConfig.labelFunc),
                 chartFieldSequence: chartConfig.chartFieldSequence,
                 shape: {
-                    type: 'bar',
-                    curve: 'linear',
+                    type: DEFAULTS.LEFT_AXIS_TYPE,
+                    curve: DEFAULTS.LEFT_AXIS_CURVE,
                     id: olFeat.get('id'),
                     color: chartConfig.colorSequence,
                     tooltipTpl: chartConfig.tooltipTpl
@@ -136,8 +137,8 @@ Ext.define('Koala.view.component.D3BarChart',{
                 },
                 axes: {
                     left: {
-                        scale: chartConfig.yAxisScale || 'linear',
-                        format: chartConfig.yAxisFormat,
+                        scale: chartConfig.yAxisScale || DEFAULTS.LEFT_AXIS_SCALE,
+                        format: chartConfig.yAxisFormat || DEFAULTS.LEFT_AXIS_FORMAT,
                         label: (chartConfig.yAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
                         labelPadding: chartConfig.labelPadding,
                         labelColor: chartConfig.labelColor,
@@ -146,9 +147,9 @@ Ext.define('Koala.view.component.D3BarChart',{
                         tickPadding: chartConfig.tickPadding
                     },
                     bottom: {
-                        scale: chartConfig.xAxisScale || 'ordinal',
+                        scale: chartConfig.xAxisScale || DEFAULTS.BOTTOM_AXIS_SCALE,
                         format: chartConfig.xAxisFormat,
-                        label: (chartConfig.xAxisLabel || '') + ' ' + (chartConfig.dspUnit || ''),
+                        label: (chartConfig.xAxisLabel || ''),
                         labelPadding: chartConfig.labelPadding,
                         labelColor: chartConfig.labelColor,
                         labelSize: chartConfig.labelSize,
