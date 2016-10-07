@@ -4,10 +4,11 @@ Ext.define('Koala.view.container.styler.SymbolizerModel', {
     data: {
         name: 'SLDStyler',
         title: 'Symbol',
+        symbolizer: null,
         olStyle: null,
         symbolType: null,
         windowTitle: 'Edit Symbol',
-        symbolizerFieldSetHtml: 'Click symbol to edit'
+        symbolizerFieldSetHtml: 'Click symbol to edit',
     }
 
 });

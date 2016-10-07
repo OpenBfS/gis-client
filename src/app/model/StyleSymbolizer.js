@@ -26,6 +26,9 @@ Ext.define('Koala.model.StyleSymbolizer', {
     },{
         name: 'symbolType',
         type: 'string'
+    }, {
+        name: 'textPattern',
+        type: 'string'
     }]
 
 });
