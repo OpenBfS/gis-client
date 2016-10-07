@@ -342,7 +342,6 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     drawSvgContainer: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
         var view = me.getView();
         var viewId = '#' + view.getId();
 
