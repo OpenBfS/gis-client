@@ -35,7 +35,8 @@ Ext.define('Koala.view.component.MapController', {
      */
     onHoverFeatureClick: function(olFeats) {
         var me = this;
-        var win;
+        var timeSeriesWin;
+        var barChartWin;
         if (Ext.isEmpty(olFeats)){
             return;
         }
@@ -45,24 +46,24 @@ Ext.define('Koala.view.component.MapController', {
 
             // TimeSeries
             if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
-                // if first Series create the window
-                if(index === 0){
-                    win = me.openTimeseriesWindow(olFeat);
-                // just add any further series to the existing window
-                } else if (win && (win instanceof Koala.view.window.TimeSeriesWindow)) {
-                    win.getController().updateTimeSeriesChart(layer, olFeat);
+                if(!timeSeriesWin){
+                    // if no timeseries window, create one
+                    timeSeriesWin = me.openTimeseriesWindow(olFeat);
+                } else {
+                    // just add any further series to the existing window
+                    timeSeriesWin.getController().updateTimeSeriesChart(layer, olFeat);
                 }
             // Open new BarchartWindow for each featuere. Move if overlapping.
             } else if (Koala.util.Layer.isBarChartLayer(layer)) {
-                if(win){
+                if(barChartWin){
                     var faktor = olFeats.length - index;
-                    var x = win.getX() - 30 * faktor;
-                    var y = win.getY() - 40 * faktor;
-                    win.setPosition(x, y, true);
+                    var x = barChartWin.getX() - 30 * faktor;
+                    var y = barChartWin.getY() - 40 * faktor;
+                    barChartWin.setPosition(x, y, true);
                 }
-                win = me.openBarChartWindow(olFeat);
+                barChartWin = me.openBarChartWindow(olFeat);
             } else {
-                win = me.openGetFeatureInfoWindow(olFeat);
+                me.openGetFeatureInfoWindow(olFeat);
             }
         });
 
