@@ -353,9 +353,6 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var me = this;
         var store = me.getStore();
 
-        // Use the configured textProperty
-        store.setTextProperty(me.getTextProperty());
-
         // call parent
         me.callParent();
 
@@ -603,9 +600,10 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     /**
-     * Bound as handler for the `add`-event of the store, this method binds
-     * listeners to all added records to show whether they are loading. See
-     * also the method #bindLoadIndicationToRecord.
+     * Bound as handler for the `add`-event of the store, this method modfies
+     * the `text` of the displayed record and binds listeners to all added
+     * records to show whether they are loading. See also the method
+     * #bindLoadIndicationToRecord.
      *
      * @param {GeoExt.data.store.LayersTree} store The store to which the
      *   records have been added.
@@ -614,6 +612,15 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
      * @private
      */
     handleLayerStoreAdd: function(store, recs) {
+        // Replace the text of the treerecords with the configured textProperty
+        // to enable the filter logic
+        var textProperty = this.getTextProperty();
+        if(textProperty){
+            Ext.each(recs, function(layerRec){
+                var layer = layerRec.getOlLayer();
+                layerRec.set('text', layer.get(textProperty))
+            });
+        }
         Ext.each(recs, this.bindLoadIndicationToRecord, this);
     },
 
