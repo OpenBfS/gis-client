@@ -271,13 +271,16 @@ Ext.define("Koala.view.form.Print", {
      * the RoutingLegendTree text.
      */
     prepareLegendTextHtml: function(layer){
-        var layerName = layer.get('name');
+        var layerName = layer.get('name'); // fallback
+        if ('metadata' in layer && 'printTitle' in layer.metadata) {
+            layerName = layer.metadata.printTitle;
+        }
         var text = layerName;
         var legendSpan = Ext.getDom(layer.get('__suffix_id__'));
 
         if(legendSpan){
             var filterText = legendSpan.innerHTML;
-            text = layerName + '<br/><font color="#999999">' + filterText + '<font>';
+            text = layerName + '<br/><font color="#999999">' + filterText + '</font>';
         }
 
         return text;
