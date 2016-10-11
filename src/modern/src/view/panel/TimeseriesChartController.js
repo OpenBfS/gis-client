@@ -20,7 +20,12 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-panel-timeserieschart',
 
-    requires: [],
+    requires: [
+        'Koala.util.Filter',
+        'Koala.util.String',
+
+        'Koala.view.component.D3Chart'
+    ],
 
     updateFor: function(olLayer, olFeat){
         var me = this;
