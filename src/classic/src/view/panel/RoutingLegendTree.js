@@ -351,7 +351,6 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
      */
     initComponent: function() {
         var me = this;
-        var store = me.getStore();
 
         // call parent
         me.callParent();
@@ -618,7 +617,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         if(textProperty){
             Ext.each(recs, function(layerRec){
                 var layer = layerRec.getOlLayer();
-                layerRec.set('text', layer.get(textProperty))
+                layerRec.set('text', layer.get(textProperty));
             });
         }
         Ext.each(recs, this.bindLoadIndicationToRecord, this);
