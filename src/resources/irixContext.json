@@ -65,7 +65,7 @@
                 },{
                     "type": "fieldset",
                     "name": "OrganisationContact",
-                    "label": "OrganisationContact",
+                    "label": "Kontakt",
                     "fields":[{
                         "name": "Name",
                         "label": "Name",
@@ -106,24 +106,15 @@
                     "label": "Inhaltstyp",
                     "type": "combo",
                     "values": [
-                        ["eventinformation", "eventinformation"],
-                        ["notification", "notification"],
-                        ["nppinformation", "nppinformation"],
-                        ["weatherinformation", "weatherinformation"],
-                        ["trajectory", "trajectory"],
-                        ["nppprojection", "nppprojection"],
-                        ["rodosprojection", "rodosprojection"],
-                        ["otherprojection", "otherprojection"],
-                        ["gammadoserate", "gammadoserate"],
-                        ["airactivity", "airactivity"],
-                        ["groundcontamination", "groundcontamination"],
-                        ["mresult_feed", "mresult_feed"],
-                        ["mresult_food", "mresult_food"],
-                        ["mresult_water", "mresult_water"],
-                        ["situationreport", "situationreport"],
-                        ["instructions", "instructions"],
-                        ["protectiveactions", "protectiveactions"],
-                        ["mediarelease", "mediarelease"]
+                        ["weatherinformation", "Wetterinformation"],
+                        ["trajectory", "Trajektorie"],
+                        ["rodosprojection", "RODOS_Prognose"],
+                        ["gammadoserate", "Messergebnis_ODL"],
+                        ["airactivity", "Messergebnis_Luftaktivität"],
+                        ["groundcontamination", "Messergebnis_Bodenkontamination"],
+                        ["mresult_feed", "Messergebnis_Futtermittel"],
+                        ["mresult_food", "Messergebnis_Lebensmittel"],
+                        ["mresult_water", "Messergebnis_Gewässer"]
                     ],
                     "defaultValue": "eventinformation",
                     "allowBlank": true
@@ -184,10 +175,11 @@
                     "label": "Umweltbereich ID",
                     "type": "combo",
                     "values": [
-                        ["L5", "L5"],
-                        ["L51", "L51"],
-                        ["L52", "L52"],
-                        ["L53", "L53"]
+                        ["B1", "B1"],
+                        ["G", "G"],
+                        ["L12", "L12"],
+                        ["L31", "L31"],
+                        ["L41", "L41"]
                     ],
                     "defaultValue": "L5",
                     "allowBlank": true
@@ -196,15 +188,13 @@
                     "label": "Umweltbereich",
                     "type": "combo",
                     "values": [
-                        ["L5 - Niederschlag", "L5 - Niederschlag"],
-                        ["L51 - Niederschlag (Aktivitätskonzentration)",
-                        "L51 - Niederschlag (Aktivitätskonzentration)"],
-                        ["L52 - nasse Niederschläge (Deposition)",
-                        "L52 - nasse Niederschläge (Deposition)"],
-                        ["L53 - trockene Niederschläge (Deposition)",
-                        "L53 - trockene Niederschläge (Deposition)"]
+                        ["B1 - Boden in-situ", "B1 - Boden in-situ"],
+                        ["G - Gewässer", "G - Gewässer"],
+                        ["L12 - Gamma-Ortsdosisleistung", "L12 - Gamma-Ortsdosisleistung"],
+                        ["L31 - Aerosole", "L31 - Aerosole"],
+                        ["L41 - Luft/gasförmiges Iod", "L41 - Luft/gasförmiges Iod"]
                     ],
-                    "defaultValue": "L5 - Niederschlag",
+                    "defaultValue": "L12 - Gamma-Ortsdosisleistung",
                     "allowBlank": true
                 },{
                     "name": "Dom",
@@ -212,6 +202,7 @@
                     "type": "combo",
                     "values": [
                         ["Gamma-Spektrometrie", "Gamma-Spektrometrie"],
+                        ["Gamma-ODL", "Gamma-ODL"],
                         ["Gesamt-Beta / Gesamt-Alpha",
                         "Gesamt-Beta / Gesamt-Alpha"]
                     ],
@@ -243,10 +234,9 @@
                         ["Intensivmessprogramm", "Intensivmessprogramm"],
                         ["REI", "REI"],
                         ["Routinemessprogramm", "Routinemessprogramm"],
-                        ["Routinemeßprogramm", "Routinemeßprogramm"],
                         ["Spontanproben Bund", "Spontanproben Bund"]
                     ],
-                    "defaultValue": "Intensivmessprogramm",
+                    "defaultValue": "Routinemessprogramm",
                     "allowBlank": false
                 },{
                     "name": "Status",
@@ -260,7 +250,7 @@
                         ["4 - Rückfrage abgesetzt", "4 - Rückfrage abgesetzt"],
                         ["6 - Rücklauf bearbeitet", "6 - Rücklauf bearbeitet"]
                     ],
-                    "defaultValue": "0 - nicht vergeben",
+                    "defaultValue": "1 - plausibel",
                     "allowBlank": false
                 },{
                     "name": "SamplingBegin",
