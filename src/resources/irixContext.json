@@ -60,7 +60,7 @@
                     "name": "SequenceNumber",
                     "label": "Laufende Nr.",
                     "type": "text",
-                    "defaultValue": "42",
+                    "defaultValue": "1",
                     "allowBlank": true
                 },{
                     "type": "fieldset",
@@ -116,7 +116,7 @@
                         ["mresult_food", "Messergebnis_Lebensmittel"],
                         ["mresult_water", "Messergebnis_Gewässer"]
                     ],
-                    "defaultValue": "eventinformation",
+                    "defaultValue": "Messergebnis_ODL",
                     "allowBlank": true
                 },{
                     "name": "IsElan",
@@ -168,7 +168,7 @@
                         "X - ausländ. Messnetze",
                         "Z - BfS (ODL)"
                     ],
-                    "defaultValue": "U - BfS (ABI)",
+                    "defaultValue": "Z - BfS (ODL)",
                     "allowBlank": true
                 },{
                     "name": "SampleTypeId",
@@ -181,7 +181,7 @@
                         ["L31", "L31"],
                         ["L41", "L41"]
                     ],
-                    "defaultValue": "L5",
+                    "defaultValue": "L12",
                     "allowBlank": true
                 },{
                     "name": "SampleType",
@@ -206,7 +206,7 @@
                         ["Gesamt-Beta / Gesamt-Alpha",
                         "Gesamt-Beta / Gesamt-Alpha"]
                     ],
-                    "defaultValue": "Gamma-Spektrometrie",
+                    "defaultValue": "Gamma-ODL",
                     "allowBlank": true
                 },{
                     "name": "LegalBase",
@@ -224,7 +224,7 @@
                         ["REI-I", "REI-I"],
                         ["SPARSE", "SPARSE"]
                     ],
-                    "defaultValue": "Europa",
+                    "defaultValue": "§2",
                     "allowBlank": false
                 },{
                     "name": "MeasuringProgram",
