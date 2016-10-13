@@ -32,7 +32,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
             symbolizerFromRule.set('symbolType', symbolType);
         }
 
-        var textStyle = symbolizerFromRule.get('olStyle').getText()
+        var textStyle = symbolizerFromRule.get('olStyle').getText();
         if(textStyle){
             textStyle.setText(symbolizerFromRule.get('textPattern'));
         }
@@ -139,13 +139,16 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         var symbolizerRenderer = view.down('gx_renderer');
         var win = btn.up('[name=symbolizer-edit-window]');
         var editorRenderer = win.down('gx_renderer');
-        var editorSymbolizer = editorRenderer.getSymbolizers()
+        var editorSymbolizer = editorRenderer.getSymbolizers();
 
         viewModel.set('symbolizer.olStyle', editorSymbolizer);
 
         // Store the textPattern seperately
         if(editorSymbolizer.getText()){
-            viewModel.set('symbolizer.textPattern', editorSymbolizer.getText().getText())
+            viewModel.set(
+                'symbolizer.textPattern',
+                editorSymbolizer.getText().getText()
+            );
         }
 
         symbolizerRenderer.update({

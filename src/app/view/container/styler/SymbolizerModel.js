@@ -8,7 +8,7 @@ Ext.define('Koala.view.container.styler.SymbolizerModel', {
         olStyle: null,
         symbolType: null,
         windowTitle: 'Edit Symbol',
-        symbolizerFieldSetHtml: 'Click symbol to edit',
+        symbolizerFieldSetHtml: 'Click symbol to edit'
     }
 
 });
