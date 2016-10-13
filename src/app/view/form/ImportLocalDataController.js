@@ -194,14 +194,45 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         layerUtil.getMetadataFromUuidAndThen(uuid, function(metadata){
             // Make some specific settings for local data:
             var cfg = me.getInternalLayerConfig(metadata);
+
+            // handle style information for the layer:
+            var mdStyle = Koala.util.Object.getPathStrOr(
+                metadata,
+                'layerConfig/olProperties/vectorStyle',
+                null
+            );
+            var style = mdStyle ? Koala.util.String.coerce(mdStyle) : undefined;
+            cfg.style = style; // This handles styling on OpenLayers side…
+
             cfg.name = layerName;
             cfg.metadata = metadata;
             cfg.routeId = "localData_" + layerName;
+
+            // Create a source for the features from the uploaded / dragged file
             cfg.source = new ol.source.Vector({
                 features: features
             });
 
             var layer = new ol.layer.Vector(cfg);
+
+            // If we were configured with a style, we can set up a matching
+            // Koala.model.StyleRule so that the style editor window can be used
+            // directly:
+            if (style) {
+                var rule = Ext.create('Koala.model.StyleRule');
+                var symbolizer = Ext.create('Koala.model.StyleSymbolizer');
+                var koalaStyle = Ext.create('Koala.model.Style');
+                var rules = koalaStyle.rules();
+                symbolizer.set('olStyle', style);
+                if (style.getText()) {
+                    symbolizer.set('textPattern', style.getText().getText());
+                }
+                rule.setSymbolizer(symbolizer);
+                rules.add(rule);
+                layer.set('koalaStyle', koalaStyle);
+            }
+
+            // Finally add the layer to the map.
             layerUtil.addOlLayerToMap(layer);
         });
 
