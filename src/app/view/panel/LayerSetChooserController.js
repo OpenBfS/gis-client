@@ -158,7 +158,9 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                  * done yet.
                  */
                 var successCallback = function(metadata) {
+                    var metadataClone = Ext.clone(metadata);
                     var olLayer = LayerUtil.layerFromMetadata(metadata);
+                    LayerUtil.setOriginalMetadata(olLayer, metadataClone);
                     olLayer.setVisible(initiallyVisible);
                     orderedRealLayers[index] = olLayer;
                     increaseAndCheckIfDone();
