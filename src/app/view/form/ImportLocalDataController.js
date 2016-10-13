@@ -230,6 +230,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
                 rule.setSymbolizer(symbolizer);
                 rules.add(rule);
                 layer.set('koalaStyle', koalaStyle);
+
+                Koala.util.Style.applyKoalaStyleToLayer(koalaStyle, layer);
             }
 
             // Finally add the layer to the map.
