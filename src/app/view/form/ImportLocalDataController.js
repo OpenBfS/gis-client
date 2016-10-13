@@ -21,7 +21,14 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     alias: 'controller.k-form-importlocaldata',
 
     requires: [
-        'Koala.util.Layer'
+        'Koala.util.Layer',
+        'Koala.util.Object',
+        'Koala.util.String',
+        'Koala.util.Style',
+
+        'Koala.model.Style',
+        'Koala.model.StyleRule',
+        'Koala.model.StyleSymbolizer'
     ],
 
     /**
