@@ -28,6 +28,7 @@
         "packages/remote/GeoExt/src/util",
         "packages/remote/GeoExt/src/mixin",
         "packages/remote/BasiGX/src/util/Application.js",
+        "packages/remote/BasiGX/src/util/Color.js",
         "packages/remote/BasiGX/src/util/ConfigParser.js",
         "packages/remote/BasiGX/src/util/Controller.js",
         "packages/remote/BasiGX/src/util/Layer.js",
