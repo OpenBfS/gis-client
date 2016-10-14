@@ -36,11 +36,14 @@ Ext.define('Koala.view.main.Main', {
         'BasiGX.view.panel.MapContainer',
         'BasiGX.util.Animate',
 
+        'Koala.util.AppContext',
+
         'Koala.view.chart.TimeSeries',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
         'Koala.view.window.Print'
+
     ],
 
     controller: 'main',
@@ -72,6 +75,7 @@ Ext.define('Koala.view.main.Main', {
         region: 'center',
         mapComponentConfig: {
             xtype: 'k-component-map',
+            appContextPath: Koala.appContextUrl || 'resources/appContext.json',
             plugins: [{
                 ptype: 'hover',
                 selectMulti: true,
@@ -148,6 +152,9 @@ Ext.define('Koala.view.main.Main', {
                         text: '{addWmsButtonText}',
                         tooltip: '{addWmsButtonTooltip}'
                     },
+                    listeners: {
+                        boxready: Koala.util.AppContext.generateCheckToolVisibility('addWmsBtn')
+                    },
                     handler: function(){
                         var win = Ext.ComponentQuery.query(
                             '[name=add-wms-window]')[0];
@@ -180,6 +187,9 @@ Ext.define('Koala.view.main.Main', {
                     bind: {
                         text: '{printButtonText}',
                         tooltip: '{printButtonTooltip}'
+                    },
+                    listeners: {
+                        boxready: Koala.util.AppContext.generateCheckToolVisibility('printBtn')
                     },
                     handler: function(btn){
                         var win = Ext.ComponentQuery.query('k-window-print')[0];

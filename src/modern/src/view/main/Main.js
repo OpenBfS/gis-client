@@ -54,7 +54,7 @@ Ext.define('Koala.view.main.Main', {
         height: '100%',
         items: [{
             xtype: 'basigx-component-map',
-            appContextPath: 'resources/appContext.json',
+            appContextPath: Koala.appContextUrl || 'resources/appContext.json',
             height: '100%',
             listeners: {
                 painted: function(){
