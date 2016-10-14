@@ -47,13 +47,26 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         var me = this;
         var view = me.getView();
         var FilterUtil = Koala.util.Filter;
-        var filterVals = FilterUtil.getStartEndFilterFromMetadata(
-            olLayer.metadata
-        );
+        var metadata = olLayer.metadata;
+        var filterVals = FilterUtil.getStartEndFilterFromMetadata(metadata);
+        // This is how we would get min/max values for the modern part
+        // but `datepickerfield` instances don't have `minValue`/`maxValue`…
+        //
+        // var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
         var startDateField = view.down('datepickerfield[name=datestart]');
         var endDateField = view.down('datepickerfield[name=dateend]');
+
         startDateField.setValue(filterVals.mindatetimeinstant);
+        // No need to set these, sadly `minValue`/`maxValue` don't exist
+        //
+        // startDateField.setMinValue(minMaxDates.min);
+        // startDateField.setMaxValue(minMaxDates.max);
+
         endDateField.setValue(filterVals.maxdatetimeinstant);
+        // No need to set these, sadly `minValue`/`maxValue` don't exist
+        //
+        // endDateField.setMinValue(minMaxDates.min);
+        // endDateField.setMaxValue(minMaxDates.max);
     },
 
     applyChangedFilterToChart: function() {
