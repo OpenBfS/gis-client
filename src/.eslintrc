@@ -9,7 +9,8 @@
         "FileReader": true,
         "Koala": true,
         "BasiGX": true,
-        "btoa": true
+        "btoa": true,
+        "d3": false
     },
     "rules": {
         "comma-dangle": 2,
@@ -72,7 +73,7 @@
         "indent": 0,
         "linebreak-style": [2, "unix"],
         "no-mixed-spaces-and-tabs": 2,
-        "no-nested-ternary": 2,
+        "no-nested-ternary": 0,
         "no-trailing-spaces": 2,
         "semi": [2, "always"],
         "max-len": [0, 80, 4]

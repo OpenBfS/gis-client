@@ -14,39 +14,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.BarChart
+ * @class Koala.view.panel.TimeseriesChartModel
  */
-Ext.define("Koala.view.window.BarChart", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-barchart",
-
-    requires: [
-        "Koala.view.window.BarChartController",
-        "Koala.view.window.BarChartModel",
-
-        "Ext.form.field.Date"
-    ],
-
-    controller: "k-window-barchart",
-
-    viewModel: {
-        type: "k-window-barchart"
-    },
-
-    bind: {
-        title: "{title}"
-    },
-
-    resizable: false,
-
-    config: {
-        name: "barchartwin",
-        constrainHeader: true,
-        collapsible: true,
-        layout: "fit"
-    },
-
-    listeners: {
-        close: "onBarchartWinClose"
+Ext.define('Koala.view.panel.TimeseriesChartModel', {
+    extend: 'Ext.app.ViewModel',
+    alias: 'viewmodel.k-panel-timeserieschart',
+    data: {
+        panelTitleText: ''
     }
 });

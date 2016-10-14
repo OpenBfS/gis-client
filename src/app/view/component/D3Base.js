@@ -14,39 +14,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.BarChart
+ * @class Koala.view.component.D3Base
  */
-Ext.define("Koala.view.window.BarChart", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-barchart",
-
-    requires: [
-        "Koala.view.window.BarChartController",
-        "Koala.view.window.BarChartModel",
-
-        "Ext.form.field.Date"
-    ],
-
-    controller: "k-window-barchart",
-
-    viewModel: {
-        type: "k-window-barchart"
-    },
-
-    bind: {
-        title: "{title}"
-    },
-
-    resizable: false,
-
-    config: {
-        name: "barchartwin",
-        constrainHeader: true,
-        collapsible: true,
-        layout: "fit"
-    },
+Ext.define('Koala.view.component.D3Base',{
+    extend: 'Ext.Component',
+    xtype: 'd3-base',
 
     listeners: {
-        close: "onBarchartWinClose"
+        boxready: 'onShow',
+        painted: 'onShow'
+    },
+
+    inheritableStatics: {
+        DEFAULTS: {
+            CHART: {
+                LEFT_AXIS_TYPE: 'line',
+                LEFT_AXIS_CURVE: 'linear',
+                STROKE_OPACITY: 1,
+                STROKE_WIDTH: 1
+            },
+            BARCHART: {
+                LEFT_AXIS_TYPE: 'bar',
+                LEFT_AXIS_CURVE: 'linear',
+                LEFT_AXIS_SCALE: 'linear', // TODO are these always same?
+                LEFT_AXIS_FORMAT: ',.0f',
+                BOTTOM_AXIS_SCALE: 'ordinal'
+            }
+        }
     }
 });

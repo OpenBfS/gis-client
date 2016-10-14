@@ -14,13 +14,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.chart.TimeSeriesModel
+ * @class Koala.view.panel.BarChartController
  */
-Ext.define('Koala.view.chart.TimeSeriesModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-chart-timeseries',
-    data: {
-        name: ''
-    }
+Ext.define('Koala.view.panel.BarChartController', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.k-panel-barchart',
 
+    requires: [
+        "Koala.view.component.D3BarChart"
+    ],
+
+    updateFor: function(olLayer, olFeat){
+        var me = this;
+        var view = me.getView();
+        var chart = Koala.view.component.D3BarChart.create(olLayer, olFeat);
+        view.removeAll();
+        view.add(chart);
+    }
 });

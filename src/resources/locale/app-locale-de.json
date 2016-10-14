@@ -41,6 +41,20 @@
             }
         }
     },
+    "Koala.view.component.D3BarChart": {
+        "config": {
+            "data": {
+                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+            }
+        }
+    },
+    "Koala.view.component.D3Chart": {
+        "config": {
+            "data": {
+                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+            }
+        }
+    },
     "Koala.view.chart.Bar": {
         "config": {
             "data": {
@@ -768,6 +782,22 @@
     },
 
 
+    "Koala.view.form.TimeseriesFilterControl": {
+        "config": {
+            "data": {
+                "labelStartDate": "Startdatum",
+                "labelEndDate": "Enddatum",
+                "setFilterButtonText": "Anwenden"
+            }
+        }
+    },
+    "Koala.view.panel.BarChart":{
+        "config": {
+            "data": {
+                "panelTitleText": "Säulendiagramm"
+            }
+        }
+    },
     "Koala.view.panel.MobileLegend": {
         "config": {
             "data": {
@@ -809,6 +839,13 @@
                 "utcLabel": "UTC",
                 "localLabel": "Lokal",
                 "languageSelectComboLabel": "Sprache"
+            }
+        }
+    },
+    "Koala.view.panel.TimeseriesChart":{
+        "config": {
+            "data": {
+                "panelTitleText": "Zeitreihe"
             }
         }
     },

@@ -25,6 +25,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         "Koala.view.window.TimeSeriesWindowModel",
         "Koala.util.Duration",
         "Koala.util.Date",
+        "Koala.util.Filter",
         "Koala.util.String",
 
         "Ext.form.field.Date"
@@ -70,49 +71,16 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
 
     items: [],
 
-    statics: {
-        /**
-         * The string which we replace with the current date.
-         */
-        NOW_STRING: "now",
-
-        /**
-         */
-        getStartEndFilterFromMetadata: function(metadata){
-            var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
-            var endDate = Koala.util.String.coerce(timeseriesCfg.end_timestamp);
-            // replace "now" with current utc date
-            if (endDate === Koala.view.window.TimeSeriesWindow.NOW_STRING) {
-                endDate = Koala.util.Date.makeUtc(new Date());
-            }
-            if (Ext.isString(endDate)) {
-                var format = timeseriesCfg.end_timestamp_format;
-                if (!format) {
-                    format = Koala.util.Date.ISO_FORMAT;
-                }
-                endDate = Ext.Date.parse(endDate, format);
-            }
-            var duration = timeseriesCfg.duration;
-            var startDate = Koala.util.Duration.dateSubtractAbsoluteDuration(
-                endDate,
-                duration
-            );
-            var filter = {
-                parameter: timeseriesCfg.xAxisAttribute,
-                mindatetimeinstant: startDate,
-                maxdatetimeinstant: endDate
-            };
-            return filter;
-        }
-    },
-
     /**
      * Initializes the component.
      */
     initComponent: function() {
         var me = this;
+        var FilterUtil = Koala.util.Filter;
         var metadata = me.initOlLayer.metadata;
-        var timeRangeFilter = me.self.getStartEndFilterFromMetadata(metadata);
+        var timeRangeFilter = FilterUtil.getStartEndFilterFromMetadata(metadata);
+        var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
+
         if (me.addFilterForm) {
             me.items = [{
                 xtype: 'form',
@@ -132,9 +100,10 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     // https://github.com/gportela85/DateTimeField
                     xtype: 'datefield',
                     bind: {
-                        fieldLabel: '{dateFieldStartLabel}',
-                        maxValue: '{startDateMaxValue}'
+                        fieldLabel: '{dateFieldStartLabel}'
                     },
+                    minValue: minMaxDates.min,
+                    maxValue: minMaxDates.max,
                     value: timeRangeFilter.mindatetimeinstant,
                     labelWidth: 35,
                     name: 'datestart',
@@ -145,6 +114,8 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     bind: {
                         fieldLabel: '{dateFieldEndLabel}'
                     },
+                    minValue: minMaxDates.min,
+                    maxValue: minMaxDates.max,
                     value: timeRangeFilter.maxdatetimeinstant,
                     labelWidth: 38,
                     name: 'dateend',

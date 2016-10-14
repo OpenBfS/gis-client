@@ -78,21 +78,29 @@ Ext.define('Koala.util.String', {
         /**
          * Gets a value from an comma separated string with given index
          * @param {string} sequence - the comma separated sequence
-         * @param {index} - the index to access the value_
-         * @param {mixed} - the default return value
+         * @param {index} index - the index to access the value_
+         * @param {mixed} defaultValue - the default return value
          * @returns {string} - the desired value in the sequence, if found
          */
-        getValueFromSequence: function(sequence, index, defaultValue) {
-            if (Ext.isEmpty(sequence)) {
-                return defaultValue;
-            }
-            var seqArr = sequence.split(",");
-            if (Ext.isEmpty(seqArr[index])) {
-                return defaultValue;
-            } else {
-                return seqArr[index];
-            }
-        },
+        getValueFromSequence: (function() {
+            // cache splitted sequences by their string representation
+            var sequenceCache = {};
+            return function(sequence, index, defaultValue) {
+                if (Ext.isEmpty(sequence)) {
+                    return defaultValue;
+                }
+                var seqArr = sequenceCache[sequence];
+                if (!seqArr) {
+                    seqArr = sequence.split(",");
+                    sequenceCache[sequence] = seqArr;
+                }
+                if (Ext.isEmpty(seqArr[index])) {
+                    return defaultValue;
+                } else {
+                    return seqArr[index];
+                }
+            };
+        }()),
 
         /**
          * @param {string} string - the string containing the bool

@@ -38,12 +38,12 @@ Ext.define('Koala.view.main.Main', {
 
         'Koala.util.AppContext',
 
-        'Koala.view.chart.TimeSeries',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
-        'Koala.view.window.Print'
+        'Koala.view.window.Print',
 
+        'Koala.util.Layer'
     ],
 
     controller: 'main',
@@ -84,7 +84,6 @@ Ext.define('Koala.view.main.Main', {
         },
         listeners: {
             afterrender: function(){
-
                 if(!location.hash){
                     Ext.create('Ext.window.Window', {
                         title: 'Layer Profilwahl',

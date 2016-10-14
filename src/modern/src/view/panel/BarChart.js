@@ -14,39 +14,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.BarChart
+ * @class Koala.view.panel.BarChart
  */
-Ext.define("Koala.view.window.BarChart", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-barchart",
+Ext.define('Koala.view.panel.BarChart', {
+    extend: 'Koala.view.panel.MobilePanel',
+    xtype: 'k-panel-barchart',
 
     requires: [
-        "Koala.view.window.BarChartController",
-        "Koala.view.window.BarChartModel",
-
-        "Ext.form.field.Date"
+        'Koala.view.panel.BarChartController',
+        'Koala.view.panel.BarChartModel'
     ],
 
-    controller: "k-window-barchart",
-
+    controller: 'k-panel-barchart',
     viewModel: {
-        type: "k-window-barchart"
+        type: 'k-panel-barchart'
     },
 
     bind: {
-        title: "{title}"
+        title: '{panelTitleText}'
     },
 
-    resizable: false,
+    closeToolAlign: 'left',
 
-    config: {
-        name: "barchartwin",
-        constrainHeader: true,
-        collapsible: true,
-        layout: "fit"
-    },
+    scrollable: true,
 
-    listeners: {
-        close: "onBarchartWinClose"
-    }
+    items: []
 });
