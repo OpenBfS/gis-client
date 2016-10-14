@@ -44,23 +44,25 @@ Ext.define('Koala.util.String', {
          * exposes a method `get` to access properties. Both Ext.data.Model
          * instances and o.Objects qualify as gettable.
          */
-        replaceTemplateStrings: function(tpl, getable, showWarnings) {
+        replaceTemplateStrings: function(tpl, getable, showWarnings, prefix) {
             if (getable && !('get' in getable)) {
                 getable = new ol.Object(getable);
             }
+            var keyPrefix = prefix ? prefix : '';
 
             // capture alphanumeric values in between double square brackets:
             // will yield an array of matches including their boundaries:
             // tpl = "Hello [[whom-to-greet]], how are you [[another_string]]";
             // matches = ["[[whom-to-greet]]", "[[another_string]]"]
-            var regex = /\[\[([a-zA-Z0-9_-])+?\]\]/gi;
+            var regex = /\[\[([a-zA-Z0-9\._-])+?\]\]/gi;
             var matches = tpl.match(regex);
             var keys = [];
             Ext.each(matches, function(match) {
-                keys.push(match.replace(/[\]\[]/g, ""));
+                var key = match.replace(/[\]\[]/g, "");
+                keys.push(key.replace(prefix, ""));
             });
             Ext.each(keys, function(key) {
-                var re = new RegExp("\\[\\[" + key + "\\]\\]");
+                var re = new RegExp("\\[\\[" + keyPrefix + key + "\\]\\]");
                 var replacement = getable.get(key);
                 if (!Ext.isDefined(replacement)) {
                     if (showWarnings === true) {

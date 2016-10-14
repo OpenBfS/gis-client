@@ -68,7 +68,11 @@ Ext.define('Koala.view.component.MapController', {
                     tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, layer, false);
                     tooltipFeature = replaceTemplateStrings(
+                        tooltipFeature, layer, false, "layer.");
+                    tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, feature, false);
+                    tooltipFeature = replaceTemplateStrings(
+                        tooltipFeature, feature, false, "feature.");
                     innerHtml += tooltipFeature;
                     if (featureIdx + 1 !== featuresLen) {
                         // not the last feature, append linebreak
@@ -84,6 +88,23 @@ Ext.define('Koala.view.component.MapController', {
         });
 
         return innerHtml;
+    },
+
+    onDroppedExternalVectorData: function(event) {
+        Ext.create("Ext.window.Window", {
+            // TODO i18n
+            title: 'Upload local data',
+            autoShow: true,
+            items: [{
+                xtype: 'k-form-importLocalData',
+                viewModel: {
+                    data: {
+                        file: event.file,
+                        targetProjection: event.projection
+                    }
+                }
+            }]
+        });
     },
 
     /**

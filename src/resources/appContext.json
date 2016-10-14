@@ -44,10 +44,43 @@
                 "projection": "EPSG:3857",
                 "zoom": 0
             },
+
             "tools": [
                 "addWmsBtn",
                 "printBtn"
-            ]
+            ],
+
+            "vectorIcons": [
+                {
+                    "src": "resources/vectorIcons/atomicon.png",
+                    "caption": "Atom"
+                }
+            ],
+
+            "vectorProjections": [{
+                "code": "EPSG:3857",
+                "label": "EPSG:3857"
+            }, {
+                "code": "EPSG:4326",
+                "label": "EPSG:4326 (lon/lat)"
+            }, {
+                "code": "EPSG:4326-enu",
+                "label": "EPSG:4326 (lat/lon)"
+            }, {
+                "code": "EPSG:25832",
+                "label": "EPSG:25832"
+            }],
+
+            "vectorTemplates": [{
+                "uuid": "241ae25f-c180-475b-9734-4947f75137e1",
+                "label": "Local Vector Data Template (drinkwater)"
+            }, {
+                "uuid": "5fdc824d-dc67-46cc-a87e-1c99f13557cf",
+                "label": "Local Vector Data Template (buildings)"
+            }, {
+                "uuid": "0613135b-8a4a-496d-b4a2-bf67831c620d",
+                "label": "Local Vector Data Template (bundeslaender)"
+            }]
         }
     },
     "success": true

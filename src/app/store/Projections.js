@@ -14,23 +14,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * This class is the view model for the Main view of the application.
- *
- * @class Koala.view.main.MainModel
+ * @class Koala.store.Projections
  */
-Ext.define('Koala.view.main.MainModel', {
-    extend: 'Ext.app.ViewModel',
+Ext.define('Koala.store.Projections', {
+    extend: 'Ext.data.Store',
 
-    alias: 'viewmodel.app-main',
+    alias: 'store.k-projections',
 
-    data: {
-        addWmsButtonText: '',
-        addWmsButtonTooltip: '',
-        buttonGroupTopTitle: '',
-        printButtonText: '',
-        printButtonTooltip: '',
-        importLocalDataButtonText: 'Import',
-        importLocalDataButtonTooltip: 'Import local data',
-        importLocalDataWindowText: 'Import'
+    pageSize: 0,
+
+    useDefaultXhrHeader: false,
+
+    fields: [{
+         name: 'code',
+         type: 'string'
+    },{
+        name: 'label',
+        type: 'string'
+    }],
+
+    proxy: {
+        type: 'memory',
+        reader: {
+            type: 'json'
+        }
     }
 });

@@ -5,10 +5,11 @@
         "ol": true,
         "window": true,
         "location": true,
+        "document": true,
+        "FileReader": true,
         "Koala": true,
         "BasiGX": true,
-        "btoa": true,
-        "document": true
+        "btoa": true
     },
     "rules": {
         "comma-dangle": 2,
