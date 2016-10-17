@@ -28,6 +28,9 @@ Ext.define('Koala.view.main.MainModel', {
         addWmsButtonTooltip: '',
         buttonGroupTopTitle: '',
         printButtonText: '',
-        printButtonTooltip: ''
+        printButtonTooltip: '',
+        importLocalDataButtonText: 'Import',
+        importLocalDataButtonTooltip: 'Import local data',
+        importLocalDataWindowText: 'Import'
     }
 });

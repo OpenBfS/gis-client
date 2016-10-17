@@ -41,6 +41,20 @@
             }
         }
     },
+    "Koala.view.component.D3BarChart": {
+        "config": {
+            "data": {
+                "noDataAvailableText": "fr:Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+            }
+        }
+    },
+    "Koala.view.component.D3Chart": {
+        "config": {
+            "data": {
+                "noDataAvailableText": "fr:Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+            }
+        }
+    },
     "Koala.view.chart.Bar": {
         "config": {
             "data": {
@@ -52,6 +66,99 @@
         "config": {
             "data": {
                 "name": "fr:Koala"
+            }
+        }
+    },
+    "Koala.view.container.styler.Filter": {
+        "config": {
+            "data": {
+                "attributeComboLabel": "fr:Attribut",
+                "operatorComboLabel": "fr:Operator",
+                "literalNumberField1Label": "fr:Untere Grenze",
+                "literalNumberField2Label": "fr:Wert",
+                "literalTextFieldLabel": "fr:'Is like' Muster",
+                "upperBoundaryText": "fr:Obere Grenze",
+                "valueText": "fr:Wert",
+                "isLikeText": "fr:'Is like' Muster"
+            }
+        }
+    },
+    "Koala.view.container.styler.Rule": {
+        "config": {
+            "data": {
+                "titlePrefix": "fr:Feature Style Regel",
+                "removeRuleButtonText": "fr:Diese Regel entfernen",
+                "oneRuleRequiredWarning": "fr:Es wird mindestens eine Regel benötigt."
+            }
+        }
+    },
+    "Koala.view.container.styler.Rules": {
+        "config": {
+            "data": {
+                "addRuleButtonText": "fr:Regel hinzufügen"
+            }
+        }
+    },
+    "Koala.view.container.styler.ScaleDenominator": {
+        "config": {
+            "data": {
+                "title": "fr:Maßstabsbegrenzung verwenden",
+                "operatorComboLabel": "fr:Operator",
+                "literalNumberField1Label": "fr:Untere Grenze",
+                "literalNumberField2Label": "fr:Obere Grenze"
+            }
+        }
+    },
+    "Koala.view.container.styler.Styler": {
+        "config": {
+            "data": {
+                "missingOrInvalidLayerName": "fr:'layerName' ist obligatorisch und muss einen NameSpace beinhalten",
+                "genericError": "fr:Ein unbekannter Fehler ist aufgetreten",
+                "failedToFetch": "fr:Der aktuelle Style konnte nicht gelesen werden",
+                "titlePrefix": "fr:Styling ",
+                "btnTextReloadCurrentStyle": "fr:Auf original Style zurücksetzen",
+                "btnTextApplyAndSave": "fr:Style speichern",
+                "dspLayerName": "fr:"
+            }
+        }
+    },
+    "Koala.view.container.styler.Symbolizer": {
+        "config": {
+            "data": {
+                "title": "fr:Symbol",
+                "windowTitle": "fr:Symbol",
+                "symbolizerFieldSetHtml": "fr:Zum Bearbeiten klicken"
+            }
+        }
+    },
+    "Koala.view.container.styler.Label": {
+        "config": {
+            "data": {
+                "labelFieldSetTitle": "fr:Beschriftung",
+                "textFieldLabel": "fr:Text/Template",
+                "fontFamilyFieldLabel": "fr:Schriftfamilie",
+                "fontStyleFieldLabel": "fr:Schriftstil",
+                "fontSizeFieldLabel": "fr:Schriftgröße",
+                "fontColorFieldLabel": "fr:Schriftfarbe:",
+                "fontStrokeColorFieldLabel": "fr:Schriftumrandung:",
+                "rotationFieldLabel": "fr:Rotation",
+                "offsetXFieldLabel": "fr:Versatz X",
+                "offsetYFieldLabel": "fr:Versatz Y"
+            }
+        }
+    },
+
+    "Koala.view.form.ImportLocalDataModel": {
+        "config": {
+            "data": {
+                "fieldSetTitle": "fr:Import von",
+                "cancelButtonText": "fr:Abbrechen",
+                "importButtonText": "fr:Import",
+                "layerNameLabel": "fr:Layername",
+                "templateLabel": "fr:Template",
+                "projectionLabel": "fr:Projektion",
+                "fileFieldLabel": "fr:Datei",
+                "fileFieldButtonText": "fr:Durchsuchen"
             }
         }
     },
@@ -119,7 +226,10 @@
                 "basigx-button-zoomin-tooltip": "fr:Hineinzoomen",
                 "basigx-button-zoomout-tooltip": "fr:Herauszoomen",
                 "basigx-button-zoomtoextent-tooltip": "fr:Auf Startkartenansicht rezentrieren",
-                "basigx-button-togglelegend-tooltip": "fr:Legende ein-/ausklappen"
+                "basigx-button-togglelegend-tooltip": "fr:Legende ein-/ausklappen",
+                "importLocalDataButtonText": "fr:Import",
+                "importLocalDataButtonTooltip": "fr:Lokale Dateien importieren",
+                "importLocalDataWindowText": "fr:Import"
             }
         }
     },
@@ -256,6 +366,22 @@
     },
 
 
+    "Koala.view.form.TimeseriesFilterControl": {
+        "config": {
+            "data": {
+                "labelStartDate": "fr:Startdatum",
+                "labelEndDate": "fr:Enddatum",
+                "setFilterButtonText": "fr:Anwenden"
+            }
+        }
+    },
+    "Koala.view.panel.BarChart":{
+        "config": {
+            "data": {
+                "panelTitleText": "fr:Säulendiagramm"
+            }
+        }
+    },
     "Koala.view.panel.MobileLegend": {
         "config": {
             "data": {
@@ -297,6 +423,13 @@
                 "utcLabel": "fr:UTC",
                 "localLabel": "fr:Lokal",
                 "languageSelectComboLabel": "fr:Sprache"
+            }
+        }
+    },
+    "Koala.view.panel.TimeseriesChart":{
+        "config": {
+            "data": {
+                "panelTitleText": "fr:Zeitreihe"
             }
         }
     },

@@ -20,6 +20,10 @@ Ext.define('Koala.view.window.BarChartController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-barchart',
 
+    requires: [
+        "Koala.view.component.D3BarChart"
+    ],
+
     /**
      * Removes the previousy selected feature from the select interaction
      */
@@ -29,23 +33,8 @@ Ext.define('Koala.view.window.BarChartController', {
         mapComp.removeAllHoverFeatures();
     },
 
-    createBarChart: function(olLayer, olFeat, chartId) {
-        var props = olLayer.get('barChartProperties');
-        var categoryCount = props.chartFieldSequence.split(",").length;
-        var chartWidth = 200 + categoryCount * 30;
-        var titleTpl = 'titleTpl' in props ? props.titleTpl : '';
-        var title = Koala.util.String.replaceTemplateStrings(titleTpl, olLayer);
-        title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
-
-        var chart = {
-            title: Ext.isEmpty(title) ? undefined : title,
-            xtype: 'k-chart-bar',
-            name: chartId,
-            layer: olLayer,
-            height: 350,
-            width: chartWidth
-        };
-        return chart;
+    createBarChart: function(olLayer, olFeat) {
+        return Koala.view.component.D3BarChart.create(olLayer, olFeat);
     },
 
     updateBarChartStore: function(olFeat, chartId) {
@@ -97,7 +86,7 @@ Ext.define('Koala.view.window.BarChartController', {
 
         if (!layerChartRendered) {
             view.add(me.createBarChart(olLayer, olFeat, uniqueId));
-            me.updateBarChartStore(olFeat, uniqueId);
+            // me.updateBarChartStore(olFeat, uniqueId);
             view.show();
             me.updateBarChartWin(view, lastChart, olLayer.qtitle);
         } else {

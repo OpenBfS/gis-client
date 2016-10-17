@@ -44,7 +44,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         hasCollapseAllBtn: true,
         hasExpandAllBtn: true,
         hasToggleAllBtn: false,
-        hasRemoveAllLayersBtn: true
+        hasRemoveAllLayersBtn: true,
+        textProperty: 'nameWithSuffix'
     },
 
     hasRoutingListeners: false,
@@ -130,6 +131,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             var allowChangeFilter = olLayer.metadata || false;
             var allowDownload = olLayer.get('allowDownload') || false;
             var allowRemoval = olLayer.get('allowRemoval') || false;
+            var allowStyle = olLayer instanceof ol.layer.Vector;
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
             var hasLegend = olLayer.get('hasLegend') || false;
 
@@ -137,8 +139,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             var changeFilterBtn = comp.down('button[name="filter"]');
             var downloadBtn = comp.down('button[name="download"]');
             var removalBtn = comp.down('button[name="removal"]');
+            var styleBtn = comp.down('button[name="style"]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
-            var legend = comp.up().down('image[name="legend"]');
+            var legend = comp.up().down('image[name="' + olLayer.get("routeId") + '-legendImg"]');
 
             if(shortInfoBtn){
                 shortInfoBtn.setVisible(allowShortInfo);
@@ -151,6 +154,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             }
             if(removalBtn){
                 removalBtn.setVisible(allowRemoval);
+            }
+            if(styleBtn){
+                styleBtn.setVisible(allowStyle);
             }
             if(opacitySlider){
                 opacitySlider.setVisible(allowOpacityChange);
@@ -216,6 +222,30 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                     }
                 }
             });
+        },
+
+        styleHandler: function(btn){
+            var layer = btn.layerRec.getOlLayer();
+            var win = Ext.ComponentQuery.query('[name=style-layer]')[0];
+            if(!win){
+                Ext.create('Ext.window.Window', {
+                    name: 'style-layer',
+                    title: 'Layer Style',
+                    width: 800,
+                    height: 450,
+                    layout: 'fit',
+                    items: [{
+                        xtype: 'k_container_styler_styler',
+                        viewModel:{
+                            data: {
+                                layer: layer
+                            }
+                        }
+                    }]
+                }).show();
+            } else {
+                BasiGX.util.Animate.shake(win);
+            }
         },
 
         downloadHandler: function(btn){
@@ -291,6 +321,13 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 name: 'removal',
                 glyph: 'xf00d@FontAwesome',
                 tooltip: 'Layer entfernen'
+                // We'll assign a handler to handle clicks here once the
+                // class is defined and we can access the static methods
+            }, {
+                xtype: 'button',
+                name: 'style',
+                glyph: 'xf1fc@FontAwesome',
+                tooltip: 'Layerstil anpassen'
                 // We'll assign a handler to handle clicks here once the
                 // class is defined and we can access the static methods
             }, {
@@ -598,9 +635,10 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     /**
-     * Bound as handler for the `add`-event of the store, this method binds
-     * listeners to all added records to show whether they are loading. See
-     * also the method #bindLoadIndicationToRecord.
+     * Bound as handler for the `add`-event of the store, this method modfies
+     * the `text` of the displayed record and binds listeners to all added
+     * records to show whether they are loading. See also the method
+     * #bindLoadIndicationToRecord.
      *
      * @param {GeoExt.data.store.LayersTree} store The store to which the
      *   records have been added.
@@ -609,6 +647,15 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
      * @private
      */
     handleLayerStoreAdd: function(store, recs) {
+        // Replace the text of the treerecords with the configured textProperty
+        // to enable the filter logic
+        var textProperty = this.getTextProperty();
+        if(textProperty){
+            Ext.each(recs, function(layerRec){
+                var layer = layerRec.getOlLayer();
+                layerRec.set('text', layer.get(textProperty));
+            });
+        }
         Ext.each(recs, this.bindLoadIndicationToRecord, this);
     },
 
@@ -799,8 +846,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             var layer = rec.getOlLayer();
             var selector = '[name=' + layer.get("routeId") + '-legendImg]';
             var img = Ext.ComponentQuery.query(selector)[0];
-
-            if (img) {
+            if (img && img.el && img.el.dom) {
                 img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));
             }
         });
@@ -833,6 +879,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     var infoBtnCfg = cls.findByProp(menuItems, 'name', 'shortInfo');
     var downloadBtnCfg = cls.findByProp(menuItems, 'name', 'download');
     var removalBtnCfg = cls.findByProp(menuItems, 'name', 'removal');
+    var styleBtnCfg = cls.findByProp(menuItems, 'name', 'style');
     var opacitySliderCfg = cls.findByProp(menuItems, 'name', 'opacityChange');
 
     if (layerMenuCfg) {
@@ -849,6 +896,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     }
     if (removalBtnCfg) {
         removalBtnCfg.handler = cls.removalHandler;
+    }
+    if (styleBtnCfg) {
+        styleBtnCfg.handler = cls.styleHandler;
     }
     if (opacitySliderCfg) {
         opacitySliderCfg.listeners.change = cls.sliderChangeHandler;

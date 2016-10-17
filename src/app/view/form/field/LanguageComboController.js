@@ -25,6 +25,199 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
      */
     locale: null,
 
+    /**
+     * The custom D3 language definitions.
+     *
+     * @type {Object}
+     */
+    d3LocaleDefinitions: {
+        "de": {
+            "decimal": ",",
+            "thousands": ".",
+            "grouping": [3],
+            "currency": [
+                "€",
+                ""
+            ],
+            "dateTime": "%a %b %e %X %Y",
+            "date": "%d.%m.%Y",
+            "time": "%H:%M:%S",
+            "periods": [
+                "AM",
+                "PM"
+            ],
+            "days": [
+                "Sonntag",
+                "Montag",
+                "Dienstag",
+                "Mittwoch",
+                "Donnerstag",
+                "Freitag",
+                "Samstag"
+            ],
+            "shortDays": [
+                "So",
+                "Mo",
+                "Di",
+                "Mi",
+                "Do",
+                "Fr",
+                "Sa"
+            ],
+            "months": [
+                "Januar",
+                "Februar",
+                "März",
+                "April",
+                "Mai",
+                "Juni",
+                "Juli",
+                "August",
+                "September",
+                "Oktober",
+                "November",
+                "Dezember"
+            ],
+            "shortMonths": [
+                "Jan",
+                "Feb",
+                "Mär",
+                "Apr",
+                "Mai",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Okt",
+                "Nov",
+                "Dez"
+            ]
+        },
+        "en": {
+            "decimal": ",",
+            "thousands": ".",
+            "grouping": [3],
+            "currency": [
+                "€",
+                ""
+            ],
+            "dateTime": "%a %e %b %X %Y",
+            "date": "%d/%m/%Y",
+            "time": "%H:%M:%S",
+            "periods": [
+                "AM",
+                "PM"
+            ],
+            "days": [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday"
+            ],
+            "shortDays": [
+                "Sun",
+                "Mon",
+                "Tue",
+                "Wed",
+                "Thu",
+                "Fri",
+                "Sat"
+            ],
+            "months": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
+            "shortMonths": [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec"
+            ]
+        },
+        "fr": {
+            "decimal": ",",
+            "thousands": ".",
+            "grouping": [3],
+            "currency": [
+                "€",
+                ""],
+            "dateTime": "%A, le %e %B %Y, %X",
+            "date": "%d/%m/%Y",
+            "time": "%H:%M:%S",
+            "periods": [
+                "AM",
+                "PM"
+            ],
+            "days": [
+                "dimanche",
+                "lundi",
+                "mardi",
+                "mercredi",
+                "jeudi",
+                "vendredi",
+                "samedi"
+            ],
+            "shortDays": [
+                "dim.",
+                "lun.",
+                "mar.",
+                "mer.",
+                "jeu.",
+                "ven.",
+                "sam."
+            ],
+            "months": [
+                "janvier",
+                "février",
+                "mars",
+                "avril",
+                "mai",
+                "juin",
+                "juillet",
+                "août",
+                "septembre",
+                "octobre",
+                "novembre",
+                "décembre"
+            ],
+            "shortMonths": [
+                "janv.",
+                "févr.",
+                "mars",
+                "avr.",
+                "mai",
+                "juin",
+                "juil.",
+                "août",
+                "sept.",
+                "oct.",
+                "nov.",
+                "déc."
+            ]
+        }
+    },
+
     bindTooltip: function() {
         var combo = this.getView();
         var el = combo.getEl();
@@ -77,7 +270,6 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
         var respObj;
 
         if (resp && resp.responseText) {
-
             // try to parse the given string as JSON
             try {
                 respObj = Ext.decode(resp.responseText);
@@ -90,6 +282,7 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
                     me.setAppLanguage(respObj);
                     me.recreateSingletons();
                     me.bindTooltip();
+                    me.setD3Locale(me.locale);
                 }
             }
         }
@@ -177,5 +370,17 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
                 clazz.getViewModel().setData(locale.config.data);
             });
         });
+    },
+
+    /**
+     * Overrides the current locale for D3 by redefining d3.timeFormat, d3.timeParse,
+     * d3.utcFormat and d3.utcParse to the given format.
+     *
+     * @param {string} locale The locale to set, either 'de', 'en' or 'fr'.
+     */
+    setD3Locale: function(locale) {
+        var me = this;
+        d3.timeFormatDefaultLocale(me.d3LocaleDefinitions[locale]);
     }
+
 });

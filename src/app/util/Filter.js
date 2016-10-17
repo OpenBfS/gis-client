@@ -1,6 +1,7 @@
 Ext.define('Koala.util.Filter', {
     requires: [
         'Koala.util.Duration',
+        'Koala.util.Object',
         'Koala.util.String'
     ],
     statics: {
@@ -27,6 +28,79 @@ Ext.define('Koala.util.Filter', {
          * they represent.
          */
         createdStores: {},
+
+        /**
+         * The string which we replace with the current date.
+         */
+        NOW_STRING: "now",
+
+        /**
+         * Examines the metadata object and returns an object with timeseries
+         * min and max values for the x-axis (that is the first possible date
+         * and the last possible date).
+         *
+         * @param {Object} metadata The GNOS metadatsa object.
+         * @return {Object} An object with keys `min` and `max` containing
+         *     `Date`-instances or `undefined`.
+         */
+        getMinMaxDatesFromMetadata: function(metadata) {
+            // TODO this is the agreed format, should be harmonized throughout
+            //      the application.
+            var dateFormat = 'Y-m-d H:i:s';
+            var min;
+            var max;
+            var rawXAxisMin = Koala.util.Object.getPathStrOr(
+                metadata,
+                'layerConfig/timeSeriesChartProperties/xAxisMin',
+                undefined
+            );
+            var rawXAxisMax = Koala.util.Object.getPathStrOr(
+                metadata,
+                'layerConfig/timeSeriesChartProperties/xAxisMax',
+                undefined
+            );
+            if (rawXAxisMin) {
+                min = Ext.Date.parse(rawXAxisMin, dateFormat);
+            }
+            if (rawXAxisMax) {
+                max = Ext.Date.parse(rawXAxisMax, dateFormat);
+            }
+
+            return {
+                min: min,
+                max: max
+            };
+        },
+
+        /**
+         */
+        getStartEndFilterFromMetadata: function(metadata){
+            var staticMe = Koala.util.Filter;
+            var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
+            var endDate = Koala.util.String.coerce(timeseriesCfg.end_timestamp);
+            // replace "now" with current utc date
+            if (endDate === staticMe.NOW_STRING) {
+                endDate = Koala.util.Date.makeUtc(new Date());
+            }
+            if (Ext.isString(endDate)) {
+                var format = timeseriesCfg.end_timestamp_format;
+                if (!format) {
+                    format = Koala.util.Date.ISO_FORMAT;
+                }
+                endDate = Ext.Date.parse(endDate, format);
+            }
+            var duration = timeseriesCfg.duration;
+            var startDate = Koala.util.Duration.dateSubtractAbsoluteDuration(
+                endDate,
+                duration
+            );
+            var filter = {
+                parameter: timeseriesCfg.xAxisAttribute,
+                mindatetimeinstant: startDate,
+                maxdatetimeinstant: endDate
+            };
+            return filter;
+        },
 
         /**
          * Turns various ways of specifying a list of allowed values (coming

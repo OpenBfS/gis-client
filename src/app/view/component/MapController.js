@@ -23,6 +23,7 @@ Ext.define('Koala.view.component.MapController', {
     requires: [
         "BasiGX.util.Controller",
 
+        "Koala.util.Layer",
         "Koala.view.window.TimeSeriesWindow",
         "Koala.view.window.BarChart"
     ],
@@ -32,19 +33,40 @@ Ext.define('Koala.view.component.MapController', {
     /**
      *
      */
-    onHoverFeatureClick: function(olFeat) {
-        if (!olFeat){
+    onHoverFeatureClick: function(olFeats) {
+        var me = this;
+        var timeSeriesWin;
+        var barChartWin;
+        if (Ext.isEmpty(olFeats)){
             return;
         }
-        var me = this;
-        var layer = olFeat.get('layer');
-        if (Ext.Object.getSize(layer.get("timeSeriesChartProperties")) > 0) {
-            me.openTimeseriesWindow(olFeat);
-        } else if (Ext.Object.getSize(layer.get("barChartProperties")) > 0) {
-            me.openBarChartWindow(olFeat);
-        } else {
-            me.openGetFeatureInfoWindow(olFeat);
-        }
+
+        Ext.each(olFeats, function(olFeat, index) {
+            var layer = olFeat.get('layer');
+
+            // TimeSeries
+            if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
+                if(!timeSeriesWin){
+                    // if no timeseries window, create one
+                    timeSeriesWin = me.openTimeseriesWindow(olFeat);
+                } else {
+                    // just add any further series to the existing window
+                    timeSeriesWin.getController().updateTimeSeriesChart(layer, olFeat);
+                }
+            // Open new BarchartWindow for each featuere. Move if overlapping.
+            } else if (Koala.util.Layer.isBarChartLayer(layer)) {
+                if(barChartWin){
+                    var faktor = olFeats.length - index;
+                    var x = barChartWin.getX() - 30 * faktor;
+                    var y = barChartWin.getY() - 40 * faktor;
+                    barChartWin.setPosition(x, y, true);
+                }
+                barChartWin = me.openBarChartWindow(olFeat);
+            } else {
+                me.openGetFeatureInfoWindow(olFeat);
+            }
+        });
+
     },
 
     /**
@@ -68,7 +90,11 @@ Ext.define('Koala.view.component.MapController', {
                     tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, layer, false);
                     tooltipFeature = replaceTemplateStrings(
+                        tooltipFeature, layer, false, "layer.");
+                    tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, feature, false);
+                    tooltipFeature = replaceTemplateStrings(
+                        tooltipFeature, feature, false, "feature.");
                     innerHtml += tooltipFeature;
                     if (featureIdx + 1 !== featuresLen) {
                         // not the last feature, append linebreak
@@ -86,6 +112,23 @@ Ext.define('Koala.view.component.MapController', {
         return innerHtml;
     },
 
+    onDroppedExternalVectorData: function(event) {
+        Ext.create("Ext.window.Window", {
+            // TODO i18n
+            title: 'Upload local data',
+            autoShow: true,
+            items: [{
+                xtype: 'k-form-importLocalData',
+                viewModel: {
+                    data: {
+                        file: event.file,
+                        targetProjection: event.projection
+                    }
+                }
+            }]
+        });
+    },
+
     /**
     *
     */
@@ -94,6 +137,7 @@ Ext.define('Koala.view.component.MapController', {
        var uniqueId = this.getUniqueIdByFeature(olFeat);
        var win = Ext.create("Koala.view.window.BarChart");
        win.getController().createOrUpdateChart(olLayer, olFeat, uniqueId);
+       return win;
    },
 
     /**
@@ -112,6 +156,8 @@ Ext.define('Koala.view.component.MapController', {
 
         // show the window itself
         win.show();
+
+        return win;
     },
 
     /**
@@ -125,6 +171,7 @@ Ext.define('Koala.view.component.MapController', {
 //           win = Ext.create("Koala.view.window.GetFeatureInfoWindow");
        }
 //       win.show();
+        return win;
    },
 
     /**

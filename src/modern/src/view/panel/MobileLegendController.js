@@ -23,22 +23,20 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         'Ext.MessageBox'
     ],
 
+    activeChartingLayer: null,
+
     /**
      *
      */
     onInitialize: function() {
-        var me = this;
-
-        me.createTreeList();
+        this.createTreeList();
     },
 
     /**
      *
      */
     onPainted: function() {
-        var me = this;
-
-        me.setInitialCheckStatus();
+        this.setInitialCheckStatus();
     },
 
     /**
@@ -106,16 +104,18 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var selection = treeList.getSelection();
         var layer = selection ? selection.getOlLayer() : null;
 
-        if (!target.getAttribute("class")) {
+        var targetClass = target.getAttribute("class");
+
+        if (!targetClass) {
             return false;
         }
 
-        if (target.getAttribute("class").indexOf("fa-times") > 0) {
+        if (targetClass.indexOf("fa-times") > 0) {
             me.removeLayer(layer);
             return false;
         }
 
-        if (target.getAttribute("class").indexOf("fa-eye") > 0) {
+        if (targetClass.indexOf("fa-eye") > 0) {
             if (layer && layer instanceof ol.layer.Layer) {
 
                 if (me.isLayerAllowedToSetVisible(layer)) {
@@ -137,6 +137,18 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             return false;
         }
 
+        // charting toggler
+        if(targetClass.indexOf("fa-bar-chart") > 0) {
+            me.removeAllChartingActiveClasses();
+            if (me.activeChartingLayer === layer) {
+                me.activeChartingLayer = null;
+            } else {
+                me.activeChartingLayer = layer;
+                me.addChartingActiveClass(treeList.getItem(selection));
+            }
+            view.fireEvent('chartinglayerchange', me.activeChartingLayer);
+        }
+
         if (target.getElementsByTagName("img").length > 0) {
             var legend = target.getElementsByTagName("img")[0];
             if (legend.style.display === 'none') {
@@ -145,6 +157,21 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 legend.style.display = 'none';
             }
         }
+    },
+
+    addChartingActiveClass: function(item) {
+        item.el.down('.fa-bar-chart')
+            .removeCls('k-inactive-charting-layer')
+            .addCls('k-active-charting-layer');
+    },
+
+    removeAllChartingActiveClasses: function() {
+        var allActive = Ext.DomQuery.select('.k-active-charting-layer');
+        Ext.each(allActive, function(active) {
+            Ext.fly(active)
+                .removeCls('k-active-charting-layer')
+                .addCls('k-inactive-charting-layer');
+        });
     },
 
     /**
@@ -187,6 +214,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      *
      */
     getTreeListItemTpl: function() {
+        var me = this;
         return new Ext.XTemplate(
             '<tpl if="this.display(values)">',
                 '<tpl if="this.isVisible(values)">',
@@ -194,8 +222,14 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 '<tpl else>',
                     '<i class="fa fa-eye-slash" style="color:#808080;"></i> {text}',
                 '</tpl>',
-                '<tpl if="this.isChartingLayer(values)">',
-                    ' <i class="fa fa-bar-chart"></i>',
+                '<tpl if="this.isChartableLayer(values)">',
+                    ' <i class="fa fa-bar-chart ',
+                    '<tpl if="this.isCurrentChartingLayer(values)">',
+                        ' k-active-charting-layer',
+                    '<tpl else>',
+                        ' k-inactive-charting-layer',
+                    '</tpl>',
+                    '"></i>',
                 '</tpl>',
                 '<tpl if="this.isRemovable(values)">',
                     '<span style="float:right"><i class="fa fa-times" style="color:#157fcc;"></i></span>',
@@ -223,9 +257,11 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 getLegendGraphicUrl: function(layer) {
                     return Koala.util.Layer.getCurrentLegendUrl(layer);
                 },
-                isChartingLayer: function(layer) {
-                    // TODO: set layer property accordingly
-                    return !!layer.hasActiveChart;
+                isChartableLayer: function(layer) {
+                    return Koala.util.Layer.isChartableLayer(layer);
+                },
+                isCurrentChartingLayer: function(layer) {
+                    return me.activeChartingLayer === layer;
                 }
             }
         );

@@ -36,11 +36,14 @@ Ext.define('Koala.view.main.Main', {
         'BasiGX.view.panel.MapContainer',
         'BasiGX.util.Animate',
 
-        'Koala.view.chart.TimeSeries',
+        'Koala.util.AppContext',
+
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
-        'Koala.view.window.Print'
+        'Koala.view.window.Print',
+
+        'Koala.util.Layer'
     ],
 
     controller: 'main',
@@ -72,6 +75,7 @@ Ext.define('Koala.view.main.Main', {
         region: 'center',
         mapComponentConfig: {
             xtype: 'k-component-map',
+            appContextPath: Koala.appContextUrl || 'resources/appContext.json',
             plugins: [{
                 ptype: 'hover',
                 selectMulti: true,
@@ -80,7 +84,6 @@ Ext.define('Koala.view.main.Main', {
         },
         listeners: {
             afterrender: function(){
-
                 if(!location.hash){
                     Ext.create('Ext.window.Window', {
                         title: 'Layer Profilwahl',
@@ -132,14 +135,13 @@ Ext.define('Koala.view.main.Main', {
             maxWidth: 700,
             dockedItems: [{
                 xtype: 'buttongroup',
-                columns: 2,
+                columns: 3,
                 bind: {
                     title: '{buttonGroupTopTitle}'
                 },
                 dock: 'top',
                 defaults: {
-                    scale: 'small',
-                    width: 100
+                    scale: 'small'
                 },
                 items: [{
                     xtype: 'button',
@@ -147,6 +149,9 @@ Ext.define('Koala.view.main.Main', {
                     bind: {
                         text: '{addWmsButtonText}',
                         tooltip: '{addWmsButtonTooltip}'
+                    },
+                    listeners: {
+                        boxready: Koala.util.AppContext.generateCheckToolVisibility('addWmsBtn')
                     },
                     handler: function(){
                         var win = Ext.ComponentQuery.query(
@@ -165,6 +170,7 @@ Ext.define('Koala.view.main.Main', {
                                     includeSubLayer: true,
                                     listeners: {
                                         beforewmsadd: function(olLayer){
+                                            olLayer.set('nameWithSuffix', olLayer.get('name'));
                                             olLayer.set('allowRemoval', true);
                                         }
                                     }
@@ -181,6 +187,9 @@ Ext.define('Koala.view.main.Main', {
                         text: '{printButtonText}',
                         tooltip: '{printButtonTooltip}'
                     },
+                    listeners: {
+                        boxready: Koala.util.AppContext.generateCheckToolVisibility('printBtn')
+                    },
                     handler: function(btn){
                         var win = Ext.ComponentQuery.query('k-window-print')[0];
                         if(!win){
@@ -189,6 +198,31 @@ Ext.define('Koala.view.main.Main', {
                         } else {
                             BasiGX.util.Animate.shake(win);
                         }
+                    }
+                }, {
+                    xtype: 'button',
+                    glyph: 'xf093@FontAwesome',
+                    bind: {
+                        text: '{importLocalDataButtonText}',
+                        tooltip: '{importLocalDataButtonTooltip}'
+                    },
+                    handler: function(){
+                            var win = Ext.ComponentQuery.query(
+                                '[name=add-wms-window]')[0];
+                            if(!win){
+                                Ext.create('Ext.window.Window', {
+                                    name: 'add-wms-window',
+                                    bind: {
+                                        title: '{importLocalDataButtonText}'
+                                    },
+                                    layout: 'fit',
+                                    items: [{
+                                        xtype: 'k-form-importLocalData'
+                                    }]
+                                }).show();
+                            } else {
+                                BasiGX.util.Animate.shake(win);
+                            }
                     }
                 }]
             }],

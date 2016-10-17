@@ -21,13 +21,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     alias: 'controller.k-window-timeserieswindow',
     requires: [
         'Koala.util.String',
-        'Koala.model.Station'
+        'Koala.model.Station',
+        'Koala.view.component.D3Chart'
     ],
-
-    /**
-     * The CSS class we'll assign to 'selected' legend items.
-     */
-    legendSelectedCssClass: 'k-selected-chart-legend',
 
     /**
      * Disable UTC-Button when TimeSeriesWindow is shown.
@@ -51,38 +47,16 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     /**
      *
      */
-    createTimeSeriesChart: function(olLayer) {
-        var chartConfig = olLayer.get('timeSeriesChartProperties');
-        var interactions = null;
-        if (Ext.isEmpty(chartConfig.allowCrossZoom) ||
-            Koala.util.String.getBool(chartConfig.allowCrossZoom)) {
-            interactions = {
-               type: 'crosszoom',
-               // We need the tyoe below, as there is a bug inExtJS: see this
-               // lines: http://docs.sencha.com/extjs/6.0/6.0.0-classic/source/
-               // /AbstractChart.html
-               // #Ext-chart-AbstractChart-method-getInteraction
-               // That particular bug is fixed in non-GPL 6.0.1
-               tyoe: 'crosszoom',
-               axes: {
-                   bottom: {
-                       maxZoom: 5,
-                       allowPan: true
-                   }
-               }
-           };
-        }
-        var chart = {
-            xtype: 'k-chart-timeseries',
-            name: olLayer.get('name'),
-            layer: olLayer,
-            interactions: interactions,
-            height: 200,
-            width: 700
-        };
-        return chart;
+    createTimeSeriesChart: function(olLayer, olFeat) {
+        var view = this.getView();
+        var start = view.down('datefield[name=datestart]').getValue();
+        var end = view.down('datefield[name=dateend]').getValue();
+        return Koala.view.component.D3Chart.create(olLayer, olFeat, start, end);
     },
 
+    /**
+     *
+     */
     layerTimeFilterToCql: function(layer, urlParamTime) {
         var cql = "";
         var util = Koala.util.Layer;
@@ -203,10 +177,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                         );
                     }
                     // now filter out series already in the chart
-                    var chart = this.up(
-                            'panel[name="chart-composition"]'
-                        ).down('chart');
-                    var selectedStations = chart.getSelectedStations();
+                    // var chart = this.up(
+                    //         'panel[name="chart-composition"]'
+                    //     ).down('chart');
+                    // var selectedStations = chart.getSelectedStations();
+                    var selectedStations = [];
                     var stationIds = [];
                     Ext.each(selectedStations, function(selectedStation) {
                         var stationId = selectedStation.get(identifyField);
@@ -242,10 +217,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     /**
      *
      */
-    createTimeSeriesChartPanel: function(olLayer) {
+    createTimeSeriesChartPanel: function(olLayer, olFeat) {
         var me = this;
         var viewModel = me.getViewModel();
-        var chart = me.createTimeSeriesChart(olLayer);
+        var chart = me.createTimeSeriesChart(olLayer, olFeat);
         var chartConfig = olLayer.get('timeSeriesChartProperties');
         var addSeriesCombo;
         if (Koala.util.String.getBool(chartConfig.allowAddSeries)) {
@@ -254,6 +229,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var title = !Ext.isEmpty(chartConfig.titleTpl) ?
             Koala.util.String.replaceTemplateStrings(
             chartConfig.titleTpl, olLayer) : olLayer.get('name');
+
         var panel = {
             xtype: 'panel',
             name: 'chart-composition',
@@ -290,31 +266,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             margin: '0 0 10px 0'
         };
 
-        var removeSeriesBtn = {
-            text: viewModel.get('removeSeriesBtnText'),
-            xtype: 'button',
-            name: 'remove-series',
-            disabled: true,
-            handler: me.onRemoveSeriesButtonClicked,
-            scope: me,
-            margin: '0 0 10px 0',
-            listeners: {
-                afterrender: {
-                    fn: me.registerFocusChangeLegendHandler,
-                    single: true
-                },
-                beforedestroy: {
-                    fn: me.unregisterFocusChangeLegendHandler,
-                    single: true
-                },
-                scope: me
-            }
-        };
-
         rightColumnWrapper.items.push(undoBtn);
-        // TODO we may want to have this being configurable as the addSeries
-        //      combo below is.
-        rightColumnWrapper.items.push(removeSeriesBtn);
 
         if (addSeriesCombo) {
             rightColumnWrapper.items.push(addSeriesCombo);
@@ -325,190 +277,14 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     },
 
     /**
-     * Registers a listener for focuschange on legenditems, which enables or
-     * disables the remove series button. Called after the button was rendered.
-     *
-     * @param {Ext.button.Button} btn The remove-series button.
-     */
-    registerFocusChangeLegendHandler: function(btn){
-        var me = this;
-        var chart = btn.up('[name="chart-composition"]').down('chart');
-        var legend = chart && chart.getLegend();
-        if (legend) {
-            // store it in the btn, so that unregisterFocusChangeLegendHandler
-            // can access it, there seems to be no way around this, as the
-            // chart-composition is already destroyed at this point.
-            btn.legend = legend;
-
-            legend.on({
-                itemclick: me.onLegendItemClick,
-                containerclick: me.onLegendContainerClick,
-                scope: me
-            });
-        }
-    },
-
-    /**
-     * Unregisters the listener for focuschange on legenditems, which enables or
-     * disables the remove series button. Called during the destroy of the
-     * button
-     *
-     * @param {Ext.button.Button} btn The remove-series button.
-     */
-    unregisterFocusChangeLegendHandler: function(btn){
-        var me = this;
-        var legend = btn && btn.legend;
-        if (legend) {
-            legend.un({
-                itemclick: me.onLegendItemClick,
-                containerclick: me.onLegendContainerClick,
-                scope: me
-            });
-        }
-    },
-
-    /**
-     * Called when the legend container is clicked and not a specific legend
-     * item, this method will visually deselect any ölegend items and also reset
-     * and disable the remove series button.
-     *
-     * @param {Ext.chart.Legend} legend The legend.
-     */
-    onLegendContainerClick: function(legend) {
-        var chartWrap = legend.up('[name="chart-composition"]');
-        var btn = chartWrap && chartWrap.down('button[name="remove-series"]');
-        if (btn) {
-            btn.lastLegendSelection = null;
-            btn.setDisabled(true);
-            this.removeAllLegendHiglighting(legend);
-        }
-    },
-
-    /**
-     * Removes the CSS class #legendSelectedCssClass from any legend items which
-     * are children of the passed legend.
-     *
-     * @param {Ext.chart.Legend} legend The legend.
-     */
-    removeAllLegendHiglighting: function(legend) {
-        var cssClass = this.legendSelectedCssClass;
-        var legendDom = legend.getEl().dom;
-        var oldHighlighted = Ext.DomQuery.select(
-            '.' + cssClass,
-            legendDom
-        );
-        Ext.each(oldHighlighted, function(oldHighlight) {
-            Ext.get(oldHighlight).removeCls(cssClass);
-        });
-    },
-
-    /**
-     * Whenever a legenditem is clicked we do three things:
-     *
-     * 1) Disable or enable the associated series (one series mus always be
-     *    enabled).
-     * 2) Visually select the clicked legend element (to tell people which
-     *    series will be affected by the 'remove series' button).
-     * 3) Store the record of the clicked series inside a property of the
-     *    delete button, to correctly determine the layer to eventually delete.
-     *
-     * This method is bound to the `itemclick` event, because the previously
-     * used `focuschanged` event wouldn't be so easy to understand (with regard
-     * to the visual indcation of selection).
-     *
-     * See https://redmine-koala.bfs.de/issues/1394
-     *
-     * @param {Ext.chart.Legend} legend The legend.
-     * @param {Ext.data.Model} record The clicked record
-     */
-    onLegendItemClick: function(legend, record) {
-        var me = this;
-        var legendDom = legend.getEl().dom;
-        var chartWrap = legend.up('[name="chart-composition"]');
-        var btn = chartWrap && chartWrap.down('button[name="remove-series"]');
-        var cssClass = me.legendSelectedCssClass;
-
-        // 1) disable/enable the clicked series
-        if (record) {
-            var doAllowToggling = false;
-            var currentlyDisabled = record.get('disabled');
-            if (currentlyDisabled === true) {
-                doAllowToggling = true;
-            } else {
-                var store = legend.getStore();
-                var maxDisabledCnt = store.getCount() - 1;
-                var disabledCount = 0;
-                store.each(function(rec) {
-                    if (rec.get('disabled') === true) {
-                        disabledCount++;
-                    }
-                });
-                doAllowToggling = maxDisabledCnt > disabledCount;
-            }
-
-            if (doAllowToggling) {
-                record.set('disabled', !currentlyDisabled);
-            }
-        }
-
-        // 2) visually select the legendDiv
-        me.removeAllLegendHiglighting(legend);
-        var legDom = Ext.DomQuery.select(
-            '[data-recordid=' + record.internalId + ']',
-            legendDom
-        )[0];
-        var legElement = Ext.get(legDom);
-        if (legElement) {
-            legElement.addCls(cssClass);
-        } else {
-            Ext.log.warn('Failed to determine a legend element to highlight');
-        }
-
-        // 3) store reference for removeBtn
-        if (btn) {
-            btn.lastLegendSelection = record;
-            btn.setDisabled(false);
-        }
-    },
-
-    /**
-     * This method actually removes a previously focused series of a chart. The
-     * main removal logic is handled in the chart see e.g.
-     * Koala.view.chart.TimeSeries#removeStation.
-     *
-     * @param {Ext.button.Button} btn The remove-series button.
-     */
-    onRemoveSeriesButtonClicked: function(removeBtn){
-        var lastLegendSelection = removeBtn.lastLegendSelection;
-        if (!lastLegendSelection) {
-            return;
-        }
-        var chart = removeBtn.up('[name="chart-composition"]').down('chart');
-        var series = lastLegendSelection.get('series');
-        var name = lastLegendSelection.get('name');
-        var viewModel = this.getViewModel();
-        var questionTpl = viewModel.get('removeSeriesQuestionTpl');
-        var questionTitle = viewModel.get('removeSeriesQuestionTitle');
-        var question = Ext.String.format(questionTpl, name);
-
-        Ext.Msg.confirm(questionTitle, question, function(doRemove){
-            if (doRemove === "yes") {
-                chart.removeStation(series);
-            }
-        });
-    },
-
-    /**
      * Zoom back out after the button has been clicked.
      *
      * @param {Ext.button.Button} undoBtn The clicked undo button.
      */
     onUndoButtonClicked: function(undoBtn){
-        var chart = undoBtn.up('[name="chart-composition"]').down('chart');
-        var crossZoomInteraction = chart.getInteraction('crosszoom');
-        if (crossZoomInteraction && crossZoomInteraction.undoZoom) {
-            crossZoomInteraction.undoZoom();
-        }
+        var chart = undoBtn.up('[name="chart-composition"]').down('d3-chart');
+        var chartCtrl = chart.getController();
+        chartCtrl.resetZoom();
     },
 
     /**
@@ -522,27 +298,45 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         }
 
         var me = this;
+        var StringUtil = Koala.util.String;
         var view = me.getView();
         var layerName = olLayer.get('name');
-        var chart = view.down('chart[name="' + layerName + '"]');
-        var controller = chart.getController();
-
-        var added = chart.addStation(olFeat);
-        if (!added) {
-            // chart already contains series for the new feature.
-            return;
+        var chartConfig = olLayer.get('timeSeriesChartProperties');
+        var chart = view.down('d3-chart[name="' + layerName + '"]');
+        var chartController = chart.getController();
+        var valFromSeq = StringUtil.getValueFromSequence;
+        var coerce = StringUtil.coerce;
+        var stationName = "";
+        if(!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
+            stationName = StringUtil.replaceTemplateStrings(
+                chartConfig.seriesTitleTpl, olFeat
+            );
         }
-
-        controller.prepareTimeSeriesLoad(olFeat);
+        var currentSeqIndex = chart.getSelectedStations().length;
+        var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, "");
+        if (!color) {
+            color = Koala.view.component.D3BaseController.getRandomColor();
+        }
+        chartController.addShape({
+            type: chartConfig.shapeType || 'line',
+            curve: chartConfig.curveType || 'linear',
+            xField: chartConfig.xAxisAttribute,
+            yField: chartConfig.yAxisAttribute,
+            name: stationName,
+            id: olFeat.get('id'),
+            color: color,
+            opacity: coerce(chartConfig.strokeOpacity) || 1,
+            width: coerce(chartConfig.strokeWidth) || 1,
+            tooltipTpl: chartConfig.tooltipTpl
+        }, olFeat, false);
     },
 
     /**
      *
      */
     isLayerChartRendered: function(layerName) {
-        var me = this;
-        var view = me.getView();
-        var existingCharts = view ? view.query('chart') : [];
+        var view = this.getView();
+        var existingCharts = view ? view.query('d3-chart') : [];
         var isRendered = false;
 
         Ext.each(existingCharts, function(chart) {
@@ -561,14 +355,26 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     onSetFilterBtnClick: function() {
         var me = this;
         var view = me.getView();
-        var charts = view.query('chart');
+        var charts = view.query('d3-chart');
+        var startDate = view.down('datefield[name=datestart]').getValue();
+        var endDate = view.down('datefield[name=dateend]').getValue();
+
         Ext.each(charts, function(chart) {
-            var selectedStations = chart.getSelectedStations();
-            chart.removeAllStations();
-            chart.getStore().removeAll();
-            Ext.each(selectedStations, function(selectedStation) {
-                me.createOrUpdateChart(chart.layer, selectedStation);
+            var chartController = chart.getController();
+
+            // update the time range for the chart
+            chart.setStartDate(startDate);
+            chart.setEndDate(endDate);
+
+            var shapes = chart.getShapes();
+
+            Ext.each(shapes, function(shape) {
+                chartController.deleteShapeSeriesById(shape.id);
+                chartController.deleteLegendEntry(shape.id);
             });
+
+            // update the chart to reflect the changes
+            chart.getController().getChartData();
         });
     },
 
@@ -586,16 +392,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 me.onSetFilterBtnClick(setFilterBtn);
             }
         }
-    },
-
-    /**
-     *
-     */
-    setAbscissaRange: function(chart, minVal, maxVal) {
-        var abscissa = chart.getAxis(1);
-        abscissa.setFromDate(minVal);
-        abscissa.setToDate(maxVal);
-        chart.redraw();
     },
 
     /**
@@ -634,6 +430,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var view = me.getView();
         var layerName = olLayer.get('name');
         var layerChartRendered = me.isLayerChartRendered(layerName);
+
         // if the window contains a chart rendered for a feature from the
         // same layer as the given olFeat already, load a new timeseries into
         // the existing chart
@@ -642,8 +439,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         } else {
             // otherwise create a new chart for the olFeat and add it to the
             // window and update the store
-            view.add(me.createTimeSeriesChartPanel(olLayer));
-            me.updateTimeSeriesChart(olLayer, olFeat);
+            view.add(me.createTimeSeriesChartPanel(olLayer, olFeat));
         }
     }
 
