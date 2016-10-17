@@ -735,28 +735,54 @@
         "config": {
             "data": {
                 "title": "Hilfe",
-                "overviewTitle": "Übersicht",
-                "prefaceTitle": "Vorbemerkung",
-                "prefaceHtml": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39'><br>"+
+                "helpPrefaceTitle": "Vorbemerkung",
+                "helpPrefaceHtml": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39'><br>"+
                         "Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen.<br>Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur Überwachung der Umweltradioaktivität“ (IMIS) betroffen.<br>Seit <b>2018</b> basiert die aktuelle Applikation auf Strategien der KOALA (<i>Komponenten-orientierte Architektur mit langfristiger Ausrichtung</i>)-Entwicklungszyklen. Das Hauptaugenmerk richtet sich hierbei auf die Modularisierung der einzelnen Softwarekomponenten.<br><b><i>...Informationen zur Open Source-Strategie? Link zum Repository?</i></b>",
-                "quickRefTitle": "Schnellübersicht",
-                "quickRefHtml": "<img class='img' src='classic/resources/img/helpPage/mobile/mobile_graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'>"+
+                "helpQuickRefTitle": "Schnellübersicht",
+                "helpQuickRefHtml": "<img class='img' src='modern/resources/img/helpPage/mobile_graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'><br />"+
                             "<ol>"+
-                            "<li style='color:#157FCC; font-weight:bold'>1. Menü</li>"+
-                                "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen. Diese können von interner als auch von externen Quellen bezogen werden. Eine Suche von Orten und Daten ist über die Eingabe innerhalb eines Suchfeldes möglich. Desweiteren kann die Sprache sowie der Zeitbezug der Anwendung eingestellt werden.</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>2. Navigation</li>"+
-                                "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>3. Karte</li>"+
+                            "<li style='color:#157FCC; font-weight:bold'>1. Karte</li>"+
                                 "<div>In der Karte können Sie mit Fingergesten navigieren und die Informationen mit georäumlichen Bezug betrachten. Darüber hinaus sind die Daten der BfS-Geoobjekte abrufbar. Eine Berührung auf eine Geometrie liefert Informationen des entsprechenden Objektes. Es öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereit stellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>4. Urheberrechtsangaben</li>"+
-                            "<div>Im linken unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Eine Berührung öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Angaben.</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>5. Legende</li>"+
+                            "<li style='color:#157FCC; font-weight:bold'>2. Menü</li>"+
+                                "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen. Diese können von interner als auch von externen Quellen bezogen werden. Eine Suche von Orten und Daten ist über die Eingabe innerhalb eines Suchfeldes möglich. Desweiteren kann die Sprache sowie der Zeitbezug der Anwendung eingestellt werden.</div><br />"+
+                            "<li style='color:#157FCC; font-weight:bold'>3. Navigation</li>"+
+                                "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div><br />"+
+                            "<li style='color:#157FCC; font-weight:bold'>4. Legende</li>"+
                                 "<div>Die Legende ermöglicht das Ein- bzw. Ausschalten einzelner Layer.</div>"+
                                 "<div>Informationen zu den jeweiligen Layern werden angezeigt. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte hierarchisch dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
                                 "<div>Ferner ist es möglich, einzelne Layer von der Legende zu entfernen.</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>6. Maßstabsleiste</li>"+
+                            "<li style='color:#157FCC; font-weight:bold'>5. Maßstabsleiste</li>"+
                                 "<div>Die Maßstabsleiste dient als Referenz des aktuellen Kartenmaßstabs. Demzufolge bietet sie eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m), oder Kilometern (km).</div>"+
-                            "</ol>"
+                            "</ol>",
+                "helpMapTitle": "1. Karte",
+                "helpMapHtml": "<p>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857). Innerhalb der Karte kann man mithilfe <i>Fingergesten</i> navigieren. Das Zoomen kann über die <i>2-Fingergesten</i> gesteuert werden.</p><p>Alternativ lassen sich diese Funktionen auch über die Navigationsleiste (siehe <i>3. Navigation</i>) steuern. Im linken unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfacher Klick öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Informationen.</p>",
+                "helpMenuTitle": "2. Menü",
+                "helpMenuHtml": "<p>Das Menü beinhaltet ein Textfeld für das Suchen von Daten und Diensten, \"Weitere Themen\" für das Laden von internen Datenlayern, den Menüpunkt \"Externe Layer hinzufügen\" für das Laden von externen Quellen via WMS-Request, sowie \"Einstellungen\" um die Sprache bzw. Zeitbezug für die gesamte Anwendung festzulegen.</p>"+
+                                "<p>Über den <i>Dreieckspeil</i> "+
+                                "<img class='img' src='modern/resources/img/helpPage/mobile_button_backMenu.png' title='Schalter: zurück navigieren' alt='mobile_button_backMenu.png' width='16' height='21' style='vertical-align:middle'>"+
+                                ", der sich in der linken oberen Ecke befindet, kann man zur vorherigen Ansicht zurück wechseln.</p><br />"+
+                                "<ol>"+
+                                "<li style='color:#157FCC; font-weight:bold'>2.1 Suche von Daten und Diensten</li>"+
+                                    "<div>Mit einer Berührung in das Textfeld öffnet sich die Tastatur Ihres Gerätes. Sie können nun nach Daten und Diensten des BfS suchen. Die Ergebnisse werden in die Bereiche \"Daten\", \"Datenserie\" und \"Dienst\" gegliedert. Demzufolge ist ersichtlich welche Informationstypen des jeweiligen Suchbegriffes zur Verfügung stehen.</div><br />"+
+                                "<li style='color:#157FCC; font-weight:bold'>2.2 Weitere Themen</li>"+
+                                    "<div>Die Option \"Weitere Themen\" gewährleisten das Hinzufügen von Layern in die Legende und somit in die geographische Karte. Die Layer sind in fachliche Einteilungen gegliedert. Eine Berührung auf einen fachbezogenen Oberbegriff, bzw. auf den \"Dreieckspfeil\" "+
+                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_layerSet.png' title='Layer-Set öffnen' alt='mobile_button_layerSet.png' width='11' height='17' style='vertical-align:middle'>"+
+                                    " auf der linken Seite, öffnet die Auswahl der fachlich zugehörigen Layern. Eine Berührung auf die Layerbezeichnung öffnet ein layerspezifisches Fenster. Je nach Semantik des Layers beinhaltet ein Fenster gegebenfalls Einstellungen um die Daten mithilfe eines Zeit- und/oder Wertefilters einzuschränken. Hinzufügen lässt sich letztlich ein Layer mit einer Berührung auf \"Ausgewählten Layer hinzufügen\".</div><br />"+
+                                "<li style='color:#157FCC; font-weight:bold'>2.3 Externe Layer hinzufügen</li>"+
+                                    "<div>Der WMS Dienst ermöglicht das Hinzufügen von WMS-Layern innerhalb des BfS-WebGIS. Demnach sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar. Detailliertere Informationen rund um das Thema Web Map Service finden Sie unter folgender Adresse: <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a>. Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld \"WMS-URL\" eine gültige Anfrage ein und wählen anschließend eine entsprechende Version (\"v1.1.1\", \"v1.3.0\") durch betätigen des Optionfeldes (selektiert: "+
+                                    "<img class='img' src='modern/resources/img/helpPage/mobile_radioButton_on.png' title='Optionsfeld EIN' alt='mobile_radioButton_on.png' width='18' height='17' style='vertical-align:middle'>"+
+                                    ", nicht selektiert: "+
+                                    "<img class='img' src='modern/resources/img/helpPage/mobile_radioButton_off.png' title='Optionsfeld AUS' alt='mobile_radioButton_off.png' width='18' height='17' style='vertical-align:middle'>"+
+                                    ") aus. In der Folge drücken Sie auf den Schalter \"Verfügbare Layer abfragen\". Die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt. Durch das Setzen von Häkchen können die Layer ausgewählt werden die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Schalter \"Ausgewählte Layer hinzufügen\". Diese werden initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</div><br />"+
+                                "<li style='color:#157FCC; font-weight:bold'>2.4 Einstellungen</li>"+
+                                    "<p>In den Einstellungen kann sowohl die Sprache als auch der Zeitbezug eingestellt werden.</p><p>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend kann mit einem Klick auf das referenzierte Kürzel die Sprache gewählt werden. Ein Klick auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"DE\" entspricht Deutsch, \"EN\" Englisch und \"FR\" Französisch.</p><p>Der Zeitbezug ist standardmäßig auf koordinierter Weltzeit - UTC eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen. Betätigt man den Schalter \"Zeitbezug (UTC)\" wird die Zeit auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt. Das bedeutet im Einzelnen, dass die Uhrzeit vom PC-Standortes des Nutzers bezogen wird. Die lokale Uhrzeit bezieht sich lediglich auf die Anzeige des Klienten."+
+                                "</ol>",
+                "helpNavigationTitle": "3. Navigation",
+                "helpNavigationHtml": "-ToDo-",
+                "helpLegendTitle": "4. Legende",
+                "helpLegendHtml": "-ToDo-",
+                "helpScaleBarTitle": "5. Maßstabsleiste",
+                "helpScaleBarHtml": "-ToDo-"
             }
         }
     },
