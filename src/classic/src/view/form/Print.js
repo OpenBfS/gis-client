@@ -468,6 +468,12 @@ Ext.define("Koala.view.form.Print", {
             Ext.each(attributes.legend.classes, function(clazz){
                 var legendTextField = legendFieldset.down(
                         'textfield[name=' + clazz.name + '_legendtext]');
+                var layer = BasiGX.util.Layer.getLayerByName(clazz.name);
+                var currentLegendUrl = Koala.util.Layer.getCurrentLegendUrl(layer);
+
+                if(currentLegendUrl){
+                    clazz.icons[0] = currentLegendUrl;
+                }
 
                 if(legendTextField){
                     clazz.name = legendTextField.getValue();
