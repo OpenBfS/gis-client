@@ -19,6 +19,7 @@
 Ext.define("Koala.view.window.TimeSeriesWindow", {
     extend: "Ext.window.Window",
     xtype: "k-window-timeserieswindow",
+    cls: "k-window-timeserieswindow",
 
     requires: [
         "Koala.view.window.TimeSeriesWindowController",

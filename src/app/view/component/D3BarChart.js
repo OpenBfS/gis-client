@@ -19,6 +19,7 @@
 Ext.define('Koala.view.component.D3BarChart',{
     extend: 'Koala.view.component.D3Base',
     xtype: 'd3-barchart',
+    cls: 'd3-barchart',
 
     requires: [
         'Koala.view.component.D3BarChartController',
