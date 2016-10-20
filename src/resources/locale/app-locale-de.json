@@ -874,28 +874,32 @@
                 "helpQuickRefHtml": "<img class='img' src='modern/resources/img/helpPage/mobile_graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'><br />"+
                             "<ol>"+
                             "<li style='color:#157FCC; font-weight:bold'>1. Karte</li>"+
-                                "<div>In der Karte können Sie mit Fingergesten navigieren und die Informationen mit georäumlichen Bezug betrachten. Darüber hinaus sind die Daten der BfS-Geoobjekte abrufbar. Eine Berührung auf eine Geometrie liefert Informationen des entsprechenden Objektes. Es öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereit stellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />"+
+                                "<div>In der Karte können Sie mit Fingergesten navigieren und die Informationen mit georäumlichen Bezug betrachten. Darüber hinaus sind die Daten der BfS-Geoobjekte abrufbar. Tippt man auf eine entsprechende Geometrie, sind Zeit- bzw. Wertereihen in einem separaten Reiter zum jeweiligen Objekt ersichtlich. Hierbei ist darauf zu achten, dass das Diagrammsymbol des entsprechenden Layers in der Legende auf aktiv gesetzt ist (aktiv: "+
+                                "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
+                                ", inaktiv: "+
+                                "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Diagramm inaktiv' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
+                                ").</div><br />"+
                             "<li style='color:#157FCC; font-weight:bold'>2. Menü</li>"+
                                 "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen. Diese können von interner als auch von externen Quellen bezogen werden. Eine Suche von Orten und Daten ist über die Eingabe innerhalb eines Suchfeldes möglich. Desweiteren kann die Sprache sowie der Zeitbezug der Anwendung eingestellt werden.</div><br />"+
                             "<li style='color:#157FCC; font-weight:bold'>3. Navigation</li>"+
                                 "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div><br />"+
                             "<li style='color:#157FCC; font-weight:bold'>4. Legende</li>"+
                                 "<div>Die Legende ermöglicht das Ein- bzw. Ausschalten einzelner Layer.</div>"+
-                                "<div>Informationen zu den jeweiligen Layern werden angezeigt. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte hierarchisch dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
+                                "<div>Informationen zu den jeweiligen Layern werden angezeigt. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte hierarchisch dargestellt.</div>"+
                                 "<div>Ferner ist es möglich, einzelne Layer von der Legende zu entfernen.</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>5. Maßstabsleiste</li>"+
-                                "<div>Die Maßstabsleiste dient als Referenz des aktuellen Kartenmaßstabs. Demzufolge bietet sie eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m), oder Kilometern (km).</div>"+
                             "</ol>",
                 "helpMapTitle": "1. Karte",
                 "helpMapHtml": "<p>In der Karte können Sie navigieren und die Informationen mit georäumlichen Bezug betrachten. Desweiteren sind die Daten der BfS-Geoobjekte abrufbar.</p>"+
                                "<p>Eine Berührung auf eine Geometrie öffnet Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms.</p><br />"+
                                "<ol>"+
                                "<li style='color:#157FCC; font-weight:bold'>1.1 Übersicht</li>"+
-                                    "<div>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857). Innerhalb der Karte kann man mithilfe <i>Fingergesten</i> navigieren. Das Zoomen kann über die <i>2-Fingergesten</i> gesteuert werden.</p><p>Alternativ lassen sich diese Funktionen auch über die Navigationsleiste (siehe <i>3. Navigation</i>) steuern. Im linken unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfache Berührung öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Informationen.</div><br />"+
+                                    "<p>Die Karte wird im geodätischen Referenzsystem WGS 84 (World Geodetic System 1984) / Pseudo-Mercator projiziert (EPSG: 3857). Innerhalb der Karte kann man mithilfe von <i>Fingergesten</i> navigieren. Das Zoomen kann über die <i>2-Fingergestik</i> gesteuert werden.</p>"+
+                                    "<p>Alternativ lassen sich diese Funktionen auch über die Navigationsleiste (siehe <i>3. Navigation</i>) steuern. Im linken unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Ein einfache Berührung öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Informationen.</p>"+
+                                    "<p>Im rechten unteren Eck der Karte befindet sich die Maßstabsleiste. Diese dient als Referenz des aktuellen Kartenmaßstabs. Demzufolge bietet sie eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m), oder Kilometern (km).</p><br />"+
                                "<li style='color:#157FCC; font-weight:bold'>1.2 Abfrage von BfS-Geoobjekten</li>"+
                                     "<div>Für diese Funktion muss in der Legende das Diagrammsymbol aktiv sein "+
                                     "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
-                                    ". Desweiteren ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist. Weitere Informationen bezüglich der Legendeneinstellungen finden Sie unter dem Punkt <i>4. Legende</i>.</div>"+
+                                    ". Weitere Informationen bezüglich der Legendeneinstellungen finden Sie unter dem Punkt <i>4. Legende</i>.</div>"+
                                     "<br /><div><b>-ToDo-</b></div>"+
                                "</ol>",
                 "helpMenuTitle": "2. Menü <img class='img' src='modern/resources/img/helpPage/mobile_button_menu.png' title='Schalter: Menü öffnen' alt='mobile_button_menu.png' width='37' height='33' style='vertical-align:middle'>",
@@ -904,8 +908,14 @@
                                 "<img class='img' src='modern/resources/img/helpPage/mobile_button_backMenu.png' title='Schalter: zurück navigieren' alt='mobile_button_backMenu.png' width='16' height='21' style='vertical-align:middle'>"+
                                 ", der sich in der linken oberen Ecke befindet, kann man zur vorherigen Ansicht zurück wechseln.</p><br />"+
                                 "<ol>"+
-                                "<li style='color:#157FCC; font-weight:bold'>2.1 Suche von Daten und Diensten</li>"+
-                                    "<div>Mit einer Berührung in das Textfeld öffnet sich die Tastatur Ihres Gerätes. Sie können nun nach Daten und Diensten des BfS suchen. Die Ergebnisse werden in die Bereiche \"Daten\", \"Datenserie\" und \"Dienst\" gegliedert. Demzufolge ist ersichtlich welche Informationstypen des jeweiligen Suchbegriffes zur Verfügung stehen.</div><br />"+
+                                "<li style='color:#157FCC; font-weight:bold'>2.1 Multisuchleiste</li>"+
+                                    "<p>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS. Mit einer Berührung in das Textfeld öffnet sich die Tastatur Ihres Gerätes. Gemäß der Texteingabe werden die Ergebnisse in einem Fenster unterhalb der Leiste angezeigt. Ein Tippen auf das Kreuzsymbol "+
+                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_deleteSearch.png' title='Suchauswahl löschen' alt='mobile_button_deleteSearch.png' width='21' height='21' style='vertical-align:middle'>"+
+                                    " an der rechten Seite des Suchfeldes löscht die Eingabe und schließt das Ergebnisfenster.</p><br />"+
+                                    "<p><b>Räumliche Suche</b><br />"+
+                                    "Die Suche nach Orten erfolgt über die Multisuchleiste. Die Ergebnisse werden entsprechend der Texteingabe nach Betätigen der Entertaste Ihres Gerätes angezeigt. Ist ein gewünschter Ort gefunden, genügt ein Tippen auf die Auswahl um an jene zu navigieren.</p><br />"+
+                                    "<p><b>Suche von Daten und Diensten</b><br />"+
+                                    "Neben der räumlichen Suche, wird parallel nach Daten und Diensten des BfS gesucht. Die Ergebnisse entsprechen der Layer die zur Karte hinzugefügt werden können.</p><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>2.2 Weitere Themen</li>"+
                                     "<div>Die Option \"Weitere Themen\" gewährleisten das Hinzufügen von Layern in die Legende und somit in die geographische Karte. Die Layer sind in fachliche Einteilungen gegliedert. Eine Berührung auf einen fachbezogenen Oberbegriff, bzw. auf den <i>Dreieckspfeil</i> "+
                                     "<img class='img' src='modern/resources/img/helpPage/mobile_button_layerSet.png' title='Layer-Set öffnen' alt='mobile_button_layerSet.png' width='11' height='17' style='vertical-align:middle'>"+
@@ -942,9 +952,7 @@
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_legend_eye_off.png' title='Layer inaktiv' alt='mobile_legend_eye_off.png' width='18' height='14' style='vertical-align:middle'>"+
                                   ". Ein Layer kann auch aus der Legende wieder entfernt werden. Hierzu tippt man auf das blaue Kreuzsymbol "+
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_legend_delete.png' title='Layer löschen' alt='mobile_legend_delete.png' width='13' height='12' style='vertical-align:middle'>"+
-                                  ", rechts neben der Layerbezeichnung.</p>",
-                "helpScaleBarTitle": "5. Maßstabsleiste",
-                "helpScaleBarHtml": "Die Maßstabsleiste dient als Referenz des aktuellen Kartenmaßstabs. Demzufolge bietet sie eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m), oder Kilometern (km)."
+                                  ", rechts neben der Layerbezeichnung.</p>"
             }
         }
     },

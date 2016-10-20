@@ -14,9 +14,7 @@ Ext.define('Koala.view.panel.MobileImprintModel', {
         helpNavigationTitle: '',
         helpNavigationHtml: '',
         helpLegendTitle: '',
-        helpLegendHtml: '',
-        helpScaleBarTitle: '',
-        helpScaleBarHtml: ''
+        helpLegendHtml: ''
     }
 
 });

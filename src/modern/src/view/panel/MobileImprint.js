@@ -62,12 +62,5 @@ Ext.define('Koala.view.panel.MobileImprint',{
             title: '{helpLegendTitle}',
             html: '{helpLegendHtml}'
         }
-    }, {
-        xtype: 'fieldset',
-        padding: 5,
-        bind: {
-            title: '{helpScaleBarTitle}',
-            html: '{helpScaleBarHtml}'
-        }
     }]
 });
