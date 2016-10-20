@@ -660,22 +660,16 @@ Ext.define('Koala.util.Layer', {
                 return "";
             }
             if (width) {
-                legendUrl = Ext.String.urlAppend(legendUrl, "WIDTH="+width);
+                legendUrl = Ext.String.urlAppend(legendUrl, "WIDTH=" + width);
             }
             if (height){
-                legendUrl = Ext.String.urlAppend(legendUrl, "HEIGHT="+height);
+                legendUrl = Ext.String.urlAppend(legendUrl, "HEIGHT=" + height);
             }
             if (resolution) {
-                legendUrl = Ext.String.urlAppend(legendUrl, "SCALE="+scale);
+                legendUrl = Ext.String.urlAppend(legendUrl, "SCALE=" + scale);
             }
             if (style) {
                 legendUrl = Ext.String.urlAppend(legendUrl, "STYLE=" + style);
-                // requested by SB: replace any [[STYLES]] placeholders with the
-                // current style
-                legendUrl = Koala.util.String.replaceTemplateStrings(
-                    legendUrl,
-                    {STYLES: style}
-                );
             }
             return legendUrl;
         },
