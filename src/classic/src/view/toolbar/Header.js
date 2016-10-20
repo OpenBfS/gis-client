@@ -21,10 +21,12 @@ Ext.define("Koala.view.toolbar.Header", {
     xtype: 'k-toolbar-header',
 
     requires: [
+        "BasiGX.util.Animate",
+
         "Koala.view.toolbar.HeaderController",
         "Koala.view.toolbar.HeaderModel",
-
-        "Koala.view.button.TimeReference"
+        "Koala.view.button.TimeReference",
+        "Koala.view.window.HelpWindow"
     ],
 
     controller: "k-toolbar-header",
@@ -49,6 +51,7 @@ Ext.define("Koala.view.toolbar.Header", {
             xtype: 'k-button-timereference'
         },
         {
+        	xtype: 'button',
             bind: {
                 text: '{btnTextHelp}',
                 tooltip: '{btnTooltipHelp}'
