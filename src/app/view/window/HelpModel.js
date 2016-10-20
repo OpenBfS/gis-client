@@ -20,6 +20,7 @@ Ext.define('Koala.view.window.HelpModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-window-help',
 
+
     formulas: {
         selectionHtml: function(get) {
             var selection = get('treelist.selection'),

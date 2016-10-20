@@ -3,10 +3,18 @@ Ext.define('Koala.view.panel.MobileImprintModel', {
     alias: 'viewmodel.k-panel-mobileimprint',
     data: {
         title: '',
-        helpTitle: '',
-        helpHtml: '',
-        imprintTitle: '',
-        imprintHtml: ''
+        helpPrefaceTitle: '',
+        helpPrefaceHtml: '',
+        helpQuickRefTitle: '',
+        helpQuickRefHtml: '',
+        helpMapTitle: '',
+        helpMapHtml: '',
+        helpMenuTitle: '',
+        helpMenuHtml: '',
+        helpNavigationTitle: '',
+        helpNavigationHtml: '',
+        helpLegendTitle: '',
+        helpLegendHtml: ''
     }
 
 });

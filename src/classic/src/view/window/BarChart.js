@@ -19,6 +19,7 @@
 Ext.define("Koala.view.window.BarChart", {
     extend: "Ext.window.Window",
     xtype: "k-window-barchart",
+    cls: "k-window-barchart",
 
     requires: [
         "Koala.view.window.BarChartController",

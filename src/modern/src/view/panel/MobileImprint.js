@@ -24,15 +24,43 @@ Ext.define('Koala.view.panel.MobileImprint',{
         xtype: 'fieldset',
         padding: 5,
         bind: {
-            title: '{helpTitle}',
-            html: '{helpHtml}'
+            title: '{helpPrefaceTitle}',
+            html: '{helpPrefaceHtml}'
         }
     }, {
         xtype: 'fieldset',
         padding: 5,
         bind: {
-            title: '{imprintTitle}',
-            html: '{imprintHtml}'
+            title: '{helpQuickRefTitle}',
+            html: '{helpQuickRefHtml}'
+        }
+    }, {
+        xtype: 'fieldset',
+        padding: 5,
+        bind: {
+            title: '{helpMapTitle}',
+            html: '{helpMapHtml}'
+        }
+    }, {
+        xtype: 'fieldset',
+        padding: 5,
+        bind: {
+            title: '{helpMenuTitle}',
+            html: '{helpMenuHtml}'
+        }
+    }, {
+        xtype: 'fieldset',
+        padding: 5,
+        bind: {
+            title: '{helpNavigationTitle}',
+            html: '{helpNavigationHtml}'
+        }
+    }, {
+        xtype: 'fieldset',
+        padding: 5,
+        bind: {
+            title: '{helpLegendTitle}',
+            html: '{helpLegendHtml}'
         }
     }]
 });
