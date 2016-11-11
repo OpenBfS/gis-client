@@ -38,7 +38,6 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var wkt = record.get('wkt');
         var projection = store.map.getView().getProjection().getCode();
         var feature = format.readFeature(wkt);
-        feature.getGeometry().transform('EPSG:4326', projection);
         var map = store.map;
         var view = map.getView();
 

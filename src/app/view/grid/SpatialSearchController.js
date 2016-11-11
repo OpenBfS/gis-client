@@ -27,7 +27,6 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
         var format = new ol.format.WKT();
         var wkt = record.get('wkt');
         var feature = format.readFeature(wkt);
-        feature.getGeometry().transform('EPSG:4326', projection);
         layer.getSource().addFeature(feature);
     },
 
@@ -43,7 +42,6 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
         var wkt = record.get('wkt');
         var projection = store.map.getView().getProjection().getCode();
         var feature = format.readFeature(wkt);
-        feature.getGeometry().transform('EPSG:4326', projection);
         var map = store.map;
         var view = map.getView();
 

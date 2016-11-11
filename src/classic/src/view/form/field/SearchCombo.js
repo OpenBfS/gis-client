@@ -91,7 +91,9 @@ Ext.define("Koala.view.form.field.SearchCombo", {
 
         spatialGrid.show();
         Ext.Ajax.abort(spatialStore._lastRequest);
-        spatialStore.getProxy().setExtraParam('cql_filter', "NAME ilike '%" + value + "%'");
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+        var field = appContext.data.merge.spatialSearchFields.searchColumn;
+        spatialStore.getProxy().setExtraParam('cql_filter', field + " ilike '%" + value + "%'");
         spatialStore.load();
         spatialStore._lastRequest = Ext.Ajax.getLatest();
     },

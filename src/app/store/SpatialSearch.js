@@ -22,10 +22,13 @@ Ext.define('Koala.store.SpatialSearch', {
     alias: 'store.k-spatialsearch',
 
     requires: [
+        'Koala.model.SpatialRecord',
         'BasiGX.util.Layer'
     ],
 
     storeID: 'spatialsearch',
+
+    model: 'Koala.model.SpatialRecord',
 
     layer: null,
 
@@ -51,7 +54,6 @@ Ext.define('Koala.store.SpatialSearch', {
             this.map.addLayer(this.layer);
         }
 
-
         this.callParent([config]);
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
@@ -59,6 +61,14 @@ Ext.define('Koala.store.SpatialSearch', {
         var spatialsearchtypename = appContext.data.merge['spatialSearchTypeName'];
         this.proxy.url = urls['spatial-search'];
         this.proxy.extraParams.typeName = spatialsearchtypename;
+
+        var fields = Koala.model.SpatialRecord.getFields();
+        Ext.each(fields, function(field){
+            field.initConfig({
+                searchColumn: appContext.data.merge.spatialSearchFields.searchColumn,
+                geomColumn: appContext.data.merge.spatialSearchFields.geomColumn
+            });
+        });
     },
 
     proxy: {
@@ -77,22 +87,5 @@ Ext.define('Koala.store.SpatialSearch', {
             type: 'json',
             rootProperty: 'features'
         }
-    },
-
-    fields: [{
-        name: 'name',
-        mapping: function(data) {
-            return data.properties.MYNAME;
-        }
-    }, {
-        name: 'wkt',
-        mapping: function(data) {
-            return data.properties.BOX_GEO;
-        }
-    }, {
-        name: 'nnid',
-        mapping: function(data) {
-            return data.properties.NNID;
-        }
-    }]
+    }
 });
