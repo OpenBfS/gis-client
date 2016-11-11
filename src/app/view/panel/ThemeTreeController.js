@@ -55,7 +55,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
                 );
             }
         });
-        me.currentTask.delay(200);
+        me.currentTask.delay(500);
     },
 
     addLayerWithDefaultFilters:  function(treepanel, item) {
