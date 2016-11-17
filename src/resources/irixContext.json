@@ -91,7 +91,7 @@
                 "name" : "DokpoolMeta",
                 "label" : "DokpoolMeta",
                 "fields": [{
-                    "name": "purpose",
+                    "name": "Purpose",
                     "label": "Zweck",
                     "type": "combo",
                     "values": [
@@ -208,6 +208,16 @@
                     ],
                     "defaultValue": "Gamma-ODL",
                     "allowBlank": true
+                },{
+                    "name": "DataType",
+                    "label": "Datenquelle",
+                    "type": "combo",
+                    "values": [
+                        ["Onmon", "Onmon"],
+                        ["LaDa", "LaDa"]
+                    ],
+                    "defaultValue": "Onmon",
+                    "allowBlank": false
                 },{
                     "name": "LegalBase",
                     "label": "Gesetzliche Grundlage",
