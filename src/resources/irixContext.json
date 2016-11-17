@@ -213,10 +213,10 @@
                     "label": "Datenquelle",
                     "type": "combo",
                     "values": [
-                        ["Onmon", "Onmon"],
-                        ["LaDa", "LaDa"]
+                        ["OnMon", "OnMon Datenbank"],
+                        ["LaDa", "Labordaten"]
                     ],
-                    "defaultValue": "Onmon",
+                    "defaultValue": "OnMon",
                     "allowBlank": false
                 },{
                     "name": "LegalBase",
@@ -265,11 +265,13 @@
                 },{
                     "name": "SamplingBegin",
                     "label": "Probeentnahme Beginn",
-                    "type": "datetime"
+                    "type": "datetime",
+                    "allowBlank": false
                 },{
                     "name": "SamplingEnd",
                     "label": "Probeentnahme Ende",
-                    "type": "datetime"
+                    "type": "datetime",
+                    "allowBlank": false
                 }]
             }
         ]
