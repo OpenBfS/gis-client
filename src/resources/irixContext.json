@@ -116,7 +116,7 @@
                         ["mresult_food", "Messergebnis_Lebensmittel"],
                         ["mresult_water", "Messergebnis_Gewässer"]
                     ],
-                    "defaultValue": "Messergebnis_ODL",
+                    "defaultValue": "gammadoserate",
                     "allowBlank": true
                 },{
                     "name": "IsElan",
