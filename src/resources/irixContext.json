@@ -57,6 +57,16 @@
                     "defaultValue": "Test",
                     "allowBlank": true
                 },{
+                    "name": "Confidentiality",
+                    "label": "Sichtbarkeit",
+                    "type": "combo",
+                    "values": [
+                        ["For Addressees Use Only", "Gruppenintern"],
+                        ["Free for Public Use", "Alle"]
+                    ],
+                    "defaultValue": "For Addressees Use Only",
+                    "allowBlank": false
+                },{
                     "name": "SequenceNumber",
                     "label": "Laufende Nr.",
                     "type": "text",
