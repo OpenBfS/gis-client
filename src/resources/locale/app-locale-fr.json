@@ -192,6 +192,8 @@
             "printButtonPrefix": "fr:Dokument",
             "downloadButtonSuffix": "fr:herunterladen",
             "downloadOngoingMiddleText": "fr: wird vorbereitet",
+            "mapBboxLabel": "fr:BBOX",
+            "mapBboxButton": "fr:Info",
             "warnPrintTimedOutTitle": "fr:Druckfehler",
             "warnPrintTimedOutText": "fr:Die Druckerzeugung hat das erlaubte Zeitlimit überschritten."
         }

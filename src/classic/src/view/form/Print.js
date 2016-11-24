@@ -106,6 +106,7 @@ Ext.define("Koala.view.form.Print", {
     listeners: {
         genericfieldsetadded: function() {
             this.addIrixCheckbox();
+            this.addBboxFieldset();
         }
     },
 
@@ -709,6 +710,64 @@ Ext.define("Koala.view.form.Print", {
                 });
             }, 500);
         }
+    },
+
+    updateFeatureBbox: function(bboxTextfield){
+        var me = this;
+        var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
+        var fieldsets = me.query(fsSelector);
+        var featureBbox = "";
+
+        Ext.each(fieldsets, function(fs){
+            // TODO double check when rotated
+            featureBbox = fs.extentFeature.getGeometry().getExtent();
+        }, this);
+
+        bboxTextfield.setValue(featureBbox);
+    },
+
+    addBboxFieldset: function(){
+        var me = this;
+        var mapFieldSet = me.down('fieldset[name=map]');
+        var map = me.getMapComponent().getMap();
+        var bboxTextfield = Ext.create('Ext.form.field.Text', {
+            fieldLabel: me.getMapBboxLabel(),
+            readOnly: true,
+            labelWidth: 40,
+            width: 150,
+            value: ''
+        });
+
+        var listenerFunction = function(){
+            me.updateFeatureBbox(bboxTextfield);
+        };
+
+        map.on('moveend', listenerFunction);
+
+        bboxTextfield.on('destroy', function(){
+            map.un('moveend', listenerFunction);
+        });
+
+        var bboxFieldSet = Ext.create('Ext.form.FieldSet', {
+            name: 'bbox-fieldset',
+            layout: 'hbox',
+            border: false,
+            margin: '0 0 0 -10',
+            items: [
+                bboxTextfield,
+                {
+                //TODO update bbox of irix-upload sos-job
+                xtype: 'button',
+                text: me.getMapBboxButton(),
+                margin: '0 0 0 55',
+                handler: function() {
+                    Ext.Msg.alert(me.getMapBboxButton(), "<b>"+me.getMapBboxLabel()+":</b> " + bboxTextfield.getValue());
+                }
+            }]
+        });
+
+        me.updateFeatureBbox(bboxTextfield);
+        mapFieldSet.add(bboxFieldSet);
     },
 
     addIrixCheckbox: function(){
