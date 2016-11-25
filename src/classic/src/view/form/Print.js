@@ -313,6 +313,65 @@ Ext.define("Koala.view.form.Print", {
         }
     },
 
+    getCheckBoxBooleanFields: function (attributeRec) {
+        return {
+            xtype: 'checkbox',
+            name: attributeRec.get('name'),
+            checked: true,
+            fieldLabel: attributeRec.get('name')
+        };
+    },
+
+    /**
+     * Create a checkbox instead of a textfield
+     * if type is Boolean.
+     * @override
+     */
+    addAttributeFields: function(attributeRec, fieldset){
+        var me = this;
+        var map = me.getMapComponent().getMap();
+
+        var attributeFields;
+        switch (attributeRec.get('type')) {
+            case "MapAttributeValues":
+                attributeFields = me.getMapAttributeFields(attributeRec);
+                map.on('moveend', me.renderAllClientInfos, me);
+                break;
+            case "NorthArrowAttributeValues":
+                attributeFields = me.getNorthArrowAttributeFields(attributeRec);
+                break;
+            case "ScalebarAttributeValues":
+                attributeFields = me.getScalebarAttributeFields(attributeRec);
+                break;
+            case "LegendAttributeValue":
+                attributeFields = me.getLegendAttributeFields(attributeRec);
+                break;
+            case "String":
+                attributeFields = me.getStringField(attributeRec);
+                break;
+            case "Boolean":
+                attributeFields = me.getCheckBoxBooleanFields(attributeRec);
+                break;
+            case "DataSourceAttributeValue":
+                Ext.toast('Data Source not yet supported');
+                attributeFields = me.getStringField(attributeRec);
+                break;
+            default:
+                break;
+        }
+
+        if (attributeFields) {
+            var doContinue = me.fireEvent(
+                    'beforeattributefieldsadd', me, attributeFields
+                );
+            // a beforeattributefieldsadd handler may have cancelled the adding
+            if (doContinue !== false) {
+                var added = fieldset.add(attributeFields);
+                me.fireEvent('attributefieldsadd', me, attributeFields, added);
+            }
+        }
+    },
+
     /**
      * Validate all fields on creation so they are marked as red if invalid.
      *
