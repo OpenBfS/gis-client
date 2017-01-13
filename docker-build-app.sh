@@ -18,6 +18,7 @@ CONFIG="gis_client_configs"
 
 $SENCHA_CMD -sdk $WORKSPACE/src/ext generate workspace $SENCHA_WS
 $SENCHA_CMD package repo init -name "terrestris GmbH & Co. KG" -email "info@terrestris.de"
+$SENCHA_CMD package repo add GeoExt http://geoext.github.io/geoext3/cmd/pkgs
 cd $SENCHA_WS/packages/
 git clone https://github.com/terrestris/BasiGX.git
 cd BasiGX/
