@@ -311,6 +311,34 @@ this file in most cases.
 
     <!--
     ===============================================================
+    Build Dependencies
+    uses the compiler to build metadata files for all detected
+    file-to-file dependencies
+    ===============================================================
+    -->
+    <target name="build-dependencies" depends="init,-init-compile-js">
+        <x-compile refid="${compiler.ref.id}">
+            <![CDATA[
+            include
+                -all
+            and
+            meta
+                -infoType=Dependencies
+                -basePath=${build.dir}
+                -tpl={0}
+                -out=${build.dir}/dependencies.json
+            and
+            meta
+                -infoType=AppManifest
+                -basePath=${build.dir}
+                -tpl={0}
+                -out=${build.dir}/bootsequence.json
+            ]]>
+        </x-compile>
+    </target>
+
+    <!--
+    ===============================================================
     Help - properties
     displays all current ant properties
     ===============================================================
