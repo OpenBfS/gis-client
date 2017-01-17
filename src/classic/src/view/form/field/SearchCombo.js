@@ -113,15 +113,6 @@ Ext.define("Koala.view.form.field.SearchCombo", {
     },
 
     /**
-     * TODO why do we need this? Without this, the data from the view template
-     * is not applied.
-     */
-    setEmptyText: function(txt){
-        this.emptyText = txt;
-        this.applyEmptyText();
-    },
-
-    /**
      *
      */
     getMetadataCql: function(fields, value){
