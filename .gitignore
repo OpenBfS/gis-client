@@ -7,6 +7,7 @@ src/build/**
 src/ext/**
 src/classic.json
 src/modern.json
+src/modern.jsonp
 src/coverage
 src/packages/**
 src/sass/example/bootstrap.js
