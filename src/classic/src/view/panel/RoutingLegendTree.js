@@ -716,7 +716,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var loadStartFunc = function() {
             rec.set(fieldnameLoadIndicationLoading, true);
             var row = Ext.get(me.getView().getRowByRecord(rec));
-            row.removeCls('k-loading-failed');
+            if (row) {
+                row.removeCls('k-loading-failed');
+            }
             me.layerDropped(); // restores collapsed/expanded state
         };
         var loadEndFunc = function() {
@@ -727,10 +729,12 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             loadEndFunc();
             layer.set('visible', false);
             var row = Ext.get(me.getView().getRowByRecord(rec));
-            var task = new Ext.util.DelayedTask(function(){
-                row.addCls('k-loading-failed');
-            });
-            task.delay(150);
+            if (row) {
+                var task = new Ext.util.DelayedTask(function(){
+                    row.addCls('k-loading-failed');
+                });
+                task.delay(150);
+            }
         };
 
         // buffer the loadEnd function, so that the loading indicator doesn't

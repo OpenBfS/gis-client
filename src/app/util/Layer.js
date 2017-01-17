@@ -468,7 +468,10 @@ Ext.define('Koala.util.Layer', {
                 var suffixId = layer.get('__suffix_id__');
                 if (suffixId) {
                     var txt = me.getFiltersTextFromMetadata(layer.metadata);
-                    Ext.get(suffixId).setHtml(txt);
+                    var filterIndicator = Ext.get(suffixId);
+                    if (filterIndicator) {
+                        filterIndicator.setHtml(txt);
+                    }
                 }
             });
         },
@@ -562,13 +565,16 @@ Ext.define('Koala.util.Layer', {
                 return;
             }
             var hoverPlugin = mapComp.getPlugin('hover');
-            layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts, hoverPlugin);
-            if (layer instanceof ol.layer.Group) {
-                // additionally, if the new layer is a group layer, we need to
-                // bind ourself for all sublayers
-                layer.getLayers().forEach(function(subLayer){
-                    me.bindLayerVisibilityHandlers(subLayer, mapComp);
-                });
+
+            if (hoverPlugin) {
+                layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts, hoverPlugin);
+                if (layer instanceof ol.layer.Group) {
+                    // additionally, if the new layer is a group layer, we need to
+                    // bind ourself for all sublayers
+                    layer.getLayers().forEach(function(subLayer){
+                        me.bindLayerVisibilityHandlers(subLayer, mapComp);
+                    });
+                }
             }
         },
 
