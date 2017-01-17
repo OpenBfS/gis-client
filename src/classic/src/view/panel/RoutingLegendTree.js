@@ -393,14 +393,6 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         me.checkAddCollapseExpandButtons();
 
-        // See the comment above the constructor why we need this.
-        if (me.initiallyCollapsed){
-            me.on('afterlayout', function(){
-                this.collapse();
-            }, me, {single: true, delay: 100});
-            me.initiallyCollapsed = null;
-        }
-
         // configure rowexpanderwithcomponents-plugin
         me.plugins[0].hideExpandColumn = false;
 

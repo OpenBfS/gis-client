@@ -242,6 +242,7 @@ Ext.define('Koala.view.main.Main', {
             xtype: 'k-panel-routing-legendtree',
             resizable: true,
             resizeHandles: 'w',
+            collapsed: true,
             minWidth: 200,
             maxWidth: 700,
             listeners: {
