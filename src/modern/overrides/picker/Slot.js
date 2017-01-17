@@ -1,7 +1,7 @@
 /**
  * Credits to: https://ftp.sencha.com/forum/showthread.php?309447-ExtJS-6.0.2.408-Modern-Datepicker-wrong-selection
  */
-Ext.define('Koala.overrides.Slot', {
+Ext.define('Koala.overrides.picker.Slot', {
     override: 'Ext.picker.Slot',
 
     scrollToItem: function(item, animated) {
