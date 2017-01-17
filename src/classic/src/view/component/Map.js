@@ -46,7 +46,7 @@ Ext.define("Koala.view.component.Map", {
         });
 
         var hoverPlugin = me.getPlugin('hover');
-        if(hoverPlugin){
+        if (hoverPlugin) {
             var selStyleFunction = staticMe.styleFromGnos("selectStyle");
             var highlightStyleFunction = staticMe.styleFromGnos("hoverStyle");
             hoverPlugin.selectStyleFunction = selStyleFunction;

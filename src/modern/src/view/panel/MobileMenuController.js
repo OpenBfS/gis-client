@@ -36,7 +36,6 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var store = list.getStore();
         var format = new ol.format.WKT();
         var wkt = record.get('wkt');
-        var projection = store.map.getView().getProjection().getCode();
         var feature = format.readFeature(wkt);
         var map = store.map;
         var view = map.getView();

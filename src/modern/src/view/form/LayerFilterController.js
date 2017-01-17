@@ -526,7 +526,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             );
         } else {
             field = {
-                xtype: "textfield"
+                xtype: 'textfield'
             };
         }
 

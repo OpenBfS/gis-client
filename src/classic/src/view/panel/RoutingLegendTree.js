@@ -635,7 +635,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     /**
-     * Bound as handler for the `add`-event of the store, this method modfies
+     * Bound as handler for the `add`-event of the store, this method modifies
      * the `text` of the displayed record and binds listeners to all added
      * records to show whether they are loading. See also the method
      * #bindLoadIndicationToRecord.
@@ -650,7 +650,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         // Replace the text of the treerecords with the configured textProperty
         // to enable the filter logic
         var textProperty = this.getTextProperty();
-        if(textProperty){
+        if (textProperty) {
             Ext.each(recs, function(layerRec){
                 var layer = layerRec.getOlLayer();
                 layerRec.set('text', layer.get(textProperty));
