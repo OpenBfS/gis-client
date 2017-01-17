@@ -349,6 +349,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
             filter, "minutes", "minutespinner", value
         );
 
+        hourSpinner.setPadding('30 0 0 0');
+        minuteSpinner.setPadding('30 0 0 0');
+
         var container = Ext.create("Ext.Container", {
             name: "pointintimecontainer",
             layout: "hbox",
@@ -446,6 +449,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var minMinuteSpinner = FilterUtil.getSpinner(
             filter, "minutes", "minminutespinner", defaultMinValue
         );
+
+        minHourSpinner.setPadding('30 0 0 0');
+        minMinuteSpinner.setPadding('30 0 0 0');
+
         var minContainer = Ext.create("Ext.Container", {
             name: "mincontainer",
             anchor: "100%",
@@ -481,6 +488,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var maxMinuteSpinner = FilterUtil.getSpinner(
             filter, "minutes", "maxminutespinner", defaultMaxValue
         );
+
+        maxHourSpinner.setPadding('30 0 0 0');
+        maxMinuteSpinner.setPadding('30 0 0 0');
 
         var maxContainer = Ext.create("Ext.Container", {
             name: "maxcontainer",
