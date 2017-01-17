@@ -23,7 +23,6 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
     onItemMouseEnter: function(grid, record){
         var store = grid.getStore();
         var layer = store.layer;
-        var projection = store.map.getView().getProjection().getCode();
         var format = new ol.format.WKT();
         var wkt = record.get('wkt');
         var feature = format.readFeature(wkt);
@@ -40,7 +39,6 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
         var store = grid.getStore();
         var format = new ol.format.WKT();
         var wkt = record.get('wkt');
-        var projection = store.map.getView().getProjection().getCode();
         var feature = format.readFeature(wkt);
         var map = store.map;
         var view = map.getView();
