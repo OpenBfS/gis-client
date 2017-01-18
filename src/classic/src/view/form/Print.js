@@ -394,17 +394,12 @@ Ext.define("Koala.view.form.Print", {
         var vm = me.getViewModel();
         var createPrintBtn = me.down('button[name="createPrint"]');
         var downloadPrintBtn = me.down('button[name="downloadPrint"]');
+
         // the create button
-        createPrintBtn.setBind({
-            text: null
-        });
         createPrintBtn.setText(
             me.getPrintButtonPrefix() + " " + vm.get('printButtonSuffix')
         );
         // the download button
-        downloadPrintBtn.setBind({
-            text: null
-        });
         downloadPrintBtn.setText(
             me.getPrintButtonPrefix() + " " + me.getDownloadButtonSuffix()
         );
