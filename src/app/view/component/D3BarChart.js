@@ -90,7 +90,7 @@ Ext.define('Koala.view.component.D3BarChart',{
          *     chart for.
          * @return {Koala.view.component.D3BarChart} The created chart.
          */
-        create: function(olLayer, olFeat) {
+        create: function(olLayer, olFeat, config) {
             var DEFAULTS = Koala.view.component.D3Base.DEFAULTS.BARCHART;
             var chartConfig = olLayer.get('barChartProperties');
             var categoryCount = chartConfig.chartFieldSequence.split(",").length;
@@ -113,8 +113,8 @@ Ext.define('Koala.view.component.D3BarChart',{
                 xtype: 'd3-barchart',
                 name: olLayer.get('name'),
                 zoomEnabled: Koala.util.String.coerce(chartConfig.allowZoom),
-                height: 350,
-                width: chartWidth,
+                height: config.height || 350,
+                width: config.width || chartWidth,
                 startDate: olFeat.get('end_measure'),
                 endDate: olFeat.get('end_measure'),
                 targetLayer: olLayer,

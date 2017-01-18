@@ -49,9 +49,13 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     createTimeSeriesChart: function(olLayer, olFeat) {
         var view = this.getView();
-        var start = view.down('datefield[name=datestart]').getValue();
-        var end = view.down('datefield[name=dateend]').getValue();
-        return Koala.view.component.D3Chart.create(olLayer, olFeat, start, end);
+        var config = {
+            startDate: view.down('datefield[name=datestart]').getValue(),
+            endDate: view.down('datefield[name=dateend]').getValue(),
+            width: null,
+            height: null
+        };
+        return Koala.view.component.D3Chart.create(olLayer, olFeat, config);
     },
 
     /**

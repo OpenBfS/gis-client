@@ -34,7 +34,11 @@ Ext.define('Koala.view.window.BarChartController', {
     },
 
     createBarChart: function(olLayer, olFeat) {
-        return Koala.view.component.D3BarChart.create(olLayer, olFeat);
+        var config = {
+            width: null,
+            height: null
+        };
+        return Koala.view.component.D3BarChart.create(olLayer, olFeat, config);
     },
 
     updateBarChartStore: function(olFeat, chartId) {

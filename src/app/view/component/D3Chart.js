@@ -91,7 +91,7 @@ Ext.define('Koala.view.component.D3Chart',{
          * @param {Date} endDate The end date.
          * @return {Koala.view.component.D3Chart} The created chart.
          */
-        create: function(olLayer, olFeat, startDate, endDate) {
+        create: function(olLayer, olFeat, config) {
             var DEFAULTS = Koala.view.component.D3Base.DEFAULTS.CHART;
             var chartConfig = olLayer.get('timeSeriesChartProperties');
             var StringUtil = Koala.util.String;
@@ -142,10 +142,10 @@ Ext.define('Koala.view.component.D3Chart',{
                 name: olLayer.get('name'),
                 zoomEnabled: StringUtil.coerce(chartConfig.allowZoom),
                 showLoadMask: false,
-                height: 200,
-                width: 700,
-                startDate: startDate,
-                endDate: endDate,
+                height: config.height || 200,
+                width: config.width || 700,
+                startDate: config.startDate,
+                endDate: config.endDate,
                 targetLayer: olLayer,
                 selectedStations: selectedStations,
                 backgroundColor: chartConfig.backgroundColor,

@@ -142,9 +142,13 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
      */
     createTimeseriesChart: function(olLayer, olFeat) {
         var view = this.getView();
-        var start = view.down('datepickerfield[name=datestart]').getValue();
-        var end = view.down('datepickerfield[name=dateend]').getValue();
-        return Koala.view.component.D3Chart.create(olLayer, olFeat, start, end);
+        var config = {
+            startDate: view.down('datepickerfield[name=datestart]').getValue(),
+            endDate: view.down('datepickerfield[name=dateend]').getValue(),
+            width: 640, //Ext.getBody().getWidth(),
+            height: null
+        };
+        return Koala.view.component.D3Chart.create(olLayer, olFeat, config);
     }
 
 });
