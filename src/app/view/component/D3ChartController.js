@@ -287,14 +287,12 @@ Ext.define('Koala.view.component.D3ChartController', {
     addShape: function(shapeConfig, selectedStation, allowDupes) {
         var me = this;
         var view = me.getView();
-        var shapes = view.getShapes();
         var added = false;
         allowDupes = Ext.isDefined(allowDupes) ? allowDupes : false;
 
         if (allowDupes === true || !me.containsStation(selectedStation)) {
             view.getSelectedStations().push(selectedStation);
-            shapes.push(shapeConfig);
-            view.setShapes(shapes);
+            view.getShapes().push(shapeConfig);
             // update the chart to reflect the changes
             me.getChartData();
             added = true;
@@ -381,11 +379,12 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
 
             // actually set the domain
-            var domain = me.scales[orient].domain(axisDomain);
-            if (makeDomainNice) {
-                domain.nice();
+            if (axisDomain) {
+                var domain = me.scales[orient].domain(axisDomain);
+                if (makeDomainNice) {
+                    domain.nice();
+                }
             }
-
         });
     },
 
@@ -1372,7 +1371,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             callback: function() {
                 // Called for both success and failure, this will delete the
                 // entry in the pending requests object.
-                if(selId in me.ajaxRequests) {
+                if (selId in me.ajaxRequests) {
                     delete me.ajaxRequests[selId];
                 }
             },
@@ -1391,7 +1390,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                 var seriesData = [];
 
                 while (startDate <= endDate) {
-
                     var newRawData = {};
 
                     compareableDate = Ext.Date.format(startDate, 'timestamp');
