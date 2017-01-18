@@ -38,6 +38,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @type {Boolean}
      */
     chartRendered: false,
+
     /**
      * An object that holds all requests we issue for fetching series data. It
      * is keyed by the id of a selectedStation. We need this in order to be able
@@ -132,7 +133,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.shapes = [];
         me.scales = {};
 
-        me.deleteSvg();
+        me.deleteShapeContainerSvg();
 
         me.createScales();
         me.createAxes();
@@ -241,12 +242,12 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    deleteSvg: function() {
+    deleteShapeContainerSvg: function() {
         var view = this.getView();
         var svg = d3.select('#' + view.getId() + ' svg svg');
+
         if (svg && !svg.empty()) {
             svg.node().remove();
-            this.chartRendered = false;
         }
     },
 

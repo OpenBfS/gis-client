@@ -116,7 +116,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     redrawChart: function() {
         var me = this;
 
-        me.deleteSvg();
+        me.deleteShapeContainerSvg();
 
         me.createScales();
         me.createAxes();
@@ -132,12 +132,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
     /**
      *
      */
-    deleteSvg: function() {
+    deleteShapeContainerSvg: function() {
         var view = this.getView();
         var svg = d3.select('#' + view.getId() + ' svg svg');
         if (svg && !svg.empty()) {
             svg.node().remove();
-            this.chartRendered = false;
         }
     },
 
