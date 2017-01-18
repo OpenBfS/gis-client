@@ -41,7 +41,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         var map = view.down('basigx-component-map').getMap();
         var mapView = map.getView();
 
-        mapView.setCenter([lon, lat]);
+        mapView.setCenter([parseInt(lon, 10), parseInt(lat, 10)]);
         mapView.setZoom(zoom);
     },
 
@@ -203,6 +203,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var view = me.getView();
         var panel;
+
         if (Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer)) {
             panel = view.down('k-panel-timeserieschart');
         } else if (Koala.util.Layer.isBarChartLayer(me.chartingLayer)) {
