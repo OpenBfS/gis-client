@@ -851,14 +851,13 @@ Ext.define("Koala.view.form.Print", {
     addIrixFieldset: function(){
         var me = this;
         var fs = me.down("k-form-irixfieldset");
-        var formContainer = me.down('[name="formContainer"]');
         var checkBox = me.down('[name="irix-fieldset-checkbox"]');
 
         if (!fs) {
             var irixFieldset = Ext.create('Koala.view.form.IrixFieldSet',{
                 flex: 2
             });
-            formContainer.add(irixFieldset);
+            me.add(irixFieldset);
         } else {
             checkBox.setValue(false);
         }
