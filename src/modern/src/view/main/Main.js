@@ -196,10 +196,12 @@ Ext.define('Koala.view.main.Main', {
         hidden: true
     }, {
         xtype: 'k-panel-barchart',
+        width: '100%',
         left: 0,
         hidden: true
     }, {
         xtype: 'k-panel-timeserieschart',
+        width: '100%',
         left: 0,
         hidden: true
     }, {
