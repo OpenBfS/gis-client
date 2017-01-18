@@ -21,8 +21,8 @@ Ext.define('Koala.view.component.D3Base',{
     xtype: 'd3-base',
 
     listeners: {
-        boxready: 'onShow',
-        painted: 'onShow'
+        boxready: 'onBoxReady',
+        initialize: 'onInitialize'
     },
 
     inheritableStatics: {

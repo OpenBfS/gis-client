@@ -75,9 +75,22 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
 
     /**
+     * Called on initialize event. Only used in modern toolkit.
      *
+     * @private
      */
-    onShow: function() {
+    onInitialize: function() {
+        var me = this;
+        me.onBoxReady();
+    },
+
+    /**
+     * Note: This is private method, don't call it yourself and if you have to,
+     * remember to call it only once!
+     *
+     * @private
+     */
+    onBoxReady: function() {
         var me = this;
         var view = me.getView();
 
