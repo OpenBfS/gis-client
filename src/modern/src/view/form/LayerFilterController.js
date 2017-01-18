@@ -32,7 +32,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
     initComponent: function(){
         var me = this;
         var view = this.getView();
-
         var filters = view.getFilters();
 
         if(!filters || filters.length < 1){
@@ -108,6 +107,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     if (!Ext.Array.contains(view.ignoreFields, key)) {
                         var val = field.getValue();
                         if (Ext.isDate(val)) {
+                            // we have to add hours & minutes, the date field
+                            // has precision DAY:
+                            val = FilterUtil.addHoursAndMinutes(val, field);
                             val = me.adjustToUtcIfNeeded(val);
                         }
                         keyVals[key] = val;
@@ -336,10 +338,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             minValue: minValue,
             maxValue: maxValue,
             dateFormat: view.getFormat(),
-            submitFormat: format,
-            listeners: {
-                select: me.resetNumberFields
-            }
+            submitFormat: format
         });
 
         var hourSpinner = FilterUtil.getSpinner(
@@ -397,6 +396,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             filter.maxdatetimeinstant,
             filter.maxdatetimeformat
         );
+
         var defaultMinValue = Ext.Date.parse(
             filter.defaultstarttimeinstant,
             filter.defaultstarttimeformat
@@ -439,7 +439,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
             validator: FilterUtil.validateMaxDurationTimerange,
             msgTarget: "under",
             listeners: {
-                select: me.resetNumberFields,
                 validitychange: FilterUtil.revalidatePartnerField
             }
         });
@@ -478,7 +477,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
             validator: FilterUtil.validateMaxDurationTimerange,
             msgTarget: 'under',
             listeners: {
-                select: me.resetNumberFields,
                 validitychange: FilterUtil.revalidatePartnerField
             }
         });
@@ -564,23 +562,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @param {Number} idx The index of the filter in the list of all filters.
      */
     createRODOSFilter: function(){
-    },
-
-    /**
-     * Called whenever a date is selected, this methdo resets the associated
-     * sonners for minutes and hours.
-     *
-     * TODO check if we still need this / want this??? It may the way better
-     *      idea to set the minute and hour value of the selected date to be
-     *      the one that was previously selected in the spinners.
-     */
-    resetNumberFields: function(datefield) {
-        var numberFields = datefield.up("container").query("numberfield");
-        Ext.each(numberFields, function(field) {
-            field.suspendEvents(false);
-            field.setValue(0);
-            field.resumeEvents(true);
-        });
     },
 
     addWithoutFilterBtn: function() {
