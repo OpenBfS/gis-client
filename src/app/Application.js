@@ -99,14 +99,105 @@ Ext.define('Koala.Application', {
         var gotLayers = 0;
         var routeCreatedLayers = {};
         var LayerUtil = Koala.util.Layer;
+        var permalinkFilters = {};
 
         Ext.each(layerUuidsWithStates, function(uuidWithState) {
             var uuid = uuidWithState.split("_")[0];
+            var filters = uuidWithState.split("_")[2];
+            permalinkFilters[uuid] = {};
+
+            if (filters) {
+                var filtersArray = filters.split(";");
+                Ext.each(filtersArray, function(filter){
+                    var filterParts = filter.split('{');
+                    var prefix = filterParts[0];
+                    var filterValues = filterParts[1].replace('}', '');
+
+                    switch (prefix) {
+                        case 'pt':
+                            var t = parseInt(filterValues.split('t')[1], 10);
+                            if (Ext.isNumber(t)) {
+                                permalinkFilters[uuid].pointintime = {
+                                    timeinstant: new Date(t)
+                                };
+                            }
+                        break;
+                        case 'tr':
+                            var s = parseInt(filterValues.split('s')[1], 10);
+                            var e = parseInt(filterValues.split('e')[1], 10);
+                            if (Ext.isNumber(s) && Ext.isNumber(s)) {
+                                permalinkFilters[uuid].timerange = {
+                                    mindatetimeinstant: new Date(s),
+                                    maxdatetimeinstant: new Date(e)
+                                };
+                            }
+                        break;
+                        case 'at':
+                            var alias = filterValues.split("=")[0];
+                            var val = filterValues.split("=")[1];
+                            permalinkFilters[uuid].value = {
+                                alias: alias,
+                                value: val
+                            };
+                        break;
+                        case 'st':
+                            permalinkFilters[uuid].Stil = {
+                                alias: 'Stil',
+                                value: filterValues
+                            };
+                        break;
+                        default:
+                        break;
+                    }
+                });
+            }
+
             if (Koala.util.String.isUuid(uuid)) {
                 expectedLayers++;
                 LayerUtil.getMetadataFromUuidAndThen(uuid, function(md){
                     gotLayers++;
                     var metadataClone = Ext.clone(md);
+
+                    // Apply permalink-values to filter
+                    Ext.each(md.filters, function(mdFilter){
+                        var permalinkFilter = permalinkFilters[uuid][mdFilter.alias] || permalinkFilters[uuid][mdFilter.type];
+                        var minDate;
+                        var maxDate;
+                        if(permalinkFilter){
+                            if (mdFilter.type === "pointintime") {
+                                maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
+                                minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
+                                if(minDate < permalinkFilter.timeinstant && maxDate > permalinkFilter.timeinstant){
+                                    Ext.apply(mdFilter, permalinkFilter);
+                                }
+                            }
+                            if (mdFilter.type === "timerange") {
+                                maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
+                                minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
+                                if(minDate < permalinkFilter.mindatetimeinstant && maxDate > permalinkFilter.mindatetimeinstant &&
+                                    minDate < permalinkFilter.maxdatetimeinstant && maxDate > permalinkFilter.maxdatetimeinstant){
+                                    Ext.apply(mdFilter, permalinkFilter);
+                                }
+                            }
+                            // if (mdFilter.type === "value" && !(mdFilter.alias === "Stil")) {
+                            //     var allowedStore = Koala.util.Filter.getStoreFromAllowedValues(mdFilter.allowedValues);
+                            //     debugger
+                            //     Ext.each(mdFilter.allowedValues.split(","), function(a){
+                            //         if(a === permalinkFilter.value) {
+                            //             Ext.apply(mdFilter, permalinkFilter);
+                            //         }
+                            //     });
+                            // }
+                            if (mdFilter.type === "value") {
+                                var allowedStore = Koala.util.Filter.getStoreFromAllowedValues(mdFilter.allowedValues);
+                                var matchingRecord = allowedStore.findRecord('dsp', permalinkFilter.value);
+                                if(matchingRecord){
+                                    Ext.apply(mdFilter, permalinkFilter);
+                                }
+                            }
+                        }
+                    });
+
                     var olLayer = LayerUtil.layerFromMetadata(md);
                     LayerUtil.setOriginalMetadata(olLayer, metadataClone);
                     routeCreatedLayers[uuid] = olLayer;
@@ -139,6 +230,7 @@ Ext.define('Koala.Application', {
             var uuidWithStateParts = uuidWithState.split("_");
             var uuid = uuidWithStateParts[0];
             var state = uuidWithStateParts[1] || '1'; // default to visible
+
             var booleanState = state === '1';
             var olLayer = me.routeCreatedLayers[uuid];
             if (Koala.util.String.isUuid(uuid) && Ext.isDefined(olLayer)) {
@@ -149,10 +241,28 @@ Ext.define('Koala.Application', {
         me.routeCreatedLayers = null;
     },
 
+    /**
+     *
+     */
+    onMapRoute: function(lon, lat, zoom) {
+        var view = this.getMainView();
+        var map = view.down('basigx-component-map').getMap();
+        var mapView = map.getView();
+
+        mapView.setCenter([lon, lat]);
+        mapView.setZoom(zoom);
+    },
+
     routes: {
+        'map/:lon/:lat/:zoom': {
+            action: 'onMapRoute'
+        },
         'layers/:layers': {
             action: 'onLayerTreeRoute',
-            before: 'beforeLayerTreeRoute'
+            before: 'beforeLayerTreeRoute',
+            conditions: {
+                ':layers': "(.*)"
+            }
         }
     },
 
