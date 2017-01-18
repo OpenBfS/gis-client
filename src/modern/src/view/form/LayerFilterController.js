@@ -39,16 +39,21 @@ Ext.define('Koala.view.form.LayerFilterController', {
             return;
         }
 
-        var submitButton = Ext.create("Ext.Button", {
+        var setFilterButton = Ext.create("Ext.Button", {
             viewModel: me.getViewModel(),
             bind: {
-                text: "{buttonText}"
+                text: view.getLayer() ?
+                        '{buttonTextChangeFilter}' :
+                        '{buttonText}'
             },
-            handler: "submitFilter",
-            margin: "0 20px",
+            handler: view.getLayer() ?
+                    'changeFilterForLayer' :
+                    'submitFilter',
+            margin: '0 20px',
             formBind: true
         });
-        view.add(submitButton);
+
+        view.add(setFilterButton);
 
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || "").toLowerCase();
@@ -93,6 +98,67 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var metadataClone = Ext.clone(metadata);
         var filters = view.getFilters();
 
+        filters = me.updateFiltersFromForm(filters);
+        metadata.filters = filters;
+        var layer = LayerUtil.layerFromMetadata(metadata);
+        LayerUtil.setOriginalMetadata(layer, metadataClone);
+        LayerUtil.addOlLayerToMap(layer);
+
+        me.deselectThemeTreeItems();
+
+        var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
+
+        Ext.each(mobilePanels, function(panel){
+            panel.hide();
+        });
+    },
+
+    /**
+     * This is the handler if we want to update the filters of an
+     * existing layer.
+     */
+    changeFilterForLayer: function() {
+        var me = this;
+        var LayerUtil = Koala.util.Layer;
+        var view = me.getView();
+        var existingLayer = view.getLayer();
+        // view.getMetadata() might be tainted, i.e. changed in place
+        var metadata = LayerUtil.getOriginalMetadata(existingLayer);
+        var filters = view.getFilters();
+        filters = me.updateFiltersFromForm(filters);
+        metadata.filters = filters;
+
+        // Create a complete new layer to get its source…
+        var newLayer = LayerUtil.layerFromMetadata(metadata);
+        // … this is the trick to update the filter but reuse all the
+        // utility logic.
+        existingLayer.setSource(newLayer.getSource());
+
+        me.updateMetadataLegendTree(existingLayer, metadata);
+        me.deselectThemeTreeItems();
+        LayerUtil.repaintLayerFilterIndication();
+
+        var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
+
+        Ext.each(mobilePanels, function(panel){
+            panel.hide();
+        });
+    },
+
+    /**
+     * Given the set of original filters (from metadata), this method
+     * queries the complete filter form and tries to gather values from
+     * its elements. Will return a changed filter where the filter
+     * conditions match those of the form.
+     *
+     * @param {Array<Object>} filters The filters.
+     * @return {Array<Object>} The updated filters.
+     */
+    updateFiltersFromForm: function(filters) {
+        var me = this;
+        var FilterUtil = Koala.util.Filter;
+        var view = me.getView();
+
         // Iterate over all filters…
         Ext.each(filters, function(filter, idx) {
             // … grab the associated fieldset by attribute
@@ -119,16 +185,31 @@ Ext.define('Koala.view.form.LayerFilterController', {
             }
         });
 
-        metadata.filters = filters;
-        var layer = LayerUtil.layerFromMetadata(metadata);
-        LayerUtil.setOriginalMetadata(layer, metadataClone);
-        LayerUtil.addOlLayerToMap(layer);
-        me.deselectThemeTreeItems();
+        return filters;
+    },
 
-        var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
-
-        Ext.each(mobilePanels, function(panel){
-            panel.hide();
+    /**
+     * Called during the update of a filter of an existing layer, this
+     * method will upodate the metadata of the layer everywhere it might
+     * be used.
+     *
+     * @param {ol.layer.Layer} layer The layer whose metadata (filter)
+     *     has changed.
+     * @param {Object} metadata The new metadata of the layer.
+     */
+    updateMetadataLegendTree: function(layer, metadata){
+        layer.metadata = metadata;
+        // find all legendpanels:
+        var legends = Ext.ComponentQuery.query('k-panel-routing-legendtree');
+        Ext.each(legends, function(legend) {
+            // find the correct record for the given layer
+            legend.getStore().each(function(rec) {
+                var layerInTree = rec.getOlLayer && rec.getOlLayer();
+                if (layerInTree && layerInTree === layer) {
+                    rec.set('metadata', metadata);
+                    layerInTree.metadata = metadata;
+                }
+            });
         });
     },
 
@@ -289,19 +370,19 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var me = this;
         var view = this.getView();
         var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
-            .getViewModel();
+                .getViewModel();
         var FilterUtil = Koala.util.Filter;
         var format = Koala.util.Date.ISO_FORMAT;
 
-        var value = Ext.Date.parse(
+        var value = filter.timeinstant || Ext.Date.parse(
                 filter.defaulttimeinstant, filter.defaulttimeformat
-            );
+        );
 
         var minValue;
         if (filter.mindatetimeinstant) {
             // only fill lower boundary when defined
             minValue = Ext.Date.parse(
-                filter.mindatetimeinstant, filter.mindatetimeformat
+                    filter.mindatetimeinstant, filter.mindatetimeformat
             );
         }
 
@@ -309,7 +390,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         if (filter.maxdatetimeinstant) {
             // only fill upper boundary when defined
             maxValue = Ext.Date.parse(
-                filter.maxdatetimeinstant, filter.maxdatetimeformat
+                    filter.maxdatetimeinstant, filter.maxdatetimeformat
             );
 
             // Fix for the issue #1068-34
@@ -406,6 +487,11 @@ Ext.define('Koala.view.form.LayerFilterController', {
             filter.defaultendtimeformat
         );
 
+        var startValue = filter.mindatetimeinstant.getDate ?
+                filter.mindatetimeinstant : defaultMinValue;
+        var endValue = filter.maxdatetimeinstant.getDate ?
+                filter.maxdatetimeinstant : defaultMaxValue;
+
         // Fix for the issue #1068-34
         // Raises the maxDate by one day to avoid the bug with the datefield
         // where maxDate = defaultValue leads to invalid input
@@ -431,7 +517,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             name: startName,
             editable: false,
             flex: 1,
-            value: defaultMinValue,
+            value: startValue,
             minValue: minValue,
             maxValue: maxValue,
             dateFormat: view.getFormat(),
@@ -469,7 +555,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             },
             labelAlign: 'top',
             flex: 1,
-            value: defaultMaxValue,
+            value: endValue,
             minValue: minValue,
             maxValue: maxValue,
             dateFormat: view.getFormat(),

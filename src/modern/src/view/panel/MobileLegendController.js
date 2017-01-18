@@ -157,6 +157,50 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 legend.style.display = 'none';
             }
         }
+
+        if (targetClass === 'legend-filter-text') {
+            me.onLegendFilterTextClick(layer);
+        }
+    },
+
+    onLegendFilterTextClick: function(olLayer) {
+        var me = this;
+        var view = me.getView();
+        var filterPanel = view.up('app-main')
+                .down('k-panel-mobilepanel[name=filterContainer]');
+
+        if (!(olLayer instanceof ol.layer.Layer)) {
+            Ext.Logger.warn('Invalid input parameter. Expected an subclass ' +
+                    'of ol.layer.Layer!');
+            return;
+        }
+
+        if (!filterPanel) {
+            Ext.Logger.warn('Could not find the filterContainer panel.');
+            return;
+        }
+
+        // Remove any existing layer filter form
+        var filterForms = filterPanel.query('k-form-layerfilter');
+        Ext.each(filterForms, function(panel){
+            panel.destroy();
+        });
+
+        var title = olLayer.get('name');
+        var metadata = olLayer.metadata;
+        var filters = Koala.util.Layer.getFiltersFromMetadata(metadata);
+
+        filterPanel.setTitle(title);
+        filterPanel.add({
+            xtype: 'k-form-layerfilter',
+            metadata: metadata,
+            filters: filters,
+            format: 'j F Y',
+            layer: olLayer
+        });
+
+        view.hide();
+        filterPanel.show();
     },
 
     addChartingActiveClass: function(item) {
@@ -235,7 +279,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                     '<span style="float:right"><i class="fa fa-times" style="color:#157fcc;"></i></span>',
                 '</tpl>',
                 '<tpl if="this.getFilterText(values)">',
-                    '<div style="color:#666; margin-left:20px; white-space:pre-line;">{[this.getFilterText(values)]}</div>',
+                    '<div class="legend-filter-text" style="color:#666; margin-left:20px; white-space:pre-line;">{[this.getFilterText(values)]}</div>',
                 '</tpl>',
                 '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
             '</tpl>',

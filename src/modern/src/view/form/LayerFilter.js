@@ -60,7 +60,8 @@ Ext.define("Koala.view.form.LayerFilter", {
     config: {
         metadata: null,
         filters: null,
-        format: null
+        format: null,
+        layer: null
     }
 
 });
