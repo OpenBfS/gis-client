@@ -23,7 +23,33 @@ Ext.define('Koala.util.Routing', {
     ],
 
     statics: {
-        getRoute: function(){
+        /**
+         * Updates the current permalink.
+         * @param {String} route A route expression representing the application
+         *                       state.
+         * @param {Ext.Base} view An ext view class.
+         * @param {integer} delay [optional] Milliseconds to delay the redirect.
+         */
+        setRouteForView: function(view, delay, skipLayers) {
+            var viewController = view.getController() || view.lookupController();
+            var route = this.getRoute(skipLayers);
+
+            if (Ext.isNumber(delay)) {
+                new Ext.util.DelayedTask(function(){
+                    viewController.redirectTo(route);
+                }).delay(delay);
+            } else {
+                viewController.redirectTo(route);
+            }
+        },
+
+        /**
+         * Creates the route (hash) for the current map state. Including
+         * mapcenter, mapzoom and layers with all their filters.
+         * @return {String} A route expression representing the applications
+         *                  state.
+         */
+        getRoute: function(skipLayers){
             var me = this;
             var mapComponent = BasiGX.util.Map.getMapComponent('gx_map');
             var map = mapComponent.getMap();
@@ -36,29 +62,31 @@ Ext.define('Koala.util.Routing', {
                 return !Ext.isEmpty(layer.metadata);
             });
 
-            var layersString = '';
-            Ext.each(filteredLayers, function(layer, i, layers){
-                var metadata = layer.metadata;
-                var uuid = metadata.id;
-                var isVisible = layer.get('visible') ? 1 : 0;
-                var filtersString = '';
+            if(!skipLayers){
+                var layersString = '';
+                Ext.each(filteredLayers, function(layer, i, layers){
+                    var metadata = layer.metadata;
+                    var uuid = metadata.id;
+                    var isVisible = layer.get('visible') ? 1 : 0;
+                    var filtersString = '';
 
-                Ext.each(metadata.filters, function(filter, j, filters){
-                    filtersString += me.filterToPermalinkString(filter);
-                    if(j+1 < filters.length){
-                        filtersString += ';';
-                    }
-                });
+                    Ext.each(metadata.filters, function(filter, j, filters){
+                        filtersString += me.filterToPermalinkString(filter);
+                        if(j+1 < filters.length){
+                            filtersString += ';';
+                        }
+                    });
 
-                layersString += Ext.String.format('{0}_{1}_{2}',
+                    layersString += Ext.String.format('{0}_{1}_{2}',
                     uuid,
                     isVisible,
                     filtersString);
 
-                if(i+1 < layers.length){
-                    layersString += ',';
-                }
-            });
+                    if(i+1 < layers.length){
+                        layersString += ',';
+                    }
+                });
+            }
 
             var hash = Ext.String.format('map/{0}/{1}/{2}|layers/{3}',
                 Math.round(lon),
@@ -69,6 +97,12 @@ Ext.define('Koala.util.Routing', {
             return hash;
         },
 
+        /**
+         * Transforms the values of a layer metadata filter to an permalink
+         * expression.
+         * @param {Object} filter A layer metadat filter object.
+         * @return {String} The permalink expression.
+         */
         filterToPermalinkString: function(filter) {
             var permalinkString;
             switch (filter.type) {
@@ -97,6 +131,16 @@ Ext.define('Koala.util.Routing', {
                 default:
             }
             return permalinkString;
+        },
+
+        /**
+         * Check if the route prefix is present in the window.location.hash
+         * @param {String} route The route expression.
+         * @return {Boolean} Is the route allready set.
+         */
+        isRouteSet: function(route) {
+            var exp = new RegExp(route.split('/')[0] + '/', 'gi');
+            return exp.test(window.location.hash);
         }
     }
 

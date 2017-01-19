@@ -26,25 +26,6 @@ Ext.define('Koala.view.main.MobileMainController', {
 
     chartingLayer: null,
 
-    routes: {
-        'map/:lon/:lat/:zoom': {
-            action: 'onMapRoute'
-        }
-    },
-
-    /**
-     *
-     */
-    onMapRoute: function(lon, lat, zoom) {
-        var me = this;
-        var view = me.getView();
-        var map = view.down('basigx-component-map').getMap();
-        var mapView = map.getView();
-
-        mapView.setCenter([parseInt(lon, 10), parseInt(lat, 10)]);
-        mapView.setZoom(zoom);
-    },
-
     /**
      * TODO needed only while developing, will eventually be removed
      */

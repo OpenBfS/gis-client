@@ -32,7 +32,7 @@ Ext.define('Koala.view.main.Main', {
 
         'Koala.view.form.LayerFilter',
 
-        'Koala.util.Route',
+        'Koala.util.Routing',
 
         'Koala.view.panel.BarChart',
         'Koala.view.panel.MobilePanel',
@@ -48,13 +48,6 @@ Ext.define('Koala.view.main.Main', {
     controller: 'mobile-main',
     viewModel: {
         type: 'mobile-main'
-    },
-
-    config: {
-        /**
-         * The route (template) to apply for the map component.
-         */
-        mapRoute: 'map/{0}/{1}/{2}'
     },
 
     defaults: {
@@ -110,14 +103,9 @@ Ext.define('Koala.view.main.Main', {
                     //     layer.setVisible(false);
                     // });
 
-                    map.on('moveend', function(evt) {
-                        var mapView = evt.map.getView();
-                        var mapCenter = mapView.getCenter();
-                        var mapZoom = mapView.getZoom();
-
-                        Koala.util.Route.setRouteForView(Ext.String.format(
-                                view.getMapRoute(), Math.round(mapCenter[0]),
-                                Math.round(mapCenter[1]), mapZoom), view);
+                    map.on('moveend', function() {
+                        // The secondparameter is set to true to the skipLayers
+                        Koala.util.Routing.setRouteForView(view, true);
                     });
                 }
             }

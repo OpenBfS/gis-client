@@ -157,6 +157,10 @@ Ext.define('Koala.Application', {
         var routeCreatedLayers = {};
         var LayerUtil = Koala.util.Layer;
 
+        if (Ext.isEmpty(layerUuidsWithStates[0])) {
+            return;
+        }
+
         Ext.each(layerUuidsWithStates, function(uuidWithState) {
             var uuid = uuidWithState.split("_")[0];
             var filtersString = uuidWithState.split("_")[2];
@@ -178,8 +182,8 @@ Ext.define('Koala.Application', {
                         action.resume();
                     }
                 });
-           } else {
-               Ext.log.info('Skipping route part ', uuidWithState);
+            } else {
+                Ext.log.info('Skipping route part ', uuidWithState);
             }
         });
     },
