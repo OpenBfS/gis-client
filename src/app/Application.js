@@ -274,6 +274,10 @@ Ext.define('Koala.Application', {
     applyPermalinkFiltersToMetadata: function(uuid, metadataFilters) {
         var me = this;
         Ext.each(metadataFilters, function(mdFilter) {
+            if(!me.permalinkFilters[uuid]){
+                return false;
+            }
+
             var permalinkFilter = me.permalinkFilters[uuid][mdFilter.alias] || me.permalinkFilters[uuid][mdFilter.type];
             var minDate;
             var maxDate;
