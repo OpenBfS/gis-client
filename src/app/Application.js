@@ -119,7 +119,7 @@ Ext.define('Koala.Application', {
         var map = view.down('basigx-component-map').getMap();
         var mapView = map.getView();
 
-        mapView.setCenter([lon, lat]);
+        mapView.setCenter([parseInt(lon, 10), parseInt(lat, 10)]);
         mapView.setZoom(zoom);
     },
 
@@ -283,6 +283,8 @@ Ext.define('Koala.Application', {
                     minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
                     if(minDate < permalinkFilter.timeinstant && maxDate > permalinkFilter.timeinstant){
                         Ext.apply(mdFilter, permalinkFilter);
+                    } else {
+                        Ext.toast('Permalink contains illegal pointintime filter');
                     }
                 }
                 if (mdFilter.type === "timerange") {
@@ -291,6 +293,8 @@ Ext.define('Koala.Application', {
                     if(minDate < permalinkFilter.mindatetimeinstant && maxDate > permalinkFilter.mindatetimeinstant &&
                         minDate < permalinkFilter.maxdatetimeinstant && maxDate > permalinkFilter.maxdatetimeinstant){
                         Ext.apply(mdFilter, permalinkFilter);
+                    } else {
+                        Ext.toast('Permalink contains illegal timerange filter');
                     }
                 }
                 if (mdFilter.type === "value") {
@@ -298,6 +302,8 @@ Ext.define('Koala.Application', {
                     var matchingRecord = allowedStore.findRecord('val', permalinkFilter.value);
                     if(matchingRecord){
                         Ext.apply(mdFilter, permalinkFilter);
+                    } else {
+                        Ext.toast('Permalink contains illegal value filter');
                     }
                 }
             }
