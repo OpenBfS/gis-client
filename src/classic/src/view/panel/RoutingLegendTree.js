@@ -53,7 +53,12 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     listeners: {
         selectionchange: 'onSelectionChange',
         beforerender: 'bindUtcBtnToggleHandler',
-        beforedestroy: 'unbindUtcBtnToggleHandler'
+        beforedestroy: 'unbindUtcBtnToggleHandler',
+        // Ensure the layer filter text indicator will be drawn
+        expand: {
+            fn: 'onFirstExpand',
+            single: true
+        }
     },
 
     statics: {
@@ -538,10 +543,30 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var treeView = me.getView();
         var treeStore = me.getStore();
 
+        me.delayedRepaintLayerFilterIndication = Ext.Function.createDelayed(
+                Koala.util.Layer.repaintLayerFilterIndication, 50, Koala.util.Layer);
+
         // Register moveend to update legendUrls
         map.on('moveend', me.updateLegendsWithScale, me);
         // Ensure a previous selection is kept after datachange
         treeStore.on('datachanged', me.layerDataChanged, me);
+
+        // Bind/Unbind delayedRepaintLayerFilterIndication() on layer add/remove.
+        treeStore.on({
+            add: function(store, recs) {
+                me.bindOnLayerVisibilityChange(recs[0]);
+            },
+            remove: function(store, recs) {
+                me.unbindOnLayerVisibilityChange(recs[0]);
+            },
+            scope: me
+        });
+
+        // Bind delayedRepaintLayerFilterIndication() on already added layers.
+        treeStore.each(function(rec) {
+            me.bindOnLayerVisibilityChange(rec);
+        });
+
         // store data on collapse/expand, and use it on drop to keep the
         // expanded / collapsed state after drag and drop
         treeView.on({
@@ -556,6 +581,34 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     },
 
     /**
+     * Binds delayedRepaintLayerFilterIndication() on layer visibility change.
+     *
+     * @param  {Ext.data.Model} record A treestore record.
+     * @private
+     */
+    bindOnLayerVisibilityChange: function(record) {
+        var me = this;
+        var layer = record.getOlLayer();
+        if (layer && me.delayedRepaintLayerFilterIndication) {
+            layer.on('change:visible', me.delayedRepaintLayerFilterIndication);
+        }
+    },
+
+    /**
+     * Unbinds delayedRepaintLayerFilterIndication() on layer visibility change.
+     *
+     * @param  {Ext.data.Model} record A treestore record.
+     * @private
+     */
+    unbindOnLayerVisibilityChange: function(record) {
+        var me = this;
+        var layer = record.getOlLayer();
+        if (layer && me.delayedRepaintLayerFilterIndication) {
+            layer.un('change:visible', me.delayedRepaintLayerFilterIndication);
+        }
+    },
+
+    /**
      * Unbind the handlers that were bound in #bindUpdateHandlers during the
      * `initComponent` sequence.
      *
@@ -567,14 +620,6 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
         var treeView = me.getView();
         var treeStore = me.getStore();
-
-        // unbind repaintLayerFilterIndication from the individually added
-        // layers
-        treeStore.each(function(layerNode) {
-            var ns = Koala.util.Layer;
-            var layer = layerNode.getOlLayer();
-            layer.un('change:visible', ns.repaintLayerFilterIndication, ns);
-        });
 
         // Unregister moveend to update legendUrls
         map.un('moveend', me.updateLegendsWithScale, me);
@@ -776,8 +821,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
      * @param {HTMLElement} rowNode The `tr` element owning the expanded row.
      * @param {Ext.data.Model} record The record providing the data.
      */
-    onCollapseBody: function(rowNode, record){
-        record.set(this.itemExpandedKey, false);
+    onCollapseBody: function(rowNode, record) {
+        // Called silently to prevent redrawing of the associated layertree node.
+        record.set(this.itemExpandedKey, false, {silent: true});
     },
 
     /**
@@ -786,8 +832,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
      * @param {HTMLElement} rowNode The `tr` element owning the expanded row.
      * @param {Ext.data.Model} record The record providing the data.
      */
-    onExpandBody: function(rowNode, record){
-        record.set(this.itemExpandedKey, true);
+    onExpandBody: function(rowNode, record) {
+        // Called silently to prevent redrawing of the associated layertree node.
+        record.set(this.itemExpandedKey, true, {silent: true});
     },
 
     /**
@@ -823,10 +870,12 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     layerDataChanged: function() {
         var me = this;
         var selection = me.getSelection();
+
         // nothing to do if the selection is empty.
         if (Ext.isEmpty(selection)) {
             return;
         }
+
         var selModel = me.getSelectionModel();
         // Here is what we do:
         // 1) unselect all records, but suppress event handler notification

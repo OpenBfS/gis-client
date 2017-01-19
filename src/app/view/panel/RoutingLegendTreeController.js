@@ -26,6 +26,13 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
     ],
 
     /**
+     * Ensure the layer filter text indicator will be drawn.
+     */
+    onFirstExpand: function() {
+        Koala.util.Layer.repaintLayerFilterIndication();
+    },
+
+    /**
      *
      */
     setRouting: function(store){

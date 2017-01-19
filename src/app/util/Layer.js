@@ -540,13 +540,6 @@ Ext.define('Koala.util.Layer', {
             layer.set('suffix', suffix);
             layer.set('nameWithSuffix', layer.get('name') + suffix);
 
-            var repaintTask = new Ext.util.DelayedTask(
-                me.repaintLayerFilterIndication, me
-            );
-            repaintTask.delay(50);
-
-            layer.on('change:visible', me.repaintLayerFilterIndication, me);
-
             // TODO in the future we aren't allowed to guess here, as there will
             // be multiple maps!
             var mapComp = Ext.ComponentQuery.query('basigx-component-map')[0];
