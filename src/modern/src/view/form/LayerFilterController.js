@@ -111,14 +111,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
         Ext.each(mobilePanels, function(panel) {
             panel.hide();
         });
-
-        var mobileLegendPanel = view.up('app-main').down('k-panel-mobilelegend');
-
-        // Newly added layers should be chartable by default (if supported by
-        // the layer).
-        if (mobileLegendPanel && Koala.util.Layer.isChartableLayer(layer)) {
-            mobileLegendPanel.getController().setActiveChartingLayer(layer);
-        }
     },
 
     /**

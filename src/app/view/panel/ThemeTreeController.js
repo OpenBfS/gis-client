@@ -20,6 +20,8 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-panel-themetree',
 
+    currentTask: null,
+
     toggleLayerSetView: function () {
         var view = this.getView();
         var menu = view.up('basigx-panel-menu');
@@ -40,8 +42,6 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         themeStore.getRoot().expandChildren();
         btn.disable();
     },
-
-    currentTask: null,
 
     setupShowFilterWinCheck: function(treepanel, item) {
         var me = this;

@@ -547,6 +547,62 @@ Ext.define('Koala.util.Layer', {
             // the get cleaned up when visibility changes base-component-map
             me.bindLayerVisibilityHandlers(layer, mapComp);
             mapComp.addLayer(layer);
+
+            // Select the newly added layer in the legend tree (handles classic
+            // and modern)
+            me.setAsActiveInLegendTree(layer);
+
+            // Newly added layers should be chartable by default (if supported by
+            // the layer). Actually only needed in modern.
+            me.setAsActiveChartingLayer(layer);
+        },
+
+        /**
+         * Sets the given ol.layer.Layer as chartable in the modern legend tree.
+         *
+         * @param {ol.layer.Layer} layer The layer to set as chartable in the
+         *                               modern tree.
+         */
+        setAsActiveChartingLayer: function(layer) {
+            if (!(layer instanceof ol.layer.Layer)) {
+                return;
+            }
+
+            var mobileLegendPanel = Ext.ComponentQuery.query(
+                    'k-panel-mobilelegend')[0];
+
+            if (mobileLegendPanel && Koala.util.Layer.isChartableLayer(layer)) {
+                mobileLegendPanel.getController().setActiveChartingLayer(layer);
+            }
+        },
+
+        /**
+         * Sets the given ol.layer.Layer as selected in the legend tree. Handles
+         * both classic and modern legend tree.
+         *
+         * @param {ol.layer.Layer} layer The layer to set selected/active in
+         *                               the tree.
+         */
+        setAsActiveInLegendTree: function(layer) {
+            if (!(layer instanceof ol.layer.Layer)) {
+                return;
+            }
+
+            // Get the legend tree, either classic or modern
+            var legendTree = Ext.ComponentQuery.query(
+                    'k-panel-routing-legendtree, k-panel-mobilelegend > treelist')[0];
+
+            if (legendTree) {
+                // Get the corresponding tree node. We use qtitle as identifier
+                // as the text may have been manipulated (e.g. including a span
+                // tag in classic).
+                var treeNode = legendTree.getStore().findNode(
+                        'qtitle', layer.get('name'));
+                if (treeNode) {
+                    // Select the tree node
+                    legendTree.setSelection(treeNode);
+                }
+            }
         },
 
         /**
