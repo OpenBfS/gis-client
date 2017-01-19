@@ -90,7 +90,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * currently displayed filters applied and add that layer to the map (via
      * Koala.util.Layer#addOlLayerToMap)
      */
-    submitFilter: function(){
+    submitFilter: function() {
         var me = this;
         var LayerUtil = Koala.util.Layer;
         var view = me.getView();
@@ -108,9 +108,17 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
 
-        Ext.each(mobilePanels, function(panel){
+        Ext.each(mobilePanels, function(panel) {
             panel.hide();
         });
+
+        var mobileLegendPanel = view.up('app-main').down('k-panel-mobilelegend');
+
+        // Newly added layers should be chartable by default (if supported by
+        // the layer).
+        if (mobileLegendPanel && Koala.util.Layer.isChartableLayer(layer)) {
+            mobileLegendPanel.getController().setActiveChartingLayer(layer);
+        }
     },
 
     /**

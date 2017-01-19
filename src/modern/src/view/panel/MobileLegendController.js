@@ -139,14 +139,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
 
         // charting toggler
         if(targetClass.indexOf("fa-bar-chart") > 0) {
-            me.removeAllChartingActiveClasses();
-            if (me.activeChartingLayer === layer) {
-                me.activeChartingLayer = null;
-            } else {
-                me.activeChartingLayer = layer;
-                me.addChartingActiveClass(treeList.getItem(selection));
-            }
-            view.fireEvent('chartinglayerchange', me.activeChartingLayer);
+            me.setActiveChartingLayer(layer);
         }
 
         if (target.getElementsByTagName("img").length > 0) {
@@ -161,6 +154,35 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         if (targetClass === 'legend-filter-text') {
             me.onLegendFilterTextClick(layer);
         }
+    },
+
+    /**
+     * Sets the given ol.layer.Layer as the active charting layer.
+     *
+     * @param {ol.layer.Layer} layer The layer to set active charting on.
+     */
+    setActiveChartingLayer: function(layer) {
+        if (!(layer instanceof ol.layer.Layer)) {
+            return;
+        }
+
+        var me = this;
+        var view = me.getView();
+        var treeList = view.down('treelist');
+
+        // Get the layer associated treelist node.
+        var listNode = treeList.getStore().findNode('text', layer.get('name'));
+
+        me.removeAllChartingActiveClasses();
+
+        if (me.activeChartingLayer === layer) {
+            me.activeChartingLayer = null;
+        } else {
+            me.activeChartingLayer = layer;
+            me.addChartingActiveClass(treeList.getItem(listNode));
+        }
+
+        view.fireEvent('chartinglayerchange', me.activeChartingLayer);
     },
 
     onLegendFilterTextClick: function(olLayer) {
@@ -204,9 +226,13 @@ Ext.define('Koala.view.panel.MobileLegendController', {
     },
 
     addChartingActiveClass: function(item) {
-        item.el.down('.fa-bar-chart')
-            .removeCls('k-inactive-charting-layer')
-            .addCls('k-active-charting-layer');
+        var itemElChartIconClass = item.el.down('.fa-bar-chart');
+
+        if (itemElChartIconClass) {
+            itemElChartIconClass
+                .removeCls('k-inactive-charting-layer')
+                .addCls('k-active-charting-layer');
+        }
     },
 
     removeAllChartingActiveClasses: function() {
