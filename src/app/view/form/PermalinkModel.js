@@ -14,16 +14,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.PermalinkModel
+ * @class Koala.view.form.PermalinkModel
  */
-Ext.define('Koala.view.button.PermalinkModel', {
+Ext.define('Koala.view.form.PermalinkModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-button-permalink',
-
+    alias: 'viewmodel.k-form-permalink',
     data: {
-        text: '',
-        tooltip: 'Permalink',
-        windowTitle: 'Permalink'
+        refreshBtnText: 'Erneuern'
     }
 
 });

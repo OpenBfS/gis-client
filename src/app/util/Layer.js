@@ -1756,7 +1756,7 @@ Ext.define('Koala.util.Layer', {
          * Returns a flattened array of all layers in the passed structure (may
          * be hierarchical with children under the key `children`). This utility
          * ensures that layers sets (also possibly with a deep hierarchy) can be
-         * added in the exoected order, even though we have to query in an
+         * added in the expected order, even though we have to query in an
          * asynchronous for their metadata. Undefined layers will be skipped.
          *
          * See also https://redmine-koala.bfs.de/issues/1491.

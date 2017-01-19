@@ -14,33 +14,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.PermalinkController
+ * @class Koala.view.form.PermalinkController
  */
-Ext.define('Koala.view.button.PermalinkController', {
+Ext.define('Koala.view.form.PermalinkController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.k-button-permalink',
+    alias: 'controller.k-form-permalink',
 
-    requires: [
-        'Koala.view.form.Permalink'
-    ],
-
-    /**
-     *
-     */
-    onClick: function(){
-        var win = Ext.ComponentQuery.query('[name=permalink-window]')[0];
-        if(!win){
-            Ext.create('Ext.window.Window', {
-                name: 'permalink-window',
-                title: this.getViewModel().get('windowTitle'),
-                layout: 'fit',
-                items: [{
-                    xtype: 'k-form-permalink'
-                }]
-            }).show();
-        } else {
-            BasiGX.util.Animate.shake(win);
-        }
-    }
+    requires: []
 
 });
