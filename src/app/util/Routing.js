@@ -388,16 +388,6 @@ Ext.define('Koala.util.Routing', {
                 default:
             }
             return permalinkString;
-        },
-
-        /**
-         * Check if the route prefix is present in the window.location.hash
-         * @param {String} route The route expression.
-         * @return {Boolean} Is the route allready set.
-         */
-        isRouteSet: function(route) {
-            var exp = new RegExp(route.split('/')[0] + '/', 'gi');
-            return exp.test(window.location.hash);
         }
     }
 
