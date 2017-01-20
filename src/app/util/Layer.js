@@ -595,11 +595,8 @@ Ext.define('Koala.util.Layer', {
                     'k-panel-routing-legendtree, k-panel-mobilelegend > treelist')[0];
 
             if (legendTree) {
-                // Get the corresponding tree node. We use qtitle as identifier
-                // as the text may have been manipulated (e.g. including a span
-                // tag in classic).
-                var treeNode = legendTree.getStore().findNode(
-                        'qtitle', layer.get('name'));
+                // Get the corresponding tree node.
+                var treeNode = legendTree.getStore().findNode('id', layer.id);
                 if (treeNode) {
                     // Select the tree node
                     legendTree.setSelection(treeNode);
