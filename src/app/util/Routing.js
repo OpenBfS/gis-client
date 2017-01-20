@@ -326,9 +326,11 @@ Ext.define('Koala.util.Routing', {
                     var filtersString = '';
 
                     Ext.each(metadata.filters, function(filter, j, filters){
-                        filtersString += me.filterToPermalinkString(filter);
-                        if(j+1 < filters.length){
-                            filtersString += ';';
+                        if(filter){
+                            filtersString += me.filterToPermalinkString(filter);
+                            if(j+1 < filters.length){
+                                filtersString += ';';
+                            }
                         }
                     });
 
