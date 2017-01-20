@@ -27,12 +27,6 @@ Ext.define('Koala.Application', {
 
     name: 'Koala',
 
-    requires: [
-        'Koala.util.Layer',
-        'Koala.util.String',
-        'Koala.util.Filter'
-    ],
-
     statics: {
         /**
          * Return the current timereference for the application or null if
