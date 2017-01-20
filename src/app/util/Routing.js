@@ -158,7 +158,7 @@ Ext.define('Koala.util.Routing', {
                             var t = parseInt(filterValues.split('t')[1], 10);
                             if (Ext.isNumber(t)) {
                                 me.permalinkFilters[uuid].pointintime = {
-                                    timeinstant: new Date(t)
+                                    effectivedatetime: new Date(t)
                                 };
                             }
                         break;
@@ -167,8 +167,8 @@ Ext.define('Koala.util.Routing', {
                             var e = parseInt(filterValues.split('e')[1], 10);
                             if (Ext.isNumber(s) && Ext.isNumber(s)) {
                                 me.permalinkFilters[uuid].timerange = {
-                                    mindatetimeinstant: new Date(s),
-                                    maxdatetimeinstant: new Date(e)
+                                    effectivemindatetime: new Date(s),
+                                    effectivemaxdatetime: new Date(e)
                                 };
                             }
                         break;
@@ -178,13 +178,13 @@ Ext.define('Koala.util.Routing', {
                             var val = filterValues.split("=")[1];
                             me.permalinkFilters[uuid].value = {
                                 alias: alias,
-                                value: val
+                                effectivevalue: val
                             };
                         break;
                         case 'st':
                             me.permalinkFilters[uuid].Stil = {
                                 alias: 'Stil',
-                                value: filterValues
+                                effectivevalue: filterValues
                             };
                         break;
                         default:
@@ -219,7 +219,7 @@ Ext.define('Koala.util.Routing', {
                     if (mdFilter.type === "pointintime") {
                         maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
                         minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
-                        if(minDate <= permalinkFilter.timeinstant && maxDate >= permalinkFilter.timeinstant){
+                        if(minDate <= permalinkFilter.effectivedatetime && maxDate >= permalinkFilter.effectivedatetime){
                             Ext.apply(mdFilter, permalinkFilter);
                         } else {
                             Ext.toast('Permalink contains illegal pointintime filter');
@@ -228,8 +228,8 @@ Ext.define('Koala.util.Routing', {
                     if (mdFilter.type === "timerange") {
                         maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
                         minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
-                        if(minDate <= permalinkFilter.mindatetimeinstant && maxDate >= permalinkFilter.mindatetimeinstant &&
-                            minDate <= permalinkFilter.maxdatetimeinstant && maxDate >= permalinkFilter.maxdatetimeinstant){
+                        if(minDate <= permalinkFilter.effectivemindatetime && maxDate >= permalinkFilter.effectivemindatetime &&
+                            minDate <= permalinkFilter.effectivemaxdatetime && maxDate >= permalinkFilter.effectivemaxdatetime){
                             Ext.apply(mdFilter, permalinkFilter);
                         } else {
                             Ext.toast('Permalink contains illegal timerange filter');
@@ -237,7 +237,7 @@ Ext.define('Koala.util.Routing', {
                     }
                     if (mdFilter.type === "value") {
                         var allowedStore = Koala.util.Filter.getStoreFromAllowedValues(mdFilter.allowedValues);
-                        var matchingRecord = allowedStore.findRecord('val', permalinkFilter.value);
+                        var matchingRecord = allowedStore.findRecord('val', permalinkFilter.effectivevalue);
                         if(matchingRecord){
                             Ext.apply(mdFilter, permalinkFilter);
                         } else {
@@ -362,16 +362,16 @@ Ext.define('Koala.util.Routing', {
             var permalinkString;
             switch (filter.type) {
                 case "pointintime":
-                    var t = filter.timeinstant.getTime();
+                    var t = filter.effectivedatetime.getTime();
                     permalinkString = 'pt{t' + t + '}';
                     break;
                 case "timerange":
-                    var s = filter.mindatetimeinstant.getTime();
-                    var e = filter.maxdatetimeinstant.getTime();
+                    var s = filter.effectivemindatetime.getTime();
+                    var e = filter.effectivemaxdatetime.getTime();
                     permalinkString = 'tr{s' + s + 'e' + e + '}';
                     break;
                 case "value":
-                    var value = filter.value;
+                    var value = filter.effectivevalue;
                     var alias = filter.alias;
                     var param = filter.param;
 
