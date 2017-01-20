@@ -26,13 +26,11 @@ Ext.define("Koala.view.form.Permalink", {
     xtype: 'k-form-permalink',
 
     requires: [
-        'Ext.button.Button',
-        'Ext.app.ViewModel',
+        'Koala.view.form.PermalinkModel',
 
         'Koala.util.Routing'
     ],
 
-    controller: "k-form-permalink",
     viewModel: {
         type: "k-form-permalink"
     },
@@ -56,7 +54,6 @@ Ext.define("Koala.view.form.Permalink", {
 
     getPermalink: function(){
         var route = Koala.util.Routing.getRoute();
-
         var hrefWithoutHash = window.location.origin +
             window.location.pathname +
             window.location.search;
