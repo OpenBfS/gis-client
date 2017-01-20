@@ -335,7 +335,8 @@ Ext.define('Koala.util.Layer', {
                 } else if (filterType === "pointintime") {
                     var date, format, time;
 
-                    date = new Date(filter.timeinstant);
+                    date = new Date(filter.effectivedatetime);
+
                     // respect the applications UTC setting
                     if (staticMe.appIsLocal()) {
                         date = Koala.util.Date.makeLocal(date);
@@ -347,8 +348,9 @@ Ext.define('Koala.util.Layer', {
                     var startDate, startFormat, startTime;
                     var endDate, endFormat, endTime;
 
-                    startDate = new Date(filter.mindatetimeinstant);
-                    endDate = new Date(filter.maxdatetimeinstant);
+                    startDate = new Date(filter.effectivemindatetime);
+                    endDate = new Date(filter.effectivemaxdatetime);
+
                     // respect the applications UTC setting
                     if (staticMe.appIsLocal()) {
                         startDate = Koala.util.Date.makeLocal(startDate);
@@ -648,8 +650,8 @@ Ext.define('Koala.util.Layer', {
             var themeTree = Ext.ComponentQuery.query('k-panel-themetree')[0];
             var currentSelection = themeTree.getSelection()[0];
             var title = currentSelection ?
-                currentSelection.data.text :
-                metadata.legendTitle;
+                    currentSelection.data.text :
+                    metadata.legendTitle;
 
             var winName = 'filter-win-' + metadata.id;
 
@@ -1211,10 +1213,10 @@ Ext.define('Koala.util.Layer', {
          *
          */
         applyDefaultsTimerangeFilter: function(filter){
-            if (!Ext.isDate(filter.mindatetimeinstant)) {
+            if (!Ext.isDate(filter.effectivemindatetime)) {
                 if (filter.defaultstarttimeinstant) {
                     try {
-                        filter.mindatetimeinstant = Ext.Date.parse(
+                        filter.effectivemindatetime = Ext.Date.parse(
                             filter.defaultstarttimeinstant,
                             filter.defaultstarttimeformat
                         );
@@ -1227,10 +1229,10 @@ Ext.define('Koala.util.Layer', {
                         ' filter');
                 }
             }
-            if (!Ext.isDate(filter.maxdatetimeinstant)) {
+            if (!Ext.isDate(filter.effectivemaxdatetime)) {
                 if (filter.defaultendtimeinstant) {
                     try {
-                        filter.maxdatetimeinstant = Ext.Date.parse(
+                        filter.effectivemaxdatetime = Ext.Date.parse(
                             filter.defaultendtimeinstant,
                             filter.defaultendtimeformat
                         );
@@ -1247,10 +1249,10 @@ Ext.define('Koala.util.Layer', {
         },
 
         applyDefaultsPointInTimeFilter: function(filter){
-            if (!Ext.isDate(filter.timeinstant)) {
+            if (!Ext.isDate(filter.effectivedatetime)) {
                 if (filter.defaulttimeinstant) {
                     try {
-                        filter.timeinstant = Ext.Date.parse(
+                        filter.effectivedatetime = Ext.Date.parse(
                             filter.defaulttimeinstant,
                             filter.defaulttimeformat
                         );
@@ -1268,8 +1270,8 @@ Ext.define('Koala.util.Layer', {
         },
 
         applyDefaultsValueFilter: function(filter){
-            if (!filter.value) {
-                filter.value = filter.defaultValue;
+            if (!filter.effectivevalue) {
+                filter.effectivevalue = filter.defaultValue;
             }
             return filter;
         },
@@ -1308,8 +1310,8 @@ Ext.define('Koala.util.Layer', {
                 Ext.log.warn('Multiple time filters configured, ' +
                     'only the last will win');
             }
-            var start = filter.mindatetimeinstant;
-            var end = filter.maxdatetimeinstant;
+            var start = filter.effectivemindatetime;
+            var end = filter.effectivemaxdatetime;
 
             var format = Koala.util.Date.ISO_FORMAT;
             var val = Ext.Date.format(start, format) + '/' + Ext.Date.format(end, format);
@@ -1319,14 +1321,14 @@ Ext.define('Koala.util.Layer', {
         },
 
         configureMetadataWithPointInTime: function(metadata, filter) {
-            // Point in time filter is an additional param TIME=timeinstant
+            // Point in time filter is an additional param TIME=effectivedatetime
             var olProps = metadata.layerConfig.olProperties;
             var wmstKey = 'param_TIME';
             if (wmstKey in olProps) {
                 Ext.log.warn('Multiple time filters configured, ' +
                     'only the last will win');
             }
-            var dateValue = filter.timeinstant;
+            var dateValue = filter.effectivedatetime;
             var format = Koala.util.Date.ISO_FORMAT;
             var val = Ext.Date.format(dateValue, format);
             olProps[wmstKey] = val;
@@ -1360,10 +1362,10 @@ Ext.define('Koala.util.Layer', {
             // call ourself again with the only value or undefined as
             // non-array
             if (displayFriendly &&
-                Ext.isArray(filter.value) &&
-                filter.value.length < 2) {
+                Ext.isArray(filter.effectivevalue) &&
+                filter.effectivevalue.length < 2) {
                 var clone = Ext.clone(filter);
-                clone.value = filter.value[0];
+                clone.effectivevalue = filter.effectivevalue[0];
                 return LayerUtil.stringifyValueFilter(
                     clone, displayFriendly
                 );
@@ -1383,7 +1385,7 @@ Ext.define('Koala.util.Layer', {
             var adjusted = false;
             var stringified = "";
 
-            if (!Ext.isArray(filter.value)) {
+            if (!Ext.isArray(filter.effectivevalue)) {
                 if (op === '!=' || op === 'NEQ' || op === 'NOT IN') {
                     op = "<>";
                     adjusted = true;
@@ -1391,7 +1393,7 @@ Ext.define('Koala.util.Layer', {
                     op = "=";
                     adjusted = true;
                 }
-                var value = filter.value;
+                var value = filter.effectivevalue;
                 // in case of userfriendly display, we need to adjust again, now
                 // taking the current language into account.
                 if (displayFriendly) {
@@ -1413,14 +1415,14 @@ Ext.define('Koala.util.Layer', {
                     adjusted = true;
                 }
 
-                var valuesPart = '(' + filter.value.join(',') + ')';
+                var valuesPart = '(' + filter.effectivevalue.join(',') + ')';
 
                 // in case of userfriendly display, we need to adjust again, now
                 // taking the current language into account, both for operation
                 // and the value part
                 if (displayFriendly) {
                     valuesPart = LayerUtil.getDisplayFriendlyValuesPart(
-                        op, filter.value, filter.allowedValues
+                            op, filter.effectivevalue, filter.allowedValues
                     );
                     op = LayerUtil.getDisplayFriendlyOperation(op);
                 }
@@ -1558,8 +1560,8 @@ Ext.define('Koala.util.Layer', {
         stringifyPointInTimeFilter: function(filter) {
             var format = Koala.util.Date.ISO_FORMAT;
             var trimmedParam = Ext.String.trim(filter.param);
-            var timeinstant = filter.timeinstant;
-            var formattedTime = Ext.Date.format(timeinstant, format);
+            var effectiveDateTime = filter.effectivedatetime;
+            var formattedTime = Ext.Date.format(effectiveDateTime, format);
             var cql = trimmedParam + "=" + formattedTime;
             return cql;
         },
@@ -1580,11 +1582,12 @@ Ext.define('Koala.util.Layer', {
             var params = trimmedParam.split(",");
             var startParam = params[0];
             var endParam = params[1] || params[0];
-            var mindatetimeinstant = filter.mindatetimeinstant;
-            var maxdatetimeinstant = filter.maxdatetimeinstant;
-            var formattedStart = Ext.Date.format(mindatetimeinstant, format);
-            var formattedEnd = Ext.Date.format(maxdatetimeinstant, format);
+            var effectiveMinDateTime = filter.effectivemindatetime;
+            var effectiveMaxDateTime = filter.effectivemaxdatetime;
+            var formattedStart = Ext.Date.format(effectiveMinDateTime, format);
+            var formattedEnd = Ext.Date.format(effectiveMaxDateTime, format);
             var cql = "";
+
             if (startParam === endParam) {
                 // We'll often be filtering on actually one attribute.
                 // we then want to have the standard GeoServer functionality:
@@ -1642,10 +1645,10 @@ Ext.define('Koala.util.Layer', {
 
                     // we need to check the metadata for default filters to apply
                     if (type === "timerange") {
-                        var rawDateMin = filter.mindatetimeinstant;
+                        var rawDateMin = filter.effectivemindatetime;
                         keyVals[params[0]] = Ext.Date.format(rawDateMin, format);
 
-                        var rawDateMax = filter.maxdatetimeinstant;
+                        var rawDateMax = filter.effectivemaxdatetime;
                         if(!params[1]) {
                             keyVals[params[0]] += "/" +
                             Ext.Date.format(rawDateMax, format);
@@ -1655,10 +1658,10 @@ Ext.define('Koala.util.Layer', {
                             );
                         }
                     } else if (type === "pointintime") {
-                        var rawDate = filter.timeinstant;
+                        var rawDate = filter.effectivedatetime;
                         keyVals[params[0]] = Ext.Date.format(rawDate, format);
                     } else if (type === "value") {
-                        keyVals[params[0]] = filter.value;
+                        keyVals[params[0]] = filter.effectivevalue;
                     }
                 }
             });
