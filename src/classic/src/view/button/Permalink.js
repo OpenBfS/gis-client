@@ -34,7 +34,6 @@ Ext.define("Koala.view.button.Permalink", {
     html: '<i class="fa fa-chain fa-2x"></i>',
 
     bind: {
-        text: '{text}',
         tooltip: '{tooltip}'
     },
 

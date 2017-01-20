@@ -21,9 +21,8 @@ Ext.define('Koala.view.button.PermalinkModel', {
     alias: 'viewmodel.k-button-permalink',
 
     data: {
-        text: '',
-        tooltip: 'Permalink',
-        windowTitle: 'Permalink'
+        tooltip: '',
+        windowTitle: ''
     }
 
 });

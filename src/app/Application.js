@@ -289,7 +289,7 @@ Ext.define('Koala.Application', {
                 if (mdFilter.type === "pointintime") {
                     maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
                     minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
-                    if(minDate < permalinkFilter.timeinstant && maxDate > permalinkFilter.timeinstant){
+                    if(minDate <= permalinkFilter.timeinstant && maxDate >= permalinkFilter.timeinstant){
                         Ext.apply(mdFilter, permalinkFilter);
                     } else {
                         Ext.toast('Permalink contains illegal pointintime filter');
@@ -298,8 +298,8 @@ Ext.define('Koala.Application', {
                 if (mdFilter.type === "timerange") {
                     maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
                     minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
-                    if(minDate < permalinkFilter.mindatetimeinstant && maxDate > permalinkFilter.mindatetimeinstant &&
-                        minDate < permalinkFilter.maxdatetimeinstant && maxDate > permalinkFilter.maxdatetimeinstant){
+                    if(minDate <= permalinkFilter.mindatetimeinstant && maxDate >= permalinkFilter.mindatetimeinstant &&
+                        minDate <= permalinkFilter.maxdatetimeinstant && maxDate >= permalinkFilter.maxdatetimeinstant){
                         Ext.apply(mdFilter, permalinkFilter);
                     } else {
                         Ext.toast('Permalink contains illegal timerange filter');

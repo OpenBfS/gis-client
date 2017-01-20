@@ -20,7 +20,7 @@ Ext.define('Koala.view.form.PermalinkModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-form-permalink',
     data: {
-        refreshBtnText: 'Erneuern'
+        refreshBtnText: ''
     }
 
 });
