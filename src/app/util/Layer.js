@@ -1107,7 +1107,7 @@ Ext.define('Koala.util.Layer', {
 
             if (stylesFilter) {
                 // move it to the layerConfig…
-                metadata.layerConfig.olProperties.param_STYLES = stylesFilter.value;
+                metadata.layerConfig.olProperties.param_STYLES = stylesFilter.effectivevalue;
             }
 
             return metadata;
