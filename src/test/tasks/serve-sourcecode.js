@@ -21,6 +21,7 @@
  *   by our server from `http://localhost:3000/view/component/`.
  *
  * @author Marc Jansen <jansen@terrestris.de>
+ * @author Kai Volland <volland@terrestris.de>
  */
 var express = require('express');
 var path = require('path');
@@ -30,15 +31,15 @@ var rootDir = path.join(__dirname, '..', '..');
 
 // The path where the classic view source code lives
 var classicDir = path.normalize(path.join(rootDir, 'classic', 'src'));
-// The path where the modern view source code lives
+// The path where the classic view source code lives
 var modernDir = path.normalize(path.join(rootDir, 'modern', 'src'));
 // The path where shared code lives e.g. controller etc.
 var appDir = path.normalize(path.join(rootDir, 'app'));
 
-var serveApp = express();
+var classicServer = express();
 
 // make the JavaScript usable from another URL (our testsuite)
-serveApp.use(function(req, res, next) {
+classicServer.use(function(req, res, next) {
     var allowOrigin = "*"; // any origin, baby.
     var allowHeaders = "Origin, X-Requested-With, Content-Type, Accept";
     res.header("Access-Control-Allow-Origin", allowOrigin);
@@ -47,8 +48,24 @@ serveApp.use(function(req, res, next) {
 });
 
 // make sure both classic and app files are being served
-serveApp.use(serveStatic(classicDir));
-serveApp.use(serveStatic(modernDir));
-serveApp.use(serveStatic(appDir));
+classicServer.use(serveStatic(classicDir));
+classicServer.use(serveStatic(appDir));
 
-serveApp.listen(3000);
+classicServer.listen(3000);
+
+var modernServer = express();
+
+// make the JavaScript usable from another URL (our testsuite)
+modernServer.use(function(req, res, next) {
+    var allowOrigin = "*"; // any origin, baby.
+    var allowHeaders = "Origin, X-Requested-With, Content-Type, Accept";
+    res.header("Access-Control-Allow-Origin", allowOrigin);
+    res.header("Access-Control-Allow-Headers", allowHeaders);
+    next();
+});
+
+// make sure both modern and app files are being served
+modernServer.use(serveStatic(modernDir));
+modernServer.use(serveStatic(appDir));
+
+modernServer.listen(3001);

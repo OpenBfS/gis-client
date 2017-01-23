@@ -1,16 +1,15 @@
 /*global document*/
 // This file is taken from GeoExt3
 (function(doc, global){
-    var specPath = './spec/',
+    var specPath = '../spec/',
         dependencies = [
-            'basics.test.js',
-            'classic/button/TimeReference.test.js',
-            'modern/panel/Settings.test.js',
-            'util/Date.test.js',
-            'util/Duration.test.js',
-            'util/Layer.test.js',
-            'util/Object.test.js',
-            'util/String.test.js'
+            './app/basics.test.js',
+            './app/util/Date.test.js',
+            './app/util/Duration.test.js',
+            './app/util/Layer.test.js',
+            './app/util/Object.test.js',
+            './app/util/String.test.js',
+            './modern/panel/Settings.test.js'
         ],
         getScriptTag = global.TestUtil.getExternalScriptTag,
         dependencyCnt = dependencies.length,

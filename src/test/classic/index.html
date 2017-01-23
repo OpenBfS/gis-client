@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title>Koala Testsuite</title>
-    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
     <script src="http://openlayers.org/en/master/build/ol.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+    <script src="../../ext/build/ext-all.js"></script>
     <script src="https://geoext.github.io/geoext3/master/GeoExt.js"></script>
-    <script src="../node_modules/expect.js/index.js"></script>
-    <script src="../node_modules/sinon/pkg/sinon.js"></script>
-    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../../node_modules/expect.js/index.js"></script>
+    <script src="../../node_modules/sinon/pkg/sinon.js"></script>
+    <script src="../../node_modules/mocha/mocha.js"></script>
   </head>
   <body>
     <div id="mocha"></div>
@@ -17,7 +17,7 @@
     Ext.Loader.setConfig({
         enabled: true,
         paths: {
-            BasiGX: '../packages/remote/BasiGX/src',
+            BasiGX: '../../packages/remote/BasiGX/src',
             Koala: 'http://localhost:3000'
         }
     });
@@ -31,7 +31,7 @@
         bail: false
       });
     </script>
-    <script src="./test-helper-functions.js"></script>
+    <script src="../test-helper-functions.js"></script>
     <script src="./load-tests.js"></script>
     <script>
       mocha.run();
