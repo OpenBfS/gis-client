@@ -4,6 +4,8 @@
     var specPath = './spec/',
         dependencies = [
             'basics.test.js',
+            'classic/button/TimeReference.test.js',
+            'modern/panel/Settings.test.js',
             'util/Date.test.js',
             'util/Duration.test.js',
             'util/Layer.test.js',
