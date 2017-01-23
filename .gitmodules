@@ -1,0 +1,6 @@
+[submodule "src/lib/BasiGX"]
+	path = src/lib/BasiGX
+	url = https://github.com/terrestris/BasiGX.git
+[submodule "src/lib/GeoExt"]
+	path = src/lib/GeoExt
+	url = https://github.com/geoext/geoext3.git
