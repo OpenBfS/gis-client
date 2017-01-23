@@ -38,14 +38,16 @@ var appDir = path.normalize(path.join(rootDir, 'app'));
 
 var classicServer = express();
 
+var enableCors = function(req, res, next) {
+        var allowOrigin = "*"; // any origin, baby.
+        var allowHeaders = "Origin, X-Requested-With, Content-Type, Accept";
+        res.header("Access-Control-Allow-Origin", allowOrigin);
+        res.header("Access-Control-Allow-Headers", allowHeaders);
+        next();
+    };
+
 // make the JavaScript usable from another URL (our testsuite)
-classicServer.use(function(req, res, next) {
-    var allowOrigin = "*"; // any origin, baby.
-    var allowHeaders = "Origin, X-Requested-With, Content-Type, Accept";
-    res.header("Access-Control-Allow-Origin", allowOrigin);
-    res.header("Access-Control-Allow-Headers", allowHeaders);
-    next();
-});
+classicServer.use(enableCors);
 
 // make sure both classic and app files are being served
 classicServer.use(serveStatic(classicDir));
@@ -56,13 +58,7 @@ classicServer.listen(3000);
 var modernServer = express();
 
 // make the JavaScript usable from another URL (our testsuite)
-modernServer.use(function(req, res, next) {
-    var allowOrigin = "*"; // any origin, baby.
-    var allowHeaders = "Origin, X-Requested-With, Content-Type, Accept";
-    res.header("Access-Control-Allow-Origin", allowOrigin);
-    res.header("Access-Control-Allow-Headers", allowHeaders);
-    next();
-});
+modernServer.use(enableCors);
 
 // make sure both modern and app files are being served
 modernServer.use(serveStatic(modernDir));

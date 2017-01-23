@@ -9,10 +9,6 @@
  * This script is being executed when one runs `npm test` in the root of the
  * package.
  *
- * When one only has this repository, testing will not work, as the application
- * expects certain libraries outside of the repo. This is something we should
- * change, if possible.
- *
  * @author Marc Jansen <jansen@terrestris.de
  */
 var path = require('path');
