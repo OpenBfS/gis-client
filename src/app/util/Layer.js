@@ -1069,7 +1069,7 @@ Ext.define('Koala.util.Layer', {
          *     viewparams of any request.
          */
         isViewParamFilter: function(f){
-            return f.encodeInViewParams === "true";
+            return f ? f.encodeInViewParams === "true" : false;
         },
 
         /**
@@ -1107,7 +1107,7 @@ Ext.define('Koala.util.Layer', {
 
             if (stylesFilter) {
                 // move it to the layerConfig…
-                metadata.layerConfig.olProperties.param_STYLES = stylesFilter.value;
+                metadata.layerConfig.olProperties.param_STYLES = stylesFilter.effectivevalue;
             }
 
             return metadata;
@@ -1276,7 +1276,7 @@ Ext.define('Koala.util.Layer', {
         adjustMetadataFiltersToStandardLocations: function(metadata, filters){
             var me = this;
             Ext.each(filters, function(filter) {
-                if (!me.isStandardLocationFilter(filter)) {
+                if (!filter || !me.isStandardLocationFilter(filter)) {
                     // any non-standard, e.g. viewparam filters, are ignored.
                     return;
                 }
@@ -1756,7 +1756,7 @@ Ext.define('Koala.util.Layer', {
          * Returns a flattened array of all layers in the passed structure (may
          * be hierarchical with children under the key `children`). This utility
          * ensures that layers sets (also possibly with a deep hierarchy) can be
-         * added in the exoected order, even though we have to query in an
+         * added in the expected order, even though we have to query in an
          * asynchronous for their metadata. Undefined layers will be skipped.
          *
          * See also https://redmine-koala.bfs.de/issues/1491.

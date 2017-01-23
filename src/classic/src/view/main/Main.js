@@ -38,6 +38,7 @@ Ext.define('Koala.view.main.Main', {
 
         'Koala.util.AppContext',
 
+        'Koala.view.button.Permalink',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
@@ -80,6 +81,19 @@ Ext.define('Koala.view.main.Main', {
                 ptype: 'hover',
                 selectMulti: true,
                 selectEventOrigin: 'interaction'
+            }]
+        },
+        toolbarConfig: {
+            items: [{
+                xtype: 'basigx-button-zoomin'
+            }, {
+                xtype: 'basigx-button-zoomout'
+            }, {
+                xtype: 'basigx-button-zoomtoextent'
+            }, {
+                xtype: 'k-button-permalink'
+            }, {
+                xtype: 'basigx-button-togglelegend'
             }]
         },
         listeners: {

@@ -99,6 +99,14 @@ Ext.define('Koala.view.panel.MobileMenu',{
     }, {
         xtype: 'button',
         bind: {
+            text: '{permalinkButtonText}'
+        },
+        handler: function(btn){
+            btn.up('app-main').down('k-panel-mobilepermalink').show();
+        }
+    }, {
+        xtype: 'button',
+        bind: {
             text: '{settingsButtonText}'
         },
         handler: function(btn){
@@ -112,6 +120,5 @@ Ext.define('Koala.view.panel.MobileMenu',{
         handler: function(btn){
             btn.up('app-main').down('k-panel-mobileimprint').show();
         }
-    }
-]
+    }]
 });

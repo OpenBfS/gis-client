@@ -7,7 +7,8 @@ Ext.define('Koala.view.panel.MobileMenuModel', {
         imprintButtonText: '',
         settingsButtonText: '',
         moreLayersButtonText: '',
-        addLayerButtonText: ''
+        addLayerButtonText: '',
+        permalinkButtonText: ''
     }
 
 });

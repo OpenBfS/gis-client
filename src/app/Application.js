@@ -27,7 +27,6 @@ Ext.define('Koala.Application', {
 
     name: 'Koala',
 
-
     statics: {
         /**
          * Return the current timereference for the application or null if
@@ -59,6 +58,23 @@ Ext.define('Koala.Application', {
         }
     },
 
+    routes: {
+        'map/:lon/:lat/:zoom': {
+            action: 'onMapRoute'
+        },
+        'layers/:layers': {
+            action: 'onLayerTreeRoute',
+            before: 'beforeLayerTreeRoute',
+            conditions: {
+                ':layers': "(.*)"
+            }
+        }
+    },
+
+    stores: [
+        // TODO: add global / shared stores here
+    ],
+
     listen: {
         controller: {
             '#': {
@@ -67,99 +83,38 @@ Ext.define('Koala.Application', {
         }
     },
 
-    onUnmatchedRoute: function(hash) {
-        Ext.log.info('Unmatched route: ', hash);
-    },
+    /**
+     * Listens to the map route. See Koala.util.Routing.onMapRoute for
+     * detailed implementation docs.
+     * @type {function}
+     */
+    onMapRoute: Koala.util.Routing.onMapRoute,
 
     /**
-     * A look-up object that will be filled in #beforeLayerTreeRoute so that
-     * the actual #onLayerTreeRoute can do its work. Cosnsist of uuids as keys
-     * and actual OpenLayers layers as values.
-     *
-     * @private
+     * Listens to the layers route and does some prechecks. See
+     * Koala.util.Routing.onMapRoute for detailed implementation docs.
+     * @type {function}
      */
-    routeCreatedLayers: null,
+    beforeLayerTreeRoute: Koala.util.Routing.beforeLayerTreeRoute,
 
     /**
-     * Called before the actual #onLayerTreeRoute handlers layer adding to the
-     * map, this method ensures that the correct openlayers objects are build
-     * asynchronously via their UUID. Created layers are saved in the private
-     * property #routeCreatedLayers, and the routing action is only then
-     * resumed when all layers have been build.
-     *
-     * @param String layers The has part that triggered the route and
-     *     that looks like 'uuid:state,otheruuid:otherstate'
-     * @param Object action A routing action element
-     * @private
+     * Listens to the layers route after beforeLayerTreeRoute. See
+     * Koala.util.Routing.onMapRoute for detailed implementation docs.
+     * @type {function}
      */
-    beforeLayerTreeRoute: function(layers, action){
-        var me = this;
-        var layerUuidsWithStates = layers.split(",");
-        var expectedLayers = 0;
-        var gotLayers = 0;
-        var routeCreatedLayers = {};
-        var LayerUtil = Koala.util.Layer;
-
-        Ext.each(layerUuidsWithStates, function(uuidWithState) {
-            var uuid = uuidWithState.split("_")[0];
-            if (Koala.util.String.isUuid(uuid)) {
-                expectedLayers++;
-                LayerUtil.getMetadataFromUuidAndThen(uuid, function(md){
-                    gotLayers++;
-                    var metadataClone = Ext.clone(md);
-                    var olLayer = LayerUtil.layerFromMetadata(md);
-                    LayerUtil.setOriginalMetadata(olLayer, metadataClone);
-                    routeCreatedLayers[uuid] = olLayer;
-                    if (gotLayers === expectedLayers) {
-                        me.routeCreatedLayers = routeCreatedLayers;
-                        action.resume();
-                    }
-                });
-           } else {
-               Ext.log.info('Skipping route part ', uuidWithState);
-            }
-        });
-    },
+    onLayerTreeRoute: Koala.util.Routing.onLayerTreeRoute,
 
     /**
-     * Called as handler for routes matching 'layers/:layers', but only if the
-     * before handler #beforeLayerTreeRoute was able to create all required
-     * layers and store them in #routeCreatedLayers. This method splits the
-     * matched hash and adds the layers contained in the object in the correct
-     * order.
-     *
-     * @param String layers The has part that triggered the route and
-     *     that looks like 'uuid:state,otheruuid:otherstate'
-     * @private
+     * Gets called on an unmatched route. See Koala.util.Routing.onMapRoute
+     * for detailed implementation docs.
+     * @type {function}
      */
-    onLayerTreeRoute: function(layers){
-        var me = this;
-        var layerUuidsWithStates = layers.split(",");
-        Ext.each(layerUuidsWithStates, function(uuidWithState) {
-            var uuidWithStateParts = uuidWithState.split("_");
-            var uuid = uuidWithStateParts[0];
-            var state = uuidWithStateParts[1] || '1'; // default to visible
-            var booleanState = state === '1';
-            var olLayer = me.routeCreatedLayers[uuid];
-            if (Koala.util.String.isUuid(uuid) && Ext.isDefined(olLayer)) {
-                olLayer.set('visible', booleanState);
-                Koala.util.Layer.addOlLayerToMap(olLayer);
-            }
-        });
-        me.routeCreatedLayers = null;
-    },
+    onUnmatchedRoute: Koala.util.Routing.onUnmatchedRoute,
 
-    routes: {
-        'layers/:layers': {
-            action: 'onLayerTreeRoute',
-            before: 'beforeLayerTreeRoute'
-        }
-    },
-
-    stores: [
-        // TODO: add global / shared stores here
-    ],
-
+    /**
+     * Gets called if the appCache signals an app update. It shows a confirm
+     * dialog which reloads the page on confirmation.
+     */
     onAppUpdate: function () {
         Ext.Msg.confirm('Application Update', 'This application has an update, reload?',
             function (choice) {
@@ -169,15 +124,5 @@ Ext.define('Koala.Application', {
             }
         );
     }
-}, function() {
-    // Remove the annyoing warning '[W] targetCls is missing. This may mean that
-    // getTargetEl() …' see: https://www.sencha.com/forum/showthread.php?288898-
-    // W-targetCls-is-missing.-This-may-mean-that-getTargetEl()-is-being-overrid
-    // den-but-no/page3
-    Ext.define('Ext.overrides.layout.container.Container', {
-        override: 'Ext.layout.container.Container',
-        notifyOwner: function() {
-            this.owner.afterLayout(this);
-        }
-    });
+
 });

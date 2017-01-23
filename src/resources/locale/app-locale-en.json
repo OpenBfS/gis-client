@@ -31,6 +31,14 @@
             "defaultDateFormat": "Y/m/d H:i:s"
         }
     },
+    "Koala.view.button.Permalink": {
+        "config": {
+            "data":{
+                "tooltip": "en:Permalink",
+                "windowTitle": "en:Permalink"
+            }
+        }
+    },
     "Koala.view.button.TimeReference": {
         "config": {
             "data":{
@@ -822,7 +830,15 @@
                 "imprintButtonText": "en:Hilfe",
                 "settingsButtonText": "en:Einstellungen",
                 "moreLayersButtonText": "en:Weitere Themen",
-                "addLayerButtonText": "en:Externen Layer hinzufügen"
+                "addLayerButtonText": "en:Externen Layer hinzufügen",
+                "permalinkButtonText": "en:Permalink"
+            }
+        }
+    },
+    "Koala.view.panel.MobilePermalink": {
+        "config": {
+            "data": {
+                "title": "en:Permalink"
             }
         }
     },
@@ -863,6 +879,13 @@
                 "timeRangeFilter": "en:Zeitraumfilter",
                 "pointInTimeFilter": "en:Zeitpunktfilter",
                 "buttonTextChangeFilter": "en:Filter auf Layer anwenden"
+            }
+        }
+    },
+    "Koala.view.form.Permalink": {
+        "config": {
+            "data": {
+                "refreshBtnText": "en:Erneuern"
             }
         }
     },
