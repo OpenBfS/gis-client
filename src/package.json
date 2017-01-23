@@ -4,25 +4,23 @@
   "version": "1.5.0",
   "description": "Koala WebGIS",
   "scripts": {
-      "pretest": "npm run lint-js",
-      "test": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true test/index.html",
-      "lint-js": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
-
-      "test:watch": "watch 'npm test' app/ classic/ modern/ test/",
-
-      "save-coverage": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true --hooks ./test/phantom_hooks.js test/index.html",
-      "rm-coverage": "rm -Rf coverage",
-      "rm-coverage-tmp-dirs": "rm -Rf app_instrumented app_old classic_instrumented classic_old",
-      "instrument-js": "istanbul instrument app -o app_instrumented && istanbul instrument classic -o classic_instrumented",
-      "backup-js": "mv app app_old && mv classic classic_old",
-      "restore-js": "mv app_old app && mv classic_old classic",
-      "use-instrumented-js": "mv app_instrumented app && mv classic_instrumented classic",
-      "un-use-instrumented-js": "mv app app_instrumented && mv classic classic_instrumented",
-      "html-coverage": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && npm run instrument-js && npm run backup-js && npm run use-instrumented-js && istanbul cover npm run save-coverage && npm run un-use-instrumented-js && npm run restore-js && istanbul report --root ./coverage html && npm run rm-coverage-tmp-dirs",
-
-      "apidoc": "jsduck --config jsduck-cfg.json",
-
-      "clean": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && rm -rf apidoc && rm -rf build/*"
+    "pretest": "npm run lint-js",
+    "test": "node test/tasks/serve-and-run-tests.js",
+    "lint-js": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
+    "test:watch": "watch 'npm test' app/ classic/ modern/ test/",
+    "test:serve": "node test/tasks/serve-sourcecode.js",
+    "test:run": "node test/tasks/run-tests.js",
+    "save-coverage": "mocha-phantomjs --ssl-protocol=any --ignore-ssl-errors=true --hooks ./test/phantom_hooks.js test/index.html",
+    "rm-coverage": "rm -Rf coverage",
+    "rm-coverage-tmp-dirs": "rm -Rf app_instrumented app_old classic_instrumented classic_old",
+    "instrument-js": "istanbul instrument app -o app_instrumented && istanbul instrument classic -o classic_instrumented",
+    "backup-js": "mv app app_old && mv classic classic_old",
+    "restore-js": "mv app_old app && mv classic_old classic",
+    "use-instrumented-js": "mv app_instrumented app && mv classic_instrumented classic",
+    "un-use-instrumented-js": "mv app app_instrumented && mv classic classic_instrumented",
+    "html-coverage": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && npm run instrument-js && npm run backup-js && npm run use-instrumented-js && istanbul cover npm run save-coverage && npm run un-use-instrumented-js && npm run restore-js && istanbul report --root ./coverage html && npm run rm-coverage-tmp-dirs",
+    "apidoc": "jsduck --config jsduck-cfg.json",
+    "clean": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && rm -rf apidoc && rm -rf build/*"
   },
   "repository": {
     "type": "mercurial",
@@ -37,6 +35,8 @@
     "mocha": "3.0.2",
     "mocha-phantomjs": "4.1.0",
     "sinon": "1.17.5",
-    "watch": "0.19.1"
+    "watch": "0.19.1",
+    "express": "^4.14.0",
+    "serve-static": "^1.11.1"
   }
 }
