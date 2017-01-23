@@ -106,7 +106,7 @@ Ext.define('Koala.view.main.Main', {
 
                     map.on('moveend', function() {
                         // The secondparameter is set to true to the skipLayers
-                        Koala.util.Routing.setRouteForView(view, true);
+                        Koala.util.Routing.setRouteForView(view, null, true);
                     });
                 }
             }
