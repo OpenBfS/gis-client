@@ -1,0 +1,42 @@
+# This file is a template, and might need editing before it works on your project.
+# Official framework image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/node/tags/
+image: kaivolland/jdk-node7-sencha6
+
+# This folder is cached between builds
+# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
+#cache:
+# paths:
+# - node_modules/
+
+stages:
+  - test
+
+before_script:
+  # Install ssh-agent if not already installed, it is required by Docker
+  # (change apt-get to yum if you use a CentOS-based image)
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  # Run ssh-agent (inside the build environment)
+  - eval $(ssh-agent -s)
+  # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  # For Docker builds disable host key checking. Be aware that by adding that
+  # you are suspectible to man-in-the-middle attacks.
+  # WARNING: Use this only with the Docker executor, if you use it with shell
+  # you will overwrite your user's SSH config.
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+test:
+  stage: test
+  only:
+    - branches
+  script:
+    - git submodule sync
+    - git submodule update --init --recursive --force
+    - git clone git@gitlab.intranet.terrestris.de:libraries/ext-6.2.0.git /ext
+    - cd src
+    - sencha app upgrade /ext
+    - sencha app build
+    - npm install
+    - npm test
