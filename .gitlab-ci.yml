@@ -19,6 +19,7 @@ test:
   script:
     - git submodule sync
     - git submodule update --init --recursive --force
+    - ./ci/install-sencha.sh
     - cd src
     - npm install
     - npm test
