@@ -17,5 +17,8 @@ test:
   only:
     - branches
   script:
+    - git submodule sync
+    - git submodule update --init --recursive --force
+    - cd src
     - npm install
     - npm test
