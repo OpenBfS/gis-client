@@ -13,7 +13,7 @@ stages:
   - test
 
 test:
-  stage: test_branch
+  stage: test
   only:
     - branches
   script:
