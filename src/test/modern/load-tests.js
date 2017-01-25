@@ -8,6 +8,7 @@
             './app/util/Duration.test.js',
             './app/util/Layer.test.js',
             './app/util/Object.test.js',
+            './app/util/Routing.test.js',
             './app/util/String.test.js',
             './modern/panel/Settings.test.js'
         ],
