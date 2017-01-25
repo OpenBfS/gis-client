@@ -47,4 +47,4 @@ deploy:
   only:
     - master@terrestris/bfs_koala
   script:
-    - echo "hallo"
+    - rsync -avzh --delete build/production/Koala/ -e ssh gitlab-ci@10.133.7.63:/home/gitlab-ci/koala/
