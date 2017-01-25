@@ -10,16 +10,16 @@ describe('Basic requirements of Koala', function() {
                 expect(ol).not.to.be(undefined);
             });
         });
-        describe('GeoExt', function() {
-            it('is defined', function() {
-                expect(GeoExt).not.to.be(undefined);
-            });
-        });
     });
     describe('The Ext.loader is correctly configured', function() {
         it('is enabled', function () {
             var isEnabled = Ext.Loader.getConfig('enabled');
             expect(isEnabled).to.be(true);
+        });
+        it('has a path configured for GeoExt', function () {
+            var paths = Ext.Loader.getConfig('paths');
+            expect('GeoExt' in paths).to.be(true);
+            expect(paths['GeoExt']).not.to.be(undefined);
         });
         it('has a path configured for BasiGX', function () {
             var paths = Ext.Loader.getConfig('paths');
