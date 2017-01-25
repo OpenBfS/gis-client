@@ -255,13 +255,13 @@ Ext.define('Koala.util.Routing', {
          * matched hash and adds the layers contained in the object in the correct
          * order.
          *
-         * @param String layers The has part that triggered the route and
+         * @param {String} layersString The has part that triggered the route and
          *     that looks like 'uuid:state,otheruuid:otherstate'
          * @private
          */
-        onLayerTreeRoute: function(layers){
+        onLayerTreeRoute: function(layersString){
             var me = Koala.util.Routing;
-            var layerUuidsWithStates = layers.split(",");
+            var layerUuidsWithStates = layersString.split(",");
             Ext.each(layerUuidsWithStates, function(uuidWithState) {
                 var uuidWithStateParts = uuidWithState.split("_");
                 var uuid = uuidWithStateParts[0];
