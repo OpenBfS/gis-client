@@ -11,6 +11,7 @@ image: kaivolland/jdk-node7-sencha6
 
 stages:
   - test
+  - deploy
 
 before_script:
   # Install ssh-agent if not already installed, it is required by Docker
@@ -26,17 +27,24 @@ before_script:
   # you will overwrite your user's SSH config.
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - git submodule sync
+  - git submodule update --init --recursive --force
+  - git clone git@gitlab.intranet.terrestris.de:libraries/ext-6.2.0.git /ext
+  - cd src
+  - sencha app upgrade /ext
+  - sencha app build
 
 test:
   stage: test
   only:
     - branches
   script:
-    - git submodule sync
-    - git submodule update --init --recursive --force
-    - git clone git@gitlab.intranet.terrestris.de:libraries/ext-6.2.0.git /ext
-    - cd src
-    - sencha app upgrade /ext
-    - sencha app build
     - npm install
     - npm test
+
+deploy:
+  stage: deploy
+  only:
+    - master@terrestris/bfs_koala
+  script:
+    - rsync -avzh --delete build/production/Koala/ -e ssh gitlab-ci@10.133.7.63:/home/gitlab-ci/koala/
