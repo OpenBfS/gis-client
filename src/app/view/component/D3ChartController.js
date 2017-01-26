@@ -115,54 +115,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
         });
 
-        // TODO Move to barchart!
-        if (view.chartType === 'bar') {
-            var targetLayer = view.getTargetLayer();
-            var chartConfig = targetLayer.metadata.layerConfig.barChartProperties;
-            var selectedStation = view.getSelectedStations()[0];
-            var props = selectedStation.getProperties();
-
-            var data = {};
-            Ext.each(chartConfig.chartFieldSequence.split(','), function(field) {
-                data[field] = props[field];
-            });
-
-            // TODO double check locality_code, is this hardcoded?
-            //      Shouldn't this be selectedStation.get('id')?
-            me.data[props.locality_code] = data;
-        } else {
-            me.getChartData();
-        }
-
-    },
-
-    /**
-     *
-     */
-    redrawChart: function() {
-        var me = this;
-
-        // Reset the shapes and scales
-        me.shapes = [];
-        me.scales = {};
-
-        me.deleteShapeContainerSvg();
-
-        me.createScales();
-        me.createAxes();
-        me.createGridAxes();
-        me.createShapes();
-
-        me.setDomainForScales();
-
-        me.redrawAxes();
-        me.redrawGridAxes();
-        me.drawShapes();
-
-        me.redrawLegend();
-
-        // Zoom to the new chart extent
-        me.resetZoom();
+        me.getChartData();
     },
 
     /**
@@ -193,74 +146,36 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * [redrawAxes description]
-     * @return {[type]} [description]
-     */
-    redrawAxes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var axesConfig = view.getAxes();
-        var axisSelector = viewId + ' svg g.' + CSS.AXIS;
-
-        Ext.iterate(axesConfig, function(orient) {
-            var axisGenerator = me.axes[orient];
-            var axis;
-
-            if (orient === 'top' || orient === 'bottom') {
-                axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
-            } else if (orient === 'left' || orient === 'right') {
-                axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
-            }
-
-            axis.call(axisGenerator);
-        });
-    },
-
-    /**
-     * [redrawGridAxes description]
-     * @return {[type]} [description]
-     */
-    redrawGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var viewId = '#' + view.getId();
-        var axisSelector = viewId + ' svg g.' + CSS.GRID;
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var axisGenerator = me.gridAxes[orient];
-            var axis;
-
-            if (orient === 'top' || orient === 'bottom') {
-                axis = d3.select(axisSelector + '.' + CSS.GRID_X);
-            } else if (orient === 'left' || orient === 'right') {
-                axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
-            }
-
-            axis.call(axisGenerator);
-        });
-    },
-
-    /**
      *
      */
-    deleteShapeContainerSvg: function() {
-        var view = this.getView();
-        var svg = d3.select('#' + view.getId() + ' svg svg');
+    redrawChart: function() {
+        var me = this;
 
-        if (svg && !svg.empty()) {
-            svg.node().remove();
+        if (me.chartRendered && me.chartDataAvailable) {
+            // Reset the shapes and scales
+            me.shapes = [];
+            me.scales = {};
+
+            me.updateSvgContainerSize();
+
+            me.deleteShapeContainerSvg();
+
+            me.createScales();
+            me.createAxes();
+            me.createGridAxes();
+            me.createShapes();
+
+            me.setDomainForScales();
+
+            me.redrawTitle();
+            me.redrawAxes();
+            me.redrawGridAxes();
+            me.drawShapes();
+            me.updateLegendContainerPosition();
+            me.redrawLegend();
+
+            // Reset the zoom to the initial extent
+            me.resetZoom();
         }
     },
 
@@ -508,29 +423,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    createScales: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var view = me.getView();
-        var chartSize = me.getChartSize();
-
-        Ext.iterate(view.getAxes(), function(orient, axisConfig) {
-            var scaleType = staticMe.SCALE[axisConfig.scale || 'linear'];
-            var range;
-
-            if (orient === 'top' || orient === 'bottom') {
-                range = [0, chartSize[0]];
-            } else if (orient === 'left' || orient === 'right') {
-                range = [chartSize[1], 0];
-            }
-
-            me.scales[orient] = scaleType().range(range);
-        });
-    },
-
-    /**
-     *
-     */
     createShapes: function() {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
@@ -607,222 +499,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         });
 
         return axisOrientation;
-    },
-
-    /**
-     * [createAxes description]
-     * @return {[type]} [description]
-     */
-    createAxes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var view = me.getView();
-        var axesConfig = view.getAxes();
-
-        Ext.iterate(axesConfig, function(orient, axisConfig) {
-            var axis = staticMe.ORIENTATION[orient];
-            var scale = me.scales[orient];
-            // https://github.com/d3/d3-format
-            var tickFormatter = axisConfig.scale === 'time' ?
-                    me.getMultiScaleTimeFormatter :
-                    d3.format(axisConfig.format || ',.0f');
-
-            var chartAxis = axis(scale)
-                .ticks(axisConfig.ticks)
-                .tickValues(axisConfig.values)
-                .tickFormat(tickFormatter)
-                .tickSize(axisConfig.tickSize || 6)
-                .tickPadding(axisConfig.tickPadding || 3);
-
-            me.axes[orient] = chartAxis;
-        });
-    },
-
-    /**
-     * Method that can be adjusted to generate a custom multi scale time formatter
-     * function, based on https://github.com/d3/d3-time-format
-     *
-     * See https://github.com/d3/d3-time-format/blob/master/README.md#locale_format
-     * for available D3 datetime formats.
-     *
-     * @param  {Date} date The current Date object.
-     * @return {function} The multi-scale time format function.
-     */
-    getMultiScaleTimeFormatter: function(date) {
-        var formatMillisecond = d3.timeFormat(".%L"),
-            formatSecond = d3.timeFormat(":%S"),
-            formatMinute = d3.timeFormat("%H:%M"),
-            formatHour = d3.timeFormat("%H:%M"),
-            formatDay = d3.timeFormat("%a %d"),
-            formatWeek = d3.timeFormat("%b %d"),
-            formatMonth = d3.timeFormat("%B"),
-            formatYear = d3.timeFormat("%Y");
-
-        return (d3.timeSecond(date) < date ? formatMillisecond
-          : d3.timeMinute(date) < date ? formatSecond
-          : d3.timeHour(date) < date ? formatMinute
-          : d3.timeDay(date) < date ? formatHour
-          : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
-          : d3.timeYear(date) < date ? formatMonth
-          : formatYear)(date);
-    },
-
-    /**
-     *
-     */
-    drawAxes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var makeTranslate = staticMe.makeTranslate;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var axesConfig = view.getAxes();
-        var chartSize = me.getChartSize();
-
-        Ext.iterate(axesConfig, function(orient, axisConfig) {
-            var axisTransform;
-            var labelTransform;
-            var labelPadding;
-            var cssClass;
-
-            if (orient === 'top' || orient === 'bottom') {
-                cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
-                axisTransform = (orient === 'bottom') ?
-                        makeTranslate(0, chartSize[1]) : undefined;
-
-                labelTransform = makeTranslate(chartSize[0] / 2, 0);
-                labelPadding = axisConfig.labelPadding || 35;
-            } else if (orient === 'left' || orient === 'right') {
-                cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
-                axisTransform = (orient === 'right') ?
-                        makeTranslate(chartSize[0], 0) : undefined;
-                var translate = makeTranslate(chartSize[1] / -2, 0);
-                labelTransform = 'rotate(-90), ' + translate;
-                labelPadding = (axisConfig.labelPadding || 25) * -1;
-            }
-
-            d3.select(viewId + ' svg > g')
-                .append('g')
-                    .attr('class', cssClass)
-                    .attr('transform', axisTransform)
-                    .call(me.axes[orient])
-                .append('text')
-                    .attr('transform', labelTransform)
-                    .attr('dy', labelPadding)
-                    .attr('fill', axisConfig.labelColor || '#000')
-                    .style('text-anchor', 'middle')
-                    .style('font-weight', 'bold')
-                    .style('font-size', axisConfig.labelSize || 12)
-                    .text(axisConfig.label || '');
-
-            if (axisConfig.rotateXAxisLabel && (orient === 'top' || orient === 'bottom')) {
-                d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_X + ' > g > text')
-                    .attr('transform', 'rotate(-55)')
-                    .attr('dx', '-10px')
-                    .attr('dy', '1px')
-                    .style('text-anchor', 'end');
-            }
-
-        });
-    },
-
-    /**
-     * [createGridAxes description]
-     * @return {[type]} [description]
-     */
-    createGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3ChartController;
-        var chartSize = me.getChartSize();
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var axis = staticMe.ORIENTATION[orient];
-            var scale = me.scales[orient];
-            var tickSize;
-
-            if (orient === 'top' || orient === 'bottom') {
-                tickSize = chartSize[1];
-            } else if (orient === 'left' || orient === 'right') {
-                tickSize = chartSize[0] * -1;
-            }
-
-            var chartAxis = axis(scale)
-                .tickFormat('')
-                .tickSize(tickSize);
-
-            me.gridAxes[orient] = chartAxis;
-        });
-    },
-
-    /**
-     * [drawGridAxes description]
-     * @return {[type]} [description]
-     */
-    drawGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var viewId = '#' + view.getId();
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var cssClass;
-
-            if (orient === 'bottom') {
-                cssClass = CSS.GRID + ' ' + CSS.GRID_X;
-            } else if (orient === 'left') {
-                cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
-            }
-
-            d3.select(viewId + ' svg > g')
-                .append('g')
-                    .attr('class', cssClass)
-                    .call(me.gridAxes[orient]);
-
-            d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
-                .style('stroke-width', gridConfig.width || 1)
-                .style('stroke', gridConfig.color || '#d3d3d3')
-                .style('stroke-opacity', gridConfig.opacity || 0.7);
-        });
-    },
-
-    /**
-     *
-     */
-    drawTitle: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var makeTranslate = staticMe.makeTranslate;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var titleConfig = view.getTitle();
-        var chartSize = me.getChartSize();
-
-        d3.select(viewId + ' svg > g')
-            .append('text')
-                .attr('transform', makeTranslate(chartSize[0] / 2, 0))
-                .attr('dy', (titleConfig.labelPadding || 18) * -1)
-                .attr('fill', titleConfig.labelColor || '#000')
-                .style('text-anchor', 'middle')
-                .style('font-weight', 'bold')
-                .style('font-size', titleConfig.labelSize || 20)
-                .text(titleConfig.label);
     },
 
     /**
@@ -1050,25 +726,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             y: 0,
             k: 1
         }, 500);
-    },
-
-    /**
-     * Removes the current legend from the chart (if it exists) and redraws the
-     * legend by looking at our internal data.
-     */
-    redrawLegend: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var legendCls = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND;
-        var legend = d3.select(viewId + ' svg g.' + legendCls);
-        if (legend && !legend.empty()) {
-            var legendNode = legend.node();
-            legendNode.parentNode.removeChild(legendNode);
-        }
-        me.drawLegend();
     },
 
     /**
@@ -1308,6 +965,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var targetLayer = view.getTargetLayer();
         var chartConfig = targetLayer.get("timeSeriesChartProperties");
         var filterConfig = FilterUtil.getStartEndFilterFromMetadata(targetLayer.metadata);
+        // TODO gettestdatafilter and set to request URL // CQL ticket #1578
         var startDate = view.getStartDate();
         var endDate = view.getEndDate();
         var timeField = filterConfig.parameter;

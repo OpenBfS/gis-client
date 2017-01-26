@@ -128,6 +128,10 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'basigx-button-zoomout'
             }, {
                 xtype: 'basigx-button-zoomtoextent'
+            }, {
+                xtype: 'button',
+                html: '<i class="fa fa-expand fa-2x"></i>',
+                handler: 'toggleFullscreen'
             }]
         }, {
             xtype: 'button',
@@ -145,7 +149,7 @@ Ext.define('Koala.view.main.Main', {
             html: '<i class="fa fa-list-alt fa-2x"></i>',
             style: {
                 position: 'absolute',
-                bottom: '50px',
+                bottom: '40px',
                 right: '20px'
             },
             handler: function(btn){
@@ -196,10 +200,12 @@ Ext.define('Koala.view.main.Main', {
         hidden: true
     }, {
         xtype: 'k-panel-barchart',
+        width: '100%',
         left: 0,
         hidden: true
     }, {
         xtype: 'k-panel-timeserieschart',
+        width: '100%',
         left: 0,
         hidden: true
     }, {

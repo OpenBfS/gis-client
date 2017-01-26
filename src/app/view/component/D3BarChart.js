@@ -31,9 +31,11 @@ Ext.define('Koala.view.component.D3BarChart',{
         type: 'component-d3barchart'
     },
 
-    width: 800,
-    height: 500,
-    margin: 5,
+    listeners: {
+        boxready: 'onBoxReady',
+        painted: 'onPainted',
+        resize: 'redrawChart'
+    },
 
     name: null,
 
@@ -90,7 +92,7 @@ Ext.define('Koala.view.component.D3BarChart',{
          *     chart for.
          * @return {Koala.view.component.D3BarChart} The created chart.
          */
-        create: function(olLayer, olFeat) {
+        create: function(olLayer, olFeat, config) {
             var DEFAULTS = Koala.view.component.D3Base.DEFAULTS.BARCHART;
             var chartConfig = olLayer.get('barChartProperties');
             var categoryCount = chartConfig.chartFieldSequence.split(",").length;
@@ -99,6 +101,8 @@ Ext.define('Koala.view.component.D3BarChart',{
             var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
             var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
             var chartMarginObj;
+
+            config = config || {};
 
             if (chartMargin.length > 0) {
                 chartMarginObj = {
@@ -113,8 +117,10 @@ Ext.define('Koala.view.component.D3BarChart',{
                 xtype: 'd3-barchart',
                 name: olLayer.get('name'),
                 zoomEnabled: Koala.util.String.coerce(chartConfig.allowZoom),
-                height: 350,
-                width: chartWidth,
+                height: config.height || '100%',
+                width: config.width || chartWidth,
+                margin: config.margin || 0,
+                flex: config.flex,
                 startDate: olFeat.get('end_measure'),
                 endDate: olFeat.get('end_measure'),
                 targetLayer: olLayer,

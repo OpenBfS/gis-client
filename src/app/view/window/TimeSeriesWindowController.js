@@ -48,10 +48,28 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      *
      */
     createTimeSeriesChart: function(olLayer, olFeat) {
+        var timeFilter = Koala.util.Layer.getEffectiveTimeFilterFromMetadata(
+                olLayer.metadata);
         var view = this.getView();
-        var start = view.down('datefield[name=datestart]').getValue();
-        var end = view.down('datefield[name=dateend]').getValue();
-        return Koala.view.component.D3Chart.create(olLayer, olFeat, start, end);
+        var addFilterForm = view.getAddFilterForm();
+
+        var startDate = addFilterForm ?
+                view.down('datefield[name=datestart]').getValue() :
+                Ext.Date.parse(timeFilter.mindatetimeinstant,
+                    timeFilter.mindatetimeformat);
+        var endDate = addFilterForm ?
+                view.down('datefield[name=dateend]').getValue() :
+                Ext.Date.parse(timeFilter.maxdatetimeinstant,
+                    timeFilter.maxdatetimeformat);
+
+        var config = {
+            startDate: startDate,
+            endDate: endDate,
+            flex: 1,
+            height: '100%'
+        };
+
+        return Koala.view.component.D3Chart.create(olLayer, olFeat, config);
     },
 
     /**
@@ -230,6 +248,30 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             Koala.util.String.replaceTemplateStrings(
             chartConfig.titleTpl, olLayer) : olLayer.get('name');
 
+        var rightColumnWrapper = {
+            xtype: 'panel',
+            header: false,
+            layout: {
+                type: 'vbox',
+                align: 'middle',
+                pack: 'center'
+            },
+            bodyPadding: 5,
+            height: '100%',
+            width: 150,
+            items: [{
+                text: viewModel.get('undoBtnText'),
+                xtype: 'button',
+                handler: me.onUndoButtonClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }]
+        };
+
+        if (addSeriesCombo) {
+            rightColumnWrapper.items.push(addSeriesCombo);
+        }
+
         var panel = {
             xtype: 'panel',
             name: 'chart-composition',
@@ -239,39 +281,14 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             titleCollapse: true,
             closable: true,
             titleAlign: 'center',
-            flex: 1,
             layout: {
-                type: 'hbox',
-                align: 'stretch'
+                type: 'hbox'
             },
-            items: [chart]
+            items: [
+                chart,
+                rightColumnWrapper
+            ]
         };
-
-        var rightColumnWrapper = {
-            xtype: 'panel',
-            header: false,
-            layout: {
-                type: 'vbox',
-                align: 'middle'
-            },
-            bodyPadding: 5,
-            items: []
-        };
-
-        var undoBtn = {
-            text: viewModel.get('undoBtnText'),
-            xtype: 'button',
-            handler: me.onUndoButtonClicked,
-            scope: me,
-            margin: '0 0 10px 0'
-        };
-
-        rightColumnWrapper.items.push(undoBtn);
-
-        if (addSeriesCombo) {
-            rightColumnWrapper.items.push(addSeriesCombo);
-        }
-        panel.items.push(rightColumnWrapper);
 
         return panel;
     },

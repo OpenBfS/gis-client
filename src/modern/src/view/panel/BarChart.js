@@ -36,7 +36,10 @@ Ext.define('Koala.view.panel.BarChart', {
 
     closeToolAlign: 'left',
 
-    scrollable: true,
+    tools: [{
+        type: 'collapse',
+        handler: 'onCollapseLegendToolClick'
+    }],
 
     items: []
 });

@@ -23,7 +23,8 @@ Ext.define('Koala.util.Layer', {
 
         'Koala.util.Date',
         'Koala.util.Filter',
-        'Koala.util.String'
+        'Koala.util.String',
+        'Koala.util.Object'
 
     ],
 

@@ -38,9 +38,19 @@ Ext.define('Koala.view.panel.TimeseriesChart', {
 
     closeToolAlign: 'left',
 
-    scrollable: true,
+    layout: 'vbox',
+
+    tools: [{
+        type: 'gear',
+        handler: 'onSearchToolClick'
+    }, {
+        type: 'collapse',
+        handler: 'onCollapseLegendToolClick'
+    }],
 
     items: [{
-        xtype: 'k-form-timeseriesfiltercontrol'
+        xtype: 'k-form-timeseriesfiltercontrol',
+        padding: 5,
+        hidden: true
     }]
 });

@@ -20,7 +20,9 @@ Ext.define('Koala.view.main.MobileMainController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.mobile-main',
 
-    requires: [],
+    requires: [
+        'Koala.util.Fullscreen'
+    ],
 
     layersAlreadyAdded: [],
 
@@ -224,6 +226,17 @@ Ext.define('Koala.view.main.MobileMainController', {
         Ext.each(charts, function(chart) {
             chart.up().remove(chart);
         });
+    },
+
+    /**
+     * Toggle fullscreen mode.
+     */
+    toggleFullscreen: function(btn) {
+        Koala.util.Fullscreen.toggleFullscreen();
+
+        var btnClass = Koala.util.Fullscreen.isInFullscreen() ?
+                'fa-compress' : 'fa-expand';
+        btn.setHtml('<i class="fa ' + btnClass + ' fa-2x"></i>');
     }
 
 });
