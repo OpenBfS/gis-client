@@ -42,21 +42,21 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         title: '{title}'
     },
 
+    name: 'timeserieswin',
+    constrainHeader: true,
+    collapsible: true,
+    maxHeight: 800,
+    height: 300,
+    width: 900,
+    layout: {
+        type: 'vbox'
+    },
+    defaults: {
+        flex: 1,
+        width: '100%'
+    },
+
     config: {
-        name: 'timeserieswin',
-        constrainHeader: true,
-        collapsible: true,
-        maxHeight: 800,
-        width: 900,
-        autoScroll: true,
-        layout: {
-            type: 'vbox'
-        },
-        defaults: {
-            flex: 1,
-            minHeight: 300,
-            width: '100%'
-        },
         addFilterForm: true
     },
 
@@ -82,7 +82,10 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         var timeRangeFilter = FilterUtil.getStartEndFilterFromMetadata(metadata);
         var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
 
-        if (me.addFilterForm) {
+        // TODO REMOVE
+        // me.setAddFilterForm(false);
+
+        if (me.getAddFilterForm()) {
             me.items = [{
                 xtype: 'form',
                 layout: {
@@ -93,7 +96,6 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                 defaults: {
                     padding: 5
                 },
-                width: '100%',
                 height: 40,
                 maxHeight: 40,
                 minHeight: 40,

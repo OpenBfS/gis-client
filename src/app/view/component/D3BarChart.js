@@ -31,9 +31,11 @@ Ext.define('Koala.view.component.D3BarChart',{
         type: 'component-d3barchart'
     },
 
-    width: 800,
-    height: 500,
-    margin: 5,
+    listeners: {
+        boxready: 'onBoxReady',
+        painted: 'onPainted',
+        resize: 'redrawChart'
+    },
 
     name: null,
 
@@ -100,6 +102,8 @@ Ext.define('Koala.view.component.D3BarChart',{
             var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
             var chartMarginObj;
 
+            config = config || {};
+
             if (chartMargin.length > 0) {
                 chartMarginObj = {
                     top: chartMargin[0],
@@ -113,8 +117,10 @@ Ext.define('Koala.view.component.D3BarChart',{
                 xtype: 'd3-barchart',
                 name: olLayer.get('name'),
                 zoomEnabled: Koala.util.String.coerce(chartConfig.allowZoom),
-                height: config.height || 350,
+                height: config.height || '100%',
                 width: config.width || chartWidth,
+                margin: config.margin || 0,
+                flex: config.flex,
                 startDate: olFeat.get('end_measure'),
                 endDate: olFeat.get('end_measure'),
                 targetLayer: olLayer,

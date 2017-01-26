@@ -49,9 +49,19 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
+     * Called on painted event. Only used in modern toolkit.
+     *
+     * @private
+     */
+    onPainted: function() {
+        var me = this;
+        me.onBoxReady();
+    },
+
+    /**
      *
      */
-    onShow: function() {
+    onBoxReady: function() {
         var me = this;
 
         // We have to cleanup manually.  WHY?!
@@ -108,6 +118,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.drawShapes();
 
         me.drawLegend();
+
+        me.chartRendered = true;
     },
 
     /**
@@ -116,79 +128,25 @@ Ext.define('Koala.view.component.D3BarChartController', {
     redrawChart: function() {
         var me = this;
 
-        me.deleteShapeContainerSvg();
+        if (me.chartRendered && me.data) {
 
-        me.createScales();
-        me.createAxes();
-        me.createGridAxes();
+            me.updateSvgContainerSize();
 
-        me.setDomainForScales();
+            me.deleteShapeContainerSvg();
 
-        me.redrawAxes();
-        me.redrawGridAxes();
-        me.redrawShapes();
-    },
+            me.createScales();
+            me.createAxes();
+            me.createGridAxes();
 
-    /**
-     *
-     */
-    deleteShapeContainerSvg: function() {
-        var view = this.getView();
-        var svg = d3.select('#' + view.getId() + ' svg svg');
-        if (svg && !svg.empty()) {
-            svg.node().remove();
+            me.setDomainForScales();
+
+            me.redrawTitle();
+            me.redrawAxes();
+            me.redrawGridAxes();
+            me.redrawShapes();
+
+            me.updateLegendContainerPosition();
         }
-    },
-
-    /**
-     *
-     */
-    createScales: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var view = me.getView();
-        var chartSize = me.getChartSize();
-
-        Ext.iterate(view.getAxes(), function(orient, axisConfig) {
-            var scaleType = staticMe.SCALE[axisConfig.scale];
-            var range;
-
-            if (orient === 'top' || orient === 'bottom') {
-                range = [0, chartSize[0]];
-            } else if (orient === 'left' || orient === 'right') {
-                range = [chartSize[1], 0];
-            }
-
-            me.scales[orient] = scaleType().range(range);
-        });
-    },
-
-    /**
-     * [createAxes description]
-     * @return {[type]} [description]
-     */
-    createAxes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var view = me.getView();
-        var axesConfig = view.getAxes();
-
-        Ext.iterate(axesConfig, function(orient, axisConfig) {
-            var axis = staticMe.ORIENTATION[orient];
-            var scale = me.scales[orient];
-
-            // https://github.com/d3/d3-format
-            var tickFormatter = axisConfig.format ? d3.format(axisConfig.format) : undefined;
-
-            var chartAxis = axis(scale)
-                .ticks(axisConfig.ticks)
-                .tickValues(axisConfig.values)
-                .tickFormat(tickFormatter)
-                .tickSize(axisConfig.tickSize || 6)
-                .tickPadding(axisConfig.tickPadding || 3);
-
-            me.axes[orient] = chartAxis;
-        });
     },
 
     /**
@@ -219,82 +177,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 // max = Math.ceil(max);
                 me.scales[orient].domain([min, max]);
             }
-        });
-    },
-
-    /**
-     *
-     */
-    drawTitle: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var titleConfig = view.getTitle();
-        var chartSize = me.getChartSize();
-        var translate = staticMe.makeTranslate(chartSize[0] / 2, 0);
-
-        d3.select(viewId + ' svg > g')
-            .append('text')
-                .attr('transform', translate)
-                .attr('dy', (titleConfig.labelPadding || 18) * -1)
-                .attr('fill', titleConfig.labelColor || '#000')
-                .style('text-anchor', 'middle')
-                .style('font-weight', 'bold')
-                .style('font-size', titleConfig.labelSize || 20)
-                .text(titleConfig.label || '');
-    },
-
-    /**
-     *
-     */
-    drawAxes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var makeTranslate = staticMe.makeTranslate;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var axesConfig = view.getAxes();
-        var chartSize = me.getChartSize();
-
-        Ext.iterate(axesConfig, function(orient, axisConfig) {
-            var axisTransform;
-            var labelTransform;
-            var labelPadding;
-            var cssClass;
-
-            if (orient === 'top' || orient === 'bottom') {
-                cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
-                axisTransform = (orient === 'bottom') ?
-                        makeTranslate(0, chartSize[1]) : undefined;
-
-                labelTransform = makeTranslate(chartSize[0] / 2, 0);
-                labelPadding = axisConfig.labelPadding || 35;
-            } else if (orient === 'left' || orient === 'right') {
-                cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
-                axisTransform = (orient === 'right') ?
-                        makeTranslate(chartSize[0], 0) : undefined;
-
-                var labelTranslate = makeTranslate(chartSize[1] / -2, 0);
-                labelTransform = 'rotate(-90), ' + labelTranslate;
-                labelPadding = (axisConfig.labelPadding || 25) * -1;
-            }
-
-            d3.select(viewId + ' svg > g')
-                .append('g')
-                    .attr('class', cssClass)
-                    .attr('transform', axisTransform)
-                    .call(me.axes[orient])
-                .append('text')
-                    .attr('transform', labelTransform)
-                    .attr('dy', labelPadding)
-                    .attr('fill', axisConfig.labelColor || '#000')
-                    .style('text-anchor', 'middle')
-                    .style('font-weight', 'bold')
-                    .style('font-size', axisConfig.labelSize || 12)
-                    .text(axisConfig.label || '');
-
         });
     },
 
@@ -403,162 +285,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .style("fill", "#000")
             .style("font-weight", "bold")
             .style("unselectable", "on");
-    },
-
-    /**
-     * [createGridAxes description]
-     * @return {[type]} [description]
-     */
-    createGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3ChartController;
-        var chartSize = me.getChartSize();
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var axis = staticMe.ORIENTATION[orient];
-            var scale = me.scales[orient];
-            var tickSize;
-
-            if (orient === 'top' || orient === 'bottom') {
-                tickSize = chartSize[1];
-            } else if (orient === 'left' || orient === 'right') {
-                tickSize = chartSize[0] * -1;
-            }
-
-            var chartAxis = axis(scale)
-                .tickFormat('')
-                .tickSize(tickSize);
-
-            me.gridAxes[orient] = chartAxis;
-        });
-    },
-
-    /**
-     * [drawGridAxes description]
-     * @return {[type]} [description]
-     */
-    drawGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var viewId = '#' + view.getId();
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var cssClass;
-
-            if (orient === 'bottom') {
-                cssClass = CSS.GRID + ' ' + CSS.GRID_X;
-            } else if (orient === 'left') {
-                cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
-            }
-
-            d3.select(viewId + ' svg > g')
-                .append('g')
-                    .attr('class', cssClass)
-                    .call(me.gridAxes[orient]);
-
-            d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
-                .style('stroke-width', gridConfig.width || 1)
-                .style('stroke', gridConfig.color || '#d3d3d3')
-                .style('stroke-opacity', gridConfig.opacity || 0.7);
-        });
-    },
-
-    /**
-     * [redrawAxes description]
-     * @return {[type]} [description]
-     */
-    redrawAxes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var axesConfig = view.getAxes();
-        var axisSelector = viewId + ' svg g.' + CSS.AXIS;
-
-        Ext.iterate(axesConfig, function(orient) {
-            var axisGenerator = me.axes[orient];
-            var axis;
-
-            if (orient === 'top' || orient === 'bottom') {
-                axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
-            } else if (orient === 'left' || orient === 'right') {
-                axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
-            }
-
-            axis
-                .transition()
-                .call(axisGenerator);
-        });
-    },
-
-    /**
-     * [redrawGridAxes description]
-     * @return {[type]} [description]
-     */
-    redrawGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var viewId = '#' + view.getId();
-        var axisSelector = viewId + ' svg g.' + CSS.GRID;
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var axisGenerator = me.gridAxes[orient];
-            var axis;
-
-            if (orient === 'top' || orient === 'bottom') {
-                axis = d3.select(axisSelector + '.' + CSS.GRID_X);
-            } else if (orient === 'left' || orient === 'right') {
-                axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
-            }
-
-            axis
-                .transition()
-                .call(axisGenerator);
-        });
-    },
-
-    /**
-     * Removes the current legend from the chart (if it exists) and redraws the
-     * legend by looking at our internal data (by calling #drawLegend).
-     */
-    redrawLegend: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var legendCls = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND;
-        var legend = this.legendSvg.select('g.' + legendCls);
-        if (legend) {
-            var legendNode = legend.node();
-            legendNode.parentNode.removeChild(legendNode);
-        }
-        me.drawLegend();
     },
 
     /**

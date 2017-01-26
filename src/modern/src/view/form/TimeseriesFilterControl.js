@@ -37,29 +37,25 @@ Ext.define("Koala.view.form.TimeseriesFilterControl", {
         type: "k-form-timeseriesfiltercontrol"
     },
 
-    items: [
-        {
-            xtype: 'datepickerfield',
-            bind: {
-                label: '{labelStartDate}'
-            },
-            name: 'datestart',
-            value: null
+    items: [{
+        xtype: 'datepickerfield',
+        bind: {
+            label: '{labelStartDate}'
         },
-        {
-            xtype: 'datepickerfield',
-            bind: {
-                label: '{labelEndDate}'
-            },
-            name: 'dateend',
-            value: null
+        name: 'datestart',
+        value: null
+    }, {
+        xtype: 'datepickerfield',
+        bind: {
+            label: '{labelEndDate}'
         },
-        {
-            xtype: 'button',
-            bind: {
-                text: '{setFilterButtonText}'
-            },
-            handler: 'onSetFilterButtonClick'
-        }
-    ]
+        name: 'dateend',
+        value: null
+    }, {
+        xtype: 'button',
+        bind: {
+            text: '{setFilterButtonText}'
+        },
+        handler: 'onSetFilterButtonClick'
+    }]
 });

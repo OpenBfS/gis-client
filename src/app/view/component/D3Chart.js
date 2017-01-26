@@ -32,9 +32,11 @@ Ext.define('Koala.view.component.D3Chart',{
         type: 'component-d3chart'
     },
 
-    width: 800,
-    height: 500,
-    margin: 5,
+    listeners: {
+        resize: 'redrawChart',
+        boxready: 'onBoxReady',
+        initialize: 'onInitialize'
+    },
 
     name: null,
 
@@ -104,6 +106,8 @@ Ext.define('Koala.view.component.D3Chart',{
             var shapes = [];
             var selectedStations = [];
 
+            config = config || {};
+
             if (chartMargin.length > 0) {
                 chartMarginObj = {
                     top: chartMargin[0],
@@ -137,13 +141,71 @@ Ext.define('Koala.view.component.D3Chart',{
                 selectedStations = [olFeat];
             }
 
+            // There are four ways and combinations of defining the ticks and
+            // the min and max values on the y axis based on the chart configs
+            // yAxisTicks, yAxisMin, yAxisMax and yTickValues:
+            // 1. Fully automatically: If neither yAxisTicks, yAxisMin,
+            // yAxisMax or yTickValues are set in the chartConfig object the
+            // min and max values are determined by the chart data and will be
+            // fit into a "nice" range with a a proper count of ticks.
+            // 2. Fully automatically (hinted): If yTickValues is set the min
+            // and max values are determined by the chart data (as above), but
+            // the number of ticks will be set by the parameter. Note: The count
+            // is only a hint for d3 and is just a approximate value.
+            // 3. Automatic step size: If yAxisTicks, yAxisMin and yAxisMax are
+            // set, the min and max axis values are rendered as given and the
+            // tick count is the number of additional ticks to be set between
+            // the min an max ticks.
+            // 4. Fully manual: If yTickValues is given, only the ticks in
+            // this parameter are shown on the axis.
+            var yAxisTickValues;
+            if (chartConfig.yAxisTicks && chartConfig.yAxisMin &&
+                    chartConfig.yAxisMax) {
+                var rangeMin = StringUtil.coerce(chartConfig.yAxisMin);
+                var rangeMax = StringUtil.coerce(chartConfig.yAxisMax);
+                var tickCnt = StringUtil.coerce(chartConfig.yAxisTicks);
+
+                // Tick count must be greater than 0
+                if (tickCnt < 0) {
+                    tickCnt = 0;
+                }
+
+                // Logarithmic scales are with min/max values of 0 are
+                // not possible.
+                if (chartConfig.yAxisScale === 'log' && (rangeMin === 0 ||
+                        rangeMax === 0)) {
+                    if (rangeMin === 0) {
+                        rangeMin = 0.00000001;
+                    }
+                    if (rangeMax === 0) {
+                        rangeMax = 0.00000001;
+                    }
+                }
+
+                var rangeStep = Math.abs(rangeMax - rangeMin) / (tickCnt + 1);
+                yAxisTickValues = d3.range(rangeMin, rangeMax + rangeStep,
+                        rangeStep);
+            }
+
+            if (chartConfig.yTickValues) {
+                yAxisTickValues = [];
+                Ext.each(chartConfig.yTickValues.split(','), function(val) {
+                    yAxisTickValues.push(StringUtil.coerce(val));
+                });
+            }
+
             var chart = {
                 xtype: 'd3-chart',
                 name: olLayer.get('name'),
                 zoomEnabled: StringUtil.coerce(chartConfig.allowZoom),
                 showLoadMask: false,
-                height: config.height || 200,
-                width: config.width || 700,
+                minHeight: 100,
+                minWidth: 100,
+                height: config.height || '100%',
+                width: config.width || '100%',
+                margin: config.margin || 0,
+                flex: config.flex,
+                autoScroll: false,
                 startDate: config.startDate,
                 endDate: config.endDate,
                 targetLayer: olLayer,
@@ -166,6 +228,8 @@ Ext.define('Koala.view.component.D3Chart',{
                         labelPadding: chartConfig.labelPadding,
                         labelColor: chartConfig.labelColor,
                         labelSize: chartConfig.labelSize,
+                        ticks: chartConfig.yAxisTicks,
+                        tickValues: yAxisTickValues,
                         tickSize: chartConfig.tickSize,
                         tickPadding: chartConfig.tickPadding,
                         min: chartConfig.yAxisMin,

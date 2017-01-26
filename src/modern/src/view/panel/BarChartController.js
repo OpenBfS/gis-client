@@ -24,12 +24,24 @@ Ext.define('Koala.view.panel.BarChartController', {
         "Koala.view.component.D3BarChart"
     ],
 
+    /**
+     * Toggles the legend's visibility.
+     */
+    onCollapseLegendToolClick: function() {
+        var me = this;
+        var view = me.getView();
+        var chart = view.down('d3-barchart');
+        var chartCtrl = chart.getController();
+
+        chartCtrl.toggleLegendVisibility();
+    },
+
     updateFor: function(olLayer, olFeat){
         var me = this;
         var view = me.getView();
         var config = {
-            height: null,
-            width: null
+            width: '100%',
+            height: '100%'
         };
         var chart = Koala.view.component.D3BarChart.create(olLayer, olFeat, config);
         view.removeAll();
