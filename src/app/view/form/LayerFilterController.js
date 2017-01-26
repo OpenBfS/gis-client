@@ -195,12 +195,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var param = filter.param;
         if (filterType === 'timerange') {
             var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
-            filter.mindatetimeinstant = keyVals[keys.startName];
-            filter.maxdatetimeinstant = keyVals[keys.endName];
+            filter.effectivemindatetime = keyVals[keys.startName];
+            filter.effectivemaxdatetime = keyVals[keys.endName];
         } else if (filterType === 'pointintime') {
-            filter.timeinstant = keyVals[param];
+            filter.effectivedatetime = keyVals[param];
         } else if (filterType === 'value') {
-            filter.value = keyVals[param];
+            filter.effectivevalue = keyVals[param];
         }
         filters[idx] = filter;
         return filters;

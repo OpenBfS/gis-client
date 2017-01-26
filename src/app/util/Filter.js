@@ -318,26 +318,69 @@ Ext.define('Koala.util.Filter', {
                 maxValue = maxValue + curValRemainderStepSize;
             }
 
-            var spinner = Ext.create({
-                xtype: 'numberfield',
-                name: name,
-                spinnerType: spinnerType,
-                value: startValue,
-                minValue: 0,
-                maxValue: maxValue,
-                step: stepSize,
-                disabled: !enableSpinner,
-                visible: true,
-                width: 50,
-                editable: false,
-                valueToRaw: staticMe.leadingZeroValueToRaw,
-                rawToValue: staticMe.leadingZeroRawToValue,
-                listeners: {
-                    change: staticMe.handleSpinnerChange
-                }
-            });
+            var spinner;
+            if (!Ext.isModern) {
+                spinner = Ext.create({
+                    xtype: 'numberfield',
+                    name: name,
+                    spinnerType: spinnerType,
+                    value: startValue,
+                    minValue: 0,
+                    maxValue: maxValue,
+                    step: stepSize,
+                    disabled: !enableSpinner,
+                    visible: true,
+                    width: 50,
+                    editable: false,
+                    valueToRaw: staticMe.leadingZeroValueToRaw,
+                    rawToValue: staticMe.leadingZeroRawToValue,
+                    listeners: {
+                        change: staticMe.handleSpinnerChange
+                    }
+                });
+            } else {
+                spinner = Ext.create({
+                    xtype: 'selectfield',
+                    name: name,
+                    spinnerType: spinnerType,
+                    value: startValue,
+                    disabled: !enableSpinner,
+                    usePicker: true,
+                    width: 60,
+                    valueToRaw: staticMe.leadingZeroValueToRaw,
+                    rawToValue: staticMe.leadingZeroRawToValue,
+                    options: staticMe.getSelectFieldOptionsData(maxValue, stepSize),
+                    listeners: {
+                        change: staticMe.handleSpinnerChange
+                    }
+                });
+            }
 
             return spinner;
+        },
+
+        /**
+         * Creates a linear incremented options array that can be used in a
+         * selectfield or similar. Typically used in a time slotpicker.
+         *
+         * @param {Number} maxValue The number of option objects to create.
+         * @param {Number} stepSize The distance between the object values.
+         *
+         * @return {Array} The options object.
+         */
+        getSelectFieldOptionsData: function(maxValue, stepSize) {
+            var options = [];
+
+            var optionsCnt = maxValue / stepSize;
+
+            for (var i = 0; i <= optionsCnt; i++) {
+                options.push({
+                    text: i * stepSize,
+                    value: i * stepSize
+                });
+            }
+
+            return options;
         },
 
         /**
@@ -378,9 +421,9 @@ Ext.define('Koala.util.Filter', {
          */
         addHoursAndMinutes: function(date, dateField) {
             var dateClone = Ext.Date.clone(date);
-            // TODO we might want to remove the hoour part, just to be extra
-            //      sure we always have the right date.
-            // Ext.date.clearTime(dateClone);
+            // Remove the time part of the data, just to be extra sure we
+            // always have the right date.
+            Ext.Date.clearTime(dateClone);
             var container = dateField.up();
             // the selectors mean '… ending with hourspinner' / 'minutespinner'
             var hourspinner = container.down('[name$="hourspinner"]');
@@ -404,7 +447,7 @@ Ext.define('Koala.util.Filter', {
             var datefield;
             var dateVal;
 
-            if(!Ext.isModern){ // classic
+            if (!Ext.isModern) { // classic
                 datefield = field.up("fieldcontainer").down("datefield");
                 dateVal = datefield.getValue();
                 // Fix the date by starting with the old values from h and min
@@ -422,7 +465,7 @@ Ext.define('Koala.util.Filter', {
                 datefield = field.up("container").down('datepickerfield');
                 dateVal = datefield.getValue();
 
-                if(field.spinnerType === MINUTE_TYPE){
+                if (field.spinnerType === MINUTE_TYPE) {
                     dateVal.setMinutes(field.getValue());
                 } else {
                     dateVal.setHours(field.getValue());

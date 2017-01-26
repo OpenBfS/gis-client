@@ -198,7 +198,7 @@ describe('Koala.util.Layer', function() {
                         type: "value",
                         param: "foo",
                         operator: "=",
-                        value: "'bar'"
+                        effectivevalue: "'bar'"
                     }]
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
@@ -214,10 +214,11 @@ describe('Koala.util.Layer', function() {
                 var metadata = {
                     filters: [{
                         type: "pointintime",
-                        timeinstant: Ext.Date.parse("1980-11-28", "Y-m-d"),
+                        effectivedatetime: Ext.Date.parse("1980-11-28", "Y-m-d"),
                         timeformat: "d.m.Y f\\o\\o"
                     }]
                 };
+
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
                 expect(got).to.not.be("");
@@ -228,7 +229,7 @@ describe('Koala.util.Layer', function() {
                     var metadata = {
                         filters: [{
                             type: "pointintime",
-                            timeinstant: Ext.Date.parse("1980-11-28", "Y-m-d")
+                            effectivedatetime: Ext.Date.parse("1980-11-28", "Y-m-d")
                         }]
                     };
                     var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
@@ -244,9 +245,9 @@ describe('Koala.util.Layer', function() {
                 var metadata = {
                     filters: [{
                         type: "timerange",
-                        mindatetimeinstant: min,
+                        effectivemindatetime: min,
                         mindatetimeformat: "d.m.Y f\\o\\o \\s\\t\\ar\\t",
-                        maxdatetimeinstant: max,
+                        effectivemaxdatetime: max,
                         maxdatetimeformat: "d.m.Y f\\o\\o e\\n\\d"
                     }]
                 };
@@ -265,8 +266,8 @@ describe('Koala.util.Layer', function() {
                 var metadata = {
                     filters: [{
                         type: "timerange",
-                        mindatetimeinstant: min,
-                        maxdatetimeinstant: max
+                        effectivemindatetime: min,
+                        effectivemaxdatetime: max
                     }]
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
