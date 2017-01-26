@@ -50,7 +50,7 @@ Ext.define("Koala.view.form.LayerFilter", {
     ],
 
     listeners: {
-        initialize: "initComponent", //"onBeforeRenderLayerFilterForm",
+        initialize: "initComponent",
         destroy: "onBeforeDestroyLayerFilterForm"
     },
 

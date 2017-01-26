@@ -462,7 +462,8 @@ Ext.define('Koala.util.Filter', {
                     return false;
                 }
 
-                datefield = field.up("container").down('datepickerfield');
+                datefield = field.up('container[name*=timecontainer]')
+                        .down('datepickerfield');
                 dateVal = datefield.getValue();
 
                 if (field.spinnerType === MINUTE_TYPE) {
