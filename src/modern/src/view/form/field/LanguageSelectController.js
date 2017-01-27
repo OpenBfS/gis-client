@@ -1,4 +1,4 @@
-Ext.define('Koala.view.field.LanguageSelectController', {
+Ext.define('Koala.view.form.field.LanguageSelectController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-field-languageselect',
 

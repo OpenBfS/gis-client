@@ -20,11 +20,6 @@ Ext.define('Koala.view.component.D3Base',{
     extend: 'Ext.Component',
     xtype: 'd3-base',
 
-    listeners: {
-        boxready: 'onBoxReady',
-        initialize: 'onInitialize'
-    },
-
     inheritableStatics: {
         DEFAULTS: {
             CHART: {

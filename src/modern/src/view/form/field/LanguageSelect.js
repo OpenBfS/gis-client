@@ -22,8 +22,8 @@ Ext.define("Koala.view.form.field.LanguageSelect", {
     requires: [
         "Koala.store.Language",
 
-        "Koala.view.field.LanguageSelectController",
-        "Koala.view.field.LanguageSelectModel"
+        "Koala.view.form.field.LanguageSelectController",
+        "Koala.view.form.field.LanguageSelectModel"
     ],
 
     controller: "k-field-languageselect",

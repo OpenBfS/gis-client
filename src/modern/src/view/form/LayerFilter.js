@@ -21,11 +21,8 @@ Ext.define("Koala.view.form.LayerFilter", {
     xtype: "k-form-layerfilter",
 
     requires: [
-        // "Ext.form.field.Date",
         "Ext.field.DatePicker",
-        // "Ext.form.ComboBox",
         "Ext.field.Select",
-        // "Ext.ux.form.MultiSelect",
 
         "Koala.util.Date",
         "Koala.util.Duration",
@@ -53,7 +50,7 @@ Ext.define("Koala.view.form.LayerFilter", {
     ],
 
     listeners: {
-        initialize: "initComponent", //"onBeforeRenderLayerFilterForm",
+        initialize: "initComponent",
         destroy: "onBeforeDestroyLayerFilterForm"
     },
 

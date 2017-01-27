@@ -31,6 +31,14 @@
             "defaultDateFormat": "d/m/Y H:i:s"
         }
     },
+    "Koala.view.button.Permalink": {
+        "config": {
+            "data":{
+                "tooltip": "fr:Permalink",
+                "windowTitle": "fr:Permalink"
+            }
+        }
+    },
     "Koala.view.button.TimeReference": {
         "config": {
             "data":{
@@ -335,6 +343,11 @@
                 "resetFilterBtnText": "fr:Reset",
                 "selectChartLayerComboLabel": "fr:",
                 "undoBtnText": "fr:…zurückzoomen",
+                "downloadBtnText": "fr:Download",
+                "downloadChartDataMsgTitle": "fr:Info",
+                "downloadChartDataMsgMessage": "fr:Aktuelle Chartdaten herunterladen?",
+                "downloadChartDataMsgButtonYes": "fr:Ja",
+                "downloadChartDataMsgButtonNo": "fr:Nein",
                 "removeSeriesBtnText": "fr:Serie entfernen",
                 "removeSeriesQuestionTitle": "fr:Rückfrage",
                 "removeSeriesQuestionTpl": "fr:Serie '{0}' entfernen?"
@@ -822,7 +835,15 @@
                 "imprintButtonText": "fr:Hilfe",
                 "settingsButtonText": "fr:Einstellungen",
                 "moreLayersButtonText": "fr:Weitere Themen",
-                "addLayerButtonText": "fr:Externen Layer hinzufügen"
+                "addLayerButtonText": "fr:Externen Layer hinzufügen",
+                "permalinkButtonText": "fr:Permalink"
+            }
+        }
+    },
+    "Koala.view.panel.MobilePermalink": {
+        "config": {
+            "data": {
+                "title": "fr:Permalink"
             }
         }
     },
@@ -863,6 +884,13 @@
                 "timeRangeFilter": "fr:Zeitraumfilter",
                 "pointInTimeFilter": "fr:Zeitpunktfilter",
                 "buttonTextChangeFilter": "fr:Filter auf Layer anwenden"
+            }
+        }
+    },
+    "Koala.view.form.Permalink": {
+        "config": {
+            "data": {
+                "refreshBtnText": "fr:Erneuern"
             }
         }
     },

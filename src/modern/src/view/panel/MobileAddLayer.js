@@ -46,14 +46,10 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
 
     items: [{
         xtype: 'formpanel',
-        height: '90vh',
-        width: '80vw',
-        baseCls: 'add-wms-form',
         items: [{
             xtype: 'fieldset',
             defaults: {
-                labelAlign: 'top',
-                flex: 1
+                labelAlign: 'top'
             },
             bind: {
                 title: '{queryParamsFieldSetTitle}'
@@ -66,7 +62,7 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                 name: 'url',
                 allowBlank: false,
                 value: 'http://ows.terrestris.de/osm/service'
-            },{
+            }, {
                 xtype: 'container',
                 defaultType: 'radiofield',
                 items: [{
@@ -83,8 +79,7 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                     id: 'v130-radio',
                     checked: true
                 }]
-            },
-            {
+            }, {
                 xtype: 'hiddenfield',
                 name: 'request',
                 value: 'GetCapabilities'

@@ -20,30 +20,13 @@ Ext.define('Koala.view.main.MobileMainController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.mobile-main',
 
-    requires: [],
+    requires: [
+        'Koala.util.Fullscreen'
+    ],
 
     layersAlreadyAdded: [],
 
     chartingLayer: null,
-
-    routes: {
-        'map/:lon/:lat/:zoom': {
-            action: 'onMapRoute'
-        }
-    },
-
-    /**
-     *
-     */
-    onMapRoute: function(lon, lat, zoom) {
-        var me = this;
-        var view = me.getView();
-        var map = view.down('basigx-component-map').getMap();
-        var mapView = map.getView();
-
-        mapView.setCenter([parseInt(lon, 10), parseInt(lat, 10)]);
-        mapView.setZoom(zoom);
-    },
 
     /**
      * TODO needed only while developing, will eventually be removed
@@ -243,6 +226,17 @@ Ext.define('Koala.view.main.MobileMainController', {
         Ext.each(charts, function(chart) {
             chart.up().remove(chart);
         });
+    },
+
+    /**
+     * Toggle fullscreen mode.
+     */
+    toggleFullscreen: function(btn) {
+        Koala.util.Fullscreen.toggleFullscreen();
+
+        var btnClass = Koala.util.Fullscreen.isInFullscreen() ?
+                'fa-compress' : 'fa-expand';
+        btn.setHtml('<i class="fa ' + btnClass + ' fa-2x"></i>');
     }
 
 });

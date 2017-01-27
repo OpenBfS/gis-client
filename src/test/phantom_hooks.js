@@ -1,5 +1,5 @@
-/*eslint-env node*/
-/*eslint no-console:0*/
+/* eslint-disable */
+
 module.exports = {
   afterEnd: function(runner) {
     var fs = require('fs');

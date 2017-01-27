@@ -1,0 +1,119 @@
+/**
+ * component/Map.scss
+ */
+div.feature-hover-popup {
+    background: rgba(255,255,255,0.8);
+    padding: 3px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    text-align: center;
+    color: #333;
+}
+
+/**
+ * panel/Header.scss
+ */
+.basigx-header {
+    background-color: #fff;
+}
+
+/**
+ * panel/LayerSetChooser.scss
+ */
+.img-chooser-view {
+    background: white;
+    font: 11px Arial, Helvetica, sans-serif;
+}
+.img-chooser-view .thumb {
+    padding: 3px;
+}
+.img-chooser-view .thumb-wrap {
+    height: 90px;
+    float: left;
+    margin: 4px;
+    margin-right: 0;
+    padding: 5px;
+    -webkit-transition: background-color 1s, border-color 0.5s;
+    transition: background-color 1s, border-color 0.5s;
+}
+.img-chooser-view .thumb-wrap span {
+    display: block;
+    overflow: hidden;
+    text-align: center;
+}
+.img-chooser-view .x-view-over {
+    border: 1px solid #dddddd;
+    background-color: #efefef;
+    padding: 4px;
+}
+.img-chooser-view .x-item-selected {
+    background: #DFEDFF;
+    border: 1px solid #6593cf;
+    padding: 4px;
+}
+.img-chooser-view .x-item-selected .thumb {
+    background: transparent;
+}
+.img-chooser-view .x-item-selected span {
+    color: #1A4D8F;
+}
+.img-chooser-view .loading-indicator {
+    font-size: 11px;
+    background-image: url('../../resources/images/grid/loading.gif');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 20px;
+    margin: 10px;
+}
+#images img {
+    margin: 20px;
+}
+
+/**
+ * panel/LegendTree.scss
+ */
+.basigx-legend-panel {
+    bottom: 0 !important;
+    top: auto !important;
+    right: 0 !important;
+}
+.basigx-legend {
+    margin: 3px 0 0 0;
+    border: 1px solid transparent;
+    border-radius: 6px;
+}
+
+/**
+ * panel/MapContainer.scss
+ */
+.basigx-map-tools {
+    right: 0 !important;
+    left: auto !important;
+    background-color: transparent !important;
+}
+.basigx-overview-map {
+    top: auto !important;
+    bottom: 0 !important;
+    background-color: white;
+}
+.basigx-overview-map-button {
+    top: auto !important;
+    bottom: 5px !important;
+    left: 5px !important;
+}
+.ol-scale-line {
+    bottom: 5px;
+    left: 50px;
+}
+.ol-scale-line.basigx-scaline-adjusted {
+    left: 405px;
+}
+.basigx-combo-scale {
+    top: auto;
+    bottom: 5px;
+    left: 50px;
+    background-color: white;
+}
+.basigx-combo-scale-adjusted {
+    left: 405px;
+}

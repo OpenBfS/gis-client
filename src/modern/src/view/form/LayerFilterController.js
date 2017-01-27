@@ -437,13 +437,18 @@ Ext.define('Koala.view.form.LayerFilterController', {
             filter, "minutes", "minutespinner", value
         );
 
-        hourSpinner.setPadding('30 0 0 0');
-        minuteSpinner.setPadding('30 0 0 0');
+        hourSpinner.setWidth('50%');
+        minuteSpinner.setWidth('50%');
+
+        var timeContainer = {
+            xtype: 'container',
+            layout: 'hbox',
+            items: [hourSpinner, minuteSpinner]
+        };
 
         var container = Ext.create("Ext.Container", {
             name: "pointintimecontainer",
-            layout: "hbox",
-            items: [dateField, hourSpinner, minuteSpinner]
+            items: [dateField, timeContainer]
         });
 
         var fieldSet = Ext.create("Ext.form.FieldSet", {
@@ -550,14 +555,18 @@ Ext.define('Koala.view.form.LayerFilterController', {
             filter, "minutes", "minminutespinner", startValue
         );
 
-        minHourSpinner.setPadding('30 0 0 0');
-        minMinuteSpinner.setPadding('30 0 0 0');
+        minHourSpinner.setWidth('50%');
+        minMinuteSpinner.setWidth('50%');
+
+        var minTimeContainer = {
+            xtype: 'container',
+            layout: 'hbox',
+            items: [minHourSpinner, minMinuteSpinner]
+        };
 
         var minContainer = Ext.create("Ext.Container", {
-            name: "mincontainer",
-            anchor: "100%",
-            layout: "hbox",
-            items: [minDateField, minHourSpinner, minMinuteSpinner]
+            name: "mintimecontainer",
+            items: [minDateField, minTimeContainer]
         });
 
         // --- MAXIMUM ---
@@ -588,13 +597,18 @@ Ext.define('Koala.view.form.LayerFilterController', {
             filter, "minutes", "maxminutespinner", endValue
         );
 
-        maxHourSpinner.setPadding('30 0 0 0');
-        maxMinuteSpinner.setPadding('30 0 0 0');
+        maxHourSpinner.setWidth('50%');
+        maxMinuteSpinner.setWidth('50%');
+
+        var maxTimeContainer = {
+            xtype: 'container',
+            layout: 'hbox',
+            items: [maxHourSpinner, maxMinuteSpinner]
+        };
 
         var maxContainer = Ext.create("Ext.Container", {
-            name: "maxcontainer",
-            layout: "hbox",
-            items: [maxDateField, maxHourSpinner, maxMinuteSpinner]
+            name: "maxtimecontainer",
+            items: [maxDateField, maxTimeContainer]
         });
 
         var fieldSet = Ext.create("Ext.form.FieldSet", {

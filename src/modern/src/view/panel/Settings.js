@@ -27,7 +27,7 @@ Ext.define('Koala.view.panel.Settings',{
         },
         labelWidth: 150,
         margin: 15
-    },{
+    }, {
         xtype: 'fieldset',
         bind: {
             title: '{timereferenceLabel}'

@@ -48,10 +48,28 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      *
      */
     createTimeSeriesChart: function(olLayer, olFeat) {
+        var timeFilter = Koala.util.Layer.getEffectiveTimeFilterFromMetadata(
+                olLayer.metadata);
         var view = this.getView();
-        var start = view.down('datefield[name=datestart]').getValue();
-        var end = view.down('datefield[name=dateend]').getValue();
-        return Koala.view.component.D3Chart.create(olLayer, olFeat, start, end);
+        var addFilterForm = view.getAddFilterForm();
+
+        var startDate = addFilterForm ?
+                view.down('datefield[name=datestart]').getValue() :
+                Ext.Date.parse(timeFilter.mindatetimeinstant,
+                    timeFilter.mindatetimeformat);
+        var endDate = addFilterForm ?
+                view.down('datefield[name=dateend]').getValue() :
+                Ext.Date.parse(timeFilter.maxdatetimeinstant,
+                    timeFilter.maxdatetimeformat);
+
+        var config = {
+            startDate: startDate,
+            endDate: endDate,
+            flex: 1,
+            height: '100%'
+        };
+
+        return Koala.view.component.D3Chart.create(olLayer, olFeat, config);
     },
 
     /**
@@ -230,6 +248,37 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             Koala.util.String.replaceTemplateStrings(
             chartConfig.titleTpl, olLayer) : olLayer.get('name');
 
+        var rightColumnWrapper = {
+            xtype: 'panel',
+            header: false,
+            layout: {
+                type: 'vbox',
+                align: 'middle',
+                pack: 'center'
+            },
+            bodyPadding: 5,
+            height: '100%',
+            width: 150,
+            items: [{
+                text: viewModel.get('undoBtnText'),
+                xtype: 'button',
+                handler: me.onUndoButtonClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }, {
+                text: viewModel.get('downloadBtnText'),
+                xtype: 'button',
+                hidden: !olLayer.get('allowDownload'),
+                handler: me.onDownloadButtonClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }]
+        };
+
+        if (addSeriesCombo) {
+            rightColumnWrapper.items.push(addSeriesCombo);
+        }
+
         var panel = {
             xtype: 'panel',
             name: 'chart-composition',
@@ -239,39 +288,14 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             titleCollapse: true,
             closable: true,
             titleAlign: 'center',
-            flex: 1,
             layout: {
-                type: 'hbox',
-                align: 'stretch'
+                type: 'hbox'
             },
-            items: [chart]
+            items: [
+                chart,
+                rightColumnWrapper
+            ]
         };
-
-        var rightColumnWrapper = {
-            xtype: 'panel',
-            header: false,
-            layout: {
-                type: 'vbox',
-                align: 'middle'
-            },
-            bodyPadding: 5,
-            items: []
-        };
-
-        var undoBtn = {
-            text: viewModel.get('undoBtnText'),
-            xtype: 'button',
-            handler: me.onUndoButtonClicked,
-            scope: me,
-            margin: '0 0 10px 0'
-        };
-
-        rightColumnWrapper.items.push(undoBtn);
-
-        if (addSeriesCombo) {
-            rightColumnWrapper.items.push(addSeriesCombo);
-        }
-        panel.items.push(rightColumnWrapper);
 
         return panel;
     },
@@ -281,10 +305,55 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      *
      * @param {Ext.button.Button} undoBtn The clicked undo button.
      */
-    onUndoButtonClicked: function(undoBtn){
+    onUndoButtonClicked: function(undoBtn) {
         var chart = undoBtn.up('[name="chart-composition"]').down('d3-chart');
         var chartCtrl = chart.getController();
         chartCtrl.resetZoom();
+    },
+
+    /**
+     * Download the current chart data.
+     *
+     * @param {Ext.button.Button} btn The clicked button.
+     */
+    onDownloadButtonClicked: function(btn) {
+        var me = this;
+        var viewModel = me.getViewModel();
+        var chart = btn.up('[name="chart-composition"]').down('d3-chart');
+        var chartCtrl = chart.getController();
+
+        Ext.Msg.show({
+            title: viewModel.get('downloadChartDataMsgTitle'),
+            message: viewModel.get('downloadChartDataMsgMessage'),
+            buttonText: {
+                yes: viewModel.get('downloadChartDataMsgButtonYes'),
+                no: viewModel.get('downloadChartDataMsgButtonNo')
+            },
+            fn: function(btnId){
+                if (btnId === 'yes') {
+                    var chartData = Ext.clone(chartCtrl.data);
+                    var prettyChartData = me.getAsPrettyJson(chartData);
+
+                    // Use the download library to enforce a browser download.
+                    download(prettyChartData, 'koala-chart-data.json',
+                            'application/json');
+                }
+            }
+        });
+    },
+
+    /**
+     * Returns the input value as pretty formatted JSON string. Undefined values
+     * will be replaced with null, otherwise they will be ignored by
+     * JSON.stringify.
+     */
+    getAsPrettyJson: function(obj) {
+        return JSON.stringify(obj, function(key, value) {
+            if (value === undefined) {
+                value = null;
+            }
+            return value;
+        }, 2);
     },
 
     /**

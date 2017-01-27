@@ -27,6 +27,29 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         'Koala.view.component.D3Chart'
     ],
 
+    /**
+     * Toogles the visibility of the filter form panel.
+     */
+    onSearchToolClick: function() {
+        var me = this;
+        var view = me.getView();
+        var filterForm = view.down('k-form-timeseriesfiltercontrol');
+
+        filterForm.setHidden(!filterForm.isHidden());
+    },
+
+    /**
+     * Toggles the legend's visibility.
+     */
+    onCollapseLegendToolClick: function() {
+        var me = this;
+        var view = me.getView();
+        var chart = view.down('d3-chart');
+        var chartCtrl = chart.getController();
+
+        chartCtrl.toggleLegendVisibility();
+    },
+
     updateFor: function(olLayer, olFeat){
         var me = this;
         var view = me.getView();
@@ -142,9 +165,14 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
      */
     createTimeseriesChart: function(olLayer, olFeat) {
         var view = this.getView();
-        var start = view.down('datepickerfield[name=datestart]').getValue();
-        var end = view.down('datepickerfield[name=dateend]').getValue();
-        return Koala.view.component.D3Chart.create(olLayer, olFeat, start, end);
+        var config = {
+            startDate: view.down('datepickerfield[name=datestart]').getValue(),
+            endDate: view.down('datepickerfield[name=dateend]').getValue(),
+            width: '100%',
+            flex: 1,
+            margin: 0
+        };
+        return Koala.view.component.D3Chart.create(olLayer, olFeat, config);
     }
 
 });

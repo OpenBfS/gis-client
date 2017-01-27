@@ -115,54 +115,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
         });
 
-        // TODO Move to barchart!
-        if (view.chartType === 'bar') {
-            var targetLayer = view.getTargetLayer();
-            var chartConfig = targetLayer.metadata.layerConfig.barChartProperties;
-            var selectedStation = view.getSelectedStations()[0];
-            var props = selectedStation.getProperties();
-
-            var data = {};
-            Ext.each(chartConfig.chartFieldSequence.split(','), function(field) {
-                data[field] = props[field];
-            });
-
-            // TODO double check locality_code, is this hardcoded?
-            //      Shouldn't this be selectedStation.get('id')?
-            me.data[props.locality_code] = data;
-        } else {
-            me.getChartData();
-        }
-
-    },
-
-    /**
-     *
-     */
-    redrawChart: function() {
-        var me = this;
-
-        // Reset the shapes and scales
-        me.shapes = [];
-        me.scales = {};
-
-        me.deleteShapeContainerSvg();
-
-        me.createScales();
-        me.createAxes();
-        me.createGridAxes();
-        me.createShapes();
-
-        me.setDomainForScales();
-
-        me.redrawAxes();
-        me.redrawGridAxes();
-        me.drawShapes();
-
-        me.redrawLegend();
-
-        // Zoom to the new chart extent
-        me.resetZoom();
+        me.getChartData();
     },
 
     /**
@@ -193,74 +146,36 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * [redrawAxes description]
-     * @return {[type]} [description]
-     */
-    redrawAxes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var axesConfig = view.getAxes();
-        var axisSelector = viewId + ' svg g.' + CSS.AXIS;
-
-        Ext.iterate(axesConfig, function(orient) {
-            var axisGenerator = me.axes[orient];
-            var axis;
-
-            if (orient === 'top' || orient === 'bottom') {
-                axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
-            } else if (orient === 'left' || orient === 'right') {
-                axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
-            }
-
-            axis.call(axisGenerator);
-        });
-    },
-
-    /**
-     * [redrawGridAxes description]
-     * @return {[type]} [description]
-     */
-    redrawGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var viewId = '#' + view.getId();
-        var axisSelector = viewId + ' svg g.' + CSS.GRID;
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var axisGenerator = me.gridAxes[orient];
-            var axis;
-
-            if (orient === 'top' || orient === 'bottom') {
-                axis = d3.select(axisSelector + '.' + CSS.GRID_X);
-            } else if (orient === 'left' || orient === 'right') {
-                axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
-            }
-
-            axis.call(axisGenerator);
-        });
-    },
-
-    /**
      *
      */
-    deleteShapeContainerSvg: function() {
-        var view = this.getView();
-        var svg = d3.select('#' + view.getId() + ' svg svg');
+    redrawChart: function() {
+        var me = this;
 
-        if (svg && !svg.empty()) {
-            svg.node().remove();
+        if (me.chartRendered && me.chartDataAvailable) {
+            // Reset the shapes and scales
+            me.shapes = [];
+            me.scales = {};
+
+            me.updateSvgContainerSize();
+
+            me.deleteShapeContainerSvg();
+
+            me.createScales();
+            me.createAxes();
+            me.createGridAxes();
+            me.createShapes();
+
+            me.setDomainForScales();
+
+            me.redrawTitle();
+            me.redrawAxes();
+            me.redrawGridAxes();
+            me.drawShapes();
+            me.updateLegendContainerPosition();
+            me.redrawLegend();
+
+            // Reset the zoom to the initial extent
+            me.resetZoom();
         }
     },
 
@@ -508,29 +423,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    createScales: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var view = me.getView();
-        var chartSize = me.getChartSize();
-
-        Ext.iterate(view.getAxes(), function(orient, axisConfig) {
-            var scaleType = staticMe.SCALE[axisConfig.scale || 'linear'];
-            var range;
-
-            if (orient === 'top' || orient === 'bottom') {
-                range = [0, chartSize[0]];
-            } else if (orient === 'left' || orient === 'right') {
-                range = [chartSize[1], 0];
-            }
-
-            me.scales[orient] = scaleType().range(range);
-        });
-    },
-
-    /**
-     *
-     */
     createShapes: function() {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
@@ -607,222 +499,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         });
 
         return axisOrientation;
-    },
-
-    /**
-     * [createAxes description]
-     * @return {[type]} [description]
-     */
-    createAxes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var view = me.getView();
-        var axesConfig = view.getAxes();
-
-        Ext.iterate(axesConfig, function(orient, axisConfig) {
-            var axis = staticMe.ORIENTATION[orient];
-            var scale = me.scales[orient];
-            // https://github.com/d3/d3-format
-            var tickFormatter = axisConfig.scale === 'time' ?
-                    me.getMultiScaleTimeFormatter :
-                    d3.format(axisConfig.format || ',.0f');
-
-            var chartAxis = axis(scale)
-                .ticks(axisConfig.ticks)
-                .tickValues(axisConfig.values)
-                .tickFormat(tickFormatter)
-                .tickSize(axisConfig.tickSize || 6)
-                .tickPadding(axisConfig.tickPadding || 3);
-
-            me.axes[orient] = chartAxis;
-        });
-    },
-
-    /**
-     * Method that can be adjusted to generate a custom multi scale time formatter
-     * function, based on https://github.com/d3/d3-time-format
-     *
-     * See https://github.com/d3/d3-time-format/blob/master/README.md#locale_format
-     * for available D3 datetime formats.
-     *
-     * @param  {Date} date The current Date object.
-     * @return {function} The multi-scale time format function.
-     */
-    getMultiScaleTimeFormatter: function(date) {
-        var formatMillisecond = d3.timeFormat(".%L"),
-            formatSecond = d3.timeFormat(":%S"),
-            formatMinute = d3.timeFormat("%H:%M"),
-            formatHour = d3.timeFormat("%H:%M"),
-            formatDay = d3.timeFormat("%a %d"),
-            formatWeek = d3.timeFormat("%b %d"),
-            formatMonth = d3.timeFormat("%B"),
-            formatYear = d3.timeFormat("%Y");
-
-        return (d3.timeSecond(date) < date ? formatMillisecond
-          : d3.timeMinute(date) < date ? formatSecond
-          : d3.timeHour(date) < date ? formatMinute
-          : d3.timeDay(date) < date ? formatHour
-          : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
-          : d3.timeYear(date) < date ? formatMonth
-          : formatYear)(date);
-    },
-
-    /**
-     *
-     */
-    drawAxes: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var makeTranslate = staticMe.makeTranslate;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var axesConfig = view.getAxes();
-        var chartSize = me.getChartSize();
-
-        Ext.iterate(axesConfig, function(orient, axisConfig) {
-            var axisTransform;
-            var labelTransform;
-            var labelPadding;
-            var cssClass;
-
-            if (orient === 'top' || orient === 'bottom') {
-                cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
-                axisTransform = (orient === 'bottom') ?
-                        makeTranslate(0, chartSize[1]) : undefined;
-
-                labelTransform = makeTranslate(chartSize[0] / 2, 0);
-                labelPadding = axisConfig.labelPadding || 35;
-            } else if (orient === 'left' || orient === 'right') {
-                cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
-                axisTransform = (orient === 'right') ?
-                        makeTranslate(chartSize[0], 0) : undefined;
-                var translate = makeTranslate(chartSize[1] / -2, 0);
-                labelTransform = 'rotate(-90), ' + translate;
-                labelPadding = (axisConfig.labelPadding || 25) * -1;
-            }
-
-            d3.select(viewId + ' svg > g')
-                .append('g')
-                    .attr('class', cssClass)
-                    .attr('transform', axisTransform)
-                    .call(me.axes[orient])
-                .append('text')
-                    .attr('transform', labelTransform)
-                    .attr('dy', labelPadding)
-                    .attr('fill', axisConfig.labelColor || '#000')
-                    .style('text-anchor', 'middle')
-                    .style('font-weight', 'bold')
-                    .style('font-size', axisConfig.labelSize || 12)
-                    .text(axisConfig.label || '');
-
-            if (axisConfig.rotateXAxisLabel && (orient === 'top' || orient === 'bottom')) {
-                d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_X + ' > g > text')
-                    .attr('transform', 'rotate(-55)')
-                    .attr('dx', '-10px')
-                    .attr('dy', '1px')
-                    .style('text-anchor', 'end');
-            }
-
-        });
-    },
-
-    /**
-     * [createGridAxes description]
-     * @return {[type]} [description]
-     */
-    createGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3ChartController;
-        var chartSize = me.getChartSize();
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var axis = staticMe.ORIENTATION[orient];
-            var scale = me.scales[orient];
-            var tickSize;
-
-            if (orient === 'top' || orient === 'bottom') {
-                tickSize = chartSize[1];
-            } else if (orient === 'left' || orient === 'right') {
-                tickSize = chartSize[0] * -1;
-            }
-
-            var chartAxis = axis(scale)
-                .tickFormat('')
-                .tickSize(tickSize);
-
-            me.gridAxes[orient] = chartAxis;
-        });
-    },
-
-    /**
-     * [drawGridAxes description]
-     * @return {[type]} [description]
-     */
-    drawGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var viewId = '#' + view.getId();
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var cssClass;
-
-            if (orient === 'bottom') {
-                cssClass = CSS.GRID + ' ' + CSS.GRID_X;
-            } else if (orient === 'left') {
-                cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
-            }
-
-            d3.select(viewId + ' svg > g')
-                .append('g')
-                    .attr('class', cssClass)
-                    .call(me.gridAxes[orient]);
-
-            d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
-                .style('stroke-width', gridConfig.width || 1)
-                .style('stroke', gridConfig.color || '#d3d3d3')
-                .style('stroke-opacity', gridConfig.opacity || 0.7);
-        });
-    },
-
-    /**
-     *
-     */
-    drawTitle: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var makeTranslate = staticMe.makeTranslate;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var titleConfig = view.getTitle();
-        var chartSize = me.getChartSize();
-
-        d3.select(viewId + ' svg > g')
-            .append('text')
-                .attr('transform', makeTranslate(chartSize[0] / 2, 0))
-                .attr('dy', (titleConfig.labelPadding || 18) * -1)
-                .attr('fill', titleConfig.labelColor || '#000')
-                .style('text-anchor', 'middle')
-                .style('font-weight', 'bold')
-                .style('font-size', titleConfig.labelSize || 20)
-                .text(titleConfig.label);
     },
 
     /**
@@ -1053,25 +729,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * Removes the current legend from the chart (if it exists) and redraws the
-     * legend by looking at our internal data.
-     */
-    redrawLegend: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var legendCls = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND;
-        var legend = d3.select(viewId + ' svg g.' + legendCls);
-        if (legend && !legend.empty()) {
-            var legendNode = legend.node();
-            legendNode.parentNode.removeChild(legendNode);
-        }
-        me.drawLegend();
-    },
-
-    /**
      *
      */
     drawLegend: function() {
@@ -1299,52 +956,68 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     *
+     * TODO gettestdatafilter and set to request URL // CQL ticket #1578
      */
     getChartDataForStation: function(selectedStation) {
         var me = this;
-        var FilterUtil = Koala.util.Filter;
-        var view = me.getView();
-        var targetLayer = view.getTargetLayer();
-        var chartConfig = targetLayer.get("timeSeriesChartProperties");
-        var filterConfig = FilterUtil.getStartEndFilterFromMetadata(targetLayer.metadata);
-        var startDate = view.getStartDate();
-        var endDate = view.getEndDate();
-        var timeField = filterConfig.parameter;
 
-        var paramConfig = Koala.util.Object.getConfigByPrefix(
-            chartConfig, "param_", true);
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = selectedStation.get('id');
 
-        Ext.iterate(paramConfig, function(k, v) {
-            paramConfig[k] = Koala.util.String.replaceTemplateStrings(
-                v, selectedStation);
-        });
-
-        // TODO refactor this gathering of the needed filter attribute
-        var filters = targetLayer.metadata.filters;
-        var timeRangeFilter;
-
-        Ext.each(filters, function(filter) {
-            var fType = (filter && filter.type) || '';
-            if (fType === 'timerange' || fType === 'pointintime') {
-                timeRangeFilter = filter;
-                return false;
-            }
-        });
-        if (!timeRangeFilter) {
-            Ext.log.warn("Failed to determine a timerange filter");
-        }
-        // don't accidently overwrite the configured filter…
-        timeRangeFilter = Ext.clone(timeRangeFilter);
-
-        var intervalInSeconds = me.getIntervalInSeconds(
-            timeRangeFilter.interval, timeRangeFilter.unit
+        // Store the actual request object, so we are able to abort it if we are
+        // called faster than the response arrives.
+        var ajaxRequest = me.getChartDataRequest(
+                selectedStation,
+                me.onChartDataRequestCallback,
+                me.onChartDataRequestSuccess,
+                me.onChartDataRequestFailure,
+                me
         );
 
-        var startString = Ext.Date.format(startDate, targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
-        var endString = Ext.Date.format(endDate, targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
+        // Put the current request into our storage for possible abortion.
+        me.ajaxRequests[stationId] = ajaxRequest;
+    },
 
-        var url = targetLayer.metadata.layerConfig.wfs.url;
+    /**
+     * Returns the request params for a given station.
+     *
+     * @param {ol.Feature} station The station to build the request for.
+     * @return {Object} The request object.
+     */
+    getChartDataRequestParams: function(station) {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+        var chartConfig = targetLayer.get('timeSeriesChartProperties');
+        var startDate = view.getStartDate();
+        var endDate = view.getEndDate();
+        var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
+                targetLayer.metadata);
+        var timeField = filterConfig.parameter;
+
+        // TODO: check filters[0]
+        var startString = Ext.Date.format(startDate,
+                targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
+        var endString = Ext.Date.format(endDate,
+                targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
+
+        // Get the viewparams configured for the layer
+        var layerViewParams = Koala.util.Object.getPathStrOr(
+                    targetLayer, 'metadata/layerConfig/olProperties/param_viewparams', '');
+
+        // Get the request params configured for the chart
+        var paramConfig = Koala.util.Object.getConfigByPrefix(
+                chartConfig, 'param_', true);
+
+        // Merge the layer viewparams to the chart params
+        paramConfig.viewparams += ';' + layerViewParams;
+
+        // Replace all template strings
+        Ext.iterate(paramConfig, function(k, v) {
+            paramConfig[k] = Koala.util.String.replaceTemplateStrings(
+                v, station);
+        });
 
         var requestParams = {
             service: 'WFS',
@@ -1358,75 +1031,208 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         Ext.apply(requestParams, paramConfig);
 
-        // The id of the selected station is also the key in the pending
-        // requests object.
-        var selId = selectedStation.get('id');
+        return requestParams;
+    },
 
-        // store the actual request object, so we are able to abort it if we are
-        // called faster than the response arrives.
+    /**
+     * Returns the WFS url of the current charting target layer.
+     *
+     * @return {String} The WFS url.
+     */
+    getChartDataRequestUrl: function() {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+
+        return targetLayer.metadata.layerConfig.wfs.url;
+    },
+
+    /**
+     * Returns the Ext.Ajax.request for requesting the chart data.
+     *
+     * @param {ol.Feature} station The ol.Feature to build the request function
+ *                                 for. Required.
+     * @param {Function} cbSuccess The function to be called on success. Optional.
+     * @param {Function} cbFailure The function to be called on failure. Optional.
+     * @param {Function} cbScope The callback function to be called on
+     *                           success and failure. Optional.
+     * @return {Ext.Ajax.request} The request function.
+     */
+    getChartDataRequest: function(station, cbFn, cbSuccess, cbFailure, cbScope) {
+        var me = this;
+
+        if (!(station instanceof ol.Feature)) {
+            Ext.log.warn('No valid ol.Feature given.');
+            return;
+        }
+
         var ajaxRequest = Ext.Ajax.request({
-            url: url,
             method: 'GET',
-            params: requestParams,
+            url: me.getChartDataRequestUrl(),
+            params: me.getChartDataRequestParams(station),
             callback: function() {
-                // Called for both success and failure, this will delete the
-                // entry in the pending requests object.
-                if (selId in me.ajaxRequests) {
-                    delete me.ajaxRequests[selId];
+                if (Ext.isFunction(cbFn)) {
+                    cbFn.call(cbScope, station);
                 }
             },
-            success: function(resp) {
-                var jsonObj = Ext.decode(resp.responseText);
-
-                var snapObject = me.getTimeStampSnapObject(
-                        startDate, intervalInSeconds, jsonObj.features, timeField);
-
-                var compareableDate, matchingFeature;
-
-                var xAxisAttr = chartConfig.xAxisAttribute;
-                var yAxisAttr = chartConfig.yAxisAttribute;
-                var valueField = chartConfig.yAxisAttribute;
-
-                var seriesData = [];
-
-                while (startDate <= endDate) {
-                    var newRawData = {};
-
-                    compareableDate = Ext.Date.format(startDate, 'timestamp');
-                    matchingFeature = snapObject[compareableDate];
-
-                    newRawData[xAxisAttr] = startDate;
-                    newRawData[valueField] = undefined;
-
-                    if (matchingFeature) {
-                        me.chartDataAvailable = true;
-                        newRawData[valueField] = matchingFeature.properties[yAxisAttr];
-                    }
-
-                    seriesData.push(newRawData);
-                    startDate = Ext.Date.add(startDate, Ext.Date.SECOND, intervalInSeconds);
+            success: function(response) {
+                if (Ext.isFunction(cbSuccess)) {
+                    cbSuccess.call(cbScope, response, station);
                 }
-
-                me.data[selId] = seriesData;
-
-                me.ajaxCounter++;
-
-                if (me.ajaxCounter === view.getSelectedStations().length) {
-                    if (view.getShowLoadMask()) {
-                        view.setLoading(false);
-                    }
-                    me.fireEvent('chartdataprepared');
-                }
-
             },
             failure: function(response) {
-                if(!response.aborted) { // aborted requests aren't failures
-                    Ext.log.error('Failure on chartdata load');
+                if (Ext.isFunction(cbFailure)) {
+                    cbFailure.call(cbScope, response, station);
                 }
             }
         });
-        // Put the current request into our storage for possible abortion.
-        me.ajaxRequests[selId] = ajaxRequest;
+
+        return ajaxRequest;
+    },
+
+    /**
+     * The default callback handler for chart data requests.
+     *
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for.
+     */
+    onChartDataRequestCallback: function(station) {
+        var me = this;
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = station.get('id');
+
+        // Called for both success and failure, this will delete the
+        // entry in the pending requests object.
+        if (stationId in me.ajaxRequests) {
+            delete me.ajaxRequests[stationId];
+        }
+    },
+
+    /**
+     * Returns the normalized interval based on the time filter attributes
+     * (interval and units) of the current target layer.
+     *
+     * @return {Integer} The normalized interval.
+     */
+    getIntervalInSecondsForTargetLayer: function() {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+
+        // TODO refactor this gathering of the needed filter attribute
+        var filters = targetLayer.metadata.filters;
+        var timeRangeFilter;
+        var intervalInSeconds;
+
+        Ext.each(filters, function(filter) {
+            var fType = (filter && filter.type) || '';
+            if (fType === 'timerange' || fType === 'pointintime') {
+                timeRangeFilter = filter;
+                return false;
+            }
+        });
+
+        if (!timeRangeFilter) {
+            Ext.log.warn('Failed to determine a timerange filter');
+        }
+
+        // don't accidently overwrite the configured filter…
+        timeRangeFilter = Ext.clone(timeRangeFilter);
+
+        intervalInSeconds = me.getIntervalInSeconds(
+            timeRangeFilter.interval, timeRangeFilter.unit
+        );
+
+        return intervalInSeconds;
+    },
+
+    /**
+     * Function to be called on request success.
+     *
+     * @param {Object} reponse The response object.
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for.
+     */
+    onChartDataRequestSuccess: function(response, station) {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+        var startDate = view.getStartDate();
+        var endDate = view.getEndDate();
+        var chartConfig = targetLayer.get('timeSeriesChartProperties');
+        var xAxisAttr = chartConfig.xAxisAttribute;
+        var yAxisAttr = chartConfig.yAxisAttribute;
+        var valueField = chartConfig.yAxisAttribute;
+        var jsonObj;
+
+        if (response && response.responseText) {
+            try {
+                jsonObj = Ext.decode(response.responseText);
+            } catch(err) {
+                Ext.log.error('Could not parse the response: ', err);
+                return false;
+            }
+        }
+
+        var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
+                targetLayer.metadata);
+        var timeField = filterConfig.parameter;
+        var intervalInSeconds = me.getIntervalInSecondsForTargetLayer();
+        var snapObject = me.getTimeStampSnapObject(
+                startDate, intervalInSeconds, jsonObj.features, timeField);
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = station.get('id');
+
+        var compareableDate;
+        var matchingFeature;
+        var seriesData = [];
+
+        while (startDate <= endDate) {
+            var newRawData = {};
+
+            compareableDate = Ext.Date.format(startDate, 'timestamp');
+            matchingFeature = snapObject[compareableDate];
+
+            newRawData[xAxisAttr] = startDate;
+            newRawData[valueField] = undefined;
+
+            if (matchingFeature) {
+                me.chartDataAvailable = true;
+                newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+            }
+
+            seriesData.push(newRawData);
+            startDate = Ext.Date.add(startDate, Ext.Date.SECOND, intervalInSeconds);
+        }
+
+        me.data[stationId] = seriesData;
+
+        me.ajaxCounter++;
+
+        if (me.ajaxCounter === view.getSelectedStations().length) {
+            if (view.getShowLoadMask()) {
+                view.setLoading(false);
+            }
+            me.fireEvent('chartdataprepared');
+        }
+    },
+
+    /**
+     * The default handler for chart data request failures.
+     *
+     * @param {Object} response The reponse object.
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for. Optional.
+     */
+    onChartDataRequestFailure: function(response /*station*/) {
+        // aborted requests aren't failures
+        if (!response.aborted) {
+            Ext.log.error('Failure on chartdata load');
+        }
     },
 
     /**
