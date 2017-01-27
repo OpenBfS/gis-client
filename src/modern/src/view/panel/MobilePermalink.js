@@ -27,6 +27,7 @@ Ext.define('Koala.view.panel.MobilePermalink',{
         name: 'textfield-permalink',
         editable: false,
         labelAlign: 'top',
+        margin: 15,
         bind: {
             label: '{title}',
             value: '{permalink}'
