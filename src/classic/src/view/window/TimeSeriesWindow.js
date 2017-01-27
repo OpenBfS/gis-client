@@ -82,9 +82,6 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         var timeRangeFilter = FilterUtil.getStartEndFilterFromMetadata(metadata);
         var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
 
-        // TODO REMOVE
-        // me.setAddFilterForm(false);
-
         if (me.getAddFilterForm()) {
             me.items = [{
                 xtype: 'form',

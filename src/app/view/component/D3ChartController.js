@@ -956,53 +956,59 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     *
+     * TODO gettestdatafilter and set to request URL // CQL ticket #1578
      */
     getChartDataForStation: function(selectedStation) {
         var me = this;
-        var FilterUtil = Koala.util.Filter;
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = selectedStation.get('id');
+
+        // Store the actual request object, so we are able to abort it if we are
+        // called faster than the response arrives.
+        var ajaxRequest = me.getChartDataRequest(
+                selectedStation,
+                me.onChartDataRequestCallback,
+                me.onChartDataRequestSuccess,
+                me.onChartDataRequestFailure,
+                me
+        );
+
+        // Put the current request into our storage for possible abortion.
+        me.ajaxRequests[stationId] = ajaxRequest;
+    },
+
+    /**
+     * Returns the request params for a given station.
+     *
+     * @param {ol.Feature} station The station to build the request for.
+     * @return {Object} The request object.
+     */
+    getChartDataRequestParams: function(station) {
+        var me = this;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
-        var chartConfig = targetLayer.get("timeSeriesChartProperties");
-        var filterConfig = FilterUtil.getStartEndFilterFromMetadata(targetLayer.metadata);
-        // TODO gettestdatafilter and set to request URL // CQL ticket #1578
+        var chartConfig = targetLayer.get('timeSeriesChartProperties');
         var startDate = view.getStartDate();
         var endDate = view.getEndDate();
+        var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
+                targetLayer.metadata);
         var timeField = filterConfig.parameter;
 
+        // TODO: check filters[0]
+        var startString = Ext.Date.format(startDate,
+                targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
+        var endString = Ext.Date.format(endDate,
+                targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
+
         var paramConfig = Koala.util.Object.getConfigByPrefix(
-            chartConfig, "param_", true);
+                chartConfig, 'param_', true);
 
         Ext.iterate(paramConfig, function(k, v) {
             paramConfig[k] = Koala.util.String.replaceTemplateStrings(
-                v, selectedStation);
+                v, station);
         });
-
-        // TODO refactor this gathering of the needed filter attribute
-        var filters = targetLayer.metadata.filters;
-        var timeRangeFilter;
-
-        Ext.each(filters, function(filter) {
-            var fType = (filter && filter.type) || '';
-            if (fType === 'timerange' || fType === 'pointintime') {
-                timeRangeFilter = filter;
-                return false;
-            }
-        });
-        if (!timeRangeFilter) {
-            Ext.log.warn("Failed to determine a timerange filter");
-        }
-        // don't accidently overwrite the configured filter…
-        timeRangeFilter = Ext.clone(timeRangeFilter);
-
-        var intervalInSeconds = me.getIntervalInSeconds(
-            timeRangeFilter.interval, timeRangeFilter.unit
-        );
-
-        var startString = Ext.Date.format(startDate, targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
-        var endString = Ext.Date.format(endDate, targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
-
-        var url = targetLayer.metadata.layerConfig.wfs.url;
 
         var requestParams = {
             service: 'WFS',
@@ -1016,75 +1022,208 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         Ext.apply(requestParams, paramConfig);
 
-        // The id of the selected station is also the key in the pending
-        // requests object.
-        var selId = selectedStation.get('id');
+        return requestParams;
+    },
 
-        // store the actual request object, so we are able to abort it if we are
-        // called faster than the response arrives.
+    /**
+     * Returns the WFS url of the current charting target layer.
+     *
+     * @return {String} The WFS url.
+     */
+    getChartDataRequestUrl: function() {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+
+        return targetLayer.metadata.layerConfig.wfs.url;
+    },
+
+    /**
+     * Returns the Ext.Ajax.request for requesting the chart data.
+     *
+     * @param {ol.Feature} station The ol.Feature to build the request function
+ *                                 for. Required.
+     * @param {Function} cbSuccess The function to be called on success. Optional.
+     * @param {Function} cbFailure The function to be called on failure. Optional.
+     * @param {Function} cbScope The callback function to be called on
+     *                           success and failure. Optional.
+     * @return {Ext.Ajax.request} The request function.
+     */
+    getChartDataRequest: function(station, cbFn, cbSuccess, cbFailure, cbScope) {
+        var me = this;
+
+        if (!(station instanceof ol.Feature)) {
+            Ext.log.warn('No valid ol.Feature given.');
+            return;
+        }
+
         var ajaxRequest = Ext.Ajax.request({
-            url: url,
             method: 'GET',
-            params: requestParams,
+            url: me.getChartDataRequestUrl(),
+            params: me.getChartDataRequestParams(station),
             callback: function() {
-                // Called for both success and failure, this will delete the
-                // entry in the pending requests object.
-                if (selId in me.ajaxRequests) {
-                    delete me.ajaxRequests[selId];
+                if (Ext.isFunction(cbFn)) {
+                    cbFn.call(cbScope, station);
                 }
             },
-            success: function(resp) {
-                var jsonObj = Ext.decode(resp.responseText);
-
-                var snapObject = me.getTimeStampSnapObject(
-                        startDate, intervalInSeconds, jsonObj.features, timeField);
-
-                var compareableDate, matchingFeature;
-
-                var xAxisAttr = chartConfig.xAxisAttribute;
-                var yAxisAttr = chartConfig.yAxisAttribute;
-                var valueField = chartConfig.yAxisAttribute;
-
-                var seriesData = [];
-
-                while (startDate <= endDate) {
-                    var newRawData = {};
-
-                    compareableDate = Ext.Date.format(startDate, 'timestamp');
-                    matchingFeature = snapObject[compareableDate];
-
-                    newRawData[xAxisAttr] = startDate;
-                    newRawData[valueField] = undefined;
-
-                    if (matchingFeature) {
-                        me.chartDataAvailable = true;
-                        newRawData[valueField] = matchingFeature.properties[yAxisAttr];
-                    }
-
-                    seriesData.push(newRawData);
-                    startDate = Ext.Date.add(startDate, Ext.Date.SECOND, intervalInSeconds);
+            success: function(response) {
+                if (Ext.isFunction(cbSuccess)) {
+                    cbSuccess.call(cbScope, response, station);
                 }
-
-                me.data[selId] = seriesData;
-
-                me.ajaxCounter++;
-
-                if (me.ajaxCounter === view.getSelectedStations().length) {
-                    if (view.getShowLoadMask()) {
-                        view.setLoading(false);
-                    }
-                    me.fireEvent('chartdataprepared');
-                }
-
             },
             failure: function(response) {
-                if(!response.aborted) { // aborted requests aren't failures
-                    Ext.log.error('Failure on chartdata load');
+                if (Ext.isFunction(cbFailure)) {
+                    cbFailure.call(cbScope, response, station);
                 }
             }
         });
-        // Put the current request into our storage for possible abortion.
-        me.ajaxRequests[selId] = ajaxRequest;
+
+        return ajaxRequest;
+    },
+
+    /**
+     * The default callback handler for chart data requests.
+     *
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for.
+     */
+    onChartDataRequestCallback: function(station) {
+        var me = this;
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = station.get('id');
+
+        // Called for both success and failure, this will delete the
+        // entry in the pending requests object.
+        if (stationId in me.ajaxRequests) {
+            delete me.ajaxRequests[stationId];
+        }
+    },
+
+    /**
+     * Returns the normalized interval based on the time filter attributes
+     * (interval and units) of the current target layer.
+     *
+     * @return {Integer} The normalized interval.
+     */
+    getIntervalInSecondsForTargetLayer: function() {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+
+        // TODO refactor this gathering of the needed filter attribute
+        var filters = targetLayer.metadata.filters;
+        var timeRangeFilter;
+        var intervalInSeconds;
+
+        Ext.each(filters, function(filter) {
+            var fType = (filter && filter.type) || '';
+            if (fType === 'timerange' || fType === 'pointintime') {
+                timeRangeFilter = filter;
+                return false;
+            }
+        });
+
+        if (!timeRangeFilter) {
+            Ext.log.warn('Failed to determine a timerange filter');
+        }
+
+        // don't accidently overwrite the configured filter…
+        timeRangeFilter = Ext.clone(timeRangeFilter);
+
+        intervalInSeconds = me.getIntervalInSeconds(
+            timeRangeFilter.interval, timeRangeFilter.unit
+        );
+
+        return intervalInSeconds;
+    },
+
+    /**
+     * Function to be called on request success.
+     *
+     * @param {Object} reponse The response object.
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for.
+     */
+    onChartDataRequestSuccess: function(response, station) {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+        var startDate = view.getStartDate();
+        var endDate = view.getEndDate();
+        var chartConfig = targetLayer.get('timeSeriesChartProperties');
+        var xAxisAttr = chartConfig.xAxisAttribute;
+        var yAxisAttr = chartConfig.yAxisAttribute;
+        var valueField = chartConfig.yAxisAttribute;
+        var jsonObj;
+
+        if (response && response.responseText) {
+            try {
+                jsonObj = Ext.decode(response.responseText);
+            } catch(err) {
+                Ext.log.error('Could not parse the response: ', err);
+                return false;
+            }
+        }
+
+        var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
+                targetLayer.metadata);
+        var timeField = filterConfig.parameter;
+        var intervalInSeconds = me.getIntervalInSecondsForTargetLayer();
+        var snapObject = me.getTimeStampSnapObject(
+                startDate, intervalInSeconds, jsonObj.features, timeField);
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = station.get('id');
+
+        var compareableDate;
+        var matchingFeature;
+        var seriesData = [];
+
+        while (startDate <= endDate) {
+            var newRawData = {};
+
+            compareableDate = Ext.Date.format(startDate, 'timestamp');
+            matchingFeature = snapObject[compareableDate];
+
+            newRawData[xAxisAttr] = startDate;
+            newRawData[valueField] = undefined;
+
+            if (matchingFeature) {
+                me.chartDataAvailable = true;
+                newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+            }
+
+            seriesData.push(newRawData);
+            startDate = Ext.Date.add(startDate, Ext.Date.SECOND, intervalInSeconds);
+        }
+
+        me.data[stationId] = seriesData;
+
+        me.ajaxCounter++;
+
+        if (me.ajaxCounter === view.getSelectedStations().length) {
+            if (view.getShowLoadMask()) {
+                view.setLoading(false);
+            }
+            me.fireEvent('chartdataprepared');
+        }
+    },
+
+    /**
+     * The default handler for chart data request failures.
+     *
+     * @param {Object} response The reponse object.
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for. Optional.
+     */
+    onChartDataRequestFailure: function(response /*station*/) {
+        // aborted requests aren't failures
+        if (!response.aborted) {
+            Ext.log.error('Failure on chartdata load');
+        }
     },
 
     /**

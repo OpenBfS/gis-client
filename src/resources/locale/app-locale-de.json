@@ -343,6 +343,11 @@
                 "resetFilterBtnText": "Reset",
                 "selectChartLayerComboLabel": "",
                 "undoBtnText": "…zurückzoomen",
+                "downloadBtnText": "Download",
+                "downloadChartDataMsgTitle": "Info",
+                "downloadChartDataMsgMessage": "Aktuelle Chartdaten herunterladen?",
+                "downloadChartDataMsgButtonYes": "Ja",
+                "downloadChartDataMsgButtonNo": "Nein",
                 "removeSeriesBtnText": "Serie entfernen",
                 "removeSeriesQuestionTitle": "Rückfrage",
                 "removeSeriesQuestionTpl": "Serie '{0}' entfernen?"
