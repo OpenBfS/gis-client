@@ -2,11 +2,9 @@
 
 CUR_DIR=`pwd`
 WORKSPACE=$CUR_DIR
-SCRIPT_DIR=`dirname $0`
 SENCHA_CMD_VERSION="6.2.1.29"
 EXTJS_VERSION="6.2.0"
 
-cd $SCRIPT_DIR
 wget http://cdn.sencha.com/cmd/$SENCHA_CMD_VERSION/no-jre/SenchaCmd-$SENCHA_CMD_VERSION-linux-amd64.sh.zip
 unzip SenchaCmd-$SENCHA_CMD_VERSION-linux-amd64.sh.zip
 ./SenchaCmd-$SENCHA_CMD_VERSION-linux-amd64.sh -q -dir "/opt/$SENCHA_CMD_VERSION"
@@ -25,4 +23,4 @@ ln -sf $WORKSPACE/src/build/production/Koala $WORKSPACE/webgis
 
 #$SENCHA_CMD app watch
 
-cd $CUR_DIR
+cd $WORKSPACE
