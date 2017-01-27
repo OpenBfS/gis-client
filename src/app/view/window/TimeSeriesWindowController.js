@@ -265,6 +265,13 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 handler: me.onUndoButtonClicked,
                 scope: me,
                 margin: '0 0 10px 0'
+            }, {
+                text: viewModel.get('downloadBtnText'),
+                xtype: 'button',
+                hidden: !olLayer.get('allowDownload'),
+                handler: me.onDownloadButtonClicked,
+                scope: me,
+                margin: '0 0 10px 0'
             }]
         };
 
@@ -298,10 +305,55 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      *
      * @param {Ext.button.Button} undoBtn The clicked undo button.
      */
-    onUndoButtonClicked: function(undoBtn){
+    onUndoButtonClicked: function(undoBtn) {
         var chart = undoBtn.up('[name="chart-composition"]').down('d3-chart');
         var chartCtrl = chart.getController();
         chartCtrl.resetZoom();
+    },
+
+    /**
+     * Download the current chart data.
+     *
+     * @param {Ext.button.Button} btn The clicked button.
+     */
+    onDownloadButtonClicked: function(btn) {
+        var me = this;
+        var viewModel = me.getViewModel();
+        var chart = btn.up('[name="chart-composition"]').down('d3-chart');
+        var chartCtrl = chart.getController();
+
+        Ext.Msg.show({
+            title: viewModel.get('downloadChartDataMsgTitle'),
+            message: viewModel.get('downloadChartDataMsgMessage'),
+            buttonText: {
+                yes: viewModel.get('downloadChartDataMsgButtonYes'),
+                no: viewModel.get('downloadChartDataMsgButtonNo')
+            },
+            fn: function(btnId){
+                if (btnId === 'yes') {
+                    var chartData = Ext.clone(chartCtrl.data);
+                    var prettyChartData = me.getAsPrettyJson(chartData);
+
+                    // Use the download library to enforce a browser download.
+                    download(prettyChartData, 'koala-chart-data.json',
+                            'application/json');
+                }
+            }
+        });
+    },
+
+    /**
+     * Returns the input value as pretty formatted JSON string. Undefined values
+     * will be replaced with null, otherwise they will be ignored by
+     * JSON.stringify.
+     */
+    getAsPrettyJson: function(obj) {
+        return JSON.stringify(obj, function(key, value) {
+            if (value === undefined) {
+                value = null;
+            }
+            return value;
+        }, 2);
     },
 
     /**
