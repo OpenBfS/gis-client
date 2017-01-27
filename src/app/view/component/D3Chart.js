@@ -148,7 +148,7 @@ Ext.define('Koala.view.component.D3Chart',{
             // yAxisMax or yTickValues are set in the chartConfig object the
             // min and max values are determined by the chart data and will be
             // fit into a "nice" range with a a proper count of ticks.
-            // 2. Fully automatically (hinted): If yTickValues is set the min
+            // 2. Fully automatically (hinted): If yAxisTicks is set the min
             // and max values are determined by the chart data (as above), but
             // the number of ticks will be set by the parameter. Note: The count
             // is only a hint for d3 and is just a approximate value.
