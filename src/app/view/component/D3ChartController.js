@@ -1002,9 +1002,18 @@ Ext.define('Koala.view.component.D3ChartController', {
         var endString = Ext.Date.format(endDate,
                 targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
 
+        // Get the viewparams configured for the layer
+        var layerViewParams = Koala.util.Object.getPathStrOr(
+                    targetLayer, 'metadata/layerConfig/olProperties/param_viewparams', '');
+
+        // Get the request params configured for the chart
         var paramConfig = Koala.util.Object.getConfigByPrefix(
                 chartConfig, 'param_', true);
 
+        // Merge the layer viewparams to the chart params
+        paramConfig.viewparams += ';' + layerViewParams;
+
+        // Replace all template strings
         Ext.iterate(paramConfig, function(k, v) {
             paramConfig[k] = Koala.util.String.replaceTemplateStrings(
                 v, station);
