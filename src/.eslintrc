@@ -10,7 +10,8 @@
         "Koala": true,
         "BasiGX": true,
         "btoa": true,
-        "d3": false
+        "d3": false,
+        "download": false
     },
     "rules": {
         "comma-dangle": 2,
