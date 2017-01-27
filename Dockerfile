@@ -24,9 +24,8 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
 ADD . /usr/local/apache2/htdocs/
 WORKDIR /usr/local/apache2/htdocs/
 
-# add custom appContext.json
-RUN mv ./src/resources/appContext.json ./src/resources/appContext.json.orig
-ADD appContext.json ./src/resources/
+# add custom appContext.json if available at ./
+RUN if [ -f ./appContext.json ]; then mv ./src/resources/appContext.json ./src/resources/appContext.json.orig && mv ./appContext.json ./src/resources/ ; fi
 
 #
 # Install dependencies
