@@ -81,119 +81,34 @@ Ext.define('Koala.util.Routing', {
          */
         beforeLayerTreeRoute: function(layers, action){
             var me = Koala.util.Routing;
-            var layerUuidsWithStates = layers.split(",");
+            var LayerUtil = Koala.util.Layer;
             var expectedLayers = 0;
             var gotLayers = 0;
             var routeCreatedLayers = {};
-            var LayerUtil = Koala.util.Layer;
+            var permaObj = JSON.parse(layers);
 
-            if (Ext.isEmpty(layerUuidsWithStates[0])) {
-                return;
-            }
-
-            Ext.each(layerUuidsWithStates, function(uuidWithState) {
-                var uuid = uuidWithState.split("_")[0];
-                var filtersString = uuidWithState.split("_")[2];
-
+            Ext.iterate(permaObj, function(uuid, config) {
                 if (Koala.util.String.isUuid(uuid)) {
                     expectedLayers++;
-                    me.parseFiltersFromPermalink(uuid, filtersString);
                     LayerUtil.getMetadataFromUuidAndThen(uuid, function(md){
                         gotLayers++;
                         var metadataClone = Ext.clone(md);
-
-                        me.applyPermalinkFiltersToMetadata(uuid, md.filters);
+                        me.applyPermalinkFiltersToMetadata(uuid, md.filters, config.filters);
 
                         var olLayer = LayerUtil.layerFromMetadata(md);
+
                         LayerUtil.setOriginalMetadata(olLayer, metadataClone);
                         routeCreatedLayers[uuid] = olLayer;
+
                         if (gotLayers === expectedLayers) {
                             me.routeCreatedLayers = routeCreatedLayers;
                             action.resume();
                         }
                     });
                 } else {
-                    Ext.log.info('Skipping route part ', uuidWithState);
+                    Ext.log.info('Skipping route part ', uuid);
                 }
             });
-        },
-
-        /**
-         * Parses the String representation of a filter an stores the filters in
-         * me.permalinkFilters.
-         *
-         * @param {String} uuid The metadataidentifier comming from gnos.
-         * @param {String} filtersString The string representation of filtersString.
-         *     pointintime: "pt{t[timestamp]}"
-         *     e.g.: Wed Jan 18 2017 15:10:14 GMT+0100 (CET)
-         *         "pt{t1484748614084}"
-         *
-         *     timerange: "tr{s[starttimestamp]e[endtimestamp]}"
-         *     e.g. From Mon Jun 01 2015 02:00:00 GMT+0200 (CEST)
-         *          Till Tue Jun 30 2015 02:00:00 GMT+0200 (CEST):
-         *         "tr{s1433116800000e1435622400000}"
-         *
-         *     attribute: "at{[filteralias]=[value]}"
-         *     e.g.: Messnetz = KFÜ
-         *          "at{Messnetz='triangle'}"
-         *
-         *     style: "st{[stylename]}"
-         *     e.g.: Style should be 'blue-point'
-         *          "st{point}"
-         * @private
-         */
-        parseFiltersFromPermalink: function(uuid, filtersString){
-            var me = Koala.util.Routing;
-            if (filtersString) {
-                me.permalinkFilters[uuid] = {};
-
-                var filtersArray = filtersString.split(";");
-                Ext.each(filtersArray, function(filter){
-                    var filterParts = filter.split('{');
-                    var prefix = filterParts[0];
-                    var filterValues = filterParts[1].replace('}', '');
-
-                    switch (prefix) {
-                        case 'pt':
-                            var t = parseInt(filterValues.split('t')[1], 10);
-                            if (Ext.isNumber(t)) {
-                                me.permalinkFilters[uuid].pointintime = {
-                                    effectivedatetime: new Date(t)
-                                };
-                            }
-                        break;
-                        case 'tr':
-                            var s = parseInt(filterValues.split('s')[1], 10);
-                            var e = parseInt(filterValues.split('e')[1], 10);
-                            if (Ext.isNumber(s) && Ext.isNumber(s)) {
-                                me.permalinkFilters[uuid].timerange = {
-                                    effectivemindatetime: new Date(s),
-                                    effectivemaxdatetime: new Date(e)
-                                };
-                            }
-                        break;
-                        case 'at':
-                            //TODO Check for special 'test_data'
-                            var alias = filterValues.split("=")[0];
-                            var val = filterValues.split("=")[1];
-                            me.permalinkFilters[uuid].value = {
-                                alias: alias,
-                                effectivevalue: val
-                            };
-                        break;
-                        case 'st':
-                            me.permalinkFilters[uuid].Stil = {
-                                alias: 'Stil',
-                                effectivevalue: filterValues
-                            };
-                        break;
-                        default:
-                            Ext.log.warn('Could not parase filter from permalink ' +
-                                filter);
-                        break;
-                    }
-                });
-            }
         },
 
         /**
@@ -205,14 +120,24 @@ Ext.define('Koala.util.Routing', {
          *                                metadataFilter.
          * @private
          */
-        applyPermalinkFiltersToMetadata: function(uuid, metadataFilters) {
-            var me = Koala.util.Routing;
+        applyPermalinkFiltersToMetadata: function(uuid, metadataFilters, configFilters) {
             Ext.each(metadataFilters, function(mdFilter) {
-                if(!me.permalinkFilters[uuid]){
-                    return false;
-                }
+                var permalinkFilter = Ext.Array.findBy(configFilters, function(filter) {
+                    var isPointInTime = filter.type === 'pointintime';
+                    var isTimeRange = filter.type === 'timerange';
+                    var sameType = mdFilter.type === filter.type;
+                    var sameAlias = mdFilter.alias === filter.alias;
 
-                var permalinkFilter = me.permalinkFilters[uuid][mdFilter.alias] || me.permalinkFilters[uuid][mdFilter.type];
+                    if(sameType) {
+                        if(isPointInTime || isTimeRange || sameAlias){
+                            return true;
+                        }
+                        return false;
+                    }
+                    return false;
+
+                });
+
                 var minDate;
                 var maxDate;
                 if(permalinkFilter){
@@ -220,6 +145,7 @@ Ext.define('Koala.util.Routing', {
                         maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
                         minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
                         if(minDate <= permalinkFilter.effectivedatetime && maxDate >= permalinkFilter.effectivedatetime){
+                            permalinkFilter.effectivedatetime = new Date(permalinkFilter.effectivedatetime);
                             Ext.apply(mdFilter, permalinkFilter);
                         } else {
                             Ext.toast('Permalink contains illegal pointintime filter');
@@ -229,7 +155,9 @@ Ext.define('Koala.util.Routing', {
                         maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
                         minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
                         if(minDate <= permalinkFilter.effectivemindatetime && maxDate >= permalinkFilter.effectivemindatetime &&
-                            minDate <= permalinkFilter.effectivemaxdatetime && maxDate >= permalinkFilter.effectivemaxdatetime){
+                                minDate <= permalinkFilter.effectivemaxdatetime && maxDate >= permalinkFilter.effectivemaxdatetime){
+                            permalinkFilter.effectivemindatetime = new Date(permalinkFilter.effectivemindatetime);
+                            permalinkFilter.effectivemaxdatetime = new Date(permalinkFilter.effectivemaxdatetime);
                             Ext.apply(mdFilter, permalinkFilter);
                         } else {
                             Ext.toast('Permalink contains illegal timerange filter');
@@ -237,8 +165,16 @@ Ext.define('Koala.util.Routing', {
                     }
                     if (mdFilter.type === "value") {
                         var allowedStore = Koala.util.Filter.getStoreFromAllowedValues(mdFilter.allowedValues);
-                        var matchingRecord = allowedStore.findRecord('val', permalinkFilter.effectivevalue);
-                        if(matchingRecord){
+                        var containsIllegal = false;
+
+                        Ext.each(permalinkFilter.effectivevalue, function(value){
+                            var matchingRecord = allowedStore.findRecord('val', value);
+                            if (!matchingRecord) {
+                                containsIllegal = true;
+                            }
+                        });
+
+                        if (!containsIllegal) {
                             Ext.apply(mdFilter, permalinkFilter);
                         } else {
                             Ext.toast('Permalink contains illegal value filter');
@@ -261,13 +197,11 @@ Ext.define('Koala.util.Routing', {
          */
         onLayerTreeRoute: function(layersString){
             var me = Koala.util.Routing;
-            var layerUuidsWithStates = layersString.split(",");
-            Ext.each(layerUuidsWithStates, function(uuidWithState) {
-                var uuidWithStateParts = uuidWithState.split("_");
-                var uuid = uuidWithStateParts[0];
-                var state = uuidWithStateParts[1] || '1'; // default to visible
+            var permaObj = JSON.parse(layersString);
 
-                var booleanState = state === '1';
+            Ext.iterate(permaObj, function(uuid, config) {
+
+                var booleanState = config.isVisible;
                 var olLayer = me.routeCreatedLayers[uuid];
                 if (Koala.util.String.isUuid(uuid) && Ext.isDefined(olLayer)) {
                     olLayer.set('visible', booleanState);
@@ -319,30 +253,27 @@ Ext.define('Koala.util.Routing', {
 
             if(!skipLayers){
                 var layersString = '';
-                Ext.each(filteredLayers, function(layer, i, layers){
+                var permaObj = {};
+
+                Ext.each(filteredLayers, function(layer){
                     var metadata = layer.metadata;
                     var uuid = metadata.id;
                     var isVisible = layer.get('visible') ? 1 : 0;
-                    var filtersString = '';
+                    var filters = [];
 
-                    Ext.each(metadata.filters, function(filter, j, filters){
+                    permaObj[uuid] = {};
+                    permaObj[uuid].isVisible = isVisible;
+
+                    Ext.each(metadata.filters, function(filter) {
                         if(filter){
-                            filtersString += me.filterToPermalinkString(filter);
-                            if(j+1 < filters.length){
-                                filtersString += ';';
-                            }
+                            filters.push(me.filterToPermaObj(filter));
                         }
                     });
 
-                    layersString += Ext.String.format('{0}_{1}_{2}',
-                    uuid,
-                    isVisible,
-                    filtersString);
-
-                    if(i+1 < layers.length){
-                        layersString += ',';
-                    }
+                    permaObj[uuid].filters = filters;
                 });
+
+                layersString += JSON.stringify(permaObj);
             }
 
             var hash = Ext.String.format('map/{0}/{1}/{2}|layers/{3}',
@@ -355,39 +286,30 @@ Ext.define('Koala.util.Routing', {
         },
 
         /**
-         * Transforms the values of a layer metadata filter to an permalink
-         * expression.
-         * @param {Object} filter A layer metadat filter object.
-         * @return {String} The permalink expression.
+         * [filterToPermaObj description]
+         * @return {[type]} [description]
          */
-        filterToPermalinkString: function(filter) {
-            var permalinkString;
+        filterToPermaObj: function(filter){
+            var permaObj = {
+                    type: filter.type
+                };
+
             switch (filter.type) {
                 case "pointintime":
-                    var t = filter.effectivedatetime.getTime();
-                    permalinkString = 'pt{t' + t + '}';
+                    permaObj.effectivedatetime = filter.effectivedatetime.getTime();
                     break;
                 case "timerange":
-                    var s = filter.effectivemindatetime.getTime();
-                    var e = filter.effectivemaxdatetime.getTime();
-                    permalinkString = 'tr{s' + s + 'e' + e + '}';
+                    permaObj.effectivemindatetime = filter.effectivemindatetime.getTime();
+                    permaObj.effectivemaxdatetime = filter.effectivemaxdatetime.getTime();
                     break;
                 case "value":
-                    var value = filter.effectivevalue;
-                    var alias = filter.alias;
-                    var param = filter.param;
-
-                    if(alias === "Stil"){
-                        permalinkString = 'st{' + value + '}';
-                    } else if (param === "test_data") {
-                        permalinkString = 'at{' + param + '=true}';
-                    } else {
-                        permalinkString = 'at{' + alias + '=' + value + '}';
-                    }
+                    permaObj.effectivevalue = filter.effectivevalue;
+                    permaObj.alias = filter.alias;
+                    permaObj.param = filter.param;
                     break;
                 default:
             }
-            return permalinkString;
+            return permaObj;
         }
     }
 
