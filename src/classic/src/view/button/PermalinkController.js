@@ -34,6 +34,8 @@ Ext.define('Koala.view.button.PermalinkController', {
                 name: 'permalink-window',
                 title: this.getViewModel().get('windowTitle'),
                 layout: 'fit',
+                constrain: true,
+                maxWidth: Ext.getBody().getViewSize().width,
                 items: [{
                     xtype: 'k-form-permalink'
                 }]
