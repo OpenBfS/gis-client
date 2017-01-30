@@ -286,8 +286,9 @@ Ext.define('Koala.util.Routing', {
         },
 
         /**
-         * [filterToPermaObj description]
-         * @return {[type]} [description]
+         * Transforms the real layerfilters to smaller permalinkObjects.
+         * @param {Object} filter The filterobject from the layer metadata.
+         * @return {Object} The returned object contains just the needed values.
          */
         filterToPermaObj: function(filter){
             var permaObj = {
