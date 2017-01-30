@@ -24,6 +24,7 @@ var serve = spawn('node', [ serveScript ], spawnOptions);
 var test = spawn('node', [ testScript ], spawnOptions);
 
 // stop serving source code once the testsuite is closed
-test.on('close', function() {
+test.on('close', function(code) {
     serve.kill();
+    process.exit(code);
 });

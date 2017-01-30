@@ -25,5 +25,12 @@ var modernArguments = [
     'test/modern/index.html'
 ];
 
-spawn(mochaBinary, classicArguments, spawnOptions);
-spawn(mochaBinary, modernArguments, spawnOptions);
+var classic = spawn(mochaBinary, classicArguments, spawnOptions);
+if (classic.status !== 0) {
+    process.exit(classic.status);
+}
+
+var modern = spawn(mochaBinary, modernArguments, spawnOptions);
+if (modern.status !== 0) {
+    process.exit(modern.status);
+}
