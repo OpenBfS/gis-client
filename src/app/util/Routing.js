@@ -187,9 +187,7 @@ Ext.define('Koala.util.Routing', {
         /**
          * Called as handler for routes matching 'layers/:layers', but only if the
          * before handler #beforeLayerTreeRoute was able to create all required
-         * layers and store them in #routeCreatedLayers. This method splits the
-         * matched hash and adds the layers contained in the object in the correct
-         * order.
+         * layers and store them in #routeCreatedLayers.
          *
          * @param {String} layersString The has part that triggered the route and
          *     that looks like 'uuid:state,otheruuid:otherstate'
