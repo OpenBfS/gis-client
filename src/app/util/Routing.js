@@ -85,7 +85,7 @@ Ext.define('Koala.util.Routing', {
             var expectedLayers = 0;
             var gotLayers = 0;
             var routeCreatedLayers = {};
-            var permaObj = JSON.parse(layers);
+            var permaObj = JSON.parse(decodeURIComponent(layers));
 
             Ext.iterate(permaObj, function(uuid, config) {
                 if (Koala.util.String.isUuid(uuid)) {
@@ -197,7 +197,7 @@ Ext.define('Koala.util.Routing', {
          */
         onLayerTreeRoute: function(layersString){
             var me = Koala.util.Routing;
-            var permaObj = JSON.parse(layersString);
+            var permaObj = JSON.parse(decodeURIComponent(layersString));
 
             Ext.iterate(permaObj, function(uuid, config) {
 
@@ -274,6 +274,7 @@ Ext.define('Koala.util.Routing', {
                 });
 
                 layersString += JSON.stringify(permaObj);
+                layersString = encodeURIComponent(layersString);
             }
 
             var hash = Ext.String.format('map/{0}/{1}/{2}|layers/{3}',
