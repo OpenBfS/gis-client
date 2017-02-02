@@ -1,4 +1,4 @@
-/* Copyright (c) 2015     Marco Pochert, Bundesamt fuer Strahlenschutz
+/* Copyright (c) 2017 Bundesamt fuer Strahlenschutz
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,9 +43,6 @@ Ext.define("Koala.view.window.HelpWindow", {
 
     resizable: true,
     maximizable: true,
-    //TODO: implement minimize-function
-//    minimizable: true,
-//    constrain: true,
 
     //Navigation-Panel
     items: [{
@@ -53,10 +50,8 @@ Ext.define("Koala.view.window.HelpWindow", {
         region: 'west',
         width: 260,
         split: true,
-//        reference: 'treelistContainer',
         layout: {
             type: 'vbox'
-//            align: 'stretch'
         },
         border: false,
         items: [{
@@ -68,6 +63,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     },
     //Content
     {
+        xtype: 'panel',
         region: 'center',
         scrollable: 'vertical',
         bodyPadding: 10,
@@ -75,15 +71,16 @@ Ext.define("Koala.view.window.HelpWindow", {
             html: '{selectionHtml}'
         }
     }],
-    //select 'preface' at initialization
+
+    //select default node 'quick-reference'
     listeners:{
         afterlayout: function() {
-            var treelist = this.lookupReference('treelist'),
-            store = treelist.getStore(),
-            selection = treelist.getSelection();
+            var me = this,
+                treelist = me.lookupReference('treelist'),
+                store = treelist.getStore(),
+                selection = treelist.getSelection();
             if (store && !selection){
-                var node = treelist.getStore().getNodeById('select');
-                treelist.setSelection(node);
+                me.controller.setTopic('quickRef');
             }
         }
     }

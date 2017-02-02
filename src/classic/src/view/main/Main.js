@@ -105,6 +105,23 @@ Ext.define('Koala.view.main.Main', {
                         layout: 'fit',
                         minWidth: 250,
                         minHeight: 300,
+                        tools: [{
+                            type:'help',
+                            //TODO: move to app-locale
+                            tooltip: 'Hilfe',
+                            callback: function() {
+                                var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
+                                if(!helpWin){
+                                    helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                                    helpWin.on('afterlayout', function(helpWin) {
+                                        helpWin.controller.setTopic('profileSelection');
+                                    });
+                                } else {
+                                    BasiGX.util.Animate.shake(helpWin);
+                                    helpWin.controller.setTopic('profileSelection');
+                                }
+                            }
+                        }],
                         items: [{
                             xtype: 'k-panel-layersetchooser',
                             showLayerProfiles: true,
@@ -177,6 +194,23 @@ Ext.define('Koala.view.main.Main', {
                                 width: 500,
                                 height: 450,
                                 layout: 'fit',
+                                tools: [{
+                                    type:'help',
+                                    //TODO: move to app-locale
+                                    tooltip: 'Hilfe',
+                                    callback: function() {
+                                        var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
+                                        if(!helpWin){
+                                            helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                                            helpWin.on('afterlayout', function(helpWin) {
+                                                helpWin.controller.setTopic('toolsWms', 'tools');
+                                            });
+                                        } else {
+                                            BasiGX.util.Animate.shake(helpWin);
+                                            helpWin.controller.setTopic('toolsWms', 'tools');
+                                        }
+                                    }
+                                }],
                                 items: [{
                                     xtype: 'basigx-form-addwms',
                                     hasCheckAllBtn: true,

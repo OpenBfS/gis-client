@@ -47,6 +47,24 @@ Ext.define("Koala.view.window.Print", {
     layout: 'fit',
     bodyPadding: '10px',
 
+    tools: [{
+        type:'help',
+        //TODO: move to app-locale
+        tooltip: 'Hilfe',
+        callback: function() {
+            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
+            if(!helpWin){
+                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                helpWin.on('afterlayout', function(helpWin) {
+                    helpWin.controller.setTopic('toolsPrint', 'tools');
+                });
+            } else {
+                BasiGX.util.Animate.shake(helpWin);
+                helpWin.controller.setTopic('toolsPrint', 'tools');
+            }
+        }
+    }],
+
     constructor: function(){
         this.callParent(arguments);
 
