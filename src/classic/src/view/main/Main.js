@@ -220,6 +220,9 @@ Ext.define('Koala.view.main.Main', {
                         text: '{importLocalDataButtonText}',
                         tooltip: '{importLocalDataButtonTooltip}'
                     },
+                    listeners: {
+                        boxready: Koala.util.AppContext.generateCheckToolVisibility('importLocalDataBtn')
+                    },
                     handler: function(){
                             var win = Ext.ComponentQuery.query(
                                 '[name=add-wms-window]')[0];
