@@ -1,4 +1,4 @@
-/* Copyright (c) 2015     Marco Pochert, Bundesamt fuer Strahlenschutz
+/* Copyright (c) 2017 Bundesamt fuer Strahlenschutz
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,16 @@
  */
 Ext.define('Koala.view.window.HelpController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.k-window-help'
+    alias: 'controller.k-window-help',
 
+    setTopic: function(topic, parentOfTopic) {
+        var treelist = this.lookupReference('treelist'),
+            store = treelist.getStore(),
+            topicNode = store.getNodeById(topic);
+        if (parentOfTopic) {
+            var parentNode = store.getNodeById(parentOfTopic);
+            parentNode.expand();
+        }
+        treelist.setSelection(topicNode);
+    }
 });

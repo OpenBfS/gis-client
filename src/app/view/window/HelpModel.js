@@ -1,4 +1,4 @@
-/* Copyright (c) 2015     Marco Pochert, Bundesamt fuer Strahlenschutz
+/* Copyright (c) 2017 Bundesamt fuer Strahlenschutz
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ Ext.define('Koala.view.window.HelpModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-window-help',
 
-
     formulas: {
         selectionHtml: function(get) {
             var selection = get('treelist.selection'),
@@ -34,6 +33,7 @@ Ext.define('Koala.view.window.HelpModel', {
             }
         }
     },
+
     stores: {
         navItems: {
             type: 'tree',
@@ -43,11 +43,12 @@ Ext.define('Koala.view.window.HelpModel', {
                     content: '{preface.html}',
                     leaf: true
                 }, {
-                    id: 'select',
+                    id: 'quickRef',
                     text: '{quickRef.title}',
                     content: '{quickRef.html}',
                     leaf: true
                 }, {
+                    id: 'profileSelection',
                     text: '{profileSelection.title}',
                     content: '{profileSelection.html}',
                     leaf: true
@@ -64,13 +65,16 @@ Ext.define('Koala.view.window.HelpModel', {
                         leaf: true
                     }]
                 }, {
+                    id: 'tools',
                     text: '{tools.title}',
                     content: '{tools.html}',
                     children: [{
+                        id: 'toolsWms',
                         text: '{tools.wms.title}',
                         content: '{tools.wms.html}',
                         leaf: true
                     }, {
+                        id: 'toolsPrint',
                         text: '{tools.print.title}',
                         content: '{tools.print.html}',
                         leaf: true
@@ -128,6 +132,7 @@ Ext.define('Koala.view.window.HelpModel', {
                     content: '{legend.html}',
                     leaf: true
                 }, {
+                    id: 'geographicOverview',
                     text: '{geographicOverview.title}',
                     content: '{geographicOverview.html}',
                     leaf: true
