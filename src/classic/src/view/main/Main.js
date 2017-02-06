@@ -113,12 +113,14 @@ Ext.define('Koala.view.main.Main', {
                                 var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
                                 if(!helpWin){
                                     helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                                    helpWin.on('afterlayout', function(helpWin) {
-                                        helpWin.controller.setTopic('profileSelection');
+                                    helpWin.on('afterlayout', function() {
+                                        var helpWinController = this.getController();
+                                        helpWinController.setTopic('profileSelection');
                                     });
                                 } else {
                                     BasiGX.util.Animate.shake(helpWin);
-                                    helpWin.controller.setTopic('profileSelection');
+                                    var helpWinController = helpWin.getController();
+                                    helpWinController.setTopic('profileSelection');
                                 }
                             }
                         }],
@@ -202,12 +204,14 @@ Ext.define('Koala.view.main.Main', {
                                         var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
                                         if(!helpWin){
                                             helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                                            helpWin.on('afterlayout', function(helpWin) {
-                                                helpWin.controller.setTopic('toolsWms', 'tools');
+                                            helpWin.on('afterlayout', function() {
+                                                var helpWinController = this.getController();
+                                                helpWinController.setTopic('toolsWms', 'tools');
                                             });
                                         } else {
                                             BasiGX.util.Animate.shake(helpWin);
-                                            helpWin.controller.setTopic('toolsWms', 'tools');
+                                            var helpWinController = helpWin.getController();
+                                            helpWinController.setTopic('toolsWms', 'tools');
                                         }
                                     }
                                 }],
