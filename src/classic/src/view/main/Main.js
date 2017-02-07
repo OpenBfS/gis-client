@@ -163,7 +163,7 @@ Ext.define('Koala.view.main.Main', {
         menuConfig: {
             bodyPadding: 0,
             resizable: true,
-            resizeHandles: 'e',
+            resizeHandles: 's se e',
             minWidth: 220,
             maxWidth: 700,
             dockedItems: [{
@@ -296,7 +296,7 @@ Ext.define('Koala.view.main.Main', {
         legendPanelConfig: {
             xtype: 'k-panel-routing-legendtree',
             resizable: true,
-            resizeHandles: 'w',
+            resizeHandles: 'w nw n',
             collapsed: true,
             minWidth: 200,
             maxWidth: 700,
@@ -315,7 +315,6 @@ Ext.define('Koala.view.main.Main', {
             x: 300,
             y: 0,
             floating: true,
-            resizeHandles: 'se',
             resizable: true
         }]
     }],
