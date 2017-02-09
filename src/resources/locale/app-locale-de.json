@@ -383,15 +383,11 @@
                             "<ol>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'>"+
                                 "<li style='color:#157FCC; font-weight:bold'>Layer Profilwahl</li>"+
-                                    "<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich eine Hintergrundkarte geladen.</div>"+
+                                    "<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich sind beim Schließen des Fensters lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte OSM\" ersichtlich.</div>"+
                                 "<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
                                     "<div>In der Karte können Sie navigieren und die Informationen mit georäumlichen Bezug betrachten. Desweiteren sind die Daten der BfS-Geoobjekte abrufbar. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Klick man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereit stellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div>"+
                                 "<li style='color:#157FCC; font-weight:bold'>Werkzeuge</li>"+
-                                    "<div>Die Werkzeugleiste beinhaltet die Dienste:</div>"+
-                                    "<ul>"+
-                                        "<li>WMS (Web Map Service) einbinden</li>"+
-                                        "<li>Druckfunktion, zur Erstellung von thematischen Übersichtskarten in den Rastergrafiken BMP, GIF, PNG, TIF, TIFF, sowohl als PDF- oder IRIX-Datei</li>"+
-                                    "</ul>"+
+                                    "<div>Die Werkzeugleiste beinhaltet Dienste für das Hinzufügen externer Datenquellen.</div>"+
                                 "<li style='color:#157FCC; font-weight:bold'>Auswahl</li>"+
                                     "<div>Die \"Auswahl\" bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
                                     "<div>Das Hinzufügen eines Layers erfolgt mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</div>"+
@@ -401,17 +397,16 @@
                                     "<div>Folgende Einstellungen lassen sich für den gesamten Dienst vornehmen:</div>"+
                                 "<ul>"+
                                     "<li>Vollbild: Darstellung der Anwendung über den gesamten Bildschirm</li>"+
-                                    "<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale Zeit (mitteleuropäische Zeit MEZ) oder auf UTC (Coordinated Universal Time)</li>"+
+                                    "<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale Zeit (Systemzeit des PCs) oder auf UTC (Coordinated Universal Time)</li>"+
                                     "<li>Hilfe: Öffnet das Hilfefenster</li>"+
-                                    "<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE), Englisch (EN) oder Französisch (FR)</li>"+
+                                    "<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE) oder Englisch (EN)</li>"+
                                 "</ul>"+
                                 "<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
                                     "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
-                                    "<div>Desweiteren kann die Legende geöffnet werden.</div>"+
+                                    "<div>Desweiteren ist es möglich ein Permalink der Kartenansicht zu erzeugen. Die Legende öffnet sich beim Betätigen des untersten Schalters der Navigation.</div>"+
                                 "<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
-                                    "<div>Die Legende ermöglicht einzelne Layer darzustellen, als auch von der Ansicht zu entfernen.</div>"+
-                                    "<div>Informationen zu den jeweiligen Layern werden angezeigt. Layer lassen sich verschieben und werden entsprechend der Reihenfolge (von oben nach unten) auf der Karte hierarchisch dargestellt. Über einen Schieberegler kann die Transparenz gesteuert werden.</div>"+
-                                    "<div>Ferner ist es möglich, einzelne Layer zu speichern bzw. von der Legende zu entfernen.</div>"+
+                                    "<div>Die Legende umfasst die Layer, sprich thematischen Inhalte, die in der Karte angezeigt werden. Entsprechend ermöglicht dieser Punkt Einstellungen an der Kartenansicht vorzunehmen.</div>"+
+                                    "<div>Layer lassen sich ein- bzw. ausblenden, gänzlich entfernen, die Abfrage von Geoobjekten aktivieren bzw. deaktivieren und Filtereinstellungen zu ändern. Desweiteren ist es möglich die Zeichenreihenfolge durch Verschieben der Layer anzupassen.</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Geographische Übersicht</li>"+
                                     "<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht.</div>"+
                             "</ol>"
@@ -419,17 +414,7 @@
                 "profileSelection": {
                     "title": "1. Layer Profilwahl",
                     "html": "<h2> 1. Layer Profilwahl </h2>"+
-                            "<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich eine Hintergrundkarte geladen. Im Anschluss kann über die Auswahl, Layer manuell hinzugefügt werden.</div>"+
-                            "<h4>Zur Auswahl stehen die Profile:</h4>"+
-                            "<ul>"+
-                                "<li>IMIS - Bundesmessnetze Routine</li>"+
-                                "<li>IMIS - Bundesmessnetze intensiv</li>"+
-                                "<li>RODOS - Realtime Online Decision Support System</li>"+
-                                "<li>Nahrungsmittel</li>"+
-                                "<li>Futtermittel</li>"+
-                                "<li>GeoZG - Geodatenzugangsgesetz</li>"+
-                                "<li>INSPIRE - Infrastructure for Spatial Information in Europe</li>"+
-                            "</ul>"+
+                            "<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte OSM\" geladen. Anschluss kann über die Auswahl, Layer manuell hinzugefügt werden.</div>"+
                             "<div>Unterhalb der Profile lässt sich über die Eingabe innerhalb einer Filterleiste die Auswahl der Profile einschränken.</div><br />"+
                             "<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' style='max-height: 100%; max-width: 100%;'>"
                 },
@@ -465,11 +450,11 @@
                                 "<p>Grafik <i>2.2 Zeitreihen</i> zeigt, an Beispielen der Tagesmittelwerte von Ortsdosisleistungen, Zeitreihen von drei verschiedenen Stationen. Es können jederzeit Stationen entweder über das Anklicken eines Geoobjektes auf der Karte, oder über das Feld \"Serie hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingSerial.png' title='Auswahlfeld: Serie hinzufügen' alt='selectionBox_addingSerial.png' width='170' height='24' style='vertical-align:middle'>"+
                                 " ergänzt werden. In diesem Feld ist mithilfe einer Texteingabe möglich, direkt nach einem bestimmten Objekt zu suchen. Alternativ lassen sich sämtliche Serien über das <i>Pfeilsymbol</i> anzeigen.<br>"+
-                                "Das Lienendiagramm selbst kann durch Interaktion verändert werden. Hält man die linke <i>Maustaste</i> innerhalb des Diagramms gedrückt, kann ein Zoomfenster erzeugt werden. Entsprechend wird die x- und y-Achse auf die Auswahl eingestellt. Möchte man wieder herauszoomen, ist dies über den Schalter \"...zurückzoomen\" "+
+                                "Das Lienendiagramm selbst kann durch Interaktion verändert werden. Mit einem Doppelklick auf die linke <i>Maustaste</i> innerhalb des Diagramms, kann der Ausschnitt vergrößert werden. Entsprechend wird die x- und y-Achse auf die Auswahl eingestellt. Mit gedrückter linker <i>Maustaste</i> lässt sich innnerhalb des Diagramms die Ansicht verschieben. Möchte man wieder herauszoomen, ist dies über den Schalter \"...zurückzoomen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_zoomBack.png' title='Schalter: ...zurückzoomen' alt='button_zoomBack.png' width='114' height='24' style='vertical-align:middle'>"+
-                                " möglich. Einzelne Serien, beispielsweise \"Helgoland / Unterland\", können mit einem Klick auf die Diagrammlegende ein- bzw. ausgeschalten werden. Eine Serie kann auch gänzlich aus dem Diagramm entfernt werden. Hierzu wählt man eine Serie über die Diagrammlegende aus und betätigt anschließen den Schalter \"Serie entfernen\" "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_removeSerial.png' title='Schalter: Serie entfernen' alt='button_removeSerial.png' width='106' height='24' style='vertical-align:middle'>"+
-                                ".</p>"+
+                                " möglich. Alternativ lassen sich die Zoomfunktionen mit dem <i>Mausrad</i> steuern. Einzelne Serien, beispielsweise \"Helgoland / Unterland\", können mit einem Klick auf die Diagrammlegende ein- bzw. ausgeschalten werden. Eine Serie kann auch gänzlich aus dem Diagramm entfernt werden. Hierzu betätigt man den X-Schalter "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Schalter: Serie entfernen' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
+                                " neben der Layerbezeichnung.</p>"+
                                 "<p>Möchte man sich einen bestimmten Wert innerhalb des Diagramms einzeigen lassen, muss lediglich der <i>Mauszeiger</i> über die gewünschte Position bewegt werden.</p>"+
                                 "<p>Oberhalb des Liniendiagramms lässt sich die Darstellung über die Eingabe eines Start- und Enddatums präzisieren. Alternativ ist ein Datum über das Kalendersymbol "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Schalter: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
@@ -484,7 +469,9 @@
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_timeSeries.png' title='Zeitreihen' alt'graphic_timeSeries.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Zeitreihen</b>"+
                                 "</div><br />"+
-                                "<p>Die Balkendiagramme, zur Darstellung der Wertereihen, sind in Grafik <i>2.2 Wertereihen</i> dargestellt. Bewegt man den <i>Mauszeiger</i> über einen Balken, wird in einem Fenster der exakte Wert mit Einheit zur entsprechenden Serie angezeigt. Wie bei den Zeitreihen kann jede Serie über die Diagrammlegende ein- und ausgeschaltet werden. Die y-Achse passt sich jeweils an den maximalen Wert der verbleibenden Serien an. Grafik <i>2.2 Wertereihen</i> zeigt, wie demnach die Funktion für detailierte Analysen genutzt werden kann.</p>"+
+                                "<p>Die Balkendiagramme, zur Darstellung der Wertereihen, sind in Grafik <i>2.2 Wertereihen</i> dargestellt. Bewegt man den <i>Mauszeiger</i> über einen Balken, wird in einem Fenster der exakte Wert mit Einheit zur entsprechenden Serie angezeigt. Wie bei den Zeitreihen kann jede Serie über die Diagrammlegende ein- und ausgeschaltet werden (einzelne Serien lassen sich auch direkt über den X-Schalter "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Schalter: Serie entfernen' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
+                                " entfernen). Die y-Achse passt sich jeweils an den maximalen Wert der verbleibenden Serien an. Grafik <i>2.2 Wertereihen</i> zeigt, wie demnach die Funktion für detailierte Analysen genutzt werden kann.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_barChart.png' title='Wertereihen' alt'graphic_barChart.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Wertereihen</b>"+
@@ -555,7 +542,7 @@
                                 "<p>Das Menü ist in der Breite anpassbar. Bewegt man den <i>Mauszeiger</i> an den rechten Rand des Menüs, ändert sich das Symbol zu einem Doppelpfeil "+
                                 "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
                                 " und die Breite lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
-                                "<p>Jeder Layer befindet sich in einem Layer-Set, das eine fachliche Einteilung widerspiegelt. Dementsprechend sind Layer nach Themen untergliedert und können in mehreren Layer-Sets auftreten. Möchte man beispielsweise den Layer der Ortsdosisleistung brutto für 24h (ODL brutto 24h) der Karte hinzufügen, findet man diesen unter den Layer-Sets \"BFS-Messnetz\", sowie \"Ortsdosisleistung\".</p>"+
+                                "<p>Jeder Layer befindet sich in einem Layer-Set, das eine fachliche Einteilung widerspiegelt. Möchte man beispielsweise den Layer der Ortsdosisleistung brutto für 24h (ODL brutto 24h) der Karte hinzufügen, findet man diesen unter den Layer-Sets \"BFS-Messnetz\", sowie \"Ortsdosisleistung\".</p>"+
                                 "<p>Die Anordnung im Auswahlfenster entspricht der eines allgemeingebräuchlichen Dateisystems, mit Ordnern und Dateien. Die Layer-Sets entsprechen den Ordnern, während die Layer den Dateien gleich kommen. Möchte man einen Ordner ausklappen um sich die zugeordneten Layer anzeigen zu lassen, ist dies mit einem einfachen Klick auf das Plus-Symbol links neben des Ordnersymbols möglich. Alternativ kann auch ein Doppelklick auf die Ordnerbeschriftung ausgeführt werden.</p>"+
                                 "<p>Ein einfacher Klick auf die Layerbezeichnung öffnet ein layerspezifisches Fenster. Je nach Semantik des Layers beinhaltet ein Fenster gegebenenfalls Einstellungen um die Daten mithilfe eines Zeit- und/oder Wertefilters einzuschränken. Sofern ein Layer über keine Zeit- bzw. Wertefilter verfügt, enthält das Fenster lediglich einen Schalter für das Hinzufügen des entsprechenden Layers (siehe Grafik <i>4. layerspezifisches Fenster - Layer ohne Filter</i>).</p>"+
                                 "<div style='font-size:11px'>"+
@@ -573,7 +560,9 @@
                                 "<b>4. Arbeitsablauf der Layerauswahl</b>"+
                                 "</div><br />"+
                                 "<h3>Layer-Set Auswahl</h3>"+
-                                "<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe Grafik <i>4. Arbeitsablauf der Layer-Set Auswahl</i>). In der türkisfarbenen Leiste der  \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster das eine Auswahl an Layer-Sets beinhaltet, die mit einem repräsentativen Bild des entsprechenden Themas versehen sind. Klickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Desweiteren kann mit einem Doppelklick auf ein Thema die gesamten korrespondierenden Layer der Legende hinzugefügt werden. Im unteren Teil der \"Layer-Set Auswahl\" kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden.</p>"+
+                                "<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe Grafik <i>4. Arbeitsablauf der Layer-Set Auswahl</i>). In der türkisfarbenen Leiste der  \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster das eine Auswahl an Layer-Sets beinhaltet, die mit einem repräsentativen Bild des entsprechenden Themas versehen sind. Klickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Desweiteren kann mit einem Doppelklick auf ein Thema die gesamten korrespondierenden Layer der Legende hinzugefügt werden. Im unteren Teil der \"Layer-Set Auswahl\" kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden. Sofern die Auswahl an Layern eingegrenzt wurde, ist es möglich mithilfe des Schalters \"Alle Layer\" "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_allLayers.png' title='Schalter: Alle Layer' alt='button_allLayers.png' width='76' height='24' style='vertical-align:middle'>"+
+                                ", sich sämtliche Layer wieder anzeigen zu lassen.</p>"+
                                 "<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_layerSet_selection.png' title='Arbeitsablauf der Layer-Set Auswahl' alt='graphic_layerSet_selection.png' style='max-height: 100%; max-width: 100%;'><br>"+
@@ -626,7 +615,7 @@
                                 "<h2>6.2 Zeitbezug <img class='img' src='classic/resources/img/helpPage/button_settings_timeRef_utc.png' title='Schalter: Zeitbezug' alt='button_settings_timeRef_utc.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Der Zeitbezug ist standardmäßig auf <i>koordinierter Weltzeit - UTC</i> eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen.</p>"+
-                                "<p>Betätigt man den Schalter \"Zeitbezug (UTC)\" wird die Zeit auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt (siehe Grafik <i>6.2 Zeitbezug</i>). Das bedeutet im Einzelnen, dass die Uhrzeit vom PC-Standortes des Nutzers bezogen wird. Die lokale Uhrzeit bezieht sich lediglich auf die Anzeige des Klienten.</p>"+
+                                "<p>Betätigt man den Schalter \"Zeitbezug (UTC)\" wird die Zeit auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt (siehe Grafik <i>6.2 Zeitbezug</i>). Das bedeutet im Einzelnen, dass die Uhrzeit von der Systemzeit des PCs bezogen wird. Die lokale Uhrzeit bezieht sich lediglich auf die Anzeige des Klienten.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_timeRef.png' title='Zeitbezug' alt'graphic_timeRef.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>6.2 Zeitbezug</b>"+
@@ -646,7 +635,7 @@
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>6.4 Sprache <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Schalter: Sprache' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend kann mit einem Klick auf das referenzierte Kürzel die Sprache gewählt werden. Ein Klick auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"DE\" entspricht Deutsch, \"EN\" Englisch und \"FR\" Französisch.</p>"+
+                                "<p>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend kann mit einem Klick auf das referenzierte Kürzel die Sprache gewählt werden. Ein Klick auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"DE\" entspricht Deutsch und \"EN\" Englisch.</p>"+
                                 "<img class='img' src='classic/resources/img/helpPage/button_settings_language_all.png' title='Sprache' alt'button_settings_language_all.png' style='max-height: 100%; max-width: 100%;'>"+
                                 "</div>"
                         }
@@ -730,7 +719,16 @@
                             "<img class='img' src='classic/resources/img/helpPage/button_delete.png' title='Schalter: Layer löschen' alt='button_delete.png' width='24' height='24' style='vertical-align:middle'>"+
                             " sowie einen Schieberegler um die Transparenz eines Layers einstellen zu können "+
                             "<img class='img' src='classic/resources/img/helpPage/slider_transparent.png' title='Schieberegler: Transparenz des Layers einstellen' alt='slider_transparent.png' width='100' height='15' style='vertical-align:middle'>"+
+                            ". Verfügt ein Layer über Filtereinstellungen ist desweiteren ein Schalter für das Ändern von Filtereigenschaften vorhanden "+
+                            "<img class='img' src='classic/resources/img/helpPage/button_openFilter.png' title='Schalter: Filtereinstellungen' alt='button_openFilter.png' width='24' height='24' style='vertical-align:middle'>"+
                             ". Das Fenster der Metadaten beinhaltet Informationen der Layer-ID, Name, Quelle, Servicetyp sowie Typ des Layers. Falls Sie einen Layer speichern möchten, betätigen Sie den entsprechenden Schalter und bestätigen das Herunterladen mit \"Ja\" im Infofenster, das sich öffnet. Das Löschen eines Layers entfernt das Objekt aus der Legende und dementsprechend aus der Karte. Dies muss in einem Infofenster, das sich öffnet, ebenfalls bestätigt werden.</p>"+
+                            "<p>Am unteren Ende der Legende befinden sich Schalter die sämtliche Layer innerhalb der Legende betreffen. Demnach ist es möglich mit einem Klick alle Legenden aus- "+
+                            "<img class='img' src='classic/resources/img/helpPage/button_collapseAll_down.png' title='Schalter: Alle Legenden einklappen' alt='button_collapseAll_down.png' width='24' height='24' style='vertical-align:middle'>"+
+                            " bzw. einzuklappen "+
+                            "<img class='img' src='classic/resources/img/helpPage/button_collapseAll_up.png' title='Schalter: Alle Legenden ausklappen' alt='button_collapseAll_up.png' width='24' height='24' style='vertical-align:middle'>"+
+                            ". Betätigt man den Schalter mit dem Mülleimersymbol "+
+                            "<img class='img' src='classic/resources/img/helpPage/button_rubbishBin.png' title='Schalter: Alle Layer entfernen' alt='button_rubbishBin.png' width='24' height='24' style='vertical-align:middle'>"+
+                            ", werden alle Layer, mit Ausnahme der Standardlayer, aus der Legende und dementsprechend aus der Karte entfernt.</p>"+
                             "</div>"
                 },
                 "geographicOverview":{
