@@ -602,11 +602,22 @@ Ext.define('Koala.util.Filter', {
             );
             var startName = names.startName;
             var endName = names.endName;
-            var minField = fieldset.down('datefield[name="' + startName + '"]');
-            var maxField = fieldset.down('datefield[name="' + endName + '"]');
+
+            // Query for field types generally to be compatible with classic
+            // and modern. In classic the datefield, whereas in modern
+            // the datepickerfield, is used.
+            var minField = fieldset.down('field[name="' + startName + '"]');
+            var maxField = fieldset.down('field[name="' + endName + '"]');
 
             var startDate = minField.getValue();
             var endDate = maxField.getValue();
+
+            // In modern apps we need to add the time as the datepickerfield
+            // holds the date (with time 00:00:00) only.
+            if (Ext.isModern) {
+                startDate = staticMe.addHoursAndMinutes(startDate, field);
+                endDate = staticMe.addHoursAndMinutes(endDate, field);
+            }
 
             if (startDate > endDate) {
                 // Invalid: start value after end value
