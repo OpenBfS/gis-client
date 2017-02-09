@@ -642,9 +642,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var FilterUtil = Koala.util.Filter;
         var field = null;
         var sharedCfg = {
-            labelWidth: 70,
+            labelAlign: 'top',
             name: filter.param,
-            fieldLabel: filter.alias,
+            label: filter.alias,
             value: filter.effectivevalue || filter.defaultValue,
             emptyText: filter.defaultValue
         };
