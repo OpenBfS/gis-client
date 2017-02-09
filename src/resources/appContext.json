@@ -2,20 +2,15 @@
     "data": {
         "merge": {
             "urls": {
-                "metadata-xml2json": "http://bfs-koala.intranet.terrestris.de/geonetwork/srv/ger/xml_iso19139Tojson",
-                "metadata-search": "http://bfs-koala.intranet.terrestris.de/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://bfs-koala.intranet.terrestris.de/geoserver/BFS/ows",
-                "print-servlet": "http://bfs-koala.intranet.terrestris.de/print-servlet-3.3-SNAPSHOT/print/",
-
-                "metadata-xml2json": "http://10.133.7.63/geonetwork/srv/ger/xml_iso19139Tojson",
-                "metadata-search": "http://10.133.7.63/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://10.133.7.63/geoserver/BFS/ows",
-                "print-servlet": "http://10.133.7.63:8080/print-servlet-3.4-SNAPSHOT/print/",
+                "metadata-xml2json": "http://bfs-docker:18084/geonetwork/srv/ger/xml_iso19139Tojson",
+                "metadata-search": "http://bfs-docker:18084/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://bfs-docker:18085/geoserver/BFS/ows",
+                "print-servlet": "http://bfs-docker:18086/bfs-printservice/print/",
+                "irix-servlet": "http://bfs-docker:18087/irix-servlet",
 
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
 
-                "irix-servlet": "/irix-servlet",
                 "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
             },
             "application_user": {
