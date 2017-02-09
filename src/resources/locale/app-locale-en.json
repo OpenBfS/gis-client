@@ -882,7 +882,13 @@
                 "timestampLabel": "en:Zeitpunkt",
                 "buttonText": "en:Ausgewählten Layer hinzufügen",
                 "buttonTextNoFilter": "en:Ausgewählten Layer hinzufügen",
-                "buttonTextChangeFilter": "en:Filter auf Layer anwenden"
+                "valueFilter": "en:Wertefilter",
+                "timeRangeFilter": "en:Zeitraumfilter",
+                "pointInTimeFilter": "en:Zeitpunktfilter",
+                "buttonTextChangeFilter": "en:Filter auf Layer anwenden",
+                "minDateWarnMsg": "en:Das Datum in diesem Feld muss nach dem {0} liegen.",
+                "maxDateWarnMsg": "en:Das Datum in diesem Feld muss vor dem {0} liegen.",
+                "warnMsgDateFormat": "d.m.Y"
             }
         }
     },

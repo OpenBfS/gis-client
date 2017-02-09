@@ -860,7 +860,13 @@
                 "timestampLabel": "Zeitpunkt",
                 "buttonText": "Ausgewählten Layer hinzufügen",
                 "buttonTextNoFilter": "Ausgewählten Layer hinzufügen",
-                "buttonTextChangeFilter": "Filter auf Layer anwenden"
+                "valueFilter": "Wertefilter",
+                "timeRangeFilter": "Zeitraumfilter",
+                "pointInTimeFilter": "Zeitpunktfilter",
+                "buttonTextChangeFilter": "Filter auf Layer anwenden",
+                "minDateWarnMsg": "Das Datum in diesem Feld muss nach dem {0} liegen.",
+                "maxDateWarnMsg": "Das Datum in diesem Feld muss vor dem {0} liegen.",
+                "warnMsgDateFormat": "d.m.Y"
             }
         }
     },

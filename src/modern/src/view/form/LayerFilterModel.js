@@ -28,7 +28,10 @@ Ext.define('Koala.view.form.LayerFilterModel', {
         valueFilter: '',
         timeRangeFilter: '',
         pointInTimeFilter: '',
-        buttonTextChangeFilter: ''
+        buttonTextChangeFilter: '',
+        minDateWarnMsg: '',
+        maxDateWarnMsg: '',
+        warnMsgDateFormat: ''
     }
 
 });
