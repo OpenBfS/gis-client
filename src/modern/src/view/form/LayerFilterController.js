@@ -372,7 +372,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
                 .getViewModel();
         var FilterUtil = Koala.util.Filter;
-        var format = Koala.util.Date.ISO_FORMAT;
 
         var minValue;
         if (filter.mindatetimeinstant) {
@@ -414,27 +413,33 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var minClone = minValue ? Ext.Date.clone(minValue) : undefined;
         var maxClone = maxValue ? Ext.Date.clone(maxValue) : undefined;
 
-        var dateField = Ext.create("Ext.field.DatePicker", {
+        var dateField = Ext.create('Ext.field.DatePicker', {
+            type: 'pointintime',
             viewModel: me.getViewModel(),
             bind: {
-                label: "{timestampLabel}"
+                label: '{timestampLabel}'
             },
             labelAlign: 'top',
-            editable: false,
             name: filter.param,
             flex: 1,
             value: Ext.Date.clone(value),
+            // The configs minValue and maxValue are not existing in the modern
+            // datePicker, but the values will be used by our custom validator
+            // onChange.
             minValue: minClone,
             maxValue: maxClone,
             dateFormat: view.getFormat(),
-            submitFormat: format
+            listeners: {
+                change: me.validateDatePickerChange,
+                scope: me
+            }
         });
 
         var hourSpinner = FilterUtil.getSpinner(
-            filter, "hours", "hourspinner", value
+            filter, 'hours', 'hourspinner', value
         );
         var minuteSpinner = FilterUtil.getSpinner(
-            filter, "minutes", "minutespinner", value
+            filter, 'minutes', 'minutespinner', value
         );
 
         hourSpinner.setWidth('50%');
@@ -446,15 +451,18 @@ Ext.define('Koala.view.form.LayerFilterController', {
             items: [hourSpinner, minuteSpinner]
         };
 
-        var container = Ext.create("Ext.Container", {
-            name: "pointintimecontainer",
+        var container = Ext.create('Ext.Container', {
+            name: 'pointintimecontainer',
             items: [dateField, timeContainer]
         });
 
-        var fieldSet = Ext.create("Ext.form.FieldSet", {
+        var fieldSet = Ext.create('Ext.form.FieldSet', {
             viewModel: me.getViewModel(),
             padding: 5,
             filterIdx: idx,
+            bind: {
+                title: '{pointInTimeFilter}'
+            },
             items: [container]
         });
         view.add(fieldSet);
@@ -472,7 +480,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
                 .getViewModel();
         var FilterUtil = Koala.util.Filter;
-        var format = Koala.util.Date.ISO_FORMAT;
         var param = filter.param;
 
         var names = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
@@ -525,31 +532,32 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var maxClone = maxValue ? Ext.Date.clone(maxValue) : undefined;
 
         // --- MINIMUM ---
-        var minDateField = Ext.create("Ext.field.DatePicker", {
+        var minDateField = Ext.create('Ext.field.DatePicker', {
+            type: 'timerange-min',
             viewModel: me.getViewModel(),
             bind: {
-                label: "{startLabel}"
+                label: '{startLabel}'
             },
             labelAlign: 'top',
             name: startName,
-            editable: false,
             flex: 1,
             value: Ext.Date.clone(startValue),
+            // The configs minValue and maxValue are not existing in the modern
+            // datePicker, but the values will be used by our custom validator
+            // onChange.
             minValue: minClone,
             maxValue: maxClone,
             dateFormat: view.getFormat(),
-            submitFormat: format,
-            validator: FilterUtil.validateMaxDurationTimerange,
-            msgTarget: "under",
             listeners: {
-                validitychange: FilterUtil.revalidatePartnerField
+                change: me.validateDatePickerChange,
+                scope: me
             }
         });
         var minHourSpinner = FilterUtil.getSpinner(
-            filter, "hours", "minhourspinner", startValue
+            filter, 'hours', 'minhourspinner', startValue
         );
         var minMinuteSpinner = FilterUtil.getSpinner(
-            filter, "minutes", "minminutespinner", startValue
+            filter, 'minutes', 'minminutespinner', startValue
         );
 
         minHourSpinner.setWidth('50%');
@@ -561,37 +569,38 @@ Ext.define('Koala.view.form.LayerFilterController', {
             items: [minHourSpinner, minMinuteSpinner]
         };
 
-        var minContainer = Ext.create("Ext.Container", {
-            name: "mintimecontainer",
+        var minContainer = Ext.create('Ext.Container', {
+            name: 'mintimecontainer',
             items: [minDateField, minTimeContainer]
         });
 
         // --- MAXIMUM ---
-        var maxDateField = Ext.create("Ext.field.DatePicker", {
+        var maxDateField = Ext.create('Ext.field.DatePicker', {
+            type: 'timerange-max',
             viewModel: me.getViewModel(),
-            name: endName,
-            editable: false,
             bind: {
-                label: "{endLabel}"
+                label: '{endLabel}'
             },
             labelAlign: 'top',
+            name: endName,
             flex: 1,
             value: Ext.Date.clone(endValue),
+            // The configs minValue and maxValue are not existing in the modern
+            // datePicker, but the values will be used by our custom validator
+            // onChange.
             minValue: minClone,
             maxValue: maxClone,
             dateFormat: view.getFormat(),
-            submitFormat: format,
-            validator: FilterUtil.validateMaxDurationTimerange,
-            msgTarget: 'under',
             listeners: {
-                validitychange: FilterUtil.revalidatePartnerField
+                change: me.validateDatePickerChange,
+                scope: me
             }
         });
         var maxHourSpinner = FilterUtil.getSpinner(
-            filter, "hours", "maxhourspinner", endValue
+            filter, 'hours', 'maxhourspinner', endValue
         );
         var maxMinuteSpinner = FilterUtil.getSpinner(
-            filter, "minutes", "maxminutespinner", endValue
+            filter, 'minutes', 'maxminutespinner', endValue
         );
 
         maxHourSpinner.setWidth('50%');
@@ -603,13 +612,16 @@ Ext.define('Koala.view.form.LayerFilterController', {
             items: [maxHourSpinner, maxMinuteSpinner]
         };
 
-        var maxContainer = Ext.create("Ext.Container", {
-            name: "maxtimecontainer",
+        var maxContainer = Ext.create('Ext.Container', {
+            name: 'maxtimecontainer',
             items: [maxDateField, maxTimeContainer]
         });
 
-        var fieldSet = Ext.create("Ext.form.FieldSet", {
+        var fieldSet = Ext.create('Ext.form.FieldSet', {
             viewModel: me.getViewModel(),
+            bind: {
+                title: '{timeRangeFilter}'
+            },
             padding: 5,
             filter: filter,
             filterIdx: idx,
@@ -649,10 +661,13 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         field = Ext.apply(field, sharedCfg);
 
-        var fieldSet = Ext.create("Ext.form.FieldSet", {
+        var fieldSet = Ext.create('Ext.form.FieldSet', {
             viewModel: me.getViewModel(),
             padding: 5,
             filterIdx: idx,
+            bind: {
+                title: '{valueFilter}'
+            },
             items: field
         });
         view.add(fieldSet);
@@ -668,6 +683,66 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @param {Number} idx The index of the filter in the list of all filters.
      */
     createRODOSFilter: function(){
+    },
+
+    /**
+     * Validates the user input on a datefield picker. If the input is invalid,
+     * it resets the value to the previous (and valid) value and shows a simple
+     * toast with an warn message.
+     *
+     * @param {Ext.field.DatePicker} field The datefield picker this validator
+     *                                     is bound to.
+     * @param {Date} newDate The new date.
+     * @param {Date} oldDate The old date.
+     */
+    validateDatePickerChange: function(field, newDate, oldDate) {
+        var me = this;
+        var viewModel = me.getViewModel();
+        var minValue = field.minValue;
+        var maxValue = field.maxValue;
+
+        // Only proceed if the field is rendered
+        if (!field.isRendered()) {
+            return;
+        }
+
+        var minDateWarnMsg = viewModel.get('minDateWarnMsg');
+        var maxDateWarnMsg = viewModel.get('maxDateWarnMsg');
+        var dateFormat = viewModel.get('warnMsgDateFormat');
+        var readableMinDate = Ext.Date.format(minValue, dateFormat);
+        var readableMaxDate = Ext.Date.format(maxValue, dateFormat);
+
+        // Check if the input value is larger than the accepted minimum
+        if (newDate < minValue) {
+            Ext.toast(Ext.String.format(
+                    minDateWarnMsg,
+                    readableMinDate
+            ));
+            field.setValue(oldDate);
+            return;
+        }
+
+        // Check if the input value is smaller than the accepted maximum
+        if (newDate > maxValue) {
+            Ext.toast(Ext.String.format(
+                    maxDateWarnMsg,
+                    readableMaxDate
+            ));
+            field.setValue(oldDate);
+            return;
+        }
+
+        // Check if the current time range fits into the accepted range (only
+        // needed if we were called from a timerange field)
+        if (field.type === 'timerange-min' || field.type === 'timerange-max') {
+            var isValid = Koala.util.Filter.validateMaxDurationTimerange
+                    .call(field);
+            if (Ext.isString(isValid)) {
+                Ext.toast(isValid);
+                field.setValue(oldDate);
+                return;
+            }
+        }
     },
 
     addWithoutFilterBtn: function() {
