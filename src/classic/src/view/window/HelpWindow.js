@@ -48,6 +48,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     items: [{
         xtype: 'panel',
         region: 'west',
+        scrollable: 'vertical',
         width: 260,
         split: true,
         layout: {

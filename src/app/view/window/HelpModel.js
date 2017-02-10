@@ -123,6 +123,10 @@ Ext.define('Koala.view.window.HelpModel', {
                         content: '{mapNavigation.initMapView.html}',
                         leaf: true
                     }, {
+                        text: '{mapNavigation.permaLink.title}',
+                        content: '{mapNavigation.permaLink.html}',
+                        leaf: true
+                    }, {
                         text: '{mapNavigation.openLegend.title}',
                         content: '{mapNavigation.openLegend.html}',
                         leaf: true
