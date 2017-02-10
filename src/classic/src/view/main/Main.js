@@ -164,6 +164,7 @@ Ext.define('Koala.view.main.Main', {
             bodyPadding: 0,
             resizable: true,
             resizeHandles: 's se e',
+            constrain: true,
             minWidth: 220,
             maxWidth: 700,
             dockedItems: [{
@@ -296,6 +297,7 @@ Ext.define('Koala.view.main.Main', {
         legendPanelConfig: {
             xtype: 'k-panel-routing-legendtree',
             resizable: true,
+            constrain: true,
             resizeHandles: 'w nw n',
             collapsed: true,
             minWidth: 200,
