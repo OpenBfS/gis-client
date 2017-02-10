@@ -165,20 +165,33 @@ Ext.define('Koala.view.form.LayerFilterController', {
             var selector = "[filterIdx='" + idx +"']";
             var fieldset = view.down(selector);
             if (fieldset) {
-                var fields = fieldset.query('field, multiselect');
+                var fields = fieldset.query('field, list');
                 var keyVals = {};
 
                 Ext.each(fields, function(field) {
-                    var key = field.getName();
-                    if (!Ext.Array.contains(view.ignoreFields, key)) {
-                        var val = field.getValue();
-                        if (Ext.isDate(val)) {
-                            // we have to add hours & minutes, the date field
-                            // has precision DAY:
-                            val = FilterUtil.addHoursAndMinutes(val, field);
-                            val = me.adjustToUtcIfNeeded(val);
+                    var key;
+                    if (field instanceof Ext.dataview.List) {
+                        var selections = field.getSelections();
+                        // The list component has no property name and therefore
+                        // no getter.
+                        key = field.name;
+                        keyVals[key] = [];
+                        var valField = FilterUtil.COMBO_VAL_FIELD;
+                        Ext.each(selections, function(selection) {
+                            keyVals[key].push(selection.get(valField));
+                        });
+                    } else {
+                        key = field.getName();
+                        if (!Ext.Array.contains(view.ignoreFields, key)) {
+                            var val = field.getValue();
+                            if (Ext.isDate(val)) {
+                                // we have to add hours & minutes, the date field
+                                // has precision DAY:
+                                val = FilterUtil.addHoursAndMinutes(val, field);
+                                val = me.adjustToUtcIfNeeded(val);
+                            }
+                            keyVals[key] = val;
                         }
-                        keyVals[key] = val;
                     }
                 });
                 filters = me.updateFilterValues(filters, idx, keyVals);
@@ -661,6 +674,16 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         field = Ext.apply(field, sharedCfg);
 
+        if (field.xtype === 'list') {
+            // Set the label
+            field.items[0].label = field.label;
+            // Set the default values and enforce selection
+            field.listeners = {
+                painted: me.selectEffectiveValues,
+                selectionchange: me.forceListSelection
+            };
+        }
+
         var fieldSet = Ext.create('Ext.form.FieldSet', {
             viewModel: me.getViewModel(),
             padding: 5,
@@ -670,6 +693,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             },
             items: field
         });
+
         view.add(fieldSet);
     },
 
@@ -683,6 +707,45 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @param {Number} idx The index of the filter in the list of all filters.
      */
     createRODOSFilter: function(){
+    },
+
+    /**
+     * Selects the effective values of a list in the representing view.
+     *
+     * @param {Ext.dom.Element} element The list element this listener is
+     *                                  bound to.
+     */
+    selectEffectiveValues: function(element) {
+        var list = element.component;
+        var listStore = list.getStore();
+        var values = list.value;
+        var valField = Koala.util.Filter.COMBO_VAL_FIELD;
+        var records = [];
+
+        listStore.each(function(record) {
+            Ext.each(values, function(value) {
+                if (record.get(valField) === value) {
+                    records.push(record);
+                }
+            });
+        });
+
+        list.select(records);
+    },
+
+    /**
+     * Forces at least a single active selection in a list component.
+     *
+     * @param {Ext.dataview.List} list The list component this listener is
+     *                                 bound to.
+     * @param {Ext.data.Model} record The record that selection has been
+     *                                changed.
+     */
+    forceListSelection: function(list, record) {
+        var selectionCnt = list.getSelectionCount();
+        if (selectionCnt < 1) {
+            list.select(record);
+        }
     },
 
     /**

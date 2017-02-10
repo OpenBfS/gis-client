@@ -173,12 +173,12 @@ Ext.define('Koala.util.Filter', {
             var combo;
             var xtype;
 
-            if(!Ext.isModern){ // classic
-                xtype = multi ? "multiselect" : "combo";
+            if (!Ext.isModern) { // classic
+                xtype = multi ? 'multiselect' : 'combo';
                 combo = {
                     xtype: xtype,
                     store: store,
-                    queryMode: "local",
+                    queryMode: 'local',
                     editable: false,
                     allowBlank: true,
                     forceSelection: true,
@@ -186,16 +186,31 @@ Ext.define('Koala.util.Filter', {
                     valueField: staticMe.COMBO_VAL_FIELD
                 };
             } else { // modern
-                combo = {
-                    xtype: "selectfield",
-                    store: store,
-                    queryMode: "local",
-                    editable: false,
-                    usePicker: true,
-                    allowBlank: true,
-                    displayField: staticMe.COMBO_DSP_FIELD,
-                    valueField: staticMe.COMBO_VAL_FIELD
-                };
+                if (multi) {
+                    // If multi selection is allowed, we return a list view.
+                    combo = {
+                        xtype: 'list',
+                        store: store,
+                        mode: 'MULTI',
+                        itemTpl: '{' + staticMe.COMBO_DSP_FIELD + '}',
+                        items: [{
+                            // The list view itself doesn't contain a label,
+                            // therefore we insert a basic field that can be
+                            // labeled.
+                            xtype: 'field'
+                        }]
+                    };
+                } else {
+                    combo = {
+                        xtype: 'selectfield',
+                        store: store,
+                        queryMode: 'local',
+                        editable: false,
+                        allowBlank: true,
+                        displayField: staticMe.COMBO_DSP_FIELD,
+                        valueField: staticMe.COMBO_VAL_FIELD
+                    };
+                }
             }
 
             return combo;
