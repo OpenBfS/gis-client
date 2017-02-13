@@ -252,6 +252,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var chartSize = me.getChartSize();
         var barWidth;
 
+        var labelFunc = view.getLabelFunc() || staticMe.identity;
+
         var shapeConfig = view.getShape();
         var xField = 'key';
         var yField = 'value';
@@ -311,7 +313,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     });
 
         var bars = d3.selectAll(viewId + ' .k-d3-bar');
-        var labelFunc = view.getLabelFunc() || staticMe.identity;
 
         bars.append('text')
             .filter(function(d) {
@@ -320,13 +321,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .text(function(d) {
                 return labelFunc(d[yField], d);
             })
-            .attr('x', function(d) {
-                return me.scales[orientX](d[xField]);
+            .attr('transform', function(d) {
+                return me.getBarLabelTransform(d, orientX, orientY, xField,
+                        yField, barWidth);
             })
-            .attr('y', function(d) {
-                return me.scales[orientY](d[yField]);
-            })
-            .attr('transform', 'translate(' + (barWidth / 2) + ', -5)')
             .attr('text-anchor', 'middle')
             // TODO make configurable. Generic from css config
             .style('font-family', 'sans-serif')
@@ -334,6 +332,54 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .style('fill', '#000')
             .style('font-weight', 'bold')
             .style('unselectable', 'on');
+
+        if (shapeConfig.rotateBarLabel) {
+            bars.selectAll('text')
+                .filter(function(d) {
+                    return me.shapeFilter(d, orientY, yField);
+                })
+                .attr('transform', function(d) {
+                    var labelTransform = me.getBarLabelTransform(d, orientX,
+                            orientY, xField, yField, barWidth);
+                    return labelTransform + ' rotate(-90)';
+                })
+                .attr('dy', function(d, idx, el) {
+                    var textElHeight = el[0].clientHeight;
+                    return textElHeight / 4;
+                })
+                .attr('dx', function(d, idx, el) {
+                    if (shapeConfig.showLabelInsideBar) {
+                        var textElWidth = el[0].clientWidth;
+                        return (textElWidth + 5) * -1;
+                    } else {
+                        return 0;
+                    }
+                })
+                .style('text-anchor', 'start');
+        }
+    },
+
+    /**
+     * Returns the translate string for a single bar label.
+     *
+     * @param  {Object} d        The current data object to create the label
+     *                           for.
+     * @param  {String} orientX  The x axis orientation.
+     * @param  {String} orientY  The y axis orientation.
+     * @param  {String} xField   The data index field (inside the given data
+     *                           object) for the x axis.
+     * @param  {String} yField   The data index field (inside the given data
+     *                           object) for the y axis.
+     * @param  {Number} barWidth The bar width.
+     * @return {String}          The translate sting.
+     */
+    getBarLabelTransform: function(d, orientX, orientY, xField, yField, barWidth) {
+        var me = this;
+        var chartSize = me.getChartSize();
+        var translateX = me.scales[orientX](d[xField]) + (barWidth / 2);
+        var translateY = me.scales[orientY](d[yField]) - 5 || chartSize[1];
+
+        return 'translate(' + translateX + ', ' + translateY + ')';
     },
 
     /**

@@ -192,7 +192,10 @@ Ext.define('Koala.view.component.D3BarChart',{
                     curve: DEFAULTS.LEFT_AXIS_CURVE,
                     id: olFeat.get('id'),
                     color: chartConfig.colorSequence,
-                    tooltipTpl: chartConfig.tooltipTpl
+                    tooltipTpl: chartConfig.tooltipTpl,
+                    rotateBarLabel: Koala.util.String.coerce(chartConfig.rotateBarLabel),
+                    // Note: No public config yet.
+                    showLabelInsideBar: false
                 },
                 grid: {
                     show: Koala.util.String.coerce(chartConfig.showGrid),
