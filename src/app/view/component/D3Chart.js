@@ -232,8 +232,8 @@ Ext.define('Koala.view.component.D3Chart',{
                         tickValues: yAxisTickValues,
                         tickSize: chartConfig.tickSize,
                         tickPadding: chartConfig.tickPadding,
-                        min: chartConfig.yAxisMin,
-                        max: chartConfig.yAxisMax
+                        min: Koala.util.String.coerce(chartConfig.yAxisMin),
+                        max: Koala.util.String.coerce(chartConfig.yAxisMax)
                     },
                     bottom: {
                         scale: chartConfig.xAxisScale,
