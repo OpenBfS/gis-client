@@ -276,7 +276,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 })
                 .append('rect')
                 .filter(function(d) {
-                    return (Ext.isDefined(d[yField]) && !d.hidden);
+                    return me.shapeFilter(d, orientY, yField);
                 })
                     .style('fill', function(d) {
                         return d.color || staticMe.getRandomColor();
@@ -295,41 +295,87 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     .on('mouseover', function(data) {
                         var tooltipCmp = me.tooltipCmp;
                         var tooltipTpl = shapeConfig.tooltipTpl;
-                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, {
-                            xAxisAttribute: data[xField],
-                            yAxisAttribute: data[yField]
-                        });
-                        html = Koala.util.String.replaceTemplateStrings(html, data);
-                        html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
-                        tooltipCmp.setHtml(html);
-                        tooltipCmp.setTarget(this);
-                        tooltipCmp.show();
+
+                        // Only proceed and show tooltip if a tooltipTpl is
+                        // given in the chartConfig.
+                        if (tooltipTpl) {
+                            var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, {
+                                xAxisAttribute: data[xField],
+                                yAxisAttribute: data[yField]
+                            });
+                            html = Koala.util.String.replaceTemplateStrings(html, data);
+                            html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
+                            tooltipCmp.setHtml(html);
+                            tooltipCmp.setTarget(this);
+                            tooltipCmp.show();
+                        }
                     });
 
         var bars = d3.selectAll(viewId + ' .k-d3-bar');
         var labelFunc = view.getLabelFunc() || staticMe.identity;
 
-        bars.append("text")
+        bars.append('text')
             .filter(function(d) {
-                return (Ext.isDefined(d[yField]) && !d.hidden);
+                return me.shapeFilter(d, orientY, yField);
             })
-            .text(function(d){
+            .text(function(d) {
                 return labelFunc(d[yField], d);
             })
-            .attr("x", function(d) {
-                 return me.scales[orientX](d[xField]);
+            .attr('x', function(d) {
+                return me.scales[orientX](d[xField]);
             })
-            .attr("y", function(d) {
-                 return me.scales[orientY](d[yField]);
+            .attr('y', function(d) {
+                return me.scales[orientY](d[yField]);
             })
             .attr('transform', 'translate(' + (barWidth / 2) + ', -5)')
-            .attr("text-anchor", "middle")
+            .attr('text-anchor', 'middle')
             // TODO make configurable. Generic from css config
-            .style("font-family", "sans-serif")
-            .style("font-size", "11px")
-            .style("fill", "#000")
-            .style("font-weight", "bold")
-            .style("unselectable", "on");
+            .style('font-family', 'sans-serif')
+            .style('font-size', '11px')
+            .style('fill', '#000')
+            .style('font-weight', 'bold')
+            .style('unselectable', 'on');
+    },
+
+    /**
+     * Checks if the given chart data object has to be drawn in the chart or not.
+     *
+     * @param  {Object} d The current data object to filter against.
+     * @param  {String} orientY The identifier for the y orientation,
+     *                          typically 'left'.
+     * @param  {String} yField The identifier for the value field, typically
+     *                         'value'.
+     * @return {Boolean} Wheather to filter the data object or not.
+     */
+    shapeFilter: function(d, orientY, yField) {
+        var me = this;
+        var view = me.getView();
+        var axisScale = view.getAxes()[orientY].scale;
+
+        // Skip, if the value is not defined.
+        if (!(Ext.isDefined(d[yField]))) {
+            return false;
+        }
+
+        // Skip, if we have a logarithmic axis scale and a value
+        // of 0.
+        if (axisScale === 'log' && d[yField] === 0) {
+            return false;
+        }
+
+        // If the current value is negative (considering the
+        // current minimum axis value), we must also skip.
+        if ((d[yField] - view.getAxes()[orientY].min) < 0) {
+            return false;
+        }
+
+        // And also skip, if the data object is set to hidden.
+        if (d.hidden) {
+            return false;
+        }
+
+        // All others may pass.
+        return true;
     },
 
     /**
