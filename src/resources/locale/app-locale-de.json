@@ -381,18 +381,18 @@
                             "<div>Nachfolgend wird eine kurze Übersicht der Anwendung dargestellt. Für eine detailierte Erläuterung der einzelnen Funktionalitäten, navigieren Sie bitte durch das Inhaltsverzeichnis auf der linken Seite und klicken auf das gewünschte Themenfeld.</div>"+
                             "<h4>Die Oberfläche ist in folgende Bereiche gegliedert:</h4>"+
                             "<ol>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'>"+
+                                "<div><img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Layer Profilwahl</li>"+
-                                    "<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich sind beim Schließen des Fensters lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte OSM\" ersichtlich.</div>"+
+                                    "<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich sind beim Schließen des Fensters lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte OSM\" ersichtlich.</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
-                                    "<div>In der Karte können Sie navigieren und die Informationen mit georäumlichen Bezug betrachten. Desweiteren sind die Daten der BfS-Geoobjekte abrufbar. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Klick man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereit stellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div>"+
+                                    "<div>In der Karte können Sie navigieren und die Informationen mit georäumlichen Bezug betrachten. Desweiteren sind die Daten der BfS-Geoobjekte abrufbar. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Klick man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereit stellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Werkzeuge</li>"+
-                                    "<div>Die Werkzeugleiste beinhaltet Dienste für das Hinzufügen externer Datenquellen.</div>"+
+                                    "<div>Die Werkzeugleiste beinhaltet Dienste für das Hinzufügen externer Datenquellen.</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Auswahl</li>"+
                                     "<div>Die \"Auswahl\" bietet die Möglichkeit einzelne Layer zur Darstellung in die Legende zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
-                                    "<div>Das Hinzufügen eines Layers erfolgt mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</div>"+
+                                    "<div>Das Hinzufügen eines Layers erfolgt mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Multisuchleiste</li>"+
-                                    "<div>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS.</div>"+
+                                    "<div>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS.</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Einstellungen</li>"+
                                     "<div>Folgende Einstellungen lassen sich für den gesamten Dienst vornehmen:</div>"+
                                 "<ul>"+
@@ -400,10 +400,10 @@
                                     "<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale Zeit (Systemzeit des PCs) oder auf UTC (Coordinated Universal Time)</li>"+
                                     "<li>Hilfe: Öffnet das Hilfefenster</li>"+
                                     "<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE) oder Englisch (EN)</li>"+
-                                "</ul>"+
+                                "</ul><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
                                     "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
-                                    "<div>Desweiteren ist es möglich ein Permalink der Kartenansicht zu erzeugen. Die Legende öffnet sich beim Betätigen des untersten Schalters der Navigation.</div>"+
+                                    "<div>Desweiteren ist es möglich ein Permalink der Kartenansicht zu erzeugen. Die Legende öffnet sich beim Betätigen des untersten Schalters der Navigation.</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
                                     "<div>Die Legende umfasst die Layer, sprich thematischen Inhalte, die in der Karte angezeigt werden. Entsprechend ermöglicht dieser Punkt Einstellungen an der Kartenansicht vorzunehmen.</div>"+
                                     "<div>Layer lassen sich ein- bzw. ausblenden, gänzlich entfernen, die Abfrage von Geoobjekten aktivieren bzw. deaktivieren und Filtereinstellungen zu ändern. Desweiteren ist es möglich die Zeichenreihenfolge durch Verschieben der Layer anzupassen.</div><br />"+
@@ -414,7 +414,7 @@
                 "profileSelection": {
                     "title": "1. Layer Profilwahl",
                     "html": "<h2> 1. Layer Profilwahl </h2>"+
-                            "<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich wird beim Schließen des Fensters lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte OSM\" geladen. Anschluss kann über die Auswahl, Layer manuell hinzugefügt werden.</div>"+
+                            "<div>Dieses Auswahlfenster ermöglicht vordefinierte Layer-Sets in die Karte zu laden. Das Fenster öffnet sich beim initialen Laden der Seite. Ein Profil auszuwählen ist nicht erforderlich um die Anwendung zu starten. Folglich werden beim Schließen des Fensters lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte OSM\" geladen.</div>"+
                             "<div>Unterhalb der Profile lässt sich über die Eingabe innerhalb einer Filterleiste die Auswahl der Profile einschränken.</div><br />"+
                             "<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' style='max-height: 100%; max-width: 100%;'>"
                 },
@@ -879,7 +879,7 @@
                 "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br />Vorbemerkung",
                 "helpPrefaceHtml": "Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen.<br>Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur Überwachung der Umweltradioaktivität“ (IMIS) betroffen.<br>Seit <b>2018</b> basiert die aktuelle Applikation auf Strategien der KOALA (<i>Komponenten-orientierte Architektur mit langfristiger Ausrichtung</i>)-Entwicklungszyklen. Das Hauptaugenmerk richtet sich hierbei auf die Modularisierung der einzelnen Softwarekomponenten.<br><b><i>...Informationen zur Open Source-Strategie? Link zum Repository?</i></b>",
                 "helpQuickRefTitle": "Schnellübersicht",
-                "helpQuickRefHtml": "<img class='img' src='modern/resources/img/helpPage/mobile_graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'><br />"+
+                "helpQuickRefHtml": "<div><img class='img' src='modern/resources/img/helpPage/mobile_graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
                             "<ol>"+
                             "<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
                                 "<div>In der Karte können Sie mit Fingergesten navigieren und die Informationen mit georäumlichen Bezug betrachten. Darüber hinaus sind die Daten der BfS-Geoobjekte abrufbar. Tippt man auf eine entsprechende Geometrie, sind Zeit- bzw. Wertereihen in einem separaten Reiter zum jeweiligen Objekt ersichtlich. Hierbei ist darauf zu achten, dass das Diagrammsymbol des entsprechenden Layers in der Legende auf aktiv gesetzt ist (aktiv: "+
@@ -893,7 +893,7 @@
                                 "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div><br />"+
                             "<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
                                 "<div>Die Legende umfasst die Layer, sprich thematischen Inhalte, die in der Karte angezeigt werden. Entsprechend ermöglicht dieser Punkt Einstellungen an der Kartenansicht vorzunehmen.</div>"+
-                                "<div>Layer lassen sich ein- bzw. ausblenden, gänzlich entfernen, die Abfrage von Geoobjekten aktivieren bzw. deaktivieren und Filtereinstellungen zu ändern. Desweiteren ist es möglich die Zeichenreihenfolge per <i>Drag & Drop</i> der Layer anzupassen.</div><br />"+
+                                "<div>Layer lassen sich ein- bzw. ausblenden, gänzlich entfernen, die Abfrage von Geoobjekten aktivieren bzw. deaktivieren und Filtereinstellungen zu ändern. Desweiteren ist es möglich die Zeichenreihenfolge per <i>Drag & Drop</i> der Layer anzupassen.</div>"+
                             "</ol>",
                 "helpMapTitle": "1. Karte",
                 "helpMapHtml": "<p>In der Karte können Sie navigieren und die Informationen mit georäumlichen Bezug betrachten. Desweiteren sind die Daten der BfS-Geoobjekte abrufbar.</p>"+
