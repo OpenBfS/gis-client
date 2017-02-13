@@ -223,7 +223,8 @@ Ext.define('Koala.view.component.D3BarChart',{
                         labelColor: chartConfig.labelColor,
                         labelSize: chartConfig.labelSize,
                         tickSize: chartConfig.tickSize,
-                        tickPadding: chartConfig.tickPadding
+                        tickPadding: chartConfig.tickPadding,
+                        rotateXAxisLabel: StringUtil.coerce(chartConfig.rotateXAxisLabel)
                     }
                 },
                 legend: {

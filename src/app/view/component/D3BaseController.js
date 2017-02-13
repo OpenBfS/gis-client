@@ -51,6 +51,10 @@ Ext.define('Koala.view.component.D3BaseController', {
             LEGEND_CONTAINER: 'k-d3-scrollable-legend-container',
             DELETE_ICON: 'k-d3-delete-icon',
 
+            AXIS_LABEL: 'k-d3-axis-label',
+            AXIS_LABEL_X: 'k-d3-axis-label-x',
+            AXIS_LABEL_Y: 'k-d3-axis-label-y',
+
             PREFIX_IDX_SHAPE_GROUP: 'shape-group-',
             PREFIX_IDX_SHAPE_PATH: 'shape-path-',
             PREFIX_IDX_SHAPE_POINT_GROUP: 'shape-points-',
@@ -606,17 +610,20 @@ Ext.define('Koala.view.component.D3BaseController', {
             var axisTransform;
             var labelTransform;
             var labelPadding;
-            var cssClass;
+            var cssAxisClass;
+            var cssLabelClass;
 
             if (orient === 'top' || orient === 'bottom') {
-                cssClass = CSS.AXIS + ' ' + CSS.AXIS_X;
+                cssAxisClass = CSS.AXIS + ' ' + CSS.AXIS_X;
+                cssLabelClass = CSS.AXIS_LABEL + ' ' + CSS.AXIS_LABEL_X;
                 axisTransform = (orient === 'bottom') ?
                         makeTranslate(0, chartSize[1]) : undefined;
 
                 labelTransform = makeTranslate(chartSize[0] / 2, 0);
                 labelPadding = axisConfig.labelPadding || 35;
             } else if (orient === 'left' || orient === 'right') {
-                cssClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
+                cssAxisClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
+                cssLabelClass = CSS.AXIS_LABEL + ' ' + CSS.AXIS_LABEL_Y;
                 axisTransform = (orient === 'right') ?
                         makeTranslate(chartSize[0], 0) : undefined;
                 var translate = makeTranslate(chartSize[1] / -2, 0);
@@ -626,13 +633,14 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             d3.select(viewId + ' svg > g')
                 .append('g')
-                    .attr('class', cssClass)
+                    .attr('class', cssAxisClass)
                     .attr('transform', axisTransform)
                     .call(me.axes[orient])
                 .append('text')
                     .attr('transform', labelTransform)
                     .attr('dy', labelPadding)
                     .attr('fill', axisConfig.labelColor || '#000')
+                    .attr('class', cssLabelClass)
                     .style('text-anchor', 'middle')
                     .style('font-weight', 'bold')
                     .style('font-size', axisConfig.labelSize || 12)
@@ -688,7 +696,8 @@ Ext.define('Koala.view.component.D3BaseController', {
                 .attr('transform', axisTransform)
                 .call(axisGenerator);
 
-            axis.select('text[transform]')
+            // Redraw the axis label
+            axis.select('.' + CSS.AXIS_LABEL)
                 .transition()
                 .attr('transform', labelTransform);
         });

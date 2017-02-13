@@ -28,7 +28,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
     axes: {},
     gridAxes: {},
     tooltipCmp: null,
-    // zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
     chartRendered: false,
