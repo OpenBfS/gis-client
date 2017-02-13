@@ -242,6 +242,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var makeDomainNice = true;
             var min;
             var max;
+
             if (Ext.isDefined(axis.min)) {
                 min = Koala.util.String.coerce(axis.min);
                 makeDomainNice = false; // if one was given, don't auto-enhance
@@ -250,6 +251,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 max = Koala.util.String.coerce(axis.max);
                 makeDomainNice = false; // if one was given, don't auto-enhance
             }
+
             // We have to check if min and max make sense in relation to
             // the scale; 0 doesn't make sense if scale is logarithmic
             if (axis.scale === "log" && (min === 0 || max === 0)) {

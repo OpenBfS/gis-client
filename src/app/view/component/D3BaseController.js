@@ -649,7 +649,7 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
-     * Redraws all axis.
+     * Redraws all axes.
      */
     redrawAxes: function() {
         var me = this;
@@ -917,8 +917,7 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
-     * [deleteTitle description]
-     * @return {[type]} [description]
+     * Removes the title of the chart.
      */
     deleteTitle: function() {
         var me = this;
