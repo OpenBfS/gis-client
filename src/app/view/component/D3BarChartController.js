@@ -155,34 +155,79 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     setDomainForScales: function() {
         var me = this;
+        var view = me.getView();
 
-        // iterate over all scales/axis orientations and all shapes to find the
+        // Iterate over all scales/axis orientations and all shapes to find the
         // corresponding data index for each scale. Set the extent (max/min range
         // in this data index) for each scale.
         Ext.iterate(me.scales, function(orient) {
-            if (orient === 'top' || orient === 'bottom') {
-                var topBottomDomain = me.data.map(function(d) {
+            var axis = view.getAxes()[orient];
+            var axisDomain;
+            var makeDomainNice = true;
+            var min;
+            var max;
+
+            if (axis.scale === 'ordinal') {
+                axisDomain = me.data.map(function(d) {
                     return d.key;
                 });
-                me.scales[orient].domain(topBottomDomain);
-            } else if (orient === 'left' || orient === 'right') {
-                var minOffsetTopFactor = 0.1; // was 0.05 ~ val/20
-                var min = 0;
-                var max = d3.max(me.data, function(d) {
-                    if (d.hidden) {
-                        return;
+                me.scales[orient].domain(axisDomain);
+            } else {
+                var dataRange = d3.extent(me.data, function(d) {
+                    if (!d.hidden) {
+                        return d.value;
                     }
-                    return d.value + d.value * minOffsetTopFactor;
                 });
-                // max = Math.ceil(max);
-                me.scales[orient].domain([min, max]);
+
+                if (Ext.isDefined(axis.min)) {
+                    min = Koala.util.String.coerce(axis.min);
+                    makeDomainNice = false; // if one was given, don't auto-enhance
+                } else {
+                    min = dataRange[0];
+                }
+                if (Ext.isDefined(axis.max)) {
+                    max = Koala.util.String.coerce(axis.max);
+                    makeDomainNice = false; // if one was given, don't auto-enhance
+                } else {
+                    max = dataRange[1];
+                }
+
+                if (Ext.isDefined(min) && Ext.isDefined(max)) {
+                    // We're basically done for this axis, both min and max were
+                    // given. We need to iterate over the data nonetheless, so as to
+                    // extend the minimim and maximum in case of outliers.
+                    axisDomain = [min, max];
+                } else {
+                    axisDomain = [dataRange[0], dataRange[1]];
+                }
+
+                // We have to check if min and max make sense in relation to
+                // the scale; 0 doesn't make sense if scale is logarithmic.
+                if (axis.scale === 'log' &&
+                        (axisDomain[0] === 0 || axisDomain[1] === 0)) {
+                    Ext.log.warn('Correcting min/max value for y-axis as ' +
+                        'logarithmic scales don\'t work with 0');
+                    if (axisDomain[0] === 0) {
+                        axisDomain[0] = 0.00000001;
+                    }
+                    if (axisDomain[1] === 0) {
+                        axisDomain[1] = 0.00000001;
+                    }
+                }
+
+                // Actually set the domain
+                if (axisDomain) {
+                    var domain = me.scales[orient].domain(axisDomain);
+                    if (makeDomainNice) {
+                        domain.nice();
+                    }
+                }
             }
         });
     },
 
     /**
-     * [redrawShapes description]
-     * @return {[type]} [description]
+     * Redraws the shapeGroup containg all shapes (bars in this case).
      */
     redrawShapes: function() {
         var me = this;
