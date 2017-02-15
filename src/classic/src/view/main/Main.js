@@ -272,6 +272,25 @@ Ext.define('Koala.view.main.Main', {
                                         title: '{importLocalDataButtonText}'
                                     },
                                     layout: 'fit',
+                                    tools: [{
+                                        type:'help',
+                                        //TODO: move to app-locale
+                                        tooltip: 'Hilfe',
+                                        callback: function() {
+                                            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
+                                            if(!helpWin){
+                                                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                                                helpWin.on('afterlayout', function() {
+                                                    var helpWinController = this.getController();
+                                                    helpWinController.setTopic('toolsImport', 'tools');
+                                                });
+                                            } else {
+                                                BasiGX.util.Animate.shake(helpWin);
+                                                var helpWinController = helpWin.getController();
+                                                helpWinController.setTopic('toolsImport', 'tools');
+                                            }
+                                        }
+                                    }],
                                     items: [{
                                         xtype: 'k-form-importLocalData'
                                     }]

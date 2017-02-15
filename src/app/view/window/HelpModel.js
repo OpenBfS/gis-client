@@ -53,13 +53,16 @@ Ext.define('Koala.view.window.HelpModel', {
                     content: '{profileSelection.html}',
                     leaf: true
                 }, {
+                    id: 'map',
                     text: '{map.title}',
                     content: '{map.html}',
                     children: [{
+                        id: 'mapOverview',
                         text: '{map.overview.title}',
                         content: '{map.overview.html}',
                         leaf: true
                     }, {
+                        id: 'mapGeoObjects',
                         text: '{map.geoObjects.title}',
                         content: '{map.geoObjects.html}',
                         leaf: true
