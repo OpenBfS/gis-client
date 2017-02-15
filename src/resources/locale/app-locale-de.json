@@ -479,11 +479,11 @@
                                 "</div>"
                     }
                 },
-                "tools":{
+                "tools": {
                     "title": "3. Werkzeuge",
                     "html": "<h2>3. Werkzeuge</h2>"+
                             "<div>Die Werkzeugleiste befindet sich im linken oberen Eck unterhalb des BfS-Logos. Ein Klick auf den entsprechenden Schalter öffnet den jeweiligen Dienst der nachfolgend näher erläutert ist (navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt).</div><br />",
-                    "wms":{
+                    "wms": {
                         "title": "3.1 WMS Dienst",
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>3.1 WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26' style='vertical-align:middle'> </h2>"+
@@ -508,7 +508,7 @@
                                 "</div>"+
                                 "</div>"
                         },
-                    "print":{
+                    "print": {
                         "title": "3.2 Druckdienst",
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>3.2 Druckdienst <img class='img' src='classic/resources/img/helpPage/button_print.png' title='Print-Button' alt='button_print.png' width='103' height='27' style='vertical-align:middle'> </h2>"+
@@ -532,7 +532,13 @@
                                 "<h3>IRIX - International Radiation Information eXchange</h3>"+
                                 "<br /><p><b>-TODO-</b></p>"+
                                 "</div>"
-                        }
+                        },
+                    "import": {
+                        "title": "3.3 Import",
+                        "html": "<hr style='color:#157FCC' />"+
+                                "<h2>3.3 Import <img class='img' src='classic/resources/img/helpPage/button_import.png' title='Import-Button' alt='button_import.png' width='71' height='24' style='vertical-align:middle'> </h2>"+
+                                "<div>- TODO -</div>"
+                    }
                 },
                 "layerSelection": {
                     "title": "4. Auswahl",

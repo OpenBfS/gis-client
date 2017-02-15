@@ -552,7 +552,13 @@
                                 "<h3>IRIX - International Radiation Information eXchange</h3>"+
                                 "<br /><p><b>-TODO-</b></p>"+
                                 "</div>"
-                        }
+                        },
+                    "import": {
+                        "title": "fr:3.3 Import",
+                        "html": "<hr style='color:#157FCC' />"+
+                                "<h2>3.3 Import <img class='img' src='classic/resources/img/helpPage/button_import.png' title='Import-Button' alt='button_import.png' width='71' height='24' style='vertical-align:middle'> </h2>"+
+                                "<div>fr:- TODO -</div>"
+                    }
                 },
                 "layerSelection": {
                     "title": "fr:4. Auswahl",

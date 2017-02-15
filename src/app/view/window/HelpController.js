@@ -31,8 +31,7 @@ Ext.define('Koala.view.window.HelpController', {
             tools.removeChild(store.getNodeById('toolsPrint'));
         }
         if(!Koala.util.AppContext.hasTool('importLocalDataBtn')){
-            console.log("-TODO-");
-            //tools.removeChild(store.getNodeById('toolsImport'));
+            tools.removeChild(store.getNodeById('toolsImport'));
         }
     },
     setTopic: function(topic, parentOfTopic) {

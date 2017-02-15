@@ -78,6 +78,11 @@ Ext.define('Koala.view.window.HelpModel', {
                         text: '{tools.print.title}',
                         content: '{tools.print.html}',
                         leaf: true
+                    }, {
+                        id: 'toolsImport',
+                        text: '{tools.import.title}',
+                        content: '{tools.import.html}',
+                        leaf: true
                     }]
                 }, {
                     text: '{layerSelection.title}',
