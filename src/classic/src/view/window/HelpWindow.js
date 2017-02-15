@@ -81,7 +81,9 @@ Ext.define("Koala.view.window.HelpWindow", {
                 store = treelist.getStore(),
                 selection = treelist.getSelection();
             if (store && !selection){
-                me.controller.setTopic('quickRef');
+                var winController = me.getController();
+                winController.removeTopicByTools();
+                winController.setTopic('quickRef');
             }
         }
     }

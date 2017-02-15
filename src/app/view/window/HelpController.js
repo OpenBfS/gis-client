@@ -20,6 +20,21 @@ Ext.define('Koala.view.window.HelpController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-help',
 
+    removeTopicByTools: function() {
+        var treelist = this.lookupReference('treelist'),
+            store = treelist.getStore(),
+            tools = store.getNodeById('tools');
+        if (!Koala.util.AppContext.hasTool('addWmsBtn')){
+            tools.removeChild(store.getNodeById('toolsWms'));
+        }
+        if (!Koala.util.AppContext.hasTool('printBtn')){
+            tools.removeChild(store.getNodeById('toolsPrint'));
+        }
+        if(!Koala.util.AppContext.hasTool('importLocalDataBtn')){
+            console.log("-TODO-");
+            //tools.removeChild(store.getNodeById('toolsImport'));
+        }
+    },
     setTopic: function(topic, parentOfTopic) {
         var treelist = this.lookupReference('treelist'),
             store = treelist.getStore(),
