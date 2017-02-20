@@ -17,7 +17,7 @@ SENCHA_CMD="/opt/$SENCHA_CMD_VERSION/sencha"
 
 cd $WORKSPACE/src/
 
-$SENCHA_CMD app upgrade $SCRIPT_DIR/ext-$EXTJS_VERSION
+$SENCHA_CMD app upgrade $WORKSPACE/ext-$EXTJS_VERSION
 $SENCHA_CMD app clean
 $SENCHA_CMD app build
 
