@@ -87,12 +87,8 @@ Ext.define("Koala.view.window.MetadataInfo", {
          * the locale files.
          */
         fieldNames: {
-            type: "",
-            name: "",
             fileIdentifier: "",
             abstract: "",
-            serviceType: "",
-            source: "",
             contact: ""
         }
     },

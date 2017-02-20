@@ -22,28 +22,6 @@ Ext.define('Koala.model.MetadataRecord', {
     ],
     extend: 'Ext.data.Model',
     fields: [{
-        name: 'type',
-        mapping: function(data){
-            var path = [
-                'gmd:hierarchyLevel',
-                'gmd:MD_ScopeCode',
-                '@codeListValue'
-            ];
-            var val = Koala.util.Object.getPathOr(data, path, 'bfs');
-            return val;
-        }
-    }, {
-        name: 'fileIdentifier',
-        mapping: function(data){
-            var path = [
-                'gmd:fileIdentifier',
-                'gco:CharacterString',
-                '#text'
-            ];
-            var val = Koala.util.Object.getPathOr(data, path);
-            return val;
-        }
-    }, {
         name: 'name',
         mapping: function(dataRec){
             var val;
@@ -68,6 +46,17 @@ Ext.define('Koala.model.MetadataRecord', {
             return val;
         }
     }, {
+        name: 'fileIdentifier',
+        mapping: function(data){
+            var path = [
+                'gmd:fileIdentifier',
+                'gco:CharacterString',
+                '#text'
+            ];
+            var val = Koala.util.Object.getPathOr(data, path);
+            return val;
+        }
+    }, {
         name: 'abstract',
         mapping: function(dataRec){
             var val;
@@ -85,48 +74,59 @@ Ext.define('Koala.model.MetadataRecord', {
             return val;
         }
     }, {
-        name: 'serviceType',
-        mapping: function(dataRec){
-            var val;
-            if (dataRec.type === "service") {
-                val = Koala.util.Object.getPathStrOr(
-                    dataRec,
-                    'gmd:identificationInfo/srv:SV_ServiceIdentification/srv:serviceTypeVersion/gco:CharacterString/#text'
-                );
-            } else {
-                val = null;
-            }
-            return val;
-        }
-    }, {
-        name: 'source',
-        mapping: function(dataRec){
-            var val;
-            if (dataRec.type === "service") {
-                var tmp = Koala.util.Object.getPathStrOr(
-                    dataRec,
-                    'gmd:identificationInfo/srv:SV_ServiceIdentification/srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint/gmd:CI_OnlineResource/gmd:linkage/gmd:URL'
-                );
-                val = tmp.split('?')[0];
-            } else {
-                val = null;
-            }
-            return val;
-        }
-    }, {
         name: 'contact',
+        //TODO: make the function great again (not quick and dirty)
         mapping: function(dataRec){
-            var val;
+            var val,
+                pathRespParty = "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty",
+                pathAddress = pathRespParty+'/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address';
             if (dataRec.type === "service") {
                 val = Koala.util.Object.getPathStrOr(
                     dataRec,
                     'gmd:identificationInfo/srv:SV_ServiceIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString/#text'
                 );
             } else {
-                val = Koala.util.Object.getPathStrOr(
+                val = "<div>";
+                val += Koala.util.Object.getPathStrOr(
                     dataRec,
-                    'gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString/#text'
+                    pathRespParty+'/gmd:organisationName/gco:CharacterString/#text'
                 );
+                val += "</div><div>";
+                val += Koala.util.Object.getPathStrOr(
+                    dataRec,
+                    pathAddress+'/gmd:deliveryPoint/gco:CharacterString/#text'
+                );
+                val += "</div><div>";
+                val += Koala.util.Object.getPathStrOr(
+                    dataRec,
+                    pathAddress+'/gmd:postalCode/gco:CharacterString/#text'
+                );
+                val += " ";
+                val += Koala.util.Object.getPathStrOr(
+                    dataRec,
+                    pathAddress+'/gmd:city/gco:CharacterString/#text'
+                );
+                val += "</div><div>";
+                val += Koala.util.Object.getPathStrOr(
+                    dataRec,
+                    pathAddress+'/gmd:country/gco:CharacterString/#text'
+                );
+                val += "</div><div>Email: ";
+                val += Koala.util.Object.getPathStrOr(
+                    dataRec,
+                    pathAddress+'/gmd:electronicMailAddress/gco:CharacterString/#text'
+                );
+                val += "</div><br /><div>";
+                val += Koala.util.Object.getPathStrOr(
+                    dataRec,
+                    pathRespParty+'/gmd:individualName/gco:CharacterString/#text'
+                );
+                val += ": ";
+                val += Koala.util.Object.getPathStrOr(
+                    dataRec,
+                    pathRespParty+'/gmd:positionName/gco:CharacterString/#text'
+                );
+                val += "</div>";
             }
             return val;
         }

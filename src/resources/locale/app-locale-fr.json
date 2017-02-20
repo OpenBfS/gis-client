@@ -316,12 +316,8 @@
         },
         "statics": {
             "fieldNames": {
-                "type": "fr:Typ",
-                "name": "fr:Name",
                 "fileIdentifier": "fr:ID",
                 "abstract": "fr:Abstract",
-                "serviceType": "fr:Servicetyp",
-                "source": "fr:Quelle",
                 "contact": "fr:Kontakt"
             }
         }
