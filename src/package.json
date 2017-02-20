@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "Koala",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Koala WebGIS",
   "scripts": {
     "pretest": "npm run lint",
@@ -23,8 +23,8 @@
     "clean": "npm run rm-coverage-tmp-dirs && npm run rm-coverage && rm -rf apidoc && rm -rf build/*"
   },
   "repository": {
-    "type": "mercurial",
-    "url": "https://redmine-koala.bfs.de/hg/gis_client/"
+    "type": "git",
+    "url": "https://redmine-koala.bfs.de/scm/git/gis_client"
   },
   "author": "terrestris GmbH & Co. KG <info@terrestris.de>",
   "license": "gpl-3",
