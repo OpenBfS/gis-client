@@ -53,8 +53,8 @@ Ext.define('Koala.view.component.MapController', {
                     // just add any further series to the existing window
                     timeSeriesWin.getController().updateTimeSeriesChart(layer, olFeat);
                 }
-            // Open new BarchartWindow for each featuere. Move if overlapping.
-            } else if (Koala.util.Layer.isBarChartLayer(layer)) {
+            // Open new BarchartWindow for each feature. Move if overlapping.
+            } if (Koala.util.Layer.isBarChartLayer(layer)) {
                 if(barChartWin){
                     var faktor = olFeats.length - index;
                     var x = barChartWin.getX() - 30 * faktor;
