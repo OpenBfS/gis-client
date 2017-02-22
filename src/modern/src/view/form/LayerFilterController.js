@@ -455,9 +455,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
             viewModel: me.getViewModel(),
             padding: 5,
             filterIdx: idx,
-            bind: {
-                title: "{pointInTimeFilter}"
-            },
             items: [container]
         });
         view.add(fieldSet);
@@ -613,9 +610,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         var fieldSet = Ext.create("Ext.form.FieldSet", {
             viewModel: me.getViewModel(),
-            bind: {
-                title: "{timeRangeFilter}"
-            },
             padding: 5,
             filter: filter,
             filterIdx: idx,
@@ -659,9 +653,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
             viewModel: me.getViewModel(),
             padding: 5,
             filterIdx: idx,
-            bind: {
-                title: "{valueFilter}"
-            },
             items: field
         });
         view.add(fieldSet);

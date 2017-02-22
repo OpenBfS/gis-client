@@ -882,9 +882,6 @@
                 "timestampLabel": "fr:Zeitpunkt",
                 "buttonText": "fr:Ausgewählten Layer hinzufügen",
                 "buttonTextNoFilter": "fr:Ausgewählten Layer hinzufügen",
-                "valueFilter": "fr:Wertefilter",
-                "timeRangeFilter": "fr:Zeitraumfilter",
-                "pointInTimeFilter": "fr:Zeitpunktfilter",
                 "buttonTextChangeFilter": "fr:Filter auf Layer anwenden"
             }
         }

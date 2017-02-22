@@ -236,9 +236,6 @@ Ext.define("Koala.view.form.LayerFilter", {
             padding: 5,
             layout: "anchor",
             filterIdx: idx,
-            bind: {
-                title: "{pointInTimeFilter}"
-            },
             items: [container]
         });
         me.add(fieldSet);
@@ -400,9 +397,6 @@ Ext.define("Koala.view.form.LayerFilter", {
             layout: "anchor",
             filter: filter,
             filterIdx: idx,
-            bind: {
-                title: "{timeRangeFilter}"
-            },
             items: [minContainer, maxContainer]
         });
         me.add(fieldSet);
@@ -444,9 +438,6 @@ Ext.define("Koala.view.form.LayerFilter", {
             },
             layout: "anchor",
             filterIdx: idx,
-            bind: {
-                title: "{valueFilter}"
-            },
             items: field
         });
         this.add(fieldSet);
