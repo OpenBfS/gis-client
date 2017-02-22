@@ -20,36 +20,80 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-grid-spatialsearch',
 
+    /**
+     * The handler for the mouse enter event of a grid record.
+     * @param {Koala.view.grid.SpatialSearch} grid The grid.
+     * @param {Koala.model.SpatialRecord} record A record of the spatialsearch
+     *                                           grid.
+     */
     onItemMouseEnter: function(grid, record){
         var store = grid.getStore();
         var layer = store.layer;
-        var format = new ol.format.WKT();
-        var wkt = record.get('wkt');
-        var feature = format.readFeature(wkt);
+        var feature = this.getFeatureFromRecord(record);
+
         layer.getSource().addFeature(feature);
     },
 
+    /**
+     * The handler for the mouse enter event of a grid record.
+     * @param {Koala.view.grid.SpatialSearch} grid The grid.
+     *
+     */
     onItemMouseLeave: function(grid){
         var store = grid.getStore();
         var layer = store.layer;
         layer.getSource().clear();
     },
 
+    /**
+     * The handler for the clickevent of a grid record.
+     * @param {Koala.view.grid.SpatialSearch} grid The grid.
+     * @param {Koala.model.SpatialRecord} record A record of the spatialsearch
+     *                                           grid.
+     */
     onItemClick: function(grid, record){
         var store = grid.getStore();
-        var format = new ol.format.WKT();
-        var wkt = record.get('wkt');
-        var feature = format.readFeature(wkt);
         var map = store.map;
         var view = map.getView();
-
+        var feature = this.getFeatureFromRecord(record);
         var extent = feature.getGeometry().getExtent();
+
         view.fit(extent, map.getSize());
     },
 
     // TODO onStoreBeforeload / onStoreLoad / setupStatusLineListeners and
     //      teardownStatusLineListeners are the same in the
     //      MetadataSearchController.
+
+    /**
+     * Find a wkt or geometry inside of an grid record and returns a corresponding
+     * feature;
+     * @param {Koala.model.SpatialRecord} record A record of the spatialsearch
+     *                                           grid.
+     * @return {ol.Feature} The feature contained in this record.
+     */
+    getFeatureFromRecord: function(record) {
+      var store = this.getView().getStore();
+      var map = store.map;
+      var view = map.getView();
+      var wkt = record.get('wkt');
+      var geom = record.get('geometry');
+      var format;
+      var feature;
+
+      if(wkt){
+        format = new ol.format.WKT();
+        feature = format.readFeature(wkt);
+      } else if (geom) {
+        format = new ol.format.GeoJSON({
+          geometryName: record.get('geometry_name') || 'the_geom',
+          featureProjection: view.getProjection()
+        });
+        feature = format.readFeature(record.getData());
+      }
+
+      return feature;
+    },
 
     /**
      * Before the store loads, we'll show the footer of the grid which contains

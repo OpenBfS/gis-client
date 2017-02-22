@@ -4,7 +4,7 @@
             "urls": {
                 "metadata-xml2json": "http://bfs-docker:18084/geonetwork/srv/ger/xml_iso19139Tojson",
                 "metadata-search": "http://bfs-docker:18084/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://bfs-docker:18085/geoserver/BFS/ows",
+                "spatial-search": "http://bfs-docker:18085/geoserver/bfs/ows",
                 "print-servlet": "http://bfs-docker:18086/bfs-printservice/print/",
                 "irix-servlet": "http://bfs-docker:18087/irix-servlet",
 
@@ -21,8 +21,8 @@
             "metadataSearchFields": ["title", "abstract"],
             "spatialSearchTypeName": "BFS:verwaltung_4326_geozg_sort",
             "spatialSearchFields": {
-                "searchColumn": "name",
-                "geomColumn": "geom"
+                "searchColumn": "NAME",
+                "geomColumn": "the_geom"
             },
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
