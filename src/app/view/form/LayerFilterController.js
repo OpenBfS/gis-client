@@ -294,5 +294,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
         Ext.each(utcBtns, function(utcBtn) {
             utcBtn.un('toggle', me.handleTimereferenceButtonToggled, me);
         });
+
+        //deselect ThemeTreeItems
+        me.deselectThemeTreeItems();
     }
 });
