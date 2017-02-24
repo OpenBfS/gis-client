@@ -258,7 +258,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             },
             bodyPadding: 5,
             height: '100%',
-            width: 150,
+            width: 180,
             items: [{
                 text: viewModel.get('undoBtnText'),
                 xtype: 'button',
