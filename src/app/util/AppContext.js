@@ -24,6 +24,20 @@ Ext.define('Koala.util.AppContext', {
         'BasiGX.view.component.Map'
     ],
     statics: {
+
+        /**
+         * Get the map context from a given map. If no map is given the map will
+         * be guessed via BasiGX.view.component.Map.guess().
+         * @param {BasiGX.view.component.Map} mapComponent A BasiGX mapComponent
+         * @return {Object} The matched AppContext.
+         */
+        getAppContext: function(mapComponent){
+          if(!mapComponent){
+            mapComponent = BasiGX.view.component.Map.guess();
+          }
+          return mapComponent.appContext;
+        },
+
         /**
          * Returns a callback that can be used to check and change the
          * visibility of a tool.
