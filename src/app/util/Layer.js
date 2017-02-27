@@ -246,9 +246,34 @@ Ext.define('Koala.util.Layer', {
             }
             var filter = metadata.filter;
             var filters = metadata.filters || [];
+            var testdataFilter;
+
             if (filter) {
                 filters.push(filter);
             }
+
+            Ext.each(filters, function(f){
+                if(f.param === "test_data") {
+                  testdataFilter = f;
+                }
+            });
+
+            // test_data filters should only be allowed to be used by users who
+            // have the userrole 'imis'.
+            // TODO This should be replaced with a security/roles concept ;)
+            if(testdataFilter) {
+              var appContext = Koala.util.AppContext.getAppContext();
+              var userroles = Koala.util.Object.getPathStrOr(appContext,
+                'data/merge/imis_user/userroles');
+
+                // Check if the "user" is not allowed to see 'test_data'
+                if (!(userroles && Ext.Array.contains(userroles, 'imis'))) {
+                  filters = Ext.Array.filter(filters, function(fi){
+                    return fi.param !== 'test_data';
+                  });
+                }
+            }
+
             return filters;
         },
 
