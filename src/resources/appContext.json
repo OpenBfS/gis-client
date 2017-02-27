@@ -30,6 +30,19 @@
                 "public"
               ]
             },
+            "imis_user": {
+              "imisroles": [
+                "ruf"
+              ],
+              "uid": "Fake Authuser",
+              "username": "Fake Authuser",
+              "userroles": [
+                "ruf",
+                "imis",
+                "bfs",
+                "public"
+              ]
+            },
             "print-timeout": 60000,
             "metadataSearchFields": ["title", "abstract"],
             "spatialSearchTypeName": "bfs:verwaltung_4326_geozg_sort",
