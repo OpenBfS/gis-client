@@ -332,6 +332,13 @@ Ext.define('Koala.util.Layer', {
                 if (filterType === "rodos") {
                     // TODO
                 } else if (filterType === "value") {
+                    // Empty or false "test_data" filters should not be shown in the legend
+                    if(filter.param === 'test_data' &&
+                        (filter.effectivevalue.toLowerCase() === 'false' ||
+                            !filter.effectivevalue)
+                      ) {
+                        return;
+                    }
                     filterTxt += staticMe.stringifyValueFilter(filter, true);
                 } else if (filterType === "pointintime") {
                     var date, format, time;
