@@ -17,6 +17,19 @@
                 "username": "data_reader",
                 "password": "data_reader"
             },
+            "imis_user": {
+              "imisroles": [
+                "ruf"
+              ],
+              "uid": "Fake Authuser",
+              "username": "Fake Authuser",
+              "userroles": [
+                "ruf",
+                "imis",
+                "bfs",
+                "public"
+              ]
+            },
             "print-timeout": 60000,
             "metadataSearchFields": ["title", "abstract"],
             "spatialSearchTypeName": "BFS:verwaltung_4326_geozg_sort",
