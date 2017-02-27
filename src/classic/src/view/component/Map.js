@@ -125,18 +125,24 @@ Ext.define("Koala.view.component.Map", {
                          })];
                     }
                 } else {
-                    return [new ol.style.Style({
-                         image: new ol.style.Circle({
-                             radius: 6,
-                             fill: new ol.style.Fill({
-                                 color: "rgba(0, 0, 255, 0.6)"
-                             }),
-                             stroke: new ol.style.Stroke({
-                                 color: 'gray'
-                             })
-                         })
-                     })];
-                 }
+                  var fill = new ol.style.Fill({
+                    color: 'rgba(0, 0, 255, 0.6)'
+                  });
+                  var stroke = new ol.style.Stroke({
+                    color: 'blue',
+                    width: 1.25
+                  });
+                  return[new ol.style.Style({
+                      image: new ol.style.Circle({
+                        fill: fill,
+                        stroke: stroke,
+                        radius: 6
+                      }),
+                      fill: fill,
+                      stroke: stroke
+                    })
+                  ];
+                }
             };
             return fn;
         }
