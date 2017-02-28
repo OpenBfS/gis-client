@@ -319,41 +319,82 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     onDownloadButtonClicked: function(btn) {
         var me = this;
         var viewModel = me.getViewModel();
-        var chart = btn.up('[name="chart-composition"]').down('d3-chart');
-        var chartCtrl = chart.getController();
 
-        Ext.Msg.show({
+        var win = Ext.create('Ext.window.Window', {
             title: viewModel.get('downloadChartDataMsgTitle'),
-            message: viewModel.get('downloadChartDataMsgMessage'),
-            buttonText: {
-                yes: viewModel.get('downloadChartDataMsgButtonYes'),
-                no: viewModel.get('downloadChartDataMsgButtonNo')
-            },
-            fn: function(btnId){
-                if (btnId === 'yes') {
-                    var chartData = Ext.clone(chartCtrl.data);
-                    var prettyChartData = me.getAsPrettyJson(chartData);
-
-                    // Use the download library to enforce a browser download.
-                    download(prettyChartData, 'koala-chart-data.json',
-                            'application/json');
-                }
-            }
+            name: 'Download data',
+            width: 300,
+            layout: 'fit',
+            bodyPadding: 10,
+            items: [{
+              xtype: 'container',
+              items: [{
+                padding: '10px 0',
+                html: viewModel.get('downloadChartDataMsgMessage')
+              },{
+                xtype: 'combo',
+                width: '100%',
+                fieldLabel: viewModel.get('outputFormatText'),
+                value: 'application/json',
+                forceSelection: true,
+                store: [
+                  ['gml3','gml'],
+                  ['csv','csv'],
+                  ['application/json','json']
+                ]
+              }]
+            }],
+            bbar: [{
+              text: viewModel.get('downloadChartDataMsgButtonYes'),
+              name: 'confirm-timeseries-download',
+              handler: me.doWfsDownload,
+              scope: btn
+            }, {
+              text: viewModel.get('downloadChartDataMsgButtonNo'),
+              name: 'abort-timeseries-download',
+              handler: function(){
+                this.up('window').close();
+              }
+            }]
         });
+        win.show();
     },
 
     /**
-     * Returns the input value as pretty formatted JSON string. Undefined values
-     * will be replaced with null, otherwise they will be ignored by
-     * JSON.stringify.
+     * Starts a WFS download for each selectedStation with the selected
+     * outputFormat.
+     * @param {Ext.button.Button} btn The clicked button.
+     * @return {undefined}
      */
-    getAsPrettyJson: function(obj) {
-        return JSON.stringify(obj, function(key, value) {
-            if (value === undefined) {
-                value = null;
+    doWfsDownload: function(btn){
+      var combo = btn.up('window').down('combo');
+      var chart = this.up('[name="chart-composition"]').down('d3-chart');
+      var chartCtrl = chart.getController();
+      var features = chart.getSelectedStations();
+      var requestUrl = chartCtrl.getChartDataRequestUrl();
+
+      Ext.each(features, function(feat){
+        var requestParams = chartCtrl.getChartDataRequestParams(feat);
+        var format = combo.getValue();
+        var fileEnding = combo.getSelectedRecord().get('field2');
+        requestParams.outputFormat = format;
+
+        Ext.Ajax.request({
+            method: 'GET',
+            url: requestUrl,
+            params: requestParams,
+            success: function(response) {
+              var stationId = feat.get('id');
+              var fileName = stationId + '_koala-chart-data.' + fileEnding;
+
+              // Use the download library to enforce a browser download.
+              download(response.responseText, fileName, format);
+            },
+            failure: function(response) {
+              Ext.log.warn('Download Error: ', response);
             }
-            return value;
-        }, 2);
+        });
+      });
     },
 
     /**
