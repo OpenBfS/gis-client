@@ -560,6 +560,7 @@
                 "lib/BasiGX/src/util/Map.js",
                 "lib/BasiGX/src/util/Object.js",
                 "lib/BasiGX/src/util/Url.js",
+                "lib/BasiGX/src/view/button/Base.js",
                 "lib/BasiGX/src/view/button/ZoomIn.js",
                 "lib/BasiGX/src/view/button/ZoomOut.js",
                 "lib/BasiGX/src/view/button/ZoomToExtent.js",
