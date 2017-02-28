@@ -344,6 +344,7 @@
                 "downloadChartDataMsgMessage": "en:Aktuelle Chartdaten herunterladen?",
                 "downloadChartDataMsgButtonYes": "en:Ja",
                 "downloadChartDataMsgButtonNo": "en:Nein",
+                "outputFormatText": "Outputformat",
                 "removeSeriesBtnText": "en:Serie entfernen",
                 "removeSeriesQuestionTitle": "en:Rückfrage",
                 "removeSeriesQuestionTpl": "en:Serie '{0}' entfernen?"
