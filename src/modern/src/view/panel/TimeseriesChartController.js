@@ -72,32 +72,31 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         var FilterUtil = Koala.util.Filter;
         var metadata = olLayer.metadata;
         var filterVals = FilterUtil.getStartEndFilterFromMetadata(metadata);
+        var startDateContainer = view.down('container[name=startdate]');
+        var endDateContainer = view.down('container[name=enddate]');
         // This is how we would get min/max values for the modern part
         // but `datepickerfield` instances don't have `minValue`/`maxValue`…
-        //
-        // var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
-        var startDateField = view.down('datepickerfield[name=datestart]');
-        var endDateField = view.down('datepickerfield[name=dateend]');
+        var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
 
-        startDateField.setValue(filterVals.mindatetimeinstant);
-        // No need to set these, sadly `minValue`/`maxValue` don't exist
-        //
-        // startDateField.setMinValue(minMaxDates.min);
-        // startDateField.setMaxValue(minMaxDates.max);
+        // Set the allowed max/min values for the start container.
+        startDateContainer.setMaxValue(minMaxDates.max);
+        startDateContainer.setMinValue(minMaxDates.min);
+        // Set the default start value.
+        startDateContainer.setValue(filterVals.mindatetimeinstant);
 
-        endDateField.setValue(filterVals.maxdatetimeinstant);
-        // No need to set these, sadly `minValue`/`maxValue` don't exist
-        //
-        // endDateField.setMinValue(minMaxDates.min);
-        // endDateField.setMaxValue(minMaxDates.max);
+        // Set the allowed max/min values for the end container.
+        endDateContainer.setMaxValue(minMaxDates.max);
+        endDateContainer.setMinValue(minMaxDates.min);
+        // Set the default end value.
+        endDateContainer.setValue(filterVals.maxdatetimeinstant);
     },
 
     applyChangedFilterToChart: function() {
         var me = this;
         var view = me.getView();
         var charts = view.query('d3-chart');
-        var startDate = view.down('datepickerfield[name=datestart]').getValue();
-        var endDate = view.down('datepickerfield[name=dateend]').getValue();
+        var startDate = view.down('k-container-datetimepicker[name=startdate]').getValue();
+        var endDate = view.down('k-container-datetimepicker[name=enddate]').getValue();
 
         Ext.each(charts, function(chart) {
             var chartController = chart.getController();
@@ -166,8 +165,8 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
     createTimeseriesChart: function(olLayer, olFeat) {
         var view = this.getView();
         var config = {
-            startDate: view.down('datepickerfield[name=datestart]').getValue(),
-            endDate: view.down('datepickerfield[name=dateend]').getValue(),
+            startDate: view.down('k-container-datetimepicker[name=startdate]').getValue(),
+            endDate: view.down('k-container-datetimepicker[name=enddate]').getValue(),
             width: '100%',
             flex: 1,
             margin: 0
