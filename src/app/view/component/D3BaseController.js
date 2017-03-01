@@ -1001,5 +1001,21 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             me.redrawChart();
         }
+    },
+
+    /**
+     * Returns the root <svg>-container containing the chart itself.
+     *
+     * @method getSvgContainer
+     * @return {Selections} The selection (data-driven transformation of the
+     *     document object model). Note: The selection may be empty, check with
+     *     selection.node().
+     */
+    getSvgContainer: function() {
+        var me = this;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+
+        return d3.select(viewId + ' svg');
     }
 });

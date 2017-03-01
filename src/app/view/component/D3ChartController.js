@@ -102,14 +102,23 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.data = {};
 
         me.on('chartdataprepared', function() {
+            var svgContainer = me.getSvgContainer();
             if (!me.chartDataAvailable) {
+                // We explicitly hide the svg root container, as the modern
+                // toolkit's panel didn't do it automatically if we update the
+                // element via setHtml(). And as it doesn't conflict with the
+                // classic toolkit's behaviour, no additional check for the
+                // current toolkit is needed.
+                svgContainer.attr('display', 'none');
                 view.setHtml(me.getViewModel().get('noDataAvailableText'));
                 me.chartRendered = false;
             } else {
+                // Show the svg root container, see comment above as well.
+                svgContainer.attr('display', 'unset');
+                view.setHtml('');
                 if (me.chartRendered) {
                     me.redrawChart();
                 } else {
-                    view.setHtml('');
                     me.drawChart();
                 }
             }

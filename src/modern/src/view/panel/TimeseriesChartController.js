@@ -112,6 +112,9 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
                 chartController.deleteLegendEntry(shape.id);
             });
 
+            // Mark the chart as rendered
+            chart.getController().chartRendered = true;
+
             // update the chart to reflect the changes
             chart.getController().getChartData();
         });
