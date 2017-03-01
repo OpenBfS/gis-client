@@ -904,6 +904,15 @@
             }
         }
     },
+    "Koala.view.container.date.DateTimePicker": {
+        "config": {
+            "data": {
+                "minDateWarnMsg": "en:Das Datum in diesem Feld muss nach dem {0} liegen.",
+                "maxDateWarnMsg": "en:Das Datum in diesem Feld muss vor dem {0} liegen.",
+                "warnMsgDateFormat": "d.m.Y"
+            }
+        }
+    },
     "Koala.view.panel.MobileImprint": {
         "config": {
             "data": {
