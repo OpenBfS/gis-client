@@ -34,41 +34,65 @@ Ext.define('Koala.view.component.MapController', {
      *
      */
     onHoverFeatureClick: function(olFeats) {
-        var me = this;
-        var timeSeriesWin;
-        var barChartWin;
+        var me = this,
+            timeSeriesWin,
+            barChartWin;
+
         if (Ext.isEmpty(olFeats)){
             return;
         }
 
-        Ext.each(olFeats, function(olFeat, index) {
+        Ext.each(olFeats, function(olFeat) {
             var layer = olFeat.get('layer');
 
             // TimeSeries
             if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
                 if(!timeSeriesWin){
-                    // if no timeseries window, create one
+                    // if no timeseries window exist, create one
                     timeSeriesWin = me.openTimeseriesWindow(olFeat);
-                } else {
+                }
+                else {
                     // just add any further series to the existing window
                     timeSeriesWin.getController().updateTimeSeriesChart(layer, olFeat);
                 }
+                Ext.WindowManager.bringToFront(timeSeriesWin);
+
             // Open new BarchartWindow for each feature. Move if overlapping.
             } if (Koala.util.Layer.isBarChartLayer(layer)) {
-                if(barChartWin){
-                    var faktor = olFeats.length - index;
-                    var x = barChartWin.getX() - 30 * faktor;
-                    var y = barChartWin.getY() - 40 * faktor;
-                    barChartWin.setPosition(x, y, true);
-                }
                 barChartWin = me.openBarChartWindow(olFeat);
-            } else {
+                me.offsetBarChartWin(barChartWin);
+                Ext.WindowManager.bringToFront(barChartWin);
+            }
+            else {
                 me.openGetFeatureInfoWindow(olFeat);
             }
         });
 
     },
+    /**
+     * offsets a BarChart-window. Reference is either the BarChart-window
+     * closest to the lower right corner, or the window itself (if no BarChart-window is open).
+     * That way a BarChart-window is also displaced to a TimeSeries-window, which always opens at
+     * the default position.
+     *@param Object (Ext.window.Window) winToOffset
+     */
+    offsetBarChartWin: function(winToOffset){
+        var x, y,
+            allWinX = [],
+            allWinY = [];
+        Ext.WindowManager.each(function(win){
+            if (win instanceof Koala.view.window.BarChart){
+                allWinX.push(win.getPosition()[0]);
+                allWinY.push(win.getPosition()[1]);
+            }
+        });
+        if (allWinX.length > 0 || allWinY.length > 0){
+            x = Ext.Array.max(allWinX) + 20;
+            y = Ext.Array.max(allWinY) + 30;
 
+            winToOffset.setPosition(x, y);
+        }
+    },
     /**
      * This is finally a complete OVERRIDE of the getToolTipHtml function from
      * the base class BasiGX.view.component.Map!
