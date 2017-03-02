@@ -93,10 +93,8 @@ Ext.define("Koala.view.form.field.SearchCombo", {
 
     doSpatialSearch: function(value){
         var spatialGrid = Ext.ComponentQuery.query('k-grid-spatialsearch')[0];
-        console.log("spatialGrid");
-        console.log(spatialGrid);
         var spatialStore = spatialGrid.getStore();
-        console.log(spatialStore);
+
         spatialGrid.show();
         Ext.Ajax.abort(spatialStore._lastRequest);
         var appContext = BasiGX.view.component.Map.guess().appContext;
@@ -104,34 +102,24 @@ Ext.define("Koala.view.form.field.SearchCombo", {
         spatialStore.getProxy()
             .setExtraParam('cql_filter', field + " ilike '%" + value + "%'");
         spatialStore.load();
-        // Bsp Wasser 11 Elemente
-        // console.log(spatialStore);
         spatialStore._lastRequest = Ext.Ajax.getLatest();
-        // debugger;
+
     },
 
     doMetadataSearch: function(value){
 
         var metadataGrid = Ext.ComponentQuery.query('k-grid-metadatasearch')[0];
-        console.log("metadataGrid");
-        console.log(metadataGrid);
         var metadataStore = metadataGrid.getStore();
-        console.log(metadataStore);
+
         metadataGrid.show();
         Ext.Ajax.abort(metadataStore._lastRequest);
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
         var fields = appContext.data.merge.metadataSearchFields;
-        console.log(fields);
         var cql = this.getMetadataCql(fields, value);
-        console.log(cql);
-        // metadataStore.getProxy().setExtraParam('constraint', cql)
-        // ist an dieser Stelle undefined
+
         metadataStore.getProxy().setExtraParam('constraint', cql);
         metadataStore.load();
-        // Bsp Wasser sollen es 7 Elemente sein, zur Zeit 0
-        // Fehler wahrscheinlich beim cql-Filter
-        // console.log(metadataStore);
         metadataStore._lastRequest = Ext.Ajax.getLatest();
     },
 
