@@ -56,6 +56,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             store: treeStore,
             width: 'calc(80vw)',
             listeners: {
+                selectionchange: me.onSelectionChange,
                 tap: {
                     fn: me.onTreeItemTap,
                     element: 'element'
@@ -91,6 +92,23 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var me = this;
         var layer = item.getNode().getOlLayer();
         item.setText(me.getTreeListItemTpl().apply(layer));
+    },
+
+    /**
+     * Listener for the selectionchange event.
+     * It sets the selected layer as chartable.
+     *
+     * @param {Ext.list.Tree} treeList The treelist of the MobileLegend.
+     * @param {GeoExt.data.model.LayerTreeNode} record The seletcted
+     *                                                 LayerTreeNode.
+     * @return {undefined}
+     */
+    onSelectionChange: function(treeList, record) {
+      var me = this;
+      var layer = record.getOlLayer();
+      if(layer){
+        me.setActiveChartingLayer(layer);
+      }
     },
 
     /**
