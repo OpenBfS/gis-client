@@ -78,7 +78,7 @@ Ext.define('Koala.view.grid.MetadataSearchController', {
     },
 
     /**
-     * Called on the `boxready`-event, this methods adds listeners to store
+     * Called on the 'boxready'-event, this methods adds listeners to store
      * events, which will update the status line of the grids (e.g. 'no data
      * found'), see also #teardownStatusLineListeners.
      *

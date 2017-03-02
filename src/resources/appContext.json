@@ -14,8 +14,8 @@
                 "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
             },
             "application_user": {
-                "username": "data_reader",
-                "password": "data_reader"
+                "username": "admin",
+                "password": "admin"
             },
             "imis_user": {
               "imisroles": [
@@ -32,10 +32,10 @@
             },
             "print-timeout": 60000,
             "metadataSearchFields": ["title", "abstract"],
-            "spatialSearchTypeName": "BFS:verwaltung_4326_geozg_sort",
+            "spatialSearchTypeName": "bfs:verwaltung_4326_geozg_sort",
             "spatialSearchFields": {
                 "searchColumn": "NAME",
-                "geomColumn": "the_geom"
+                "geomColumn": "BOX_GEO"
             },
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,

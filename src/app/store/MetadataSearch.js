@@ -45,6 +45,7 @@ Ext.define('Koala.store.MetadataSearch', {
         this.proxy.url = urls['metadata-search'];
         this.proxy.username = merge.application_user.username || null;
         this.proxy.password = merge.application_user.password || null;
+        console.log(merge.application_user);
 
         if(this.proxy.username && this.proxy.password){
             var tok = this.proxy.username + ':' + this.proxy.password;

@@ -152,15 +152,11 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 shortInfoBtn.setVisible(allowShortInfo);
             }
             if(changeFilterBtn) {
-              if(allowChangeFilter.filters.length === 0)
-              {
+              if(allowChangeFilter.filters.length === 0) {
                 changeFilterBtn.setVisible(false);
-              }
-              else {
+              } else {
                   changeFilterBtn.setVisible(allowChangeFilter);
               }
-
-
             }
             if(downloadBtn){
                 downloadBtn.setVisible(allowDownload);
