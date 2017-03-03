@@ -80,9 +80,21 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         Ext.iterate(treeListItems, function(k, item) {
             if (item instanceof Ext.list.TreeItem) {
                 me.setTreeItemCheckStatus(item);
+
+                // Prepare Slider
+                var layer = item.getNode().getOlLayer();
+                var slider = document.getElementById('slider_' + layer.id);
+
+                if(slider){
+                    slider.value = layer.getOpacity() * 100;
+
+                    // Clone the element to delete all previous eventlisteners
+                    var sliderClone = slider.cloneNode(true);
+                    slider.parentNode.replaceChild(sliderClone, slider);
+                    sliderClone.addEventListener('change', me.onSliderChange.bind(slider, layer));
+                }
             }
         });
-
     },
 
     /**
@@ -323,6 +335,10 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 '<div class="tree-item-order-icons">',
                   '<i class="fa fa-arrow-up up-icon" style="color:#157fcc;"></i>',
                   '<i class="fa fa-arrow-down down-icon" style="color:#157fcc;"></i>',
+                  '<tpl if="this.allowOpacityChange(values)">',
+                  // TODO Add event listener to slider
+                    '<input type="range" class="mobile-opacity-slider" id="slider_{id}"/>',
+                  '</tpl>',
                   '<tpl if="this.isRemovable(values)">',
                       '<span class="remove-icon"><i class="fa fa-times" style="color:#157fcc;"></i></span>',
                   '</tpl>',
@@ -360,6 +376,9 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 getFilterText: function(layer) {
                     return Koala.util.Layer.getFiltersTextFromMetadata(layer.metadata);
                 },
+                allowOpacityChange: function(layer){
+                    return layer.get('allowOpacityChange') || false;
+                },
                 isRemovable: function(layer) {
                     return layer.get('allowRemoval') || false;
                 },
@@ -377,6 +396,18 @@ Ext.define('Koala.view.panel.MobileLegendController', {
     },
 
     /**
+     * Event listener for a slider to set the opacity on a given layer.
+     *
+     * @param {ol.layer.Base} layer The given layer
+     * @param {Event} event The change event.
+     */
+    onSliderChange: function(layer, event){
+        var slider = event.target;
+        var opacity = slider.value / 100;
+        layer.setOpacity(opacity);
+    },
+
+    /**
      * This changes the order of a given layer by a specfic integer.
      * e.G.:
      *  "-1" move the layer behind its underlying layer
@@ -388,34 +419,34 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      *                           of the layer. E.g. "-1" to decrease by one.
      */
     changeLayerOrder: function(layer, orderInt){
-      var me = this;
-      var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
-      var layersCollection = map.getLayerGroup().getLayers();
-      var collectionLength = layersCollection.getLength();
-      var index;
+        var me = this;
+        var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
+        var layersCollection = map.getLayerGroup().getLayers();
+        var collectionLength = layersCollection.getLength();
+        var index;
 
-      layersCollection.forEach(function(l, idx){
-        if(l === layer){
-          index = idx;
+        layersCollection.forEach(function(l, idx){
+            if(l === layer){
+                index = idx;
+            }
+        });
+        var newIndex = index + orderInt;
+
+        // If layer should be moved under the lowest layer, make it the lowest
+        // layer
+        newIndex = newIndex <= 0 ? 0 : newIndex;
+
+        // If layer should be moved over the most top layer, make it the topmost
+        // layer
+        newIndex = newIndex >= collectionLength ? collectionLength - 1: newIndex;
+
+        if(index !== newIndex){
+            layersCollection.removeAt(index);
+            layersCollection.insertAt(newIndex, layer);
         }
-      });
-      var newIndex = index + orderInt;
 
-      // If layer should be moved under the lowest layer, make it the lowest
-      // layer
-      newIndex = newIndex <= 0 ? 0 : newIndex;
-
-      // If layer should be moved over the most top layer, make it the topmost
-      // layer
-      newIndex = newIndex >= collectionLength ? collectionLength - 1: newIndex;
-
-      if(index !== newIndex){
-        layersCollection.removeAt(index);
-        layersCollection.insertAt(newIndex, layer);
-      }
-
-      // This refreshes the templates of the records
-      me.setInitialCheckStatus();
+        // This refreshes the templates of the records
+        me.setInitialCheckStatus();
     },
 
     /**
