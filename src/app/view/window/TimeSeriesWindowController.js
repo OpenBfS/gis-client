@@ -322,7 +322,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
 
         var win = Ext.create('Ext.window.Window', {
             title: viewModel.get('downloadChartDataMsgTitle'),
-            name: 'Download data',
+            name: 'downloaddatawin',
             width: 300,
             layout: 'fit',
             bodyPadding: 10,
