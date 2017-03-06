@@ -336,7 +336,6 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                   '<i class="fa fa-arrow-up up-icon" style="color:#157fcc;"></i>',
                   '<i class="fa fa-arrow-down down-icon" style="color:#157fcc;"></i>',
                   '<tpl if="this.allowOpacityChange(values)">',
-                  // TODO Add event listener to slider
                     '<input type="range" class="mobile-opacity-slider" id="slider_{id}"/>',
                   '</tpl>',
                   '<tpl if="this.isRemovable(values)">',
