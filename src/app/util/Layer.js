@@ -1755,7 +1755,9 @@ Ext.define('Koala.util.Layer', {
             }
             var cqlParts = [];
             Ext.each(filters, function(filter){
+              if(!staticMe.isViewParamFilter(filter)){
                 cqlParts.push("(" + staticMe.filterToCql(filter) + ")");
+              }
             });
             return cqlParts.join(" AND ");
         },
