@@ -88,6 +88,7 @@ Ext.define('Koala.view.window.HelpModel', {
                         leaf: true
                     }]
                 }, {
+                    id: 'layerSelection',
                     text: '{layerSelection.title}',
                     content: '{layerSelection.html}',
                     leaf: true

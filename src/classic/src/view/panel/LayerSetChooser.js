@@ -43,6 +43,26 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
         }
     },
 
+    tools: [{
+        type:'help',
+        //TODO: move to app-locale
+        tooltip: 'Hilfe',
+        callback: function() {
+            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
+            if(!helpWin){
+                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                helpWin.on('afterlayout', function() {
+                    var helpWinController = this.getController();
+                    helpWinController.setTopic('layerSelection');
+                });
+            } else {
+                BasiGX.util.Animate.shake(helpWin);
+                var helpWinController = helpWin.getController();
+                helpWinController.setTopic('layerSelection');
+            }
+        }
+    }],
+
     /**
      * flag used to indicate which items should be displayed through template
      */
