@@ -42,6 +42,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     minHeight: 300,
 
     resizable: true,
+    collapsible: true,
     maximizable: true,
 
     //Navigation-Panel
