@@ -31,6 +31,14 @@ Ext.define('Koala.view.component.D3ChartController', {
     zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
+    /**
+     * Contains the DateValues of the charts current zoom extent.
+     * @type {Object}
+     */
+    currentDateRange: {
+      min: null,
+      max: null
+    },
 
     /**
      * Whether the chart is actually being rendered.
@@ -383,6 +391,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                         });
 
                         axis.call(axisGenerator.scale(scaleX));
+
+                        me.currentDateRange.min = scaleX.invert(0);
+                        var chartWidth = me.getChartSize()[0];
+                        me.currentDateRange.max = scaleX.invert(chartWidth);
 
                         if (view.getAxes()[orient].rotateXAxisLabel) {
                             d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_X + ' > g > text')
@@ -923,7 +935,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var feat = Ext.Array.findBy(allSelectedStations, function(station) {
           return station.get('id') === stationId;
         });
-        var requestParams = me.getChartDataRequestParams(feat);
+        var requestParams = me.getChartDataRequestParams(feat, true);
 
         var format = combo.getValue();
         var fileEnding = combo.getSelectedRecord().get('field2');
@@ -1092,9 +1104,11 @@ Ext.define('Koala.view.component.D3ChartController', {
      * Returns the request params for a given station.
      *
      * @param {ol.Feature} station The station to build the request for.
+     * @param {Boolean} useCurrentZoom Whether to use the currentZoom of the
+     *                                 chart or not. Default is false.
      * @return {Object} The request object.
      */
-    getChartDataRequestParams: function(station) {
+    getChartDataRequestParams: function(station, useCurrentZoom) {
         var me = this;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
@@ -1110,6 +1124,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                 targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
         var endString = Ext.Date.format(endDate,
                 targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
+
+        if(useCurrentZoom === true) {
+          startString = Ext.Date.format(me.currentDateRange.min,
+                  targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
+          endString = Ext.Date.format(me.currentDateRange.max,
+                  targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
+        }
 
         // Get the viewparams configured for the layer
         var layerViewParams = Koala.util.Object.getPathStrOr(
