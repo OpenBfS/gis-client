@@ -42,6 +42,8 @@ Ext.define("Koala.view.form.TimeseriesFilterControl", {
     items: [{
         xtype: 'k-container-datetimepicker',
         name: 'startdate',
+        partnerType: 'start',
+        partnerFieldName: 'enddate',
         value: null,
         bind: {
             label: '{labelStartDate}'
@@ -49,6 +51,8 @@ Ext.define("Koala.view.form.TimeseriesFilterControl", {
     }, {
         xtype: 'k-container-datetimepicker',
         name: 'enddate',
+        partnerType: 'end',
+        partnerFieldName: 'startdate',
         value: null,
         margin: '5 0 0 0',
         bind: {

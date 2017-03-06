@@ -21,7 +21,6 @@ Ext.define('Koala.view.container.date.DateTimePicker', {
     xtype: 'k-container-datetimepicker',
 
     requires: [
-
     ],
 
     controller: 'k-container-datetimepicker',
@@ -33,7 +32,14 @@ Ext.define('Koala.view.container.date.DateTimePicker', {
         value: null,
         minValue: null,
         maxValue: null,
-        label: null
+        maxDuration: null,
+        label: null,
+        partnerFieldName: null,
+        partnerType: null
+    },
+
+    privates: {
+        allowedPartnerTypes: ['start', 'end']
     },
 
     layout: 'hbox',
@@ -49,12 +55,6 @@ Ext.define('Koala.view.container.date.DateTimePicker', {
         dateFormat: 'd.m.Y',
         bind: {
             value: '{date}'
-        },
-        maxValue: null,
-        minValue: null,
-        listeners: {
-            // TODO: doesn't fire on value change
-            // change: 'onFieldChange'
         }
     }, {
         xtype: 'container',
@@ -76,8 +76,31 @@ Ext.define('Koala.view.container.date.DateTimePicker', {
             bind: {
                 value: '{minutes}'
             }
-            // TODO check if validator is needed here!
         }]
+    }, {
+        xtype: 'label',
+        name: 'validateMessage',
+        html: '<i class="fa fa-2x fa-exclamation-circle" aria-hidden="true" style="color:red;"></i>',
+        padding: '0 0 0 5',
+        bind: {
+            hidden: '{isValidDateTime}'
+        },
+        listeners: {
+            tap: {
+                fn: 'onValidateMessageTap',
+                element: 'element'
+            }
+        }
+    }, {
+        xtype: 'datepickerfield',
+        name: 'valueField',
+        hidden: true,
+        bind: {
+            value: '{value}'
+        },
+        listeners: {
+            change: 'onFieldChange'
+        }
     }],
 
     getValue: function() {
@@ -88,16 +111,6 @@ Ext.define('Koala.view.container.date.DateTimePicker', {
         this.getViewModel().set('value', value);
     },
 
-    setMaxValue: function(value) {
-        this.down('datepickerfield').maxValue = value;
-        this._maxValue = value;
-    },
-
-    setMinValue: function(value) {
-        this.down('datepickerfield').minValue = value;
-        this._minValue = value;
-    },
-
     getLabel: function() {
         return this.getViewModel().get('label');
     },
@@ -106,6 +119,30 @@ Ext.define('Koala.view.container.date.DateTimePicker', {
         this.down('field[name=labelField]').setBind({
             label: label
         });
+    },
+
+    setPartnerType: function(value) {
+        if (!value) {
+            return;
+        }
+        if (Ext.Array.contains(this.allowedPartnerTypes, value)) {
+            this._partnerType = value;
+        } else {
+            Ext.Logger.warn('Unsupported partnerType: ' + value +
+                    '. Allowed values are: ' + this.allowedPartnerTypes.join(','));
+        }
+    },
+
+    isStartPartner: function() {
+        return this.getPartnerType() === this.allowedPartnerTypes[0];
+    },
+
+    isEndPartner: function() {
+        return this.getPartnerType() === this.allowedPartnerTypes[1];
+    },
+
+    isValidDateTime: function() {
+        return this.getViewModel().get('isValidDateTime');
     }
 
 });

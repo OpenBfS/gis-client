@@ -21,10 +21,16 @@ Ext.define('Koala.view.container.date.DateTimePickerModel', {
     alias: 'viewmodel.k-container-datetimepicker',
 
     data: {
+        // i18n
         minDateWarnMsg: '',
         maxDateWarnMsg: '',
-        warnMsgDateFormat: 'peter2',
-        value: null
+        warnMsgDateFormat: '',
+        endBeforeStartWarnMsg: '',
+        exceedsMaxDurationWarnMsg: '',
+        // i18n
+        value: null,
+        isValidDateTime: null,
+        validationMessage: ''
     },
 
     formulas: {
@@ -36,7 +42,6 @@ Ext.define('Koala.view.container.date.DateTimePickerModel', {
                 var date = Ext.Date.clone(value);
                 date.setHours(this.get('hours'));
                 date.setMinutes(this.get('minutes'));
-                date.setSeconds(this.get('seconds'));
                 this.set({
                     value: date
                 });
@@ -47,8 +52,9 @@ Ext.define('Koala.view.container.date.DateTimePickerModel', {
                 return get('value') ? get('value').getHours() : null;
             },
             set: function(value) {
+                var mainValue = Ext.Date.clone(this.get('value'));
                 this.set({
-                    value: new Date(this.get('value').setHours(value.get('value')))
+                    value: new Date(mainValue.setHours(value.get('value')))
                 });
             }
         },
@@ -57,18 +63,9 @@ Ext.define('Koala.view.container.date.DateTimePickerModel', {
                 return get('value') ? get('value').getMinutes() : null;
             },
             set: function(value) {
+                var mainValue = Ext.Date.clone(this.get('value'));
                 this.set({
-                    value: new Date(this.get('value').setMinutes(value.get('value')))
-                });
-            }
-        },
-        seconds: {
-            get: function(get) {
-                return get('value') ? get('value').getSeconds() : null;
-            },
-            set: function(value) {
-                this.set({
-                    value: new Date(this.get('value').setSeconds(value.get('value')))
+                    value: new Date(mainValue.setMinutes(value.get('value')))
                 });
             }
         }

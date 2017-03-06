@@ -23,11 +23,46 @@ Ext.define('Koala.view.form.TimeseriesFilterControlController', {
     requires: [
     ],
 
+    /**
+     * Validates if the current datetime values are valid. Either delegates
+     * the newly passed valies or shows a toast if not valid.
+     *
+     * @method onSetFilterButtonClick
+     */
     onSetFilterButtonClick: function() {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var timeseriesPanel = view.up('k-panel-timeserieschart');
         var timeseriesController = timeseriesPanel.getController();
-        timeseriesController.applyChangedFilterToChart();
+        var isValid = me.isValid();
+
+        if (isValid) {
+            timeseriesController.applyChangedFilterToChart();
+        } else {
+            Ext.toast(viewModel.get('invalidInputErrMsg'));
+        }
+    },
+
+    /**
+     * Checks if the current datetime values are valid.
+     *
+     * @method isValid
+     * @return {Boolean} The valid state.
+     */
+    isValid: function() {
+        var me = this;
+        var view = me.getView();
+        var dateTimePickers = view.query('k-container-datetimepicker');
+        var isValid = true;
+
+        Ext.each(dateTimePickers, function(dateTimePicker) {
+            if (!isValid) {
+                return;
+            }
+            isValid = dateTimePicker.isValidDateTime();
+        });
+
+        return isValid;
     }
 });
