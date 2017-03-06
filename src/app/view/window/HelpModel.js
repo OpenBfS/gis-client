@@ -116,6 +116,7 @@ Ext.define('Koala.view.window.HelpModel', {
                         leaf: true
                     }]
                 }, {
+                    id: 'mapNavigation',
                     text: '{mapNavigation.title}',
                     content: '{mapNavigation.html}',
                     children: [{
@@ -131,6 +132,7 @@ Ext.define('Koala.view.window.HelpModel', {
                         content: '{mapNavigation.initMapView.html}',
                         leaf: true
                     }, {
+                        id: 'mapNavigationPermalink',
                         text: '{mapNavigation.permaLink.title}',
                         content: '{mapNavigation.permaLink.html}',
                         leaf: true
