@@ -49,6 +49,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
             LEGEND_CONTAINER: 'k-d3-scrollable-legend-container',
+            DOWNLOAD_ICON: 'k-d3-download-icon',
             DELETE_ICON: 'k-d3-delete-icon',
 
             AXIS_LABEL: 'k-d3-axis-label',
@@ -878,7 +879,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      * removed by eventually calling into the concrete #deleteEverything
      * and #redrawLegend implementations of child classes
      *
-     * @param {Object} shape The current shape object to handle.
+     * @param {Object} dataObj The current shape object to handle.
      * @param {[Number]} idx The index of the shape object in the array of all
      *     shapes.
      * @return {Function} The callback to be used as click handler on the delete
@@ -891,6 +892,14 @@ Ext.define('Koala.view.component.D3BaseController', {
             me.redrawLegend();
         };
         return deleteCallback;
+    },
+
+    generateDownloadCallback: function(dataObj) {
+        var me = this;
+        var downloadCallback = function() {
+          me.downloadSeries(dataObj);
+        };
+        return downloadCallback;
     },
 
     /**

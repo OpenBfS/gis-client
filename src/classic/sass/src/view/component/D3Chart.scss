@@ -73,11 +73,13 @@ svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden path,
 svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden text {
     opacity: 0.3;
 }
-svg .k-d3-shape-group-legend .k-d3-delete-icon {
+svg .k-d3-shape-group-legend .k-d3-delete-icon,
+svg .k-d3-shape-group-legend .k-d3-download-icon, {
     fill: $button-default-background-color;
     font-size: 17px;
     font-family: FontAwesome;
 }
+
 svg text {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none;   /* Chrome/Safari/Opera */

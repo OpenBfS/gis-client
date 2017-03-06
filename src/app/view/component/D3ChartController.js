@@ -765,7 +765,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
-                    if (target && target.classed(CSS.DELETE_ICON)) {
+                    if (target && (target.classed(CSS.DELETE_ICON) ||
+                            target.classed(CSS.DOWNLOAD_ICON))) {
                         // click happened on the delete icon, no visibility
                         // toggling. The deletion is handled in an own event
                         // handler
@@ -838,15 +839,112 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .text(nameAsTooltip);
 
             legendEntry.append('text')
+                // fa-save from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('')
+                .attr('class', CSS.DOWNLOAD_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                .on('click', me.generateDownloadCallback(shape));
+
+            legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('')
                 .attr('class', CSS.DELETE_ICON)
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
-                .attr('dx', '160') // TODO Discuss, do we need this dynamically?
+                .attr('dx', '170') // TODO Discuss, do we need this dynamically?
                 .on('click', me.generateDeleteCallback(shape));
+
         });
     },
+
+    /**
+     * Downloads the current visibile data for this series.
+     *
+     * @param {Object} dataObj The config object of the selected Series.
+     */
+    downloadSeries: function(dataObj){
+        var me = this;
+        var viewModel = me.getViewModel();
+
+        var win = Ext.create('Ext.window.Window', {
+            title: viewModel.get('downloadChartDataMsgTitle'),
+            name: 'downloaddatawin',
+            width: 300,
+            layout: 'fit',
+            bodyPadding: 10,
+            items: [{
+              xtype: 'container',
+              items: [{
+                padding: '10px 0',
+                html: viewModel.get('downloadChartDataMsgMessage')
+              },{
+                xtype: 'combo',
+                width: '100%',
+                fieldLabel: viewModel.get('outputFormatText'),
+                value: 'application/json',
+                forceSelection: true,
+                store: [
+                  ['gml3','gml'],
+                  ['csv','csv'],
+                  ['application/json','json']
+                ]
+              }]
+            }],
+            bbar: [{
+              text: viewModel.get('downloadChartDataMsgButtonYes'),
+              name: 'confirm-timeseries-download',
+              handler: me.doWfsDownload.bind(me, dataObj)
+            }, {
+              text: viewModel.get('downloadChartDataMsgButtonNo'),
+              name: 'abort-timeseries-download',
+              handler: function(){
+                this.up('window').close();
+              }
+            }]
+        });
+        win.show();
+    },
+
+    /**
+     * Executes the WFS-Request and starts the real download on success.
+     *
+     * @param {Object} dataObj The config object of the selected Series.
+     * @param {Ext.button.Button} btn The button we clicked on.
+     */
+    doWfsDownload: function(dataObj, btn) {
+        var me = this;
+        var stationId = dataObj.config.id;
+        var combo = btn.up('window').down('combo');
+        var view = this.getView();
+        var allSelectedStations = view.getSelectedStations();
+        var requestUrl = me.getChartDataRequestUrl();
+        var feat = Ext.Array.findBy(allSelectedStations, function(station) {
+          return station.get('id') === stationId;
+        });
+        var requestParams = me.getChartDataRequestParams(feat);
+
+        var format = combo.getValue();
+        var fileEnding = combo.getSelectedRecord().get('field2');
+        requestParams.outputFormat = format;
+
+        Ext.Ajax.request({
+            method: 'GET',
+            url: requestUrl,
+            params: requestParams,
+            success: function(response) {
+              var fileName = stationId + '_koala-chart-data.' + fileEnding;
+
+              // Use the download library to enforce a browser download.
+              download(response.responseText, fileName, format);
+            },
+            failure: function(response) {
+              Ext.log.warn('Download Error: ', response);
+            }
+        });
+    },
+
 
     /**
      *
