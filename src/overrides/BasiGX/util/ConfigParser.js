@@ -91,6 +91,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                   } finally {
                       if (Koala.util.Layer.minimumValidMetadata(obj)) {
                           var layer = Koala.util.Layer.layerFromMetadata(obj);
+                          layer.set('treeId', 'bkg'); // Do we need this?
                           var layers = me.map.getLayers();
                           layers.insertAt(index, layer);
                       } else {
