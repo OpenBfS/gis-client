@@ -925,6 +925,7 @@ Ext.define('Koala.util.Layer', {
                 allowOpacityChange: getBool(olProps.allowOpacityChange, true),
                 hoverable: shallHover,
                 hoverTpl: olProps.hoverTpl,
+                opacity: olProps.opacity || 1,
                 hoverStyle: olProps.hoverStyle,
                 selectStyle: olProps.selectStyle || olProps.hoverStyle,
                 hasLegend: getBool(olProps.hasLegend, true),
