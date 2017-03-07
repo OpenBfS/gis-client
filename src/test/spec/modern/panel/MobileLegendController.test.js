@@ -1,8 +1,6 @@
 Ext.Loader.syncRequire([
-    'GeoExt.view.component.Map',
     'BasiGX.view.component.Map',
-    'Koala.view.panel.MobileLegend',
-    'Koala.view.panel.MobileLegendController'
+    'Koala.view.panel.MobileLegend'
 ]);
 
 describe('Koala.view.panel.MobileLegendController', function() {
@@ -83,6 +81,7 @@ describe('Koala.view.panel.MobileLegendController', function() {
 
             controller.removeLayer(firstLayer);
             expect(spy.called).to.be(true);
+            expect(spy.calledOnce).to.be.ok();
             expect(spy.callCount).to.be(1);
 
             // teardown
