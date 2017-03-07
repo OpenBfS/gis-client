@@ -161,27 +161,25 @@ Ext.define('Koala.util.Layer', {
          * @param {ol.layer.Layer} layer The layer to check.
          * @return {boolean} Whether the layer is a WMS layer.
          */
-        isWmsLayer: (function() {
-            var wmsSourceNames = ['TileWMS', 'ImageWMS'];
-            var wmsSources = [];
-            Ext.each(wmsSourceNames, function(wmsSourceName) {
-                if (wmsSourceName in ol.source) {
-                    wmsSources.push(ol.source[wmsSourceName]);
-                }
-            });
-            return function(layer) {
-                var isWmsLayer = false;
-                if (layer) {
-                    var source = layer.getSource();
-                    Ext.each(wmsSources, function (wmsSource) {
-                        if (source instanceof wmsSource) {
-                            isWmsLayer = true;
-                        }
-                    });
-                }
-                return isWmsLayer;
-            };
-        }()),
+        isWmsLayer: function(layer) {
+            var isWmsLayer = false;
+            if (layer) {
+                var wmsSourceNames = ['TileWMS', 'ImageWMS'];
+                var wmsSources = [];
+                Ext.each(wmsSourceNames, function(wmsSourceName) {
+                    if (wmsSourceName in ol.source) {
+                        wmsSources.push(ol.source[wmsSourceName]);
+                    }
+                });
+                var source = layer.getSource();
+                Ext.each(wmsSources, function (wmsSource) {
+                    if (source instanceof wmsSource) {
+                        isWmsLayer = true;
+                    }
+                });
+            }
+            return isWmsLayer;
+        },
 
         /**
          * Returns whether the specified layer is using a vector source, i.e. is
@@ -190,24 +188,22 @@ Ext.define('Koala.util.Layer', {
          * @param {ol.layer.Layer} layer The layer to check.
          * @return {boolean} Whether the layer is a vector layer.
          */
-        isVectorLayer: (function() {
-            var vectorSources = [];
-            if ('Vector' in ol.source) {
-                vectorSources.push(ol.source.Vector);
-            }
-            return function(layer) {
-                var isVectorLayer = false;
-                if (layer) {
-                    var source = layer.getSource();
-                    Ext.each(vectorSources, function (vectorSource) {
-                        if (source instanceof vectorSource) {
-                            isVectorLayer = true;
-                        }
-                    });
+        isVectorLayer: function(layer) {
+            var isVectorLayer = false;
+            if (layer) {
+                var vectorSources = [];
+                if ('Vector' in ol.source) {
+                    vectorSources.push(ol.source.Vector);
                 }
-                return isVectorLayer;
-            };
-        }()),
+                var source = layer.getSource();
+                Ext.each(vectorSources, function (vectorSource) {
+                    if (source instanceof vectorSource) {
+                        isVectorLayer = true;
+                    }
+                });
+            }
+            return isVectorLayer;
+        },
 
         /**
          * Returns whether the passed metadat object from GNOS has at least one
