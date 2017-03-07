@@ -822,7 +822,7 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
-         * @param Object metadata The JSON metadata form GNOS
+         * @param Object metadata The JSON metadata from GNOS
          */
         getLayerClassFromMetadata: function(metadata) {
             var layerCfg = metadata.layerConfig;
