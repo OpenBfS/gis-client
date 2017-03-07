@@ -894,6 +894,15 @@ Ext.define('Koala.view.component.D3BaseController', {
         return deleteCallback;
     },
 
+    /**
+     * Generates a callback that can be used for the click event on the download
+     * icon. It will call the downloadSeries function which has to be implemtend
+     * in the child classes.
+     *
+     * @param {Object} dataObj The current shape object to handle.]
+     * @return {Function} The callback to be used as click handler on the
+     *                    download icon.
+     */
     generateDownloadCallback: function(dataObj) {
         var me = this;
         var downloadCallback = function() {
