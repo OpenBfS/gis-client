@@ -40,17 +40,7 @@
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
             "mapLayers": [
-                {
-                    "name": "Hintergrundkarte",
-                    "type": "XYZ",
-                    "url": "http://www.imis.bfs.de/mapcache/tms/1.0.0/osm_bfs_google@GoogleMapsCompatible/{z}/{x}/{-y}.png",
-                    "legendUrl": "http://www.imis.bfs.de/mapcache/tms/1.0.0/osm_bfs_google@GoogleMapsCompatible/6/33/43.png",
-                    "attribution": "<a href=\"http://www.imis.bfs.de/geozg/static/nutzungsbedingungen.html\" target=\"_blank\">© Bundesamt für Strahlenschutz</a>&nbsp;&nbsp;&#x007C;&nbsp;&nbsp;<a href=\"http://www.imis.bfs.de/geozg/static/license_de.html\" target=\"_blank\">OpenStreetMap  |  BKG  |  SRTM  |  USGS</a>",
-                    "customParams": {
-                        "allowOpacityChange": true,
-                        "treeId": "bkg"
-                    }
-                }
+                "8e54b74a-33d4-449f-b2f2-0a7b21e872a3"
             ],
             "mapConfig": {
                 "projection": "EPSG:3857",
