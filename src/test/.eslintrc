@@ -9,6 +9,7 @@
     "globals": {
         "document": false,
         "expect": false,
+        "sinon":false,
 
         "Ext": true,
         "GeoExt": true,

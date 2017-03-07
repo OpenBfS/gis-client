@@ -76,9 +76,18 @@ describe('Koala.view.panel.MobileLegendController', function() {
         it('is a function', function() {
             expect(controller.removeLayer).to.be.a('function');
         });
-        // The function opens a confirm dialog which can`t be tested any further
-        // TODO I'm not sure about this. Maybe we can check if Ext.Msg.show gets
-        // called
+        it('asks for confirmation', function() {
+            var firstLayer = mapComponent.getLayers().item(0);
+            // setup
+            var spy = sinon.spy(Ext.Msg, 'show');
+
+            controller.removeLayer(firstLayer);
+            expect(spy.called).to.be(true);
+            expect(spy.callCount).to.be(1);
+
+            // teardown
+            Ext.Msg.show.restore();
+         });
     });
 
     describe('changeLayerOrder', function() {
