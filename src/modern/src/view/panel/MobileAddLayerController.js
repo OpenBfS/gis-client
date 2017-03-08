@@ -4,51 +4,87 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
 
     /**
      * Will be called with the 'get layers' button. Issues a GetCapabilities
-     * request and sets up handlewrs for reacting on the response.
+     * request and sets up handlers for reacting on the response.
      */
     requestGetCapabilities: function(){
+
         var me = this;
         var view = this.getView();
         var form = view.down('formpanel');
-        // if (form.isValid()) {
-            // view.setLoading(true);
-            view.setMasked({
-                xtype: 'loadmask',
-                message: 'Loading'
-            });
-            me.removeAddLayersComponents();
-            var values = form.getValues();
-            var url = values.url;
-            delete values.url;
+        view.setMasked({
+            xtype: 'loadmask',
+            message: 'Loading'
+        });
+        me.removeAddLayersComponents();
+        var values = form.getValues();
+        var url;
+        url = values.url;
 
-            Ext.Ajax.request({
-                url: url,
-                method: 'GET',
-                params: values,
-                scope: me,
-                success: me.onGetCapabilitiesSuccess,
-                failure: me.onGetCapabilitiesFailure
+        var version;
+        var versionAutomatically = view.getVersionsWmsAutomatically();
+
+        if (versionAutomatically === false) {
+            version = values.version;
+        } else {
+            // try to detect the WMS version we should try next
+            var triedVersions = view.getTriedVersions();
+            var versionsToTry = view.getVersionArray();
+
+            Ext.each(versionsToTry, function(currentVersion) {
+                var alreadyTried = Ext.Array.contains(
+                triedVersions, currentVersion
+              );
+
+                if (!alreadyTried) {
+                    version = currentVersion;
+                    triedVersions.push(currentVersion);
+                    return false;
+                }
             });
-        // }
+        }
+
+        if (!version) {
+            // should only happen if all versions
+            // have been tried unsuccessful
+            view.setMasked(false);
+            Ext.toast(me.getViewModel().get('errorRequestFailed'), 3000);
+            return;
+        }
+
+        Ext.Ajax.request({
+            url: url,
+            method: 'GET',
+            params: {
+                REQUEST: 'GetCapabilities',
+                SERVICE: 'WMS',
+                VERSION: version
+            },
+            scope: me,
+            success: me.onGetCapabilitiesSuccess,
+            failure: me.onGetCapabilitiesFailure
+        });
     },
 
     /**
-     * Remove the checkboxes ffor layxers from previous requests, and also the
+     * Remove the checkboxes for layers from previous requests, and also the
      * interact-toolbar.
      */
     removeAddLayersComponents: function() {
         var view = this.getView();
         var fs = view.down('[name=fs-available-layers]');
         var tb = view.down('toolbar[name=interact-w-available-layers]');
+
         fs.removeAll();
+
         if (tb) {
             view.remove(tb);
         }
+
     },
 
     /**
-     * Called if we could successfully query for the capabiliteis of a WMS, this
-     * methdo will examine the answer and eventually set up a fieldset for all
+     * Called if we could successfully query for the capabilities of a WMS, this
+     * method will examine the answer and eventually set up a fieldset for all
      * the layers that we have found in the server's answer.
      *
      * @param response {XMLHttpRequest} The response of the request.
@@ -59,14 +95,25 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var viewModel = me.getViewModel();
         var parser = viewModel.get('parser');
         var result;
+        var isLastAvailableVersion = view.getVersionArray().length ===
+          view.getTriedVersions().length;
         try {
             result = parser.read(response.responseText);
         } catch(ex) {
-            // console.log(viewModel.get('errorCouldntParseResponse'));
+            if (isLastAvailableVersion) {
+                Ext.toast(me.viewModel.get('errorCouldntParseResponse'), 3000);
+                return;
+            }
+            me.requestGetCapabilities();
+            return;
         }
+
         var compatibleLayers = me.isCompatibleCapabilityResponse(result);
         if (!compatibleLayers) {
-            // console.log(viewModel.get('errorIncompatibleWMS'));
+            if (isLastAvailableVersion) {
+                Ext.toast(me.viewModel.get('errorIncompatibleWMS'), 3000);
+                return;
+            }
         }
         me.fillAvailableLayersFieldset(compatibleLayers);
         me.updateControlToolbarState();
@@ -79,20 +126,28 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
      * @param response {XMLHttpRequest} The response of the request.
      */
     onGetCapabilitiesFailure: function() {
+        var me= this;
         var view = this.getView();
-        view.setMasked(false);
-        // console.log(this.getViewModel().get('errorRequestFailed'));
+        var versionAutomatically = view.getVersionsWmsAutomatically();
+        if (versionAutomatically === false) {
+            Ext.toast(me.getViewModel().get('errorRequestFailed'), 3000);
+            view.setMasked(false);
+            return;
+        } else {
+            // we will try another WMS version automatically...
+            me.requestGetCapabilities();
+        }
     },
 
     /**
      * Checks if the passed capabilities object (from the #parser) is
      * compatible. It woill return an array of layers if we could determine any,
-     * and the boolean value `false` if not.
+     * and the boolean value 'false' if not.
      *
      * @param {Object} capabilities The GetCapabbilties object as it is returned
      *     by our parser.
      * @return {ol.layer.Tile[]|boolean} Eitehr an array of comüatible layers or
-     *     `false`.
+     *     'false'.
      */
     isCompatibleCapabilityResponse: function (capabilities) {
         var me = this;
@@ -190,51 +245,34 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var candidatesInitiallyChecked = view.getCandidatesInitiallyChecked();
 
         Ext.each(layers, function(layer){
-            checkBoxes.push({
-                xtype: 'checkboxfield',
-                label: layer.get('name'),
-                labelWidth: '80%',
-                checked: candidatesInitiallyChecked,
-                olLayer: layer
-            });
+            if(layer) {
+                view.setTriedVersions([]);
+                checkBoxes.push({
+                    xtype: 'checkboxfield',
+                    label: layer.get('name'),
+                    labelWidth: '80%',
+                    checked: candidatesInitiallyChecked,
+                    olLayer: layer
+                });
+            }
+
         });
         fs.add(checkBoxes);
 
         var tbItems = [];
 
-        if (view.getHasCheckAllBtn()) {
+        var addCheckedLayersBtn = view.down('button[name=add-checked-layers]');
+        if(!addCheckedLayersBtn) {
             tbItems.push({
                 xtype: 'button',
-                name: 'check-all-layers',
+                name: 'add-checked-layers',
                 bind: {
-                    text: '{checkAllLayersBtnText}'
+                    text: '{addCheckedLayersBtnText}'
                 },
-                handler: me.checkAllLayers,
+                handler: me.addCheckedLayers,
                 scope: me
             });
         }
-
-        if (view.getHasUncheckAllBtn()) {
-            tbItems.push({
-                xtype: 'button',
-                name: 'uncheck-all-layers',
-                bind: {
-                    text: '{uncheckAllLayersBtnText}'
-                },
-                handler: me.uncheckAllLayers,
-                scope: me
-            });
-        }
-
-        tbItems.push({
-            xtype: 'button',
-            name: 'add-checked-layers',
-            bind: {
-                text: '{addCheckedLayersBtnText}'
-            },
-            handler: me.addCheckedLayers,
-            scope: me
-        });
 
         view.down('formpanel').add({
             xtype: 'toolbar',
@@ -262,7 +300,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         }
         if (allDisabled.length === allCbs.length) {
             // all checkboxes are disabled, all controls can be disabled
-            addBtn.setDisabled(true);
+            // addBtn.setDisabled(true);
             if (checkAllBtn) {
                 checkAllBtn.setDisabled(true);
             }
@@ -317,5 +355,4 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         });
         me.updateControlToolbarState();
     }
-
 });

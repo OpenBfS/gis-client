@@ -14,33 +14,49 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
 
     scrollable: true,
 
+    pickerdata: null,
+
     config: {
         title: 'Add Layer',
 
         /**
-         * Whether layers shall start `checked` or `unchecked` in the available
+         * Whether layers shall start 'checked' or 'unchecked' in the available
          * layers fieldset.
          */
         candidatesInitiallyChecked: true,
 
         /**
-         * Whether to add a `Check all layers` button to the toolbar to interact
-         * with the layers of a GetCapabilities response.
-         */
-        hasCheckAllBtn: false,
-
-        /**
-         * Whether to add a `Uncheck all layers` button to the toolbar to
-         * interactthe with the layers of a GetCapabilities response.
-         */
-        hasUncheckAllBtn: false,
-
-        /**
          * Whether to include sublayers when creting the list of available
          * layers.
          */
-        includeSubLayer: false
+        includeSubLayer: false,
+
+        /**
+         * The WMS versions we try to use in the getCapabilities requests.
+         */
+        versionArray: ['1.3', '1.1.1'],
+
+        /**
+         * WMS versions we already tried to request the getCapabilities document
+         */
+        triedVersions: [],
+
+        /**
+         * Whether to change the WMS versions manually.
+         */
+        versionsWmsAutomatically: true,
+
+        /**
+         * The WMS urls we try to fill the selectedfield.
+         */
+        urlArray: [],
+
+         /**
+          *Whether to change WMS Url from textfield to selectedfield.
+          */
+        urlField: false
     },
+
 
     closeToolAlign: 'left',
 
@@ -55,16 +71,42 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                 title: '{queryParamsFieldSetTitle}'
             },
             items: [{
-                xtype: 'textfield',
+                xtype: 'urlfield',
+                name: 'url',
                 bind: {
                     label: '{wmsUrlTextFieldLabel}'
                 },
-                name: 'url',
-                allowBlank: false,
                 value: 'http://ows.terrestris.de/osm/service'
+            }, {
+                xtype: 'button',
+                name: 'pickerbutton',
+                bind: {
+                    text: '{layerSelection}'
+                },
+                handler: function() {
+                    var data = this.up('k-panel-mobileaddlayer').pickerdata;
+                    var urlPicker = Ext.create('Ext.Picker', {
+                        xtype: 'pickerfield',
+                        doneButton: 'Done',
+                        cancelButton: 'Cancel',
+                        slots: [{
+                            name : 'picker',
+                            data: data
+                        }],
+                        listeners: {
+                            change: function(picker, value) {
+                                var urlField = Ext.ComponentQuery.query('urlfield[name=url]')[0];
+                                urlField.setValue(value.picker);
+                            }
+                        }
+                    });
+                    urlPicker.show();
+                }
             }, {
                 xtype: 'container',
                 defaultType: 'radiofield',
+                name: 'wmsVersionsContainer',
+                hidden: true,
                 items: [{
                     label: 'v1.1.1',
                     labelWidth: '80%',
@@ -79,14 +121,6 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                     id: 'v130-radio',
                     checked: true
                 }]
-            }, {
-                xtype: 'hiddenfield',
-                name: 'request',
-                value: 'GetCapabilities'
-            }, {
-                xtype: 'hiddenfield',
-                name: 'service',
-                value: 'WMS'
             }]
         }, {
             xtype: 'fieldset',
@@ -94,8 +128,10 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
             bind: {
                 title: '{availableLayesFieldSetTitle}'
             }
+
         }, {
             xtype: 'toolbar',
+            name: 'addLayersToolbar',
             items:[{
                 bind: {
                     text: '{requestLayersBtnText}'
@@ -103,5 +139,37 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                 handler: 'requestGetCapabilities'
             }]
         }]
-    }]
+    }],
+
+    listeners: {
+        initialize: function() {
+            var appContext = BasiGX.util.Application.getAppContext();
+            var wmsUrl = appContext.wmsUrls;
+            var versionsAutomatically = this.getVersionsWmsAutomatically();
+            var url = this.getUrlField();
+
+            if (versionsAutomatically) {
+                this.down('container[name=wmsVersionsContainer]').setHidden(true);
+            } else {
+                this.down('container[name=wmsVersionsContainer]').setHidden(false);
+
+            }
+            if(url) {
+                this.down('button[name=pickerbutton]').setHidden(true);
+            } else {
+                this.down('button[name=pickerbutton]').setHidden(false);
+                //correct data for the pickerfield
+                var text = null,
+                    value = null,
+                    data = [];
+
+                Ext.each(wmsUrl, function(wms){
+                    text = wms;
+                    value = wms;
+                    data.push({text:text, value:value});
+                });
+                this.pickerdata = data;
+            }
+        }
+    }
 });
