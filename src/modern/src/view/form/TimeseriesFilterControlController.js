@@ -21,6 +21,7 @@ Ext.define('Koala.view.form.TimeseriesFilterControlController', {
     alias: 'controller.k-form-timeseriesfiltercontrol',
 
     requires: [
+        'Ext.Toast'
     ],
 
     /**

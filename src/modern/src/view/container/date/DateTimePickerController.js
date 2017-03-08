@@ -21,6 +21,7 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
     alias: 'controller.k-container-datetimepicker',
 
     requires: [
+        'Ext.Toast'
     ],
 
     /**
