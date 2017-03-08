@@ -1,0 +1,19 @@
+.mouse-position-control {
+    position: absolute;
+    bottom: 5px;
+    left: 220px;
+    background-color: #3892d4;
+    border-radius: 4px;
+    height: 24px;
+    color: white;
+    padding: 4px;
+    font-size: 10px;
+}
+
+.mouse-position-control.adjusted {
+    left: 575px;
+}
+
+.mouse-position-control:empty {
+   display: none;
+}

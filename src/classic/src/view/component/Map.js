@@ -37,6 +37,8 @@ Ext.define("Koala.view.component.Map", {
     initComponent: function(){
         var me = this;
         var staticMe = Koala.view.component.Map;
+        var container = me.up('basigx-panel-mapcontainer');
+        var map = me.getMap();
         me.callParent();
 
         // this event originates from an ol3 collection event and may be called
@@ -56,6 +58,21 @@ Ext.define("Koala.view.component.Map", {
 
         // TODO We should may move this to another place.
         ol.proj.get('EPSG:25832').setExtent([-1878007.03, 3932282.86, 831544.53, 9437501.55]);
+
+        // MousePosition Control
+        var mousePositionControl = new ol.control.MousePosition({
+            coordinateFormat: ol.coordinate.createStringXY(2),
+            projection: map.getView().getProjection(),
+            className: 'mouse-position-control'
+        });
+        map.addControl(mousePositionControl);
+
+        container.on('overviewmapToggle', function(overviewMap){
+          var visible = overviewMap.isVisible();
+          var mpDiv = Ext.dom.Query.select('.mouse-position-control')[0];
+          mpDiv.className = visible ? 'mouse-position-control adjusted' : 'mouse-position-control';
+        });
+
         me.setupDragDropFunctionality();
     },
 
