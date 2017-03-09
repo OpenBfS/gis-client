@@ -20,7 +20,7 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
         title: 'Add Layer',
 
         /**
-         * Whether layers shall start 'checked' or 'unchecked' in the available
+         * Whether layers shall start `checked` or `unchecked` in the available
          * layers fieldset.
          */
         candidatesInitiallyChecked: true,
@@ -44,17 +44,7 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
         /**
          * Whether to change the WMS versions manually.
          */
-        versionsWmsAutomatically: true,
-
-        /**
-         * The WMS urls we try to fill the selectedfield.
-         */
-        urlArray: [],
-
-         /**
-          *Whether to change WMS Url from textfield to selectedfield.
-          */
-        urlField: false
+        versionsWmsAutomatically: true
     },
 
 
@@ -72,36 +62,37 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
             },
             items: [{
                 xtype: 'urlfield',
-                name: 'url',
+                name: 'addWmsUrlField',
                 bind: {
                     label: '{wmsUrlTextFieldLabel}'
                 },
-                value: 'http://ows.terrestris.de/osm/service'
+                value: null
             }, {
                 xtype: 'button',
                 name: 'pickerbutton',
                 bind: {
                     text: '{layerSelection}'
                 },
-                handler: function() {
-                    var data = this.up('k-panel-mobileaddlayer').pickerdata;
-                    var urlPicker = Ext.create('Ext.Picker', {
-                        xtype: 'pickerfield',
-                        doneButton: 'Done',
-                        cancelButton: 'Cancel',
-                        slots: [{
-                            name : 'picker',
-                            data: data
-                        }],
-                        listeners: {
-                            change: function(picker, value) {
-                                var urlField = Ext.ComponentQuery.query('urlfield[name=url]')[0];
-                                urlField.setValue(value.picker);
-                            }
-                        }
-                    });
-                    urlPicker.show();
-                }
+                handler: 'createPicker'
+                // function() {
+                //     var data = this.up('k-panel-mobileaddlayer').pickerdata;
+                //     var urlPicker = Ext.create('Ext.Picker', {
+                //         xtype: 'pickerfield',
+                //         doneButton: 'Done',
+                //         cancelButton: 'Cancel',
+                //         slots: [{
+                //             name : 'picker',
+                //             data: data
+                //         }],
+                //         listeners: {
+                //             change: function(picker, value) {
+                //                 var urlField = Ext.ComponentQuery.query('urlfield[name=addWmsUrlField]')[0];
+                //                 urlField.setValue(value.picker);
+                //             }
+                //         }
+                //     });
+                //     urlPicker.show();
+                // }
             }, {
                 xtype: 'container',
                 defaultType: 'radiofield',
@@ -128,7 +119,6 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
             bind: {
                 title: '{availableLayesFieldSetTitle}'
             }
-
         }, {
             xtype: 'toolbar',
             name: 'addLayersToolbar',
@@ -146,7 +136,7 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
             var appContext = BasiGX.util.Application.getAppContext();
             var wmsUrl = appContext.wmsUrls;
             var versionsAutomatically = this.getVersionsWmsAutomatically();
-            var url = this.getUrlField();
+            var countUrls = wmsUrl.length;
 
             if (versionsAutomatically) {
                 this.down('container[name=wmsVersionsContainer]').setHidden(true);
@@ -154,22 +144,22 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                 this.down('container[name=wmsVersionsContainer]').setHidden(false);
 
             }
-            if(url) {
+            if(countUrls === 0) {
                 this.down('button[name=pickerbutton]').setHidden(true);
             } else {
                 this.down('button[name=pickerbutton]').setHidden(false);
                 //correct data for the pickerfield
-                var text = null,
-                    value = null,
-                    data = [];
+                var data = [];
 
                 Ext.each(wmsUrl, function(wms){
-                    text = wms;
-                    value = wms;
-                    data.push({text:text, value:value});
+                    data.push({text:wms, value:wms});
                 });
                 this.pickerdata = data;
             }
+
+            var defaultValue = wmsUrl[0];
+            var urlField = this.down('urlfield[name=addWmsUrlField]');
+            urlField.setValue(defaultValue);
         }
     }
 });

@@ -16,6 +16,8 @@ Ext.define('Koala.view.panel.MobileAddLayerModel', {
                 'werden',
         errorCouldntParseResponse: 'Die erhaltene Antwort konnte nicht ' +
                 'erfolgreich geparst werden',
+        pickerDoneBtnText: 'Fertig',
+        pickerCancelBtnText: 'Zurück',
         parser: new ol.format.WMSCapabilities()
     }
 

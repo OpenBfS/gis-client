@@ -3,7 +3,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
     alias: 'controller.k-panel-mobileaddlayer',
 
     /**
-     * Will be called with the 'get layers' button. Issues a GetCapabilities
+     * Will be called with the get layer's button. Issues a GetCapabilities
      * request and sets up handlers for reacting on the response.
      */
     requestGetCapabilities: function(){
@@ -17,9 +17,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         });
         me.removeAddLayersComponents();
         var values = form.getValues();
-        var url;
-        url = values.url;
-
+        var url = values.addWmsUrlField;
         var version;
         var versionAutomatically = view.getVersionsWmsAutomatically();
 
@@ -96,7 +94,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var parser = viewModel.get('parser');
         var result;
         var isLastAvailableVersion = view.getVersionArray().length ===
-          view.getTriedVersions().length;
+            view.getTriedVersions().length;
         try {
             result = parser.read(response.responseText);
         } catch(ex) {
@@ -142,12 +140,12 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
     /**
      * Checks if the passed capabilities object (from the #parser) is
      * compatible. It woill return an array of layers if we could determine any,
-     * and the boolean value 'false' if not.
+     * and the boolean value `false` if not.
      *
      * @param {Object} capabilities The GetCapabbilties object as it is returned
      *     by our parser.
      * @return {ol.layer.Tile[]|boolean} Eitehr an array of comüatible layers or
-     *     'false'.
+     *     `false`.
      */
     isCompatibleCapabilityResponse: function (capabilities) {
         var me = this;
@@ -300,7 +298,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         }
         if (allDisabled.length === allCbs.length) {
             // all checkboxes are disabled, all controls can be disabled
-            // addBtn.setDisabled(true);
+            addBtn.setDisabled(true);
             if (checkAllBtn) {
                 checkAllBtn.setDisabled(true);
             }
@@ -354,5 +352,29 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             }
         });
         me.updateControlToolbarState();
+    },
+
+
+    createPicker:function() {
+        var view = this.getView();
+        var model = view.getViewModel();
+        var data = view.pickerdata;
+        var urlPicker = Ext.create('Ext.Picker', {
+            xtype: 'pickerfield',
+            doneButton: model.get('pickerDoneBtnText'),
+            cancelButton: model.get('pickerCancelBtnText'),
+            slots: [{
+                name : 'picker',
+                data : data
+            }],
+            listeners: {
+                change: function(picker, value) {
+                    var urlField = Ext.ComponentQuery.query('urlfield[name=addWmsUrlField]')[0];
+                    urlField.setValue(value.picker);
+                }
+            }
+        });
+        urlPicker.show();
     }
+
 });

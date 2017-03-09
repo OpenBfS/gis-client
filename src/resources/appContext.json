@@ -84,8 +84,8 @@
                 "label": "Local Vector Data Template (bundeslaender)"
             }],
 
-            "wmsUrls": ['http://ows.terrestris.de/osm/service',
-                'http://ows.mundialis.de/services/service' ]
+            "wmsUrls": ["http://ows.terrestris.de/osm/service",
+                "http://ows.mundialis.de/services/service" ]
         }
     },
     "success": true
