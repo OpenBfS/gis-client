@@ -68,9 +68,9 @@ Ext.define("Koala.view.component.Map", {
         map.addControl(mousePositionControl);
 
         container.on('overviewmapToggle', function(overviewMap){
-          var visible = overviewMap.isVisible();
-          var mpDiv = Ext.dom.Query.select('.mouse-position-control')[0];
-          mpDiv.className = visible ? 'mouse-position-control adjusted' : 'mouse-position-control';
+            var visible = overviewMap.isVisible();
+            var mpDiv = Ext.dom.Query.select('.mouse-position-control')[0];
+            mpDiv.className = visible ? 'mouse-position-control adjusted' : 'mouse-position-control';
         });
 
         me.setupDragDropFunctionality();
