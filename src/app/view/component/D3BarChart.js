@@ -100,6 +100,8 @@ Ext.define('Koala.view.component.D3BarChart',{
             var chartWidth = 200 + categoryCount * 50;
             var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
             var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
+            var yLabel = chartConfig.yAxisLabel || '';
+            var xLabel = chartConfig.xAxisLabel || '';
             var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
             var chartMarginObj;
 
@@ -207,7 +209,7 @@ Ext.define('Koala.view.component.D3BarChart',{
                     left: {
                         scale: chartConfig.yAxisScale || DEFAULTS.LEFT_AXIS_SCALE,
                         format: chartConfig.yAxisFormat || DEFAULTS.LEFT_AXIS_FORMAT,
-                        label: (Koala.util.String.replaceTemplateStrings(chartConfig.yAxisLabel, olFeat) || '') + ' ' + (chartConfig.dspUnit || ''),
+                        label: Koala.util.String.replaceTemplateStrings(yLabel, olFeat) + ' ' + (chartConfig.dspUnit || ''),
                         labelPadding: chartConfig.labelPadding,
                         labelColor: chartConfig.labelColor,
                         labelSize: chartConfig.labelSize,
@@ -221,7 +223,7 @@ Ext.define('Koala.view.component.D3BarChart',{
                     bottom: {
                         scale: chartConfig.xAxisScale || DEFAULTS.BOTTOM_AXIS_SCALE,
                         format: chartConfig.xAxisFormat,
-                        label: (Koala.util.String.replaceTemplateStrings(chartConfig.xAxisLabel, olFeat) || ''),
+                        label: Koala.util.String.replaceTemplateStrings(xLabel, olFeat),
                         labelPadding: chartConfig.labelPadding,
                         labelColor: chartConfig.labelColor,
                         labelSize: chartConfig.labelSize,

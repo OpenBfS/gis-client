@@ -100,6 +100,8 @@ Ext.define('Koala.view.component.D3Chart',{
             var valFromSeq = StringUtil.getValueFromSequence;
             var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
             var title = Koala.util.String.replaceTemplateStrings(titleTpl, olLayer);
+            var yLabel = chartConfig.yAxisLabel || '';
+            var xLabel = chartConfig.xAxisLabel || '';
             var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
             var chartMarginObj;
             var stationName;
@@ -224,7 +226,7 @@ Ext.define('Koala.view.component.D3Chart',{
                         scale: chartConfig.yAxisScale,
                         dataIndex: chartConfig.yAxisAttribute,
                         format: chartConfig.yAxisFormat,
-                        label: (Koala.util.String.replaceTemplateStrings(chartConfig.yAxisLabel, olFeat) || '') + ' ' + (chartConfig.dspUnit || ''),
+                        label: Koala.util.String.replaceTemplateStrings(yLabel, olFeat) + ' ' + (chartConfig.dspUnit || ''),
                         labelPadding: chartConfig.labelPadding,
                         labelColor: chartConfig.labelColor,
                         labelSize: chartConfig.labelSize,
@@ -239,7 +241,7 @@ Ext.define('Koala.view.component.D3Chart',{
                         scale: chartConfig.xAxisScale,
                         dataIndex: chartConfig.xAxisAttribute,
                         format: chartConfig.xAxisFormat,
-                        label: Koala.util.String.replaceTemplateStrings(chartConfig.xAxisLabel, olFeat),
+                        label: Koala.util.String.replaceTemplateStrings(xLabel, olFeat),
                         labelPadding: chartConfig.labelPadding,
                         labelColor: chartConfig.labelColor,
                         labelSize: chartConfig.labelSize,
