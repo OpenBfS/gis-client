@@ -2,11 +2,11 @@
     "data": {
         "merge": {
             "urls": {
-                "metadata-xml2json": "http://bfs-docker:18084/geonetwork/srv/ger/xml_iso19139Tojson",
-                "metadata-search": "http://bfs-docker:18084/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://bfs-docker:18085/geoserver/bfs/ows",
-                "print-servlet": "http://bfs-docker:18086/bfs-printservice/print/",
-                "irix-servlet": "http://bfs-docker:18087/irix-servlet",
+                "metadata-xml2json": "http://bfs-docker/geonetwork/srv/ger/xml_iso19139Tojson",
+                "metadata-search": "http://bfs-docker/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://bfs-docker/geoserver/bfs/ows",
+                "print-servlet": "http://bfs-docker/bfs-printservice/print/",
+                "irix-servlet": "http://bfs-docker/irix-servlet",
 
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
