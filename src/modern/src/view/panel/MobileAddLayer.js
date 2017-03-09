@@ -74,25 +74,6 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                     text: '{layerSelection}'
                 },
                 handler: 'createPicker'
-                // function() {
-                //     var data = this.up('k-panel-mobileaddlayer').pickerdata;
-                //     var urlPicker = Ext.create('Ext.Picker', {
-                //         xtype: 'pickerfield',
-                //         doneButton: 'Done',
-                //         cancelButton: 'Cancel',
-                //         slots: [{
-                //             name : 'picker',
-                //             data: data
-                //         }],
-                //         listeners: {
-                //             change: function(picker, value) {
-                //                 var urlField = Ext.ComponentQuery.query('urlfield[name=addWmsUrlField]')[0];
-                //                 urlField.setValue(value.picker);
-                //             }
-                //         }
-                //     });
-                //     urlPicker.show();
-                // }
             }, {
                 xtype: 'container',
                 defaultType: 'radiofield',
