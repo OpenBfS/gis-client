@@ -26,10 +26,15 @@
 .ol-scale-line {
     bottom: 5px;
     left: 50px;
+    width: 165px;
     background-color: $button-default-background-color;
 }
 .ol-scale-line.koala-scaline-adjusted {
     left: 405px;
+}
+
+.ol-scale-line-inner {
+    margin: 0 auto;
 }
 
 .ol-attribution.ol-uncollapsible {
