@@ -239,7 +239,11 @@
                 "basigx-button-togglelegend-tooltip": "toggle legend",
                 "importLocalDataButtonText": "import",
                 "importLocalDataButtonTooltip": "import local files",
-                "importLocalDataWindowText": "import"
+                "importLocalDataWindowText": "import",
+                "chartSlctnTitle": "chart selection",
+                "chartSlctnMsg": "Layer has a time series as well as a bar chart. Which type of diagram shall be displayed?",
+                "chartSlctnTimeSeriesBtn": "time series",
+                "chartSlctnBarChartBtn": "bar chart"
             }
         }
     },

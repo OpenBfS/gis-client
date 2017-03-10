@@ -239,7 +239,11 @@
                 "basigx-button-togglelegend-tooltip": "Legende ein-/ausklappen",
                 "importLocalDataButtonText": "Import",
                 "importLocalDataButtonTooltip": "Lokale Dateien importieren",
-                "importLocalDataWindowText": "Import"
+                "importLocalDataWindowText": "Import",
+                "chartSlctnTitle": "Diagramm wählen",
+                "chartSlctnMsg": "Layer hat Zeitreihen-, als auch Säulendiagramm. Welches Diagramm soll dargestellt werden?",
+                "chartSlctnTimeSeriesBtn": "Zeitreihendiagramm",
+                "chartSlctnBarChartBtn": "Säulendiagramm"
             }
         }
     },

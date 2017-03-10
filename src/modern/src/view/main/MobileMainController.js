@@ -185,9 +185,33 @@ Ext.define('Koala.view.main.MobileMainController', {
     chartableFeatureFound: function(feature) {
         var me = this;
         var view = me.getView();
+        var viewModel = view.getViewModel();
         var panel;
 
-        if (Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer)) {
+        if (Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer) && Koala.util.Layer.isBarChartLayer(me.chartingLayer)) {
+            Ext.Msg.show({
+                title: viewModel.get('chartSlctnTitle'),
+                message: viewModel.get('chartSlctnMsg'),
+                closable: true,
+                minWidth: 350,
+                buttons: [{
+                    text: viewModel.get('chartSlctnTimeSeriesBtn'),
+                    margin: '5 5 5 5'
+                },{
+                    text: viewModel.get('chartSlctnBarChartBtn'),
+                    margin: '5 5 5 5'
+                }],
+                fn: function(btnId){
+                    if (btnId === viewModel.get('chartSlctnTimeSeriesBtn')) {
+                        panel = view.down('k-panel-timeserieschart');
+                    } else if (btnId === viewModel.get('chartSlctnBarChartBtn')) {
+                        panel = view.down('k-panel-barchart');
+                    }
+                    panel.getController().updateFor(me.chartingLayer, feature);
+                    panel.show();
+                }
+            });
+        } else if (Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer)) {
             panel = view.down('k-panel-timeserieschart');
         } else if (Koala.util.Layer.isBarChartLayer(me.chartingLayer)) {
             panel = view.down('k-panel-barchart');
