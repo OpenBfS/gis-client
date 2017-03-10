@@ -850,7 +850,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             legendEntry.append('title')
                 .text(nameAsTooltip);
 
-            legendEntry.append('text')
+            if (!Ext.isModern){
+                legendEntry.append('text')
                 // fa-save from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('')
                 .attr('class', CSS.DOWNLOAD_ICON)
@@ -858,6 +859,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .attr('dy', '1')
                 .attr('dx', '150') // TODO Discuss, do we need this dynamically?
                 .on('click', me.generateDownloadCallback(shape));
+            }
 
             legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
@@ -928,7 +930,8 @@ Ext.define('Koala.view.component.D3ChartController', {
     doWfsDownload: function(dataObj, btn) {
         var me = this;
         var stationId = dataObj.config.id;
-        var combo = btn.up('window').down('combo');
+        var win = btn.up('window');
+        var combo = win.down('combo');
         var view = this.getView();
         var allSelectedStations = view.getSelectedStations();
         var requestUrl = me.getChartDataRequestUrl();
@@ -950,6 +953,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
               // Use the download library to enforce a browser download.
               download(response.responseText, fileName, format);
+              win.close();
             },
             failure: function(response) {
               Ext.log.warn('Download Error: ', response);

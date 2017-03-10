@@ -118,8 +118,8 @@ Ext.define('Koala.view.panel.MobileLegendController', {
     onSelectionChange: function(treeList, record) {
       var me = this;
       var layer = record.getOlLayer();
-      if(layer){
-        me.setActiveChartingLayer(layer);
+      if (layer && layer !== me.activeChartingLayer) {
+        me.toggleActiveChartingLayer(layer);
       }
     },
 
@@ -184,7 +184,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
 
         // charting toggler
         if(targetClass.indexOf("fa-bar-chart") > 0) {
-            me.setActiveChartingLayer(layer);
+            me.toggleActiveChartingLayer(layer);
         }
 
         if (target.getElementsByTagName("img").length > 0) {
@@ -206,7 +206,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      *
      * @param {ol.layer.Layer} layer The layer to set active charting on.
      */
-    setActiveChartingLayer: function(layer) {
+    toggleActiveChartingLayer: function(layer) {
         if (!(layer instanceof ol.layer.Layer)) {
             return;
         }
