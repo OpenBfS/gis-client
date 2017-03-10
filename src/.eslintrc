@@ -69,6 +69,9 @@
         "no-unused-vars": 2,
         "no-use-before-define": 2,
 
+          "keyword-spacing": 1,
+        "space-before-blocks": 1,
+        "space-before-function-paren": [1, "never"],
         "brace-style": [1, "1tbs"],
         "eol-last": 1,
         "indent": 0,
