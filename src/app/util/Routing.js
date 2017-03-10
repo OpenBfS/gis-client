@@ -251,13 +251,13 @@ Ext.define('Koala.util.Routing', {
             var allLayers = BasiGX.util.Layer.getAllLayers(map);
             var appContext = Koala.util.AppContext.getAppContext(mapComponent);
             var mapLayers = [];
-            if(appContext && appContext.data && appContext.data.merge) {
+            if (appContext && appContext.data && appContext.data.merge) {
                 mapLayers = appContext.data.merge.mapLayers;
             }
 
             var filteredLayers = Ext.Array.filter(allLayers, function(layer){
                 // Skip system layers like hoverLayer etc.
-                if(!layer.metadata){
+                if (!layer.metadata) {
                     return false;
                 }
 
@@ -291,7 +291,7 @@ Ext.define('Koala.util.Routing', {
                     permaObj[uuid].filters = filters;
                 });
 
-                if(!Ext.Object.isEmpty(permaObj)){
+                if (!Ext.Object.isEmpty(permaObj)) {
                     layersString += JSON.stringify(permaObj);
                     layersString = encodeURIComponent(layersString);
                 }

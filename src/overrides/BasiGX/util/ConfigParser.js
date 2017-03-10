@@ -44,14 +44,16 @@ Ext.define('Koala.override.basigx.ConfigParser', {
 
         var username = context.data.merge.application_user.username;
         var password = context.data.merge.application_user.password;
-        var auth;
+        var defaultHeaders;
 
         if(username && password){
             var tok = username + ':' + password;
             // TODO we may want to use something UTF-8 safe:
             // https://developer.mozilla.org/de/docs/Web/API/WindowBase64/btoa#Unicode-Zeichenketten
             var hash = btoa(tok);
-            auth = "Basic " + hash;
+            defaultHeaders = {
+                Authorization: "Basic " + hash
+            };
         }
 
         var layerConfig = context.data.merge.mapLayers;
@@ -62,9 +64,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
               params: {
                   uuid: layerUuid
               },
-              defaultHeaders: {
-                Authorization: auth
-              },
+              defaultHeaders: defaultHeaders,
               method: 'GET',
               success: function(response) {
                   var obj;

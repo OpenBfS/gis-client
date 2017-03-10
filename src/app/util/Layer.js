@@ -416,14 +416,16 @@ Ext.define('Koala.util.Layer', {
             var urls = appContext.data.merge.urls;
             var username = appContext.data.merge.application_user.username;
             var password = appContext.data.merge.application_user.password;
-            var auth;
+            var defaultHeaders;
 
             if(username && password){
                 var tok = username + ':' + password;
                 // TODO we may want to use something UTF-8 safe:
                 // https://developer.mozilla.org/de/docs/Web/API/WindowBase64/btoa#Unicode-Zeichenketten
                 var hash = btoa(tok);
-                auth = "Basic " + hash;
+                defaultHeaders = {
+                    Authorization: "Basic " + hash
+                };
             }
 
             Ext.Ajax.request({
@@ -431,9 +433,7 @@ Ext.define('Koala.util.Layer', {
                 params: {
                     uuid: uuid
                 },
-                defaultHeaders: {
-                  Authorization: auth
-                },
+                defaultHeaders: defaultHeaders,
                 method: 'GET',
 
                 success: function(response) {
