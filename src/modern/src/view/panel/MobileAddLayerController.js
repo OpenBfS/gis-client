@@ -356,6 +356,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
 
 
     createPicker:function() {
+        var me = this;
         var view = this.getView();
         var model = view.getViewModel();
         var data = view.pickerdata;
@@ -369,6 +370,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             }],
             listeners: {
                 change: function(picker, value) {
+                    me.removeAddLayersComponents();
                     var urlField = Ext.ComponentQuery.query('urlfield[name=addWmsUrlField]')[0];
                     urlField.setValue(value.picker);
                 }
