@@ -50,8 +50,7 @@ Ext.define('Koala.view.component.MapController', {
                 if(!timeSeriesWin){
                     // if no timeseries window exist, create one
                     timeSeriesWin = me.openTimeseriesWindow(olFeat);
-                }
-                else {
+                } else {
                     // just add any further series to the existing window
                     timeSeriesWin.getController().updateTimeSeriesChart(layer, olFeat);
                 }
@@ -62,8 +61,7 @@ Ext.define('Koala.view.component.MapController', {
                 barChartWin = me.openBarChartWindow(olFeat);
                 me.offsetBarChartWin(barChartWin);
                 Ext.WindowManager.bringToFront(barChartWin);
-            }
-            else {
+            } else {
                 me.openGetFeatureInfoWindow(olFeat);
             }
         });

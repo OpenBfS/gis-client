@@ -6,10 +6,9 @@ Ext.define('Koala.view.panel.MobileAddLayerModel', {
         wmsUrlTextFieldLabel: 'WMS-URL',
         wmsVersionContainerFieldLabel: 'Version',
         availableLayesFieldSetTitle: 'Verfügbare Layer',
+        layerSelection: 'Layerauswahl',
         resetBtnText: 'Zurücksetzen',
         requestLayersBtnText: 'Verfügbare Layer abfragen',
-        checkAllLayersBtnText: 'Alle auswählen',
-        uncheckAllLayersBtnText: 'Nichts auswählen',
         addCheckedLayersBtnText: 'Ausgewählte Layer hinzufügen',
         errorIncompatibleWMS: 'Der angefragte WMS ist nicht kompatibel ' +
                 'zur Anwendung',
@@ -17,6 +16,8 @@ Ext.define('Koala.view.panel.MobileAddLayerModel', {
                 'werden',
         errorCouldntParseResponse: 'Die erhaltene Antwort konnte nicht ' +
                 'erfolgreich geparst werden',
+        pickerDoneBtnText: 'Fertig',
+        pickerCancelBtnText: 'Zurück',
         parser: new ol.format.WMSCapabilities()
     }
 

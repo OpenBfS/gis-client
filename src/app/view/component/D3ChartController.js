@@ -31,6 +31,14 @@ Ext.define('Koala.view.component.D3ChartController', {
     zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
+    /**
+     * Contains the DateValues of the charts current zoom extent.
+     * @type {Object}
+     */
+    currentDateRange: {
+      min: null,
+      max: null
+    },
 
     /**
      * Whether the chart is actually being rendered.
@@ -102,14 +110,23 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.data = {};
 
         me.on('chartdataprepared', function() {
+            var svgContainer = me.getSvgContainer();
             if (!me.chartDataAvailable) {
+                // We explicitly hide the svg root container, as the modern
+                // toolkit's panel didn't do it automatically if we update the
+                // element via setHtml(). And as it doesn't conflict with the
+                // classic toolkit's behaviour, no additional check for the
+                // current toolkit is needed.
+                svgContainer.attr('display', 'none');
                 view.setHtml(me.getViewModel().get('noDataAvailableText'));
                 me.chartRendered = false;
             } else {
+                // Show the svg root container, see comment above as well.
+                svgContainer.attr('display', 'unset');
+                view.setHtml('');
                 if (me.chartRendered) {
                     me.redrawChart();
                 } else {
-                    view.setHtml('');
                     me.drawChart();
                 }
             }
@@ -374,6 +391,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                         });
 
                         axis.call(axisGenerator.scale(scaleX));
+
+                        me.currentDateRange.min = scaleX.invert(0);
+                        var chartWidth = me.getChartSize()[0];
+                        me.currentDateRange.max = scaleX.invert(chartWidth);
 
                         if (view.getAxes()[orient].rotateXAxisLabel) {
                             d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_X + ' > g > text')
@@ -756,7 +777,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
-                    if (target && target.classed(CSS.DELETE_ICON)) {
+                    if (target && (target.classed(CSS.DELETE_ICON) ||
+                            target.classed(CSS.DOWNLOAD_ICON))) {
                         // click happened on the delete icon, no visibility
                         // toggling. The deletion is handled in an own event
                         // handler
@@ -829,15 +851,112 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .text(nameAsTooltip);
 
             legendEntry.append('text')
+                // fa-save from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('')
+                .attr('class', CSS.DOWNLOAD_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                .on('click', me.generateDownloadCallback(shape));
+
+            legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('')
                 .attr('class', CSS.DELETE_ICON)
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
-                .attr('dx', '160') // TODO Discuss, do we need this dynamically?
+                .attr('dx', '170') // TODO Discuss, do we need this dynamically?
                 .on('click', me.generateDeleteCallback(shape));
+
         });
     },
+
+    /**
+     * Downloads the current visibile data for this series.
+     *
+     * @param {Object} dataObj The config object of the selected Series.
+     */
+    downloadSeries: function(dataObj){
+        var me = this;
+        var viewModel = me.getViewModel();
+
+        var win = Ext.create('Ext.window.Window', {
+            title: viewModel.get('downloadChartDataMsgTitle'),
+            name: 'downloaddatawin',
+            width: 300,
+            layout: 'fit',
+            bodyPadding: 10,
+            items: [{
+              xtype: 'container',
+              items: [{
+                padding: '10px 0',
+                html: viewModel.get('downloadChartDataMsgMessage')
+              },{
+                xtype: 'combo',
+                width: '100%',
+                fieldLabel: viewModel.get('outputFormatText'),
+                value: 'application/json',
+                forceSelection: true,
+                store: [
+                  ['gml3','gml'],
+                  ['csv','csv'],
+                  ['application/json','json']
+                ]
+              }]
+            }],
+            bbar: [{
+              text: viewModel.get('downloadChartDataMsgButtonYes'),
+              name: 'confirm-timeseries-download',
+              handler: me.doWfsDownload.bind(me, dataObj)
+            }, {
+              text: viewModel.get('downloadChartDataMsgButtonNo'),
+              name: 'abort-timeseries-download',
+              handler: function(){
+                this.up('window').close();
+              }
+            }]
+        });
+        win.show();
+    },
+
+    /**
+     * Executes the WFS-Request and starts the real download on success.
+     *
+     * @param {Object} dataObj The config object of the selected Series.
+     * @param {Ext.button.Button} btn The button we clicked on.
+     */
+    doWfsDownload: function(dataObj, btn) {
+        var me = this;
+        var stationId = dataObj.config.id;
+        var combo = btn.up('window').down('combo');
+        var view = this.getView();
+        var allSelectedStations = view.getSelectedStations();
+        var requestUrl = me.getChartDataRequestUrl();
+        var feat = Ext.Array.findBy(allSelectedStations, function(station) {
+          return station.get('id') === stationId;
+        });
+        var requestParams = me.getChartDataRequestParams(feat, true);
+
+        var format = combo.getValue();
+        var fileEnding = combo.getSelectedRecord().get('field2');
+        requestParams.outputFormat = format;
+
+        Ext.Ajax.request({
+            method: 'GET',
+            url: requestUrl,
+            params: requestParams,
+            success: function(response) {
+              var fileName = stationId + '_koala-chart-data.' + fileEnding;
+
+              // Use the download library to enforce a browser download.
+              download(response.responseText, fileName, format);
+            },
+            failure: function(response) {
+              Ext.log.warn('Download Error: ', response);
+            }
+        });
+    },
+
 
     /**
      *
@@ -985,9 +1104,11 @@ Ext.define('Koala.view.component.D3ChartController', {
      * Returns the request params for a given station.
      *
      * @param {ol.Feature} station The station to build the request for.
+     * @param {Boolean} useCurrentZoom Whether to use the currentZoom of the
+     *                                 chart or not. Default is false.
      * @return {Object} The request object.
      */
-    getChartDataRequestParams: function(station) {
+    getChartDataRequestParams: function(station, useCurrentZoom) {
         var me = this;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
@@ -1003,6 +1124,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                 targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
         var endString = Ext.Date.format(endDate,
                 targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
+
+        if(useCurrentZoom === true) {
+          startString = Ext.Date.format(me.currentDateRange.min,
+                  targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
+          endString = Ext.Date.format(me.currentDateRange.max,
+                  targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
+        }
 
         // Get the viewparams configured for the layer
         var layerViewParams = Koala.util.Object.getPathStrOr(

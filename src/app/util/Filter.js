@@ -197,7 +197,8 @@ Ext.define('Koala.util.Filter', {
                             // The list view itself doesn't contain a label,
                             // therefore we insert a basic field that can be
                             // labeled.
-                            xtype: 'field'
+                            xtype: 'field',
+                            labelWidth: '100%'
                         }]
                     };
                 } else {

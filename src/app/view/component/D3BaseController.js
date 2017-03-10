@@ -49,6 +49,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
             LEGEND_CONTAINER: 'k-d3-scrollable-legend-container',
+            DOWNLOAD_ICON: 'k-d3-download-icon',
             DELETE_ICON: 'k-d3-delete-icon',
 
             AXIS_LABEL: 'k-d3-axis-label',
@@ -878,7 +879,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      * removed by eventually calling into the concrete #deleteEverything
      * and #redrawLegend implementations of child classes
      *
-     * @param {Object} shape The current shape object to handle.
+     * @param {Object} dataObj The current shape object to handle.
      * @param {[Number]} idx The index of the shape object in the array of all
      *     shapes.
      * @return {Function} The callback to be used as click handler on the delete
@@ -891,6 +892,23 @@ Ext.define('Koala.view.component.D3BaseController', {
             me.redrawLegend();
         };
         return deleteCallback;
+    },
+
+    /**
+     * Generates a callback that can be used for the click event on the download
+     * icon. It will call the downloadSeries function which has to be implemtend
+     * in the child classes.
+     *
+     * @param {Object} dataObj The current shape object to handle.]
+     * @return {Function} The callback to be used as click handler on the
+     *                    download icon.
+     */
+    generateDownloadCallback: function(dataObj) {
+        var me = this;
+        var downloadCallback = function() {
+          me.downloadSeries(dataObj);
+        };
+        return downloadCallback;
     },
 
     /**
@@ -1001,5 +1019,21 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             me.redrawChart();
         }
+    },
+
+    /**
+     * Returns the root <svg>-container containing the chart itself.
+     *
+     * @method getSvgContainer
+     * @return {Selections} The selection (data-driven transformation of the
+     *     document object model). Note: The selection may be empty, check with
+     *     selection.node().
+     */
+    getSvgContainer: function() {
+        var me = this;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+
+        return d3.select(viewId + ' svg');
     }
 });

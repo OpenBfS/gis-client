@@ -20,8 +20,9 @@ Ext.define('Koala.view.form.TimeseriesFilterControlModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-form-timeseriesfiltercontrol',
     data: {
-        labelStartDate: "",
-        labelEndDate: "",
-        setFilterButtonText: ""
+        labelStartDate: '',
+        labelEndDate: '',
+        setFilterButtonText: '',
+        invalidInputErrMsg: ''
     }
 });

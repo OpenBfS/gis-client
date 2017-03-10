@@ -56,6 +56,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             store: treeStore,
             width: 'calc(80vw)',
             listeners: {
+                selectionchange: me.onSelectionChange,
                 tap: {
                     fn: me.onTreeItemTap,
                     element: 'element'
@@ -79,9 +80,21 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         Ext.iterate(treeListItems, function(k, item) {
             if (item instanceof Ext.list.TreeItem) {
                 me.setTreeItemCheckStatus(item);
+
+                // Prepare Slider
+                var layer = item.getNode().getOlLayer();
+                var slider = document.getElementById('slider_' + layer.id);
+
+                if(slider){
+                    slider.value = layer.getOpacity() * 100;
+
+                    // Clone the element to delete all previous eventlisteners
+                    var sliderClone = slider.cloneNode(true);
+                    slider.parentNode.replaceChild(sliderClone, slider);
+                    sliderClone.addEventListener('change', me.onSliderChange.bind(slider, layer));
+                }
             }
         });
-
     },
 
     /**
@@ -91,6 +104,23 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var me = this;
         var layer = item.getNode().getOlLayer();
         item.setText(me.getTreeListItemTpl().apply(layer));
+    },
+
+    /**
+     * Listener for the selectionchange event.
+     * It sets the selected layer as chartable.
+     *
+     * @param {Ext.list.Tree} treeList The treelist of the MobileLegend.
+     * @param {GeoExt.data.model.LayerTreeNode} record The seletcted
+     *                                                 LayerTreeNode.
+     * @return {undefined}
+     */
+    onSelectionChange: function(treeList, record) {
+      var me = this;
+      var layer = record.getOlLayer();
+      if(layer){
+        me.setActiveChartingLayer(layer);
+      }
     },
 
     /**
@@ -107,6 +137,21 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var targetClass = target.getAttribute("class");
 
         if (!targetClass) {
+            return false;
+        }
+
+        if (targetClass.indexOf("up-icon") > 0) {
+            me.changeLayerOrder(layer, 1);
+            return false;
+        }
+
+        if (targetClass.indexOf("down-icon") > 0) {
+            me.changeLayerOrder(layer, -1);
+            return false;
+        }
+
+        if (targetClass.indexOf("fa-times") > 0) {
+            me.removeLayer(layer);
             return false;
         }
 
@@ -287,27 +332,36 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var me = this;
         return new Ext.XTemplate(
             '<tpl if="this.display(values)">',
-                '<tpl if="this.isVisible(values)">',
-                    '<i class="fa fa-eye" style="color:#157fcc;"></i> {text}',
-                '<tpl else>',
-                    '<i class="fa fa-eye-slash" style="color:#808080;"></i> {text}',
-                '</tpl>',
-                '<tpl if="this.isChartableLayer(values)">',
-                    ' <i class="fa fa-bar-chart ',
-                    '<tpl if="this.isCurrentChartingLayer(values)">',
-                        ' k-active-charting-layer',
-                    '<tpl else>',
-                        ' k-inactive-charting-layer',
-                    '</tpl>',
-                    '"></i>',
-                '</tpl>',
-                '<tpl if="this.isRemovable(values)">',
-                    '<span style="float:right"><i class="fa fa-times" style="color:#157fcc;"></i></span>',
-                '</tpl>',
-                '<tpl if="this.getFilterText(values)">',
-                    '<div class="legend-filter-text" style="color:#666; margin-left:20px; white-space:pre-line;">{[this.getFilterText(values)]}</div>',
-                '</tpl>',
-                '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
+                '<div class="tree-item-order-icons">',
+                  '<i class="fa fa-arrow-up up-icon" style="color:#157fcc;"></i>',
+                  '<i class="fa fa-arrow-down down-icon" style="color:#157fcc;"></i>',
+                  '<tpl if="this.allowOpacityChange(values)">',
+                    '<input type="range" class="mobile-opacity-slider" id="slider_{id}"/>',
+                  '</tpl>',
+                  '<tpl if="this.isRemovable(values)">',
+                      '<span class="remove-icon"><i class="fa fa-times" style="color:#157fcc;"></i></span>',
+                  '</tpl>',
+                '</div>',
+                '<div>',
+                  '<tpl if="this.isVisible(values)">',
+                      '<i class="fa fa-eye" style="color:#157fcc;"></i> {text}',
+                  '<tpl else>',
+                      '<i class="fa fa-eye-slash" style="color:#808080;"></i> {text}',
+                  '</tpl>',
+                  '<tpl if="this.isChartableLayer(values)">',
+                      ' <i class="fa fa-bar-chart ',
+                      '<tpl if="this.isCurrentChartingLayer(values)">',
+                          ' k-active-charting-layer',
+                      '<tpl else>',
+                          ' k-inactive-charting-layer',
+                      '</tpl>',
+                      '"></i>',
+                  '</tpl>',
+                  '<tpl if="this.getFilterText(values)">',
+                      '<div class="legend-filter-text" style="color:#666; margin-left:20px; white-space:pre-line;">{[this.getFilterText(values)]}</div>',
+                  '</tpl>',
+                  '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
+                '</div>',
             '</tpl>',
              {
                 display: function(layer) {
@@ -320,6 +374,9 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 },
                 getFilterText: function(layer) {
                     return Koala.util.Layer.getFiltersTextFromMetadata(layer.metadata);
+                },
+                allowOpacityChange: function(layer){
+                    return layer.get('allowOpacityChange') || false;
                 },
                 isRemovable: function(layer) {
                     return layer.get('allowRemoval') || false;
@@ -335,6 +392,60 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 }
             }
         );
+    },
+
+    /**
+     * Event listener for a slider to set the opacity on a given layer.
+     *
+     * @param {ol.layer.Base} layer The given layer
+     * @param {Event} event The change event.
+     */
+    onSliderChange: function(layer, event){
+        var slider = event.target;
+        var opacity = slider.value / 100;
+        layer.setOpacity(opacity);
+    },
+
+    /**
+     * This changes the order of a given layer by a specfic integer.
+     * e.G.:
+     *  "-1" move the layer behind its underlying layer
+     *  "1" raises the layer above his overlying layer
+     *
+     * @param {ol.layer.Base} layer The layer of which we want to change the
+     *                              order.
+     * @param {Integer} orderInt A Number by which we want to change the order
+     *                           of the layer. E.g. "-1" to decrease by one.
+     */
+    changeLayerOrder: function(layer, orderInt){
+        var me = this;
+        var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
+        var layersCollection = map.getLayerGroup().getLayers();
+        var collectionLength = layersCollection.getLength();
+        var index;
+
+        layersCollection.forEach(function(l, idx){
+            if(l === layer){
+                index = idx;
+            }
+        });
+        var newIndex = index + orderInt;
+
+        // If layer should be moved under the lowest layer, make it the lowest
+        // layer
+        newIndex = newIndex <= 0 ? 0 : newIndex;
+
+        // If layer should be moved over the most top layer, make it the topmost
+        // layer
+        newIndex = newIndex >= collectionLength ? collectionLength - 1: newIndex;
+
+        if(index !== newIndex){
+            layersCollection.removeAt(index);
+            layersCollection.insertAt(newIndex, layer);
+        }
+
+        // This refreshes the templates of the records
+        me.setInitialCheckStatus();
     },
 
     /**

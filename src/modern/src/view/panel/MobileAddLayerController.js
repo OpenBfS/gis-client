@@ -3,52 +3,120 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
     alias: 'controller.k-panel-mobileaddlayer',
 
     /**
-     * Will be called with the 'get layers' button. Issues a GetCapabilities
-     * request and sets up handlewrs for reacting on the response.
+     * Prepares the form regarding the config.
      */
-    requestGetCapabilities: function(){
-        var me = this;
+    onInit: function() {
         var view = this.getView();
-        var form = view.down('formpanel');
-        // if (form.isValid()) {
-            // view.setLoading(true);
-            view.setMasked({
-                xtype: 'loadmask',
-                message: 'Loading'
-            });
-            me.removeAddLayersComponents();
-            var values = form.getValues();
-            var url = values.url;
-            delete values.url;
+        var appContext = BasiGX.util.Application.getAppContext();
+        var wmsUrl = appContext.wmsUrls;
+        var versionsAutomatically = view.getVersionsWmsAutomatically();
+        var countUrls = wmsUrl.length;
 
-            Ext.Ajax.request({
-                url: url,
-                method: 'GET',
-                params: values,
-                scope: me,
-                success: me.onGetCapabilitiesSuccess,
-                failure: me.onGetCapabilitiesFailure
+        if (versionsAutomatically) {
+            view.down('container[name=wmsVersionsContainer]').setHidden(true);
+        } else {
+            view.down('container[name=wmsVersionsContainer]').setHidden(false);
+
+        }
+        if(countUrls === 0) {
+            view.down('button[name=pickerbutton]').setHidden(true);
+        } else {
+            view.down('button[name=pickerbutton]').setHidden(false);
+            //correct data for the pickerfield
+            var data = [];
+
+            Ext.each(wmsUrl, function(wms){
+                data.push({text:wms, value:wms});
             });
-        // }
+            view.pickerdata = data;
+        }
+
+        var defaultValue = wmsUrl[0];
+        var urlField = view.down('urlfield[name=addWmsUrlField]');
+        urlField.setValue(defaultValue);
     },
 
     /**
-     * Remove the checkboxes ffor layxers from previous requests, and also the
+     * Will be called with the get layer's button. Issues a GetCapabilities
+     * request and sets up handlers for reacting on the response.
+     */
+    requestGetCapabilities: function(){
+
+        var me = this;
+        var view = this.getView();
+        var form = view.down('formpanel');
+        view.setMasked({
+            xtype: 'loadmask',
+            message: 'Loading'
+        });
+        me.removeAddLayersComponents();
+        var values = form.getValues();
+        var url = values.addWmsUrlField;
+        var version;
+        var versionAutomatically = view.getVersionsWmsAutomatically();
+
+        if (versionAutomatically === false) {
+            version = values.version;
+        } else {
+            // try to detect the WMS version we should try next
+            var triedVersions = view.getTriedVersions();
+            var versionsToTry = view.getVersionArray();
+
+            Ext.each(versionsToTry, function(currentVersion) {
+                var alreadyTried = Ext.Array.contains(
+                triedVersions, currentVersion
+              );
+
+                if (!alreadyTried) {
+                    version = currentVersion;
+                    triedVersions.push(currentVersion);
+                    return false;
+                }
+            });
+        }
+
+        if (!version) {
+            // should only happen if all versions
+            // have been tried unsuccessful
+            view.setMasked(false);
+            Ext.toast(me.getViewModel().get('errorRequestFailed'), 3000);
+            return;
+        }
+
+        Ext.Ajax.request({
+            url: url,
+            method: 'GET',
+            params: {
+                REQUEST: 'GetCapabilities',
+                SERVICE: 'WMS',
+                VERSION: version
+            },
+            scope: me,
+            success: me.onGetCapabilitiesSuccess,
+            failure: me.onGetCapabilitiesFailure
+        });
+    },
+
+    /**
+     * Remove the checkboxes for layers from previous requests, and also the
      * interact-toolbar.
      */
     removeAddLayersComponents: function() {
         var view = this.getView();
         var fs = view.down('[name=fs-available-layers]');
         var tb = view.down('toolbar[name=interact-w-available-layers]');
+
         fs.removeAll();
+
         if (tb) {
             view.remove(tb);
         }
+
     },
 
     /**
-     * Called if we could successfully query for the capabiliteis of a WMS, this
-     * methdo will examine the answer and eventually set up a fieldset for all
+     * Called if we could successfully query for the capabilities of a WMS, this
+     * method will examine the answer and eventually set up a fieldset for all
      * the layers that we have found in the server's answer.
      *
      * @param response {XMLHttpRequest} The response of the request.
@@ -59,14 +127,25 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var viewModel = me.getViewModel();
         var parser = viewModel.get('parser');
         var result;
+        var isLastAvailableVersion = view.getVersionArray().length ===
+            view.getTriedVersions().length;
         try {
             result = parser.read(response.responseText);
         } catch(ex) {
-            // console.log(viewModel.get('errorCouldntParseResponse'));
+            if (isLastAvailableVersion) {
+                Ext.toast(me.viewModel.get('errorCouldntParseResponse'), 3000);
+                return;
+            }
+            me.requestGetCapabilities();
+            return;
         }
+
         var compatibleLayers = me.isCompatibleCapabilityResponse(result);
         if (!compatibleLayers) {
-            // console.log(viewModel.get('errorIncompatibleWMS'));
+            if (isLastAvailableVersion) {
+                Ext.toast(me.viewModel.get('errorIncompatibleWMS'), 3000);
+                return;
+            }
         }
         me.fillAvailableLayersFieldset(compatibleLayers);
         me.updateControlToolbarState();
@@ -79,9 +158,17 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
      * @param response {XMLHttpRequest} The response of the request.
      */
     onGetCapabilitiesFailure: function() {
+        var me= this;
         var view = this.getView();
-        view.setMasked(false);
-        // console.log(this.getViewModel().get('errorRequestFailed'));
+        var versionAutomatically = view.getVersionsWmsAutomatically();
+        if (versionAutomatically === false) {
+            Ext.toast(me.getViewModel().get('errorRequestFailed'), 3000);
+            view.setMasked(false);
+            return;
+        } else {
+            // we will try another WMS version automatically...
+            me.requestGetCapabilities();
+        }
     },
 
     /**
@@ -190,51 +277,34 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var candidatesInitiallyChecked = view.getCandidatesInitiallyChecked();
 
         Ext.each(layers, function(layer){
-            checkBoxes.push({
-                xtype: 'checkboxfield',
-                label: layer.get('name'),
-                labelWidth: '80%',
-                checked: candidatesInitiallyChecked,
-                olLayer: layer
-            });
+            if(layer) {
+                view.setTriedVersions([]);
+                checkBoxes.push({
+                    xtype: 'checkboxfield',
+                    label: layer.get('name'),
+                    labelWidth: '80%',
+                    checked: candidatesInitiallyChecked,
+                    olLayer: layer
+                });
+            }
+
         });
         fs.add(checkBoxes);
 
         var tbItems = [];
 
-        if (view.getHasCheckAllBtn()) {
+        var addCheckedLayersBtn = view.down('button[name=add-checked-layers]');
+        if(!addCheckedLayersBtn) {
             tbItems.push({
                 xtype: 'button',
-                name: 'check-all-layers',
+                name: 'add-checked-layers',
                 bind: {
-                    text: '{checkAllLayersBtnText}'
+                    text: '{addCheckedLayersBtnText}'
                 },
-                handler: me.checkAllLayers,
+                handler: me.addCheckedLayers,
                 scope: me
             });
         }
-
-        if (view.getHasUncheckAllBtn()) {
-            tbItems.push({
-                xtype: 'button',
-                name: 'uncheck-all-layers',
-                bind: {
-                    text: '{uncheckAllLayersBtnText}'
-                },
-                handler: me.uncheckAllLayers,
-                scope: me
-            });
-        }
-
-        tbItems.push({
-            xtype: 'button',
-            name: 'add-checked-layers',
-            bind: {
-                text: '{addCheckedLayersBtnText}'
-            },
-            handler: me.addCheckedLayers,
-            scope: me
-        });
 
         view.down('formpanel').add({
             xtype: 'toolbar',
@@ -316,6 +386,31 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             }
         });
         me.updateControlToolbarState();
+    },
+
+
+    createPicker:function() {
+        var me = this;
+        var view = this.getView();
+        var model = view.getViewModel();
+        var data = view.pickerdata;
+        var urlPicker = Ext.create('Ext.Picker', {
+            xtype: 'pickerfield',
+            doneButton: model.get('pickerDoneBtnText'),
+            cancelButton: model.get('pickerCancelBtnText'),
+            slots: [{
+                name : 'picker',
+                data : data
+            }],
+            listeners: {
+                change: function(picker, value) {
+                    me.removeAddLayersComponents();
+                    var urlField = Ext.ComponentQuery.query('urlfield[name=addWmsUrlField]')[0];
+                    urlField.setValue(value.picker);
+                }
+            }
+        });
+        urlPicker.show();
     }
 
 });

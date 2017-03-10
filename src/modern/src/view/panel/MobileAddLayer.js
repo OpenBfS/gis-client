@@ -14,6 +14,8 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
 
     scrollable: true,
 
+    pickerdata: null,
+
     config: {
         title: 'Add Layer',
 
@@ -24,23 +26,27 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
         candidatesInitiallyChecked: true,
 
         /**
-         * Whether to add a `Check all layers` button to the toolbar to interact
-         * with the layers of a GetCapabilities response.
-         */
-        hasCheckAllBtn: false,
-
-        /**
-         * Whether to add a `Uncheck all layers` button to the toolbar to
-         * interactthe with the layers of a GetCapabilities response.
-         */
-        hasUncheckAllBtn: false,
-
-        /**
          * Whether to include sublayers when creting the list of available
          * layers.
          */
-        includeSubLayer: false
+        includeSubLayer: false,
+
+        /**
+         * The WMS versions we try to use in the getCapabilities requests.
+         */
+        versionArray: ['1.3', '1.1.1'],
+
+        /**
+         * WMS versions we already tried to request the getCapabilities document
+         */
+        triedVersions: [],
+
+        /**
+         * Whether to change the WMS versions manually.
+         */
+        versionsWmsAutomatically: true
     },
+
 
     closeToolAlign: 'left',
 
@@ -55,16 +61,24 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                 title: '{queryParamsFieldSetTitle}'
             },
             items: [{
-                xtype: 'textfield',
+                xtype: 'urlfield',
+                name: 'addWmsUrlField',
                 bind: {
                     label: '{wmsUrlTextFieldLabel}'
                 },
-                name: 'url',
-                allowBlank: false,
-                value: 'http://ows.terrestris.de/osm/service'
+                value: null
+            }, {
+                xtype: 'button',
+                name: 'pickerbutton',
+                bind: {
+                    text: '{layerSelection}'
+                },
+                handler: 'createPicker'
             }, {
                 xtype: 'container',
                 defaultType: 'radiofield',
+                name: 'wmsVersionsContainer',
+                hidden: true,
                 items: [{
                     label: 'v1.1.1',
                     labelWidth: '80%',
@@ -79,14 +93,6 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                     id: 'v130-radio',
                     checked: true
                 }]
-            }, {
-                xtype: 'hiddenfield',
-                name: 'request',
-                value: 'GetCapabilities'
-            }, {
-                xtype: 'hiddenfield',
-                name: 'service',
-                value: 'WMS'
             }]
         }, {
             xtype: 'fieldset',
@@ -96,6 +102,7 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
             }
         }, {
             xtype: 'toolbar',
+            name: 'addLayersToolbar',
             items:[{
                 bind: {
                     text: '{requestLayersBtnText}'
@@ -103,5 +110,9 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
                 handler: 'requestGetCapabilities'
             }]
         }]
-    }]
+    }],
+
+    listeners: {
+        initialize: 'onInit'
+    }
 });

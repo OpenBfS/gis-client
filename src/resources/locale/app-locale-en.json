@@ -809,7 +809,8 @@
             "data": {
                 "labelStartDate": "start date",
                 "labelEndDate": "end date",
-                "setFilterButtonText": "apply"
+                "setFilterButtonText": "apply",
+                "invalidInputErrMsg": "en:Filter kann nicht übernommen werden. Bitte überprüfen Sie Ihre Eingaben."
             }
         }
     },
@@ -901,6 +902,17 @@
         "config": {
             "data": {
                 "refreshBtnText": "refresh"
+            }
+        }
+    },
+    "Koala.view.container.date.DateTimePicker": {
+        "config": {
+            "data": {
+                "minDateWarnMsg": "en:Das Datum in diesem Feld muss nach dem {0} liegen.",
+                "maxDateWarnMsg": "en:Das Datum in diesem Feld muss vor dem {0} liegen.",
+                "warnMsgDateFormat": "d.m.Y",
+                "endBeforeStartWarnMsg": "en:Der Startwert muss vor dem Endwert liegen.",
+                "exceedsMaxDurationWarnMsg": "en:Startwert und Endwert liegen zu weit auseinander."
             }
         }
     },

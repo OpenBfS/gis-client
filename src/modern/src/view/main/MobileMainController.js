@@ -87,6 +87,14 @@ Ext.define('Koala.view.main.MobileMainController', {
      */
     onMapSingleClick: function(evt) {
         var me = this;
+        var coordinate = evt.coordinate;
+
+        // Coordinate Info
+        Ext.toast({
+          message: coordinate[0] + ',<br/>' + coordinate[1] + ' ',
+          timeout: 2000
+        });
+
         if(me.pendingRequest) {
             me.pendingRequest.abort();
         }
@@ -100,8 +108,6 @@ Ext.define('Koala.view.main.MobileMainController', {
             Ext.log.warn('Illegal chartable layer defined');
             return;
         }
-
-        var coordinate = evt.coordinate;
 
         if (LayerUtil.isWmsLayer(me.chartingLayer)) {
             var mapView = evt.map.getView();

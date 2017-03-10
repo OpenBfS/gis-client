@@ -161,27 +161,25 @@ Ext.define('Koala.util.Layer', {
          * @param {ol.layer.Layer} layer The layer to check.
          * @return {boolean} Whether the layer is a WMS layer.
          */
-        isWmsLayer: (function() {
-            var wmsSourceNames = ['TileWMS', 'ImageWMS'];
-            var wmsSources = [];
-            Ext.each(wmsSourceNames, function(wmsSourceName) {
-                if (wmsSourceName in ol.source) {
-                    wmsSources.push(ol.source[wmsSourceName]);
-                }
-            });
-            return function(layer) {
-                var isWmsLayer = false;
-                if (layer) {
-                    var source = layer.getSource();
-                    Ext.each(wmsSources, function (wmsSource) {
-                        if (source instanceof wmsSource) {
-                            isWmsLayer = true;
-                        }
-                    });
-                }
-                return isWmsLayer;
-            };
-        }()),
+        isWmsLayer: function(layer) {
+            var isWmsLayer = false;
+            if (layer) {
+                var wmsSourceNames = ['TileWMS', 'ImageWMS'];
+                var wmsSources = [];
+                Ext.each(wmsSourceNames, function(wmsSourceName) {
+                    if (wmsSourceName in ol.source) {
+                        wmsSources.push(ol.source[wmsSourceName]);
+                    }
+                });
+                var source = layer.getSource();
+                Ext.each(wmsSources, function (wmsSource) {
+                    if (source instanceof wmsSource) {
+                        isWmsLayer = true;
+                    }
+                });
+            }
+            return isWmsLayer;
+        },
 
         /**
          * Returns whether the specified layer is using a vector source, i.e. is
@@ -190,24 +188,22 @@ Ext.define('Koala.util.Layer', {
          * @param {ol.layer.Layer} layer The layer to check.
          * @return {boolean} Whether the layer is a vector layer.
          */
-        isVectorLayer: (function() {
-            var vectorSources = [];
-            if ('Vector' in ol.source) {
-                vectorSources.push(ol.source.Vector);
-            }
-            return function(layer) {
-                var isVectorLayer = false;
-                if (layer) {
-                    var source = layer.getSource();
-                    Ext.each(vectorSources, function (vectorSource) {
-                        if (source instanceof vectorSource) {
-                            isVectorLayer = true;
-                        }
-                    });
+        isVectorLayer: function(layer) {
+            var isVectorLayer = false;
+            if (layer) {
+                var vectorSources = [];
+                if ('Vector' in ol.source) {
+                    vectorSources.push(ol.source.Vector);
                 }
-                return isVectorLayer;
-            };
-        }()),
+                var source = layer.getSource();
+                Ext.each(vectorSources, function (vectorSource) {
+                    if (source instanceof vectorSource) {
+                        isVectorLayer = true;
+                    }
+                });
+            }
+            return isVectorLayer;
+        },
 
         /**
          * Returns whether the passed metadat object from GNOS has at least one
@@ -418,12 +414,26 @@ Ext.define('Koala.util.Layer', {
 
             var appContext = BasiGX.view.component.Map.guess().appContext;
             var urls = appContext.data.merge.urls;
+            var username = appContext.data.merge.application_user.username;
+            var password = appContext.data.merge.application_user.password;
+            var defaultHeaders;
+
+            if(username && password){
+                var tok = username + ':' + password;
+                // TODO we may want to use something UTF-8 safe:
+                // https://developer.mozilla.org/de/docs/Web/API/WindowBase64/btoa#Unicode-Zeichenketten
+                var hash = btoa(tok);
+                defaultHeaders = {
+                    Authorization: "Basic " + hash
+                };
+            }
 
             Ext.Ajax.request({
                 url: urls['metadata-xml2json'],
                 params: {
                     uuid: uuid
                 },
+                defaultHeaders: defaultHeaders,
                 method: 'GET',
 
                 success: function(response) {
@@ -822,7 +832,7 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
-         * @param Object metadata The JSON metadata form GNOS
+         * @param Object metadata The JSON metadata from GNOS
          */
         getLayerClassFromMetadata: function(metadata) {
             var layerCfg = metadata.layerConfig;
@@ -925,6 +935,7 @@ Ext.define('Koala.util.Layer', {
                 allowOpacityChange: getBool(olProps.allowOpacityChange, true),
                 hoverable: shallHover,
                 hoverTpl: olProps.hoverTpl,
+                opacity: olProps.opacity || 1,
                 hoverStyle: olProps.hoverStyle,
                 selectStyle: olProps.selectStyle || olProps.hoverStyle,
                 hasLegend: getBool(olProps.hasLegend, true),
@@ -1755,7 +1766,9 @@ Ext.define('Koala.util.Layer', {
             }
             var cqlParts = [];
             Ext.each(filters, function(filter){
+              if(!staticMe.isViewParamFilter(filter)){
                 cqlParts.push("(" + staticMe.filterToCql(filter) + ")");
+              }
             });
             return cqlParts.join(" AND ");
         },

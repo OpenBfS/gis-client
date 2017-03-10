@@ -85,6 +85,11 @@ Ext.define('Koala.util.Routing', {
             var expectedLayers = 0;
             var gotLayers = 0;
             var routeCreatedLayers = {};
+
+            if (layers.length === 0) {
+                return false;
+            }
+
             var permaObj = JSON.parse(decodeURIComponent(layers));
 
             Ext.iterate(permaObj, function(uuid, config) {
@@ -244,9 +249,24 @@ Ext.define('Koala.util.Routing', {
             var lon = map.getView().getCenter()[0];
             var lat = map.getView().getCenter()[1];
             var allLayers = BasiGX.util.Layer.getAllLayers(map);
+            var appContext = Koala.util.AppContext.getAppContext(mapComponent);
+            var mapLayers = [];
+            if (appContext && appContext.data && appContext.data.merge) {
+                mapLayers = appContext.data.merge.mapLayers;
+            }
 
             var filteredLayers = Ext.Array.filter(allLayers, function(layer){
-                return !Ext.isEmpty(layer.metadata);
+                // Skip system layers like hoverLayer etc.
+                if (!layer.metadata) {
+                    return false;
+                }
+
+                // Skip baselayers configured in appContext
+                if (Ext.Array.contains(mapLayers, layer.metadata.id)) {
+                    return false;
+                }
+
+                return true;
             });
 
             if(!skipLayers){
@@ -271,8 +291,10 @@ Ext.define('Koala.util.Routing', {
                     permaObj[uuid].filters = filters;
                 });
 
-                layersString += JSON.stringify(permaObj);
-                layersString = encodeURIComponent(layersString);
+                if (!Ext.Object.isEmpty(permaObj)) {
+                    layersString += JSON.stringify(permaObj);
+                    layersString = encodeURIComponent(layersString);
+                }
             }
 
             var hash = Ext.String.format('map/{0}/{1}/{2}|layers/{3}',

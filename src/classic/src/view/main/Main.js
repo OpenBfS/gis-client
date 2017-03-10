@@ -221,6 +221,8 @@ Ext.define('Koala.view.main.Main', {
                                     hasCheckAllBtn: true,
                                     hasUncheckAllBtn: true,
                                     includeSubLayer: true,
+                                    versionsWmsAutomatically: true,
+                                    wmsBaseUrls: BasiGX.util.Application.getAppContext().wmsUrls,
                                     listeners: {
                                         beforewmsadd: function(olLayer){
                                             olLayer.set('nameWithSuffix', olLayer.get('name'));
