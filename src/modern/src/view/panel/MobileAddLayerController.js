@@ -3,6 +3,40 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
     alias: 'controller.k-panel-mobileaddlayer',
 
     /**
+     * Prepares the form regarding the config.
+     */
+    onInit: function() {
+        var view = this.getView();
+        var appContext = BasiGX.util.Application.getAppContext();
+        var wmsUrl = appContext.wmsUrls;
+        var versionsAutomatically = view.getVersionsWmsAutomatically();
+        var countUrls = wmsUrl.length;
+
+        if (versionsAutomatically) {
+            view.down('container[name=wmsVersionsContainer]').setHidden(true);
+        } else {
+            view.down('container[name=wmsVersionsContainer]').setHidden(false);
+
+        }
+        if(countUrls === 0) {
+            view.down('button[name=pickerbutton]').setHidden(true);
+        } else {
+            view.down('button[name=pickerbutton]').setHidden(false);
+            //correct data for the pickerfield
+            var data = [];
+
+            Ext.each(wmsUrl, function(wms){
+                data.push({text:wms, value:wms});
+            });
+            view.pickerdata = data;
+        }
+
+        var defaultValue = wmsUrl[0];
+        var urlField = view.down('urlfield[name=addWmsUrlField]');
+        urlField.setValue(defaultValue);
+    },
+
+    /**
      * Will be called with the get layer's button. Issues a GetCapabilities
      * request and sets up handlers for reacting on the response.
      */

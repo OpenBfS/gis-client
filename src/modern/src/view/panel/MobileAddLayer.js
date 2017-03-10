@@ -113,34 +113,6 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
     }],
 
     listeners: {
-        initialize: function() {
-            var appContext = BasiGX.util.Application.getAppContext();
-            var wmsUrl = appContext.wmsUrls;
-            var versionsAutomatically = this.getVersionsWmsAutomatically();
-            var countUrls = wmsUrl.length;
-
-            if (versionsAutomatically) {
-                this.down('container[name=wmsVersionsContainer]').setHidden(true);
-            } else {
-                this.down('container[name=wmsVersionsContainer]').setHidden(false);
-
-            }
-            if(countUrls === 0) {
-                this.down('button[name=pickerbutton]').setHidden(true);
-            } else {
-                this.down('button[name=pickerbutton]').setHidden(false);
-                //correct data for the pickerfield
-                var data = [];
-
-                Ext.each(wmsUrl, function(wms){
-                    data.push({text:wms, value:wms});
-                });
-                this.pickerdata = data;
-            }
-
-            var defaultValue = wmsUrl[0];
-            var urlField = this.down('urlfield[name=addWmsUrlField]');
-            urlField.setValue(defaultValue);
-        }
+        initialize: 'onInit'
     }
 });
