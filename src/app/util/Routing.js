@@ -86,7 +86,7 @@ Ext.define('Koala.util.Routing', {
             var gotLayers = 0;
             var routeCreatedLayers = {};
 
-            if (layers.length === 0) {
+            if (Ext.isEmpty(layers.length)) {
                 return false;
             }
 
