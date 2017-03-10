@@ -850,7 +850,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             legendEntry.append('title')
                 .text(nameAsTooltip);
 
-            legendEntry.append('text')
+            if (!Ext.isModern){
+                legendEntry.append('text')
                 // fa-save from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('')
                 .attr('class', CSS.DOWNLOAD_ICON)
@@ -858,6 +859,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .attr('dy', '1')
                 .attr('dx', '150') // TODO Discuss, do we need this dynamically?
                 .on('click', me.generateDownloadCallback(shape));
+            }
 
             legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
