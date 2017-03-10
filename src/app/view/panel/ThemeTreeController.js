@@ -22,7 +22,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
 
     currentTask: null,
 
-    toggleLayerSetView: function () {
+    toggleLayerSetView: function() {
         var view = this.getView();
         var menu = view.up('basigx-panel-menu');
         var mapContainer = view.up('basigx-panel-mapcontainer');
@@ -35,7 +35,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         }
     },
 
-    resetThemeTreeFiltering: function (btn) {
+    resetThemeTreeFiltering: function(btn) {
         var themeTree = this.getView();
         var themeStore = themeTree.getStore();
         themeStore.clearFilter();
@@ -48,7 +48,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         if (me.currentTask) {
             me.currentTask.cancel();
         }
-        me.currentTask = new Ext.util.DelayedTask(function(){
+        me.currentTask = new Ext.util.DelayedTask(function() {
             if (item.isLeaf()) {
                 Koala.util.Layer.showChangeFilterSettingsWinByUuid(
                     item.get('uuid')

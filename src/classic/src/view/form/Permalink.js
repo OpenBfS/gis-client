@@ -40,11 +40,11 @@ Ext.define("Koala.view.form.Permalink", {
         name: 'textfield-permalink',
         editable: false,
         listeners: {
-            afterrender: function(textfield){
+            afterrender: function(textfield) {
                 var permalink = textfield.up('form').getPermalink();
                 textfield.setValue(permalink);
             },
-            change: function(textfield){
+            change: function(textfield) {
                 var width = Ext.util.TextMetrics.measure(
                     textfield.getEl(), textfield.getValue()).width;
                 textfield.setWidth(width + 20);
@@ -52,7 +52,7 @@ Ext.define("Koala.view.form.Permalink", {
         }
     }],
 
-    getPermalink: function(){
+    getPermalink: function() {
         var route = Koala.util.Routing.getRoute();
         var hrefWithoutHash = window.location.origin +
             window.location.pathname +

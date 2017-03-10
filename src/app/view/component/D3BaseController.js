@@ -201,7 +201,7 @@ Ext.define('Koala.view.component.D3BaseController', {
          * @param {Selection} d3Obj The object to manipulate.
          * @param {Object} diffObj A specification which attribute how to modify.
          */
-        adjustTransformTranslate: function (d3Obj, diffObj) {
+        adjustTransformTranslate: function(d3Obj, diffObj) {
             var staticMe = Koala.view.component.D3BaseController;
             var makeTranslate = staticMe.makeTranslate;
             var currentTransform = d3Obj.attr('transform');
@@ -240,7 +240,7 @@ Ext.define('Koala.view.component.D3BaseController', {
          *
          * @return {String} color The random color, e.g. '#6580C6' or '#AC3A97'.
          */
-        getRandomColor: (function(){
+        getRandomColor: (function() {
             var letters = '0123456789ABCDEF'.split('');
             return function() {
                 // An alternative approach:
@@ -858,7 +858,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var numLegends;
         if (Ext.isArray(elems)) { // for barcharts
             numLegends = elems.length;
-        } else if(Ext.isObject(elems)) { // for timeseries
+        } else if (Ext.isObject(elems)) { // for timeseries
             numLegends = Object.keys(elems).length;
         } else {
             // Ouch, shouldn't happen.

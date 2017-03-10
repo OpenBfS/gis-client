@@ -81,7 +81,7 @@ Ext.define("Koala.view.window.HelpWindow", {
                 treelist = me.lookupReference('treelist'),
                 store = treelist.getStore(),
                 selection = treelist.getSelection();
-            if (store && !selection){
+            if (store && !selection) {
                 var winController = me.getController();
                 winController.removeTopicByTools();
                 winController.setTopic('quickRef');

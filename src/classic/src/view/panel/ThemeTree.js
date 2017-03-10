@@ -79,7 +79,7 @@ Ext.define("Koala.view.panel.ThemeTree", {
         itemdblclick: 'addLayerWithDefaultFilters'
     },
 
-    initComponent: function(){
+    initComponent: function() {
 
         // try to load layerset from appContext
         var appContext = BasiGX.view.component.Map.guess().appContext;

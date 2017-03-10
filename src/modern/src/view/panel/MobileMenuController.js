@@ -25,7 +25,7 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         mdStore.load();
     },
 
-    onClearIconTap: function(field){
+    onClearIconTap: function(field) {
         var list = field.up().down('[name=spatialsearchlist]');
         var metadatalist = field.up().down('[name=metadatasearchlist]');
         list.getStore().removeAll();
@@ -44,7 +44,7 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         view.fit(extent, map.getSize());
     },
 
-    addLayer: function(list, index, target, record){
+    addLayer: function(list, index, target, record) {
         var uuid = record.get('fileIdentifier');
         Koala.util.Layer.addLayerByUuid(uuid);
 
@@ -54,11 +54,11 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         // tabpanel.setActiveItem(mapcard);
     },
 
-    getMetadataCql: function(fields, value){
+    getMetadataCql: function(fields, value) {
         var cql = "";
-        Ext.each(fields, function(field, idx, fieldsArray){
+        Ext.each(fields, function(field, idx, fieldsArray) {
             cql += field + " like '%" + value + "%'";
-            if(idx < fieldsArray.length-1){
+            if (idx < fieldsArray.length-1) {
                 cql += " OR ";
             }
         });

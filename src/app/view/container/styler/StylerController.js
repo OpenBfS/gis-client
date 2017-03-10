@@ -26,7 +26,7 @@ Ext.define('Koala.view.container.styler.StylerController', {
     /**
      *
      */
-    onBoxReady: function(){
+    onBoxReady: function() {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var layer = viewModel.get('layer');
@@ -35,7 +35,7 @@ Ext.define('Koala.view.container.styler.StylerController', {
         viewModel.set('layer', layer);
         viewModel.set('style', style);
 
-        if(!layer.get('originalStyle')){
+        if (!layer.get('originalStyle')) {
             layer.set('originalStyle', layer.getStyle());
         }
 
@@ -47,7 +47,7 @@ Ext.define('Koala.view.container.styler.StylerController', {
     /**
      *
      */
-    reloadCurrentStyle: function(){
+    reloadCurrentStyle: function() {
         var me = this;
         var viewModel = this.getViewModel();
         var layer = viewModel.get('layer');
@@ -59,8 +59,8 @@ Ext.define('Koala.view.container.styler.StylerController', {
                 yes: "Ja",
                 no: "Nein"
             },
-            fn: function(btnId){
-                if(btnId === "yes"){
+            fn: function(btnId) {
+                if (btnId === "yes") {
                     layer.setStyle(layer.get('originalStyle'));
                     layer.set('koalaStyle', undefined);
                     me.getView().up('window').close();
@@ -86,7 +86,7 @@ Ext.define('Koala.view.container.styler.StylerController', {
      * configured, usually from an unexpected layerName configuration or after a
      * request for getting styles failed.
      */
-    markErrored: function(msgKey){
+    markErrored: function(msgKey) {
         var me = this;
         var msg = me.getViewModel().get(msgKey || 'genericError');
         me.getView().setHtml(msg);

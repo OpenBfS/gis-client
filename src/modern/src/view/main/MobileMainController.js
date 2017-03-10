@@ -31,14 +31,14 @@ Ext.define('Koala.view.main.MobileMainController', {
     /**
      * TODO needed only while developing, will eventually be removed
      */
-    addDummyDevLayers: function(){
+    addDummyDevLayers: function() {
         var layers = [
             //'08e36567-cf9a-4e22-8774-e83a3452da7b' // odl_brutto_10min
             'f917f393-fb9b-4345-99cf-8d2fcfab8d3d' // niederschlag_24h
             //'45dd5d65-630a-42d9-9f86-6c718dab0412' // barchart layer
             // ,'25e17589-6694-4d58-8efb-0c400415aec3' // vector layer
         ];
-        Ext.each(layers, function(uuid){
+        Ext.each(layers, function(uuid) {
             Koala.util.Layer.addLayerByUuid(uuid);
         });
     },
@@ -95,7 +95,7 @@ Ext.define('Koala.view.main.MobileMainController', {
           timeout: 2000
         });
 
-        if(me.pendingRequest) {
+        if (me.pendingRequest) {
             me.pendingRequest.abort();
         }
         var LayerUtil = Koala.util.Layer;
@@ -130,7 +130,7 @@ Ext.define('Koala.view.main.MobileMainController', {
                 success: me.onWmsGetFeatureSuccess,
                 failure: me.onWmsGetFeatureFailure
             });
-        } else if(LayerUtil.isVectorLayer(me.chartingLayer)) {
+        } else if (LayerUtil.isVectorLayer(me.chartingLayer)) {
             var source = me.chartingLayer.getSource();
             var closestFeature = source.getClosestFeatureToCoordinate(coordinate);
             var extentFromCoord = me.extentFromCoordinate(coordinate, resolution);
@@ -207,7 +207,7 @@ Ext.define('Koala.view.main.MobileMainController', {
                     text: viewModel.get('chartSlctnBarChartBtn'),
                     margin: '5 5 5 5'
                 }],
-                fn: function(btnId){
+                fn: function(btnId) {
                     if (btnId === viewModel.get('chartSlctnTimeSeriesBtn')) {
                         panel = view.down('k-panel-timeserieschart');
                     } else if (btnId === viewModel.get('chartSlctnBarChartBtn')) {
@@ -235,7 +235,7 @@ Ext.define('Koala.view.main.MobileMainController', {
      * @param {XMLHttpRequest} resp The response object.
      */
     onWmsGetFeatureFailure: function(resp) {
-        if(!resp.aborted){
+        if (!resp.aborted) {
             Ext.log.error('WMS GetFeatureInfo failure', resp);
         }
     },

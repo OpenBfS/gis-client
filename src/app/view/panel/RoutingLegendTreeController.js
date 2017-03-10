@@ -35,9 +35,9 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
     /**
      *
      */
-    setRouting: function(store){
+    setRouting: function(store) {
         var layers = [];
-        store.each(function(rec){
+        store.each(function(rec) {
             var olLayer = rec.getOlLayer();
             var routeId = olLayer.get('routeId');
             var visible = rec.getOlLayer().getVisible() ? "1" : "0";
@@ -52,33 +52,33 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
         this.redirectTo('layers/' + layers.join(','));
     },
 
-    onSelectionChange: function(selectionModel, selectedRecords){
+    onSelectionChange: function(selectionModel, selectedRecords) {
         var store = this.getView().getStore();
         var keyHoverable = BasiGX.plugin.Hover.LAYER_HOVERABLE_PROPERTY_NAME;
         var keyHovertpl = 'hoverTpl';
         var olLayer;
-        if(selectedRecords.length > 0){
+        if (selectedRecords.length > 0) {
             // Sets keyHoverable to false on every not selected layer
-            store.each(function(layerRec){
+            store.each(function(layerRec) {
                 olLayer = layerRec.getOlLayer();
-                if(olLayer /* && olLayer.get(keyHovertpl) */ ) {
+                if (olLayer /* && olLayer.get(keyHovertpl) */ ) {
                     olLayer.set(keyHoverable, false);
                 }
             });
             // Sets keyHoverable to true for the selected layers that have an
             // hoverTpl
-            Ext.each(selectedRecords, function(selectedRecord){
+            Ext.each(selectedRecords, function(selectedRecord) {
                 olLayer = selectedRecord.getOlLayer();
-                if(olLayer && olLayer.get( keyHovertpl )){
+                if (olLayer && olLayer.get( keyHovertpl )) {
                     olLayer.set(keyHoverable, true);
                 }
             });
         } else {
             // Sets keyHoverable to true on every layer that has an hoverTpl,
             // if none is selected
-            store.each(function(layerRec){
+            store.each(function(layerRec) {
                 olLayer = layerRec.getOlLayer();
-                if(olLayer && olLayer.get( keyHovertpl )){
+                if (olLayer && olLayer.get( keyHovertpl )) {
                     olLayer.set(keyHoverable, true);
                 }
             });

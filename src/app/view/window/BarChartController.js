@@ -57,7 +57,7 @@ Ext.define('Koala.view.window.BarChartController', {
         if (layerTitle) {
             view.setBind({title: layerTitle});
         }
-        if (lastChart){
+        if (lastChart) {
             view.setPosition(lastChart.getX() + 20, lastChart.getY() + 20);
         }
     },

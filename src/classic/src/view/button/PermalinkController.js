@@ -27,9 +27,9 @@ Ext.define('Koala.view.button.PermalinkController', {
     /**
      *
      */
-    onClick: function(){
+    onClick: function() {
         var win = Ext.ComponentQuery.query('[name=permalink-window]')[0];
-        if(!win){
+        if (!win) {
             Ext.create('Ext.window.Window', {
                 name: 'permalink-window',
                 title: this.getViewModel().get('windowTitle'),
@@ -42,7 +42,7 @@ Ext.define('Koala.view.button.PermalinkController', {
                     tooltip: 'Hilfe',
                     callback: function() {
                         var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-                        if(!helpWin){
+                        if (!helpWin) {
                             helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                             helpWin.on('afterlayout', function() {
                                 var helpWinController = this.getController();

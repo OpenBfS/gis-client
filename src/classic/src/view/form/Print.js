@@ -71,7 +71,7 @@ Ext.define("Koala.view.form.Print", {
         me.setBind();
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
-        if(appContext){
+        if (appContext) {
             var configuredIrixServlet = Koala.util.Object.getPathStrOr(
                 appContext, 'data/merge/urls/irix-servlet', false
             );
@@ -113,7 +113,7 @@ Ext.define("Koala.view.form.Print", {
     /**
      * @override Override to return an htmleditor instead of a textfield
      */
-    getStringField: function (attributeRec) {
+    getStringField: function(attributeRec) {
         return {
             xtype: 'textfield',
             name: attributeRec.get('name'),
@@ -130,7 +130,7 @@ Ext.define("Koala.view.form.Print", {
     /**
      *
      */
-    onTextFieldFocus: function(textfield){
+    onTextFieldFocus: function(textfield) {
         Ext.create('Ext.window.Window', {
             title: textfield.getFieldLabel() + ' HTML',
             layout: 'fit',
@@ -149,7 +149,7 @@ Ext.define("Koala.view.form.Print", {
                 xtype: 'button',
                 text: 'OK',
                 name: 'setValueButton',
-                handler: function(button){
+                handler: function(button) {
                     var win = button.up('window');
                     var editor = win.down('htmleditor');
                     win.correspondingTextfield.setValue(editor.getValue());
@@ -164,7 +164,7 @@ Ext.define("Koala.view.form.Print", {
      * layerlegends we want to print and which not.
      * @override
      */
-    getLegendAttributeFields: function () {
+    getLegendAttributeFields: function() {
         var me = this;
         var legendsFieldset = Ext.create('Ext.form.FieldSet', {
             title: this.getPrintLegendsFieldSetTitle(),
@@ -176,14 +176,14 @@ Ext.define("Koala.view.form.Print", {
         var treePanel = Ext.ComponentQuery.
                 query('k-panel-routing-legendtree')[0];
 
-        var listenerFunction = function(){
+        var listenerFunction = function() {
             me.updateLegendsFieldset(legendsFieldset);
         };
 
         var treeStore = treePanel.getStore();
         treeStore.on('update', listenerFunction);
         treeStore.on('datachange', listenerFunction);
-        legendsFieldset.on('destroy', function(){
+        legendsFieldset.on('destroy', function() {
             treeStore.un('update', listenerFunction);
             treeStore.un('datachange', listenerFunction);
         });
@@ -223,7 +223,7 @@ Ext.define("Koala.view.form.Print", {
      * Update the content of the legendsFieldset. Remove all. Get visible and
      * printable Layers from Map. Add those to the fieldset.
      */
-    updateLegendsFieldset: function(legendsFieldset){
+    updateLegendsFieldset: function(legendsFieldset) {
         var me = this;
         if (!legendsFieldset) {
             return;
@@ -233,8 +233,8 @@ Ext.define("Koala.view.form.Print", {
         var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
 
         var items = [];
-        Ext.each(layers, function(layer){
-            if(layer.get('visible') && layer.get('allowPrint')){
+        Ext.each(layers, function(layer) {
+            if (layer.get('visible') && layer.get('allowPrint')) {
                 var legendTextHtml = me.prepareLegendTextHtml(layer);
 
                 items.push({
@@ -258,7 +258,7 @@ Ext.define("Koala.view.form.Print", {
             }
         });
 
-        if(items.length > 0){
+        if (items.length > 0) {
             legendsFieldset.show();
         } else {
             legendsFieldset.hide();
@@ -271,7 +271,7 @@ Ext.define("Koala.view.form.Print", {
      * Prepares the content of the legendTextHtml field by adding the filter from
      * the RoutingLegendTree text.
      */
-    prepareLegendTextHtml: function(layer){
+    prepareLegendTextHtml: function(layer) {
         var layerName = layer.get('name'); // fallback
         if ('metadata' in layer && 'printTitle' in layer.metadata) {
             layerName = layer.metadata.printTitle;
@@ -279,7 +279,7 @@ Ext.define("Koala.view.form.Print", {
         var text = layerName;
         var legendSpan = Ext.getDom(layer.get('__suffix_id__'));
 
-        if(legendSpan){
+        if (legendSpan) {
             var filterText = legendSpan.innerHTML;
             text = layerName + '<br/><font color="#999999">' + filterText + '</font>';
         }
@@ -307,13 +307,13 @@ Ext.define("Koala.view.form.Print", {
             var currentLayout = layoutCombo.getValue();
             if (name === "legend_template") {
                 attributeFields.value = currentLayout + "_legend.jasper";
-            } else if(name === "map_template") {
+            } else if (name === "map_template") {
                 attributeFields.value = currentLayout + "_map.jasper";
             }
         }
     },
 
-    getCheckBoxBooleanFields: function (attributeRec) {
+    getCheckBoxBooleanFields: function(attributeRec) {
         return {
             xtype: 'checkbox',
             name: attributeRec.get('name'),
@@ -327,7 +327,7 @@ Ext.define("Koala.view.form.Print", {
      * if type is Boolean.
      * @override
      */
-    addAttributeFields: function(attributeRec, fieldset){
+    addAttributeFields: function(attributeRec, fieldset) {
         var me = this;
         var map = me.getMapComponent().getMap();
 
@@ -378,8 +378,8 @@ Ext.define("Koala.view.form.Print", {
      * If https://github.com/terrestris/BasiGX/pull/74 is merged all fields are
      * allowed to be Blank. Set mandatory fields here if you need some.
      */
-    onAttributeFieldsAdd: function (printForm, attributeFields, addedField) {
-        if(Ext.isFunction(addedField.validate)){
+    onAttributeFieldsAdd: function(printForm, attributeFields, addedField) {
+        if (Ext.isFunction(addedField.validate)) {
             addedField.validate();
         }
     },
@@ -408,7 +408,7 @@ Ext.define("Koala.view.form.Print", {
     /**
      * Overrides the default createPrint method;
      */
-    createPrint: function(){
+    createPrint: function() {
         var view = this;
         var spec = {};
         var mapComponent = view.getMapComponent();
@@ -428,8 +428,8 @@ Ext.define("Koala.view.form.Print", {
         var printLayers = [];
         var serializedLayers = [];
 
-        mapComponent.getLayers().forEach(function(layer){
-            if(layer.get('printLayer')){
+        mapComponent.getLayers().forEach(function(layer) {
+            if (layer.get('printLayer')) {
                 printLayers.push(layer.get('printLayer'));
             } else {
                 var isChecked = !!layer.checked;
@@ -440,8 +440,8 @@ Ext.define("Koala.view.form.Print", {
                 ) !== false); // may be undefined for certain layers
 
                 if (isChecked && hasName && nonOpaque && inTree) {
-                    if(layer instanceof ol.layer.Vector &&
-                        layer.getSource().getFeatures().length < 1){
+                    if (layer instanceof ol.layer.Vector &&
+                        layer.getSource().getFeatures().length < 1) {
                         return false;
                     }
                     printLayers.push(layer);
@@ -451,7 +451,7 @@ Ext.define("Koala.view.form.Print", {
             }
         });
 
-        Ext.each(printLayers, function(layer){
+        Ext.each(printLayers, function(layer) {
             var source = layer.getSource();
             var serialized = {};
 
@@ -466,7 +466,7 @@ Ext.define("Koala.view.form.Print", {
         var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
         var fieldsets = view.query(fsSelector);
 
-        Ext.each(fieldsets, function(fs){
+        Ext.each(fieldsets, function(fs) {
             var name = fs.name;
             // TODO double check when rotated
             var featureBbox = fs.extentFeature.getGeometry().getExtent();
@@ -489,7 +489,7 @@ Ext.define("Koala.view.form.Print", {
         var additionalFields = view.query(
             'fieldset[name=attributes]>field[name!=dpi]'
         );
-        Ext.each(additionalFields, function(field){
+        Ext.each(additionalFields, function(field) {
             if (field.getName() === 'scalebar') {
                 attributes.scalebar = view.getScaleBarObject();
                 // handle the desire to have a scalebar or not by setting
@@ -516,21 +516,21 @@ Ext.define("Koala.view.form.Print", {
         }, this);
 
         var legendFieldset = view.down('fieldset[name="legendsFieldset"]');
-        if(legendFieldset && !legendFieldset.getCollapsed()){
+        if (legendFieldset && !legendFieldset.getCollapsed()) {
             attributes.legend = view.getLegendObject();
 
             // Override layer name in legend with valze from legendTextField
-            Ext.each(attributes.legend.classes, function(clazz){
+            Ext.each(attributes.legend.classes, function(clazz) {
                 var legendTextField = legendFieldset.down(
                         'textfield[name=' + clazz.name + '_legendtext]');
                 var layer = BasiGX.util.Layer.getLayerByName(clazz.name);
                 var currentLegendUrl = Koala.util.Layer.getCurrentLegendUrl(layer);
 
-                if(currentLegendUrl){
+                if (currentLegendUrl) {
                     clazz.icons[0] = currentLegendUrl;
                 }
 
-                if(legendTextField){
+                if (legendTextField) {
                     clazz.name = legendTextField.getValue();
                 }
             });
@@ -544,11 +544,11 @@ Ext.define("Koala.view.form.Print", {
         spec.outputFilename = layout;
 
         var irixCheckBox = this.down('[name="irix-fieldset-checkbox"]');
-        if(irixCheckBox.getValue()){
+        if (irixCheckBox.getValue()) {
             var irixJson = {};
             var mapfishPrint = [];
 
-            if(view.isValid()){
+            if (view.isValid()) {
                 spec.outputFormat = format;
                 mapfishPrint[0] = spec;
                 irixJson = this.setUpIrixJson(mapfishPrint);
@@ -678,11 +678,11 @@ Ext.define("Koala.view.form.Print", {
                         encodeURIComponent(content)
                     );
                     success = true;
-                } catch(e) {
+                } catch (e) {
                     Ext.log.warn(e);
                     try {
                         w = window.open();
-                    } catch(e2) {
+                    } catch (e2) {
                         Ext.log.warn(e2);
                     }
                     if (w && 'focus' in w && 'document' in w) {
@@ -713,7 +713,7 @@ Ext.define("Koala.view.form.Print", {
 
     /**
      */
-    downloadWhenReady: function(startTime, data){
+    downloadWhenReady: function(startTime, data) {
         var me = this;
         var elapsedMs = (new Date().getTime() - startTime);
         var format = me.down('combo[name="format"]')
@@ -735,20 +735,20 @@ Ext.define("Koala.view.form.Print", {
             });
 
         } else {
-            setTimeout(function () {
+            setTimeout(function() {
                 Ext.Ajax.request({
                     url: me.getUrl() + 'status/' + data.ref + '.json',
                     success: function(response) {
                         var statusData = Ext.decode(response.responseText);
-                        if(statusData.done){
+                        if (statusData.done) {
                             me.setLoading(false);
                             var dlBtn = me.down('button[name="downloadPrint"]');
                             dlBtn.link = me.getUrl() + 'report/' + data.ref;
                             dlBtn.show();
                             BasiGX.util.Animate.shake(dlBtn);
                             var fields = dlBtn.up('k-form-print').query('field');
-                            Ext.each(fields, function(field){
-                                field.on('change', function(){
+                            Ext.each(fields, function(field) {
+                                field.on('change', function() {
                                     dlBtn.hide();
                                 }, field, {single: true});
                             });
@@ -766,13 +766,13 @@ Ext.define("Koala.view.form.Print", {
         }
     },
 
-    updateFeatureBbox: function(bboxTextfield){
+    updateFeatureBbox: function(bboxTextfield) {
         var me = this;
         var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
         var fieldsets = me.query(fsSelector);
         var featureBbox = "";
 
-        Ext.each(fieldsets, function(fs){
+        Ext.each(fieldsets, function(fs) {
             // TODO double check when rotated
             featureBbox = fs.extentFeature.getGeometry().getExtent();
         }, this);
@@ -780,7 +780,7 @@ Ext.define("Koala.view.form.Print", {
         bboxTextfield.setValue(featureBbox);
     },
 
-    addBboxFieldset: function(){
+    addBboxFieldset: function() {
         var me = this;
         var mapFieldSet = me.down('fieldset[name=map]');
         var map = me.getMapComponent().getMap();
@@ -792,13 +792,13 @@ Ext.define("Koala.view.form.Print", {
             value: ''
         });
 
-        var listenerFunction = function(){
+        var listenerFunction = function() {
             me.updateFeatureBbox(bboxTextfield);
         };
 
         map.on('moveend', listenerFunction);
 
-        bboxTextfield.on('destroy', function(){
+        bboxTextfield.on('destroy', function() {
             map.un('moveend', listenerFunction);
         });
 
@@ -824,17 +824,17 @@ Ext.define("Koala.view.form.Print", {
         mapFieldSet.add(bboxFieldSet);
     },
 
-    addIrixCheckbox: function(){
+    addIrixCheckbox: function() {
         var me = this;
         var genericFieldset = me.down('fieldset[name=generic-fieldset]');
         var irixCheckbox = Ext.create('Ext.form.field.Checkbox', {
             name: 'irix-fieldset-checkbox',
             boxLabel: 'IRIX',
-            handler: function(checkbox, checked){
+            handler: function(checkbox, checked) {
                 var irixFieldset = me.down("k-form-irixfieldset");
-                if(checked){
+                if (checked) {
                     irixFieldset.show();
-                } else{
+                } else {
                     irixFieldset.hide();
                 }
             }
@@ -843,7 +843,7 @@ Ext.define("Koala.view.form.Print", {
         genericFieldset.add(irixCheckbox);
     },
 
-    addIrixFieldset: function(){
+    addIrixFieldset: function() {
         var me = this;
         var fs = me.down("k-form-irixfieldset");
         var checkBox = me.down('[name="irix-fieldset-checkbox"]');
@@ -859,7 +859,7 @@ Ext.define("Koala.view.form.Print", {
 
     },
 
-    setUpIrixJson: function(mapfishPrint){
+    setUpIrixJson: function(mapfishPrint) {
         var me = this;
         var irixJson = {};
         irixJson.irix = me.formItemToJson(me.down("k-form-irixfieldset"));
@@ -882,7 +882,7 @@ Ext.define("Koala.view.form.Print", {
      *     of the form.
      * @return {object} The adjusted serialisation.
      */
-    adjustIrixSerialisation: function(irixJson){
+    adjustIrixSerialisation: function(irixJson) {
         var irix = irixJson.irix;
         // move requestType or request-type out of irix object to top-level
         var correctRequestTypeKey = 'request-type';
@@ -890,7 +890,7 @@ Ext.define("Koala.view.form.Print", {
         var keysReqestType = ['requestType', correctRequestTypeKey];
         if (irix) {
             var reqType;
-            Ext.each(keysReqestType, function(keyRequestType){
+            Ext.each(keysReqestType, function(keyRequestType) {
                 if (keyRequestType in irix) {
                     // if both were present, the dashed version will win.
                     reqType = irix[keyRequestType];
@@ -904,14 +904,14 @@ Ext.define("Koala.view.form.Print", {
         return irixJson;
     },
 
-    formItemToJson: function(formItem){
+    formItemToJson: function(formItem) {
         var me = this;
         var children = formItem.items.items;
         var json = {};
 
-        Ext.each(children, function(child){
-            if(child instanceof Ext.form.FieldSet ||
-                child instanceof Ext.form.FieldContainer){
+        Ext.each(children, function(child) {
+            if (child instanceof Ext.form.FieldSet ||
+                child instanceof Ext.form.FieldContainer) {
                 json[child.name] = me.formItemToJson(child);
             } else {
                 json[child.name] = child.getValue();

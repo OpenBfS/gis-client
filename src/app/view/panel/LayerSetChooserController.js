@@ -28,7 +28,7 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
      */
     handleLayerSetSelect: function(view, rec) {
         var me = this;
-        me.currentTask = new Ext.util.DelayedTask(function(){
+        me.currentTask = new Ext.util.DelayedTask(function() {
                 me.handleLayerSetClick(view, rec);
             });
         me.currentTask.delay(200);
@@ -42,8 +42,8 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
             treeStore = tree.getStore(),
             resetFilteringBtn = tree.down('button[name="resetThemeTree"]');
 
-        treeStore.each(function(item){
-            if(item && item.collapse){
+        treeStore.each(function(item) {
+            if (item && item.collapse) {
                 item.collapse();
             }
         });
@@ -66,12 +66,12 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
         } else {
             var match = treeStore.findRecord('text', rec.get('text'));
 
-            treeStore.filterBy(function(record){
+            treeStore.filterBy(function(record) {
                 var display = false;
                 if (record.get('text') === rec.get('text')) {
                     display = true;
                 } else {
-                    record.bubble(function(node){
+                    record.bubble(function(node) {
                         if (node.get('text') === rec.get('text')) {
                             display = true;
                         }
@@ -142,7 +142,7 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                 // handle layers which shall be added but not be visible
                 // initially, https://redmine-koala.bfs.de/issues/1445
                 var initiallyVisible = true;
-                if('visible' in layer) {
+                if ('visible' in layer) {
                     initiallyVisible = layer.visible;
                 }
                 var increaseAndCheckIfDone = function() {
@@ -187,7 +187,7 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
     /**
      *
      */
-    registerMenuBehaviour: function(layersetchooser){
+    registerMenuBehaviour: function(layersetchooser) {
         var view = this.getView();
         if (!view.showLayerProfiles) {
             var mapContainer = layersetchooser.up('basigx-panel-mapcontainer');

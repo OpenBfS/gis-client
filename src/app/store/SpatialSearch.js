@@ -40,12 +40,12 @@ Ext.define('Koala.store.SpatialSearch', {
      */
     _lastRequest: null,
 
-    constructor: function(config){
+    constructor: function(config) {
         //TODO: this won't work if more than one map
-        if(!this.map){
+        if (!this.map) {
             this.map = BasiGX.view.component.Map.guess().getMap();
         }
-        if(!this.layer){
+        if (!this.layer) {
             this.layer = new ol.layer.Vector({
                 source: new ol.source.Vector()
             });
@@ -63,7 +63,7 @@ Ext.define('Koala.store.SpatialSearch', {
         this.proxy.extraParams.typeName = spatialsearchtypename;
 
         var fields = Koala.model.SpatialRecord.getFields();
-        Ext.each(fields, function(field){
+        Ext.each(fields, function(field) {
             field.initConfig({
                 searchColumn: appContext.data.merge.spatialSearchFields.searchColumn,
                 geomColumn: appContext.data.merge.spatialSearchFields.geomColumn

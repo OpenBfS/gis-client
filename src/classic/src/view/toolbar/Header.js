@@ -59,9 +59,9 @@ Ext.define("Koala.view.toolbar.Header", {
                 text: '{btnTextHelp}',
                 tooltip: '{btnTooltipHelp}'
             },
-            handler: function(){
+            handler: function() {
                 var win = Ext.ComponentQuery.query('k-window-help')[0];
-                if(!win){
+                if (!win) {
                     Ext.create('Koala.view.window.HelpWindow').show();
                 } else {
                     BasiGX.util.Animate.shake(win);

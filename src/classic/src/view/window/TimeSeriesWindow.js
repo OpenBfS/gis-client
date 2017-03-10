@@ -57,7 +57,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         tooltip: 'Hilfe',
         callback: function() {
             var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-            if(!helpWin){
+            if (!helpWin) {
                 helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                 helpWin.on('afterlayout', function() {
                     var helpWinController = this.getController();

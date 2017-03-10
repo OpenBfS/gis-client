@@ -10,7 +10,7 @@ Ext.define('Koala.view.container.styler.RuleModel', {
     },
 
     formulas: {
-        fieldsetTitle: function(get){
+        fieldsetTitle: function(get) {
             var name = get('rule.name');
             var title = get('rule.title');
             var dsp = "";

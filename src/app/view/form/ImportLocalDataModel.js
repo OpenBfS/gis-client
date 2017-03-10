@@ -38,12 +38,12 @@ Ext.define('Koala.view.form.ImportLocalDataModel', {
     },
 
     formulas: {
-        couldBeGml: function(get){
+        couldBeGml: function(get) {
             var fileName = get('file.name');
             var couldBeGml = fileName.endsWith('gml') || fileName.endsWith('xml');
 
             // If it is a *.geojson we set projection to 4326
-            if(!couldBeGml){
+            if (!couldBeGml) {
                 this.set('projection', 'EPSG:4326');
             } else {
                 this.set('projection', null);

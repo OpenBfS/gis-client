@@ -10,16 +10,16 @@ Ext.define('Koala.view.container.styler.FilterController', {
         this.applyListeners();
     },
 
-    applyListeners: function(){
+    applyListeners: function() {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var fields = view.query('field');
 
-        Ext.each(fields, function(field){
-            field.on('change', function(){
+        Ext.each(fields, function(field) {
+            field.on('change', function() {
                 var values = {};
-                Ext.each(fields, function(f){
-                    if(f.name !== "useFilterCheckbox"){
+                Ext.each(fields, function(f) {
+                    if (f.name !== "useFilterCheckbox") {
                         values[f.name] = f.getValue();
                     }
                 });
@@ -32,7 +32,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
     /**
      *
      */
-    attributeComboBoxReady: function(combo){
+    attributeComboBoxReady: function(combo) {
         var layer = this.getViewModel().get('layer');
         var attributeKeys = Koala.util.Style.getAttributeKeysFromVetorLayer(layer);
         Ext.Array.remove(attributeKeys, 'geometry');
@@ -45,7 +45,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
         var filter = viewModel.get('filter');
         var stylerUtil = Koala.util.Style;
 
-        if(filter){
+        if (filter) {
             if (stylerUtil.isComparisonFilter(filter)) {
                 this.addComparisonFilter(filter);
             } else if (stylerUtil.isSpatialFilter(filter)) {
@@ -63,14 +63,14 @@ Ext.define('Koala.view.container.styler.FilterController', {
         var fieldset = view.down('fieldset[name="filter-fieldset"]');
 
         // If we load a filter from an SLD we have to fill up the value fields
-        if(filter){
+        if (filter) {
             var operator = filter.comparisonOps.name.localPart;
             combo.setValue(operator);
             fieldset.expand();
         }
     },
 
-    operatorComboChanged: function(combo, newValue){
+    operatorComboChanged: function(combo, newValue) {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var filter = viewModel.get('filter');
@@ -83,7 +83,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
                 'numberfield[name="literalNumberField2"]');
         var literalTextField = view.down('textfield[name="literalTextField"]');
 
-        switch(newValue) {
+        switch (newValue) {
         case "PropertyIsEqualTo":
         case "PropertyIsNotEqualTo":
             literalNumberField1.hide();
@@ -121,7 +121,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
             break;
         }
 
-        if(filter){
+        if (filter) {
             attributeCombo.setValue(filter.get('attribute'));
         }
     },

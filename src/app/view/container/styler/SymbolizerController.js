@@ -12,7 +12,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
     /**
      *
      */
-    onBoxReady: function(){
+    onBoxReady: function() {
         var me = this;
         var view = me.getView();
         var viewModel = me.getViewModel();
@@ -24,16 +24,16 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         viewModel.set('symbolizer', symbolizerFromRule);
 
         // Check if we get a real symbolizer or just a blank one
-        if(!symbolizerFromRule.get('symbolType')){
+        if (!symbolizerFromRule.get('symbolType')) {
             var style = layer.getStyle();
-            if(!Ext.isFunction(style)){
+            if (!Ext.isFunction(style)) {
                 symbolizerFromRule.set('olStyle', style);
             }
             symbolizerFromRule.set('symbolType', symbolType);
         }
 
         var textStyle = symbolizerFromRule.get('olStyle').getText();
-        if(textStyle){
+        if (textStyle) {
             textStyle.setText(symbolizerFromRule.get('textPattern'));
         }
 
@@ -66,7 +66,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
     /**
      *
      */
-    symbolizerClicked: function(){
+    symbolizerClicked: function() {
         var me = this;
         var viewModel = this.getViewModel();
         var symbolType = viewModel.get('symbolizer.symbolType');
@@ -76,7 +76,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
 
         // If the layer has a style function we call it with the first feat of the
         // layer to get a real ol.Style
-        if(Ext.isFunction(olStyle)){
+        if (Ext.isFunction(olStyle)) {
             var firstFeat = viewModel.get('layer').getSource().getFeatures()[0];
             olStyle = olStyle(firstFeat)[0];
         }
@@ -92,7 +92,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
             redlinePolygonStyle: redlinePolygonStyle
         };
 
-        switch(symbolType) {
+        switch (symbolType) {
         case "Point":
             styleEditor.redlinePointStyle = Ext.isArray(olStyle) ?
                     olStyle[0] : olStyle;
@@ -109,7 +109,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
             break;
         }
 
-        if(!win){
+        if (!win) {
             Ext.create('Ext.window.Window', {
                 name: 'symbolizer-edit-window',
                 title: me.getViewModel().get('windowTitle'),
@@ -118,7 +118,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
                 items: [styleEditor],
                 bbar: [{
                     text: 'Cancel',
-                    handler: function(btn){
+                    handler: function(btn) {
                         btn.up('[name=symbolizer-edit-window]').close();
                     }
                 },{
@@ -132,7 +132,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         }
     },
 
-    applyStyle:function(btn){
+    applyStyle:function(btn) {
         var view = this.getView();
         var viewModel = this.getViewModel();
 
@@ -144,7 +144,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         viewModel.set('symbolizer.olStyle', editorSymbolizer);
 
         // Store the textPattern seperately
-        if(editorSymbolizer.getText()){
+        if (editorSymbolizer.getText()) {
             viewModel.set(
                 'symbolizer.textPattern',
                 editorSymbolizer.getText().getText()

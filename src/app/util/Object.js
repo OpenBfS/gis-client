@@ -30,7 +30,7 @@ Ext.define('Koala.util.Object', {
          * @param Object valWhenEmpty The value to return if the path isn't
          *    found or the found value is empty.
          */
-        getPathStrOr: function(obj, path, valWhenEmpty){
+        getPathStrOr: function(obj, path, valWhenEmpty) {
             var parts = path.split('/');
             return Koala.util.Object.getPathOr(
                 obj,
@@ -49,7 +49,7 @@ Ext.define('Koala.util.Object', {
          * @param Object valWhenEmpty The value to return if the path isn't
          *    found or the found value is empty.
          */
-        getPathOr: function(obj, parts, valWhenEmpty){
+        getPathOr: function(obj, parts, valWhenEmpty) {
             var lastIdx = parts.length - 1;
             var curObj = obj;
             var val;

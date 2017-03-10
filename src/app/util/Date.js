@@ -70,7 +70,7 @@ Ext.define('Koala.util.Date', {
          * @return {number} The offset in minutes from a local date compared to
          *     the UTC date.
          */
-        getUTCOffsetInMinutes: function(){
+        getUTCOffsetInMinutes: function() {
             var localDate = new Date();
 
             var utcOffsetMinutes = 0;
@@ -96,7 +96,7 @@ Ext.define('Koala.util.Date', {
          * @param {Date} utcDate A date supposed to be in UTC. All dates coming
          *     from the server are supposed to be UTC.
          */
-        makeLocal: function(utcDate){
+        makeLocal: function(utcDate) {
             var offsetMinutes = Koala.util.Date.getUTCOffsetInMinutes();
             return Ext.Date.add(utcDate, Ext.Date.MINUTE, offsetMinutes);
         },
@@ -109,7 +109,7 @@ Ext.define('Koala.util.Date', {
          *     setting), but when we are talking to the server, we need to
          *     convert these to UTC.
          */
-        makeUtc: function(localDate){
+        makeUtc: function(localDate) {
             var offsetMinutes = -1 * Koala.util.Date.getUTCOffsetInMinutes();
             return Ext.Date.add(localDate, Ext.Date.MINUTE, offsetMinutes);
         }

@@ -24,13 +24,13 @@ Ext.define('Koala.view.window.HelpController', {
         var treelist = this.lookupReference('treelist'),
             store = treelist.getStore(),
             tools = store.getNodeById('tools');
-        if (!Koala.util.AppContext.hasTool('addWmsBtn')){
+        if (!Koala.util.AppContext.hasTool('addWmsBtn')) {
             tools.removeChild(store.getNodeById('toolsWms'));
         }
-        if (!Koala.util.AppContext.hasTool('printBtn')){
+        if (!Koala.util.AppContext.hasTool('printBtn')) {
             tools.removeChild(store.getNodeById('toolsPrint'));
         }
-        if(!Koala.util.AppContext.hasTool('importLocalDataBtn')){
+        if (!Koala.util.AppContext.hasTool('importLocalDataBtn')) {
             tools.removeChild(store.getNodeById('toolsImport'));
         }
     },

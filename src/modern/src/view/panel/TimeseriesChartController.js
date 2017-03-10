@@ -50,7 +50,7 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         chartCtrl.toggleLegendVisibility();
     },
 
-    updateFor: function(olLayer, olFeat){
+    updateFor: function(olLayer, olFeat) {
         var me = this;
         var view = me.getView();
         var existingChart = view.down('d3-chart');
@@ -140,7 +140,7 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         var valFromSeq = StringUtil.getValueFromSequence;
         var coerce = StringUtil.coerce;
         var stationName = "";
-        if(!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
+        if (!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
             stationName =StringUtil.replaceTemplateStrings(
                 chartConfig.seriesTitleTpl, olFeat
             );
