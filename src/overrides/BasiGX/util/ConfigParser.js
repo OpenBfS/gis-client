@@ -62,7 +62,6 @@ Ext.define('Koala.override.basigx.ConfigParser', {
               params: {
                   uuid: layerUuid
               },
-              // TODO Add this to the Layer Util aswell
               defaultHeaders: {
                 Authorization: auth
               },
