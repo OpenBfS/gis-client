@@ -85,6 +85,11 @@ Ext.define('Koala.util.Routing', {
             var expectedLayers = 0;
             var gotLayers = 0;
             var routeCreatedLayers = {};
+
+            if (layers.length === 0) {
+                return false;
+            }
+
             var permaObj = JSON.parse(decodeURIComponent(layers));
 
             Ext.iterate(permaObj, function(uuid, config) {
