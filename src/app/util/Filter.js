@@ -73,6 +73,16 @@ Ext.define('Koala.util.Filter', {
         },
 
         /**
+         * Calculates the start and endvalues for timeseries charts. If a filter
+         * is active for the layer it takes the filtervalue as enddate. If not
+         * it looks for the configured defaultvalue.
+         * The startvalue is calculated from the enddate minus the configured
+         * timeseries duration.
+         *
+         * @param {Object} metadata The metadata  Object of the layer.
+         * @return {Object} The filterobject used by the timeseries. It contains
+         *                  the keys `parameter`, `mindatetimeinstant` and
+         *                  `maxdatetimeinstant`.
          */
         getStartEndFilterFromMetadata: function(metadata) {
             var staticMe = Koala.util.Filter;
@@ -89,6 +99,21 @@ Ext.define('Koala.util.Filter', {
                 }
                 endDate = Ext.Date.parse(endDate, format);
             }
+
+            var filters = metadata.filters;
+            if (filters) {
+                Ext.each(filters, function(filter) {
+                    if (filter.type === "pointintime") {
+                        // TODO This will be a moment object in the near future.
+                        endDate = filter.effectivedatetime;
+                    }
+                    if (filter.type === "timerange") {
+                        // TODO This will be a moment object in the near future.
+                        endDate = filter.effectivemaxdatetime;
+                    }
+                });
+            }
+
             var duration = timeseriesCfg.duration;
             var startDate = Koala.util.Duration.dateSubtractAbsoluteDuration(
                 endDate,
