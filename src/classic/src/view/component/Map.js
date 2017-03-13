@@ -92,7 +92,7 @@ Ext.define("Koala.view.component.Map", {
         me.map.addInteraction(dragAndDropInteraction);
     },
 
-    statics:{
+    statics: {
         /**
          *
          */

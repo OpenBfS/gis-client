@@ -557,7 +557,7 @@ Ext.define("Koala.view.form.Print", {
                     url: url,
                     method: 'POST',
                     headers: {
-                        'Content-Type' : 'application/json'
+                        'Content-Type': 'application/json'
                     },
                     jsonData: irixJson,
                     scope: view,
@@ -572,7 +572,7 @@ Ext.define("Koala.view.form.Print", {
                 url: view.getUrl() + app + '/report.' + format,
                 method: 'POST',
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 jsonData: Ext.encode(spec),
                 scope: view,

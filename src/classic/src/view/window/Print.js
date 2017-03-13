@@ -48,7 +48,7 @@ Ext.define("Koala.view.window.Print", {
     bodyPadding: '10px',
 
     tools: [{
-        type:'help',
+        type: 'help',
         //TODO: move to app-locale
         tooltip: 'Hilfe',
         callback: function() {

@@ -26,7 +26,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             var data = [];
 
             Ext.each(wmsUrl, function(wms) {
-                data.push({text:wms, value:wms});
+                data.push({text: wms, value: wms});
             });
             view.pickerdata = data;
         }
@@ -389,7 +389,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
     },
 
 
-    createPicker:function() {
+    createPicker: function() {
         var me = this;
         var view = this.getView();
         var model = view.getViewModel();
@@ -399,8 +399,8 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             doneButton: model.get('pickerDoneBtnText'),
             cancelButton: model.get('pickerCancelBtnText'),
             slots: [{
-                name : 'picker',
-                data : data
+                name: 'picker',
+                data: data
             }],
             listeners: {
                 change: function(picker, value) {

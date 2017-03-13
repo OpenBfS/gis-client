@@ -103,7 +103,7 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
         }, {
             xtype: 'toolbar',
             name: 'addLayersToolbar',
-            items:[{
+            items: [{
                 bind: {
                     text: '{requestLayersBtnText}'
                 },

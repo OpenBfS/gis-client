@@ -44,7 +44,7 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
     },
 
     tools: [{
-        type:'help',
+        type: 'help',
         //TODO: move to app-locale
         tooltip: 'Hilfe',
         callback: function() {

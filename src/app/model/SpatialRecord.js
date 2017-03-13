@@ -19,7 +19,7 @@
 Ext.define('Koala.model.SpatialRecord', {
     extend: 'Ext.data.Model',
 
-    fields:[{
+    fields: [{
         name: 'name',
         mapping: function(data) {
             return data.properties[this.config.searchColumn];

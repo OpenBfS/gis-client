@@ -46,7 +46,7 @@ Ext.define("Koala.view.window.BarChart", {
     width: 900,
     layout: "fit",
     tools: [{
-        type:'help',
+        type: 'help',
         //TODO: move to app-locale
         tooltip: 'Hilfe',
         callback: function() {

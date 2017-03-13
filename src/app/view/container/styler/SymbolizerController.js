@@ -39,7 +39,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
 
         view.add({
             xtype: 'fieldset',
-            bind:{
+            bind: {
                 title: '{title}',
                 html: '{symbolizerFieldSetHtml}'
             },
@@ -132,7 +132,7 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         }
     },
 
-    applyStyle:function(btn) {
+    applyStyle: function(btn) {
         var view = this.getView();
         var viewModel = this.getViewModel();
 

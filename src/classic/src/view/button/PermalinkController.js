@@ -37,7 +37,7 @@ Ext.define('Koala.view.button.PermalinkController', {
                 constrain: true,
                 maxWidth: Ext.getBody().getViewSize().width,
                 tools: [{
-                    type:'help',
+                    type: 'help',
                     //TODO: move to app-locale
                     tooltip: 'Hilfe',
                     callback: function() {

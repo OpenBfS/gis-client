@@ -61,7 +61,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         me.currentTask.delay(200);
     },
 
-    addLayerWithDefaultFilters:  function() {
+    addLayerWithDefaultFilters: function() {
         // TODO if we want equal behaviour for sets and profiles, the
         //      changes from https://redmine-koala.bfs.de/issues/1445
         //      we have to share the logic in LayerSetChooserController

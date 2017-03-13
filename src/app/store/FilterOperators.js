@@ -12,7 +12,7 @@ Ext.define('Koala.store.FilterOperators', {
         type: 'string'
     }],
 
-    data : [{
+    data: [{
         ogcType: "PropertyIsEqualTo",
         operator: "="
     },{

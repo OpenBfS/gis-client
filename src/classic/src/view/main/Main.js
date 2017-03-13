@@ -106,7 +106,7 @@ Ext.define('Koala.view.main.Main', {
                         minWidth: 250,
                         minHeight: 300,
                         tools: [{
-                            type:'help',
+                            type: 'help',
                             //TODO: move to app-locale
                             tooltip: 'Hilfe',
                             callback: function() {
@@ -198,7 +198,7 @@ Ext.define('Koala.view.main.Main', {
                                 height: 450,
                                 layout: 'fit',
                                 tools: [{
-                                    type:'help',
+                                    type: 'help',
                                     //TODO: move to app-locale
                                     tooltip: 'Hilfe',
                                     callback: function() {
@@ -275,7 +275,7 @@ Ext.define('Koala.view.main.Main', {
                                     },
                                     layout: 'fit',
                                     tools: [{
-                                        type:'help',
+                                        type: 'help',
                                         //TODO: move to app-locale
                                         tooltip: 'Hilfe',
                                         callback: function() {

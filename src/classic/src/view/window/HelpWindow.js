@@ -75,7 +75,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     }],
 
     //select default node 'quick-reference'
-    listeners:{
+    listeners: {
         afterlayout: function() {
             var me = this,
                 treelist = me.lookupReference('treelist'),

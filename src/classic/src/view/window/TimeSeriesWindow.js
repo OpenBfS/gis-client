@@ -52,7 +52,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         type: 'vbox'
     },
     tools: [{
-        type:'help',
+        type: 'help',
         //TODO: move to app-locale
         tooltip: 'Hilfe',
         callback: function() {
@@ -79,7 +79,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         addFilterForm: true
     },
 
-    listeners:{
+    listeners: {
         show: 'onTimeseriesShow',
         close: 'onTimeseriesClose'
     },

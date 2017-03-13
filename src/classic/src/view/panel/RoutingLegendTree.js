@@ -245,7 +245,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                     layout: 'fit',
                     items: [{
                         xtype: 'k_container_styler_styler',
-                        viewModel:{
+                        viewModel: {
                             data: {
                                 layer: layer
                             }
