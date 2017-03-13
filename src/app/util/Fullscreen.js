@@ -107,16 +107,16 @@ Ext.define('Koala.util.Fullscreen', {
             }
         };
 
+        /**
+         * Checks if the FullScreenApi is supported by the browser the method
+         * is called with.
+         * @return {Boolean} Returns if FullScreen is supported.
+         */
         staticsToExport.isFullscreenSupported = function(){
             var isSupported = true;
 
             // Disable if api not found
             if (Ext.Object.isEmpty(this.propertyNames)) {
-                isSupported = false;
-            }
-
-            // Disable for ChromeMobile < version 5
-            if (Ext.browser.is.ChromeMobile && Ext.browser.version.major < 5) {
                 isSupported = false;
             }
 
