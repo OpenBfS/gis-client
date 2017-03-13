@@ -62,7 +62,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                 helpWin.on('afterlayout', function() {
                     var helpWinController = this.getController();
                     helpWinController.setTopic('mapGeoObjects', 'map');
-                });
+                }, helpWin, {single: true});
             } else {
                 BasiGX.util.Animate.shake(helpWin);
                 var helpWinController = helpWin.getController();

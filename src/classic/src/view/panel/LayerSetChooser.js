@@ -54,7 +54,7 @@ Ext.define("Koala.view.panel.LayerSetChooser", {
                 helpWin.on('afterlayout', function() {
                     var helpWinController = this.getController();
                     helpWinController.setTopic('layerSelection');
-                });
+                }, helpWin, {single: true});
             } else {
                 BasiGX.util.Animate.shake(helpWin);
                 var helpWinController = helpWin.getController();

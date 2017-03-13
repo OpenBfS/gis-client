@@ -116,7 +116,7 @@ Ext.define('Koala.view.main.Main', {
                                     helpWin.on('afterlayout', function() {
                                         var helpWinController = this.getController();
                                         helpWinController.setTopic('profileSelection');
-                                    });
+                                    }, helpWin, {single: true});
                                 } else {
                                     BasiGX.util.Animate.shake(helpWin);
                                     var helpWinController = helpWin.getController();
@@ -208,7 +208,7 @@ Ext.define('Koala.view.main.Main', {
                                             helpWin.on('afterlayout', function() {
                                                 var helpWinController = this.getController();
                                                 helpWinController.setTopic('toolsWms', 'tools');
-                                            });
+                                            }, helpWin, {single: true});
                                         } else {
                                             BasiGX.util.Animate.shake(helpWin);
                                             var helpWinController = helpWin.getController();
@@ -285,7 +285,7 @@ Ext.define('Koala.view.main.Main', {
                                                 helpWin.on('afterlayout', function() {
                                                     var helpWinController = this.getController();
                                                     helpWinController.setTopic('toolsImport', 'tools');
-                                                });
+                                                }, helpWin, {single: true});
                                             } else {
                                                 BasiGX.util.Animate.shake(helpWin);
                                                 var helpWinController = helpWin.getController();

@@ -58,7 +58,7 @@ Ext.define("Koala.view.window.Print", {
                 helpWin.on('afterlayout', function() {
                     var helpWinController = this.getController();
                     helpWinController.setTopic('toolsPrint', 'tools');
-                });
+                }, helpWin, {single: true});
             } else {
                 BasiGX.util.Animate.shake(helpWin);
                 var helpWinController = helpWin.getController();

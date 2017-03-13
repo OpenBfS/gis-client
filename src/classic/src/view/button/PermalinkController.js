@@ -47,7 +47,7 @@ Ext.define('Koala.view.button.PermalinkController', {
                             helpWin.on('afterlayout', function() {
                                 var helpWinController = this.getController();
                                 helpWinController.setTopic('mapNavigationPermalink', 'mapNavigation');
-                            });
+                            }, helpWin, {single: true});
                         } else {
                             BasiGX.util.Animate.shake(helpWin);
                             var helpWinController = helpWin.getController();
