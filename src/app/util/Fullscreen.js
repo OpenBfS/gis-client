@@ -107,6 +107,22 @@ Ext.define('Koala.util.Fullscreen', {
             }
         };
 
+        staticsToExport.isFullscreenSupported = function(){
+            var isSupported = true;
+
+            // Disable if api not found
+            if (Ext.Object.isEmpty(this.propertyNames)) {
+                isSupported = false;
+            }
+
+            // Disable for ChromeMobile < version 5
+            if (Ext.browser.is.ChromeMobile && Ext.browser.version.major < 5) {
+                isSupported = false;
+            }
+
+            return isSupported;
+        };
+
         // actually return the gathered information from the closure
         return staticsToExport;
     }()),

@@ -33,6 +33,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.form.LayerFilter',
 
         'Koala.util.Routing',
+        'Koala.util.Fullscreen',
 
         'Koala.view.panel.BarChart',
         'Koala.view.panel.MobilePanel',
@@ -130,6 +131,7 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'basigx-button-zoomtoextent'
             }, {
                 xtype: 'button',
+                hidden: !Koala.util.Fullscreen.isFullscreenSupported(),
                 html: '<i class="fa fa-expand fa-2x"></i>',
                 handler: 'toggleFullscreen'
             }]
