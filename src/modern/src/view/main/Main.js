@@ -76,7 +76,7 @@ Ext.define('Koala.view.main.Main', {
             appContextPath: Koala.appContextUrl || 'resources/appContext.json',
             height: '100%',
             listeners: {
-                painted: function(){
+                painted: function() {
                     var me = this;
                     var viewCtrl = me.lookupController();
                     var view = viewCtrl.getView();
@@ -143,7 +143,7 @@ Ext.define('Koala.view.main.Main', {
                 top: '20px',
                 left: '20px'
             },
-            handler: function(btn){
+            handler: function(btn) {
                 btn.up('app-main').down('k-panel-mobilemenu').show();
             }
         }, {
@@ -154,7 +154,7 @@ Ext.define('Koala.view.main.Main', {
                 bottom: '40px',
                 right: '20px'
             },
-            handler: function(btn){
+            handler: function(btn) {
                 btn.up('app-main').down('k-panel-mobilelegend').show();
             }
         }]

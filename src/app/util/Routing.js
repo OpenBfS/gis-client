@@ -79,7 +79,7 @@ Ext.define('Koala.util.Routing', {
          * @param {Object} action A routing action element
          * @private
          */
-        beforeLayerTreeRoute: function(layers, action){
+        beforeLayerTreeRoute: function(layers, action) {
             var me = Koala.util.Routing;
             var LayerUtil = Koala.util.Layer;
             var expectedLayers = 0;
@@ -95,7 +95,7 @@ Ext.define('Koala.util.Routing', {
             Ext.iterate(permaObj, function(uuid, config) {
                 if (Koala.util.String.isUuid(uuid)) {
                     expectedLayers++;
-                    LayerUtil.getMetadataFromUuidAndThen(uuid, function(md){
+                    LayerUtil.getMetadataFromUuidAndThen(uuid, function(md) {
                         gotLayers++;
                         var metadataClone = Ext.clone(md);
                         me.applyPermalinkFiltersToMetadata(uuid, md.filters, config.filters);
@@ -133,8 +133,8 @@ Ext.define('Koala.util.Routing', {
                     var sameType = mdFilter.type === filter.type;
                     var sameAlias = mdFilter.alias === filter.alias;
 
-                    if(sameType) {
-                        if(isPointInTime || isTimeRange || sameAlias){
+                    if (sameType) {
+                        if (isPointInTime || isTimeRange || sameAlias) {
                             return true;
                         }
                         return false;
@@ -145,11 +145,11 @@ Ext.define('Koala.util.Routing', {
 
                 var minDate;
                 var maxDate;
-                if(permalinkFilter){
+                if (permalinkFilter) {
                     if (mdFilter.type === "pointintime") {
                         maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
                         minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
-                        if(minDate <= permalinkFilter.effectivedatetime && maxDate >= permalinkFilter.effectivedatetime){
+                        if (minDate <= permalinkFilter.effectivedatetime && maxDate >= permalinkFilter.effectivedatetime) {
                             permalinkFilter.effectivedatetime = new Date(permalinkFilter.effectivedatetime);
                             Ext.apply(mdFilter, permalinkFilter);
                         } else {
@@ -159,8 +159,8 @@ Ext.define('Koala.util.Routing', {
                     if (mdFilter.type === "timerange") {
                         maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
                         minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
-                        if(minDate <= permalinkFilter.effectivemindatetime && maxDate >= permalinkFilter.effectivemindatetime &&
-                                minDate <= permalinkFilter.effectivemaxdatetime && maxDate >= permalinkFilter.effectivemaxdatetime){
+                        if (minDate <= permalinkFilter.effectivemindatetime && maxDate >= permalinkFilter.effectivemindatetime &&
+                                minDate <= permalinkFilter.effectivemaxdatetime && maxDate >= permalinkFilter.effectivemaxdatetime) {
                             permalinkFilter.effectivemindatetime = new Date(permalinkFilter.effectivemindatetime);
                             permalinkFilter.effectivemaxdatetime = new Date(permalinkFilter.effectivemaxdatetime);
                             Ext.apply(mdFilter, permalinkFilter);
@@ -172,7 +172,7 @@ Ext.define('Koala.util.Routing', {
                         var allowedStore = Koala.util.Filter.getStoreFromAllowedValues(mdFilter.allowedValues);
                         var containsIllegal = false;
 
-                        Ext.each(permalinkFilter.effectivevalue, function(value){
+                        Ext.each(permalinkFilter.effectivevalue, function(value) {
                             var matchingRecord = allowedStore.findRecord('val', value);
                             if (!matchingRecord) {
                                 containsIllegal = true;
@@ -198,7 +198,7 @@ Ext.define('Koala.util.Routing', {
          *     that looks like 'uuid:state,otheruuid:otherstate'
          * @private
          */
-        onLayerTreeRoute: function(layersString){
+        onLayerTreeRoute: function(layersString) {
             var me = Koala.util.Routing;
             var permaObj = JSON.parse(decodeURIComponent(layersString));
 
@@ -227,7 +227,7 @@ Ext.define('Koala.util.Routing', {
             var route = me.getRoute(skipLayers);
 
             if (Ext.isNumber(delay)) {
-                new Ext.util.DelayedTask(function(){
+                new Ext.util.DelayedTask(function() {
                     viewController.redirectTo(route);
                 }).delay(delay);
             } else {
@@ -241,7 +241,7 @@ Ext.define('Koala.util.Routing', {
          * @return {String} A route expression representing the applications
          *                  state.
          */
-        getRoute: function(skipLayers){
+        getRoute: function(skipLayers) {
             var me = Koala.util.Routing;
             var mapComponent = BasiGX.util.Map.getMapComponent('gx_map');
             var map = mapComponent.getMap();
@@ -255,7 +255,7 @@ Ext.define('Koala.util.Routing', {
                 mapLayers = appContext.data.merge.mapLayers;
             }
 
-            var filteredLayers = Ext.Array.filter(allLayers, function(layer){
+            var filteredLayers = Ext.Array.filter(allLayers, function(layer) {
                 // Skip system layers like hoverLayer etc.
                 if (!layer.metadata) {
                     return false;
@@ -269,11 +269,11 @@ Ext.define('Koala.util.Routing', {
                 return true;
             });
 
-            if(!skipLayers){
+            if (!skipLayers) {
                 var layersString = '';
                 var permaObj = {};
 
-                Ext.each(filteredLayers, function(layer){
+                Ext.each(filteredLayers, function(layer) {
                     var metadata = layer.metadata;
                     var uuid = metadata.id;
                     var isVisible = layer.get('visible') ? 1 : 0;
@@ -283,7 +283,7 @@ Ext.define('Koala.util.Routing', {
                     permaObj[uuid].isVisible = isVisible;
 
                     Ext.each(metadata.filters, function(filter) {
-                        if(filter){
+                        if (filter) {
                             filters.push(me.filterToPermaObj(filter));
                         }
                     });
@@ -311,7 +311,7 @@ Ext.define('Koala.util.Routing', {
          * @param {Object} filter The filterobject from the layer metadata.
          * @return {Object} The returned object contains just the needed values.
          */
-        filterToPermaObj: function(filter){
+        filterToPermaObj: function(filter) {
             var permaObj = {
                     type: filter.type
                 };

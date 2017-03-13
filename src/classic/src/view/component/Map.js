@@ -34,7 +34,7 @@ Ext.define("Koala.view.component.Map", {
      */
     controller: "k-component-map",
 
-    initComponent: function(){
+    initComponent: function() {
         var me = this;
         var staticMe = Koala.view.component.Map;
         var container = me.up('basigx-panel-mapcontainer');
@@ -67,7 +67,7 @@ Ext.define("Koala.view.component.Map", {
         });
         map.addControl(mousePositionControl);
 
-        container.on('overviewmapToggle', function(overviewMap){
+        container.on('overviewmapToggle', function(overviewMap) {
             var visible = overviewMap.isVisible();
             var mpDiv = Ext.dom.Query.select('.mouse-position-control')[0];
             mpDiv.className = visible ? 'mouse-position-control adjusted' : 'mouse-position-control';
@@ -92,19 +92,19 @@ Ext.define("Koala.view.component.Map", {
         me.map.addInteraction(dragAndDropInteraction);
     },
 
-    statics:{
+    statics: {
         /**
          *
          */
-        styleFromGnos: function(styleKey){
-            var fn = function(feature){
+        styleFromGnos: function(styleKey) {
+            var fn = function(feature) {
                 var styleCfg = feature.get('layer').get(styleKey);
                 if (styleCfg) {
                     var sArray = styleCfg.split(",");
                     var color = sArray[0];
                     var shape = sArray[1];
 
-                    if(shape === "rect"){
+                    if (shape === "rect") {
                         var width = sArray[2];
                         var height = sArray[3];
 
@@ -149,7 +149,7 @@ Ext.define("Koala.view.component.Map", {
                     color: 'blue',
                     width: 1.25
                   });
-                  return[new ol.style.Style({
+                  return [new ol.style.Style({
                       image: new ol.style.Circle({
                         fill: fill,
                         stroke: stroke,
@@ -168,7 +168,7 @@ Ext.define("Koala.view.component.Map", {
     /**
      * Removes the previousy selected features from the select interaction.
      */
-    removeAllHoverFeatures: function(){
+    removeAllHoverFeatures: function() {
         var p = this.getPlugin('hover');
         var i = p && p.getHoverVectorLayerInteraction();
         var f = i && i.getFeatures();

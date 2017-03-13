@@ -12,7 +12,7 @@ Ext.define('Koala.store.ScaleDenominatorOperators', {
         type: 'string'
     }],
 
-    data : [{
+    data: [{
         ogcType: "ScaleIsLessThan",
         operator: "<"
     },{

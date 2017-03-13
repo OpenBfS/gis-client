@@ -9,13 +9,13 @@ Ext.define('Koala.view.container.styler.RulesController', {
     /**
      *
      */
-    onBoxReady: function(view){
+    onBoxReady: function(view) {
         var me = this;
         var viewModel = me.getViewModel();
         var style = viewModel.get('style');
         var rules = style.rules();
 
-        if(rules.getCount() < 1){
+        if (rules.getCount() < 1) {
             me.addRule();
         } else {
             rules.each(function(rule) {
@@ -28,7 +28,7 @@ Ext.define('Koala.view.container.styler.RulesController', {
                         }
                     },
                     listeners: {
-                        rulechanged: function(){
+                        rulechanged: function() {
                             view.fireEvent('rulesChanged', rules);
                         }
                     }
@@ -40,7 +40,7 @@ Ext.define('Koala.view.container.styler.RulesController', {
     /**
      *
      */
-    addRule: function(){
+    addRule: function() {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var rules = viewModel.get('style').rules();
@@ -56,7 +56,7 @@ Ext.define('Koala.view.container.styler.RulesController', {
                 }
             },
             listeners: {
-                rulechanged: function(){
+                rulechanged: function() {
                     view.fireEvent('rulesChanged', rules);
                 }
             }

@@ -1,6 +1,6 @@
 /*global document*/
 // This file is taken from GeoExt3
-(function(doc, global){
+(function(doc, global) {
     var specPath = '../spec/',
         dependencies = [
             './app/basics.test.js',
@@ -16,7 +16,7 @@
         dependencyCnt = dependencies.length,
         i = 0;
 
-    for(; i < dependencyCnt; i++) {
+    for (; i < dependencyCnt; i++) {
         doc.write(getScriptTag(specPath + dependencies[i]));
     }
 }(document, this));

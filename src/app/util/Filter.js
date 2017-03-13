@@ -74,7 +74,7 @@ Ext.define('Koala.util.Filter', {
 
         /**
          */
-        getStartEndFilterFromMetadata: function(metadata){
+        getStartEndFilterFromMetadata: function(metadata) {
             var staticMe = Koala.util.Filter;
             var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
             var endDate = Koala.util.String.coerce(timeseriesCfg.end_timestamp);
@@ -135,7 +135,7 @@ Ext.define('Koala.util.Filter', {
             } else if (Ext.isArray(allowedValues)) {
                 // validate structure
                 Ext.each(allowedValues, function(entry) {
-                    if(!(VAL_FIELD in entry) || !(DSP_FIELD in entry)) {
+                    if (!(VAL_FIELD in entry) || !(DSP_FIELD in entry)) {
                         Ext.log.warn("Missing any of the required keys (" +
                             VAL_FIELD + ", " + DSP_FIELD + ") in " +
                             "allowedValues configuration");
@@ -417,7 +417,7 @@ Ext.define('Koala.util.Filter', {
          * @return {Number} A number representation of the raw value, which may
          *     have a leading zero
          */
-        leadingZeroRawToValue: function(raw){
+        leadingZeroRawToValue: function(raw) {
             return parseInt("" + raw, 10);
         },
 
@@ -506,7 +506,7 @@ Ext.define('Koala.util.Filter', {
          * @return {String} return.startName The name to use for the startfield
          * @return {String} return.endName The name to use for the endfield
          */
-        startAndEndFieldnamesFromMetadataParam: function(param){
+        startAndEndFieldnamesFromMetadataParam: function(param) {
             var names = {
                 startName: "",
                 endName: ""
@@ -604,7 +604,7 @@ Ext.define('Koala.util.Filter', {
          * current range determine by start- and enddate is not larger than the
          * `maxduration` of the corresponding filter.
          */
-        validateMaxDurationTimerange: function(){
+        validateMaxDurationTimerange: function() {
             var field = this; // since we are bound as validator function
             var staticMe = Koala.util.Filter;
             var durationUtil = Koala.util.Duration;
@@ -675,7 +675,7 @@ Ext.define('Koala.util.Filter', {
          *     the validity of this field has changed and the other one should
          *     now be revalidated.
          */
-        revalidatePartnerField: function(triggerField){
+        revalidatePartnerField: function(triggerField) {
             var fieldset = triggerField.up('fieldset[filter]');
             var candidates = fieldset.query('datefield');
             var partnerField = Ext.Array.findBy(candidates, function(cand) {

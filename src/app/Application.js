@@ -43,7 +43,7 @@ Ext.define('Koala.Application', {
         /**
          * Return whether the current time reference is UTC.
          */
-        isUtc: function(){
+        isUtc: function() {
             if (Ext.isModern) {
                 return Ext.ComponentQuery.query('app-main')[0].getViewModel().get('useUtc');
             } else {
@@ -53,7 +53,7 @@ Ext.define('Koala.Application', {
         /**
          * Return whether the current time reference is local.
          */
-        isLocal: function(){
+        isLocal: function() {
             return !this.isUtc();
         }
     },
@@ -115,9 +115,9 @@ Ext.define('Koala.Application', {
      * Gets called if the appCache signals an app update. It shows a confirm
      * dialog which reloads the page on confirmation.
      */
-    onAppUpdate: function () {
+    onAppUpdate: function() {
         Ext.Msg.confirm('Application Update', 'This application has an update, reload?',
-            function (choice) {
+            function(choice) {
                 if (choice === 'yes') {
                     window.location.reload();
                 }

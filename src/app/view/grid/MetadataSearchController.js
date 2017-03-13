@@ -24,12 +24,12 @@ Ext.define('Koala.view.grid.MetadataSearchController', {
         "Koala.view.window.MetadataInfo"
     ],
 
-    addToMap: function(grid, rowIndex, colIndex, btn, evt, record){
+    addToMap: function(grid, rowIndex, colIndex, btn, evt, record) {
         // TODO, get better
         Koala.util.Layer.addLayerByUuid(record.get('fileIdentifier'));
     },
 
-    getInfo: function(grid, rowIndex, colIndex, btn, evt, record){
+    getInfo: function(grid, rowIndex, colIndex, btn, evt, record) {
         Ext.create('Koala.view.window.MetadataInfo', {
             title: record.get('name'),
             layout: 'fit',
@@ -64,7 +64,7 @@ Ext.define('Koala.view.grid.MetadataSearchController', {
      * @param {Ext.data.Model[]} records The records that the last query
      *     returned.
      */
-    onStoreLoad: function(store, records){
+    onStoreLoad: function(store, records) {
         var grid = this.getView();
         var footer = grid.down('toolbar[name="footer"]');
         var statusLine = footer.down('[name="status-line"]');

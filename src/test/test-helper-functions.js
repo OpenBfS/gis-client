@@ -1,5 +1,5 @@
 // This file is taken from GeoExt3
-(function(global){
+(function(global) {
     /**
      * A helper method that'll return a HTML script tag for loading
      * an external JavaScript file.
@@ -7,7 +7,7 @@
      * @param {string} src The `src` of the external JavaScript file.
      * @return {string} The script tag with given `src`
      */
-    function getExternalScriptTag(src){
+    function getExternalScriptTag(src) {
         return '<scr' + 'ipt src="' + src + '"></scr' + 'ipt>';
     }
 
@@ -18,7 +18,7 @@
      * @param {string} code The code to execute.
      * @return {string} The script tag with given content.
      */
-    function getInlineScriptTag(code){
+    function getInlineScriptTag(code) {
         return '<scr' + 'ipt>' + code + '</scr' + 'ipt>';
     }
 

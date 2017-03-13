@@ -36,7 +36,7 @@ Ext.define('Koala.view.panel.BarChartController', {
         chartCtrl.toggleLegendVisibility();
     },
 
-    updateFor: function(olLayer, olFeat){
+    updateFor: function(olLayer, olFeat) {
         var me = this;
         var view = me.getView();
         var config = {

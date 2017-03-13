@@ -274,7 +274,7 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
             try {
                 respObj = Ext.decode(resp.responseText);
                 Ext.Logger.info('Succesfully loaded i18n file: ' + me.locale);
-            } catch(err) {
+            } catch (err) {
                 me.onLoadAppLocaleFailure();
                 return false;
             } finally {
@@ -291,7 +291,7 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
     /**
      *
      */
-    recreateSingletons: function(){
+    recreateSingletons: function() {
         Ext.MessageBox = Ext.Msg = new Ext.window.MessageBox();
     },
 

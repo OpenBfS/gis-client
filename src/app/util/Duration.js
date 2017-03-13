@@ -117,7 +117,7 @@ Ext.define('Koala.util.Duration', {
 
         /**
          */
-        abs: function(duration){
+        abs: function(duration) {
             if (duration && duration[0] === '-') {
                 return duration.substr(1);
             }

@@ -66,7 +66,7 @@ Ext.define("Koala.view.panel.Header", {
                     style: {
                         borderRadius: 0
                     },
-                    handler: function(btn){
+                    handler: function(btn) {
                         btn.up().down('k-form-field-searchcombo').clearValue();
                     }
                 }

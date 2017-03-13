@@ -30,7 +30,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * This is the handler if we want to update the filters of an
      * existing layer.
      */
-    changeFilterForLayer: function(){
+    changeFilterForLayer: function() {
         var me = this;
         var LayerUtil = Koala.util.Layer;
         var view = me.getView();
@@ -59,7 +59,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * currently displayed filters applied and add that layer to the map (via
      * Koala.util.Layer#addOlLayerToMap)
      */
-    submitFilter: function(){
+    submitFilter: function() {
         var me = this;
         var LayerUtil = Koala.util.Layer;
         var view = me.getView();
@@ -124,7 +124,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      *     has changed.
      * @param {Object} metadata The new metadata of the layer.
      */
-    updateMetadataLegendTree: function(layer, metadata){
+    updateMetadataLegendTree: function(layer, metadata) {
         layer.metadata = metadata;
         // find all legendpanels:
         var legends = Ext.ComponentQuery.query('k-panel-routing-legendtree');
@@ -177,7 +177,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      *     time.
      * @return {Date} The date which probably has been adjusted to UTC.
      */
-    adjustToUtcIfNeeded: function(userDate){
+    adjustToUtcIfNeeded: function(userDate) {
         if (Koala.Application.isLocal()) {
             return Koala.util.Date.makeUtc(userDate);
         }
@@ -212,7 +212,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * now active setting; either they wil be transformed to UTC or to the local
      * timezone.
      */
-    handleTimereferenceButtonToggled: function(){
+    handleTimereferenceButtonToggled: function() {
         var me = this;
         var FilterUtil = Koala.util.Filter;
         var layerFilterView = me.getView();
@@ -275,7 +275,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * listener to react on any UTC-button changes (See also the atual
      * method #handleTimereferenceButtonToggled).
      */
-    onBeforeRenderLayerFilterForm: function(){
+    onBeforeRenderLayerFilterForm: function() {
         var me = this;
         var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
         Ext.each(utcBtns, function(utcBtn) {
@@ -288,7 +288,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * listener to react on any UTC-button changes (See also the atual
      * method #handleTimereferenceButtonToggled).
      */
-    onBeforeDestroyLayerFilterForm: function(){
+    onBeforeDestroyLayerFilterForm: function() {
         var me = this;
         var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
         Ext.each(utcBtns, function(utcBtn) {

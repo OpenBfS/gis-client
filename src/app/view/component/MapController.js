@@ -38,7 +38,7 @@ Ext.define('Koala.view.component.MapController', {
             timeSeriesWin,
             barChartWin;
 
-        if (Ext.isEmpty(olFeats)){
+        if (Ext.isEmpty(olFeats)) {
             return;
         }
 
@@ -47,7 +47,7 @@ Ext.define('Koala.view.component.MapController', {
 
             // TimeSeries
             if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
-                if(!timeSeriesWin){
+                if (!timeSeriesWin) {
                     // if no timeseries window exist, create one
                     timeSeriesWin = me.openTimeseriesWindow(olFeat);
                 } else {
@@ -74,17 +74,17 @@ Ext.define('Koala.view.component.MapController', {
      * the default position.
      *@param Object (Ext.window.Window) winToOffset
      */
-    offsetBarChartWin: function(winToOffset){
+    offsetBarChartWin: function(winToOffset) {
         var x, y,
             allWinX = [],
             allWinY = [];
-        Ext.WindowManager.each(function(win){
-            if (win instanceof Koala.view.window.BarChart){
+        Ext.WindowManager.each(function(win) {
+            if (win instanceof Koala.view.window.BarChart) {
                 allWinX.push(win.getPosition()[0]);
                 allWinY.push(win.getPosition()[1]);
             }
         });
-        if (allWinX.length > 0 || allWinY.length > 0){
+        if (allWinX.length > 0 || allWinY.length > 0) {
             x = Ext.Array.max(allWinX) + 20;
             y = Ext.Array.max(allWinY) + 30;
 
@@ -107,7 +107,7 @@ Ext.define('Koala.view.component.MapController', {
                 // we check for existing feature first as there maybe strange
                 // situations (e.g. when zooming while hovering)
                 // where feat is undefined and feat.get would throw an error
-                if(feature && feature.get("layer") === layer) {
+                if (feature && feature.get("layer") === layer) {
                     var tooltipFeature = hoverTpl;
                     tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, layer, false);
@@ -125,7 +125,7 @@ Ext.define('Koala.view.component.MapController', {
                 }
             });
 
-            if(layerIdx + 1 !== layersLen){
+            if (layerIdx + 1 !== layersLen) {
                 // not the last layer, append linebreak
                 innerHtml += lineBreak;
             }

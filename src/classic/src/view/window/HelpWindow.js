@@ -75,13 +75,13 @@ Ext.define("Koala.view.window.HelpWindow", {
     }],
 
     //select default node 'quick-reference'
-    listeners:{
+    listeners: {
         afterlayout: function() {
             var me = this,
                 treelist = me.lookupReference('treelist'),
                 store = treelist.getStore(),
                 selection = treelist.getSelection();
-            if (store && !selection){
+            if (store && !selection) {
                 var winController = me.getController();
                 winController.removeTopicByTools();
                 winController.setTopic('quickRef');

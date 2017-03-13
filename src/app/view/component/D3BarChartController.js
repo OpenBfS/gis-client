@@ -533,7 +533,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     deleteData: function(dataKey) {
         var me = this;
-        var dataObjToDelete = Ext.Array.findBy(me.data, function(dataObj){
+        var dataObjToDelete = Ext.Array.findBy(me.data, function(dataObj) {
             return dataObj.key === dataKey;
         });
         Ext.Array.remove(me.data, dataObjToDelete);

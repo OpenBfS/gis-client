@@ -20,19 +20,19 @@ describe('Koala.util.Object', function() {
                 ).to.be.a(Function);
             });
             it('returns expected val for non-nested key', function() {
-                var obj = {a:123};
+                var obj = {a: 123};
                 var path = 'a';
                 var got = Koala.util.Object.getPathStrOr(obj, path);
                 expect(got).to.be(123);
             });
             it('returns undefined for non-existing key', function() {
-                var obj = {a:123};
+                var obj = {a: 123};
                 var path = 'b';
                 var got = Koala.util.Object.getPathStrOr(obj, path);
                 expect(got).to.be(undefined);
             });
             it('returns a configurable val for non-existing key', function() {
-                var obj = {a:123};
+                var obj = {a: 123};
                 var path = 'b';
                 var valWhenEmpty = 'New Way Home';
                 var got = Koala.util.Object.getPathStrOr(
@@ -41,14 +41,14 @@ describe('Koala.util.Object', function() {
                 expect(got).to.be(valWhenEmpty);
             });
             it('returns expected val for nested key', function() {
-                var obj = {a:{b:{c:{d:456}}}};
+                var obj = {a: {b: {c: {d: 456}}}};
                 var path = 'a/b/c/d';
                 var got = Koala.util.Object.getPathStrOr(obj, path);
                 expect(got).to.be(456);
             });
             it('returns undefined for non-existing key (deep-nested)',
                 function() {
-                    var obj = {a:{b:{c:{d:456}}}};
+                    var obj = {a: {b: {c: {d: 456}}}};
                     var path = 'a/b/c/NOTTHERE';
                     var got = Koala.util.Object.getPathStrOr(obj, path);
                     expect(got).to.be(undefined);
@@ -56,7 +56,7 @@ describe('Koala.util.Object', function() {
             );
             it('returns a configurable val for non-existing key (deep-nested)',
                 function() {
-                    var obj = {a:{b:{c:{d:456}}}};
+                    var obj = {a: {b: {c: {d: 456}}}};
                     var path = 'a/b/c/NOTTHERE';
                     var valWhenEmpty = 'February Stars';
                     var got = Koala.util.Object.getPathStrOr(

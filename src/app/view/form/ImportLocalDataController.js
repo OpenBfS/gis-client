@@ -57,7 +57,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
      *
      */
-    onBoxReady: function(){
+    onBoxReady: function() {
         var viewModel = this.getViewModel();
         var fileName = viewModel.get('file.name');
         viewModel.set('layerName', fileName);
@@ -81,7 +81,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
      *
      */
-    beforeProjectionComboRendered: function(combo){
+    beforeProjectionComboRendered: function(combo) {
         var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
         combo.getStore().setData(appContext.data.merge.vectorProjections);
     },
@@ -89,7 +89,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
      *
      */
-    beforeVectorTemplateComboRendered: function(combo){
+    beforeVectorTemplateComboRendered: function(combo) {
         var viewModel = this.getViewModel();
         var store = combo.getStore();
         var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
@@ -100,7 +100,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
      *
      */
-    fileFieldChanged: function(filefield){
+    fileFieldChanged: function(filefield) {
         var file = filefield.getEl().down('input[type=file]').dom.files[0];
         var viewModel = this.getViewModel();
         viewModel.set('file', file);
@@ -111,7 +111,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
      *
      */
-    readFile: function(){
+    readFile: function() {
         var me = this;
         var file = this.getViewModel().get('file');
         var reader = new FileReader();
@@ -122,7 +122,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
     * Copy of https://github.com/openlayers/ol3/blob/v3.18.2/src/ol/interaction/draganddrop.js#L97
     */
-    parseFeatures: function(event){
+    parseFeatures: function(event) {
         var me = this;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
         var viewModel = me.getViewModel();
@@ -171,7 +171,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
     * Copy of https://github.com/openlayers/ol3/blob/v3.18.2/src/ol/interaction/draganddrop.js#L170
     */
-    tryReadFeatures: function(format, text, options){
+    tryReadFeatures: function(format, text, options) {
         try {
             return format.readFeatures(text, options);
         } catch (e) {
@@ -182,14 +182,14 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
      *
      */
-    importClicked: function(){
+    importClicked: function() {
         this.readFile();
     },
 
     /**
      *
      */
-    createLayer: function(){
+    createLayer: function() {
         var viewModel = this.getViewModel();
         var layerUtil = Koala.util.Layer;
         var uuid = viewModel.get('templateUuid');
@@ -198,7 +198,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var me = this;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
 
-        layerUtil.getMetadataFromUuidAndThen(uuid, function(metadata){
+        layerUtil.getMetadataFromUuidAndThen(uuid, function(metadata) {
             // Make some specific settings for local data:
             var cfg = me.getInternalLayerConfig(metadata);
 
@@ -245,7 +245,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             layerUtil.addOlLayerToMap(layer);
         });
 
-        map.getLayers().once('add', function(evt){
+        map.getLayers().once('add', function(evt) {
             // TODO this has to be replaced once we have multiple maps
             var layer = evt.element;
             var extent = layer.getSource().getExtent();
@@ -259,9 +259,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
     * Close the parent window if existing.
     */
-    cancelClicked: function(){
+    cancelClicked: function() {
         var win = this.getView().up('window');
-        if(win){
+        if (win) {
             win.close();
         }
     },

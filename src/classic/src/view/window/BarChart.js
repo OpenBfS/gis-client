@@ -46,12 +46,12 @@ Ext.define("Koala.view.window.BarChart", {
     width: 900,
     layout: "fit",
     tools: [{
-        type:'help',
+        type: 'help',
         //TODO: move to app-locale
         tooltip: 'Hilfe',
         callback: function() {
             var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-            if(!helpWin){
+            if (!helpWin) {
                 helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                 helpWin.on('afterlayout', function() {
                     var helpWinController = this.getController();

@@ -9,7 +9,7 @@ Ext.define('Koala.view.panel.MobilePermalinkController', {
     /**
      * Updates the viewmodel value with the current permalink.
      */
-    refreshPermalink: function(){
+    refreshPermalink: function() {
         var viewModel = this.getViewModel();
         var route = Koala.util.Routing.getRoute();
         var hrefWithoutHash = window.location.origin +

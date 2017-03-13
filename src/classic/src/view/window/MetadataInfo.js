@@ -56,7 +56,7 @@ Ext.define("Koala.view.window.MetadataInfo", {
          * @return {string} The value wrapped in a `white-space:normal` styled
          *     `<div>`.
          */
-        multilineRenderer: function (value) {
+        multilineRenderer: function(value) {
             return "<div class='koala-multiline'>" + value +'</div>';
         },
 
@@ -65,7 +65,7 @@ Ext.define("Koala.view.window.MetadataInfo", {
          *
          * @return {boolean} Always `false`.
          */
-        returnFalse: function(){
+        returnFalse: function() {
             return false;
         },
 
@@ -78,7 +78,7 @@ Ext.define("Koala.view.window.MetadataInfo", {
          * @param {Number} cellIndex
          * @param {Ext.data.Model} record
          */
-        alertKeyValue: function(propGrid, td, cellIndex, record){
+        alertKeyValue: function(propGrid, td, cellIndex, record) {
             Ext.Msg.alert(record.get('name'), record.get('value'));
         },
 
@@ -136,7 +136,7 @@ Ext.define("Koala.view.window.MetadataInfo", {
      * @return {object} The source config, keyed by the displayName, with an
      *     object that assigns the #multilineRenderer.
      */
-    sourceConfigFromRecord: function(){
+    sourceConfigFromRecord: function() {
         var fieldNames = this.self.fieldNames;
         var renderer = this.self.multilineRenderer;
         var sourceCfg = {};

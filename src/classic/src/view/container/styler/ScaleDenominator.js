@@ -22,7 +22,7 @@ Ext.define('Koala.view.container.styler.ScaleDenominator', {
     items: [{
         xtype: 'fieldset',
         height: 80,
-        bind:{
+        bind: {
             title: '{title}'
         },
         name: 'scaledenominator-fieldset',

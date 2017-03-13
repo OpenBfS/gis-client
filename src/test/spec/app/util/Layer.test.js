@@ -3,12 +3,12 @@ Ext.Loader.syncRequire(['Koala.util.Layer', 'Koala.util.String']);
 describe('Koala.util.Layer', function() {
     var oldTxtUntil = Koala.util.Layer.txtUntil;
     var oldDefaultFormat = Koala.util.String.defaultDateFormat;
-    beforeEach(function(){
+    beforeEach(function() {
         // mock up successful i18n
         Koala.util.Layer.txtUntil = "bis";
         Koala.util.String.defaultDateFormat = "d.m.Y K\\o\\a\\l\\a";
     });
-    afterEach(function(){
+    afterEach(function() {
         // un-mock successful i18n
         Koala.util.Layer.txtUntil = oldTxtUntil;
         Koala.util.String.defaultDateFormat = oldDefaultFormat;
@@ -20,7 +20,7 @@ describe('Koala.util.Layer', function() {
             expect(Koala.util.Layer).to.not.be(undefined);
         });
     });
-    describe('Static functions', function(){
+    describe('Static functions', function() {
 
         describe('#metadataHasFilters', function() {
             it('is defined', function() {
@@ -43,7 +43,7 @@ describe('Koala.util.Layer', function() {
                     Koala.util.Layer.metadataHasFilters()
                 ).to.be(false);
             });
-            it('returns true if filters defined and filled', function(){
+            it('returns true if filters defined and filled', function() {
                 var metadata = {
                     filters: [
                         {}
@@ -61,7 +61,7 @@ describe('Koala.util.Layer', function() {
                     Koala.util.Layer.metadataHasFilters(metadata)
                 ).to.be(true);
             });
-            it('returns false if filters defined but empty', function(){
+            it('returns false if filters defined but empty', function() {
                 var metadata = {
                     filters: []
                 };
@@ -77,7 +77,7 @@ describe('Koala.util.Layer', function() {
                     { foo: { filters: [ {} ] } }, // nesting wrong
                     { foo: { filter: {} } } // nesting wrong
                 ];
-                metadatas.forEach(function(md){
+                metadatas.forEach(function(md) {
                     expect(
                         Koala.util.Layer.metadataHasFilters(md)
                     ).to.be(false);
@@ -91,10 +91,10 @@ describe('Koala.util.Layer', function() {
                     { filters: {} },
                     { filters: true },
                     { filters: -42.11 },
-                    { filters: function(){} },
+                    { filters: function() {} },
                     { filters: /regex/ }
                 ];
-                metadatas.forEach(function(md){
+                metadatas.forEach(function(md) {
                     expect(
                         Koala.util.Layer.metadataHasFilters(md)
                     ).to.be(false);
@@ -123,7 +123,7 @@ describe('Koala.util.Layer', function() {
                 expect(got[0]).to.eql(filter);
                 expect(got).to.have.length(1);
             });
-            it('merges old and new syntax to a combined array', function(){
+            it('merges old and new syntax to a combined array', function() {
                 var filters = [{foo: 'bar'}, {humpty: 'dumpty'}];
                 var filter = {baz: 'bor'};
                 var metadata = {
@@ -137,7 +137,7 @@ describe('Koala.util.Layer', function() {
                 expect(got[2]).to.eql(filter);
                 expect(got).to.have.length(3);
             });
-            it('return null if no filters defined', function(){
+            it('return null if no filters defined', function() {
                 var metadatas = [
                     {}, // empty
                     { Filter: {} }, // wrong spelling
@@ -150,18 +150,18 @@ describe('Koala.util.Layer', function() {
                     { filters: {} },
                     { filters: true },
                     { filters: -42.11 },
-                    { filters: function(){} },
+                    { filters: function() {} },
                     { filters: /regex/ }
                 ];
-                metadatas.forEach(function(md){
+                metadatas.forEach(function(md) {
                     var got = Koala.util.Layer.getFiltersFromMetadata(md);
                     expect(got).to.be(null);
                 });
             });
         });
 
-        describe('#getFiltersTextFromMetadata', function(){
-            it('returns the empty string if no filter', function(){
+        describe('#getFiltersTextFromMetadata', function() {
+            it('returns the empty string if no filter', function() {
                 var metadatas = [
                     {}, // empty
                     { Filter: {} }, // wrong spelling
@@ -174,15 +174,15 @@ describe('Koala.util.Layer', function() {
                     { filters: {} },
                     { filters: true },
                     { filters: -42.11 },
-                    { filters: function(){} },
+                    { filters: function() {} },
                     { filters: /regex/ }
                 ];
-                metadatas.forEach(function(md){
+                metadatas.forEach(function(md) {
                     var got = Koala.util.Layer.getFiltersTextFromMetadata(md);
                     expect(got).to.be('');
                 });
             });
-            it('returns an empty text for rodos-filter', function(){
+            it('returns an empty text for rodos-filter', function() {
                 var metadata = {
                     filters: [{
                         type: "rodos"
@@ -192,7 +192,7 @@ describe('Koala.util.Layer', function() {
 
                 expect(got).to.be("");
             });
-            it('returns a text for key-value-filter', function(){
+            it('returns a text for key-value-filter', function() {
                 var metadata = {
                     filters: [{
                         type: "value",
@@ -210,7 +210,7 @@ describe('Koala.util.Layer', function() {
                 expect(got).to.not.be("");
                 expect(got.indexOf(filterRepr)).to.not.be(-1);
             });
-            it('returns a text for point-in-time-filter', function(){
+            it('returns a text for point-in-time-filter', function() {
                 var metadata = {
                     filters: [{
                         type: "pointintime",
@@ -225,7 +225,7 @@ describe('Koala.util.Layer', function() {
                 expect(got.indexOf("28.11.1980 foo")).to.not.be(-1);
             });
             it('returns a text for point-in-time-filter (no format)',
-                function(){
+                function() {
                     var metadata = {
                         filters: [{
                             type: "pointintime",
@@ -239,7 +239,7 @@ describe('Koala.util.Layer', function() {
                     expect(got.indexOf("28.11.1980 Koala")).to.not.be(-1);
                 }
             );
-            it('returns a text for timerange-filter', function(){
+            it('returns a text for timerange-filter', function() {
                 var min = Ext.Date.parse("1980-11-28", "Y-m-d");
                 var max = Ext.Date.parse("1998-11-28", "Y-m-d");
                 var metadata = {
@@ -260,7 +260,7 @@ describe('Koala.util.Layer', function() {
                 expect(got.indexOf(until)).to.not.be(-1);
                 expect(got.indexOf("28.11.1998 foo end")).to.not.be(-1);
             });
-            it('returns a text for timerange-filter (no format)', function(){
+            it('returns a text for timerange-filter (no format)', function() {
                 var min = Ext.Date.parse("1980-11-28", "Y-m-d");
                 var max = Ext.Date.parse("1998-11-28", "Y-m-d");
                 var metadata = {
@@ -282,7 +282,7 @@ describe('Koala.util.Layer', function() {
             });
         });
 
-        describe('#getOrderedFlatLayers', function(){
+        describe('#getOrderedFlatLayers', function() {
             it('returns a flat list for a basic array', function() {
                 var LayerUtil = Koala.util.Layer;
                 var layers = [{

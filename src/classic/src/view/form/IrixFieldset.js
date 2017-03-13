@@ -35,7 +35,7 @@ Ext.define("Koala.view.form.IrixFieldSet",{
         anchor: '100%'
     },
 
-    initComponent: function(){
+    initComponent: function() {
         var me = this;
         Ext.Ajax.request({
             url: 'resources/irixContext.json',
@@ -53,12 +53,12 @@ Ext.define("Koala.view.form.IrixFieldSet",{
         me.callParent(arguments);
     },
 
-    createFields: function(fieldsconfig){
+    createFields: function(fieldsconfig) {
         var me = this;
         var returnFields = [];
 
-        Ext.each(fieldsconfig, function(fieldconfig){
-            switch(fieldconfig.type){
+        Ext.each(fieldsconfig, function(fieldconfig) {
+            switch (fieldconfig.type) {
                 case 'fieldset':
                     returnFields.push(me.createFieldSet(fieldconfig));
                     break;
@@ -85,7 +85,7 @@ Ext.define("Koala.view.form.IrixFieldSet",{
         return returnFields;
     },
 
-    createFieldSet: function(config){
+    createFieldSet: function(config) {
         var me = this;
         return Ext.create('Ext.form.FieldSet', {
             layout: 'anchor',
@@ -98,7 +98,7 @@ Ext.define("Koala.view.form.IrixFieldSet",{
         });
     },
 
-    createTextField: function(config){
+    createTextField: function(config) {
         return Ext.create('Ext.form.field.Text', {
             name: config.name,
             fieldLabel: config.label,
@@ -107,7 +107,7 @@ Ext.define("Koala.view.form.IrixFieldSet",{
         });
     },
 
-    createNumberField: function(config){
+    createNumberField: function(config) {
         return Ext.create('Ext.form.field.Number', {
             name: config.name,
             fieldLabel: config.label,
@@ -118,7 +118,7 @@ Ext.define("Koala.view.form.IrixFieldSet",{
         });
     },
 
-    createCombo: function(config){
+    createCombo: function(config) {
         var combo = Ext.create('Ext.form.field.ComboBox', {
             name: config.name,
             fieldLabel: config.label,
@@ -132,7 +132,7 @@ Ext.define("Koala.view.form.IrixFieldSet",{
         return combo;
     },
 
-    createDateField: function(config){
+    createDateField: function(config) {
         return Ext.create('Ext.form.field.Date', {
             name: config.name,
             fieldLabel: config.label,
@@ -140,7 +140,7 @@ Ext.define("Koala.view.form.IrixFieldSet",{
         });
     },
 
-    createCheckbox: function(config){
+    createCheckbox: function(config) {
         return Ext.create('Ext.form.field.Checkbox', {
             name: config.name,
             fieldLabel: config.label,

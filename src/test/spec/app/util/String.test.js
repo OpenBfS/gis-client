@@ -6,9 +6,9 @@ describe('Koala.util.String', function() {
             expect(Koala.util.String).to.not.be(undefined);
         });
     });
-    describe('Static functions', function(){
+    describe('Static functions', function() {
         var obj = null;
-        beforeEach(function(){
+        beforeEach(function() {
             obj = new ol.Object();
             obj.set('foo', 'FOO-VAL');
             obj.set('bar', 'BAR-VAL');
@@ -16,10 +16,10 @@ describe('Koala.util.String', function() {
             obj.set('gee', 'GEE-VAL');
             obj.set('no-replace', 'NO-REPLACE-VAL');
         });
-        afterEach(function(){
+        afterEach(function() {
             obj = null;
         });
-        describe('#replaceTemplateStrings', function(){
+        describe('#replaceTemplateStrings', function() {
             it('is defined', function() {
                 expect(
                     Koala.util.String.replaceTemplateStrings

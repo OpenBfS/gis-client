@@ -7,14 +7,14 @@ describe('Koala.view.panel.MobileLegendController', function() {
     var mapComponent;
     var view;
     var controller;
-    beforeEach(function(){
+    beforeEach(function() {
         mapComponent = Ext.create("BasiGX.view.component.Map", {
             appContextPath: '../../resources/appContext.json'
         });
         view = Ext.create('Koala.view.panel.MobileLegend');
         controller = view.getController();
     });
-    afterEach(function(){
+    afterEach(function() {
         mapComponent.destroy();
         view.destroy();
         controller = null;
@@ -60,7 +60,7 @@ describe('Koala.view.panel.MobileLegendController', function() {
             var secondLayer = mapComponent.getLayers().item(1);
 
             allowed = controller.isLayerAllowedToSetVisible(firstLayer);
-            if(allowed){
+            if (allowed) {
                 firstLayer.setVisible(true);
             }
             expect(allowed).to.be(true);

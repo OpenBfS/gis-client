@@ -31,12 +31,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
     /**
      * Initializes the LayerFilter.
      */
-    initComponent: function(){
+    initComponent: function() {
         var me = this;
         var view = this.getView();
         var filters = view.getFilters();
 
-        if(!filters || filters.length < 1){
+        if (!filters || filters.length < 1) {
             me.addWithoutFilterBtn();
             return;
         }
@@ -59,7 +59,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || "").toLowerCase();
-            switch(type){
+            switch (type) {
                 case "timerange":
                     me.createTimeRangeFilter(filter, idx);
                     break;
@@ -142,7 +142,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
 
-        Ext.each(mobilePanels, function(panel){
+        Ext.each(mobilePanels, function(panel) {
             panel.hide();
         });
     },
@@ -212,7 +212,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      *     has changed.
      * @param {Object} metadata The new metadata of the layer.
      */
-    updateMetadataLegendTree: function(layer, metadata){
+    updateMetadataLegendTree: function(layer, metadata) {
         layer.metadata = metadata;
         // find all legendpanels:
         var legends = Ext.ComponentQuery.query('k-panel-routing-legendtree');
@@ -245,7 +245,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
 
-        Ext.each(mobilePanels, function(panel){
+        Ext.each(mobilePanels, function(panel) {
             panel.hide();
         });
     },
@@ -270,7 +270,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      *     time.
      * @return {Date} The date which probably has been adjusted to UTC.
      */
-    adjustToUtcIfNeeded: function(userDate){
+    adjustToUtcIfNeeded: function(userDate) {
         var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
             .getViewModel();
         if (!mainViewModel.get('useUtc')) {
@@ -307,7 +307,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * now active setting; either they wil be transformed to UTC or to the local
      * timezone.
      */
-    handleTimereferenceButtonToggled: function(){
+    handleTimereferenceButtonToggled: function() {
         var layerFilterView = this.getView();
         var dateUtil = Koala.util.Date;
         var makeUtc = dateUtil.makeUtc;
@@ -365,7 +365,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * listener to react on any UTC-button changes (See also the atual
      * method #handleTimereferenceButtonToggled).
      */
-    onBeforeDestroyLayerFilterForm: function(){
+    onBeforeDestroyLayerFilterForm: function() {
         var me = this;
         // var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
         var utcBtns = Ext.ComponentQuery.query('radiofield[originalValue=UTC]');
@@ -489,7 +489,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @param {Object} filter A filter specification object of type timerange.
      * @param {Number} idx The index of the filter in the list of all filters.
      */
-    createTimeRangeFilter: function(filter, idx){
+    createTimeRangeFilter: function(filter, idx) {
         var me = this;
         var view = this.getView();
         var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
@@ -708,7 +708,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @param {Object} filter A filter specification object of type rodos.
      * @param {Number} idx The index of the filter in the list of all filters.
      */
-    createRODOSFilter: function(){
+    createRODOSFilter: function() {
     },
 
     /**
