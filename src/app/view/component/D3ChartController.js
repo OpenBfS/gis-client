@@ -295,7 +295,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                     return d[axis.dataIndex];
                 });
 
-                if(!axisDomain) {
+                if (!axisDomain) {
                     // first iteration / shape
                     axisDomain = [extent[0], extent[1]];
                 } else {
@@ -850,7 +850,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             legendEntry.append('title')
                 .text(nameAsTooltip);
 
-            legendEntry.append('text')
+            if (!Ext.isModern) {
+                legendEntry.append('text')
                 // fa-save from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('')
                 .attr('class', CSS.DOWNLOAD_ICON)
@@ -858,6 +859,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .attr('dy', '1')
                 .attr('dx', '150') // TODO Discuss, do we need this dynamically?
                 .on('click', me.generateDownloadCallback(shape));
+            }
 
             legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
@@ -876,7 +878,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      *
      * @param {Object} dataObj The config object of the selected Series.
      */
-    downloadSeries: function(dataObj){
+    downloadSeries: function(dataObj) {
         var me = this;
         var viewModel = me.getViewModel();
 
@@ -911,7 +913,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             }, {
               text: viewModel.get('downloadChartDataMsgButtonNo'),
               name: 'abort-timeseries-download',
-              handler: function(){
+              handler: function() {
                 this.up('window').close();
               }
             }]
@@ -928,7 +930,8 @@ Ext.define('Koala.view.component.D3ChartController', {
     doWfsDownload: function(dataObj, btn) {
         var me = this;
         var stationId = dataObj.config.id;
-        var combo = btn.up('window').down('combo');
+        var win = btn.up('window');
+        var combo = win.down('combo');
         var view = this.getView();
         var allSelectedStations = view.getSelectedStations();
         var requestUrl = me.getChartDataRequestUrl();
@@ -950,6 +953,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
               // Use the download library to enforce a browser download.
               download(response.responseText, fileName, format);
+              win.close();
             },
             failure: function(response) {
               Ext.log.warn('Download Error: ', response);
@@ -961,7 +965,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    deleteEverything: function(dataObj){
+    deleteEverything: function(dataObj) {
         var id = dataObj.config.id;
         var me = this;
         // ShapeConfig
@@ -983,7 +987,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     deleteShapeConfig: function(shapeId) {
         var shapeConfigs = this.getView().getShapes();
-        var shapeConfigToRemove = Ext.Array.findBy(shapeConfigs, function(shapeConfig){
+        var shapeConfigToRemove = Ext.Array.findBy(shapeConfigs, function(shapeConfig) {
             return shapeConfig.id === shapeId;
         });
         Ext.Array.remove(shapeConfigs, shapeConfigToRemove);
@@ -992,16 +996,16 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    deleteData: function(shapeId){
+    deleteData: function(shapeId) {
         delete this.data[shapeId];
     },
 
     /**
      *
      */
-    deleteSelectedStation: function(shapeId){
+    deleteSelectedStation: function(shapeId) {
         var stations = this.getView().getSelectedStations();
-        var stationToRemove = Ext.Array.findBy(stations, function(station){
+        var stationToRemove = Ext.Array.findBy(stations, function(station) {
             return station.get('id') === shapeId;
         });
         Ext.Array.remove(stations, stationToRemove);
@@ -1015,7 +1019,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     deleteShapeSeriesById: function(id) {
         var me = this;
-        var shapeToRemove = Ext.Array.findBy(me.shapes, function(shape){
+        var shapeToRemove = Ext.Array.findBy(me.shapes, function(shape) {
             return shape.config.id === id;
         });
         Ext.Array.remove(me.shapes, shapeToRemove);
@@ -1125,7 +1129,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var endString = Ext.Date.format(endDate,
                 targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
 
-        if(useCurrentZoom === true) {
+        if (useCurrentZoom === true) {
           startString = Ext.Date.format(me.currentDateRange.min,
                   targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
           endString = Ext.Date.format(me.currentDateRange.max,
@@ -1300,7 +1304,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (response && response.responseText) {
             try {
                 jsonObj = Ext.decode(response.responseText);
-            } catch(err) {
+            } catch (err) {
                 Ext.log.error('Could not parse the response: ', err);
                 return false;
             }
@@ -1374,14 +1378,14 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @param features {Array[ol.Feature]}
      * @param xAxisAttr {String}
      */
-    getTimeStampSnapObject: function (startDate, intervalInSeconds, features,
+    getTimeStampSnapObject: function(startDate, intervalInSeconds, features,
             xAxisAttr) {
         var obj = {};
         var startSeconds = parseInt(
                 Ext.Date.format(startDate, "timestamp"), 10);
         var columnSeconds = intervalInSeconds / 2;
 
-        Ext.each(features, function(feat){
+        Ext.each(features, function(feat) {
             // Dates in features are always in UTC, `new Date` seems to be
             // respecting the format
             var featDate = new Date(feat.properties[xAxisAttr]);
@@ -1397,7 +1401,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var modulos = diffSeconds % intervalInSeconds;
             var snapSeconds;
 
-            if(modulos < columnSeconds){
+            if (modulos < columnSeconds) {
                 snapSeconds = featDateSeconds - modulos;
             } else {
                 snapSeconds = featDateSeconds + modulos;
@@ -1414,7 +1418,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @param interval {Integer}
      * @param unit {String["seconds", "minutes", "hours", "days"]}
      */
-    getIntervalInSeconds: function (interval, unit) {
+    getIntervalInSeconds: function(interval, unit) {
         var multiplier = 0;
 
         switch (unit.toLowerCase()) {
@@ -1476,7 +1480,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var candidateIdVal = candidate.get(identifyField);
         var doesContainSeries = false;
 
-        if (!Ext.isDefined(candidateIdVal)){
+        if (!Ext.isDefined(candidateIdVal)) {
             Ext.log.warn("Failed to determine if chart contains a series for " +
                 "the passed feature. Does it expose a field '" + identifyField +
                 "' with a sane value?");

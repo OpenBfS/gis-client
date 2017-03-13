@@ -66,13 +66,13 @@ Ext.define("Koala.view.grid.MetadataSearch", {
         groupHeaderTpl: [
             '{name:this.formatName}', {
             formatName: function(name) {
-                if(name === "dataset") {
+                if (name === "dataset") {
                     return "Daten"; // TODO i18n
                 }
-                if(name === "series") {
+                if (name === "series") {
                     return "Datenserie"; // TODO i18n
                 }
-                if(name === "service") {
+                if (name === "service") {
                     return "Dienst"; // TODO i18n
                 }
             }
@@ -86,7 +86,7 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             text: 'Name', // TODO i18n
             dataIndex: 'name',
             flex: 3,
-            renderer: function (value) {
+            renderer: function(value) {
                 return '<div style="white-space:normal !important;">'
                     + value +'</div>';
             }

@@ -82,7 +82,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
         bind: {
             text: '{moreLayersButtonText}'
         },
-        handler: function(btn){
+        handler: function(btn) {
             btn.up('app-main').down('k-panel-treepanel').show();
         }
     }, {
@@ -90,7 +90,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
         bind: {
             text: '{addLayerButtonText}'
         },
-        handler: function(btn){
+        handler: function(btn) {
             btn.up('app-main').down('k-panel-mobileaddlayer').show();
         },
         listeners: {
@@ -101,7 +101,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
         bind: {
             text: '{permalinkButtonText}'
         },
-        handler: function(btn){
+        handler: function(btn) {
             btn.up('app-main').down('k-panel-mobilepermalink').show();
         }
     }, {
@@ -109,7 +109,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
         bind: {
             text: '{settingsButtonText}'
         },
-        handler: function(btn){
+        handler: function(btn) {
             btn.up('app-main').down('k-panel-settings').show();
         }
     }, {
@@ -117,7 +117,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
         bind: {
             text: '{imprintButtonText}'
         },
-        handler: function(btn){
+        handler: function(btn) {
             btn.up('app-main').down('k-panel-mobileimprint').show();
         }
     }]

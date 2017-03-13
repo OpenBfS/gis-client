@@ -22,6 +22,7 @@ Ext.define("Koala.view.toolbar.Header", {
 
     requires: [
         "BasiGX.util.Animate",
+        "Koala.util.Fullscreen",
 
         "Koala.view.toolbar.HeaderController",
         "Koala.view.toolbar.HeaderModel",
@@ -45,6 +46,7 @@ Ext.define("Koala.view.toolbar.Header", {
                 text: '{btnTextFullscreen}',
                 tooltip: '{btnTooltipFullscreen}'
             },
+            hidden: !Koala.util.Fullscreen.isFullscreenSupported(),
             enableToggle: true,
             listeners: {
                 toggle: 'toggleFullscreen'
@@ -59,9 +61,9 @@ Ext.define("Koala.view.toolbar.Header", {
                 text: '{btnTextHelp}',
                 tooltip: '{btnTooltipHelp}'
             },
-            handler: function(){
+            handler: function() {
                 var win = Ext.ComponentQuery.query('k-window-help')[0];
-                if(!win){
+                if (!win) {
                     Ext.create('Koala.view.window.HelpWindow').show();
                 } else {
                     BasiGX.util.Animate.shake(win);

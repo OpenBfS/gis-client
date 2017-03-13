@@ -36,7 +36,7 @@ Ext.define('Koala.view.main.MainController', {
      * @param {Koala.view.panel.RoutingLegendTree} legendTree The tree whose
      *     height we have to set.
      */
-    resizeAndRepositionLegendTree: function(legendTree){
+    resizeAndRepositionLegendTree: function(legendTree) {
         var me = this;
         var mapContainer = legendTree.up('basigx-panel-mapcontainer');
         var toolBar = mapContainer.down('toolbar[cls="basigx-map-tools"]');
@@ -75,7 +75,7 @@ Ext.define('Koala.view.main.MainController', {
      *     resized.
      * @param {number} newWidth The new width in pixels.
      */
-    repositionAttribution: function(legendTree, newWidth){
+    repositionAttribution: function(legendTree, newWidth) {
         var selector = '.ol-attribution.ol-uncollapsible';
         var node = Ext.DomQuery.selectNode(selector);
         var attributionContainer = Ext.get(node);

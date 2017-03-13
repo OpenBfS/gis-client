@@ -42,7 +42,7 @@ Ext.define("Koala.view.form.field.SearchCombo", {
     },
 
     listeners: {
-        change: function(combo, newValue){
+        change: function(combo, newValue) {
             try {
                 if (newValue.length < this.minChars) {
                     return false;
@@ -55,26 +55,26 @@ Ext.define("Koala.view.form.field.SearchCombo", {
             // TODO this will need to be changed once we have more than one
             //      map/panel/composition
             var multiPanel = Ext.ComponentQuery.query('k-panel-multisearch')[0];
-            if(newValue){
-                if(multiPanel) {
+            if (newValue) {
+                if (multiPanel) {
                     multiPanel.show(combo);
                 }
                 this.doSpatialSearch(newValue);
                 this.doMetadataSearch(newValue);
             } else {
-                if(multiPanel) {
+                if (multiPanel) {
                     multiPanel.getEl().slideOut('t', {
                         duration: 250,
-                        callback: function(){
+                        callback: function() {
                             multiPanel.hide();
                         }
                     });
                 }
             }
         },
-        boxready: function(combo){
+        boxready: function(combo) {
             combo.nav = Ext.create('Ext.util.KeyNav', combo.el, {
-                esc: function(){
+                esc: function() {
                     combo.clearValue();
                 },
                 scope: combo
@@ -91,7 +91,7 @@ Ext.define("Koala.view.form.field.SearchCombo", {
         });
     },
 
-    doSpatialSearch: function(value){
+    doSpatialSearch: function(value) {
         var spatialGrid = Ext.ComponentQuery.query('k-grid-spatialsearch')[0];
         var spatialStore = spatialGrid.getStore();
 
@@ -106,7 +106,7 @@ Ext.define("Koala.view.form.field.SearchCombo", {
 
     },
 
-    doMetadataSearch: function(value){
+    doMetadataSearch: function(value) {
 
         var metadataGrid = Ext.ComponentQuery.query('k-grid-metadatasearch')[0];
         var metadataStore = metadataGrid.getStore();
@@ -126,12 +126,12 @@ Ext.define("Koala.view.form.field.SearchCombo", {
     /**
      *
      */
-    getMetadataCql: function(fields, value){
+    getMetadataCql: function(fields, value) {
         var cql = "";
-        Ext.each(fields, function(field, idx, fieldsArray){
+        Ext.each(fields, function(field, idx, fieldsArray) {
 
             cql += field + " like '%" + value + "%'";
-            if(idx < fieldsArray.length-1){
+            if (idx < fieldsArray.length-1) {
                 cql += " OR ";
             }
         });

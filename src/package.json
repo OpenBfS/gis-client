@@ -7,6 +7,7 @@
     "pretest": "npm run lint",
     "test": "node test/tasks/serve-and-run-tests.js",
     "lint": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
+    "lint-fix": "eslint --fix -c .eslintrc app/ classic/ modern/ && eslint --fix -c test/.eslintrc test/",
     "test:watch": "watch 'npm test' app/ classic/ modern/ test/",
     "test:serve": "node test/tasks/serve-sourcecode.js",
     "test:run": "node test/tasks/run-tests.js",

@@ -20,12 +20,12 @@ Ext.define('Koala.model.Station', {
     extend: 'Ext.data.Model',
     fields: [{
          name: 'geo_id',
-         mapping: function(dataRec){
+         mapping: function(dataRec) {
              return dataRec.properties.geo_id;
          }
     },{
         name: 'locality_name',
-        mapping: function(dataRec){
+        mapping: function(dataRec) {
             return dataRec.properties.locality_name;
         }
     }]

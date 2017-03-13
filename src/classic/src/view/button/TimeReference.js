@@ -49,7 +49,7 @@ Ext.define("Koala.view.button.TimeReference", {
     /**
      *
      */
-    getCurrent: function(){
+    getCurrent: function() {
         var staticMe = Koala.view.button.TimeReference;
         return this.pressed ? staticMe.UTC : staticMe.LOCAL;
     }

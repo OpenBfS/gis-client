@@ -28,7 +28,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     /**
      * Disable UTC-Button when TimeSeriesWindow is shown.
      */
-    onTimeseriesShow: function () {
+    onTimeseriesShow: function() {
         Ext.ComponentQuery.query('k-button-timereference')[0].disable();
     },
 
@@ -124,12 +124,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 extend: 'Ext.data.Model',
                 fields: [{
                      name: 'id',
-                     mapping: function(dataRec){
+                     mapping: function(dataRec) {
                          return dataRec.properties[identifyField];
                      }
                 },{
                     name: 'dspName',
-                    mapping: function(dataRec){
+                    mapping: function(dataRec) {
                         return dataRec.properties[dspField];
                     }
                 }]
@@ -184,7 +184,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             listeners: {
                 select: Ext.Function.bind(me.onTimeSeriesComboSelect,
                     me, [olLayer], true),
-                beforequery: function(queryPlan){
+                beforequery: function(queryPlan) {
                     var cqlParts = [];
                     if (layerTimeFilterAsCql) {
                         cqlParts.push(layerTimeFilterAsCql);
@@ -324,7 +324,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var valFromSeq = StringUtil.getValueFromSequence;
         var coerce = StringUtil.coerce;
         var stationName = "";
-        if(!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
+        if (!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
             stationName = StringUtil.replaceTemplateStrings(
                 chartConfig.seriesTitleTpl, olFeat
             );
@@ -417,10 +417,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     bindSelectChartLayerStore: function(combo) {
         var layerStore = BasiGX.view.component.Map.guess().getStore();
         var comboStore = Ext.clone(layerStore);
-        comboStore.filterBy(function(record){
-            if(record.data.get('timeSeriesChartProperties') &&
+        comboStore.filterBy(function(record) {
+            if (record.data.get('timeSeriesChartProperties') &&
                !Ext.Object.isEmpty(record.data.get('timeSeriesChartProperties'))
-               ){
+               ) {
                 return true;
             } else {
                 return false;

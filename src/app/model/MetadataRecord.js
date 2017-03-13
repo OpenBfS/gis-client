@@ -23,7 +23,7 @@ Ext.define('Koala.model.MetadataRecord', {
     extend: 'Ext.data.Model',
     fields: [{
         name: 'name',
-        mapping: function(dataRec){
+        mapping: function(dataRec) {
             var val;
             var path = [
                 'gmd:identificationInfo'
@@ -47,7 +47,7 @@ Ext.define('Koala.model.MetadataRecord', {
         }
     }, {
         name: 'fileIdentifier',
-        mapping: function(data){
+        mapping: function(data) {
             var path = [
                 'gmd:fileIdentifier',
                 'gco:CharacterString',
@@ -58,7 +58,7 @@ Ext.define('Koala.model.MetadataRecord', {
         }
     }, {
         name: 'abstract',
-        mapping: function(dataRec){
+        mapping: function(dataRec) {
             var val;
             if (dataRec.type === "service") {
                 val = Koala.util.Object.getPathStrOr(
@@ -76,7 +76,7 @@ Ext.define('Koala.model.MetadataRecord', {
     }, {
         name: 'contact',
         //TODO: make the function great again (not quick and dirty)
-        mapping: function(dataRec){
+        mapping: function(dataRec) {
             var val,
                 pathRespParty = "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty",
                 pathAddress = pathRespParty+'/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address';

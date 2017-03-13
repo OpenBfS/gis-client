@@ -85,7 +85,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 var layer = item.getNode().getOlLayer();
                 var slider = document.getElementById('slider_' + layer.id);
 
-                if(slider){
+                if (slider) {
                     slider.value = layer.getOpacity() * 100;
 
                     // Clone the element to delete all previous eventlisteners
@@ -118,8 +118,8 @@ Ext.define('Koala.view.panel.MobileLegendController', {
     onSelectionChange: function(treeList, record) {
       var me = this;
       var layer = record.getOlLayer();
-      if(layer){
-        me.setActiveChartingLayer(layer);
+      if (layer && layer !== me.activeChartingLayer) {
+        me.toggleActiveChartingLayer(layer);
       }
     },
 
@@ -183,8 +183,8 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         }
 
         // charting toggler
-        if(targetClass.indexOf("fa-bar-chart") > 0) {
-            me.setActiveChartingLayer(layer);
+        if (targetClass.indexOf("fa-bar-chart") > 0) {
+            me.toggleActiveChartingLayer(layer);
         }
 
         if (target.getElementsByTagName("img").length > 0) {
@@ -206,7 +206,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      *
      * @param {ol.layer.Layer} layer The layer to set active charting on.
      */
-    setActiveChartingLayer: function(layer) {
+    toggleActiveChartingLayer: function(layer) {
         if (!(layer instanceof ol.layer.Layer)) {
             return;
         }
@@ -249,7 +249,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
 
         // Remove any existing layer filter form
         var filterForms = filterPanel.query('k-form-layerfilter');
-        Ext.each(filterForms, function(panel){
+        Ext.each(filterForms, function(panel) {
             panel.destroy();
         });
 
@@ -375,7 +375,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 getFilterText: function(layer) {
                     return Koala.util.Layer.getFiltersTextFromMetadata(layer.metadata);
                 },
-                allowOpacityChange: function(layer){
+                allowOpacityChange: function(layer) {
                     return layer.get('allowOpacityChange') || false;
                 },
                 isRemovable: function(layer) {
@@ -400,7 +400,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      * @param {ol.layer.Base} layer The given layer
      * @param {Event} event The change event.
      */
-    onSliderChange: function(layer, event){
+    onSliderChange: function(layer, event) {
         var slider = event.target;
         var opacity = slider.value / 100;
         layer.setOpacity(opacity);
@@ -417,15 +417,15 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      * @param {Integer} orderInt A Number by which we want to change the order
      *                           of the layer. E.g. "-1" to decrease by one.
      */
-    changeLayerOrder: function(layer, orderInt){
+    changeLayerOrder: function(layer, orderInt) {
         var me = this;
         var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
         var layersCollection = map.getLayerGroup().getLayers();
         var collectionLength = layersCollection.getLength();
         var index;
 
-        layersCollection.forEach(function(l, idx){
-            if(l === layer){
+        layersCollection.forEach(function(l, idx) {
+            if (l === layer) {
                 index = idx;
             }
         });
@@ -439,7 +439,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         // layer
         newIndex = newIndex >= collectionLength ? collectionLength - 1: newIndex;
 
-        if(index !== newIndex){
+        if (index !== newIndex) {
             layersCollection.removeAt(index);
             layersCollection.insertAt(newIndex, layer);
         }
@@ -466,7 +466,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             },{
                 text: viewModel.get('removeLayerMsgBoxNoBtnText')
             }],
-            fn: function(btnId){
+            fn: function(btnId) {
                 if (btnId === viewModel.get('removeLayerMsgBoxYesBtnText')) {
                     map.removeLayer(layer);
                 }

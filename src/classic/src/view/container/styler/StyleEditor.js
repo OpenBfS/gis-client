@@ -128,13 +128,13 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
             '</tpl>'
         );
 
-        var onUploadChange = function(btn, event){
+        var onUploadChange = function(btn, event) {
             var file = event.target.files[0];
             var fileReader = new FileReader();
 
             fileReader.readAsDataURL(file);
 
-            fileReader.addEventListener("load", function () {
+            fileReader.addEventListener("load", function() {
                 var imageObj = {
                     src: fileReader.result,
                     caption: file.name
@@ -143,7 +143,7 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
             }, false);
         };
 
-        var okHandler = function(){
+        var okHandler = function() {
             var renderer = me.down('gx_renderer[name=pointRenderPreview]');
             var rec = dataView.selectionModel.getSelection()[0];
             var pictureUrl = rec.get('src');
@@ -196,7 +196,7 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
                 bind: {
                     text: '{cancelText}'
                 },
-                handler: function(){
+                handler: function() {
                     this.up('window').close();
                 }
             },{

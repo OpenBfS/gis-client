@@ -7,10 +7,10 @@ describe('Koala.util.Date', function() {
         });
     });
     describe('Constant ISO_FORMAT is ISO compatible', function() {
-        it('is defined', function(){
+        it('is defined', function() {
             expect(Koala.util.Date.ISO_FORMAT).to.not.be(undefined);
         });
-        it('is a string', function(){
+        it('is a string', function() {
             expect(Koala.util.Date.ISO_FORMAT).to.be.a('string');
         });
         it('can be used to format a date to iso format', function() {
@@ -35,7 +35,7 @@ describe('Koala.util.Date', function() {
                     Koala.util.Date.getUTCOffsetInMinutes
                 ).to.be.a(Function);
             });
-            it('has a different "view" than getTimezoneOffset', function(){
+            it('has a different "view" than getTimezoneOffset', function() {
                 var got = Koala.util.Date.getUTCOffsetInMinutes();
                 var expected = (new Date()).getTimezoneOffset();
                 if (Math.abs(got) === 0) {
@@ -45,7 +45,7 @@ describe('Koala.util.Date', function() {
                     expect(got).to.not.be(expected);
                 }
             });
-            it('still is compatible to getTimezoneOffset', function(){
+            it('still is compatible to getTimezoneOffset', function() {
                 var got = Koala.util.Date.getUTCOffsetInMinutes();
                 var expected = -1 * ((new Date()).getTimezoneOffset());
                 if (Math.abs(got) === 0) {
@@ -75,7 +75,7 @@ describe('Koala.util.Date', function() {
                 expect(inDate).to.not.be(got);
             });
             it('returns "later"/"earlier" dates depending on offset',
-                function(){
+                function() {
                     var inDate = new Date();
                     var got = Koala.util.Date.makeLocal(inDate);
                     var offset = Koala.util.Date.getUTCOffsetInMinutes();
@@ -108,7 +108,7 @@ describe('Koala.util.Date', function() {
                 expect(inDate).to.not.be(got);
             });
             it('returns "later"/"earlier" dates depending on offset',
-                function(){
+                function() {
                     var inDate = new Date();
                     var got = Koala.util.Date.makeUtc(inDate);
                     var offset = Koala.util.Date.getUTCOffsetInMinutes();

@@ -19,7 +19,7 @@
  */
 Ext.define('Koala.util.Fullscreen', {
 
-    statics: (function(){
+    statics: (function() {
         var doc = document;
         var canonicalNames = [
             'requestFullscreen', 'exitFullscreen',
@@ -55,7 +55,7 @@ Ext.define('Koala.util.Fullscreen', {
             propertyNames: {}
         };
 
-        Ext.each(canonicalNames, function(canonicalName, idx){
+        Ext.each(canonicalNames, function(canonicalName, idx) {
             var lookup = lookups[idx];
             var propertyFound = false;
             Ext.each(variantNameGroups, function(variantNameGroup) {
@@ -75,7 +75,7 @@ Ext.define('Koala.util.Fullscreen', {
          * @static
          * @return {boolean} Whether we are curently in fullscreen mode
          */
-        staticsToExport.isInFullscreen = function(){
+        staticsToExport.isInFullscreen = function() {
             return !!doc[this.propertyNames.fullscreenElement];
         };
 
@@ -83,7 +83,7 @@ Ext.define('Koala.util.Fullscreen', {
          * Tries to switch to fullscreen mode.
          * @static
          */
-        staticsToExport.requestFullscreen = function(){
+        staticsToExport.requestFullscreen = function() {
             doc.documentElement[this.propertyNames.requestFullscreen]();
         };
 
@@ -91,7 +91,7 @@ Ext.define('Koala.util.Fullscreen', {
          * Tries to exit from fullscreen mode.
          * @static
          */
-        staticsToExport.exitFullscreen = function(){
+        staticsToExport.exitFullscreen = function() {
             doc[this.propertyNames.exitFullscreen]();
         };
 
@@ -99,12 +99,28 @@ Ext.define('Koala.util.Fullscreen', {
          * Tries to toggle between standard and fullscreenmode.
          * @static
          */
-        staticsToExport.toggleFullscreen = function(){
+        staticsToExport.toggleFullscreen = function() {
             if (!this.isInFullscreen()) {
                 this.requestFullscreen();
             } else {
                 this.exitFullscreen();
             }
+        };
+
+        /**
+         * Checks if the FullScreenApi is supported by the browser the method
+         * is called with.
+         * @return {Boolean} Returns if FullScreen is supported.
+         */
+        staticsToExport.isFullscreenSupported = function(){
+            var isSupported = true;
+
+            // Disable if api not found
+            if (Ext.Object.isEmpty(this.propertyNames)) {
+                isSupported = false;
+            }
+
+            return isSupported;
         };
 
         // actually return the gathered information from the closure
@@ -115,7 +131,7 @@ Ext.define('Koala.util.Fullscreen', {
      * TODO find a way to use a static method as handler.
      * TODO doesn't work in IE11
      */
-    toggleFullscreen: function(){
+    toggleFullscreen: function() {
         this.self.toggleFullscreen();
     }
 });

@@ -73,20 +73,20 @@ Ext.define("Koala.view.form.LayerFilter", {
     /**
      * Initializes the LayerFilter.
      */
-    initComponent: function(){
+    initComponent: function() {
         var me = this;
         me.callParent();
 
         var filters = me.getFilters();
 
-        if(!filters || filters.length < 1){
+        if (!filters || filters.length < 1) {
             me.addWithoutFilterBtn();
             return;
         }
 
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || "").toLowerCase();
-            switch(type){
+            switch (type) {
                 case "timerange":
                     me.createTimeRangeFilter(filter, idx);
                     break;
@@ -139,7 +139,7 @@ Ext.define("Koala.view.form.LayerFilter", {
         });
     },
 
-    addWithoutFilterBtn: function(){
+    addWithoutFilterBtn: function() {
         var addWithoutFilterButton = Ext.create("Ext.button.Button", {
             bind: {
                 text: "{buttonTextNoFilter}"
@@ -250,7 +250,7 @@ Ext.define("Koala.view.form.LayerFilter", {
      * @param {Object} filter A filter specification object of type rodos.
      * @param {Number} idx The index of the filter in the list of all filters.
      */
-    createRODOSFilter: function(){
+    createRODOSFilter: function() {
     },
 
     /**
@@ -259,7 +259,7 @@ Ext.define("Koala.view.form.LayerFilter", {
      * @param {Object} filter A filter specification object of type timerange.
      * @param {Number} idx The index of the filter in the list of all filters.
      */
-    createTimeRangeFilter: function(filter, idx){
+    createTimeRangeFilter: function(filter, idx) {
         var me = this;
         var FilterUtil = Koala.util.Filter;
         var format = Koala.util.Date.ISO_FORMAT;

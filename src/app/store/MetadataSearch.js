@@ -46,7 +46,7 @@ Ext.define('Koala.store.MetadataSearch', {
         this.proxy.username = merge.application_user.username || null;
         this.proxy.password = merge.application_user.password || null;
 
-        if(this.proxy.username && this.proxy.password){
+        if (this.proxy.username && this.proxy.password) {
             var tok = this.proxy.username + ':' + this.proxy.password;
             // TODO we may want to use something UTF-8 safe:
             // https://developer.mozilla.org/de/docs/Web/API/WindowBase64/btoa#Unicode-Zeichenketten
@@ -86,7 +86,7 @@ Ext.define('Koala.store.MetadataSearch', {
         },
         reader: {
             type: 'json',
-            rootProperty: function(data){
+            rootProperty: function(data) {
                 var root = {};
                 // This is shared acros both results
                 var result = data['csw:SearchResults'];
@@ -96,14 +96,14 @@ Ext.define('Koala.store.MetadataSearch', {
                     'gmd',
                     'bfs'
                 ];
-                Ext.each(namespaces, function(namespace){
+                Ext.each(namespaces, function(namespace) {
                     var candidateKey = namespace + ':MD_Metadata';
                     if (result[candidateKey]) {
                         root = result[candidateKey];
                         return false; // return early
                     }
                 });
-                if(Ext.Object.isEmpty(root)){
+                if (Ext.Object.isEmpty(root)) {
                     return null;
                 } else {
                     return root;

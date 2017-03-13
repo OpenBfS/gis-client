@@ -33,6 +33,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.form.LayerFilter',
 
         'Koala.util.Routing',
+        'Koala.util.Fullscreen',
 
         'Koala.view.panel.BarChart',
         'Koala.view.panel.MobilePanel',
@@ -75,7 +76,7 @@ Ext.define('Koala.view.main.Main', {
             appContextPath: Koala.appContextUrl || 'resources/appContext.json',
             height: '100%',
             listeners: {
-                painted: function(){
+                painted: function() {
                     var me = this;
                     var viewCtrl = me.lookupController();
                     var view = viewCtrl.getView();
@@ -130,6 +131,7 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'basigx-button-zoomtoextent'
             }, {
                 xtype: 'button',
+                hidden: !Koala.util.Fullscreen.isFullscreenSupported(),
                 html: '<i class="fa fa-expand fa-2x"></i>',
                 handler: 'toggleFullscreen'
             }]
@@ -141,7 +143,7 @@ Ext.define('Koala.view.main.Main', {
                 top: '20px',
                 left: '20px'
             },
-            handler: function(btn){
+            handler: function(btn) {
                 btn.up('app-main').down('k-panel-mobilemenu').show();
             }
         }, {
@@ -152,7 +154,7 @@ Ext.define('Koala.view.main.Main', {
                 bottom: '40px',
                 right: '20px'
             },
-            handler: function(btn){
+            handler: function(btn) {
                 btn.up('app-main').down('k-panel-mobilelegend').show();
             }
         }]

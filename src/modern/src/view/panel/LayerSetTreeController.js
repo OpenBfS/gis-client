@@ -15,7 +15,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         var urls = merge.urls;
         var layerSetUrl = urls['layerset'] ? urls['layerset'] : 'classic/resources/layerset.json';
 
-        if(!view.down('treelist').getStore()){
+        if (!view.down('treelist').getStore()) {
             var treeStore = Ext.create('Ext.data.TreeStore', {
                 proxy: {
                     type: 'ajax',
@@ -52,7 +52,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         var treelist = me.getView().down('treelist');
         me.clearTask();
         var selection = treelist.getSelection();
-        me.currentTask = new Ext.util.DelayedTask(function(){
+        me.currentTask = new Ext.util.DelayedTask(function() {
             if (selection && selection.isLeaf()) {
                 Koala.util.Layer.getMetadataFromUuidAndThen(
                     selection.get('uuid'), me.showChangeFilterSettingsWin.bind(me));
@@ -61,7 +61,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         me.currentTask.delay(200);
     },
 
-    addLayerWithDefaultFilters:  function() {
+    addLayerWithDefaultFilters: function() {
         // TODO if we want equal behaviour for sets and profiles, the
         //      changes from https://redmine-koala.bfs.de/issues/1445
         //      we have to share the logic in LayerSetChooserController
@@ -70,7 +70,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         me.clearTask();
         var treelist = this.getView().down('treelist');
         var selection = treelist.getSelection();
-        if(selection){
+        if (selection) {
             if (selection.isLeaf()) {
                 Koala.util.Layer.addLayerByUuid(selection.get('uuid'));
             } else {
@@ -94,7 +94,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
 
         // only allow one filter-window to be open
         var filterPanels = Ext.ComponentQuery.query('k-form-layerfilter');
-        Ext.each(filterPanels, function(panel){
+        Ext.each(filterPanels, function(panel) {
             panel.destroy();
         });
 

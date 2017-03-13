@@ -26,7 +26,7 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
      * @param {Koala.model.SpatialRecord} record A record of the spatialsearch
      *                                           grid.
      */
-    onItemMouseEnter: function(grid, record){
+    onItemMouseEnter: function(grid, record) {
         var store = grid.getStore();
         var layer = store.layer;
         var feature = this.getFeatureFromRecord(record);
@@ -39,7 +39,7 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
      * @param {Koala.view.grid.SpatialSearch} grid The grid.
      *
      */
-    onItemMouseLeave: function(grid){
+    onItemMouseLeave: function(grid) {
         var store = grid.getStore();
         var layer = store.layer;
         layer.getSource().clear();
@@ -51,7 +51,7 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
      * @param {Koala.model.SpatialRecord} record A record of the spatialsearch
      *                                           grid.
      */
-    onItemClick: function(grid, record){
+    onItemClick: function(grid, record) {
         var store = grid.getStore();
         var map = store.map;
         var view = map.getView();
@@ -81,7 +81,7 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
       var format;
       var feature;
 
-      if(wkt){
+      if (wkt) {
         format = new ol.format.WKT();
         feature = format.readFeature(wkt);
       } else if (geom) {
@@ -118,7 +118,7 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
      * @param {Ext.data.Model[]} records The records that the last query
      *     returned.
      */
-    onStoreLoad: function(store, records){
+    onStoreLoad: function(store, records) {
         var grid = this.getView();
         var footer = grid.down('toolbar[name="footer"]');
         var statusLine = footer.down('[name="status-line"]');

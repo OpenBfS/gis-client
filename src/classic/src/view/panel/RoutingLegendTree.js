@@ -118,9 +118,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             return prefix;
         },
 
-        findByProp: function(arr, key, val){
+        findByProp: function(arr, key, val) {
             var item = null;
-            Ext.each(arr, function(obj){
+            Ext.each(arr, function(obj) {
                 if (obj[key] && obj[key] === val) {
                     item = obj;
                     return false; // stop early
@@ -129,7 +129,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             return item;
         },
 
-        reorganizeMenu: function(comp){
+        reorganizeMenu: function(comp) {
             var olLayer = comp.layerRec.getOlLayer();
 
             var allowShortInfo = olLayer.get('allowShortInfo') || false;
@@ -148,29 +148,29 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             var opacitySlider = comp.down('slider[name="opacityChange"]');
             var legend = comp.up().down('image[name="' + olLayer.get("routeId") + '-legendImg"]');
 
-            if(shortInfoBtn){
+            if (shortInfoBtn) {
                 shortInfoBtn.setVisible(allowShortInfo);
             }
-            if(changeFilterBtn) {
-              if(allowChangeFilter.filters.length === 0) {
+            if (changeFilterBtn) {
+              if (allowChangeFilter.filters.length === 0) {
                 changeFilterBtn.setVisible(false);
               } else {
                   changeFilterBtn.setVisible(allowChangeFilter);
               }
             }
-            if(downloadBtn){
+            if (downloadBtn) {
                 downloadBtn.setVisible(allowDownload);
             }
-            if(removalBtn){
+            if (removalBtn) {
                 removalBtn.setVisible(allowRemoval);
             }
-            if(styleBtn){
+            if (styleBtn) {
                 styleBtn.setVisible(allowStyle);
             }
-            if(opacitySlider){
+            if (opacitySlider) {
                 opacitySlider.setVisible(allowOpacityChange);
             }
-            if(legend){
+            if (legend) {
                 legend.setVisible(hasLegend);
             }
         },
@@ -185,7 +185,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         //     return LayerUtil.getFiltersTextFromMetadata(layer.metadata);
         // },
 
-        changeFilterHandler: function(btn){
+        changeFilterHandler: function(btn) {
             var record = btn.layerRec;
             var layer = btn.layerRec.getOlLayer();
             Koala.util.Layer.showChangeFilterSettingsWin(
@@ -193,7 +193,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             );
         },
 
-        shortInfoHandler: function(btn){
+        shortInfoHandler: function(btn) {
             var record = btn.layerRec;
             var cql = "Identifier = '" + record.get('metadata').id + "'";
             var metadataStore = Ext.create('Koala.store.MetadataSearch');
@@ -212,7 +212,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             metadataStore.load();
         },
 
-        removalHandler: function(btn){
+        removalHandler: function(btn) {
             var layer = btn.layerRec.getOlLayer();
             var map = Ext.ComponentQuery.query('basigx-component-map')[0]
                 .getMap();
@@ -225,18 +225,18 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                     yes: "Ja",
                     no: "Nein"
                 },
-                fn: function(btnId){
-                    if(btnId === "yes"){
+                fn: function(btnId) {
+                    if (btnId === "yes") {
                         map.removeLayer(layer);
                     }
                 }
             });
         },
 
-        styleHandler: function(btn){
+        styleHandler: function(btn) {
             var layer = btn.layerRec.getOlLayer();
             var win = Ext.ComponentQuery.query('[name=style-layer]')[0];
-            if(!win){
+            if (!win) {
                 Ext.create('Ext.window.Window', {
                     name: 'style-layer',
                     title: 'Layer Style',
@@ -245,7 +245,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                     layout: 'fit',
                     items: [{
                         xtype: 'k_container_styler_styler',
-                        viewModel:{
+                        viewModel: {
                             data: {
                                 layer: layer
                             }
@@ -257,7 +257,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             }
         },
 
-        downloadHandler: function(btn){
+        downloadHandler: function(btn) {
             var layer = btn.layerRec.getOlLayer();
 
             Ext.Msg.show({
@@ -268,8 +268,8 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                     yes: "Ja",
                     no: "Nein"
                 },
-                fn: function(btnId){
-                    if(btnId === "yes"){
+                fn: function(btnId) {
+                    if (btnId === "yes") {
                         var url = Koala.util.Layer.getDownloadUrlWithFilter(
                                 layer
                             );
@@ -279,12 +279,12 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             });
         },
 
-        sliderChangeHandler: function(slider, newValue){
+        sliderChangeHandler: function(slider, newValue) {
             var layer = slider.layerRec.getOlLayer();
             layer.setOpacity(newValue / 100);
         },
 
-        initializeOpacityVal: function(slider){
+        initializeOpacityVal: function(slider) {
             var layer = slider.layerRec.getOlLayer();
             slider.setValue(layer.getOpacity() * 100);
         }
@@ -344,7 +344,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 name: 'opacityChange',
                 width: 80,
                 value: 100,
-                tipText: function(thumb){
+                tipText: function(thumb) {
                     return String(thumb.value) + '% Sichtbarkeit';
                 },
                 listeners: {
@@ -383,7 +383,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         plugins: {
             ptype: 'treeviewdragdrop'
         },
-        getRowClass: function(record){
+        getRowClass: function(record) {
             return this.up().getCssForRow(record);
         },
         listeners: {
@@ -419,7 +419,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var hasToggleAllBtn = me.getHasToggleAllBtn();
         var hasExpandAllBtn = me.getHasExpandAllBtn();
         var hasRemoveAllLayersBtn = me.getHasRemoveAllLayersBtn();
-        if (!hasCollapseAllBtn && !hasToggleAllBtn && !hasExpandAllBtn){
+        if (!hasCollapseAllBtn && !hasToggleAllBtn && !hasExpandAllBtn) {
             return;
         }
 
@@ -462,7 +462,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             xtype: 'button',
             scope: me
         };
-        switch(mode) {
+        switch (mode) {
             case 'collapse':
                 cfg.glyph = 'xf147@FontAwesome';
                 cfg.bind = {
@@ -505,7 +505,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
     /**
      * Removes all activated layers with 'allowRemoval=true' from the map.
      */
-    removeAllLayers: function(){
+    removeAllLayers: function() {
         var viewModel = this.getViewModel();
         var store = this.getStore();
         var map = Ext.ComponentQuery.query('basigx-component-map')[0]
@@ -515,16 +515,16 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         Ext.Msg.confirm(
             viewModel.get('confirmTitleRemoveAllLayersAll'),
             viewModel.get('confirmMsgRemoveAllLayers'),
-            function(btnId){
-                if(btnId === "yes"){
-                    store.each(function(rec){
+            function(btnId) {
+                if (btnId === "yes") {
+                    store.each(function(rec) {
                         var layer = rec.getOlLayer();
-                        if(layer.get("allowRemoval")){
+                        if (layer.get("allowRemoval")) {
                             layersToRemove.push(layer);
                         }
                     });
 
-                    Ext.each(layersToRemove, function(layer){
+                    Ext.each(layersToRemove, function(layer) {
                         map.removeLayer(layer);
                     });
                 }
@@ -618,7 +618,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
      *
      * @private
      */
-    unbindUpdateHandlers: function(){
+    unbindUpdateHandlers: function() {
         var me = this;
         // TODO this needs to be changed once we handle more than one map
         var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
@@ -664,7 +664,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
      *
      * @private
      */
-    unbindLoadIndicationHandlers: function(){
+    unbindLoadIndicationHandlers: function() {
         var me = this;
         var store = me.getStore();
         store.each(me.unbindLoadIndicationFromRecord, me);
@@ -692,7 +692,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         // to enable the filter logic
         var textProperty = this.getTextProperty();
         if (textProperty) {
-            Ext.each(recs, function(layerRec){
+            Ext.each(recs, function(layerRec) {
                 var layer = layerRec.getOlLayer();
                 layerRec.set('text', layer.get(textProperty));
             });
@@ -771,7 +771,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             layer.set('visible', false);
             var row = Ext.get(me.getView().getRowByRecord(rec));
             if (row) {
-                var task = new Ext.util.DelayedTask(function(){
+                var task = new Ext.util.DelayedTask(function() {
                     row.addCls('k-loading-failed');
                 });
                 task.delay(150);
@@ -846,7 +846,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
      * panel by cascading down the tree and double toggling all candidates. If
      * someone finds a better and API-conformant way, that'd be great.
      */
-    layerDropped: function(){
+    layerDropped: function() {
         var me = this;
         var view = me.getView();
         var rowExpanderPlugin = me.getPlugin('rowexpanderwithcomponents');
@@ -889,9 +889,9 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         selModel.select(selection);
     },
 
-    updateLegendsWithScale: function () {
+    updateLegendsWithScale: function() {
         var store = this.getStore();
-        store.each(function (rec) {
+        store.each(function(rec) {
             var layer = rec.getOlLayer();
             var selector = '[name=' + layer.get("routeId") + '-legendImg]';
             var img = Ext.ComponentQuery.query(selector)[0];
@@ -901,7 +901,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         });
     },
 
-    applyRoutingEnabled: function(newVal){
+    applyRoutingEnabled: function(newVal) {
         var me = this;
         var controller = me.getController();
         var store = me.getStore();
@@ -911,7 +911,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             store.on('datachange', controller.setRouting, controller);
             // controller.setRouting.call(controller, store);
             me.hasRoutingListeners = true;
-        } else if (me.hasRoutingListeners){
+        } else if (me.hasRoutingListeners) {
             store.un('update', controller.setRouting, controller);
             store.un('datachange', controller.setRouting, controller);
             me.hasRoutingListeners = false;

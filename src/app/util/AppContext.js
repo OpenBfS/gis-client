@@ -31,8 +31,8 @@ Ext.define('Koala.util.AppContext', {
          * @param {BasiGX.view.component.Map} mapComponent A BasiGX mapComponent
          * @return {Object} The matched AppContext.
          */
-        getAppContext: function(mapComponent){
-          if(!mapComponent){
+        getAppContext: function(mapComponent) {
+          if (!mapComponent) {
             mapComponent = BasiGX.view.component.Map.guess();
           }
           return mapComponent.appContext;

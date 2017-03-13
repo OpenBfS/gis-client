@@ -40,8 +40,8 @@ Ext.define("Koala.view.panel.MultiSearch", {
 
     defaults: {
         listeners: {
-            close: function(){
-                if(this.up('panel').query('grid[hidden=false]').length < 2){
+            close: function() {
+                if (this.up('panel').query('grid[hidden=false]').length < 2) {
                     var combo = Ext.ComponentQuery.query(
                         'k-form-field-searchcombo')[0];
                     combo.clearValue();

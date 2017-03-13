@@ -16,16 +16,16 @@ Ext.define('Koala.view.container.styler.ScaleDenominatorController', {
     /**
      *
      */
-    applyListeners: function(){
+    applyListeners: function() {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var fields = view.query('field');
 
-        Ext.each(fields, function(field){
-            field.on('change', function(){
+        Ext.each(fields, function(field) {
+            field.on('change', function() {
                 var values = {};
-                Ext.each(fields, function(f){
-                    if(f.name !== "useScaleDenominatorCheckbox"){
+                Ext.each(fields, function(f) {
+                    if (f.name !== "useScaleDenominatorCheckbox") {
                         values[f.name] = f.getValue();
                     }
                 });
@@ -64,7 +64,7 @@ Ext.define('Koala.view.container.styler.ScaleDenominatorController', {
     /**
      *
      */
-    operatorComboChanged: function(combo, newValue){
+    operatorComboChanged: function(combo, newValue) {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var literalNumberField1 = view.down(
@@ -72,7 +72,7 @@ Ext.define('Koala.view.container.styler.ScaleDenominatorController', {
         var literalNumberField2 = view.down(
                 'numberfield[name="literalNumberField2"]');
 
-        switch(newValue) {
+        switch (newValue) {
         case "ScaleIsBetween":
             literalNumberField1.show();
             literalNumberField2.show();

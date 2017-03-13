@@ -5,7 +5,7 @@ Ext.define('Koala.view.container.styler.RuleController', {
     /**
      *
      */
-    onBoxReady: function(){
+    onBoxReady: function() {
         var me = this;
         var view = me.getView();
         var rule = me.getViewModel().get('rule');
@@ -14,24 +14,24 @@ Ext.define('Koala.view.container.styler.RuleController', {
         var hasSymbolizer = !!rule.getSymbolizer();
         var hasScaleDenominator = !!rule.getScaleDenominator();
 
-        if(!hasFilter){
+        if (!hasFilter) {
             rule.setFilter(Ext.create('Koala.model.StyleFilter'));
         }
-        if(!hasSymbolizer){
+        if (!hasSymbolizer) {
             rule.setSymbolizer(Ext.create('Koala.model.StyleSymbolizer'));
         }
-        if(!hasScaleDenominator){
+        if (!hasScaleDenominator) {
             rule.setScaleDenominator(Ext.create('Koala.model.StyleScaleDenominator'));
         }
 
         me.initBaseFieldset();
         me.initComponents();
 
-        if(hasFilter && rule.getFilter().get('operator')){
+        if (hasFilter && rule.getFilter().get('operator')) {
             var filterFieldset = view.down('fieldset[name="filter-fieldset"]');
             filterFieldset.expand();
         }
-        if(hasScaleDenominator && rule.getScaleDenominator().get('operator')){
+        if (hasScaleDenominator && rule.getScaleDenominator().get('operator')) {
             var scaleDenominatorFieldset = view.down('fieldset[name="scaledenominator-fieldset"]');
             scaleDenominatorFieldset.expand();
         }
@@ -40,7 +40,7 @@ Ext.define('Koala.view.container.styler.RuleController', {
     /**
      *
      */
-    initBaseFieldset: function(){
+    initBaseFieldset: function() {
         var view = this.getView();
         var viewModel = this.getViewModel();
 
@@ -136,7 +136,7 @@ Ext.define('Koala.view.container.styler.RuleController', {
     /**
      *
      */
-    removeRule: function(){
+    removeRule: function() {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var rulesPanel = view.up('k_container_styler_rules');
@@ -144,7 +144,7 @@ Ext.define('Koala.view.container.styler.RuleController', {
         var rules = viewModel.get('style.rules');
         var rule = viewModel.get('rule');
 
-        if(rules.getCount() > 1){
+        if (rules.getCount() > 1) {
             rulesPanel.remove(view);
             rules.remove(rule);
             view.fireEvent('rulechanged', rule);
@@ -157,7 +157,7 @@ Ext.define('Koala.view.container.styler.RuleController', {
     /**
      *
      */
-    onOlStyleChanged: function(){
+    onOlStyleChanged: function() {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var rule = viewModel.get('rule');
@@ -167,14 +167,14 @@ Ext.define('Koala.view.container.styler.RuleController', {
     /**
      *
      */
-    onFilterChanged: function(filter){
+    onFilterChanged: function(filter) {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var rule = viewModel.get('rule');
         var filterCheckbox = view.down('checkbox[name="useFilterCheckbox"]');
 
-        if(rule && filter){
-            if(filterCheckbox.checked){
+        if (rule && filter) {
+            if (filterCheckbox.checked) {
                 rule.setFilter(filter);
             } else {
                 delete rule.setFilter(null);
@@ -186,14 +186,14 @@ Ext.define('Koala.view.container.styler.RuleController', {
     /**
      *
      */
-    onScaleDenominatorChanged: function(scaleDenominator){
+    onScaleDenominatorChanged: function(scaleDenominator) {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var rule = viewModel.get('rule');
         var scaleDenominatorCheckbox = view.down('checkbox[name="useScaleDenominatorCheckbox"]');
 
-        if(rule && scaleDenominator){
-            if(scaleDenominatorCheckbox.checked){
+        if (rule && scaleDenominator) {
+            if (scaleDenominatorCheckbox.checked) {
                 rule.setScaleDenominator(scaleDenominator);
             } else {
                 delete rule.setScaleDenominator(null);

@@ -60,10 +60,10 @@ describe('Koala.util.Duration', function() {
                     "hours", "minutes", "seconds"
                 ];
                 var nonStringInputs = [
-                    undefined, [], {}, /abc/, 1.23, null, function(){}
+                    undefined, [], {}, /abc/, 1.23, null, function() {}
                 ];
 
-                nonStringInputs.forEach(function(nonStringInput){
+                nonStringInputs.forEach(function(nonStringInput) {
                     var durationObj = Koala.util.Duration.isoDurationToObject(
                             nonStringInput
                         );
@@ -74,7 +74,7 @@ describe('Koala.util.Duration', function() {
                     expect(durationObj.sign).to.be('+');
                 });
             });
-            it('correctly reads a fully specified iso string', function(){
+            it('correctly reads a fully specified iso string', function() {
                 var stringDuration = "-P1Y2M3W4DT5H6M7.89S";
                 var durationObj = Koala.util.Duration.isoDurationToObject(
                         stringDuration
@@ -88,7 +88,7 @@ describe('Koala.util.Duration', function() {
                 expect(durationObj.minutes).to.be(6);
                 expect(durationObj.seconds).to.be(7.89);
             });
-            it('correctly reads a partially specified iso string', function(){
+            it('correctly reads a partially specified iso string', function() {
                 var stringDuration = "PT5H6S";
                 var durationObj = Koala.util.Duration.isoDurationToObject(
                         stringDuration
@@ -102,7 +102,7 @@ describe('Koala.util.Duration', function() {
                 expect(durationObj.minutes).to.be(0);
                 expect(durationObj.seconds).to.be(6);
             });
-            it('supports float values for all numeric parts', function(){
+            it('supports float values for all numeric parts', function() {
                 var stringDuration = "P1.1Y2.2M3.3W4.4DT5.5H6.6M7.7S";
                 var durationObj = Koala.util.Duration.isoDurationToObject(
                         stringDuration
@@ -130,7 +130,7 @@ describe('Koala.util.Duration', function() {
                 ).to.be.a(Function);
             });
             it('returns the number of positive seconds in a duration',
-                function(){
+                function() {
                     var duration = "PT5H6.7S";
                     var expected = 5 * 3600 + 6.7; // 5 hours + 6.7seconds
                     var got = Koala.util.Duration.secondsFromDuration(duration);
@@ -138,7 +138,7 @@ describe('Koala.util.Duration', function() {
                 }
             );
             it('returns the number of negative seconds in a duration',
-                function(){
+                function() {
                     var duration = "-PT5H6.7S";
                     var expected = -1 * (5 * 3600 + 6.7); // neg. 5 hours + 6.7seconds
                     var got = Koala.util.Duration.secondsFromDuration(duration);
@@ -159,7 +159,7 @@ describe('Koala.util.Duration', function() {
                 ).to.be.a(Function);
             });
             it('returns the absolute number of seconds in a positive duration',
-                function(){
+                function() {
                     var duration = "PT5H6.7S";
                     var expected = 5 * 3600 + 6.7; // 5 hours + 6.7seconds
                     var got = Koala.util.Duration.absoluteSecondsFromDuration(
@@ -169,7 +169,7 @@ describe('Koala.util.Duration', function() {
                 }
             );
             it('returns the absolute number of seconds in a negative duration',
-                function(){
+                function() {
                     var duration = "-PT5H6.7S";
                     var expected = 5 * 3600 + 6.7; // 5 hours + 6.7seconds
                     var got = Koala.util.Duration.absoluteSecondsFromDuration(
@@ -192,7 +192,7 @@ describe('Koala.util.Duration', function() {
                 ).to.be.a(Function);
             });
             it('returns the number of positive seconds in a duration object',
-                function(){
+                function() {
                     var duration = "PT5H6.7S";
                     var durationObj = Koala.util.Duration.isoDurationToObject(
                             duration
@@ -205,7 +205,7 @@ describe('Koala.util.Duration', function() {
                 }
             );
             it('returns the number of negative seconds in a duration object',
-                function(){
+                function() {
                     var duration = "-PT5H6.7S";
                     var durationObj = Koala.util.Duration.isoDurationToObject(
                             duration
@@ -231,13 +231,13 @@ describe('Koala.util.Duration', function() {
                     Koala.util.Duration.abs
                 ).to.be.a(Function);
             });
-            it('returns an already positive duration unchanged', function(){
+            it('returns an already positive duration unchanged', function() {
                 var duration = "PT5H6.7S";
                 var expected = "PT5H6.7S";
                 var got = Koala.util.Duration.abs(duration);
                 expect(got).to.be(expected);
             });
-            it('returns correct positive duration for a negative', function(){
+            it('returns correct positive duration for a negative', function() {
                 var duration = "-PT5H6.7S";
                 var expected = "PT5H6.7S";
                 var got = Koala.util.Duration.abs(duration);
@@ -256,7 +256,7 @@ describe('Koala.util.Duration', function() {
                     Koala.util.Duration.dateAddDuration
                 ).to.be.a(Function);
             });
-            it('adds a positive duration correctly', function(){
+            it('adds a positive duration correctly', function() {
                 var startDate = new Date('1980-11-28T07:52:00');
                 var duration = "P1DT8M8S"; // 1 day, 8 minutes and 8 seconds
                 var expected = new Date('1980-11-29T08:00:08');
@@ -265,7 +265,7 @@ describe('Koala.util.Duration', function() {
                     );
                 expect(got).to.eql(expected);
             });
-            it('substracts a negative duration correctly', function(){
+            it('substracts a negative duration correctly', function() {
                 var startDate = new Date('1980-11-28T07:52:00');
                 var duration = "-P1DT8M8S"; // 1 day, 8 minutes and 8 seconds
                 var expected = new Date('1980-11-27T07:43:52');
@@ -287,7 +287,7 @@ describe('Koala.util.Duration', function() {
                     Koala.util.Duration.dateSubtractAbsoluteDuration
                 ).to.be.a(Function);
             });
-            it('substracts a positive duration correctly', function(){
+            it('substracts a positive duration correctly', function() {
                 var startDate = new Date('1980-11-28T07:52:00');
                 var duration = "P1DT8M8S"; // 1 day, 8 minutes and 8 seconds
                 var expected = new Date('1980-11-27T07:43:52');
@@ -296,7 +296,7 @@ describe('Koala.util.Duration', function() {
                     );
                 expect(got).to.eql(expected);
             });
-            it('substracts a negative duration correctly', function(){
+            it('substracts a negative duration correctly', function() {
                 var startDate = new Date('1980-11-28T07:52:00');
                 var duration = "-P1DT8M8S"; // 1 day, 8 minutes and 8 seconds
                 var expected = new Date('1980-11-27T07:43:52');
@@ -318,7 +318,7 @@ describe('Koala.util.Duration', function() {
                     Koala.util.Duration.dateAddAbsoluteDuration
                 ).to.be.a(Function);
             });
-            it('adds a positive duration correctly', function(){
+            it('adds a positive duration correctly', function() {
                 var startDate = new Date('1980-11-28T07:52:00');
                 var duration = "P1DT8M8S"; // 1 day, 8 minutes and 8 seconds
                 var expected = new Date('1980-11-29T08:00:08');
@@ -327,7 +327,7 @@ describe('Koala.util.Duration', function() {
                     );
                 expect(got).to.eql(expected);
             });
-            it('adds a negative duration correctly', function(){
+            it('adds a negative duration correctly', function() {
                 var startDate = new Date('1980-11-28T07:52:00');
                 var duration = "-P1DT8M8S"; // 1 day, 8 minutes and 8 seconds
                 var expected = new Date('1980-11-29T08:00:08');

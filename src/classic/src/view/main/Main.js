@@ -97,8 +97,8 @@ Ext.define('Koala.view.main.Main', {
             }]
         },
         listeners: {
-            afterrender: function(){
-                if(!location.hash){
+            afterrender: function() {
+                if (!location.hash) {
                     Ext.create('Ext.window.Window', {
                         title: 'Layer Profilwahl',
                         modal: true,
@@ -106,12 +106,12 @@ Ext.define('Koala.view.main.Main', {
                         minWidth: 250,
                         minHeight: 300,
                         tools: [{
-                            type:'help',
+                            type: 'help',
                             //TODO: move to app-locale
                             tooltip: 'Hilfe',
                             callback: function() {
                                 var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-                                if(!helpWin){
+                                if (!helpWin) {
                                     helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                                     helpWin.on('afterlayout', function() {
                                         var helpWinController = this.getController();
@@ -187,10 +187,10 @@ Ext.define('Koala.view.main.Main', {
                     listeners: {
                         boxready: Koala.util.AppContext.generateCheckToolVisibility('addWmsBtn')
                     },
-                    handler: function(){
+                    handler: function() {
                         var win = Ext.ComponentQuery.query(
                             '[name=add-wms-window]')[0];
-                        if(!win){
+                        if (!win) {
                             Ext.create('Ext.window.Window', {
                                 name: 'add-wms-window',
                                 title: 'WMS hinzufügen',
@@ -198,12 +198,12 @@ Ext.define('Koala.view.main.Main', {
                                 height: 450,
                                 layout: 'fit',
                                 tools: [{
-                                    type:'help',
+                                    type: 'help',
                                     //TODO: move to app-locale
                                     tooltip: 'Hilfe',
                                     callback: function() {
                                         var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-                                        if(!helpWin){
+                                        if (!helpWin) {
                                             helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                                             helpWin.on('afterlayout', function() {
                                                 var helpWinController = this.getController();
@@ -224,7 +224,7 @@ Ext.define('Koala.view.main.Main', {
                                     versionsWmsAutomatically: true,
                                     wmsBaseUrls: BasiGX.util.Application.getAppContext().wmsUrls,
                                     listeners: {
-                                        beforewmsadd: function(olLayer){
+                                        beforewmsadd: function(olLayer) {
                                             olLayer.set('nameWithSuffix', olLayer.get('name'));
                                             olLayer.set('allowRemoval', true);
                                         }
@@ -245,9 +245,9 @@ Ext.define('Koala.view.main.Main', {
                     listeners: {
                         boxready: Koala.util.AppContext.generateCheckToolVisibility('printBtn')
                     },
-                    handler: function(btn){
+                    handler: function(btn) {
                         var win = Ext.ComponentQuery.query('k-window-print')[0];
-                        if(!win){
+                        if (!win) {
                             Ext.create('Koala.view.window.Print')
                             .showBy(btn.up('basigx-panel-menu'), 'tr');
                         } else {
@@ -264,10 +264,10 @@ Ext.define('Koala.view.main.Main', {
                     listeners: {
                         boxready: Koala.util.AppContext.generateCheckToolVisibility('importLocalDataBtn')
                     },
-                    handler: function(){
+                    handler: function() {
                             var win = Ext.ComponentQuery.query(
                                 '[name=add-wms-window]')[0];
-                            if(!win){
+                            if (!win) {
                                 Ext.create('Ext.window.Window', {
                                     name: 'add-wms-window',
                                     bind: {
@@ -275,12 +275,12 @@ Ext.define('Koala.view.main.Main', {
                                     },
                                     layout: 'fit',
                                     tools: [{
-                                        type:'help',
+                                        type: 'help',
                                         //TODO: move to app-locale
                                         tooltip: 'Hilfe',
                                         callback: function() {
                                             var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-                                            if(!helpWin){
+                                            if (!helpWin) {
                                                 helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                                                 helpWin.on('afterlayout', function() {
                                                     var helpWinController = this.getController();
@@ -368,7 +368,7 @@ Ext.define('Koala.view.main.Main', {
             style: {
                 borderRadius: 0
             },
-            handler: function(btn){
+            handler: function(btn) {
                 btn.up().down('k-form-field-searchcombo').clearValue();
             }
         };

@@ -50,7 +50,7 @@ Ext.define("Koala.view.component.TextTool", {
     /**
      * Initializes the TextTool component.
      */
-    initComponent: function(){
+    initComponent: function() {
         var me = this;
         me.callParent();
         me.on({
@@ -96,7 +96,7 @@ Ext.define("Koala.view.component.TextTool", {
      *
      * @private
      */
-    bindOwnHoverHandlers: function(){
+    bindOwnHoverHandlers: function() {
         var me = this;
         var el = me.getEl();
         el.on({
@@ -111,7 +111,7 @@ Ext.define("Koala.view.component.TextTool", {
      *
      * @private
      */
-    unbindOwnHoverHandlers: function(){
+    unbindOwnHoverHandlers: function() {
         var me = this;
         var el = me.getEl();
         el.un({
@@ -127,12 +127,12 @@ Ext.define("Koala.view.component.TextTool", {
      *
      * @private
      */
-    bindToolHoverHandlers: function(){
+    bindToolHoverHandlers: function() {
         var me = this;
         var father = me.up(me.fatherSelector);
         var selector = 'tool[type="' + me.connectedToolType + '"]';
         var tool = father.down(selector);
-        tool.on('afterrender', function(toolComponent){
+        tool.on('afterrender', function(toolComponent) {
             var toolEl = toolComponent.getEl();
             toolEl.on({
                 mouseover: me.addHoverCls,
@@ -149,7 +149,7 @@ Ext.define("Koala.view.component.TextTool", {
      *
      * @private
      */
-    unbindToolHoverHandlers: function(){
+    unbindToolHoverHandlers: function() {
         var me = this;
         var toolEl = me.toolEl; // this is set in #bindToolHoverHandlers
         if (toolEl) {
@@ -166,7 +166,7 @@ Ext.define("Koala.view.component.TextTool", {
      *
      * @private
      */
-    addHoverCls: function(){
+    addHoverCls: function() {
         this.getEl().addCls(this.mouseOverTextCls);
     },
 
@@ -175,7 +175,7 @@ Ext.define("Koala.view.component.TextTool", {
      *
      * @private
      */
-    removeHoverCls: function(){
+    removeHoverCls: function() {
         this.getEl().removeCls(this.mouseOverTextCls);
     },
 

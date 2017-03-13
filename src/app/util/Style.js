@@ -16,8 +16,8 @@ Ext.define('Koala.util.Style', {
         /**
          * Returns the geometryType of the first feature of an ol.layer.Vector.
          */
-        symbolTypeFromVectorLayer: function(layer){
-            if(!layer || !(layer instanceof ol.layer.Vector)){
+        symbolTypeFromVectorLayer: function(layer) {
+            if (!layer || !(layer instanceof ol.layer.Vector)) {
                 return;
             }
             var geomType = layer.getSource().getFeatures()[0].getGeometry().getType();
@@ -29,8 +29,8 @@ Ext.define('Koala.util.Style', {
         /**
          *
          */
-        getAttributeKeysFromVetorLayer: function(layer){
-            if(!layer || !(layer instanceof ol.layer.Vector)){
+        getAttributeKeysFromVetorLayer: function(layer) {
+            if (!layer || !(layer instanceof ol.layer.Vector)) {
                 return;
             }
             return layer.getSource().getFeatures()[0].getKeys();
@@ -51,7 +51,7 @@ Ext.define('Koala.util.Style', {
             var styleFunction = function(feature) {
                 var olStyles = [];
 
-                rules.each(function(rule, idx){
+                rules.each(function(rule, idx) {
                     var scaleDenom = rule.getScaleDenominator();
                     var symbolizer = rule.getSymbolizer();
                     var filter = rule.getFilter();
@@ -81,10 +81,10 @@ Ext.define('Koala.util.Style', {
 
                 var olTextStyle;
 
-                if(olStyle && olStyle.getText){
+                if (olStyle && olStyle.getText) {
                     olTextStyle = olStyle.getText();
                 }
-                if(!olTextStyle){
+                if (!olTextStyle) {
                     olTextStyle = new ol.style.Text();
                 }
 
@@ -158,7 +158,7 @@ Ext.define('Koala.util.Style', {
             var type = scaleDenom.get('operator');
             var result;
 
-            switch(type) {
+            switch (type) {
                 case 'ScaleIsLessThan':
                     result = currentMapScale < (numberOperandA || numberOperandB);
                     break;
@@ -215,7 +215,7 @@ Ext.define('Koala.util.Style', {
                 return false;
             }
 
-            switch(type) {
+            switch (type) {
                 case 'PropertyIsEqualTo':
                     result = Koala.util.String.coerce(candidate) ===
                             Koala.util.String.coerce(textOperand);

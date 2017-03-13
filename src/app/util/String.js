@@ -31,9 +31,9 @@ Ext.define('Koala.util.String', {
          * @return Boolean whether the string conformed to the fixed layout of a
          *     uuid.
          */
-        isUuid: (function(){
+        isUuid: (function() {
             var regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-            return function isUuid(candidate){
+            return function isUuid(candidate) {
                 return regex.test(candidate);
             };
         }()),

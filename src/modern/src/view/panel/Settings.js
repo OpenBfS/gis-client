@@ -34,7 +34,7 @@ Ext.define('Koala.view.panel.Settings',{
         },
         items: [{
             xtype: 'radiofield',
-            name : 'timereference',
+            name: 'timereference',
             labelWidth: 150,
             value: 'local',
             bind: {
@@ -42,7 +42,7 @@ Ext.define('Koala.view.panel.Settings',{
             }
         },{
             xtype: 'radiofield',
-            name : 'timereference',
+            name: 'timereference',
             labelWidth: 150,
             value: 'UTC',
             checked: true,

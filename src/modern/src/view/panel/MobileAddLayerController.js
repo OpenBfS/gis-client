@@ -18,15 +18,15 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             view.down('container[name=wmsVersionsContainer]').setHidden(false);
 
         }
-        if(countUrls === 0) {
+        if (countUrls === 0) {
             view.down('button[name=pickerbutton]').setHidden(true);
         } else {
             view.down('button[name=pickerbutton]').setHidden(false);
             //correct data for the pickerfield
             var data = [];
 
-            Ext.each(wmsUrl, function(wms){
-                data.push({text:wms, value:wms});
+            Ext.each(wmsUrl, function(wms) {
+                data.push({text: wms, value: wms});
             });
             view.pickerdata = data;
         }
@@ -40,7 +40,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
      * Will be called with the get layer's button. Issues a GetCapabilities
      * request and sets up handlers for reacting on the response.
      */
-    requestGetCapabilities: function(){
+    requestGetCapabilities: function() {
 
         var me = this;
         var view = this.getView();
@@ -131,7 +131,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             view.getTriedVersions().length;
         try {
             result = parser.read(response.responseText);
-        } catch(ex) {
+        } catch (ex) {
             if (isLastAvailableVersion) {
                 Ext.toast(me.viewModel.get('errorCouldntParseResponse'), 3000);
                 return;
@@ -181,7 +181,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
      * @return {ol.layer.Tile[]|boolean} Eitehr an array of comüatible layers or
      *     `false`.
      */
-    isCompatibleCapabilityResponse: function (capabilities) {
+    isCompatibleCapabilityResponse: function(capabilities) {
         var me = this;
         var view = this.getView();
         if (!capabilities) {
@@ -202,7 +202,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
 
         var includeSubLayer = view.getIncludeSubLayer();
 
-        Ext.each(layers, function(layer){
+        Ext.each(layers, function(layer) {
             var olLayer = me.getOlLayer(layer, version, mapProj, url);
             if (olLayer) {
                 compatible.push(olLayer);
@@ -268,7 +268,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
      * @param {ol.layer.Tile[]} layers The layers for which the we shall fill
      *     the fieldset.
      */
-    fillAvailableLayersFieldset: function(layers){
+    fillAvailableLayersFieldset: function(layers) {
         var me = this;
         var view = this.getView();
         me.removeAddLayersComponents();
@@ -276,8 +276,8 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var checkBoxes = [];
         var candidatesInitiallyChecked = view.getCandidatesInitiallyChecked();
 
-        Ext.each(layers, function(layer){
-            if(layer) {
+        Ext.each(layers, function(layer) {
+            if (layer) {
                 view.setTriedVersions([]);
                 checkBoxes.push({
                     xtype: 'checkboxfield',
@@ -294,7 +294,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var tbItems = [];
 
         var addCheckedLayersBtn = view.down('button[name=add-checked-layers]');
-        if(!addCheckedLayersBtn) {
+        if (!addCheckedLayersBtn) {
             tbItems.push({
                 xtype: 'button',
                 name: 'add-checked-layers',
@@ -378,7 +378,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var checkboxes = fs.query('checkboxfield');
         var map = BasiGX.util.Map.getMapComponent().getMap();
         Ext.each(checkboxes, function(checkbox) {
-            if(checkbox.isChecked() && checkbox.isDisabled() !== true){
+            if (checkbox.isChecked() && checkbox.isDisabled() !== true) {
                 me.fireEvent('beforewmsadd', checkbox.olLayer);
                 map.addLayer(checkbox.olLayer);
                 me.fireEvent('wmsadd', checkbox.olLayer);
@@ -389,7 +389,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
     },
 
 
-    createPicker:function() {
+    createPicker: function() {
         var me = this;
         var view = this.getView();
         var model = view.getViewModel();
@@ -399,8 +399,8 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             doneButton: model.get('pickerDoneBtnText'),
             cancelButton: model.get('pickerCancelBtnText'),
             slots: [{
-                name : 'picker',
-                data : data
+                name: 'picker',
+                data: data
             }],
             listeners: {
                 change: function(picker, value) {
