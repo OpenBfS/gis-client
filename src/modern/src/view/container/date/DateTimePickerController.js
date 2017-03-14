@@ -34,6 +34,7 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
      */
     onFieldChange: function(field, newVal) {
         var me = this;
+        newVal = field.getValue(true);
         me.validateDateField(field, newVal, true);
     },
 
@@ -47,35 +48,34 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
      * @param {Date} newDate The new date.
      */
     validateDateField: function(field, newVal, validatePartnerField) {
+        // Only proceed if the field is rendered
+        if (!field.isRendered()) {
+            return;
+        }
+
         var me = this;
         var view = me.getView();
         var viewModel = me.getViewModel();
         var minValue = view.getMinValue();
         var maxValue = view.getMaxValue();
 
-        // Only proceed if the field is rendered
-        if (!field.isRendered()) {
-            return;
-        }
-
         if (Ext.isEmpty(minValue)) {
-            minValue = -Infinity;
+            minValue = moment.unix(-8640000000000);
         }
 
         if (Ext.isEmpty(maxValue)) {
-            maxValue = Infinity;
+            maxValue = moment.unix(8640000000000);
         }
 
         var minDateWarnMsg = viewModel.get('minDateWarnMsg');
         var maxDateWarnMsg = viewModel.get('maxDateWarnMsg');
-        var dateFormat = viewModel.get('warnMsgDateFormat');
-        var readableMinDate = Ext.Date.format(minValue, dateFormat);
-        var readableMaxDate = Ext.Date.format(maxValue, dateFormat);
+        var readableMinDate = Koala.util.Date.getFormattedDate(minValue);
+        var readableMaxDate = Koala.util.Date.getFormattedDate(maxValue);
         var isValid = true;
         var validationMessage = '';
 
         // Check if the input value is larger than the accepted minimum
-        if (newVal < minValue) {
+        if (newVal.isBefore(minValue)) {
             isValid = false;
             validationMessage += Ext.String.format(
                     minDateWarnMsg,
@@ -84,7 +84,7 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         }
 
         // Check if the input value is smaller than the accepted maximum
-        if (newVal > maxValue) {
+        if (newVal.isAfter(maxValue)) {
             isValid = false;
             validationMessage += Ext.String.format(
                     maxDateWarnMsg,
@@ -116,7 +116,6 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
     validateTimeRangePartnerField: function(field, newVal, validatePartnerField) {
         var me = this;
         var viewModel = me.getViewModel();
-        var durationUtil = Koala.util.Duration;
         var emptyMessage = '';
         // The picker container the value was changed in.
         var dateTimePickerField = field.up('k-container-datetimepicker');
@@ -138,13 +137,11 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
                 dateTimePickerField : partnerDateTimePickerField;
 
         // Detect the start- and enddates based in the current field which
-        // was changed and take the changed value into account. This is neede
-        // because the viewModel and the real value of the field hasn't been
+        // was changed and take the changed value into account. This is needed
+        // because the viewModel and the real value of the field haven't been
         // updated yet.
-        var startDate = (startField === dateTimePickerField) ?
-                newVal : startField.getValue();
-        var endDate = (endField === dateTimePickerField) ?
-                newVal : endField.getValue();
+        var startDate = startField.getValue(true);
+        var endDate = endField.getValue(true);
 
         // Get the max. allowed duration.
         var maxDuration = startField.getMaxDuration();
@@ -155,7 +152,7 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         }
 
         // Check if the start date is before the end date.
-        if (startDate > endDate) {
+        if (startDate.isAfter(endDate)) {
             return viewModel.get('endBeforeStartWarnMsg');
         }
 
@@ -167,13 +164,14 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         // Only proceed if the maximum duration is set to a valid value, the
         // value of 0 may be returned if only a number was entered instead of a
         // vaild duration string.
-        if (durationUtil.absoluteSecondsFromDuration(maxDuration) === 0) {
+        maxDuration = Koala.util.String.coerce(maxDuration);
+        if (!(Ext.isString(maxDuration)) ||
+                moment.duration(maxDuration).asMilliseconds() === 0) {
             return emptyMessage;
         }
 
-        var withinDuration = durationUtil.datesWithinDuration(
-            startDate, endDate, maxDuration
-        );
+        maxDuration = moment.duration(maxDuration);
+        var withinDuration = Math.abs(startDate.diff(endDate)) <= maxDuration.asMilliseconds();
 
         // Check if the timerange is inside the allowed duration.
         if (!withinDuration) {
@@ -184,7 +182,7 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         if (validatePartnerField) {
             var partnerField = partnerDateTimePickerField.down(
                     'datepickerfield[name=valueField]');
-            var partnerFieldValue = partnerField.getValue();
+            var partnerFieldValue = partnerField.getValue(true);
             partnerDateTimePickerField.getController().validateDateField(
                     partnerField, partnerFieldValue, false);
         }
@@ -203,7 +201,7 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         var viewModel = view.getViewModel();
         var errMsg = viewModel.get('validationMessage');
         if (errMsg) {
-            Ext.toast(errMsg);
+            Ext.toast(errMsg, 2000);
         }
     }
 

@@ -69,10 +69,13 @@ Ext.define('Koala.util.String', {
                         Ext.log.warn(key + " could not be found for replacement!");
                     }
                 } else {  // check if 'replacement' represents a date
-                    if (!(Koala.util.String.defaultDateFormat === '') && (Ext.isDate(replacement) )) {   // it is already an Ext.Date
-                       replacement = Ext.Date.format(replacement, Koala.util.String.defaultDateFormat);
-                    } else if (!(Koala.util.String.defaultDateFormat === '') && Ext.isDate(Ext.Date.parse(replacement, "c"))) {
-                       replacement = Ext.Date.format(Ext.Date.parse(replacement, "c"),Koala.util.String.defaultDateFormat);   // it can be formed into an Ext.Date
+                    // it is already a Moment/date
+                    if (moment.isMoment(replacement)) {
+                        replacement = Koala.util.Date.getFormattedDate(replacement);
+                    } else if (moment(replacement, moment.ISO_8601, true).isValid()) {
+                        // it can be formed into a Moment/date
+                        var momentDate = Koala.util.Date.getUtcMoment(replacement);
+                        replacement = Koala.util.Date.getFormattedDate(momentDate);
                     }
                     tpl= tpl.replace(re, replacement);
                 }

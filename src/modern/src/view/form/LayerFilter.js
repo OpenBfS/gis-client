@@ -25,7 +25,6 @@ Ext.define("Koala.view.form.LayerFilter", {
         "Ext.field.Select",
 
         "Koala.util.Date",
-        "Koala.util.Duration",
         "Koala.util.Filter",
 
         "Koala.view.form.LayerFilterController",
@@ -50,8 +49,7 @@ Ext.define("Koala.view.form.LayerFilter", {
     ],
 
     listeners: {
-        initialize: "initComponent",
-        destroy: "onBeforeDestroyLayerFilterForm"
+        initialize: "initComponent"
     },
 
     config: {

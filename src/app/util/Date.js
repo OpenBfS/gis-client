@@ -39,81 +39,151 @@ Ext.define('Koala.util.Date', {
         ISO_FORMAT: 'Y-m-d\\TH:i:s.u\\Z',
 
         /**
-         * Returns an offset in minutes from a local date compared to UTC. The
-         * offset is positive for zones ahead of UTC-0 and negative for zones
-         * behind UTC-0. For Germany, this will be e.g. `60` or `120` (both
-         * positive).
+         * The default (Moment) date format.
          *
-         * "Why is this method not using Date.prototype.getTimezoneOffset?", you
-         * may ask youself. According to [the MDN documentation][1], the support
-         * in browsers still isn't reliable, that's why. Why we chose to use a
-         * different 'view' on the offset (-60 versus 60) is another valid
-         * question. This basically comes from the original implementation in
-         * the GeoZG project. A future implementation should probably fix or
-         * harmonize this behaviour. On the other hand, our deviation makes the
-         * implementation of #makeLocal and #makeUtc very simple, because we can
-         * directly use `Ext.Date.add` with the return value from this method.
-         *
-         * Here is an untested reference implementation using the mentioned
-         * `Date.prototype.getTimezoneOffset`, which is API compatible:
-         *
-         *     var localDate = new Date();
-         *     if ('getTimezoneOffset' in localDate) {
-         *         return -1 * localDate.getTimezoneOffset();
-         *     }
-         *
-         * If we were to adopt our internal usage / expectations / change the
-         * API, the multiplication with `-1` could be removed.
-         *
-         * [1]: https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Date/getTimezoneOffset
-         *
-         * @return {number} The offset in minutes from a local date compared to
-         *     the UTC date.
+         * @type {String}
          */
-        getUTCOffsetInMinutes: function() {
-            var localDate = new Date();
+        DEFAULT_DATE_FORMAT: 'DD.MM.YYYY HH:mm:ss',
 
-            var utcOffsetMinutes = 0;
-            var utcOffsetHours = 0;
-            var utcOffset = Ext.Date.getGMTOffset(localDate); // e.g. "+0100"
-            var utcOffsetSign = utcOffset.substring(0, 1); // e.g. "+"
+        /**
+         * Server time is always UTC (and in ISO 8601 format)
+         * Use moment in strict moment (this is also recommended
+         * by the momentjs guys) by passing the format
+         * moment.ISO_8601 YYYY-MM-DD HH:mm:ss
+         *
+         * Usage hint: Use this method if you have a server returned UTC
+         *             datetime value (e.g. `2016-10-17T00:00:00Z` or
+         *             1489167742783).
+         *
+         * @method getUtcMoment
+         * @param {String|Number} dateValue The date value to parse.
+         * @param {String} dateFormat [moment.ISO_8601] The moment date format
+         *     to use for deserialization. Default is to moment.ISO_8601.
+         * @return {moment} The moment object.
+         */
+        getUtcMoment: function(dateValue, dateFormat) {
+            var momentDate;
 
-            if (utcOffset.length === 5) {
-                utcOffsetMinutes = parseInt(utcOffset.substring(3, 5), 10);
-                utcOffsetHours = parseInt(utcOffset.substring(1, 3), 10);
-                utcOffsetMinutes = utcOffsetMinutes + (utcOffsetHours * 60);
-                var modifier = (utcOffsetSign === "-") ? -1 : 1;
-                return modifier * utcOffsetMinutes;
+            dateFormat = dateFormat || moment.ISO_8601;
+
+            momentDate = moment.utc(
+                dateValue,
+                dateFormat,
+                true
+            );
+
+            if (momentDate.isValid()) {
+                return momentDate;
             } else {
-                return 0;
+                var warnMsg = Ext.String.format('The given defaulttimeinstant' +
+                    ' {0} could not be parsed correctly. Please ensure the ' +
+                    'date is defined in a valid ISO 8601 format.', dateValue);
+                Ext.Logger.warn(warnMsg);
             }
         },
 
         /**
-         * Takes a Date which is utc (e.g. coming from the server) and adds
-         * the UTC offset.
+         * Creates an UTC moment object out of a moment object by adding
+         * the local UTC time offset.
          *
-         * @param {Date} utcDate A date supposed to be in UTC. All dates coming
-         *     from the server are supposed to be UTC.
+         * @method addUtcOffset
+         * @param {Moment} momentDate The moment to add the offset to.
+         * @return {Moment} The adjusted moment.
          */
-        makeLocal: function(utcDate) {
-            var offsetMinutes = Koala.util.Date.getUTCOffsetInMinutes();
-            return Ext.Date.add(utcDate, Ext.Date.MINUTE, offsetMinutes);
+        addUtcOffset: function(momentDate) {
+            if (!moment.isMoment(momentDate)) {
+                Ext.Logger.warn('`momentDate` must be a Moment date object.');
+                return;
+            }
+
+            var dateClone = momentDate.clone();
+
+            dateClone.add(dateClone.utcOffset(), 'minutes').utc();
+
+            return dateClone;
         },
 
         /**
-         * Takes a Date which is local and substracts the UTC difference.
+         * Creates a local moment object out of a moment object by removing
+         * the local UTC time offset.
          *
-         * @param {Date} localDate A date supposed to be local. Dates in the
-         *     frontend may very well be local ones (depending on a user
-         *     setting), but when we are talking to the server, we need to
-         *     convert these to UTC.
+         * @method removeUtcOffset
+         * @param {Moment} momentDate The moment to remove the offset from.
+         * @return {Moment} The adjusted moment.
          */
-        makeUtc: function(localDate) {
-            var offsetMinutes = -1 * Koala.util.Date.getUTCOffsetInMinutes();
-            return Ext.Date.add(localDate, Ext.Date.MINUTE, offsetMinutes);
-        }
+        removeUtcOffset: function(momentDate) {
+            if (!moment.isMoment(momentDate)) {
+                Ext.Logger.warn('`momentDate` must be a Moment date object.');
+                return;
+            }
 
+            var dateClone = momentDate.clone();
+
+            dateClone.subtract(dateClone.local().utcOffset(), 'minutes').local();
+
+            return dateClone;
+        },
+
+        /**
+         * Serializes a moment date to the specified date format depending on
+         * the current application's time reference (UTC or locale).
+         *
+         * @method getFormattedDate
+         * @param {moment} momentDate The date to serialize.
+         * @param {String} [Koala.util.Date.DEFAULT_DATE_FORMAT] dateFormat The
+         *     moment format to use for serialization. See
+         *     {@link https://momentjs.com/docs/#/displaying/format/|here}
+         *     for a list of supported format identifiers. Default is to
+         *     Koala.util.Date.DEFAULT_DATE_FORMAT.
+         * @return {String} The serialized date.
+         */
+        getFormattedDate: function(momentDate, dateFormat, timeReferenceAware) {
+            if (!moment.isMoment(momentDate)) {
+                Ext.Logger.warn('`momentDate` must be a Moment date object.');
+                return;
+            }
+
+            // The default should always the set to `true`.
+            if (!(Ext.isDefined(timeReferenceAware))) {
+                timeReferenceAware = true;
+            }
+
+            var dateClone = momentDate.clone();
+
+            if (timeReferenceAware) {
+                dateClone = Koala.util.Date
+                    .getTimeReferenceAwareMomentDate(dateClone);
+            }
+
+            dateFormat = dateFormat || Koala.util.Date.DEFAULT_DATE_FORMAT;
+
+            return dateClone.format(dateFormat);
+        },
+
+        /**
+         * Returns a moment date object aware of the current application's
+         * time reference.
+         *
+         * @method getTimeReferencedDate
+         * @param {moment} momentDate The moment date to switch to utc/local.
+         * @return {moment} The adjusted moment date.
+         */
+        getTimeReferenceAwareMomentDate: function(momentDate) {
+            if (!moment.isMoment(momentDate)) {
+                Ext.Logger.warn('`momentDate` must be a Moment date object.');
+                return;
+            }
+
+            var dateClone = momentDate.clone();
+
+            if (Koala.Application.isLocal()) {
+                dateClone.local();
+            } else {
+                dateClone.utc();
+            }
+
+            return dateClone;
+        }
     }
 
 });

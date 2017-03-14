@@ -25,7 +25,6 @@ Ext.define("Koala.view.form.TimeseriesFilterControl", {
         "Ext.field.Select",
 
         "Koala.util.Date",
-        "Koala.util.Duration",
         "Koala.util.Filter",
 
         'Koala.view.container.date.DateTimePicker',

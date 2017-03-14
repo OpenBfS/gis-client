@@ -79,6 +79,7 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
         var maxDuration = Koala.util.Object.getPathStrOr(metadata,
                 'layerConfig/timeSeriesChartProperties/duration', null);
+
         // Set the allowed max/min values for the start container.
         startDateContainer.setMaxValue(minMaxDates.max);
         startDateContainer.setMinValue(minMaxDates.min);
@@ -171,8 +172,8 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
     createTimeseriesChart: function(olLayer, olFeat) {
         var view = this.getView();
         var config = {
-            startDate: view.down('k-container-datetimepicker[name=startdate]').getValue(),
-            endDate: view.down('k-container-datetimepicker[name=enddate]').getValue(),
+            startDate: view.down('k-container-datetimepicker[name=startdate]').getValue(true),
+            endDate: view.down('k-container-datetimepicker[name=enddate]').getValue(true),
             width: '100%',
             flex: 1,
             margin: 0
