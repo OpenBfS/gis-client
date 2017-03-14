@@ -913,6 +913,8 @@ Ext.define('Koala.util.Layer', {
                 hoverable: shallHover,
                 hoverTpl: olProps.hoverTpl,
                 opacity: olProps.opacity || 1,
+                minResolution: olProps.minResolution || 0, //allow almost verything if olProps.maxResolution exists but is empty
+                maxResolution: olProps.maxResolution || 200000, //allow almost verything if olProps.maxResolution exists but is empty
                 hoverStyle: olProps.hoverStyle,
                 selectStyle: olProps.selectStyle || olProps.hoverStyle,
                 hasLegend: getBool(olProps.hasLegend, true),
@@ -1013,9 +1015,9 @@ Ext.define('Koala.util.Layer', {
                     var origin = ol.extent.getTopLeft(projection.getExtent());
                     var projectionExtent = projection.getExtent();
                     var size = ol.extent.getWidth(projectionExtent) / 256;
-                    var resolutions = new Array(14);
-                    var matrixIds = new Array(14);
-                    for (var z = 0; z < 14; ++z) {
+                    var resolutions = new Array(19);
+                    var matrixIds = new Array(19);
+                    for (var z = 0; z < 19; ++z) {
                         // generate resolutions and matrixIds arrays for this
                         // WMTS
                         resolutions[z] = size / Math.pow(2, z);
