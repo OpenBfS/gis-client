@@ -34,7 +34,8 @@ Ext.define('Koala.view.main.MobileMainController', {
     addDummyDevLayers: function() {
         var layers = [
             //'08e36567-cf9a-4e22-8774-e83a3452da7b' // odl_brutto_10min
-            'f917f393-fb9b-4345-99cf-8d2fcfab8d3d' // niederschlag_24h
+            //'f917f393-fb9b-4345-99cf-8d2fcfab8d3d' // niederschlag_24h
+            //'83cb1604-3d8c-490b-b807-5e7cb17f3b22' // odl_brutto_24h
             //'45dd5d65-630a-42d9-9f86-6c718dab0412' // barchart layer
             // ,'25e17589-6694-4d58-8efb-0c400415aec3' // vector layer
         ];
