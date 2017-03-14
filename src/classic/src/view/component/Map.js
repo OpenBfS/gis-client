@@ -62,7 +62,8 @@ Ext.define("Koala.view.component.Map", {
         // MousePosition Control
         var mousePositionControl = new ol.control.MousePosition({
             coordinateFormat: ol.coordinate.createStringXY(2),
-            projection: map.getView().getProjection(),
+            //projection: map.getView().getProjection(),
+            projection: ol.proj.get('EPSG:4326'),
             className: 'mouse-position-control'
         });
         map.addControl(mousePositionControl);
