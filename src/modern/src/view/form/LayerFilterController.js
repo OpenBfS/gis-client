@@ -404,11 +404,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 filter.maxdatetimeinstant,
                 filter.maxdatetimeformat
             );
-
-            // Fix for the issue #1068-34
-            // Raises the maxDate by one day to avoid the bug with the datefield
-            // where maxDate = defaultValue leads to invalid input
-            maxValue.setDate(maxValue.getDate() + 1);
         }
 
         var defaultValue = Ext.Date.parse(
@@ -512,11 +507,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 filter.maxdatetimeinstant,
                 filter.maxdatetimeformat
             );
-
-            // Fix for the issue #1068-34
-            // Raises the maxDate by one day to avoid the bug with the datefield
-            // where maxDate = defaultValue leads to invalid input
-            maxValue.setDate(maxValue.getDate() + 1);
         }
 
         var defaultMinValue = Ext.Date.parse(
