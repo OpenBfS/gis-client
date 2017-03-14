@@ -127,7 +127,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                 // version so we check before we set the html to an emptystring.
                 if (Ext.isModern) {
                     view.setHtml('');
+                } else {
+                    view.getEl().setHtml('');
                 }
+
                 if (me.chartRendered) {
                     me.redrawChart();
                 } else {
