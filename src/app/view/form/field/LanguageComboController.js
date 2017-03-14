@@ -283,6 +283,7 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
                     me.recreateSingletons();
                     me.bindTooltip();
                     me.setD3Locale(me.locale);
+                    me.setMomentJsLocale(me.locale);
                 }
             }
         }
@@ -381,6 +382,16 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
     setD3Locale: function(locale) {
         var me = this;
         d3.timeFormatDefaultLocale(me.d3LocaleDefinitions[locale]);
+    },
+
+    /**
+     * Sets the format for Moment.js to the selected locale.
+     *
+     * @method setMomentJsLocale
+     * @param {String} locale The locale identifier to set.
+     */
+    setMomentJsLocale: function(locale) {
+        moment.locale(locale);
     }
 
 });
