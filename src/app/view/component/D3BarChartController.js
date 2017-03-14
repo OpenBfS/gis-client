@@ -84,12 +84,19 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var selectedStation = view.getSelectedStation();
         var featureProps = selectedStation.getProperties();
         var fields = view.getChartFieldSequence().split(',');
+        var titleSequence = view.getChartFieldTitleSequence();
+        var defaultsSequence = view.getChartFieldDefaultsSequence();
         var colors = view.getShape().color.split(',');
 
         Ext.each(fields, function(field, idx) {
             var dataObj = {};
-            dataObj.key = field;
-            dataObj.value = featureProps[field];
+            var key = Koala.util.String.getValueFromSequence(
+                titleSequence, idx, field);
+            var value = featureProps[field] || Koala.util.String.getValueFromSequence(
+                defaultsSequence, idx, undefined);
+
+            dataObj.key = key;
+            dataObj.value = value;
             dataObj.color = colors[idx] || staticMe.getRandomColor();
             me.data.push(dataObj);
         });
