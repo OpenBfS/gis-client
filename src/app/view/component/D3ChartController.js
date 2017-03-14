@@ -118,17 +118,18 @@ Ext.define('Koala.view.component.D3ChartController', {
                 // classic toolkit's behaviour, no additional check for the
                 // current toolkit is needed.
                 svgContainer.attr('display', 'none');
-                view.setHtml(me.getViewModel().get('noDataAvailableText'));
+                view.setHtml('<div class="noDataError">' +
+                    me.getViewModel().get('noDataAvailableText') +
+                    '</div>'
+                );
                 me.chartRendered = false;
             } else {
                 // Show the svg root container, see comment above as well.
                 svgContainer.attr('display', 'unset');
-                // `view.setHtml` would override the whole chart in the classic
-                // version so we check before we set the html to an emptystring.
-                if (Ext.isModern) {
-                    view.setHtml('');
-                } else {
-                    view.getEl().setHtml('');
+
+                var errorDiv = view.el.query('.noDataError');
+                if (errorDiv[0]) {
+                    errorDiv[0].remove();
                 }
 
                 if (me.chartRendered) {
