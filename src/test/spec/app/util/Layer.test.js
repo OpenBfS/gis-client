@@ -7,6 +7,13 @@ describe('Koala.util.Layer', function() {
         // mock up successful i18n
         Koala.util.Layer.txtUntil = "bis";
         Koala.util.String.defaultDateFormat = "d.m.Y K\\o\\a\\l\\a";
+        Koala.Application = {};
+        Koala.Application.isLocal = function() {
+            return false;
+        };
+        Koala.Application.isUtc = function() {
+            return true;
+        };
     });
     afterEach(function() {
         // un-mock successful i18n
@@ -214,8 +221,8 @@ describe('Koala.util.Layer', function() {
                 var metadata = {
                     filters: [{
                         type: "pointintime",
-                        effectivedatetime: Ext.Date.parse("1980-11-28", "Y-m-d"),
-                        timeformat: "d.m.Y f\\o\\o"
+                        effectivedatetime: moment.utc("1980-11-28"),
+                        timeformat: "DD.MM.YYYY f\\o\\o"
                     }]
                 };
 
@@ -229,26 +236,26 @@ describe('Koala.util.Layer', function() {
                     var metadata = {
                         filters: [{
                             type: "pointintime",
-                            effectivedatetime: Ext.Date.parse("1980-11-28", "Y-m-d")
+                            effectivedatetime: moment.utc("1980-11-28")
                         }]
                     };
                     var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
                     expect(got).to.not.be("");
-                    // d.m.Y Koala is the default (see beforeEach)
-                    expect(got.indexOf("28.11.1980 Koala")).to.not.be(-1);
+                    // DD.MM.YYYY HH:mm:ss is the default for moment.js
+                    expect(got.indexOf("28.11.1980 00:00:00")).to.not.be(-1);
                 }
             );
             it('returns a text for timerange-filter', function() {
-                var min = Ext.Date.parse("1980-11-28", "Y-m-d");
-                var max = Ext.Date.parse("1998-11-28", "Y-m-d");
+                var min = moment.utc("1980-11-28");
+                var max = moment.utc("1998-11-28");
                 var metadata = {
                     filters: [{
                         type: "timerange",
                         effectivemindatetime: min,
-                        mindatetimeformat: "d.m.Y f\\o\\o \\s\\t\\ar\\t",
+                        mindatetimeformat: "DD.MM.YYYY",
                         effectivemaxdatetime: max,
-                        maxdatetimeformat: "d.m.Y f\\o\\o e\\n\\d"
+                        maxdatetimeformat: "DD.MM.YYYY"
                     }]
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
@@ -256,13 +263,13 @@ describe('Koala.util.Layer', function() {
                 var until = Koala.util.Layer.txtUntil;
 
                 expect(got).to.not.be("");
-                expect(got.indexOf("28.11.1980 foo start")).to.not.be(-1);
+                expect(got.indexOf("28.11.1980")).to.not.be(-1);
                 expect(got.indexOf(until)).to.not.be(-1);
-                expect(got.indexOf("28.11.1998 foo end")).to.not.be(-1);
+                expect(got.indexOf("28.11.1998")).to.not.be(-1);
             });
             it('returns a text for timerange-filter (no format)', function() {
-                var min = Ext.Date.parse("1980-11-28", "Y-m-d");
-                var max = Ext.Date.parse("1998-11-28", "Y-m-d");
+                var min = moment.utc("1980-11-28");
+                var max = moment.utc("1998-11-28");
                 var metadata = {
                     filters: [{
                         type: "timerange",
@@ -272,13 +279,14 @@ describe('Koala.util.Layer', function() {
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
+
                 var until = Koala.util.Layer.txtUntil;
 
                 expect(got).to.not.be("");
-                // d.m.Y Koala is the default (see beforeEach)
-                expect(got.indexOf("28.11.1980 Koala")).to.not.be(-1);
+                // DD.MM.YYYY HH:mm:ss is the default for moment.js
+                expect(got.indexOf("28.11.1980 00:00:00")).to.not.be(-1);
                 expect(got.indexOf(until)).to.not.be(-1);
-                expect(got.indexOf("28.11.1998 Koala")).to.not.be(-1);
+                expect(got.indexOf("28.11.1998 00:00:00")).to.not.be(-1);
             });
         });
 
