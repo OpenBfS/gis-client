@@ -5,7 +5,6 @@
         dependencies = [
             './app/basics.test.js',
             './app/util/Date.test.js',
-            './app/util/Duration.test.js',
             './app/util/Layer.test.js',
             './app/util/Object.test.js',
             './app/util/Routing.test.js',
