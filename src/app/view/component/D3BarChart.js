@@ -46,6 +46,8 @@ Ext.define('Koala.view.component.D3BarChart',{
         backgroundColor: null,
         labelFunc: null,
         chartFieldSequence: null,
+        chartFieldTitleSequence: null,
+        chartFieldDefaultsSequence: null,
         grid: {
             show: false,
             color: null,
@@ -189,6 +191,8 @@ Ext.define('Koala.view.component.D3BarChart',{
                 chartMargin: chartMarginObj,
                 labelFunc: Koala.util.String.coerce(chartConfig.labelFunc),
                 chartFieldSequence: chartConfig.chartFieldSequence,
+                chartFieldTitleSequence: chartConfig.chartFieldTitleSequence,
+                chartFieldDefaultsSequence: chartConfig.chartFieldDefaultsSequence,
                 shape: {
                     type: DEFAULTS.LEFT_AXIS_TYPE,
                     curve: DEFAULTS.LEFT_AXIS_CURVE,

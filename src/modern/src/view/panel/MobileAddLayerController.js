@@ -80,6 +80,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
             // have been tried unsuccessful
             view.setMasked(false);
             Ext.toast(me.getViewModel().get('errorRequestFailed'), 3000);
+            view.setTriedVersions([]);
             return;
         }
 
@@ -407,6 +408,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
                     me.removeAddLayersComponents();
                     var urlField = Ext.ComponentQuery.query('urlfield[name=addWmsUrlField]')[0];
                     urlField.setValue(value.picker);
+                    view.setTriedVersions([]);
                 }
             }
         });
