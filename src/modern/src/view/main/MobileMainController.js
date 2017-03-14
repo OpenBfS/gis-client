@@ -83,16 +83,22 @@ Ext.define('Koala.view.main.MobileMainController', {
     },
 
     /**
-     * Handle the case when a singlecilick / tap was fired on the map.
+     * Handle the case when a singleclick / tap was fired on the map.
      */
     onMapSingleClick: function(evt) {
         var me = this;
         var coordinate = evt.coordinate;
+        var mapProj = evt.map.getView().getProjection().getCode();
+        
+        //show geographic coords regardless og map projection
+        var lonlat_coord = ol.proj.transform(coordinate,mapProj,'EPSG:4326');
+        var lon = parseFloat(lonlat_coord[0]).toFixed(2);
+        var lat = parseFloat(lonlat_coord[1]).toFixed(2);
 
         // Coordinate Info
         Ext.toast({
-          message: coordinate[0] + ',<br/>' + coordinate[1] + ' ',
-          timeout: 2000
+          message: 'Longitude , Latitude' + '<br/>' + lon + ' , ' + lat + ' ',
+          timeout: 3000
         });
 
         if (me.pendingRequest) {
