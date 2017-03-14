@@ -593,7 +593,7 @@ Ext.define('Koala.util.Filter', {
                 var momentDate = date.clone().utc();
                 var realDate = momentDate;
 
-                if (realDate.isBetween(minClone, maxClone)) {
+                if (realDate.isBetween(minClone, maxClone, null, '[]')) {
                     return true;
                 } else {
                     return staticMe.msgNotBetweenMinMax;
