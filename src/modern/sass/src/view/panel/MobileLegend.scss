@@ -11,14 +11,22 @@
 }
 
 
-.tree-item-order-icons {
+.tree-item-tools {
     font-size: 21px;
+    display: flex;
 
-    .up-icon, .down-icon {
-        padding-right: 5px;
+    .left-items, .right-items, .centered-items {
+        width: 33%;
+        padding: 0 5px;
     }
 
-    .remove-icon{
+    .left-items {
+        .up-icon {
+            padding-right: 12px;
+        }
+    }
+
+    .right-items > i {
         float: right;
     }
 
@@ -26,6 +34,7 @@
     input[type=range] {
         -webkit-appearance: none;
         height: 20px;
+        width: 100%;
         background: rgba(0,0,0,0);
     }
     input[type=range]:focus {
