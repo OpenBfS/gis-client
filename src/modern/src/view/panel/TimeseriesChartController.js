@@ -27,6 +27,62 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         'Koala.view.component.D3Chart'
     ],
 
+    onInitialize: function() {
+        var me = this;
+        var utcRadios = Ext.ComponentQuery.query('radiofield[originalValue=UTC]');
+        Ext.each(utcRadios, function(utcRadio) {
+            utcRadio.on('change', me.onTimeReferenceChanged, me);
+        });
+    },
+
+    onPainted: function() {
+        var me = this;
+        var view = me.getView();
+
+        // Redraw the chart as the underlying data may have been changed.
+        view.down('d3-chart').getController().redrawChart();
+    },
+
+    onTimeReferenceChanged: function() {
+        var me = this;
+        var view = me.getView();
+        var startDatePicker = view.down('k-container-datetimepicker[name=startdate]');
+        var endDatePicker = view.down('k-container-datetimepicker[name=enddate]');
+        var startDate = startDatePicker.getValue();
+        var endDate = endDatePicker.getValue();
+        var chart = view.down('d3-chart');
+
+        // Update the datepicker values.
+        if (startDate) {
+            startDate = Koala.util.Date.getTimeReferenceAwareMomentDate(startDate);
+            startDatePicker.setValue(startDate);
+        }
+        if (endDate) {
+            endDate = Koala.util.Date.getTimeReferenceAwareMomentDate(endDate);
+            endDatePicker.setValue(endDate);
+        }
+
+        if (chart) {
+            var chartController = chart.getController();
+            var chartData = chartController.data;
+            var xAxisAttribute = chart.getTargetLayer().get(
+                'timeSeriesChartProperties').xAxisAttribute;
+
+            // Update the chart data itself.
+            Ext.iterate(chartData, function(stationId, data) {
+                Ext.each(data, function(item) {
+                    if (Koala.Application.isUtc()) {
+                        item[xAxisAttribute] = Koala.util.Date.removeUtcOffset(
+                            item[xAxisAttribute]);
+                    } else {
+                        item[xAxisAttribute] = Koala.util.Date.addUtcOffset(
+                            item[xAxisAttribute]).local();
+                    }
+                });
+            });
+        }
+    },
+
     /**
      * Toogles the visibility of the filter form panel.
      */

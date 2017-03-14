@@ -52,5 +52,10 @@ Ext.define('Koala.view.panel.TimeseriesChart', {
         xtype: 'k-form-timeseriesfiltercontrol',
         padding: 5,
         hidden: true
-    }]
+    }],
+
+    listeners: {
+        initialize: 'onInitialize',
+        painted: 'onPainted'
+    }
 });

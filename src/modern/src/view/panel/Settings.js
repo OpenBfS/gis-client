@@ -40,7 +40,7 @@ Ext.define('Koala.view.panel.Settings',{
             bind: {
                 label: '{localLabel}'
             }
-        },{
+        }, {
             xtype: 'radiofield',
             name: 'timereference',
             labelWidth: 150,

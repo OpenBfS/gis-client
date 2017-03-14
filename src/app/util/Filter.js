@@ -111,8 +111,10 @@ Ext.define('Koala.util.Filter', {
 
             var filter = {
                 parameter: timeseriesCfg.xAxisAttribute,
-                mindatetimeinstant: startDate,
-                maxdatetimeinstant: endDate
+                // start- and enddate are always UTC, but we may have to set
+                // them to local reference.
+                mindatetimeinstant: Koala.util.Date.getTimeReferenceAwareMomentDate(startDate),
+                maxdatetimeinstant: Koala.util.Date.getTimeReferenceAwareMomentDate(endDate)
             };
 
             return filter;
