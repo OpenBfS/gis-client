@@ -821,7 +821,7 @@
                 "imprintButtonText": "Hilfe",
                 "settingsButtonText": "Einstellungen",
                 "moreLayersButtonText": "Weitere Themen",
-                "addLayerButtonText": "Externen Layer hinzufügen",
+                "addLayerButtonText": "Externen WMS hinzufügen",
                 "permalinkButtonText": "Permalink"
             }
         }
@@ -907,7 +907,7 @@
                                 "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Diagramm inaktiv' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
                                 ").</div><br />"+
                             "<li style='color:#157FCC; font-weight:bold'>Menü</li>"+
-                                "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen. Diese können von interner (\"Weitere Themen\") als auch von externen Quellen (\"Externen Layer hinzufügen\") bezogen werden. Eine Suche von Orten bzw. Daten und Dienste des BfS ist über die Eingabe innerhalb des Suchfeldes möglich. Mithilfe des Permalink-Schalters kann eine bestimmte Kartenansicht für einen späteren Zugriff gesichert werden. Desweiteren lässt sich die Sprache sowie der Zeitbezug der Anwendung über den Menüpunkt \"Einstellungen\" anpassen.</div><br />"+
+                                "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen. Diese können von interner (\"Weitere Themen\") als auch von externen Quellen (\"Externen WMS hinzufügen\") bezogen werden. Eine Suche von Orten bzw. Daten und Dienste des BfS ist über die Eingabe innerhalb des Suchfeldes möglich. Mithilfe des Permalink-Schalters kann eine bestimmte Kartenansicht für einen späteren Zugriff gesichert werden. Desweiteren lässt sich die Sprache sowie der Zeitbezug der Anwendung über den Menüpunkt \"Einstellungen\" anpassen.</div><br />"+
                             "<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
                                 "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div><br />"+
                             "<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
