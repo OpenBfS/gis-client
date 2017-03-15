@@ -25,7 +25,7 @@ Ext.define('Koala.util.Date', {
          *
          * @type {String}
          */
-        DEFAULT_DATE_FORMAT: 'DD.MM.YYYY HH:mm:ss',
+        DEFAULT_DATE_FORMAT: 'LLL',
 
         /**
          * Server time is always UTC (and in ISO 8601 format)
@@ -131,6 +131,9 @@ Ext.define('Koala.util.Date', {
             }
 
             var dateClone = momentDate.clone();
+
+            // Set the current locale property from the global moment object.
+            dateClone.locale(moment.locale());
 
             if (timeReferenceAware) {
                 dateClone = Koala.util.Date

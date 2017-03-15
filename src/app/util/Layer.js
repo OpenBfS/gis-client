@@ -339,8 +339,6 @@ Ext.define('Koala.util.Layer', {
                 return "";
             }
 
-            var defaultDateFormat = Koala.util.Date.DEFAULT_DATE_FORMAT;
-
             var filterTxts = [];
 
             Ext.each(filters, function(filter) {
@@ -362,10 +360,9 @@ Ext.define('Koala.util.Layer', {
                     }
                     filterTxt += staticMe.stringifyValueFilter(filter, true);
                 } else if (filterType === "pointintime") {
-                    var date, format, time;
+                    var date, time;
                     date = filter.effectivedatetime;
-                    format = filter.timeformat || defaultDateFormat;
-                    time = Koala.util.Date.getFormattedDate(date, format);
+                    time = Koala.util.Date.getFormattedDate(date);
                     filterTxt += time;
                 } else if (filterType === "timerange") {
                     var startDate, startTime;
