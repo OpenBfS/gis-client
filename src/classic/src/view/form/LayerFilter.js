@@ -158,7 +158,6 @@ Ext.define("Koala.view.form.LayerFilter", {
     createPointInTimeFilter: function(filter, idx) {
         var me = this;
         var FilterUtil = Koala.util.Filter;
-        var format = Koala.util.Date.ISO_FORMAT;
 
         var minValue;
         if (filter.mindatetimeinstant) {
@@ -202,8 +201,7 @@ Ext.define("Koala.view.form.LayerFilter", {
             validator: FilterUtil.makeDateValidator(
                 minValue, maxValue
             ),
-            format: me.getFormat(),
-            submitFormat: format
+            format: me.getFormat()
         });
 
         var hourSpinner = FilterUtil.getSpinner(
@@ -249,7 +247,6 @@ Ext.define("Koala.view.form.LayerFilter", {
     createTimeRangeFilter: function(filter, idx) {
         var me = this;
         var FilterUtil = Koala.util.Filter;
-        var format = Koala.util.Date.ISO_FORMAT;
         var param = filter.param;
 
         var names = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
@@ -310,7 +307,6 @@ Ext.define("Koala.view.form.LayerFilter", {
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
-            submitFormat: format,
             validator: minMaxDurationAndOrderValidator,
             msgTarget: "under",
             listeners: {
@@ -343,7 +339,6 @@ Ext.define("Koala.view.form.LayerFilter", {
             minValue: minValue,
             maxValue: maxValue,
             format: me.getFormat(),
-            submitFormat: format,
             validator: minMaxDurationAndOrderValidator,
             msgTarget: 'under',
             listeners: {
