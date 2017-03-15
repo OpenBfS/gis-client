@@ -197,7 +197,6 @@ Ext.define("Koala.view.form.LayerFilter", {
             // The Ext.form.field.Date is capabale of receiving a moment object,
             // see override of setValue().
             value: value,
-            // value: value.format('DD.MM.YY'),
             minValue: minValue,
             maxValue: maxValue,
             validator: FilterUtil.makeDateValidator(

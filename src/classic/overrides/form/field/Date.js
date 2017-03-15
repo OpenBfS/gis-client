@@ -26,6 +26,12 @@ Ext.define('Koala.overrides.form.field.Date', {
         maxValue: null
     },
 
+    /**
+     * Don't show a formatText as it will be shown as tooltip onMouseOver.
+     * @type {String}
+     */
+    formatText: '',
+
     initComponent: function() {
         var me = this;
 
