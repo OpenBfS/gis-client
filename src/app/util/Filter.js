@@ -566,7 +566,7 @@ Ext.define('Koala.util.Filter', {
          * @param {moment} min The minimum/start date.
          * @param {moment} max The maximum/end date.
          */
-        makeDateValidator: function(min, max/*, minMaxAreLocal*/) {
+        makeDateValidator: function(min, max) {
             var staticMe = Koala.util.Filter;
 
             // Min and max might be undefined, in that case we set them to
