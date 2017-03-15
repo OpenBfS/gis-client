@@ -89,7 +89,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var coordinate = evt.coordinate;
         var mapProj = evt.map.getView().getProjection().getCode();
-        
+
         //show geographic coords regardless og map projection
         var lonlat_coord = ol.proj.transform(coordinate,mapProj,'EPSG:4326');
         var lon = parseFloat(lonlat_coord[0]).toFixed(2);
