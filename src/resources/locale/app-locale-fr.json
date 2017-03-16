@@ -273,7 +273,12 @@
                 "btnTxtRemoveAllLayers": "fr:",
                 "btnTooltipRemoveAllLayers": "fr:Alle Layer entfernen",
                 "confirmTitleRemoveAllLayersAll": "fr:Alle Layer entfernen",
-                "confirmMsgRemoveAllLayers": "fr:Sind sie sicher, dass sie alle Layer (sofern möglich) entfernen wollen?"
+                "confirmMsgRemoveAllLayers": "fr:Sind sie sicher, dass sie alle Layer (sofern möglich) entfernen wollen?",
+                "downloadTitle": "fr:Download",
+                "downloadMessage": "fr:Download Layerdaten?",
+                "downloadButtonYes": "Oui",
+                "downloadButtonNo": "Non",
+                "outputFormatText": "fr:Ausgabeformat"
             }
         }
     },

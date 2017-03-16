@@ -258,25 +258,55 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         },
 
         downloadHandler: function(btn) {
+            var view = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+            var viewModel = view.lookupViewModel();
             var layer = btn.layerRec.getOlLayer();
 
-            Ext.Msg.show({
-                title: 'Info',
-                message: 'Daten zu <b>' + layer.get('name') +
-                    '</b> runterladen?',
-                buttonText: {
-                    yes: "Ja",
-                    no: "Nein"
-                },
-                fn: function(btnId) {
-                    if (btnId === "yes") {
+            var win = Ext.create('Ext.window.Window', {
+                title: viewModel.get('downloadTitle'),
+                name: 'downloaddatawin',
+                width: 300,
+                layout: 'fit',
+                bodyPadding: 10,
+                items: [{
+                    xtype: 'container',
+                    items: [{
+                        padding: '10px 0',
+                        html: viewModel.get('downloadMessage')
+                    },{
+                        xtype: 'combo',
+                        width: '100%',
+                        fieldLabel: viewModel.get('outputFormatText'),
+                        value: 'application/json',
+                        forceSelection: true,
+                        store: [
+                            ['gml3','gml'],
+                            ['csv','csv'],
+                            ['application/json','json']
+                        ]
+                    }]
+                }],
+                bbar: [{
+                    text: viewModel.get('downloadButtonYes'),
+                    name: 'confirm-timeseries-download',
+                    handler: function(button) {
+                        var combo = button.up('window').down('combo');
+                        var outputFormat = combo.getSelectedRecord().get('field1');
                         var url = Koala.util.Layer.getDownloadUrlWithFilter(
-                                layer
-                            );
+                            layer
+                        );
+                        url += '&outputFormat=' + encodeURIComponent(outputFormat);
                         window.open(url, '_blank');
                     }
-                }
+                }, {
+                    text: viewModel.get('downloadButtonNo'),
+                    name: 'abort-timeseries-download',
+                    handler: function() {
+                        this.up('window').close();
+                    }
+                }]
             });
+            win.show();
         },
 
         sliderChangeHandler: function(slider, newValue) {
