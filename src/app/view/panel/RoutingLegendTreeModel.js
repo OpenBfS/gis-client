@@ -29,7 +29,12 @@ Ext.define('Koala.view.panel.RoutingLegendTreeModel', {
         btnTxtRemoveAllLayersAll: '',
         btnTooltipRemoveAllLayers: '',
         confirmTitleRemoveAllLayersAll: '',
-        confirmMsgRemoveAllLayers: ''
+        confirmMsgRemoveAllLayers: '',
+        downloadTitle: '',
+        downloadMessage: '',
+        downloadButtonYes: '',
+        downloadButtonNo: '',
+        outputFormatText: ''
     }
 
 });

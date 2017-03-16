@@ -112,7 +112,7 @@ Ext.define('Koala.util.Fullscreen', {
          * is called with.
          * @return {Boolean} Returns if FullScreen is supported.
          */
-        staticsToExport.isFullscreenSupported = function(){
+        staticsToExport.isFullscreenSupported = function() {
             var isSupported = true;
 
             // Disable if api not found
