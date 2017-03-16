@@ -1367,7 +1367,6 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             if (matchingFeature) {
                 newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
-                newRawData[valueField] = undefined;
 
                 me.chartDataAvailable = true;
                 newRawData[valueField] = matchingFeature.properties[yAxisAttr];
