@@ -9,7 +9,6 @@ Ext.define('Koala.override.basigx.ConfigParser', {
       setupMap: function(context){
         var me = this;
         var config;
-
         if (!context || !context.data || !context.data.merge ||
             !context.data.merge.mapConfig || !context.data.merge.mapLayers) {
             Ext.log.warn('Invalid context given to configParser!');
@@ -90,6 +89,13 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                   } finally {
                       if (Koala.util.Layer.minimumValidMetadata(obj)) {
                           var layer = Koala.util.Layer.layerFromMetadata(obj);
+
+                          //set ol.Attribution
+                          var olProps = layer.getProperties();
+                          var attributions = olProps.attribution ? [new ol.Attribution({html: olProps.attribution})] : undefined;
+                          var source = layer.getSource();
+                          source.setAttributions(attributions);
+
                           layer.set('treeId', 'bkg'); // Do we need this?
                           var layers = me.map.getLayers();
                           layers.insertAt(index, layer);
