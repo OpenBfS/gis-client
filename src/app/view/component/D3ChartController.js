@@ -389,12 +389,20 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                             d3.select(shapePathSelector)
                                 .attr('d', shape.shape.x(function(d) {
+                                    var val = d[shape.config.xField];
+                                    if (!val) {
+                                        return null;
+                                    }
                                     return scaleX(d[shape.config.xField]);
                                 }));
 
                             d3.selectAll(shapePointsSelector)
                                 .attr('cx', function(d) {
-                                    return scaleX(d[shape.config.xField]);
+                                    var val = d[shape.config.xField];
+                                    if (!val) {
+                                        return null;
+                                    }
+                                    return scaleX(val);
                                 });
                         });
 
@@ -1349,10 +1357,10 @@ Ext.define('Koala.view.component.D3ChartController', {
             compareableDate = startDate.unix() + firstDiffSeconds;
             matchingFeature = snapObject[compareableDate];
 
-            newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
-            newRawData[valueField] = undefined;
-
             if (matchingFeature) {
+                newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
+                newRawData[valueField] = undefined;
+
                 me.chartDataAvailable = true;
                 newRawData[valueField] = matchingFeature.properties[yAxisAttr];
             }
