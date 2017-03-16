@@ -23,6 +23,12 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var cql = this.getMetadataCql(fields, newVal);
         mdStore.getProxy().setExtraParam('constraint', cql);
         mdStore.load();
+
+        var spatialsearchttitle = field.up().down('[name=spatialsearchtitle]');
+        spatialsearchttitle.setHidden(false);
+        var metadatasearchtitle = field.up().down('[name=metadatasearchtitle]');
+        metadatasearchtitle.setHidden(false);
+
     },
 
     onClearIconTap: function(field) {
@@ -30,28 +36,58 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var metadatalist = field.up().down('[name=metadatasearchlist]');
         list.getStore().removeAll();
         metadatalist.getStore().removeAll();
+        var spatialsearchttitle = field.up().down('[name=spatialsearchtitle]');
+        spatialsearchttitle.setHidden(true);
+        var metadatasearchtitle = field.up().down('[name=metadatasearchtitle]');
+        metadatasearchtitle.setHidden(true);
     },
 
     zoomToRecord: function(list, index, target, record) {
         var store = list.getStore();
-        var format = new ol.format.WKT();
-        var wkt = record.get('wkt');
-        var feature = format.readFeature(wkt);
         var map = store.map;
         var view = map.getView();
+        var format = new ol.format.WKT();
+        var wkt = record.get('wkt');
+        var feature = format.readFeature(wkt, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: map.getView().getProjection()
+        });
 
         var extent = feature.getGeometry().getExtent();
         view.fit(extent, map.getSize());
+        var menupanel = this.getView('k-panel-mobilemenu');
+        menupanel.hide();
     },
 
-    addLayer: function(list, index, target, record) {
-        var uuid = record.get('fileIdentifier');
-        Koala.util.Layer.addLayerByUuid(uuid);
+    onItemTap: function(list, index, target, record, event){
 
-        // var mobilemenucard = this.getView();
-        // var tabpanel = mobilemenucard.up('tabpanel');
-        // var mapcard = tabpanel.down('[name=mapcontainer]');
-        // tabpanel.setActiveItem(mapcard);
+        if(event.target.title ==='addLayer'){
+            var uuid = record.get('fileIdentifier');
+            Koala.util.Layer.addLayerByUuid(uuid);
+            var menupanel = this.getView('k-panel-mobilemenu');
+            menupanel.hide();
+        }
+        if(event.target.title ==='getInfo'){
+            var view = this.getView();
+            var metadatInfoPanel = view.up('app-main').down('k-panel-mobilemetadatainfo');
+
+            if (metadatInfoPanel) {
+                var vm = metadatInfoPanel.getViewModel();
+                var fieldNames = Koala.view.panel.MobileMetadataInfo.fieldNames;
+                var data = [];
+
+                Ext.Object.each(fieldNames, function(key, value){
+                    data.push({
+                        'key': value,
+                        'value': record.get(key)
+                    });
+                });
+
+                vm.set('name', record.get('name'));
+                vm.set('data', data);
+                metadatInfoPanel.show();
+            }
+        }
     },
 
     getMetadataCql: function(fields, value) {

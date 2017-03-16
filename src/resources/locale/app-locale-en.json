@@ -844,7 +844,23 @@
                 "settingsButtonText": "settings",
                 "moreLayersButtonText": "further topics",
                 "addLayerButtonText": "add external layer",
-                "permalinkButtonText": "permalink"
+                "permalinkButtonText": "permalink",
+                "spatialSearchTitle": "en:Räumliche Suche",
+                "metadataSearchTitle": "en:Daten und Dienste des Bfs"
+            }
+        }
+    },
+    "Koala.view.panel.MobileMetadataInfo": {
+        "config": {
+            "data": {
+                "name": "Koala"
+            }
+        },
+        "statics": {
+            "fieldNames": {
+                "fileIdentifier": "en:ID",
+                "abstract": "en:Abstract",
+                "contact": "en:Kontakt"
             }
         }
     },

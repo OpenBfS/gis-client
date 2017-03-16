@@ -822,7 +822,23 @@
                 "settingsButtonText": "Einstellungen",
                 "moreLayersButtonText": "Weitere Themen",
                 "addLayerButtonText": "Externen WMS hinzufügen",
-                "permalinkButtonText": "Permalink"
+                "permalinkButtonText": "Permalink",
+                "spatialSearchTitle": "Räumliche Suche",
+                "metadataSearchTitle": "Daten und Dienste des Bfs"
+            }
+        }
+    },
+    "Koala.view.panel.MobileMetadataInfo": {
+        "config": {
+            "data": {
+                "name": "Koala"
+            }
+        },
+        "statics": {
+            "fieldNames": {
+                "fileIdentifier": "ID",
+                "abstract": "Abstract",
+                "contact": "Kontakt"
             }
         }
     },
