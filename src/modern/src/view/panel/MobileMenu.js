@@ -51,10 +51,17 @@ Ext.define('Koala.view.panel.MobileMenu',{
                 clearicontap: 'onClearIconTap'
             }
         }, {
+            xtype: 'titlebar',
+            name: 'spatialsearchtitle',
+            hidden: true,
+            bind: {
+                title: '{spatialSearchTitle}'
+            }
+        }, {
             xtype: 'dataview',
             scrollable: false,
             itemCls: 'koala-list-item koala-list-item-spatial',
-            itemTpl: '<i class="fa fa-map-marker" aria-hidden="true"></i> {name}',
+            itemTpl: '<img src="modern/resources/img/map_add.png" class="modernMenuIcon" title="addLayer">&nbsp;&nbsp;&nbsp; {name}',
             name: 'spatialsearchlist',
             hidden: true,
             store: {
@@ -64,19 +71,29 @@ Ext.define('Koala.view.panel.MobileMenu',{
                 itemtap: 'zoomToRecord'
             }
         }, {
+            xtype: 'titlebar',
+            name: 'metadatasearchtitle',
+            hidden: true,
+            bind: {
+                title: '{metadataSearchTitle}'
+            }
+        }, {
             xtype: 'dataview',
             scrollable: false,
             itemCls: 'koala-list-item koala-list-item-metadata',
-            itemTpl: '<i class="fa fa-info" aria-hidden="true"></i> {name}',
+            itemTpl: '<img src="modern/resources/img/information.png" class="modernMenuIcon" title="getInfo">&nbsp;&nbsp;&nbsp;' +
+                '<img src="modern/resources/img/map_add.png" class="modernMenuIcon" title="addLayer">&nbsp;&nbsp;&nbsp; {name}',
             name: 'metadatasearchlist',
             hidden: true,
             store: {
                 type: 'k-metadatasearch'
-            },
-            listeners: {
-                itemtap: 'addLayer'
             }
-        }]
+            ,
+            listeners: {
+                itemtap: 'onItemTap'
+            }
+        }
+    ]
     }, {
         xtype: 'button',
         bind: {

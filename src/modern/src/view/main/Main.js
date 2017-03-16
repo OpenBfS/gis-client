@@ -181,6 +181,10 @@ Ext.define('Koala.view.main.Main', {
         left: 0,
         hidden: true
     }, {
+        xtype: 'k-panel-mobilemetadatainfo',
+        left: 0,
+        hidden: true
+    }, {
         xtype: 'k-panel-mobileaddlayer',
         left: 0,
         hidden: true
