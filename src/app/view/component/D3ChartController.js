@@ -871,7 +871,15 @@ Ext.define('Koala.view.component.D3ChartController', {
             legendEntry.append('title')
                 .text(nameAsTooltip);
 
-            if (!Ext.isModern) {
+            var targetLayer = view.getTargetLayer();
+            var allowDownload = Koala.util.Object.getPathStrOr(
+                    targetLayer,
+                    "metadata/layerConfig/olProperties/allowDownload",
+                    true
+                );
+            allowDownload = Koala.util.String.coerce(allowDownload);
+
+            if (!Ext.isModern && allowDownload) {
                 legendEntry.append('text')
                 // fa-save from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('')
