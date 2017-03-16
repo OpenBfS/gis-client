@@ -99,12 +99,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 Ext.each(fields, function(field) {
                     var key = field.getName();
                     if (!Ext.Array.contains(view.ignoreFields, key)) {
-                        var val = field.getValue();
-                        if (Ext.isDate(val)) {
-                            // we have to add hours & minutes, the date field
+                        // Request the value as moment object.
+                        var val = field.getValue(true);
+                        if (moment.isMoment(val)) {
+                            // We have to add hours & minutes, the date field
                             // has precision DAY:
-                            val = FilterUtil.addHoursAndMinutes(val, field);
-                            val = me.adjustToUtcIfNeeded(val);
+                            val = FilterUtil.setHoursAndMinutes(val, field);
                         }
                         keyVals[key] = val;
                     }
@@ -170,22 +170,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
-     * Check if the application currently displays local dates, and if so adjust
-     * the passed date to UTC since we always store in UTC.
-     *
-     * @param {Date} userDate A date entered in a filter which may be in local
-     *     time.
-     * @return {Date} The date which probably has been adjusted to UTC.
-     */
-    adjustToUtcIfNeeded: function(userDate) {
-        if (Koala.Application.isLocal()) {
-            return Koala.util.Date.makeUtc(userDate);
-        }
-        // already UTC
-        return userDate;
-    },
-
-    /**
      *
      */
     updateFilterValues: function(filters, idx, keyVals) {
@@ -207,92 +191,25 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
-     * Called whenever any UTC button is toggled, this method will adjust the
-     * visually relevant (displayed or restricting the calendar) dates to the
-     * now active setting; either they wil be transformed to UTC or to the local
-     * timezone.
-     */
-    handleTimereferenceButtonToggled: function() {
-        var me = this;
-        var FilterUtil = Koala.util.Filter;
-        var layerFilterView = me.getView();
-        var dateUtil = Koala.util.Date;
-        var makeUtc = dateUtil.makeUtc;
-        var makeLocal = dateUtil.makeLocal;
-        var dateFields = layerFilterView.query('datefield');
-
-        var switchToUtc = Koala.Application.isUtc();
-        var converterMethod = switchToUtc ? makeUtc : makeLocal;
-
-        Ext.each(dateFields, function(dateField) {
-            // The actual value of the field
-            var currentDate = dateField.getValue();
-            if (!currentDate) {
-                return;
-            }
-            // we have to add hours & minutes, the date field has precision DAY:
-            currentDate = FilterUtil.addHoursAndMinutes(currentDate, dateField);
-
-            // Also update the minimum and maximums, as they need to be in sync
-            // wrt the UTC/local setting.
-            var currentMinValue = dateField.minValue; // no getter in ExtJS
-            var currentMaxValue = dateField.maxValue; // no getter in ExtJS
-
-            var accompanyingHourSpinner = dateField.up().down(
-                // All that end with the string 'hourspinner', will capture all
-                // spinners including those from timerange-filters
-                'field[name$="hourspinner"]'
-            );
-
-            // The new value of the field
-            var newDate;
-            var newMinValue = currentMinValue; // to gracefully handle unset min
-            var newMaxValue = currentMaxValue; // to gracefully handle unset max
-
-            // Use the determined converter now to change new dates
-            newDate = converterMethod(currentDate);
-            if (!Ext.isEmpty(currentMinValue)) {
-                newMinValue = converterMethod(currentMinValue);
-            }
-            if (!Ext.isEmpty(currentMaxValue)) {
-                newMaxValue = converterMethod(currentMaxValue);
-            }
-
-            // Update spinner if any
-            if (accompanyingHourSpinner) {
-                accompanyingHourSpinner.setValue(newDate.getHours());
-            }
-
-            // Actually set the new values for relevant properties
-            dateField.setValue(newDate);
-            dateField.setMinValue(newMinValue);
-            dateField.setMaxValue(newMaxValue);
-        });
-    },
-
-    /**
      * Bound as handler for the beforerender event, this method registers the
-     * listener to react on any UTC-button changes (See also the atual
-     * method #handleTimereferenceButtonToggled).
+     * listener to react on any UTC-button changes.
      */
     onBeforeRenderLayerFilterForm: function() {
-        var me = this;
         var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
         Ext.each(utcBtns, function(utcBtn) {
-            utcBtn.on('toggle', me.handleTimereferenceButtonToggled, me);
+            utcBtn.disable();
         });
     },
 
     /**
      * Bound as handler in the destroy sequence, this method unregisters the
-     * listener to react on any UTC-button changes (See also the atual
-     * method #handleTimereferenceButtonToggled).
+     * listener to react on any UTC-button changes.
      */
     onBeforeDestroyLayerFilterForm: function() {
         var me = this;
         var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
         Ext.each(utcBtns, function(utcBtn) {
-            utcBtn.un('toggle', me.handleTimereferenceButtonToggled, me);
+            utcBtn.enable();
         });
 
         //deselect ThemeTreeItems

@@ -11,7 +11,8 @@
         "BasiGX": true,
         "btoa": true,
         "d3": false,
-        "download": false
+        "download": false,
+        "moment": true
     },
     "rules": {
         "comma-dangle": 2,

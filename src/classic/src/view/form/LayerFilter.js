@@ -26,7 +26,6 @@ Ext.define("Koala.view.form.LayerFilter", {
         "Ext.ux.form.MultiSelect",
 
         "Koala.util.Date",
-        "Koala.util.Duration",
         "Koala.util.Filter",
 
         "Koala.view.form.LayerFilterController",
@@ -159,43 +158,32 @@ Ext.define("Koala.view.form.LayerFilter", {
     createPointInTimeFilter: function(filter, idx) {
         var me = this;
         var FilterUtil = Koala.util.Filter;
-        var format = Koala.util.Date.ISO_FORMAT;
 
         var minValue;
         if (filter.mindatetimeinstant) {
-            // only fill lower boundary when defined
-            minValue = Ext.Date.parse(
-                filter.mindatetimeinstant,
-                filter.mindatetimeformat
+            // Only fill lower boundary when defined
+            minValue = Koala.util.Date.getUtcMoment(
+                filter.mindatetimeinstant
             );
         }
 
         var maxValue;
         if (filter.maxdatetimeinstant) {
-            // only fill upper boundary when defined
-            maxValue = Ext.Date.parse(
-                filter.maxdatetimeinstant,
-                filter.maxdatetimeformat
+            // Only fill upper boundary when defined
+            maxValue = Koala.util.Date.getUtcMoment(
+                filter.maxdatetimeinstant
             );
         }
 
-        var defaultValue = Ext.Date.parse(
-            filter.defaulttimeinstant,
-            filter.defaulttimeformat
+        var defaultValue = Koala.util.Date.getUtcMoment(
+            filter.defaulttimeinstant
         );
 
         var value = filter.effectivedatetime || defaultValue;
 
-        var appIsLocal = Koala.Application.isLocal();
-        if (appIsLocal) {
-            var makeLocal = Koala.util.Date.makeLocal;
-            minValue = minValue ? makeLocal(minValue) : undefined;
-            maxValue = maxValue ? makeLocal(maxValue) : undefined;
-            value = makeLocal(value);
-        }
-
-        var minClone = minValue ? Ext.Date.clone(minValue) : undefined;
-        var maxClone = maxValue ? Ext.Date.clone(maxValue) : undefined;
+        minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
+        maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
+        value = Koala.util.Date.getTimeReferenceAwareMomentDate(value);
 
         var dateField = Ext.create("Ext.form.field.Date", {
             bind: {
@@ -205,15 +193,17 @@ Ext.define("Koala.view.form.LayerFilter", {
             labelWidth: 70,
             name: filter.param,
             flex: 1,
-            value: Ext.Date.clone(value),
-            minValue: minClone,
-            maxValue: maxClone,
+            // The Ext.form.field.Date is capabale of receiving a moment object,
+            // see override of setValue().
+            value: value,
+            minValue: minValue,
+            maxValue: maxValue,
             validator: FilterUtil.makeDateValidator(
-                minClone, maxClone, appIsLocal
+                minValue, maxValue
             ),
-            format: me.getFormat(),
-            submitFormat: format
+            format: me.getFormat()
         });
+
         var hourSpinner = FilterUtil.getSpinner(
             filter, "hours", "hourspinner", value
         );
@@ -257,7 +247,6 @@ Ext.define("Koala.view.form.LayerFilter", {
     createTimeRangeFilter: function(filter, idx) {
         var me = this;
         var FilterUtil = Koala.util.Filter;
-        var format = Koala.util.Date.ISO_FORMAT;
         var param = filter.param;
 
         var names = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
@@ -266,47 +255,36 @@ Ext.define("Koala.view.form.LayerFilter", {
 
         var minValue;
         if (filter.mindatetimeinstant) {
-            minValue = Ext.Date.parse(
-                filter.mindatetimeinstant,
-                filter.mindatetimeformat
+            minValue = Koala.util.Date.getUtcMoment(
+                filter.mindatetimeinstant
             );
         }
 
         var maxValue;
         if (filter.maxdatetimeinstant) {
-            maxValue = Ext.Date.parse(
-                filter.maxdatetimeinstant,
-                filter.maxdatetimeformat
+            maxValue = Koala.util.Date.getUtcMoment(
+                filter.maxdatetimeinstant
             );
         }
 
-        var defaultMinValue = Ext.Date.parse(
-            filter.defaultstarttimeinstant,
-            filter.defaultstarttimeformat
+        var defaultMinValue = Koala.util.Date.getUtcMoment(
+            filter.defaultstarttimeinstant
         );
 
-        var defaultMaxValue = Ext.Date.parse(
-            filter.defaultendtimeinstant,
-            filter.defaultendtimeformat
+        var defaultMaxValue = Koala.util.Date.getUtcMoment(
+            filter.defaultendtimeinstant
         );
 
         var startValue = filter.effectivemindatetime || defaultMinValue;
         var endValue = filter.effectivemaxdatetime || defaultMaxValue;
 
-        var appIsLocal = Koala.Application.isLocal();
-        if (appIsLocal) {
-            var makeLocal = Koala.util.Date.makeLocal;
-            minValue = minValue ? makeLocal(minValue) : undefined;
-            maxValue = maxValue ? makeLocal(maxValue) : undefined;
-            startValue = makeLocal(startValue);
-            endValue = makeLocal(endValue);
-        }
-
-        var minClone = minValue ? Ext.Date.clone(minValue) : undefined;
-        var maxClone = maxValue ? Ext.Date.clone(maxValue) : undefined;
+        minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
+        maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
+        startValue = Koala.util.Date.getTimeReferenceAwareMomentDate(startValue);
+        endValue = Koala.util.Date.getTimeReferenceAwareMomentDate(endValue);
 
         var minMaxValidator = FilterUtil.makeDateValidator(
-            minClone, maxClone, appIsLocal
+            minValue, maxValue
         );
         var minMaxDurationAndOrderValidator = function() {
             var ok = minMaxValidator.call(this);
@@ -325,11 +303,10 @@ Ext.define("Koala.view.form.LayerFilter", {
             editable: false,
             labelWidth: 70,
             flex: 1,
-            value: Ext.Date.clone(startValue),
-            minValue: minClone,
-            maxValue: maxClone,
+            value: startValue,
+            minValue: minValue,
+            maxValue: maxValue,
             format: me.getFormat(),
-            submitFormat: format,
             validator: minMaxDurationAndOrderValidator,
             msgTarget: "under",
             listeners: {
@@ -358,11 +335,10 @@ Ext.define("Koala.view.form.LayerFilter", {
             },
             labelWidth: 70,
             flex: 1,
-            value: Ext.Date.clone(endValue),
-            minValue: minClone,
-            maxValue: maxClone,
+            value: endValue,
+            minValue: minValue,
+            maxValue: maxValue,
             format: me.getFormat(),
-            submitFormat: format,
             validator: minMaxDurationAndOrderValidator,
             msgTarget: 'under',
             listeners: {

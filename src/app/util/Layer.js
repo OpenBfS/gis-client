@@ -339,8 +339,6 @@ Ext.define('Koala.util.Layer', {
                 return "";
             }
 
-            var defaultDateFormat = Koala.util.String.defaultDateFormat;
-
             var filterTxts = [];
 
             Ext.each(filters, function(filter) {
@@ -362,33 +360,21 @@ Ext.define('Koala.util.Layer', {
                     }
                     filterTxt += staticMe.stringifyValueFilter(filter, true);
                 } else if (filterType === "pointintime") {
-                    var date, format, time;
-
-                    date = new Date(filter.effectivedatetime);
-
-                    // respect the applications UTC setting
-                    if (staticMe.appIsLocal()) {
-                        date = Koala.util.Date.makeLocal(date);
-                    }
-                    format = filter.timeformat || defaultDateFormat;
-                    time = Ext.Date.format(date, format);
+                    var date, time;
+                    date = filter.effectivedatetime;
+                    time = Koala.util.Date.getFormattedDate(date);
                     filterTxt += time;
                 } else if (filterType === "timerange") {
-                    var startDate, startFormat, startTime;
-                    var endDate, endFormat, endTime;
+                    var startDate, startTime;
+                    var endDate, endTime;
 
-                    startDate = new Date(filter.effectivemindatetime);
-                    endDate = new Date(filter.effectivemaxdatetime);
+                    startDate = filter.effectivemindatetime;
+                    endDate = filter.effectivemaxdatetime;
 
-                    // respect the applications UTC setting
-                    if (staticMe.appIsLocal()) {
-                        startDate = Koala.util.Date.makeLocal(startDate);
-                        endDate = Koala.util.Date.makeLocal(endDate);
-                    }
-                    startFormat = filter.mindatetimeformat || defaultDateFormat;
-                    endFormat = filter.maxdatetimeformat || defaultDateFormat;
-                    startTime = Ext.Date.format(startDate, startFormat);
-                    endTime = Ext.Date.format(endDate, endFormat);
+                    // startFormat
+                    startTime = Koala.util.Date.getFormattedDate(startDate);
+                    // endFormat
+                    endTime = Koala.util.Date.getFormattedDate(endDate);
 
                     filterTxt += "" +
                         startTime +
@@ -647,7 +633,7 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
-         * layer will be undefined in the case that we actiually want
+         * Layer will be undefined in the case that we actiually want
          * to add a layer with the filter. It might also be a layer
          * if we actually want to show the filter window to change the
          * filter of a layer.
@@ -1233,13 +1219,11 @@ Ext.define('Koala.util.Layer', {
          *
          */
         applyDefaultsTimerangeFilter: function(filter) {
-            if (!Ext.isDate(filter.effectivemindatetime)) {
+            if (!moment.isMoment(filter.effectivemindatetime)) {
                 if (filter.defaultstarttimeinstant) {
                     try {
-                        filter.effectivemindatetime = Ext.Date.parse(
-                            filter.defaultstarttimeinstant,
-                            filter.defaultstarttimeformat
-                        );
+                        filter.effectivemindatetime = Koala.util.Date
+                            .getUtcMoment(filter.defaultstarttimeinstant);
                     } catch (e) {
                         Ext.log.error('Could not set default timerange filter');
                     }
@@ -1249,13 +1233,11 @@ Ext.define('Koala.util.Layer', {
                         ' filter');
                 }
             }
-            if (!Ext.isDate(filter.effectivemaxdatetime)) {
+            if (!moment.isMoment(filter.effectivemaxdatetime)) {
                 if (filter.defaultendtimeinstant) {
                     try {
-                        filter.effectivemaxdatetime = Ext.Date.parse(
-                            filter.defaultendtimeinstant,
-                            filter.defaultendtimeformat
-                        );
+                        filter.effectivemaxdatetime = Koala.util.Date
+                            .getUtcMoment(filter.defaultendtimeinstant);
                     } catch (e) {
                         Ext.log.error('Could not set default timerange filter');
                     }
@@ -1269,13 +1251,11 @@ Ext.define('Koala.util.Layer', {
         },
 
         applyDefaultsPointInTimeFilter: function(filter) {
-            if (!Ext.isDate(filter.effectivedatetime)) {
+            if (!moment.isMoment(filter.effectivedatetime)) {
                 if (filter.defaulttimeinstant) {
                     try {
-                        filter.effectivedatetime = Ext.Date.parse(
-                            filter.defaulttimeinstant,
-                            filter.defaulttimeformat
-                        );
+                        filter.effectivedatetime = Koala.util.Date
+                            .getUtcMoment(filter.defaulttimeinstant);
                     } catch (e) {
                         Ext.log.error(
                             'Could not set default point in time filter'
@@ -1332,9 +1312,7 @@ Ext.define('Koala.util.Layer', {
             }
             var start = filter.effectivemindatetime;
             var end = filter.effectivemaxdatetime;
-
-            var format = Koala.util.Date.ISO_FORMAT;
-            var val = Ext.Date.format(start, format) + '/' + Ext.Date.format(end, format);
+            var val = start.toISOString() + '/' + end.toISOString();
             olProps[wmstKey] = val;
             metadata.layerConfig.olProperties = olProps;
             return metadata;
@@ -1349,9 +1327,7 @@ Ext.define('Koala.util.Layer', {
                     'only the last will win');
             }
             var dateValue = filter.effectivedatetime;
-            var format = Koala.util.Date.ISO_FORMAT;
-            var val = Ext.Date.format(dateValue, format);
-            olProps[wmstKey] = val;
+            olProps[wmstKey] = dateValue.toISOString();
             metadata.layerConfig.olProperties = olProps;
             return metadata;
         },
@@ -1578,10 +1554,9 @@ Ext.define('Koala.util.Layer', {
          * @return {string} A stringified variant of the filter as CQL.
          */
         stringifyPointInTimeFilter: function(filter) {
-            var format = Koala.util.Date.ISO_FORMAT;
             var trimmedParam = Ext.String.trim(filter.param);
             var effectiveDateTime = filter.effectivedatetime;
-            var formattedTime = Ext.Date.format(effectiveDateTime, format);
+            var formattedTime = effectiveDateTime.toISOString();
             var cql = trimmedParam + "=" + formattedTime;
             return cql;
         },
@@ -1597,15 +1572,14 @@ Ext.define('Koala.util.Layer', {
          * @return {string} A stringified variant of the filter as CQL.
          */
         stringifyTimeRangeFilter: function(filter) {
-            var format = Koala.util.Date.ISO_FORMAT;
             var trimmedParam = Ext.String.trim(filter.param);
             var params = trimmedParam.split(",");
             var startParam = params[0];
             var endParam = params[1] || params[0];
             var effectiveMinDateTime = filter.effectivemindatetime;
             var effectiveMaxDateTime = filter.effectivemaxdatetime;
-            var formattedStart = Ext.Date.format(effectiveMinDateTime, format);
-            var formattedEnd = Ext.Date.format(effectiveMaxDateTime, format);
+            var formattedStart = effectiveMinDateTime.toISOString();
+            var formattedEnd = effectiveMaxDateTime.toISOString();
             var cql = "";
 
             if (startParam === endParam) {
@@ -1651,7 +1625,6 @@ Ext.define('Koala.util.Layer', {
 
         moveFiltersToViewparams: function(metadata, filters) {
             var me = this;
-            var format = Koala.util.Date.ISO_FORMAT;
             var keyVals = {};
             Ext.each(filters, function(filter) {
                 // Only consider viewparam filters here
@@ -1666,20 +1639,17 @@ Ext.define('Koala.util.Layer', {
                     // we need to check the metadata for default filters to apply
                     if (type === "timerange") {
                         var rawDateMin = filter.effectivemindatetime;
-                        keyVals[params[0]] = Ext.Date.format(rawDateMin, format);
+                        keyVals[params[0]] = rawDateMin.toISOString();
 
                         var rawDateMax = filter.effectivemaxdatetime;
                         if (!params[1]) {
-                            keyVals[params[0]] += "/" +
-                            Ext.Date.format(rawDateMax, format);
+                            keyVals[params[0]] += "/" + rawDateMax.toISOString();
                         } else {
-                            keyVals[params[1]] = Ext.Date.format(
-                                rawDateMax, format
-                            );
+                            keyVals[params[1]] = rawDateMax.toISOString();
                         }
                     } else if (type === "pointintime") {
                         var rawDate = filter.effectivedatetime;
-                        keyVals[params[0]] = Ext.Date.format(rawDate, format);
+                        keyVals[params[0]] = rawDate.toISOString();
                     } else if (type === "value") {
                         keyVals[params[0]] = filter.effectivevalue;
                     }

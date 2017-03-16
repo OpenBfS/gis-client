@@ -79,11 +79,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         // TODO Readd validation
         // view.getForm().isValid();
-
-        var utcBtns = Ext.ComponentQuery.query('radiofield[originalValue=UTC]');
-        Ext.each(utcBtns, function(utcBtn) {
-            utcBtn.on('change', me.handleTimereferenceButtonToggled, me);
-        });
     },
 
     /**
@@ -185,12 +180,11 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     } else {
                         key = field.getName();
                         if (!Ext.Array.contains(view.ignoreFields, key)) {
-                            var val = field.getValue();
-                            if (Ext.isDate(val)) {
+                            var val = field.getValue(true);
+                            if (moment.isMoment(val)) {
                                 // we have to add hours & minutes, the date field
                                 // has precision DAY:
-                                val = FilterUtil.addHoursAndMinutes(val, field);
-                                val = me.adjustToUtcIfNeeded(val);
+                                val = FilterUtil.setHoursAndMinutes(val, field);
                             }
                             keyVals[key] = val;
                         }
@@ -263,24 +257,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
-     * Check if the application currently displays local dates, and if so adjust
-     * the passed date to UTC since we always store in UTC.
-     *
-     * @param {Date} userDate A date entered in a filter which may be in local
-     *     time.
-     * @return {Date} The date which probably has been adjusted to UTC.
-     */
-    adjustToUtcIfNeeded: function(userDate) {
-        var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
-            .getViewModel();
-        if (!mainViewModel.get('useUtc')) {
-            return Koala.util.Date.makeUtc(userDate);
-        }
-        // already UTC
-        return userDate;
-    },
-
-    /**
      *
      */
     updateFilterValues: function(filters, idx, keyVals) {
@@ -302,79 +278,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
-     * Called whenever any UTC button is toggled, this method will adjust the
-     * visually relevant (displayed or restricting the calendar) dates to the
-     * now active setting; either they wil be transformed to UTC or to the local
-     * timezone.
-     */
-    handleTimereferenceButtonToggled: function() {
-        var layerFilterView = this.getView();
-        var dateUtil = Koala.util.Date;
-        var makeUtc = dateUtil.makeUtc;
-        var makeLocal = dateUtil.makeLocal;
-        var dateFields = layerFilterView.query('datepicker');
-
-        var switchToUtc = layerFilterView.up('app-main').getViewModel().get('useUtc');
-        var converterMethod = switchToUtc ? makeUtc : makeLocal;
-
-        Ext.each(dateFields, function(dateField) {
-            // The actual value of the field
-            var currentDate = dateField.getValue();
-            if (!currentDate) {
-                return;
-            }
-            // Also update the minimum and maximums, as they need to be in sync
-            // wrt the UTC/local setting.
-            var currentMinValue = dateField.minValue; // no getter in ExtJS
-            var currentMaxValue = dateField.maxValue; // no getter in ExtJS
-
-            var accompanyingHourSpinner = dateField.up().down(
-                // All that end with the string 'hourspinner', will capture all
-                // spinners including those from timerange-filters
-                'field[name$="hourspinner"]'
-            );
-
-            // The new value of the field
-            var newDate;
-            var newMinValue = currentMinValue; // to gracefully handle unset min
-            var newMaxValue = currentMaxValue; // to gracefully handle unset max
-
-            // Use the determined converter now to change new dates
-            newDate = converterMethod(currentDate);
-            if (!Ext.isEmpty(currentMinValue)) {
-                newMinValue = converterMethod(currentMinValue);
-            }
-            if (!Ext.isEmpty(currentMaxValue)) {
-                newMaxValue = converterMethod(currentMaxValue);
-            }
-
-            // Update spinner if any
-            if (accompanyingHourSpinner) {
-                accompanyingHourSpinner.setValue(newDate.getHours());
-            }
-
-            // Actually set the new values for relevant properties
-            dateField.setValue(newDate);
-            dateField.setMinValue(newMinValue);
-            dateField.setMaxValue(newMaxValue);
-        });
-    },
-
-    /**
-     * Bound as handler in the destroy sequence, this method unregisters the
-     * listener to react on any UTC-button changes (See also the atual
-     * method #handleTimereferenceButtonToggled).
-     */
-    onBeforeDestroyLayerFilterForm: function() {
-        var me = this;
-        // var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
-        var utcBtns = Ext.ComponentQuery.query('radiofield[originalValue=UTC]');
-        Ext.each(utcBtns, function(utcBtn) {
-            utcBtn.un('change', me.handleTimereferenceButtonToggled, me);
-        });
-    },
-
-    /**
      * Creates and adds a point in time filter at the specified index.
      *
      * @param {Object} filter A filter specification object of type
@@ -384,44 +287,33 @@ Ext.define('Koala.view.form.LayerFilterController', {
     createPointInTimeFilter: function(filter, idx) {
         var me = this;
         var view = this.getView();
-        var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
-                .getViewModel();
         var FilterUtil = Koala.util.Filter;
 
         var minValue;
         if (filter.mindatetimeinstant) {
             // only fill lower boundary when defined
-            minValue = Ext.Date.parse(
-                filter.mindatetimeinstant,
-                filter.mindatetimeformat
+            minValue = Koala.util.Date.getUtcMoment(
+                filter.mindatetimeinstant
             );
         }
 
         var maxValue;
         if (filter.maxdatetimeinstant) {
             // only fill upper boundary when defined
-            maxValue = Ext.Date.parse(
-                filter.maxdatetimeinstant,
-                filter.maxdatetimeformat
+            maxValue = Koala.util.Date.getUtcMoment(
+                filter.maxdatetimeinstant
             );
         }
 
-        var defaultValue = Ext.Date.parse(
-            filter.defaulttimeinstant,
-            filter.defaulttimeformat
+        var defaultValue = Koala.util.Date.getUtcMoment(
+            filter.defaulttimeinstant
         );
 
         var value = filter.effectivedatetime || defaultValue;
 
-        if (!mainViewModel.get('useUtc')) {
-            var makeLocal = Koala.util.Date.makeLocal;
-            minValue = minValue ? makeLocal(minValue) : undefined;
-            maxValue = maxValue ? makeLocal(maxValue) : undefined;
-            value = makeLocal(value);
-        }
-
-        var minClone = minValue ? Ext.Date.clone(minValue) : undefined;
-        var maxClone = maxValue ? Ext.Date.clone(maxValue) : undefined;
+        minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
+        maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
+        value = Koala.util.Date.getTimeReferenceAwareMomentDate(value);
 
         var dateField = Ext.create('Ext.field.DatePicker', {
             type: 'pointintime',
@@ -432,14 +324,15 @@ Ext.define('Koala.view.form.LayerFilterController', {
             labelAlign: 'top',
             name: filter.param,
             flex: 1,
-            value: Ext.Date.clone(value),
+            value: value,
             // The configs minValue and maxValue are not existing in the modern
             // datePicker, but the values will be used by our custom validator
             // onChange.
-            minValue: minClone,
-            maxValue: maxClone,
+            minValue: minValue,
+            maxValue: maxValue,
             dateFormat: view.getFormat(),
             listeners: {
+                painted: me.onDatePickerPainted,
                 change: me.validateDatePickerChange,
                 scope: me
             }
@@ -484,8 +377,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
     createTimeRangeFilter: function(filter, idx) {
         var me = this;
         var view = this.getView();
-        var mainViewModel = Ext.ComponentQuery.query('app-main')[0]
-                .getViewModel();
         var FilterUtil = Koala.util.Filter;
         var param = filter.param;
 
@@ -495,43 +386,33 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         var minValue;
         if (filter.mindatetimeinstant) {
-            minValue = Ext.Date.parse(
-                filter.mindatetimeinstant,
-                filter.mindatetimeformat
+            minValue = Koala.util.Date.getUtcMoment(
+                filter.mindatetimeinstant
             );
         }
 
         var maxValue;
         if (filter.maxdatetimeinstant) {
-            maxValue = Ext.Date.parse(
-                filter.maxdatetimeinstant,
-                filter.maxdatetimeformat
+            maxValue = Koala.util.Date.getUtcMoment(
+                filter.maxdatetimeinstant
             );
         }
 
-        var defaultMinValue = Ext.Date.parse(
-            filter.defaultstarttimeinstant,
-            filter.defaultstarttimeformat
+        var defaultMinValue = Koala.util.Date.getUtcMoment(
+            filter.defaultstarttimeinstant
         );
 
-        var defaultMaxValue = Ext.Date.parse(
-            filter.defaultendtimeinstant,
-            filter.defaultendtimeformat
+        var defaultMaxValue = Koala.util.Date.getUtcMoment(
+            filter.defaultendtimeinstant
         );
 
         var startValue = filter.effectivemindatetime || defaultMinValue;
         var endValue = filter.effectivemaxdatetime || defaultMaxValue;
 
-        if (!mainViewModel.get('useUtc')) {
-            var makeLocal = Koala.util.Date.makeLocal;
-            minValue = minValue ? makeLocal(minValue) : undefined;
-            maxValue = maxValue ? makeLocal(maxValue) : undefined;
-            startValue = makeLocal(startValue);
-            endValue = makeLocal(endValue);
-        }
-
-        var minClone = minValue ? Ext.Date.clone(minValue) : undefined;
-        var maxClone = maxValue ? Ext.Date.clone(maxValue) : undefined;
+        minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
+        maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
+        startValue = Koala.util.Date.getTimeReferenceAwareMomentDate(startValue);
+        endValue = Koala.util.Date.getTimeReferenceAwareMomentDate(endValue);
 
         // --- MINIMUM ---
         var minDateField = Ext.create('Ext.field.DatePicker', {
@@ -543,14 +424,15 @@ Ext.define('Koala.view.form.LayerFilterController', {
             labelAlign: 'top',
             name: startName,
             flex: 1,
-            value: Ext.Date.clone(startValue),
+            value: startValue,
             // The configs minValue and maxValue are not existing in the modern
             // datePicker, but the values will be used by our custom validator
             // onChange.
-            minValue: minClone,
-            maxValue: maxClone,
+            minValue: minValue,
+            maxValue: maxValue,
             dateFormat: view.getFormat(),
             listeners: {
+                painted: me.onDatePickerPainted,
                 change: me.validateDatePickerChange,
                 scope: me
             }
@@ -586,14 +468,15 @@ Ext.define('Koala.view.form.LayerFilterController', {
             labelAlign: 'top',
             name: endName,
             flex: 1,
-            value: Ext.Date.clone(endValue),
+            value: endValue,
             // The configs minValue and maxValue are not existing in the modern
             // datePicker, but the values will be used by our custom validator
             // onChange.
-            minValue: minClone,
-            maxValue: maxClone,
+            minValue: minValue,
+            maxValue: maxValue,
             dateFormat: view.getFormat(),
             listeners: {
+                painted: me.onDatePickerPainted,
                 change: me.validateDatePickerChange,
                 scope: me
             }
@@ -732,6 +615,21 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
+     * Called whenever a datepickerfield is painted to validate the initial
+     * values.
+     *
+     * @method onDatePickerPainted
+     * @param {Ext.Element} element The passed element on `painted` event.
+     */
+    onDatePickerPainted: function(element) {
+        var me = this;
+        var field = element.component;
+        var newValue = field.getValue(true);
+
+        me.validateDatePickerChange(field, newValue);
+    },
+
+    /**
      * Validates the user input on a datefield picker. If the input is invalid,
      * it resets the value to the previous (and valid) value and shows a simple
      * toast with an warn message.
@@ -742,38 +640,38 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @param {Date} oldDate The old date.
      */
     validateDatePickerChange: function(field, newDate, oldDate) {
-        var me = this;
-        var viewModel = me.getViewModel();
-        var minValue = field.minValue;
-        var maxValue = field.maxValue;
-
         // Only proceed if the field is rendered
         if (!field.isRendered()) {
             return;
         }
 
+        var me = this;
+        var viewModel = me.getViewModel();
+        var minValue = field.getMinValue(true);
+        var maxValue = field.getMaxValue(true);
+        newDate = field.getValue(true);
+
         var minDateWarnMsg = viewModel.get('minDateWarnMsg');
         var maxDateWarnMsg = viewModel.get('maxDateWarnMsg');
-        var dateFormat = viewModel.get('warnMsgDateFormat');
-        var readableMinDate = Ext.Date.format(minValue, dateFormat);
-        var readableMaxDate = Ext.Date.format(maxValue, dateFormat);
+        var readableMinDate = Koala.util.Date.getFormattedDate(minValue);
+        var readableMaxDate = Koala.util.Date.getFormattedDate(maxValue);
 
         // Check if the input value is larger than the accepted minimum
-        if (newDate < minValue) {
+        if (newDate.isBefore(minValue)) {
             Ext.toast(Ext.String.format(
                     minDateWarnMsg,
                     readableMinDate
-            ));
+            ), 2000);
             field.setValue(oldDate);
             return;
         }
 
         // Check if the input value is smaller than the accepted maximum
-        if (newDate > maxValue) {
+        if (newDate.isAfter(maxValue)) {
             Ext.toast(Ext.String.format(
                     maxDateWarnMsg,
                     readableMaxDate
-            ));
+            ), 2000);
             field.setValue(oldDate);
             return;
         }
@@ -784,8 +682,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
             var isValid = Koala.util.Filter.validateMaxDurationTimerange
                     .call(field);
             if (Ext.isString(isValid)) {
-                Ext.toast(isValid);
-                field.setValue(oldDate);
+                Ext.toast(isValid, 2000);
+                // TODO If an invalid oldDate is set in the metadata of the layer
+                // setting it back could lead to an loop of infinity here.
+                // field.setValue(oldDate);
                 return;
             }
         }

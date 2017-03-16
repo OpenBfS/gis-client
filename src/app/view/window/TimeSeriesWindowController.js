@@ -54,13 +54,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var addFilterForm = view.getAddFilterForm();
 
         var startDate = addFilterForm ?
-                view.down('datefield[name=datestart]').getValue() :
-                Ext.Date.parse(timeFilter.mindatetimeinstant,
-                    timeFilter.mindatetimeformat);
+                view.down('datefield[name=datestart]').getValue(true) :
+                Koala.util.Date.getUtcMoment(timeFilter.mindatetimeinstant);
         var endDate = addFilterForm ?
-                view.down('datefield[name=dateend]').getValue() :
-                Ext.Date.parse(timeFilter.maxdatetimeinstant,
-                    timeFilter.maxdatetimeformat);
+                view.down('datefield[name=dateend]').getValue(true) :
+                Koala.util.Date.getUtcMoment(timeFilter.maxdatetimeinstant);
 
         var config = {
             startDate: startDate,
@@ -373,8 +371,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var me = this;
         var view = me.getView();
         var charts = view.query('d3-chart');
-        var startDate = view.down('datefield[name=datestart]').getValue();
-        var endDate = view.down('datefield[name=dateend]').getValue();
+        var startDate = view.down('datefield[name=datestart]').getValue(true);
+        var endDate = view.down('datefield[name=dateend]').getValue(true);
 
         Ext.each(charts, function(chart) {
             var chartController = chart.getController();

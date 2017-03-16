@@ -39,9 +39,16 @@ Ext.define('Koala.view.container.date.DateTimePickerModel', {
                 return get('value');
             },
             set: function(value) {
-                var date = Ext.Date.clone(value);
-                date.setHours(this.get('hours'));
-                date.setMinutes(this.get('minutes'));
+                if (!(moment.isMoment(value))) {
+                    if (Koala.Application.isUtc()) {
+                        value = Koala.util.Date.addUtcOffset(moment(value));
+                    } else {
+                        value = moment(value);
+                    }
+                }
+                var date = value.clone();
+                date.hours(this.get('hours'));
+                date.minutes(this.get('minutes'));
                 this.set({
                     value: date
                 });
@@ -49,23 +56,23 @@ Ext.define('Koala.view.container.date.DateTimePickerModel', {
         },
         hours: {
             get: function(get) {
-                return get('value') ? get('value').getHours() : null;
+                return get('value') ? get('value').hours() : null;
             },
             set: function(value) {
-                var mainValue = Ext.Date.clone(this.get('value'));
+                var mainValue = this.get('value').clone();
                 this.set({
-                    value: new Date(mainValue.setHours(value.get('value')))
+                    value: mainValue.hours(value.get('value'))
                 });
             }
         },
         minutes: {
             get: function(get) {
-                return get('value') ? get('value').getMinutes() : null;
+                return get('value') ? get('value').minutes() : null;
             },
             set: function(value) {
-                var mainValue = Ext.Date.clone(this.get('value'));
+                var mainValue = this.get('value').clone();
                 this.set({
-                    value: new Date(mainValue.setMinutes(value.get('value')))
+                    value: mainValue.minutes(value.get('value'))
                 });
             }
         }

@@ -24,7 +24,6 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
     requires: [
         "Koala.view.window.TimeSeriesWindowController",
         "Koala.view.window.TimeSeriesWindowModel",
-        "Koala.util.Duration",
         "Koala.util.Date",
         "Koala.util.Filter",
         "Koala.util.String",
@@ -160,6 +159,7 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     xtype: 'combo',
                     displayField: 'text',
                     queryMode: 'local',
+                    // TODO i18n
                     emptyText: 'Chart hinzufügen',
                     bind: {
                         fieldLabel: '{selectChartLayerComboLabel}'

@@ -140,29 +140,41 @@ Ext.define('Koala.util.Routing', {
                         return false;
                     }
                     return false;
-
                 });
 
                 var minDate;
                 var maxDate;
                 if (permalinkFilter) {
                     if (mdFilter.type === "pointintime") {
-                        maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
-                        minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
-                        if (minDate <= permalinkFilter.effectivedatetime && maxDate >= permalinkFilter.effectivedatetime) {
-                            permalinkFilter.effectivedatetime = new Date(permalinkFilter.effectivedatetime);
+                        maxDate = Koala.util.Date.getUtcMoment(
+                            mdFilter.maxdatetimeinstant);
+                        minDate = Koala.util.Date.getUtcMoment(
+                            mdFilter.mindatetimeinstant);
+                        var effectiveDateTime = Koala.util.Date.getUtcMoment(
+                            permalinkFilter.effectivedatetime, 'x');
+                        // '[]': Include both min and max value.
+                        if (effectiveDateTime.isBetween(minDate, maxDate, null, '[]')) {
+                            permalinkFilter.effectivedatetime = effectiveDateTime;
                             Ext.apply(mdFilter, permalinkFilter);
                         } else {
                             Ext.toast('Permalink contains illegal pointintime filter');
                         }
                     }
                     if (mdFilter.type === "timerange") {
-                        maxDate = Ext.Date.parse(mdFilter.maxdatetimeinstant, mdFilter.maxdatetimeformat);
-                        minDate = Ext.Date.parse(mdFilter.mindatetimeinstant, mdFilter.mindatetimeformat);
-                        if (minDate <= permalinkFilter.effectivemindatetime && maxDate >= permalinkFilter.effectivemindatetime &&
-                                minDate <= permalinkFilter.effectivemaxdatetime && maxDate >= permalinkFilter.effectivemaxdatetime) {
-                            permalinkFilter.effectivemindatetime = new Date(permalinkFilter.effectivemindatetime);
-                            permalinkFilter.effectivemaxdatetime = new Date(permalinkFilter.effectivemaxdatetime);
+                        maxDate = Koala.util.Date.getUtcMoment(
+                            mdFilter.maxdatetimeinstant);
+                        minDate = Koala.util.Date.getUtcMoment(
+                            mdFilter.mindatetimeinstant);
+                        var effectiveMinDateTime = Koala.util.Date.getUtcMoment(
+                            permalinkFilter.effectivemindatetime, 'x');
+                        var effectiveMaxDateTime = Koala.util.Date.getUtcMoment(
+                            permalinkFilter.effectivemaxdatetime, 'x');
+                        if (effectiveMinDateTime.isBetween(minDate, maxDate, null, '[]') &&
+                                effectiveMaxDateTime.isBetween(minDate, maxDate, null, '[]')) {
+                            permalinkFilter.effectivemindatetime =
+                                effectiveMinDateTime;
+                            permalinkFilter.effectivemaxdatetime =
+                                effectiveMaxDateTime;
                             Ext.apply(mdFilter, permalinkFilter);
                         } else {
                             Ext.toast('Permalink contains illegal timerange filter');
@@ -203,7 +215,6 @@ Ext.define('Koala.util.Routing', {
             var permaObj = JSON.parse(decodeURIComponent(layersString));
 
             Ext.iterate(permaObj, function(uuid, config) {
-
                 var booleanState = config.isVisible;
                 var olLayer = me.routeCreatedLayers[uuid];
                 if (Koala.util.String.isUuid(uuid) && Ext.isDefined(olLayer)) {
@@ -317,12 +328,16 @@ Ext.define('Koala.util.Routing', {
                 };
 
             switch (filter.type) {
+                // valueOf() returns the timestamp value of the moment date.
                 case "pointintime":
-                    permaObj.effectivedatetime = filter.effectivedatetime.getTime();
+                    permaObj.effectivedatetime = filter.effectivedatetime
+                        .valueOf();
                     break;
                 case "timerange":
-                    permaObj.effectivemindatetime = filter.effectivemindatetime.getTime();
-                    permaObj.effectivemaxdatetime = filter.effectivemaxdatetime.getTime();
+                    permaObj.effectivemindatetime = filter.effectivemindatetime
+                        .valueOf();
+                    permaObj.effectivemaxdatetime = filter.effectivemaxdatetime
+                        .valueOf();
                     break;
                 case "value":
                     permaObj.effectivevalue = filter.effectivevalue;

@@ -685,7 +685,12 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     return station.get('id') === shapeId;
                                 });
 
-                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, data);
+                                var tooltipData = Ext.clone(data);
+                                if (Koala.Application.isUtc()) {
+                                    tooltipData[xField] = Koala.util.Date.addUtcOffset(tooltipData[xField]);
+                                }
+
+                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, tooltipData);
                                 html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
                                 tooltipCmp.setHtml(html);
                                 tooltipCmp.setTarget(this);
@@ -1131,17 +1136,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                 targetLayer.metadata);
         var timeField = filterConfig.parameter;
 
-        // TODO: check filters[0]
-        var startString = Ext.Date.format(startDate,
-                targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
-        var endString = Ext.Date.format(endDate,
-                targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
+        var startString = startDate.toISOString();
+        var endString = endDate.toISOString();
 
-        if (useCurrentZoom === true) {
-          startString = Ext.Date.format(me.currentDateRange.min,
-                  targetLayer.metadata.filters[0].mindatetimeformat || Koala.util.Date.ISO_FORMAT);
-          endString = Ext.Date.format(me.currentDateRange.max,
-                  targetLayer.metadata.filters[0].maxdatetimeformat || Koala.util.Date.ISO_FORMAT);
+        if (useCurrentZoom === true && me.currentDateRange.min &&
+                me.currentDateRange.max) {
+            startString = moment.utc(me.currentDateRange.min).toISOString();
+            endString = moment.utc(me.currentDateRange.max).toISOString();
         }
 
         // Get the viewparams configured for the layer
@@ -1301,8 +1302,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
-        var startDate = view.getStartDate();
-        var endDate = view.getEndDate();
+        var startDate = view.getStartDate().clone();
+        var endDate = view.getEndDate().clone();
         var chartConfig = targetLayer.get('timeSeriesChartProperties');
         var xAxisAttr = chartConfig.xAxisAttribute;
         var yAxisAttr = chartConfig.yAxisAttribute;
@@ -1333,13 +1334,22 @@ Ext.define('Koala.view.component.D3ChartController', {
         var matchingFeature;
         var seriesData = [];
 
-        while (startDate <= endDate) {
+        var firstDiffSeconds;
+        if (jsonObj.features[0]) {
+            var startSeconds = startDate.unix();
+            var firstFeatDate = Koala.util.Date.getUtcMoment(jsonObj.features[0].properties[xAxisAttr]);
+            var firstFeatSeconds = firstFeatDate.unix();
+            firstDiffSeconds = Math.abs(firstFeatSeconds - startSeconds);
+        }
+
+        // Iterate until startDate <= endDate
+        while (startDate.diff(endDate) <= 0) {
             var newRawData = {};
 
-            compareableDate = Ext.Date.format(startDate, 'timestamp');
+            compareableDate = startDate.unix() + firstDiffSeconds;
             matchingFeature = snapObject[compareableDate];
 
-            newRawData[xAxisAttr] = startDate;
+            newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
             newRawData[valueField] = undefined;
 
             if (matchingFeature) {
@@ -1348,8 +1358,14 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
 
             seriesData.push(newRawData);
-            startDate = Ext.Date.add(startDate, Ext.Date.SECOND, intervalInSeconds);
+            startDate.add(intervalInSeconds, 'seconds');
         }
+
+        Ext.each(seriesData, function(item) {
+            if (Koala.Application.isUtc()) {
+                item[xAxisAttr] = Koala.util.Date.removeUtcOffset(item[xAxisAttr]);
+            }
+        });
 
         me.data[stationId] = seriesData;
 
@@ -1389,32 +1405,15 @@ Ext.define('Koala.view.component.D3ChartController', {
     getTimeStampSnapObject: function(startDate, intervalInSeconds, features,
             xAxisAttr) {
         var obj = {};
-        var startSeconds = parseInt(
-                Ext.Date.format(startDate, "timestamp"), 10);
-        var columnSeconds = intervalInSeconds / 2;
 
         Ext.each(features, function(feat) {
             // Dates in features are always in UTC, `new Date` seems to be
             // respecting the format
-            var featDate = new Date(feat.properties[xAxisAttr]);
+            var featDate = Koala.util.Date.getUtcMoment(feat.properties[xAxisAttr]);
 
-            if (Koala.Application.isLocal()) {
-                var makeLocal = Koala.util.Date.makeLocal;
-                featDate = makeLocal(featDate);
-            }
+            var featDateSeconds = featDate.unix();
 
-            var featDateSeconds = parseInt(
-                    Ext.Date.format(featDate, "timestamp"), 10);
-            var diffSeconds = featDateSeconds - startSeconds;
-            var modulos = diffSeconds % intervalInSeconds;
-            var snapSeconds;
-
-            if (modulos < columnSeconds) {
-                snapSeconds = featDateSeconds - modulos;
-            } else {
-                snapSeconds = featDateSeconds + modulos;
-            }
-            obj[snapSeconds] = feat;
+            obj[featDateSeconds] = feat;
         });
 
         return obj;
@@ -1434,13 +1433,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                 multiplier = 1;
                 break;
             case "minutes":
-                multiplier = Koala.util.Duration.secondsInOne.MINUTE;
+                multiplier = 60;
                 break;
             case "hours":
-                multiplier = Koala.util.Duration.secondsInOne.HOUR;
+                multiplier = 3600;
                 break;
             case "days":
-                multiplier = Koala.util.Duration.secondsInOne.DAY;
+                multiplier = 86400;
                 break;
             default:
                 break;

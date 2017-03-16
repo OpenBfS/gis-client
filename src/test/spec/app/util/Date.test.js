@@ -1,127 +1,181 @@
 Ext.Loader.syncRequire(['Koala.util.Date']);
 
 describe('Koala.util.Date', function() {
+    beforeEach(function() {
+        // mock up successful i18n
+        Koala.util.Layer.txtUntil = "bis";
+        Koala.Application = {};
+        Koala.Application.isUtc = function() {
+            return true;
+        };
+        Koala.Application.isLocal = function() {
+            return false;
+        };
+    });
+    afterEach(function() {
+        delete Koala.Application;
+    });
+
     describe('Basics', function() {
         it('is defined', function() {
             expect(Koala.util.Date).to.not.be(undefined);
         });
     });
-    describe('Constant ISO_FORMAT is ISO compatible', function() {
+    describe('Constant DEFAULT_DATE_FORMAT is a valid Moment.js format', function() {
         it('is defined', function() {
-            expect(Koala.util.Date.ISO_FORMAT).to.not.be(undefined);
+            expect(Koala.util.Date.DEFAULT_DATE_FORMAT).to.not.be(undefined);
         });
         it('is a string', function() {
-            expect(Koala.util.Date.ISO_FORMAT).to.be.a('string');
+            expect(Koala.util.Date.DEFAULT_DATE_FORMAT).to.be.a('string');
         });
-        it('can be used to format a date to iso format', function() {
-            var format = Koala.util.Date.ISO_FORMAT;
-            var inDate = new Date();
-            var formatted = Ext.Date.format(inDate, format);
-            // from http://stackoverflow.com/a/3143231
-            var expectedRegExp = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/;
-            expect(formatted).to.match(expectedRegExp);
+        it('can be used to format a Moment', function() {
+            var format = Koala.util.Date.DEFAULT_DATE_FORMAT;
+            var momentDate = moment(new Date);
+            var formattedDate = momentDate.format(format);
+            expect(formattedDate).to.be.a('string');
         });
     });
     describe('Static functions', function() {
-
-        describe('#getUTCOffsetInMinutes', function() {
+        describe('#getUtcMoment', function() {
             it('is defined', function() {
-                expect(
-                    Koala.util.Date.getUTCOffsetInMinutes
-                ).to.not.be(undefined);
+                expect(Koala.util.Date.getUtcMoment).to.not.be(undefined);
             });
             it('is a function', function() {
-                expect(
-                    Koala.util.Date.getUTCOffsetInMinutes
-                ).to.be.a(Function);
+                expect(Koala.util.Date.getUtcMoment).to.be.a(Function);
             });
-            it('has a different "view" than getTimezoneOffset', function() {
-                var got = Koala.util.Date.getUTCOffsetInMinutes();
-                var expected = (new Date()).getTimezoneOffset();
-                if (Math.abs(got) === 0) {
-                    // Called in the UTC timezone, we need to skip this test
-                    expect(true).to.be(true);
-                } else {
-                    expect(got).to.not.be(expected);
-                }
+            it('returns a moment date object', function() {
+                var got = Koala.util.Date.getUtcMoment(
+                    '1909-09-09 09:09:09');
+                expect(got).to.be.a(moment);
             });
-            it('still is compatible to getTimezoneOffset', function() {
-                var got = Koala.util.Date.getUTCOffsetInMinutes();
-                var expected = -1 * ((new Date()).getTimezoneOffset());
-                if (Math.abs(got) === 0) {
-                    // Called in the UTC timezone, we need to skip this test
-                    // We do not want to mess with +0 and -0…
-                    expect(true).to.be(true);
-                } else {
-                    expect(got).to.be(expected);
-                }
+            it('returns an UTC moment date object', function() {
+                var got = Koala.util.Date.getUtcMoment(
+                    '1909-09-09 09:09:09');
+                var isUtc = got.isUtc();
+                expect(isUtc).to.be(true);
+            });
+            it('returns undefined on invalid input', function() {
+                var got = Koala.util.Date.getUtcMoment(
+                    '1909-09-09 09:09:09 BVB');
+                expect(got).to.be(undefined);
+            });
+            it('can parse custom non-ISO formats', function() {
+                var got = Koala.util.Date.getUtcMoment(
+                    '1909-09-09 09:09:09 BVB', 'YYYY-MM-DD HH:mm:ss BVB');
+                expect(got).to.be.a(moment);
             });
         });
-
-        describe('#makeLocal', function() {
+        describe('#addUtcOffset', function() {
             it('is defined', function() {
-                expect(
-                    Koala.util.Date.makeLocal
-                ).to.not.be(undefined);
+                expect(Koala.util.Date.addUtcOffset).to.not.be(undefined);
             });
             it('is a function', function() {
-                expect(
-                    Koala.util.Date.makeLocal
-                ).to.be.a(Function);
+                expect(Koala.util.Date.addUtcOffset).to.be.a(Function);
             });
-            it('returns a different date', function() {
-                var inDate = new Date();
-                var got = Koala.util.Date.makeLocal(inDate);
-                expect(inDate).to.not.be(got);
+            it('returns a moment date object', function() {
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.addUtcOffset(inputMoment);
+                expect(got).to.be.a(moment);
             });
-            it('returns "later"/"earlier" dates depending on offset',
-                function() {
-                    var inDate = new Date();
-                    var got = Koala.util.Date.makeLocal(inDate);
-                    var offset = Koala.util.Date.getUTCOffsetInMinutes();
-
-                    if (offset > 0) {
-                        expect(got).to.be.above(inDate);
-                    } else if (offset < 0) {
-                        expect(got).to.be.below(inDate);
-                    } else {
-                        expect(got).to.eql(inDate);
-                    }
-                }
-            );
+            it('creates a clone of the input moment', function() {
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.addUtcOffset(inputMoment);
+                expect(got).to.not.be(inputMoment);
+            });
+            it('returns an UTC moment date object', function() {
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.addUtcOffset(inputMoment);
+                var isUtc = got.isUtc();
+                expect(isUtc).to.be(true);
+            });
+            it('returns undefined on invalid input', function() {
+                var got = Koala.util.Date.addUtcOffset(new Date());
+                expect(got).to.be(undefined);
+            });
         });
-
-        describe('#makeUtc', function() {
+        describe('#removeUtcOffset', function() {
             it('is defined', function() {
-                expect(
-                    Koala.util.Date.makeUtc
-                ).to.not.be(undefined);
+                expect(Koala.util.Date.removeUtcOffset).to.not.be(undefined);
             });
             it('is a function', function() {
-                expect(
-                    Koala.util.Date.makeUtc
-                ).to.be.a(Function);
+                expect(Koala.util.Date.removeUtcOffset).to.be.a(Function);
             });
-            it('returns a different date', function() {
-                var inDate = new Date();
-                var got = Koala.util.Date.makeUtc(inDate);
-                expect(inDate).to.not.be(got);
+            it('returns a moment date object', function() {
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.removeUtcOffset(inputMoment);
+                expect(got).to.be.a(moment);
             });
-            it('returns "later"/"earlier" dates depending on offset',
-                function() {
-                    var inDate = new Date();
-                    var got = Koala.util.Date.makeUtc(inDate);
-                    var offset = Koala.util.Date.getUTCOffsetInMinutes();
-
-                    if (offset > 0) {
-                        expect(got).to.be.below(inDate);
-                    } else if (offset < 0) {
-                        expect(got).to.be.above(inDate);
-                    } else {
-                        expect(got).to.eql(inDate);
-                    }
-                }
-            );
+            it('creates a clone of the input moment', function() {
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.removeUtcOffset(inputMoment);
+                expect(got).to.not.be(inputMoment);
+            });
+            it('returns a local moment date object', function() {
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.removeUtcOffset(inputMoment);
+                var isUtc = got.isUtc();
+                expect(isUtc).to.be(false);
+            });
+            it('returns undefined on invalid input', function() {
+                var got = Koala.util.Date.removeUtcOffset(new Date());
+                expect(got).to.be(undefined);
+            });
+        });
+        describe('#getFormattedDate', function() {
+            it('is defined', function() {
+                expect(Koala.util.Date.getFormattedDate).to.not.be(undefined);
+            });
+            it('is a function', function() {
+                expect(Koala.util.Date.getFormattedDate).to.be.a(Function);
+            });
+            it('returns undefined on invalid input', function() {
+                var got = Koala.util.Date.getFormattedDate(new Date());
+                expect(got).to.be(undefined);
+            });
+        });
+        describe('#getTimeReferenceAwareMomentDate', function() {
+            it('is defined', function() {
+                expect(Koala.util.Date.getTimeReferenceAwareMomentDate).to.not.be(undefined);
+            });
+            it('is a function', function() {
+                expect(Koala.util.Date.getTimeReferenceAwareMomentDate).to.be.a(Function);
+            });
+            it('returns a moment date object', function() {
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.getTimeReferenceAwareMomentDate(inputMoment);
+                expect(got).to.be.a(moment);
+            });
+            it('creates a clone of the input moment', function() {
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.getTimeReferenceAwareMomentDate(inputMoment);
+                expect(got).to.not.be(inputMoment);
+            });
+            it('returns an UTC moment if the application\'s time reference is UTC', function() {
+                Koala.Application.isUtc = function() {
+                    return true;
+                };
+                Koala.Application.isLocal = function() {
+                    return false;
+                };
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.getTimeReferenceAwareMomentDate(inputMoment);
+                expect(got.isUtc()).to.be(true);
+            });
+            it('returns a local moment if the application\'s time reference is local', function() {
+                Koala.Application.isUtc = function() {
+                    return false;
+                };
+                Koala.Application.isLocal = function() {
+                    return true;
+                };
+                var inputMoment = moment(new Date());
+                var got = Koala.util.Date.getTimeReferenceAwareMomentDate(inputMoment);
+                expect(got.isLocal()).to.be(true);
+            });
+            it('returns undefined on invalid input', function() {
+                var got = Koala.util.Date.getTimeReferenceAwareMomentDate(new Date());
+                expect(got).to.be(undefined);
+            });
         });
     });
 });
