@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2017 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 /**
  * @class Koala.view.panel.MobileMetadataInfo
  */
-Ext.define("Koala.view.panel.MobileMetadataInfo", {
+Ext.define('Koala.view.panel.MobileMetadataInfo', {
     extend: 'Koala.view.panel.MobilePanel',
     xtype: 'k-panel-mobilemetadatainfo',
 
@@ -53,10 +53,10 @@ Ext.define("Koala.view.panel.MobileMetadataInfo", {
     },
 
     listeners: {
-        show: function(){
+        show: function() {
             var viewModel = this.getViewModel();
-            var dataview = this.down('dataview');
-            dataview.getStore().setData(viewModel.get('data'));
+            var dataView = this.down('dataview');
+            dataView.getStore().setData(viewModel.get('data'));
         }
     },
 
