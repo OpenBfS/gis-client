@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-2017 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,10 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
 
       if (wkt) {
         format = new ol.format.WKT();
-        feature = format.readFeature(wkt);
+        feature = format.readFeature(wkt, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: map.getView().getProjection()
+        });
       } else if (geom) {
         format = new ol.format.GeoJSON({
           geometryName: record.get('geometry_name') || 'the_geom',
