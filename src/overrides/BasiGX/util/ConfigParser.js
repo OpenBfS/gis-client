@@ -2,11 +2,12 @@ Ext.define('Koala.override.basigx.ConfigParser', {
     override: 'BasiGX.util.ConfigParser',
 
     requires: [
+      'Koala.util.Authentication',
       'Koala.util.Layer'
     ],
 
     statics: {
-      setupMap: function(context){
+      setupMap: function(context) {
         var me = this;
         var config;
         if (!context || !context.data || !context.data.merge ||
@@ -41,23 +42,17 @@ Ext.define('Koala.override.basigx.ConfigParser', {
             logo: false
         });
 
-        var username = context.data.merge.application_user.username;
-        var password = context.data.merge.application_user.password;
         var defaultHeaders;
-
-        if(username && password){
-            var tok = username + ':' + password;
-            // TODO we may want to use something UTF-8 safe:
-            // https://developer.mozilla.org/de/docs/Web/API/WindowBase64/btoa#Unicode-Zeichenketten
-            var hash = btoa(tok);
+        var authHeader = Koala.util.Authentication.getAuthenticationHeader(context);
+        if (authHeader) {
             defaultHeaders = {
-                Authorization: "Basic " + hash
+                Authorization: authHeader
             };
         }
 
         var layerConfig = context.data.merge.mapLayers;
 
-        Ext.each(layerConfig, function(layerUuid, index){
+        Ext.each(layerConfig, function(layerUuid, index) {
           Ext.Ajax.request({
               url: context.data.merge.urls["metadata-xml2json"],
               params: {
@@ -83,7 +78,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                       txt = txt.replace(escapedCurlyOpen, '[[');
                       txt = txt.replace(escapedCurlyClose, ']]');
                       obj = Ext.decode(txt);
-                  } catch(ex) {
+                  } catch (ex) {
                       // TODO i18n
                       Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
                   } finally {
