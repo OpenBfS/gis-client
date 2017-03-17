@@ -21,6 +21,7 @@ Ext.define('Koala.util.Layer', {
     requires: [
         'BasiGX.util.Map',
 
+        'Koala.util.Authentication',
         'Koala.util.Date',
         'Koala.util.Filter',
         'Koala.util.String',

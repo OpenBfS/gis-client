@@ -19,7 +19,10 @@
 Ext.define('Koala.store.MetadataSearch', {
     extend: 'Ext.data.Store',
 
-    requires: 'Koala.model.MetadataRecord',
+    requires: [
+        'Koala.util.Authentication',
+        'Koala.model.MetadataRecord'
+    ],
 
     alias: 'store.k-metadatasearch',
 
