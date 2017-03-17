@@ -2,8 +2,8 @@
     "Koala.util.Layer": {
         "statics": {
             "txtUntil": "until",
-            "titleAddLayer": "layer",
-            "titleAddLayerFilter": "layer-filter",
+            "titleAddLayer": "Layer",
+            "titleAddLayerFilter": "Layer-Filter",
             "textUnknownLayer": "unknown",
             "dspSignEq": " = ",
             "dspSignNotEq": " ≠ ",
@@ -42,10 +42,10 @@
     "Koala.view.button.TimeReference": {
         "config": {
             "data":{
-                "textUtc": "time reference (UTC)",
-                "textLocal": "time reference (local)",
-                "tooltipUtc": "Currently time is is set and shown in UTC, press on local time to switch the time reference.",
-                "tooltipLocal": "Currently time is is set and shown in local time, press on UTC to switch the time reference."
+                "textUtc": "Time Reference (UTC)",
+                "textLocal": "Time Reference (local)",
+                "tooltipUtc": "Currently time is set and shown in UTC, press for switching to local time.",
+                "tooltipLocal": "Currently time is set and shown in local time, press for switching to UTC."
             }
         }
     },
@@ -80,21 +80,21 @@
     "Koala.view.container.styler.Filter": {
         "config": {
             "data": {
-                "attributeComboLabel": "attribute",
-                "operatorComboLabel": "operator",
-                "literalNumberField1Label": "lower boundary",
-                "literalNumberField2Label": "value",
+                "attributeComboLabel": "Attribute",
+                "operatorComboLabel": "Operator",
+                "literalNumberField1Label": "Lower Boundary",
+                "literalNumberField2Label": "Value",
                 "literalTextFieldLabel": "'Is like' pattern",
-                "upperBoundaryText": "upper boundary",
-                "valueText": "value",
-                "isLikeText": "'Is like' Muster"
+                "upperBoundaryText": "Upper Boundary",
+                "valueText": "Value",
+                "isLikeText": "'Is like' pattern"
             }
         }
     },
     "Koala.view.container.styler.Rule": {
         "config": {
             "data": {
-                "titlePrefix": "feature style rule",
+                "titlePrefix": "Feature Style Rule",
                 "removeRuleButtonText": "Remove this rule",
                 "oneRuleRequiredWarning": "At least one rule is required."
             }
@@ -103,17 +103,17 @@
     "Koala.view.container.styler.Rules": {
         "config": {
             "data": {
-                "addRuleButtonText": "add rule"
+                "addRuleButtonText": "Add Rule"
             }
         }
     },
     "Koala.view.container.styler.ScaleDenominator": {
         "config": {
             "data": {
-                "title": "apply scale limitationen:Maßstabsbegrenzung verwenden",
-                "operatorComboLabel": "operator",
-                "literalNumberField1Label": "lower boundary",
-                "literalNumberField2Label": "upper boundary"
+                "title": "Apply Scale Limitationen",
+                "operatorComboLabel": "Operator",
+                "literalNumberField1Label": "Lower Boundary",
+                "literalNumberField2Label": "Upper Boundary"
             }
         }
     },
@@ -121,11 +121,11 @@
         "config": {
             "data": {
                 "missingOrInvalidLayerName": "'layerName' is mandatory and has to have a NameSpace",
-                "genericError": "An unknown error has occurred",
+                "genericError": "An unknown error occurred",
                 "failedToFetch": "The current style could not be read",
-                "titlePrefix": "styling ",
-                "btnTextReloadCurrentStyle": "reset to original style",
-                "btnTextApplyAndSave": "save style",
+                "titlePrefix": "Styling ",
+                "btnTextReloadCurrentStyle": "Reset to original style",
+                "btnTextApplyAndSave": "Save Style",
                 "dspLayerName": ""
             }
         }
@@ -133,25 +133,25 @@
     "Koala.view.container.styler.Symbolizer": {
         "config": {
             "data": {
-                "title": "symbol",
-                "windowTitle": "symbol",
-                "symbolizerFieldSetHtml": "press for editing"
+                "title": "Symbol",
+                "windowTitle": "Symbol",
+                "symbolizerFieldSetHtml": "Press for editing"
             }
         }
     },
     "Koala.view.container.styler.Label": {
         "config": {
             "data": {
-                "labelFieldSetTitle": "labeling",
-                "textFieldLabel": "text/template",
-                "fontFamilyFieldLabel": "font family",
-                "fontStyleFieldLabel": "font style",
-                "fontSizeFieldLabel": "font size",
-                "fontColorFieldLabel": "font color:",
-                "fontStrokeColorFieldLabel": "font contour:",
-                "rotationFieldLabel": "rotation",
-                "offsetXFieldLabel": "offset X",
-                "offsetYFieldLabel": "offset Y"
+                "labelFieldSetTitle": "Labeling",
+                "textFieldLabel": "Text/Template",
+                "fontFamilyFieldLabel": "Font Family",
+                "fontStyleFieldLabel": "Font Style",
+                "fontSizeFieldLabel": "Font Size",
+                "fontColorFieldLabel": "Font Color:",
+                "fontStrokeColorFieldLabel": "Font Contour:",
+                "rotationFieldLabel": "Rotation",
+                "offsetXFieldLabel": "Offset X",
+                "offsetYFieldLabel": "Offset Y"
             }
         }
     },
@@ -159,50 +159,50 @@
     "Koala.view.form.ImportLocalDataModel": {
         "config": {
             "data": {
-                "fieldSetTitle": "import of",
-                "cancelButtonText": "abort",
-                "importButtonText": "import",
-                "layerNameLabel": "layer name",
-                "templateLabel": "template",
-                "projectionLabel": "projection",
-                "fileFieldLabel": "file",
-                "fileFieldButtonText": "browse"
+                "fieldSetTitle": "Import from",
+                "cancelButtonText": "Abort",
+                "importButtonText": "Import",
+                "layerNameLabel": "Layer Name",
+                "templateLabel": "Template",
+                "projectionLabel": "Projection",
+                "fileFieldLabel": "File",
+                "fileFieldButtonText": "Browse"
             }
         }
     },
     "Koala.view.form.field.LanguageCombo": {
         "config": {
             "data": {
-                "tooltip": "press for language selection"
+                "tooltip": "Press for language selection"
             }
         }
     },
     "Koala.view.form.field.SearchCombo": {
         "config": {
             "data": {
-                "emptyText": "combo search",
+                "emptyText": "Combo Search",
                 "fieldLabel": "",
-                "tooltip": "spatial search and search for BfS-data and -services"
+                "tooltip": "Spatial search and search for BfS-data and -services"
             }
         }
     },
     "Koala.view.form.Print": {
         "config": {
-            "serverUploadSuccessTitle": "print successfully completed",
+            "serverUploadSuccessTitle": "Print successfully completed",
             "serverUploadSuccess": "Print successfully initiated.",
-            "serverErrorTitle": "print error",
+            "serverErrorTitle": "Print Error",
             "serverError": "A server-side error occurred during the print process. Internal state: {0}",
             "disablePopupBlocker": "Please disable any popup blocker and repeat the last action.",
-            "disablePopupBlockerTitle": "popup blocker enabled?",
-            "unexpectedResponseTitle": "unexpected response",
-            "printLegendsFieldSetTitle": "print legends",
+            "disablePopupBlockerTitle": "Popup blocker enabled?",
+            "unexpectedResponseTitle": "Unexpected Response",
+            "printLegendsFieldSetTitle": "Print Legends",
             "unexpectedResponse": "Printing process returned unexpected response.",
-            "printButtonPrefix": "document",
-            "downloadButtonSuffix": "download",
+            "printButtonPrefix": "Document",
+            "downloadButtonSuffix": "Download",
             "downloadOngoingMiddleText": " will be prepared",
             "mapBboxLabel": "BBOX",
-            "mapBboxButton": "info",
-            "warnPrintTimedOutTitle": "printing error",
+            "mapBboxButton": "Info",
+            "warnPrintTimedOutTitle": "Printing Error",
             "warnPrintTimedOutText": "Printing process has exceeded the valid time limit."
         }
     },
@@ -211,16 +211,16 @@
             "data": {
                 "metadataSearchTitle": "BfS-data and -services",
                 "searchInProgressText": "searching…",
-                "noRecordsFoundText": "no records found"
+                "noRecordsFoundText": "No records found"
             }
         }
     },
     "Koala.view.grid.SpatialSearch": {
         "config": {
             "data": {
-                "spatialSearchTitle": "spatial search",
+                "spatialSearchTitle": "Spatial Search",
                 "searchInProgressText": "searching…",
-                "noRecordsFoundText": "no records found"
+                "noRecordsFoundText": "No records found"
             }
         }
     },
@@ -228,29 +228,29 @@
         "config": {
             "data": {
                 "addWmsButtonText": "WMS",
-                "addWmsButtonTooltip": "adding external WMS",
-                "printButtonText": "print",
-                "printButtonTooltip": "print map",
-                "buttonGroupTopTitle": "tools",
-                "toogleOverviewBtnTooltip": "show/hide overview map",
-                "basigx-button-zoomin-tooltip": "zoom in",
-                "basigx-button-zoomout-tooltip": "zoom out",
-                "basigx-button-zoomtoextent-tooltip": "zoom to initial view",
-                "basigx-button-togglelegend-tooltip": "toggle legend",
-                "importLocalDataButtonText": "import",
-                "importLocalDataButtonTooltip": "import local files",
-                "importLocalDataWindowText": "import",
-                "chartSlctnTitle": "chart selection",
+                "addWmsButtonTooltip": "Add external WMS",
+                "printButtonText": "Print",
+                "printButtonTooltip": "Print map",
+                "buttonGroupTopTitle": "Tools",
+                "toogleOverviewBtnTooltip": "Show/hide overview map",
+                "basigx-button-zoomin-tooltip": "Zoom in",
+                "basigx-button-zoomout-tooltip": "Zoom out",
+                "basigx-button-zoomtoextent-tooltip": "Zoom to initial view",
+                "basigx-button-togglelegend-tooltip": "Toggle legend",
+                "importLocalDataButtonText": "Import",
+                "importLocalDataButtonTooltip": "Import local files",
+                "importLocalDataWindowText": "Import",
+                "chartSlctnTitle": "Chart Selection",
                 "chartSlctnMsg": "Layer has a time series as well as a bar chart. Which type of diagram shall be displayed?",
-                "chartSlctnTimeSeriesBtn": "time series",
-                "chartSlctnBarChartBtn": "bar chart"
+                "chartSlctnTimeSeriesBtn": "Time Series",
+                "chartSlctnBarChartBtn": "Bar Chart"
             }
         }
     },
     "Koala.view.panel.LayerSetChooser": {
         "config": {
             "data": {
-                "title": "Layer-Set selection"
+                "title": "Layer-Set Selection"
             }
         }
     },
@@ -271,8 +271,8 @@
                 "btnTxtToggleAll": "",
                 "btnTooltipToggleAll": "Reverse legend visibility.",
                 "btnTxtRemoveAllLayers": "",
-                "btnTooltipRemoveAllLayers": "remove all layers",
-                "confirmTitleRemoveAllLayersAll": "remove all layers",
+                "btnTooltipRemoveAllLayers": "Remove all layers",
+                "confirmTitleRemoveAllLayersAll": "Remove all layers",
                 "confirmMsgRemoveAllLayers": "Please confirm that all possible layers will be removed!",
                 "downloadTitle": "Download",
                 "downloadMessage": "Download Layerdaten?",
@@ -285,10 +285,10 @@
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {
-                "title": "selection",
-                "tooltip": "change layer set",
-                "tooltext": "change topic",
-                "btnTextResetThemeTreeFiltering": "all layers",
+                "title": "Selection",
+                "tooltip": "Change Layer-Set",
+                "tooltext": "Change Topic",
+                "btnTextResetThemeTreeFiltering": "All Layers",
                 "btnTooltipResetThemeTreeFiltering": "Resets filtering of available topics."
             }
         }
@@ -296,10 +296,10 @@
     "Koala.view.toolbar.Header": {
         "config": {
             "data": {
-                "btnTextFullscreen": "full-screen",
-                "btnTextHelp": "help",
+                "btnTextFullscreen": "Full-Screen",
+                "btnTextHelp": "Help",
                 "btnTooltipFullscreen": "Switch between full-screen and standard view.",
-                "btnTooltipHelp": "show help"
+                "btnTooltipHelp": "Show help"
             }
         }
     },
@@ -313,7 +313,7 @@
     "Koala.view.window.BarChart": {
         "config": {
             "data": {
-                "title": "bar chart"
+                "title": "Bar Chart"
             }
         }
     },
@@ -326,36 +326,36 @@
         "statics": {
             "fieldNames": {
                 "fileIdentifier": "ID",
-                "abstract": "abstract",
-                "contact": "contact"
+                "abstract": "Abstract",
+                "contact": "Contact"
             }
         }
     },
     "Koala.view.window.Print": {
         "config": {
             "data": {
-                "title": "map printing"
+                "title": "Map Printing"
             }
         }
     },
     "Koala.view.window.TimeSeriesWindow": {
         "config": {
             "data": {
-                "title": "time series",
-                "dateFieldStartLabel": "start",
-                "dateFieldEndLabel": "end",
+                "title": "Time Series",
+                "dateFieldStartLabel": "Start",
+                "dateFieldEndLabel": "End",
                 "setFilterBtnText": "OK",
-                "resetFilterBtnText": "reset",
+                "resetFilterBtnText": "Reset",
                 "selectChartLayerComboLabel": "",
                 "undoBtnText": "…zoom back",
-                "downloadBtnText": "download",
-                "downloadChartDataMsgTitle": "info",
+                "downloadBtnText": "Download",
+                "downloadChartDataMsgTitle": "Info",
                 "downloadChartDataMsgMessage": "Download current chart?",
-                "downloadChartDataMsgButtonYes": "yes",
-                "downloadChartDataMsgButtonNo": "no",
-                "outputFormatText": "output format",
-                "removeSeriesBtnText": "remove series",
-                "removeSeriesQuestionTitle": "request",
+                "downloadChartDataMsgButtonYes": "Yes",
+                "downloadChartDataMsgButtonNo": "No",
+                "outputFormatText": "Output Format",
+                "removeSeriesBtnText": "Remove Series",
+                "removeSeriesQuestionTitle": "Request",
                 "removeSeriesQuestionTpl": "Remove series '{0}'?"
             }
         }
@@ -363,7 +363,7 @@
     "Koala.view.window.HelpWindow": {
         "config": {
             "data": {
-                "title": "help"
+                "title": "Help"
             }
         }
     },
@@ -787,7 +787,7 @@
     "BasiGX.view.button.AddWms": {
         "config": {
             "data": {
-                "tooltip": "add WMS...",
+                "tooltip": "Add WMS...",
                 "text": "WMS"
             }
         }
@@ -795,15 +795,15 @@
     "BasiGX.view.panel.MapContainer": {
         "config": {
             "data": {
-                "titleLegendPanel": "legend"
+                "titleLegendPanel": "Legend"
             }
         }
     },
     "BasiGX.view.panel.Menu": {
         "config": {
             "data": {
-                "closedMenuTitle": "close menu",
-                "openedMenuTitle": "show menu"
+                "closedMenuTitle": "Close Menu",
+                "openedMenuTitle": "Show Menu"
             }
         }
     },
@@ -812,44 +812,44 @@
     "Koala.view.form.TimeseriesFilterControl": {
         "config": {
             "data": {
-                "labelStartDate": "start date",
-                "labelEndDate": "end date",
-                "setFilterButtonText": "apply",
-                "invalidInputErrMsg": "en:Filter kann nicht übernommen werden. Bitte überprüfen Sie Ihre Eingaben."
+                "labelStartDate": "Start Date",
+                "labelEndDate": "End Date",
+                "setFilterButtonText": "Apply",
+                "invalidInputErrMsg": "Filter cannot be assigned. Please verify your inputs."
             }
         }
     },
     "Koala.view.panel.BarChart":{
         "config": {
             "data": {
-                "panelTitleText": "bar chart"
+                "panelTitleText": "Bar Chart"
             }
         }
     },
     "Koala.view.panel.MobileLegend": {
         "config": {
             "data": {
-                "title": "legend",
-                "maxLayersMsgBoxTitle": "hint",
+                "title": "Legend",
+                "maxLayersMsgBoxTitle": "Hint",
                 "maxLayersMsgBoxMessage": "Only {0} parallel WMS layer permitted. Please disable at least one layer before proceeding.",
-                "maxLayersMsgBoxBtnText": "Ok",
-                "removeLayerMsgBoxTitle": "info",
-                "removeLayerMsgBoxMessage": "remove layer <b>{0}</b> from map?",
-                "removeLayerMsgBoxYesBtnText": "yes",
-                "removeLayerMsgBoxNoBtnText": "no"
+                "maxLayersMsgBoxBtnText": "OK",
+                "removeLayerMsgBoxTitle": "Info",
+                "removeLayerMsgBoxMessage": "Remove layer <b>{0}</b> from map?",
+                "removeLayerMsgBoxYesBtnText": "Yes",
+                "removeLayerMsgBoxNoBtnText": "No"
             }
         }
     },
     "Koala.view.panel.MobileMenu": {
         "config": {
             "data": {
-                "menuTitle": "menu",
-                "searchFieldPlaceHolderText": "search within data and services",
-                "imprintButtonText": "help",
-                "settingsButtonText": "settings",
-                "moreLayersButtonText": "further topics",
-                "addLayerButtonText": "add external layer",
-                "permalinkButtonText": "permalink",
+                "menuTitle": "Menu",
+                "searchFieldPlaceHolderText": "Search within data and services",
+                "imprintButtonText": "Help",
+                "settingsButtonText": "Settings",
+                "moreLayersButtonText": "Further topics",
+                "addLayerButtonText": "Add external layer",
+                "permalinkButtonText": "Permalink",
                 "spatialSearchTitle": "en:Räumliche Suche",
                 "metadataSearchTitle": "en:Daten und Dienste des Bfs"
             }
@@ -872,44 +872,44 @@
     "Koala.view.panel.MobilePermalink": {
         "config": {
             "data": {
-                "title": "permalink"
+                "title": "Permalink"
             }
         }
     },
     "Koala.view.panel.LayerSetTree": {
         "config": {
             "data": {
-                "panelTitleText": "choice of topic"
+                "panelTitleText": "Choice of Topic"
             }
         }
     },
     "Koala.view.panel.Settings": {
         "config": {
             "data": {
-                "title": "settings",
-                "timereferenceLabel": "time reference",
+                "title": "Settings",
+                "timereferenceLabel": "Time Reference",
                 "utcLabel": "UTC",
                 "localLabel": "local",
-                "languageSelectComboLabel": "language"
+                "languageSelectComboLabel": "Language"
             }
         }
     },
     "Koala.view.panel.TimeseriesChart":{
         "config": {
             "data": {
-                "panelTitleText": "time series"
+                "panelTitleText": "Time Series"
             }
         }
     },
     "Koala.view.form.LayerFilter": {
         "config": {
             "data": {
-                "startLabel": "start",
-                "endLabel": "end",
-                "timestampLabel": "point in time",
-                "buttonText": "add choosen layer",
-                "buttonTextNoFilter": "add choosen layer",
-                "buttonTextChangeFilter": "apply filter to layer",
+                "startLabel": "Start",
+                "endLabel": "End",
+                "timestampLabel": "Point in Time",
+                "buttonText": "Add Choosen Layer",
+                "buttonTextNoFilter": "Add Choosen Layer",
+                "buttonTextChangeFilter": "Apply Filter to Layer",
                 "minDateWarnMsg": "Date of this text field must be after {0}.",
                 "maxDateWarnMsg": "Date of this text field must be before {0}.",
                 "warnMsgDateFormat": "d.m.Y"
@@ -919,25 +919,25 @@
     "Koala.view.form.Permalink": {
         "config": {
             "data": {
-                "refreshBtnText": "refresh"
+                "refreshBtnText": "Refresh"
             }
         }
     },
     "Koala.view.container.date.DateTimePicker": {
         "config": {
             "data": {
-                "minDateWarnMsg": "en:Das Datum in diesem Feld muss nach dem {0} liegen.",
-                "maxDateWarnMsg": "en:Das Datum in diesem Feld muss vor dem {0} liegen.",
+                "minDateWarnMsg": "Date of this text field must be after {0}.",
+                "maxDateWarnMsg": "Date of this text field must be before {0}.",
                 "warnMsgDateFormat": "d.m.Y",
-                "endBeforeStartWarnMsg": "en:Der Startwert muss vor dem Endwert liegen.",
-                "exceedsMaxDurationWarnMsg": "en:Startwert und Endwert liegen zu weit auseinander."
+                "endBeforeStartWarnMsg": "The start value must be before the end value.",
+                "exceedsMaxDurationWarnMsg": "Start value and end value are too far apart."
             }
         }
     },
     "Koala.view.panel.MobileImprint": {
         "config": {
             "data": {
-                "title": "help",
+                "title": "Help",
                 "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>en: Vorbemerkung</h1>",
                 "helpPrefaceHtml": "Am 14. Februar 2009 trat in Deutschland das Geodatenzugangsgesetz (GeoZG) in Kraft. Es verpflichtet unter anderem alle Bundesbehörden, Geodaten, die bestimmte Kriterien erfüllen und vorgegebenen Themenfeldern zugeordnet werden können, über Such-, Darstellungs- und Download-Dienste zur Verfügung zu stellen.<br>Dazu hat das BfS eine eigene Anwendung entwickelt. Im BfS sind neben anderen Geodaten vor allem die Daten des „Integrierten Mess- und Informationssystems zur Überwachung der Umweltradioaktivität“ (IMIS) betroffen.<br>Seit <b>2018</b> basiert die aktuelle Applikation auf Strategien der KOALA (<i>Komponenten-orientierte Architektur mit langfristiger Ausrichtung</i>)-Entwicklungszyklen. Das Hauptaugenmerk richtet sich hierbei auf die Modularisierung der einzelnen Softwarekomponenten.<br><b><i>...Informationen zur Open Source-Strategie? Link zum Repository?</i></b>",
                 "helpQuickRefTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>Schnellübersicht</h1>",
@@ -1284,6 +1284,6 @@
         }
     },
     "Ext.window.Window": {
-        "closeToolText": "close window"
+        "closeToolText": "Close window"
     }
 }

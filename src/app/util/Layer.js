@@ -790,7 +790,6 @@ Ext.define('Koala.util.Layer', {
                     }).bind(this)
                 );
             }
-
             return layer;
         },
 
@@ -905,6 +904,7 @@ Ext.define('Koala.util.Layer', {
                 selectStyle: olProps.selectStyle || olProps.hoverStyle,
                 hasLegend: getBool(olProps.hasLegend, true),
                 downloadUrl: metadata.layerConfig.download ? metadata.layerConfig.download.url : undefined,
+                attribution: olProps.attribution || '',
                 // "treeId": metadata.inspireId, //TODO: is now routeId
                 //"treeMenu": true, // TODO: remove / enhance due to new single item properties
                 //routeId: olProps.routeId || metadata.inspireId, // TODO: get this back in when gnos is ready
