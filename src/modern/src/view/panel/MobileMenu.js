@@ -61,7 +61,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
             xtype: 'dataview',
             scrollable: false,
             itemCls: 'koala-list-item koala-list-item-spatial',
-            itemTpl: '<img src="modern/resources/img/map_add.png" class="modernMenuIcon" title="addLayer">&nbsp;&nbsp;&nbsp; {name}',
+            itemTpl: '<i class="fa fa-map-marker" aria-hidden="true"></i> {name}',
             name: 'spatialsearchlist',
             hidden: true,
             store: {
