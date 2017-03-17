@@ -21,7 +21,9 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
     alias: 'controller.k-form-field-languagecombo',
 
     /**
+     * The abbrev of the active language.
      *
+     * @type {String}
      */
     locale: null,
 
@@ -284,6 +286,7 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
                     me.bindTooltip();
                     me.setD3Locale(me.locale);
                     me.setMomentJsLocale(me.locale);
+                    Koala.util.Layer.repaintLayerFilterIndication();
                 }
             }
         }
