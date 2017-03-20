@@ -27,8 +27,7 @@ Ext.define('Koala.store.Language', {
 
     data: [
         {code: 'de', name: 'DE'},
-        {code: 'en', name: 'EN'},
-        {code: 'fr', name: 'FR'}
+        {code: 'en', name: 'EN'}
     ],
 
     proxy: {
