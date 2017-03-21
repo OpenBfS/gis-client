@@ -53,11 +53,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var view = this.getView();
         var addFilterForm = view.getAddFilterForm();
 
-        var startDate = addFilterForm ?
-                view.down('datefield[name=datestart]').getValue(true) :
+        var startValue = this.getStartFieldValue();
+        var endValue = this.getEndFieldValue();
+
+        var startDate = addFilterForm ? startValue :
                 Koala.util.Date.getUtcMoment(timeFilter.mindatetimeinstant);
-        var endDate = addFilterForm ?
-                view.down('datefield[name=dateend]').getValue(true) :
+        var endDate = addFilterForm ? endValue :
                 Koala.util.Date.getUtcMoment(timeFilter.maxdatetimeinstant);
 
         var config = {
@@ -371,8 +372,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var me = this;
         var view = me.getView();
         var charts = view.query('d3-chart');
-        var startDate = view.down('datefield[name=datestart]').getValue(true);
-        var endDate = view.down('datefield[name=dateend]').getValue(true);
+        var startDate = this.getStartFieldValue();
+        var endDate = this.getEndFieldValue();
 
         Ext.each(charts, function(chart) {
             var chartController = chart.getController();
@@ -407,6 +408,32 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 me.onSetFilterBtnClick(setFilterBtn);
             }
         }
+    },
+
+    /**
+     * Returns the curent value of the combined start datefield and start
+     * time spinners.
+     * @return {Moment} A Moment object.
+     */
+    getStartFieldValue: function() {
+        var view = this.getView();
+        var startField = view.query('datefield')[0];
+        var startDate = startField.getValue(true);
+        startDate = Koala.util.Filter.setHoursAndMinutes(startDate, startField);
+        return startDate;
+    },
+
+    /**
+     * Returns the curent value of the combined end datefield and end
+     * time spinners.
+     * @return {Moment} A Moment object.
+     */
+    getEndFieldValue: function() {
+        var view = this.getView();
+        var endField = view.query('datefield')[1];
+        var endDate = endField.getValue(true);
+        endDate = Koala.util.Filter.setHoursAndMinutes(endDate, endField);
+        return endDate;
     },
 
     /**
