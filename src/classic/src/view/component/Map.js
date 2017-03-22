@@ -100,6 +100,7 @@ Ext.define("Koala.view.component.Map", {
         styleFromGnos: function(styleKey) {
             var fn = function(feature) {
                 var styleCfg = feature.get('layer').get(styleKey);
+
                 if (styleCfg) {
                     var sArray = styleCfg.split(",");
                     var color = sArray[0];
@@ -124,6 +125,12 @@ Ext.define("Koala.view.component.Map", {
                                     size: [width, height],
                                     opacity: 0.5,
                                     src: dataUrl
+                                }),
+                                fill: new ol.style.Fill({
+                                    color: color
+                                }),
+                                stroke: new ol.style.Stroke({
+                                    color: 'gray'
                                 })
                             })
                         ];
@@ -139,6 +146,12 @@ Ext.define("Koala.view.component.Map", {
                                  stroke: new ol.style.Stroke({
                                      color: 'gray'
                                  })
+                             }),
+                             fill: new ol.style.Fill({
+                                 color: color
+                             }),
+                             stroke: new ol.style.Stroke({
+                                 color: 'gray'
                              })
                          })];
                     }
