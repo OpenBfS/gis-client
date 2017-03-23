@@ -123,6 +123,13 @@ Ext.define('Koala.Application', {
                 }
             }
         );
+    },
+
+    launch: function() {
+        var loadmask = Ext.get('loadmask');
+        if (loadmask) {
+            loadmask.destroy();
+        }
     }
 
 });
