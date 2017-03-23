@@ -94,7 +94,7 @@ Ext.define('Koala.util.Layer', {
 
         /**
          * Checks whether the passed layer has it's original metadata stored at
-         * teh exected location. we need this methdo so that we can check the
+         * the exected location. we need this methdo so that we can check the
          * various layers that might be passed to layer utility methods.
          *
          * @param {ol.layer.Layer} layer The layer where we want to check.
@@ -207,7 +207,7 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
-         * Returns whether the passed metadat object from GNOS has at least one
+         * Returns whether the passed metadata object from GNOS has at least one
          * filter configured.
          *
          * @param {object} metadata The metadata json object.
@@ -459,7 +459,7 @@ Ext.define('Koala.util.Layer', {
 
         minimumValidMetadata: function(metadata) {
             // catches undefined and false, which we'll receive if there isn't
-            // an additiona dataset stored
+            // an additional dataset stored
             if (!metadata) {
                 return false;
             }
@@ -634,7 +634,7 @@ Ext.define('Koala.util.Layer', {
          * filter of a layer.
          *
          * @param {Object} metadata The metadata to construct the
-         *     filter window from.
+         *     filter window form.
          * @param {ol.layer.layer} [layer] The layer (if any) whose
          *     filter we want to change. Optional, don't pass if you want a new
          *     layer with the filter added to the map.
