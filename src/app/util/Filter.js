@@ -38,7 +38,7 @@ Ext.define('Koala.util.Filter', {
          * min and max values for the x-axis (that is the first possible date
          * and the last possible date).
          *
-         * @param {Object} metadata The GNOS metadatsa object.
+         * @param {Object} metadata The GNOS metadata object.
          * @return {Object} An object with keys `min` and `max` containing
          *     `Date`-instances or `undefined`.
          */

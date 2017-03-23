@@ -34,7 +34,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
      */
     attributeComboBoxReady: function(combo) {
         var layer = this.getViewModel().get('layer');
-        var attributeKeys = Koala.util.Style.getAttributeKeysFromVetorLayer(layer);
+        var attributeKeys = Koala.util.Style.getAttributekeysFromVectorLayer(layer);
         Ext.Array.remove(attributeKeys, 'geometry');
 
         combo.setStore(attributeKeys);

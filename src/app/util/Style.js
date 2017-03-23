@@ -29,7 +29,7 @@ Ext.define('Koala.util.Style', {
         /**
          *
          */
-        getAttributeKeysFromVetorLayer: function(layer) {
+        getAttributekeysFromVectorLayer: function(layer) {
             if (!layer || !(layer instanceof ol.layer.Vector)) {
                 return;
             }
