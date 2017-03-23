@@ -9,8 +9,11 @@
             './app/util/Object.test.js',
             './app/util/Routing.test.js',
             './app/util/String.test.js',
+            './app/util/Style.test.js',
+            './app/util.AppContext.test.js',
             './modern/panel/Settings.test.js',
-            './modern/panel/MobileLegendController.test.js'
+            './modern/panel/MobileLegendController.test.js',
+            './modern/util/Filter.test.js'
         ],
         getScriptTag = global.TestUtil.getExternalScriptTag,
         dependencyCnt = dependencies.length,

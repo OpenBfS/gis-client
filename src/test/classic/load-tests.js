@@ -9,7 +9,11 @@
             './app/util/Object.test.js',
             './app/util/Routing.test.js',
             './app/util/String.test.js',
-            './classic/button/TimeReference.test.js'
+            './app/util/Style.test.js',
+            './app/util/AppContext.test.js',
+            './classic/button/Permalink.test.js',
+            './classic/button/TimeReference.test.js',
+            './classic/util/Filter.test.js'
         ],
         getScriptTag = global.TestUtil.getExternalScriptTag,
         dependencyCnt = dependencies.length,
