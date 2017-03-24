@@ -158,6 +158,26 @@ Ext.define('Koala.util.String', {
             } else {
                 return string;
             }
+        },
+
+        /**
+         * Transforms an utf-8 string to a base-64 encoded ASCII string.
+         *
+         * @param {String} str The utf-8 input string.
+         * @return {String} The base-64 encoded output string.
+         */
+        utf8_to_b64: function(str) {
+            return window.btoa(unescape(encodeURIComponent(str)));
+        },
+
+        /**
+         * Transforms a  base-64 encoded ASCII string to anutf-8 string.
+         *
+         * @param {String} str The base-64 encoded input string.
+         * @return {String} The utf-8 output string.
+         */
+        b64_to_utf8: function(str) {
+            return decodeURIComponent(escape(window.atob(str)));
         }
     }
 });
