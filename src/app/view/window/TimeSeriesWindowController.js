@@ -417,7 +417,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     getStartFieldValue: function() {
         var view = this.getView();
-        var startField = view.query('datefield')[0];
+        var startField = view.down('datefield[name="timeseriesStartField"]');
         var startDate = startField.getValue(true);
         startDate = Koala.util.Filter.setHoursAndMinutes(startDate, startField);
         return startDate;
@@ -430,7 +430,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     getEndFieldValue: function() {
         var view = this.getView();
-        var endField = view.query('datefield')[1];
+        var endField = view.down('datefield[name="timeseriesEndField"]');
         var endDate = endField.getValue(true);
         endDate = Koala.util.Filter.setHoursAndMinutes(endDate, endField);
         return endDate;

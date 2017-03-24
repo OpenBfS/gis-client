@@ -615,12 +615,17 @@ Ext.define('Koala.util.Filter', {
             var filter = fieldset && fieldset.filter;
             var maxDuration = filter && filter.maxduration;
             var maxDurationUnit = filter && filter.unit;
+            var startName, endName;
 
-            var names = staticMe.startAndEndFieldnamesFromMetadataParam(
-                filter.param
-            );
-            var startName = names.startName;
-            var endName = names.endName;
+            if (!filter.fromTimeseries) {
+                var names = field.startAndEndFieldnamesFromMetadataParam(
+                        filter.param);
+                startName = names.startName;
+                endName = names.endName;
+            } else {
+                startName = 'timeseriesStartField';
+                endName = 'timeseriesEndField';
+            }
 
             // Query for field types generally to be compatible with classic
             // and modern. In classic the datefield, whereas in modern
@@ -786,10 +791,16 @@ Ext.define('Koala.util.Filter', {
         createTimeRangeFieldset: function(format, filter, idx) {
             var me = this;
             var param = filter.param;
+            var startName, endName;
 
-            var names = me.startAndEndFieldnamesFromMetadataParam(param);
-            var startName = names.startName;
-            var endName = names.endName;
+            if (!filter.fromTimeseries) {
+                var names = me.startAndEndFieldnamesFromMetadataParam(param);
+                startName = names.startName;
+                endName = names.endName;
+            } else {
+                startName = 'timeseriesStartField';
+                endName = 'timeseriesEndField';
+            }
 
             var minValue;
             if (filter.mindatetimeinstant) {

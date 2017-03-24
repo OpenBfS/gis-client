@@ -105,13 +105,13 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                 maxdatetimeinstant: minMaxDates.max,
                 defaultendtimeinstant: timeRangeFilter.maxdatetimeinstant,
                 defaultstarttimeinstant: timeRangeFilter.mindatetimeinstant,
-                unit: 'MINUTES'
+                unit: 'minutes',
+                fromTimeseries: true
             };
 
         var timeRangeFilterFieldset = FilterUtil.createTimeRangeFieldset(
                 'j F Y', filter, 1
             );
-
 
         Ext.each(timeRangeFilterFieldset.query('datefield'), function(field) {
             field.labelWidth = null;
