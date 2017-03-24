@@ -58,7 +58,8 @@ Ext.define("Koala.view.form.Print", {
         downloadButtonSuffix: '',
         downloadOngoingMiddleText: '',
         warnPrintTimedOutTitle: '',
-        warnPrintTimedOutText: ''
+        warnPrintTimedOutText: '',
+        updateLegendtext: ''
     },
 
     initComponent: function() {
@@ -246,8 +247,7 @@ Ext.define("Koala.view.form.Print", {
                 }, {
                     xtype: 'textfield',
                     name: layer.get('name') + '_legendtext',
-                    // TODO i18n
-                    fieldLabel: 'Legendtext',
+                    fieldLabel: me.getUpdateLegendtext(),
                     value: legendTextHtml,
                     allowBlank: true,
                     listeners: {

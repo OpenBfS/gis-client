@@ -203,7 +203,8 @@
             "mapBboxLabel": "BBOX",
             "mapBboxButton": "Info",
             "warnPrintTimedOutTitle": "Druckfehler",
-            "warnPrintTimedOutText": "Die Druckerzeugung hat das erlaubte Zeitlimit überschritten."
+            "warnPrintTimedOutText": "Die Druckerzeugung hat das erlaubte Zeitlimit überschritten.",
+            "updateLegendtext": "Legendtext"
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -211,7 +212,14 @@
             "data": {
                 "metadataSearchTitle": "Daten und Dienste des BfS",
                 "searchInProgressText": "Suche läuft…",
-                "noRecordsFoundText": "Keine Datensätze gefunden"
+                "noRecordsFoundText": "Keine Datensätze gefunden",
+                "formatNameDataset": "Daten",
+                "formatNameSeries": "Datenserie",
+                "formatNameService": "Dienst",
+                "columnTextName": "Name",
+                "columnTextService": "Service",
+                "addToMapTooltip": "Zur Karte hinzufügen",
+                "infoTooltip": "Info"
             }
         }
     },
@@ -243,7 +251,8 @@
                 "chartSlctnTitle": "Diagramm wählen",
                 "chartSlctnMsg": "Layer hat Zeitreihen-, als auch Säulendiagramm. Welches Diagramm soll dargestellt werden?",
                 "chartSlctnTimeSeriesBtn": "Zeitreihendiagramm",
-                "chartSlctnBarChartBtn": "Säulendiagramm"
+                "chartSlctnBarChartBtn": "Säulendiagramm",
+                "helpTooltip": "Hilfe"
             }
         }
     },
