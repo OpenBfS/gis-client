@@ -355,6 +355,7 @@
                 "setFilterBtnText": "fr:OK",
                 "resetFilterBtnText": "fr:Reset",
                 "selectChartLayerComboLabel": "fr:",
+                "selectChartLayerComboEmptyText": "fr:Chart hinzufügen",
                 "undoBtnText": "fr:…zurückzoomen",
                 "downloadBtnText": "fr:Download",
                 "downloadChartDataMsgTitle": "fr:Info",

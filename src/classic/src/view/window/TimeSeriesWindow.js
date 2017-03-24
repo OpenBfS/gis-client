@@ -157,8 +157,9 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     displayField: 'text',
                     queryMode: 'local',
                     // TODO i18n
-                    emptyText: 'Chart hinzufügen',
+                    // emptyText: 'Chart hinzufügen',
                     bind: {
+                        emptyText: '{selectChartLayerComboEmptyText}',
                         fieldLabel: '{selectChartLayerComboLabel}'
                     },
                     listeners: {
