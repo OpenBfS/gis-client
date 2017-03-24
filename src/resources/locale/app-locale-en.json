@@ -356,7 +356,9 @@
                 "outputFormatText": "Output Format",
                 "removeSeriesBtnText": "Remove Series",
                 "removeSeriesQuestionTitle": "Request",
-                "removeSeriesQuestionTpl": "Remove series '{0}'?"
+                "removeSeriesQuestionTpl": "Remove series '{0}'?",
+                "startLabel": "Start",
+                "endLabel": "End"
             }
         }
     },

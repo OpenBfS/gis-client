@@ -87,10 +87,10 @@ Ext.define("Koala.view.form.LayerFilter", {
             var type = (filter.type || "").toLowerCase();
             switch (type) {
                 case "timerange":
-                    me.createTimeRangeFilter(filter, idx);
+                    me.addTimeRangeFilter(filter, idx);
                     break;
                 case "pointintime":
-                    me.createPointInTimeFilter(filter, idx);
+                    me.addPointInTimeFilter(filter, idx);
                     break;
                 case "rodos":
                     break;
@@ -149,81 +149,18 @@ Ext.define("Koala.view.form.LayerFilter", {
     },
 
     /**
-     * Creates and adds a point in time filter at the specified index.
+     * Adds a point in time filter at the specified index.
      *
      * @param {Object} filter A filter specification object of type
      *     `pointintime`.
      * @param {Number} idx The index of the filter in the list of all filters.
      */
-    createPointInTimeFilter: function(filter, idx) {
+    addPointInTimeFilter: function(filter, idx) {
         var me = this;
         var FilterUtil = Koala.util.Filter;
-
-        var minValue;
-        if (filter.mindatetimeinstant) {
-            // Only fill lower boundary when defined
-            minValue = Koala.util.Date.getUtcMoment(
-                filter.mindatetimeinstant
-            );
-        }
-
-        var maxValue;
-        if (filter.maxdatetimeinstant) {
-            // Only fill upper boundary when defined
-            maxValue = Koala.util.Date.getUtcMoment(
-                filter.maxdatetimeinstant
-            );
-        }
-
-        var defaultValue = Koala.util.Date.getUtcMoment(
-            filter.defaulttimeinstant
-        );
-
-        var value = filter.effectivedatetime || defaultValue;
-
-        minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
-        maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
-        value = Koala.util.Date.getTimeReferenceAwareMomentDate(value);
-
-        var dateField = Ext.create("Ext.form.field.Date", {
-            bind: {
-                fieldLabel: "{timestampLabel}"
-            },
-            editable: false,
-            labelWidth: 70,
-            name: filter.param,
-            flex: 1,
-            // The Ext.form.field.Date is capabale of receiving a moment object,
-            // see override of setValue().
-            value: value,
-            minValue: minValue,
-            maxValue: maxValue,
-            validator: FilterUtil.makeDateValidator(
-                minValue, maxValue
-            ),
-            format: me.getFormat()
-        });
-
-        var hourSpinner = FilterUtil.getSpinner(
-            filter, "hours", "hourspinner", value
-        );
-        var minuteSpinner = FilterUtil.getSpinner(
-            filter, "minutes", "minutespinner", value
-        );
-        var container = Ext.create("Ext.form.FieldContainer", {
-            name: "pointintimecontainer",
-            anchor: "100%",
-            layout: "hbox",
-            items: [dateField, hourSpinner, minuteSpinner]
-        });
-
-        var fieldSet = Ext.create("Ext.form.FieldSet", {
-            padding: 5,
-            layout: "anchor",
-            filterIdx: idx,
-            items: [container]
-        });
-        me.add(fieldSet);
+        var pointInTimeFilter = FilterUtil.createPointInTimeFieldset(
+                me.getFormat(), filter, idx);
+        me.add(pointInTimeFilter);
     },
 
     /**
@@ -239,133 +176,17 @@ Ext.define("Koala.view.form.LayerFilter", {
     },
 
     /**
-     * Creates and adds a timerange filter at the specified index.
+     * Adds a timerange filter at the specified index.
      *
      * @param {Object} filter A filter specification object of type timerange.
      * @param {Number} idx The index of the filter in the list of all filters.
      */
-    createTimeRangeFilter: function(filter, idx) {
+    addTimeRangeFilter: function(filter, idx) {
         var me = this;
         var FilterUtil = Koala.util.Filter;
-        var param = filter.param;
-
-        var names = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
-        var startName = names.startName;
-        var endName = names.endName;
-
-        var minValue;
-        if (filter.mindatetimeinstant) {
-            minValue = Koala.util.Date.getUtcMoment(
-                filter.mindatetimeinstant
-            );
-        }
-
-        var maxValue;
-        if (filter.maxdatetimeinstant) {
-            maxValue = Koala.util.Date.getUtcMoment(
-                filter.maxdatetimeinstant
-            );
-        }
-
-        var defaultMinValue = Koala.util.Date.getUtcMoment(
-            filter.defaultstarttimeinstant
-        );
-
-        var defaultMaxValue = Koala.util.Date.getUtcMoment(
-            filter.defaultendtimeinstant
-        );
-
-        var startValue = filter.effectivemindatetime || defaultMinValue;
-        var endValue = filter.effectivemaxdatetime || defaultMaxValue;
-
-        minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
-        maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
-        startValue = Koala.util.Date.getTimeReferenceAwareMomentDate(startValue);
-        endValue = Koala.util.Date.getTimeReferenceAwareMomentDate(endValue);
-
-        var minMaxValidator = FilterUtil.makeDateValidator(
-            minValue, maxValue
-        );
-        var minMaxDurationAndOrderValidator = function() {
-            var ok = minMaxValidator.call(this);
-            if (ok === true) {
-                ok = FilterUtil.validateMaxDurationTimerange.call(this);
-            }
-            return ok;
-        };
-
-        // --- MINIMUM ---
-        var minDateField = Ext.create("Ext.form.field.Date", {
-            bind: {
-                fieldLabel: "{startLabel}"
-            },
-            name: startName,
-            editable: false,
-            labelWidth: 70,
-            flex: 1,
-            value: startValue,
-            minValue: minValue,
-            maxValue: maxValue,
-            format: me.getFormat(),
-            validator: minMaxDurationAndOrderValidator,
-            msgTarget: "under",
-            listeners: {
-                validitychange: FilterUtil.revalidatePartnerField
-            }
-        });
-        var minHourSpinner = FilterUtil.getSpinner(
-            filter, "hours", "minhourspinner", startValue
-        );
-        var minMinuteSpinner = FilterUtil.getSpinner(
-            filter, "minutes", "minminutespinner", startValue
-        );
-        var minContainer = Ext.create("Ext.form.FieldContainer", {
-            name: "mincontainer",
-            anchor: "100%",
-            layout: "hbox",
-            items: [minDateField, minHourSpinner, minMinuteSpinner]
-        });
-
-        // --- MAXIMUM ---
-        var maxDateField = Ext.create("Ext.form.field.Date", {
-            name: endName,
-            editable: false,
-            bind: {
-                fieldLabel: "{endLabel}"
-            },
-            labelWidth: 70,
-            flex: 1,
-            value: endValue,
-            minValue: minValue,
-            maxValue: maxValue,
-            format: me.getFormat(),
-            validator: minMaxDurationAndOrderValidator,
-            msgTarget: 'under',
-            listeners: {
-                validitychange: FilterUtil.revalidatePartnerField
-            }
-        });
-        var maxHourSpinner = FilterUtil.getSpinner(
-            filter, "hours", "maxhourspinner", endValue
-        );
-        var maxMinuteSpinner = FilterUtil.getSpinner(
-            filter, "minutes", "maxminutespinner", endValue
-        );
-        var maxContainer = Ext.create("Ext.form.FieldContainer", {
-            name: "maxcontainer",
-            anchor: "100%",
-            layout: "hbox",
-            items: [maxDateField, maxHourSpinner, maxMinuteSpinner]
-        });
-
-        var fieldSet = Ext.create("Ext.form.FieldSet", {
-            padding: 5,
-            layout: "anchor",
-            filter: filter,
-            filterIdx: idx,
-            items: [minContainer, maxContainer]
-        });
-        me.add(fieldSet);
+        var timeRangeFilter = FilterUtil.createTimeRangeFieldset(
+                me.getFormat(), filter, idx);
+        me.add(timeRangeFilter);
     },
 
     /**
