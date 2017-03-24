@@ -100,6 +100,7 @@ Ext.define("Koala.view.component.Map", {
         styleFromGnos: function(styleKey) {
             var fn = function(feature) {
                 var styleCfg = feature.get('layer').get(styleKey);
+
                 if (styleCfg) {
                     var sArray = styleCfg.split(",");
                     var color = sArray[0];
@@ -131,37 +132,49 @@ Ext.define("Koala.view.component.Map", {
                         var radius = sArray[2];
 
                         return [new ol.style.Style({
-                             image: new ol.style.Circle({
-                                 radius: radius,
-                                 fill: new ol.style.Fill({
-                                     color: color
-                                 }),
-                                 stroke: new ol.style.Stroke({
-                                     color: 'gray'
-                                 })
-                             })
-                         })];
+                            image: new ol.style.Circle({
+                                radius: radius,
+                                fill: new ol.style.Fill({
+                                    color: color
+                                }),
+                                stroke: new ol.style.Stroke({
+                                    color: 'gray'
+                                })
+                            })
+                        })];
+                    } else if (shape === "polygon") {
+                        var strokeWidth = sArray[2];
+
+                        return [new ol.style.Style({
+                            fill: new ol.style.Fill({
+                                color: color
+                            }),
+                            stroke: new ol.style.Stroke({
+                                color: 'gray',
+                                width: strokeWidth || 1
+                            })
+                        })];
                     }
                 } else {
-                  var fill = new ol.style.Fill({
-                    color: 'rgba(0, 0, 255, 0.6)'
-                  });
-                  var stroke = new ol.style.Stroke({
-                    color: 'blue',
-                    width: 1.25
-                  });
-                  return [new ol.style.Style({
-                      image: new ol.style.Circle({
+                    var fill = new ol.style.Fill({
+                        color: 'rgba(0, 0, 255, 0.6)'
+                    });
+                    var stroke = new ol.style.Stroke({
+                        color: 'blue',
+                        width: 1.25
+                    });
+                    return [new ol.style.Style({
+                        image: new ol.style.Circle({
+                            fill: fill,
+                            stroke: stroke,
+                            radius: 6
+                        }),
                         fill: fill,
-                        stroke: stroke,
-                        radius: 6
-                      }),
-                      fill: fill,
-                      stroke: stroke
+                        stroke: stroke
                     })
-                  ];
-                }
-            };
+                ];
+            }
+        };
             return fn;
         }
     },

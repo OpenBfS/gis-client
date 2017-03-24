@@ -7,19 +7,19 @@ describe('Koala.util.String', function() {
         });
     });
     describe('Static functions', function() {
-        var obj = null;
-        beforeEach(function() {
-            obj = new ol.Object();
-            obj.set('foo', 'FOO-VAL');
-            obj.set('bar', 'BAR-VAL');
-            obj.set('baz', 'BAZ-VAL');
-            obj.set('gee', 'GEE-VAL');
-            obj.set('no-replace', 'NO-REPLACE-VAL');
-        });
-        afterEach(function() {
-            obj = null;
-        });
         describe('#replaceTemplateStrings', function() {
+            var obj = null;
+            beforeEach(function() {
+                obj = new ol.Object();
+                obj.set('foo', 'FOO-VAL');
+                obj.set('bar', 'BAR-VAL');
+                obj.set('baz', 'BAZ-VAL');
+                obj.set('gee', 'GEE-VAL');
+                obj.set('no-replace', 'NO-REPLACE-VAL');
+            });
+            afterEach(function() {
+                obj = null;
+            });
             it('is defined', function() {
                 expect(
                     Koala.util.String.replaceTemplateStrings
@@ -61,5 +61,21 @@ describe('Koala.util.String', function() {
                 );
             });
         });
+        describe('#utf8_to_b64 & #b64_to_utf8', function() {
+            var utf8 = 'Süper Ömer &@d@m&eva';
+            var b64 = 'U8O8cGVyIMOWbWVyICZAZEBtJmV2YQ==';
+
+            it('#utf8_to_b64 transforms utf8 to b64', function() {
+                var result = Koala.util.String.utf8_to_b64(utf8);
+                expect(result).to.be(b64);
+            });
+
+            it('#b64_to_utf8 transforms b64 to utf8', function() {
+                var result = Koala.util.String.b64_to_utf8(b64);
+                expect(result).to.be(utf8);
+            });
+
+        });
+
     });
 });
