@@ -618,7 +618,7 @@ Ext.define('Koala.util.Filter', {
             var startName, endName;
 
             if (!filter.fromTimeseries) {
-                var names = field.startAndEndFieldnamesFromMetadataParam(
+                var names = staticMe.startAndEndFieldnamesFromMetadataParam(
                         filter.param);
                 startName = names.startName;
                 endName = names.endName;
