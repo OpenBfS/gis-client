@@ -7,7 +7,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -45,7 +45,6 @@ Ext.define('Koala.util.Authentication', {
 
             if (username && password) {
                 var tok = username + ':' + password;
-                Koala.util.String.utf8_to_b64(tok);
                 var hash = Koala.util.String.utf8_to_b64(tok);
                 authHeader = "Basic " + hash;
             }
