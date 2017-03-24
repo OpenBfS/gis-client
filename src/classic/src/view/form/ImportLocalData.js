@@ -50,9 +50,8 @@ Ext.define("Koala.view.form.ImportLocalData",{
         },
         items: [{
             xtype: 'filefield',
-            // TODO i18n
-            buttonText: 'Durchsuchen',
             bind: {
+                buttonText: '{fileFieldButtonText}',
                 fieldLabel: '{fileFieldLabel}',
                 hidden: '{layerName}'
             },
