@@ -137,6 +137,14 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var targetClass = target.getAttribute("class");
 
         if (!targetClass) {
+            if (target.getElementsByTagName("img").length > 0) {
+                var legend = target.getElementsByTagName("img")[0];
+                if (legend.style.display === 'none') {
+                    legend.style.display = 'inherit';
+                } else {
+                    legend.style.display = 'none';
+                }
+            }
             return false;
         }
 
@@ -150,8 +158,8 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             return false;
         }
 
-        if (targetClass.indexOf("fa-times") > 0) {
-            me.removeLayer(layer);
+        if (targetClass.indexOf("fa-info-circle") > 0) {
+            me.showLayerInfo(layer);
             return false;
         }
 
@@ -185,20 +193,14 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         // charting toggler
         if (targetClass.indexOf("fa-bar-chart") > 0) {
             me.toggleActiveChartingLayer(layer);
-        }
-
-        if (target.getElementsByTagName("img").length > 0) {
-            var legend = target.getElementsByTagName("img")[0];
-            if (legend.style.display === 'none') {
-                legend.style.display = 'inherit';
-            } else {
-                legend.style.display = 'none';
-            }
+            return false;
         }
 
         if (targetClass === 'legend-filter-text') {
             me.onLegendFilterTextClick(layer);
+            return false;
         }
+
     },
 
     /**
@@ -270,7 +272,14 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         filterPanel.show();
     },
 
+    /**
+     * Adds the class "k-active-charting-layer" to an item
+     * @param {Ext.list.TreeItem} item The tabed treelist item.
+     */
     addChartingActiveClass: function(item) {
+        if (!item || !item.el) {
+            return false;
+        }
         var itemElChartIconClass = item.el.down('.fa-bar-chart');
 
         if (itemElChartIconClass) {
@@ -342,11 +351,14 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                       '<input type="range" id="slider_{id}"/>',
                     '</span>',
                   '</tpl>',
-                  '<tpl if="this.isRemovable(values)">',
-                    '<span class="right-items">',
-                      '<i class="fa fa-times" style="color:#157fcc;"></i>',
-                    '</span>',
-                  '</tpl>',
+                  '<span class="right-items">',
+                      '<tpl if="this.isRemovable(values)">',
+                          '<i class="fa fa-times" style="color:#157fcc;"></i>',
+                      '</tpl>',
+                      '<tpl if="this.allowShortInfo(values)">',
+                          '<i class="fa fa-info-circle info" style="color:#157fcc;"></i>',
+                      '</tpl>',
+                  '</span>',
                 '</div>',
                 '<div>',
                   '<tpl if="this.isVisible(values)">',
@@ -364,7 +376,8 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                       '"></i>',
                   '</tpl>',
                   '<tpl if="this.getFilterText(values)">',
-                      '<div class="legend-filter-text" style="color:#666; margin-left:20px; white-space:pre-line;">{[this.getFilterText(values)]}</div>',
+                      '</br>',
+                      '<div class="legend-filter-text" style="">{[this.getFilterText(values)]}</div>',
                   '</tpl>',
                   '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
                 '</div>',
@@ -380,6 +393,9 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                 },
                 getFilterText: function(layer) {
                     return Koala.util.Layer.getFiltersTextFromMetadata(layer.metadata);
+                },
+                allowShortInfo: function(layer) {
+                    return layer.get('allowShortInfo') || false;
                 },
                 allowOpacityChange: function(layer) {
                     return layer.get('allowOpacityChange') || false;
@@ -452,6 +468,41 @@ Ext.define('Koala.view.panel.MobileLegendController', {
 
         // This refreshes the templates of the records
         me.setInitialCheckStatus();
+    },
+
+    /**
+     * Shows the layer metadata info panel.
+     * @param {ol.layer.Base} layer The layer of which we want to show the
+     *                              the info.
+     */
+    showLayerInfo: function(layer) {
+        var view = this.getView();
+        var metadataInfoPanel = view.up('app-main').down('k-panel-mobilemetadatainfo');
+
+        var cql = "Identifier = '" + layer.metadata.id + "'";
+        var metadataStore = Ext.create('Koala.store.MetadataSearch');
+        metadataStore.getProxy().setExtraParam('constraint', cql);
+        metadataStore.on('load', function(store, recs) {
+            var rec = recs && recs[0];
+            if (rec && metadataInfoPanel) {
+                var vm = metadataInfoPanel.getViewModel();
+                var fieldNames = Koala.view.panel.MobileMetadataInfo.fieldNames;
+                var data = [];
+
+                Ext.Object.each(fieldNames, function(key, value) {
+                    data.push({
+                        'key': value,
+                        'value': rec.get(key)
+                    });
+                });
+
+                vm.set('name', rec.get('name'));
+                vm.set('data', data);
+                metadataInfoPanel.show();
+            }
+            Ext.defer(metadataStore.destroy, 1000, metadataStore);
+        }, this, {single: true});
+        metadataStore.load();
     },
 
     /**

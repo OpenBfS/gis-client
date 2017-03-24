@@ -10,6 +10,12 @@
     color: #808080;
 }
 
+.legend-filter-text {
+    color:#666;
+    margin-left:20px;
+    white-space:pre-line;
+    display: inline-block;
+}
 
 .tree-item-tools {
     font-size: 21px;
@@ -26,8 +32,13 @@
         }
     }
 
-    .right-items > i {
-        float: right;
+    .right-items {
+        i {
+            float: right;
+        }
+        .fa-info-circle{
+            padding-right: 12px;
+        }
     }
 
     /* Special styling for slider */
