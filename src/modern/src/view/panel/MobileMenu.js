@@ -135,7 +135,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
             text: '{imprintButtonText}'
         },
         handler: function(btn) {
-            btn.up('app-main').down('k-panel-mobileimprint').show();
+            btn.up('app-main').down('k-panel-mobilehelp').show();
         }
     }]
 });

@@ -934,7 +934,7 @@
             }
         }
     },
-    "Koala.view.panel.MobileImprint": {
+    "Koala.view.panel.MobileHelp": {
         "config": {
             "data": {
                 "title": "fr: Hilfe",

@@ -35,7 +35,7 @@ Ext.define('Koala.view.window.HelpModel', {
     },
 
     stores: {
-        navItems: {
+        helpNavItems: {
             type: 'tree',
             root: {
                 children: [{

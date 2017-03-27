@@ -298,8 +298,10 @@
             "data": {
                 "btnTextFullscreen": "Full-Screen",
                 "btnTextHelp": "Help",
+                "btnTextImprint": "Imprint",
                 "btnTooltipFullscreen": "Switch between full-screen and standard view.",
-                "btnTooltipHelp": "Show help"
+                "btnTooltipHelp": "Show help",
+                "btnTooltipImprint": "Show imprint"
             }
         }
     },
@@ -363,7 +365,7 @@
     "Koala.view.window.HelpWindow": {
         "config": {
             "data": {
-                "title": "Help"
+                "helpWinTitle": "Help"
             }
         }
     },
@@ -784,6 +786,13 @@
             }
         }
     },
+    "Koala.view.window.ImprintWindow": {
+        "config": {
+            "data": {
+                "imprintWinTitle": "Imprint"
+            }
+        }
+    },
     "BasiGX.view.button.AddWms": {
         "config": {
             "data": {
@@ -934,7 +943,7 @@
             }
         }
     },
-    "Koala.view.panel.MobileImprint": {
+    "Koala.view.panel.MobileHelp": {
         "config": {
             "data": {
                 "title": "Help",

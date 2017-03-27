@@ -32,7 +32,7 @@ Ext.define("Koala.view.window.HelpWindow", {
     },
 
     bind: {
-        title: '{title}'
+        title: '{helpWinTitle}'
     },
     constrainHeader: true,
     width: 1050,
@@ -60,7 +60,7 @@ Ext.define("Koala.view.window.HelpWindow", {
             xtype: 'treelist',
             reference: 'treelist',
             expanderOnly: false,
-            bind: '{navItems}'
+            bind: '{helpNavItems}'
         }]
     },
     //Content

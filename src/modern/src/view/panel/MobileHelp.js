@@ -1,15 +1,15 @@
-Ext.define('Koala.view.panel.MobileImprint',{
+Ext.define('Koala.view.panel.MobileHelp',{
     extend: 'Koala.view.panel.MobilePanel',
-    xtype: 'k-panel-mobileimprint',
+    xtype: 'k-panel-mobilehelp',
 
     requires: [
-        'Koala.view.panel.MobileImprintController',
-        'Koala.view.panel.MobileImprintModel'
+        'Koala.view.panel.MobileHelpController',
+        'Koala.view.panel.MobileHelpModel'
     ],
 
-    controller: 'k-panel-mobileimprint',
+    controller: 'k-panel-mobilehelp',
     viewModel: {
-        type: 'k-panel-mobileimprint'
+        type: 'k-panel-mobilehelp'
     },
 
     closeToolAlign: 'left',

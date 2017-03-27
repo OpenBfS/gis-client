@@ -1,6 +1,6 @@
-Ext.define('Koala.view.panel.MobileImprintModel', {
+Ext.define('Koala.view.panel.MobileHelpModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-panel-mobileimprint',
+    alias: 'viewmodel.k-panel-mobilehelp',
     data: {
         title: '',
         helpPrefaceTitle: '',

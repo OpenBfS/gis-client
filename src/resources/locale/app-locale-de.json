@@ -298,8 +298,10 @@
             "data": {
                 "btnTextFullscreen": "Vollbild",
                 "btnTextHelp": "Hilfe",
+                "btnTextImprint": "Impressum",
                 "btnTooltipFullscreen": "Zwischen Vollbildanzeige und Normalansicht wechseln",
-                "btnTooltipHelp": "Hilfe anzeigen"
+                "btnTooltipHelp": "Hilfe anzeigen",
+                "btnTooltipImprint": "Impressum anzeigen"
             }
         }
     },
@@ -363,7 +365,7 @@
     "Koala.view.window.HelpWindow": {
         "config": {
             "data": {
-                "title": "Hilfe"
+                "helpWinTitle": "Hilfe"
             }
         }
     },
@@ -762,6 +764,25 @@
             }
         }
     },
+    "Koala.view.window.ImprintWindow": {
+        "config": {
+            "data": {
+                "imprintWinTitle": "Impressum"
+            }
+        }
+    },
+    "Koala.view.window.ImprintModel": {
+        "config": {
+            "data": {
+                "imprint": {
+                    "title": "Impressum"
+                },
+                "sitePolicy": {
+                    "title": "Nutzungsbedingungen"
+                }
+            }
+        }
+    },
     "BasiGX.view.button.AddWms": {
         "config": {
             "data": {
@@ -912,7 +933,7 @@
             }
         }
     },
-    "Koala.view.panel.MobileImprint": {
+    "Koala.view.panel.MobileHelp": {
         "config": {
             "data": {
                 "title": "Hilfe",
