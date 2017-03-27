@@ -177,16 +177,19 @@ Ext.define("Koala.view.form.Print", {
         var treePanel = Ext.ComponentQuery.
                 query('k-panel-routing-legendtree')[0];
 
+
+        // TODO Refactor. Due to https://redmine-koala.bfs.de/issues/1574 only
+        // the value of the filter should be updated in the legendhtml.
         var listenerFunction = function() {
             me.updateLegendsFieldset(legendsFieldset);
         };
 
         var treeStore = treePanel.getStore();
         treeStore.on('update', listenerFunction);
-        treeStore.on('datachange', listenerFunction);
+        // treeStore.on('datachange', listenerFunction);
         legendsFieldset.on('destroy', function() {
             treeStore.un('update', listenerFunction);
-            treeStore.un('datachange', listenerFunction);
+            // treeStore.un('datachange', listenerFunction);
         });
 
         me.updateLegendsFieldset(legendsFieldset);
@@ -229,6 +232,8 @@ Ext.define("Koala.view.form.Print", {
         if (!legendsFieldset) {
             return;
         }
+
+        // debugger
         legendsFieldset.removeAll();
         var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
         var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
@@ -238,23 +243,28 @@ Ext.define("Koala.view.form.Print", {
             if (layer.get('visible') && layer.get('allowPrint')) {
                 var legendTextHtml = me.prepareLegendTextHtml(layer);
 
-                items.push({
-                    xtype: 'checkbox',
-                    checked: true,
-                    name: layer.get('name') + '_visible',
+                var layerLegendContainer = Ext.create('Ext.container.Container', {
                     layer: layer,
-                    boxLabel: layer.get('name')
-                }, {
-                    xtype: 'textfield',
-                    name: layer.get('name') + '_legendtext',
-                    fieldLabel: me.getUpdateLegendtext(),
-                    value: legendTextHtml,
-                    allowBlank: true,
-                    listeners: {
-                        focus: me.onTextFieldFocus,
-                        scope: me
-                    }
+                    items: [{
+                        xtype: 'checkbox',
+                        checked: true,
+                        name: layer.get('name') + '_visible',
+                        layer: layer,
+                        boxLabel: layer.get('name')
+                    }, {
+                        xtype: 'textfield',
+                        name: layer.get('name') + '_legendtext',
+                        fieldLabel: me.getUpdateLegendtext(),
+                        value: legendTextHtml,
+                        allowBlank: true,
+                        listeners: {
+                            focus: me.onTextFieldFocus,
+                            scope: me
+                        }
+                    }]
                 });
+
+                items.push(layerLegendContainer);
             }
         });
 
