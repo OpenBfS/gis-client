@@ -92,8 +92,15 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var dataObj = {};
             var key = Koala.util.String.getValueFromSequence(
                 titleSequence, idx, field);
-            var value = featureProps[field] || Koala.util.String.getValueFromSequence(
-                defaultsSequence, idx, undefined);
+
+            var value;
+            if (featureProps[field] || featureProps[field]===0){
+                value = featureProps[field];
+            }
+            else{
+                value = Koala.util.String.getValueFromSequence(
+                        defaultsSequence, idx, undefined);
+            }
 
             dataObj.key = key;
             dataObj.value = value;

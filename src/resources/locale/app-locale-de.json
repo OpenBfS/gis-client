@@ -358,7 +358,9 @@
                 "outputFormatText": "Ausgabeformat",
                 "removeSeriesBtnText": "Serie entfernen",
                 "removeSeriesQuestionTitle": "Rückfrage",
-                "removeSeriesQuestionTpl": "Serie '{0}' entfernen?"
+                "removeSeriesQuestionTpl": "Serie '{0}' entfernen?",
+                "startLabel": "Start",
+                "endLabel": "Ende"
             }
         }
     },

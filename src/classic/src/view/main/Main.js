@@ -370,6 +370,11 @@ Ext.define('Koala.view.main.Main', {
             },
             handler: function(btn) {
                 btn.up().down('k-form-field-searchcombo').clearValue();
+                var multiSearchPanel = this.up('basigx-panel-header')
+                        .down('k-panel-multisearch');
+                if (multiSearchPanel) {
+                    multiSearchPanel.hide();
+                }
             }
         };
 

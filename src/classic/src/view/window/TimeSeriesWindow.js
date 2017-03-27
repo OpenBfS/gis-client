@@ -100,6 +100,29 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         var timeRangeFilter = FilterUtil.getStartEndFilterFromMetadata(metadata);
         var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
 
+        var filter = {
+                mindatetimeinstant: minMaxDates.min,
+                maxdatetimeinstant: minMaxDates.max,
+                defaultendtimeinstant: timeRangeFilter.maxdatetimeinstant,
+                defaultstarttimeinstant: timeRangeFilter.mindatetimeinstant,
+                unit: 'minutes',
+                fromTimeseries: true
+            };
+
+        var timeRangeFilterFieldset = FilterUtil.createTimeRangeFieldset(
+                'j F Y', filter, 1
+            );
+
+        Ext.each(timeRangeFilterFieldset.query('datefield'), function(field) {
+            field.labelWidth = null;
+        });
+
+        var startContainer = timeRangeFilterFieldset.down('[name=mincontainer]');
+        startContainer.padding = "0 5 0 0";
+        timeRangeFilterFieldset.border = "0";
+        timeRangeFilterFieldset.padding = "0 5 0 0";
+        timeRangeFilterFieldset.setLayout('hbox');
+
         if (me.getAddFilterForm()) {
             me.items = [{
                 xtype: 'form',
@@ -108,38 +131,12 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                     pack: 'center'
                 },
                 padding: 5,
-                defaults: {
-                    padding: 5
-                },
                 height: 40,
                 maxHeight: 40,
                 minHeight: 40,
-                items: [{
-                    // https://github.com/gportela85/DateTimeField
-                    xtype: 'datefield',
-                    bind: {
-                        fieldLabel: '{dateFieldStartLabel}'
-                    },
-                    minValue: minMaxDates.min,
-                    maxValue: minMaxDates.max,
-                    value: timeRangeFilter.mindatetimeinstant,
-                    labelWidth: 35,
-                    name: 'datestart',
-                    format: 'j F Y, H:i',
-                    flex: 1
-                }, {
-                    xtype: 'datefield',
-                    bind: {
-                        fieldLabel: '{dateFieldEndLabel}'
-                    },
-                    minValue: minMaxDates.min,
-                    maxValue: minMaxDates.max,
-                    value: timeRangeFilter.maxdatetimeinstant,
-                    labelWidth: 38,
-                    name: 'dateend',
-                    format: 'j F Y, H:i',
-                    flex: 1
-                }, {
+                items: [
+                    timeRangeFilterFieldset,
+                {
                     xtype: 'button',
                     name: 'btn-set-filter',
                     bind: {

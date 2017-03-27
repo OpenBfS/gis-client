@@ -40,6 +40,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
         endDateValue: new Date(), // this is not in the locale files
         removeSeriesBtnText: '',
         removeSeriesQuestionTitle: '',
-        removeSeriesQuestionTpl: ''
+        removeSeriesQuestionTpl: '',
+        startLabel: '',
+        endLabel: ''
     }
 });

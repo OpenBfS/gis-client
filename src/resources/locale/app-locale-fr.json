@@ -356,7 +356,9 @@
                 "outputFormatText": "fr:Ausgabeformat",
                 "removeSeriesBtnText": "fr:Serie entfernen",
                 "removeSeriesQuestionTitle": "fr:Rückfrage",
-                "removeSeriesQuestionTpl": "fr:Serie '{0}' entfernen?"
+                "removeSeriesQuestionTpl": "fr:Serie '{0}' entfernen?",
+                "startLabel": "fr:Start",
+                "endLabel": "fr:Ende"
             }
         }
     },
