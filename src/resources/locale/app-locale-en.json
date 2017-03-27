@@ -856,7 +856,8 @@
             "data": {
                 "menuTitle": "Menu",
                 "searchFieldPlaceHolderText": "Search within data and services",
-                "imprintButtonText": "Help",
+                "helpButtonText": "Help",
+                "imprintButtonText": "Imprint",
                 "settingsButtonText": "Settings",
                 "moreLayersButtonText": "Further topics",
                 "addLayerButtonText": "Add external layer",

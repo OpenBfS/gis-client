@@ -846,7 +846,8 @@
             "data": {
                 "menuTitle": "Menu",
                 "searchFieldPlaceHolderText": "Suche in Daten und Diensten",
-                "imprintButtonText": "Hilfe",
+                "helpButtonText": "Hilfe",
+                "imprintButtonText": "Impressum",
                 "settingsButtonText": "Einstellungen",
                 "moreLayersButtonText": "Weitere Themen",
                 "addLayerButtonText": "Externen WMS hinzufügen",
@@ -1032,6 +1033,13 @@
                                   ". Ein Layer kann auch aus der Legende wieder entfernt werden. Hierzu tippt man auf das blaue Kreuzsymbol "+
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_legend_delete.png' title='Layer löschen' alt='mobile_legend_delete.png' width='13' height='12' style='vertical-align:middle'>"+
                                   ", rechts neben der Layerbezeichnung.</p>"
+            }
+        }
+    },
+    "Koala.view.panel.MobileImprint": {
+        "config": {
+            "data": {
+                "title": "Impressum"
             }
         }
     },

@@ -847,7 +847,8 @@
             "data": {
                 "menuTitle": "fr:Menu",
                 "searchFieldPlaceHolderText": "fr:Suche in Daten und Diensten",
-                "imprintButtonText": "fr:Hilfe",
+                "helpButtonText": "fr:Hilfe",
+                "imprintButtonText": "fr:Impressum",
                 "settingsButtonText": "fr:Einstellungen",
                 "moreLayersButtonText": "fr:Weitere Themen",
                 "addLayerButtonText": "fr:Externen WMS hinzufügen",

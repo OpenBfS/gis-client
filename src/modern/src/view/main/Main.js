@@ -41,6 +41,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.panel.MobileAddLayer',
         'Koala.view.panel.MobileMenu',
         'Koala.view.panel.MobileHelp',
+        'Koala.view.panel.MobileImprint',
         'Koala.view.panel.LayerSetTree',
         'Koala.view.panel.MobilePermalink',
         'Koala.view.panel.Settings',
@@ -198,6 +199,10 @@ Ext.define('Koala.view.main.Main', {
         hidden: true
     }, {
         xtype: 'k-panel-mobilehelp',
+        left: 0,
+        hidden: true
+    }, {
+        xtype: 'k-panel-mobileimprint',
         left: 0,
         hidden: true
     }, {
