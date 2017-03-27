@@ -71,6 +71,21 @@ Ext.define("Koala.view.toolbar.Header", {
             }
         },
         {
+            xtype: 'button',
+            bind: {
+                text: '{btnTextImprint}',
+                tooltip: '{btnTooltipImprint}'
+            },
+            handler: function() {
+                var win = Ext.ComponentQuery.query('k-window-imprint')[0];
+                if (!win) {
+                    Ext.create('Koala.view.window.ImprintWindow').show();
+                } else {
+                    BasiGX.util.Animate.shake(win);
+                }
+            }
+        },
+        {
             xtype: 'k-form-field-languagecombo'
         }
     ]
