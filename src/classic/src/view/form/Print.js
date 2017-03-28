@@ -174,25 +174,13 @@ Ext.define("Koala.view.form.Print", {
             checkboxToggle: true
         });
 
-        var treePanel = Ext.ComponentQuery.
-                query('k-panel-routing-legendtree')[0];
-
-
         // TODO Refactor. Due to https://redmine-koala.bfs.de/issues/1574 only
         // the value of the filter should be updated in the legendhtml.
         var listenerFunction = function() {
-            me.updateLegendsFieldset(legendsFieldset);
+            console.log('TODO refactor');
         };
 
-        var treeStore = treePanel.getStore();
-        treeStore.on('update', listenerFunction);
-        // treeStore.on('datachange', listenerFunction);
-        legendsFieldset.on('destroy', function() {
-            treeStore.un('update', listenerFunction);
-            // treeStore.un('datachange', listenerFunction);
-        });
-
-        me.updateLegendsFieldset(legendsFieldset);
+        me.initLegendsFieldset(legendsFieldset);
 
         return legendsFieldset;
     },
@@ -227,14 +215,12 @@ Ext.define("Koala.view.form.Print", {
      * Update the content of the legendsFieldset. Remove all. Get visible and
      * printable Layers from Map. Add those to the fieldset.
      */
-    updateLegendsFieldset: function(legendsFieldset) {
+    initLegendsFieldset: function(legendsFieldset) {
         var me = this;
         if (!legendsFieldset) {
             return;
         }
 
-        // debugger
-        legendsFieldset.removeAll();
         var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
         var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
 
@@ -245,6 +231,7 @@ Ext.define("Koala.view.form.Print", {
 
                 var layerLegendContainer = Ext.create('Ext.container.Container', {
                     layer: layer,
+                    name: 'layerLegendContainer',
                     items: [{
                         xtype: 'checkbox',
                         checked: true,
@@ -261,8 +248,26 @@ Ext.define("Koala.view.form.Print", {
                             focus: me.onTextFieldFocus,
                             scope: me
                         }
-                    }]
+                    }],
+                    listeners: {
+                        'destroy': function() {
+                            layer.un('change:visible',
+                                me.onLayerVisibiltyChange.bind(layer,
+                                    layerLegendContainer)
+                            );
+                            layer.un('change',
+                                me.updateLegendText.bind(me, layerLegendContainer)
+                            );
+                        }
+                    }
                 });
+
+                layer.on('change:visible',
+                    me.onLayerVisibiltyChange.bind(me, layerLegendContainer)
+                );
+                layer.on('change',
+                    me.updateLegendText.bind(me, layerLegendContainer)
+                );
 
                 items.push(layerLegendContainer);
             }
@@ -278,23 +283,50 @@ Ext.define("Koala.view.form.Print", {
     },
 
     /**
-     * Prepares the content of the legendTextHtml field by adding the filter from
-     * the RoutingLegendTree text.
+     * Get's called when the layers visibility changes. If it set to invisible
+     * the container for the corresponding legend while get disabled and
+     * deactivated.
+     * @param {Ext.container.Container} layerLegendContainer The layerLegendContainer
+     *                                                       of the layer.
+     * @param {ol.Object.Event} evt The 'change:visible' event of a layer.
+     */
+    onLayerVisibiltyChange: function(layerLegendContainer, evt) {
+        layerLegendContainer.setDisabled(evt.oldValue);
+        var checkbox = layerLegendContainer.down('checkbox');
+        checkbox.setValue(!evt.oldValue);
+    },
+
+    /**
+     * Updates the Value of the underlying legend textfield of a given
+     * layerLegendContainer.
+     *
+     * @param {Ext.container.Container} layerLegendContainer The layerLegendContainer
+     *                                                       of the layer.
+     * @param {ol.Object.Event} evt The 'change' event of a layer.
+     */
+    updateLegendText: function(layerLegendContainer, evt) {
+        var me = this;
+        var layer = evt.target;
+        var legendText = me.prepareLegendTextHtml(layer);
+        layerLegendContainer.down('textfield').setValue(legendText);
+    },
+
+    /**
+     * Prepares the legendText for a given layer. It returns the layerName extended
+     * by a textual representation of the layer filter if given.
+     * @param {ol.layer.Base} layer A layer.
+     * @return {String} The markup representation for the legendtext.
      */
     prepareLegendTextHtml: function(layer) {
-        var layerName = layer.get('name'); // fallback
-        if ('metadata' in layer && 'printTitle' in layer.metadata) {
-            layerName = layer.metadata.printTitle;
-        }
-        var text = layerName;
-        var legendSpan = Ext.getDom(layer.get('__suffix_id__'));
+        var layerName = layer.get('name');
+        var filterText = Koala.util.Layer.getFiltersTextFromMetadata(
+            layer.metadata);
 
-        if (legendSpan) {
-            var filterText = legendSpan.innerHTML;
-            text = layerName + '<br/><font color="#999999">' + filterText + '</font>';
+        if (Ext.isEmpty(filterText)) {
+            return layerName;
+        } else {
+            return layerName + '<br/><font color="#999999">' + filterText + '</font>';
         }
-
-        return text;
     },
 
     /**
