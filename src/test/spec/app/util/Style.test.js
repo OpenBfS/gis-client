@@ -1,11 +1,6 @@
 Ext.Loader.syncRequire(['Koala.util.Style']);
 
 describe('Koala.util.Style', function() {
-
-    afterEach(function() {
-        delete Koala.Application;
-    });
-
     describe('Basics', function() {
         it('is defined', function() {
             expect(Koala.util.Style).to.not.be(undefined);

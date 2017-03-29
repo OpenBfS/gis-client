@@ -1,6 +1,4 @@
-Ext.Loader.syncRequire(['Koala.util.Filter',
-                        'Koala.util.Object',
-                        'Koala.util.Date']);
+Ext.Loader.syncRequire(['Koala.util.Filter']);
 
 describe('Koala.util.Filter', function() {
 
@@ -12,10 +10,6 @@ describe('Koala.util.Filter', function() {
         Koala.Application.isLocal = function() {
             return false;
         };
-    });
-
-    afterEach(function() {
-        delete Koala.Application;
     });
 
     describe('Basics', function() {
@@ -61,7 +55,6 @@ describe('Koala.util.Filter', function() {
             });
 
             it('returns an min and max UTC moment date object from invalid metadata', function() {
-
                 var metadataEmpty = {
                 };
                 var got = Koala.util.Filter.getMinMaxDatesFromMetadata(metadataEmpty);
@@ -70,20 +63,28 @@ describe('Koala.util.Filter', function() {
                 expect(equalMax).to.be(false);
                 expect(equalMin).to.be(false);
             });
+
+            it('returns an undefined min and max UTC momement date from metadata', function() {
+                var metadataEmpty = {
+                };
+                var got = Koala.util.Filter.getMinMaxDatesFromMetadata(metadataEmpty);
+                expect(got).to.be.an('object');
+                expect(got.min).to.be(undefined);
+                expect(got.max).to.be(undefined);
+            });
         });
 
         describe('#getStartEndFilterFromMetadata', function() {
-
             var metadata = {
                 layerConfig: {
                     timeSeriesChartProperties: {
-                        xAxisAttribute: "end_measure",
-                        yAxisAttribute: "value",
-                        end_timestamp: "2016-10-17T00:00:00",
-                        duration: "P4WT",
-                        end_timestamp_format: "Y-m-dTH:i:s",
-                        yAxis_minimum: "0",
-                        yAxis_maximum: "0.3",
+                        xAxisAttribute: 'end_measure',
+                        yAxisAttribute: 'value',
+                        end_timestamp: '2016-10-17T00:00:00',
+                        duration: 'P4WT',
+                        end_timestamp_format: 'Y-m-dTH:i:s',
+                        yAxis_minimum: '0',
+                        yAxis_maximum: '0.3',
                         xAxis_minimum: '2006-09-19T00:00:00',
                         xAxis_maximum: '2016-10-17T00:00:00'
                     }
@@ -97,6 +98,11 @@ describe('Koala.util.Filter', function() {
                 expect(Koala.util.Filter.getStartEndFilterFromMetadata).to.be.a(Function);
             });
 
+            it('returns a filter object', function() {
+                var got = Koala.util.Filter.getStartEndFilterFromMetadata(metadata);
+                expect(got).to.be.an('object');
+            });
+
             it('returns a parameter and min and max UTC moment date object from filters', function() {
                 var got = Koala.util.Filter.getStartEndFilterFromMetadata(metadata);
                 expect(got).to.have.property('parameter');
@@ -104,10 +110,6 @@ describe('Koala.util.Filter', function() {
                 expect(got).to.have.property('maxdatetimeinstant');
             });
 
-            it('return check is filter object', function() {
-                var got = Koala.util.Filter.getStartEndFilterFromMetadata(metadata);
-                expect(got).to.be.an('object');
-            });
 
             it('returns an min and max UTC moment date object as a property from metadata', function() {
                 var got = Koala.util.Filter.getStartEndFilterFromMetadata(metadata);
@@ -116,6 +118,7 @@ describe('Koala.util.Filter', function() {
                 var equalMax = xAxis_maximum.isSame(got.maxdatetimeinstant);
                 var equalMin = xAxis_minimum.isSame(got.mindatetimeinstant);
                 expect(equalMax).to.be(true);
+                // the got. maxdatetimeinstant is the same like the mindatetimeinstant
                 // I do not know, the xAxis_minimum date is not the same like
                 // the got.mindatetimeinstant
                 expect(equalMin).to.be(false);
@@ -124,6 +127,7 @@ describe('Koala.util.Filter', function() {
         });
 
         describe('#getStoreFromAllowedValues', function() {
+
             // input String with raw values from the GNOS
             // examples from the layer ODL butto 1h
 
@@ -136,12 +140,35 @@ describe('Koala.util.Filter', function() {
                 expect(Koala.util.Filter.getStoreFromAllowedValues).to.be.a(Function);
             });
 
-            it('returns data object from store', function() {
+            it('returns an object', function() {
                 var got = Koala.util.Filter.getStoreFromAllowedValues(allowedValues);
-                // debugger;
                 expect(got).to.be.an('object');
             });
 
+            it('returns an `Ext.data.Store`', function() {
+                var got = Koala.util.Filter.getStoreFromAllowedValues(allowedValues);
+                expect(got instanceof Ext.data.Store).to.be(true);
+            });
+
+            it('returns the number of records', function() {
+                var got = Koala.util.Filter.getStoreFromAllowedValues(allowedValues);
+                expect(got.getCount()).to.be.equal(3);
+            });
+
+            it('returns a string of records', function() {
+                var got = Koala.util.Filter.getStoreFromAllowedValues(allowedValues);
+                expect(got.getData().items[1].data.val).to.be.a('string');
+            });
+
+            it('return the string of records', function() {
+                var got = Koala.util.Filter.getStoreFromAllowedValues(allowedValues);
+                expect(got.getData().items[1].data.val).to.be.equal("'KFUE'");
+            });
+
+            it('return the string of records', function() {
+                var got = Koala.util.Filter.getStoreFromAllowedValues(allowedValues);
+                expect(got.getData().items[1].data.dsp).to.be.equal("KFÜ");
+            });
         });
 
         describe('#getComboFromAllowedValues', function() {
@@ -155,48 +182,66 @@ describe('Koala.util.Filter', function() {
                 expect(Koala.util.Filter.getComboFromAllowedValues).to.be.a(Function);
             });
 
+            it('returns combo object', function() {
+                var rawMulti = false;
+                if (!Ext.isModern) {
+                    var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
+                    expect(got.xtype).to.be('combo');
+                }
+            });
+
+            it('returns multiselect object', function() {
+                var rawMulti = true;
+                if (!Ext.isModern) {
+                    var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
+                    expect(got.xtype).to.be('multiselect');
+                }
+            });
+
             it('returns list object', function() {
                 var rawMulti = false;
-                Ext.isModern = true;
-                var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
-                expect(got.xtype).to.be('selectfield');
+                if (Ext.isModern) {
+                    var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
+                    expect(got.xtype).to.be('selectfield');
+                }
             });
 
             it('returns selectfield object', function() {
                 var rawMulti = true;
-                Ext.isModern = true;
-                var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
-                expect(got.xtype).to.be('list');
+                if (Ext.isModern) {
+                    var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
+                    expect(got.xtype).to.be('list');
+                }
             });
         });
 
         describe('#getSpinner', function() {
 
             var filters = {
-                type: "pointintime",
-                param: "end_measure",
-                interval: "24",
-                unit: "hours",
-                mindatetimeformat: "Y-m-d H:i:s",
-                mindatetimeinstant: "2016-10-17 00:00:00",
-                maxdatetimeformat: "Y-m-d H:i:s",
-                maxdatetimeinstant: "2016-10-18 00:00:00",
-                defaulttimeformat: "Y-m-d H:i:s",
-                defaulttimeinstant: "2016-10-17 00:00:00"
+                type: 'pointintime',
+                param: 'end_measure',
+                interval: '24',
+                unit: 'hours',
+                mindatetimeformat: 'Y-m-d H:i:s',
+                mindatetimeinstant: '2016-10-17 00:00:00',
+                maxdatetimeformat: 'Y-m-d H:i:s',
+                maxdatetimeinstant: '2016-10-18 00:00:00',
+                defaulttimeformat: 'Y-m-d H:i:s',
+                defaulttimeinstant: '2016-10-17 00:00:00'
             };
 
             var filtersMinutes = {
-                type: "pointintime",
-                param: "end_measure",
-                interval: "1",
-                unit: "minutes",
-                mindatetimeformat: "Y-m-d H:i:s",
-                mindatetimeinstant: "2016-10-17 00:00:00",
-                maxdatetimeformat: "Y-m-d H:i:s",
-                maxdatetimeinstant: "2016-10-18 00:00:00",
-                defaulttimeformat: "Y-m-d H:i:s",
-                defaulttimeinstant: "2016-10-17 00:00:00"
-          };
+                type: 'pointintime',
+                param: 'end_measure',
+                interval: '1',
+                unit: 'minutes',
+                mindatetimeformat: 'Y-m-d H:i:s',
+                mindatetimeinstant: '2016-10-17 00:00:00',
+                maxdatetimeformat: 'Y-m-d H:i:s',
+                maxdatetimeinstant: '2016-10-18 00:00:00',
+                defaulttimeformat: 'Y-m-d H:i:s',
+                defaulttimeinstant: '2016-10-17 00:00:00'
+            };
 
             var spinnerType = 'hours';
             var spinnerTypeMinutes = 'minutes';
@@ -212,16 +257,82 @@ describe('Koala.util.Filter', function() {
                 expect(Koala.util.Filter.getSpinner).to.be.a(Function);
             });
 
+            it('returns a hour numberfield object', function() {
+                if (!Ext.isModern) {
+                    var got = Koala.util.Filter.getSpinner(filters, spinnerType, name, value);
+                    expect(got.xtype).to.be('numberfield');
+                }
+            });
+
+            it('returns a minutes numberfield object', function() {
+                if (!Ext.isModern) {
+                    var got = Koala.util.Filter.getSpinner(filtersMinutes, spinnerTypeMinutes, nameMinutes, value);
+                    expect(got.xtype).to.be('numberfield');
+                }
+            });
+
             it('returns a hour selectfield object', function() {
-                Ext.isModern = true;
-                var got = Koala.util.Filter.getSpinner(filters, spinnerType, name, value);
-                expect(got.xtype).to.be('selectfield');
+                if (Ext.isModern) {
+                    var got = Koala.util.Filter.getSpinner(filters, spinnerType, name, value);
+                    expect(got.xtype).to.be('selectfield');
+                }
             });
 
             it('returns a minutes selectfield object', function() {
-                Ext.isModern = true;
+                if (Ext.isModern) {
+                    var got = Koala.util.Filter.getSpinner(filtersMinutes, spinnerTypeMinutes, nameMinutes, value);
+                    expect(got.xtype).to.be('selectfield');
+                }
+            });
+
+            it('returns the length of the pickerobject from hourspinner', function() {
+                var got = Koala.util.Filter.getSpinner(filters, spinnerType, name, value);
+                if (Ext.isModern) {
+                    expect(got.options.length).to.be.equal(24);
+                }
+            });
+
+            it('returns the length of the pickerobject from minutespinner', function() {
                 var got = Koala.util.Filter.getSpinner(filtersMinutes, spinnerTypeMinutes, nameMinutes, value);
-                expect(got.xtype).to.be('selectfield');
+                if (Ext.isModern) {
+                    expect(got.options.length).to.be.equal(60);
+                }
+            });
+
+            it('returns the minValue from hourspinner', function() {
+                var got = Koala.util.Filter.getSpinner(filters, spinnerType, name, value);
+                if (!Ext.isModern) { // classic
+                    expect(got.minValue).to.be.equal(0);
+                } else { // modern
+                    expect(got.options[0].value).to.be.equal(0);
+                }
+            });
+
+            it('returns the maxValue from hourspinner', function() {
+                var got = Koala.util.Filter.getSpinner(filters, spinnerType, name, value);
+                if (!Ext.isModern) { // classic
+                    expect(got.maxValue).to.be.equal(23);
+                } else {  // modern
+                    expect(got.options[23].value).to.be.equal(23);
+                }
+            });
+
+            it('returns the minValue from minutespinner', function() {
+                var got = Koala.util.Filter.getSpinner(filtersMinutes, spinnerTypeMinutes, name, value);
+                if (!Ext.isModern) { // classic
+                    expect(got.minValue).to.be.equal(0);
+                } else { // modern
+                    expect(got.options[0].value).to.be.equal(0);
+                }
+            });
+
+            it('returns the maxValue from minutespinner', function() {
+                var got = Koala.util.Filter.getSpinner(filtersMinutes, spinnerTypeMinutes, name, value);
+                if (!Ext.isModern) { // classic
+                    expect(got.maxValue).to.be.equal(59);
+                } else { // modern
+                    expect(got.options[59].value).to.be.equal(59);
+                }
             });
         });
 
@@ -241,7 +352,7 @@ describe('Koala.util.Filter', function() {
             });
 
             it('returns options object for a minutepicker', function() {
-                var maxValue = 24;
+                var maxValue = 23;
                 var stepSize = 1;
                 var got = Koala.util.Filter.getSelectFieldOptionsData(maxValue, stepSize);
                 expect(got).to.be.an('array');
@@ -255,16 +366,33 @@ describe('Koala.util.Filter', function() {
             it('is a function', function() {
                 expect(Koala.util.Filter.leadingZeroValueToRaw).to.be.a(Function);
             });
-
-            it('check is val a String', function() {
+            it('check is val a String, if val is beetween 1 and 9', function() {
                 var val = 2;
                 var got = Koala.util.Filter.leadingZeroValueToRaw(val);
                 expect(got).to.be.a('string');
             });
-            it('returns val as a String', function() {
-                var val = 2;
+            it('returns val as a String, if val is 0', function() {
+                var val = 0;
                 var got = Koala.util.Filter.leadingZeroValueToRaw(val);
-                expect(got).to.be('02');
+                expect(got).to.be.equal('00');
+            });
+
+            it('returns val as a String, if val is 10', function() {
+                var val = 10;
+                var got = Koala.util.Filter.leadingZeroValueToRaw(val);
+                expect(got).to.be.equal('10');
+            });
+
+            it('returns val as a String, if val is 100', function() {
+                var val = 100;
+                var got = Koala.util.Filter.leadingZeroValueToRaw(val);
+                expect(got).to.be.equal('100');
+            });
+
+            it('returns val as a String', function() {
+                var val = 0002;
+                var got = Koala.util.Filter.leadingZeroValueToRaw(val);
+                expect(got).to.be.equal('02');
             });
         });
 
@@ -275,15 +403,50 @@ describe('Koala.util.Filter', function() {
             it('is a function', function() {
                 expect(Koala.util.Filter.leadingZeroRawToValue).to.be.a(Function);
             });
-            it('check is raw a number', function() {
-                var raw = 2;
+
+            it('returns raw as a number', function() {
+                var raw = '02';
                 var got = Koala.util.Filter.leadingZeroRawToValue(raw);
-                expect(got).to.be.a('number');
+                expect(got).to.be.equal(2);
             });
-            it('returns val as a number', function() {
-                var raw = 02;
+
+            it('returns raw as a number', function() {
+                var raw = '00000000002';
                 var got = Koala.util.Filter.leadingZeroRawToValue(raw);
-                expect(got).to.be(2);
+                expect(got).to.be.equal(2);
+            });
+
+            it('returns raw as a number', function() {
+                var raw = '020';
+                var got = Koala.util.Filter.leadingZeroRawToValue(raw);
+                expect(got).to.be.equal(20);
+            });
+
+            it('returns raw as a number', function() {
+                var raw = '00';
+                var got = Koala.util.Filter.leadingZeroRawToValue(raw);
+                expect(got).to.be.equal(0);
+            });
+
+            it('returns raw as a number', function() {
+                var raw = '10';
+                var got = Koala.util.Filter.leadingZeroRawToValue(raw);
+                expect(got).to.be.equal(10);
+            });
+
+            it('returns raw as a number', function() {
+                var raw = '100';
+                var got = Koala.util.Filter.leadingZeroRawToValue(raw);
+                expect(got).to.be.equal(100);
+            });
+
+            it('returns raw as a number, but raw is not equal got', function() {
+                // the value of raw is now im octral system
+                // the value 020 is im decimal system the value 16
+                var raw = 020;
+                var got = Koala.util.Filter.leadingZeroRawToValue(raw);
+                expect(got).to.not.be.equal(20);
+                expect(got).to.be.equal(16);
             });
 
         });
@@ -317,12 +480,12 @@ describe('Koala.util.Filter', function() {
                 expect(Koala.util.Filter.startAndEndFieldnamesFromMetadataParam).to.be.a(Function);
             });
 
-            it('returns check is object', function() {
+            it('returns an object', function() {
                 var got = Koala.util.Filter.startAndEndFieldnamesFromMetadataParam(param);
                 expect(got).to.be.an('object');
             });
 
-            it('returns check the object have the properties startName and endName', function() {
+            it('returns the properties startName and endName ', function() {
                 var got = Koala.util.Filter.startAndEndFieldnamesFromMetadataParam(param);
                 expect(got).to.have.property('startName');
                 expect(got).to.have.property('endName');

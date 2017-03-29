@@ -1,13 +1,6 @@
-Ext.Loader.syncRequire([
-    'Koala.util.AppContext',
-    'BasiGX.view.component.Map'
-]);
+Ext.Loader.syncRequire(['Koala.util.AppContext']);
 
 describe('Koala.util.AppContext', function() {
-
-    afterEach(function() {
-        delete Koala.Application;
-    });
 
     describe('Basics', function() {
         it('is defined', function() {

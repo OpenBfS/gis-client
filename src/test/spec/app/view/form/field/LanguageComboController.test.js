@@ -3,11 +3,6 @@ Ext.Loader.syncRequire([
 ]);
 
 describe('Koala.view.form.field.LanguageComboController', function() {
-
-    afterEach(function() {
-        delete Koala.Application;
-    });
-
     describe('Basics', function() {
         it('is defined', function() {
             expect(Koala.view.form.field.LanguageComboController).to.not.be(undefined);

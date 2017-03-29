@@ -6,4 +6,6 @@ describe('Koala.view.component.TextTool', function() {
             expect(Koala.view.component.TextTool).to.not.be(undefined);
         });
     });
+
+    // handleTextToolClick
 });

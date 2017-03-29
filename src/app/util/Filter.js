@@ -80,6 +80,7 @@ Ext.define('Koala.util.Filter', {
          *                  the keys `parameter`, `mindatetimeinstant` and
          *                  `maxdatetimeinstant`.
          */
+         // TODO: In the test for the mindatetimeinstant is wrong
         getStartEndFilterFromMetadata: function(metadata) {
             var staticMe = Koala.util.Filter;
             var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
@@ -353,7 +354,7 @@ Ext.define('Koala.util.Filter', {
 
             var spinner;
             if (!Ext.isModern) {
-                spinner = Ext.create({
+                spinner = {
                     xtype: 'numberfield',
                     name: name,
                     spinnerType: spinnerType,
@@ -370,9 +371,9 @@ Ext.define('Koala.util.Filter', {
                     listeners: {
                         change: staticMe.handleSpinnerChange
                     }
-                });
+                };
             } else {
-                spinner = Ext.create({
+                spinner = {
                     xtype: 'selectfield',
                     name: name,
                     spinnerType: spinnerType,
@@ -386,7 +387,7 @@ Ext.define('Koala.util.Filter', {
                     listeners: {
                         change: staticMe.handleSpinnerChange
                     }
-                });
+                };
             }
 
             return spinner;
