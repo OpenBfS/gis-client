@@ -94,7 +94,7 @@ Ext.define('Koala.util.Layer', {
 
         /**
          * Checks whether the passed layer has it's original metadata stored at
-         * the exected location. we need this methdo so that we can check the
+         * the exected location. We need this method so that we can check the
          * various layers that might be passed to layer utility methods.
          *
          * @param {ol.layer.Layer} layer The layer where we want to check.
