@@ -586,7 +586,15 @@ Ext.define('Koala.view.form.LayerFilterController', {
     selectEffectiveValues: function(element) {
         var list = element.component;
         var listStore = list.getStore();
-        var values = list.value.split(',');
+        var val = list.value;
+        var values;
+        if (Ext.isString(val)) {
+            values = val.split(',');
+        } else if (Ext.isArray(val)) {
+            values = val;
+        } else {
+            values = [val];
+        }
         var valField = Koala.util.Filter.COMBO_VAL_FIELD;
         var records = [];
 
