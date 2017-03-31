@@ -46,10 +46,10 @@ describe('Koala.util.Style', function() {
 
         describe('#getAttributekeysFromVectorLayer', function() {
             it('is defined', function() {
-                expect(Koala.util.Style.getAttributeKeysFromVetorLayer).to.not.be(undefined);
+                expect(Koala.util.Style.getAttributekeysFromVectorLayer).to.not.be(undefined);
             });
             it('is a function', function() {
-                expect(Koala.util.Style.getAttributeKeysFromVetorLayer).to.be.a(Function);
+                expect(Koala.util.Style.getAttributekeysFromVectorLayer).to.be.a(Function);
             });
         });
 
