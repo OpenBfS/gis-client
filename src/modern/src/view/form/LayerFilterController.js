@@ -347,8 +347,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
             filter, 'minutes', 'minutespinner', value
         );
 
-        hourSpinner.setWidth('50%');
-        minuteSpinner.setWidth('50%');
+        hourSpinner.width = '50%';
+        minuteSpinner.width = '50%';
 
         var timeContainer = {
             xtype: 'container',
@@ -446,8 +446,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
             filter, 'minutes', 'minminutespinner', startValue
         );
 
-        minHourSpinner.setWidth('50%');
-        minMinuteSpinner.setWidth('50%');
+        minHourSpinner.width = '50%';
+        minMinuteSpinner.width = '50%';
 
         var minTimeContainer = {
             xtype: 'container',
@@ -490,8 +490,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
             filter, 'minutes', 'maxminutespinner', endValue
         );
 
-        maxHourSpinner.setWidth('50%');
-        maxMinuteSpinner.setWidth('50%');
+        maxHourSpinner.width = '50%';
+        maxMinuteSpinner.width = '50%';
 
         var maxTimeContainer = {
             xtype: 'container',
