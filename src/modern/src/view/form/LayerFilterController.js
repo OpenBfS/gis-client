@@ -22,6 +22,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
     requires: [
         'Ext.Toast',
+        'Ext.field.Select',
+        'Ext.dataview.List',
 
         'Koala.util.Date',
         'Koala.util.Filter',
