@@ -94,10 +94,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 titleSequence, idx, field);
 
             var value;
-            if (featureProps[field] || featureProps[field]===0){
+            if (featureProps[field] || featureProps[field] === 0) {
                 value = featureProps[field];
-            }
-            else{
+            } else {
                 value = Koala.util.String.getValueFromSequence(
                         defaultsSequence, idx, undefined);
             }
