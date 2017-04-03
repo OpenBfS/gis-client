@@ -970,6 +970,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var requestParams = me.getChartDataRequestParams(feat, true);
 
         var format = combo.getValue();
+        var layerName = this.getView().config.name.replace(' ','_');
         var fileEnding = combo.getSelectedRecord().get('field2');
         requestParams.outputFormat = format;
 
@@ -978,7 +979,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             url: requestUrl,
             params: requestParams,
             success: function(response) {
-              var fileName = stationId + '_koala-chart-data.' + fileEnding;
+              var fileName = stationId + '_' + layerName + '.' + fileEnding;
 
               // Use the download library to enforce a browser download.
               download(response.responseText, fileName, format);
