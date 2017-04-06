@@ -232,14 +232,27 @@ Ext.define("Koala.view.form.Print", {
         var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
         var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
 
+        var treePanel = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+        var treeStore = treePanel.getStore();
+
+        treeStore.on('nodemove', me.onTreeStoreNodeMove);
+        legendsFieldset.on('destroy', function() {
+            treeStore.un('nodemove', me.onTreeStoreNodeMove);
+        });
+
         var items = [];
+
+        // The layers are initially not synchronous with the layerTree. So we
+        // reverse the Array initally.
+        layers.reverse();
+
         Ext.each(layers, function(layer) {
             if (layer.get('visible') && layer.get('allowPrint')) {
                 var legendTextHtml = me.prepareLegendTextHtml(layer);
 
                 var layerLegendContainer = Ext.create('Ext.container.Container', {
                     layer: layer,
-                    name: 'layerLegendContainer',
+                    name: layer.get('name') + '_layerLegendContainer',
                     items: [{
                         xtype: 'checkbox',
                         checked: true,
@@ -294,6 +307,27 @@ Ext.define("Koala.view.form.Print", {
         }
 
         legendsFieldset.add(items);
+    },
+
+    /**
+     * A listener for the treeStore on nodeMove event. Reorders the
+     * layerLegendContainers to be synchronous with the maps layer order.
+     *
+     */
+    onTreeStoreNodeMove: function() {
+        var treeStore = this;
+        var legendsFieldset = Ext.ComponentQuery.query(
+                'fieldset[name="legendsFieldset"]')[0];
+        var itemsClone = Ext.clone(legendsFieldset.items.items);
+        legendsFieldset.removeAll(false);
+
+        treeStore.each(function(layerNode) {
+            var layer = layerNode.getData();
+            var matchedItem = Ext.Array.findBy(itemsClone, function(item) {
+                return item.name === layer.get('name') + '_layerLegendContainer';
+            });
+            legendsFieldset.add(matchedItem);
+        });
     },
 
     /**
@@ -543,8 +577,10 @@ Ext.define("Koala.view.form.Print", {
         // TODO This query should be optimized or changed into some
         // different kind of logic
         var additionalFields = view.query(
-            'fieldset[name=attributes]>field[name!=dpi]'
+            'fieldset[name=attributes]>field[name!=dpi],' +
+            'fieldset[name=attributes]>container>textfield[name!=dpi]'
         );
+
         Ext.each(additionalFields, function(field) {
             if (field.getName() === 'scalebar') {
                 attributes.scalebar = view.getScaleBarObject();
