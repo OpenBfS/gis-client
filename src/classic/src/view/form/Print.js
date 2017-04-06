@@ -112,26 +112,41 @@ Ext.define("Koala.view.form.Print", {
     },
 
     /**
-     * @override Override to return an htmleditor instead of a textfield
+     * It returns a container with a textfield and a corresponding editbutton
+     * as items.
+     *
+     * @param {Ext.data.Model} attributeRec An Ext.data.Model containing
+     *                                      attribute data.
+     * @return {Object} An object representation of an Ext.container.Container
      */
-    getStringField: function(attributeRec) {
+    getStringFieldContainer: function(attributeRec) {
+        var me = this;
         return {
-            xtype: 'textfield',
-            name: attributeRec.get('name'),
-            fieldLabel: attributeRec.get('name'),
-            value: attributeRec.get('default'),
-            allowBlank: true,
-            listeners: {
-                focus: this.onTextFieldFocus,
-                scope: this
-            }
+            xtype: 'container',
+            layout: 'hbox',
+            items: [{
+                xtype: 'textfield',
+                name: attributeRec.get('name'),
+                fieldLabel: attributeRec.get('name'),
+                value: attributeRec.get('default'),
+                allowBlank: true,
+                editable: false
+            }, {
+                xtype: 'button',
+                name: attributeRec.get('name') + '_editbutton',
+                handler: me.onTextFieldEditButtonClicked,
+                iconCls: 'fa fa-pencil'
+            }]
         };
     },
 
     /**
-     *
+     * Listener for the textfield edit buttons. It will open a window with a
+     * htmleditor with the textfields value. The textfield has to be in the same
+     * container as the editbutton.
      */
-    onTextFieldFocus: function(textfield) {
+    onTextFieldEditButtonClicked: function() {
+        var textfield = this.up('container').down('textfield');
         Ext.create('Ext.window.Window', {
             title: textfield.getFieldLabel() + ' HTML',
             layout: 'fit',
@@ -173,13 +188,6 @@ Ext.define("Koala.view.form.Print", {
             checkboxName: 'legendsFieldsetCheckBox',
             checkboxToggle: true
         });
-
-        // TODO Refactor. Due to https://redmine-koala.bfs.de/issues/1574 only
-        // the value of the filter should be updated in the legendhtml.
-        var listenerFunction = function() {
-            console.log('TODO refactor');
-        };
-
         me.initLegendsFieldset(legendsFieldset);
 
         return legendsFieldset;
@@ -239,15 +247,21 @@ Ext.define("Koala.view.form.Print", {
                         layer: layer,
                         boxLabel: layer.get('name')
                     }, {
-                        xtype: 'textfield',
-                        name: layer.get('name') + '_legendtext',
-                        fieldLabel: me.getUpdateLegendtext(),
-                        value: legendTextHtml,
-                        allowBlank: true,
-                        listeners: {
-                            focus: me.onTextFieldFocus,
-                            scope: me
-                        }
+                        xtype: 'container',
+                        layout: 'hbox',
+                        items: [{
+                            xtype: 'textfield',
+                            name: layer.get('name') + '_legendtext',
+                            editable: false,
+                            fieldLabel: me.getUpdateLegendtext(),
+                            value: legendTextHtml,
+                            allowBlank: true
+                        }, {
+                            xtype: 'button',
+                            name: layer.get('name') + '_legendtexteditbutton',
+                            handler: me.onTextFieldEditButtonClicked,
+                            iconCls: 'fa fa-pencil'
+                        }]
                     }],
                     listeners: {
                         'destroy': function() {
@@ -389,14 +403,14 @@ Ext.define("Koala.view.form.Print", {
                 attributeFields = me.getLegendAttributeFields(attributeRec);
                 break;
             case "String":
-                attributeFields = me.getStringField(attributeRec);
+                attributeFields = me.getStringFieldContainer(attributeRec);
                 break;
             case "Boolean":
                 attributeFields = me.getCheckBoxBooleanFields(attributeRec);
                 break;
             case "DataSourceAttributeValue":
                 Ext.toast('Data Source not yet supported');
-                attributeFields = me.getStringField(attributeRec);
+                attributeFields = me.getStringFieldContainer(attributeRec);
                 break;
             default:
                 break;
