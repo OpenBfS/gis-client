@@ -236,8 +236,12 @@ Ext.define("Koala.view.form.Print", {
         var treeStore = treePanel.getStore();
 
         treeStore.on('nodemove', me.onTreeStoreNodeMove);
+        treeStore.on('nodeinsert', me.onTreeStoreNodeInsert, me);
+        treeStore.on('noderemove', me.onTreeStoreNodeRemove, me);
         legendsFieldset.on('destroy', function() {
-            treeStore.un('nodemove', me.onTreeStoreNodeMove);
+          treeStore.un('nodemove', me.onTreeStoreNodeMove);
+          treeStore.un('nodeinsert', me.onTreeStoreNodeInsert, me);
+          treeStore.un('noderemove', me.onTreeStoreNodeRemove, me);
         });
 
         var items = [];
@@ -248,54 +252,7 @@ Ext.define("Koala.view.form.Print", {
 
         Ext.each(layers, function(layer) {
             if (layer.get('visible') && layer.get('allowPrint')) {
-                var legendTextHtml = me.prepareLegendTextHtml(layer);
-
-                var layerLegendContainer = Ext.create('Ext.container.Container', {
-                    layer: layer,
-                    name: layer.get('name') + '_layerLegendContainer',
-                    items: [{
-                        xtype: 'checkbox',
-                        checked: true,
-                        name: layer.get('name') + '_visible',
-                        layer: layer,
-                        boxLabel: layer.get('name')
-                    }, {
-                        xtype: 'container',
-                        layout: 'hbox',
-                        items: [{
-                            xtype: 'textfield',
-                            name: layer.get('name') + '_legendtext',
-                            editable: false,
-                            fieldLabel: me.getUpdateLegendtext(),
-                            value: legendTextHtml,
-                            allowBlank: true
-                        }, {
-                            xtype: 'button',
-                            name: layer.get('name') + '_legendtexteditbutton',
-                            handler: me.onTextFieldEditButtonClicked,
-                            iconCls: 'fa fa-pencil'
-                        }]
-                    }],
-                    listeners: {
-                        'destroy': function() {
-                            layer.un('change:visible',
-                                me.onLayerVisibiltyChange.bind(layer,
-                                    layerLegendContainer)
-                            );
-                            layer.un('change',
-                                me.updateLegendText.bind(me, layerLegendContainer)
-                            );
-                        }
-                    }
-                });
-
-                layer.on('change:visible',
-                    me.onLayerVisibiltyChange.bind(me, layerLegendContainer)
-                );
-                layer.on('change',
-                    me.updateLegendText.bind(me, layerLegendContainer)
-                );
-
+                var layerLegendContainer = me.createLegendContainer(layer);
                 items.push(layerLegendContainer);
             }
         });
@@ -309,15 +266,71 @@ Ext.define("Koala.view.form.Print", {
         legendsFieldset.add(items);
     },
 
+    createLegendContainer: function(layer) {
+        var me = this;
+        var legendTextHtml = me.prepareLegendTextHtml(layer);
+        var layerLegendContainer = Ext.create('Ext.container.Container', {
+            layer: layer,
+            name: layer.get('name') + '_layerLegendContainer',
+            items: [{
+                xtype: 'checkbox',
+                checked: true,
+                name: layer.get('name') + '_visible',
+                layer: layer,
+                boxLabel: layer.get('name')
+            }, {
+                xtype: 'container',
+                layout: 'hbox',
+                items: [{
+                    xtype: 'textfield',
+                    name: layer.get('name') + '_legendtext',
+                    editable: false,
+                    // TODO i18n
+                    fieldLabel: 'Legendtext',
+                    value: legendTextHtml,
+                    allowBlank: true
+                }, {
+                    xtype: 'button',
+                    name: layer.get('name') + '_legendtexteditbutton',
+                    handler: me.onTextFieldEditButtonClicked,
+                    iconCls: 'fa fa-pencil'
+                }]
+            }]
+        });
+
+        var onLayerVisibiltyChange = me.onLayerVisibiltyChange.bind(
+                me, layerLegendContainer);
+        var updateLegendText = me.updateLegendText.bind(
+                me, layerLegendContainer);
+
+        layer.on('change:visible',
+            onLayerVisibiltyChange
+        );
+        layer.on('change',
+            updateLegendText
+        );
+
+        layerLegendContainer.on('beforedestroy', function() {
+            layer.un('change:visible',
+                onLayerVisibiltyChange
+            );
+            layer.un('change',
+                updateLegendText
+            );
+        });
+
+        return layerLegendContainer;
+    },
+
     /**
-     * A listener for the treeStore on nodeMove event. Reorders the
-     * layerLegendContainers to be synchronous with the maps layer order.
-     *
-     */
+    * A listener for the treeStore on nodeMove event. Reorders the
+    * layerLegendContainers to be synchronous with the maps layer order.
+    *
+    */
     onTreeStoreNodeMove: function() {
         var treeStore = this;
         var legendsFieldset = Ext.ComponentQuery.query(
-                'fieldset[name="legendsFieldset"]')[0];
+            'fieldset[name="legendsFieldset"]')[0];
         var itemsClone = Ext.clone(legendsFieldset.items.items);
         legendsFieldset.removeAll(false);
 
@@ -328,6 +341,34 @@ Ext.define("Koala.view.form.Print", {
             });
             legendsFieldset.add(matchedItem);
         });
+    },
+
+    /**
+    * A listener for the treeStore nodeInsert event. Adds a layerLegendContainer
+    * to the legendsFieldset.
+    *
+    */
+    onTreeStoreNodeInsert: function(node, inserted) {
+        var me = this;
+        var layer = inserted.getOlLayer();
+        var legendContainer = me.createLegendContainer(layer);
+        var legendsFieldset = me.down('fieldset[name="legendsFieldset"]');
+        legendsFieldset.insert(0, legendContainer);
+    },
+
+    /**
+    * A listener for the treeStore nodeRemove event. Removes a layerLegendContainer
+    * from the legendsFieldset if the corresponding layer is removed from the
+    * tree.
+    *
+    */
+    onTreeStoreNodeRemove: function(node, removed) {
+        var me = this;
+        var layer = removed.getOlLayer();
+        var legendsFieldset = me.down('fieldset[name="legendsFieldset"]');
+        var componentName = layer.get('name') + '_layerLegendContainer';
+        var legendContainer = legendsFieldset.down('[name='+componentName+']');
+        legendsFieldset.remove(legendContainer);
     },
 
     /**
