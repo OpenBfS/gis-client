@@ -428,7 +428,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                         // d3.selectAll('circle')
                         //     .attr('cy', function(d) {
-                        //         return scaleGenerator(d.value);
+                        //         return scaleGenerator(d[shape.config.xField]);
                         //     });
                     }
                 });
@@ -489,7 +489,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                     // set the curve interpolator
                     .curve(curveType)
                     .defined(function(d) {
-                        return Ext.isDefined(d.value);
+                        return Ext.isDefined(d[xField]);
                     })
                     // set the x accessor
                     .x(function(d) {
