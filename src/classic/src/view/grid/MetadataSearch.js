@@ -60,30 +60,34 @@ Ext.define("Koala.view.grid.MetadataSearch", {
         beforedestroy: 'teardownStatusLineListeners'
     },
 
-    features: [{
-        id: 'group',
-        ftype: 'grouping',
-        groupHeaderTpl: [
-            '{name:this.formatName}', {
-            formatName: function(name) {
-                if (name === "dataset") {
-                    return "Daten"; // TODO i18n
-                }
-                if (name === "series") {
-                    return "Datenserie"; // TODO i18n
-                }
-                if (name === "service") {
-                    return "Dienst"; // TODO i18n
-                }
-            }
-        } ]
-    }],
+    // Commented out as it can't work! TODO
+    // features: [{
+    //     id: 'group',
+    //     ftype: 'grouping',
+    //     groupHeaderTpl: [
+    //         '{name:this.formatName(values)}', {
+    //         formatName: function(name) {
+    //             var vm = this.owner.view.lookupViewModel();
+    //             if (name === "dataset") {
+    //                 return vm.get('formatNameDataset');
+    //             }
+    //             if (name === "series") {
+    //                 return vm.get('formatNameSeries');
+    //             }
+    //             if (name === "service") {
+    //                 return vm.get('formatNameService');
+    //             }
+    //         }
+    //     } ]
+    // }],
 
     hideHeaders: true,
 
     columns: {
         items: [{
-            text: 'Name', // TODO i18n
+            bind: {
+                text: '{columnTextName}'
+            },
             dataIndex: 'name',
             flex: 3,
             renderer: function(value) {
@@ -91,7 +95,9 @@ Ext.define("Koala.view.grid.MetadataSearch", {
                     + value +'</div>';
             }
         }, {
-            text: 'Service', // TODO i18n
+            bind: {
+                text: '{columnTextService}'
+            },
             dataIndex: 'serviceType',
             flex: 1
         }, {
@@ -100,7 +106,7 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             tdCls: 'k-action-column',
             items: [{
                 icon: 'classic/resources/img/map_add.png',
-                tooltip: 'Zur Karte hinzufügen', // TODO i18n
+                tooltip: 'Zur Karte hinzufügen', // TODO i18n addToMapTooltip
                 handler: 'addToMap'
             }],
             renderer: function(value, meta, record) {
@@ -114,7 +120,7 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             tdCls: 'k-action-column',
             items: [{
                 icon: 'classic/resources/img/information.png',
-                tooltip: 'Info', // TODO i18n
+                tooltip: 'Info', // TODO i18n infoTooltip
                 handler: 'getInfo'
             }]
         }]
