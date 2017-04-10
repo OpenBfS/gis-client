@@ -328,19 +328,27 @@ Ext.define("Koala.view.form.Print", {
     *
     */
     onTreeStoreNodeMove: function() {
-        var treeStore = this;
         var legendsFieldset = Ext.ComponentQuery.query(
             'fieldset[name="legendsFieldset"]')[0];
         var itemsClone = Ext.clone(legendsFieldset.items.items);
         legendsFieldset.removeAll(false);
 
-        treeStore.each(function(layerNode) {
-            var layer = layerNode.getData();
-            var matchedItem = Ext.Array.findBy(itemsClone, function(item) {
-                return item.name === layer.get('name') + '_layerLegendContainer';
+        var treeStore = this;
+        // We need to delay the store-Iteration as the "nodeMove" event is
+        // fired before the node is readded to the store. The iteration will then
+        // skip the moved node. This is not nice and we should change it to an
+        // other event or strategy maybe.
+        // TODO
+        setTimeout(function() {
+            treeStore.each(function(layerNode) {
+                var layer = layerNode.getData();
+                var matchedItem = Ext.Array.findBy(itemsClone, function(item) {
+                    return item.name === layer.get('name') + '_layerLegendContainer';
+                });
+                legendsFieldset.add(matchedItem);
             });
-            legendsFieldset.add(matchedItem);
-        });
+        }, 200);
+
     },
 
     /**
