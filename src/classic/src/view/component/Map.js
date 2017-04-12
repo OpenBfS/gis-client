@@ -26,7 +26,8 @@ Ext.define("Koala.view.component.Map", {
     ],
 
     config: {
-        hoverFeatureClickBufferMS: 250
+        hoverFeatureClickBufferMS: 250,
+        pointerRestInterval: 20
     },
 
     /**
@@ -51,6 +52,7 @@ Ext.define("Koala.view.component.Map", {
         if (hoverPlugin) {
             var selStyleFunction = staticMe.styleFromGnos("selectStyle");
             var highlightStyleFunction = staticMe.styleFromGnos("hoverStyle");
+            hoverPlugin.setPointerRestInterval(me.getPointerRestInterval());
             hoverPlugin.selectStyleFunction = selStyleFunction;
             hoverPlugin.highlightStyleFunction = highlightStyleFunction;
             hoverPlugin.getToolTipHtml = me.getController().getToolTipHtml;
