@@ -106,10 +106,12 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             tdCls: 'k-action-column',
             items: [{
                 icon: 'classic/resources/img/map_add.png',
-                tooltip: 'Zur Karte hinzufügen', // TODO i18n addToMapTooltip
+                tooltip: 'Zur Karte hinzufügen',
                 handler: 'addToMap'
             }],
             renderer: function(value, meta, record) {
+                var vm = this.lookupViewModel();
+                this.items[0].tooltip = vm.get('addToMapTooltip');
                 if (record.get('type') === "dataset") {
                     meta.style = "display:none;";
                 }
@@ -120,9 +122,13 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             tdCls: 'k-action-column',
             items: [{
                 icon: 'classic/resources/img/information.png',
-                tooltip: 'Info', // TODO i18n infoTooltip
+                tooltip: 'Info',
                 handler: 'getInfo'
-            }]
+            }],
+            renderer: function() {
+                var vm = this.lookupViewModel();
+                this.items[0].tooltip = vm.get('infoTooltip');
+            }
         }]
     }
 });
