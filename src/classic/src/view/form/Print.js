@@ -124,6 +124,7 @@ Ext.define("Koala.view.form.Print", {
         return {
             xtype: 'container',
             layout: 'hbox',
+            margin: '5px 0px',
             items: [{
                 xtype: 'textfield',
                 name: attributeRec.get('name'),
@@ -235,19 +236,23 @@ Ext.define("Koala.view.form.Print", {
         var treePanel = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
         var treeStore = treePanel.getStore();
 
+        var timeReferenceButton = Ext.ComponentQuery.query('k-button-timereference')[0];
+        timeReferenceButton.disable();
+
         treeStore.on('nodemove', me.onTreeStoreNodeMove);
         treeStore.on('nodeinsert', me.onTreeStoreNodeInsert, me);
         treeStore.on('noderemove', me.onTreeStoreNodeRemove, me);
         legendsFieldset.on('destroy', function() {
-          treeStore.un('nodemove', me.onTreeStoreNodeMove);
-          treeStore.un('nodeinsert', me.onTreeStoreNodeInsert, me);
-          treeStore.un('noderemove', me.onTreeStoreNodeRemove, me);
+            timeReferenceButton.enable();
+            treeStore.un('nodemove', me.onTreeStoreNodeMove);
+            treeStore.un('nodeinsert', me.onTreeStoreNodeInsert, me);
+            treeStore.un('noderemove', me.onTreeStoreNodeRemove, me);
         });
 
         var items = [];
 
         // The layers are initially not synchronous with the layerTree. So we
-        // reverse the Array initally.
+        // reverse the Array initially.
         layers.reverse();
 
         Ext.each(layers, function(layer) {
@@ -297,13 +302,13 @@ Ext.define("Koala.view.form.Print", {
             }]
         });
 
-        var onLayerVisibiltyChange = me.onLayerVisibiltyChange.bind(
+        var onLayerVisibilityChange = me.onLayerVisibilityChange.bind(
                 me, layerLegendContainer);
         var updateLegendText = me.updateLegendText.bind(
                 me, layerLegendContainer);
 
         layer.on('change:visible',
-            onLayerVisibiltyChange
+            onLayerVisibilityChange
         );
         layer.on('change',
             updateLegendText
@@ -311,7 +316,7 @@ Ext.define("Koala.view.form.Print", {
 
         layerLegendContainer.on('beforedestroy', function() {
             layer.un('change:visible',
-                onLayerVisibiltyChange
+                onLayerVisibilityChange
             );
             layer.un('change',
                 updateLegendText
@@ -386,7 +391,7 @@ Ext.define("Koala.view.form.Print", {
      *                                                       of the layer.
      * @param {ol.Object.Event} evt The 'change:visible' event of a layer.
      */
-    onLayerVisibiltyChange: function(layerLegendContainer, evt) {
+    onLayerVisibilityChange: function(layerLegendContainer, evt) {
         layerLegendContainer.setDisabled(evt.oldValue);
         var checkbox = layerLegendContainer.down('checkbox');
         checkbox.setValue(!evt.oldValue);
