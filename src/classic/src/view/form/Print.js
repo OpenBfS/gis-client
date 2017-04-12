@@ -285,8 +285,7 @@ Ext.define("Koala.view.form.Print", {
                     xtype: 'textfield',
                     name: layer.get('name') + '_legendtext',
                     editable: false,
-                    // TODO i18n
-                    fieldLabel: 'Legendtext',
+                    fieldLabel: me.getUpdateLegendtext(),
                     value: legendTextHtml,
                     allowBlank: true
                 }, {
