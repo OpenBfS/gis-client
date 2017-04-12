@@ -36,16 +36,10 @@ Ext.define("Koala.view.window.Print", {
         title: '{title}'
     },
 
-    minWidth: 360,
-    maxWidth: window.innerWidth - 100,
-    minHeight: 150,
-    maxHeight: window.innerHeight - 100,
-
     resizable: false,
     constrain: true,
 
     layout: 'fit',
-    bodyPadding: '10px',
 
     tools: [{
         type: 'help',
@@ -74,6 +68,8 @@ Ext.define("Koala.view.window.Print", {
         var urls = appContext.data.merge.urls;
         this.add({
             xtype: 'k-form-print',
+            maxWidth: window.innerWidth - 100,
+            maxHeight: window.innerHeight - 100,
             url: urls['print-servlet']
         });
     }

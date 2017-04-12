@@ -112,26 +112,42 @@ Ext.define("Koala.view.form.Print", {
     },
 
     /**
-     * @override Override to return an htmleditor instead of a textfield
+     * It returns a container with a textfield and a corresponding editbutton
+     * as items.
+     *
+     * @param {Ext.data.Model} attributeRec An Ext.data.Model containing
+     *                                      attribute data.
+     * @return {Object} An object representation of an Ext.container.Container
      */
-    getStringField: function(attributeRec) {
+    getStringFieldContainer: function(attributeRec) {
+        var me = this;
         return {
-            xtype: 'textfield',
-            name: attributeRec.get('name'),
-            fieldLabel: attributeRec.get('name'),
-            value: attributeRec.get('default'),
-            allowBlank: true,
-            listeners: {
-                focus: this.onTextFieldFocus,
-                scope: this
-            }
+            xtype: 'container',
+            layout: 'hbox',
+            margin: '5px 0px',
+            items: [{
+                xtype: 'textfield',
+                name: attributeRec.get('name'),
+                fieldLabel: attributeRec.get('name'),
+                value: attributeRec.get('default'),
+                allowBlank: true,
+                editable: false
+            }, {
+                xtype: 'button',
+                name: attributeRec.get('name') + '_editbutton',
+                handler: me.onTextFieldEditButtonClicked,
+                iconCls: 'fa fa-pencil'
+            }]
         };
     },
 
     /**
-     *
+     * Listener for the textfield edit buttons. It will open a window with a
+     * htmleditor with the textfields value. The textfield has to be in the same
+     * container as the editbutton.
      */
-    onTextFieldFocus: function(textfield) {
+    onTextFieldEditButtonClicked: function() {
+        var textfield = this.up('container').down('textfield');
         Ext.create('Ext.window.Window', {
             title: textfield.getFieldLabel() + ' HTML',
             layout: 'fit',
@@ -173,23 +189,7 @@ Ext.define("Koala.view.form.Print", {
             checkboxName: 'legendsFieldsetCheckBox',
             checkboxToggle: true
         });
-
-        var treePanel = Ext.ComponentQuery.
-                query('k-panel-routing-legendtree')[0];
-
-        var listenerFunction = function() {
-            me.updateLegendsFieldset(legendsFieldset);
-        };
-
-        var treeStore = treePanel.getStore();
-        treeStore.on('update', listenerFunction);
-        treeStore.on('datachange', listenerFunction);
-        legendsFieldset.on('destroy', function() {
-            treeStore.un('update', listenerFunction);
-            treeStore.un('datachange', listenerFunction);
-        });
-
-        me.updateLegendsFieldset(legendsFieldset);
+        me.initLegendsFieldset(legendsFieldset);
 
         return legendsFieldset;
     },
@@ -224,37 +224,41 @@ Ext.define("Koala.view.form.Print", {
      * Update the content of the legendsFieldset. Remove all. Get visible and
      * printable Layers from Map. Add those to the fieldset.
      */
-    updateLegendsFieldset: function(legendsFieldset) {
+    initLegendsFieldset: function(legendsFieldset) {
         var me = this;
         if (!legendsFieldset) {
             return;
         }
-        legendsFieldset.removeAll();
+
         var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
         var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
 
+        var treePanel = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+        var treeStore = treePanel.getStore();
+
+        var timeReferenceButton = Ext.ComponentQuery.query('k-button-timereference')[0];
+        timeReferenceButton.disable();
+
+        treeStore.on('nodemove', me.onTreeStoreNodeMove);
+        treeStore.on('nodeinsert', me.onTreeStoreNodeInsert, me);
+        treeStore.on('noderemove', me.onTreeStoreNodeRemove, me);
+        legendsFieldset.on('destroy', function() {
+            timeReferenceButton.enable();
+            treeStore.un('nodemove', me.onTreeStoreNodeMove);
+            treeStore.un('nodeinsert', me.onTreeStoreNodeInsert, me);
+            treeStore.un('noderemove', me.onTreeStoreNodeRemove, me);
+        });
+
         var items = [];
+
+        // The layers are initially not synchronous with the layerTree. So we
+        // reverse the Array initially.
+        layers.reverse();
+
         Ext.each(layers, function(layer) {
             if (layer.get('visible') && layer.get('allowPrint')) {
-                var legendTextHtml = me.prepareLegendTextHtml(layer);
-
-                items.push({
-                    xtype: 'checkbox',
-                    checked: true,
-                    name: layer.get('name') + '_visible',
-                    layer: layer,
-                    boxLabel: layer.get('name')
-                }, {
-                    xtype: 'textfield',
-                    name: layer.get('name') + '_legendtext',
-                    fieldLabel: me.getUpdateLegendtext(),
-                    value: legendTextHtml,
-                    allowBlank: true,
-                    listeners: {
-                        focus: me.onTextFieldFocus,
-                        scope: me
-                    }
-                });
+                var layerLegendContainer = me.createLegendContainer(layer);
+                items.push(layerLegendContainer);
             }
         });
 
@@ -267,24 +271,163 @@ Ext.define("Koala.view.form.Print", {
         legendsFieldset.add(items);
     },
 
+    createLegendContainer: function(layer) {
+        var me = this;
+        var legendTextHtml = me.prepareLegendTextHtml(layer);
+        var layerLegendContainer = Ext.create('Ext.container.Container', {
+            layer: layer,
+            name: layer.get('name') + '_layerLegendContainer',
+            items: [{
+                xtype: 'checkbox',
+                checked: true,
+                name: layer.get('name') + '_visible',
+                layer: layer,
+                boxLabel: layer.get('name')
+            }, {
+                xtype: 'container',
+                layout: 'hbox',
+                items: [{
+                    xtype: 'textfield',
+                    name: layer.get('name') + '_legendtext',
+                    editable: false,
+                    fieldLabel: me.getUpdateLegendtext(),
+                    value: legendTextHtml,
+                    allowBlank: true
+                }, {
+                    xtype: 'button',
+                    name: layer.get('name') + '_legendtexteditbutton',
+                    handler: me.onTextFieldEditButtonClicked,
+                    iconCls: 'fa fa-pencil'
+                }]
+            }]
+        });
+
+        var onLayerVisibilityChange = me.onLayerVisibilityChange.bind(
+                me, layerLegendContainer);
+        var updateLegendText = me.updateLegendText.bind(
+                me, layerLegendContainer);
+
+        layer.on('change:visible',
+            onLayerVisibilityChange
+        );
+        layer.on('change',
+            updateLegendText
+        );
+
+        layerLegendContainer.on('beforedestroy', function() {
+            layer.un('change:visible',
+                onLayerVisibilityChange
+            );
+            layer.un('change',
+                updateLegendText
+            );
+        });
+
+        return layerLegendContainer;
+    },
+
     /**
-     * Prepares the content of the legendTextHtml field by adding the filter from
-     * the RoutingLegendTree text.
+    * A listener for the treeStore on nodeMove event. Reorders the
+    * layerLegendContainers to be synchronous with the maps layer order.
+    *
+    */
+    onTreeStoreNodeMove: function() {
+        var legendsFieldset = Ext.ComponentQuery.query(
+            'fieldset[name="legendsFieldset"]')[0];
+        var itemsClone = Ext.clone(legendsFieldset.items.items);
+        legendsFieldset.removeAll(false);
+
+        var treeStore = this;
+        // We need to delay the store-Iteration as the "nodeMove" event is
+        // fired before the node is readded to the store. The iteration will then
+        // skip the moved node. This is not nice and we should change it to an
+        // other event or strategy maybe.
+        // TODO
+        setTimeout(function() {
+            treeStore.each(function(layerNode) {
+                var layer = layerNode.getData();
+                var matchedItem = Ext.Array.findBy(itemsClone, function(item) {
+                    return item.name === layer.get('name') + '_layerLegendContainer';
+                });
+                legendsFieldset.add(matchedItem);
+            });
+        }, 200);
+
+    },
+
+    /**
+    * A listener for the treeStore nodeInsert event. Adds a layerLegendContainer
+    * to the legendsFieldset.
+    *
+    */
+    onTreeStoreNodeInsert: function(node, inserted) {
+        var me = this;
+        var layer = inserted.getOlLayer();
+        var legendContainer = me.createLegendContainer(layer);
+        var legendsFieldset = me.down('fieldset[name="legendsFieldset"]');
+        legendsFieldset.insert(0, legendContainer);
+    },
+
+    /**
+    * A listener for the treeStore nodeRemove event. Removes a layerLegendContainer
+    * from the legendsFieldset if the corresponding layer is removed from the
+    * tree.
+    *
+    */
+    onTreeStoreNodeRemove: function(node, removed) {
+        var me = this;
+        var layer = removed.getOlLayer();
+        var legendsFieldset = me.down('fieldset[name="legendsFieldset"]');
+        var componentName = layer.get('name') + '_layerLegendContainer';
+        var legendContainer = legendsFieldset.down('[name='+componentName+']');
+        legendsFieldset.remove(legendContainer);
+    },
+
+    /**
+     * Get's called when the layers visibility changes. If it set to invisible
+     * the container for the corresponding legend while get disabled and
+     * deactivated.
+     * @param {Ext.container.Container} layerLegendContainer The layerLegendContainer
+     *                                                       of the layer.
+     * @param {ol.Object.Event} evt The 'change:visible' event of a layer.
+     */
+    onLayerVisibilityChange: function(layerLegendContainer, evt) {
+        layerLegendContainer.setDisabled(evt.oldValue);
+        var checkbox = layerLegendContainer.down('checkbox');
+        checkbox.setValue(!evt.oldValue);
+    },
+
+    /**
+     * Updates the Value of the underlying legend textfield of a given
+     * layerLegendContainer.
+     *
+     * @param {Ext.container.Container} layerLegendContainer The layerLegendContainer
+     *                                                       of the layer.
+     * @param {ol.Object.Event} evt The 'change' event of a layer.
+     */
+    updateLegendText: function(layerLegendContainer, evt) {
+        var me = this;
+        var layer = evt.target;
+        var legendText = me.prepareLegendTextHtml(layer);
+        layerLegendContainer.down('textfield').setValue(legendText);
+    },
+
+    /**
+     * Prepares the legendText for a given layer. It returns the layerName extended
+     * by a textual representation of the layer filter if given.
+     * @param {ol.layer.Base} layer A layer.
+     * @return {String} The markup representation for the legendtext.
      */
     prepareLegendTextHtml: function(layer) {
-        var layerName = layer.get('name'); // fallback
-        if ('metadata' in layer && 'printTitle' in layer.metadata) {
-            layerName = layer.metadata.printTitle;
-        }
-        var text = layerName;
-        var legendSpan = Ext.getDom(layer.get('__suffix_id__'));
+        var layerName = layer.get('name');
+        var filterText = Koala.util.Layer.getFiltersTextFromMetadata(
+            layer.metadata);
 
-        if (legendSpan) {
-            var filterText = legendSpan.innerHTML;
-            text = layerName + '<br/><font color="#999999">' + filterText + '</font>';
+        if (Ext.isEmpty(filterText)) {
+            return layerName;
+        } else {
+            return layerName + '<br/><font color="#999999">' + filterText + '</font>';
         }
-
-        return text;
     },
 
     /**
@@ -347,14 +490,14 @@ Ext.define("Koala.view.form.Print", {
                 attributeFields = me.getLegendAttributeFields(attributeRec);
                 break;
             case "String":
-                attributeFields = me.getStringField(attributeRec);
+                attributeFields = me.getStringFieldContainer(attributeRec);
                 break;
             case "Boolean":
                 attributeFields = me.getCheckBoxBooleanFields(attributeRec);
                 break;
             case "DataSourceAttributeValue":
                 Ext.toast('Data Source not yet supported');
-                attributeFields = me.getStringField(attributeRec);
+                attributeFields = me.getStringFieldContainer(attributeRec);
                 break;
             default:
                 break;
@@ -487,8 +630,10 @@ Ext.define("Koala.view.form.Print", {
         // TODO This query should be optimized or changed into some
         // different kind of logic
         var additionalFields = view.query(
-            'fieldset[name=attributes]>field[name!=dpi]'
+            'fieldset[name=attributes]>field[name!=dpi],' +
+            'fieldset[name=attributes]>container>textfield[name!=dpi]'
         );
+
         Ext.each(additionalFields, function(field) {
             if (field.getName() === 'scalebar') {
                 attributes.scalebar = view.getScaleBarObject();
