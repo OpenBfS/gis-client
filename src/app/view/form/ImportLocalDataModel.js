@@ -26,7 +26,6 @@ Ext.define('Koala.view.form.ImportLocalDataModel', {
         targetProjection: null,
         layerName: null,
         templateUuid: null,
-        // TODO add to locales
         fieldSetTitle: 'Upload of',
         cancelButtonText: 'Cancel',
         importButtonText: 'Import',

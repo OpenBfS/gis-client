@@ -203,7 +203,8 @@
             "mapBboxLabel": "fr:BBOX",
             "mapBboxButton": "fr:Info",
             "warnPrintTimedOutTitle": "fr:Druckfehler",
-            "warnPrintTimedOutText": "fr:Die Druckerzeugung hat das erlaubte Zeitlimit überschritten."
+            "warnPrintTimedOutText": "fr:Die Druckerzeugung hat das erlaubte Zeitlimit überschritten.",
+            "updateLegendtext": "fr:Legendtext"
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -211,7 +212,14 @@
             "data": {
                 "metadataSearchTitle": "fr:Daten und Dienste des BfS",
                 "searchInProgressText": "fr:Suche läuft…",
-                "noRecordsFoundText": "fr:Keine Datensätze gefunden"
+                "noRecordsFoundText": "fr:Keine Datensätze gefunden",
+                "formatNameDataset": "fr:Daten",
+                "formatNameSeries": "fr:Datenserie",
+                "formatNameService": "fr:Dienst",
+                "columnTextName": "fr:Name",
+                "columnTextService": "fr:Service",
+                "addToMapTooltip": "fr:Zur Karte hinzufügen",
+                "infoTooltip": "fr:Info"
             }
         }
     },
@@ -347,6 +355,7 @@
                 "setFilterBtnText": "fr:OK",
                 "resetFilterBtnText": "fr:Reset",
                 "selectChartLayerComboLabel": "fr:",
+                "selectChartLayerComboEmptyText": "fr:Chart hinzufügen",
                 "undoBtnText": "fr:…zurückzoomen",
                 "downloadBtnText": "fr:Download",
                 "downloadChartDataMsgTitle": "fr:Info",

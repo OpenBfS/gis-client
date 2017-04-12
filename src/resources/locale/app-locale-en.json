@@ -203,7 +203,8 @@
             "mapBboxLabel": "BBOX",
             "mapBboxButton": "Info",
             "warnPrintTimedOutTitle": "Printing Error",
-            "warnPrintTimedOutText": "Printing process has exceeded the valid time limit."
+            "warnPrintTimedOutText": "Printing process has exceeded the valid time limit.",
+            "updateLegendtext": "en:Legendtext"
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -211,7 +212,14 @@
             "data": {
                 "metadataSearchTitle": "BfS-data and -services",
                 "searchInProgressText": "searching…",
-                "noRecordsFoundText": "No records found"
+                "noRecordsFoundText": "No records found",
+                "formatNameDataset": "en:Daten",
+                "formatNameSeries": "en:Datenserie",
+                "formatNameService": "en:Dienst",
+                "columnTextName": "en:Name",
+                "columnTextService": "en:Service",
+                "addToMapTooltip": "en:Zur Karte hinzufügen",
+                "infoTooltip": "en:Info"
             }
         }
     },
@@ -349,6 +357,7 @@
                 "setFilterBtnText": "OK",
                 "resetFilterBtnText": "Reset",
                 "selectChartLayerComboLabel": "",
+                "selectChartLayerComboEmptyText": "en:Chart hinzufügen",
                 "undoBtnText": "…zoom back",
                 "downloadBtnText": "Download",
                 "downloadChartDataMsgTitle": "Info",
