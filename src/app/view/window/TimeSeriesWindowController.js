@@ -258,18 +258,19 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             height: '100%',
             width: 180,
             items: [{
-                bind: {
-                    text: '{downloadBtnText}'
-                },
                 xtype: 'button',
-                handler: me.onDownloadBtnClicked,
+                bind: {
+                    text: '{exportAsImageBtnText}'
+                },
+                handler: me.onExportAsImageClicked,
                 scope: me,
                 margin: '0 0 10px 0'
             }, {
+                xtype: 'button',
                 bind: {
                     text: '{undoBtnText}'
                 },
-                xtype: 'button',
+                hidden: !Koala.util.String.coerce(chartConfig.allowZoom),
                 handler: me.onUndoButtonClicked,
                 scope: me,
                 margin: '0 0 10px 0'
@@ -306,7 +307,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      *
      * @param {Ext.button.Button} btn The button.
      */
-    onDownloadBtnClicked: function(btn) {
+    onExportAsImageClicked: function(btn) {
         var chart = btn.up('[name="chart-composition"]').down('d3-chart');
         var chartCtrl = chart.getController();
         var cb = function(dataUri) {

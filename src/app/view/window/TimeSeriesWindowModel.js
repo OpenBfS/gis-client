@@ -29,7 +29,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
         selectChartLayerComboLabel: '',
         selectChartLayerComboEmptyText: '',
         undoBtnText: '',
-        downloadBtnText: '',
+        exportAsImageBtnText: '',
         downloadChartDataMsgTitle: '',
         downloadChartDataMsgMessage: '',
         downloadChartDataMsgButtonYes: '',

@@ -323,7 +323,9 @@
     "Koala.view.window.BarChart": {
         "config": {
             "data": {
-                "title": "Bar Chart"
+                "title": "Bar Chart",
+                "undoBtnText": "…zoom back",
+                "exportAsImageBtnText": "Export as image"
             }
         }
     },
@@ -359,7 +361,7 @@
                 "selectChartLayerComboLabel": "",
                 "selectChartLayerComboEmptyText": "en:Chart hinzufügen",
                 "undoBtnText": "…zoom back",
-                "downloadBtnText": "Download",
+                "exportAsImageBtnText": "Export as image",
                 "downloadChartDataMsgTitle": "Info",
                 "downloadChartDataMsgMessage": "Download current chart?",
                 "downloadChartDataMsgButtonYes": "Yes",
