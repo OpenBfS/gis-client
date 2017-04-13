@@ -16,20 +16,20 @@
 /**
  * @class Koala.view.window.Print
  */
-Ext.define("Koala.view.window.Print", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-print",
+Ext.define('Koala.view.window.Print', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-print',
 
     requires: [
-        "Koala.view.window.PrintController",
-        "Koala.view.window.PrintModel",
+        'Koala.view.window.PrintController',
+        'Koala.view.window.PrintModel',
 
-        "Koala.view.form.Print"
+        'Koala.view.form.Print'
     ],
 
-    controller: "k-window-print",
+    controller: 'k-window-print',
     viewModel: {
-        type: "k-window-print"
+        type: 'k-window-print'
     },
 
     bind: {

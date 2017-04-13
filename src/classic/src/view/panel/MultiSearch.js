@@ -16,24 +16,24 @@
 /**
  * @class Koala.view.panel.MultiSearch
  */
-Ext.define("Koala.view.panel.MultiSearch", {
-    extend: "Ext.panel.Panel",
-    xtype: "k-panel-multisearch",
+Ext.define('Koala.view.panel.MultiSearch', {
+    extend: 'Ext.panel.Panel',
+    xtype: 'k-panel-multisearch',
 
     requires: [
-        "Koala.view.panel.MultiSearchController",
-        "Koala.view.panel.MultiSearchModel",
+        'Koala.view.panel.MultiSearchController',
+        'Koala.view.panel.MultiSearchModel',
 
-        "Koala.view.grid.SpatialSearch",
-        "Koala.store.SpatialSearch",
+        'Koala.view.grid.SpatialSearch',
+        'Koala.store.SpatialSearch',
 
-        "Koala.view.grid.MetadataSearch",
-        "Koala.store.MetadataSearch"
+        'Koala.view.grid.MetadataSearch',
+        'Koala.store.MetadataSearch'
     ],
 
-    controller: "k-panel-multisearch",
+    controller: 'k-panel-multisearch',
     viewModel: {
-        type: "k-panel-multisearch"
+        type: 'k-panel-multisearch'
     },
 
     layout: 'vbox',

@@ -20,8 +20,8 @@
  *
  * @class Koala.view.form.Permalink
  */
-Ext.define("Koala.view.form.Permalink", {
-    extend: "BasiGX.view.form.Permalink",
+Ext.define('Koala.view.form.Permalink', {
+    extend: 'BasiGX.view.form.Permalink',
 
     xtype: 'k-form-permalink',
 
@@ -32,7 +32,7 @@ Ext.define("Koala.view.form.Permalink", {
     ],
 
     viewModel: {
-        type: "k-form-permalink"
+        type: 'k-form-permalink'
     },
 
     items: [{

@@ -56,11 +56,11 @@ Ext.define('Koala.view.container.styler.StylerController', {
             message: 'Stil von <b>' + layer.get('name') +
                 '</b> zurücksetzen?',
             buttonText: {
-                yes: "Ja",
-                no: "Nein"
+                yes: 'Ja',
+                no: 'Nein'
             },
             fn: function(btnId) {
-                if (btnId === "yes") {
+                if (btnId === 'yes') {
                     layer.setStyle(layer.get('originalStyle'));
                     layer.set('koalaStyle', undefined);
                     me.getView().up('window').close();

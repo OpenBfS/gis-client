@@ -29,7 +29,7 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         list.setHidden(false);
         var store = list.getStore();
         var newVal = field.getValue();
-        store.getProxy().setExtraParam('cql_filter', "NAME ilike '%" + newVal + "%'");
+        store.getProxy().setExtraParam('cql_filter', 'NAME ilike \'%' + newVal + '%\'');
         store.load();
 
         var metadataList = field.up().down('[name=metadatasearchlist]');
@@ -109,11 +109,11 @@ Ext.define('Koala.view.panel.MobileMenuController', {
     },
 
     getMetadataCql: function(fields, value) {
-        var cql = "";
+        var cql = '';
         Ext.each(fields, function(field, idx, fieldsArray) {
-            cql += field + " like '%" + value + "%'";
+            cql += field + ' like \'%' + value + '%\'';
             if (idx < fieldsArray.length-1) {
-                cql += " OR ";
+                cql += ' OR ';
             }
         });
         return cql;

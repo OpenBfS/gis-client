@@ -36,9 +36,9 @@ Ext.define('Koala.view.panel.MobileMetadataInfo', {
          * Translated in the local files
          */
         fieldNames: {
-            fileIdentifier: "",
-            abstract: "",
-            contact: ""
+            fileIdentifier: '',
+            abstract: '',
+            contact: ''
         }
     },
 

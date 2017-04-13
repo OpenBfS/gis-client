@@ -85,7 +85,7 @@ Ext.define('Koala.util.Object', {
 
             Ext.iterate(clone, function(key, value) {
                 if (Ext.String.startsWith(key, prefix)) {
-                    var unprefixedKey = key.replace(prefix, "");
+                    var unprefixedKey = key.replace(prefix, '');
                     if (guessTypes) {
                         value = Koala.util.String.coerce(value);
                     }
@@ -96,7 +96,7 @@ Ext.define('Koala.util.Object', {
         },
 
         coerceAll: function(obj) {
-            return this.getConfigByPrefix(obj, "", true);
+            return this.getConfigByPrefix(obj, '', true);
         }
     }
 });

@@ -6,6 +6,6 @@
  *
  * @class Koala.view.container.styler.Rules
  */
-Ext.define("Koala.view.container.styler.Rules", {
-    extend: "Ext.Component"
+Ext.define('Koala.view.container.styler.Rules', {
+    extend: 'Ext.Component'
 });

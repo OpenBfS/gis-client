@@ -16,8 +16,8 @@
 /**
  * @class Koala.view.component.TextTool
  */
-Ext.define("Koala.view.component.TextTool", {
-    extend: "Ext.Component",
+Ext.define('Koala.view.component.TextTool', {
+    extend: 'Ext.Component',
     xtype: 'k-component-texttool',
 
     /**

@@ -43,7 +43,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             return;
         }
 
-        var setFilterButton = Ext.create("Ext.Button", {
+        var setFilterButton = Ext.create('Ext.Button', {
             viewModel: me.getViewModel(),
             bind: {
                 text: view.getLayer() ?
@@ -60,21 +60,21 @@ Ext.define('Koala.view.form.LayerFilterController', {
         view.add(setFilterButton);
 
         Ext.each(filters, function(filter, idx) {
-            var type = (filter.type || "").toLowerCase();
+            var type = (filter.type || '').toLowerCase();
             switch (type) {
-                case "timerange":
+                case 'timerange':
                     me.createTimeRangeFilter(filter, idx);
                     break;
-                case "pointintime":
+                case 'pointintime':
                     me.createPointInTimeFilter(filter, idx);
                     break;
-                case "rodos":
+                case 'rodos':
                     break;
-                case "value":
+                case 'value':
                     me.createValueFilter(filter, idx);
                     break;
                 default:
-                    Ext.log.warn("Unexpected filter type: " + filter.type);
+                    Ext.log.warn('Unexpected filter type: ' + filter.type);
                     break;
             }
         });
@@ -161,7 +161,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         // Iterate over all filters…
         Ext.each(filters, function(filter, idx) {
             // … grab the associated fieldset by attribute
-            var selector = "[filterIdx='" + idx +"']";
+            var selector = '[filterIdx=\'' + idx +'\']';
             var fieldset = view.down(selector);
             if (fieldset) {
                 var fields = fieldset.query('field, list');
@@ -264,7 +264,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
     updateFilterValues: function(filters, idx, keyVals) {
         var FilterUtil = Koala.util.Filter;
         var filter = filters[idx];
-        var filterType = (filter.type || "").toLowerCase();
+        var filterType = (filter.type || '').toLowerCase();
         var param = filter.param;
         if (filterType === 'timerange') {
             var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
@@ -704,12 +704,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
     addWithoutFilterBtn: function() {
         var me = this;
         var view = me.getView();
-        var addWithoutFilterButton = Ext.create("Ext.Button", {
+        var addWithoutFilterButton = Ext.create('Ext.Button', {
             viewModel: me.getViewModel(),
             bind: {
-                text: "{buttonTextNoFilter}"
+                text: '{buttonTextNoFilter}'
             },
-            handler: "submitNoFilter"
+            handler: 'submitNoFilter'
         });
         view.add(addWithoutFilterButton);
     }

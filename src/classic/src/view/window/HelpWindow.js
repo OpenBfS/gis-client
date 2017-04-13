@@ -16,19 +16,19 @@
 /**
  * @class Koala.view.window.HelpWindow
  */
-Ext.define("Koala.view.window.HelpWindow", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-help",
+Ext.define('Koala.view.window.HelpWindow', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-help',
 
     requires: [
-        "Ext.list.Tree",
-        "Koala.view.window.HelpController",
-        "Koala.view.window.HelpModel"
+        'Ext.list.Tree',
+        'Koala.view.window.HelpController',
+        'Koala.view.window.HelpModel'
     ],
 
-    controller: "k-window-help",
+    controller: 'k-window-help',
     viewModel: {
-        type: "k-window-help"
+        type: 'k-window-help'
     },
 
     bind: {

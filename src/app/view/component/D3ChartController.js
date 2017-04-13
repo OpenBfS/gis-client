@@ -279,9 +279,9 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // We have to check if min and max make sense in relation to
             // the scale; 0 doesn't make sense if scale is logarithmic
-            if (axis.scale === "log" && (min === 0 || max === 0)) {
-                Ext.log.warn("Correcting min/max value for y-axis as" +
-                    " logarithmic scales don't work with 0");
+            if (axis.scale === 'log' && (min === 0 || max === 0)) {
+                Ext.log.warn('Correcting min/max value for y-axis as' +
+                    ' logarithmic scales don\'t work with 0');
                 if (min === 0) {
                     min = 0.00000001;
                 }
@@ -611,33 +611,33 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 tooltipCmp.setTarget(this);
                                 tooltipCmp.show();
                             });
-                shapeGroup.selectAll("text")
+                shapeGroup.selectAll('text')
                     .data(me.data[shapeId])
                     .enter()
-                    .append("text")
+                    .append('text')
                         .filter(function(d) {
                             return Ext.isDefined(d[yField]);
                         })
                         .text(function(d) {
                             return d[yField];
                         })
-                        .attr("transform", function(d) {
+                        .attr('transform', function(d) {
                             var x = me.scales[orientX](d[xField]);
                             var y = me.scales[orientY](d[yField]);
-                            return "rotate(-90," + x + "," + y + ") translate(-15,15)";
+                            return 'rotate(-90,' + x + ',' + y + ') translate(-15,15)';
                         })
-                        .attr("x", function(d) {
+                        .attr('x', function(d) {
                              return me.scales[orientX](d[xField]);
                         })
-                        .attr("y", function(d) {
+                        .attr('y', function(d) {
                              return me.scales[orientY](d[yField]);
                         })
-                        .attr("text-anchor", "middle")
-                        .style("font-family", "sans-serif")
-                        .style("font-size", "11px")
-                        .style("font-weight", "bold")
-                        .style("fill", "white")
-                        .style("unselectable", "on");
+                        .attr('text-anchor', 'middle')
+                        .style('font-family', 'sans-serif')
+                        .style('font-size', '11px')
+                        .style('font-weight', 'bold')
+                        .style('fill', 'white')
+                        .style('unselectable', 'on');
             } else {
                 shapeGroup.append('path')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
@@ -874,7 +874,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var targetLayer = view.getTargetLayer();
             var allowDownload = Koala.util.Object.getPathStrOr(
                     targetLayer,
-                    "metadata/layerConfig/olProperties/allowDownload",
+                    'metadata/layerConfig/olProperties/allowDownload',
                     true
                 );
             allowDownload = Koala.util.String.coerce(allowDownload);
@@ -1445,16 +1445,16 @@ Ext.define('Koala.view.component.D3ChartController', {
         var multiplier = 0;
 
         switch (unit.toLowerCase()) {
-            case "seconds":
+            case 'seconds':
                 multiplier = 1;
                 break;
-            case "minutes":
+            case 'minutes':
                 multiplier = 60;
                 break;
-            case "hours":
+            case 'hours':
                 multiplier = 3600;
                 break;
-            case "days":
+            case 'days':
                 multiplier = 86400;
                 break;
             default:
@@ -1498,15 +1498,15 @@ Ext.define('Koala.view.component.D3ChartController', {
     containsStation: function(candidate) {
         var me = this;
         var view = me.getView();
-        var chartingMetadata = view.getTargetLayer().get("timeSeriesChartProperties");
-        var identifyField = chartingMetadata.featureIdentifyField || "id";
+        var chartingMetadata = view.getTargetLayer().get('timeSeriesChartProperties');
+        var identifyField = chartingMetadata.featureIdentifyField || 'id';
         var candidateIdVal = candidate.get(identifyField);
         var doesContainSeries = false;
 
         if (!Ext.isDefined(candidateIdVal)) {
-            Ext.log.warn("Failed to determine if chart contains a series for " +
-                "the passed feature. Does it expose a field '" + identifyField +
-                "' with a sane value?");
+            Ext.log.warn('Failed to determine if chart contains a series for ' +
+                'the passed feature. Does it expose a field \'' + identifyField +
+                '\' with a sane value?');
         } else {
             var currentStations = view.getSelectedStations();
             Ext.each(currentStations, function(currentStation) {

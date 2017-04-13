@@ -16,19 +16,19 @@
 /**
  * @class Koala.view.panel.ThemeTree
  */
-Ext.define("Koala.view.panel.ThemeTree", {
-    extend: "Ext.tree.Panel",
+Ext.define('Koala.view.panel.ThemeTree', {
+    extend: 'Ext.tree.Panel',
     xtype: 'k-panel-themetree',
 
     requires: [
-        "Koala.view.component.TextTool",
-        "Koala.view.panel.ThemeTreeController",
-        "Koala.view.panel.ThemeTreeModel"
+        'Koala.view.component.TextTool',
+        'Koala.view.panel.ThemeTreeController',
+        'Koala.view.panel.ThemeTreeModel'
     ],
 
-    controller: "k-panel-themetree",
+    controller: 'k-panel-themetree',
     viewModel: {
-        type: "k-panel-themetree"
+        type: 'k-panel-themetree'
     },
 
     bind: {

@@ -39,10 +39,10 @@ var appDir = path.normalize(path.join(rootDir, 'app'));
 var classicServer = express();
 
 var enableCors = function(req, res, next) {
-        var allowOrigin = "*"; // any origin, baby.
-        var allowHeaders = "Origin, X-Requested-With, Content-Type, Accept";
-        res.header("Access-Control-Allow-Origin", allowOrigin);
-        res.header("Access-Control-Allow-Headers", allowHeaders);
+        var allowOrigin = '*'; // any origin, baby.
+        var allowHeaders = 'Origin, X-Requested-With, Content-Type, Accept';
+        res.header('Access-Control-Allow-Origin', allowOrigin);
+        res.header('Access-Control-Allow-Headers', allowHeaders);
         next();
     };
 

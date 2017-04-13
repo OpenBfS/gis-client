@@ -31,22 +31,22 @@ Ext.define('Koala.util.Layer', {
 
     statics: {
         /* i18n */
-        txtUntil: "",
-        titleAddLayer: "",
-        titleAddLayerFilter: "",
-        textUnknownLayer: "",
-        dspSignEq: "",
-        dspSignNotEq: "",
-        dspSignLtEq: "",
-        dspSignGtEq: "",
-        dspSignLt: "",
-        dspSignGt: "",
-        dspSignIn: "",
-        dspSignInJoiner: "",
-        dspSignInLastJoiner: "",
-        dspSignNotIn: "",
-        dspSignNotInJoiner: "",
-        dspSignNotInLastJoiner: "",
+        txtUntil: '',
+        titleAddLayer: '',
+        titleAddLayerFilter: '',
+        textUnknownLayer: '',
+        dspSignEq: '',
+        dspSignNotEq: '',
+        dspSignLtEq: '',
+        dspSignGtEq: '',
+        dspSignLt: '',
+        dspSignGt: '',
+        dspSignIn: '',
+        dspSignInJoiner: '',
+        dspSignInLastJoiner: '',
+        dspSignNotIn: '',
+        dspSignNotInJoiner: '',
+        dspSignNotInLastJoiner: '',
         /* i18n */
 
         /**
@@ -137,7 +137,7 @@ Ext.define('Koala.util.Layer', {
          * @return {boolean} Whether the layer allows to draw timeseries charts.
          */
         isTimeseriesChartLayer: function(layer) {
-            var timeseriesProps = layer.get("timeSeriesChartProperties") || {};
+            var timeseriesProps = layer.get('timeSeriesChartProperties') || {};
             var numTimeseriesProps = Ext.Object.getSize(timeseriesProps);
             return numTimeseriesProps > 0;
         },
@@ -150,7 +150,7 @@ Ext.define('Koala.util.Layer', {
          * @return {boolean} Whether the layer allows to draw bar charts.
          */
         isBarChartLayer: function(layer) {
-            var barProps = layer.get("barChartProperties") || {};
+            var barProps = layer.get('barChartProperties') || {};
             var numBarProps = Ext.Object.getSize(barProps);
             return numBarProps > 0;
         },
@@ -250,7 +250,7 @@ Ext.define('Koala.util.Layer', {
             }
 
             Ext.each(filters, function(f) {
-                if (f.param === "test_data") {
+                if (f.param === 'test_data') {
                   testdataFilter = f;
                 }
             });
@@ -337,7 +337,7 @@ Ext.define('Koala.util.Layer', {
             var staticMe = this;
             var filters = staticMe.getFiltersFromMetadata(metadata);
             if (filters === null) {
-                return "";
+                return '';
             }
 
             var filterTxts = [];
@@ -349,9 +349,9 @@ Ext.define('Koala.util.Layer', {
                 var filterType = filter.type;
                 var filterTxt = '';
 
-                if (filterType === "rodos") {
+                if (filterType === 'rodos') {
                     // TODO
-                } else if (filterType === "value") {
+                } else if (filterType === 'value') {
                     // Empty or false "test_data" filters should not be shown in the legend
                     if (filter.param === 'test_data' &&
                         (filter.effectivevalue.toLowerCase() === 'false' ||
@@ -360,12 +360,12 @@ Ext.define('Koala.util.Layer', {
                         return;
                     }
                     filterTxt += staticMe.stringifyValueFilter(filter, true);
-                } else if (filterType === "pointintime") {
+                } else if (filterType === 'pointintime') {
                     var date, time;
                     date = filter.effectivedatetime;
                     time = Koala.util.Date.getFormattedDate(date);
                     filterTxt += time;
-                } else if (filterType === "timerange") {
+                } else if (filterType === 'timerange') {
                     var startDate, startTime;
                     var endDate, endTime;
 
@@ -377,15 +377,15 @@ Ext.define('Koala.util.Layer', {
                     // endFormat
                     endTime = Koala.util.Date.getFormattedDate(endDate);
 
-                    filterTxt += "" +
+                    filterTxt += '' +
                         startTime +
-                        " " + staticMe.txtUntil + " " +
+                        ' ' + staticMe.txtUntil + ' ' +
                         endTime;
                 }
                 filterTxts.push(filterTxt);
             });
 
-            return filterTxts.join("<br />");
+            return filterTxts.join('<br />');
         },
 
         /**
@@ -525,11 +525,11 @@ Ext.define('Koala.util.Layer', {
          *     additional layer information.
          */
         getLayerNameSuffix: function(suffixId) {
-            return "" +
-                "<span" +
-                " class='layer-name-suffix'" +
-                " id='" + suffixId + "'>" +
-                "</span>";
+            return '' +
+                '<span' +
+                ' class=\'layer-name-suffix\'' +
+                ' id=\'' + suffixId + '\'>' +
+                '</span>';
         },
 
         /**
@@ -693,9 +693,9 @@ Ext.define('Koala.util.Layer', {
          * @param ol.layer.Base
          */
         getCurrentLegendUrl: function(layer) {
-            var width = layer.get("legendWidth");
-            var height= layer.get("legendHeight");
-            var legendUrl = layer.get("legendUrl") || "";
+            var width = layer.get('legendWidth');
+            var height= layer.get('legendHeight');
+            var legendUrl = layer.get('legendUrl') || '';
             var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
             var resolution = BasiGX.util.Map.getResolution(map);
             var scale = BasiGX.util.Map.getScale(map);
@@ -707,24 +707,24 @@ Ext.define('Koala.util.Layer', {
                 var params = source.getParams();
                 var styles = params && 'STYLES' in params && params.STYLES;
                 if (styles) {
-                    style = styles.split(",")[0];
+                    style = styles.split(',')[0];
                 }
             }
 
             if (!legendUrl) {
-                return "";
+                return '';
             }
             if (width) {
-                legendUrl = Ext.String.urlAppend(legendUrl, "WIDTH=" + width);
+                legendUrl = Ext.String.urlAppend(legendUrl, 'WIDTH=' + width);
             }
             if (height) {
-                legendUrl = Ext.String.urlAppend(legendUrl, "HEIGHT=" + height);
+                legendUrl = Ext.String.urlAppend(legendUrl, 'HEIGHT=' + height);
             }
             if (resolution) {
-                legendUrl = Ext.String.urlAppend(legendUrl, "SCALE=" + scale);
+                legendUrl = Ext.String.urlAppend(legendUrl, 'SCALE=' + scale);
             }
             if (style) {
-                legendUrl = Ext.String.urlAppend(legendUrl, "STYLE=" + style);
+                legendUrl = Ext.String.urlAppend(legendUrl, 'STYLE=' + style);
                 // requested by SB: replace any [[STYLES]] placeholders with the
                 // current style
                 legendUrl = Koala.util.String.replaceTemplateStrings(
@@ -752,13 +752,13 @@ Ext.define('Koala.util.Layer', {
                     metadata.layerConfig.olProperties || {} :
                     {};
             var mdLayerConfig = Koala.util.Object.getConfigByPrefix(
-                olProps, "layer_", true);
+                olProps, 'layer_', true);
 
             var mdSourceConfig = Koala.util.Object.getConfigByPrefix(
-                olProps, "source_", true);
+                olProps, 'source_', true);
 
             var mdParamConfig = Koala.util.Object.getConfigByPrefix(
-                olProps, "param_", false);
+                olProps, 'param_', false);
 
             layerConfig = Ext.apply(internalLayerConfig, mdLayerConfig);
             sourceConfig = Ext.apply(internalSourceConfig, mdSourceConfig);
@@ -916,7 +916,7 @@ Ext.define('Koala.util.Layer', {
             var cfg;
             var olProps = md.layerConfig.olProperties;
             var extraParams = Koala.util.Object.getConfigByPrefix(
-                    olProps, "param_");
+                    olProps, 'param_');
             var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
             var projection = map.getView().getProjection();
             var projCode = projection.getCode();
@@ -1038,7 +1038,7 @@ Ext.define('Koala.util.Layer', {
             var me = this;
             if (me.isViewParamFilter(f) &&
                 f.type === 'value' &&
-                f.param === "STYLES") {
+                f.param === 'STYLES') {
                 return true;
             }
             return false;
@@ -1073,7 +1073,7 @@ Ext.define('Koala.util.Layer', {
          *     viewparams of any request.
          */
         isViewParamFilter: function(f) {
-            return f ? f.encodeInViewParams === "true" : false;
+            return f ? f.encodeInViewParams === 'true' : false;
         },
 
         /**
@@ -1140,7 +1140,7 @@ Ext.define('Koala.util.Layer', {
 
             if (testDataFilter) {
                 // adjust the legend title
-                metadata.legendTitle = "#TESTDATA# " + metadata.legendTitle;
+                metadata.legendTitle = '#TESTDATA# ' + metadata.legendTitle;
             }
 
             return metadata;
@@ -1187,7 +1187,7 @@ Ext.define('Koala.util.Layer', {
             var me = this;
             var adjustedFilters = [];
             Ext.each(filters, function(filter) {
-                var filterType = (filter.type || "").toLowerCase();
+                var filterType = (filter.type || '').toLowerCase();
                 var adjFilter;
                 switch (filterType) {
                     case 'timerange':
@@ -1278,7 +1278,7 @@ Ext.define('Koala.util.Layer', {
                     // any non-standard, e.g. viewparam filters, are ignored.
                     return;
                 }
-                var filterType = (filter.type || "").toLowerCase();
+                var filterType = (filter.type || '').toLowerCase();
                 switch (filterType) {
                     case 'timerange':
                         metadata = me.configureMetadataWithTimerange(metadata, filter);
@@ -1374,14 +1374,14 @@ Ext.define('Koala.util.Layer', {
             }
             var op = (filter.operator || '').toUpperCase();
             var adjusted = false;
-            var stringified = "";
+            var stringified = '';
 
             if (!Ext.isArray(filter.effectivevalue)) {
                 if (op === '!=' || op === 'NEQ' || op === 'NOT IN') {
-                    op = "<>";
+                    op = '<>';
                     adjusted = true;
                 } else if (op === '==' || op === 'EQ' || op === 'IN') {
-                    op = "=";
+                    op = '=';
                     adjusted = true;
                 }
                 var value = filter.effectivevalue;
@@ -1399,10 +1399,10 @@ Ext.define('Koala.util.Layer', {
                 // only makes sense for operator IN and NOT IN, let's adjust for
                 // common errors
                 if (op === '=' || op === '==' || op === 'EQ') {
-                    op = "IN";
+                    op = 'IN';
                     adjusted = true;
                 } else if (op === '!=' || op === '<>' || op === 'NEQ') {
-                    op = "NOT IN";
+                    op = 'NOT IN';
                     adjusted = true;
                 }
 
@@ -1423,8 +1423,8 @@ Ext.define('Koala.util.Layer', {
                     valuesPart; // ('kalle', 'jupp')
             }
             if (adjusted) {
-                Ext.log.info("Filter operator has been adjusted from " +
-                    "'" + filter.operator + "' to '" + op + "'");
+                Ext.log.info('Filter operator has been adjusted from ' +
+                    '\'' + filter.operator + '\' to \'' + op + '\'');
             }
             return stringified;
         },
@@ -1491,7 +1491,7 @@ Ext.define('Koala.util.Layer', {
         arrJoinWith: function(arr, joiner, lastJoiner) {
             var len = arr.length;
             var i = 0;
-            var joined = "";
+            var joined = '';
             for (; i < len - 2; i++) {
                 joined += arr[i] + joiner;
             }
@@ -1552,7 +1552,7 @@ Ext.define('Koala.util.Layer', {
             var trimmedParam = Ext.String.trim(filter.param);
             var effectiveDateTime = filter.effectivedatetime;
             var formattedTime = effectiveDateTime.toISOString();
-            var cql = trimmedParam + "=" + formattedTime;
+            var cql = trimmedParam + '=' + formattedTime;
             return cql;
         },
 
@@ -1568,31 +1568,31 @@ Ext.define('Koala.util.Layer', {
          */
         stringifyTimeRangeFilter: function(filter) {
             var trimmedParam = Ext.String.trim(filter.param);
-            var params = trimmedParam.split(",");
+            var params = trimmedParam.split(',');
             var startParam = params[0];
             var endParam = params[1] || params[0];
             var effectiveMinDateTime = filter.effectivemindatetime;
             var effectiveMaxDateTime = filter.effectivemaxdatetime;
             var formattedStart = effectiveMinDateTime.toISOString();
             var formattedEnd = effectiveMaxDateTime.toISOString();
-            var cql = "";
+            var cql = '';
 
             if (startParam === endParam) {
                 // We'll often be filtering on actually one attribute.
                 // we then want to have the standard GeoServer functionality:
                 // http://docs.geoserver.org/stable/en/user/filter/ecql_reference.html#temporal-predicate
                 cql += startParam;
-                cql += " DURING ";
-                cql += formattedStart + "/" + formattedEnd;
+                cql += ' DURING ';
+                cql += formattedStart + '/' + formattedEnd;
             } else {
                 // This will not often be the case, but we need to make sure to
                 // support it. If different attributes have the start/end values
                 // we make a AND connected less than /greater than filter.
-                cql += "(";
-                cql += startParam + ">" + formattedStart;
-                cql += " AND ";
-                cql += endParam + "<" + formattedEnd;
-                cql += ")";
+                cql += '(';
+                cql += startParam + '>' + formattedStart;
+                cql += ' AND ';
+                cql += endParam + '<' + formattedEnd;
+                cql += ')';
             }
             return cql;
         },
@@ -1605,12 +1605,12 @@ Ext.define('Koala.util.Layer', {
             var cqlKey = 'param_cql_filter';
             var stringified = this.stringifyValueFilter(filter);
             if (cqlKey in olProps) {
-                Ext.log.info("Overwriting existing CQL Filter in URL." +
-                    " Is this intentional? If you changed a filter, the" +
-                    " answer is likely yes, else it might lead to " +
-                    " misbehaviour of this layer.");
-                Ext.log.info("Existing value is " + olProps[cqlKey]);
-                Ext.log.info("New value is " + stringified);
+                Ext.log.info('Overwriting existing CQL Filter in URL.' +
+                    ' Is this intentional? If you changed a filter, the' +
+                    ' answer is likely yes, else it might lead to ' +
+                    ' misbehaviour of this layer.');
+                Ext.log.info('Existing value is ' + olProps[cqlKey]);
+                Ext.log.info('New value is ' + stringified);
             }
             olProps[cqlKey] = stringified;
 
@@ -1628,24 +1628,24 @@ Ext.define('Koala.util.Layer', {
                 var isSpecialStyles = filter && me.isSpecialStylesValueFilter(filter);
 
                 if (isViewParam && !isSpecialStyles) {
-                    var params = filter.param.split(",");
+                    var params = filter.param.split(',');
                     var type = filter.type;
 
                     // we need to check the metadata for default filters to apply
-                    if (type === "timerange") {
+                    if (type === 'timerange') {
                         var rawDateMin = filter.effectivemindatetime;
                         keyVals[params[0]] = rawDateMin.toISOString();
 
                         var rawDateMax = filter.effectivemaxdatetime;
                         if (!params[1]) {
-                            keyVals[params[0]] += "/" + rawDateMax.toISOString();
+                            keyVals[params[0]] += '/' + rawDateMax.toISOString();
                         } else {
                             keyVals[params[1]] = rawDateMax.toISOString();
                         }
-                    } else if (type === "pointintime") {
+                    } else if (type === 'pointintime') {
                         var rawDate = filter.effectivedatetime;
                         keyVals[params[0]] = rawDate.toISOString();
-                    } else if (type === "value") {
+                    } else if (type === 'value') {
                         keyVals[params[0]] = filter.effectivevalue;
                     }
                 }
@@ -1653,11 +1653,11 @@ Ext.define('Koala.util.Layer', {
 
             var existingViewParams = decodeURIComponent(
                 Koala.util.Object.getPathStrOr(
-                    metadata, "layerConfig/olProperties/param_viewparams", "")
+                    metadata, 'layerConfig/olProperties/param_viewparams', '')
             );
-            if (!Ext.String.endsWith(existingViewParams, ";") &&
+            if (!Ext.String.endsWith(existingViewParams, ';') &&
                 existingViewParams) {
-                existingViewParams += ";";
+                existingViewParams += ';';
             }
 
             Ext.iterate(keyVals, function(key, value) {
@@ -1687,17 +1687,17 @@ Ext.define('Koala.util.Layer', {
                 return url;
             }
             var cql = staticMe.filtersToCql(filters);
-            var param = "CQL_FILTER=" + encodeURIComponent(cql);
+            var param = 'CQL_FILTER=' + encodeURIComponent(cql);
             // TODO check if we already have a CQL_FILTER in layer or base-url?!?
             url = Ext.String.urlAppend(url, param);
 
             var existingViewParams = Koala.util.Object.getPathStrOr(
                     metadata,
-                    "layerConfig/olProperties/param_viewparams",
+                    'layerConfig/olProperties/param_viewparams',
                     null
                 );
             if (existingViewParams !== null) {
-                var viewParams = "VIEWPARAMS=" + existingViewParams;
+                var viewParams = 'VIEWPARAMS=' + existingViewParams;
                 url = Ext.String.urlAppend(url, viewParams);
             }
             return url;
@@ -1706,37 +1706,37 @@ Ext.define('Koala.util.Layer', {
         filtersToCql: function(filters) {
             var staticMe = this;
             if (!filters || filters.length < 1) {
-                return "";
+                return '';
             }
             var cqlParts = [];
             Ext.each(filters, function(filter) {
               if (!staticMe.isViewParamFilter(filter)) {
-                cqlParts.push("(" + staticMe.filterToCql(filter) + ")");
+                cqlParts.push('(' + staticMe.filterToCql(filter) + ')');
               }
             });
-            return cqlParts.join(" AND ");
+            return cqlParts.join(' AND ');
         },
 
         filterToCql: function(filter) {
             var staticMe = this;
             var type = filter.type;
-            var cql = "";
+            var cql = '';
             switch (type) {
-                case "rodos":
+                case 'rodos':
                     // TODO to be specified
                     break;
-                case "value":
+                case 'value':
                     cql = staticMe.stringifyValueFilter(filter);
                     break;
-                case "pointintime":
+                case 'pointintime':
                     cql = staticMe.stringifyPointInTimeFilter(filter);
                     break;
-                case "timerange":
+                case 'timerange':
                     cql = staticMe.stringifyTimeRangeFilter(filter);
                     break;
                 default:
-                    Ext.log.warn("Unexpected filter type " + type
-                        + " specified");
+                    Ext.log.warn('Unexpected filter type ' + type
+                        + ' specified');
                     break;
             }
             return cql;

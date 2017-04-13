@@ -98,7 +98,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
             panel.destroy();
         });
 
-        var filterContainer = view.up('app-main').down("[name=filterContainer]");
+        var filterContainer = view.up('app-main').down('[name=filterContainer]');
 
         filterContainer.setTitle(title);
         filterContainer.add({

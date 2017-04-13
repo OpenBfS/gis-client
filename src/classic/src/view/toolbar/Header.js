@@ -16,23 +16,23 @@
 /**
  * @class Koala.view.toolbar.Header
  */
-Ext.define("Koala.view.toolbar.Header", {
-    extend: "Ext.toolbar.Toolbar",
+Ext.define('Koala.view.toolbar.Header', {
+    extend: 'Ext.toolbar.Toolbar',
     xtype: 'k-toolbar-header',
 
     requires: [
-        "BasiGX.util.Animate",
-        "Koala.util.Fullscreen",
+        'BasiGX.util.Animate',
+        'Koala.util.Fullscreen',
 
-        "Koala.view.toolbar.HeaderController",
-        "Koala.view.toolbar.HeaderModel",
-        "Koala.view.button.TimeReference",
-        "Koala.view.window.HelpWindow"
+        'Koala.view.toolbar.HeaderController',
+        'Koala.view.toolbar.HeaderModel',
+        'Koala.view.button.TimeReference',
+        'Koala.view.window.HelpWindow'
     ],
 
-    controller: "k-toolbar-header",
+    controller: 'k-toolbar-header',
     viewModel: {
-        type: "k-toolbar-header"
+        type: 'k-toolbar-header'
     },
 
     defaults: {

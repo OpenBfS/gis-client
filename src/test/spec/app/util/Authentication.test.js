@@ -12,9 +12,9 @@ describe('Koala.util.Authentication', function() {
             var fakeContext = {
                     data: {
                         merge: {
-                            "application_user": {
-                                "username": "Ümit",
-                                "password": "Vielfraß"
+                            'application_user': {
+                                'username': 'Ümit',
+                                'password': 'Vielfraß'
                             }
                         }
                     }

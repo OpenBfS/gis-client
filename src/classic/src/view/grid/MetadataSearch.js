@@ -16,20 +16,20 @@
 /**
  * @class Koala.view.grid.MetadataSearch
  */
-Ext.define("Koala.view.grid.MetadataSearch", {
-    extend: "Ext.grid.Panel",
-    xtype: "k-grid-metadatasearch",
+Ext.define('Koala.view.grid.MetadataSearch', {
+    extend: 'Ext.grid.Panel',
+    xtype: 'k-grid-metadatasearch',
 
     requires: [
-        "Koala.view.grid.MetadataSearchController",
-        "Koala.view.grid.MetadataSearchModel",
+        'Koala.view.grid.MetadataSearchController',
+        'Koala.view.grid.MetadataSearchModel',
 
-        "Koala.store.MetadataSearch"
+        'Koala.store.MetadataSearch'
     ],
 
-    controller: "k-grid-metadatasearch",
+    controller: 'k-grid-metadatasearch',
     viewModel: {
-        type: "k-grid-metadatasearch"
+        type: 'k-grid-metadatasearch'
     },
 
     store: {
@@ -112,8 +112,8 @@ Ext.define("Koala.view.grid.MetadataSearch", {
             renderer: function(value, meta, record) {
                 var vm = this.lookupViewModel();
                 this.items[0].tooltip = vm.get('addToMapTooltip');
-                if (record.get('type') === "dataset") {
-                    meta.style = "display:none;";
+                if (record.get('type') === 'dataset') {
+                    meta.style = 'display:none;';
                 }
             }
         }, {

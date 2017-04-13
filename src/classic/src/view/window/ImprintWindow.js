@@ -16,18 +16,18 @@
 /**
  * @class Koala.view.window.ImprintWindow
  */
-Ext.define("Koala.view.window.ImprintWindow", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-imprint",
+Ext.define('Koala.view.window.ImprintWindow', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-imprint',
 
     requires: [
-        "Koala.view.window.ImprintController",
-        "Koala.view.window.ImprintModel"
+        'Koala.view.window.ImprintController',
+        'Koala.view.window.ImprintModel'
     ],
 
-    controller: "k-window-imprint",
+    controller: 'k-window-imprint',
     viewModel: {
-        type: "k-window-imprint"
+        type: 'k-window-imprint'
     },
 
     bind: {

@@ -5,8 +5,8 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         'GeoExt.component.FeatureRenderer',
         'BasiGX.util.Color',
 
-        "Koala.view.container.styler.StyleEditor",
-        "Koala.util.Style"
+        'Koala.view.container.styler.StyleEditor',
+        'Koala.util.Style'
     ],
 
     /**
@@ -93,15 +93,15 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         };
 
         switch (symbolType) {
-        case "Point":
+        case 'Point':
             styleEditor.redlinePointStyle = Ext.isArray(olStyle) ?
                     olStyle[0] : olStyle;
             break;
-        case "Line":
+        case 'Line':
             styleEditor.redlineLineStringStyle = Ext.isArray(olStyle) ?
                     olStyle[0] : olStyle;
             break;
-        case "Polygon":
+        case 'Polygon':
             styleEditor.redlinePolygonStyle = Ext.isArray(olStyle) ?
                     olStyle[0] : olStyle;
             break;

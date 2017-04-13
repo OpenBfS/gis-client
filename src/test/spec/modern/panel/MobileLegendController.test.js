@@ -8,7 +8,7 @@ describe('Koala.view.panel.MobileLegendController', function() {
     var view;
     var controller;
     beforeEach(function() {
-        mapComponent = Ext.create("BasiGX.view.component.Map", {
+        mapComponent = Ext.create('BasiGX.view.component.Map', {
             appContextPath: '../../resources/appContext.json'
         });
         view = Ext.create('Koala.view.panel.MobileLegend');

@@ -6,6 +6,6 @@
  *
  * @class Koala.view.container.styler.StyleEditor
  */
-Ext.define("Koala.view.container.styler.StyleEditor", {
-    extend: "Ext.Component"
+Ext.define('Koala.view.container.styler.StyleEditor', {
+    extend: 'Ext.Component'
 });

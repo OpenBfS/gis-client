@@ -19,7 +19,7 @@ Ext.define('Koala.view.container.styler.FilterController', {
             field.on('change', function() {
                 var values = {};
                 Ext.each(fields, function(f) {
-                    if (f.name !== "useFilterCheckbox") {
+                    if (f.name !== 'useFilterCheckbox') {
                         values[f.name] = f.getValue();
                     }
                 });
@@ -84,34 +84,34 @@ Ext.define('Koala.view.container.styler.FilterController', {
         var literalTextField = view.down('textfield[name="literalTextField"]');
 
         switch (newValue) {
-        case "PropertyIsEqualTo":
-        case "PropertyIsNotEqualTo":
+        case 'PropertyIsEqualTo':
+        case 'PropertyIsNotEqualTo':
             literalNumberField1.hide();
             literalNumberField2.hide();
             literalTextField.show();
             viewModel.set('literalTextFieldLabel', viewModel.get('valueText'));
             break;
-        case "PropertyIsLike":
+        case 'PropertyIsLike':
             literalNumberField1.hide();
             literalNumberField2.hide();
             literalTextField.show();
             viewModel.set('literalTextFieldLabel', viewModel.get('isLikeText'));
             break;
-        case "PropertyIsNull":
+        case 'PropertyIsNull':
             literalNumberField1.hide();
             literalNumberField2.hide();
             literalTextField.hide();
             break;
-        case "PropertyIsBetween":
+        case 'PropertyIsBetween':
             literalNumberField1.show();
             literalNumberField2.show();
             literalTextField.hide();
             viewModel.set('literalNumberField2Label', viewModel.get('upperBoundaryText'));
             break;
-        case "PropertyIsLessThan":
-        case "PropertyIsLessThanOrEqualTo":
-        case "PropertyIsGreaterThan":
-        case "PropertyIsGreaterThanOrEqualTo":
+        case 'PropertyIsLessThan':
+        case 'PropertyIsLessThanOrEqualTo':
+        case 'PropertyIsGreaterThan':
+        case 'PropertyIsGreaterThanOrEqualTo':
             literalNumberField2.show();
             literalNumberField1.hide();
             literalTextField.hide();

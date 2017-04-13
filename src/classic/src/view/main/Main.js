@@ -49,7 +49,7 @@ Ext.define('Koala.view.main.Main', {
 
     controller: 'main',
     viewModel: {
-        type: "app-main"
+        type: 'app-main'
     },
 
     ui: 'navigation',
@@ -145,10 +145,10 @@ Ext.define('Koala.view.main.Main', {
                 // Bind the tooltops of certain map button
                 // TODO refactor BasiGX to do this in a more sane way
                 var btnSelectors = [
-                    "basigx-button-zoomin",
-                    "basigx-button-zoomout",
-                    "basigx-button-zoomtoextent",
-                    "basigx-button-togglelegend"
+                    'basigx-button-zoomin',
+                    'basigx-button-zoomout',
+                    'basigx-button-zoomtoextent',
+                    'basigx-button-togglelegend'
                 ];
                 var btns = this.query(btnSelectors.join(','));
                 Ext.each(btns, function(b) {

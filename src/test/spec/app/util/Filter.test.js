@@ -131,7 +131,7 @@ describe('Koala.util.Filter', function() {
             // input String with raw values from the GNOS
             // examples from the layer ODL butto 1h
 
-            var allowedValues = [{"val": "'BfS'","dsp": "BfS"},{"val": "'KFUE'","dsp": "KFÜ"},{"val": "'EURDEP'","dsp": "EURDEP"}];
+            var allowedValues = [{'val': '\'BfS\'','dsp': 'BfS'},{'val': '\'KFUE\'','dsp': 'KFÜ'},{'val': '\'EURDEP\'','dsp': 'EURDEP'}];
 
             it('is defined', function() {
                 expect(Koala.util.Filter.getStoreFromAllowedValues).to.not.be(undefined);
@@ -162,18 +162,18 @@ describe('Koala.util.Filter', function() {
 
             it('return the string of records', function() {
                 var got = Koala.util.Filter.getStoreFromAllowedValues(allowedValues);
-                expect(got.getData().items[1].data.val).to.be.equal("'KFUE'");
+                expect(got.getData().items[1].data.val).to.be.equal('\'KFUE\'');
             });
 
             it('return the string of records', function() {
                 var got = Koala.util.Filter.getStoreFromAllowedValues(allowedValues);
-                expect(got.getData().items[1].data.dsp).to.be.equal("KFÜ");
+                expect(got.getData().items[1].data.dsp).to.be.equal('KFÜ');
             });
         });
 
         describe('#getComboFromAllowedValues', function() {
 
-            var allowedValues = [{"val": "'BfS'","dsp": "BfS"},{"val": "'KFUE'","dsp": "KFÜ"},{"val": "'EURDEP'","dsp": "EURDEP"}];
+            var allowedValues = [{'val': '\'BfS\'','dsp': 'BfS'},{'val': '\'KFUE\'','dsp': 'KFÜ'},{'val': '\'EURDEP\'','dsp': 'EURDEP'}];
 
             it('is defined', function() {
                 expect(Koala.util.Filter.getComboFromAllowedValues).to.not.be(undefined);

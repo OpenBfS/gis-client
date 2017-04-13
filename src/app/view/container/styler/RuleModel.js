@@ -13,12 +13,12 @@ Ext.define('Koala.view.container.styler.RuleModel', {
         fieldsetTitle: function(get) {
             var name = get('rule.name');
             var title = get('rule.title');
-            var dsp = "";
+            var dsp = '';
             if (name) {
                 dsp += name;
             }
             if (title) {
-                dsp += " (" + title + ")";
+                dsp += ' (' + title + ')';
             }
             return dsp;
         }

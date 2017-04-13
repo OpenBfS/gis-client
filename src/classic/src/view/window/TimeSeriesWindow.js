@@ -16,25 +16,25 @@
 /**
  * @class Koala.view.window.TimeSeriesWindow
  */
-Ext.define("Koala.view.window.TimeSeriesWindow", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-timeserieswindow",
-    cls: "k-window-timeserieswindow",
+Ext.define('Koala.view.window.TimeSeriesWindow', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-timeserieswindow',
+    cls: 'k-window-timeserieswindow',
 
     requires: [
-        "Koala.view.window.TimeSeriesWindowController",
-        "Koala.view.window.TimeSeriesWindowModel",
-        "Koala.util.Date",
-        "Koala.util.Filter",
-        "Koala.util.String",
+        'Koala.view.window.TimeSeriesWindowController',
+        'Koala.view.window.TimeSeriesWindowModel',
+        'Koala.util.Date',
+        'Koala.util.Filter',
+        'Koala.util.String',
 
-        "Ext.form.field.Date"
+        'Ext.form.field.Date'
     ],
 
-    controller: "k-window-timeserieswindow",
+    controller: 'k-window-timeserieswindow',
 
     viewModel: {
-        type: "k-window-timeserieswindow"
+        type: 'k-window-timeserieswindow'
     },
 
     bind: {
@@ -118,9 +118,9 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         });
 
         var startContainer = timeRangeFilterFieldset.down('[name=mincontainer]');
-        startContainer.padding = "0 5 0 0";
-        timeRangeFilterFieldset.border = "0";
-        timeRangeFilterFieldset.padding = "0 5 0 0";
+        startContainer.padding = '0 5 0 0';
+        timeRangeFilterFieldset.border = '0';
+        timeRangeFilterFieldset.padding = '0 5 0 0';
         timeRangeFilterFieldset.setLayout('hbox');
 
         if (me.getAddFilterForm()) {

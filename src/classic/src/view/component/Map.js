@@ -17,12 +17,12 @@
 /**
  * @class Koala.view.component.Map
  */
-Ext.define("Koala.view.component.Map", {
-    extend: "BasiGX.view.component.Map",
-    xtype: "k-component-map",
+Ext.define('Koala.view.component.Map', {
+    extend: 'BasiGX.view.component.Map',
+    xtype: 'k-component-map',
 
     requires: [
-        "Koala.view.component.MapController"
+        'Koala.view.component.MapController'
     ],
 
     config: {
@@ -33,7 +33,7 @@ Ext.define("Koala.view.component.Map", {
     /**
      *
      */
-    controller: "k-component-map",
+    controller: 'k-component-map',
 
     initComponent: function() {
         var me = this;
@@ -50,8 +50,8 @@ Ext.define("Koala.view.component.Map", {
 
         var hoverPlugin = me.getPlugin('hover');
         if (hoverPlugin) {
-            var selStyleFunction = staticMe.styleFromGnos("selectStyle");
-            var highlightStyleFunction = staticMe.styleFromGnos("hoverStyle");
+            var selStyleFunction = staticMe.styleFromGnos('selectStyle');
+            var highlightStyleFunction = staticMe.styleFromGnos('hoverStyle');
             hoverPlugin.setPointerRestInterval(me.getPointerRestInterval());
             hoverPlugin.selectStyleFunction = selStyleFunction;
             hoverPlugin.highlightStyleFunction = highlightStyleFunction;
@@ -104,18 +104,18 @@ Ext.define("Koala.view.component.Map", {
                 var styleCfg = feature.get('layer').get(styleKey);
 
                 if (styleCfg) {
-                    var sArray = styleCfg.split(",");
+                    var sArray = styleCfg.split(',');
                     var color = sArray[0];
                     var shape = sArray[1];
 
-                    if (shape === "rect") {
+                    if (shape === 'rect') {
                         var width = sArray[2];
                         var height = sArray[3];
 
                         var c = document.createElement('canvas');
                         c.setAttribute('width', width);
                         c.setAttribute('height', height);
-                        var ctx = c.getContext("2d");
+                        var ctx = c.getContext('2d');
                         ctx.fillStyle = color;
                         ctx.fillRect(0,0,width,height);
                         var dataUrl = c.toDataURL();
@@ -130,7 +130,7 @@ Ext.define("Koala.view.component.Map", {
                                 })
                             })
                         ];
-                    } else if (shape === "circle") {
+                    } else if (shape === 'circle') {
                         var radius = sArray[2];
 
                         return [new ol.style.Style({
@@ -144,7 +144,7 @@ Ext.define("Koala.view.component.Map", {
                                 })
                             })
                         })];
-                    } else if (shape === "polygon") {
+                    } else if (shape === 'polygon') {
                         var strokeWidth = sArray[2];
 
                         return [new ol.style.Style({

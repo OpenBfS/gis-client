@@ -16,23 +16,23 @@
 /**
  * @class Koala.view.window.MetadataInfo
  */
-Ext.define("Koala.view.window.MetadataInfo", {
-    extend: "Ext.window.Window",
+Ext.define('Koala.view.window.MetadataInfo', {
+    extend: 'Ext.window.Window',
 
     requires: [
-        "Ext.grid.property.Grid",
+        'Ext.grid.property.Grid',
 
-        "Koala.view.window.MetadataInfoController",
-        "Koala.view.window.MetadataInfoModel"
+        'Koala.view.window.MetadataInfoController',
+        'Koala.view.window.MetadataInfoModel'
     ],
 
     uses: [
-        "Koala.model.MetadataRecord"
+        'Koala.model.MetadataRecord'
     ],
 
-    controller: "k-window-metadatainfo",
+    controller: 'k-window-metadatainfo',
     viewModel: {
-        type: "k-window-metadatainfo"
+        type: 'k-window-metadatainfo'
     },
 
     config: {
@@ -57,7 +57,7 @@ Ext.define("Koala.view.window.MetadataInfo", {
          *     `<div>`.
          */
         multilineRenderer: function(value) {
-            return "<div class='koala-multiline'>" + value +'</div>';
+            return '<div class=\'koala-multiline\'>' + value +'</div>';
         },
 
         /**
@@ -87,9 +87,9 @@ Ext.define("Koala.view.window.MetadataInfo", {
          * the locale files.
          */
         fieldNames: {
-            fileIdentifier: "",
-            abstract: "",
-            contact: ""
+            fileIdentifier: '',
+            abstract: '',
+            contact: ''
         }
     },
 

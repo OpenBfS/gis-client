@@ -23,7 +23,7 @@ Ext.define('Koala.util.Style', {
             var geomType = layer.getSource().getFeatures()[0].getGeometry().getType();
             // The GeoExt FeatureRenderer only knows non-multi geometries and
             // handles "LineString" as "Line"
-            return geomType.replace("Multi", "").replace("String", "");
+            return geomType.replace('Multi', '').replace('String', '');
         },
 
         /**

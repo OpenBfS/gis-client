@@ -17,9 +17,9 @@
 /**
  * @class Koala.view.form.Print
  */
-Ext.define("Koala.view.form.Print", {
-    extend: "BasiGX.view.form.Print",
-    xtype: "k-form-print",
+Ext.define('Koala.view.form.Print', {
+    extend: 'BasiGX.view.form.Print',
+    xtype: 'k-form-print',
 
     requires: [
         'BasiGX.util.Animate',
@@ -209,7 +209,7 @@ Ext.define("Koala.view.form.Print", {
         if (layerCheckbox && !legendFieldset.getCollapsed() &&
                 layer.checked &&
                 layer.get('name') &&
-                layer.get('name') !== "Hintergrundkarte" &&
+                layer.get('name') !== 'Hintergrundkarte' &&
                 layer.get('opacity') > 0 &&
                 layer.get('allowPrint') &&
                 layerCheckbox.layer === layer &&
@@ -449,16 +449,16 @@ Ext.define("Koala.view.form.Print", {
     onBeforeAttributeFieldsAdd: function(printForm, attributeFields) {
         var name = attributeFields.name;
         // For these two fields we need special handling…
-        if (name === "legend_template" || name === "map_template") {
+        if (name === 'legend_template' || name === 'map_template') {
             // …hide both…
             attributeFields.hidden = true;
             // …set the value according to actual field and current layout
             var layoutCombo = printForm.down('combo[name="layout"]');
             var currentLayout = layoutCombo.getValue();
-            if (name === "legend_template") {
-                attributeFields.value = currentLayout + "_legend.jasper";
-            } else if (name === "map_template") {
-                attributeFields.value = currentLayout + "_map.jasper";
+            if (name === 'legend_template') {
+                attributeFields.value = currentLayout + '_legend.jasper';
+            } else if (name === 'map_template') {
+                attributeFields.value = currentLayout + '_map.jasper';
             }
         }
     },
@@ -483,26 +483,26 @@ Ext.define("Koala.view.form.Print", {
 
         var attributeFields;
         switch (attributeRec.get('type')) {
-            case "MapAttributeValues":
+            case 'MapAttributeValues':
                 attributeFields = me.getMapAttributeFields(attributeRec);
                 map.on('moveend', me.renderAllClientInfos, me);
                 break;
-            case "NorthArrowAttributeValues":
+            case 'NorthArrowAttributeValues':
                 attributeFields = me.getNorthArrowAttributeFields(attributeRec);
                 break;
-            case "ScalebarAttributeValues":
+            case 'ScalebarAttributeValues':
                 attributeFields = me.getScalebarAttributeFields(attributeRec);
                 break;
-            case "LegendAttributeValue":
+            case 'LegendAttributeValue':
                 attributeFields = me.getLegendAttributeFields(attributeRec);
                 break;
-            case "String":
+            case 'String':
                 attributeFields = me.getStringFieldContainer(attributeRec);
                 break;
-            case "Boolean":
+            case 'Boolean':
                 attributeFields = me.getCheckBoxBooleanFields(attributeRec);
                 break;
-            case "DataSourceAttributeValue":
+            case 'DataSourceAttributeValue':
                 Ext.toast('Data Source not yet supported');
                 attributeFields = me.getStringFieldContainer(attributeRec);
                 break;
@@ -547,11 +547,11 @@ Ext.define("Koala.view.form.Print", {
 
         // the create button
         createPrintBtn.setText(
-            me.getPrintButtonPrefix() + " " + vm.get('printButtonSuffix')
+            me.getPrintButtonPrefix() + ' ' + vm.get('printButtonSuffix')
         );
         // the download button
         downloadPrintBtn.setText(
-            me.getPrintButtonPrefix() + " " + me.getDownloadButtonSuffix()
+            me.getPrintButtonPrefix() + ' ' + me.getDownloadButtonSuffix()
         );
     },
 
@@ -922,7 +922,7 @@ Ext.define("Koala.view.form.Print", {
         var me = this;
         var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
         var fieldsets = me.query(fsSelector);
-        var featureBbox = "";
+        var featureBbox = '';
 
         Ext.each(fieldsets, function(fs) {
             // TODO double check when rotated
@@ -967,7 +967,7 @@ Ext.define("Koala.view.form.Print", {
                 text: me.getMapBboxButton(),
                 margin: '0 0 0 55',
                 handler: function() {
-                    Ext.Msg.alert(me.getMapBboxButton(), "<b>"+me.getMapBboxLabel()+":</b> " + bboxTextfield.getValue());
+                    Ext.Msg.alert(me.getMapBboxButton(), '<b>'+me.getMapBboxLabel()+':</b> ' + bboxTextfield.getValue());
                 }
             }]
         });
@@ -983,7 +983,7 @@ Ext.define("Koala.view.form.Print", {
             name: 'irix-fieldset-checkbox',
             boxLabel: 'IRIX',
             handler: function(checkbox, checked) {
-                var irixFieldset = me.down("k-form-irixfieldset");
+                var irixFieldset = me.down('k-form-irixfieldset');
                 if (checked) {
                     irixFieldset.show();
                 } else {
@@ -997,7 +997,7 @@ Ext.define("Koala.view.form.Print", {
 
     addIrixFieldset: function() {
         var me = this;
-        var fs = me.down("k-form-irixfieldset");
+        var fs = me.down('k-form-irixfieldset');
         var checkBox = me.down('[name="irix-fieldset-checkbox"]');
 
         if (!fs) {
@@ -1014,7 +1014,7 @@ Ext.define("Koala.view.form.Print", {
     setUpIrixJson: function(mapfishPrint) {
         var me = this;
         var irixJson = {};
-        irixJson.irix = me.formItemToJson(me.down("k-form-irixfieldset"));
+        irixJson.irix = me.formItemToJson(me.down('k-form-irixfieldset'));
         // the generic serialisation needs a little bit shuffeling
         irixJson = me.adjustIrixSerialisation(irixJson);
         // always add the printapp to the top-lvel for irix:

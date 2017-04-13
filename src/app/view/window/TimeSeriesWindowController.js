@@ -75,17 +75,17 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      *
      */
     layerTimeFilterToCql: function(layer, urlParamTime) {
-        var cql = "";
+        var cql = '';
         var util = Koala.util.Layer;
         var filter = util.getEffectiveTimeFilterFromMetadata(layer.metadata);
         var paramName = filter && filter.param;
         var filterType = filter && filter.type;
-        if (filterType === "timerange") {
-            cql = paramName + " DURING " + urlParamTime;
-        } else if (filterType === "pointintime") {
-            cql = paramName + " = " + urlParamTime;
+        if (filterType === 'timerange') {
+            cql = paramName + ' DURING ' + urlParamTime;
+        } else if (filterType === 'pointintime') {
+            cql = paramName + ' = ' + urlParamTime;
         } else {
-            cql = "1=1";
+            cql = '1=1';
         }
         return cql;
     },
@@ -101,17 +101,17 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         // first try to read out explicitly configured WFS URL
         var url = Koala.util.Object.getPathStrOr(
                 olLayer.metadata,
-                "layerConfig/wfs/url",
+                'layerConfig/wfs/url',
                 null
             );
         if (!url) {
             // … otherwise determine from wms url
-            url = (olLayer.getSource().getUrls()[0]).replace(/\/wms/g, "/wfs");
+            url = (olLayer.getSource().getUrls()[0]).replace(/\/wms/g, '/wfs');
         }
 
-        var identifyField = chartConfig.featureIdentifyField || "id";
-        var idDataType = chartConfig.featureIdentifyFieldDataType || "string";
-        var dspField = chartConfig.featureShortDspField || "name";
+        var identifyField = chartConfig.featureIdentifyField || 'id';
+        var idDataType = chartConfig.featureIdentifyFieldDataType || 'string';
+        var dspField = chartConfig.featureShortDspField || 'name';
 
         var modelNamespace = Koala.model;
         var modelName = 'FeatureType-' + olLayer.id;
@@ -190,7 +190,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                     }
                     if (queryPlan.query) {
                         cqlParts.push(
-                            dspField + " ILIKE '%" + queryPlan.query + "%'"
+                            dspField + ' ILIKE \'%' + queryPlan.query + '%\''
                         );
                     }
                     // now filter out series already in the chart
@@ -203,15 +203,15 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                     Ext.each(selectedStations, function(selectedStation) {
                         var stationId = selectedStation.get(identifyField);
                         if (idDataType === 'string') {
-                            stationId = "'" + stationId + "'";
+                            stationId = '\'' + stationId + '\'';
                         }
                         stationIds.push(stationId);
                     });
                     if (stationIds.length > 0) {
-                        var inPart = "IN (" + stationIds.join(",") + ")";
-                        cqlParts.push("NOT " + identifyField + " " + inPart);
+                        var inPart = 'IN (' + stationIds.join(',') + ')';
+                        cqlParts.push('NOT ' + identifyField + ' ' + inPart);
                     }
-                    queryPlan.query = cqlParts.join(" AND ");
+                    queryPlan.query = cqlParts.join(' AND ');
                 }
             }
         };
@@ -347,14 +347,14 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var chartController = chart.getController();
         var valFromSeq = StringUtil.getValueFromSequence;
         var coerce = StringUtil.coerce;
-        var stationName = "";
+        var stationName = '';
         if (!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
             stationName = StringUtil.replaceTemplateStrings(
                 chartConfig.seriesTitleTpl, olFeat
             );
         }
         var currentSeqIndex = chart.getSelectedStations().length;
-        var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, "");
+        var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, '');
         if (!color) {
             color = Koala.view.component.D3BaseController.getRandomColor();
         }
