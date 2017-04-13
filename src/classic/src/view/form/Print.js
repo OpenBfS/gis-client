@@ -233,42 +233,49 @@ Ext.define("Koala.view.form.Print", {
         var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
         var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
 
-        var treePanel = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
-        var treeStore = treePanel.getStore();
-
-        var timeReferenceButton = Ext.ComponentQuery.query('k-button-timereference')[0];
-        timeReferenceButton.disable();
-
-        treeStore.on('nodemove', me.onTreeStoreNodeMove);
-        treeStore.on('nodeinsert', me.onTreeStoreNodeInsert, me);
-        treeStore.on('noderemove', me.onTreeStoreNodeRemove, me);
-        legendsFieldset.on('destroy', function() {
-            timeReferenceButton.enable();
-            treeStore.un('nodemove', me.onTreeStoreNodeMove);
-            treeStore.un('nodeinsert', me.onTreeStoreNodeInsert, me);
-            treeStore.un('noderemove', me.onTreeStoreNodeRemove, me);
-        });
-
-        var items = [];
+        var layerLegendContainers = [];
 
         // The layers are initially not synchronous with the layerTree. So we
         // reverse the Array initially.
         layers.reverse();
 
+
         Ext.each(layers, function(layer) {
             if (layer.get('visible') && layer.get('allowPrint')) {
                 var layerLegendContainer = me.createLegendContainer(layer);
-                items.push(layerLegendContainer);
+                layerLegendContainers.push(layerLegendContainer);
             }
         });
 
-        if (items.length > 0) {
+        var timeReferenceButton = Ext.ComponentQuery.query(
+                'k-button-timereference')[0];
+        var treePanel = Ext.ComponentQuery.query(
+                'k-panel-routing-legendtree')[0];
+        var treeStore = treePanel.getStore();
+        var onUtcToggle = function() {
+            Ext.each(layerLegendContainers, function(layerLegendContainer) {
+                me.updateLegendText(layerLegendContainer);
+            });
+        };
+
+        treeStore.on('nodemove', me.onTreeStoreNodeMove);
+        treeStore.on('nodeinsert', me.onTreeStoreNodeInsert, me);
+        treeStore.on('noderemove', me.onTreeStoreNodeRemove, me);
+        timeReferenceButton.on('toggle', onUtcToggle);
+        legendsFieldset.on('destroy', function() {
+            treeStore.un('nodemove', me.onTreeStoreNodeMove);
+            treeStore.un('nodeinsert', me.onTreeStoreNodeInsert, me);
+            treeStore.un('noderemove', me.onTreeStoreNodeRemove, me);
+            timeReferenceButton.un('toggle', onUtcToggle);
+        });
+
+        if (layerLegendContainers.length > 0) {
             legendsFieldset.show();
         } else {
             legendsFieldset.hide();
         }
 
-        legendsFieldset.add(items);
+        legendsFieldset.add(layerLegendContainers);
     },
 
     createLegendContainer: function(layer) {
@@ -405,9 +412,9 @@ Ext.define("Koala.view.form.Print", {
      *                                                       of the layer.
      * @param {ol.Object.Event} evt The 'change' event of a layer.
      */
-    updateLegendText: function(layerLegendContainer, evt) {
+    updateLegendText: function(layerLegendContainer) {
         var me = this;
-        var layer = evt.target;
+        var layer = layerLegendContainer.layer;
         var legendText = me.prepareLegendTextHtml(layer);
         layerLegendContainer.down('textfield').setValue(legendText);
     },
