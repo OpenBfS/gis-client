@@ -287,6 +287,13 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
+     * The SVG element for the chart-container as returned by d3.
+     *
+     * @type {Selection} https://developer.mozilla.org/docs/Web/API/Selection
+     */
+    containerSvg: null,
+
+    /**
      * The SVG element for the legend as returned by d3.
      *
      * @type {Selection} https://developer.mozilla.org/docs/Web/API/Selection
@@ -406,6 +413,9 @@ Ext.define('Koala.view.component.D3BaseController', {
                 .attr('width', chartSize[0])
                 .attr('height', chartSize[1])
                 .attr('pointer-events', 'all');
+
+        var containerSvg = d3.select(viewId + ' svg');
+        me.containerSvg = containerSvg;
     },
 
     /**
@@ -771,6 +781,68 @@ Ext.define('Koala.view.component.D3BaseController', {
                 .transition()
                 .call(axisGenerator);
         });
+    },
+
+    /**
+     * Exports the chart to a dataUri and calls the specified callback
+     * function. The first argument of the callback function is the dataUri.
+     *
+     * @param {Function} cb The callbackfunction. Receives the dataUri. required
+     * @param {Object} cbScope The scope for the callback function.
+     * @param {DOMString} outputFormat An image outputFormat like 'image/bmp'
+     *                                 default is 'image/png'.
+     */
+    chartToDataUriAndThen: function(cb, cbScope, outputFormat) {
+        if (!cb) {
+            Ext.logger.warn('Please pass a callback function as first argument.');
+            return false;
+        }
+        outputFormat = outputFormat || 'image/png';
+        cbScope = cbScope || this;
+        var chartNode = this.containerSvg.node();
+        var chartSource = (new XMLSerializer()).serializeToString(chartNode);
+        var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
+                unescape(encodeURIComponent(chartSource)));
+        var chartImageWidth = chartNode.clientWidth;
+        var chartImageHeight = chartNode.clientHeight;
+        var chartImageObject = new Image(chartImageWidth, chartImageHeight);
+        chartImageObject.src = chartDataUri;
+
+        var legendD3 = this.legendSvg;
+        var legendNode = legendD3.node();
+        var downloadIcons = legendD3.selectAll('.k-d3-download-icon');
+        var deleteIcons = legendD3.selectAll('.k-d3-delete-icon');
+        downloadIcons.style('display', 'none');
+        deleteIcons.style('display', 'none');
+        var legendSource = (new XMLSerializer()).serializeToString(legendNode);
+        var legendDataUri = 'data:image/svg+xml;base64,'+ btoa(
+                unescape(encodeURIComponent(legendSource)));
+        var legendImageWidth = legendNode.clientWidth;
+        var legendImageHeight = legendNode.clientHeight;
+        var legendImageObject = new Image(legendImageWidth, legendImageHeight);
+        legendImageObject.src = legendDataUri;
+
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = chartImageWidth;
+        canvas.height = legendImageHeight > chartImageHeight ?
+                legendImageHeight : chartImageHeight;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        chartImageObject.onload = function() {
+           ctx.drawImage(chartImageObject, 0, 0, chartImageWidth,
+                chartImageHeight);
+           legendImageObject.onload = function() {
+               ctx.drawImage(legendImageObject,
+                    chartImageWidth - legendImageWidth, 0, legendImageWidth,
+                    legendImageHeight);
+               var dataUri = canvas.toDataURL(outputFormat);
+               downloadIcons.style('display', 'block');
+               deleteIcons.style('display', 'block');
+               cb.call(cbScope, dataUri);
+           };
+        };
     },
 
     /**

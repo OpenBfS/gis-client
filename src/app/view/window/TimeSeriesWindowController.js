@@ -236,7 +236,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     createTimeSeriesChartPanel: function(olLayer, olFeat) {
         var me = this;
-        var viewModel = me.getViewModel();
         var chart = me.createTimeSeriesChart(olLayer, olFeat);
         var chartConfig = olLayer.get('timeSeriesChartProperties');
         var addSeriesCombo;
@@ -259,7 +258,17 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             height: '100%',
             width: 180,
             items: [{
-                text: viewModel.get('undoBtnText'),
+                bind: {
+                    text: '{downloadBtnText}'
+                },
+                xtype: 'button',
+                handler: me.onDownloadBtnClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }, {
+                bind: {
+                    text: '{undoBtnText}'
+                },
                 xtype: 'button',
                 handler: me.onUndoButtonClicked,
                 scope: me,
@@ -293,12 +302,27 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     },
 
     /**
+     * Convert current chart view into PNG.
+     *
+     * @param {Ext.button.Button} btn The button.
+     */
+    onDownloadBtnClicked: function(btn) {
+        var chart = btn.up('[name="chart-composition"]').down('d3-chart');
+        var chartCtrl = chart.getController();
+        var cb = function(dataUri) {
+            download(dataUri, 'chart.png', 'image/png');
+        };
+        var cbScope = this;
+        chartCtrl.chartToDataUriAndThen(cb, cbScope);
+    },
+
+    /**
      * Zoom back out after the button has been clicked.
      *
-     * @param {Ext.button.Button} undoBtn The clicked undo button.
+     * @param {Ext.button.Button} btn The clicked button.
      */
-    onUndoButtonClicked: function(undoBtn) {
-        var chart = undoBtn.up('[name="chart-composition"]').down('d3-chart');
+    onUndoButtonClicked: function(btn) {
+        var chart = btn.up('[name="chart-composition"]').down('d3-chart');
         var chartCtrl = chart.getController();
         chartCtrl.resetZoom();
     },
