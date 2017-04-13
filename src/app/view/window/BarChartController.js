@@ -21,7 +21,8 @@ Ext.define('Koala.view.window.BarChartController', {
     alias: 'controller.k-window-barchart',
 
     requires: [
-        "Koala.view.component.D3BarChart"
+        "Koala.view.component.D3BarChart",
+        "Koala.util.String"
     ],
 
     /**
@@ -33,8 +34,106 @@ Ext.define('Koala.view.window.BarChartController', {
         mapComp.removeAllHoverFeatures();
     },
 
+    /**
+     * Create the barchart by a given layer and feature. Adds flex and height to
+     * fit the panel.
+     *
+     * @param {ol.layer.Layer} olLayer An openlayers layer.
+     * @param {ol.Feature} olFeat An openlayers feature.
+     * @return {Koala.view.component.D3BarChart} The barchart component.
+     */
     createBarChart: function(olLayer, olFeat) {
-        return Koala.view.component.D3BarChart.create(olLayer, olFeat);
+        var config = {
+            flex: 1,
+            height: '100%'
+        };
+
+        return Koala.view.component.D3BarChart.create(olLayer, olFeat, config);
+    },
+
+    /**
+     * Create the BarChart Panel which includes the barchart and the
+     * rightColumnWrapper containing the download and reset buttons.
+     *
+     * @param {ol.layer.Layer} olLayer An openlayers layer.
+     * @param {ol.Feature} olFeat An openlayers feature.
+     * @return {Ext.panel.Panel} The Panel including all needed components.
+     */
+    createBarChartPanel: function(olLayer, olFeat) {
+        var me = this;
+        var chart = me.createBarChart(olLayer, olFeat);
+        var chartConfig = olLayer.get('barChartProperties');
+
+        var rightColumnWrapper = {
+            xtype: 'panel',
+            header: false,
+            layout: {
+                type: 'vbox',
+                align: 'middle',
+                pack: 'center'
+            },
+            bodyPadding: 5,
+            height: '100%',
+            width: 180,
+            items: [{
+                xtype: 'button',
+                bind: {
+                    text: '{exportAsImageBtnText}'
+                },
+                handler: me.onExportAsImageClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }, {
+                xtype: 'button',
+                bind: {
+                    text: '{undoBtnText}'
+                },
+                hidden: !Koala.util.String.coerce(chartConfig.allowZoom),
+                handler: me.onUndoButtonClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }]
+        };
+
+        var panel = {
+            xtype: 'panel',
+            name: 'chart-composition',
+            layout: {
+                type: 'hbox'
+            },
+            items: [
+                chart,
+                rightColumnWrapper
+            ]
+        };
+
+        return panel;
+    },
+
+    /**
+     * Convert current chart view into PNG.
+     *
+     * @param {Ext.button.Button} btn The button.
+     */
+    onExportAsImageClicked: function(btn) {
+        var chart = btn.up('[name="chart-composition"]').down('d3-barchart');
+        var chartCtrl = chart.getController();
+        var cb = function(dataUri) {
+            download(dataUri, 'chart.png', 'image/png');
+        };
+        var cbScope = this;
+        chartCtrl.chartToDataUriAndThen(cb, cbScope);
+    },
+
+    /**
+     * Zoom back out after the button has been clicked.
+     *
+     * @param {Ext.button.Button} btn The clicked button.
+     */
+    onUndoButtonClicked: function(btn) {
+        var chart = btn.up('[name="chart-composition"]').down('d3-barchart');
+        var chartCtrl = chart.getController();
+        chartCtrl.resetZoom();
     },
 
     updateBarChartStore: function(olFeat, chartId) {
@@ -85,8 +184,7 @@ Ext.define('Koala.view.window.BarChartController', {
         var lastChart = existingCharts[existingCharts.length - 1];
 
         if (!layerChartRendered) {
-            view.add(me.createBarChart(olLayer, olFeat, uniqueId));
-            // me.updateBarChartStore(olFeat, uniqueId);
+            view.add(me.createBarChartPanel(olLayer, olFeat, uniqueId));
             view.show();
             me.updateBarChartWin(view, lastChart, olLayer.qtitle);
         } else {

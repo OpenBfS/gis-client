@@ -44,7 +44,7 @@ Ext.define("Koala.view.window.BarChart", {
     maxHeight: 800,
     height: 300,
     width: 900,
-    layout: "fit",
+    layout: "vbox",
     tools: [{
         type: 'help',
         //TODO: move to app-locale
@@ -64,6 +64,11 @@ Ext.define("Koala.view.window.BarChart", {
             }
         }
     }],
+    defaults: {
+        flex: 1,
+        width: '100%'
+    },
+
     listeners: {
         close: "onBarchartWinClose"
     }

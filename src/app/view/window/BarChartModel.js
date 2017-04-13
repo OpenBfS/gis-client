@@ -21,6 +21,8 @@ Ext.define('Koala.view.window.BarChartModel', {
     alias: 'viewmodel.k-window-barchart',
 
     data: {
-        title: ''
+        title: '',
+        undoBtnText: '',
+        downloadBtnText: ''
     }
 });
