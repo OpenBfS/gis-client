@@ -63,22 +63,22 @@
             //};
         };
     </script>
+    <!-- The line below must be kept intact for Sencha Cmd to build your application -->
+    <script id="microloader" type="text/javascript" src="bootstrap.js"></script>
     <style>
         div#loadmask {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            height: 78px;
+            width: 200px;
+            background-image: url("resources/images/loading_mask.gif");
+            background-repeat: no-repeat;
         }
     </style>
-    <!-- The line below must be kept intact for Sencha Cmd to build your application -->
-    <script id="microloader" type="text/javascript" src="bootstrap.js"></script>
 </head>
 <body>
-    <div id="loadmask">
-        <img src="resources/images/bfs-logo.png" style="width:200px" /><br />
-        <img src="resources/images/loader.gif" />
-        Loading, please wait...
-    </div>
+    <div id="loadmask" />
 </body>
 </html>
