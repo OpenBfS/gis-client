@@ -2,9 +2,9 @@ Ext.define('Koala.model.StyleFilter', {
     extend: 'Ext.data.Model',
 
     fields: [{
-         name: 'operator',
-         type: 'string',
-         default: 'IsEqualTo'
+        name: 'operator',
+        type: 'string',
+        default: 'IsEqualTo'
     },{
         name: 'attribute',
         type: 'string'

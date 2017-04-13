@@ -98,8 +98,8 @@ Ext.define('Koala.view.main.MobileMainController', {
 
         // Coordinate Info
         Ext.toast({
-          message: 'Longitude , Latitude' + '<br/>' + lon + ' , ' + lat + ' ',
-          timeout: 3000
+            message: 'Longitude , Latitude' + '<br/>' + lon + ' , ' + lat + ' ',
+            timeout: 3000
         });
 
         if (me.pendingRequest) {

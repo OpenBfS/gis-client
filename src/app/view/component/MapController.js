@@ -155,12 +155,12 @@ Ext.define('Koala.view.component.MapController', {
     *
     */
     openBarChartWindow: function(olFeat) {
-       var olLayer = olFeat.get('layer');
-       var uniqueId = this.getUniqueIdByFeature(olFeat);
-       var win = Ext.create('Koala.view.window.BarChart');
-       win.getController().createOrUpdateChart(olLayer, olFeat, uniqueId);
-       return win;
-   },
+        var olLayer = olFeat.get('layer');
+        var uniqueId = this.getUniqueIdByFeature(olFeat);
+        var win = Ext.create('Koala.view.window.BarChart');
+        win.getController().createOrUpdateChart(olLayer, olFeat, uniqueId);
+        return win;
+    },
 
     /**
      *
@@ -185,16 +185,16 @@ Ext.define('Koala.view.component.MapController', {
     /**
     *
     */
-   openGetFeatureInfoWindow: function() {
-       var win = Ext.ComponentQuery.query('window[name=getfeatureinfowin]')[0];
+    openGetFeatureInfoWindow: function() {
+        var win = Ext.ComponentQuery.query('window[name=getfeatureinfowin]')[0];
 
        // create the window if it doesn't exist already
-       if (!win) {
+        if (!win) {
 //           win = Ext.create("Koala.view.window.GetFeatureInfoWindow");
-       }
+        }
 //       win.show();
         return win;
-   },
+    },
 
     /**
      *

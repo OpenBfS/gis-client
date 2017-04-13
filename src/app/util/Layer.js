@@ -251,7 +251,7 @@ Ext.define('Koala.util.Layer', {
 
             Ext.each(filters, function(f) {
                 if (f.param === 'test_data') {
-                  testdataFilter = f;
+                    testdataFilter = f;
                 }
             });
 
@@ -259,15 +259,15 @@ Ext.define('Koala.util.Layer', {
             // have the userrole 'imis'.
             // TODO This should be replaced with a security/roles concept ;)
             if (testdataFilter) {
-              var appContext = Koala.util.AppContext.getAppContext();
-              var userroles = Koala.util.Object.getPathStrOr(appContext,
+                var appContext = Koala.util.AppContext.getAppContext();
+                var userroles = Koala.util.Object.getPathStrOr(appContext,
                 'data/merge/imis_user/userroles');
 
                 // Check if the "user" is not allowed to see 'test_data'
                 if (!(userroles && Ext.Array.contains(userroles, 'imis'))) {
-                  filters = Ext.Array.filter(filters, function(fi) {
-                    return fi.param !== 'test_data';
-                  });
+                    filters = Ext.Array.filter(filters, function(fi) {
+                        return fi.param !== 'test_data';
+                    });
                 }
             }
 
@@ -778,11 +778,11 @@ Ext.define('Koala.util.Layer', {
                 var printLayer;
 
                 this.getMetadataFromUuidAndThen(printUuid, (function(md) {
-                        var metadataClone = Ext.clone(md);
-                        printLayer = this.layerFromMetadata(md);
-                        this.setOriginalMetadata(printLayer, metadataClone);
-                        layer.set('printLayer', printLayer);
-                    }).bind(this)
+                    var metadataClone = Ext.clone(md);
+                    printLayer = this.layerFromMetadata(md);
+                    this.setOriginalMetadata(printLayer, metadataClone);
+                    layer.set('printLayer', printLayer);
+                }).bind(this)
                 );
             }
             return layer;
@@ -1710,9 +1710,9 @@ Ext.define('Koala.util.Layer', {
             }
             var cqlParts = [];
             Ext.each(filters, function(filter) {
-              if (!staticMe.isViewParamFilter(filter)) {
-                cqlParts.push('(' + staticMe.filterToCql(filter) + ')');
-              }
+                if (!staticMe.isViewParamFilter(filter)) {
+                    cqlParts.push('(' + staticMe.filterToCql(filter) + ')');
+                }
             });
             return cqlParts.join(' AND ');
         },

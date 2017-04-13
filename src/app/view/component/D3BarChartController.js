@@ -77,7 +77,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     /**
      *
      */
-     prepareData: function() {
+    prepareData: function() {
         var me = this;
         var staticMe = me.self;
         var view = me.getView();

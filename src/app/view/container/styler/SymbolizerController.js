@@ -93,20 +93,20 @@ Ext.define('Koala.view.container.styler.SymbolizerController', {
         };
 
         switch (symbolType) {
-        case 'Point':
-            styleEditor.redlinePointStyle = Ext.isArray(olStyle) ?
+            case 'Point':
+                styleEditor.redlinePointStyle = Ext.isArray(olStyle) ?
                     olStyle[0] : olStyle;
-            break;
-        case 'Line':
-            styleEditor.redlineLineStringStyle = Ext.isArray(olStyle) ?
+                break;
+            case 'Line':
+                styleEditor.redlineLineStringStyle = Ext.isArray(olStyle) ?
                     olStyle[0] : olStyle;
-            break;
-        case 'Polygon':
-            styleEditor.redlinePolygonStyle = Ext.isArray(olStyle) ?
+                break;
+            case 'Polygon':
+                styleEditor.redlinePolygonStyle = Ext.isArray(olStyle) ?
                     olStyle[0] : olStyle;
-            break;
-        default:
-            break;
+                break;
+            default:
+                break;
         }
 
         if (!win) {

@@ -152,11 +152,11 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 shortInfoBtn.setVisible(allowShortInfo);
             }
             if (changeFilterBtn) {
-              if (!allowChangeFilter || allowChangeFilter.filters.length === 0) {
-                changeFilterBtn.setVisible(false);
-              } else {
-                  changeFilterBtn.setVisible(allowChangeFilter);
-              }
+                if (!allowChangeFilter || allowChangeFilter.filters.length === 0) {
+                    changeFilterBtn.setVisible(false);
+                } else {
+                    changeFilterBtn.setVisible(allowChangeFilter);
+                }
             }
             if (downloadBtn) {
                 downloadBtn.setVisible(allowDownload);
@@ -558,7 +558,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                         map.removeLayer(layer);
                     });
                 }
-        });
+            });
 
     },
 

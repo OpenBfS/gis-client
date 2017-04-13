@@ -81,7 +81,7 @@
         "space-before-function-paren": [1, "never"],
         "brace-style": [1, "1tbs"],
         "eol-last": 1,
-        "indent": 0,
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "quotes": ["error", "single"],
         "linebreak-style": [2, "unix"],
         "no-mixed-spaces-and-tabs": 2,

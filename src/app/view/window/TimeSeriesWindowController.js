@@ -122,10 +122,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             model = Ext.define('Koala.model.' + modelName, {
                 extend: 'Ext.data.Model',
                 fields: [{
-                     name: 'id',
-                     mapping: function(dataRec) {
-                         return dataRec.properties[identifyField];
-                     }
+                    name: 'id',
+                    mapping: function(dataRec) {
+                        return dataRec.properties[identifyField];
+                    }
                 },{
                     name: 'dspName',
                     mapping: function(dataRec) {

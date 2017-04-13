@@ -116,11 +116,11 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      * @return {undefined}
      */
     onSelectionChange: function(treeList, record) {
-      var me = this;
-      var layer = record.getOlLayer();
-      if (layer && layer !== me.activeChartingLayer) {
-        me.toggleActiveChartingLayer(layer);
-      }
+        var me = this;
+        var layer = record.getOlLayer();
+        if (layer && layer !== me.activeChartingLayer) {
+            me.toggleActiveChartingLayer(layer);
+        }
     },
 
     /**
@@ -382,7 +382,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                   '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
                 '</div>',
             '</tpl>',
-             {
+            {
                 display: function(layer) {
                     return (layer.get(
                         BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER

@@ -84,41 +84,41 @@ Ext.define('Koala.view.container.styler.FilterController', {
         var literalTextField = view.down('textfield[name="literalTextField"]');
 
         switch (newValue) {
-        case 'PropertyIsEqualTo':
-        case 'PropertyIsNotEqualTo':
-            literalNumberField1.hide();
-            literalNumberField2.hide();
-            literalTextField.show();
-            viewModel.set('literalTextFieldLabel', viewModel.get('valueText'));
-            break;
-        case 'PropertyIsLike':
-            literalNumberField1.hide();
-            literalNumberField2.hide();
-            literalTextField.show();
-            viewModel.set('literalTextFieldLabel', viewModel.get('isLikeText'));
-            break;
-        case 'PropertyIsNull':
-            literalNumberField1.hide();
-            literalNumberField2.hide();
-            literalTextField.hide();
-            break;
-        case 'PropertyIsBetween':
-            literalNumberField1.show();
-            literalNumberField2.show();
-            literalTextField.hide();
-            viewModel.set('literalNumberField2Label', viewModel.get('upperBoundaryText'));
-            break;
-        case 'PropertyIsLessThan':
-        case 'PropertyIsLessThanOrEqualTo':
-        case 'PropertyIsGreaterThan':
-        case 'PropertyIsGreaterThanOrEqualTo':
-            literalNumberField2.show();
-            literalNumberField1.hide();
-            literalTextField.hide();
-            viewModel.set('literalNumberField2Label', viewModel.get('valueText'));
-            break;
-        default:
-            break;
+            case 'PropertyIsEqualTo':
+            case 'PropertyIsNotEqualTo':
+                literalNumberField1.hide();
+                literalNumberField2.hide();
+                literalTextField.show();
+                viewModel.set('literalTextFieldLabel', viewModel.get('valueText'));
+                break;
+            case 'PropertyIsLike':
+                literalNumberField1.hide();
+                literalNumberField2.hide();
+                literalTextField.show();
+                viewModel.set('literalTextFieldLabel', viewModel.get('isLikeText'));
+                break;
+            case 'PropertyIsNull':
+                literalNumberField1.hide();
+                literalNumberField2.hide();
+                literalTextField.hide();
+                break;
+            case 'PropertyIsBetween':
+                literalNumberField1.show();
+                literalNumberField2.show();
+                literalTextField.hide();
+                viewModel.set('literalNumberField2Label', viewModel.get('upperBoundaryText'));
+                break;
+            case 'PropertyIsLessThan':
+            case 'PropertyIsLessThanOrEqualTo':
+            case 'PropertyIsGreaterThan':
+            case 'PropertyIsGreaterThanOrEqualTo':
+                literalNumberField2.show();
+                literalNumberField1.hide();
+                literalTextField.hide();
+                viewModel.set('literalNumberField2Label', viewModel.get('valueText'));
+                break;
+            default:
+                break;
         }
 
         if (filter) {

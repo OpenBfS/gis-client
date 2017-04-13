@@ -36,8 +36,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @type {Object}
      */
     currentDateRange: {
-      min: null,
-      max: null
+        min: null,
+        max: null
     },
 
     /**
@@ -627,10 +627,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                             return 'rotate(-90,' + x + ',' + y + ') translate(-15,15)';
                         })
                         .attr('x', function(d) {
-                             return me.scales[orientX](d[xField]);
+                            return me.scales[orientX](d[xField]);
                         })
                         .attr('y', function(d) {
-                             return me.scales[orientY](d[yField]);
+                            return me.scales[orientY](d[yField]);
                         })
                         .attr('text-anchor', 'middle')
                         .style('font-family', 'sans-serif')
@@ -918,33 +918,33 @@ Ext.define('Koala.view.component.D3ChartController', {
             layout: 'fit',
             bodyPadding: 10,
             items: [{
-              xtype: 'container',
-              items: [{
-                padding: '10px 0',
-                html: viewModel.get('downloadChartDataMsgMessage')
-              },{
-                xtype: 'combo',
-                width: '100%',
-                fieldLabel: viewModel.get('outputFormatText'),
-                value: 'application/json',
-                forceSelection: true,
-                store: [
+                xtype: 'container',
+                items: [{
+                    padding: '10px 0',
+                    html: viewModel.get('downloadChartDataMsgMessage')
+                },{
+                    xtype: 'combo',
+                    width: '100%',
+                    fieldLabel: viewModel.get('outputFormatText'),
+                    value: 'application/json',
+                    forceSelection: true,
+                    store: [
                   ['gml3','gml'],
                   ['csv','csv'],
                   ['application/json','json']
-                ]
-              }]
+                    ]
+                }]
             }],
             bbar: [{
-              text: viewModel.get('downloadChartDataMsgButtonYes'),
-              name: 'confirm-timeseries-download',
-              handler: me.doWfsDownload.bind(me, dataObj)
+                text: viewModel.get('downloadChartDataMsgButtonYes'),
+                name: 'confirm-timeseries-download',
+                handler: me.doWfsDownload.bind(me, dataObj)
             }, {
-              text: viewModel.get('downloadChartDataMsgButtonNo'),
-              name: 'abort-timeseries-download',
-              handler: function() {
-                this.up('window').close();
-              }
+                text: viewModel.get('downloadChartDataMsgButtonNo'),
+                name: 'abort-timeseries-download',
+                handler: function() {
+                    this.up('window').close();
+                }
             }]
         });
         win.show();
@@ -965,7 +965,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var allSelectedStations = view.getSelectedStations();
         var requestUrl = me.getChartDataRequestUrl();
         var feat = Ext.Array.findBy(allSelectedStations, function(station) {
-          return station.get('id') === stationId;
+            return station.get('id') === stationId;
         });
         var requestParams = me.getChartDataRequestParams(feat, true);
 
@@ -979,14 +979,14 @@ Ext.define('Koala.view.component.D3ChartController', {
             url: requestUrl,
             params: requestParams,
             success: function(response) {
-              var fileName = stationId + '_' + layerName + '.' + fileEnding;
+                var fileName = stationId + '_' + layerName + '.' + fileEnding;
 
               // Use the download library to enforce a browser download.
-              download(response.responseText, fileName, format);
-              win.close();
+                download(response.responseText, fileName, format);
+                win.close();
             },
             failure: function(response) {
-              Ext.log.warn('Download Error: ', response);
+                Ext.log.warn('Download Error: ', response);
             }
         });
     },

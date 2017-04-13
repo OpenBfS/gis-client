@@ -73,21 +73,21 @@ Ext.define('Koala.view.container.styler.ScaleDenominatorController', {
                 'numberfield[name="literalNumberField2"]');
 
         switch (newValue) {
-        case 'ScaleIsBetween':
-            literalNumberField1.show();
-            literalNumberField2.show();
-            viewModel.set('literalNumberField2Label', 'Upper boundary');
-            break;
-        case 'ScaleIsLessThan':
-        case 'ScaleIsLessThanOrEqualTo':
-        case 'ScaleIsGreaterThan':
-        case 'ScaleIsGreaterThanOrEqualTo':
-            literalNumberField2.show();
-            literalNumberField1.hide();
-            viewModel.set('literalNumberField2Label', 'Boundary');
-            break;
-        default:
-            break;
+            case 'ScaleIsBetween':
+                literalNumberField1.show();
+                literalNumberField2.show();
+                viewModel.set('literalNumberField2Label', 'Upper boundary');
+                break;
+            case 'ScaleIsLessThan':
+            case 'ScaleIsLessThanOrEqualTo':
+            case 'ScaleIsGreaterThan':
+            case 'ScaleIsGreaterThanOrEqualTo':
+                literalNumberField2.show();
+                literalNumberField1.hide();
+                viewModel.set('literalNumberField2Label', 'Boundary');
+                break;
+            default:
+                break;
         }
     }
 

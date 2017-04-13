@@ -101,13 +101,13 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
         var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
 
         var filter = {
-                mindatetimeinstant: minMaxDates.min,
-                maxdatetimeinstant: minMaxDates.max,
-                defaultendtimeinstant: timeRangeFilter.maxdatetimeinstant,
-                defaultstarttimeinstant: timeRangeFilter.mindatetimeinstant,
-                unit: 'minutes',
-                fromTimeseries: true
-            };
+            mindatetimeinstant: minMaxDates.min,
+            maxdatetimeinstant: minMaxDates.max,
+            defaultendtimeinstant: timeRangeFilter.maxdatetimeinstant,
+            defaultstarttimeinstant: timeRangeFilter.mindatetimeinstant,
+            unit: 'minutes',
+            fromTimeseries: true
+        };
 
         var timeRangeFilterFieldset = FilterUtil.createTimeRangeFieldset(
                 'j F Y', filter, 1
@@ -136,36 +136,36 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
                 minHeight: 40,
                 items: [
                     timeRangeFilterFieldset,
-                {
-                    xtype: 'button',
-                    name: 'btn-set-filter',
-                    bind: {
-                        text: '{setFilterBtnText}'
-                    },
-                    handler: 'onSetFilterBtnClick',
-                    margin: '0 3px 0 0'
-                }, {
-                    xtype: 'button',
-                    name: 'btn-reset-filter',
-                    bind: {
-                        text: '{resetFilterBtnText}'
-                    },
-                    handler: 'onResetFilterBtnClick',
-                    margin: '0 3px 0 0'
-                }, {
-                    xtype: 'combo',
-                    displayField: 'text',
-                    queryMode: 'local',
-                    bind: {
-                        emptyText: '{selectChartLayerComboEmptyText}',
-                        fieldLabel: '{selectChartLayerComboLabel}'
-                    },
-                    listeners: {
-                        select: 'onSelectChartLayerComboSelect',
-                        beforerender: 'bindSelectChartLayerStore'
-                    },
-                    flex: 1
-                }]
+                    {
+                        xtype: 'button',
+                        name: 'btn-set-filter',
+                        bind: {
+                            text: '{setFilterBtnText}'
+                        },
+                        handler: 'onSetFilterBtnClick',
+                        margin: '0 3px 0 0'
+                    }, {
+                        xtype: 'button',
+                        name: 'btn-reset-filter',
+                        bind: {
+                            text: '{resetFilterBtnText}'
+                        },
+                        handler: 'onResetFilterBtnClick',
+                        margin: '0 3px 0 0'
+                    }, {
+                        xtype: 'combo',
+                        displayField: 'text',
+                        queryMode: 'local',
+                        bind: {
+                            emptyText: '{selectChartLayerComboEmptyText}',
+                            fieldLabel: '{selectChartLayerComboLabel}'
+                        },
+                        listeners: {
+                            select: 'onSelectChartLayerComboSelect',
+                            beforerender: 'bindSelectChartLayerStore'
+                        },
+                        flex: 1
+                    }]
             }];
         }
         me.callParent();

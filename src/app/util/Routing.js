@@ -324,8 +324,8 @@ Ext.define('Koala.util.Routing', {
          */
         filterToPermaObj: function(filter) {
             var permaObj = {
-                    type: filter.type
-                };
+                type: filter.type
+            };
 
             switch (filter.type) {
                 // valueOf() returns the timestamp value of the moment date.

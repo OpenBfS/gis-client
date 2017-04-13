@@ -162,17 +162,17 @@ Ext.define('Koala.view.form.Print', {
                 enableAlignments: false
             }],
             bbar: ['->',
-            {
-                xtype: 'button',
-                text: 'OK',
-                name: 'setValueButton',
-                handler: function(button) {
-                    var win = button.up('window');
-                    var editor = win.down('htmleditor');
-                    win.correspondingTextfield.setValue(editor.getValue());
-                    win.close();
-                }
-            }]
+                {
+                    xtype: 'button',
+                    text: 'OK',
+                    name: 'setValueButton',
+                    handler: function(button) {
+                        var win = button.up('window');
+                        var editor = win.down('htmleditor');
+                        win.correspondingTextfield.setValue(editor.getValue());
+                        win.close();
+                    }
+                }]
         });
     },
 
@@ -838,10 +838,10 @@ Ext.define('Koala.view.form.Print', {
                         Ext.log.warn(e2);
                     }
                     if (w && 'focus' in w && 'document' in w) {
-                         w.document.write(content);
-                         w.document.close();
-                         w.focus();
-                         success = true;
+                        w.document.write(content);
+                        w.document.close();
+                        w.focus();
+                        success = true;
                     }
                 }
                 if (!success) {
@@ -963,13 +963,13 @@ Ext.define('Koala.view.form.Print', {
                 bboxTextfield,
                 {
                 //TODO update bbox of irix-upload sos-job
-                xtype: 'button',
-                text: me.getMapBboxButton(),
-                margin: '0 0 0 55',
-                handler: function() {
-                    Ext.Msg.alert(me.getMapBboxButton(), '<b>'+me.getMapBboxLabel()+':</b> ' + bboxTextfield.getValue());
-                }
-            }]
+                    xtype: 'button',
+                    text: me.getMapBboxButton(),
+                    margin: '0 0 0 55',
+                    handler: function() {
+                        Ext.Msg.alert(me.getMapBboxButton(), '<b>'+me.getMapBboxLabel()+':</b> ' + bboxTextfield.getValue());
+                    }
+                }]
         });
 
         me.updateFeatureBbox(bboxTextfield);

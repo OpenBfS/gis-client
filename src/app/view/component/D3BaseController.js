@@ -831,17 +831,17 @@ Ext.define('Koala.view.component.D3BaseController', {
         ctx.fillRect(0,0,canvas.width,canvas.height);
 
         chartImageObject.onload = function() {
-           ctx.drawImage(chartImageObject, 0, 0, chartImageWidth,
+            ctx.drawImage(chartImageObject, 0, 0, chartImageWidth,
                 chartImageHeight);
-           legendImageObject.onload = function() {
-               ctx.drawImage(legendImageObject,
+            legendImageObject.onload = function() {
+                ctx.drawImage(legendImageObject,
                     chartImageWidth - legendImageWidth, 0, legendImageWidth,
                     legendImageHeight);
-               var dataUri = canvas.toDataURL(outputFormat);
-               downloadIcons.style('display', 'block');
-               deleteIcons.style('display', 'block');
-               cb.call(cbScope, dataUri);
-           };
+                var dataUri = canvas.toDataURL(outputFormat);
+                downloadIcons.style('display', 'block');
+                deleteIcons.style('display', 'block');
+                cb.call(cbScope, dataUri);
+            };
         };
     },
 
@@ -978,7 +978,7 @@ Ext.define('Koala.view.component.D3BaseController', {
     generateDownloadCallback: function(dataObj) {
         var me = this;
         var downloadCallback = function() {
-          me.downloadSeries(dataObj);
+            me.downloadSeries(dataObj);
         };
         return downloadCallback;
     },
