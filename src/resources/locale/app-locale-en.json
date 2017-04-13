@@ -417,7 +417,7 @@
                             "<ol>"+
                                 "<div><img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Layer Profilwahl</li>"+
-                                    "<div>Dieses Auswahlfenster ermöglicht eine vordefinierte Auswahl mehrerer Datensätze in die Karte zu laden (sogenannte Layer-Sets). Ein Layer-Set besteht aus einzelnen Layern, die in der Karte eine thematische Ebene darstellen. Das Fenster öffnet sich beim initialen Laden der Seite. Es ist nicht erforderlich ein Layer-Set auszuwählen um die Anwendung zu starten. Die Layer-Sets/Themen-Sets stellen eine Hilfestellung dar, um thematisch ähnliche Datensätze mit einem Klick zu laden. Wird das Fenster ohne Wahl eines Layer-Sets geschlossen, werden lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte OSM\" geladen.</div><br />"+
+                                    "<div>Dieses Auswahlfenster ermöglicht eine vordefinierte Auswahl mehrerer Datensätze in die Karte zu laden (sogenannte Layer-Sets). Ein Layer-Set besteht aus einzelnen Layern, die in der Karte eine thematische Ebene darstellen. Das Fenster öffnet sich beim initialen Laden der Seite. Es ist nicht erforderlich ein Layer-Set auszuwählen um die Anwendung zu starten. Die Layer-Sets/Themen-Sets stellen eine Hilfestellung dar, um thematisch ähnliche Datensätze mit einem Klick zu laden. Wird das Fenster ohne Wahl eines Layer-Sets geschlossen, werden lediglich die Standardlayer \"Place names\", \"Contour lines\" and \"Background map - OSM\" geladen.</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
                                     "<div>In der Karte werden die gewählten Datensätze dargestellt. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Klickt man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Werkzeuge</li>"+
@@ -451,14 +451,14 @@
                 "profileSelection": {
                     "title": "en: 1. Layer Profilwahl",
                     "html": "<h2> 1. Layer Profilwahl </h2>"+
-                            "<div>Dieses Auswahlfenster ermöglicht eine vordefinierte Auswahl mehrerer Datensätze in die Karte zu laden (sogenannte Layer-Sets). Ein Layer-Set besteht aus einzelnen Layern, die in der Karte eine thematische Ebene darstellen. Das Fenster öffnet sich beim initialen Laden der Seite. Es ist nicht erforderlich ein Layer-Set auszuwählen um die Anwendung zu starten. Die Layer-Sets/Themen-Sets stellen eine Hilfestellung dar, um thematisch ähnliche Datensätze mit einem Klick zu laden. Wird das Fenster ohne Wahl eines Layer-Sets geschlossen, werden lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte OSM\" geladen.</div>"+
+                            "<div>Dieses Auswahlfenster ermöglicht eine vordefinierte Auswahl mehrerer Datensätze in die Karte zu laden (sogenannte Layer-Sets). Ein Layer-Set besteht aus einzelnen Layern, die in der Karte eine thematische Ebene darstellen. Das Fenster öffnet sich beim initialen Laden der Seite. Es ist nicht erforderlich ein Layer-Set auszuwählen um die Anwendung zu starten. Die Layer-Sets/Themen-Sets stellen eine Hilfestellung dar, um thematisch ähnliche Datensätze mit einem Klick zu laden. Wird das Fenster ohne Wahl eines Layer-Sets geschlossen, werden lediglich die Standardlayer \"Place names\", \"Contour lines\" and \"Background map - OSM\" geladen.</div>"+
                             "<div>Über die Eingabe eines Begriffs als Filter lässt sich die Auswahl der Layer-Sets einschränken.</div><br />"+
                             "<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' style='max-height: 100%; max-width: 100%;'>"
                 },
                 "map": {
                     "title": "en: 2. Karte",
                     "html": "<h2> 2. Karte </h2>"+
-                            "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>4. Auswahl</i>). Standardmäßig sind die Layer \"Höhenlinien\", \"Ortsnamen\" und \"Hintergrundkarte - OSM\" geladen. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Die Geometrie wird farblich hervorgehoben und ist nun anklickbar. Klickt man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />",
+                            "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>4. Auswahl</i>). Standardmäßig sind die Layer \"Place names\", \"Contour lines\" and \"Background map - OSM\" geladen. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Die Geometrie wird farblich hervorgehoben und ist nun anklickbar. Klickt man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />",
                     "overview": {
                         "title": "en: 2.1 Übersicht",
                         "html": "<hr style='color:#157FCC' />"+
@@ -865,10 +865,10 @@
                 "imprintButtonText": "Imprint",
                 "settingsButtonText": "Settings",
                 "moreLayersButtonText": "Selection",
-                "addLayerButtonText": "Add external layer",
+                "addLayerButtonText": "Add external WMS",
                 "permalinkButtonText": "Permalink",
-                "spatialSearchTitle": "en:Räumliche Suche",
-                "metadataSearchTitle": "en:Daten und Dienste des Bfs"
+                "spatialSearchTitle": "Spatial search",
+                "metadataSearchTitle": "BfS data and services"
             }
         }
     },
@@ -881,8 +881,8 @@
         "statics": {
             "fieldNames": {
                 "fileIdentifier": "en:ID",
-                "abstract": "en:Abstract",
-                "contact": "en:Kontakt"
+                "abstract": "Abstract",
+                "contact": "Contact"
             }
         }
     },
@@ -954,7 +954,7 @@
     "Koala.view.panel.MobileHelp": {
         "config": {
             "data": {
-                "title": "en: Hilfe",
+                "title": "Help",
                 "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Vorbemerkung</h1>",
                 "helpPrefaceHtml": "<h2> Vorbemerkung </h2>"+
                     "<div>Das GeoPortal des "+
@@ -978,112 +978,112 @@
                     "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html' target='_blank'>(Kurzmeldung des BfS)</a>"+
                     ".</div>"+
                     "<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>",
-                "helpQuickRefTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>Schnellübersicht</h1>",
-                "helpQuickRefHtml": "<div><img class='img' src='modern/resources/img/helpPage/mobile_graphic_overview.png' title='Übersicht' alt='mobile_graphic_overview.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
+                "helpQuickRefTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>Brief overview</h1>",
+                "helpQuickRefHtml": "<div><img class='img' src='modern/resources/img/helpPage/mobile_graphic_overview_en.png' title='Overview' alt='mobile_graphic_overview_en.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
                             "<ol>"+
-                            "<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
-                                "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt. Die Navigation erfolgt entweder über Fingergesten oder die Navigationsleiste am rechten oberen Rand des Bildschirms. Tippt man auf eine entsprechende Geometrie (Messpunkt) in der Karte, werden Zeit- bzw. Wertereihen zu diesem Messpunkt in einem separaten Reiter dargestellt. Hierbei ist darauf zu achten, dass das Diagrammsymbol des entsprechenden Layers in der Legende auf aktiv gesetzt ist (aktiv: "+
-                                "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
-                                ", inaktiv: "+
-                                "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Diagramm inaktiv' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
+                            "<li style='color:#157FCC; font-weight:bold'>Map</li>"+
+                                "<div>The map displays the selected layers/data sets. You can use finger gestures or the navigation bar at the top-right corner of the screen to navigate in the map. Tap on the relevant geometry (measurement point) in the map to open a separate tab that displays the timelines and/or value series referring to this measurement point. Please ensure that the diagram icon for the relevant layer is activated in the legend (active: "+
+                                "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Active chart' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
+                                ", inactive: "+
+                                "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Inactive chart' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
                                 ").</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Menü</li>"+
-                                "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen (Knopf \"Auswahl\"). Zusätzlich lassen sich von externen Quellen Daten in die Karte laden (Knopf \"Externen WMS hinzufügen\"). Eine Suche von Orten bzw. Daten und Dienste des BfS ist über die Eingabe innerhalb des Suchfeldes möglich. Mithilfe des Permalink-Knopfs kann eine bestimmte Kartenansicht für einen späteren Zugriff gesichert werden. Die Sprache sowie der Zeitbezug der Anwendung lässt sich über den Menüpunkt \"Einstellungen\" anpassen. Des Weiteren finden Sie die Hilfe bzw. das Impressum über die gleichnamigen Knöpfe.</div><br />"+
+                            "<li style='color:#157FCC; font-weight:bold'>Menu</li>"+
+                                "<div>Via the menu, it is possible to add individual layers to the map (\"Selection\" button). It is also possible to load data from external sources into the map (\"Add external WMS\"). Search for locations and/or BfS data and services by entering a search term into the search field. The Permalink button allows you to save a particular map view for future access. You can define the language and the reference time used in the application via the menu item \"Settings\". You will also find separate buttons to open the Help pages or the Legal Disclosure information.</div><br />"+
                             "<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
-                                "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland). Alternativ können Fingergesten verwendet werden.</div>"+
-                                "<div>Der unterste Knopf (zwei Pfeile) erweitert das Sichtfeld auf den gesamten Bildschirm des Endgerätes (sofern dies vom mobilen Browser unterstützt wird).</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
-                                "<div>In der Legende werden die Symbole der Layer erläutert.</div>"+
-                                "<div>Zusätzlich lassen sich Einstellungen an der Darstellung der Layer vornehmen. Layer lassen sich ein- bzw. ausblenden oder gänzlich entfernen. Die Abfrage von Layern lässt sich aktivieren bzw. deaktivieren und es können Filtereinstellungen vorgenommen werden. Des Weiteren ist es möglich die Zeichenreihenfolge der Layer mithilfe der Pfeiltasten anzupassen.</div><br />"+
+                                "<div>Allows you to enlarge or reduce the map view and to shift the map view to its original position (centre of Germany). Alternatively, you can use finger gestures to zoom in or out.</div>"+
+                                "<div>A tap on the lowest button (two arrows) will enlarge the view so that the application uses the full screen of your device (if your mobile browser supports full screen mode).</div><br />"+
+                            "<li style='color:#157FCC; font-weight:bold'>Legend</li>"+
+                                "<div>The legend explains the symbols used in the layers.</div>"+
+                                "<div>It is also possible to change the settings for the layer presentation. Via the legend, you can hide or show or even completely delete individual layers. You can activate or deactivate the layer query in the legend and you can change the filter settings. It is also possible to change the mapping order of the layers with the help of the arrow buttons.</div><br />"+
                             "<li style='color:#157FCC; font-weight:bold'>Software-Version</li>"+
                                 "<div>1.6.2.0</div>"+
                             "</ol>",
-                "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Karte</h1>",
-                "helpMapHtml": "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>2.2 Auswahl</i>). Standardmäßig sind die Layer \"Höhenlinien\", \"Ortsnamen\" und \"Hintergrundkarte - OSM\" geladen. Eine Berührung innerhalb der Karte öffnet ein temporäres Fenster das die geographischen Koordinaten der getippten Position anzeigt.</div><br />"+
-                               "<div> Layer denen Messdaten zugrunde liegen, liefern mit einer Berührung auf einen Datenpunkt/eine Station die Messdaten in Form eines Linien- bzw. Balkendiagramms. Für diese Funktion muss in der Legende das Diagrammsymbol aktiv sein "+
-                               "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
-                               " gesetzt ist. Weitere Informationen bezüglich der Legendeneinstellungen finden Sie unter dem Punkt <i>4. Legende</i>.</div><br />"+
-                               "<div>So öffnet sich zum Beispiel bei der Wahl des Layers \"ODL 1h\" (siehe <i>1. Arbeitsablauf Zeitreihen anzeigen</i>) bei Berührung auf eine Station ein neuer Reiter, in dem die Werte für einen bestimmten Zeitraum dargestellt werden. Eine bessere Darstellung von Linien- und Balkendiagramme wird erreicht, wenn das Endgerät (Smartphone oder Tablet) in horizontaler Lage gehalten wird (dazu muss die Funktion \"Automatisch drehen\" aktiviert sein).</div><br />"+
-                               "<div><img class='img' src='modern/resources/img/helpPage/mobile_graphic_timeSeries.png' title='Arbeitsablauf Zeitreihen anzeigen' alt='mobile_graphic_timeSeries.png' style='max-height: 100%; max-width: 100%;'><br>"+
-                               "<b>1. Arbeitsablauf Zeitreihen anzeigen</b></div><br />"+
-                               "<div>Innerhalb eines Liniendiagramms kann, wie bei der Karte, mithilfe der <i>2-Fingergestik</i> gezoomt bzw. mit <i>Wischgestik</i> die Ansicht verschoben werden. Detaillierte Informationen eines einzelnen Messpunktes sind per Berührung abrufbar. Eine Zeitreihe kann durch Berührung der Layerbezeichnung ein- bzw. ausgeblendet werden. Betätigen Sie den X-Knopf "+
-                               "<img class='img' src='modern/resources/img/helpPage/mobile_legend_delete.png' title='Zeitreihe löschen' alt='mobile_legend_delete.png' width='13' height='12' style='vertical-align:middle'>"+
-                               " um eine Zeitreihe aus dem Diagramm gänzlich zu entfernen. Sofern eine Zeitreihe dem Diagramm hinzufügt werden soll, ist dies über Auswahl eines weiteren Datenpunkts/Station innerhalb der Karte möglich.</div><br />"+
-                               "<div>Neben Zeitreihen können auch Balkendiagramme dargestellt werden. Detaillierte Informationen werden bei Berührung eines Balkens dargestellt. Das Diagramm passt sich stets dem Höchstwert an. Entsprechend ist das Diagramm durch Ausblenden einzelner Werte anpassbar.</div><br />"+
-                               "<div>Innerhalb der Karte kann man mithilfe von Fingergesten oder über die Navigationsleiste den Kartenausschnitt verschieben oder zoomen (siehe <i>3. Navigation</i>).</div><br />"+
-                               "<div>Im linken unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Eine einfache Berührung öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Informationen.</div><br />"+
-                               "<div>Im rechten unteren Eck der Karte befindet sich die Maßstabsleiste. Diese dient als Referenz des aktuellen Kartenmaßstabs. Demzufolge bietet sie eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m), oder Kilometern (km).</div><br />",
-                "helpMenuTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>2. Menü <img class='img' src='modern/resources/img/helpPage/mobile_button_menu.png' title='Knopf: Menü öffnen' alt='mobile_button_menu.png' width='37' height='33' style='vertical-align:middle'></h1>",
-                "helpMenuHtml": "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen (Knopf \"Auswahl\"). Zusätzlich lassen sich von externen Quellen Daten in die Karte laden (\"Externen WMS hinzufügen\"). Eine Suche von Orten bzw. Daten und Dienste des BfS ist über die Eingabe innerhalb des Suchfeldes möglich. Mithilfe des Permalink-Knopfs kann eine bestimmte Kartenansicht für einen späteren Zugriff gesichert werden. Die Sprache sowie der Zeitbezug der Anwendung lässt sich über den Menüpunkt \"Einstellungen\" anpassen. Des Weiteren finden Sie die Hilfe bzw. das Impressum über die gleichnamigen Knöpfe.</div>"+
-                                "<div>Der <i>Dreieckspeil</i> "+
-                                "<img class='img' src='modern/resources/img/helpPage/mobile_button_backMenu.png' title='Knopf: zurück navigieren' alt='mobile_button_backMenu.png' width='16' height='21' style='vertical-align:middle'>"+
-                                ", der sich in der linken oberen Ecke befindet, ermöglicht es zur vorherigen Ansicht zurück zu wechseln.</div><br />"+
-                                "<h2 style='font-weight:bold'>2.1 Multisuchleiste</h2>"+
-                                    "<p>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS. Mit einer Berührung in das Textfeld öffnet sich die Tastatur Ihres Endgerätes. Gemäß der Texteingabe werden die Ergebnisse in einem Fenster unterhalb der Leiste angezeigt. Ein Tippen auf das Kreuzsymbol "+
-                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_deleteSearch.png' title='Suchauswahl löschen' alt='mobile_button_deleteSearch.png' width='21' height='21' style='vertical-align:middle'>"+
-                                    ", an der rechten Seite des Suchfeldes, löscht die Eingabe und schließt das Ergebnisfenster.</p><br />"+
-                                    "<p><b>Räumliche Suche</b><br />"+
-                                    "Die Suche nach Orten erfolgt über die Multisuchleiste. Die Ergebnisse werden entsprechend der Texteingabe nach Betätigen der <i>Entertaste</i> Ihres Endgerätes angezeigt. Der gewünschte Ort wird mit einem Tippen auf den Ortsnamen ausgewählt, die Kartenansicht aktualisiert sich daraufhin automatisch.</p><br />"+
-                                    "<p><b>Suche von Daten und Diensten</b><br />"+
-                                    "Neben der räumlichen Suche, wird parallel nach Daten und Diensten des BfS gesucht. Weitere Informationen finden sich im Metadatenfenster, das sich mit einer Berührung auf den Informationsknopf "+
-                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_search_info.png' title='Informationsknopf' alt='button_search_info.png' width='15' height='15' style='vertical-align:middle'>"+
-                                    " öffnet. Daten und Dienste, die mit einem Knopf in Form einer Karte und einem Plus-Symbol "+
-                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_search_addData.png' title='Knopf: Füge Daten der Karte hinzu' alt='button_search_addData.png' width='17' height='17' style='vertical-align:middle'>"+
-                                    " versehen sind, lassen sich mit einer Berührung zur Karte hinzufügen.</p><br />"+
-                                "<h2 style='font-weight:bold'>2.2 Auswahl</h2>"+
-                                    "<div>Über die Option \"Auswahl\" können Layer zur Karte hinzugefügt werden. Die Layer sind thematisch gegliedert. Eine Berührung auf ein Thema, bzw. auf den <i>Dreieckspfeil</i> "+
-                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_layerSet.png' title='Layer-Set öffnen' alt='mobile_button_layerSet.png' width='11' height='17' style='vertical-align:middle'>"+
-                                    "auf der linken Seite, öffnet die Auswahl der verfügbaren Layer.</div><br />"+
-                                    "<div>Eine Berührung auf die Layerbezeichnung öffnet ein layerspezifisches Fenster. Je nach Art des Layers beinhaltet das Fenster gegebenenfalls Einstellungen um die Daten mithilfe eines Zeit- und/oder Wertefilters zu selektieren. Hinzufügen lässt sich ein Layer mit einer Berührung auf \"Ausgewählten Layer hinzufügen\". Die Abfragefunktion wird bei einem hinzugefügten Layer automatisch auf aktiv "+
-                                    "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
-                                    " gesetzt.</div><br />"+
-                                "<h2 style='font-weight:bold'>2.3 Externe Layer hinzufügen</h2>"+
-                                    "<div>Der WMS Dienst ermöglicht das Hinzufügen von WMS-Layern zur Darstellung von externen Geodaten. Detailliertere Informationen rund um das Thema Web Map Service finden Sie unter folgender Adresse: <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a>.</div><br />"+
-                                    "<div>Der Knopf \"Layerauswahl\" öffnet eine Auswahl an vordefinierten WMS-URLs die angefragt werden können.</div>"+
-                                    "<div>Für eine individuelle WMS-Anfrage tragen Sie in das Feld \"WMS-URL\" eine gültige Anfrage ein. In der Folge drücken Sie auf den Knopf \"Verfügbare Layer abfragen\". Die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt. Durch das Setzen von Häkchen lassen sich die Layer auswählen, die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Knopf \"Ausgewählte Layer hinzufügen\". Diese sind initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</div><br />"+
+                "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Map</h1>",
+                "helpMapHtml": "<div>The map displays the selected layers/data sets (please refer to Section <i>2.2 Selection</i> for details on adding layers). The layers \"Place names\", \"Contour lines\" and \"Background map - OSM\" are loaded by default. Tap into the map to open a temporary window that displays the geographical coordinates of the selected position.</div><br />"+
+                               "<div> If measurement data is available for a layer, tap on the data point / a measuring station to display the relevant measurement data in the form of a line graph or bar graph. The diagram icon must be activated in the legend "+
+                               "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Active chart' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
+                               " to enable this function. For more detailed information with respect to legend settings please refer to Section <i>4. Legend</i>.</div><br />"+
+                               "<div>As illustrated in the example for layer \"ODL 1h\" (cf. <i>1. Workflow show timeseries</i>), touching a location will open a new tab that displays the values for a specified period of time. For a better presentation of line graphs and bar graphs, hold the device (smartphone or tablet) horizontally (please ensure that the Auto-rotate function is activated).</div><br />"+
+                               "<div><img class='img' src='modern/resources/img/helpPage/mobile_graphic_timeSeries.png' title='Workflow show timeseries' alt='mobile_graphic_timeSeries.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                               "<b>1. Workflow show timeseries</b></div><br />"+
+                               "<div>Within a line diagram, you can use the <i>2-fingers zoom</i> to zoom in or out of the diagram or drag to shift the view (similar to navigating in the map). Touch an individual measurement point to retrieve more detailed information. Touch the layer name to hide or show a timeline. Use the X button "+
+                               "<img class='img' src='modern/resources/img/helpPage/mobile_legend_delete.png' title='Delete timeseries' alt='mobile_legend_delete.png' width='13' height='12' style='vertical-align:middle'>"+
+                               " to delete a timeline completely from the diagram. If you wish to add a timeline to the diagram, just select another data point / measuring station within the map.</div><br />"+
+                               "<div>The application does not only display timelines but also bar graphs. Touch a bar to retrieve more detailed information. The diagram always adjusts to the highest value. It is thus possible to adjust the diagram by hiding individual values.</div><br />"+
+                               "<div>Within the map, you can use finger gestures or the navigation bar to shift the map view or to zoom in or out (cf. <i>3. Navigation</i>).</div><br />"+
+                               "<div>You will find the copyright information for internal and external data in the bottom-left corner of the map view. Touch it to open a new tab in the browser showing the relevant information.</div><br />"+
+                               "<div>The scalebar is displayed in the bottom-right corner of the map. The scalebar serves as a reference to the current map scale. It thus helps to compare the current view. The scalebar varies by length according to the zoom level. It shows the length in metres (m) or kilometres (km).</div><br />",
+                "helpMenuTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>2. Menu <img class='img' src='modern/resources/img/helpPage/mobile_button_menu.png' title='Open menu' alt='mobile_button_menu.png' width='37' height='33' style='vertical-align:middle'></h1>",
+                "helpMenuHtml": "<div>Via the menu, it is possible to add individual layers to the map (\"Selection\" button). It is also possible to load data from external sources into the map (\"Add external WMS\"). Search for locations and/or BfS data and services by entering a search term into the search field. The Permalink button allows you to save a particular map view for future access. You can define the language and the reference time used in the application via the menu item \"Settings\". You will also find separate buttons to open the Help pages or the Legal Disclosure information.</div>"+
+                                "<div>Use the <i>arrow icon</i> "+
+                                "<img class='img' src='modern/resources/img/helpPage/mobile_button_backMenu.png' title='Navigate back' alt='mobile_button_backMenu.png' width='16' height='21' style='vertical-align:middle'>"+
+                                " in the top-left corner to return to the previous screen.</div><br />"+
+                                "<h2 style='font-weight:bold'>2.1 Multi search bar</h2>"+
+                                    "<p>The multi search bar makes it possible to search for spatial data as well as for BfS data and services. Touch the textbox to open the keyboard on your device. Enter your text and the results will be shown in a window below the bar. Tap on the X icon "+
+                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_deleteSearch.png' title='Delete search' alt='mobile_button_deleteSearch.png' width='21' height='21' style='vertical-align:middle'>"+
+                                    " at the right-hand side of the search field to delete the entry and close the result window.</p><br />"+
+                                    "<p><b>Spatial search</b><br />"+
+                                    "You can use the multi search bar to search for locations. The results will be displayed once you have entered your text and pressed the <i>Enter button</i> on your device. Select the desired location with a tap on the name and the map view will refresh automatically.</p><br />"+
+                                    "<p><b>Search for data and services</b><br />"+
+                                    "In addition to the spatial search, the application also searches for BfS data and services. Further information can be found in the Metadata window. Click on the information icon "+
+                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_search_info.png' title='Information button' alt='button_search_info.png' width='15' height='15' style='vertical-align:middle'>"+
+                                    " to open the Metadata window. Data and services that are associated with a button showing a map and a plus symbol "+
+                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_search_addData.png' title='Add data to the map' alt='button_search_addData.png' width='17' height='17' style='vertical-align:middle'>"+
+                                    " can be added to the map by a tap.</p><br />"+
+                                "<h2 style='font-weight:bold'>2.2 Selection</h2>"+
+                                    "<div>The menu item \"Selection\" makes it possible to add layers to the map. The layers are organized by subjects. Touch the subject title or the <i>arrow icon</i> "+
+                                    "<img class='img' src='modern/resources/img/helpPage/mobile_button_layerSet.png' title='Open layer-set' alt='mobile_button_layerSet.png' width='11' height='17' style='vertical-align:middle'>"+
+                                    " on the left-hand side to open the selection of available layers.</div><br />"+
+                                    "<div>Touch the layer name to open a layer-specific window. Depending on the type of layer, the window may also include settings so that you can select data with the help of a time filter and/or value filter. Simply tap on \"Add Choosen Layer\" to add a layer. The query function is automatically activated "+
+                                    "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Active chart' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
+                                    " for newly added layers.</div><br />"+
+                                "<h2 style='font-weight:bold'>2.3 Add external WMS</h2>"+
+                                    "<div>The WMS service can be used to add WMS layers to display external geo data. Please find more detailed information on the topic of Web Map Service at the following address: <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a>.</div><br />"+
+                                    "<div>Tap on the \"Layer Selection\" button to open a selection of predefined WMS-URLs that can be queried. </div>"+
+                                    "<div>For an individual WMS query, enter a valid query into the \"WMS-URL\" field. Then press the \"Query Available Layer\" button. The results will be shown in the \"Available Layer\" field. Check the boxes for the required layers so that they will be shown in the legend and thus also on the map. Confirm the selection with the \"Add Choosen Layer\" button. Initially, these layers will be positioned hierarchically at the top of the legend and thus mapped over all the other layers in the representation.</div><br />"+
                                     "<h2 style='font-weight:bold'>2.4 Permalink</h2>"+
-                                    "<div>Ein Permalink ist ein Hyperlink der als dauerhafte Referenz von Inhalten einer Internetadresse dient. Er enthält die Informationen der Kartenansicht (Zoomstufe und Position), sowie zusätzlich geladene Inhalte (Layer mit Filtereinstellungen).</div>"+
-                                    "<div>Dadurch ist es möglich eine bestimmte Kartenansicht für einen späteren Zugriff abzuspeichern. Nach Auswahl einer gewünschten Ansicht betätigen Sie hierfür den Permalink-Knopf um den passenden Permalink zur aktuellen Ansicht sich anzeigen zu lassen.</div><br />"+
-                                "<h2 style='font-weight:bold'>2.5 Einstellungen</h2>"+
-                                    "<div>In den Einstellungen kann sowohl die Sprache als auch der Zeitbezug eingestellt werden.</div><br />"+
-                                    "<div>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend lässt sich mit einer Berührung auf das referenzierte Kürzel die Sprache auswählen. Eine Berührung auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"DE\" entspricht Deutsch und \"EN\" Englisch.</div><br />"+
-                                    "<div>Der Zeitbezug ist standardmäßig auf koordinierter Weltzeit - UTC eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen. Betätigt man den Knopf \"Zeitbezug (UTC)\" wird die Zeit auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt. Das bedeutet im Einzelnen, dass die Uhrzeit von der Systemzeit des Endgerätes bezogen wird. Die lokale Uhrzeit bezieht sich lediglich auf die Anzeige des Klienten.</div><br />"+
-                                "<h2 style='font-weight:bold'>2.6 Hilfe</h2>"+
-                                    "<div>Betätigen des Knopfs öffnet die Hilfe zur mobilen Anwendung.</div><br />"+
-                                "<h2 style='font-weight:bold'>2.7 Impressum</h2>"+
-                                    "<div>Betätigen des Knopfs öffnet das Impressum sowie die Nutzungsbedingungen.</div><br />",
+                                    "<div>A permalink is a hyperlink permanently referencing the contents of a webpage. It contains map view information (zoom level and position) as well as additionally loaded contents (layers with filter settings).</div>"+
+                                    "<div>A permalink thus makes it possible to save a particular map view for future access. Choose the required map view and press the Permalink button to display the permalink corresponding to the current map view.</div><br />"+
+                                "<h2 style='font-weight:bold'>2.5 Settings</h2>"+
+                                    "<div>The Settings menu allows you to set both the language and the reference time.</div><br />"+
+                                    "<div>The Language selection menu controls the language used for the entire application. You can choose your language by tapping on the referenced symbol. Tapping onto the downward arrow will open the selection menu showing the available languages. \"DE\" means German, \"EN\" means English.</div><br />"+
+                                    "<div>The default setting for the reference time is Coordinated Universal Time - UTC. Using a universal reference time is essential for international cooperation and/or the analysis of data over different time zones. If you work with time-related data, please remember to verify the reference time settings. Pressing the \"Time reference (UTC)\" button will change the time to the local time \"Time refence (local)\". This means that the system time of your device will be used. The local time only refers to the time displayed at the client's.</div><br />"+
+                                "<h2 style='font-weight:bold'>2.6 Help</h2>"+
+                                    "<div>Use this button to open the Help pages for the mobile application.</div><br />"+
+                                "<h2 style='font-weight:bold'>2.7 Imprint</h2>"+
+                                    "<div>Use this button to open the Legal Disclosure information and the Terms of Use.</div><br />",
                 "helpNavigationTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>3. Navigation</h1>",
-                "helpNavigationHtml": "<div>Die Navigation beinhaltet die Knöpfe für das Hinein- bzw. Herauszoomen, sowie die Kartenansicht auf die initiale Position und Zoomstufe (Gesamtansicht Deutschlands) zu stellen</div>"+
-                                      "<h2 style='font-weight:bold'>3.1 Hineinzoomen  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomIn.png' title='Knopf: Hineinzoomen' alt='mobile_button_zoomIn.png' width='32' height='28' style='vertical-align:middle'></h2>"+
-                                        "<div>Der oberste Knopf zoomt mit vordefinierter Stufe in die Karte hinein. Das heißt, dass der Maßstab der aktuellen Ansicht größer wird. Alternativ kann ein doppeltes Berühren an gewünschter Position, oder die <i>2-Fingergestik</i> innerhalb der Karte benutzt werden.</div>"+
-                                      "<h2 style='font-weight:bold'>3.2 Herauszoomen  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomOut.png' title='Knopf: Herauszoomen' alt='mobile_button_zoomOut.png' width='32' height='28' style='vertical-align:middle'></h2>"+
-                                        "<div>Der zweite Knopf von oben zoomt mit vordefinierter Stufe aus die Karte heraus. Das heißt, dass der Maßstab der aktuellen Ansicht kleiner wird. ein doppeltes Berühren an gewünschter Position, oder die <i>2-Fingergestik</i> innerhalb der Karte benutzt werden.</div>"+
-                                      "<h2 style='font-weight:bold'>3.3 initiale Kartenansicht  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomBack.png' title='Knopf: initiale Kartenansicht' alt='mobile_button_zoomBack.png' width='32' height='28' style='vertical-align:middle'></h2>"+
-                                        "<div>Der dritte Knopf von oben zoomt bzw. verschiebt die Ansicht auf die Ausgangsposition. Entsprechend wird als Zentrum der Kartenansicht Deutschland dargestellt.</div>"+
-                                      "<h2 style='font-weight:bold'>3.4 Vollbild  <img class='img' src='modern/resources/img/helpPage/mobile_button_extend.png' title='Knopf: Vollbild' alt='mobile_button_extend.png' width='32' height='28' style='vertical-align:middle'></h2>"+
-                                        "<div>Der unterste Knopf erweitert das Sichtfeld auf den gesamten Bildschirm des Endgerätes (sofern dies vom mobilen Browser unterstützt wird).</div>",
-                "helpLegendTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>4. Legende <img class='img' src='modern/resources/img/helpPage/mobile_button_legend.png' title='Knopf: Legende öffnen' alt='mobile_button_legend.png' width='40' height='33' style='vertical-align:middle'></h1>",
-                "helpLegendHtml": "<div>Die Legende beinhaltet sämtliche Layer die in die Kartenansicht geladen sind. Das Hinzufügen von Layern ist unter dem Punkt <i>2.2 Auswahl</i> beschrieben.</div><br />"+
-                                  "<div>Wie bereits in Punkt 1. erwähnt, ist darauf zu achten, dass der entsprechende Layer für Abfragen der Geometrien selektiert ist und das Diagrammsymbol von inaktiv "+
-                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Diagramm inaktiv' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
-                                  " auf aktiv "+
-                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
-                                  " gesetzt wird. Ein ausgewählter Layer ist in der Legende mit einer türkisfarbenen Fläche markiert. Eine Berührung auf die Layerbezeichnung öffnet die Zeichenerklärung.</div><br />"+
-                                  "<div>Die Reihenfolge der Layer bestimmt die Hierarchie der Kartenzeichnung. Entsprechend wird der oberste Layer über alle Folgenden gezeichnet. Die Reihenfolge kann geändert werden, indem man die Pfeile in gewünschter Richtung betätigt "+
-                                  "<img class='img' src='modern/resources/img/helpPage/mobile_button_moveLayer.png' title='Layerreihenfolge ändern' alt='mobile_button_moveLayer.png' width='53' height='21' style='vertical-align:middle'>"+
+                "helpNavigationHtml": "<div>The Navigation menu includes buttons to zoom in and out of the map and a button to reset the map view to the initial position and initial zoom level (full view of Germany).</div>"+
+                                      "<h2 style='font-weight:bold'>3.1 Zoom in  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomIn.png' title='Zoom in' alt='mobile_button_zoomIn.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                        "<div>The topmost button zooms into the map using a predefined zoom level. As a result, the map scale of the current view becomes larger. Alternatively, you can double-tap the map at the desired location or use the <i>2 fingers zoom</i> to zoom into the map.</div>"+
+                                      "<h2 style='font-weight:bold'>3.2 Zoom out  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomOut.png' title='Zoom out' alt='mobile_button_zoomOut.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                        "<div>The second button zooms out of the map using a predefined zoom level. As a result, the map scale of the current view becomes smaller. Alternatively, you can double-tap the map at the desired location or use the <i>2 fingers zoom</i> to zoom out of the map.</div>"+
+                                      "<h2 style='font-weight:bold'>3.3 Initial map view  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomBack.png' title='Initial map view' alt='mobile_button_zoomBack.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                        "<div>The third button (crossed arrows) zooms and/or shifts the view to the initially displayed map section. Germany is shown at the centre of the map view.</div>"+
+                                      "<h2 style='font-weight:bold'>3.4 Full screen  <img class='img' src='modern/resources/img/helpPage/mobile_button_extend.png' title='Full screen' alt='mobile_button_extend.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                        "<div>A tap on the lowest button (two arrows) will enlarge the view so that the application uses the full screen of your device (if your mobile browser supports full screen mode).</div>",
+                "helpLegendTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>4. Legend <img class='img' src='modern/resources/img/helpPage/mobile_button_legend.png' title='Open legend' alt='mobile_button_legend.png' width='40' height='33' style='vertical-align:middle'></h1>",
+                "helpLegendHtml": "<div>The legend comprises all layers that are loaded into the map view. Please refer to Section <i>2.2. Selection</i> for more information on adding layers.</div><br />"+
+                                  "<div>As mentioned above in Section 1, please ensure that the relevant layer is selected to retrieve information on the desired geometries. Remember that the diagram icon must be activated "+
+                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Active chart' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
+                                  " and not deactivated "+
+                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Inactive chart' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
+                                  ". Selected layers are labelled in turquoise in the legend. Touch the layer name to open an explanation of the signs and symbols.</div><br />"+
+                                  "<div>The layer sequence defines the hierarchy in the mapping. Thus, the topmost layer will be mapped over the following layers. You can change the sequence with the help of the corresponding arrows "+
+                                  "<img class='img' src='modern/resources/img/helpPage/mobile_button_moveLayer.png' title='Define layer sequence' alt='mobile_button_moveLayer.png' width='53' height='21' style='vertical-align:middle'>"+
                                   "</div><br />"+
-                                  "<div>Das Augensymbol auf der linken Seite der Layerbezeichnung steuert ob ein Layer in der Karte angezeigt wird "+
-                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_eye_on.png' title='Layer aktiv' alt='mobile_legend_eye_on.png' width='18' height='12' style='vertical-align:middle'>"+
-                                  ", oder nicht "+
-                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_eye_off.png' title='Layer inaktiv' alt='mobile_legend_eye_off.png' width='18' height='14' style='vertical-align:middle'>"+
-                                  ". Ein Layer kann auch aus der Legende wieder entfernt werden. Hierzu tippt man auf das blaue Kreuzsymbol "+
-                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_delete.png' title='Layer löschen' alt='mobile_legend_delete.png' width='13' height='12' style='vertical-align:middle'>"+
-                                  ", rechts neben der Layerbezeichnung. Metainformationen erhalten Sie mit einer Berührung auf den Informationsknopf "+
-                                  "<img class='img' src='modern/resources/img/helpPage/mobile_button_info.png' title='Informationsknopf' alt='mobile_button_info.png' width='20' height='19' style='vertical-align:middle'>"+
-                                  ". Die Transparenz kann über den Schieberegler "+
-                                  "<img class='img' src='modern/resources/img/helpPage/mobile_slider_transparent.png' title='Schieberegler Transparenz' alt='mobile_slider_transparent.png' width='84' height='22' style='vertical-align:middle'>"+
-                                  " eingestellt werden.</div><br />"+
-                                  "<div>Um Filtereinstellungen eines Layers zu ändern, berühren Sie die Filterinformationen des entsprechenden Layers innerhalb der Legende. Wie unter Punkt <i>2.2 Auswahl</i> beschrieben, können Sie nun Änderungen vornehmen.</div>"
+                                  "<div>The eye icon to the left of the layer name governs whether a layer is shown on the map "+
+                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_eye_on.png' title='active layer' alt='mobile_legend_eye_on.png' width='18' height='12' style='vertical-align:middle'>"+
+                                  ", or not "+
+                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_eye_off.png' title='inactive layer' alt='mobile_legend_eye_off.png' width='18' height='14' style='vertical-align:middle'>"+
+                                  ". You can also delete layers from the legend. To delete a layer, tap the blue X icon "+
+                                  "<img class='img' src='modern/resources/img/helpPage/mobile_legend_delete.png' title='Delete layer' alt='mobile_legend_delete.png' width='13' height='12' style='vertical-align:middle'>"+
+                                  " to the right of the layer name. Tap on the information button "+
+                                  "<img class='img' src='modern/resources/img/helpPage/mobile_button_info.png' title='Information button' alt='mobile_button_info.png' width='20' height='19' style='vertical-align:middle'>"+
+                                  " to obtain metadata. You can adjust the transparency with the help of the slider "+
+                                  "<img class='img' src='modern/resources/img/helpPage/mobile_slider_transparent.png' title='Slider transparency' alt='mobile_slider_transparent.png' width='84' height='22' style='vertical-align:middle'>"+
+                                  ".</div><br />"+
+                                  "<div>If you wish to change the filter settings for a layer, touch the filter data relating to the relevant layer within the legend. You can now change the settings, as described in Section <i>2.2 Selection</i>.</div>"
             }
         }
     },
