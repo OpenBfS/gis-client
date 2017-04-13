@@ -16,44 +16,44 @@
 /**
  * @class Koala.view.form.LayerFilter
  */
-Ext.define("Koala.view.form.LayerFilter", {
-    extend: "Ext.form.Panel",
-    xtype: "k-form-layerfilter",
+Ext.define('Koala.view.form.LayerFilter', {
+    extend: 'Ext.form.Panel',
+    xtype: 'k-form-layerfilter',
 
     requires: [
-        "Ext.form.field.Date",
-        "Ext.form.ComboBox",
-        "Ext.ux.form.MultiSelect",
+        'Ext.form.field.Date',
+        'Ext.form.ComboBox',
+        'Ext.ux.form.MultiSelect',
 
-        "Koala.util.Date",
-        "Koala.util.Filter",
+        'Koala.util.Date',
+        'Koala.util.Filter',
 
-        "Koala.view.form.LayerFilterController",
-        "Koala.view.form.LayerFilterModel"
+        'Koala.view.form.LayerFilterController',
+        'Koala.view.form.LayerFilterModel'
     ],
 
-    controller: "k-form-layerfilter",
+    controller: 'k-form-layerfilter',
     viewModel: {
-        type: "k-form-layerfilter"
+        type: 'k-form-layerfilter'
     },
-    layout: "anchor",
+    layout: 'anchor',
     defaults: {
-        anchor: "100%"
+        anchor: '100%'
     },
     padding: 5,
 
     ignoreFields: [
-        "minutespinner",
-        "hourspinner",
-        "minminutespinner",
-        "minhourspinner",
-        "maxminutespinner",
-        "maxhourspinner"
+        'minutespinner',
+        'hourspinner',
+        'minminutespinner',
+        'minhourspinner',
+        'maxminutespinner',
+        'maxhourspinner'
     ],
 
     listeners: {
-        beforerender: "onBeforeRenderLayerFilterForm",
-        beforedestroy: "onBeforeDestroyLayerFilterForm"
+        beforerender: 'onBeforeRenderLayerFilterForm',
+        beforedestroy: 'onBeforeDestroyLayerFilterForm'
     },
 
     config: {
@@ -84,21 +84,21 @@ Ext.define("Koala.view.form.LayerFilter", {
         }
 
         Ext.each(filters, function(filter, idx) {
-            var type = (filter.type || "").toLowerCase();
+            var type = (filter.type || '').toLowerCase();
             switch (type) {
-                case "timerange":
+                case 'timerange':
                     me.addTimeRangeFilter(filter, idx);
                     break;
-                case "pointintime":
+                case 'pointintime':
                     me.addPointInTimeFilter(filter, idx);
                     break;
-                case "rodos":
+                case 'rodos':
                     break;
-                case "value":
+                case 'value':
                     me.createValueFilter(filter, idx);
                     break;
                 default:
-                    Ext.log.warn("Unexpected filter type: " + filter.type);
+                    Ext.log.warn('Unexpected filter type: ' + filter.type);
                     break;
             }
         });
@@ -123,13 +123,13 @@ Ext.define("Koala.view.form.LayerFilter", {
         var handler;
         var textBind;
         if (!this.getLayer()) {
-            handler = "submitFilter";
-            textBind = "{buttonText}";
+            handler = 'submitFilter';
+            textBind = '{buttonText}';
         } else {
-            handler = "changeFilterForLayer";
-            textBind = "{buttonTextChangeFilter}";
+            handler = 'changeFilterForLayer';
+            textBind = '{buttonTextChangeFilter}';
         }
-        return Ext.create("Ext.button.Button", {
+        return Ext.create('Ext.button.Button', {
             formBind: true,
             handler: handler,
             bind: {
@@ -139,11 +139,11 @@ Ext.define("Koala.view.form.LayerFilter", {
     },
 
     addWithoutFilterBtn: function() {
-        var addWithoutFilterButton = Ext.create("Ext.button.Button", {
+        var addWithoutFilterButton = Ext.create('Ext.button.Button', {
             bind: {
-                text: "{buttonTextNoFilter}"
+                text: '{buttonTextNoFilter}'
             },
-            handler: "submitNoFilter"
+            handler: 'submitNoFilter'
         });
         this.add(addWithoutFilterButton);
     },
@@ -212,18 +212,18 @@ Ext.define("Koala.view.form.LayerFilter", {
             );
         } else {
             field = {
-                xtype: "textfield"
+                xtype: 'textfield'
             };
         }
 
         field = Ext.apply(field, sharedCfg);
 
-        var fieldSet = Ext.create("Ext.form.FieldSet", {
+        var fieldSet = Ext.create('Ext.form.FieldSet', {
             padding: 5,
             defaults: {
-                anchor: "100%"
+                anchor: '100%'
             },
-            layout: "anchor",
+            layout: 'anchor',
             filterIdx: idx,
             items: field
         });

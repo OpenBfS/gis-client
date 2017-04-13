@@ -15,189 +15,189 @@ Ext.define('Koala.view.form.field.LanguageSelectController', {
      * @type {Object}
      */
     d3LocaleDefinitions: {
-        "de": {
-            "decimal": ",",
-            "thousands": ".",
-            "grouping": [3],
-            "currency": [
-                "€",
-                ""
+        'de': {
+            'decimal': ',',
+            'thousands': '.',
+            'grouping': [3],
+            'currency': [
+                '€',
+                ''
             ],
-            "dateTime": "%a %b %e %X %Y",
-            "date": "%d.%m.%Y",
-            "time": "%H:%M:%S",
-            "periods": [
-                "AM",
-                "PM"
+            'dateTime': '%a %b %e %X %Y',
+            'date': '%d.%m.%Y',
+            'time': '%H:%M:%S',
+            'periods': [
+                'AM',
+                'PM'
             ],
-            "days": [
-                "Sonntag",
-                "Montag",
-                "Dienstag",
-                "Mittwoch",
-                "Donnerstag",
-                "Freitag",
-                "Samstag"
+            'days': [
+                'Sonntag',
+                'Montag',
+                'Dienstag',
+                'Mittwoch',
+                'Donnerstag',
+                'Freitag',
+                'Samstag'
             ],
-            "shortDays": [
-                "So",
-                "Mo",
-                "Di",
-                "Mi",
-                "Do",
-                "Fr",
-                "Sa"
+            'shortDays': [
+                'So',
+                'Mo',
+                'Di',
+                'Mi',
+                'Do',
+                'Fr',
+                'Sa'
             ],
-            "months": [
-                "Januar",
-                "Februar",
-                "März",
-                "April",
-                "Mai",
-                "Juni",
-                "Juli",
-                "August",
-                "September",
-                "Oktober",
-                "November",
-                "Dezember"
+            'months': [
+                'Januar',
+                'Februar',
+                'März',
+                'April',
+                'Mai',
+                'Juni',
+                'Juli',
+                'August',
+                'September',
+                'Oktober',
+                'November',
+                'Dezember'
             ],
-            "shortMonths": [
-                "Jan",
-                "Feb",
-                "Mär",
-                "Apr",
-                "Mai",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Okt",
-                "Nov",
-                "Dez"
+            'shortMonths': [
+                'Jan',
+                'Feb',
+                'Mär',
+                'Apr',
+                'Mai',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Okt',
+                'Nov',
+                'Dez'
             ]
         },
-        "en": {
-            "decimal": ",",
-            "thousands": ".",
-            "grouping": [3],
-            "currency": [
-                "€",
-                ""
+        'en': {
+            'decimal': ',',
+            'thousands': '.',
+            'grouping': [3],
+            'currency': [
+                '€',
+                ''
             ],
-            "dateTime": "%a %e %b %X %Y",
-            "date": "%d/%m/%Y",
-            "time": "%H:%M:%S",
-            "periods": [
-                "AM",
-                "PM"
+            'dateTime': '%a %e %b %X %Y',
+            'date': '%d/%m/%Y',
+            'time': '%H:%M:%S',
+            'periods': [
+                'AM',
+                'PM'
             ],
-            "days": [
-                "Sunday",
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday"
+            'days': [
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday'
             ],
-            "shortDays": [
-                "Sun",
-                "Mon",
-                "Tue",
-                "Wed",
-                "Thu",
-                "Fri",
-                "Sat"
+            'shortDays': [
+                'Sun',
+                'Mon',
+                'Tue',
+                'Wed',
+                'Thu',
+                'Fri',
+                'Sat'
             ],
-            "months": [
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December"
+            'months': [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
             ],
-            "shortMonths": [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec"
+            'shortMonths': [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec'
             ]
         },
-        "fr": {
-            "decimal": ",",
-            "thousands": ".",
-            "grouping": [3],
-            "currency": [
-                "€",
-                ""],
-            "dateTime": "%A, le %e %B %Y, %X",
-            "date": "%d/%m/%Y",
-            "time": "%H:%M:%S",
-            "periods": [
-                "AM",
-                "PM"
+        'fr': {
+            'decimal': ',',
+            'thousands': '.',
+            'grouping': [3],
+            'currency': [
+                '€',
+                ''],
+            'dateTime': '%A, le %e %B %Y, %X',
+            'date': '%d/%m/%Y',
+            'time': '%H:%M:%S',
+            'periods': [
+                'AM',
+                'PM'
             ],
-            "days": [
-                "dimanche",
-                "lundi",
-                "mardi",
-                "mercredi",
-                "jeudi",
-                "vendredi",
-                "samedi"
+            'days': [
+                'dimanche',
+                'lundi',
+                'mardi',
+                'mercredi',
+                'jeudi',
+                'vendredi',
+                'samedi'
             ],
-            "shortDays": [
-                "dim.",
-                "lun.",
-                "mar.",
-                "mer.",
-                "jeu.",
-                "ven.",
-                "sam."
+            'shortDays': [
+                'dim.',
+                'lun.',
+                'mar.',
+                'mer.',
+                'jeu.',
+                'ven.',
+                'sam.'
             ],
-            "months": [
-                "janvier",
-                "février",
-                "mars",
-                "avril",
-                "mai",
-                "juin",
-                "juillet",
-                "août",
-                "septembre",
-                "octobre",
-                "novembre",
-                "décembre"
+            'months': [
+                'janvier',
+                'février',
+                'mars',
+                'avril',
+                'mai',
+                'juin',
+                'juillet',
+                'août',
+                'septembre',
+                'octobre',
+                'novembre',
+                'décembre'
             ],
-            "shortMonths": [
-                "janv.",
-                "févr.",
-                "mars",
-                "avr.",
-                "mai",
-                "juin",
-                "juil.",
-                "août",
-                "sept.",
-                "oct.",
-                "nov.",
-                "déc."
+            'shortMonths': [
+                'janv.',
+                'févr.',
+                'mars',
+                'avr.',
+                'mai',
+                'juin',
+                'juil.',
+                'août',
+                'sept.',
+                'oct.',
+                'nov.',
+                'déc.'
             ]
         }
     },
@@ -327,14 +327,14 @@ Ext.define('Koala.view.form.field.LanguageSelectController', {
                 var configurator = currentClass.getConfigurator();
                 if (configurator && configurator.values &&
                     configurator.values.viewModel) {
-                        var type = configurator.values.viewModel.type;
-                        if (!Ext.isEmpty(type)) {
-                            var viewClassName = Ext.ClassManager.getName(
+                    var type = configurator.values.viewModel.type;
+                    if (!Ext.isEmpty(type)) {
+                        var viewClassName = Ext.ClassManager.getName(
                                 Ext.ClassManager.getByAlias('viewmodel.' +
                                     type));
-                            baseLocaleObj.override = viewClassName;
-                            Ext.define(viewClassName, baseLocaleObj);
-                        }
+                        baseLocaleObj.override = viewClassName;
+                        Ext.define(viewClassName, baseLocaleObj);
+                    }
                 }
             }
 

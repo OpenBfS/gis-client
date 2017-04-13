@@ -5,28 +5,28 @@ Ext.define('Koala.store.ScaleDenominatorOperators', {
     alias: 'store.scaleDenominatorOperators',
 
     fields: [{
-        name: "ogcType",
+        name: 'ogcType',
         type: 'string'
     },{
-        name: "operator",
+        name: 'operator',
         type: 'string'
     }],
 
     data: [{
-        ogcType: "ScaleIsLessThan",
-        operator: "<"
+        ogcType: 'ScaleIsLessThan',
+        operator: '<'
     },{
-        ogcType: "ScaleIsLessThanOrEqualTo",
-        operator: "≤"
+        ogcType: 'ScaleIsLessThanOrEqualTo',
+        operator: '≤'
     },{
-        ogcType: "ScaleIsBetween",
-        operator: "≤ x ≤"
+        ogcType: 'ScaleIsBetween',
+        operator: '≤ x ≤'
     },{
-        ogcType: "ScaleIsGreaterThan",
-        operator: ">"
+        ogcType: 'ScaleIsGreaterThan',
+        operator: '>'
     },{
-        ogcType: "ScaleIsGreaterThanOrEqualTo",
-        operator: "≥"
+        ogcType: 'ScaleIsGreaterThanOrEqualTo',
+        operator: '≥'
     }]
 
 });

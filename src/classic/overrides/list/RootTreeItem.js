@@ -11,9 +11,9 @@ Ext.define('Koala.overrides.list.RootTreeItem', {
     // We're still an inner item, we just get put inside a Container.
     setFloated: function(floated) {
         var me = this,
-        el = me.element,
-        placeholder = me.placeholder,
-        node, wasExpanded;
+            el = me.element,
+            placeholder = me.placeholder,
+            node, wasExpanded;
         if (me.treeItemFloated !== floated) {
             if (floated) {
                 placeholder = el.clone(false, true);
@@ -62,10 +62,10 @@ Ext.define('Koala.overrides.list.RootTreeItem', {
     privates: {
         createFloater: function() {
             var me = this,
-            owner = me.getOwner(),
-            ownerTree = me.up('treelist'),
-            floater,
-            toolElement = me.getToolElement();
+                owner = me.getOwner(),
+                ownerTree = me.up('treelist'),
+                floater,
+                toolElement = me.getToolElement();
             me.floater = floater = new Ext.container.Container({
                 cls: ownerTree.self.prototype.element.cls + ' ' + ownerTree.uiPrefix + ownerTree.getUi() + ' ' + Ext.baseCSSPrefix + 'treelist-floater',
                 floating: true,

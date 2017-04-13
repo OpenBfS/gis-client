@@ -3,7 +3,7 @@ Ext.Loader.syncRequire(['Koala.util.Date']);
 describe('Koala.util.Date', function() {
     beforeEach(function() {
         // mock up successful i18n
-        Koala.util.Layer.txtUntil = "bis";
+        Koala.util.Layer.txtUntil = 'bis';
         Koala.Application = {};
         Koala.Application.isUtc = function() {
             return true;

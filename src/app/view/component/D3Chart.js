@@ -122,8 +122,8 @@ Ext.define('Koala.view.component.D3Chart',{
             if (olFeat) {
                 stationName = !Ext.isEmpty(chartConfig.seriesTitleTpl) ?
                     StringUtil.replaceTemplateStrings(
-                        chartConfig.seriesTitleTpl, olFeat) : "";
-                var color = valFromSeq(chartConfig.colorSequence, 0, "");
+                        chartConfig.seriesTitleTpl, olFeat) : '';
+                var color = valFromSeq(chartConfig.colorSequence, 0, '');
                 if (!color) {
                     color = Koala.view.component.D3BaseController.getRandomColor();
                 }

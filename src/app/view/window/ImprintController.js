@@ -41,10 +41,10 @@ Ext.define('Koala.view.window.ImprintController', {
             method: 'GET',
             url: imprintHtmlUrl,
             success: function(response) {
-              panel.setHtml(response.responseText);
+                panel.setHtml(response.responseText);
             },
             failure: function(response) {
-              Ext.log.warn('Loading imprint-HTML failed: ', response);
+                Ext.log.warn('Loading imprint-HTML failed: ', response);
             }
         });
     }

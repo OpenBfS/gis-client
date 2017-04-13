@@ -21,7 +21,7 @@ Ext.define('Koala.view.grid.MetadataSearchController', {
     alias: 'controller.k-grid-metadatasearch',
 
     requires: [
-        "Koala.view.window.MetadataInfo"
+        'Koala.view.window.MetadataInfo'
     ],
 
     addToMap: function(grid, rowIndex, colIndex, btn, evt, record) {

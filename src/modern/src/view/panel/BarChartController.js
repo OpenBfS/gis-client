@@ -21,7 +21,7 @@ Ext.define('Koala.view.panel.BarChartController', {
     alias: 'controller.k-panel-barchart',
 
     requires: [
-        "Koala.view.component.D3BarChart"
+        'Koala.view.component.D3BarChart'
     ],
 
     /**

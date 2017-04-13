@@ -16,25 +16,25 @@
 /**
  * @class Koala.view.window.TimeSeriesWindow
  */
-Ext.define("Koala.view.window.TimeSeriesWindow", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-timeserieswindow",
-    cls: "k-window-timeserieswindow",
+Ext.define('Koala.view.window.TimeSeriesWindow', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-timeserieswindow',
+    cls: 'k-window-timeserieswindow',
 
     requires: [
-        "Koala.view.window.TimeSeriesWindowController",
-        "Koala.view.window.TimeSeriesWindowModel",
-        "Koala.util.Date",
-        "Koala.util.Filter",
-        "Koala.util.String",
+        'Koala.view.window.TimeSeriesWindowController',
+        'Koala.view.window.TimeSeriesWindowModel',
+        'Koala.util.Date',
+        'Koala.util.Filter',
+        'Koala.util.String',
 
-        "Ext.form.field.Date"
+        'Ext.form.field.Date'
     ],
 
-    controller: "k-window-timeserieswindow",
+    controller: 'k-window-timeserieswindow',
 
     viewModel: {
-        type: "k-window-timeserieswindow"
+        type: 'k-window-timeserieswindow'
     },
 
     bind: {
@@ -101,13 +101,13 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
 
         var filter = {
-                mindatetimeinstant: minMaxDates.min,
-                maxdatetimeinstant: minMaxDates.max,
-                defaultendtimeinstant: timeRangeFilter.maxdatetimeinstant,
-                defaultstarttimeinstant: timeRangeFilter.mindatetimeinstant,
-                unit: 'minutes',
-                fromTimeseries: true
-            };
+            mindatetimeinstant: minMaxDates.min,
+            maxdatetimeinstant: minMaxDates.max,
+            defaultendtimeinstant: timeRangeFilter.maxdatetimeinstant,
+            defaultstarttimeinstant: timeRangeFilter.mindatetimeinstant,
+            unit: 'minutes',
+            fromTimeseries: true
+        };
 
         var timeRangeFilterFieldset = FilterUtil.createTimeRangeFieldset(
                 'j F Y', filter, 1
@@ -118,9 +118,9 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
         });
 
         var startContainer = timeRangeFilterFieldset.down('[name=mincontainer]');
-        startContainer.padding = "0 5 0 0";
-        timeRangeFilterFieldset.border = "0";
-        timeRangeFilterFieldset.padding = "0 5 0 0";
+        startContainer.padding = '0 5 0 0';
+        timeRangeFilterFieldset.border = '0';
+        timeRangeFilterFieldset.padding = '0 5 0 0';
         timeRangeFilterFieldset.setLayout('hbox');
 
         if (me.getAddFilterForm()) {
@@ -136,36 +136,36 @@ Ext.define("Koala.view.window.TimeSeriesWindow", {
                 minHeight: 40,
                 items: [
                     timeRangeFilterFieldset,
-                {
-                    xtype: 'button',
-                    name: 'btn-set-filter',
-                    bind: {
-                        text: '{setFilterBtnText}'
-                    },
-                    handler: 'onSetFilterBtnClick',
-                    margin: '0 3px 0 0'
-                }, {
-                    xtype: 'button',
-                    name: 'btn-reset-filter',
-                    bind: {
-                        text: '{resetFilterBtnText}'
-                    },
-                    handler: 'onResetFilterBtnClick',
-                    margin: '0 3px 0 0'
-                }, {
-                    xtype: 'combo',
-                    displayField: 'text',
-                    queryMode: 'local',
-                    bind: {
-                        emptyText: '{selectChartLayerComboEmptyText}',
-                        fieldLabel: '{selectChartLayerComboLabel}'
-                    },
-                    listeners: {
-                        select: 'onSelectChartLayerComboSelect',
-                        beforerender: 'bindSelectChartLayerStore'
-                    },
-                    flex: 1
-                }]
+                    {
+                        xtype: 'button',
+                        name: 'btn-set-filter',
+                        bind: {
+                            text: '{setFilterBtnText}'
+                        },
+                        handler: 'onSetFilterBtnClick',
+                        margin: '0 3px 0 0'
+                    }, {
+                        xtype: 'button',
+                        name: 'btn-reset-filter',
+                        bind: {
+                            text: '{resetFilterBtnText}'
+                        },
+                        handler: 'onResetFilterBtnClick',
+                        margin: '0 3px 0 0'
+                    }, {
+                        xtype: 'combo',
+                        displayField: 'text',
+                        queryMode: 'local',
+                        bind: {
+                            emptyText: '{selectChartLayerComboEmptyText}',
+                            fieldLabel: '{selectChartLayerComboLabel}'
+                        },
+                        listeners: {
+                            select: 'onSelectChartLayerComboSelect',
+                            beforerender: 'bindSelectChartLayerStore'
+                        },
+                        flex: 1
+                    }]
             }];
         }
         me.callParent();

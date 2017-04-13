@@ -17,29 +17,29 @@
 /**
  * @class Koala.view.panel.RoutingLegendTree
  */
-Ext.define("Koala.view.panel.RoutingLegendTree", {
-    extend: "BasiGX.view.panel.LegendTree",
-    xtype: "k-panel-routing-legendtree",
+Ext.define('Koala.view.panel.RoutingLegendTree', {
+    extend: 'BasiGX.view.panel.LegendTree',
+    xtype: 'k-panel-routing-legendtree',
 
     requires: [
-        "Koala.store.MetadataSearch",
-        "Koala.util.Layer",
-        "Koala.view.panel.RoutingLegendTreeController",
-        "Koala.view.panel.RoutingLegendTreeModel",
-        "Koala.view.window.MetadataInfo"
+        'Koala.store.MetadataSearch',
+        'Koala.util.Layer',
+        'Koala.view.panel.RoutingLegendTreeController',
+        'Koala.view.panel.RoutingLegendTreeModel',
+        'Koala.view.window.MetadataInfo'
     ],
 
-    controller: "k-panel-routing-legendtree",
+    controller: 'k-panel-routing-legendtree',
 
     viewModel: {
-        type: "k-panel-routing-legendtree"
+        type: 'k-panel-routing-legendtree'
     },
 
     config: {
         routingEnabled: false,
         selModel: {
             allowDeselect: true,
-            mode: "SINGLE"
+            mode: 'SINGLE'
         },
         hasCollapseAllBtn: true,
         hasExpandAllBtn: true,
@@ -146,17 +146,17 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             var removalBtn = comp.down('button[name="removal"]');
             var styleBtn = comp.down('button[name="style"]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
-            var legend = comp.up().down('image[name="' + olLayer.get("routeId") + '-legendImg"]');
+            var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
 
             if (shortInfoBtn) {
                 shortInfoBtn.setVisible(allowShortInfo);
             }
             if (changeFilterBtn) {
-              if (!allowChangeFilter || allowChangeFilter.filters.length === 0) {
-                changeFilterBtn.setVisible(false);
-              } else {
-                  changeFilterBtn.setVisible(allowChangeFilter);
-              }
+                if (!allowChangeFilter || allowChangeFilter.filters.length === 0) {
+                    changeFilterBtn.setVisible(false);
+                } else {
+                    changeFilterBtn.setVisible(allowChangeFilter);
+                }
             }
             if (downloadBtn) {
                 downloadBtn.setVisible(allowDownload);
@@ -195,7 +195,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
 
         shortInfoHandler: function(btn) {
             var record = btn.layerRec;
-            var cql = "Identifier = '" + record.get('metadata').id + "'";
+            var cql = 'Identifier = \'' + record.get('metadata').id + '\'';
             var metadataStore = Ext.create('Koala.store.MetadataSearch');
             metadataStore.getProxy().setExtraParam('constraint', cql);
             metadataStore.on('load', function(store, recs) {
@@ -222,11 +222,11 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                 message: 'Layer <b>' + layer.get('name') +
                     '</b> aus Karte entfernen?',
                 buttonText: {
-                    yes: "Ja",
-                    no: "Nein"
+                    yes: 'Ja',
+                    no: 'Nein'
                 },
                 fn: function(btnId) {
-                    if (btnId === "yes") {
+                    if (btnId === 'yes') {
                         map.removeLayer(layer);
                     }
                 }
@@ -546,10 +546,10 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
             viewModel.get('confirmTitleRemoveAllLayersAll'),
             viewModel.get('confirmMsgRemoveAllLayers'),
             function(btnId) {
-                if (btnId === "yes") {
+                if (btnId === 'yes') {
                     store.each(function(rec) {
                         var layer = rec.getOlLayer();
-                        if (layer.get("allowRemoval")) {
+                        if (layer.get('allowRemoval')) {
                             layersToRemove.push(layer);
                         }
                     });
@@ -558,7 +558,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
                         map.removeLayer(layer);
                     });
                 }
-        });
+            });
 
     },
 
@@ -923,7 +923,7 @@ Ext.define("Koala.view.panel.RoutingLegendTree", {
         var store = this.getStore();
         store.each(function(rec) {
             var layer = rec.getOlLayer();
-            var selector = '[name=' + layer.get("routeId") + '-legendImg]';
+            var selector = '[name=' + layer.get('routeId') + '-legendImg]';
             var img = Ext.ComponentQuery.query(selector)[0];
             if (img && img.el && img.el.dom) {
                 img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));

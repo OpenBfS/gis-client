@@ -16,35 +16,35 @@
 /**
  * @class Koala.view.window.BarChart
  */
-Ext.define("Koala.view.window.BarChart", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-barchart",
-    cls: "k-window-barchart",
+Ext.define('Koala.view.window.BarChart', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-barchart',
+    cls: 'k-window-barchart',
 
     requires: [
-        "Koala.view.window.BarChartController",
-        "Koala.view.window.BarChartModel",
+        'Koala.view.window.BarChartController',
+        'Koala.view.window.BarChartModel',
 
-        "Ext.form.field.Date"
+        'Ext.form.field.Date'
     ],
 
-    controller: "k-window-barchart",
+    controller: 'k-window-barchart',
 
     viewModel: {
-        type: "k-window-barchart"
+        type: 'k-window-barchart'
     },
 
     bind: {
-        title: "{title}"
+        title: '{title}'
     },
 
-    name: "barchartwin",
+    name: 'barchartwin',
     constrainHeader: true,
     collapsible: true,
     maxHeight: 800,
     height: 300,
     width: 900,
-    layout: "vbox",
+    layout: 'vbox',
     tools: [{
         type: 'help',
         //TODO: move to app-locale
@@ -70,6 +70,6 @@ Ext.define("Koala.view.window.BarChart", {
     },
 
     listeners: {
-        close: "onBarchartWinClose"
+        close: 'onBarchartWinClose'
     }
 });

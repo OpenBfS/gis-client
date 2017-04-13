@@ -196,14 +196,14 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         var chartController = chart.getController();
         var valFromSeq = StringUtil.getValueFromSequence;
         var coerce = StringUtil.coerce;
-        var stationName = "";
+        var stationName = '';
         if (!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
             stationName =StringUtil.replaceTemplateStrings(
                 chartConfig.seriesTitleTpl, olFeat
             );
         }
         var currentSeqIndex = chart.getSelectedStations().length;
-        var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, "");
+        var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, '');
         if (!color) {
             color = Koala.view.component.D3BaseController.getRandomColor();
         }

@@ -5,22 +5,22 @@ Ext.define('Koala.util.Filter', {
     ],
     statics: {
         /* begin i18n */
-        warnMsgEndBeforeStart: "",
-        warnMsgExceedsMaxDuration: "",
-        msgNotBetweenMinMax: "",
+        warnMsgEndBeforeStart: '',
+        warnMsgExceedsMaxDuration: '',
+        msgNotBetweenMinMax: '',
         /* end i18n */
 
         /**
          * The field configured as displayField for combos when only a number
          * of values are allowed for selection.
          */
-        COMBO_DSP_FIELD: "dsp",
+        COMBO_DSP_FIELD: 'dsp',
 
         /**
          * The field configured as valueField for combos when only a number
          * of values are allowed for selection.
          */
-        COMBO_VAL_FIELD: "val",
+        COMBO_VAL_FIELD: 'val',
 
         /**
          * Will hold all stores we created, keyed by the rawAllowedValues that
@@ -31,7 +31,7 @@ Ext.define('Koala.util.Filter', {
         /**
          * The string which we replace with the current date.
          */
-        NOW_STRING: "now",
+        NOW_STRING: 'now',
 
         /**
          * Examines the metadata object and returns an object with timeseries
@@ -97,10 +97,10 @@ Ext.define('Koala.util.Filter', {
             var filters = metadata.filters;
             if (filters) {
                 Ext.each(filters, function(filter) {
-                    if (filter.type === "pointintime") {
+                    if (filter.type === 'pointintime') {
                         endDate = filter.effectivedatetime;
                     }
-                    if (filter.type === "timerange") {
+                    if (filter.type === 'timerange') {
                         endDate = filter.effectivemaxdatetime;
                     }
                 });
@@ -144,7 +144,7 @@ Ext.define('Koala.util.Filter', {
             var allowedValues = Koala.util.String.coerce(rawAllowedValues);
             if (Ext.isString(allowedValues)) {
                 data = [];
-                var arr = allowedValues.split(",");
+                var arr = allowedValues.split(',');
                 Ext.each(arr, function(val) {
                     var entry = {};
                     entry[VAL_FIELD] = val;
@@ -155,18 +155,18 @@ Ext.define('Koala.util.Filter', {
                 // validate structure
                 Ext.each(allowedValues, function(entry) {
                     if (!(VAL_FIELD in entry) || !(DSP_FIELD in entry)) {
-                        Ext.log.warn("Missing any of the required keys (" +
-                            VAL_FIELD + ", " + DSP_FIELD + ") in " +
-                            "allowedValues configuration");
+                        Ext.log.warn('Missing any of the required keys (' +
+                            VAL_FIELD + ', ' + DSP_FIELD + ') in ' +
+                            'allowedValues configuration');
                     }
                 });
                 data = allowedValues;
             } else {
-                Ext.log.warn("Illegal 'allowedValues' configured: ",
+                Ext.log.warn('Illegal \'allowedValues\' configured: ',
                     allowedValues);
             }
 
-            var store = Ext.create("Ext.data.Store", {
+            var store = Ext.create('Ext.data.Store', {
                 fields: [VAL_FIELD, DSP_FIELD],
                 data: data
             });
@@ -242,9 +242,9 @@ Ext.define('Koala.util.Filter', {
          * a interval/unit combination like "24 hours".
          */
         SPINNERTYPE: {
-            DAYS: "days",
-            HOURS: "hours",
-            MINUTES: "minutes"
+            DAYS: 'days',
+            HOURS: 'hours',
+            MINUTES: 'minutes'
         },
 
         /**
@@ -277,9 +277,9 @@ Ext.define('Koala.util.Filter', {
         getSpinner: function(filter, spinnerType, name, value) {
             var staticMe = this;
             // harmonize unit
-            var unit = (filter.unit || "").toLowerCase();
+            var unit = (filter.unit || '').toLowerCase();
             // harmonize interval as number
-            var interval = parseInt((filter.interval || "1").toLowerCase(), 10);
+            var interval = parseInt((filter.interval || '1').toLowerCase(), 10);
 
             // some static variables
             var DAYS = staticMe.SPINNERTYPE.DAYS;
@@ -425,7 +425,7 @@ Ext.define('Koala.util.Filter', {
          *     optional leading zero for numbers less than 10.
          */
         leadingZeroValueToRaw: function(val) {
-            return (val < 10) ? "0" + val : "" + val;
+            return (val < 10) ? '0' + val : '' + val;
         },
 
         /**
@@ -437,7 +437,7 @@ Ext.define('Koala.util.Filter', {
          *     have a leading zero
          */
         leadingZeroRawToValue: function(raw) {
-            return parseInt("" + raw, 10);
+            return parseInt('' + raw, 10);
         },
 
         /**
@@ -479,7 +479,7 @@ Ext.define('Koala.util.Filter', {
             var dateVal;
 
             if (!Ext.isModern) { // classic
-                datefield = field.up("fieldcontainer").down("datefield");
+                datefield = field.up('fieldcontainer').down('datefield');
                 // Request the date as moment date.
                 dateVal = datefield.getValue(true);
                 // Fix the date by starting with the old values from h and min
@@ -525,23 +525,23 @@ Ext.define('Koala.util.Filter', {
          */
         startAndEndFieldnamesFromMetadataParam: function(param) {
             var names = {
-                startName: "",
-                endName: ""
+                startName: '',
+                endName: ''
             };
-            var differentiateSuffix = "__make-distinguishable__";
+            var differentiateSuffix = '__make-distinguishable__';
 
             if (!param) {
-                Ext.log.warn("Illegal configuration for timerange filter");
+                Ext.log.warn('Illegal configuration for timerange filter');
                 return names;
             }
 
             var trimmedParam = Ext.String.trim(param);
-            if (trimmedParam === "," || trimmedParam === "") {
-                Ext.log.warn("Illegal configuration for timerange filter");
+            if (trimmedParam === ',' || trimmedParam === '') {
+                Ext.log.warn('Illegal configuration for timerange filter');
                 return names;
             }
 
-            var params = trimmedParam.split(",");
+            var params = trimmedParam.split(',');
 
             // When we were configured with only one parameter, or if the two
             // parameters have the same name, we need to create a unique fieldname
@@ -742,9 +742,9 @@ Ext.define('Koala.util.Filter', {
             maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
             value = Koala.util.Date.getTimeReferenceAwareMomentDate(value);
 
-            var dateField = Ext.create("Ext.form.field.Date", {
+            var dateField = Ext.create('Ext.form.field.Date', {
                 bind: {
-                    fieldLabel: "{timestampLabel}"
+                    fieldLabel: '{timestampLabel}'
                 },
                 editable: false,
                 labelWidth: 70,
@@ -762,21 +762,21 @@ Ext.define('Koala.util.Filter', {
             });
 
             var hourSpinner = me.getSpinner(
-                filter, "hours", "hourspinner", value
+                filter, 'hours', 'hourspinner', value
             );
             var minuteSpinner = me.getSpinner(
-                filter, "minutes", "minutespinner", value
+                filter, 'minutes', 'minutespinner', value
             );
-            var container = Ext.create("Ext.form.FieldContainer", {
-                name: "pointintimecontainer",
-                anchor: "100%",
-                layout: "hbox",
+            var container = Ext.create('Ext.form.FieldContainer', {
+                name: 'pointintimecontainer',
+                anchor: '100%',
+                layout: 'hbox',
                 items: [dateField, hourSpinner, minuteSpinner]
             });
 
-            var fieldSet = Ext.create("Ext.form.FieldSet", {
+            var fieldSet = Ext.create('Ext.form.FieldSet', {
                 padding: 5,
-                layout: "anchor",
+                layout: 'anchor',
                 filterIdx: idx,
                 items: [container]
             });
@@ -845,9 +845,9 @@ Ext.define('Koala.util.Filter', {
             };
 
             // --- MINIMUM ---
-            var minDateField = Ext.create("Ext.form.field.Date", {
+            var minDateField = Ext.create('Ext.form.field.Date', {
                 bind: {
-                    fieldLabel: "{startLabel}"
+                    fieldLabel: '{startLabel}'
                 },
                 name: startName,
                 editable: false,
@@ -863,24 +863,24 @@ Ext.define('Koala.util.Filter', {
                 }
             });
             var minHourSpinner = me.getSpinner(
-                filter, "hours", "minhourspinner", startValue
+                filter, 'hours', 'minhourspinner', startValue
             );
             var minMinuteSpinner = me.getSpinner(
-                filter, "minutes", "minminutespinner", startValue
+                filter, 'minutes', 'minminutespinner', startValue
             );
-            var minContainer = Ext.create("Ext.form.FieldContainer", {
-                name: "mincontainer",
-                anchor: "100%",
-                layout: "hbox",
+            var minContainer = Ext.create('Ext.form.FieldContainer', {
+                name: 'mincontainer',
+                anchor: '100%',
+                layout: 'hbox',
                 items: [minDateField, minHourSpinner, minMinuteSpinner]
             });
 
             // --- MAXIMUM ---
-            var maxDateField = Ext.create("Ext.form.field.Date", {
+            var maxDateField = Ext.create('Ext.form.field.Date', {
                 name: endName,
                 editable: false,
                 bind: {
-                    fieldLabel: "{endLabel}"
+                    fieldLabel: '{endLabel}'
                 },
                 labelWidth: 50,
                 flex: 1,
@@ -894,21 +894,21 @@ Ext.define('Koala.util.Filter', {
                 }
             });
             var maxHourSpinner = me.getSpinner(
-                filter, "hours", "maxhourspinner", endValue
+                filter, 'hours', 'maxhourspinner', endValue
             );
             var maxMinuteSpinner = me.getSpinner(
-                filter, "minutes", "maxminutespinner", endValue
+                filter, 'minutes', 'maxminutespinner', endValue
             );
-            var maxContainer = Ext.create("Ext.form.FieldContainer", {
-                name: "maxcontainer",
-                anchor: "100%",
-                layout: "hbox",
+            var maxContainer = Ext.create('Ext.form.FieldContainer', {
+                name: 'maxcontainer',
+                anchor: '100%',
+                layout: 'hbox',
                 items: [maxDateField, maxHourSpinner, maxMinuteSpinner]
             });
 
-            var fieldSet = Ext.create("Ext.form.FieldSet", {
+            var fieldSet = Ext.create('Ext.form.FieldSet', {
                 padding: 5,
-                layout: "anchor",
+                layout: 'anchor',
                 filter: filter,
                 filterIdx: idx,
                 items: [minContainer, maxContainer]

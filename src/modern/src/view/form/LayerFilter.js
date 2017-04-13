@@ -16,40 +16,40 @@
 /**
  * @class Koala.view.form.LayerFilter
  */
-Ext.define("Koala.view.form.LayerFilter", {
-    extend: "Ext.form.Panel",
-    xtype: "k-form-layerfilter",
+Ext.define('Koala.view.form.LayerFilter', {
+    extend: 'Ext.form.Panel',
+    xtype: 'k-form-layerfilter',
 
     requires: [
-        "Ext.field.DatePicker",
-        "Ext.field.Select",
+        'Ext.field.DatePicker',
+        'Ext.field.Select',
 
-        "Koala.util.Date",
-        "Koala.util.Filter",
+        'Koala.util.Date',
+        'Koala.util.Filter',
 
-        "Koala.view.form.LayerFilterController",
-        "Koala.view.form.LayerFilterModel"
+        'Koala.view.form.LayerFilterController',
+        'Koala.view.form.LayerFilterModel'
     ],
 
-    controller: "k-form-layerfilter",
+    controller: 'k-form-layerfilter',
     viewModel: {
-        type: "k-form-layerfilter"
+        type: 'k-form-layerfilter'
     },
     padding: 5,
 
     height: '95vh',
 
     ignoreFields: [
-        "minutespinner",
-        "hourspinner",
-        "minminutespinner",
-        "minhourspinner",
-        "maxminutespinner",
-        "maxhourspinner"
+        'minutespinner',
+        'hourspinner',
+        'minminutespinner',
+        'minhourspinner',
+        'maxminutespinner',
+        'maxhourspinner'
     ],
 
     listeners: {
-        initialize: "initComponent"
+        initialize: 'initComponent'
     },
 
     config: {

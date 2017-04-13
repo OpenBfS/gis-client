@@ -26,9 +26,9 @@ Ext.define('Koala.view.main.Main', {
 
         'BasiGX.view.component.Map',
 
-        "BasiGX.view.button.ZoomIn",
-        "BasiGX.view.button.ZoomOut",
-        "BasiGX.view.button.ZoomToExtent",
+        'BasiGX.view.button.ZoomIn',
+        'BasiGX.view.button.ZoomOut',
+        'BasiGX.view.button.ZoomToExtent',
 
         'Koala.view.form.LayerFilter',
 

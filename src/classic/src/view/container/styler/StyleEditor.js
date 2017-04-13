@@ -1,6 +1,6 @@
-Ext.define("Koala.view.container.styler.StyleEditor", {
-    extend: "BasiGX.view.container.RedlineStyler",
-    xtype: "k_container_styler_styleditor",
+Ext.define('Koala.view.container.styler.StyleEditor', {
+    extend: 'BasiGX.view.container.RedlineStyler',
+    xtype: 'k_container_styler_styleditor',
 
     requires: [
         'Ext.form.field.FileButton',
@@ -134,7 +134,7 @@ Ext.define("Koala.view.container.styler.StyleEditor", {
 
             fileReader.readAsDataURL(file);
 
-            fileReader.addEventListener("load", function() {
+            fileReader.addEventListener('load', function() {
                 var imageObj = {
                     src: fileReader.result,
                     caption: file.name

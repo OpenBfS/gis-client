@@ -16,18 +16,18 @@
 /**
  * @class Koala.view.form.field.SearchCombo
  */
-Ext.define("Koala.view.form.field.SearchCombo", {
-    extend: "Ext.form.field.ComboBox",
-    xtype: "k-form-field-searchcombo",
+Ext.define('Koala.view.form.field.SearchCombo', {
+    extend: 'Ext.form.field.ComboBox',
+    xtype: 'k-form-field-searchcombo',
 
     requires: [
-        "Ext.window.Toast",
-        "Ext.util.KeyNav"
+        'Ext.window.Toast',
+        'Ext.util.KeyNav'
     ],
 
-    controller: "k-form-field-searchcombo",
+    controller: 'k-form-field-searchcombo',
     viewModel: {
-        type: "k-form-field-searchcombo"
+        type: 'k-form-field-searchcombo'
     },
 
     store: [],
@@ -100,7 +100,7 @@ Ext.define("Koala.view.form.field.SearchCombo", {
         var appContext = BasiGX.view.component.Map.guess().appContext;
         var field = appContext.data.merge.spatialSearchFields.searchColumn;
         spatialStore.getProxy()
-            .setExtraParam('cql_filter', field + " ilike '%" + value + "%'");
+            .setExtraParam('cql_filter', field + ' ilike \'%' + value + '%\'');
         spatialStore.load();
         spatialStore._lastRequest = Ext.Ajax.getLatest();
 
@@ -127,12 +127,12 @@ Ext.define("Koala.view.form.field.SearchCombo", {
      *
      */
     getMetadataCql: function(fields, value) {
-        var cql = "";
+        var cql = '';
         Ext.each(fields, function(field, idx, fieldsArray) {
 
-            cql += field + " like '%" + value + "%'";
+            cql += field + ' like \'%' + value + '%\'';
             if (idx < fieldsArray.length-1) {
-                cql += " OR ";
+                cql += ' OR ';
             }
         });
         return cql;

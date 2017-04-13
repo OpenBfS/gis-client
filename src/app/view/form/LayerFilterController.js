@@ -91,7 +91,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         // Iterate over all filters…
         Ext.each(filters, function(filter, idx) {
             // … grab the associated fieldset by attribute
-            var selector = "[filterIdx='" + idx +"']";
+            var selector = '[filterIdx=\'' + idx +'\']';
             var fieldset = view.down(selector);
             if (fieldset) {
                 var fields = fieldset.query('field, multiselect');
@@ -175,7 +175,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
     updateFilterValues: function(filters, idx, keyVals) {
         var FilterUtil = Koala.util.Filter;
         var filter = filters[idx];
-        var filterType = (filter.type || "").toLowerCase();
+        var filterType = (filter.type || '').toLowerCase();
         var param = filter.param;
         if (filterType === 'timerange') {
             var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);

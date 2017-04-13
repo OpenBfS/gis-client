@@ -26,8 +26,8 @@ Ext.define('Koala.store.Projections', {
     useDefaultXhrHeader: false,
 
     fields: [{
-         name: 'code',
-         type: 'string'
+        name: 'code',
+        type: 'string'
     },{
         name: 'label',
         type: 'string'

@@ -32,10 +32,10 @@ Ext.define('Koala.util.AppContext', {
          * @return {Object} The matched AppContext.
          */
         getAppContext: function(mapComponent) {
-          if (!mapComponent) {
-            mapComponent = BasiGX.view.component.Map.guess();
-          }
-          return mapComponent.appContext;
+            if (!mapComponent) {
+                mapComponent = BasiGX.view.component.Map.guess();
+            }
+            return mapComponent.appContext;
         },
 
         /**
@@ -61,8 +61,8 @@ Ext.define('Koala.util.AppContext', {
          *     listener.
          */
         generateCheckToolVisibility: function(tool) {
-            var errTpl = "Wanted to set visibility of instance of {0} to" +
-                " {1} but could not find method `{2}`.";
+            var errTpl = 'Wanted to set visibility of instance of {0} to' +
+                ' {1} but could not find method `{2}`.';
             return function() {
                 var me = this;
                 var visible = Koala.util.AppContext.hasTool(tool);

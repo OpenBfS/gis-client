@@ -49,7 +49,7 @@ Ext.define('Koala.view.main.Main', {
 
     controller: 'main',
     viewModel: {
-        type: "app-main"
+        type: 'app-main'
     },
 
     ui: 'navigation',
@@ -145,10 +145,10 @@ Ext.define('Koala.view.main.Main', {
                 // Bind the tooltops of certain map button
                 // TODO refactor BasiGX to do this in a more sane way
                 var btnSelectors = [
-                    "basigx-button-zoomin",
-                    "basigx-button-zoomout",
-                    "basigx-button-zoomtoextent",
-                    "basigx-button-togglelegend"
+                    'basigx-button-zoomin',
+                    'basigx-button-zoomout',
+                    'basigx-button-zoomtoextent',
+                    'basigx-button-togglelegend'
                 ];
                 var btns = this.query(btnSelectors.join(','));
                 Ext.each(btns, function(b) {
@@ -265,41 +265,41 @@ Ext.define('Koala.view.main.Main', {
                         boxready: Koala.util.AppContext.generateCheckToolVisibility('importLocalDataBtn')
                     },
                     handler: function() {
-                            var win = Ext.ComponentQuery.query(
+                        var win = Ext.ComponentQuery.query(
                                 '[name=add-wms-window]')[0];
-                            if (!win) {
-                                Ext.create('Ext.window.Window', {
-                                    name: 'add-wms-window',
-                                    bind: {
-                                        title: '{importLocalDataButtonText}'
-                                    },
-                                    layout: 'fit',
-                                    tools: [{
-                                        type: 'help',
+                        if (!win) {
+                            Ext.create('Ext.window.Window', {
+                                name: 'add-wms-window',
+                                bind: {
+                                    title: '{importLocalDataButtonText}'
+                                },
+                                layout: 'fit',
+                                tools: [{
+                                    type: 'help',
                                         //TODO: move to app-locale
-                                        tooltip: 'Hilfe',
-                                        callback: function() {
-                                            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-                                            if (!helpWin) {
-                                                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                                                helpWin.on('afterlayout', function() {
-                                                    var helpWinController = this.getController();
-                                                    helpWinController.setTopic('toolsImport', 'tools');
-                                                }, helpWin, {single: true});
-                                            } else {
-                                                BasiGX.util.Animate.shake(helpWin);
-                                                var helpWinController = helpWin.getController();
+                                    tooltip: 'Hilfe',
+                                    callback: function() {
+                                        var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
+                                        if (!helpWin) {
+                                            helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                                            helpWin.on('afterlayout', function() {
+                                                var helpWinController = this.getController();
                                                 helpWinController.setTopic('toolsImport', 'tools');
-                                            }
+                                            }, helpWin, {single: true});
+                                        } else {
+                                            BasiGX.util.Animate.shake(helpWin);
+                                            var helpWinController = helpWin.getController();
+                                            helpWinController.setTopic('toolsImport', 'tools');
                                         }
-                                    }],
-                                    items: [{
-                                        xtype: 'k-form-importLocalData'
-                                    }]
-                                }).show();
-                            } else {
-                                BasiGX.util.Animate.shake(win);
-                            }
+                                    }
+                                }],
+                                items: [{
+                                    xtype: 'k-form-importLocalData'
+                                }]
+                            }).show();
+                        } else {
+                            BasiGX.util.Animate.shake(win);
+                        }
                     }
                 }]
             }],

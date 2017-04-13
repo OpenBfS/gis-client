@@ -66,7 +66,7 @@ Ext.define('Koala.Application', {
             action: 'onLayerTreeRoute',
             before: 'beforeLayerTreeRoute',
             conditions: {
-                ':layers': "(.*)"
+                ':layers': '(.*)'
             }
         }
     },

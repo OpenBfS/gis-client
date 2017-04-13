@@ -16,9 +16,9 @@
 /**
  * @class Koala.view.button.TimeReference
  */
-Ext.define("Koala.view.button.TimeReference", {
-    extend: "Ext.button.Button",
-    xtype: "k-button-timereference",
+Ext.define('Koala.view.button.TimeReference', {
+    extend: 'Ext.button.Button',
+    xtype: 'k-button-timereference',
 
     statics: {
         UTC: 'UTC',
@@ -26,13 +26,13 @@ Ext.define("Koala.view.button.TimeReference", {
     },
 
     requires: [
-        "Koala.view.button.TimeReferenceController",
-        "Koala.view.button.TimeReferenceModel"
+        'Koala.view.button.TimeReferenceController',
+        'Koala.view.button.TimeReferenceModel'
     ],
 
-    controller: "k-button-timereference",
+    controller: 'k-button-timereference',
     viewModel: {
-        type: "k-button-timereference"
+        type: 'k-button-timereference'
     },
 
     enableToggle: true,

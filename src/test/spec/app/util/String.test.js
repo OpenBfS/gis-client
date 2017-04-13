@@ -31,33 +31,33 @@ describe('Koala.util.String', function() {
                 ).to.be.a(Function);
             });
             it('replaces strings in a template', function() {
-                var tpl = "foo [[bar]]";
+                var tpl = 'foo [[bar]]';
                 var result = Koala.util.String.replaceTemplateStrings(
                     tpl, obj, false
                 );
-                expect(result).to.be("foo BAR-VAL");
+                expect(result).to.be('foo BAR-VAL');
             });
             it('replaces only found placeholders', function() {
-                var tpl = "foo [[not-there]]";
+                var tpl = 'foo [[not-there]]';
                 var result = Koala.util.String.replaceTemplateStrings(
                     tpl, obj, false
                 );
-                expect(result).to.be("foo [[not-there]]");
+                expect(result).to.be('foo [[not-there]]');
             });
             it('does not replace the old syntax', function() {
-                var tpl = "foo {{bar}}";
+                var tpl = 'foo {{bar}}';
                 var result = Koala.util.String.replaceTemplateStrings(
                     tpl, obj, false
                 );
-                expect(result).to.be("foo {{bar}}");
+                expect(result).to.be('foo {{bar}}');
             });
             it('replaces strings in complex template', function() {
-                var tpl = "foo [[bar]], baz [[beng]] {{gee}} [no-replace]";
+                var tpl = 'foo [[bar]], baz [[beng]] {{gee}} [no-replace]';
                 var result = Koala.util.String.replaceTemplateStrings(
                     tpl, obj, false
                 );
                 expect(result).to.be(
-                    "foo BAR-VAL, baz [[beng]] {{gee}} [no-replace]"
+                    'foo BAR-VAL, baz [[beng]] {{gee}} [no-replace]'
                 );
             });
         });

@@ -16,8 +16,8 @@
 /**
  * @class Koala.view.panel.LayerSetChooser
  */
-Ext.define("Koala.view.panel.LayerSetChooser", {
-    extend: "BasiGX.view.panel.LayerSetChooser",
+Ext.define('Koala.view.panel.LayerSetChooser', {
+    extend: 'BasiGX.view.panel.LayerSetChooser',
     xtype: 'k-panel-layersetchooser',
 
     requires: [

@@ -115,7 +115,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var me = this;
         var file = this.getViewModel().get('file');
         var reader = new FileReader();
-        reader.addEventListener("load", me.parseFeatures.bind(this));
+        reader.addEventListener('load', me.parseFeatures.bind(this));
         reader.readAsText(file);
     },
 
@@ -213,7 +213,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
 
             cfg.name = layerName;
             cfg.metadata = metadata;
-            cfg.routeId = "localData_" + layerName;
+            cfg.routeId = 'localData_' + layerName;
 
             // Create a source for the features from the uploaded / dragged file
             cfg.source = new ol.source.Vector({

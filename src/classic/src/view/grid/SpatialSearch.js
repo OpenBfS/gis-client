@@ -16,20 +16,20 @@
 /**
  * @class Koala.view.grid.SpatialSearch
  */
-Ext.define("Koala.view.grid.SpatialSearch", {
-    extend: "Ext.grid.Panel",
-    xtype: "k-grid-spatialsearch",
+Ext.define('Koala.view.grid.SpatialSearch', {
+    extend: 'Ext.grid.Panel',
+    xtype: 'k-grid-spatialsearch',
 
     requires: [
-        "Koala.view.grid.SpatialSearchController",
-        "Koala.view.grid.SpatialSearchModel",
+        'Koala.view.grid.SpatialSearchController',
+        'Koala.view.grid.SpatialSearchModel',
 
-        "Koala.store.SpatialSearch"
+        'Koala.store.SpatialSearch'
     ],
 
-    controller: "k-grid-spatialsearch",
+    controller: 'k-grid-spatialsearch',
     viewModel: {
-        type: "k-grid-spatialsearch"
+        type: 'k-grid-spatialsearch'
     },
 
     store: {

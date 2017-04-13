@@ -73,29 +73,29 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
      * @return {ol.Feature} The feature contained in this record.
      */
     getFeatureFromRecord: function(record) {
-      var store = this.getView().getStore();
-      var map = store.map;
-      var view = map.getView();
-      var wkt = record.get('wkt');
-      var geom = record.get('geometry');
-      var format;
-      var feature;
+        var store = this.getView().getStore();
+        var map = store.map;
+        var view = map.getView();
+        var wkt = record.get('wkt');
+        var geom = record.get('geometry');
+        var format;
+        var feature;
 
-      if (wkt) {
-        format = new ol.format.WKT();
-        feature = format.readFeature(wkt, {
-            dataProjection: 'EPSG:4326',
-            featureProjection: map.getView().getProjection()
-        });
-      } else if (geom) {
-        format = new ol.format.GeoJSON({
-          geometryName: record.get('geometry_name') || 'the_geom',
-          featureProjection: view.getProjection()
-        });
-        feature = format.readFeature(record.getData());
-      }
+        if (wkt) {
+            format = new ol.format.WKT();
+            feature = format.readFeature(wkt, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: map.getView().getProjection()
+            });
+        } else if (geom) {
+            format = new ol.format.GeoJSON({
+                geometryName: record.get('geometry_name') || 'the_geom',
+                featureProjection: view.getProjection()
+            });
+            feature = format.readFeature(record.getData());
+        }
 
-      return feature;
+        return feature;
     },
 
     /**

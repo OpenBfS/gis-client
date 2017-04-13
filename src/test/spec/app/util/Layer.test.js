@@ -5,8 +5,8 @@ describe('Koala.util.Layer', function() {
     var oldDefaultFormat = Koala.util.String.defaultDateFormat;
     beforeEach(function() {
         // mock up successful i18n
-        Koala.util.Layer.txtUntil = "bis";
-        Koala.util.String.defaultDateFormat = "d.m.Y K\\o\\a\\l\\a";
+        Koala.util.Layer.txtUntil = 'bis';
+        Koala.util.String.defaultDateFormat = 'd.m.Y K\\o\\a\\l\\a';
         Koala.Application = {};
         Koala.Application.isLocal = function() {
             return false;
@@ -95,7 +95,7 @@ describe('Koala.util.Layer', function() {
                 var metadatas = [
                     { filters: undefined },
                     { filters: null },
-                    { filters: "foo" },
+                    { filters: 'foo' },
                     { filters: {} },
                     { filters: true },
                     { filters: -42.11 },
@@ -154,7 +154,7 @@ describe('Koala.util.Layer', function() {
                     { foo: { filter: {} } }, // nesting wrong
                     { filters: undefined },
                     { filters: null },
-                    { filters: "foo" },
+                    { filters: 'foo' },
                     { filters: {} },
                     { filters: true },
                     { filters: -42.11 },
@@ -178,7 +178,7 @@ describe('Koala.util.Layer', function() {
                     { foo: { filter: {} } }, // nesting wrong
                     { filters: undefined },
                     { filters: null },
-                    { filters: "foo" },
+                    { filters: 'foo' },
                     { filters: {} },
                     { filters: true },
                     { filters: -42.11 },
@@ -193,20 +193,20 @@ describe('Koala.util.Layer', function() {
             it('returns an empty text for rodos-filter', function() {
                 var metadata = {
                     filters: [{
-                        type: "rodos"
+                        type: 'rodos'
                     }]
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                expect(got).to.be("");
+                expect(got).to.be('');
             });
             it('returns a text for key-value-filter', function() {
                 var metadata = {
                     filters: [{
-                        type: "value",
-                        param: "foo",
-                        operator: "=",
-                        effectivevalue: "'bar'"
+                        type: 'value',
+                        param: 'foo',
+                        operator: '=',
+                        effectivevalue: '\'bar\''
                     }]
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
@@ -215,58 +215,58 @@ describe('Koala.util.Layer', function() {
                 var filterRepr = Koala.util.Layer.stringifyValueFilter(
                         metadata.filters[0], true
                     );
-                expect(got).to.not.be("");
+                expect(got).to.not.be('');
                 expect(got.indexOf(filterRepr)).to.not.be(-1);
             });
             it('returns a localized text for point-in-time-filter (de)', function() {
                 var metadata = {
                     filters: [{
-                        type: "pointintime",
-                        effectivedatetime: moment.utc("1980-11-28")
+                        type: 'pointintime',
+                        effectivedatetime: moment.utc('1980-11-28')
                     }]
                 };
                 moment.locale('de');
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                expect(got).to.not.be("");
-                expect(got.indexOf("28. November 1980 00:00")).to.not.be(-1);
+                expect(got).to.not.be('');
+                expect(got.indexOf('28. November 1980 00:00')).to.not.be(-1);
             });
             it('returns a localized text for point-in-time-filter (en)',
                 function() {
                     var metadata = {
                         filters: [{
-                            type: "pointintime",
-                            effectivedatetime: moment.utc("1980-11-28")
+                            type: 'pointintime',
+                            effectivedatetime: moment.utc('1980-11-28')
                         }]
                     };
                     moment.locale('en');
                     var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                    expect(got).to.not.be("");
-                    expect(got.indexOf("November 28, 1980 12:00 AM")).to.not.be(-1);
+                    expect(got).to.not.be('');
+                    expect(got.indexOf('November 28, 1980 12:00 AM')).to.not.be(-1);
                 }
             );
             it('returns a localized text for point-in-time-filter (fr)',
                 function() {
                     var metadata = {
                         filters: [{
-                            type: "pointintime",
-                            effectivedatetime: moment.utc("1980-11-28")
+                            type: 'pointintime',
+                            effectivedatetime: moment.utc('1980-11-28')
                         }]
                     };
                     moment.locale('fr');
                     var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                    expect(got).to.not.be("");
-                    expect(got.indexOf("28 novembre 1980 00:00")).to.not.be(-1);
+                    expect(got).to.not.be('');
+                    expect(got.indexOf('28 novembre 1980 00:00')).to.not.be(-1);
                 }
             );
             it('returns a localized text for timerange-filter (de)', function() {
-                var min = moment.utc("1980-11-28");
-                var max = moment.utc("1998-11-28");
+                var min = moment.utc('1980-11-28');
+                var max = moment.utc('1998-11-28');
                 var metadata = {
                     filters: [{
-                        type: "timerange",
+                        type: 'timerange',
                         effectivemindatetime: min,
                         effectivemaxdatetime: max
                     }]
@@ -276,17 +276,17 @@ describe('Koala.util.Layer', function() {
 
                 var until = Koala.util.Layer.txtUntil;
 
-                expect(got).to.not.be("");
-                expect(got.indexOf("28. November 1980 00:00")).to.not.be(-1);
+                expect(got).to.not.be('');
+                expect(got.indexOf('28. November 1980 00:00')).to.not.be(-1);
                 expect(got.indexOf(until)).to.not.be(-1);
-                expect(got.indexOf("28. November 1998 00:00")).to.not.be(-1);
+                expect(got.indexOf('28. November 1998 00:00')).to.not.be(-1);
             });
             it('returns a localized text for timerange-filter (en)', function() {
-                var min = moment.utc("1980-11-28");
-                var max = moment.utc("1998-11-28");
+                var min = moment.utc('1980-11-28');
+                var max = moment.utc('1998-11-28');
                 var metadata = {
                     filters: [{
-                        type: "timerange",
+                        type: 'timerange',
                         effectivemindatetime: min,
                         effectivemaxdatetime: max
                     }]
@@ -296,17 +296,17 @@ describe('Koala.util.Layer', function() {
 
                 var until = Koala.util.Layer.txtUntil;
 
-                expect(got).to.not.be("");
-                expect(got.indexOf("November 28, 1980 12:00 AM")).to.not.be(-1);
+                expect(got).to.not.be('');
+                expect(got.indexOf('November 28, 1980 12:00 AM')).to.not.be(-1);
                 expect(got.indexOf(until)).to.not.be(-1);
-                expect(got.indexOf("November 28, 1998 12:00 AM")).to.not.be(-1);
+                expect(got.indexOf('November 28, 1998 12:00 AM')).to.not.be(-1);
             });
             it('returns a localized text for timerange-filter (fr)', function() {
-                var min = moment.utc("1980-11-28");
-                var max = moment.utc("1998-11-28");
+                var min = moment.utc('1980-11-28');
+                var max = moment.utc('1998-11-28');
                 var metadata = {
                     filters: [{
-                        type: "timerange",
+                        type: 'timerange',
                         effectivemindatetime: min,
                         effectivemaxdatetime: max
                     }]
@@ -316,10 +316,10 @@ describe('Koala.util.Layer', function() {
 
                 var until = Koala.util.Layer.txtUntil;
 
-                expect(got).to.not.be("");
-                expect(got.indexOf("28 novembre 1980 00:00")).to.not.be(-1);
+                expect(got).to.not.be('');
+                expect(got.indexOf('28 novembre 1980 00:00')).to.not.be(-1);
                 expect(got.indexOf(until)).to.not.be(-1);
-                expect(got.indexOf("28 novembre 1998 00:00")).to.not.be(-1);
+                expect(got.indexOf('28 novembre 1998 00:00')).to.not.be(-1);
             });
         });
 

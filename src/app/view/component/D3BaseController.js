@@ -232,7 +232,7 @@ Ext.define('Koala.view.component.D3BaseController', {
          * @return {String} A string ready to be used in a transform-attribute.
          */
         makeTranslate: function(x, y) {
-            return "translate(" + x + "," + y + ")";
+            return 'translate(' + x + ',' + y + ')';
         },
 
         /**
@@ -276,7 +276,7 @@ Ext.define('Koala.view.component.D3BaseController', {
          *     the input was longer than allowed.
          */
         labelEnsureMaxLength: function(labelText, maxLength) {
-            var ensured = labelText || "";
+            var ensured = labelText || '';
             var maxLen = !Ext.isEmpty(maxLength) ? maxLength : Infinity;
             if (ensured.length > maxLen) {
                 ensured = ensured.substring(0, maxLen);
@@ -451,7 +451,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                 .attr('class', CSS.LEGEND_CONTAINER)
                 .style('width', legWidth + 'px')
                 .style('height', legHeight + 'px')
-                .style('left', legLeft + "px" )
+                .style('left', legLeft + 'px' )
             // values below will be updated in #updateLegendContainerDimensions
             .append('svg')
                 .attr('viewBox', '0 0 ' + legWidth + ' 100')
@@ -554,14 +554,14 @@ Ext.define('Koala.view.component.D3BaseController', {
      * @return {function} The multi-scale time format function.
      */
     getMultiScaleTimeFormatter: function(date) {
-        var formatMillisecond = d3.timeFormat(".%L"),
-            formatSecond = d3.timeFormat(":%S"),
-            formatMinute = d3.timeFormat("%H:%M"),
-            formatHour = d3.timeFormat("%H:%M"),
-            formatDay = d3.timeFormat("%a %d"),
-            formatWeek = d3.timeFormat("%b %d"),
-            formatMonth = d3.timeFormat("%B"),
-            formatYear = d3.timeFormat("%Y");
+        var formatMillisecond = d3.timeFormat('.%L'),
+            formatSecond = d3.timeFormat(':%S'),
+            formatMinute = d3.timeFormat('%H:%M'),
+            formatHour = d3.timeFormat('%H:%M'),
+            formatDay = d3.timeFormat('%a %d'),
+            formatWeek = d3.timeFormat('%b %d'),
+            formatMonth = d3.timeFormat('%B'),
+            formatYear = d3.timeFormat('%Y');
 
         return (d3.timeSecond(date) < date ? formatMillisecond
           : d3.timeMinute(date) < date ? formatSecond
@@ -831,17 +831,17 @@ Ext.define('Koala.view.component.D3BaseController', {
         ctx.fillRect(0,0,canvas.width,canvas.height);
 
         chartImageObject.onload = function() {
-           ctx.drawImage(chartImageObject, 0, 0, chartImageWidth,
+            ctx.drawImage(chartImageObject, 0, 0, chartImageWidth,
                 chartImageHeight);
-           legendImageObject.onload = function() {
-               ctx.drawImage(legendImageObject,
+            legendImageObject.onload = function() {
+                ctx.drawImage(legendImageObject,
                     chartImageWidth - legendImageWidth, 0, legendImageWidth,
                     legendImageHeight);
-               var dataUri = canvas.toDataURL(outputFormat);
-               downloadIcons.style('display', 'block');
-               deleteIcons.style('display', 'block');
-               cb.call(cbScope, dataUri);
-           };
+                var dataUri = canvas.toDataURL(outputFormat);
+                downloadIcons.style('display', 'block');
+                deleteIcons.style('display', 'block');
+                cb.call(cbScope, dataUri);
+            };
         };
     },
 
@@ -940,7 +940,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var legWidth = me.legendTargetWidth;
         var legHeight = heightEach + heightEach * numLegends;
         legendParent
-            .attr('viewBox', "0 0 " + legWidth + " " + legHeight)
+            .attr('viewBox', '0 0 ' + legWidth + ' ' + legHeight)
             .attr('width', legWidth)
             .attr('height', legHeight);
     },
@@ -978,7 +978,7 @@ Ext.define('Koala.view.component.D3BaseController', {
     generateDownloadCallback: function(dataObj) {
         var me = this;
         var downloadCallback = function() {
-          me.downloadSeries(dataObj);
+            me.downloadSeries(dataObj);
         };
         return downloadCallback;
     },

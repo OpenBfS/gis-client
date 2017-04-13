@@ -29,8 +29,8 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
     handleLayerSetSelect: function(view, rec) {
         var me = this;
         me.currentTask = new Ext.util.DelayedTask(function() {
-                me.handleLayerSetClick(view, rec);
-            });
+            me.handleLayerSetClick(view, rec);
+        });
         me.currentTask.delay(200);
     },
 

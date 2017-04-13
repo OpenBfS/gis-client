@@ -22,7 +22,7 @@ Ext.define('Koala.util.String', {
         /**
          * The format to use as fallback when cobnverting dates to string.
          */
-        defaultDateFormat: "", // actual value comes from locale
+        defaultDateFormat: '', // actual value comes from locale
 
         /**
          * Checks whether a passed string is a valid level 1-5 uuid (RFC4122).
@@ -58,15 +58,15 @@ Ext.define('Koala.util.String', {
             var matches = tpl.match(regex);
             var keys = [];
             Ext.each(matches, function(match) {
-                var key = match.replace(/[\]\[]/g, "");
-                keys.push(key.replace(prefix, ""));
+                var key = match.replace(/[\]\[]/g, '');
+                keys.push(key.replace(prefix, ''));
             });
             Ext.each(keys, function(key) {
-                var re = new RegExp("\\[\\[" + keyPrefix + key + "\\]\\]");
+                var re = new RegExp('\\[\\[' + keyPrefix + key + '\\]\\]');
                 var replacement = getable.get(key);
                 if (!Ext.isDefined(replacement)) {
                     if (showWarnings === true) {
-                        Ext.log.warn(key + " could not be found for replacement!");
+                        Ext.log.warn(key + ' could not be found for replacement!');
                     }
                 } else {  // check if 'replacement' represents a date
                     // it is already a Moment/date
@@ -99,7 +99,7 @@ Ext.define('Koala.util.String', {
                 }
                 var seqArr = sequenceCache[sequence];
                 if (!seqArr) {
-                    seqArr = sequence.split(",");
+                    seqArr = sequence.split(',');
                     sequenceCache[sequence] = seqArr;
                 }
                 if (Ext.isEmpty(seqArr[index])) {
@@ -141,17 +141,17 @@ Ext.define('Koala.util.String', {
             }
             string = Ext.String.trim(string);
 
-            if (string.toLowerCase() === "true") {
+            if (string.toLowerCase() === 'true') {
                 return true;
-            } else if (string.toLowerCase() === "false") {
+            } else if (string.toLowerCase() === 'false') {
                 return false;
             } else if (/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/.test(string)) {
                 return parseFloat(string);
-            } else if (Ext.String.startsWith(string, "[") &&
-                !Ext.String.startsWith(string, "[[")) {
+            } else if (Ext.String.startsWith(string, '[') &&
+                !Ext.String.startsWith(string, '[[')) {
                 return Ext.decode(string);
-            } else if (Ext.String.startsWith(string, "{") &&
-                      !Ext.String.startsWith(string, "{{")) {
+            } else if (Ext.String.startsWith(string, '{') &&
+                      !Ext.String.startsWith(string, '{{')) {
                 return Ext.decode(string);
             } else if (Ext.String.startsWith(string, 'eval:')) {
                 return eval(string.substr(5)); // eslint-disable-line no-eval

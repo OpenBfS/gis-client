@@ -145,7 +145,7 @@ Ext.define('Koala.util.Routing', {
                 var minDate;
                 var maxDate;
                 if (permalinkFilter) {
-                    if (mdFilter.type === "pointintime") {
+                    if (mdFilter.type === 'pointintime') {
                         maxDate = Koala.util.Date.getUtcMoment(
                             mdFilter.maxdatetimeinstant);
                         minDate = Koala.util.Date.getUtcMoment(
@@ -160,7 +160,7 @@ Ext.define('Koala.util.Routing', {
                             Ext.toast('Permalink contains illegal pointintime filter');
                         }
                     }
-                    if (mdFilter.type === "timerange") {
+                    if (mdFilter.type === 'timerange') {
                         maxDate = Koala.util.Date.getUtcMoment(
                             mdFilter.maxdatetimeinstant);
                         minDate = Koala.util.Date.getUtcMoment(
@@ -180,7 +180,7 @@ Ext.define('Koala.util.Routing', {
                             Ext.toast('Permalink contains illegal timerange filter');
                         }
                     }
-                    if (mdFilter.type === "value") {
+                    if (mdFilter.type === 'value') {
                         var allowedStore = Koala.util.Filter.getStoreFromAllowedValues(mdFilter.allowedValues);
                         var containsIllegal = false;
 
@@ -324,22 +324,22 @@ Ext.define('Koala.util.Routing', {
          */
         filterToPermaObj: function(filter) {
             var permaObj = {
-                    type: filter.type
-                };
+                type: filter.type
+            };
 
             switch (filter.type) {
                 // valueOf() returns the timestamp value of the moment date.
-                case "pointintime":
+                case 'pointintime':
                     permaObj.effectivedatetime = filter.effectivedatetime
                         .valueOf();
                     break;
-                case "timerange":
+                case 'timerange':
                     permaObj.effectivemindatetime = filter.effectivemindatetime
                         .valueOf();
                     permaObj.effectivemaxdatetime = filter.effectivemaxdatetime
                         .valueOf();
                     break;
-                case "value":
+                case 'value':
                     permaObj.effectivevalue = filter.effectivevalue;
                     permaObj.alias = filter.alias;
                     permaObj.param = filter.param;

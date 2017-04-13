@@ -16,26 +16,26 @@
 /**
  * @class Koala.view.form.TimeseriesFilterControl
  */
-Ext.define("Koala.view.form.TimeseriesFilterControl", {
-    extend: "Ext.form.Panel",
-    xtype: "k-form-timeseriesfiltercontrol",
+Ext.define('Koala.view.form.TimeseriesFilterControl', {
+    extend: 'Ext.form.Panel',
+    xtype: 'k-form-timeseriesfiltercontrol',
 
     requires: [
-        "Ext.field.DatePicker",
-        "Ext.field.Select",
+        'Ext.field.DatePicker',
+        'Ext.field.Select',
 
-        "Koala.util.Date",
-        "Koala.util.Filter",
+        'Koala.util.Date',
+        'Koala.util.Filter',
 
         'Koala.view.container.date.DateTimePicker',
 
-        "Koala.view.form.TimeseriesFilterControlController",
-        "Koala.view.form.TimeseriesFilterControlModel"
+        'Koala.view.form.TimeseriesFilterControlController',
+        'Koala.view.form.TimeseriesFilterControlModel'
     ],
 
-    controller: "k-form-timeseriesfiltercontrol",
+    controller: 'k-form-timeseriesfiltercontrol',
     viewModel: {
-        type: "k-form-timeseriesfiltercontrol"
+        type: 'k-form-timeseriesfiltercontrol'
     },
 
     items: [{

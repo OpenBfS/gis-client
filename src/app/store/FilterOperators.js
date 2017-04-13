@@ -5,40 +5,40 @@ Ext.define('Koala.store.FilterOperators', {
     alias: 'store.filterOperators',
 
     fields: [{
-        name: "ogcType",
+        name: 'ogcType',
         type: 'string'
     },{
-        name: "operator",
+        name: 'operator',
         type: 'string'
     }],
 
     data: [{
-        ogcType: "PropertyIsEqualTo",
-        operator: "="
+        ogcType: 'PropertyIsEqualTo',
+        operator: '='
     },{
-        ogcType: "PropertyIsNotEqualTo",
-        operator: "!="
+        ogcType: 'PropertyIsNotEqualTo',
+        operator: '!='
     },{
-        ogcType: "PropertyIsLessThan",
-        operator: "<"
+        ogcType: 'PropertyIsLessThan',
+        operator: '<'
     },{
-        ogcType: "PropertyIsLessThanOrEqualTo",
-        operator: "≤"
+        ogcType: 'PropertyIsLessThanOrEqualTo',
+        operator: '≤'
     },{
-        ogcType: "PropertyIsBetween",
-        operator: "≤ x ≤"
+        ogcType: 'PropertyIsBetween',
+        operator: '≤ x ≤'
     },{
-        ogcType: "PropertyIsGreaterThan",
-        operator: ">"
+        ogcType: 'PropertyIsGreaterThan',
+        operator: '>'
     },{
-        ogcType: "PropertyIsGreaterThanOrEqualTo",
-        operator: "≥"
+        ogcType: 'PropertyIsGreaterThanOrEqualTo',
+        operator: '≥'
     },{
-        ogcType: "PropertyIsLike",
-        operator: "is Like"
+        ogcType: 'PropertyIsLike',
+        operator: 'is Like'
     },{
-        ogcType: "PropertyIsNull",
-        operator: "isNull"
+        ogcType: 'PropertyIsNull',
+        operator: 'isNull'
     }]
 
 });

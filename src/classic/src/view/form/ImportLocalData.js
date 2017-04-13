@@ -16,22 +16,22 @@
 /**
  * @class Koala.view.form.ImportLocalData
  */
-Ext.define("Koala.view.form.ImportLocalData",{
-    extend: "Ext.form.Panel",
+Ext.define('Koala.view.form.ImportLocalData',{
+    extend: 'Ext.form.Panel',
 
-    xtype: "k-form-importLocalData",
+    xtype: 'k-form-importLocalData',
 
     requires: [
-        "Koala.view.form.ImportLocalDataController",
-        "Koala.view.form.ImportLocalDataModel",
+        'Koala.view.form.ImportLocalDataController',
+        'Koala.view.form.ImportLocalDataModel',
 
-        "Koala.store.Projections",
-        "Koala.store.VectorTemplates"
+        'Koala.store.Projections',
+        'Koala.store.VectorTemplates'
     ],
 
-    controller: "k-form-importlocaldata",
+    controller: 'k-form-importlocaldata',
     viewModel: {
-        type: "k-form-importlocaldata"
+        type: 'k-form-importlocaldata'
     },
 
     minWidth: 400,

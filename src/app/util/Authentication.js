@@ -46,7 +46,7 @@ Ext.define('Koala.util.Authentication', {
             if (username && password) {
                 var tok = username + ':' + password;
                 var hash = Koala.util.String.utf8_to_b64(tok);
-                authHeader = "Basic " + hash;
+                authHeader = 'Basic ' + hash;
             }
 
             return authHeader;

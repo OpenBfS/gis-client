@@ -26,8 +26,8 @@ Ext.define('Koala.store.VectorTemplates', {
     useDefaultXhrHeader: false,
 
     fields: [{
-         name: 'uuid',
-         type: 'string'
+        name: 'uuid',
+        type: 'string'
     },{
         name: 'label',
         type: 'string'

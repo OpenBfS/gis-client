@@ -116,11 +116,11 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      * @return {undefined}
      */
     onSelectionChange: function(treeList, record) {
-      var me = this;
-      var layer = record.getOlLayer();
-      if (layer && layer !== me.activeChartingLayer) {
-        me.toggleActiveChartingLayer(layer);
-      }
+        var me = this;
+        var layer = record.getOlLayer();
+        if (layer && layer !== me.activeChartingLayer) {
+            me.toggleActiveChartingLayer(layer);
+        }
     },
 
     /**
@@ -134,11 +134,11 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var selection = treeList.getSelection();
         var layer = selection ? selection.getOlLayer() : null;
 
-        var targetClass = target.getAttribute("class");
+        var targetClass = target.getAttribute('class');
 
         if (!targetClass) {
-            if (target.getElementsByTagName("img").length > 0) {
-                var legend = target.getElementsByTagName("img")[0];
+            if (target.getElementsByTagName('img').length > 0) {
+                var legend = target.getElementsByTagName('img')[0];
                 if (legend.style.display === 'none') {
                     legend.style.display = 'inherit';
                 } else {
@@ -148,27 +148,27 @@ Ext.define('Koala.view.panel.MobileLegendController', {
             return false;
         }
 
-        if (targetClass.indexOf("up-icon") > 0) {
+        if (targetClass.indexOf('up-icon') > 0) {
             me.changeLayerOrder(layer, 1);
             return false;
         }
 
-        if (targetClass.indexOf("down-icon") > 0) {
+        if (targetClass.indexOf('down-icon') > 0) {
             me.changeLayerOrder(layer, -1);
             return false;
         }
 
-        if (targetClass.indexOf("fa-info-circle") > 0) {
+        if (targetClass.indexOf('fa-info-circle') > 0) {
             me.showLayerInfo(layer);
             return false;
         }
 
-        if (targetClass.indexOf("fa-times") > 0) {
+        if (targetClass.indexOf('fa-times') > 0) {
             me.removeLayer(layer);
             return false;
         }
 
-        if (targetClass.indexOf("fa-eye") > 0) {
+        if (targetClass.indexOf('fa-eye') > 0) {
             if (layer && layer instanceof ol.layer.Layer) {
 
                 if (me.isLayerAllowedToSetVisible(layer)) {
@@ -191,7 +191,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         }
 
         // charting toggler
-        if (targetClass.indexOf("fa-bar-chart") > 0) {
+        if (targetClass.indexOf('fa-bar-chart') > 0) {
             me.toggleActiveChartingLayer(layer);
             return false;
         }
@@ -382,7 +382,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                   '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
                 '</div>',
             '</tpl>',
-             {
+            {
                 display: function(layer) {
                     return (layer.get(
                         BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER
@@ -479,7 +479,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var view = this.getView();
         var metadataInfoPanel = view.up('app-main').down('k-panel-mobilemetadatainfo');
 
-        var cql = "Identifier = '" + layer.metadata.id + "'";
+        var cql = 'Identifier = \'' + layer.metadata.id + '\'';
         var metadataStore = Ext.create('Koala.store.MetadataSearch');
         metadataStore.getProxy().setExtraParam('constraint', cql);
         metadataStore.on('load', function(store, recs) {

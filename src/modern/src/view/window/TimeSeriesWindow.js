@@ -1,3 +1,3 @@
-Ext.define("Koala.view.window.TimeSeriesWindow",{
-    extend: "Ext.Component"
+Ext.define('Koala.view.window.TimeSeriesWindow',{
+    extend: 'Ext.Component'
 });

@@ -91,7 +91,7 @@ Ext.define('Koala.view.container.styler.Filter', {
         },{
             xtype: 'textfield',
             name: 'literalTextField',
-            value: "",
+            value: '',
             bind: {
                 fieldLabel: '{literalTextFieldLabel}',
                 value: '{filter.text}'

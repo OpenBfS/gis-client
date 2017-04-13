@@ -40,10 +40,10 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
         store.each(function(rec) {
             var olLayer = rec.getOlLayer();
             var routeId = olLayer.get('routeId');
-            var visible = rec.getOlLayer().getVisible() ? "1" : "0";
+            var visible = rec.getOlLayer().getVisible() ? '1' : '0';
 
             if (routeId && Koala.util.String.isUuid(routeId)) {
-                var serialized = routeId + "_" + visible;
+                var serialized = routeId + '_' + visible;
                 if (!Ext.Array.contains(layers, serialized)) {
                     layers.push(serialized);
                 }

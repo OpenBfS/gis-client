@@ -16,18 +16,18 @@
 /**
  * @class Koala.view.button.Permalink
  */
-Ext.define("Koala.view.button.Permalink", {
-    extend: "Ext.button.Button",
-    xtype: "k-button-permalink",
+Ext.define('Koala.view.button.Permalink', {
+    extend: 'Ext.button.Button',
+    xtype: 'k-button-permalink',
 
     requires: [
-        "Koala.view.button.PermalinkController",
-        "Koala.view.button.PermalinkModel"
+        'Koala.view.button.PermalinkController',
+        'Koala.view.button.PermalinkModel'
     ],
 
-    controller: "k-button-permalink",
+    controller: 'k-button-permalink',
     viewModel: {
-        type: "k-button-permalink"
+        type: 'k-button-permalink'
     },
 
     glyph: 'xf0c1@FontAwesome',

@@ -21,11 +21,11 @@ Ext.define('Koala.view.component.MapController', {
     alias: 'controller.k-component-map',
 
     requires: [
-        "BasiGX.util.Controller",
+        'BasiGX.util.Controller',
 
-        "Koala.util.Layer",
-        "Koala.view.window.TimeSeriesWindow",
-        "Koala.view.window.BarChart"
+        'Koala.util.Layer',
+        'Koala.view.window.TimeSeriesWindow',
+        'Koala.view.window.BarChart'
     ],
 
     pendingRequest: null,
@@ -96,27 +96,27 @@ Ext.define('Koala.view.component.MapController', {
      * the base class BasiGX.view.component.Map!
      */
     getToolTipHtml: function(layers, features) {
-        var innerHtml = "";
-        var lineBreak = "<br />";
+        var innerHtml = '';
+        var lineBreak = '<br />';
         var layersLen = layers && layers.length;
         var featuresLen = features && features.length;
         var replaceTemplateStrings = Koala.util.String.replaceTemplateStrings;
         Ext.each(layers, function(layer, layerIdx) {
-            var hoverTpl = layer.get("hoverTpl");
+            var hoverTpl = layer.get('hoverTpl');
             Ext.each(features, function(feature, featureIdx) {
                 // we check for existing feature first as there maybe strange
                 // situations (e.g. when zooming while hovering)
                 // where feat is undefined and feat.get would throw an error
-                if (feature && feature.get("layer") === layer) {
+                if (feature && feature.get('layer') === layer) {
                     var tooltipFeature = hoverTpl;
                     tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, layer, false);
                     tooltipFeature = replaceTemplateStrings(
-                        tooltipFeature, layer, false, "layer.");
+                        tooltipFeature, layer, false, 'layer.');
                     tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, feature, false);
                     tooltipFeature = replaceTemplateStrings(
-                        tooltipFeature, feature, false, "feature.");
+                        tooltipFeature, feature, false, 'feature.');
                     innerHtml += tooltipFeature;
                     if (featureIdx + 1 !== featuresLen) {
                         // not the last feature, append linebreak
@@ -135,7 +135,7 @@ Ext.define('Koala.view.component.MapController', {
     },
 
     onDroppedExternalVectorData: function(event) {
-        Ext.create("Ext.window.Window", {
+        Ext.create('Ext.window.Window', {
             // TODO i18n
             title: 'Upload local data',
             autoShow: true,
@@ -155,12 +155,12 @@ Ext.define('Koala.view.component.MapController', {
     *
     */
     openBarChartWindow: function(olFeat) {
-       var olLayer = olFeat.get('layer');
-       var uniqueId = this.getUniqueIdByFeature(olFeat);
-       var win = Ext.create("Koala.view.window.BarChart");
-       win.getController().createOrUpdateChart(olLayer, olFeat, uniqueId);
-       return win;
-   },
+        var olLayer = olFeat.get('layer');
+        var uniqueId = this.getUniqueIdByFeature(olFeat);
+        var win = Ext.create('Koala.view.window.BarChart');
+        win.getController().createOrUpdateChart(olLayer, olFeat, uniqueId);
+        return win;
+    },
 
     /**
      *
@@ -185,16 +185,16 @@ Ext.define('Koala.view.component.MapController', {
     /**
     *
     */
-   openGetFeatureInfoWindow: function() {
-       var win = Ext.ComponentQuery.query('window[name=getfeatureinfowin]')[0];
+    openGetFeatureInfoWindow: function() {
+        var win = Ext.ComponentQuery.query('window[name=getfeatureinfowin]')[0];
 
        // create the window if it doesn't exist already
-       if (!win) {
+        if (!win) {
 //           win = Ext.create("Koala.view.window.GetFeatureInfoWindow");
-       }
+        }
 //       win.show();
         return win;
-   },
+    },
 
     /**
      *
@@ -204,7 +204,7 @@ Ext.define('Koala.view.component.MapController', {
         var addFilterForm = !Ext.isEmpty(chartConfig.allowFilterForm) ?
             Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
 
-        var win = Ext.create("Koala.view.window.TimeSeriesWindow", {
+        var win = Ext.create('Koala.view.window.TimeSeriesWindow', {
             addFilterForm: addFilterForm,
             initOlLayer: olLayer
         });
@@ -218,7 +218,7 @@ Ext.define('Koala.view.component.MapController', {
         var geom = olFeat.getGeometry();
         if (geom && geom.getExtent) {
             var extent = geom.getExtent();
-            return extent.join("-");
+            return extent.join('-');
         } else {
             return olFeat.getId();
         }

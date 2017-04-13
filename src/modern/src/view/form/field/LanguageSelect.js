@@ -16,19 +16,19 @@
 /**
  * @class Koala.view.form.field.LanguageCombo
  */
-Ext.define("Koala.view.form.field.LanguageSelect", {
-    extend: "Ext.field.Select",
-    xtype: "k-field-languageselect",
+Ext.define('Koala.view.form.field.LanguageSelect', {
+    extend: 'Ext.field.Select',
+    xtype: 'k-field-languageselect',
     requires: [
-        "Koala.store.Language",
+        'Koala.store.Language',
 
-        "Koala.view.form.field.LanguageSelectController",
-        "Koala.view.form.field.LanguageSelectModel"
+        'Koala.view.form.field.LanguageSelectController',
+        'Koala.view.form.field.LanguageSelectModel'
     ],
 
-    controller: "k-field-languageselect",
+    controller: 'k-field-languageselect',
     viewModel: {
-        type: "k-field-languageselect"
+        type: 'k-field-languageselect'
     },
 
     fields: ['code', 'name'],
