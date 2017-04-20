@@ -31,7 +31,7 @@ Ext.define('Koala.view.main.Main', {
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
 
-        'BasiGX.plugin.Hover',
+        'Koala.plugin.Hover',
         'BasiGX.view.panel.Header',
         'BasiGX.view.panel.MapContainer',
         'BasiGX.util.Animate',
@@ -78,7 +78,7 @@ Ext.define('Koala.view.main.Main', {
             xtype: 'k-component-map',
             appContextPath: Koala.appContextUrl || 'resources/appContext.json',
             plugins: [{
-                ptype: 'hover',
+                ptype: 'hoverBfS',
                 selectMulti: true,
                 selectEventOrigin: 'interaction'
             }]

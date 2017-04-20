@@ -48,7 +48,7 @@ Ext.define("Koala.view.component.Map", {
             buffer: me.getHoverFeatureClickBufferMS()
         });
 
-        var hoverPlugin = me.getPlugin('hover');
+        var hoverPlugin = me.getPlugin('hoverBfS');
         if (hoverPlugin) {
             var selStyleFunction = staticMe.styleFromGnos("selectStyle");
             var highlightStyleFunction = staticMe.styleFromGnos("hoverStyle");
@@ -185,7 +185,7 @@ Ext.define("Koala.view.component.Map", {
      * Removes the previousy selected features from the select interaction.
      */
     removeAllHoverFeatures: function() {
-        var p = this.getPlugin('hover');
+        var p = this.getPlugin('hoverBfS');
         var i = p && p.getHoverVectorLayerInteraction();
         var f = i && i.getFeatures();
         if (f) {
