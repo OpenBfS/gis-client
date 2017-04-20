@@ -606,7 +606,7 @@
                                 "</div><br />"+
                                 "<h3>Layer-Set Auswahl</h3>"+
                                 "<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe Grafik <i>4. Arbeitsablauf der Layer-Set Auswahl</i>). In der türkisfarbenen Leiste der \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster mit Layer-Sets, die mit einem repräsentativen Bild des entsprechenden Themas versehen sind. Klickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Des Weiteren können mit einem Doppelklick auf ein Thema die gesamten korrespondierenden Layer der Legende hinzugefügt werden. Im unteren Teil der \"Layer-Set Auswahl\" kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden. Sofern die Auswahl an Layern eingegrenzt wurde, ist es mithilfe des Knopfs \"Alle Layer\" "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_allLayers.png' title='Knopf: Alle Layer' alt='button_allLayers.png' width='76' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_allLayers.png' title='Knopf: Alle Layer' alt='button_allLayers.png' width='75' height='24' style='vertical-align:middle'>"+
                                 " möglich, sich sämtliche Layer wieder anzeigen zu lassen.</p>"+
                                 "<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</p>"+
                                 "<div style='font-size:11px'>"+
@@ -675,10 +675,18 @@
                                 "<p>Der Knopf \"Hilfe\" öffnet das Hilfefenster, das in einzelnen Unterpunkten die Funktionalitäten des BfS Geo-Portals beschreibt.</p>"+
                                 "</div>"
                         },
-                    "language": {
-                        "title": "6.4 Sprache",
+                    "imprint": {
+                        "title": "6.4 Impressum",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.4 Sprache <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Knopf: Sprache' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
+                                "<h2>6.4 Impressum <img class='img' src='classic/resources/img/helpPage/button_settings_imprint.png' title='Knopf: Impressum' alt='button_settings_imprint.png' width='83' height='24' style='vertical-align:middle'></h2>"+
+                                "<div>"+
+                                "<p>Der Knopf \"Impressum\" öffnet das Impressum sowie die Nutzungsbedingungen des BfS Geo-Portals.</p>"+
+                                "</div>"
+                        },
+                    "language": {
+                        "title": "6.5 Sprache",
+                        "html": "<hr style='color:#157FCC' />"+
+                                "<h2>6.5 Sprache <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Knopf: Sprache' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend kann mit einem Klick auf das referenzierte Kürzel die Sprache gewählt werden. Ein Klick auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"DE\" entspricht Deutsch und \"EN\" Englisch.</p>"+
                                 "<img class='img' src='classic/resources/img/helpPage/button_settings_language_all.png' title='Sprache' alt'button_settings_language_all.png' style='max-height: 100%; max-width: 100%;'>"+
@@ -971,7 +979,7 @@
             "data": {
                 "title": "Hilfe",
                 "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Vorbemerkung</h1>",
-                "helpPrefaceHtml": "<h2> Vorbemerkung </h2>"+
+                "helpPrefaceHtml":
                     "<div>Das GeoPortal des "+
                     "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz)</a>"+
                     " stellt Daten und Dienste sowie Darstellungswerkzeuge zur Verfügung, um einen Überblick über die im BfS erhobenen und zusammengeführten Messdaten zu ermitteln.</div>"+

@@ -406,7 +406,7 @@
                             "<p>BfS endeavours to constantly expand the availability of information beyond such standardized services.</p>"+
                             "</div>"+
                             "<div>This application cannot only be used to find the desired data and represent it geographically, but it is also aimed at analysing data according to the user’s individual requirements. The current representations of time series or bar charts are only the first steps. We intend to refine and expand the application’s functionalities in the future.</div>"+
-                            "<div>We are implementing a transparent information policy by providing the data as open data (cf. BfS Geoportal - Imprint/Nutzungsbedingungen) and by developing our applications in the form of open source software "+
+                            "<div>We are implementing a transparent information policy by providing the data as open data (cf. BfS Geoportal - Imprint/Terms of Use) and by developing our applications in the form of open source software "+
                             "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/EN/2017/0102-bfs-open-source.html' target='_blank'>(message by BfS)</a>"+
                             ".</div>"+
                             "<div>This development concept ensures an effective, non-profit use of resources.</div>"
@@ -417,7 +417,7 @@
                             "<div>The following paragraphs briefly explain the functionalities provided by the application. For a more detailed explanation, please navigate the table of contents on the left-hand side and click on the item you are looking for.</div>"+
                             "<h4>The surface of the application offers the following functionalities:</h4>"+
                             "<ol>"+
-                                "<div><img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
+                                "<div><img class='img' src='classic/resources/img/helpPage/graphic_overview_en.png' title='Overview' alt='graphic_overview_en.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Layer profile selection</li>"+
                                     "<div>This selection window enables you to load a predefined selection of data sets (i.e. layer sets) into the map. A layer set is composed of several layers that represent a common thematic level in the map. This window opens upon the initial loading of the page. It is not necessary to select a layer set in order to start the application. The layer sets/thematic sets are only a means of assistance to the user. They make it possible to load similar or related data sets with a single click. If you close the window without selecting a layer set, only the standard layers will be loaded, i.e. \"Place names\", \"Contour lines\" and \"Background map - OSM\".</div><br />"+
                                 "<li style='color:#157FCC; font-weight:bold'>Map</li>"+
@@ -455,7 +455,7 @@
                     "html": "<h2> 1. Layer profile selection </h2>"+
                             "<div>This selection window enables you to load a predefined selection of data sets (i.e. layer sets) into the map. A layer set is composed of several layers that represent a common thematic level in the map. This window opens upon the initial loading of the page. It is not necessary to select a layer set in order to start the application. The layer sets/thematic sets are only a means of assistance to the user. They make it possible to load similar or related data sets with a single click. If you close the window without selecting a layer set, only the standard layers will be loaded, i.e. \"Place names\", \"Contour lines\" and \"Background map - OSM\".</div>"+
                             "<div>Enter a filter term to restrict the selection of profiles.</div><br />"+
-                            "<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' style='max-height: 100%; max-width: 100%;'>"
+                            "<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer profile selection' alt='window_profileSelection.png' style='max-height: 100%; max-width: 100%;'>"
                 },
                 "map": {
                     "title": "2. Map",
@@ -467,11 +467,11 @@
                                 "<h2>2.1 Overview</h2>"+
                                 "<div>"+
                                 "<p>Within the map, you can navigate with the help of the <i>mouse</i>. Shift the map view by clicking and holding the left <i>mouse button</i> down. Double-click the <i>mouse</i> to zoom into the current position of the <i>mouse pointer</i>. If you wish to zoom into a particular map view, you can use a separate zoom window. To create a zoom window in the map, hold the Shift key "+
-                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Shift key' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
                                 " and click on the left <i>mouse button</i>.<br />"+
                                 "The <i>scroll wheel</i> can also be used to zoom in and out of the map, thus adjusting the map scale. Alternatively, you can control these functions via the navigation bar (please refer to <i>7. Navigation</i>).</div>"+
                                 "<div>You will find the copyright information for internal and external data in the bottom-right corner of the map view. Click on them to open a new tab in the browser showing the relevant information.</div><br />"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Karte' alt='graphic_map.png' style='max-height: 100%; max-width: 100%;'><br />"
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Map' alt='graphic_map.png' style='max-height: 100%; max-width: 100%;'><br />"
                     },
                     "geoObjects": {
                         "title": "2.2 Retrieving information on BfS objects",
@@ -481,41 +481,41 @@
                                 "<p>If you wish to retrieve information on BfS objects, please make sure that the relevant layer is selected in the legend. Selected layers are labelled in turquoise (cf. Figure <i>2.2 Information on individual objects</i>).</p>"+
                                 "<p>You will obtain information on individual objects (such as the 1 h ambient dose rate at a particular location) by moving the <i>mouse pointer</i> over the relevant geometry (represented as dots in the example below). The selected object will be highlighted in colour and the relevant data will appear. Depending on the zoom level, you may have selected more than one geometry so that the relevant data is displayed for several objects. Zoom to the desired object in this case to obtain an unambiguous selection.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_hoverGeometry.png' title='Informationen zu einzelnen Objekten' alt'graphic_hoverGeometry.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_hoverGeometry_en.png' title='Information on individual objects' alt'graphic_hoverGeometry_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Information on individual objects</b>"+
                                 "</div><br />"+
                                 "<p>If data is available for a certain object, such data can be viewed in a diagram by clicking onto the relevant geometry. Time-related data will be shown in a line chart (such as ODL 1h), while value series (such as nuclides in mushrooms) will be shown in a bar chart.</p>"+
                                 "<p>Figure <i>2.2 Time series</i> shows time series for three different locations; here the 1h values of the ambient dose rate are visualized. Add locations at any time by clicking onto another object on the map or pressing the \"Add series\" "+
-                                "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingSerial.png' title='Auswahlfeld: Serie hinzufügen' alt='selectionBox_addingSerial.png' width='170' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingSerial.png' title='Add series' alt='selectionBox_addingSerial.png' width='170' height='24' style='vertical-align:middle'>"+
                                 " button. This button allows you to search directly for a particular object by entering keywords. Alternatively, use the <i>arrow icon</i> to display all available series.<br>"+
                                 "You can adjust the line chart itself by interaction. Double-click the left <i>mouse button</i> within the diagram to enlarge a particular section. The x axis and y axis will be adjusted to the selected section. Shift the view within the diagram by holding the left <i>mouse button</i> down. You can zoom out of the diagram by using the \"...zoom back\" "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_zoomBack.png' title='Knopf: ...zurückzoomen' alt='button_zoomBack.png' width='114' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_zoomBack_en.png' title='Zoom back' alt='button_zoomBack_en.png' width='92' height='24' style='vertical-align:middle'>"+
                                 " button. Alternatively, use the scroll wheel to control the zoom function.</p>"+
                                 "<p>Press the download icon "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_saveTimeSeries.png' title='Knopf: download' alt='button_download.png' width='17' height='16' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_saveTimeSeries.png' title='Download' alt='button_download.png' width='17' height='16' style='vertical-align:middle'>"+
                                 " to download individual time series. The series can be saved in JSON, CSV or GML format. Select the desired format and then confirm the download. The file will be saved in your browser’s download directory. Select the section that you wish to download from the diagram with the help of the zoom function.</p>"+
                                 "<p>Click on the diagram's legend to hide or show individual series, such as \"Helgoland / Unterland\" in the example below. It is also possible to delete an individual series completely from the diagram: Just click on the X button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Delete series' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
                                 " next to the layer name.</p>"+
                                 "<p>If you wish to display an individual value within the diagram, move the <i>mouse pointer</i> over the desired position.</p>"+
                                 "<p>Enter a start date and end date above the line diagram to refine the mapping. Alternatively, you can select a date via the calendar icon "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Knopf: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Calendar icon' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
                                 ". Confirm your selection with the OK button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_ok.png' title='Knopf: OK' alt='button_ok.png' width='32' height='23' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_ok.png' title='OK button' alt='button_ok.png' width='32' height='23' style='vertical-align:middle'>"+
                                 ". Use the \"Reset\" button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_reset.png' title='Knopf: Reset' alt='button_reset.png' width='44' height='23' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_reset.png' title='Reset button' alt='button_reset.png' width='44' height='23' style='vertical-align:middle'>"+
                                 " to return to the original time range. Click on the \"Add chart\" button "+
-                                "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingChart.png' title='Auswahlfeld: Chart hinzufügen' alt='selectionBox_addingChart.png' width='250' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingChart.png' title='Add chart' alt='selectionBox_addingChart.png' width='250' height='24' style='vertical-align:middle'>"+
                                 " to display all the layers in the legend that can be added as a time series.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_timeSeries.png' title='Zeitreihen' alt'graphic_timeSeries.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_timeSeries_en.png' title='Time series' alt'graphic_timeSeries_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Time series</b>"+
                                 "</div><br />"+
                                 "<p>The bar charts representing value series are shown in Figure <i>2.2 Value series</i>. If you move the <i>mouse pointer</i> over a bar, the relevant value and unit will be shown in a separate window. As explained for the time series, it is possible to hide or show every series via the diagram’s legend (you can also delete individual series by using the X button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Delete series' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
                                 "). The y axis will adjust to the relevant maximum value of the remaining series. <i>Figure 2.2 Value series</i> shows how this function can be used for detailed analyses.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_barChart.png' title='Wertereihen' alt'graphic_barChart.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_barChart_en.png' title='Value series' alt'graphic_barChart_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Value series</b>"+
                                 "</div>"+
                                 "</div>"
@@ -534,14 +534,14 @@
                                 "Please find more detailed information on the topic of Web Map Service at the following address: <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></p>"+
                                 "<p>First you need to set the query parameters. Enter a valid query into the \"WMS-URL\" field or select a predefined URL.</p>"+
                                 "<p>Then press the \"Query Available Layer\" button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Knopf: Verfügbare Layer abfragen' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Query Available Layer' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'>"+
                                 ". The results will be shown in the \"Available Layer\" field.</p>"+
                                 "<p>Check the boxes for the required layers so that they will be shown in the legend and thus also on the map. Confirm the selection with the \"Add Selected Layer\" button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Knopf: Ausgewählte Layer hinzufügen' alt='button_addLayers.png' width='198' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Add Selected Layer' alt='button_addLayers.png' width='198' height='24' style='vertical-align:middle'>"+
                                 ". Initially, these layers will be positioned hierarchically at the top of the legend and thus mapped over all the other layers in the representation.</p>"+
                                 "<p>Figure <i>3.1 WMS service workflow</i> shows how the layer \"Topographic OSM WMS - by mundalis\" is added to the map.</p><br />"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='Arbeitsablauf des WMS-Dienstes' alt='graphic_wms_workflow.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='WMS service workflow' alt='graphic_wms_workflow.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>3.1 WMS service workflow</b>"+
                                 "</div>"+
                                 "</div>"
@@ -549,7 +549,7 @@
                     "print": {
                         "title": "en: 3.2 Druckdienst",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>3.2 Druckdienst <img class='img' src='classic/resources/img/helpPage/button_print.png' title='Print-Button' alt='button_print.png' width='103' height='27' style='vertical-align:middle'> </h2>"+
+                                "<h2>3.2 Druckdienst <img class='img' src='classic/resources/img/helpPage/button_print.png' title='Print button' alt='button_print.png' width='103' height='27' style='vertical-align:middle'> </h2>"+
                                 "<div>"+
                                 "<p>Der Druckdienst ermöglicht es einen Kartenausschnitt in verschiedenen Formaten zu erstellen und abzuspeichern. Der Dienst ist in zwei Hauptkomponenten untergliedert. Einerseits werden allgemein gebräuchliche Standards wie BMP, GIF, PDF, PNG, TIF und TIFF, andererseits der Standard für den Austausch radiologischer Informationen <i>IRIX</i> zur Verfügung gestellt. Das Vorgehen zur Erstellung eines IRIX-Dokumentes wird im Anschluss unter entsprechender Überschrift erläutert.</p>"+
                                 "<p>Zunächst muss über das Auswahlmenü \"Printapp\" eine vordefinierte Ausschnittsgröße, beispielsweise <i>A4</i> gewählt werden. Dies stellt den Kartendruck nach DIN-Normen sicher. Im Anschluss erweitert sich das Fenster, um Karteneigenschaften und -inhalte einzustellen. Überdies ist ein blaues Fenster, das den Kartenausschnitt repräsentiert sichtbar. Nun können die Inhalte der Karte auf das Auswahlfenster angepasst werden (siehe Grafik <i>3.2 Arbeitsablauf des Druckdienstes</i>). Die Zoomstufe bestimmt letztlich den Kartenmaßstab. Beachten Sie, dass nur die Inhalte gedruckt werden die auf der Karte sichtbar sind.</p>"+
@@ -584,32 +584,32 @@
                                 "<div>"+
                                 "<p>Via the selection window it is possible to add layers to the map. You will find the selection window in the menu below the \"Tools\" panel. Initially, the window is closed. It can be opened by clicking onto the phrase \"Selection\" or onto the turquoise-coloured bar (cf. Figure <i>4. Layer selection workflow</i>).</p>"+
                                 "<p>The menu width can be adjusted. If you move the <i>mouse pointer</i> to the right-hand margin of the menu, the icon changes into a double-arrow "+
-                                "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
                                 " and you can adjust the width by holding the left <i>mouse button</i> down.</p>"+
                                 "<p>Every layer is part of a layer set that reflects a technical classification. For example, if you wish to add the layer \"nuclear power plant\" to the map, you will find it in the layer set \"miscellaneous\".</p>"+
                                 "<p>The selection window is structured like a common file system, including folders and files. The layer sets equate to folders, while the layers equate to files. If you wish to unfold a folder in order to view the layers contained therein, simply click on the plus icon to the left of the folder icon. Alternatively, you can double-click the folder name.</p>"+
                                 "<p>A single click onto the layer name will open a layer-specific window. Depending on the type of layer, the window may also include settings so that you can restrict the data with the help of a time filter and/or value filter. If a layer does not include any time or value filters, the window will only contain a button for adding the relevant layer (cf. Figure <i>4. Layer-specific window - layer without filter</i>).</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/window_layerNoFilter.png' title='layerspezifisches Fenster - Layer ohne Filter' alt'window_layerNoFilter.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/window_layerNoFilter_en.png' title='layer-specific window - layer without filter' alt'window_layerNoFilter_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>4. Layer-specific window - layer without filter</b>"+
                                 "</div><br />"+
                                 "<p>A double-click on the layer name will directly add the layer to the map. In this case, the standard settings will be used. Time-related layers will be adjusted to the most current data.</p>"+
                                 "<p>Figure <i>4. Layer selection workflow shows</i> how the gross ambient dose rate (determined in 1 hour intervals) is added. You can choose the final date for which the recorded data will be displayed. The date can be set either by entering the relevant date or by selecting a date in the calendar. Click onto the calendar icon "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Knopf: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Calendar' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
                                 " to open the calendar. For some layers, it is not only possible to choose a point in time but also to choose a period of time (e.g. \"nuclide in the soil\"). In these cases, a start date and/or end date will be available for configuration. The value filter corresponds to the measuring network and thus makes it possible to further refine the display of values. It is also possible to choose several filters by pressing the Shift key "+
-                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Shift key' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
                                 ". Click the \"Add Selected Layer\" button and the layer will be displayed on the map.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_layer_selection.png' title='Arbeitsablauf der Layerauswahl' alt='graphic_layer_selection.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_layer_selection_en.png' title='Layer selection workflow' alt='graphic_layer_selection_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>4. Layer selection workflow</b>"+
                                 "</div><br />"+
                                 "<h3>Layer set selection</h3>"+
                                 "<p>In addition to the option of searching for layers via the selection window, it is also possible to search for layers via the layer set selection (cf. Figure <i>4. Layer set selection workflow</i>). Click onto \"Change Topic\" in the turquoise-coloured bar of the \"Selection\" window. This will open a window containing a selection of layer sets that are illustrated with an appropriate image. If you click on one of the subjects or the relevant image, the corresponding folder with the associated layers will open in the selection window. You can also add all corresponding layers to the legend by double-clicking onto the subject. In the lower part of the \"Layer Set Selection\" window you can restrict the selection of subjects by entering a filter term (search term). I the selection of layers was restricted, press the \"All Layer\" button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_allLayers.png' title='Knopf: Alle Layer' alt='button_allLayers.png' width='76' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_allLayers_en.png' title='All layers' alt='button_allLayers_en.png' width='75' height='24' style='vertical-align:middle'>"+
                                 " to show all available layers.</p>"+
                                 "<p>Add a layer, as described above, by clicking once or twice (apply standard settings) on the layer name.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_layerSet_selection.png' title='Arbeitsablauf der Layer-Set Auswahl' alt='graphic_layerSet_selection.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_layerSet_selection.png' title='Layer set selection workflow' alt='graphic_layerSet_selection.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>4. Layer set selection workflow</b>"+
                                 "</div><br />"+
                                 "</div>"
@@ -619,23 +619,23 @@
                     "html":     "<h2>5. Multi search bar</h2>"+
                                 "<div>"+
                                 "<p>The multi search bar makes it possible to search for spatial data as well as for BfS data and services. Simply enter your text into the search field and the results will be shown separately in a window below the bar. Clicking onto the X icon "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_search_delete.png' title='Kreuzsymbol: Löschen der Eingabe' alt='button_search_delete.png' width='25' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_search_delete.png' title='X icon: delete the entry' alt='button_search_delete.png' width='25' height='24' style='vertical-align:middle'>"+
                                 " on the right-hand side of the search field will delete the entry and close the result window.</p>"+
                                 "<h3>Spatial search</h3>"+
                                 "<p>You can search for locations via the multi search bar (cf. Figure <i>5. Spatial search</i>). The results will be constantly updated according to the entered text and thus do not require any further entries. If you have found the location you were looking for, simply click onto the name to zoom into the map.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_search_location.png' title='Räumliche Suche' alt'graphic_search_location.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_search_location.png' title='Spatial search' alt'graphic_search_location.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>5. Spatial search</b>"+
                                 "</div><br />"+
                                 "<h3>BfS data and services</h3>"+
                                 "<p>In addition to the spatial search, the application also searches for BfS data and services (cf. Figure <i>5. Data search</i>).</p>"+
                                 "<p>Further information can be found in the Metadata window. Click on the information icon "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_search_info.png' title='Informationsknopf' alt='button_search_info.png' width='15' height='15' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_search_info.png' title='Information icon' alt='button_search_info.png' width='15' height='15' style='vertical-align:middle'>"+
                                 " to open the Metadata window. Data and services that are associated with a button showing a map and a plus symbol "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_search_addData.png' title='Knopf: Füge Daten der Karte hinzu' alt='button_search_addData.png' width='17' height='17' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_search_addData.png' title='Button: add to the map' alt='button_search_addData.png' width='17' height='17' style='vertical-align:middle'>"+
                                 " can be added to the map with a single click.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_search_data.png' title='Datensuche' alt'graphic_search_data.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_search_data.png' title='Data search' alt'graphic_search_data.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>5. Data search</b>"+
                                 "</div>"+
                                 "</div>"
@@ -647,21 +647,21 @@
                     "fullScreen": {
                         "title": "6.1 Full screen",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.1 Full screen <img class='img' src='classic/resources/img/helpPage/button_settings_fullScreen.png' title='Knopf: Vollbild' alt='button_settings_fullScreen.png' width='107' height='24' style='vertical-align:middle'></h2>"+
+                                "<h2>6.1 Full screen <img class='img' src='classic/resources/img/helpPage/button_settings_fullScreen_en.png' title='Full screen' alt='button_settings_fullScreen_en.png' width='81' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Click on the \"Full Screen\" button to enlarge the view so that the BfS Geo-Portal application uses the full screen. Depending on the browser you use, you may be required to confirm the full screen mode.</p>"+
-                                "<p>Click the <b>Esc button</b> to cancel the full screen mode.</p>"+
+                                "<p>Click the <b>Esc key</b> to cancel the full screen mode.</p>"+
                                 "</div>"
                         },
                     "timeRef": {
                         "title": "6.2 Time Reference",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.2 Time Reference <img class='img' src='classic/resources/img/helpPage/button_settings_timeRef_utc.png' title='Knopf: Zeitbezug' alt='button_settings_timeRef_utc.png' width='107' height='24' style='vertical-align:middle'></h2>"+
+                                "<h2>6.2 Time Reference <img class='img' src='classic/resources/img/helpPage/button_settings_timeRef_utc_en.png' title='Time reference button' alt='button_settings_timeRef_utc_en.png' width='142' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>The default setting for the reference time is <i>Coordinated Universal Time - UTC</i>. Using a universal reference time is essential for international cooperation and/or the analysis of data over different time zones. Please remember, with respect to time-related data, to check the reference time settings.</p>"+
                                 "<p>Pressing the button \"Time Reference (UTC)\" will change the time shown at the client's to local time \"Time Reference (local)\" (cf. Figure <i>6.2 Time Reference</i>). This means that your computer’s system time will be used.</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_timeRef.png' title='Zeitbezug' alt'graphic_timeRef.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_timeRef_en.png' title='Time reference' alt'graphic_timeRef_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>6.2 Time Reference</b>"+
                                 "</div><br />"+
                                 "</div>"
@@ -669,18 +669,26 @@
                     "help": {
                         "title": "6.3 Help",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.3 Help <img class='img' src='classic/resources/img/helpPage/button_settings_help.png' title='Knopf: Hilfe' alt='button_settings_help.png' width='107' height='24' style='vertical-align:middle'></h2>"+
+                                "<h2>6.3 Help <img class='img' src='classic/resources/img/helpPage/button_settings_help_en.png' title='Help button' alt='button_settings_help_en.png' width='43' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>The \"Help\" button opens the Help window. In the Help window you will find a detailed description of the functionalities provided by BfS Geo-Portal.</p>"+
                                 "</div>"
                         },
-                    "language": {
-                        "title": "6.4 Language",
+                    "imprint": {
+                        "title": "6.4 Imprint",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.4 Language <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Knopf: Sprache' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
+                                "<h2>6.4 Imprint <img class='img' src='classic/resources/img/helpPage/button_settings_imprint_en.png' title='Imprint button' alt='button_settings_imprint_en.png' width='58' height='24' style='vertical-align:middle'></h2>"+
+                                "<div>"+
+                                "<p>Use this button to open the Legal Disclosure information and the Terms of Use.</p>"+
+                                "</div>"
+                        },
+                    "language": {
+                        "title": "6.5 Language",
+                        "html": "<hr style='color:#157FCC' />"+
+                                "<h2>6.5 Language <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Language button' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>The Language selection menu controls the language used in the entire application. You can choose your language by clicking the referenced symbol. Clicking onto the downward arrow will open the selection menu showing the available languages. \"DE\" means German, \"EN\" means English.</p>"+
-                                "<img class='img' src='classic/resources/img/helpPage/button_settings_language_all.png' title='Sprache' alt'button_settings_language_all.png' style='max-height: 100%; max-width: 100%;'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_settings_language_all.png' title='Language' alt'button_settings_language_all.png' style='max-height: 100%; max-width: 100%;'>"+
                                 "</div>"
                         }
                 },
@@ -691,18 +699,18 @@
                     "zoomIn": {
                         "title": "7.1 Zoom in",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>7.1 Zoom in <img class='img' src='classic/resources/img/helpPage/button_zoomIn.png' title='Knopf: Hineinzoomen' alt='button_zoomIn.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                "<h2>7.1 Zoom in <img class='img' src='classic/resources/img/helpPage/button_zoomIn.png' title='Zoom in button' alt='button_zoomIn.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>This button zooms into the map using a predefined zoom level. As a result, the map scale of the current view becomes larger. Alternatively, you can double-click the <i>mouse</i> within the map view or use the scroll wheel to zoom into the map.</p>"+
                                 "<p>If you wish to zoom into a particular map view, you can use a separate zoom window. To create a zoom window in the map, hold the Shift key "+
-                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
-                                "and click on the left <i>mouse button</i>.</p>"+
+                                "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Shift key' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
+                                " and click on the left <i>mouse button</i>.</p>"+
                                 "</div>"
                         },
                     "zoomOut": {
                         "title": "7.2 Zoom out",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>7.2 Zoom out <img class='img' src='classic/resources/img/helpPage/button_zoomOut.png' title='Knopf: Herauszoomen' alt='button_zoomOut.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                "<h2>7.2 Zoom out <img class='img' src='classic/resources/img/helpPage/button_zoomOut.png' title='Zoom out button' alt='button_zoomOut.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>This button zooms out of the map using a predefined zoom level. As a result, the map scale of the current view becomes smaller. Alternatively, you can use the <i>scroll wheel</i> to zoom out of the map.</p>"+
                                 "</div>"
@@ -710,7 +718,7 @@
                     "initMapView": {
                         "title": "7.3 Initial map view",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>7.3 Initial map view <img class='img' src='classic/resources/img/helpPage/button_initMapView.png' title='Knopf: initiale Kartenansicht' alt='button_initMapView.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                "<h2>7.3 Initial map view <img class='img' src='classic/resources/img/helpPage/button_initMapView.png' title='Initial map view' alt='button_initMapView.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Click on this button to show the initial map view (zoom level and position). Germany is shown at the centre of the map view.</p>"+
                                 "</div>"
@@ -718,7 +726,7 @@
                     "permaLink": {
                         "title": "7.4 Permalink",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>7.4 Permalink <img class='img' src='classic/resources/img/helpPage/button_permaLink.png' title='Knopf: Permalink' alt='button_permaLink.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                "<h2>7.4 Permalink <img class='img' src='classic/resources/img/helpPage/button_permaLink.png' title='Permalink button' alt='button_permaLink.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>A permalink is a hyperlink permanently referencing the contents of a webpage. It contains map view information (zoom level and position) as well as additionally loaded contents (layers with filter settings).</p>"+
                                 "<p>A permalink thus makes it possible to save a particular map view for future access. Choose the required map view and press the Permalink button. If the Permalink window is already open, press \"Refresh\" to display the permalink corresponding to the current map view. The \"Copy to Clipboard\" button saves the permalink temporarily so that you can paste the link where desired.</p>"+
@@ -727,7 +735,7 @@
                     "openLegend": {
                         "title": "7.5 Open legend",
                         "html": "<hr style='color:#157FCC' />"+
-                                "<h2>7.5 Open legend <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Knopf: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                "<h2>7.5 Open legend <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Open legend' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>This button opens or closes the legend displayed in the bottom-right corner of BfS Geo-Portal. The legend comprises all layers that are immediately available for representation. Alternatively, you can directly click on the legend (blue bar labelled \"Legend\").</p>"+
                                 "</div>"
@@ -738,40 +746,40 @@
                     "html": "<h2>8. Legend</h2>"+
                             "<div>"+
                             "<p>The legend comprises all layers that are loaded into the map view. Please refer to Section <i>4. Selection</i> for more information on adding layers. To open the legend, either use the button "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Knopf: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Open legend' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'>"+
                             " or click directly onto the blue bar labelled \"Legend\".</p>"+
                             "<p>The legend width can be adjusted. If you move the mouse pointer to the left-hand margin of the legend, the icon changes into a double-arrow "+
-                            "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='mouse pointer resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
                             ". Hold the left <i>mouse button</i> down to adjust the width.</p>"+
                             "<p>As mentioned above in Section <i>2.2 Retrieving information on individual objects</i>, please ensure that the relevant layer is selected for retrieving information on the desired geometries. Selected layers are labelled in turquoise in the legend (cf. Figure <i>8. Legend - Shifting a layer</i>). The checkbox to the left of the layer name governs whether a layer is shown on the map (checkbox checked "+
-                            "<img class='img' src='classic/resources/img/helpPage/checkbox_true.png' title='Kontrollkästchen - aktiv' alt='checkbox_true.png' width='14' height='14' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/checkbox_true.png' title='checkbox checked' alt='checkbox_true.png' width='14' height='14' style='vertical-align:middle'>"+
                             " ) or not (checkbox unchecked "+
-                            "<img class='img' src='classic/resources/img/helpPage/checkbox_false.png' title='Kontrollkästchen - inaktiv' alt='checkbox_false.png' width='13' height='13' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/checkbox_false.png' title='checkbox unchecked' alt='checkbox_false.png' width='13' height='13' style='vertical-align:middle'>"+
                             " ).</p>"+
                             "<p>The layer sequence defines the mapping hierarchy. Thus, the topmost layer will be mapped over the following layers. You can change the layer sequence by holding the left <i>mouse button</i> down and moving a selected layer to the required position.</p>"+
                             "<div style='font-size:11px'>"+
-                            "<img class='img' src='classic/resources/img/helpPage/graphic_legend.png' title='Legende - Layer verschieben' alt'graphic_legend.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                            "<img class='img' src='classic/resources/img/helpPage/graphic_legend_en.png' title='Legend - Shifting a layer' alt'graphic_legend_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
                             "<b>8. Legend - Shifting a layer</b>"+
                             "</div><br />"+
                             "<p>Click on the plus icon "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_collapse_up.png' title='Knopf - zugeklappt' alt='button_collapse_up.png' width='11' height='11' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_collapse_up.png' title='show or hide layer information' alt='button_collapse_up.png' width='11' height='11' style='vertical-align:middle'>"+
                             " to the left of the layer name to show or hide the key to the symbols used in a layer. The window for each layer does not only comprise a description of that layer but also buttons for retrieving metadata "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_info.png' title='Knopf: Metadaten' alt='button_info.png' width='24' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_info.png' title='Metadata button' alt='button_info.png' width='24' height='24' style='vertical-align:middle'>"+
                             ", saving the layer "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_save.png' title='Knopf: Layer speichern' alt='button_save.png' width='24' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_save.png' title='Saving a layer' alt='button_save.png' width='24' height='24' style='vertical-align:middle'>"+
                             " and deleting the layer from the map view "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_delete.png' title='Knopf: Layer löschen' alt='button_delete.png' width='24' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_delete.png' title='Deleting a layer' alt='button_delete.png' width='24' height='24' style='vertical-align:middle'>"+
                             " as well as a slide bar to control the layer’s transparency "+
-                            "<img class='img' src='classic/resources/img/helpPage/slider_transparent.png' title='Schieberegler: Transparenz des Layers einstellen' alt='slider_transparent.png' width='100' height='15' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/slider_transparent.png' title='Slide bar - layer transparency' alt='slider_transparent.png' width='100' height='15' style='vertical-align:middle'>"+
                             ". If filter settings are provided for a layer, the window also comprises a button for changing the filter properties "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_openFilter.png' title='Knopf: Filtereinstellungen' alt='button_openFilter.png' width='24' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_openFilter.png' title='Filter properties' alt='button_openFilter.png' width='24' height='24' style='vertical-align:middle'>"+
                             ". The metadata window contains information on the layer ID, name, source, service type and layer type. If you wish to save a layer, press the save button and confirm the download. Deleting a layer will remove the object from the legend and thus from the map. This must also be confirmed in the info window that appears.</p>"+
                             "<p>The buttons shown at the bottom of the legend relate to all layers within the legend. You can thus show "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_collapseAll_down.png' title='Knopf: Alle Legenden einklappen' alt='button_collapseAll_down.png' width='24' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_collapseAll_down.png' title='Show all details' alt='button_collapseAll_down.png' width='24' height='24' style='vertical-align:middle'>"+
                             " or hide "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_collapseAll_up.png' title='Knopf: Alle Legenden ausklappen' alt='button_collapseAll_up.png' width='24' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_collapseAll_up.png' title='Hide all details' alt='button_collapseAll_up.png' width='24' height='24' style='vertical-align:middle'>"+
                             " all details relating to the layers in the legend with a single click. A click on the dustbin icon "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_rubbishBin.png' title='Knopf: Alle Layer entfernen' alt='button_rubbishBin.png' width='24' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_rubbishBin.png' title='Delete all layers' alt='button_rubbishBin.png' width='24' height='24' style='vertical-align:middle'>"+
                             " will delete all layers, except the standard layers, from the legend and thus from the map.</p>"+
                             "</div>"
                 },
@@ -780,14 +788,14 @@
                     "html": "<h2>9. Geographical overview</h2>"+
                             "<div>"+
                             "<p>The geographical overview comprises an overview map and a scalebar. Open the overview map by clicking on the globe icon "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_overviewMap.png' title='Knopf: Übersichtskarte öffnen' alt='button_overviewMap.png' width='28' height='28' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/button_overviewMap.png' title='Overview map button' alt='button_overviewMap.png' width='28' height='28' style='vertical-align:middle'>"+
                             ". This map provides an overview of the current map view on a smaller scale. The blue window in the overview map represents the section of the current view. A click on the desired region will shift the view so that it is centred at this location (cf. Figure <i>9. Overview map</i>).</p>"+
                             "<div style='font-size:11px'>"+
-                            "<img class='img' src='classic/resources/img/helpPage/graphic_overviewMap.png' title='Übersichtskarte' alt='graphic_overviewMap.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                            "<img class='img' src='classic/resources/img/helpPage/graphic_overviewMap.png' title='Overview map' alt='graphic_overviewMap.png' style='max-height: 100%; max-width: 100%;'><br>"+
                             "<b>9. Overview map</b>"+
                             "</div><br />"+
                             "<p>The scalebar "+
-                            "<img class='img' src='classic/resources/img/helpPage/info_scaleBar.png' title='Maßstabsleiste' alt='info_scaleBar.png' width='72' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/info_scaleBar.png' title='Scalebar' alt='info_scaleBar.png' width='72' height='24' style='vertical-align:middle'>"+
                             " serves as a reference to the current map scale. It thus helps to compare the current view. The scalebar varies by length according to the zoom level. It shows the length in metres (m) or kilometres (km).</p>"+
                             "<p>As long as the mouse pointer is in the map, the geographical coordinates of the <i>mouse pointer's</i> current position are displayed to the right of the scalebar.</p>"+
                             "</div>"
@@ -957,29 +965,29 @@
         "config": {
             "data": {
                 "title": "Help",
-                "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Vorbemerkung</h1>",
-                "helpPrefaceHtml": "<h2> Vorbemerkung </h2>"+
-                    "<div>Das GeoPortal des "+
-                    "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz)</a>"+
-                    " stellt Daten und Dienste sowie Darstellungswerkzeuge zur Verfügung, um einen Überblick über die im BfS erhobenen und zusammengeführten Messdaten zu ermitteln.</div>"+
+                "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Introductory Note</h1>",
+                "helpPrefaceHtml":
+                    "<div>Geoportal by "+
+                    "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz - Federal Office for Radiation Protection)</a>"+
+                    " provides data and services as well as visualization tools in order to give an overview of the measurement data collected and consolidated at BfS.</div>"+
                     "<div>"+
-                    "<p>Für die Bereitstellung von Geoinformationen haben gesetzliche Grundlagen, wie das "+
-                    "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>Geodatenzugangsgesetz (GeoZG)</a>"+
-                    " als Umsetzung der Europäische "+
-                    "<a href='http://inspire.ec.europa.eu/' target='_blank'>INSPIRE Richtlinie</a>"+
-                    ", in den vergangenen Jahren die technischen Entwicklungen und "+
-                    "<a href='http://www.opengeospatial.org/standards' target='_blank'>Normierungen</a>"+
-                    " von Such-, Darstellungs- und Download-Dienste erheblich vorangetrieben.</p>"+
-                    "<p>Unter anderem wurden dadurch nutzerfreundlich Zugriffe auf Dienste anderer Quellen möglich, wie dies zentral im "+
-                    "<a href='http://www.geoportal.de/DE/Geoportal/geoportal.html?lang=de' target='_blank'>GeoPortal-Deutschland</a>"+
-                    " aber auch in der vorliegenden GIS-Software des BfS möglich ist.</p>"+
-                    "<p>Das BfS ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>"+
+                    "<p>Over the past few years, the relevant legal provisions and requirements, such as the "+
+                    "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>German Geodata Access Act (GeoZG)</a>"+
+                    " that implements the "+
+                    "<a href='http://inspire.ec.europa.eu/' target='_blank'>European INSPIRE Directive</a>"+
+                    ", have contributed to significant advances in the technical development and "+
+                    "<a href='http://www.opengeospatial.org/standards' target='_blank'>standardization</a>"+
+                    " of search, visualization and download services with respect to the provision of geodata.</p>"+
+                    "<p>This has led to user-friendly access to the services provided by other sources. A central service is provided by "+
+                    "<a href='http://www.geoportal.de/EN/Geoportal/geoportal.html?lang=en' target='_blank'>Geoportal-Deutschland</a>"+
+                    ", but you can also use this GIS software provided by BfS.</p>"+
+                    "<p>BfS endeavours to constantly expand the availability of information beyond such standardized services.</p>"+
                     "</div>"+
-                    "<div>Diese Anwendung soll nicht nur helfen die gewünschten Daten zu finden und geographisch darzustellen, sondern wenn möglich auch nach individuellen Bedürfnissen zu analysieren. Zeitreihendarstellungen oder Säulendiagramme sind dabei erste Schritte, die zukünftig noch ausgebaut werden sollen.</div>"+
-                    "<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe BfS Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software "+
-                    "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html' target='_blank'>(Kurzmeldung des BfS)</a>"+
+                    "<div>This application cannot only be used to find the desired data and represent it geographically, but it is also aimed at analysing data according to the user’s individual requirements. The current representations of time series or bar charts are only the first steps. We intend to refine and expand the application’s functionalities in the future.</div>"+
+                    "<div>We are implementing a transparent information policy by providing the data as open data (cf. BfS Geoportal - Imprint/Nutzungsbedingungen) and by developing our applications in the form of open source software "+
+                    "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/EN/2017/0102-bfs-open-source.html' target='_blank'>(message by BfS)</a>"+
                     ".</div>"+
-                    "<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>",
+                    "<div>This development concept ensures an effective, non-profit use of resources.</div>",
                 "helpQuickRefTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>Brief overview</h1>",
                 "helpQuickRefHtml": "<div><img class='img' src='modern/resources/img/helpPage/mobile_graphic_overview_en.png' title='Overview' alt='mobile_graphic_overview_en.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
                             "<ol>"+
