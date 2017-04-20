@@ -112,6 +112,10 @@ Ext.define('Koala.view.window.HelpModel', {
                         content: '{settings.help.html}',
                         leaf: true
                     }, {
+                        text: '{settings.imprint.title}',
+                        content: '{settings.imprint.html}',
+                        leaf: true
+                    }, {
                         text: '{settings.language.title}',
                         content: '{settings.language.html}',
                         leaf: true
