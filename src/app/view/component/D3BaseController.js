@@ -803,8 +803,9 @@ Ext.define('Koala.view.component.D3BaseController', {
         var chartSource = (new XMLSerializer()).serializeToString(chartNode);
         var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
                 unescape(encodeURIComponent(chartSource)));
-        var chartImageWidth = chartNode.clientWidth;
-        var chartImageHeight = chartNode.clientHeight;
+
+        var chartImageWidth = chartNode.getBoundingClientRect().width;
+        var chartImageHeight = chartNode.getBoundingClientRect().height;
         var chartImageObject = new Image(chartImageWidth, chartImageHeight);
         chartImageObject.src = chartDataUri;
 
@@ -817,8 +818,8 @@ Ext.define('Koala.view.component.D3BaseController', {
         var legendSource = (new XMLSerializer()).serializeToString(legendNode);
         var legendDataUri = 'data:image/svg+xml;base64,'+ btoa(
                 unescape(encodeURIComponent(legendSource)));
-        var legendImageWidth = legendNode.clientWidth;
-        var legendImageHeight = legendNode.clientHeight;
+        var legendImageWidth = legendNode.getBoundingClientRect().width;
+        var legendImageHeight = legendNode.getBoundingClientRect().height;
         var legendImageObject = new Image(legendImageWidth, legendImageHeight);
         legendImageObject.src = legendDataUri;
 
