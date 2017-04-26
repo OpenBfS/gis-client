@@ -613,7 +613,7 @@ Ext.define('Koala.util.Layer', {
             if (!mapComp.getPlugin) {
                 return;
             }
-            var hoverPlugin = mapComp.getPlugin('hover');
+            var hoverPlugin = mapComp.getPlugin('hoverBfS');
 
             if (hoverPlugin) {
                 layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts, hoverPlugin);
