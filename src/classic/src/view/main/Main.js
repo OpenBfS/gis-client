@@ -167,6 +167,11 @@ Ext.define('Koala.view.main.Main', {
             constrain: true,
             minWidth: 220,
             maxWidth: 700,
+            hideCollapseTool: false,
+            collapseDirection: 'top',
+            header: {
+                overCls: 'k-over-clickable'
+            },
             dockedItems: [{
                 xtype: 'buttongroup',
                 columns: 3,
@@ -317,6 +322,7 @@ Ext.define('Koala.view.main.Main', {
         },
         legendPanelConfig: {
             xtype: 'k-panel-routing-legendtree',
+            hideCollapseTool: false,
             resizable: true,
             constrain: true,
             resizeHandles: 'w nw n',

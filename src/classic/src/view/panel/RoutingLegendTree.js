@@ -50,6 +50,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
     hasRoutingListeners: false,
 
+    header: {
+        overCls: 'k-over-clickable'
+    },
+
     listeners: {
         selectionchange: 'onSelectionChange',
         beforerender: 'bindUtcBtnToggleHandler',
