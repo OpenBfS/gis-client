@@ -350,18 +350,23 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
             // The override has to be based on the unmodified classname in
             // this case
             var currentClass = Ext.ClassManager.get(className);
-
             if (currentClass && currentClass.getConfigurator) {
                 var configurator = currentClass.getConfigurator();
                 if (configurator && configurator.values &&
                     configurator.values.viewModel) {
-                    var type = configurator.values.viewModel.type;
-                    if (!Ext.isEmpty(type)) {
+                    var viewModel = configurator.values.viewModel;
+                    var type = viewModel.type;
+                    // if the component has an own viewModel instance
+                    if (!Ext.isEmpty(type) || Ext.isString(viewModel)) {
+                        var viewName = type || viewModel;
                         var viewClassName = Ext.ClassManager.getName(
-                                Ext.ClassManager.getByAlias('viewmodel.' +
-                                    type));
+                                Ext.ClassManager
+                                    .getByAlias('viewmodel.' + viewName));
                         baseLocaleObj.override = viewClassName;
                         Ext.define(viewClassName, baseLocaleObj);
+                    } else if (!Ext.isEmpty(viewModel)) {
+                        // if the component has an inline viewModel
+                        Ext.apply(viewModel.data, locale.config.data);
                     }
                 }
             }
@@ -371,7 +376,11 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
             instantiatedClasses = cq(Ext.String.format(cqTpl, className));
             // set the locale for each class
             Ext.each(instantiatedClasses, function(clazz) {
-                clazz.getViewModel().setData(locale.config.data);
+                // Check if the locale contains an expected structure…
+                if ('config' in locale && 'data' in locale.config) {
+                    clazz.getViewModel().setData(locale.config.data);
+                }
+                // clazz.getViewModel().setData(locale.config.data);
             });
         });
     },

@@ -188,23 +188,36 @@
     },
     "Koala.view.form.Print": {
         "config": {
-            "serverUploadSuccessTitle": "Druck erfolgreich",
-            "serverUploadSuccess": "Druck wurde erfolgreich initiiert.",
-            "serverErrorTitle": "Fehler beim Druck",
-            "serverError": "Ein serverseitiger Fehler trat bei der Bearbeitung des Drucks auf. Interner Status: {0}",
-            "disablePopupBlocker": "Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
-            "disablePopupBlockerTitle": "Popup-Blocker aktiviert?",
-            "printLegendsFieldSetTitle": "Legenden drucken",
-            "unexpectedResponseTitle": "Unerwartete Antwort",
-            "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort.",
-            "printButtonPrefix": "Dokument",
-            "downloadButtonSuffix": "herunterladen",
-            "downloadOngoingMiddleText": " wird vorbereitet",
-            "mapBboxLabel": "BBOX",
-            "mapBboxButton": "Info",
-            "warnPrintTimedOutTitle": "Druckfehler",
-            "warnPrintTimedOutText": "Die Druckerzeugung hat das erlaubte Zeitlimit überschritten.",
-            "updateLegendtext": "Legendtext"
+            "data": {
+                "title": "Drucken",
+                "labelDpi": "DPI",
+                "printButtonSuffix": "anfordern",
+                "downloadButtonPrefix": "Download",
+                "printFormat": "pdf",
+                "printAppFieldSetTitle": "Vorlage",
+                "genericFieldSetTitle": "Einstellungen",
+                "formatComboLabel": "Format",
+                "layoutComboLabel": "Layout",
+                "attributesTitle": "Eigenschaften",
+                "mapTitleLabel": "Kartentitel",
+                "serverUploadSuccessTitle": "Druck erfolgreich",
+                "serverUploadSuccess": "Druck wurde erfolgreich initiiert.",
+                "serverErrorTitle": "Fehler beim Druck",
+                "serverError": "Ein serverseitiger Fehler trat bei der Bearbeitung des Drucks auf. Interner Status: {0}",
+                "disablePopupBlocker": "Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
+                "disablePopupBlockerTitle": "Popup-Blocker aktiviert?",
+                "printLegendsFieldSetTitle": "Legenden drucken",
+                "unexpectedResponseTitle": "Unerwartete Antwort",
+                "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort.",
+                "printButtonPrefix": "Dokument",
+                "downloadButtonSuffix": "herunterladen",
+                "downloadOngoingMiddleText": " wird vorbereitet",
+                "mapBboxLabel": "BBOX",
+                "mapBboxButton": "Info",
+                "warnPrintTimedOutTitle": "Druckfehler",
+                "warnPrintTimedOutText": "Die Druckerzeugung hat das erlaubte Zeitlimit überschritten.",
+                "updateLegendtext": "Legendtext"
+            },
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -828,6 +841,23 @@
             "data": {
                 "tooltip": "WMS hinzufügen...",
                 "text": "WMS"
+            }
+        }
+    },
+    "BasiGX.view.form.Print": {
+        "config": {
+            "data": {
+                "title": "Drucken",
+                "labelDpi": "DPI",
+                "printButtonSuffix": "anfordern",
+                "downloadButtonPrefix": "Download",
+                "printFormat": "pdf",
+                "printAppFieldSetTitle": "Vorlage",
+                "genericFieldSetTitle": "Einstellungen",
+                "formatComboLabel": "Format",
+                "layoutComboLabel": "Layout",
+                "attributesTitle": "Eigenschaften",
+                "mapTitleLabel": "Kartentitel"
             }
         }
     },

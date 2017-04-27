@@ -188,23 +188,36 @@
     },
     "Koala.view.form.Print": {
         "config": {
-            "serverUploadSuccessTitle": "fr:Druck erfolgreich",
-            "serverUploadSuccess": "fr:Druck wurde erfolgreich initiiert.",
-            "serverErrorTitle": "fr:Fehler beim Druck",
-            "serverError": "fr:Ein serverseitiger Fehler trat bei der Bearbeitung des Drucks auf. Interner Status: {0}",
-            "disablePopupBlocker": "fr:Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
-            "disablePopupBlockerTitle": "fr:Popup-Blocker aktiviert?",
-            "unexpectedResponseTitle": "fr:Unerwartete Antwort",
-            "printLegendsFieldSetTitle": "fr:Legenden drucken",
-            "unexpectedResponse": "fr:Der Druck lieferte eine unerwartete Antwort.",
-            "printButtonPrefix": "fr:Dokument",
-            "downloadButtonSuffix": "fr:herunterladen",
-            "downloadOngoingMiddleText": "fr: wird vorbereitet",
-            "mapBboxLabel": "fr:BBOX",
-            "mapBboxButton": "fr:Info",
-            "warnPrintTimedOutTitle": "fr:Druckfehler",
-            "warnPrintTimedOutText": "fr:Die Druckerzeugung hat das erlaubte Zeitlimit überschritten.",
-            "updateLegendtext": "fr:Legendtext"
+            "data": {
+                "title": "fr:Drucken",
+                "labelDpi": "fr:DPI",
+                "printButtonSuffix": "fr:anfordern",
+                "downloadButtonPrefix": "fr:Download",
+                "printFormat": "fr:pdf",
+                "printAppFieldSetTitle": "fr:Vorlage",
+                "genericFieldSetTitle": "fr:Einstellungen",
+                "formatComboLabel": "fr:Format",
+                "layoutComboLabel": "fr:Layout",
+                "attributesTitle": "fr:Eigenschaften",
+                "mapTitleLabel": "fr:Kartentitel",
+                "serverUploadSuccessTitle": "fr:Druck erfolgreich",
+                "serverUploadSuccess": "fr:Druck wurde erfolgreich initiiert.",
+                "serverErrorTitle": "fr:Fehler beim Druck",
+                "serverError": "fr:Ein serverseitiger Fehler trat bei der Bearbeitung des Drucks auf. Interner Status: {0}",
+                "disablePopupBlocker": "fr:Bitte deaktivieren Sie etwaige Popup-Blocker und wiederholen Sie die letzte Aktion.",
+                "disablePopupBlockerTitle": "fr:Popup-Blocker aktiviert?",
+                "printLegendsFieldSetTitle": "fr:Legenden drucken",
+                "unexpectedResponseTitle": "fr:Unerwartete Antwort",
+                "unexpectedResponse": "fr:Der Druck lieferte eine unerwartete Antwort.",
+                "printButtonPrefix": "fr:Dokument",
+                "downloadButtonSuffix": "fr:herunterladen",
+                "downloadOngoingMiddleText": "fr: wird vorbereitet",
+                "mapBboxLabel": "fr:BBOX",
+                "mapBboxButton": "fr:Info",
+                "warnPrintTimedOutTitle": "fr:Druckfehler",
+                "warnPrintTimedOutText": "fr:Die Druckerzeugung hat das erlaubte Zeitlimit überschritten.",
+                "updateLegendtext": "fr:Legendtext"
+            },
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -802,6 +815,23 @@
             "data": {
                 "tooltip": "fr:WMS hinzufügen...",
                 "text": "fr:WMS"
+            }
+        }
+    },
+    "BasiGX.view.form.Print": {
+        "config": {
+            "data": {
+                "title": "fr:Drucken",
+                "labelDpi": "fr:DPI",
+                "printButtonSuffix": "fr:anfordern",
+                "downloadButtonPrefix": "fr:Download",
+                "printFormat": "fr:pdf",
+                "printAppFieldSetTitle": "fr:Vorlage",
+                "genericFieldSetTitle": "fr:Einstellungen",
+                "formatComboLabel": "fr:Format",
+                "layoutComboLabel": "fr:Layout",
+                "attributesTitle": "fr:Eigenschaften",
+                "mapTitleLabel": "fr:Kartentitel"
             }
         }
     },
