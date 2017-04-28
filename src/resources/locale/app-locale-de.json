@@ -79,6 +79,18 @@
             }
         }
     },
+    "Koala.view.container.RedliningToolsContainer": {
+        "config": {
+            "data": {
+                "drawPointBtnTooltip": "Punkt zeichnen",
+                "drawLinesBtnTooltip": "Strecke zeichnen",
+                "drawPolygonsBtnTooltip": "Fläche zeichnen",
+                "modifyObjectBtnTooltip": "Zeichenobjekt modifzieren",
+                "deleteObjectBtnTooltip": "Zeichenobjekt löschen",
+                "clearObjectsBtnTooltip": "Alle Zeicehnobjekte löschen"
+            }
+        }
+    },
     "Koala.view.container.styler.Filter": {
         "config": {
             "data": {

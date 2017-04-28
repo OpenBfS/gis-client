@@ -2,8 +2,9 @@
  * This is is imported by virtue of "sass.etc" in "app.json".
  */
  $fa-font-path: "../resources/fonts";
-@import "font-awesome/font-awesome.scss";
+ $enable-font-awesome: dynamic(true);
 
 @import "font-open-sans-condensed/font-open-sans-condensed.scss";
-
+@import "fonts/font-awesome/font-awesome.scss";
+@import "fonts/flaticon/_flaticon.scss";
 @import "BasiGX.scss";
