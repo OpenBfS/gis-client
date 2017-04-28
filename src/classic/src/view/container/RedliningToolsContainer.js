@@ -36,24 +36,40 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
     width: 150,
 
     config: {
-        postitPictureUrl: null,
-        redlinePointStyle: null,
-        redlineLineStringStyle: null,
-        redlinePolygonStyle: null,
-        redlineStyleFunction: function(feature) {
-            var me = Ext.ComponentQuery.query('koala-container-redlining')[0];
-            if (!(feature instanceof ol.Feature)) {
-                return;
-            }
-            var geometry = feature.getGeometry();
-            if (geometry instanceof ol.geom.Point) {
-                return me.getRedlinePointStyle();
-            } else if (geometry instanceof ol.geom.LineString) {
-                return me.getRedlineLineStringStyle();
-            } else {
-                return me.getRedlinePolygonStyle();
-            }
-        }
+        redlineLayerStyle: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#ffcc33',
+                width: 2
+            }),
+            image: new ol.style.Circle({
+                radius: 7,
+                fill: new ol.style.Fill({
+                    color: '#ffcc33'
+                })
+            })
+        }),
+        drawInteractionStyle: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.5)',
+                lineDash: [10, 10],
+                width: 2
+            }),
+            image: new ol.style.Circle({
+                radius: 5,
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(0, 0, 0, 0.7)'
+                }),
+                fill: new ol.style.Fill({
+                    color: 'rgba(255, 255, 255, 0.2)'
+                })
+            })
+        })
     },
 
     map: null,
@@ -63,6 +79,36 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
     redlineFeatures: null,
 
     stateChangeActive: false,
+
+    /**
+     * Overlay to show the help messages.
+     * @type {ol.Overlay}
+     */
+    helpTooltip: null,
+
+    /**
+     * The help tooltip element.
+     * @type {Element}
+     */
+    helpTooltipElement: null,
+
+    /**
+     * The measure tooltip element.
+     * @type {Element}
+     */
+    measureTooltipElement: null,
+
+    /**
+     * Overlay to show the measurement.
+     * @type {ol.Overlay}
+    */
+    measureTooltip: null,
+
+    /**
+     * Currently drawn feature.
+     * @type {ol.Feature}
+     */
+    sketch: null,
 
     defaults: {
         xtype: 'button',
@@ -77,19 +123,28 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         bind: {
             tooltip: '{drawPointBtnTooltip}'
         },
-        glyph: 'xf100@Flaticon'
+        glyph: 'xf100@Flaticon',
+        listeners: {
+            toggle: 'onDrawPointsBtnToggle'
+        }
     }, {
         name: 'drawLinesBtn',
         bind: {
             tooltip: '{drawLinesBtnTooltip}'
         },
-        glyph: 'xf104@Flaticon'
+        glyph: 'xf104@Flaticon',
+        listeners: {
+            toggle: 'onDrawLinesBtnToggle'
+        }
     }, {
         name: 'drawPolygonsBtn',
         bind: {
             tooltip: '{drawPolygonsBtnTooltip}'
         },
-        glyph: 'xf107@Flaticon'
+        glyph: 'xf107@Flaticon',
+        listeners: {
+            toggle: 'onDrawPolygonsBtnToggle'
+        }
     }, {
         name: 'modifyObjectBtn',
         bind: {
@@ -140,46 +195,106 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
             me.redliningVectorLayer = new ol.layer.Vector({
                 name: 'redliningVectorLayer',
                 source: new ol.source.Vector({features: me.redlineFeatures}),
-                style: me.getRedlineStyleFunction()
+                style: me.getRedlineLayerStyle()
             });
             me.redliningVectorLayer.set(displayInLayerSwitcherKey, false);
             me.map.addLayer(me.redliningVectorLayer);
         }
 
+        me.createHelpTooltip();
+        me.createMeasureTooltip();
+
+        me.map.on('pointermove', me.pointerMoveHandler, me);
+
         me.callParent(arguments);
+    },
+
+    /**
+    * Handle pointer move.
+    * @param {ol.MapBrowserEvent} evt
+    */
+    pointerMoveHandler: function(evt) {
+        var me = this;
+        var continuePolygonMsg = 'Click to continue drawing the polygon';
+        var continueLineMsg = 'Click to continue drawing the line';
+
+        if (evt.dragging) {
+            return;
+        }
+        var helpMsg = 'Click to start drawing';
+
+        if (me.sketch) {
+            var geom = me.sketch.getGeometry();
+            if (geom instanceof ol.geom.Polygon) {
+                helpMsg = continuePolygonMsg;
+            } else if (geom instanceof ol.geom.LineString) {
+                helpMsg = continueLineMsg;
+            }
+        }
+
+        me.helpTooltipElement.innerHTML = helpMsg;
+        me.helpTooltip.setPosition(evt.coordinate);
+    },
+
+    /**
+     * Creates a new measure tooltip
+     */
+    createMeasureTooltip: function() {
+        var me = this;
+        if (me.measureTooltipElement) {
+            me.measureTooltipElement.parentNode.removeChild(me.measureTooltipElement);
+        }
+        me.measureTooltipElement = document.createElement('div');
+        me.measureTooltipElement.className = 'tooltip tooltip-measure';
+        me.measureTooltip = new ol.Overlay({
+            element: me.measureTooltipElement,
+            offset: [0, -15],
+            positioning: 'bottom-center'
+        });
+        me.map.addOverlay(me.measureTooltip);
+    },
+
+    /**
+    * Creates a new help tooltip
+    */
+    createHelpTooltip: function() {
+        var me = this;
+        if (me.helpTooltipElement) {
+            me.helpTooltipElement.parentNode.removeChild(me.helpTooltipElement);
+        }
+        me.helpTooltipElement = document.createElement('div');
+        me.helpTooltipElement.className = 'tooltip x-hidden';
+        me.helpTooltip = new ol.Overlay({
+            element: me.helpTooltipElement,
+            offset: [15, 0],
+            positioning: 'center-left'
+        });
+        me.map.addOverlay(me.helpTooltip);
+    },
+
+    /**
+     *
+     */
+    fireRedliningChanged: function(evt) {
+        var me = this;
+        var feat = evt.element;
+        me.adjustFeatureStyle(feat);
+    },
+
+    /**
+     * Sets currently defined style to the new added features.
+     * @param {ol.Feature} feature drawn feature
+     */
+    adjustFeatureStyle: function(feature) {
+        var me = this;
+        var controller = me.getController();
+
+        if (controller.stateChangeActive) {
+            return;
+        }
+
+        if (feature) {
+            feature.setStyle(me.getRedlineLayerStyle());
+        }
     }
-
-    // /**
-    //  *
-    //  */
-    // fireRedliningChanged: function(evt) {
-    //     var me = this;
-    //     var feat = evt.element;
-    //     me.adjustFeatureStyle(feat);
-    // },
-
-    // /**
-    //  * Sets currently defined style to the new added features.
-    //  * @param {ol.Feature} feature drawn feature
-    //  */
-    // adjustFeatureStyle: function(feature) {
-    //     var me = this;
-    //     var controller = me.getController();
-    //
-    //     if (controller.stateChangeActive) {
-    //         return;
-    //     }
-    //
-    //     if (feature) {
-    //         var geometry = feature.getGeometry();
-    //
-    //         if (geometry instanceof ol.geom.Point) {
-    //             feature.setStyle(me.getRedlinePointStyle());
-    //         } else if (geometry instanceof ol.geom.LineString) {
-    //             feature.setStyle(me.getRedlineLineStringStyle());
-    //         } else {
-    //             feature.setStyle(me.getRedlinePolygonStyle());
-    //         }
-    //     }
-    // }
 });
