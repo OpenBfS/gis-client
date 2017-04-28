@@ -245,6 +245,7 @@
                 "basigx-button-zoomout-tooltip": "Herauszoomen",
                 "basigx-button-zoomtoextent-tooltip": "Auf Startkartenansicht rezentrieren",
                 "basigx-button-togglelegend-tooltip": "Legende ein-/ausklappen",
+                "k-button-togglefullscreen-tooltip": "Zwischen Vollbildanzeige und Normalansicht wechseln",
                 "importLocalDataButtonText": "Import",
                 "importLocalDataButtonTooltip": "Lokale Dateien importieren",
                 "importLocalDataWindowText": "Import",

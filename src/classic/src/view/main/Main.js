@@ -39,6 +39,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.util.AppContext',
 
         'Koala.view.button.Permalink',
+        'Koala.view.button.toggleFullscreen',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
@@ -91,6 +92,8 @@ Ext.define('Koala.view.main.Main', {
             }, {
                 xtype: 'basigx-button-zoomtoextent'
             }, {
+                xtype: 'k-button-togglefullscreen'
+            },{
                 xtype: 'k-button-permalink'
             }, {
                 xtype: 'basigx-button-togglelegend'
@@ -145,10 +148,11 @@ Ext.define('Koala.view.main.Main', {
                 // Bind the tooltops of certain map button
                 // TODO refactor BasiGX to do this in a more sane way
                 var btnSelectors = [
-                    'basigx-button-zoomin',
-                    'basigx-button-zoomout',
-                    'basigx-button-zoomtoextent',
-                    'basigx-button-togglelegend'
+                    "basigx-button-zoomin",
+                    "basigx-button-zoomout",
+                    "basigx-button-zoomtoextent",
+                    "basigx-button-togglelegend",
+                    "k-button-togglefullscreen"
                 ];
                 var btns = this.query(btnSelectors.join(','));
                 Ext.each(btns, function(b) {
