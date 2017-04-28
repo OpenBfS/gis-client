@@ -31,7 +31,9 @@ Ext.define('Koala.view.form.Print', {
         'GeoExt.data.serializer.XYZ',
 
         'Koala.view.form.IrixFieldSet',
-        'Koala.util.Object'
+        'Koala.util.Object',
+
+        'Koala.view.form.PrintModel'
     ],
 
     maxHeight: null,
@@ -44,23 +46,10 @@ Ext.define('Koala.view.form.Print', {
         timeoutMilliseconds: 60000,
         // can be overriden via appContext.json: urls/print-transparent-img
         transparentImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif',
-        transparentColor: 'rgba(0,0,0,0)',
-        serverUploadSuccessTitle: '',
-        serverUploadSuccess: '',
-        serverErrorTitle: '',
-        serverError: '',
-        disablePopupBlockerTitle: '',
-        disablePopupBlocker: '',
-        printLegendsFieldSetTitle: '',
-        unexpectedResponseTitle: '',
-        unexpectedResponse: '',
-        printButtonPrefix: '',
-        downloadButtonSuffix: '',
-        downloadOngoingMiddleText: '',
-        warnPrintTimedOutTitle: '',
-        warnPrintTimedOutText: '',
-        updateLegendtext: ''
+        transparentColor: 'rgba(0,0,0,0)'
     },
+
+    viewModel: 'k-form-print',
 
     initComponent: function() {
         var me = this;
@@ -100,8 +89,6 @@ Ext.define('Koala.view.form.Print', {
 
         me.on('beforeattributefieldsadd', me.onBeforeAttributeFieldsAdd);
         me.on('attributefieldsadd', me.onAttributeFieldsAdd);
-
-        me.setFixedCreatePrintBtnText();
     },
 
     listeners: {
@@ -184,7 +171,10 @@ Ext.define('Koala.view.form.Print', {
     getLegendAttributeFields: function() {
         var me = this;
         var legendsFieldset = Ext.create('Ext.form.FieldSet', {
-            title: this.getPrintLegendsFieldSetTitle(),
+            viewModel: me.getViewModel(),
+            bind: {
+                title: '{printLegendsFieldSetTitle}'
+            },
             name: 'legendsFieldset',
             checkboxName: 'legendsFieldsetCheckBox',
             checkboxToggle: true
@@ -238,7 +228,6 @@ Ext.define('Koala.view.form.Print', {
         // The layers are initially not synchronous with the layerTree. So we
         // reverse the Array initially.
         layers.reverse();
-
 
         Ext.each(layers, function(layer) {
             if (layer.get('visible') && layer.get('allowPrint')) {
@@ -297,7 +286,9 @@ Ext.define('Koala.view.form.Print', {
                     xtype: 'textfield',
                     name: layer.get('name') + '_legendtext',
                     editable: false,
-                    fieldLabel: me.getUpdateLegendtext(),
+                    bind: {
+                        fieldLabel: '{updateLegendtext}'
+                    },
                     value: legendTextHtml,
                     allowBlank: true
                 }, {
@@ -535,27 +526,6 @@ Ext.define('Koala.view.form.Print', {
     },
 
     /**
-     * Called in init component, this method removes the standard BasiGX binding
-     * of the createPrint and downloadPrint buttons, and configures them to use
-     * a static text.
-     */
-    setFixedCreatePrintBtnText: function() {
-        var me = this;
-        var vm = me.getViewModel();
-        var createPrintBtn = me.down('button[name="createPrint"]');
-        var downloadPrintBtn = me.down('button[name="downloadPrint"]');
-
-        // the create button
-        createPrintBtn.setText(
-            me.getPrintButtonPrefix() + ' ' + vm.get('printButtonSuffix')
-        );
-        // the download button
-        downloadPrintBtn.setText(
-            me.getPrintButtonPrefix() + ' ' + me.getDownloadButtonSuffix()
-        );
-    },
-
-    /**
      * Overrides the default createPrint method;
      */
     createPrint: function() {
@@ -790,10 +760,11 @@ Ext.define('Koala.view.form.Print', {
     /**
      */
     genericPostFailureHandler: function(response) {
-        var msg = this.getServerError();
+        var viewModel = this.getViewModel();
+        var msg = viewModel.get('serverError');
         msg = Ext.String.format(msg, response.status || 'n.a.');
         Ext.Msg.show({
-            title: this.getServerErrorTitle(),
+            title: viewModel.get('serverErrorTitle'),
             message: msg,
             buttons: Ext.Msg.OK,
             icon: Ext.Msg.WARNING
@@ -814,8 +785,8 @@ Ext.define('Koala.view.form.Print', {
 
         if (chosenRequestType === uploadOnly) {
             Ext.Msg.show({
-                title: me.getServerUploadSuccessTitle(),
-                message: me.getServerUploadSuccess(),
+                title: me.getViewModel().get('serverUploadSuccessTitle'),
+                message: me.getViewModel().get('serverUploadSuccess'),
                 buttons: Ext.Msg.OK,
                 icon: Ext.Msg.INFO
             });
@@ -846,16 +817,16 @@ Ext.define('Koala.view.form.Print', {
                 }
                 if (!success) {
                     Ext.Msg.show({
-                        title: me.getDisablePopupBlockerTitle(),
-                        message: me.getDisablePopupBlocker(),
+                        title: me.getViewModel().get('disablePopupBlockerTitle'),
+                        message: me.getViewModel().get('disablePopupBlocker'),
                         buttons: Ext.Msg.OK,
                         icon: Ext.Msg.INFO
                     });
                 }
             } else {
                 Ext.Msg.show({
-                    title: me.getUnexpectedResponseTitle(),
-                    message: me.getUnexpectedResponse(),
+                    title: me.getViewModel().get('unexpectedResponseTitle'),
+                    message: me.getViewModel().get('unexpectedResponse'),
                     buttons: Ext.Msg.OK,
                     icon: Ext.Msg.WARNING
                 });
@@ -872,7 +843,7 @@ Ext.define('Koala.view.form.Print', {
             .getValue();
 
         var dspElapsedMs = (elapsedMs/1000).toFixed(3) + ' s';
-        var loadMsg = format + ' ' + me.getDownloadOngoingMiddleText() + ': ' +
+        var loadMsg = format + ' ' + me.getViewModel().get('downloadOngoingMiddleText') + ': ' +
             dspElapsedMs;
         me.setLoading(loadMsg);
 
@@ -882,8 +853,8 @@ Ext.define('Koala.view.form.Print', {
             Ext.Msg.show({
                 buttons: Ext.MessageBox.OK,
                 icon: Ext.MessageBox.ERROR,
-                title: me.getWarnPrintTimedOutTitle(),
-                message: me.getWarnPrintTimedOutText()
+                title: me.getViewModel().get('warnPrintTimedOutTitle'),
+                message: me.getViewModel().get('warnPrintTimedOutText')
             });
 
         } else {
@@ -937,7 +908,9 @@ Ext.define('Koala.view.form.Print', {
         var mapFieldSet = me.down('fieldset[name=map]');
         var map = me.getMapComponent().getMap();
         var bboxTextfield = Ext.create('Ext.form.field.Text', {
-            fieldLabel: me.getMapBboxLabel(),
+            bind: {
+                fieldLabel: '{mapBboxLabel}'
+            },
             readOnly: true,
             labelWidth: 40,
             width: 150,
@@ -964,10 +937,14 @@ Ext.define('Koala.view.form.Print', {
                 {
                 //TODO update bbox of irix-upload sos-job
                     xtype: 'button',
-                    text: me.getMapBboxButton(),
+                    bind: {
+                        text: '{mapBboxButton}'
+                    },
                     margin: '0 0 0 55',
                     handler: function() {
-                        Ext.Msg.alert(me.getMapBboxButton(), '<b>'+me.getMapBboxLabel()+':</b> ' + bboxTextfield.getValue());
+                        Ext.Msg.alert(me.getViewModel().get('mapBboxButton'),
+                                '<b>' + me.getViewModel().get('mapBboxLabel') +
+                                ':</b> ' + bboxTextfield.getValue());
                     }
                 }]
         });

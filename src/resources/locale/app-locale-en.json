@@ -188,23 +188,36 @@
     },
     "Koala.view.form.Print": {
         "config": {
-            "serverUploadSuccessTitle": "Print successfully completed",
-            "serverUploadSuccess": "Print successfully initiated.",
-            "serverErrorTitle": "Print Error",
-            "serverError": "A server-side error occurred during the print process. Internal state: {0}",
-            "disablePopupBlocker": "Please disable any popup blocker and repeat the last action.",
-            "disablePopupBlockerTitle": "Popup blocker enabled?",
-            "unexpectedResponseTitle": "Unexpected Response",
-            "printLegendsFieldSetTitle": "Print Legends",
-            "unexpectedResponse": "Printing process returned unexpected response.",
-            "printButtonPrefix": "Document",
-            "downloadButtonSuffix": "Download",
-            "downloadOngoingMiddleText": " will be prepared",
-            "mapBboxLabel": "BBOX",
-            "mapBboxButton": "Info",
-            "warnPrintTimedOutTitle": "Printing Error",
-            "warnPrintTimedOutText": "Printing process has exceeded the valid time limit.",
-            "updateLegendtext": "en:Legendtext"
+            "data": {
+                "title": "en:Drucken",
+                "labelDpi": "en:DPI",
+                "printButtonSuffix": "en:anfordern",
+                "downloadButtonPrefix": "en:Download",
+                "printFormat": "en:pdf",
+                "printAppFieldSetTitle": "en:Vorlage",
+                "genericFieldSetTitle": "en:Einstellungen",
+                "formatComboLabel": "en:Format",
+                "layoutComboLabel": "en:Layout",
+                "attributesTitle": "en:Eigenschaften",
+                "mapTitleLabel": "en:Kartentitel",
+                "serverUploadSuccessTitle": "Print successfully completed",
+                "serverUploadSuccess": "Print successfully initiated.",
+                "serverErrorTitle": "Print Error",
+                "serverError": "A server-side error occurred during the print process. Internal state: {0}",
+                "disablePopupBlocker": "Please disable any popup blocker and repeat the last action.",
+                "disablePopupBlockerTitle": "Popup blocker enabled?",
+                "unexpectedResponseTitle": "Unexpected Response",
+                "printLegendsFieldSetTitle": "Print Legends",
+                "unexpectedResponse": "Printing process returned unexpected response.",
+                "printButtonPrefix": "Document",
+                "downloadButtonSuffix": "Download",
+                "downloadOngoingMiddleText": " will be prepared",
+                "mapBboxLabel": "BBOX",
+                "mapBboxButton": "Info",
+                "warnPrintTimedOutTitle": "Printing Error",
+                "warnPrintTimedOutText": "Printing process has exceeded the valid time limit.",
+                "updateLegendtext": "en:Legendtext"
+            },
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -815,6 +828,23 @@
             "data": {
                 "tooltip": "Add WMS...",
                 "text": "WMS"
+            }
+        }
+    },
+    "BasiGX.view.form.Print": {
+        "config": {
+            "data": {
+                "title": "en:Drucken",
+                "labelDpi": "en:DPI",
+                "printButtonSuffix": "en:anfordern",
+                "downloadButtonPrefix": "en:Download",
+                "printFormat": "en:pdf",
+                "printAppFieldSetTitle": "en:Vorlage",
+                "genericFieldSetTitle": "en:Einstellungen",
+                "formatComboLabel": "en:Format",
+                "layoutComboLabel": "en:Layout",
+                "attributesTitle": "en:Eigenschaften",
+                "mapTitleLabel": "en:Kartentitel"
             }
         }
     },
