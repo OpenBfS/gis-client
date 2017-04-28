@@ -42,11 +42,14 @@ Ext.define('Koala.view.main.MainController', {
         var toolBar = mapContainer.down('toolbar[cls="basigx-map-tools"]');
         var mapContainerHeight = mapContainer.getHeight() || 0;
         var toolbarHeight = toolBar.getHeight() || 0;
-        var gap = 20;
+        var gap = 200;
         // resize the tree within sane bounds to the maximum height available
         var h = mapContainerHeight - toolbarHeight - gap;
-        h = Ext.Number.constrain(h, 200, 1200); // minimum 200px, maximum 1200px
+        var maxH = mapContainerHeight - toolbarHeight - 20;
+        h = Ext.Number.constrain(h, 200, maxH); // minimum 200px, maximum maxH
         legendTree.setHeight(h);
+        //ensure that toolbar is always visible
+        legendTree.setMaxHeight(maxH);
         // …also check whether the tree is still anchored at the bottom-right
         // corner
         var legendTreePos = legendTree.getPosition();
