@@ -316,7 +316,8 @@ Ext.define('Koala.view.main.Main', {
                     hidden: true
                 },
                 {
-                    xtype: 'k-panel-themetree'
+                    xtype: 'k-panel-themetree',
+                    collapsed: false
                 }
             ]
         },
@@ -326,7 +327,7 @@ Ext.define('Koala.view.main.Main', {
             resizable: true,
             constrain: true,
             resizeHandles: 'w nw n',
-            collapsed: true,
+            collapsed: false,
             minWidth: 200,
             maxWidth: 700,
             listeners: {
