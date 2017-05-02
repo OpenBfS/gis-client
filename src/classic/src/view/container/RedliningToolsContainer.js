@@ -127,12 +127,12 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         xtype: 'button',
         scale: 'large',
         ui: 'default-toolbar',
-        margin: '0 0 10px 10px',
-        toggleGroup: 'draw'
+        margin: '0 0 10px 10px'
     },
 
     items: [{
         name: 'drawPointsBtn',
+        toggleGroup: 'draw',
         bind: {
             tooltip: '{drawPointBtnTooltip}'
         },
@@ -142,6 +142,7 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         }
     }, {
         name: 'drawLinesBtn',
+        toggleGroup: 'draw',
         bind: {
             tooltip: '{drawLinesBtnTooltip}'
         },
@@ -151,6 +152,7 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         }
     }, {
         name: 'drawPolygonsBtn',
+        toggleGroup: 'draw',
         bind: {
             tooltip: '{drawPolygonsBtnTooltip}'
         },
@@ -160,22 +162,31 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         }
     }, {
         name: 'modifyObjectBtn',
+        toggleGroup: 'draw',
         bind: {
             tooltip: '{modifyObjectBtnTooltip}'
         },
-        glyph: 'xf044@FontAwesome'
+        glyph: 'xf044@FontAwesome',
+        listeners: {
+            toggle: 'onModifyObjectBtnToggle'
+        }
     }, {
         name: 'deleteObjectBtn',
+        toggleGroup: 'draw',
         bind: {
             tooltip: '{deleteObjectBtnTooltip}'
         },
-        glyph: 'xf12d@FontAwesome'
+        glyph: 'xf12d@FontAwesome',
+        listeners: {
+            toggle: 'onDeleteObjectBtnToggle'
+        }
     }, {
         name: 'clearObjectsBtn',
         bind: {
             tooltip: '{clearObjectsBtnTooltip}'
         },
-        glyph: 'f014@FontAwesome'
+        glyph: 'f014@FontAwesome',
+        handler: 'onClearObjectsBtn'
     }],
 
     /**

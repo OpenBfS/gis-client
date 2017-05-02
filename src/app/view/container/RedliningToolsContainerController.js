@@ -161,18 +161,15 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
         var labelText = view.measureTooltipElement.innerHTML;
 
         if (geom.getType() === 'Point') {
-            var sourceProjection = this.view.map.getView().getProjection();
-            var targetProjection = ol.proj.get('EPSG:4326');
-            var geomClone = geom.clone().transform(sourceProjection,
-                targetProjection);
-
             tooltipPosition = geom.getCoordinates();
-            labelText = ol.coordinate.toStringXY(geomClone.getCoordinates(), 2);
+            labelText = me.formatCoordinates(geom);
         }
 
         var labelFeature = new ol.Feature({
             geometry: new ol.geom.Point(tooltipPosition),
-            text: labelText
+            text: labelText,
+            parentFeature: evt.feature,
+            isLabel: true
         });
 
         view.redliningVectorLayer.getSource().addFeature(labelFeature);
@@ -244,7 +241,7 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
      * @param {Ext.button.Button} btn
      * @param {Boolean} pressed toggle state
      */
-    onModifyBtnToggle: function(btn, pressed) {
+    onModifyObjectBtnToggle: function(btn, pressed) {
         var me = this,
             view = me.getView();
         if (!me.modifyInteraction) {
@@ -272,14 +269,55 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
         if (pressed) {
             me.modifyInteraction.setActive(true);
             me.modifySelectInteraction.setActive(true);
+            me.modifyInteraction.on('modifyend', me.updateLabel, me);
             me.modifyInteraction.on('modifyend',
                     view.fireRedliningChanged, view);
         } else {
             me.modifyInteraction.setActive(false);
             me.modifySelectInteraction.setActive(false);
+            me.modifyInteraction.un('modifyend', me.updateLabel, me);
             me.modifyInteraction.un('modifyend',
                     view.fireRedliningChanged, view);
         }
+    },
+
+    /**
+     * Updates the labelFeature of a feature. It updates the textcontent (and
+     * the position for polygons).
+     *
+     * @param {ol.interaction.Modify.Event} evt
+     */
+    updateLabel: function(evt) {
+        var me = this;
+        var view = me.getView();
+        var modifiedFeatures = evt.features;
+        var allFeatures = view.redliningVectorLayer.getSource().getFeatures();
+
+        modifiedFeatures.forEach(function(feature) {
+            allFeatures.forEach(function(label) {
+                if (label.get('isLabel') && label.get('parentFeature') === feature ) {
+                    var text;
+                    var featureGeom = feature.getGeometry();
+                    switch (featureGeom.getType()) {
+                        case 'Point':
+                            text = me.formatCoordinates(featureGeom);
+                            break;
+                        case 'LineString':
+                            text = me.formatLength(featureGeom);
+                            break;
+                        case 'Polygon':
+                            var interiorPoint = featureGeom.getInteriorPoint();
+                            label.setGeometry(interiorPoint);
+                            text = me.formatArea(featureGeom);
+                            break;
+                        default:
+                            text = label.get('text');
+                            break;
+                    }
+                    label.set('text', text);
+                }
+            });
+        }, me);
     },
 
     /**
@@ -289,9 +327,9 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
      * @param {Ext.button.Button} btn
      * @param {Boolean} pressed toggle state
      */
-    onDeleteBtnToggle: function(btn, pressed) {
-        var me = this,
-            view = me.getView();
+    onDeleteObjectBtnToggle: function(btn, pressed) {
+        var me = this;
+        var view = me.getView();
         if (!me.deleteSelectInteraction) {
             var removeFeatures = function(selFeatures) {
                 // find the matching feature in redlining layer
@@ -300,8 +338,21 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
                     if (feature) {
                         view.redlineFeatures.remove(feature);
                     }
-                    me.deleteSelectInteraction.getFeatures().
-                        remove(sf);
+                    me.deleteSelectInteraction.getFeatures().remove(sf);
+
+                    // remove a corresponding label or feature if label was clicked
+                    view.redlineFeatures.forEach(function(af) {
+                        if (sf.get('isLabel') && sf.get('parentFeature') === af ) {
+                            view.redlineFeatures.remove(af);
+                            me.deleteSelectInteraction.getFeatures().remove(af);
+                        }
+
+                        if (af.get('isLabel') && af.get('parentFeature') === sf ) {
+                            view.redlineFeatures.remove(af);
+                            me.deleteSelectInteraction.getFeatures().remove(af);
+                        }
+                    });
+
                     view.map.renderSync();
                 });
             };
@@ -335,13 +386,23 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
     },
 
     /**
+     * Click-Listener for the clera objects btn. It removes all drawn features
+     * from the map.
+     */
+    onClearObjectsBtn: function() {
+        var me = this;
+        var view = me.getView();
+        view.redliningVectorLayer.getSource().clear();
+    },
+
+    /**
     * A helper that returns a redline feature using WKT parser
     * @param {ol.Feature} clone cloned feature to be parsed
     * @return {ol.Feature} redlineFeat
     */
     getRedlineFeatFromClone: function(clone) {
-        var me = this,
-            view = me.getView();
+        var me = this;
+        var view = me.getView();
 
         var redlineFeat;
         var wktParser = new ol.format.WKT();
@@ -426,7 +487,22 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
     },
 
     /**
-     * format length output
+     * Returns a string representation of the coordinates of the point.
+     * @param {ol.geom.Point} point
+     * @return {string}
+     */
+    formatCoordinates: function(point) {
+        var me = this;
+        var view = me.getView();
+        var sourceProjection = view.map.getView().getProjection();
+        var targetProjection = ol.proj.get('EPSG:4326');
+        var geomClone = point.clone().transform(sourceProjection,
+            targetProjection);
+        return ol.coordinate.toStringXY(geomClone.getCoordinates(), 2);
+    },
+
+    /**
+     * Returns a string representation of the length of the line.
      * @param {ol.geom.LineString} line
      * @return {string}
      */
@@ -452,7 +528,7 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
     },
 
     /**
-     * format length output
+     * Returns a string representation of the area of the polygon.
      * @param {ol.geom.Polygon} polygon
      * @return {string}
      */
