@@ -16,6 +16,29 @@ div.feature-hover-popup {
 .basigx-header {
     background-color: #fff;
 }
+.basigx-header .x-btn-default-toolbar-small.x-btn-over {
+    background-image: -webkit-linear-gradient(top, #5b7792, #496886 50%, #456380 51%, #496886) !important;
+}
+.basigx-header .x-btn-over .x-btn-inner-default-toolbar-small {
+    color: #ffffff;
+}
+.basigx-header .x-form-trigger-over {
+    background-color: $base-color !important;
+}
+
+
+/**
+ * panel/ThemeTree.scss
+ */
+
+.x-btn-group .x-btn-default-toolbar-small.x-btn-over {
+    background-image: -webkit-linear-gradient(top, #5b7792, #496886 50%, #456380 51%, #496886) !important;
+}
+.x-btn-group .x-btn-over .x-btn-inner-default-toolbar-small {
+    color: #ffffff;
+}
+
+
 
 /**
  * panel/LayerSetChooser.scss
@@ -91,6 +114,21 @@ div.feature-hover-popup {
     left: auto !important;
     background-color: transparent !important;
 }
+
+.basigx-map-tools .x-btn-icon-el-default-toolbar-large {
+    color: $base-color !important;
+}
+
+.basigx-map-tools .x-btn-over .x-btn-icon-el-default-toolbar-large {
+    color: #ffffff !important;
+}
+
+.basigx-map-tools .x-btn-default-toolbar-large.x-btn-over {
+    background-image:  -webkit-linear-gradient(top, #5b7792, #496886 50%, #456380 51%, #496886) !important;
+}
+
+
+
 .basigx-overview-map {
     top: auto !important;
     bottom: 0 !important;
@@ -100,10 +138,12 @@ div.feature-hover-popup {
     top: auto !important;
     bottom: 5px !important;
     left: 5px !important;
+    background-color: $base-color !important;
 }
 .ol-scale-line {
     bottom: 5px;
     left: 50px;
+    background-color: $base-color !important;
 }
 .ol-scale-line.basigx-scaline-adjusted {
     left: 405px;

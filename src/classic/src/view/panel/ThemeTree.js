@@ -42,6 +42,7 @@ Ext.define("Koala.view.panel.ThemeTree", {
     height: 400,
 
     header: {
+        overCls: 'k-over-clickable',
         items: [
             {
                 xtype: 'k-component-texttool',

@@ -31,7 +31,7 @@ Ext.define('Koala.view.main.Main', {
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
 
-        'BasiGX.plugin.Hover',
+        'Koala.plugin.Hover',
         'BasiGX.view.panel.Header',
         'BasiGX.view.panel.MapContainer',
         'BasiGX.util.Animate',
@@ -39,6 +39,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.util.AppContext',
 
         'Koala.view.button.Permalink',
+        'Koala.view.button.toggleFullscreen',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
@@ -78,7 +79,7 @@ Ext.define('Koala.view.main.Main', {
             xtype: 'k-component-map',
             appContextPath: Koala.appContextUrl || 'resources/appContext.json',
             plugins: [{
-                ptype: 'hover',
+                ptype: 'hoverBfS',
                 selectMulti: true,
                 selectEventOrigin: 'interaction'
             }]
@@ -170,6 +171,11 @@ Ext.define('Koala.view.main.Main', {
             constrain: true,
             minWidth: 220,
             maxWidth: 700,
+            hideCollapseTool: false,
+            collapseDirection: 'top',
+            header: {
+                overCls: 'k-over-clickable'
+            },
             dockedItems: [{
                 xtype: 'buttongroup',
                 columns: 3,
@@ -314,16 +320,18 @@ Ext.define('Koala.view.main.Main', {
                     hidden: true
                 },
                 {
-                    xtype: 'k-panel-themetree'
+                    xtype: 'k-panel-themetree',
+                    collapsed: false
                 }
             ]
         },
         legendPanelConfig: {
             xtype: 'k-panel-routing-legendtree',
+            hideCollapseTool: false,
             resizable: true,
             constrain: true,
             resizeHandles: 'w nw n',
-            collapsed: true,
+            collapsed: false,
             minWidth: 200,
             maxWidth: 700,
             listeners: {
