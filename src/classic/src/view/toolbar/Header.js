@@ -41,6 +41,7 @@ Ext.define('Koala.view.toolbar.Header', {
 
     items: [
         '->',
+/*
         {
             bind: {
                 text: '{btnTextFullscreen}',
@@ -52,6 +53,7 @@ Ext.define('Koala.view.toolbar.Header', {
                 toggle: 'toggleFullscreen'
             }
         },
+*/
         {
             xtype: 'k-button-timereference'
         },
