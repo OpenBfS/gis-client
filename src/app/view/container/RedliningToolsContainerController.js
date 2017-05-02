@@ -98,8 +98,10 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
 
         if (pressed) {
             view.helpTooltipElement.classList.remove('x-hidden');
+            me.drawPointInteraction.on('drawend', me.onDrawEnd, me);
             me.drawPointInteraction.setActive(true);
         } else {
+            me.drawPointInteraction.un('drawend', me.onDrawEnd, me);
             me.drawPointInteraction.setActive(false);
         }
     },
@@ -115,6 +117,7 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
             view = me.getView();
         if (!me.drawLineInteraction) {
             me.drawLineInteraction = new ol.interaction.Draw({
+                layer: view.redliningVectorLayer,
                 style: view.getDrawInteractionStyle(),
                 features: view.redlineFeatures,
                 type: 'LineString'
@@ -150,16 +153,32 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
      * [description]
      * @return {[type]} [description]
      */
-    onDrawEnd: function() {
+    onDrawEnd: function(evt) {
         var me = this;
         var view = me.getView();
-        view.measureTooltipElement.className = 'tooltip tooltip-static';
-        view.measureTooltip.setOffset([0, -7]);
-        view.sketch.getGeometry().un('change', me.onGeometryChange, me);
+        var geom = evt.feature.getGeometry();
+        var tooltipPosition = view.measureTooltip.getPosition();
+        var labelText = view.measureTooltipElement.innerHTML;
 
-        // unset sketch
-        view.sketch = null;
-        // unset tooltip so that a new one can be created
+        if (geom.getType() === 'Point') {
+            var sourceProjection = this.view.map.getView().getProjection();
+            var targetProjection = ol.proj.get('EPSG:4326');
+            var geomClone = geom.clone().transform(sourceProjection,
+                targetProjection);
+
+            tooltipPosition = geom.getCoordinates();
+            labelText = ol.coordinate.toStringXY(geomClone.getCoordinates(), 2);
+        }
+
+        var labelFeature = new ol.Feature({
+            geometry: new ol.geom.Point(tooltipPosition),
+            text: labelText
+        });
+
+        view.redliningVectorLayer.getSource().addFeature(labelFeature);
+        geom.un('change', me.onGeometryChange, me);
+
+        view.measureTooltipElement.remove();
         view.measureTooltipElement = null;
         view.createMeasureTooltip();
     },
@@ -447,9 +466,9 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
         var output;
 
         if (area > 10000) {
-            output = (Math.round(area / 1000000 * 100) / 100) + ' ' + 'km<sup>2</sup>';
+            output = (Math.round(area / 1000000 * 100) / 100) + ' ' + 'km²';
         } else {
-            output = (Math.round(area * 100) / 100) + ' ' + 'm<sup>2</sup>';
+            output = (Math.round(area * 100) / 100) + ' ' + 'm²';
         }
 
         return output;

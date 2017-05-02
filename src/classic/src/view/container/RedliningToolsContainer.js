@@ -36,21 +36,34 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
     width: 150,
 
     config: {
-        redlineLayerStyle: new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: 'rgba(255, 255, 255, 0.2)'
-            }),
-            stroke: new ol.style.Stroke({
-                color: '#ffcc33',
-                width: 2
-            }),
-            image: new ol.style.Circle({
-                radius: 7,
+        redlineLayerStyle: function() {
+            return new ol.style.Style({
                 fill: new ol.style.Fill({
-                    color: '#ffcc33'
+                    color: 'rgba(255, 255, 255, 0.2)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#ffcc33',
+                    width: 2
+                }),
+                image: new ol.style.Circle({
+                    radius: 7,
+                    fill: new ol.style.Fill({
+                        color: '#ffcc33'
+                    })
+                }),
+                text: new ol.style.Text({
+                    text: this.get('text'),
+                    offsetY: -7,
+                    fill: new ol.style.Fill({
+                        color: 'black'
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: '#ffcc33',
+                        width: 2
+                    })
                 })
-            })
-        }),
+            });
+        },
         drawInteractionStyle: new ol.style.Style({
             fill: new ol.style.Fill({
                 color: 'rgba(255, 255, 255, 0.2)'
