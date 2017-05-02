@@ -16,7 +16,7 @@
 /**
  * RedliningToolsPanelController
  *
- * The controller for the redlining tools. Contains all OL interactions for the
+ * The controller for the redlining tools. Contains all OL interactions for
  * each redlining action on the map (e.g. draw/modify/move/delete point,
  * linestring, polygon). Additionally the simple styler is included.
  *
@@ -104,6 +104,7 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
             me.drawPointInteraction.un('drawend', me.onDrawEnd, me);
             me.drawPointInteraction.setActive(false);
         }
+        me.resetSnapInteraction();
     },
 
     /**
@@ -135,6 +136,39 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
             me.drawLineInteraction.un('drawend', me.onDrawEnd, me);
             me.drawLineInteraction.setActive(false);
         }
+        me.resetSnapInteraction();
+    },
+
+    /**
+     * Fires if "draw polygon" button was toggled. Creates a
+     * #drawPolygonInteraction if not already exist.
+     * @param {Ext.button.Button} btn
+     * @param {Boolean} pressed toggle state
+     */
+    onDrawPolygonsBtnToggle: function(btn, pressed) {
+        var me = this,
+            view = me.getView();
+        if (!me.drawPolygonInteraction) {
+            me.drawPolygonInteraction = new ol.interaction.Draw({
+                style: view.getDrawInteractionStyle(),
+                features: view.redlineFeatures,
+                type: 'Polygon'
+            });
+            view.map.addInteraction(me.drawPolygonInteraction);
+        }
+
+        if (pressed) {
+            view.helpTooltipElement.classList.remove('x-hidden');
+            me.drawPolygonInteraction.on('drawstart', me.onDrawStart, me);
+            me.drawPolygonInteraction.on('drawend', me.onDrawEnd, me);
+            me.drawPolygonInteraction.setActive(true);
+        } else {
+            view.helpTooltipElement.classList.add('x-hidden');
+            me.drawPolygonInteraction.un('drawstart', me.onDrawStart, me);
+            me.drawPolygonInteraction.un('drawend', me.onDrawEnd, me);
+            me.drawPolygonInteraction.setActive(false);
+        }
+        me.resetSnapInteraction();
     },
 
     /**
@@ -204,37 +238,6 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
     },
 
     /**
-     * Fires if "draw polygon" button was toggled. Creates a
-     * #drawPolygonInteraction if not already exist.
-     * @param {Ext.button.Button} btn
-     * @param {Boolean} pressed toggle state
-     */
-    onDrawPolygonsBtnToggle: function(btn, pressed) {
-        var me = this,
-            view = me.getView();
-        if (!me.drawPolygonInteraction) {
-            me.drawPolygonInteraction = new ol.interaction.Draw({
-                style: view.getDrawInteractionStyle(),
-                features: view.redlineFeatures,
-                type: 'Polygon'
-            });
-            view.map.addInteraction(me.drawPolygonInteraction);
-        }
-
-        if (pressed) {
-            view.helpTooltipElement.classList.remove('x-hidden');
-            me.drawPolygonInteraction.on('drawstart', me.onDrawStart, me);
-            me.drawPolygonInteraction.on('drawend', me.onDrawEnd, me);
-            me.drawPolygonInteraction.setActive(true);
-        } else {
-            view.helpTooltipElement.classList.add('x-hidden');
-            me.drawPolygonInteraction.un('drawstart', me.onDrawStart, me);
-            me.drawPolygonInteraction.un('drawend', me.onDrawEnd, me);
-            me.drawPolygonInteraction.setActive(false);
-        }
-    },
-
-    /**
      * Fires if "modify feature" button was toggled.
      * Creates a #modifyInteraction and #modifySelectInteraction
      * if not already exist.
@@ -270,14 +273,14 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
             me.modifyInteraction.setActive(true);
             me.modifySelectInteraction.setActive(true);
             me.modifyInteraction.on('modifyend', me.updateLabel, me);
-            me.modifyInteraction.on('modifyend',
-                    view.fireRedliningChanged, view);
+            // me.modifyInteraction.on('modifyend',
+            //         view.fireRedliningChanged, view);
         } else {
             me.modifyInteraction.setActive(false);
             me.modifySelectInteraction.setActive(false);
             me.modifyInteraction.un('modifyend', me.updateLabel, me);
-            me.modifyInteraction.un('modifyend',
-                    view.fireRedliningChanged, view);
+            // me.modifyInteraction.un('modifyend',
+            //         view.fireRedliningChanged, view);
         }
     },
 
@@ -439,6 +442,25 @@ Ext.define('Koala.view.panel.RedliningToolsPanelController', {
         };
 
         return state;
+    },
+
+    /**
+     * Creates or recreates the snapInteraction. It has to be added after all
+     * other interactions so we have to recreate it everytime we add a new
+     * interaction.
+     */
+    resetSnapInteraction: function() {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+        if (view.snapInteraction) {
+            map.removeInteraction(view.snapInteraction);
+        }
+        var snap = new ol.interaction.Snap({
+            source: view.redliningVectorLayer.getSource()
+        });
+        view.snapInteraction = snap;
+        map.addInteraction(snap);
     },
 
     /**

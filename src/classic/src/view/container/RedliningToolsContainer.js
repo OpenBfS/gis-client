@@ -123,6 +123,13 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
      */
     sketch: null,
 
+    /**
+     * The snapInteraction which has to be recreated after every newly added
+     * interaction. See http://openlayers.org/en/latest/examples/snap.html.
+     * @type {ol.interaction.Snap}
+     */
+    snapInteraction: null,
+
     defaults: {
         xtype: 'button',
         scale: 'large',
@@ -219,7 +226,8 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
             me.redliningVectorLayer = new ol.layer.Vector({
                 name: 'redliningVectorLayer',
                 source: new ol.source.Vector({features: me.redlineFeatures}),
-                style: me.getRedlineLayerStyle()
+                style: me.getRedlineLayerStyle(),
+                allowPrint: true
             });
             me.redliningVectorLayer.set(displayInLayerSwitcherKey, false);
             me.map.addLayer(me.redliningVectorLayer);
