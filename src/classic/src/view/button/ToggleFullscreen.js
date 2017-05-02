@@ -16,32 +16,47 @@
 /**
  * @class Koala.view.button.toggleFullscreen
  */
-Ext.define("Koala.view.button.toggleFullscreen", {
-    extend: "Ext.Button",
-    xtype: "k-button-togglefullscreen",
+Ext.define('Koala.view.button.toggleFullscreen', {
+    extend: 'Ext.Button',
+    xtype: 'k-button-togglefullscreen',
 
     requires: [
-        "Koala.view.button.toggleFullscreenController",
-        "Koala.view.button.toggleFullscreenModel"
+        'Koala.view.button.toggleFullscreenController',
+        'Koala.view.button.toggleFullscreenModel'
     ],
 
-    controller: "k-button-togglefullscreen",
+    controller: 'k-button-togglefullscreen',
     viewModel: {
-        type: "k-button-togglefullscreen"
+        type: 'k-button-togglefullscreen'
     },
 
     glyph: 'xf065@FontAwesome',
-//    html: '<i class="fa fa-expand fa-2x"></i>',
 
     scale: 'large',
-/*
+
+    enableToggle: true,
+
     bind: {
         text: null,
-        tooltip: '{toggleFullscreenTooltip}'
+        tooltip: '{tooltip}'
     },
-*/
+
+    initComponent: function() {
+        var me = this;
+        var browserPrefixes = ['', 'webkit', 'moz', 'ms'];
+
+        Ext.each(browserPrefixes, function(browserPrefix) {
+            var event = browserPrefix + 'fullscreenchange';
+            document.addEventListener(event, function() {
+                var fullscreen = Koala.util.Fullscreen.isInFullscreen();
+                var glyphCode = fullscreen ? 'xf066' : 'xf065';
+                me.setGlyph(glyphCode + '@FontAwesome');
+            });
+        });
+    },
+
     listeners: {
-        click: 'onClick'
+        toggle: 'onToggle'
     }
 
 });
