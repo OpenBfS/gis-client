@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+/* Copyright (c) 2017 Bundesamt fuer Strahlenschutz
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,24 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * This class is the view model for the Main view of the application.
- *
- * @class Koala.view.main.MainModel
+ * @class Koala.view.panel.HeaderController
  */
-Ext.define('Koala.view.main.MainModel', {
-    extend: 'Ext.app.ViewModel',
+Ext.define('Koala.view.panel.HeaderController', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.k-panel-header'
 
-    alias: 'viewmodel.app-main',
-
-    data: {
-        addWmsButtonText: '',
-        addWmsButtonTooltip: '',
-        buttonGroupTopTitle: '',
-        printButtonText: '',
-        printButtonTooltip: '',
-        importLocalDataButtonText: 'Import',
-        importLocalDataButtonTooltip: 'Import local data',
-        importLocalDataWindowText: 'Import',
-        headerTitle: ''
-    }
 });
