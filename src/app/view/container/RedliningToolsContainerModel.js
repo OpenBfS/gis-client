@@ -30,7 +30,10 @@ Ext.define('Koala.view.container.RedliningToolsContainerModel', {
         clearObjectsBtnTooltip: '',
         helpMsg: 'Click to start drawing',
         continuePolygonMsg: 'Click to continue drawing the polygon',
-        continueLineMsg: 'Click to continue drawing the line'
+        continueLineMsg: 'Click to continue drawing the line',
+
+        measurementLabelText: null,
+        measurementLabelCoord: null
     }
 
 });

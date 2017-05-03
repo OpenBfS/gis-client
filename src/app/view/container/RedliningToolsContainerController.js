@@ -275,9 +275,12 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     onDrawEnd: function(evt) {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var geom = evt.feature.getGeometry();
-        var tooltipPosition = view.measureTooltip.getPosition();
-        var labelText = view.measureTooltipElement.innerHTML;
+        var tooltipPosition = viewModel.get('measurementLabelCoord') ||
+                view.measureTooltip.getPosition();
+        var labelText = viewModel.get('measurementLabelText') ||
+                view.measureTooltipElement.innerHTML;
 
         if (geom.getType() === 'Point') {
             tooltipPosition = geom.getCoordinates();
@@ -307,6 +310,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     onGeometryChange: function(evt) {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var geom = evt.target;
         var output;
         var tooltipCoord = evt.coordinate;
@@ -318,6 +322,10 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             output = me.formatLength(geom);
             tooltipCoord = geom.getLastCoordinate();
         }
+
+        viewModel.set('measurementLabelText', output);
+        viewModel.set('measurementLabelCoord', tooltipCoord);
+
         view.measureTooltipElement.innerHTML = output;
         view.measureTooltip.setPosition(tooltipCoord);
     },
