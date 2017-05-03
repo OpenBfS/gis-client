@@ -26,14 +26,14 @@ Ext.define('Koala.view.button.ShowRedliningToolsContainer', {
 
     requires: [
         'Ext.app.ViewModel',
-        'BasiGX.util.Animate',
 
-        'Koala.view.button.ShowRedliningToolsContainerController'
+        'Koala.view.button.ShowRedliningToolsContainerController',
+        'Koala.view.button.ShowRedliningToolsContainerModel'
     ],
 
     controller: 'k-button-showredliningtoolscontainer',
 
-    // viewModel: 'k-button-showredliningtoolscontainer',
+    viewModel: 'k-button-showredliningtoolscontainer',
 
     bind: {
         tooltip: '{tooltip}',

@@ -14,15 +14,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * RedliningToolsPanelController
+ * RedliningToolsContainerController
  *
  * The controller for the redlining tools. Contains all OL interactions for
  * each redlining action on the map (e.g. draw/modify/move/delete point,
  * linestring, polygon). Additionally the simple styler is included.
  *
- * @class Koala.view.panel.RedliningToolsPanelController
+ * @class Koala.view.container.RedliningToolsContainerController
  */
-Ext.define('Koala.view.panel.RedliningToolsPanelController', {
+Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     extend: 'Ext.app.ViewController',
 

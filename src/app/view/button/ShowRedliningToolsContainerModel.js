@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+/* Copyright (c) 2016 terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,21 +14,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.ToggleFullscreenController
+ * ShowRedliningToolsContainerModel
+ *
+ * The view model for the redlining tools
+ *
+ * @class Koala.view.button.ShowRedliningToolsContainerModel
  */
-Ext.define('Koala.view.button.ToggleFullscreenController', {
-    extend: 'Ext.app.ViewController',
-    alias: 'controller.k-button-togglefullscreen',
+Ext.define('Koala.view.button.ShowRedliningToolsContainerModel', {
+    extend: 'Ext.app.ViewModel',
 
-    requires: [
-        'Koala.util.Fullscreen'
-    ],
+    alias: 'viewmodel.k-button-showredliningtoolscontainer',
 
-    /**
-     *
-     */
-    onToggle: function() {
-        Koala.util.Fullscreen.toggleFullscreen();
+    data: {
+        tooltip: '',
+        text: null
     }
-
 });

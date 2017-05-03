@@ -14,9 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.toggleFullscreenModel
+ * @class Koala.view.button.ToggleFullscreenModel
  */
-Ext.define('Koala.view.button.toggleFullscreenModel', {
+Ext.define('Koala.view.button.ToggleFullscreenModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-button-togglefullscreen',
 

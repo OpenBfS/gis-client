@@ -21,11 +21,13 @@
  */
 Ext.define('Koala.view.container.RedliningToolsContainer', {
     extend: 'Ext.container.Container',
-    xtype: 'koala-container-redlining',
+
+    xtype: 'k-container-redliningtoolscontainer',
 
     requires: [
         'Ext.button.Button',
 
+        'Koala.view.container.RedliningToolsContainerController',
         'Koala.view.container.RedliningToolsContainerModel'
     ],
 
@@ -33,7 +35,7 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
 
     controller: 'k-container-redliningtoolscontainer',
 
-    width: 150,
+    width: 300,
 
     config: {
         redlineLayerStyle: function() {
@@ -59,7 +61,7 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
                     }),
                     stroke: new ol.style.Stroke({
                         color: '#ffcc33',
-                        width: 2
+                        width: 10
                     })
                 })
             });
@@ -239,6 +241,11 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         me.map.on('pointermove', me.pointerMoveHandler, me);
 
         me.callParent(arguments);
+
+        var languageCombo = Ext.ComponentQuery.query(
+                'k-form-field-languagecombo')[0];
+        var locale = languageCombo.getValue();
+        languageCombo.getController().requestLanguageFile(locale);
     },
 
     /**

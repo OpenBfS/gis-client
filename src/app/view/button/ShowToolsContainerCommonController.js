@@ -40,17 +40,17 @@ Ext.define('Koala.view.button.ShowToolsContainerCommonController', {
      * The position of the Container will be computed dynamically (s. method
      * #computePosition below).
      * If an additional config is provided it will be applied as well.
-     * @param {String} xtype xtype of the container/Container element to be created
+     * @param {String} className className of the container/Container element to be created
      * @param {Object} config additional config object that could be specific
      *      for different classes
      */
-    createToolsContainer: function(xtype, config) {
+    createToolsContainer: function(className, config) {
 
         var me = this;
         var parentBtn = me.getView().getEl();
         var position = me.computePosition(parentBtn);
 
-        var btnContainer = Ext.create(xtype, {
+        var btnContainer = Ext.create(className, {
             style: {
                 'top': position.top,
                 'right': position.right
@@ -67,14 +67,14 @@ Ext.define('Koala.view.button.ShowToolsContainerCommonController', {
 
     /**
      * Shows a tools Container on call button toggle.
-     * @param {String} xtype xtype of the container/Container element to be created
+     * @param {String} className className of the container/Container element to be created
      * @param {Object} config additional config object that could be specific
      *      for different classes
      */
-    showToolsContainer: function(xtype, config) {
+    showToolsContainer: function(className, config) {
         var me = this;
         if (!me.btnContainer) {
-            me.btnContainer = me.createToolsContainer(xtype, config);
+            me.btnContainer = me.createToolsContainer(className, config);
             // map container
             var cont = Ext.ComponentQuery
                 .query('basigx-panel-mapcontainer')[0];

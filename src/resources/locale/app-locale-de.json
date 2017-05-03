@@ -41,6 +41,13 @@
             }
         }
     },
+    "Koala.view.button.ShowRedliningToolsContainer": {
+        "config": {
+            "data":{
+                "tooltip": "Zeichenwerkzeuge",
+            }
+        }
+    },
     "Koala.view.button.TimeReference": {
         "config": {
             "data":{
@@ -87,7 +94,7 @@
                 "drawPolygonsBtnTooltip": "Fläche zeichnen",
                 "modifyObjectBtnTooltip": "Zeichenobjekt modifzieren",
                 "deleteObjectBtnTooltip": "Zeichenobjekt löschen",
-                "clearObjectsBtnTooltip": "Alle Zeicehnobjekte löschen"
+                "clearObjectsBtnTooltip": "Alle Zeichenobjekte löschen"
             }
         }
     },

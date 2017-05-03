@@ -52,11 +52,7 @@ Ext.define('Koala.view.button.ShowRedliningToolsContainerController', {
     onToggle: function(btn, pressed) {
         var me = this;
         if (pressed) {
-            var conf = me.createConfigObject();
-            me.showToolsContainer(
-                'Koala.view.container.RedliningToolsContainer',
-                conf
-            );
+            me.showToolsContainer('Koala.view.container.RedliningToolsContainer');
         } else {
             me.hideToolsContainer();
             me.deactivateTools();
@@ -64,42 +60,17 @@ Ext.define('Koala.view.button.ShowRedliningToolsContainerController', {
     },
 
     /**
-     * Returns config object with style properties to be applied
-     * lately to the redlining tools Container
+     * Override.
+     *
      */
-    createConfigObject: function() {
-        // var me = this;
-        // var viewModel = me.getView().getViewModel();
+    computePosition: function() {
+        var mapPanel = Ext.ComponentQuery.query('gx_map')[0];
+        var top = '6px';
+        var right = ((mapPanel.getWidth()/2) - 150) + 'px';
 
-        var conf = {
-            // redlinePointStyle: new ol.style.Style({
-            //     image: new ol.style.Circle({
-            //         radius: viewModel.get('defPointStyle.radius'),
-            //         fill: new ol.style.Fill({
-            //             color: viewModel.get('defPointStyle.fillColor')
-            //         }),
-            //         stroke: new ol.style.Stroke({
-            //             color: viewModel.get('defPointStyle.strokeColor'),
-            //             width: viewModel.get('defPointStyle.strokeWidth')
-            //         })
-            //     })
-            // }),
-            // redlineLineStringStyle: new ol.style.Style({
-            //     stroke: new ol.style.Stroke({
-            //         color: viewModel.get('defLineStringStyle.strokeColor'),
-            //         width: viewModel.get('defLineStringStyle.strokeWidth')
-            //     })
-            // }),
-            // redlinePolygonStyle: new ol.style.Style({
-            //     stroke: new ol.style.Stroke({
-            //         color: viewModel.get('defPolygonStyle.strokeColor'),
-            //         width: viewModel.get('defPolygonStyle.strokeWidth')
-            //     }),
-            //     fill: new ol.style.Fill({
-            //         color: viewModel.get('defPolygonStyle.fillColor')
-            //     })
-            // })
+        return {
+            top: top,
+            right: right
         };
-        return conf;
     }
 });
