@@ -37,6 +37,7 @@ Ext.define('Koala.view.button.ShowRedliningToolsContainerController', {
     extend: 'Koala.view.button.ShowToolsContainerCommonController',
 
     requires: [
+        'Koala.view.container.RedliningToolsContainer'
     ],
 
     alias: 'controller.k-button-showredliningtoolscontainer',

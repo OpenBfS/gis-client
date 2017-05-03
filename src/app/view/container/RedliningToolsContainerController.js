@@ -395,6 +395,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     onClearObjectsBtn: function() {
         var me = this;
         var view = me.getView();
+        view.helpTooltipElement.classList.add('x-hidden');
         view.redliningVectorLayer.getSource().clear();
     },
 
