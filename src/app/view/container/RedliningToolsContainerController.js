@@ -31,6 +31,72 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     alias: 'controller.k-container-redliningtoolscontainer',
 
+    redlineLayerStyle: function() {
+        return new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#ffcc33',
+                width: 2
+            }),
+            image: new ol.style.Circle({
+                radius: 7,
+                fill: new ol.style.Fill({
+                    color: '#ffcc33'
+                })
+            }),
+            text: new ol.style.Text({
+                text: this.get('text'),
+                offsetY: -7,
+                fill: new ol.style.Fill({
+                    color: 'black'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#ffcc33',
+                    width: 10
+                })
+            })
+        });
+    },
+
+    drawInteractionStyle: new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 255, 0.2)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: 'rgba(0, 0, 0, 0.5)',
+            lineDash: [10, 10],
+            width: 2
+        }),
+        image: new ol.style.Circle({
+            radius: 5,
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.7)'
+            }),
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            })
+        })
+    }),
+
+    redliningVectorLayer: null,
+
+    redlineFeatures: null,
+
+    /**
+     * Currently drawn feature.
+     * @type {ol.Feature}
+     */
+    sketch: null,
+
+    /**
+     * The snapInteraction which has to be recreated after every newly added
+     * interaction. See http://openlayers.org/en/latest/examples/snap.html.
+     * @type {ol.interaction.Snap}
+     */
+    snapInteraction: null,
+
     /**
     * Instance of the `ol.interaction.Draw` with type `Point`
     */
@@ -70,12 +136,30 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
      */
     deleteSnapInteraction: null,
 
-    /**
-     * @private
-     */
-    stateChangeActive: null,
-
     wgs84Sphere: new ol.Sphere(6378137),
+
+    onInit: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!me.redliningVectorLayer) {
+            me.redlineFeatures = new ol.Collection();
+            me.redlineFeatures.on(
+                'add',
+                me.fireRedliningChanged,
+                me
+            );
+            me.redliningVectorLayer = new ol.layer.Vector({
+                name: 'redliningVectorLayer',
+                source: new ol.source.Vector({
+                    features: me.redlineFeatures
+                }),
+                style: me.redlineLayerStyle,
+                allowPrint: true
+            });
+            view.map.addLayer(me.redliningVectorLayer);
+        }
+    },
 
     /**
      * Fires if "draw point" button was toggled. Creates a #drawPointInteraction
@@ -89,8 +173,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
         if (!me.drawPointInteraction) {
             me.drawPointInteraction = new ol.interaction.Draw({
-                style: view.getDrawInteractionStyle(),
-                features: view.redlineFeatures,
+                style: me.drawInteractionStyle,
+                features: me.redlineFeatures,
                 type: 'Point'
             });
             view.map.addInteraction(me.drawPointInteraction);
@@ -101,6 +185,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             me.drawPointInteraction.on('drawend', me.onDrawEnd, me);
             me.drawPointInteraction.setActive(true);
         } else {
+            view.helpTooltipElement.classList.add('x-hidden');
             me.drawPointInteraction.un('drawend', me.onDrawEnd, me);
             me.drawPointInteraction.setActive(false);
         }
@@ -118,9 +203,9 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             view = me.getView();
         if (!me.drawLineInteraction) {
             me.drawLineInteraction = new ol.interaction.Draw({
-                layer: view.redliningVectorLayer,
-                style: view.getDrawInteractionStyle(),
-                features: view.redlineFeatures,
+                layer: me.redliningVectorLayer,
+                style: me.drawInteractionStyle,
+                features: me.redlineFeatures,
                 type: 'LineString'
             });
             view.map.addInteraction(me.drawLineInteraction);
@@ -132,6 +217,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             me.drawLineInteraction.on('drawend', me.onDrawEnd, me);
             me.drawLineInteraction.setActive(true);
         } else {
+            view.helpTooltipElement.classList.add('x-hidden');
             me.drawLineInteraction.un('drawstart', me.onDrawStart, me);
             me.drawLineInteraction.un('drawend', me.onDrawEnd, me);
             me.drawLineInteraction.setActive(false);
@@ -150,8 +236,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             view = me.getView();
         if (!me.drawPolygonInteraction) {
             me.drawPolygonInteraction = new ol.interaction.Draw({
-                style: view.getDrawInteractionStyle(),
-                features: view.redlineFeatures,
+                style: me.drawInteractionStyle,
+                features: me.redlineFeatures,
                 type: 'Polygon'
             });
             view.map.addInteraction(me.drawPolygonInteraction);
@@ -178,9 +264,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
      */
     onDrawStart: function(evt) {
         var me = this;
-        var view = me.getView();
-        view.sketch = evt.feature;
-        view.sketch.getGeometry().on('change', me.onGeometryChange, me);
+        me.sketch = evt.feature;
+        me.sketch.getGeometry().on('change', me.onGeometryChange, me);
     },
 
     /**
@@ -206,7 +291,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             isLabel: true
         });
 
-        view.redliningVectorLayer.getSource().addFeature(labelFeature);
+        me.redliningVectorLayer.getSource().addFeature(labelFeature);
         geom.un('change', me.onGeometryChange, me);
 
         view.measureTooltipElement.remove();
@@ -260,7 +345,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             });
             view.map.addInteraction(me.modifySelectInteraction);
             me.modifyInteraction = new ol.interaction.Modify({
-                features: view.redlineFeatures,
+                features: me.redlineFeatures,
                 pixelTolerance: 20,
                 deleteCondition: function(event) {
                     return ol.events.condition
@@ -292,9 +377,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
      */
     updateLabel: function(evt) {
         var me = this;
-        var view = me.getView();
         var modifiedFeatures = evt.features;
-        var allFeatures = view.redliningVectorLayer.getSource().getFeatures();
+        var allFeatures = me.redliningVectorLayer.getSource().getFeatures();
 
         modifiedFeatures.forEach(function(feature) {
             allFeatures.forEach(function(label) {
@@ -339,19 +423,19 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                 selFeatures.forEach(function(sf) {
                     var feature = me.getRedlineFeatFromClone(sf);
                     if (feature) {
-                        view.redlineFeatures.remove(feature);
+                        me.redlineFeatures.remove(feature);
                     }
                     me.deleteSelectInteraction.getFeatures().remove(sf);
 
                     // remove a corresponding label or feature if label was clicked
-                    view.redlineFeatures.forEach(function(af) {
+                    me.redlineFeatures.forEach(function(af) {
                         if (sf.get('isLabel') && sf.get('parentFeature') === af ) {
-                            view.redlineFeatures.remove(af);
+                            me.redlineFeatures.remove(af);
                             me.deleteSelectInteraction.getFeatures().remove(af);
                         }
 
                         if (af.get('isLabel') && af.get('parentFeature') === sf ) {
-                            view.redlineFeatures.remove(af);
+                            me.redlineFeatures.remove(af);
                             me.deleteSelectInteraction.getFeatures().remove(af);
                         }
                     });
@@ -375,7 +459,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             view.map.addInteraction(me.deleteSelectInteraction);
 
             me.deleteSnapInteraction = new ol.interaction.Snap({
-                features: view.redlineFeatures
+                features: me.redlineFeatures
             });
             view.map.addInteraction(me.deleteSnapInteraction);
         }
@@ -396,7 +480,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var me = this;
         var view = me.getView();
         view.helpTooltipElement.classList.add('x-hidden');
-        view.redliningVectorLayer.getSource().clear();
+        me.redliningVectorLayer.getSource().clear();
     },
 
     /**
@@ -406,12 +490,11 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     */
     getRedlineFeatFromClone: function(clone) {
         var me = this;
-        var view = me.getView();
-
         var redlineFeat;
         var wktParser = new ol.format.WKT();
         var cloneWktString = wktParser.writeFeature(clone);
-        Ext.each(view.redlineFeatures.getArray(), function(feature) {
+
+        Ext.each(me.redlineFeatures.getArray(), function(feature) {
             var redlineFeatWktString = wktParser.writeFeature(feature);
             if (cloneWktString === redlineFeatWktString) {
                 redlineFeat = feature;
@@ -422,91 +505,21 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     },
 
     /**
-     * Method return the current state of the redlining, containing all features
-     * and the configured styles
-     */
-    getState: function() {
-        var me = this;
-        var view = me.getView();
-        var features = [];
-
-        view.redlineFeatures.forEach(function(feature) {
-            features.push(feature.clone());
-        });
-
-        var state = {
-            features: features,
-            pointStyle: view.getRedlinePointStyle(),
-            lineStyle: view.getRedlineLineStringStyle(),
-            polygonStyle: view.getRedlinePolygonStyle(),
-            styleFunction: view.getRedlineStyleFunction()
-        };
-
-        return state;
-    },
-
-    /**
      * Creates or recreates the snapInteraction. It has to be added after all
      * other interactions so we have to recreate it everytime we add a new
      * interaction.
      */
     resetSnapInteraction: function() {
         var me = this;
-        var view = me.getView();
-        var map = view.map;
-        if (view.snapInteraction) {
-            map.removeInteraction(view.snapInteraction);
+        var map = me.getView().map;
+        if (me.snapInteraction) {
+            map.removeInteraction(me.snapInteraction);
         }
         var snap = new ol.interaction.Snap({
-            source: view.redliningVectorLayer.getSource()
+            source: me.redliningVectorLayer.getSource()
         });
-        view.snapInteraction = snap;
+        me.snapInteraction = snap;
         map.addInteraction(snap);
-    },
-
-    /**
-     * Method sets the state of the redlining, containing drawn features
-     * and the configured styles
-     */
-    setState: function(state) {
-        var me = this;
-        var view = me.getView();
-
-        me.stateChangeActive = true;
-
-        var styler = Ext.ComponentQuery.query('momo-window-redlining')[0];
-
-        if (state.features) {
-            view.redliningVectorLayer.getSource().clear();
-            view.redliningVectorLayer.getSource().addFeatures(state.features);
-        }
-
-        if (state.pointStyle) {
-            view.setRedlinePointStyle(state.pointStyle);
-        }
-
-        if (state.lineStyle) {
-            view.setRedlineLineStringStyle(state.lineStyle);
-        }
-
-        if (state.polygonStyle) {
-            view.setRedlinePolygonStyle(state.polygonStyle);
-        }
-
-        if (styler) {
-            styler.setState(state);
-        }
-
-        if (state.styleFunction) {
-            view.setRedlineStyleFunction(state.styleFunction);
-        }
-
-        // reapply the styleFn on the layer so that ol3 starts redrawing
-        // with new styles
-        view.redliningVectorLayer.setStyle(view.redliningVectorLayer
-                .getStyle());
-
-        me.stateChangeActive = false;
     },
 
     /**
@@ -571,6 +584,27 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         }
 
         return output;
+    },
+
+    /**
+     *
+     */
+    fireRedliningChanged: function(evt) {
+        var me = this;
+        var feat = evt.element;
+        me.adjustFeatureStyle(feat);
+    },
+
+    /**
+     * Sets currently defined style to the new added features.
+     * @param {ol.Feature} feature drawn feature
+     */
+    adjustFeatureStyle: function(feature) {
+        var me = this;
+
+        if (feature) {
+            feature.setStyle(me.redlineLayerStyle);
+        }
     }
 
 });

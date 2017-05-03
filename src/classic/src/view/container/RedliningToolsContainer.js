@@ -37,63 +37,7 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
 
     width: 300,
 
-    config: {
-        redlineLayerStyle: function() {
-            return new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: 'rgba(255, 255, 255, 0.2)'
-                }),
-                stroke: new ol.style.Stroke({
-                    color: '#ffcc33',
-                    width: 2
-                }),
-                image: new ol.style.Circle({
-                    radius: 7,
-                    fill: new ol.style.Fill({
-                        color: '#ffcc33'
-                    })
-                }),
-                text: new ol.style.Text({
-                    text: this.get('text'),
-                    offsetY: -7,
-                    fill: new ol.style.Fill({
-                        color: 'black'
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: '#ffcc33',
-                        width: 10
-                    })
-                })
-            });
-        },
-        drawInteractionStyle: new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: 'rgba(255, 255, 255, 0.2)'
-            }),
-            stroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 0, 0.5)',
-                lineDash: [10, 10],
-                width: 2
-            }),
-            image: new ol.style.Circle({
-                radius: 5,
-                stroke: new ol.style.Stroke({
-                    color: 'rgba(0, 0, 0, 0.7)'
-                }),
-                fill: new ol.style.Fill({
-                    color: 'rgba(255, 255, 255, 0.2)'
-                })
-            })
-        })
-    },
-
     map: null,
-
-    redliningVectorLayer: null,
-
-    redlineFeatures: null,
-
-    stateChangeActive: false,
 
     /**
      * Overlay to show the help messages.
@@ -118,19 +62,6 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
      * @type {ol.Overlay}
     */
     measureTooltip: null,
-
-    /**
-     * Currently drawn feature.
-     * @type {ol.Feature}
-     */
-    sketch: null,
-
-    /**
-     * The snapInteraction which has to be recreated after every newly added
-     * interaction. See http://openlayers.org/en/latest/examples/snap.html.
-     * @type {ol.interaction.Snap}
-     */
-    snapInteraction: null,
 
     defaults: {
         xtype: 'button',
@@ -207,45 +138,27 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
      * @param {Object} state The current redlining state.
      */
 
+    listeners: {
+        boxready: 'onInit'
+    },
+
     /**
      * Initializes this component
      */
     initComponent: function() {
         var me = this;
-        var displayInLayerSwitcherKey = BasiGX.util.Layer.
-            KEY_DISPLAY_IN_LAYERSWITCHER;
-
         //set map
         me.map = BasiGX.util.Map.getMapComponent().getMap();
-
-        if (!me.redliningVectorLayer) {
-            me.redlineFeatures = new ol.Collection();
-            me.redlineFeatures.on(
-                'add',
-                me.fireRedliningChanged,
-                me
-            );
-            me.redliningVectorLayer = new ol.layer.Vector({
-                name: 'redliningVectorLayer',
-                source: new ol.source.Vector({features: me.redlineFeatures}),
-                style: me.getRedlineLayerStyle(),
-                allowPrint: true
-            });
-            me.redliningVectorLayer.set(displayInLayerSwitcherKey, false);
-            me.map.addLayer(me.redliningVectorLayer);
-        }
+        me.callParent(arguments);
 
         me.createHelpTooltip();
         me.createMeasureTooltip();
-
-        me.map.on('pointermove', me.pointerMoveHandler, me);
-
-        me.callParent(arguments);
 
         var languageCombo = Ext.ComponentQuery.query(
                 'k-form-field-languagecombo')[0];
         var locale = languageCombo.getValue();
         languageCombo.getController().requestLanguageFile(locale);
+        me.map.on('pointermove', me.pointerMoveHandler, me);
     },
 
     /**
@@ -254,16 +167,18 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
     */
     pointerMoveHandler: function(evt) {
         var me = this;
-        var continuePolygonMsg = 'Click to continue drawing the polygon';
-        var continueLineMsg = 'Click to continue drawing the line';
+        var controller = me.getController();
+        var viewModel = me.getViewModel();
+        var continuePolygonMsg = viewModel.get('continuePolygonMsg');
+        var continueLineMsg = viewModel.get('continueLineMsg');
+        var helpMsg = viewModel.get('helpMsg');
 
         if (evt.dragging) {
             return;
         }
-        var helpMsg = 'Click to start drawing';
 
-        if (me.sketch) {
-            var geom = me.sketch.getGeometry();
+        if (controller.sketch) {
+            var geom = controller.sketch.getGeometry();
             if (geom instanceof ol.geom.Polygon) {
                 helpMsg = continuePolygonMsg;
             } else if (geom instanceof ol.geom.LineString) {
@@ -309,31 +224,5 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
             positioning: 'center-left'
         });
         me.map.addOverlay(me.helpTooltip);
-    },
-
-    /**
-     *
-     */
-    fireRedliningChanged: function(evt) {
-        var me = this;
-        var feat = evt.element;
-        me.adjustFeatureStyle(feat);
-    },
-
-    /**
-     * Sets currently defined style to the new added features.
-     * @param {ol.Feature} feature drawn feature
-     */
-    adjustFeatureStyle: function(feature) {
-        var me = this;
-        var controller = me.getController();
-
-        if (controller.stateChangeActive) {
-            return;
-        }
-
-        if (feature) {
-            feature.setStyle(me.getRedlineLayerStyle());
-        }
     }
 });
