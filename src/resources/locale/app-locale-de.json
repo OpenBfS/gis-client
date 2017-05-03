@@ -266,7 +266,15 @@
                 "chartSlctnMsg": "Layer hat Zeitreihen-, als auch Säulendiagramm. Welches Diagramm soll dargestellt werden?",
                 "chartSlctnTimeSeriesBtn": "Zeitreihendiagramm",
                 "chartSlctnBarChartBtn": "Säulendiagramm",
-                "helpTooltip": "Hilfe"
+                "helpTooltip": "Hilfe",
+                "headerTitle": "Geoportal"
+            }
+        }
+    },
+    "Koala.view.panel.Header": {
+        "config": {
+            "data": {
+                "logoTooltip": "Link zur BfS-Homepage"
             }
         }
     },

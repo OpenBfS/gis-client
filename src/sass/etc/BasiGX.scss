@@ -16,6 +16,14 @@ div.feature-hover-popup {
 .basigx-header {
     background-color: #fff;
 }
+.k-application-title .x-title-text {
+    color: #457ab0;
+    font-size: 33px;
+    font-family: "opensansCondBold",Arial,helvetica,sans-serif;
+}
+.basigx-header a.k-application-title {
+    text-decoration: none!important;
+}
 .basigx-header .x-btn-default-toolbar-small.x-btn-over {
     background-image: -webkit-linear-gradient(top, #5b7792, #496886 50%, #456380 51%, #496886) !important;
 }

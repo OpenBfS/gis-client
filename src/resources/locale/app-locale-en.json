@@ -265,7 +265,15 @@
                 "chartSlctnTitle": "Chart Selection",
                 "chartSlctnMsg": "Layer has a time series as well as a bar chart. Which type of diagram shall be displayed?",
                 "chartSlctnTimeSeriesBtn": "Time Series",
-                "chartSlctnBarChartBtn": "Bar Chart"
+                "chartSlctnBarChartBtn": "Bar Chart",
+                "headerTitle": "Geoportal"
+            }
+        }
+    },
+    "Koala.view.panel.Header": {
+        "config": {
+            "data": {
+                "logoTooltip": "Link to the BfS homepage"
             }
         }
     },

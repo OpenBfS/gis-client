@@ -58,9 +58,11 @@ Ext.define('Koala.view.main.Main', {
     layout: 'border',
 
     header: {
-        xtype: 'basigx-panel-header',
+        xtype: 'k-panel-header',
         logoUrl: 'classic/resources/img/bfs-logo-75pct.png',
         logoHeight: 58,
+        logoWidth: 150,
+        logoMargin: '5 10 5 10',
         logoAltText: 'Logo Bundesamt für Strahlenschutz',
         additionalItems: []
     },
@@ -368,6 +370,22 @@ Ext.define('Koala.view.main.Main', {
      *
      */
     getAdditionalHeaderItems: function() {
+        var title = {
+            xtype: 'title',
+            bind: {
+                text: '{headerTitle}'
+            },
+            margin: '5 10 5 10',
+            layout: {
+                align: 'center'
+            },
+            autoEl: {
+                tag: "a",
+                href: null
+            },
+            cls: 'k-application-title'
+        };
+
         var searchFieldCombo = {
             xtype: 'k-form-field-searchcombo',
             flex: 1
@@ -381,7 +399,7 @@ Ext.define('Koala.view.main.Main', {
             },
             handler: function(btn) {
                 btn.up().down('k-form-field-searchcombo').clearValue();
-                var multiSearchPanel = this.up('basigx-panel-header')
+                var multiSearchPanel = this.up('k-panel-header')
                         .down('k-panel-multisearch');
                 if (multiSearchPanel) {
                     multiSearchPanel.hide();
@@ -422,6 +440,6 @@ Ext.define('Koala.view.main.Main', {
             }
         };
 
-        return [searchContainer, headerToolbar];
+        return [title, searchContainer, headerToolbar];
     }
 });
