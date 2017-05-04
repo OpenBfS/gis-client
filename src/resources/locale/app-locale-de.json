@@ -1,6 +1,8 @@
 {
     "Koala.util.Layer": {
         "statics": {
+            "txtUtc": "(UTC)",
+            "txtLocal": "(lokal)",
             "txtUntil": "bis",
             "titleAddLayer": "Layer",
             "titleAddLayerFilter": "Layerfilter",
