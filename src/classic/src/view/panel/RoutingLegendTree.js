@@ -140,7 +140,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var allowChangeFilter = olLayer.metadata || false;
             var allowDownload = olLayer.get('allowDownload') || false;
             var allowRemoval = olLayer.get('allowRemoval') || false;
-            var allowStyle = olLayer instanceof ol.layer.Vector;
+            var allowStyle = olLayer instanceof ol.layer.Vector &&
+                    !olLayer.get('disableStyling');
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
             var hasLegend = olLayer.get('hasLegend') || false;
 

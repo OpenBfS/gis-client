@@ -27,6 +27,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     extend: 'Ext.app.ViewController',
 
     requires: [
+        'Koala.util.AppContext'
     ],
 
     alias: 'controller.k-container-redliningtoolscontainer',
@@ -138,11 +139,18 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     wgs84Sphere: new ol.Sphere(6378137),
 
+    /**
+     * Listener called on the components initialization. It creates the
+     * redLineLayer and adds it to the map.
+     */
     onInit: function() {
         var me = this;
         var view = me.getView();
 
         if (!me.redliningVectorLayer) {
+            var appContext = Koala.util.AppContext.getAppContext();
+            var redLineLayerName = appContext.data.merge.redLineLayerName;
+
             me.redlineFeatures = new ol.Collection();
             me.redlineFeatures.on(
                 'add',
@@ -150,12 +158,16 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                 me
             );
             me.redliningVectorLayer = new ol.layer.Vector({
-                name: 'redliningVectorLayer',
+                name: redLineLayerName || 'redLineLayer',
                 source: new ol.source.Vector({
                     features: me.redlineFeatures
                 }),
                 style: me.redlineLayerStyle,
-                allowPrint: true
+                // TODO remove this in the future to allow printing this layer
+                allowPrint: false,
+                // TODO We do a check manually check on the RoutingLegendTree to
+                // disbale styling for this layer.
+                disableStyling: true
             });
             view.map.addLayer(me.redliningVectorLayer);
         }

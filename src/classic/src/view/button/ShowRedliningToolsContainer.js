@@ -40,7 +40,7 @@ Ext.define('Koala.view.button.ShowRedliningToolsContainer', {
         text: '{text}'
     },
 
-    glyph: 'xf040@FontAwesome',
+    glyph: 'xf105@Flaticon', //xf10b for a ruler
 
     enableToggle: true,
 
