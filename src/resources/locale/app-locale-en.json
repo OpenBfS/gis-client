@@ -245,7 +245,7 @@
                 "chartSlctnMsg": "Layer has a time series as well as a bar chart. Which type of diagram shall be displayed?",
                 "chartSlctnTimeSeriesBtn": "Time Series",
                 "chartSlctnBarChartBtn": "Bar Chart",
-                "headerTitle": "Geoportal"
+                "headerTitle": "GEOPORTAL"
             }
         }
     },

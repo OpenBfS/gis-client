@@ -375,15 +375,17 @@ Ext.define('Koala.view.main.Main', {
             bind: {
                 text: '{headerTitle}'
             },
-            margin: '5 10 5 10',
-            layout: {
-                align: 'center'
-            },
+            textAlign: 'center',
             autoEl: {
                 tag: "a",
                 href: null
             },
-            cls: 'k-application-title'
+            cls: 'k-application-title',
+            initComponent: function() {
+                var menuPanel = Ext.ComponentQuery.query('basigx-panel-menu')[0],
+                    titleWidth = menuPanel.width || 300;
+                this.setWidth(titleWidth);
+            }
         };
 
         var searchFieldCombo = {
