@@ -41,6 +41,13 @@
             }
         }
     },
+    "Koala.view.button.ShowRedliningToolsContainer": {
+        "config": {
+            "data":{
+                "tooltip": "Drawtools",
+            }
+        }
+    },
     "Koala.view.button.TimeReference": {
         "config": {
             "data":{
@@ -76,6 +83,18 @@
         "config": {
             "data": {
                 "name": "Koala"
+            }
+        }
+    },
+    "Koala.view.container.RedliningToolsContainer": {
+        "config": {
+            "data": {
+                "drawPointBtnTooltip": "Draw point",
+                "drawLinesBtnTooltip": "Draw line",
+                "drawPolygonsBtnTooltip": "Draw area",
+                "modifyObjectBtnTooltip": "Modify objects",
+                "deleteObjectBtnTooltip": "Delete objects",
+                "clearObjectsBtnTooltip": "Delete all"
             }
         }
     },

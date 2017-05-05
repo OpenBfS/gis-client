@@ -14,21 +14,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.ToggleFullscreenController
+ * @class Koala.view.container.RedliningToolsContainerModel
  */
-Ext.define('Koala.view.button.ToggleFullscreenController', {
-    extend: 'Ext.app.ViewController',
-    alias: 'controller.k-button-togglefullscreen',
+Ext.define('Koala.view.container.RedliningToolsContainerModel', {
+    extend: 'Ext.app.ViewModel',
 
-    requires: [
-        'Koala.util.Fullscreen'
-    ],
+    alias: 'viewmodel.k-container-redliningtoolscontainer',
 
-    /**
-     *
-     */
-    onToggle: function() {
-        Koala.util.Fullscreen.toggleFullscreen();
+    data: {
+        drawPointBtnTooltip: '',
+        drawLinesBtnTooltip: '',
+        drawPolygonsBtnTooltip: '',
+        modifyObjectBtnTooltip: '',
+        deleteObjectBtnTooltip: '',
+        clearObjectsBtnTooltip: '',
+        helpMsg: 'Click to start drawing',
+        continuePolygonMsg: 'Click to continue drawing the polygon',
+        continueLineMsg: 'Click to continue drawing the line',
+
+        measurementLabelText: null,
+        measurementLabelCoord: null
     }
 
 });

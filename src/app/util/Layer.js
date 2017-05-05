@@ -370,8 +370,7 @@ Ext.define('Koala.util.Layer', {
                     //add time reference info
                     if (staticMe.appIsUtc()) {
                         time += ' ' + staticMe.txtUtc;
-                    }
-                    else if (staticMe.appIsLocal()) {
+                    } else if (staticMe.appIsLocal()) {
                         time += ' ' + staticMe.txtLocal;
                     }
 
@@ -391,8 +390,7 @@ Ext.define('Koala.util.Layer', {
                     //add time reference info
                     if (staticMe.appIsUtc()) {
                         endTime += ' ' + staticMe.txtUtc;
-                    }
-                    else if (staticMe.appIsLocal()) {
+                    } else if (staticMe.appIsLocal()) {
                         endTime += ' ' + staticMe.txtLocal;
                     }
 

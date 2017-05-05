@@ -448,6 +448,9 @@
             "path": "resources",
             "output": "resources"
         },
+        {
+            "path": "sass/etc/fonts"
+        },
         "resources",
         "${toolkit.name}/resources",
         "favicon.ico",

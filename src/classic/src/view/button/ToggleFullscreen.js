@@ -14,15 +14,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.toggleFullscreen
+ * @class Koala.view.button.ToggleFullscreen
  */
-Ext.define('Koala.view.button.toggleFullscreen', {
+Ext.define('Koala.view.button.ToggleFullscreen', {
     extend: 'Ext.Button',
     xtype: 'k-button-togglefullscreen',
 
     requires: [
-        'Koala.view.button.toggleFullscreenController',
-        'Koala.view.button.toggleFullscreenModel'
+        'Koala.view.button.ToggleFullscreenController',
+        'Koala.view.button.ToggleFullscreenModel'
     ],
 
     controller: 'k-button-togglefullscreen',

@@ -39,7 +39,8 @@ Ext.define('Koala.view.main.Main', {
         'Koala.util.AppContext',
 
         'Koala.view.button.Permalink',
-        'Koala.view.button.toggleFullscreen',
+        'Koala.view.button.ShowRedliningToolsContainer',
+        'Koala.view.button.ToggleFullscreen',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
@@ -93,6 +94,8 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'basigx-button-zoomout'
             }, {
                 xtype: 'basigx-button-zoomtoextent'
+            }, {
+                xtype: 'k-button-showredliningtoolscontainer'
             }, {
                 xtype: 'k-button-togglefullscreen'
             },{
@@ -377,7 +380,7 @@ Ext.define('Koala.view.main.Main', {
             },
             textAlign: 'center',
             autoEl: {
-                tag: "a",
+                tag: 'a',
                 href: null
             },
             cls: 'k-application-title',

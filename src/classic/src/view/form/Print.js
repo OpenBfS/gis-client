@@ -701,7 +701,7 @@ Ext.define('Koala.view.form.Print', {
                 success: function(response) {
                     var data = Ext.decode(response.responseText);
                     view.setLoading(format + ' ' +
-                        view.getDownloadOngoingMiddleText());
+                        view.getViewModel().get('downloadOngoingMiddleText'));
                     view.downloadWhenReady(startTime, data);
                 },
                 failure: view.genericPostFailureHandler,

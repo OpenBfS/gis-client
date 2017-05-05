@@ -39,6 +39,13 @@
             }
         }
     },
+    "Koala.view.button.ShowRedliningToolsContainer": {
+        "config": {
+            "data":{
+                "tooltip": "fr:Zeichenwerkzeuge",
+            }
+        }
+    },
     "Koala.view.button.TimeReference": {
         "config": {
             "data":{
@@ -74,6 +81,18 @@
         "config": {
             "data": {
                 "name": "fr:Koala"
+            }
+        }
+    },
+    "Koala.view.container.RedliningToolsContainer": {
+        "config": {
+            "data": {
+                "drawPointBtnTooltip": "fr:Punkt zeichnen",
+                "drawLinesBtnTooltip": "fr:Strecke zeichnen",
+                "drawPolygonsBtnTooltip": "fr:Fläche zeichnen",
+                "modifyObjectBtnTooltip": "fr:Zeichenobjekt modifzieren",
+                "deleteObjectBtnTooltip": "fr:Zeichenobjekt löschen",
+                "clearObjectsBtnTooltip": "fr:Alle Zeichenobjekte löschen"
             }
         }
     },
