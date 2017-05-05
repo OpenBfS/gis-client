@@ -31,24 +31,22 @@ Ext.define('Koala.util.Layer', {
 
     statics: {
         /* i18n */
-        txtUtc: "",
-        txtLocal: "",
-        txtUntil: "",
-        titleAddLayer: "",
-        titleAddLayerFilter: "",
-        textUnknownLayer: "",
-        dspSignEq: "",
-        dspSignNotEq: "",
-        dspSignLtEq: "",
-        dspSignGtEq: "",
-        dspSignLt: "",
-        dspSignGt: "",
-        dspSignIn: "",
-        dspSignInJoiner: "",
-        dspSignInLastJoiner: "",
-        dspSignNotIn: "",
-        dspSignNotInJoiner: "",
-        dspSignNotInLastJoiner: "",
+        txtUntil: '',
+        titleAddLayer: '',
+        titleAddLayerFilter: '',
+        textUnknownLayer: '',
+        dspSignEq: '',
+        dspSignNotEq: '',
+        dspSignLtEq: '',
+        dspSignGtEq: '',
+        dspSignLt: '',
+        dspSignGt: '',
+        dspSignIn: '',
+        dspSignInJoiner: '',
+        dspSignInLastJoiner: '',
+        dspSignNotIn: '',
+        dspSignNotInJoiner: '',
+        dspSignNotInLastJoiner: '',
         /* i18n */
 
         /**
@@ -365,15 +363,6 @@ Ext.define('Koala.util.Layer', {
                     var date, time;
                     date = filter.effectivedatetime;
                     time = Koala.util.Date.getFormattedDate(date);
-
-                    //add time reference info
-                    if (staticMe.appIsUtc()) {
-                        time += " " + staticMe.txtUtc;
-                    }
-                    else if (staticMe.appIsLocal()) {
-                        time += " " + staticMe.txtLocal;
-                    }
-
                     filterTxt += time;
                 } else if (filterType === "timerange") {
                     var startDate, startTime;
@@ -386,16 +375,6 @@ Ext.define('Koala.util.Layer', {
                     startTime = Koala.util.Date.getFormattedDate(startDate);
                     // endFormat
                     endTime = Koala.util.Date.getFormattedDate(endDate);
-
-                    //add time reference info
-                    if (staticMe.appIsUtc()) {
-                        endTime += " " + staticMe.txtUtc;
-                    }
-                    else if (staticMe.appIsLocal()) {
-                        endTime += " " + staticMe.txtLocal;
-                    }
-
-                    filterTxt += "" +
                         startTime +
                         " " + staticMe.txtUntil + " " +
                         endTime;
