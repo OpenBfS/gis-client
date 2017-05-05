@@ -380,7 +380,7 @@ Ext.define('Koala.view.main.Main', {
             },
             textAlign: 'center',
             autoEl: {
-                tag: "a",
+                tag: 'a',
                 href: null
             },
             cls: 'k-application-title',
