@@ -375,6 +375,7 @@ Ext.define('Koala.util.Layer', {
                     startTime = Koala.util.Date.getFormattedDate(startDate);
                     // endFormat
                     endTime = Koala.util.Date.getFormattedDate(endDate);
+                    filterTxt += '' +
                         startTime +
                         " " + staticMe.txtUntil + " " +
                         endTime;
