@@ -21,6 +21,10 @@ Ext.define('Koala.view.form.IrixFieldSet',{
 
     xtype: 'k-form-irixfieldset',
 
+    requires: [
+        'Koala.util.Filter'
+    ],
+
     /**
      * Contains the response of the irixContext.json.
      */
@@ -71,8 +75,11 @@ Ext.define('Koala.view.form.IrixFieldSet',{
                 case 'combo':
                     returnFields.push(me.createCombo(fieldconfig));
                     break;
-                case 'datetime':
+                case 'date':
                     returnFields.push(me.createDateField(fieldconfig));
+                    break;
+                case 'datetime':
+                    returnFields.push(me.createPointInTimeField(fieldconfig));
                     break;
                 case 'checkbox':
                     returnFields.push(me.createCheckbox(fieldconfig));
@@ -137,6 +144,42 @@ Ext.define('Koala.view.form.IrixFieldSet',{
             name: config.name,
             fieldLabel: config.label,
             value: config.defaultValue
+        });
+    },
+
+    createPointInTimeField: function(config) {
+        var now = new moment();
+        var value = Koala.util.Date.getUtcMoment(config.defaultValue) || now;
+        value = Koala.util.Date.getTimeReferenceAwareMomentDate(value);
+
+        var dateField = Ext.create('Ext.form.field.Date', {
+            fieldLabel: config.label,
+            name: config.name,
+            editable: false,
+            flex: 1,
+            value: value,
+            format: 'd.m.Y'
+        });
+
+        var hourSpinner = Koala.util.Filter.getSpinner(
+            {
+                unit: 'hours'
+            }, 'hours', 'hourspinner', value
+        );
+        var minuteSpinner = Koala.util.Filter.getSpinner(
+            {
+                unit: 'minutes'
+            }, 'minutes', 'minutespinner', value
+        );
+
+        return Ext.create('Ext.form.FieldContainer', {
+            name: config.name,
+            valueField: dateField,
+            layout: {
+                type: 'hbox',
+                align: 'middle'
+            },
+            items: [dateField, hourSpinner, minuteSpinner]
         });
     },
 

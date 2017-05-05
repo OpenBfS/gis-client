@@ -49,6 +49,8 @@ Ext.define('Koala.view.form.Print', {
         transparentColor: 'rgba(0,0,0,0)'
     },
 
+    layout: 'hbox',
+
     viewModel: 'k-form-print',
 
     initComponent: function() {
@@ -1041,7 +1043,13 @@ Ext.define('Koala.view.form.Print', {
         Ext.each(children, function(child) {
             if (child instanceof Ext.form.FieldSet ||
                 child instanceof Ext.form.FieldContainer) {
-                json[child.name] = me.formItemToJson(child);
+
+                if (child.valueField && child.valueField.getValue()) {
+                    json[child.name] = child.valueField.getValue();
+                } else {
+                    json[child.name] = me.formItemToJson(child);
+                }
+
             } else {
                 json[child.name] = child.getValue();
             }
