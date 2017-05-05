@@ -49,6 +49,8 @@ Ext.define('Koala.view.form.Print', {
         transparentColor: 'rgba(0,0,0,0)'
     },
 
+    layout: 'hbox',
+
     viewModel: 'k-form-print',
 
     initComponent: function() {

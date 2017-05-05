@@ -175,7 +175,10 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         return Ext.create('Ext.form.FieldContainer', {
             name: config.name,
             valueField: dateField,
-            layout: 'hbox',
+            layout: {
+                type: 'hbox',
+                align: 'middle'
+            },
             items: [dateField, hourSpinner, minuteSpinner]
         });
     },

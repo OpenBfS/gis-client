@@ -68,8 +68,7 @@ Ext.define('Koala.view.window.Print', {
         var urls = appContext.data.merge.urls;
         this.add({
             xtype: 'k-form-print',
-            maxWidth: window.innerWidth - 100,
-            maxHeight: window.innerHeight - 100,
+            maxHeight: Ext.getBody().getHeight() - 100,
             url: urls['print-servlet']
         });
     }
