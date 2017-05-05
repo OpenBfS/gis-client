@@ -43,8 +43,8 @@
     },
     "Koala.view.button.ShowRedliningToolsContainer": {
         "config": {
-            "data":{
-                "tooltip": "Drawtools",
+            "data": {
+                "tooltip": "Drawtools"
             }
         }
     },
