@@ -238,7 +238,7 @@
                 "warnPrintTimedOutTitle": "Printing Error",
                 "warnPrintTimedOutText": "Printing process has exceeded the valid time limit.",
                 "updateLegendtext": "en:Legendtext"
-            },
+            }
         }
     },
     "Koala.view.grid.MetadataSearch": {
