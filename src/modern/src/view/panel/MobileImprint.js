@@ -59,5 +59,24 @@ Ext.define('Koala.view.panel.MobileImprint',{
                 });
             }
         }
+    }, {
+        xtype: 'fieldset',
+        padding: 5,
+        listeners: {
+            initialize: function() {
+                var me = this;
+
+                Ext.Ajax.request({
+                    method: 'GET',
+                    url: 'resources/dataprotection.html',
+                    success: function(response) {
+                      me.setHtml(response.responseText);
+                    },
+                    failure: function(response) {
+                      Ext.log.warn('Loading dataprotection-HTML failed: ', response);
+                    }
+                });
+            }
+        }
     }]
 });

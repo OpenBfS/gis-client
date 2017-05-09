@@ -866,6 +866,9 @@
                 },
                 "sitePolicy": {
                     "title": "Nutzungsbedingungen"
+                },
+                "dataProtection": {
+                    "title": "Datenschutz"
                 }
             }
         }
