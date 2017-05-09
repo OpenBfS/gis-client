@@ -47,12 +47,19 @@ Ext.define('Koala.view.button.ToggleFullscreen', {
 
         Ext.each(browserPrefixes, function(browserPrefix) {
             var event = browserPrefix + 'fullscreenchange';
-            document.addEventListener(event, function() {
-                var fullscreen = Koala.util.Fullscreen.isInFullscreen();
-                var glyphCode = fullscreen ? 'xf066' : 'xf065';
-                me.setGlyph(glyphCode + '@FontAwesome');
-            });
+            document.addEventListener(event, me.onFullScreenChange.bind(me));
         });
+    },
+
+    /**
+     * Listener for the fullscreen change event. WARNING: This does not respect
+     * the fullscreenmode toggled by F11 but just from javascript side.
+     */
+    onFullScreenChange: function() {
+        var me = this;
+        var fullscreen = Koala.util.Fullscreen.isInFullscreen();
+        var glyphCode = fullscreen ? 'xf066' : 'xf065';
+        me.setGlyph(glyphCode + '@FontAwesome');
     },
 
     listeners: {
