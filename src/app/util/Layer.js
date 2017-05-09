@@ -31,8 +31,6 @@ Ext.define('Koala.util.Layer', {
 
     statics: {
         /* i18n */
-        txtUtc: '',
-        txtLocal: '',
         txtUntil: '',
         titleAddLayer: '',
         titleAddLayerFilter: '',

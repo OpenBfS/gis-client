@@ -27,6 +27,11 @@ Ext.define('Koala.util.Date', {
          */
         DEFAULT_DATE_FORMAT: 'LLL',
 
+        /* i18n */
+        txtUtc: '',
+        txtLocal: '',
+        /* i18n */
+
         /**
          * Server time is always UTC (and in ISO 8601 format)
          * Use moment in strict moment (this is also recommended
@@ -120,11 +125,12 @@ Ext.define('Koala.util.Date', {
          * @return {String} The serialized date.
          */
         getFormattedDate: function(momentDate, dateFormat, timeReferenceAware) {
+            var staticMe = this;
+
             if (!moment.isMoment(momentDate)) {
                 Ext.Logger.warn('`momentDate` must be a Moment date object.');
                 return;
             }
-
             // The default should always the set to `true`.
             if (!(Ext.isDefined(timeReferenceAware))) {
                 timeReferenceAware = true;
@@ -142,7 +148,17 @@ Ext.define('Koala.util.Date', {
 
             dateFormat = dateFormat || Koala.util.Date.DEFAULT_DATE_FORMAT;
 
-            return dateClone.format(dateFormat);
+            var serializedDate = dateClone.format(dateFormat);
+
+            //add time reference info
+            if (dateClone.isUtc()) {
+                serializedDate += ' ' + staticMe.txtUtc;
+            }
+            else if (dateClone.isLocal()) {
+                serializedDate += ' ' + staticMe.txtLocal;
+            }
+
+            return serializedDate;
         },
 
         /**

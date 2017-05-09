@@ -1,8 +1,12 @@
 {
-    "Koala.util.Layer": {
+    "Koala.util.Date": {
         "statics": {
             "txtUtc": "(UTC)",
-            "txtLocal": "(local)",
+            "txtLocal": "(local)"
+        }
+    },
+    "Koala.util.Layer": {
+        "statics": {
             "txtUntil": "until",
             "titleAddLayer": "Layer",
             "titleAddLayerFilter": "Layer-Filter",
