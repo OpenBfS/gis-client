@@ -71,7 +71,10 @@ Ext.define('Koala.util.Fullscreen', {
 
         // Add certain helpers
         /**
-         * Return whether we are currently in fullscreenmode
+         * Return whether we are currently in fullscreenmode.
+         * WARNING: This does not respect the fullscreenmode toggled by F11 but
+         * just from javascript side.
+         *
          * @static
          * @return {boolean} Whether we are curently in fullscreen mode
          */
