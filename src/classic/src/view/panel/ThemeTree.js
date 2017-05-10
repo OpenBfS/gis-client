@@ -93,6 +93,30 @@ Ext.define('Koala.view.panel.ThemeTree', {
         }
     ],
 
+    columns: [{
+        xtype: 'treecolumn',
+        dataIndex: 'text',
+        flex: 1,
+        sortable: true
+    }, {
+        xtype: 'actioncolumn',
+        iconCls: 'x-fa fa-filter',
+        width: 25,
+        getTip: function(v, meta, rec) {
+            if (rec.get('text') === 'RODOS-Prognosen') {
+                return 'Rodos Filter ändern !18n';
+            }
+        },
+        getClass: function(v, meta, rec) {
+            if (rec.get('text') === 'RODOS-Prognosen') {
+                return 'x-fa fa-filter';
+            } else {
+                return 'hide-action-column';
+            }
+        },
+        handler: 'showRodosFilter'
+    }],
+
     listeners: {
         select: 'setupShowFilterWinCheck',
         itemdblclick: 'addLayerWithDefaultFilters'

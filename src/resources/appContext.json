@@ -7,6 +7,8 @@
                 "spatial-search": "http://bfs-docker.intranet.terrestris.de/geoserver/bfs/ows",
                 "print-servlet": "http://bfs-docker.intranet.terrestris.de/bfs-printservice/print/",
                 "irix-servlet": "http://bfs-docker.intranet.terrestris.de/irix-servlet",
+                "rodos-projects": "resources/rodos/projects.json",
+                "rodos-results": "resources/rodos/projects/",
 
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",

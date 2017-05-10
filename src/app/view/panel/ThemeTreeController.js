@@ -20,6 +20,10 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-panel-themetree',
 
+    require: [
+        'Koala.view.form.RodosFilter'
+    ],
+
     currentTask: null,
 
     toggleLayerSetView: function() {
@@ -58,6 +62,25 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             }
         });
         me.currentTask.delay(500);
+    },
+
+    showRodosFilter: function(view, rowIndex, colIndex, item) {
+        var win = Ext.ComponentQuery.query('window[name=rodos-window]')[0];
+        if (!win) {
+            var x = item.getX() + item.getWidth();
+            var y = item.getY();
+            Ext.create('Ext.window.Window', {
+                title: 'RODOS Prognosen Filter !i18n',
+                name: 'rodos-window',
+                layout: 'fit',
+                items: [{
+                    xtype: 'k-form-rodosfilter',
+                    minWidth: 400
+                }]
+            }).showAt(x, y);
+        } else {
+            BasiGX.util.Animate.shake(win);
+        }
     },
 
     addLayerWithDefaultFilters: function(treepanel, item) {
