@@ -96,10 +96,9 @@ Ext.define('Koala.view.form.LayerFilter', {
                     me.addPointInTimeFilter(filter, idx);
                     hasTimeFilter = true;
                     break;
-                case 'rodos':
-                    break;
+                case 'rodostime':
                 case 'value':
-                    me.createValueFilter(filter, idx);
+                    me.addValueFilter(filter, idx);
                     break;
                 default:
                     Ext.log.warn('Unexpected filter type: ' + filter.type);
@@ -225,18 +224,6 @@ Ext.define('Koala.view.form.LayerFilter', {
     },
 
     /**
-     * Creates and adds a rodos filter at the specified index. Currently not
-     * doing anything.
-     *
-     * // TODO specify and implement
-     *
-     * @param {Object} filter A filter specification object of type rodos.
-     * @param {Number} idx The index of the filter in the list of all filters.
-     */
-    createRODOSFilter: function() {
-    },
-
-    /**
      * Adds a timerange filter at the specified index.
      *
      * @param {Object} filter A filter specification object of type timerange.
@@ -256,20 +243,49 @@ Ext.define('Koala.view.form.LayerFilter', {
      * @param {Object} filter A filter specification object of type `value`.
      * @param {Number} idx The index of the filter in the list of all filters.
      */
-    createValueFilter: function(filter, idx) {
+    addValueFilter: function(filter, idx) {
         var FilterUtil = Koala.util.Filter;
         var field = null;
         var sharedCfg = {
-            labelWidth: 70,
+            labelWidth: 120,
             name: filter.param,
-            fieldLabel: filter.alias,
+            fieldLabel: filter.alias || filter.param,
             value: filter.effectivevalue || filter.defaultValue,
             emptyText: filter.defaultValue
         };
+
+        if (filter.type === 'rodostime') {
+            var getFormatedDate = function(values) {
+                var dspField = FilterUtil.COMBO_DSP_FIELD;
+                values = Ext.isArray(values) ? values[0] : values;
+                var dateString = values[dspField];
+                var moment = Koala.util.Date.getUtcMoment(dateString);
+                return Koala.util.Date.getFormattedDate(moment);
+            };
+            var listTpl = Ext.create('Ext.XTemplate',
+                '<tpl for=".">',
+                    '<div class="x-boundlist-item">',
+                        '{[this.getFormatedDate(values)]}',
+                    '</div>',
+                '</tpl>',
+                {
+                    getFormatedDate: getFormatedDate
+                }
+            );
+            var displayTpl = Ext.create('Ext.XTemplate',
+                    '{[this.getFormatedDate(values)]}',
+                {
+                    getFormatedDate: getFormatedDate
+                }
+            );
+        }
+
         if (filter.allowedValues) {
             field = FilterUtil.getComboFromAllowedValues(
                 filter.allowedValues,
-                filter.allowMultipleSelect
+                filter.allowMultipleSelect,
+                displayTpl,
+                listTpl
             );
         } else {
             field = {

@@ -56,8 +56,15 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         }
         me.currentTask = new Ext.util.DelayedTask(function() {
             if (item.isLeaf()) {
-                Koala.util.Layer.showChangeFilterSettingsWinByUuid(
-                    item.get('uuid')
+                Koala.util.Layer.getMetadataFromUuidAndThen(item.get('uuid'),
+                    function(metadata) {
+                        if (item.get('isRodosLayer') && item.get('rodosFilters')) {
+                            metadata.filters = Ext.Array.merge(
+                                metadata.filters, item.get('rodosFilters')
+                            );
+                        }
+                        Koala.util.Layer.showChangeFilterSettingsWin(metadata);
+                    }
                 );
             }
         });

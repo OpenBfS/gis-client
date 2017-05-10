@@ -179,13 +179,18 @@ Ext.define('Koala.util.Filter', {
          * values and the flag `rawMulti`.
          *
          * @param {String} allowedValues A string with the raw allowed
-         *     values, must conform to any of the above
+         *                               values, must conform to any of the
+         *                               above.
          * @param {String} rawMulti A string (`"true"" or `"false"`) indicating
-         *     if this combo should allow multiselection.
+         *                          if this combo should allow multiselection.
+         * @param {Ext.XTemplate} displayTpl An optional XTemplate for the
+         *                                   display of the combobbox.
+         * @param {Ext.XTemplate} listTpl An optional XTemplate for the
+         *                                listitems of the combobox.
          * @return {Object} A configuration for a combobox or a multiselect
-         *     select element.
+         *                  select element.
          */
-        getComboFromAllowedValues: function(allowedValues, rawMulti) {
+        getComboFromAllowedValues: function(allowedValues, rawMulti, displayTpl, listTpl) {
             var staticMe = this;
             var store = staticMe.getStoreFromAllowedValues(allowedValues);
             var multi = Koala.util.String.coerce(rawMulti);
@@ -205,7 +210,9 @@ Ext.define('Koala.util.Filter', {
                     valueField: staticMe.COMBO_VAL_FIELD,
                     listeners: {
                         change: 'onFilterChanged'
-                    }
+                    },
+                    displayTpl: displayTpl,
+                    tpl: listTpl
                 };
             } else { // modern
                 if (multi) {
