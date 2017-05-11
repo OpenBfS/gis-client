@@ -193,7 +193,7 @@ describe('Koala.util.Layer', function() {
             it('returns an empty text for rodos-filter', function() {
                 var metadata = {
                     filters: [{
-                        type: 'rodos'
+                        type: 'rodostime'
                     }]
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);

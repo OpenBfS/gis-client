@@ -68,8 +68,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 case 'pointintime':
                     me.createPointInTimeFilter(filter, idx);
                     break;
-                case 'rodos':
-                    break;
+                case 'rodostime':
                 case 'value':
                     me.createValueFilter(filter, idx);
                     break;

@@ -246,11 +246,19 @@ Ext.define('Koala.view.form.LayerFilter', {
     addValueFilter: function(filter, idx) {
         var FilterUtil = Koala.util.Filter;
         var field = null;
+        var value;
+        if (filter.type === 'rodostime' &&
+                moment.isMoment(filter.effectivedatetime)) {
+            value = filter.effectivedatetime.format();
+        } else {
+            value = filter.effectivevalue || filter.defaultValue;
+        }
+
         var sharedCfg = {
             labelWidth: 120,
             name: filter.param,
             fieldLabel: filter.alias || filter.param,
-            value: filter.effectivevalue || filter.defaultValue,
+            value: value,
             emptyText: filter.defaultValue
         };
 

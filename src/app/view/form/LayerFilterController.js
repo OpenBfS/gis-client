@@ -203,10 +203,15 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     if (!Ext.Array.contains(view.ignoreFields, key)) {
                         // Request the value as moment object.
                         var val = field.getValue(true);
-                        if (moment.isMoment(val)) {
-                            // We have to add hours & minutes, the date field
-                            // has precision DAY:
-                            val = FilterUtil.setHoursAndMinutes(val, field);
+                        // Transform if we have a 'rodostime'-Filter
+                        if (filter.type === 'rodostime' && !moment.isMoment(val)) {
+                            val = Koala.util.Date.getUtcMoment(val);
+                        } else {
+                            if (moment.isMoment(val)) {
+                                // We have to add hours & minutes, the date field
+                                // has precision DAY:
+                                val = FilterUtil.setHoursAndMinutes(val, field);
+                            }
                         }
                         keyVals[key] = val;
                     }
@@ -286,10 +291,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 filter.effectivemaxdatetime = keyVals[keys.endName];
                 break;
             case 'pointintime':
+            case 'rodostime':
                 filter.effectivedatetime = keyVals[param];
                 break;
             case 'value':
-            case 'rodostime':
                 filter.effectivevalue = keyVals[param];
                 break;
             default:

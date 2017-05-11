@@ -393,38 +393,47 @@ Ext.define('Koala.util.Layer', {
                 }
                 var filterType = filter.type;
                 var filterTxt = '';
-                if (filterType === 'rodos') {
-                    // TODO
-                } else if (filterType === 'value') {
-                    // Empty or false "test_data" filters should not be shown in the legend
-                    if (filter.param === 'test_data' &&
-                        (filter.effectivevalue.toLowerCase() === 'false' ||
-                            !filter.effectivevalue)
-                      ) {
-                        return;
-                    }
-                    filterTxt += staticMe.stringifyValueFilter(filter, true);
-                } else if (filterType === 'pointintime') {
-                    var date, time;
-                    date = filter.effectivedatetime;
-                    time = Koala.util.Date.getFormattedDate(date);
-                    filterTxt += time;
-                } else if (filterType === 'timerange') {
-                    var startDate, startTime;
-                    var endDate, endTime;
 
-                    startDate = filter.effectivemindatetime;
-                    endDate = filter.effectivemaxdatetime;
+                switch (filterType) {
+                    case 'timerange':
+                        var startDate, startTime;
+                        var endDate, endTime;
 
-                    // startFormat
-                    startTime = Koala.util.Date.getFormattedDate(startDate);
-                    // endFormat
-                    endTime = Koala.util.Date.getFormattedDate(endDate);
-                    filterTxt += '' +
-                        startTime +
-                        ' ' + staticMe.txtUntil + ' ' +
-                        endTime;
+                        startDate = filter.effectivemindatetime;
+                        endDate = filter.effectivemaxdatetime;
+
+                        // startFormat
+                        startTime = Koala.util.Date.getFormattedDate(startDate);
+                        // endFormat
+                        endTime = Koala.util.Date.getFormattedDate(endDate);
+
+                        filterTxt += '' +
+                            startTime +
+                            ' ' + staticMe.txtUntil + ' ' +
+                            endTime;
+                        break;
+                    case 'rodostime':
+                    case 'pointintime':
+                        var date, time;
+                        date = filter.effectivedatetime;
+                        time = Koala.util.Date.getFormattedDate(date);
+
+                        filterTxt += time;
+                        break;
+                    case 'value':
+                        // Empty or false "test_data" filters should not be shown in the legend
+                        if (filter.param === 'test_data' &&
+                            (filter.effectivevalue.toLowerCase() === 'false' ||
+                                !filter.effectivevalue)
+                          ) {
+                            return;
+                        }
+                        filterTxt += staticMe.stringifyValueFilter(filter, true);
+                        break;
+                    default:
+                        break;
                 }
+
                 filterTxts.push(filterTxt);
             });
 
@@ -1325,10 +1334,12 @@ Ext.define('Koala.util.Layer', {
                     case 'timerange':
                         adjFilter = me.applyDefaultsTimerangeFilter(filter);
                         break;
+                    case 'rodostime':
+                        adjFilter = me.applyDefaultsRodosTimeFilter(filter);
+                        break;
                     case 'pointintime':
                         adjFilter = me.applyDefaultsPointInTimeFilter(filter);
                         break;
-                    case 'rodostime':
                     case 'value':
                         adjFilter = me.applyDefaultsValueFilter(filter);
                         break;
@@ -1378,6 +1389,25 @@ Ext.define('Koala.util.Layer', {
             return filter;
         },
 
+        applyDefaultsRodosTimeFilter: function(filter) {
+            if (!moment.isMoment(filter.effectivedatetime)) {
+                if (filter.defaultValue) {
+                    try {
+                        filter.effectivedatetime = Koala.util.Date
+                            .getUtcMoment(filter.defaultValue);
+                    } catch (e) {
+                        Ext.log.error(
+                            'Could not set default rodos time filter'
+                        );
+                    }
+                } else {
+                    Ext.log.warn('No defined rodos time filter and no ' +
+                        'configured default rodos time filter');
+                }
+            }
+            return filter;
+        },
+
         applyDefaultsPointInTimeFilter: function(filter) {
             if (!moment.isMoment(filter.effectivedatetime)) {
                 if (filter.defaulttimeinstant) {
@@ -1417,10 +1447,10 @@ Ext.define('Koala.util.Layer', {
                         metadata = me.configureMetadataWithTimerange(metadata, filter);
                         break;
                     case 'pointintime':
+                    case 'rodostime':
                         metadata = me.configureMetadataWithPointInTime(metadata, filter);
                         break;
                     case 'value':
-                    case 'rodostime':
                         metadata = me.configureMetadataWithValue(metadata, filter);
                         break;
                     default:
@@ -1778,12 +1808,13 @@ Ext.define('Koala.util.Layer', {
                             }
                             break;
                         case 'pointintime':
+                        case 'rodostime':
                             var rawDate = filter.effectivedatetime;
                             keyVals[params[0]] = rawDate.toISOString();
                             break;
                         case 'value':
-                        case 'rodostime':
                             keyVals[params[0]] = filter.effectivevalue;
+                            break;
                         default:
                             Ext.log.warn('Unexpected filter type ' + type
                                 + ' specified');
@@ -1863,10 +1894,10 @@ Ext.define('Koala.util.Layer', {
             var cql = '';
             switch (type) {
                 case 'value':
-                case 'rodostime':
                     cql = staticMe.stringifyValueFilter(filter);
                     break;
                 case 'pointintime':
+                case 'rodostime':
                     cql = staticMe.stringifyPointInTimeFilter(filter);
                     break;
                 case 'timerange':
