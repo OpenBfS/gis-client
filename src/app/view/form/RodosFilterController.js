@@ -76,8 +76,10 @@ Ext.define('Koala.view.form.RodosFilterController', {
      *                               they are returned by the rodos servlet.
      */
     setRodosLayers: function(layers) {
-        var themeTree = Ext.ComponentQuery.query('k-panel-themetree')[0];
-        var treeStore = themeTree.getStore();
+        var queryString = Ext.isModern ?
+            'k-panel-treepanel > treelist' :
+            'k-panel-themetree';
+        var treeStore = Ext.ComponentQuery.query(queryString)[0].getStore();
         var rodosFolder = treeStore.findRecord('text', 'RODOS-Prognosen');
 
         // Remove all current layers from tree;
@@ -102,8 +104,10 @@ Ext.define('Koala.view.form.RodosFilterController', {
      * Removes all layers from the "RODOS-Prognosen" folder
      */
     removeRodosLayers: function() {
-        var themeTree = Ext.ComponentQuery.query('k-panel-themetree')[0];
-        var treeStore = themeTree.getStore();
+        var queryString = Ext.isModern ?
+            'k-panel-treepanel > treelist' :
+            'k-panel-themetree';
+        var treeStore = Ext.ComponentQuery.query(queryString)[0].getStore();
         var rodosFolder = treeStore.findRecord('text', 'RODOS-Prognosen');
         rodosFolder.removeAll();
     }

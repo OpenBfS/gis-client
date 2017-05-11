@@ -33,6 +33,7 @@ Ext.define('Koala.view.form.RodosFilterModel', {
     stores: {
         projectStore: {
             type: 'k-rodosprojects',
+            autoLoad: true,
             proxy: {
                 url: '{rodosProjectsUrl}'
             }

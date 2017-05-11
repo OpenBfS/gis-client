@@ -35,6 +35,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.util.Routing',
         'Koala.util.Fullscreen',
 
+        'Koala.view.form.RodosFilter',
         'Koala.view.panel.BarChart',
         'Koala.view.panel.MobilePanel',
         'Koala.view.panel.MobileLegend',
@@ -222,6 +223,14 @@ Ext.define('Koala.view.main.Main', {
         width: '100%',
         left: 0,
         hidden: true
+    }, {
+        xtype: 'k-panel-mobilepanel',
+        name: 'rodosContainer',
+        left: 0,
+        hidden: true,
+        items: [{
+            xtype: 'k-form-rodosfilter'
+        }]
     }, {
         xtype: 'k-panel-mobilepanel',
         name: 'filterContainer',

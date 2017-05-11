@@ -238,8 +238,6 @@ Ext.define('Koala.util.Filter', {
                         xtype: 'selectfield',
                         store: store,
                         queryMode: 'local',
-                        editable: false,
-                        allowBlank: true,
                         displayField: staticMe.COMBO_DSP_FIELD,
                         valueField: staticMe.COMBO_VAL_FIELD,
                         listeners: {
