@@ -10,9 +10,9 @@
 }
 
 .ol-scale-line-inner {
-    border: 1px solid #666;
+    border: 1px solid #ffffff;
     border-top: none;
-    color: #666;
+    color: #ffffff;
 }
 
 .ol-attribution.ol-uncollapsible {
@@ -45,3 +45,11 @@
 .x-toast {
     top: 40vh;
 }
+
+.imis-map-tools .x-button {
+    color: $base-color !important;
+}
+.imis-map-tools.x-button {
+    color: $base-color !important;
+}
+
