@@ -41,7 +41,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         var view = me.getView();
         var treeList = view.down('treelist');
         store.each(function(rec) {
-            if (rec.get('text') === 'RODOS-Prognosen') {
+            if (rec.get('text').indexOf('RODOS-Prognosen') > -1) {
                 var item = treeList.getItem(rec);
                 var iconEl = item.el.query('.x-treelist-item-icon')[0];
                 iconEl.style.left = 'inherit';
@@ -79,7 +79,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
                 Koala.util.Layer.getMetadataFromUuidAndThen(
                     selection.get('uuid'), me.showChangeFilterSettingsWin.bind(me));
             }
-            if (selection.get('text') === 'RODOS-Prognosen' &&
+            if (selection.get('text').indexOf('RODOS-Prognosen') > -1 &&
                     node.id === 'rodos-filter-button') {
                 me.showRodosFilterPanel();
             }

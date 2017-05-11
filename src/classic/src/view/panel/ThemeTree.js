@@ -103,12 +103,12 @@ Ext.define('Koala.view.panel.ThemeTree', {
         iconCls: 'x-fa fa-filter',
         width: 25,
         getTip: function(v, meta, rec) {
-            if (rec.get('text') === 'RODOS-Prognosen') {
+            if (rec.get('text').indexOf('RODOS-Prognosen') > -1) {
                 return 'Rodos Filter ändern !18n';
             }
         },
         getClass: function(v, meta, rec) {
-            if (rec.get('text') === 'RODOS-Prognosen') {
+            if (rec.get('text').indexOf('RODOS-Prognosen') > -1) {
                 return 'x-fa fa-filter';
             } else {
                 return 'hide-action-column';

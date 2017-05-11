@@ -100,6 +100,7 @@ Ext.define('Koala.view.window.MetadataInfo', {
         var me = this;
         var staticMe = me.self;
         me.callParent();
+
         var propertyGrid = Ext.create('Ext.grid.property.Grid', {
             width: 400,
             listeners: {

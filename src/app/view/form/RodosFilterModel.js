@@ -26,6 +26,7 @@ Ext.define('Koala.view.form.RodosFilterModel', {
         removeAllLayers: 'Remove All Rodos Layers from Tree !i18n',
 
         rodosResults: null,
+        selectedProject: null,
         rodosProjectsUrl: '/rodos-servlet',
         rodosResultsUrl: '/rodos-servlet'
     },

@@ -62,6 +62,8 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
                             metadata.filters = Ext.Array.merge(
                                 metadata.filters, item.get('rodosFilters')
                             );
+                            metadata.isRodosLayer = item.get('isRodosLayer');
+                            metadata.description = item.get('description');
                         }
                         Koala.util.Layer.showChangeFilterSettingsWin(metadata);
                     }
