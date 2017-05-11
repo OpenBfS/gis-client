@@ -1328,6 +1328,7 @@ Ext.define('Koala.util.Layer', {
                     case 'pointintime':
                         adjFilter = me.applyDefaultsPointInTimeFilter(filter);
                         break;
+                    case 'rodostime':
                     case 'value':
                         adjFilter = me.applyDefaultsValueFilter(filter);
                         break;
@@ -1419,6 +1420,7 @@ Ext.define('Koala.util.Layer', {
                         metadata = me.configureMetadataWithPointInTime(metadata, filter);
                         break;
                     case 'value':
+                    case 'rodostime':
                         metadata = me.configureMetadataWithValue(metadata, filter);
                         break;
                     default:
@@ -1764,21 +1766,27 @@ Ext.define('Koala.util.Layer', {
                     var type = filter.type;
 
                     // we need to check the metadata for default filters to apply
-                    if (type === 'timerange') {
-                        var rawDateMin = filter.effectivemindatetime;
-                        keyVals[params[0]] = rawDateMin.toISOString();
-
-                        var rawDateMax = filter.effectivemaxdatetime;
-                        if (!params[1]) {
-                            keyVals[params[0]] += '/' + rawDateMax.toISOString();
-                        } else {
-                            keyVals[params[1]] = rawDateMax.toISOString();
-                        }
-                    } else if (type === 'pointintime') {
-                        var rawDate = filter.effectivedatetime;
-                        keyVals[params[0]] = rawDate.toISOString();
-                    } else if (type === 'value') {
-                        keyVals[params[0]] = filter.effectivevalue;
+                    switch (type) {
+                        case 'timerange':
+                            var rawDateMin = filter.effectivemindatetime;
+                            keyVals[params[0]] = rawDateMin.toISOString();
+                            var rawDateMax = filter.effectivemaxdatetime;
+                            if (!params[1]) {
+                                keyVals[params[0]] += '/' + rawDateMax.toISOString();
+                            } else {
+                                keyVals[params[1]] = rawDateMax.toISOString();
+                            }
+                            break;
+                        case 'pointintime':
+                            var rawDate = filter.effectivedatetime;
+                            keyVals[params[0]] = rawDate.toISOString();
+                            break;
+                        case 'value':
+                        case 'rodostime':
+                            keyVals[params[0]] = filter.effectivevalue;
+                        default:
+                            Ext.log.warn('Unexpected filter type ' + type
+                                + ' specified');
                     }
                 }
             });
@@ -1854,10 +1862,8 @@ Ext.define('Koala.util.Layer', {
             var type = filter.type;
             var cql = '';
             switch (type) {
-                case 'rodos':
-                    // TODO to be specified
-                    break;
                 case 'value':
+                case 'rodostime':
                     cql = staticMe.stringifyValueFilter(filter);
                     break;
                 case 'pointintime':

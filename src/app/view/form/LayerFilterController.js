@@ -279,15 +279,23 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var filter = filters[idx];
         var filterType = (filter.type || '').toLowerCase();
         var param = filter.param;
-        if (filterType === 'timerange') {
-            var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
-            filter.effectivemindatetime = keyVals[keys.startName];
-            filter.effectivemaxdatetime = keyVals[keys.endName];
-        } else if (filterType === 'pointintime') {
-            filter.effectivedatetime = keyVals[param];
-        } else if (filterType === 'value') {
-            filter.effectivevalue = keyVals[param];
+        switch (filterType) {
+            case 'timerange':
+                var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
+                filter.effectivemindatetime = keyVals[keys.startName];
+                filter.effectivemaxdatetime = keyVals[keys.endName];
+                break;
+            case 'pointintime':
+                filter.effectivedatetime = keyVals[param];
+                break;
+            case 'value':
+            case 'rodostime':
+                filter.effectivevalue = keyVals[param];
+                break;
+            default:
+                Ext.log.warn('Unexpected filter type ' + filterType + ' specified');
         }
+
         filters[idx] = filter;
         return filters;
     },
