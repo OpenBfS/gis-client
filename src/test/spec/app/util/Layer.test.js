@@ -193,12 +193,36 @@ describe('Koala.util.Layer', function() {
             it('returns an empty text for rodos-filter', function() {
                 var metadata = {
                     filters: [{
-                        type: 'rodostime'
+                        'allowedValues': [{
+                            'val': 'a902ae474_0aa9_1547_1d1b_f7bfa80b0c46',
+                            'dsp': 'a902ae474_0aa9_1547_1d1b_f7bfa80b0c46'
+                        }],
+                        'allowMultipleSelect': 'false',
+                        'encodeInViewParams': 'true',
+                        'param': 'tablename',
+                        'defaultValue': 'a902ae474_0aa9_1547_1d1b_f7bfa80b0c46',
+                        'type': 'value',
+                        'operator': '='
+                    }, {
+                        'allowedValues': [{
+                            'val': '2017-04-21T07:00:00Z',
+                            'dsp': '2017-04-21T07:00:00Z'
+                        }, {
+                            'val': '2017-04-22T06:00:00Z',
+                            'dsp': '2017-04-22T06:00:00Z'
+                        }],
+                        'allowMultipleSelect': 'false',
+                        'encodeInViewParams': 'false',
+                        'param': 'date',
+                        'defaultValue': '2017-04-22T06:00:00Z',
+                        'alias': 'Prognosezeitpunkt',
+                        'type': 'rodostime',
+                        'operator': '='
                     }]
                 };
                 var got = Koala.util.Layer.getFiltersTextFromMetadata(metadata);
 
-                expect(got).to.be('');
+                expect(got).not.to.be('');
             });
             it('returns a text for key-value-filter', function() {
                 var metadata = {
