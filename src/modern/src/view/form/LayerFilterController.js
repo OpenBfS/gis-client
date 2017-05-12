@@ -524,18 +524,23 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var view = this.getView();
         var FilterUtil = Koala.util.Filter;
         var field = null;
+        var value;
+        if (filter.type === 'rodostime' &&
+                moment.isMoment(filter.effectivedatetime)) {
+            value = filter.effectivedatetime.format();
+        } else {
+            value = filter.effectivevalue || filter.defaultValue;
+        }
         var sharedCfg = {
             labelAlign: 'top',
             name: filter.param,
-            label: filter.alias,
-            value: filter.effectivevalue || filter.defaultValue,
+            label: filter.alias || filter.param,
+            value: value,
             emptyText: filter.defaultValue
         };
+
         if (filter.allowedValues) {
-            field = FilterUtil.getComboFromAllowedValues(
-                filter.allowedValues,
-                filter.allowMultipleSelect
-            );
+            field = FilterUtil.getComboFromFilter(filter);
         } else {
             field = {
                 xtype: 'textfield'

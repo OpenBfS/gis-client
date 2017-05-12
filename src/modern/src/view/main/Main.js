@@ -225,6 +225,9 @@ Ext.define('Koala.view.main.Main', {
         hidden: true
     }, {
         xtype: 'k-panel-mobilepanel',
+        bind: {
+            title: '{rodosPanelTitle}'
+        },
         name: 'rodosContainer',
         left: 0,
         hidden: true,

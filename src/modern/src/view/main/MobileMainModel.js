@@ -28,6 +28,7 @@ Ext.define('Koala.view.main.MobileMainModel', {
         chartSlctnTitle: '',
         chartSlctnMsg: '',
         chartSlctnTimeSeriesBtn: '',
-        chartSlctnBarChartBtn: ''
+        chartSlctnBarChartBtn: '',
+        rodosPanelTitle: 'RODOS-Filter !i18n'
     }
 });

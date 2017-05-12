@@ -262,39 +262,8 @@ Ext.define('Koala.view.form.LayerFilter', {
             emptyText: filter.defaultValue
         };
 
-        if (filter.type === 'rodostime') {
-            var getFormatedDate = function(values) {
-                var dspField = FilterUtil.COMBO_DSP_FIELD;
-                values = Ext.isArray(values) ? values[0] : values;
-                var dateString = values[dspField];
-                var moment = Koala.util.Date.getUtcMoment(dateString);
-                return Koala.util.Date.getFormattedDate(moment);
-            };
-            var listTpl = Ext.create('Ext.XTemplate',
-                '<tpl for=".">',
-                    '<div class="x-boundlist-item">',
-                        '{[this.getFormatedDate(values)]}',
-                    '</div>',
-                '</tpl>',
-                {
-                    getFormatedDate: getFormatedDate
-                }
-            );
-            var displayTpl = Ext.create('Ext.XTemplate',
-                    '{[this.getFormatedDate(values)]}',
-                {
-                    getFormatedDate: getFormatedDate
-                }
-            );
-        }
-
         if (filter.allowedValues) {
-            field = FilterUtil.getComboFromAllowedValues(
-                filter.allowedValues,
-                filter.allowMultipleSelect,
-                displayTpl,
-                listTpl
-            );
+            field = FilterUtil.getComboFromFilter(filter);
         } else {
             field = {
                 xtype: 'textfield'

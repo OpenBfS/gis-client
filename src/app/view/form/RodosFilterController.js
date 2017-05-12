@@ -45,7 +45,6 @@ Ext.define('Koala.view.form.RodosFilterController', {
      */
     requestLayersOfProject: function(projectUid) {
         var me = this;
-        var view = me.getView();
         var viewModel = this.getViewModel();
         var baseUrl = viewModel.get('rodosResultsUrl');
 
@@ -56,10 +55,7 @@ Ext.define('Koala.view.form.RodosFilterController', {
                 if (obj && obj.rodos_results) {
                     me.setRodosLayers(obj.rodos_results);
                 }
-                var window = view.up('window');
-                if (window) {
-                    window.close();
-                }
+                me.closeRodosFilter();
             },
             failure: function(response) {
                 Ext.Logger.warn('No RODOS-layers found for project '
@@ -111,12 +107,31 @@ Ext.define('Koala.view.form.RodosFilterController', {
      * Removes all layers from the "RODOS-Prognosen" folder
      */
     removeRodosLayers: function() {
+        var me = this;
         var queryString = Ext.isModern ?
             'k-panel-treepanel > treelist' :
             'k-panel-themetree';
         var treeStore = Ext.ComponentQuery.query(queryString)[0].getStore();
         var rodosFolder = treeStore.findRecord('text', 'RODOS-Prognosen');
         rodosFolder.removeAll();
+        me.closeRodosFilter();
+    },
+
+    /**
+     * Closes the window in classic. Hides the mobilepanel in modern.
+     */
+    closeRodosFilter: function() {
+        var view = this.getView();
+        // Classic
+        var window = view.up('window');
+        if (window) {
+            window.close();
+        }
+        // Modern
+        var mobilePanel = view.up('k-panel-mobilepanel');
+        if (mobilePanel) {
+            mobilePanel.hide();
+        }
     }
 
 });

@@ -76,8 +76,18 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         var selection = treelist.getSelection();
         me.currentTask = new Ext.util.DelayedTask(function() {
             if (selection && selection.isLeaf()) {
-                Koala.util.Layer.getMetadataFromUuidAndThen(
-                    selection.get('uuid'), me.showChangeFilterSettingsWin.bind(me));
+                Koala.util.Layer.getMetadataFromUuidAndThen(selection.get('uuid'),
+                    function(metadata) {
+                        if (selection.get('isRodosLayer') && selection.get('rodosFilters')) {
+                            metadata.filters = Ext.Array.merge(
+                                metadata.filters, selection.get('rodosFilters')
+                            );
+                            metadata.isRodosLayer = selection.get('isRodosLayer');
+                            metadata.description = selection.get('description');
+                        }
+                        me.showChangeFilterSettingsWin(metadata);
+                    }
+                );
             }
             if (selection.get('text').indexOf('RODOS-Prognosen') > -1 &&
                     node.id === 'rodos-filter-button') {

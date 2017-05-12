@@ -171,45 +171,51 @@ describe('Koala.util.Filter', function() {
             });
         });
 
-        describe('#getComboFromAllowedValues', function() {
+        describe('#getComboFromFilter', function() {
 
-            var allowedValues = [{'val': '\'BfS\'','dsp': 'BfS'},{'val': '\'KFUE\'','dsp': 'KFÜ'},{'val': '\'EURDEP\'','dsp': 'EURDEP'}];
+            var filter = {
+                allowedValues: [
+                    {'val': '\'BfS\'','dsp': 'BfS'},
+                    {'val': '\'KFUE\'','dsp': 'KFÜ'},
+                    {'val': '\'EURDEP\'','dsp': 'EURDEP'}
+                ]
+            };
 
             it('is defined', function() {
-                expect(Koala.util.Filter.getComboFromAllowedValues).to.not.be(undefined);
+                expect(Koala.util.Filter.getComboFromFilter).to.not.be(undefined);
             });
             it('is a function', function() {
-                expect(Koala.util.Filter.getComboFromAllowedValues).to.be.a(Function);
+                expect(Koala.util.Filter.getComboFromFilter).to.be.a(Function);
             });
 
             it('returns combo object', function() {
-                var rawMulti = false;
+                filter.allowMultipleSelect = false;
                 if (!Ext.isModern) {
-                    var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
+                    var got = Koala.util.Filter.getComboFromFilter(filter);
                     expect(got.xtype).to.be('combo');
                 }
             });
 
             it('returns multiselect object', function() {
-                var rawMulti = true;
+                filter.allowMultipleSelect = true;
                 if (!Ext.isModern) {
-                    var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
+                    var got = Koala.util.Filter.getComboFromFilter(filter);
                     expect(got.xtype).to.be('multiselect');
                 }
             });
 
             it('returns list object', function() {
-                var rawMulti = false;
+                filter.allowMultipleSelect = false;
                 if (Ext.isModern) {
-                    var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
+                    var got = Koala.util.Filter.getComboFromFilter(filter);
                     expect(got.xtype).to.be('selectfield');
                 }
             });
 
             it('returns selectfield object', function() {
-                var rawMulti = true;
+                filter.allowMultipleSelect = true;
                 if (Ext.isModern) {
-                    var got = Koala.util.Filter.getComboFromAllowedValues(allowedValues, rawMulti);
+                    var got = Koala.util.Filter.getComboFromFilter(filter);
                     expect(got.xtype).to.be('list');
                 }
             });

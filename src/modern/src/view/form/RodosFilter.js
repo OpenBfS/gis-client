@@ -68,7 +68,8 @@ Ext.define('Koala.view.form.RodosFilter', {
             name: 'projectCombo',
             autoSelect: false,
             bind: {
-                store: '{projectStore}'
+                store: '{projectStore}',
+                selection: '{selectedProject}'
             },
             displayField: 'name',
             valueField: 'project_uid',
