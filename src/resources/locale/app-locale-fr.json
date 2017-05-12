@@ -239,6 +239,13 @@
             },
         }
     },
+    "Koala.view.form.RodosFilter": {
+        "config": {
+            "data": {
+                "projectComboLabel": "fr:Projekt",
+            },
+        }
+    },
     "Koala.view.grid.MetadataSearch": {
         "config": {
             "data": {
@@ -283,7 +290,8 @@
                 "chartSlctnTitle": "fr:Diagramm wählen",
                 "chartSlctnMsg": "fr:Layer hat Zeitreihen-, als auch Säulendiagramm. Welches Diagramm soll dargestellt werden?",
                 "chartSlctnTimeSeriesBtn": "fr:Zeitreihendigramm",
-                "chartSlctnBarChartBtn": "fr:Säulendiagramm"
+                "chartSlctnBarChartBtn": "fr:Säulendiagramm",
+                "rodosPanelTitle": "RODOS-Filter"
             }
         }
     },
@@ -329,7 +337,8 @@
                 "tooltip": "fr:LayerSet wechseln",
                 "tooltext": "fr:Thema wechseln",
                 "btnTextResetThemeTreeFiltering": "fr:Alle Layer",
-                "btnTooltipResetThemeTreeFiltering": "fr:Hebt eine etwaige Filterung der verfügbaren Themen auf."
+                "btnTooltipResetThemeTreeFiltering": "fr:Hebt eine etwaige Filterung der verfügbaren Themen auf.",
+                "rodosWindowTitle": "fr:RODOS Prognosen Filter"
             }
         }
     },

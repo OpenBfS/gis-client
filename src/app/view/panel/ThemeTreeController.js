@@ -74,12 +74,13 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
     },
 
     showRodosFilter: function(view, rowIndex, colIndex, item) {
+        var viewModel = this.getViewModel();
         var win = Ext.ComponentQuery.query('window[name=rodos-window]')[0];
         if (!win) {
             var x = item.getX() + item.getWidth();
             var y = item.getY();
             Ext.create('Ext.window.Window', {
-                title: 'RODOS Prognosen Filter !i18n',
+                title: viewModel.get('rodosWindowTitle'),
                 name: 'rodos-window',
                 layout: 'fit',
                 items: [{

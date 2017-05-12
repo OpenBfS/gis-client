@@ -245,6 +245,13 @@
             }
         }
     },
+    "Koala.view.form.RodosFilter": {
+        "config": {
+            "data": {
+                "projectComboLabel": "Project",
+            },
+        }
+    },
     "Koala.view.grid.MetadataSearch": {
         "config": {
             "data": {
@@ -291,6 +298,7 @@
                 "chartSlctnMsg": "Layer has a time series as well as a bar chart. Which type of diagram shall be displayed?",
                 "chartSlctnTimeSeriesBtn": "Time Series",
                 "chartSlctnBarChartBtn": "Bar Chart",
+                "rodosPanelTitle": "RODOS-Filter",
                 "headerTitle": "GEOPORTAL"
             }
         }
@@ -344,7 +352,8 @@
                 "tooltip": "Change Layer Set",
                 "tooltext": "Change Topic",
                 "btnTextResetThemeTreeFiltering": "All Layers",
-                "btnTooltipResetThemeTreeFiltering": "Resets filtering of available topics."
+                "btnTooltipResetThemeTreeFiltering": "Resets filtering of available topics.",
+                "rodosWindowTitle": "en:RODOS Prognosen Filter"
             }
         }
     },

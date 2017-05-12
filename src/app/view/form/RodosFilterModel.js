@@ -21,8 +21,7 @@ Ext.define('Koala.view.form.RodosFilterModel', {
     alias: 'viewmodel.k-form-rodosfilter',
 
     data: {
-        rodosProjectFieldsetTitle: 'Rodos Projekt auswählen !i18n',
-        projectComboLabel: 'Projekt !i18n',
+        projectComboLabel: '',
 
         rodosResults: null,
         selectedProject: null,
