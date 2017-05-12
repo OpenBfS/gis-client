@@ -206,12 +206,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
                         // Transform if we have a 'rodostime'-Filter
                         if (filter.type === 'rodostime' && !moment.isMoment(val)) {
                             val = Koala.util.Date.getUtcMoment(val);
-                        } else {
-                            if (moment.isMoment(val)) {
-                                // We have to add hours & minutes, the date field
-                                // has precision DAY:
-                                val = FilterUtil.setHoursAndMinutes(val, field);
-                            }
+                        } else if (moment.isMoment(val)) {
+                            // We have to add hours & minutes, the date field
+                            // has precision DAY:
+                            val = FilterUtil.setHoursAndMinutes(val, field);
                         }
                         keyVals[key] = val;
                     }

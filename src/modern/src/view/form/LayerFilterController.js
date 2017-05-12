@@ -182,7 +182,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
                         key = field.getName();
                         if (!Ext.Array.contains(view.ignoreFields, key)) {
                             var val = field.getValue(true);
-                            if (moment.isMoment(val)) {
+                            if (filter.type === 'rodostime' && !moment.isMoment(val)) {
+                                val = Koala.util.Date.getUtcMoment(val);
+                            } else if (moment.isMoment(val)) {
                                 // we have to add hours & minutes, the date field
                                 // has precision DAY:
                                 val = FilterUtil.setHoursAndMinutes(val, field);
@@ -265,15 +267,24 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var filter = filters[idx];
         var filterType = (filter.type || '').toLowerCase();
         var param = filter.param;
-        if (filterType === 'timerange') {
-            var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
-            filter.effectivemindatetime = keyVals[keys.startName];
-            filter.effectivemaxdatetime = keyVals[keys.endName];
-        } else if (filterType === 'pointintime') {
-            filter.effectivedatetime = keyVals[param];
-        } else if (filterType === 'value') {
-            filter.effectivevalue = keyVals[param];
+
+        switch (filterType) {
+            case 'timerange':
+                var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
+                filter.effectivemindatetime = keyVals[keys.startName];
+                filter.effectivemaxdatetime = keyVals[keys.endName];
+                break;
+            case 'pointintime':
+            case 'rodostime':
+                filter.effectivedatetime = keyVals[param];
+                break;
+            case 'value':
+                filter.effectivevalue = keyVals[param];
+                break;
+            default:
+
         }
+
         filters[idx] = filter;
         return filters;
     },
