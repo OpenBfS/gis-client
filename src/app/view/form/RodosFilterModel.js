@@ -23,7 +23,6 @@ Ext.define('Koala.view.form.RodosFilterModel', {
     data: {
         rodosProjectFieldsetTitle: 'Rodos Projekt auswählen !i18n',
         projectComboLabel: 'Projekt !i18n',
-        removeAllLayers: 'Remove All Rodos Layers from Tree !i18n',
 
         rodosResults: null,
         selectedProject: null,

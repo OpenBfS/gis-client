@@ -60,36 +60,20 @@ Ext.define('Koala.view.form.RodosFilter', {
     },
 
     items: [{
-        xtype: 'fieldset',
+        xtype: 'combo',
+        name: 'projectCombo',
         bind: {
-            title: '{rodosProjectFieldsetTitle}'
+            fieldLabel: '{projectComboLabel}',
+            store: '{projectStore}',
+            selection: '{selectedProject}'
         },
-        name: 'rodos-project-fieldset',
-        layout: 'form',
-        items: [{
-            xtype: 'combo',
-            name: 'projectCombo',
-            bind: {
-                fieldLabel: '{projectComboLabel}',
-                store: '{projectStore}',
-                selection: '{selectedProject}'
-            },
-            allowBlank: false,
-            forceSelection: true,
-            displayField: 'name',
-            valueField: 'project_uid',
-            listeners: {
-                select: 'onProjectSelected'
-            }
-        }]
-    }],
-
-    bbar: [{
-        bind: {
-            text: '{removeAllLayers}'
-        },
-        buttonAlign: 'right',
-        handler: 'removeRodosLayers'
+        allowBlank: false,
+        forceSelection: true,
+        displayField: 'name',
+        valueField: 'project_uid',
+        listeners: {
+            select: 'onProjectSelected'
+        }
     }]
 
 });

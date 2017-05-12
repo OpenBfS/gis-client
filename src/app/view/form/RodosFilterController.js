@@ -99,22 +99,9 @@ Ext.define('Koala.view.form.RodosFilterController', {
 
             if (treeNodeObj.uuid && treeNodeObj.text) {
                 rodosFolder.appendChild(treeNodeObj);
+                rodosFolder.expand();
             }
         });
-    },
-
-    /**
-     * Removes all layers from the "RODOS-Prognosen" folder
-     */
-    removeRodosLayers: function() {
-        var me = this;
-        var queryString = Ext.isModern ?
-            'k-panel-treepanel > treelist' :
-            'k-panel-themetree';
-        var treeStore = Ext.ComponentQuery.query(queryString)[0].getStore();
-        var rodosFolder = treeStore.findRecord('text', 'RODOS-Prognosen');
-        rodosFolder.removeAll();
-        me.closeRodosFilter();
     },
 
     /**
