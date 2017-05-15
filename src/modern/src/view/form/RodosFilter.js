@@ -68,6 +68,7 @@ Ext.define('Koala.view.form.RodosFilter', {
             name: 'projectCombo',
             autoSelect: false,
             bind: {
+                label: '{projectComboLabel}',
                 store: '{projectStore}',
                 selection: '{selectedProject}'
             },
@@ -75,25 +76,8 @@ Ext.define('Koala.view.form.RodosFilter', {
             valueField: 'project_uid',
             listeners: {
                 change: 'onProjectSelected'
-            },
-            items: [{
-                // The list view itself doesn't contain a label,
-                // therefore we insert a basic field that can be
-                // labeled.
-                xtype: 'field',
-                labelWidth: '100%',
-                label: {
-                    fieldLabel: '{projectComboLabel}'
-                }
-            }]
+            }
         }]
-    }, {
-        xtype: 'button',
-        bind: {
-            text: '{removeAllLayers}'
-        },
-        buttonAlign: 'right',
-        handler: 'removeRodosLayers'
     }]
 
 });

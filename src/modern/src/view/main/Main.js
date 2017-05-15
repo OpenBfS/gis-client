@@ -231,6 +231,7 @@ Ext.define('Koala.view.main.Main', {
         name: 'rodosContainer',
         left: 0,
         hidden: true,
+        closeToolAlign: 'left',
         items: [{
             xtype: 'k-form-rodosfilter'
         }]
