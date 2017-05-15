@@ -114,6 +114,7 @@ Ext.define('Koala.view.component.MapController', {
             winToOffset.setPosition(x, y);
         }
     },
+
     /**
      * This is finally a complete OVERRIDE of the getToolTipHtml function from
      * the base class BasiGX.view.component.Map!
@@ -126,7 +127,13 @@ Ext.define('Koala.view.component.MapController', {
         var replaceTemplateStrings = Koala.util.String.replaceTemplateStrings;
         Ext.each(layers, function(layer, layerIdx) {
             var hoverTpl = layer.get('hoverTpl');
-            Ext.each(features, function(feature, featureIdx) {
+            Ext.each(features, function(feature, featureIdx, feats) {
+                if (featureIdx > 0) {
+                    if (feature.get('id') === feats[featureIdx-1].get('id')) {
+                        return;
+                    }
+                }
+
                 // we check for existing feature first as there maybe strange
                 // situations (e.g. when zooming while hovering)
                 // where feat is undefined and feat.get would throw an error
