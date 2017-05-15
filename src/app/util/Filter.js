@@ -242,7 +242,8 @@ Ext.define('Koala.util.Filter', {
                         change: 'onFilterChanged'
                     },
                     displayTpl: displayTpl,
-                    tpl: listTpl
+                    tpl: listTpl,
+                    width: 400
                 };
             } else { // modern
                 if (multi) {

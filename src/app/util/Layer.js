@@ -801,6 +801,7 @@ Ext.define('Koala.util.Layer', {
                 name: winName,
                 title: title,
                 layout: 'fit',
+                minWidth: 400,
                 items: {
                     xtype: 'k-form-layerfilter',
                     metadata: metadata,

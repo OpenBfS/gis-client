@@ -1245,7 +1245,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      * Returns the Ext.Ajax.request for requesting the chart data.
      *
      * @param {ol.Feature} station The ol.Feature to build the request function
- *                                 for. Required.
+     *                             for. Required.
      * @param {Function} cbSuccess The function to be called on success. Optional.
      * @param {Function} cbFailure The function to be called on failure. Optional.
      * @param {Function} cbScope The callback function to be called on
