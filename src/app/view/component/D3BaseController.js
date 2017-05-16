@@ -338,6 +338,205 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
+     * Note: This is private method, don't call it yourself and if you have to,
+     * remember to call it only once!
+     *
+     * @private
+     */
+    onBoxReady: function() {
+        var me = this;
+        var view = me.getView();
+
+        // We have to cleanup manually.  WHY?!
+        me.scales = {};
+        me.shapes = [];
+        me.axes = {};
+        me.gridAxes = {};
+        me.data = {};
+
+        me.on('chartdataprepared', function() {
+            var svgContainer = me.getSvgContainer();
+            if (!me.chartDataAvailable) {
+                // We explicitly hide the svg root container, as the modern
+                // toolkit's panel didn't do it automatically if we update the
+                // element via setHtml(). And as it doesn't conflict with the
+                // classic toolkit's behaviour, no additional check for the
+                // current toolkit is needed.
+                svgContainer.attr('display', 'none');
+                view.setHtml('<div class="noDataError">' +
+                    me.getViewModel().get('noDataAvailableText') +
+                    '</div>'
+                );
+                me.chartRendered = false;
+            } else {
+                // Show the svg root container, see comment above as well.
+                svgContainer.attr('display', 'unset');
+
+                var errorDiv = view.el.query('.noDataError');
+                if (errorDiv[0]) {
+                    errorDiv[0].remove();
+                }
+
+                if (me.chartRendered) {
+                    me.redrawChart();
+                } else {
+                    me.drawChart();
+                }
+            }
+        });
+
+        me.getChartData();
+    },
+
+    /**
+     *
+     */
+    getChartData: function() {
+        var me = this;
+        var view = me.getView();
+        if (view.getShowLoadMask() && view.getSelectedStations().length > 0) {
+            view.setLoading(true);
+        }
+
+        me.data = {};
+        me.chartDataAvailable = false;
+        me.abortPendingRequests();
+
+        Ext.each(view.getSelectedStations(), function(station) {
+            me.getChartDataForStation(station);
+        });
+    },
+
+    /**
+     * Aborts any loading requests in our internal pending requests object and
+     * resets both #ajaxRequests and #ajaxCounter.
+     */
+    abortPendingRequests: function() {
+        var me = this;
+        Ext.iterate(me.ajaxRequests, function(id, ajaxRequest) {
+            if (ajaxRequest && ajaxRequest.isLoading()) {
+                ajaxRequest.abort();
+            }
+        });
+        me.ajaxRequests = {};
+        me.ajaxCounter = 0;
+    },
+
+    /**
+     * TODO gettestdatafilter and set to request URL // CQL ticket #1578
+     */
+    getChartDataForStation: function(selectedStation) {
+        var me = this;
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = selectedStation.get('id');
+
+        // Store the actual request object, so we are able to abort it if we are
+        // called faster than the response arrives.
+        var ajaxRequest = me.getChartDataRequest(
+                selectedStation,
+                me.onChartDataRequestCallback,
+                me.onChartDataRequestSuccess,
+                me.onChartDataRequestFailure,
+                me
+        );
+
+        // Put the current request into our storage for possible abortion.
+        me.ajaxRequests[stationId] = ajaxRequest;
+    },
+
+    /**
+     * Returns the WFS url of the current charting target layer.
+     *
+     * @return {String} The WFS url.
+     */
+    getChartDataRequestUrl: function() {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+
+        return targetLayer.metadata.layerConfig.wfs.url;
+    },
+
+    /**
+     * Returns the Ext.Ajax.request for requesting the chart data.
+     *
+     * @param {ol.Feature} station The ol.Feature to build the request function
+     *                             for. Required.
+     * @param {Function} cbSuccess The function to be called on success. Optional.
+     * @param {Function} cbFailure The function to be called on failure. Optional.
+     * @param {Function} cbScope The callback function to be called on
+     *                           success and failure. Optional.
+     * @return {Ext.Ajax.request} The request function.
+     */
+    getChartDataRequest: function(station, cbFn, cbSuccess, cbFailure, cbScope) {
+        var me = this;
+
+        if (!(station instanceof ol.Feature)) {
+            Ext.log.warn('No valid ol.Feature given.');
+            return;
+        }
+
+        var ajaxRequest = Ext.Ajax.request({
+            method: 'GET',
+            url: me.getChartDataRequestUrl(),
+            params: me.getChartDataRequestParams(station),
+            callback: function() {
+                if (Ext.isFunction(cbFn)) {
+                    cbFn.call(cbScope, station);
+                }
+            },
+            success: function(response) {
+                if (Ext.isFunction(cbSuccess)) {
+                    cbSuccess.call(cbScope, response, station);
+                }
+            },
+            failure: function(response) {
+                if (Ext.isFunction(cbFailure)) {
+                    cbFailure.call(cbScope, response, station);
+                }
+            }
+        });
+
+        return ajaxRequest;
+    },
+
+    /**
+     * The default callback handler for chart data requests.
+     *
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for.
+     */
+    onChartDataRequestCallback: function(station) {
+        var me = this;
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = station.get('id');
+
+        // Called for both success and failure, this will delete the
+        // entry in the pending requests object.
+        if (stationId in me.ajaxRequests) {
+            delete me.ajaxRequests[stationId];
+        }
+    },
+
+    /**
+     * The default handler for chart data request failures.
+     *
+     * @param {Object} response The reponse object.
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for. Optional.
+     */
+    onChartDataRequestFailure: function(response /*station*/) {
+        // aborted requests aren't failures
+        if (!response.aborted) {
+            Ext.log.error('Failure on chartdata load');
+        }
+    },
+
+    /**
      * Interface method to be overrriden in child classes.
      */
     redrawChart: function() {
