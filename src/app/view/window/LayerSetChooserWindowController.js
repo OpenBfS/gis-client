@@ -52,6 +52,8 @@ Ext.define('Koala.view.window.LayerSetChooserWindowController', {
                     if (profileHelpTxt) {
                         var view = me.getView();
                         var helpPanel = view.down('[itemId=k-panel-layersetHelpTxt]');
+                        //delete title
+                        profileHelpTxt = profileHelpTxt.replace(/<h2[\s\S]*?<\/h2>/, '');
                         //delete image
                         profileHelpTxt = profileHelpTxt.replace(/<img[\s\S]*?>/, '');
                         helpPanel.setHtml(profileHelpTxt);
