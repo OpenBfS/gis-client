@@ -395,7 +395,9 @@
                             "<h2> Vorbemerkung </h2>"+
                             "<div>Das "+
                             "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>Bundesamt für Strahlenschutz (BfS)</a>"+
-                            " stellt mit dem BfS-Geoportal ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des BfS sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
+                            " stellt mit dem "+
+                            "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
+                            " ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des BfS sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
                             "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>Integrierten Mess- und Informationssystem (IMIS)</a>"+
                             ".</div>"+
                             "<div>"+
@@ -988,10 +990,13 @@
                 "title": "Hilfe",
                 "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Vorbemerkung</h1>",
                 "helpPrefaceHtml":
-                    "<div>Das Geoportal des "+
-                    "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz)</a>"+
-                    " stellt Daten und Dienste sowie Darstellungswerkzeuge zur Verfügung, um einen Überblick über die im BfS erhobenen und zusammengeführten Messdaten zu ermitteln.</div>"+
-                    "<div>"+
+                    "<div>Das "+
+                    "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>Bundesamt für Strahlenschutz (BfS)</a>"+
+                    " stellt mit dem "+
+                    "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
+                    " ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des BfS sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
+                    "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>Integrierten Mess- und Informationssystem (IMIS)</a>"+
+                    ".</div>"+
                     "<p>Für die Bereitstellung von Geoinformationen haben gesetzliche Grundlagen, wie das "+
                     "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>Geodatenzugangsgesetz (GeoZG)</a>"+
                     " als Umsetzung der Europäische "+
