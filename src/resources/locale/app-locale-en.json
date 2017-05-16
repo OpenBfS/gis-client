@@ -534,7 +534,7 @@
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>3.1 WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26' style='vertical-align:middle'> </h2>"+
                                 "<div>"+
-                                "<p>The WMS service makes it possible to add WMS layers within BfS Geo-Portal. You can thus perform analyses and/or representations on the basis of external geo data. "+
+                                "<p>The WMS service makes it possible to add WMS layers within BfS Geoportal. You can thus perform analyses and/or representations on the basis of external geo data. "+
                                 "Please find more detailed information on the topic of Web Map Service at the following address: <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></p>"+
                                 "<p>First you need to set the query parameters. Enter a valid query into the \"WMS-URL\" field or select a predefined URL.</p>"+
                                 "<p>Then press the \"Query Available Layer\" button "+
@@ -647,13 +647,13 @@
                 "settings": {
                     "title": "6. Settings",
                     "html": "<h2>6. Settings</h2>"+
-                            "<div>You will find the BfS Geo-Portal settings in the top-right corner of the application. Clicking the relevant button will open or activate the corresponding function, which is explained in more detail in the following paragraphs. Please navigate to the desired item on the left-hand side of the Help page menu.</div><br />",
+                            "<div>You will find the BfS Geoportal settings in the top-right corner of the application. Clicking the relevant button will open or activate the corresponding function, which is explained in more detail in the following paragraphs. Please navigate to the desired item on the left-hand side of the Help page menu.</div><br />",
                     "fullScreen": {
                         "title": "6.1 Full screen",
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>6.1 Full screen <img class='img' src='classic/resources/img/helpPage/button_settings_fullScreen_en.png' title='Full screen' alt='button_settings_fullScreen_en.png' width='81' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Click on the \"Full Screen\" button to enlarge the view so that the BfS Geo-Portal application uses the full screen. Depending on the browser you use, you may be required to confirm the full screen mode.</p>"+
+                                "<p>Click on the \"Full Screen\" button to enlarge the view so that the BfS Geoportal application uses the full screen. Depending on the browser you use, you may be required to confirm the full screen mode.</p>"+
                                 "<p>Click the <b>Esc key</b> to cancel the full screen mode.</p>"+
                                 "</div>"
                         },
@@ -675,7 +675,7 @@
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>6.3 Help <img class='img' src='classic/resources/img/helpPage/button_settings_help_en.png' title='Help button' alt='button_settings_help_en.png' width='43' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>The \"Help\" button opens the Help window. In the Help window you will find a detailed description of the functionalities provided by BfS Geo-Portal.</p>"+
+                                "<p>The \"Help\" button opens the Help window. In the Help window you will find a detailed description of the functionalities provided by BfS Geoportal.</p>"+
                                 "</div>"
                         },
                     "imprint": {
@@ -741,7 +741,7 @@
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>7.5 Open legend <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Open legend' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>This button opens or closes the legend displayed in the bottom-right corner of BfS Geo-Portal. The legend comprises all layers that are immediately available for representation. Alternatively, you can directly click on the legend (blue bar labelled \"Legend\").</p>"+
+                                "<p>This button opens or closes the legend displayed in the bottom-right corner of BfS Geoportal. The legend comprises all layers that are immediately available for representation. Alternatively, you can directly click on the legend (blue bar labelled \"Legend\").</p>"+
                                 "</div>"
                         }
                 },

@@ -393,9 +393,11 @@
                     "title": "Vorbemerkung",
                     "html": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
                             "<h2> Vorbemerkung </h2>"+
-                            "<div>Das GeoPortal des "+
-                            "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz)</a>"+
-                            " stellt Daten und Dienste sowie Darstellungswerkzeuge zur Verfügung, um einen Überblick über die im BfS erhobenen und zusammengeführten Messdaten zu ermitteln.</div>"+
+                            "<div>Das "+
+                            "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>Bundesamt für Strahlenschutz (BfS)</a>"+
+                            " stellt mit dem BfS-Geoportal ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des BfS sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
+                            "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>Integrierten Mess- und Informationssystem (IMIS)</a>"+
+                            ".</div>"+
                             "<div>"+
                             "<p>Für die Bereitstellung von Geoinformationen haben gesetzliche Grundlagen, wie das "+
                             "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>Geodatenzugangsgesetz (GeoZG)</a>"+
@@ -405,7 +407,7 @@
                             "<a href='http://www.opengeospatial.org/standards' target='_blank'>Normierungen</a>"+
                             " von Such-, Darstellungs- und Download-Dienste erheblich vorangetrieben.</p>"+
                             "<p>Unter anderem wurden dadurch nutzerfreundlich Zugriffe auf Dienste anderer Quellen möglich, wie dies zentral im "+
-                            "<a href='http://www.geoportal.de/DE/Geoportal/geoportal.html?lang=de' target='_blank'>GeoPortal-Deutschland</a>"+
+                            "<a href='http://www.geoportal.de/DE/Geoportal/geoportal.html?lang=de' target='_blank'>Geoportal-Deutschland</a>"+
                             " aber auch in der vorliegenden GIS-Software des BfS möglich ist.</p>"+
                             "<p>Das BfS ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>"+
                             "</div>"+
@@ -534,7 +536,7 @@
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>3.1 WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26' style='vertical-align:middle'> </h2>"+
                                 "<div>"+
-                                "<p>Der WMS Dienst ermöglicht das Hinzufügen von WMS-Layern innerhalb des BfS Geo-Portals. Dadurch sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar. "+
+                                "<p>Der WMS Dienst ermöglicht das Hinzufügen von WMS-Layern innerhalb des BfS Geoportals. Dadurch sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar. "+
                                 "Detailliertere Informationen rund um das Thema <i>Web Map Service</i> finden Sie unter folgender Adresse:  <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></p>"+
                                 "<p>Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld \"WMS-URL\" eine gültige Anfrage ein oder wählen eine vordefinierte URL aus.</p>"+
                                 "<p>In der Folge drücken Sie auf den Knopf \"Verfügbare Layer abfragen\" "+
@@ -647,13 +649,13 @@
                 "settings": {
                     "title": "6. Einstellungen",
                     "html": "<h2>6. Einstellungen</h2>"+
-                            "<div>Die Einstellungen des BfS Geo-Portals befinden sich im rechten oberen Eck der Anwendung. Ein Klick auf den entsprechenden Knopf öffnet bzw. aktiviert die jeweilige Funktion, welche nachfolgend näher erläutert werden. Navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt.</div><br />",
+                            "<div>Die Einstellungen des BfS Geoportals befinden sich im rechten oberen Eck der Anwendung. Ein Klick auf den entsprechenden Knopf öffnet bzw. aktiviert die jeweilige Funktion, welche nachfolgend näher erläutert werden. Navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt.</div><br />",
                     "fullScreen": {
                         "title": "6.1 Vollbild",
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>6.1 Vollbild <img class='img' src='classic/resources/img/helpPage/button_settings_fullScreen.png' title='Knopf: Vollbild' alt='button_settings_fullScreen.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Ein Klick auf den Knopf \"Vollbild\" erweitert das Sichtfeld des BfS Geo-Portals auf den gesamten Bildschirm. Je nach Browser, den Sie verwenden, müssen Sie den Vollbild-Modus bestätigen.</p>"+
+                                "<p>Ein Klick auf den Knopf \"Vollbild\" erweitert das Sichtfeld des BfS Geoportals auf den gesamten Bildschirm. Je nach Browser, den Sie verwenden, müssen Sie den Vollbild-Modus bestätigen.</p>"+
                                 "<p>Zum Beenden des Vollbild-Modus drücken Sie die <b><i>Esc</i>-Taste</b>.</p>"+
                                 "</div>"
                         },
@@ -675,7 +677,7 @@
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>6.3 Hilfe <img class='img' src='classic/resources/img/helpPage/button_settings_help.png' title='Knopf: Hilfe' alt='button_settings_help.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Der Knopf \"Hilfe\" öffnet das Hilfefenster, das in einzelnen Unterpunkten die Funktionalitäten des BfS Geo-Portals beschreibt.</p>"+
+                                "<p>Der Knopf \"Hilfe\" öffnet das Hilfefenster, das in einzelnen Unterpunkten die Funktionalitäten des BfS Geoportals beschreibt.</p>"+
                                 "</div>"
                         },
                     "imprint": {
@@ -683,7 +685,7 @@
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>6.4 Impressum <img class='img' src='classic/resources/img/helpPage/button_settings_imprint.png' title='Knopf: Impressum' alt='button_settings_imprint.png' width='83' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Der Knopf \"Impressum\" öffnet das Impressum sowie die Nutzungsbedingungen des BfS Geo-Portals.</p>"+
+                                "<p>Der Knopf \"Impressum\" öffnet das Impressum sowie die Nutzungsbedingungen des BfS Geoportals.</p>"+
                                 "</div>"
                         },
                     "language": {
@@ -741,7 +743,7 @@
                         "html": "<hr style='color:#157FCC' />"+
                                 "<h2>7.5 Legende öffnen <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Knopf: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Dieser Knopf öffnet bzw. schließt die Legende, die im rechten unteren Eck des BfS Geo-Portals zu finden ist. Diese beinhaltet sämtliche Layer, die in der Darstellung unmittelbar verfügbar sind. Alternativ kann direkt auf die Legende (blauer Balken mit der Aufschrift \"Legende\") geklickt werden.</p>"+
+                                "<p>Dieser Knopf öffnet bzw. schließt die Legende, die im rechten unteren Eck des BfS Geoportals zu finden ist. Diese beinhaltet sämtliche Layer, die in der Darstellung unmittelbar verfügbar sind. Alternativ kann direkt auf die Legende (blauer Balken mit der Aufschrift \"Legende\") geklickt werden.</p>"+
                                 "</div>"
                         }
                 },
@@ -986,7 +988,7 @@
                 "title": "Hilfe",
                 "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Vorbemerkung</h1>",
                 "helpPrefaceHtml":
-                    "<div>Das GeoPortal des "+
+                    "<div>Das Geoportal des "+
                     "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz)</a>"+
                     " stellt Daten und Dienste sowie Darstellungswerkzeuge zur Verfügung, um einen Überblick über die im BfS erhobenen und zusammengeführten Messdaten zu ermitteln.</div>"+
                     "<div>"+
@@ -998,7 +1000,7 @@
                     "<a href='http://www.opengeospatial.org/standards' target='_blank'>Normierungen</a>"+
                     " von Such-, Darstellungs- und Download-Dienste erheblich vorangetrieben.</p>"+
                     "<p>Unter anderem wurden dadurch nutzerfreundlich Zugriffe auf Dienste anderer Quellen möglich, wie dies zentral im "+
-                    "<a href='http://www.geoportal.de/DE/Geoportal/geoportal.html?lang=de' target='_blank'>GeoPortal-Deutschland</a>"+
+                    "<a href='http://www.geoportal.de/DE/Geoportal/geoportal.html?lang=de' target='_blank'>Geoportal-Deutschland</a>"+
                     " aber auch in der vorliegenden GIS-Software des BfS möglich ist.</p>"+
                     "<p>Das BfS ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>"+
                     "</div>"+
