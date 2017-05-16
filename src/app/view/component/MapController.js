@@ -198,11 +198,7 @@ Ext.define('Koala.view.component.MapController', {
     openBarChartWindow: function(olFeat) {
         var me = this;
         var olLayer = olFeat.get('layer');
-        var win = Ext.ComponentQuery.query('window[name=barchartwin]')[0];
-        // create the window if it doesn't exist already
-        if (!win) {
-            win = me.createBarChartWindow(olLayer);
-        }
+        var win = me.createBarChartWindow(olLayer);
         win.getController().createOrUpdateChart(olLayer, olFeat);
         return win;
     },
