@@ -343,8 +343,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         barWidth = (chartSize[0] / firstStationData.length);
         barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
 
-
-        shapeGroup
+        var shapes = shapeGroup
             .selectAll('rect')
             .data(me.data)
             .enter().append('g')
