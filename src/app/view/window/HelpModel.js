@@ -39,6 +39,7 @@ Ext.define('Koala.view.window.HelpModel', {
             type: 'tree',
             root: {
                 children: [{
+                    id: 'preface',
                     text: '{preface.title}',
                     content: '{preface.html}',
                     leaf: true
