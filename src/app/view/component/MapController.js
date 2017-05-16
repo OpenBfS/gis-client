@@ -43,7 +43,18 @@ Ext.define('Koala.view.component.MapController', {
             return;
         }
 
-        Ext.each(olFeats, function(olFeat) {
+        var realFeats = [];
+        var knownIds = [];
+
+        Ext.each(olFeats, function(feat) {
+            if (Ext.Array.contains(knownIds, feat.get('id'))) {
+                return;
+            }
+            knownIds.push(feat.get('id'));
+            realFeats.push(feat);
+        });
+
+        Ext.each(realFeats, function(olFeat) {
             var layer = olFeat.get('layer');
             var idField = Koala.util.Object.getPathStrOr(layer,
                 'metadata/layerConfig/olProperties/featureIdentifyField', 'id');
@@ -185,10 +196,14 @@ Ext.define('Koala.view.component.MapController', {
     *
     */
     openBarChartWindow: function(olFeat) {
+        var me = this;
         var olLayer = olFeat.get('layer');
-        var uniqueId = this.getUniqueIdByFeature(olFeat);
-        var win = Ext.create('Koala.view.window.BarChart');
-        win.getController().createOrUpdateChart(olLayer, olFeat, uniqueId);
+        var win = Ext.ComponentQuery.query('window[name=barchartwin]')[0];
+        // create the window if it doesn't exist already
+        if (!win) {
+            win = me.createBarChartWindow(olLayer);
+        }
+        win.getController().createOrUpdateChart(olLayer, olFeat);
         return win;
     },
 
@@ -221,6 +236,21 @@ Ext.define('Koala.view.component.MapController', {
             Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
 
         var win = Ext.create('Koala.view.window.TimeSeriesWindow', {
+            addFilterForm: addFilterForm,
+            initOlLayer: olLayer
+        });
+        return win;
+    },
+
+    /**
+     *
+     */
+    createBarChartWindow: function(olLayer) {
+        var chartConfig = olLayer.get('barChartProperties');
+        var addFilterForm = !Ext.isEmpty(chartConfig.allowFilterForm) ?
+            Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
+
+        var win = Ext.create('Koala.view.window.BarChart', {
             addFilterForm: addFilterForm,
             initOlLayer: olLayer
         });

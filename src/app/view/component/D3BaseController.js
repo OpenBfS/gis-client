@@ -261,7 +261,10 @@ Ext.define('Koala.view.component.D3BaseController', {
          * @param {mixed} val The value for labeling.
          * @return {mixed} The exact same value that was passed in.
          */
-        identity: function(val) {
+        identity: function(val, object) {
+            if (object.detection_limit && object.detection_limit === '<') {
+                return '< NWG'; // TODO Needs to be configurable?
+            }
             return val;
         },
 
@@ -927,12 +930,14 @@ Ext.define('Koala.view.component.D3BaseController', {
     updateLegendContainerDimensions: function() {
         var me = this;
         var legendParent = me.legendSvg;
-        var elems = 'data' in me ? me.data : me.shapes;
+        var xtype = me.getView().getXType();
+
         var numLegends;
-        if (Ext.isArray(elems)) { // for barcharts
-            numLegends = elems.length;
-        } else if (Ext.isObject(elems)) { // for timeseries
-            numLegends = Object.keys(elems).length;
+        if (xtype === 'd3-barchart') { // for barcharts
+            var firstStationData = Object.values(me.data)[0];
+            numLegends = firstStationData.length;
+        } else if (xtype === 'd3-chart') { // for timeseries
+            numLegends = Object.keys(me.data).length;
         } else {
             // Ouch, shouldn't happen.
             numLegends = 0;
@@ -1108,5 +1113,53 @@ Ext.define('Koala.view.component.D3BaseController', {
         var viewId = '#' + view.getId();
 
         return d3.select(viewId + ' svg');
+    },
+
+    /**
+     * Create a cql-filter for a datetime range.
+     *
+     * @param {String} startDateString The start date as an ISO_8601 date string.
+     * @param {String} endDateString The end date as an ISO_8601 date string.
+     * @param {String} timeField The name of the timestamp field in the layer.
+     * @return {String} The ogc-filter as a string.
+     */
+    getDateTimeRangeFilter: function(startDateString, endDateString, timeField) {
+        var filter;
+
+        filter = '' +
+            '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
+              '<a:PropertyIsBetween>' +
+                '<a:PropertyName>' + timeField + '</a:PropertyName>' +
+                '<a:LowerBoundary>'+
+                  '<a:Literal>' + startDateString + '</a:Literal>' +
+                '</a:LowerBoundary>' +
+                '<a:UpperBoundary>' +
+                  '<a:Literal>' + endDateString + '</a:Literal>' +
+                '</a:UpperBoundary>' +
+              '</a:PropertyIsBetween>' +
+            '</a:Filter>';
+
+        return filter;
+    },
+
+    /**
+     * Create a cql-filter for a point in time.
+     *
+     * @param {String} dateString An ISO_8601 date string.
+     * @param {String} timeField The name of the timestamp field in the layer.
+     * @return {String} The ogc-filter as a string.
+     */
+    getPointInTimeFilter: function(dateString, timeField) {
+        var filter;
+
+        filter = '' +
+            '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
+                '<a:PropertyIsEqualTo>' +
+                    '<a:PropertyName>' + timeField + '</a:PropertyName>' +
+                    '<a:Literal>' + dateString + '</a:Literal>' +
+                '</a:PropertyIsEqualTo>' +
+            '</a:Filter>';
+
+        return filter;
     }
 });

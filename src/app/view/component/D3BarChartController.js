@@ -62,6 +62,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     onBoxReady: function() {
         var me = this;
+        var view = me.getView();
 
         // We have to cleanup manually.  WHY?!
         me.scales = {};
@@ -70,42 +71,301 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.gridAxes = {};
         me.data = [];
 
-        me.prepareData();
-        me.drawChart();
+        me.on('chartdataprepared', function() {
+            var svgContainer = me.getSvgContainer();
+            if (!me.chartDataAvailable) {
+                // We explicitly hide the svg root container, as the modern
+                // toolkit's panel didn't do it automatically if we update the
+                // element via setHtml(). And as it doesn't conflict with the
+                // classic toolkit's behaviour, no additional check for the
+                // current toolkit is needed.
+                svgContainer.attr('display', 'none');
+                view.setHtml('<div class="noDataError">' +
+                    me.getViewModel().get('noDataAvailableText') +
+                    '</div>'
+                );
+                me.chartRendered = false;
+            } else {
+                // Show the svg root container, see comment above as well.
+                svgContainer.attr('display', 'unset');
+
+                var errorDiv = view.el.query('.noDataError');
+                if (errorDiv[0]) {
+                    errorDiv[0].remove();
+                }
+
+                if (me.chartRendered) {
+                    me.redrawChart();
+                } else {
+                    me.drawChart();
+                }
+            }
+        });
+
+        me.getChartData();
+
+        // me.prepareData();
+        // me.drawChart();
     },
 
     /**
      *
      */
-    prepareData: function() {
+    getChartData: function() {
         var me = this;
-        var staticMe = me.self;
         var view = me.getView();
-        var selectedStation = view.getSelectedStation();
-        var featureProps = selectedStation.getProperties();
-        var fields = view.getChartFieldSequence().split(',');
-        var titleSequence = view.getChartFieldTitleSequence();
-        var defaultsSequence = view.getChartFieldDefaultsSequence();
-        var colors = view.getShape().color.split(',');
+        if (view.getShowLoadMask() && view.getSelectedStations().length > 0) {
+            view.setLoading(true);
+        }
 
-        Ext.each(fields, function(field, idx) {
-            var dataObj = {};
-            var key = Koala.util.String.getValueFromSequence(
-                titleSequence, idx, field);
+        me.data = {};
+        me.chartDataAvailable = false;
+        me.abortPendingRequests();
 
-            var value;
-            if (featureProps[field] || featureProps[field] === 0) {
-                value = featureProps[field];
-            } else {
-                value = Koala.util.String.getValueFromSequence(
-                    defaultsSequence, idx, undefined);
-            }
-
-            dataObj.key = key;
-            dataObj.value = value;
-            dataObj.color = colors[idx] || staticMe.getRandomColor();
-            me.data.push(dataObj);
+        Ext.each(view.getSelectedStations(), function(station) {
+            me.getChartDataForStation(station);
         });
+    },
+
+
+    /**
+     * Aborts any loading requests in our internal pending requests object and
+     * resets both #ajaxRequests and #ajaxCounter.
+     */
+    abortPendingRequests: function() {
+        var me = this;
+        Ext.iterate(me.ajaxRequests, function(id, ajaxRequest) {
+            if (ajaxRequest && ajaxRequest.isLoading()) {
+                ajaxRequest.abort();
+            }
+        });
+        me.ajaxRequests = {};
+        me.ajaxCounter = 0;
+    },
+
+
+    /**
+     * TODO gettestdatafilter and set to request URL // CQL ticket #1578
+     */
+    getChartDataForStation: function(selectedStation) {
+        var me = this;
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = selectedStation.get('id');
+
+        // Store the actual request object, so we are able to abort it if we are
+        // called faster than the response arrives.
+        var ajaxRequest = me.getChartDataRequest(
+                selectedStation,
+                me.onChartDataRequestCallback,
+                me.onChartDataRequestSuccess,
+                me.onChartDataRequestFailure,
+                me
+        );
+
+        // Put the current request into our storage for possible abortion.
+        me.ajaxRequests[stationId] = ajaxRequest;
+    },
+
+    /**
+     * Returns the request params for a given station.
+     *
+     * @param {ol.Feature} station The station to build the request for.
+     * @param {Boolean} useCurrentZoom Whether to use the currentZoom of the
+     *                                 chart or not. Default is false.
+     * @return {Object} The request object.
+     */
+    getChartDataRequestParams: function(station, useCurrentZoom) {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+        var chartConfig = targetLayer.get('barChartProperties');
+        var filters = targetLayer.metadata.filters;
+        var dateString;
+        var timeField;
+
+        // Get the viewparams configured for the layer
+        var layerViewParams = Koala.util.Object.getPathStrOr(
+                    targetLayer, 'metadata/layerConfig/olProperties/param_viewparams', '');
+
+        // Get the request params configured for the chart
+        var paramConfig = Koala.util.Object.getConfigByPrefix(
+                chartConfig, 'param_', true);
+
+        // Merge the layer viewparams to the chart params
+        paramConfig.viewparams += ';' + layerViewParams;
+
+        // Replace all template strings
+        Ext.iterate(paramConfig, function(k, v) {
+            paramConfig[k] = Koala.util.String.replaceTemplateStrings(
+                v, station);
+        });
+
+        Ext.each(filters, function(filter) {
+            if (filter.type === 'pointintime') {
+                dateString = filter.effectivedatetime.toISOString();
+                timeField = filter.param;
+                return false;
+            }
+        });
+
+        var requestParams = {
+            service: 'WFS',
+            version: '1.1.0',
+            request: 'GetFeature',
+            typeName: chartConfig.dataFeatureType,
+            outputFormat: 'application/json',
+            filter: me.getPointInTimeFilter(dateString, timeField),
+            sortBy: timeField
+        };
+
+        Ext.apply(requestParams, paramConfig);
+
+        return requestParams;
+    },
+
+    /**
+     * Returns the WFS url of the current charting target layer.
+     *
+     * @return {String} The WFS url.
+     */
+    getChartDataRequestUrl: function() {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+
+        return targetLayer.metadata.layerConfig.wfs.url;
+    },
+
+    /**
+     * Returns the Ext.Ajax.request for requesting the chart data.
+     *
+     * @param {ol.Feature} station The ol.Feature to build the request function
+     *                             for. Required.
+     * @param {Function} cbSuccess The function to be called on success. Optional.
+     * @param {Function} cbFailure The function to be called on failure. Optional.
+     * @param {Function} cbScope The callback function to be called on
+     *                           success and failure. Optional.
+     * @return {Ext.Ajax.request} The request function.
+     */
+    getChartDataRequest: function(station, cbFn, cbSuccess, cbFailure, cbScope) {
+        var me = this;
+
+        if (!(station instanceof ol.Feature)) {
+            Ext.log.warn('No valid ol.Feature given.');
+            return;
+        }
+
+        var ajaxRequest = Ext.Ajax.request({
+            method: 'GET',
+            url: me.getChartDataRequestUrl(),
+            params: me.getChartDataRequestParams(station),
+            callback: function() {
+                if (Ext.isFunction(cbFn)) {
+                    cbFn.call(cbScope, station);
+                }
+            },
+            success: function(response) {
+                if (Ext.isFunction(cbSuccess)) {
+                    cbSuccess.call(cbScope, response, station);
+                }
+            },
+            failure: function(response) {
+                if (Ext.isFunction(cbFailure)) {
+                    cbFailure.call(cbScope, response, station);
+                }
+            }
+        });
+
+        return ajaxRequest;
+    },
+
+    /**
+     * The default callback handler for chart data requests.
+     *
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for.
+     */
+    onChartDataRequestCallback: function(station) {
+        var me = this;
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = station.get('id');
+
+        // Called for both success and failure, this will delete the
+        // entry in the pending requests object.
+        if (stationId in me.ajaxRequests) {
+            delete me.ajaxRequests[stationId];
+        }
+    },
+
+    /**
+     * Function to be called on request success.
+     *
+     * @param {Object} reponse The response object.
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for.
+     */
+    onChartDataRequestSuccess: function(response, station) {
+        var me = this;
+        var view = me.getView();
+        var colors = view.getShape().color.split(',');
+        var jsonObj;
+        var stationId = station.get('id');
+        var seriesData = [];
+
+        if (response && response.responseText) {
+            try {
+                jsonObj = Ext.decode(response.responseText);
+            } catch (err) {
+                Ext.log.error('Could not parse the response: ', err);
+                return false;
+            }
+        }
+
+        Ext.each(jsonObj.features, function(feature, idx) {
+            var dataObj = {};
+            dataObj.key = feature.properties['nuclide']; // TODO Do we need this configurable
+            dataObj.value = feature.properties['result_value']; // TODO Do we need this configurable
+            dataObj.color = colors[idx] || me.getRandomColor();
+            dataObj.detection_limit = feature.properties['nachweisgrenze']; // TODO Do we need this configurable
+            dataObj.uncertainty = feature.properties['uncertainty']; // TODO Do we need this configurable
+            seriesData.push(dataObj);
+        });
+        me.data[stationId] = seriesData;
+        me.chartDataAvailable = true;
+
+        var value;
+        if (featureProps[field] || featureProps[field] === 0) {
+            value = featureProps[field];
+        } else {
+            value = Koala.util.String.getValueFromSequence(
+                defaultsSequence, idx, undefined);
+        }
+
+        me.ajaxCounter++;
+        if (me.ajaxCounter === view.getSelectedStations().length) {
+            if (view.getShowLoadMask()) {
+                view.setLoading(false);
+            }
+            me.fireEvent('chartdataprepared');
+        }
+    },
+
+    /**
+     * The default handler for chart data request failures.
+     *
+     * @param {Object} response The reponse object.
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for. Optional.
+     */
+    onChartDataRequestFailure: function(response /*station*/) {
+        // aborted requests aren't failures
+        if (!response.aborted) {
+            Ext.log.error('Failure on chartdata load');
+        }
     },
 
     /**
@@ -178,14 +438,15 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var makeDomainNice = true;
             var min;
             var max;
+            var firstStationData = Object.values(me.data)[0];
 
             if (axis.scale === 'ordinal') {
-                axisDomain = me.data.map(function(d) {
+                axisDomain = firstStationData.map(function(d) {
                     return d.key;
                 });
                 me.scales[orient].domain(axisDomain);
             } else {
-                var dataRange = d3.extent(me.data, function(d) {
+                var dataRange = d3.extent(firstStationData, function(d) {
                     if (!d.hidden) {
                         return d.value;
                     }
@@ -264,7 +525,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
-        var selectedStation = view.getSelectedStation();
+        var selectedStation = view.getSelectedStations()[0];
         var viewId = '#' + view.getId();
         var chartSize = me.getChartSize();
         var barWidth;
@@ -276,13 +537,15 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var yField = 'value';
         var orientX = 'bottom';
         var orientY = 'left';
+        var firstStationData = Object.values(me.data)[0];
 
         var shapeGroup = d3.select(viewId + ' svg > g')
             .append('g')
             .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP);
 
-        barWidth = (chartSize[0] / me.data.length);
+        barWidth = (chartSize[0] / firstStationData.length);
         barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
+
 
         shapeGroup
             .selectAll('rect')
@@ -463,7 +726,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         me.updateLegendContainerDimensions();
 
-        Ext.each(me.data, function(dataObj, idx) {
+        var firstStationData = Object.values(me.data)[0];
+
+        Ext.each(firstStationData, function(dataObj, idx) {
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
@@ -550,10 +815,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     deleteData: function(dataKey) {
         var me = this;
-        var dataObjToDelete = Ext.Array.findBy(me.data, function(dataObj) {
+        var firstStationData = Object.values(me.data)[0];
+        var dataObjToDelete = Ext.Array.findBy(firstStationData, function(dataObj) {
             return dataObj.key === dataKey;
         });
-        Ext.Array.remove(me.data, dataObjToDelete);
+        Ext.Array.remove(firstStationData, dataObjToDelete);
     },
 
     /**
