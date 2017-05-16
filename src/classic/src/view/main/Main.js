@@ -73,6 +73,23 @@ Ext.define('Koala.view.main.Main', {
         }
     },
 
+    /**
+     * open help window initially if user is neither "ruf", "imis" nor "bfs"
+     * delay is necessary otherwise treelist.store is not ready for .setSelection()
+     */
+    listeners: {
+        delay: 1,
+        afterrender: function() {
+            if (!Koala.util.AppContext.intersectsImisRoles(["ruf", "imis", "bfs"])) {
+                var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                helpWin.on('afterlayout', function() {
+                    var helpWinController = this.getController();
+                    helpWinController.setTopic('preface');
+                }, helpWin, {single: true});
+            }
+        }
+    },
+
     items: [{
         xtype: 'basigx-panel-mapcontainer',
         title: 'K-MapPanel',
