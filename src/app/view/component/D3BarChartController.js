@@ -120,6 +120,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      *                             send for.
      */
     onChartDataRequestSuccess: function(response, station) {
+        var staticMe = Koala.view.component.D3BarChartController;
         var me = this;
         var view = me.getView();
         var colors = view.getShape().color.split(',');
@@ -140,7 +141,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var dataObj = {};
             dataObj.key = feature.properties['nuclide']; // TODO Do we need this configurable
             dataObj.value = feature.properties['result_value']; // TODO Do we need this configurable
-            dataObj.color = colors[idx] || me.getRandomColor();
+            dataObj.color = colors[idx] || staticMe.getRandomColor();
             dataObj.detection_limit = feature.properties['nachweisgrenze']; // TODO Do we need this configurable
             dataObj.uncertainty = feature.properties['uncertainty']; // TODO Do we need this configurable
             seriesData.push(dataObj);
