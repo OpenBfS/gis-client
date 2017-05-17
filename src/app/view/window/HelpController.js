@@ -37,11 +37,13 @@ Ext.define('Koala.view.window.HelpController', {
     setTopic: function(topic, parentOfTopic) {
         var treelist = this.lookupReference('treelist'),
             store = treelist.getStore(),
-            topicNode = store.getNodeById(topic);
+            topicNode = (store) ? store.getNodeById(topic) : undefined;
         if (parentOfTopic) {
             var parentNode = store.getNodeById(parentOfTopic);
             parentNode.expand();
         }
-        treelist.setSelection(topicNode);
+        else if (topicNode) {
+            treelist.setSelection(topicNode);
+        }
     }
 });
