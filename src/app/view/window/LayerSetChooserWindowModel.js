@@ -21,9 +21,7 @@ Ext.define('Koala.view.window.LayerSetChooserWindowModel', {
     alias: 'viewmodel.k-window-layersetchooserwindow',
 
     data: {
-        title: 'Layer Profilwahl',
-        helpText: {
-            html: ''
-        }
+        title: '',
+        helpHtml: ''
     }
 });

@@ -26,7 +26,7 @@ Ext.define('Koala.view.window.LayerSetChooserWindowController', {
     addHelpTxt: function() {
         var me = this;
         var view = me.getView();
-        
+
         //helpTxt-panel
         var helpPanel = {
             xtype: 'panel',
@@ -39,16 +39,8 @@ Ext.define('Koala.view.window.LayerSetChooserWindowController', {
             minHeight: 80,
             scrollable: 'vertical',
             flex: 1,
-            //delay is necessary otherwise binding of property helpText is not rea
-            listeners: {
-                delay: 1,
-                afterrender: function() {
-                    var viewModel = this.up('k-window-layersetchooserwindow').getViewModel();
-                    var vmData = viewModel.getData();
-                    if (vmData.helpText) {
-                        this.setHtml(vmData.helpText.html);
-                    }
-                }
+            bind: {
+                html: '{helpHtml}'
             }
         };
 
