@@ -26,48 +26,7 @@ Ext.define('Koala.view.window.LayerSetChooserWindowController', {
     addHelpTxt: function() {
         var me = this;
         var view = me.getView();
-        var appLocaleUrlTpl = 'resources/locale/app-locale-{0}.json';
-        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
-        var langComboController = (langCombo) ? langCombo.getController() : undefined;
-        var locale = (langComboController) ? langComboController.locale : 'de';
-        var appLocaleUrl = Ext.util.Format.format(appLocaleUrlTpl, locale);
-
-        Ext.Ajax.request({
-            method: 'GET',
-            url: appLocaleUrl,
-            success: function(response) {
-                var respObj,
-                    helpModel,
-                    profileHelpTxt;
-                // try to parse the given string as JSON
-                try {
-                    respObj = Ext.decode(response.responseText);
-                    helpModel = Koala.util.Object.getPathStrOr(respObj, "Koala.view.window.HelpModel");
-                    profileHelpTxt = helpModel.config.data.profileSelection.html;
-                } catch (err) {
-                    Ext.log.error('error parsing app-locale-{0}.json at addHelpTxt()');
-                    return false;
-                }
-                finally {
-                    if (profileHelpTxt) {
-                        var view = me.getView();
-                        var helpPanel = view.down('[itemId=k-panel-layersetHelpTxt]');
-                        //delete title
-                        profileHelpTxt = profileHelpTxt.replace(/<h2[\s\S]*?<\/h2>/, '');
-                        //delete image
-                        profileHelpTxt = profileHelpTxt.replace(/<img[\s\S]*?>/, '');
-                        helpPanel.setHtml(profileHelpTxt);
-                        view.center();
-                    }
-                }
-            },
-            failure: function(response) {
-                var msg = 'server-side failure with status code ' +
-                    response.status;
-                Ext.log.error(msg);
-            },
-            scope: me
-        });
+        
         //helpTxt-panel
         var helpPanel = {
             xtype: 'panel',
@@ -79,7 +38,18 @@ Ext.define('Koala.view.window.LayerSetChooserWindowController', {
             minWidth: 150,
             minHeight: 80,
             scrollable: 'vertical',
-            flex: 1
+            flex: 1,
+            //delay is necessary otherwise binding of property helpText is not rea
+            listeners: {
+                delay: 1,
+                afterrender: function() {
+                    var viewModel = this.up('k-window-layersetchooserwindow').getViewModel();
+                    var vmData = viewModel.getData();
+                    if (vmData.helpText) {
+                        this.setHtml(vmData.helpText.html);
+                    }
+                }
+            }
         };
 
         //adjust layersetchooser-panel
