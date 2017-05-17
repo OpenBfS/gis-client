@@ -123,6 +123,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var staticMe = Koala.view.component.D3BarChartController;
         var me = this;
         var view = me.getView();
+        var barChartProperties = view.getTargetLayer().get('barChartProperties');
         var colors = view.getShape().color.split(',');
         var jsonObj;
         var stationId = station.get('id');
@@ -139,13 +140,20 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         Ext.each(jsonObj.features, function(feature, idx) {
             var dataObj = {};
-            dataObj.key = feature.properties['nuclide']; // TODO Do we need this configurable
-            dataObj.value = feature.properties['result_value']; // TODO Do we need this configurable
+            var keyProp = barChartProperties.xAxisAttribute;
+            var valueProp = barChartProperties.yAxisAttribute;
+            var detectionLimitProp = barChartProperties.detectionLimitAttribute
+                    || 'nachweisgrenze';
+            var uncertaintyProp = barChartProperties.uncertaintyAttribute
+                    || 'uncertainty';
+            dataObj.key = feature.properties[keyProp];
+            dataObj.value = feature.properties[valueProp];
             dataObj.color = colors[idx] || staticMe.getRandomColor();
-            dataObj.detection_limit = feature.properties['nachweisgrenze']; // TODO Do we need this configurable
-            dataObj.uncertainty = feature.properties['uncertainty']; // TODO Do we need this configurable
+            dataObj.detection_limit = feature.properties[detectionLimitProp];
+            dataObj.uncertainty = feature.properties[uncertaintyProp];
             seriesData.push(dataObj);
         });
+
         me.data[stationId] = seriesData;
         me.chartDataAvailable = true;
 
@@ -246,7 +254,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             } else {
                 var dataRange = d3.extent(firstStationData, function(d) {
                     if (!d.hidden) {
-                        return d.value;
+                        return d.uncertainty ? d.value + d.uncertainty : d.value;
                     }
                 });
                 //limit chart data to 80% of chart height
