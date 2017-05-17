@@ -261,7 +261,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     max = Koala.util.String.coerce(axis.max);
                     makeDomainNice = false; // if one was given, don't auto-enhance
                 } else {
-                    max = dataRange[1];
+                    max = dataRange[1] + (dataRange[1]/10);
                 }
 
                 if (Ext.isDefined(min) && Ext.isDefined(max)) {
@@ -387,6 +387,31 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     tooltipCmp.show();
                 }
             });
+
+        // Uncertainty
+        shapes
+            .append('path')
+            .attr('d', function(d) {
+                if (d.uncertainty && d.uncertainty > 0) {
+                    var lineWidth = 10;
+                    var xCenter = me.scales[orientX](d[xField]) + barWidth/2;
+                    var topVal = d[yField] + d.uncertainty;
+                    var bottomVal = d[yField] - d.uncertainty;
+
+                    if (bottomVal < 0) {
+                        bottomVal = 0;
+                    }
+
+                    var yTop = me.scales[orientY](topVal);
+                    var yBottom = me.scales[orientY](bottomVal);
+
+                    return 'M' + (xCenter - lineWidth) + ',' + yBottom + 'L' + (xCenter + lineWidth) + ',' + yBottom + 'M' + xCenter + ',' + yBottom +
+                    'L' + xCenter + ',' + yTop + 'M' + (xCenter - lineWidth) + ',' + yTop + 'L' + (xCenter + lineWidth) + ',' + yTop;
+                }
+            })
+            .attr('stroke', 'grey')
+            .attr('stroke-opacity', 0.5)
+            .attr('stroke-width', 2);
 
         var bars = d3.selectAll(viewId + ' .k-d3-bar');
 
