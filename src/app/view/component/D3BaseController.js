@@ -45,7 +45,9 @@ Ext.define('Koala.view.component.D3BaseController', {
             GRID_Y: 'k-d3-grid-y',
 
             SHAPE_GROUP: 'k-d3-shape-group',
+            BAR_GROUP: 'k-d3-bar-group',
             BAR: 'k-d3-bar',
+            UNCERTAINTY: 'k-d3-uncertainty',
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
             LEGEND_CONTAINER: 'k-d3-scrollable-legend-container',
@@ -62,7 +64,10 @@ Ext.define('Koala.view.component.D3BaseController', {
             PREFIX_IDX_LEGEND_GROUP: 'legend-group-',
 
             SUFFIX_LEGEND: '-legend',
-            SUFFIX_HIDDEN: '-hidden'
+            SUFFIX_HIDDEN: '-hidden',
+
+            HIDDEN_CLASS: 'k-d3-hidden',
+            DISABLED_CLASS: 'k-d3-disabled'
         },
 
         /**
@@ -1135,6 +1140,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         if (xtype === 'd3-barchart') { // for barcharts
             var firstStationData = Object.values(me.data)[0];
             numLegends = firstStationData.length;
+            numLegends += Object.keys(me.colorsByKey).length;
         } else if (xtype === 'd3-chart') { // for timeseries
             numLegends = Object.keys(me.data).length;
         } else {
@@ -1234,19 +1240,22 @@ Ext.define('Koala.view.component.D3BaseController', {
 
     /**
      * Toggles an SVG g element's visibility and the appropriate legend entry
-     * the g ususally grouops a bar and its label or a series.
+     * the g usually groups a bar and its label or a series.
      */
     toggleGroupVisibility: function(group, legendElement) {
         var staticMe = Koala.view.component.D3BaseController;
         var CSS = staticMe.CSS_CLASS;
-        var SHAPE_GROUP = CSS.SHAPE_GROUP;
-        var SUFFIX_HIDDEN = CSS.SUFFIX_HIDDEN;
-        var hideClsName = SHAPE_GROUP + SUFFIX_HIDDEN;
-        var hideClsNameLegend = SHAPE_GROUP + CSS.SUFFIX_LEGEND + SUFFIX_HIDDEN;
-        if (group) {
+        var hideClsName = CSS.HIDDEN_CLASS;
+        var disabledClsName = CSS.DISABLED_CLASS;
+
+        if (group && group.nodes().length > 0) {
             var isHidden = group.classed(hideClsName);
             group.classed(hideClsName, !isHidden);
-            legendElement.classed(hideClsNameLegend, !isHidden);
+        }
+
+        if (legendElement && legendElement.nodes().length > 0) {
+            var isDisabled = legendElement.classed(disabledClsName);
+            legendElement.classed(disabledClsName, !isDisabled);
         }
     },
 

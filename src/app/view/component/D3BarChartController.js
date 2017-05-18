@@ -34,6 +34,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
     ajaxCounter: 0,
     chartConfig: null,
     featureProps: null,
+    showUncertainty: true,
+    colorsByKey: {},
+    disabledSubCategories: [],
 
     /**
      * The default chart margin to apply.
@@ -69,7 +72,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var targetLayer = view.getTargetLayer();
         var chartConfig = targetLayer.get('barChartProperties');
         var filters = targetLayer.metadata.filters;
-        var dateString;
         var timeField;
 
         // Get the viewparams configured for the layer
@@ -89,10 +91,21 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 v, station);
         });
 
+        var requestFilter;
+
         Ext.each(filters, function(filter) {
             if (filter.type === 'pointintime') {
+                var dateString;
                 dateString = filter.effectivedatetime.toISOString();
                 timeField = filter.param;
+                requestFilter = me.getPointInTimeFilter(dateString, timeField);
+                return false;
+            } else if (filter.type === 'timerange') {
+                var startString = filter.effectivemindatetime.toISOString();
+                var endString = filter.effectivemaxdatetime.toISOString();
+                timeField = filter.param;
+                requestFilter = me.getDateTimeRangeFilter(
+                        startString, endString, timeField);
                 return false;
             }
         });
@@ -103,7 +116,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             request: 'GetFeature',
             typeName: chartConfig.dataFeatureType,
             outputFormat: 'application/json',
-            filter: me.getPointInTimeFilter(dateString, timeField),
+            filter: requestFilter,
             sortBy: timeField
         };
 
@@ -120,10 +133,16 @@ Ext.define('Koala.view.component.D3BarChartController', {
      *                             send for.
      */
     onChartDataRequestSuccess: function(response, station) {
-        var staticMe = Koala.view.component.D3BarChartController;
         var me = this;
         var view = me.getView();
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
+        var groupProp = barChartProperties.groupAttribute || 'end_measure';
+        var keyProp = barChartProperties.xAxisAttribute;
+        var valueProp = barChartProperties.yAxisAttribute;
+        var detectionLimitProp = barChartProperties.detectionLimitAttribute
+                || 'nachweisgrenze';
+        var uncertaintyProp = barChartProperties.uncertaintyAttribute
+                || 'uncertainty';
         var colors = view.getShape().color.split(',');
         var jsonObj;
         var stationId = station.get('id');
@@ -138,20 +157,41 @@ Ext.define('Koala.view.component.D3BarChartController', {
             }
         }
 
-        Ext.each(jsonObj.features, function(feature, idx) {
+        me.colorsByKey = {};
+
+        Ext.each(jsonObj.features, function(feature) {
             var dataObj = {};
-            var keyProp = barChartProperties.xAxisAttribute;
-            var valueProp = barChartProperties.yAxisAttribute;
-            var detectionLimitProp = barChartProperties.detectionLimitAttribute
-                    || 'nachweisgrenze';
-            var uncertaintyProp = barChartProperties.uncertaintyAttribute
-                    || 'uncertainty';
+            var groupKey = feature.properties[groupProp];
+            var createSeries = true;
             dataObj.key = feature.properties[keyProp];
-            dataObj.value = feature.properties[valueProp];
-            dataObj.color = colors[idx] || staticMe.getRandomColor();
-            dataObj.detection_limit = feature.properties[detectionLimitProp];
-            dataObj.uncertainty = feature.properties[uncertaintyProp];
-            seriesData.push(dataObj);
+
+            if (!me.colorsByKey[groupKey]) {
+                me.colorsByKey[groupKey] = colors[0];
+                Ext.Array.removeAt(colors, 0);
+            }
+
+            var pushObj = dataObj;
+            Ext.each(seriesData, function(tuple) {
+                if (tuple.key === feature.properties[keyProp]) {
+                    pushObj = tuple;
+                    createSeries = false;
+                    return false;
+                }
+            });
+
+            if (!Ext.isObject(pushObj[groupKey])) {
+                pushObj[groupKey] = {};
+            }
+
+            pushObj[groupKey].color = me.colorsByKey[groupKey];
+            pushObj[groupKey].value = feature.properties[valueProp];
+            pushObj[groupKey].key = feature.properties[groupProp];
+            pushObj[groupKey].detection_limit = feature.properties[detectionLimitProp];
+            pushObj[groupKey].uncertainty = feature.properties[uncertaintyProp];
+
+            if (createSeries) {
+                seriesData.push(pushObj);
+            }
         });
 
         me.data[stationId] = seriesData;
@@ -246,19 +286,31 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var max;
             var firstStationData = Object.values(me.data)[0];
 
-            if (axis.scale === 'ordinal') {
+            if (axis && axis.scale === 'ordinal') {
                 axisDomain = firstStationData.map(function(d) {
                     return d.key;
                 });
                 me.scales[orient].domain(axisDomain);
-            } else {
-                var dataRange = d3.extent(firstStationData, function(d) {
-                    if (!d.hidden) {
-                        return d.uncertainty ? d.value + d.uncertainty : d.value;
+            } else if (axis) {
+                var vals = [];
+                Ext.each(firstStationData, function(a) {
+                    if (a.hidden) {
+                        return;
                     }
+                    Ext.iterate(a, function(k, v) {
+                        if (k !== 'key' && !Ext.Array.contains(me.disabledSubCategories, k)) {
+                            var val = v.value;
+                            if (me.showUncertainty && v.uncertainty) {
+                                val += v.uncertainty;
+                            }
+                            vals.push(val);
+                        }
+                    });
                 });
                 //limit chart data to 80% of chart height
                 dataRange[1] = dataRange[1]/0.8;
+
+                var dataRange = d3.extent(vals);
 
                 if (Ext.isDefined(axis.min)) {
                     min = Koala.util.String.coerce(axis.min);
@@ -334,32 +386,68 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var selectedStation = view.getSelectedStations()[0];
         var viewId = '#' + view.getId();
         var chartSize = me.getChartSize();
-        var barWidth;
-
         var labelFunc = view.getLabelFunc() || staticMe.identity;
 
         var shapeConfig = view.getShape();
         var xField = 'key';
         var yField = 'value';
         var orientX = 'bottom';
+        var orientXGroup = 'bottom_group';
         var orientY = 'left';
         var firstStationData = Object.values(me.data)[0];
 
-        var shapeGroup = d3.select(viewId + ' svg > g')
+        var allShapes = d3.select(viewId + ' svg > g')
             .append('g')
             .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP);
 
-        barWidth = (chartSize[0] / firstStationData.length);
-        barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
+        var groupedShapes = allShapes.selectAll(staticMe.CSS_CLASS.BAR_GROUP)
+            .data(firstStationData);
 
-        var shapes = shapeGroup
-            .selectAll('rect')
-            .data(me.data)
-            .enter().append('g')
-            .attr('class', staticMe.CSS_CLASS.BAR)
+        var shapes = groupedShapes.enter().append('g')
+            .filter(function(d) {
+                return !d.hidden;
+            })
+            .attr('transform', function(d) {
+                return 'translate(' + me.scales[orientX](d[xField]) + ',0)';
+            })
+            .attr('class', staticMe.CSS_CLASS.BAR_GROUP)
             .attr('id', function(d) {
                 return d[xField];
+            });
+
+        var bars = shapes.selectAll('rect')
+            .data(function(d) {
+                var values = Ext.Object.getValues(d);
+                return Ext.Array.filter(values, function(a) {
+                    return Ext.isObject(a);
+                });
             })
+            .enter()
+            .append('g')
+            .filter(function(d) {
+                return !Ext.Array.contains(me.disabledSubCategories, d.key);
+            })
+            .attr('class', function(d) {
+                var subCategories = Ext.Object.getKeys(me.colorsByKey);
+                var categoryIndex = subCategories.indexOf(d.key);
+                return staticMe.CSS_CLASS.BAR + ' subcategory-' + categoryIndex;
+            });
+            // .attr('class', staticMe.CSS_CLASS.BAR);
+
+        var keys = [];
+        Ext.each(firstStationData, function(dataGroup) {
+            Ext.iterate(dataGroup, function(k) {
+                if (k !== 'key') {
+                    Ext.Array.include(keys, k);
+                }
+            });
+        });
+
+        var x1 = d3.scaleBand().padding(0.1);
+        x1.domain(keys).rangeRound([0, me.scales[orientX].bandwidth()]);
+        me.scales[orientXGroup] = x1;
+
+        bars
             .append('rect')
             .filter(function(d) {
                 return me.shapeFilter(d, orientY, yField);
@@ -369,19 +457,22 @@ Ext.define('Koala.view.component.D3BarChartController', {
             })
         // .style('opacity', shapeConfig.opacity)
             .attr('x', function(d) {
-                return me.scales[orientX](d[xField]);
+                return x1(d[xField]);
             })
             .attr('y', function(d) {
                 return me.scales[orientY](d[yField]);
             })
-            .attr('width', barWidth)
+            .attr('width', x1.bandwidth())
             .attr('height', function(d) {
                 return chartSize[1] - me.scales[orientY](d[yField]);
             })
+            .style('fill', function(d) {
+                return d.color || staticMe.getRandomColor();
+            })
+            // .style('opacity', shapeConfig.opacity)
             .on('mouseover', function(data) {
                 var tooltipCmp = me.tooltipCmp;
                 var tooltipTpl = shapeConfig.tooltipTpl;
-
                 // Only proceed and show tooltip if a tooltipTpl is
                 // given in the chartConfig.
                 if (tooltipTpl) {
@@ -398,12 +489,16 @@ Ext.define('Koala.view.component.D3BarChartController', {
             });
 
         // Uncertainty
-        shapes
+        bars
             .append('path')
+            .attr('class', staticMe.CSS_CLASS.UNCERTAINTY)
+            .filter(function() {
+                return me.showUncertainty;
+            })
             .attr('d', function(d) {
                 if (d.uncertainty && d.uncertainty > 0) {
-                    var lineWidth = 10;
-                    var xCenter = me.scales[orientX](d[xField]) + barWidth/2;
+                    var lineWidth = x1.bandwidth()/3;
+                    var xCenter = x1(d[xField]) + x1.bandwidth()/2;
                     var topVal = d[yField] + d.uncertainty;
                     var bottomVal = d[yField] - d.uncertainty;
 
@@ -418,11 +513,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     'L' + xCenter + ',' + yTop + 'M' + (xCenter - lineWidth) + ',' + yTop + 'L' + (xCenter + lineWidth) + ',' + yTop;
                 }
             })
-            .attr('stroke', 'grey')
+            .attr('stroke', function(d) {
+                var extColor = Ext.util.Color.create(d.color);
+                extColor.darken(0.4);
+                return extColor.toHex();
+            })
             .attr('stroke-opacity', 0.5)
             .attr('stroke-width', 2);
-
-        var bars = d3.selectAll(viewId + ' .k-d3-bar');
 
         bars.append('text')
             .filter(function(d) {
@@ -432,8 +529,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return labelFunc(d[yField], d);
             })
             .attr('transform', function(d) {
-                return me.getBarLabelTransform(d, orientX, orientY, xField,
-                    yField, barWidth);
+                return me.getBarLabelTransform(d, orientXGroup, orientY, xField,
+                        yField, x1.bandwidth());
             })
             .attr('text-anchor', 'middle')
             // TODO make configurable. Generic from css config
@@ -449,8 +546,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     return me.shapeFilter(d, orientY, yField);
                 })
                 .attr('transform', function(d) {
-                    var labelTransform = me.getBarLabelTransform(d, orientX,
-                        orientY, xField, yField, barWidth);
+                    var labelTransform = me.getBarLabelTransform(d, orientXGroup,
+                            orientY, xField, yField, x1.bandwidth());
                     return labelTransform + ' rotate(-90)';
                 })
                 .attr('dy', function(d, idx, el) {
@@ -486,7 +583,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     getBarLabelTransform: function(d, orientX, orientY, xField, yField, barWidth) {
         var me = this;
         var chartSize = me.getChartSize();
-        var translateX = me.scales[orientX](d[xField]) + (barWidth / 2);
+        var translateX = me.scales[orientX](d[xField]) + (barWidth/2);
         var translateY = me.scales[orientY](d[yField]) - 5 || chartSize[1];
 
         return 'translate(' + translateX + ', ' + translateY + ')';
@@ -557,6 +654,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.updateLegendContainerDimensions();
 
         var firstStationData = Object.values(me.data)[0];
+        var curTranslateY;
 
         Ext.each(firstStationData, function(dataObj, idx) {
             var toggleVisibilityFunc = (function() {
@@ -573,16 +671,14 @@ Ext.define('Koala.view.component.D3BarChartController', {
                         barGroup, // the real group, containig shapepath & points
                         d3.select(this) // legend entry
                     );
-                    var SHAPE_GROUP = CSS.SHAPE_GROUP;
-                    var SUFFIX_HIDDEN = CSS.SUFFIX_HIDDEN;
-                    var hideClsNameLegend = SHAPE_GROUP + CSS.SUFFIX_LEGEND + SUFFIX_HIDDEN;
-                    d3.select(this).classed(hideClsNameLegend, !dataObj.hidden);
+                    var disabledClsName = CSS.DISABLED_CLASS;
+                    d3.select(this).classed(disabledClsName, !dataObj.hidden);
                     dataObj.hidden = !dataObj.hidden;
                     me.redrawChart();
                 };
             }());
 
-            var curTranslateY = (idx + 1) * legendEntryHeight;
+            curTranslateY = (idx + 1) * legendEntryHeight;
             var legendEntry = legend
                 .append('g')
                 .on('click', toggleVisibilityFunc)
@@ -622,6 +718,73 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('dy', '1')
                 .attr('dx', '160') // TODO Discuss, do we need this dynamically?
                 .on('click', me.generateDeleteCallback(dataObj));
+        });
+
+        var subCategories = me.scales.bottom_group.domain();
+        Ext.each(subCategories, function(subCategory, idx) {
+            var toggleVisibilityFunc = (function() {
+                return function() {
+                    var target = d3.select(d3.event.target);
+                    if (target && target.classed(CSS.DELETE_ICON)) {
+                        // click happened on the delete icon, no visibility
+                        // toggling. The deletion is handled in an own event
+                        // handler
+                        return;
+                    }
+                    var categoryIndex = subCategories.indexOf(subCategory);
+                    var selector = '.subcategory-' + categoryIndex;
+                    var group = me.containerSvg.selectAll(selector);
+                    me.toggleGroupVisibility(
+                        group,       // the real group, containig shapepath & points
+                        d3.select(this) // legend entry
+                    );
+
+                    if (Ext.Array.contains(me.disabledSubCategories, subCategory)) {
+                        Ext.Array.remove(me.disabledSubCategories, subCategory);
+                    } else {
+                        me.disabledSubCategories.push(subCategory);
+                    }
+                    me.redrawChart();
+                };
+            }());
+
+            curTranslateY = (firstStationData.length * legendEntryHeight) + (idx + 1) * legendEntryHeight;
+            var legendEntry = legend
+                .append('g')
+                    .on('click', toggleVisibilityFunc)
+                    .attr('transform', staticMe.makeTranslate(0, curTranslateY))
+                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + subCategory);
+
+            // background for the concrete legend icon, to widen clickable area.
+            legendEntry.append('path')
+                .attr('d', SVG_DEFS.LEGEND_ICON_BACKGROUND)
+                .style('stroke', 'none')
+                .style('fill', me.colorsByKey[subCategory]);
+
+            var nameAsTooltip = Koala.util.Date.getFormattedDate(
+                    new moment(subCategory));
+            var visualLabel = staticMe.labelEnsureMaxLength(
+                nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
+            );
+
+            legendEntry.append('text')
+                .text(visualLabel)
+                .attr('text-anchor', 'start')
+                .attr('dy', '0')
+                .attr('dx', '25');
+
+            legendEntry.append('title')
+                .text(nameAsTooltip);
+
+            legendEntry.append('text')
+                // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('')
+                .attr('class', CSS.DELETE_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '160');
+                // .on('click', me.generateDeleteCallback(dataObj));
+
         });
     },
 
@@ -672,6 +835,39 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var selector = viewId + ' svg g.' + CSS.SHAPE_GROUP +
             ' g[id="' + key + '"]';
         return d3.select(selector);
+    },
+
+    /**
+     * [description]
+     * @return {[type]} [description]
+     */
+    setUncertaintyVisiblity: function(checked) {
+        var me = this;
+        var staticMe = Koala.view.component.D3BarChartController;
+        var CSS = staticMe.CSS_CLASS;
+        var group = me.containerSvg.selectAll('.' + CSS.UNCERTAINTY);
+        var hideClsName = CSS.HIDDEN_CLASS;
+        if (group) {
+            group.classed(hideClsName, !checked);
+            me.showUncertainty = checked;
+            me.redrawChart();
+        }
+    },
+
+    /**
+     * [description]
+     * @param {[type]} group [description]
+     * @param {[type]} visible [description]
+     * @return {[type]} [description]
+     */
+    setGroupVisibility: function(group, visible) {
+        var me = this;
+        var staticMe = Koala.view.component.D3BaseController;
+        var hideClsName = staticMe.CSS_CLASS.HIDDEN_CLASS;
+        if (group) {
+            group.classed(hideClsName, !visible);
+            me.redrawChart();
+        }
     }
 
 });

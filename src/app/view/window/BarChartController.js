@@ -76,6 +76,17 @@ Ext.define('Koala.view.window.BarChartController', {
             height: '100%',
             width: 180,
             items: [{
+                xtype: 'checkbox',
+                bind: {
+                    fieldLabel: '{toggleUncertaintyBtnText}'
+                },
+                listeners: {
+                    change: me.onUncertaintyCheckChange
+                },
+                checked: true,
+                scope: me,
+                margin: '0 0 10px 0'
+            }, {
                 xtype: 'button',
                 bind: {
                     text: '{exportAsImageBtnText}'
@@ -108,6 +119,12 @@ Ext.define('Koala.view.window.BarChartController', {
         };
 
         return panel;
+    },
+
+    onUncertaintyCheckChange: function(checkbox, checked) {
+        var chart = checkbox.up('[name="chart-composition"]').down('d3-barchart');
+        var chartCtrl = chart.getController();
+        chartCtrl.setUncertaintyVisiblity(checked);
     },
 
     /**
@@ -186,7 +203,15 @@ Ext.define('Koala.view.window.BarChartController', {
         if (!layerChartRendered) {
             view.add(me.createBarChartPanel(olLayer, olFeat, uniqueId));
             view.show();
-            me.updateBarChartWin(view, lastChart, olLayer.qtitle);
+            var title = olLayer.qtitle;
+            var pointintimeFilter = Koala.util.Layer
+                    .getEffectiveTimeFilterFromMetadata(olLayer.metadata);
+            var filterDateString = Koala.util.Date.getFormattedDate(
+                    pointintimeFilter.effectivedatetime);
+            if (filterDateString) {
+                title += ' – ' + filterDateString;
+            }
+            me.updateBarChartWin(view, lastChart, title);
         } else {
             // close the newly opened, empty window
             view.destroy();
