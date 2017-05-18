@@ -435,35 +435,35 @@
                             "<h4>Die Oberfläche ist in folgende Bereiche gegliedert:</h4>"+
                             "<ol>"+
                                 "<div><img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Layer Profilwahl</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Layer Profilwahl</li>"+
                                     "<div>Dieses Auswahlfenster ermöglicht eine vordefinierte Auswahl mehrerer Datensätze in die Karte zu laden (sogenannte Layer-Sets). Ein Layer-Set besteht aus einzelnen Layern, die in der Karte eine thematische Ebene darstellen. Das Fenster öffnet sich beim initialen Laden der Seite. Es ist nicht erforderlich ein Layer-Set auszuwählen um die Anwendung zu starten. Die Layer-Sets/Themen-Sets stellen eine Hilfestellung dar, um thematisch ähnliche Datensätze mit einem Klick zu laden. Wird das Fenster ohne Wahl eines Layer-Sets geschlossen, werden lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - OSM\" geladen.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Karte</li>"+
                                     "<div>In der Karte werden die gewählten Datensätze dargestellt. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Klickt man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Werkzeuge</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Werkzeuge</li>"+
                                     "<div>Die Werkzeugleiste beinhaltet Dienste für das Hinzufügen externer Datenquellen.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Auswahl</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Auswahl</li>"+
                                     "<div>Die \"Auswahl\" bietet die Möglichkeit einzelne Layer zur Darstellung in die Karte zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
                                     "<div>Das Hinzufügen eines Layers erfolgt mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf den Layernamen.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Multisuchleiste</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Multisuchleiste</li>"+
                                     "<div>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten (z.B. Stadtname), sowie nach Daten und Diensten des BfS.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Einstellungen</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Einstellungen</li>"+
                                     "<div>Folgende Einstellungen lassen sich für die Anwendung vornehmen:</div>"+
                                 "<ul>"+
-                                    "<li>Vollbild: Darstellung der Anwendung über den gesamten Bildschirm</li>"+
                                     "<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale Zeit (Systemzeit des Rechners) oder auf UTC (Coordinated Universal Time)</li>"+
                                     "<li>Hilfe: Öffnen des Hilfefensters</li>"+
                                     "<li>Impressum: Öffnet das Fenster des Impressums sowie der Nutzungsbedingungen</li>"+
                                     "<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE) oder Englisch (EN)</li>"+
                                 "</ul><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Navigation</li>"+
                                     "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
+                                    "<div>Die Darstellung der Anwendung kann über den gesamten Bildschirm eingestellt werden.</div>"+
                                     "<div>Des Weiteren ist es möglich einen Permalink der Kartenansicht zu erzeugen. Die Legende öffnet sich beim Betätigen des untersten Knopfs der Navigation.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Legende</li>"+
                                     "<div>Die Legende umfasst die Layer, also thematischen Inhalte, die in der Karte angezeigt werden. Sie ermöglicht Einstellungen an der Kartenansicht vorzunehmen.</div>"+
                                     "<div>Layer lassen sich ein- bzw. ausblenden, gänzlich entfernen, sowie Änderungen an den Filtereinstellungen vornehmen. Des Weiteren ist es möglich die Zeichenreihenfolge durch Verschieben der Layer anzupassen.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Geographische Übersicht</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Geographische Übersicht</li>"+
                                     "<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht. Befindet sich der Mauszeiger innerhalb der Karte, werden rechts neben der Maßstabsleiste die geographischen Koordinaten der aktuellen Position des Mauszeigers angezeigt.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Software-Version</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
                                     "<div>1.6.2.0</div>"+
                             "</ol>"
                 },
@@ -480,7 +480,7 @@
                             "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>4. Auswahl</i>). Standardmäßig sind die Layer \"Höhenlinien\", \"Ortsnamen\" und \"Hintergrundkarte - OSM\" geladen. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Die Geometrie wird farblich hervorgehoben und ist nun anklickbar. Klickt man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />",
                     "overview": {
                         "title": "2.1 Übersicht",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>2.1 Übersicht</h2>"+
                                 "<div>"+
                                 "<p>Innerhalb der Karte kann man mithilfe der <i>Maus</i> navigieren. Hält man die linke <i>Maustaste</i> gedrückt, kann die Kartenansicht verschoben werden. Ein Doppelklick zoomt an die Stelle, an der sich der <i>Mauszeiger</i> befindet. Möchte man auf eine bestimmte Ansicht zoomen, ist dies über ein Zoomfenster realisierbar. Mit gedrückter Shift-Taste (auch: "+
@@ -492,7 +492,7 @@
                     },
                     "geoObjects": {
                         "title": "2.2 BfS-Objektinformationen abfragen",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>2.2 BfS-Objektinformationen abfragen</h2>"+
                                 "<div>"+
                                 "<p>Zur Abfrage von BfS-Objekten ist es wichtig, dass der entsprechende Layer in der Legende ausgewählt ist. Ein ausgewählter Layer ist mit einer türkisfarbenen Fläche markiert (siehe Grafik: <i>2.2 Informationen zu einzelnen Objekten</i>).</p>"+
@@ -509,28 +509,28 @@
                                 "<img class='img' src='classic/resources/img/helpPage/button_zoomBack.png' title='Knopf: ...zurückzoomen' alt='button_zoomBack.png' width='114' height='24' style='vertical-align:middle'>"+
                                 " möglich. Alternativ lassen sich die Zoomfunktionen mit dem <i>Mausrad</i> steuern.</p>"+
                                 "<p>Das Download-Symbol "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_saveTimeSeries.png' title='Knopf: download' alt='button_download.png' width='17' height='16' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_saveTimeSeries.png' title='Knopf: download' alt='button_saveTimeSeries.png' width='17' height='16' style='vertical-align:middle'>"+
                                 " ermöglicht das Herunterladen einzelner Zeitreihen. Diese können entweder im JSON-, CSV- oder GML-Format gesichert werden. Bestätigen Sie nach der Auswahl des gewünschten Formats den Download, der letztlich im Download-Pfad Ihres Browsers abgelegt wird. Wählen Sie mithilfe der Zoomfunktionalitäten innerhalb des Diagramms den gewünschten Bereich aus, den Sie herunterladen möchten.</p>"+
                                 "<p>Einzelne Serien, beispielsweise \"Helgoland / Unterland\", können mit einem Klick auf die Diagrammlegende ein- bzw. ausgeschalten werden. Eine Serie kann auch gänzlich aus dem Diagramm entfernt werden. Hierzu betätigt man den X-Knopf "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
                                 " neben der Layerbezeichnung.</p>"+
                                 "<p>Möchte man sich einen bestimmten Wert innerhalb des Diagramms anzeigen lassen, muss lediglich der <i>Mauszeiger</i> über die gewünschte Position bewegt werden.</p>"+
                                 "<p>Oberhalb des Liniendiagramms lässt sich die Darstellung über die Eingabe eines Start- und Enddatums präzisieren. Alternativ ist ein Datum über das Kalendersymbol "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Knopf: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
                                 " auswählbar. Anschließend bestätigt man die Auswahl über den \"OK\"-Knopf "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_ok.png' title='Knopf: OK' alt='button_ok.png' width='32' height='23' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_ok.png' title='Knopf: OK' alt='button_ok.png' width='35' height='24' style='vertical-align:middle'>"+
                                 ". Möchte man zur ursprünglichen zeitlichen Auswahl zurückkehren, ist dies über den Knopf \"Reset\" "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_reset.png' title='Knopf: Reset' alt='button_reset.png' width='44' height='23' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_reset.png' title='Knopf: Reset' alt='button_reset.png' width='51' height='24' style='vertical-align:middle'>"+
                                 " ausführbar. Das Auswahlfeld \"Chart hinzufügen\" "+
-                                "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingChart.png' title='Auswahlfeld: Chart hinzufügen' alt='selectionBox_addingChart.png' width='250' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingChart.png' title='Auswahlfeld: Chart hinzufügen' alt='selectionBox_addingChart.png' width='162' height='24' style='vertical-align:middle'>"+
                                 " beinhaltet sämtliche Layer aus der Legende die als Zeitreihe hinzugefügt werden können.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_timeSeries.png' title='Zeitreihen' alt'graphic_timeSeries.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Zeitreihen</b>"+
                                 "</div><br />"+
                                 "<p>Die Balkendiagramme, zur Darstellung der Wertereihen, sind in Grafik <i>2.2 Wertereihen</i> dargestellt. Bewegt man den <i>Mauszeiger</i> über einen Balken, wird in einem Fenster der entsprechende Wert mit Einheit angezeigt. Wie bei den Zeitreihen kann jede Serie über die Diagrammlegende ein- und ausgeschaltet werden (einzelne Serien lassen sich auch direkt über den X-Knopf "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
-                                " entfernen). Die y-Achse passt sich jeweils an den maximalen Wert der verbleibenden Serien an. Grafik <i>2.2 Wertereihen</i> zeigt, wie demnach die Funktion für detaillierte Analysen genutzt werden kann.</p>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
+                                " entfernen). Die y-Achse passt sich jeweils an den maximalen Wert der verbleibenden Serien an, sofern die Achsenskalierung für den Layer nicht fest vorgegeben wurde. Grafik <i>2.2 Wertereihen</i> zeigt, wie demnach die Funktion für detaillierte Analysen genutzt werden kann.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_barChart.png' title='Wertereihen' alt'graphic_barChart.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Wertereihen</b>"+
@@ -544,8 +544,8 @@
                             "<div>Die Werkzeugleiste befindet sich im linken oberen Eck unterhalb des BfS-Logos. Ein Klick auf den entsprechenden Knopf öffnet den jeweiligen Dienst der nachfolgend näher erläutert ist (navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt).</div><br />",
                     "wms": {
                         "title": "3.1 WMS Dienst",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>3.1 WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26' style='vertical-align:middle'> </h2>"+
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>3.1 WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='64' height='24' style='vertical-align:middle'> </h2>"+
                                 "<div>"+
                                 "<p>Der WMS Dienst ermöglicht das Hinzufügen von WMS-Layern innerhalb des BfS Geoportals. Dadurch sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar. "+
                                 "Detailliertere Informationen rund um das Thema <i>Web Map Service</i> finden Sie unter folgender Adresse:  <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></p>"+
@@ -554,7 +554,7 @@
                                 "<img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Knopf: Verfügbare Layer abfragen' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'>"+
                                 ". Die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt.</p>"+
                                 "<p>Durch das Setzen von Häkchen können die Layer ausgewählt werden, die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Knopf \"Ausgewählte Layer hinzufügen\" "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Knopf: Ausgewählte Layer hinzufügen' alt='button_addLayers.png' width='198' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Knopf: Ausgewählte Layer hinzufügen' alt='button_addLayers.png' width='192' height='24' style='vertical-align:middle'>"+
                                 ". Diese werden initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</p>"+
                                 "<p>In Grafik <i>3.1 Arbeitsablauf des WMS-Dienstes</i> wird der Layer \"Topographic OSM WMS - by mundalis\" der Karte hinzugefügt.</p><br />"+
                                 "<div style='font-size:11px'>"+
@@ -565,7 +565,7 @@
                         },
                     "print": {
                         "title": "3.2 Druckdienst",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>3.2 Druckdienst <img class='img' src='classic/resources/img/helpPage/button_print.png' title='Print-Button' alt='button_print.png' width='103' height='27' style='vertical-align:middle'> </h2>"+
                                 "<div>"+
                                 "<p>Der Druckdienst ermöglicht es einen Kartenausschnitt in verschiedenen Formaten zu erstellen und abzuspeichern. Der Dienst ist in zwei Hauptkomponenten untergliedert. Einerseits werden allgemein gebräuchliche Standards wie BMP, GIF, PDF, PNG, TIF und TIFF, andererseits der Standard für den Austausch radiologischer Informationen <i>IRIX</i> zur Verfügung gestellt. Das Vorgehen zur Erstellung eines IRIX-Dokumentes wird im Anschluss unter entsprechender Überschrift erläutert.</p>"+
@@ -590,7 +590,7 @@
                         },
                     "import": {
                         "title": "3.3 Import",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>3.3 Import <img class='img' src='classic/resources/img/helpPage/button_import.png' title='Import-Button' alt='button_import.png' width='71' height='24' style='vertical-align:middle'> </h2>"+
                                 "<div>- TODO -</div>"
                     }
@@ -603,7 +603,7 @@
                                 "<p>Das Menü ist in der Breite anpassbar. Bewegt man den <i>Mauszeiger</i> an den rechten Rand des Menüs, ändert sich das Symbol zu einem Doppelpfeil "+
                                 "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
                                 " und die Breite lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
-                                "<p>Jeder Layer befindet sich in einem Layer-Set, das eine fachliche Einteilung widerspiegelt. Möchte man beispielsweise den Layer \"Kernkraftwerk\" der Karte hinzufügen, findet man diesen unter dem Layer-Set \"Sonstiges\".</p>"+
+                                "<p>Jeder Layer befindet sich in einem Layer-Set, das eine fachliche Einteilung widerspiegelt. Möchte man beispielsweise den Layer \"UV Index aktueller Tagesverlauf\" der Karte hinzufügen, findet man diesen unter dem Layer-Set \"Sonstiges\".</p>"+
                                 "<p>Die Anordnung im Auswahlfenster entspricht der eines allgemeingebräuchlichen Dateisystems, mit Ordnern und Dateien. Die Layer-Sets entsprechen den Ordnern, während die Layer den Dateien gleich kommen. Möchte man einen Ordner ausklappen um sich die zugeordneten Layer anzeigen zu lassen, ist dies mit einem einfachen Klick auf das Plus-Symbol links neben des Ordnersymbols möglich. Alternativ kann auch ein Doppelklick auf die Ordnerbeschriftung ausgeführt werden.</p>"+
                                 "<p>Ein einfacher Klick auf die Layerbezeichnung öffnet ein layerspezifisches Fenster. Je nach Art des Layers beinhaltet das Fenster gegebenenfalls Einstellungen um die Daten mithilfe eines Zeit- und/oder Wertefilters einzuschränken. Sofern ein Layer über keine Zeit- bzw. Wertefilter verfügt, enthält das Fenster lediglich einen Knopf für das Hinzufügen des entsprechenden Layers (siehe Grafik <i>4. layerspezifisches Fenster - Layer ohne Filter</i>).</p>"+
                                 "<div style='font-size:11px'>"+
@@ -636,7 +636,7 @@
                     "html":     "<h2>5. Multisuchleiste</h2>"+
                                 "<div>"+
                                 "<p>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS. Durch einfache Texteingabe innerhalb des Suchfeldes werden die Ergebnisse in einem Fenster unterhalb der Leiste gesondert angezeigt. Ein Klick auf das Kreuzsymbol "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_search_delete.png' title='Kreuzsymbol: Löschen der Eingabe' alt='button_search_delete.png' width='25' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_search_delete.png' title='Kreuzsymbol: Löschen der Eingabe' alt='button_search_delete.png' width='24' height='24' style='vertical-align:middle'>"+
                                 " auf der rechten Seite des Suchfeldes löscht die Eingabe und schließt die Ergebnisfenster.</p>"+
                                 "<h3>Räumliche Suche</h3>"+
                                 "<p>Die Suche nach Orten erfolgt über die Multisuchleiste (siehe Grafik <i>5. Räumliche Suche</i>). Die Ergebnisse werden entsprechend der Texteingabe stets aktualisiert und erfordern demnach keiner weiteren Eingabe. Ist ein gewünschter Ort gefunden, genügt ein einfacher Klick um an die entsprechende Auswahl zu zoomen.</p>"+
@@ -661,48 +661,39 @@
                     "title": "6. Einstellungen",
                     "html": "<h2>6. Einstellungen</h2>"+
                             "<div>Die Einstellungen des BfS Geoportals befinden sich im rechten oberen Eck der Anwendung. Ein Klick auf den entsprechenden Knopf öffnet bzw. aktiviert die jeweilige Funktion, welche nachfolgend näher erläutert werden. Navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt.</div><br />",
-                    "fullScreen": {
-                        "title": "6.1 Vollbild",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.1 Vollbild <img class='img' src='classic/resources/img/helpPage/button_settings_fullScreen.png' title='Knopf: Vollbild' alt='button_settings_fullScreen.png' width='107' height='24' style='vertical-align:middle'></h2>"+
-                                "<div>"+
-                                "<p>Ein Klick auf den Knopf \"Vollbild\" erweitert das Sichtfeld des BfS Geoportals auf den gesamten Bildschirm. Je nach Browser, den Sie verwenden, müssen Sie den Vollbild-Modus bestätigen.</p>"+
-                                "<p>Zum Beenden des Vollbild-Modus drücken Sie die <b><i>Esc</i>-Taste</b>.</p>"+
-                                "</div>"
-                        },
                     "timeRef": {
-                        "title": "6.2 Zeitbezug",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.2 Zeitbezug <img class='img' src='classic/resources/img/helpPage/button_settings_timeRef_utc.png' title='Knopf: Zeitbezug' alt='button_settings_timeRef_utc.png' width='107' height='24' style='vertical-align:middle'></h2>"+
+                        "title": "6.1 Zeitbezug",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>6.1 Zeitbezug <img class='img' src='classic/resources/img/helpPage/button_settings_timeRef_utc.png' title='Knopf: Zeitbezug' alt='button_settings_timeRef_utc.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Der Zeitbezug ist standardmäßig auf <i>koordinierter Weltzeit - UTC</i> eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen.</p>"+
-                                "<p>Betätigt man den Knopf \"Zeitbezug (UTC)\", wird die Zeit in der Anzeige des Klienten auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt (siehe Grafik <i>6.2 Zeitbezug</i>). Das bedeutet im Einzelnen, dass die Uhrzeit von der Systemzeit des Rechners bezogen wird.</p>"+
+                                "<p>Betätigt man den Knopf \"Zeitbezug (UTC)\", wird die Zeit in der Anzeige des Klienten auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt (siehe Grafik <i>6.1 Zeitbezug</i>). Das bedeutet im Einzelnen, dass die Uhrzeit von der Systemzeit des Rechners bezogen wird.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_timeRef.png' title='Zeitbezug' alt'graphic_timeRef.png' style='max-height: 100%; max-width: 100%;'><br>"+
-                                "<b>6.2 Zeitbezug</b>"+
+                                "<b>6.1 Zeitbezug</b>"+
                                 "</div><br />"+
                                 "</div>"
                         },
                     "help": {
-                        "title": "6.3 Hilfe",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.3 Hilfe <img class='img' src='classic/resources/img/helpPage/button_settings_help.png' title='Knopf: Hilfe' alt='button_settings_help.png' width='107' height='24' style='vertical-align:middle'></h2>"+
+                        "title": "6.2 Hilfe",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>6.2 Hilfe <img class='img' src='classic/resources/img/helpPage/button_settings_help.png' title='Knopf: Hilfe' alt='button_settings_help.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Der Knopf \"Hilfe\" öffnet das Hilfefenster, das in einzelnen Unterpunkten die Funktionalitäten des BfS Geoportals beschreibt.</p>"+
                                 "</div>"
                         },
                     "imprint": {
-                        "title": "6.4 Impressum",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.4 Impressum <img class='img' src='classic/resources/img/helpPage/button_settings_imprint.png' title='Knopf: Impressum' alt='button_settings_imprint.png' width='83' height='24' style='vertical-align:middle'></h2>"+
+                        "title": "6.3 Impressum",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>6.3 Impressum <img class='img' src='classic/resources/img/helpPage/button_settings_imprint.png' title='Knopf: Impressum' alt='button_settings_imprint.png' width='83' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Der Knopf \"Impressum\" öffnet das Impressum sowie die Nutzungsbedingungen des BfS Geoportals.</p>"+
                                 "</div>"
                         },
                     "language": {
-                        "title": "6.5 Sprache",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.5 Sprache <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Knopf: Sprache' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
+                        "title": "6.4 Sprache",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>6.4 Sprache <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Knopf: Sprache' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend kann mit einem Klick auf das referenzierte Kürzel die Sprache gewählt werden. Ein Klick auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"DE\" entspricht Deutsch und \"EN\" Englisch.</p>"+
                                 "<img class='img' src='classic/resources/img/helpPage/button_settings_language_all.png' title='Sprache' alt'button_settings_language_all.png' style='max-height: 100%; max-width: 100%;'>"+
@@ -715,7 +706,7 @@
                             "<div>Die Navigation liefert Funktionen bezüglich der Kartenansicht. Die Knöpfe sind auf der rechten Seite der Anwendung platziert. Ein Klick auf den entsprechenden Knopf aktiviert die jeweilige Funktion, die nachfolgend näher erläutert werden. Navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt.</div><br />",
                     "zoomIn": {
                         "title": "7.1 Hineinzoomen",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>7.1 Hineinzoomen <img class='img' src='classic/resources/img/helpPage/button_zoomIn.png' title='Knopf: Hineinzoomen' alt='button_zoomIn.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Der Knopf zoomt mit vordefinierter Stufe in die Karte hinein. Das heißt, dass der Maßstab der aktuellen Ansicht größer wird. Alternativ kann im Kartenbild entweder ein Doppelklick mit der <i>Maus</i>, oder das <i>Mausrad</i> direkt in der Kartenansicht für das Hineinzoomen benutzt werden.</p>"+
@@ -726,7 +717,7 @@
                         },
                     "zoomOut": {
                         "title": "7.2 Herauszoomen",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>7.2 Herauszoomen <img class='img' src='classic/resources/img/helpPage/button_zoomOut.png' title='Knopf: Herauszoomen' alt='button_zoomOut.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Der Knopf zoomt mit vordefinierter Stufe aus die Karte heraus. Das heißt, dass der Maßstab der aktuellen Ansicht kleiner wird. Alternativ kann das <i>Mausrad</i> direkt in der Kartenansicht für das Herauszoomen benutzt werden.</p>"+
@@ -734,25 +725,34 @@
                         },
                     "initMapView": {
                         "title": "7.3 initiale Kartenansicht",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>7.3 initiale Kartenansicht <img class='img' src='classic/resources/img/helpPage/button_initMapView.png' title='Knopf: initiale Kartenansicht' alt='button_initMapView.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Durch einen Klick auf den Knopf wird die Ansicht des Anfangsausschnittes (Zoomstufe und Position) gezeigt. Entsprechend wird als Zentrum der Kartenansicht Deutschland dargestellt.</p>"+
                                 "</div>"
                         },
+                    "fullScreen": {
+                        "title": "7.4 Vollbild",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>7.4 Vollbild <img class='img' src='classic/resources/img/helpPage/button_fullScreen.png' title='Knopf: Vollbild' alt='button_fullScreen.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                "<div>"+
+                                "<p>Ein Klick auf den Knopf \"Vollbild\" erweitert das Sichtfeld des BfS Geoportals auf den gesamten Bildschirm. Je nach Browser, den Sie verwenden, müssen Sie den Vollbild-Modus bestätigen.</p>"+
+                                "<p>Zum Beenden des Vollbild-Modus drücken Sie die <b><i>Esc</i>-Taste</b>.</p>"+
+                                "</div>"
+                        },
                     "permaLink": {
-                        "title": "7.4 Permalink",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>7.4 Permalink <img class='img' src='classic/resources/img/helpPage/button_permaLink.png' title='Knopf: Permalink' alt='button_permaLink.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                        "title": "7.5 Permalink",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>7.5 Permalink <img class='img' src='classic/resources/img/helpPage/button_permaLink.png' title='Knopf: Permalink' alt='button_permaLink.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Ein Permalink ist ein Hyperlink der als dauerhafte Referenz von Inhalten einer Internetadresse dient. Er enthält die Informationen der Kartenansicht (Zoomstufe und Position), sowie zusätzlich geladene Inhalte (Layer mit Filtereinstellungen).</p>"+
                                 "<p>Dadurch ist es möglich eine bestimmte Kartenansicht für einen späteren Zugriff abzuspeichern. Nach Auswahl einer gewünschten Ansicht betätigen Sie hierfür den Permalink-Knopf oder drücken Sie, sollte das Permalink-Fenster bereits geöffnet sein, auf \"Erneuern\", um den zur aktuellen Ansicht passenden Permalink anzuzeigen. Der \"In Zwischenablage kopieren\"-Knopf sichert den Permalink temporär, so dass er an gewünschter Stelle wieder eingefügt werden kann.</p>"+
                                 "</div>"
                         },
                     "openLegend": {
-                        "title": "7.5 Legende öffnen",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>7.5 Legende öffnen <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Knopf: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                        "title": "7.6 Legende öffnen",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>7.6 Legende öffnen <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Knopf: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Dieser Knopf öffnet bzw. schließt die Legende, die im rechten unteren Eck des BfS Geoportals zu finden ist. Diese beinhaltet sämtliche Layer, die in der Darstellung unmittelbar verfügbar sind. Alternativ kann direkt auf die Legende (blauer Balken mit der Aufschrift \"Legende\") geklickt werden.</p>"+
                                 "</div>"
@@ -812,7 +812,7 @@
                             "<b>9. Übersichtskarte</b>"+
                             "</div><br />"+
                             "<p>Die Maßstabsleiste "+
-                            "<img class='img' src='classic/resources/img/helpPage/info_scaleBar.png' title='Maßstabsleiste' alt='info_scaleBar.png' width='72' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/info_scaleBar.png' title='Maßstabsleiste' alt='info_scaleBar.png' width='99' height='13' style='vertical-align:middle'>"+
                             " dient als Referenz des aktuellen Kartenmaßstabs und bietet eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m) oder Kilometern (km).</p>"+
                             "<p>Befindet sich der Mauszeiger innerhalb der Karte, werden rechts neben der Maßstabsleiste die geographischen Koordinaten der aktuellen Position des Mauszeigers angezeigt.</p>"+
                             "</div>"
@@ -1026,21 +1026,21 @@
                 "helpQuickRefTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>Schnellübersicht</h1>",
                 "helpQuickRefHtml": "<div><img class='img' src='modern/resources/img/helpPage/mobile_graphic_overview.png' title='Übersicht' alt='mobile_graphic_overview.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
                             "<ol>"+
-                            "<li style='color:#157FCC; font-weight:bold'>Karte</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Karte</li>"+
                                 "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt. Die Navigation erfolgt entweder über Fingergesten oder die Navigationsleiste am rechten oberen Rand des Bildschirms. Tippt man auf eine entsprechende Geometrie (Messpunkt) in der Karte, werden Zeit- bzw. Wertereihen zu diesem Messpunkt in einem separaten Reiter dargestellt. Hierbei ist darauf zu achten, dass das Diagrammsymbol des entsprechenden Layers in der Legende auf aktiv gesetzt ist (aktiv: "+
                                 "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
                                 ", inaktiv: "+
                                 "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Diagramm inaktiv' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
                                 ").</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Menü</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Menü</li>"+
                                 "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen (Knopf \"Auswahl\"). Zusätzlich lassen sich von externen Quellen Daten in die Karte laden (Knopf \"Externen WMS hinzufügen\"). Eine Suche von Orten bzw. Daten und Dienste des BfS ist über die Eingabe innerhalb des Suchfeldes möglich. Mithilfe des Permalink-Knopfs kann eine bestimmte Kartenansicht für einen späteren Zugriff gesichert werden. Die Sprache sowie der Zeitbezug der Anwendung lässt sich über den Menüpunkt \"Einstellungen\" anpassen. Des Weiteren finden Sie die Hilfe bzw. das Impressum über die gleichnamigen Knöpfe.</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Navigation</li>"+
                                 "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland). Alternativ können Fingergesten verwendet werden.</div>"+
                                 "<div>Der unterste Knopf (zwei Pfeile) erweitert das Sichtfeld auf den gesamten Bildschirm des Endgerätes (sofern dies vom mobilen Browser unterstützt wird).</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Legende</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Legende</li>"+
                                 "<div>In der Legende werden die Symbole der Layer erläutert.</div>"+
                                 "<div>Zusätzlich lassen sich Einstellungen an der Darstellung der Layer vornehmen. Layer lassen sich ein- bzw. ausblenden oder gänzlich entfernen. Die Abfrage von Layern lässt sich aktivieren bzw. deaktivieren und es können Filtereinstellungen vorgenommen werden. Des Weiteren ist es möglich die Zeichenreihenfolge der Layer mithilfe der Pfeiltasten anzupassen.</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Software-Version</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
                                 "<div>1.6.2.0</div>"+
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Karte</h1>",
@@ -1099,13 +1099,13 @@
                                     "<div>Betätigen des Knopfs öffnet das Impressum sowie die Nutzungsbedingungen.</div><br />",
                 "helpNavigationTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>3. Navigation</h1>",
                 "helpNavigationHtml": "<div>Die Navigation beinhaltet die Knöpfe für das Hinein- bzw. Herauszoomen, sowie die Kartenansicht auf die initiale Position und Zoomstufe (Gesamtansicht Deutschlands) zu stellen</div>"+
-                                      "<h2 style='font-weight:bold'>3.1 Hineinzoomen  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomIn.png' title='Knopf: Hineinzoomen' alt='mobile_button_zoomIn.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                      "<h2 style='font-weight:bold'>3.1 Hineinzoomen  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomIn.png' title='Knopf: Hineinzoomen' alt='mobile_button_zoomIn.png' width='32' height='27' style='vertical-align:middle'></h2>"+
                                         "<div>Der oberste Knopf zoomt mit vordefinierter Stufe in die Karte hinein. Das heißt, dass der Maßstab der aktuellen Ansicht größer wird. Alternativ kann ein doppeltes Berühren an gewünschter Position, oder die <i>2-Fingergestik</i> innerhalb der Karte benutzt werden.</div>"+
-                                      "<h2 style='font-weight:bold'>3.2 Herauszoomen  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomOut.png' title='Knopf: Herauszoomen' alt='mobile_button_zoomOut.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                      "<h2 style='font-weight:bold'>3.2 Herauszoomen  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomOut.png' title='Knopf: Herauszoomen' alt='mobile_button_zoomOut.png' width='32' height='27' style='vertical-align:middle'></h2>"+
                                         "<div>Der zweite Knopf von oben zoomt mit vordefinierter Stufe aus die Karte heraus. Das heißt, dass der Maßstab der aktuellen Ansicht kleiner wird. ein doppeltes Berühren an gewünschter Position, oder die <i>2-Fingergestik</i> innerhalb der Karte benutzt werden.</div>"+
-                                      "<h2 style='font-weight:bold'>3.3 initiale Kartenansicht  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomBack.png' title='Knopf: initiale Kartenansicht' alt='mobile_button_zoomBack.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                      "<h2 style='font-weight:bold'>3.3 initiale Kartenansicht  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomBack.png' title='Knopf: initiale Kartenansicht' alt='mobile_button_zoomBack.png' width='32' height='27' style='vertical-align:middle'></h2>"+
                                         "<div>Der dritte Knopf von oben zoomt bzw. verschiebt die Ansicht auf die Ausgangsposition. Entsprechend wird als Zentrum der Kartenansicht Deutschland dargestellt.</div>"+
-                                      "<h2 style='font-weight:bold'>3.4 Vollbild  <img class='img' src='modern/resources/img/helpPage/mobile_button_extend.png' title='Knopf: Vollbild' alt='mobile_button_extend.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                      "<h2 style='font-weight:bold'>3.4 Vollbild  <img class='img' src='modern/resources/img/helpPage/mobile_button_extend.png' title='Knopf: Vollbild' alt='mobile_button_extend.png' width='32' height='27' style='vertical-align:middle'></h2>"+
                                         "<div>Der unterste Knopf erweitert das Sichtfeld auf den gesamten Bildschirm des Endgerätes (sofern dies vom mobilen Browser unterstützt wird).</div>",
                 "helpLegendTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>4. Legende <img class='img' src='modern/resources/img/helpPage/mobile_button_legend.png' title='Knopf: Legende öffnen' alt='mobile_button_legend.png' width='40' height='33' style='vertical-align:middle'></h1>",
                 "helpLegendHtml": "<div>Die Legende beinhaltet sämtliche Layer die in die Kartenansicht geladen sind. Das Hinzufügen von Layern ist unter dem Punkt <i>2.2 Auswahl</i> beschrieben.</div><br />"+
