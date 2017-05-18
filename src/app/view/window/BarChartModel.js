@@ -23,7 +23,7 @@ Ext.define('Koala.view.window.BarChartModel', {
     data: {
         title: '',
         undoBtnText: '',
-        toggleUncertaintyBtnText: 'Uncertainty !i18n',
+        uncertaintyCheckboxLabel: '',
         downloadBtnText: ''
     }
 });

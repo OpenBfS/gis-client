@@ -761,8 +761,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .style('stroke', 'none')
                 .style('fill', me.colorsByKey[subCategory]);
 
-            var nameAsTooltip = Koala.util.Date.getFormattedDate(
-                    new moment(subCategory));
+            var isTime = (new moment(subCategory)).isValid();
+            var nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
+                    new moment(subCategory)) : subCategory;
             var visualLabel = staticMe.labelEnsureMaxLength(
                 nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
             );

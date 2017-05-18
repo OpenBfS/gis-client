@@ -78,7 +78,7 @@ Ext.define('Koala.view.window.BarChartController', {
             items: [{
                 xtype: 'checkbox',
                 bind: {
-                    fieldLabel: '{toggleUncertaintyBtnText}'
+                    fieldLabel: '{uncertaintyCheckboxLabel}'
                 },
                 listeners: {
                     change: me.onUncertaintyCheckChange

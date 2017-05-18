@@ -396,6 +396,7 @@
             "data": {
                 "title": "Bar Chart",
                 "undoBtnText": "…zoom back",
+                "uncertaintyCheckboxLabel": "Uncertainty",
                 "exportAsImageBtnText": "Export as image"
             }
         }

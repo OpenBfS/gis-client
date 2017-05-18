@@ -379,6 +379,7 @@
             "data": {
                 "title": "fr:Barchart",
                 "undoBtnText": "fr:…zurückzoomen",
+                "uncertaintyCheckboxLabel": "fr:Messungenauigkeit",
                 "exportAsImageBtnText": "fr:Als Bild exportieren"
             }
         }

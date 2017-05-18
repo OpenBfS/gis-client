@@ -397,6 +397,7 @@
             "data": {
                 "title": "Barchart",
                 "undoBtnText": "…zurückzoomen",
+                "uncertaintyCheckboxLabel": "Messungenauigkeit",
                 "exportAsImageBtnText": "Als Bild exportieren"
             }
         }
