@@ -74,6 +74,7 @@
     "Koala.view.component.D3BarChart": {
         "config": {
             "data": {
+                "belowDetectionLimitLabel": "fr:< NWG",
                 "noDataAvailableText": "fr:Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
             }
         }

@@ -83,7 +83,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 chartConfig, 'param_', true);
 
         // Merge the layer viewparams to the chart params
-        paramConfig.viewparams += ';' + layerViewParams;
+        if (paramConfig.viewparams) {
+            paramConfig.viewparams += ';' + layerViewParams;
+        } else {
+            paramConfig.viewparams = layerViewParams;
+        }
 
         // Replace all template strings
         Ext.iterate(paramConfig, function(k, v) {
@@ -273,6 +277,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     setDomainForScales: function() {
         var me = this;
+        var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
 
         // Iterate over all scales/axis orientations and all shapes to find the
@@ -284,7 +289,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var makeDomainNice = true;
             var min;
             var max;
-            var firstStationData = Object.values(me.data)[0];
+            var firstStationData = Ext.Object.getValues(me.data)[0];
 
             if (axis && axis.scale === 'ordinal') {
                 axisDomain = firstStationData.map(function(d) {
@@ -322,7 +327,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     max = Koala.util.String.coerce(axis.max);
                     makeDomainNice = false; // if one was given, don't auto-enhance
                 } else {
-                    max = dataRange[1] + (dataRange[1]/10);
+                    var additionalSpace = dataRange[1]/100*staticMe.ADDITIONAL_DOMAIN_SPACE;
+                    max = dataRange[1] + additionalSpace;
                 }
 
                 if (Ext.isDefined(min) && Ext.isDefined(max)) {
@@ -386,7 +392,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var selectedStation = view.getSelectedStations()[0];
         var viewId = '#' + view.getId();
         var chartSize = me.getChartSize();
-        var labelFunc = view.getLabelFunc() || staticMe.identity;
+        var labelFunc = view.getLabelFunc() || me.getFallBackIdentity();
 
         var shapeConfig = view.getShape();
         var xField = 'key';
@@ -394,7 +400,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var orientX = 'bottom';
         var orientXGroup = 'bottom_group';
         var orientY = 'left';
-        var firstStationData = Object.values(me.data)[0];
+        var firstStationData = Ext.Object.getValues(me.data)[0];
 
         var allShapes = d3.select(viewId + ' svg > g')
             .append('g')
@@ -653,7 +659,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         me.updateLegendContainerDimensions();
 
-        var firstStationData = Object.values(me.data)[0];
+        var firstStationData = Ext.Object.getValues(me.data)[0];
         var curTranslateY;
 
         Ext.each(firstStationData, function(dataObj, idx) {
@@ -812,7 +818,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     deleteSubCategory: function(subCategory) {
         var me = this;
         // Data
-        var firstStationData = Object.values(me.data)[0];
+        var firstStationData = Ext.Object.getValues(me.data)[0];
         Ext.each(firstStationData, function(category) {
             if (category[subCategory]) {
                 delete category[subCategory];
@@ -851,7 +857,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     deleteData: function(dataKey) {
         var me = this;
-        var firstStationData = Object.values(me.data)[0];
+        var firstStationData = Ext.Object.getValues(me.data)[0];
         var dataObjToDelete = Ext.Array.findBy(firstStationData, function(dataObj) {
             return dataObj.key === dataKey;
         });

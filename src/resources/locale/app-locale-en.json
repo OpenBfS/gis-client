@@ -80,6 +80,7 @@
     "Koala.view.component.D3BarChart": {
         "config": {
             "data": {
+                "belowDetectionLimitLabel": "< LDL",
                 "noDataAvailableText": "There is no data available for the specified time range. Please select a different period."
             }
         }

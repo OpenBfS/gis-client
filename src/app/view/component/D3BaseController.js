@@ -71,6 +71,14 @@ Ext.define('Koala.view.component.D3BaseController', {
         },
 
         /**
+         * Additional space added to the (bar) chart. Adds the configured Number
+         * as percent to the datarange to create some space inside the chart.
+         *
+         * @type {Number} percent
+         */
+        ADDITIONAL_DOMAIN_SPACE: 10,
+
+        /**
          * Additional margin to take into consideration when calculating the
          * width of the bars.
          *
@@ -260,20 +268,6 @@ Ext.define('Koala.view.component.D3BaseController', {
         }()),
 
         /**
-         * Used as the fallback for labeling when no explicity function is
-         * provided.
-         *
-         * @param {mixed} val The value for labeling.
-         * @return {mixed} The exact same value that was passed in.
-         */
-        identity: function(val, object) {
-            if (object.detection_limit && object.detection_limit === '<') {
-                return '< NWG'; // TODO Needs to be configurable?
-            }
-            return val;
-        },
-
-        /**
          * Ensures that the given label is not longer than the specified max
          * length and returns a shortened string (maxLength chars + '…') to be
          * used for labeling.
@@ -340,6 +334,24 @@ Ext.define('Koala.view.component.D3BaseController', {
         right: 200,
         bottom: 20,
         left: 40
+    },
+
+    /**
+     * Used as the fallback for labeling when no explicity function is
+     * provided.
+     *
+     * @param {mixed} val The value for labeling.
+     * @return {mixed} The exact same value that was passed in.
+     */
+    getFallBackIdentity: function() {
+        var viewModel = this.getViewModel();
+        var label = viewModel.get('belowDetectionLimitLabel');
+        return function(val, object) {
+            if (object.detection_limit && object.detection_limit === '<') {
+                return label;
+            }
+            return val;
+        };
     },
 
     /**
@@ -469,9 +481,9 @@ Ext.define('Koala.view.component.D3BaseController', {
      *
      * @param {ol.Feature} station The ol.Feature to build the request function
      *                             for. Required.
-     * @param {Function} cbSuccess The function to be called on success. Optional.
-     * @param {Function} cbFailure The function to be called on failure. Optional.
-     * @param {Function} cbScope The callback function to be called on
+     * @param {Function} [cbSuccess] The function to be called on success. Optional.
+     * @param {Function} [cbFailure] The function to be called on failure. Optional.
+     * @param {Function} [cbScope] The callback function to be called on
      *                           success and failure. Optional.
      * @return {Ext.Ajax.request} The request function.
      */
@@ -1138,7 +1150,7 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         var numLegends;
         if (xtype === 'd3-barchart') { // for barcharts
-            var firstStationData = Object.values(me.data)[0];
+            var firstStationData = Ext.Object.getValues(me.data)[0];
             numLegends = firstStationData.length;
             numLegends += Object.keys(me.colorsByKey).length;
         } else if (xtype === 'd3-chart') { // for timeseries
@@ -1324,7 +1336,7 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
-     * Create a cql-filter for a datetime range.
+     * Create a ogc-filter for a datetime range.
      *
      * @param {String} startDateString The start date as an ISO_8601 date string.
      * @param {String} endDateString The end date as an ISO_8601 date string.
@@ -1351,7 +1363,7 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
-     * Create a cql-filter for a point in time.
+     * Create a ogc-filter for a point in time.
      *
      * @param {String} dateString An ISO_8601 date string.
      * @param {String} timeField The name of the timestamp field in the layer.

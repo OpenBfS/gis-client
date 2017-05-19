@@ -139,6 +139,8 @@ Ext.define('Koala.view.component.MapController', {
         Ext.each(layers, function(layer, layerIdx) {
             var hoverTpl = layer.get('hoverTpl');
             Ext.each(features, function(feature, featureIdx, feats) {
+                // Avoid duplicated display of hovertemplate if a feature
+                // with the same id is included multiple times in features.
                 if (featureIdx > 0) {
                     if (feature.get('id') === feats[featureIdx-1].get('id')) {
                         return;
