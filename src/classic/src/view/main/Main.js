@@ -78,7 +78,7 @@ Ext.define('Koala.view.main.Main', {
      * delay is necessary otherwise treelist.store is not ready for .setSelection()
      */
     listeners: {
-        delay: 1,
+        delay: 500,
         afterrender: function() {
             if (!Koala.util.AppContext.intersectsImisRoles(["ruf", "imis", "bfs"])) {
                 var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
