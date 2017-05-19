@@ -16,22 +16,22 @@
 /**
  * @class Koala.view.window.LayerSetChooserWindow
  */
-Ext.define("Koala.view.window.LayerSetChooserWindow", {
-    extend: "Ext.window.Window",
-    xtype: "k-window-layersetchooserwindow",
-    cls: "k-window-layersetchooserwindow",
+Ext.define('Koala.view.window.LayerSetChooserWindow', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-layersetchooserwindow',
+    cls: 'k-window-layersetchooserwindow',
 
     requires: [
-        "Koala.view.window.LayerSetChooserWindowController",
-        "Koala.view.window.LayerSetChooserWindowModel",
+        'Koala.view.window.LayerSetChooserWindowController',
+        'Koala.view.window.LayerSetChooserWindowModel',
 
-        "Koala.view.panel.LayerSetChooser"
+        'Koala.view.panel.LayerSetChooser'
     ],
 
-    controller: "k-window-layersetchooserwindow",
+    controller: 'k-window-layersetchooserwindow',
 
     viewModel: {
-        type: "k-window-layersetchooserwindow"
+        type: 'k-window-layersetchooserwindow'
     },
 
     config: {

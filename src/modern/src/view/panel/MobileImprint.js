@@ -70,10 +70,10 @@ Ext.define('Koala.view.panel.MobileImprint',{
                     method: 'GET',
                     url: 'resources/dataprotection.html',
                     success: function(response) {
-                      me.setHtml(response.responseText);
+                        me.setHtml(response.responseText);
                     },
                     failure: function(response) {
-                      Ext.log.warn('Loading dataprotection-HTML failed: ', response);
+                        Ext.log.warn('Loading dataprotection-HTML failed: ', response);
                     }
                 });
             }

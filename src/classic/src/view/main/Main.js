@@ -81,7 +81,7 @@ Ext.define('Koala.view.main.Main', {
     listeners: {
         delay: 1,
         afterrender: function() {
-            if (!Koala.util.AppContext.intersectsImisRoles(["ruf", "imis", "bfs"])) {
+            if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
                 var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                 helpWin.on('afterlayout', function() {
                     var helpWinController = this.getController();
@@ -125,7 +125,7 @@ Ext.define('Koala.view.main.Main', {
             afterrender: function() {
                 if (!location.hash) {
                     var lyrSetWin = Ext.create('Koala.view.window.LayerSetChooserWindow');
-                    if (!Koala.util.AppContext.intersectsImisRoles(["ruf", "imis", "bfs"])) {
+                    if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
                         lyrSetWin.setHelpTxt(true);
                     }
                     lyrSetWin.show();
