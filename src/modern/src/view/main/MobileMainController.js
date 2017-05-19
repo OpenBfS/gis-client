@@ -52,7 +52,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         me.setupMapClickHandler();
 
         //open help initially if user is neither "ruf", "imis" nor "bfs"
-        if (!Koala.util.AppContext.intersectsImisRoles(["ruf", "imis", "bfs"])) {
+        if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
             view.down('k-panel-mobilehelp').show();
         }
     },

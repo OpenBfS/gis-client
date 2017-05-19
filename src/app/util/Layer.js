@@ -336,14 +336,14 @@ Ext.define('Koala.util.Layer', {
         getFiltersTextFromMetadata: function(metadata) {
             var staticMe = this;
             var filters = null;
-            if (Array.isArray(metadata)){ // it's a 'filters' array
-               filters = metadata;
-            } else if (metadata !== null && typeof(metadata) === 'object'){
-               if (metadata.hasOwnProperty('filters')) { // it's a 'metadata' object
-                  filters = staticMe.getFiltersFromMetadata(metadata);
-               } else {
-                   filters = [metadata]; // it's a 'filter' object
-               };
+            if (Array.isArray(metadata)) { // it's a 'filters' array
+                filters = metadata;
+            } else if (metadata !== null && typeof(metadata) === 'object') {
+                if (metadata.hasOwnProperty('filters')) { // it's a 'metadata' object
+                    filters = staticMe.getFiltersFromMetadata(metadata);
+                } else {
+                    filters = [metadata]; // it's a 'filter' object
+                }
             } else {
                 return '';
             }

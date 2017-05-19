@@ -153,8 +153,7 @@ Ext.define('Koala.util.Date', {
             //add time reference info
             if (dateClone.isUtc()) {
                 serializedDate += ' ' + staticMe.txtUtc;
-            }
-            else if (dateClone.isLocal()) {
+            } else if (dateClone.isLocal()) {
                 serializedDate += ' ' + staticMe.txtLocal;
             }
 
