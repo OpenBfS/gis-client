@@ -316,7 +316,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     min = Koala.util.String.coerce(axis.min);
                     makeDomainNice = false; // if one was given, don't auto-enhance
                 } else {
-                    min = dataRange[0];
+                    min = 0;
                 }
                 if (Ext.isDefined(axis.max)) {
                     max = Koala.util.String.coerce(axis.max);
@@ -437,7 +437,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var keys = [];
         Ext.each(firstStationData, function(dataGroup) {
             Ext.iterate(dataGroup, function(k) {
-                if (k !== 'key') {
+                if (k !== 'key' && k !== 'hidden') {
                     Ext.Array.include(keys, k);
                 }
             });
@@ -731,8 +731,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                         // handler
                         return;
                     }
-                    var categoryIndex = subCategories.indexOf(subCategory);
-                    var selector = '.subcategory-' + categoryIndex;
+                    var selector = me.getSubCategorySelector(subCategory);
                     var group = me.containerSvg.selectAll(selector);
                     me.toggleGroupVisibility(
                         group,       // the real group, containig shapepath & points
@@ -761,7 +760,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .style('stroke', 'none')
                 .style('fill', me.colorsByKey[subCategory]);
 
+            // TODO This check doesn't seem to be ideal as it throws a warning
+            // if a none datestring is the subCategory
             var isTime = (new moment(subCategory)).isValid();
+
             var nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
                     new moment(subCategory)) : subCategory;
             var visualLabel = staticMe.labelEnsureMaxLength(
@@ -783,10 +785,50 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('class', CSS.DELETE_ICON)
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
-                .attr('dx', '160');
-                // .on('click', me.generateDeleteCallback(dataObj));
+                .attr('dx', '160')
+                .on('click', me.deleteSubCategory.bind(me, subCategory));
 
         });
+    },
+
+    /**
+     * This returns the selector for a subcategory as it is needed for d3-select.
+     *
+     * @param {String} subCategory The real subcategory.
+     * @return {String} The selector.
+     */
+    getSubCategorySelector: function(subCategory) {
+        var me = this;
+        var subCategories = me.scales.bottom_group.domain();
+        var categoryIndex = subCategories.indexOf(subCategory);
+        return '.subcategory-' + categoryIndex;
+    },
+
+    /**
+     * Removes a subCategory from the chart, dataObj and Legend.
+     *
+     * @param {String} subCategory The real subcategory.
+     */
+    deleteSubCategory: function(subCategory) {
+        var me = this;
+        // Data
+        var firstStationData = Object.values(me.data)[0];
+        Ext.each(firstStationData, function(category) {
+            if (category[subCategory]) {
+                delete category[subCategory];
+            }
+        });
+
+        // Shape
+        var selector = me.getSubCategorySelector(subCategory);
+        var elements = me.containerSvg.selectAll(selector);
+        elements.remove();
+
+        // Legend
+        me.deleteLegendEntry(subCategory);
+
+        this.redrawChart();
+        this.redrawLegend();
     },
 
     /**
@@ -821,7 +863,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     deleteBarGroup: function(dataKey) {
         var barGroup = this.getBarGroupByKey(dataKey);
-        barGroup.node().remove();
+        if (barGroup.node()) {
+            barGroup.node().remove();
+        }
     },
 
     /**
