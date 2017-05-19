@@ -689,7 +689,12 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .append('g')
                 .on('click', toggleVisibilityFunc)
                 .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + dataObj.key);
+                .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + dataObj.key)
+                .attr('class', function() {
+                    if (dataObj.hidden) {
+                        return CSS.DISABLED_CLASS;
+                    }
+                });
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
@@ -758,7 +763,12 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .append('g')
                     .on('click', toggleVisibilityFunc)
                     .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + subCategory);
+                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + subCategory)
+                    .attr('class', function() {
+                        if (Ext.Array.contains(me.disabledSubCategories, subCategory) ) {
+                            return CSS.DISABLED_CLASS;
+                        }
+                    });
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
