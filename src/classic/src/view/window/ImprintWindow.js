@@ -35,7 +35,7 @@ Ext.define("Koala.view.window.ImprintWindow", {
     },
     constrainHeader: true,
     width: 1050,
-    height: 580,
+    height: 622,
     layout: 'border',
     minWidth: 500,
     minHeight: 300,
