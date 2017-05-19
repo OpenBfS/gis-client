@@ -379,9 +379,9 @@
     "Koala.view.window.LayerSetChooserWindow": {
         "config": {
             "data": {
-                "title": "EN: Layer Profilwahl",
-                "helpText": "<div>EN: Dieses Auswahlfenster ermöglicht es, thematisch zusammengehörige Datensätze mit einem Klick in die Karte zu laden. Es ist nicht zwingend erforderlich eine Profilwahl zu treffen um die Anwendung zu starten.</div>"+
-                            "<div>Wird das Fenster ohne Profilwahl geschlossen (mit \"x\" rechts oben), werden lediglich die Hintergrundkarte, Ortsnamen und Höhenlinien geladen. Das Fenster lässt sich im Menü mit \"Thema wechseln\" wieder öffnen.</div>"
+                "title": "Layer Set Selection",
+                "helpText": "<div>This selection window enables you to load predefined data sets (i.e. layer sets) into the map. It is not necessary to select a layer set in order to start the application.</div>"+
+                            "<div>If you close the window without selecting a layer set (X button in the upper right corner), only the standard layers will be loaded, i.e. background map, place names and contour lines. Afterwards layers with customized filter setting can be added individually.</div>"
             }
         }
     },
@@ -445,9 +445,13 @@
                     "title": "Introductory Note",
                     "html": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
                             "<h2> Introductory Note </h2>"+
-                            "<div>Geoportal by "+
-                            "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz - Federal Office for Radiation Protection)</a>"+
-                            " provides data and services as well as visualization tools in order to give an overview of the measurement data collected and consolidated at BfS.</div>"+
+                            "<div>The "+
+                            "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>Federal Office for Radiation Protection (BfS)</a>"+
+                            " provides with the "+
+                            "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
+                            " its own internet portal for the search and visualization of spatial data (geodata) and web services (geodata services). Measurement data from the BfS as well as data from federal agencies, federal state authorities and other public authorities are available. Most of the data comes from the \"Integrated Measuring and Information System for the Surveillance of Environmental Radioactivity\" "+
+                            "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>(IMIS)</a>"+
+                            ".</div>"+
                             "<div>"+
                             "<p>Over the past few years, the relevant legal provisions and requirements, such as the "+
                             "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>German Geodata Access Act (GeoZG)</a>"+
@@ -1040,9 +1044,13 @@
                 "title": "Help",
                 "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Introductory Note</h1>",
                 "helpPrefaceHtml":
-                    "<div>Geoportal by "+
-                    "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz - Federal Office for Radiation Protection)</a>"+
-                    " provides data and services as well as visualization tools in order to give an overview of the measurement data collected and consolidated at BfS.</div>"+
+                    "<div>The "+
+                    "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>Federal Office for Radiation Protection (BfS)</a>"+
+                    " provides with the "+
+                    "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
+                    " its own internet portal for the search and visualization of spatial data (geodata) and web services (geodata services). Measurement data from the BfS as well as data from federal agencies, federal state authorities and other public authorities are available. Most of the data comes from the \"Integrated Measuring and Information System for the Surveillance of Environmental Radioactivity\" "+
+                    "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>(IMIS)</a>"+
+                    ".</div>"+
                     "<div>"+
                     "<p>Over the past few years, the relevant legal provisions and requirements, such as the "+
                     "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>German Geodata Access Act (GeoZG)</a>"+

@@ -382,7 +382,7 @@
             "data": {
                 "title": "Layer Profilwahl",
                 "helpHtml": "<div>Dieses Auswahlfenster ermöglicht es, thematisch zusammengehörige Datensätze mit einem Klick in die Karte zu laden. Es ist nicht zwingend erforderlich eine Profilwahl zu treffen um die Anwendung zu starten.</div>"+
-                            "<div>Wird das Fenster ohne Profilwahl geschlossen (mit \"x\" rechts oben), werden lediglich die Hintergrundkarte, Ortsnamen und Höhenlinien geladen. Das Fenster lässt sich im Menü mit \"Thema wechseln\" wieder öffnen.</div>"
+                            "<div>Wird das Fenster ohne Profilwahl geschlossen (mit \"x\" rechts oben), werden lediglich die Hintergrundkarte, Ortsnamen und Höhenlinien geladen. Anschließend können einzelne Fachlayer mit individuellen Filtereinstellungen hinzugeladen werden.</div>"
             }
         }
     },
