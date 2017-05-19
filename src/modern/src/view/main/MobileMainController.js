@@ -46,9 +46,15 @@ Ext.define('Koala.view.main.MobileMainController', {
 
     onMainPanelPainted: function() {
         var me = this;
+        var view = me.getView();
         // me.addDummyDevLayers(); // TODO remove!!!!!!
         me.setupChartingLayerChangeHandler();
         me.setupMapClickHandler();
+
+        //open help initially if user is neither "ruf", "imis" nor "bfs"
+        if (!Koala.util.AppContext.intersectsImisRoles(["ruf", "imis", "bfs"])) {
+            view.down('k-panel-mobilehelp').show();
+        }
     },
 
     setupChartingLayerChangeHandler: function() {

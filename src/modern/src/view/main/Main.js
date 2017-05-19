@@ -114,6 +114,7 @@ Ext.define('Koala.view.main.Main', {
             }
         }, {
             xtype: 'container',
+            cls: 'imis-map-tools',
             layout: 'vbox',
             style: {
                 top: '20px',
@@ -138,6 +139,7 @@ Ext.define('Koala.view.main.Main', {
             }]
         }, {
             xtype: 'button',
+            cls: 'imis-map-tools',
             html: '<i class="fa fa-bars fa-2x"></i>',
             style: {
                 position: 'absolute',
@@ -149,6 +151,7 @@ Ext.define('Koala.view.main.Main', {
             }
         }, {
             xtype: 'button',
+            cls: 'imis-map-tools',
             html: '<i class="fa fa-list-alt fa-2x"></i>',
             style: {
                 position: 'absolute',

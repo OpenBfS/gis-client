@@ -100,6 +100,25 @@ Ext.define('Koala.util.AppContext', {
         },
 
         /**
+         * Checks the passed (or a guessed) application context whether it has an
+         * imis-role and if it intersects with the passed roles ('debitRoles').
+         *
+         * @param {Array} debitRoles The roles to check.
+         * @return {Boolean} Whether the current role intersects with the passed roles (debitRoles)
+         */
+        intersectsImisRoles: function(debitRoles, context) {
+            var ctx = context || BasiGX.view.component.Map.guess().appContext;
+            var staticMe = Koala.util.AppContext;
+            var imisUser = staticMe.getMergedDataByKey('imis_user', ctx);
+            var imisRoles = (imisUser) ? imisUser.imisroles : undefined;
+            var roleIntersects = false;
+            if (debitRoles && imisRoles && Ext.Array.intersect(debitRoles, imisRoles).length > 0) {
+                roleIntersects = true;
+            }
+            return roleIntersects;
+        },
+
+        /**
          * Returns the value at the specified in key in the provided (or
          * guessed) application context by looking at the `'merge'` key under
          * `'data'`. Will return `undefined` if not found.

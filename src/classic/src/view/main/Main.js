@@ -74,6 +74,23 @@ Ext.define('Koala.view.main.Main', {
         }
     },
 
+    /**
+     * open help window initially if user is neither "ruf", "imis" nor "bfs"
+     * delay is necessary otherwise treelist.store is not ready for .setSelection()
+     */
+    listeners: {
+        delay: 1,
+        afterrender: function() {
+            if (!Koala.util.AppContext.intersectsImisRoles(["ruf", "imis", "bfs"])) {
+                var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                helpWin.on('afterlayout', function() {
+                    var helpWinController = this.getController();
+                    helpWinController.setTopic('preface');
+                }, helpWin, {single: true});
+            }
+        }
+    },
+
     items: [{
         xtype: 'basigx-panel-mapcontainer',
         title: 'K-MapPanel',
@@ -107,38 +124,11 @@ Ext.define('Koala.view.main.Main', {
         listeners: {
             afterrender: function() {
                 if (!location.hash) {
-                    Ext.create('Ext.window.Window', {
-                        title: 'Layer Profilwahl',
-                        modal: true,
-                        layout: 'fit',
-                        minWidth: 250,
-                        minHeight: 300,
-                        tools: [{
-                            type: 'help',
-                            //TODO: move to app-locale
-                            tooltip: 'Hilfe',
-                            callback: function() {
-                                var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-                                if (!helpWin) {
-                                    helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                                    helpWin.on('afterlayout', function() {
-                                        var helpWinController = this.getController();
-                                        helpWinController.setTopic('profileSelection');
-                                    }, helpWin, {single: true});
-                                } else {
-                                    BasiGX.util.Animate.shake(helpWin);
-                                    var helpWinController = helpWin.getController();
-                                    helpWinController.setTopic('profileSelection');
-                                }
-                            }
-                        }],
-                        items: [{
-                            xtype: 'k-panel-layersetchooser',
-                            showLayerProfiles: true,
-                            header: false,
-                            layout: 'fit'
-                        }]
-                    }).show();
+                    var lyrSetWin = Ext.create('Koala.view.window.LayerSetChooserWindow');
+                    if (!Koala.util.AppContext.intersectsImisRoles(["ruf", "imis", "bfs"])) {
+                        lyrSetWin.setHelpTxt(true);
+                    }
+                    lyrSetWin.show();
                 }
                 // This needs to happen in an afterrender handler, as
                 // otherwise the BasiGX texts would count…

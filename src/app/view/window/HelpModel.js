@@ -39,6 +39,7 @@ Ext.define('Koala.view.window.HelpModel', {
             type: 'tree',
             root: {
                 children: [{
+                    id: 'preface',
                     text: '{preface.title}',
                     content: '{preface.html}',
                     leaf: true
@@ -100,10 +101,6 @@ Ext.define('Koala.view.window.HelpModel', {
                     text: '{settings.title}',
                     content: '{settings.html}',
                     children: [{
-                        text: '{settings.fullScreen.title}',
-                        content: '{settings.fullScreen.html}',
-                        leaf: true
-                    }, {
                         text: '{settings.timeRef.title}',
                         content: '{settings.timeRef.html}',
                         leaf: true
@@ -135,6 +132,10 @@ Ext.define('Koala.view.window.HelpModel', {
                     }, {
                         text: '{mapNavigation.initMapView.title}',
                         content: '{mapNavigation.initMapView.html}',
+                        leaf: true
+                    }, {
+                        text: '{mapNavigation.fullScreen.title}',
+                        content: '{mapNavigation.fullScreen.html}',
                         leaf: true
                     }, {
                         id: 'mapNavigationPermalink',

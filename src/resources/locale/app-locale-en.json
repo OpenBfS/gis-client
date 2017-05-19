@@ -376,6 +376,15 @@
             }
         }
     },
+    "Koala.view.window.LayerSetChooserWindow": {
+        "config": {
+            "data": {
+                "title": "Layer Set Selection",
+                "helpText": "<div>This selection window enables you to load predefined data sets (i.e. layer sets) into the map. It is not necessary to select a layer set in order to start the application.</div>"+
+                            "<div>If you close the window without selecting a layer set (X button in the upper right corner), only the standard layers will be loaded, i.e. background map, place names and contour lines. Afterwards layers with customized filter setting can be added individually.</div>"
+            }
+        }
+    },
     "Koala.view.window.MetadataInfo": {
         "config": {
             "data": {
@@ -436,9 +445,13 @@
                     "title": "Introductory Note",
                     "html": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
                             "<h2> Introductory Note </h2>"+
-                            "<div>Geoportal by "+
-                            "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz - Federal Office for Radiation Protection)</a>"+
-                            " provides data and services as well as visualization tools in order to give an overview of the measurement data collected and consolidated at BfS.</div>"+
+                            "<div>The "+
+                            "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>Federal Office for Radiation Protection (BfS)</a>"+
+                            " provides with the "+
+                            "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
+                            " its own internet portal for the search and visualization of spatial data (geodata) and web services (geodata services). Measurement data from the BfS as well as data from federal agencies, federal state authorities and other public authorities are available. Most of the data comes from the \"Integrated Measuring and Information System for the Surveillance of Environmental Radioactivity\" "+
+                            "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>(IMIS)</a>"+
+                            ".</div>"+
                             "<div>"+
                             "<p>Over the past few years, the relevant legal provisions and requirements, such as the "+
                             "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>German Geodata Access Act (GeoZG)</a>"+
@@ -465,35 +478,35 @@
                             "<h4>The surface of the application offers the following functionalities:</h4>"+
                             "<ol>"+
                                 "<div><img class='img' src='classic/resources/img/helpPage/graphic_overview_en.png' title='Overview' alt='graphic_overview_en.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Layer profile selection</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Layer profile selection</li>"+
                                     "<div>This selection window enables you to load a predefined selection of data sets (i.e. layer sets) into the map. A layer set is composed of several layers that represent a common thematic level in the map. This window opens upon the initial loading of the page. It is not necessary to select a layer set in order to start the application. The layer sets/thematic sets are only a means of assistance to the user. They make it possible to load similar or related data sets with a single click. If you close the window without selecting a layer set, only the standard layers will be loaded, i.e. \"Place names\", \"Contour lines\" and \"Background map - OSM\".</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Map</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Map</li>"+
                                     "<div>The map displays the selected data sets. Moving the <i>mouse</i> over a geometry will show you initial information on the object and its values. Click on a geometry to open a window that provides time series and/or value series in the form of a line chart or bar chart for further analysis. Please make sure that the relevant layer is selected in the legend.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Tools</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Tools</li>"+
                                     "<div>The tool bar contains services for adding external data sources.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Selection</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Selection</li>"+
                                     "<div>The \"Selection\" window makes it possible to load individual layers that will be shown in the map. The layers are grouped by subjects (layer sets). Please select the required subject via the folder structure. Click on \"Change Topic\" to open a window that allows you to choose a subject with the help of a graphical user interface.</div>"+
                                     "<div>You can add layers by clicking once or twice (apply standard settings) on the layer name.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Multi search bar</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Multi search bar</li>"+
                                     "<div>The multi search bar makes it possible to search for spatial data (such as the name of a town or city) as well as for BfS data and services.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Settings</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Settings</li>"+
                                     "<div>The following settings can be adjusted for the entire application:</div>"+
                                 "<ul>"+
-                                    "<li>Full Screen: Run the application in full screen mode</li>"+
                                     "<li>Time Reference: Set the reference time either to local time (your computer's system time) or to UTC (Coordinated Universal Time)</li>"+
                                     "<li>Help: Open the help pages in a separate window</li>"+
                                     "<li>Imprint: Open the Legal Disclosure information and the Terms of Use in a separate window</li>"+
                                     "<li>Select language: Change language into German (DE) or English (EN)</li>"+
                                 "</ul><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Navigation</li>"+
                                     "<div>Allows you to enlarge or reduce the map view and to shift the map view to its original position (centre of Germany).</div>"+
+                                    "<div>Run the application in full screen mode.</div>"+
                                     "<div>It is also possible to create a permalink of the map view. Use the lowest button in the navigation bar to open the legend.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Legend</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Legend</li>"+
                                     "<div>The legend comprises the layers, i.e. the thematic contents that are shown in the map. It is possible to adjust the map view via this function.</div>"+
                                     "<div>You can hide or show layers, completely delete layers or change layer-specific filter settings. It is also possible to change the mapping order by shifting the layers.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Geographical overview</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Geographical overview</li>"+
                                     "<div>The geographical overview allows you to navigate via an overview map. The scalebar serves as a reference with respect to the current view. As long as the mouse pointer is in the map, the geographical coordinates of the mouse pointer's current position are displayed to the right of the scalebar.</div><br />"+
-                                "<li style='color:#157FCC; font-weight:bold'>Software version</li>"+
+                                "<li style='color:#294d71; font-weight:bold'>Software version</li>"+
                                     "<div>1.6.2.0</div>"+
                             "</ol>"
                 },
@@ -510,7 +523,7 @@
                             "<div>The map displays the selected layers/data sets (please refer to Section <i>4. Selection</i> for details on adding layers). The layers \"Place names\", \"Contour lines\" and \"Background map - OSM\" are loaded by default. Moving the <i>mouse</i> over a geometry will show you initial information on the object and its values. The relevant geometry will be highlighted in colour and you can click on it. Click on a geometry to open a window that provides time series and/or value series in the form of a line chart or bar chart for further analysis. Please make sure that the relevant layer is selected in the legend.</div><br />",
                     "overview": {
                         "title": "2.1 Overview",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>2.1 Overview</h2>"+
                                 "<div>"+
                                 "<p>Within the map, you can navigate with the help of the <i>mouse</i>. Shift the map view by clicking and holding the left <i>mouse button</i> down. Double-click the <i>mouse</i> to zoom into the current position of the <i>mouse pointer</i>. If you wish to zoom into a particular map view, you can use a separate zoom window. To create a zoom window in the map, hold the Shift key "+
@@ -522,7 +535,7 @@
                     },
                     "geoObjects": {
                         "title": "2.2 Retrieving information on BfS objects",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>2.2 Retrieving information on BfS objects</h2>"+
                                 "<div>"+
                                 "<p>If you wish to retrieve information on BfS objects, please make sure that the relevant layer is selected in the legend. Selected layers are labelled in turquoise (cf. Figure <i>2.2 Information on individual objects</i>).</p>"+
@@ -542,25 +555,25 @@
                                 "<img class='img' src='classic/resources/img/helpPage/button_saveTimeSeries.png' title='Download' alt='button_download.png' width='17' height='16' style='vertical-align:middle'>"+
                                 " to download individual time series. The series can be saved in JSON, CSV or GML format. Select the desired format and then confirm the download. The file will be saved in your browser’s download directory. Select the section that you wish to download from the diagram with the help of the zoom function.</p>"+
                                 "<p>Click on the diagram's legend to hide or show individual series, such as \"Helgoland / Unterland\" in the example below. It is also possible to delete an individual series completely from the diagram: Just click on the X button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Delete series' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Delete series' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
                                 " next to the layer name.</p>"+
                                 "<p>If you wish to display an individual value within the diagram, move the <i>mouse pointer</i> over the desired position.</p>"+
                                 "<p>Enter a start date and end date above the line diagram to refine the mapping. Alternatively, you can select a date via the calendar icon "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Calendar icon' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
                                 ". Confirm your selection with the OK button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_ok.png' title='OK button' alt='button_ok.png' width='32' height='23' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_ok.png' title='OK button' alt='button_ok.png' width='35' height='24' style='vertical-align:middle'>"+
                                 ". Use the \"Reset\" button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_reset.png' title='Reset button' alt='button_reset.png' width='44' height='23' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_reset.png' title='Reset button' alt='button_reset.png' width='51' height='24' style='vertical-align:middle'>"+
                                 " to return to the original time range. Click on the \"Add chart\" button "+
-                                "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingChart.png' title='Add chart' alt='selectionBox_addingChart.png' width='250' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingChart.png' title='Add chart' alt='selectionBox_addingChart.png' width='162' height='24' style='vertical-align:middle'>"+
                                 " to display all the layers in the legend that can be added as a time series.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_timeSeries_en.png' title='Time series' alt'graphic_timeSeries_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Time series</b>"+
                                 "</div><br />"+
                                 "<p>The bar charts representing value series are shown in Figure <i>2.2 Value series</i>. If you move the <i>mouse pointer</i> over a bar, the relevant value and unit will be shown in a separate window. As explained for the time series, it is possible to hide or show every series via the diagram’s legend (you can also delete individual series by using the X button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Delete series' alt='button_series_delete.png' width='13' height='12' style='vertical-align:middle'>"+
-                                "). The y axis will adjust to the relevant maximum value of the remaining series. <i>Figure 2.2 Value series</i> shows how this function can be used for detailed analyses.</p>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Delete series' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
+                                "). The y axis will adjust to the relevant maximum value of the remaining series, unless the axis scaling for the layer has not been fixed. <i>Figure 2.2 Value series</i> shows how this function can be used for detailed analyses.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_barChart_en.png' title='Value series' alt'graphic_barChart_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Value series</b>"+
@@ -574,17 +587,17 @@
                             "<div>The tool bar is in the top-left corner, just below the BfS logo. Click a button to open the relevant service. The services are explained in more detail in the following paragraphs (please navigate to the desired item on the left-hand side of the Help page menu).</div><br />",
                     "wms": {
                         "title": "3.1 WMS service",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>3.1 WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='103' height='26' style='vertical-align:middle'> </h2>"+
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>3.1 WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='64' height='24' style='vertical-align:middle'> </h2>"+
                                 "<div>"+
-                                "<p>The WMS service makes it possible to add WMS layers within BfS Geo-Portal. You can thus perform analyses and/or representations on the basis of external geo data. "+
+                                "<p>The WMS service makes it possible to add WMS layers within BfS Geoportal. You can thus perform analyses and/or representations on the basis of external geo data. "+
                                 "Please find more detailed information on the topic of Web Map Service at the following address: <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></p>"+
                                 "<p>First you need to set the query parameters. Enter a valid query into the \"WMS-URL\" field or select a predefined URL.</p>"+
                                 "<p>Then press the \"Query Available Layer\" button "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Query Available Layer' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'>"+
                                 ". The results will be shown in the \"Available Layer\" field.</p>"+
                                 "<p>Check the boxes for the required layers so that they will be shown in the legend and thus also on the map. Confirm the selection with the \"Add Selected Layer\" button "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Add Selected Layer' alt='button_addLayers.png' width='198' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Add Selected Layer' alt='button_addLayers.png' width='192' height='24' style='vertical-align:middle'>"+
                                 ". Initially, these layers will be positioned hierarchically at the top of the legend and thus mapped over all the other layers in the representation.</p>"+
                                 "<p>Figure <i>3.1 WMS service workflow</i> shows how the layer \"Topographic OSM WMS - by mundalis\" is added to the map.</p><br />"+
                                 "<div style='font-size:11px'>"+
@@ -595,7 +608,7 @@
                         },
                     "print": {
                         "title": "en: 3.2 Druckdienst",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>3.2 Druckdienst <img class='img' src='classic/resources/img/helpPage/button_print.png' title='Print button' alt='button_print.png' width='103' height='27' style='vertical-align:middle'> </h2>"+
                                 "<div>"+
                                 "<p>Der Druckdienst ermöglicht es einen Kartenausschnitt in verschiedenen Formaten zu erstellen und abzuspeichern. Der Dienst ist in zwei Hauptkomponenten untergliedert. Einerseits werden allgemein gebräuchliche Standards wie BMP, GIF, PDF, PNG, TIF und TIFF, andererseits der Standard für den Austausch radiologischer Informationen <i>IRIX</i> zur Verfügung gestellt. Das Vorgehen zur Erstellung eines IRIX-Dokumentes wird im Anschluss unter entsprechender Überschrift erläutert.</p>"+
@@ -620,7 +633,7 @@
                         },
                     "import": {
                         "title": "en: 3.3 Import",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>3.3 Import <img class='img' src='classic/resources/img/helpPage/button_import.png' title='Import-Button' alt='button_import.png' width='71' height='24' style='vertical-align:middle'> </h2>"+
                                 "<div>- TODO -</div>"
                     }
@@ -633,11 +646,11 @@
                                 "<p>The menu width can be adjusted. If you move the <i>mouse pointer</i> to the right-hand margin of the menu, the icon changes into a double-arrow "+
                                 "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
                                 " and you can adjust the width by holding the left <i>mouse button</i> down.</p>"+
-                                "<p>Every layer is part of a layer set that reflects a technical classification. For example, if you wish to add the layer \"nuclear power plant\" to the map, you will find it in the layer set \"miscellaneous\".</p>"+
+                                "<p>Every layer is part of a layer set that reflects a technical classification. For example, if you wish to add the layer \"UV Index aktueller Tagesverlauf\" to the map, you will find it in the layer set \"miscellaneous\".</p>"+
                                 "<p>The selection window is structured like a common file system, including folders and files. The layer sets equate to folders, while the layers equate to files. If you wish to unfold a folder in order to view the layers contained therein, simply click on the plus icon to the left of the folder icon. Alternatively, you can double-click the folder name.</p>"+
                                 "<p>A single click onto the layer name will open a layer-specific window. Depending on the type of layer, the window may also include settings so that you can restrict the data with the help of a time filter and/or value filter. If a layer does not include any time or value filters, the window will only contain a button for adding the relevant layer (cf. Figure <i>4. Layer-specific window - layer without filter</i>).</p>"+
                                 "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/window_layerNoFilter_en.png' title='layer-specific window - layer without filter' alt'window_layerNoFilter_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<img class='img' src='classic/resources/img/helpPage/window_layerNoFilter.png' title='layer-specific window - layer without filter' alt'window_layerNoFilter.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>4. Layer-specific window - layer without filter</b>"+
                                 "</div><br />"+
                                 "<p>A double-click on the layer name will directly add the layer to the map. In this case, the standard settings will be used. Time-related layers will be adjusted to the most current data.</p>"+
@@ -666,7 +679,7 @@
                     "html":     "<h2>5. Multi search bar</h2>"+
                                 "<div>"+
                                 "<p>The multi search bar makes it possible to search for spatial data as well as for BfS data and services. Simply enter your text into the search field and the results will be shown separately in a window below the bar. Clicking onto the X icon "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_search_delete.png' title='X icon: delete the entry' alt='button_search_delete.png' width='25' height='24' style='vertical-align:middle'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/button_search_delete.png' title='X icon: delete the entry' alt='button_search_delete.png' width='24' height='24' style='vertical-align:middle'>"+
                                 " on the right-hand side of the search field will delete the entry and close the result window.</p>"+
                                 "<h3>Spatial search</h3>"+
                                 "<p>You can search for locations via the multi search bar (cf. Figure <i>5. Spatial search</i>). The results will be constantly updated according to the entered text and thus do not require any further entries. If you have found the location you were looking for, simply click onto the name to zoom into the map.</p>"+
@@ -690,49 +703,40 @@
                 "settings": {
                     "title": "6. Settings",
                     "html": "<h2>6. Settings</h2>"+
-                            "<div>You will find the BfS Geo-Portal settings in the top-right corner of the application. Clicking the relevant button will open or activate the corresponding function, which is explained in more detail in the following paragraphs. Please navigate to the desired item on the left-hand side of the Help page menu.</div><br />",
-                    "fullScreen": {
-                        "title": "6.1 Full screen",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.1 Full screen <img class='img' src='classic/resources/img/helpPage/button_settings_fullScreen_en.png' title='Full screen' alt='button_settings_fullScreen_en.png' width='81' height='24' style='vertical-align:middle'></h2>"+
-                                "<div>"+
-                                "<p>Click on the \"Full Screen\" button to enlarge the view so that the BfS Geo-Portal application uses the full screen. Depending on the browser you use, you may be required to confirm the full screen mode.</p>"+
-                                "<p>Click the <b>Esc key</b> to cancel the full screen mode.</p>"+
-                                "</div>"
-                        },
+                            "<div>You will find the BfS Geoportal settings in the top-right corner of the application. Clicking the relevant button will open or activate the corresponding function, which is explained in more detail in the following paragraphs. Please navigate to the desired item on the left-hand side of the Help page menu.</div><br />",
                     "timeRef": {
-                        "title": "6.2 Time Reference",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.2 Time Reference <img class='img' src='classic/resources/img/helpPage/button_settings_timeRef_utc_en.png' title='Time reference button' alt='button_settings_timeRef_utc_en.png' width='142' height='24' style='vertical-align:middle'></h2>"+
+                        "title": "6.1 Time Reference",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>6.1 Time Reference <img class='img' src='classic/resources/img/helpPage/button_settings_timeRef_utc_en.png' title='Time reference button' alt='button_settings_timeRef_utc_en.png' width='142' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>The default setting for the reference time is <i>Coordinated Universal Time - UTC</i>. Using a universal reference time is essential for international cooperation and/or the analysis of data over different time zones. Please remember, with respect to time-related data, to check the reference time settings.</p>"+
-                                "<p>Pressing the button \"Time Reference (UTC)\" will change the time shown at the client's to local time \"Time Reference (local)\" (cf. Figure <i>6.2 Time Reference</i>). This means that your computer’s system time will be used.</p>"+
+                                "<p>Pressing the button \"Time Reference (UTC)\" will change the time shown at the client's to local time \"Time Reference (local)\" (cf. Figure <i>6.1 Time Reference</i>). This means that your computer’s system time will be used.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_timeRef_en.png' title='Time reference' alt'graphic_timeRef_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
-                                "<b>6.2 Time Reference</b>"+
+                                "<b>6.1 Time Reference</b>"+
                                 "</div><br />"+
                                 "</div>"
                         },
                     "help": {
-                        "title": "6.3 Help",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.3 Help <img class='img' src='classic/resources/img/helpPage/button_settings_help_en.png' title='Help button' alt='button_settings_help_en.png' width='43' height='24' style='vertical-align:middle'></h2>"+
+                        "title": "6.2 Help",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>6.2 Help <img class='img' src='classic/resources/img/helpPage/button_settings_help_en.png' title='Help button' alt='button_settings_help_en.png' width='43' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>The \"Help\" button opens the Help window. In the Help window you will find a detailed description of the functionalities provided by BfS Geo-Portal.</p>"+
+                                "<p>The \"Help\" button opens the Help window. In the Help window you will find a detailed description of the functionalities provided by BfS Geoportal.</p>"+
                                 "</div>"
                         },
                     "imprint": {
-                        "title": "6.4 Imprint",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.4 Imprint <img class='img' src='classic/resources/img/helpPage/button_settings_imprint_en.png' title='Imprint button' alt='button_settings_imprint_en.png' width='58' height='24' style='vertical-align:middle'></h2>"+
+                        "title": "6.3 Imprint",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>6.3 Imprint <img class='img' src='classic/resources/img/helpPage/button_settings_imprint_en.png' title='Imprint button' alt='button_settings_imprint_en.png' width='58' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Use this button to open the Legal Disclosure information and the Terms of Use.</p>"+
                                 "</div>"
                         },
                     "language": {
-                        "title": "6.5 Language",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>6.5 Language <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Language button' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
+                        "title": "6.4 Language",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>6.4 Language <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Language button' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>The Language selection menu controls the language used in the entire application. You can choose your language by clicking the referenced symbol. Clicking onto the downward arrow will open the selection menu showing the available languages. \"DE\" means German, \"EN\" means English.</p>"+
                                 "<img class='img' src='classic/resources/img/helpPage/button_settings_language_all.png' title='Language' alt'button_settings_language_all.png' style='max-height: 100%; max-width: 100%;'>"+
@@ -745,7 +749,7 @@
                             "<div>The Navigation menu provides functions relating to the map view. The buttons are positioned on the right-hand side of the application. Clicking the relevant button will activate the corresponding function, which is explained in more detail in the following paragraphs. Please navigate to the desired item on the left-hand side of the Help page menu.</div><br />",
                     "zoomIn": {
                         "title": "7.1 Zoom in",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>7.1 Zoom in <img class='img' src='classic/resources/img/helpPage/button_zoomIn.png' title='Zoom in button' alt='button_zoomIn.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>This button zooms into the map using a predefined zoom level. As a result, the map scale of the current view becomes larger. Alternatively, you can double-click the <i>mouse</i> within the map view or use the scroll wheel to zoom into the map.</p>"+
@@ -756,7 +760,7 @@
                         },
                     "zoomOut": {
                         "title": "7.2 Zoom out",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>7.2 Zoom out <img class='img' src='classic/resources/img/helpPage/button_zoomOut.png' title='Zoom out button' alt='button_zoomOut.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>This button zooms out of the map using a predefined zoom level. As a result, the map scale of the current view becomes smaller. Alternatively, you can use the <i>scroll wheel</i> to zoom out of the map.</p>"+
@@ -764,27 +768,36 @@
                         },
                     "initMapView": {
                         "title": "7.3 Initial map view",
-                        "html": "<hr style='color:#157FCC' />"+
+                        "html": "<hr style='color:#294d71' />"+
                                 "<h2>7.3 Initial map view <img class='img' src='classic/resources/img/helpPage/button_initMapView.png' title='Initial map view' alt='button_initMapView.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Click on this button to show the initial map view (zoom level and position). Germany is shown at the centre of the map view.</p>"+
                                 "</div>"
                         },
+                    "fullScreen": {
+                        "title": "7.4 Full screen",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>7.4 Full screen <img class='img' src='classic/resources/img/helpPage/button_fullScreen.png' title='Full screen' alt='button_fullScreen.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                "<div>"+
+                                "<p>Click on the \"Full Screen\" button to enlarge the view so that the BfS Geoportal application uses the full screen. Depending on the browser you use, you may be required to confirm the full screen mode.</p>"+
+                                "<p>Click the <b>Esc key</b> to cancel the full screen mode.</p>"+
+                                "</div>"
+                        },
                     "permaLink": {
-                        "title": "7.4 Permalink",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>7.4 Permalink <img class='img' src='classic/resources/img/helpPage/button_permaLink.png' title='Permalink button' alt='button_permaLink.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                        "title": "7.5 Permalink",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>7.5 Permalink <img class='img' src='classic/resources/img/helpPage/button_permaLink.png' title='Permalink button' alt='button_permaLink.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>A permalink is a hyperlink permanently referencing the contents of a webpage. It contains map view information (zoom level and position) as well as additionally loaded contents (layers with filter settings).</p>"+
                                 "<p>A permalink thus makes it possible to save a particular map view for future access. Choose the required map view and press the Permalink button. If the Permalink window is already open, press \"Refresh\" to display the permalink corresponding to the current map view. The \"Copy to Clipboard\" button saves the permalink temporarily so that you can paste the link where desired.</p>"+
                                 "</div>"
                         },
                     "openLegend": {
-                        "title": "7.5 Open legend",
-                        "html": "<hr style='color:#157FCC' />"+
-                                "<h2>7.5 Open legend <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Open legend' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                        "title": "7.6 Open legend",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>7.6 Open legend <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Open legend' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>This button opens or closes the legend displayed in the bottom-right corner of BfS Geo-Portal. The legend comprises all layers that are immediately available for representation. Alternatively, you can directly click on the legend (blue bar labelled \"Legend\").</p>"+
+                                "<p>This button opens or closes the legend displayed in the bottom-right corner of BfS Geoportal. The legend comprises all layers that are immediately available for representation. Alternatively, you can directly click on the legend (blue bar labelled \"Legend\").</p>"+
                                 "</div>"
                         }
                 },
@@ -842,7 +855,7 @@
                             "<b>9. Overview map</b>"+
                             "</div><br />"+
                             "<p>The scalebar "+
-                            "<img class='img' src='classic/resources/img/helpPage/info_scaleBar.png' title='Scalebar' alt='info_scaleBar.png' width='72' height='24' style='vertical-align:middle'>"+
+                            "<img class='img' src='classic/resources/img/helpPage/info_scaleBar.png' title='Scalebar' alt='info_scaleBar.png' width='99' height='13' style='vertical-align:middle'>"+
                             " serves as a reference to the current map scale. It thus helps to compare the current view. The scalebar varies by length according to the zoom level. It shows the length in metres (m) or kilometres (km).</p>"+
                             "<p>As long as the mouse pointer is in the map, the geographical coordinates of the <i>mouse pointer's</i> current position are displayed to the right of the scalebar.</p>"+
                             "</div>"
@@ -1031,9 +1044,13 @@
                 "title": "Help",
                 "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Introductory Note</h1>",
                 "helpPrefaceHtml":
-                    "<div>Geoportal by "+
-                    "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>BfS (Bundesamt für Strahlenschutz - Federal Office for Radiation Protection)</a>"+
-                    " provides data and services as well as visualization tools in order to give an overview of the measurement data collected and consolidated at BfS.</div>"+
+                    "<div>The "+
+                    "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>Federal Office for Radiation Protection (BfS)</a>"+
+                    " provides with the "+
+                    "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
+                    " its own internet portal for the search and visualization of spatial data (geodata) and web services (geodata services). Measurement data from the BfS as well as data from federal agencies, federal state authorities and other public authorities are available. Most of the data comes from the \"Integrated Measuring and Information System for the Surveillance of Environmental Radioactivity\" "+
+                    "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>(IMIS)</a>"+
+                    ".</div>"+
                     "<div>"+
                     "<p>Over the past few years, the relevant legal provisions and requirements, such as the "+
                     "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>German Geodata Access Act (GeoZG)</a>"+
@@ -1055,21 +1072,21 @@
                 "helpQuickRefTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>Brief overview</h1>",
                 "helpQuickRefHtml": "<div><img class='img' src='modern/resources/img/helpPage/mobile_graphic_overview_en.png' title='Overview' alt='mobile_graphic_overview_en.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
                             "<ol>"+
-                            "<li style='color:#157FCC; font-weight:bold'>Map</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Map</li>"+
                                 "<div>The map displays the selected layers/data sets. You can use finger gestures or the navigation bar at the top-right corner of the screen to navigate in the map. Tap on the relevant geometry (measurement point) in the map to open a separate tab that displays the timelines and/or value series referring to this measurement point. Please ensure that the diagram icon for the relevant layer is activated in the legend (active: "+
                                 "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Active chart' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
                                 ", inactive: "+
                                 "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Inactive chart' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
                                 ").</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Menu</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Menu</li>"+
                                 "<div>Via the menu, it is possible to add individual layers to the map (\"Selection\" button). It is also possible to load data from external sources into the map (\"Add external WMS\"). Search for locations and/or BfS data and services by entering a search term into the search field. The Permalink button allows you to save a particular map view for future access. You can define the language and the reference time used in the application via the menu item \"Settings\". You will also find separate buttons to open the Help pages or the Legal Disclosure information.</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Navigation</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Navigation</li>"+
                                 "<div>Allows you to enlarge or reduce the map view and to shift the map view to its original position (centre of Germany). Alternatively, you can use finger gestures to zoom in or out.</div>"+
                                 "<div>A tap on the lowest button (two arrows) will enlarge the view so that the application uses the full screen of your device (if your mobile browser supports full screen mode).</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Legend</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Legend</li>"+
                                 "<div>The legend explains the symbols used in the layers.</div>"+
                                 "<div>It is also possible to change the settings for the layer presentation. Via the legend, you can hide or show or even completely delete individual layers. You can activate or deactivate the layer query in the legend and you can change the filter settings. It is also possible to change the mapping order of the layers with the help of the arrow buttons.</div><br />"+
-                            "<li style='color:#157FCC; font-weight:bold'>Software-Version</li>"+
+                            "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
                                 "<div>1.6.2.0</div>"+
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Map</h1>",
@@ -1128,13 +1145,13 @@
                                     "<div>Use this button to open the Legal Disclosure information and the Terms of Use.</div><br />",
                 "helpNavigationTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>3. Navigation</h1>",
                 "helpNavigationHtml": "<div>The Navigation menu includes buttons to zoom in and out of the map and a button to reset the map view to the initial position and initial zoom level (full view of Germany).</div>"+
-                                      "<h2 style='font-weight:bold'>3.1 Zoom in  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomIn.png' title='Zoom in' alt='mobile_button_zoomIn.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                      "<h2 style='font-weight:bold'>3.1 Zoom in  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomIn.png' title='Zoom in' alt='mobile_button_zoomIn.png' width='32' height='27' style='vertical-align:middle'></h2>"+
                                         "<div>The topmost button zooms into the map using a predefined zoom level. As a result, the map scale of the current view becomes larger. Alternatively, you can double-tap the map at the desired location or use the <i>2 fingers zoom</i> to zoom into the map.</div>"+
-                                      "<h2 style='font-weight:bold'>3.2 Zoom out  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomOut.png' title='Zoom out' alt='mobile_button_zoomOut.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                      "<h2 style='font-weight:bold'>3.2 Zoom out  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomOut.png' title='Zoom out' alt='mobile_button_zoomOut.png' width='32' height='27' style='vertical-align:middle'></h2>"+
                                         "<div>The second button zooms out of the map using a predefined zoom level. As a result, the map scale of the current view becomes smaller. Alternatively, you can double-tap the map at the desired location or use the <i>2 fingers zoom</i> to zoom out of the map.</div>"+
-                                      "<h2 style='font-weight:bold'>3.3 Initial map view  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomBack.png' title='Initial map view' alt='mobile_button_zoomBack.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                      "<h2 style='font-weight:bold'>3.3 Initial map view  <img class='img' src='modern/resources/img/helpPage/mobile_button_zoomBack.png' title='Initial map view' alt='mobile_button_zoomBack.png' width='32' height='27' style='vertical-align:middle'></h2>"+
                                         "<div>The third button (crossed arrows) zooms and/or shifts the view to the initially displayed map section. Germany is shown at the centre of the map view.</div>"+
-                                      "<h2 style='font-weight:bold'>3.4 Full screen  <img class='img' src='modern/resources/img/helpPage/mobile_button_extend.png' title='Full screen' alt='mobile_button_extend.png' width='32' height='28' style='vertical-align:middle'></h2>"+
+                                      "<h2 style='font-weight:bold'>3.4 Full screen  <img class='img' src='modern/resources/img/helpPage/mobile_button_extend.png' title='Full screen' alt='mobile_button_extend.png' width='32' height='27' style='vertical-align:middle'></h2>"+
                                         "<div>A tap on the lowest button (two arrows) will enlarge the view so that the application uses the full screen of your device (if your mobile browser supports full screen mode).</div>",
                 "helpLegendTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>4. Legend <img class='img' src='modern/resources/img/helpPage/mobile_button_legend.png' title='Open legend' alt='mobile_button_legend.png' width='40' height='33' style='vertical-align:middle'></h1>",
                 "helpLegendHtml": "<div>The legend comprises all layers that are loaded into the map view. Please refer to Section <i>2.2. Selection</i> for more information on adding layers.</div><br />"+

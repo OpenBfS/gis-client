@@ -330,13 +330,21 @@ Ext.define('Koala.util.Layer', {
          * object. This method is used for displaying the filters and as such it
          * respects the current UTC setting of the application.
          *
-         * @param {object} metadata The metadata json object.
+         * @param {object} || [array] metadata The metadata json object, a filters array or a filter object.
          * @returns {string} A textual representation of the filters or ''.
          */
         getFiltersTextFromMetadata: function(metadata) {
             var staticMe = this;
-            var filters = staticMe.getFiltersFromMetadata(metadata);
-            if (filters === null) {
+            var filters = null;
+            if (Array.isArray(metadata)){ // it's a 'filters' array
+               filters = metadata;
+            } else if (metadata !== null && typeof(metadata) === 'object'){
+               if (metadata.hasOwnProperty('filters')) { // it's a 'metadata' object
+                  filters = staticMe.getFiltersFromMetadata(metadata);
+               } else {
+                   filters = [metadata]; // it's a 'filter' object
+               };
+            } else {
                 return '';
             }
 
