@@ -60,6 +60,24 @@ Ext.define('Koala.view.panel.ThemeTree', {
             tooltip: '{tooltip}'
         },
         handler: 'toggleLayerSetView'
+    }, {
+        type: 'help',
+        //TODO: move to app-locale
+        tooltip: 'Hilfe',
+        callback: function() {
+            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
+            if (!helpWin) {
+                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                helpWin.on('afterlayout', function() {
+                    var helpWinController = this.getController();
+                    helpWinController.setTopic('layerSelection');
+                }, helpWin, {single: true});
+            } else {
+                BasiGX.util.Animate.shake(helpWin);
+                var helpWinController = helpWin.getController();
+                helpWinController.setTopic('layerSelection');
+            }
+        }
     }],
 
     fbar: [
