@@ -148,6 +148,7 @@ Ext.define('Koala.view.window.HelpModel', {
                         leaf: true
                     }]
                 }, {
+                    id: 'legendHelp',
                     text: '{legend.title}',
                     content: '{legend.html}',
                     leaf: true
