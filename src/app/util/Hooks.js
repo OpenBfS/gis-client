@@ -78,7 +78,10 @@ Ext.define('Koala.util.Hooks', {
          */
         beforeAdd: {
             doc_creator: function(form, attributeRec, attributeFields) {
-                attributeFields.items[0].value = 'Peter';
+                var appContext = Koala.util.AppContext.getAppContext();
+                var userName = Koala.util.Object.getPathStrOr(appContext,
+                        'data/merge/imis_user/username', '');
+                attributeFields.items[0].value = userName;
             },
             legend_template: function(form, attributeRec, attributeFields) {
                 var layoutCombo = form.down('combo[name="layout"]');
