@@ -23,8 +23,52 @@ Ext.define('Koala.view.form.LayerFilterController', {
     requires: [
         'Koala.util.Date',
         'Koala.util.Filter',
-        'Koala.util.Layer'
+        'Koala.util.Layer',
+        'Ext.util.DelayedTask'
     ],
+
+    autorefreshMap: {},
+
+    constructor: function() {
+        // functions seem sometimes to be called on the prototype itself
+        this.__proto__.layerUpdater = new Ext.util.DelayedTask(this.refreshLayers.bind(this));
+        this.__proto__.layerUpdater.delay(60000);
+    },
+
+    /**
+     * Refreshes the layers where the user activated auto refresh.
+     */
+    refreshLayers: function() {
+        this.layerUpdater.delay(60000);
+
+        var mapComponent = BasiGX.util.Map.getMapComponent('gx_map');
+        var map = mapComponent.getMap();
+        var allLayers = BasiGX.util.Layer.getAllLayers(map);
+        var layersById = {};
+        Ext.Array.each(allLayers, function(lay) {
+            if (lay.metadata) {
+                layersById[lay.metadata.id] = lay;
+            }
+        });
+
+        var me = this;
+        Ext.Object.each(this.autorefreshMap, function(id, time) {
+            if ((new Date().getMinutes() % time) === 0) {
+                Koala.util.Layer.getMetadataFromUuidAndThen(id, function(metadata) {
+                    me.updateFiltersForAutorefresh(metadata.filters);
+                    var LayerUtil = Koala.util.Layer;
+
+                    var existingLayer = layersById[id];
+                    var layer = LayerUtil.layerFromMetadata(metadata);
+                    existingLayer.setSource(layer.getSource());
+
+                    me.updateMetadataLegendTree(existingLayer, metadata);
+                    me.deselectThemeTreeItems();
+                    LayerUtil.repaintLayerFilterIndication();
+                }, function() {});
+            }
+        });
+    },
 
     /**
      * This is the handler if we want to update the filters of an
@@ -54,6 +98,24 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
+     * Updates the auto refresh flag from the view.
+     * @param  {Koala.view.form.LayerFilter} view     must be set
+     * @param  {Object} metadata layer metadata, must be set
+     */
+    updateAutorefresh: function(view, metadata) {
+        var autorefresh = view.query('checkbox')[0].checked;
+        if (!autorefresh) {
+            delete this.autorefreshMap[metadata.id];
+            metadata.autorefresh = false;
+            metadata.autorefreshTime = 0;
+        } else {
+            this.autorefreshMap[metadata.id] = view.query('combobox')[0].value;
+            metadata.autorefresh = true;
+            metadata.autorefreshTime = this.autorefreshMap[metadata.id];
+        }
+    },
+
+    /**
      * This is the actual handler when the 'Add to map' button is clicked. It
      * will create a layer (via Koala.util.Layer#layerFromMetadata) with the
      * currently displayed filters applied and add that layer to the map (via
@@ -63,16 +125,45 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var me = this;
         var LayerUtil = Koala.util.Layer;
         var view = me.getView();
+
         var metadata = view.getMetadata();
         var metadataClone = Ext.clone(metadata);
         var filters = view.getFilters();
         filters = me.updateFiltersFromForm(filters);
         metadata.filters = filters;
+        this.updateAutorefresh(view, metadata);
         var layer = LayerUtil.layerFromMetadata(metadata);
         LayerUtil.setOriginalMetadata(layer, metadataClone);
         LayerUtil.addOlLayerToMap(layer);
         me.deselectThemeTreeItems();
         view.up('window').close();
+    },
+
+    /**
+     * Updates layer time filters based on current date and the configured
+     * min/max times, also considers maximum duration for time ranges.
+     * @param  {Array} filters the filter metadata
+     * @return {Array}         the updated filters
+     */
+    updateFiltersForAutorefresh: function(filters) {
+        Ext.each(filters, function(filter) {
+            var now = new Date().toISOString();
+            if (filter.type === 'pointintime') {
+                if (now > filter.maxdatetimeinstant) {
+                    now = filter.maxdatetimeinstant;
+                }
+                filter.effectivedatetime = moment(now);
+            }
+
+            if (filter.type === 'timerange') {
+                if (now > filter.maxdatetimeinstant) {
+                    now = filter.maxdatetimeinstant;
+                }
+                filter.effectivemaxdatetime = moment(now);
+                filter.effectivemindatetime = moment(filter.effectivemaxdatetime).subtract(filter.maxduration, 'minutes');
+            }
+        });
+        return filters;
     },
 
     /**
