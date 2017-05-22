@@ -113,6 +113,7 @@ Ext.define('Koala.view.form.Print', {
         return {
             xtype: 'container',
             layout: 'hbox',
+            name: attributeRec.get('name') + '_container',
             margin: '5px 0px',
             items: [{
                 xtype: 'textfield',
@@ -439,21 +440,9 @@ Ext.define('Koala.view.form.Print', {
      * @param {Object} attributefields An `attributefields`-object, which often
      *     are formfields like `textfields`, `combos` etc.
      */
-    onBeforeAttributeFieldsAdd: function(printForm, attributeFields) {
-        var name = attributeFields.name;
-        // For these two fields we need special handling…
-        if (name === 'legend_template' || name === 'map_template') {
-            // …hide both…
-            attributeFields.hidden = true;
-            // …set the value according to actual field and current layout
-            var layoutCombo = printForm.down('combo[name="layout"]');
-            var currentLayout = layoutCombo.getValue();
-            if (name === 'legend_template') {
-                attributeFields.value = currentLayout + '_legend.jasper';
-            } else if (name === 'map_template') {
-                attributeFields.value = currentLayout + '_map.jasper';
-            }
-        }
+    onBeforeAttributeFieldsAdd: function(printForm, attributeFields, attributeRec) {
+        Koala.util.Hooks.executeBeforeAddHook(
+                printForm, attributeFields, attributeRec);
     },
 
     getCheckBoxBooleanFields: function(attributeRec) {
@@ -505,7 +494,7 @@ Ext.define('Koala.view.form.Print', {
 
         if (attributeFields) {
             var doContinue = me.fireEvent(
-                    'beforeattributefieldsadd', me, attributeFields
+                    'beforeattributefieldsadd', me, attributeFields, attributeRec
                 );
             // a beforeattributefieldsadd handler may have cancelled the adding
             if (doContinue !== false) {
@@ -658,12 +647,16 @@ Ext.define('Koala.view.form.Print', {
                     clazz.name = legendTextField.getValue();
                 }
             });
-
         }
+
+        var hookedAttributes = Ext.clone(attributes);
+        Ext.iterate(attributes, function(key, value) {
+            Koala.util.Hooks.executeBeforePostHook(key, value, hookedAttributes);
+        });
 
         var app = view.down('combo[name=appCombo]').getValue();
         var url = view.getUrl() + app + '/buildreport.' + format;
-        spec.attributes = attributes;
+        spec.attributes = hookedAttributes;
         spec.layout = layout;
         spec.outputFilename = layout;
 
