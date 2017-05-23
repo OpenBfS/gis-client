@@ -53,6 +53,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         me.createHtmlTab();
 
         me.createHoverTemplateTab();
+
+        // TODO
+        // me.createCloseIconTab();
     },
 
     createTimeSeriesTab: function() {
@@ -79,7 +82,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
 
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
-        var chart = Ext.create(chartObj);
+        Ext.create(chartObj);
 
         el.appendChild(timeSeriesTab);
     },
@@ -217,9 +220,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         });
 
-        el.addEventListener('mousedown', function() {
-            dragPan.setActive(false);
-            overlayer.set('dragging', true);
+        el.addEventListener('mousedown', function(event) {
+            if (event.target.tagName === 'LABEL') {
+                dragPan.setActive(false);
+                overlayer.set('dragging', true);
+            }
         });
         el.addEventListener('mouseup', function() {
             if (overlayer.get('dragging') === true) {

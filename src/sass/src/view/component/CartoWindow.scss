@@ -129,18 +129,17 @@
   position: absolute !important;
   clip: rect(1px, 1px, 1px, 1px);
   padding: 5px;
-  border:0 !important;
-  height: 1px !important;
-  width: 1px !important;
   overflow: hidden;
 }
 /**
  * we reveal a panel depending on which control is selected
  */
 .cartowindow > div.cartowindow-tab input:checked + h2 + div {
-  position: static !important;
-  height: auto !important;
-  width: auto !important;
+    resize: both;
+    overflow: auto;
+    position: static !important;
+    max-width: 50vw;
+    max-height: 50vh;
 }
 
 /**
