@@ -54,7 +54,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var me = this;
         Ext.Object.each(this.autorefreshMap, function(id, time) {
             var date = Koala.util.Date.getTimeReferenceAwareMomentDate(new moment());
-            if ((date.getMinutes() % time) === 0) {
+            if ((date.minutes() % time) === 0) {
                 Koala.util.Layer.getMetadataFromUuidAndThen(id, function(metadata) {
                     me.updateFiltersForAutorefresh(metadata.filters);
                     var LayerUtil = Koala.util.Layer;
