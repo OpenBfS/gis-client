@@ -83,14 +83,18 @@ Ext.define('Koala.view.form.LayerFilter', {
             return;
         }
 
+        var hasTimeFilter = false;
+
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || '').toLowerCase();
             switch (type) {
                 case 'timerange':
                     me.addTimeRangeFilter(filter, idx);
+                    hasTimeFilter = true;
                     break;
                 case 'pointintime':
                     me.addPointInTimeFilter(filter, idx);
+                    hasTimeFilter = true;
                     break;
                 case 'rodos':
                     break;
@@ -102,6 +106,13 @@ Ext.define('Koala.view.form.LayerFilter', {
                     break;
             }
         });
+
+        if (hasTimeFilter) {
+            var autorefresh = me.getAutorefreshCheckbox();
+            me.add(autorefresh);
+            var dropdown = me.getAutorefreshDropdown();
+            me.add(dropdown);
+        }
 
         var submitButton = me.getSubmitButton();
         me.add(submitButton);
@@ -135,6 +146,35 @@ Ext.define('Koala.view.form.LayerFilter', {
             bind: {
                 text: textBind
             }
+        });
+    },
+
+    getAutorefreshCheckbox: function() {
+        return Ext.create('Ext.form.field.Checkbox', {
+            fieldLabel: 'Automatisch aktualisieren',
+            labelWidth: '100%'
+        });
+    },
+
+    getAutorefreshDropdown: function() {
+        var times = Ext.create('Ext.data.Store', {
+            fields: ['timeLabel', 'time'],
+            data: [
+                {timeLabel: '1 Minute', time: 1},
+                {timeLabel: '5 Minuten', time: 5},
+                {timeLabel: '10 Minuten', time: 10},
+                {timeLabel: '15 Minuten', time: 15},
+                {timeLabel: '30 Minuten', time: 30},
+                {timeLabel: '60 Minuten', time: 60}
+            ]
+        });
+        return Ext.create(Ext.form.ComboBox, {
+            fieldLabel: 'Aktualisierungsintervall',
+            queryMode: 'local',
+            store: times,
+            displayField: 'timeLabel',
+            valueField: 'time',
+            labelWidth: '100%'
         });
     },
 
