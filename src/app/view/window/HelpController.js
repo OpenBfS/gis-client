@@ -42,7 +42,7 @@ Ext.define('Koala.view.window.HelpController', {
             var parentNode = store.getNodeById(parentOfTopic);
             parentNode.expand();
         }
-        else if (topicNode) {
+        if (topicNode) {
             treelist.setSelection(topicNode);
         }
     }
