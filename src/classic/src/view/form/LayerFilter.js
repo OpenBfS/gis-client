@@ -171,7 +171,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                 {timeLabel: Ext.String.format(minutes, 60), time: 60}
             ]
         });
-        return Ext.create(Ext.form.ComboBox, {
+        return Ext.create('Ext.form.ComboBox', {
             bind: {
                 fieldLabel: '{refreshInterval}'
             },
