@@ -1016,7 +1016,16 @@
                 "buttonTextChangeFilter": "Apply Filter to Layer",
                 "minDateWarnMsg": "Date of this text field must be after {0}.",
                 "maxDateWarnMsg": "Date of this text field must be before {0}.",
-                "warnMsgDateFormat": "d.m.Y"
+                "warnMsgDateFormat": "d.m.Y",
+                "refreshAutomatically": "Refresh automatically",
+                "refreshInterval": "Refresh interval",
+                "minute": "1 minute",
+                "minutes": "{0} minutes",
+                "test": [
+                    {
+                        "timeLabel": "60 minutes", "time": 60
+                    }
+                ]
             }
         }
     },

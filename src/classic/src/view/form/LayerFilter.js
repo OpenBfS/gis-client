@@ -151,25 +151,30 @@ Ext.define('Koala.view.form.LayerFilter', {
 
     getAutorefreshCheckbox: function() {
         return Ext.create('Ext.form.field.Checkbox', {
-            fieldLabel: 'Automatisch aktualisieren',
+            bind: {
+                fieldLabel: '{refreshAutomatically}'
+            },
             labelWidth: '100%'
         });
     },
 
     getAutorefreshDropdown: function() {
+        var minutes = this.getViewModel().data.minutes;
         var times = Ext.create('Ext.data.Store', {
             fields: ['timeLabel', 'time'],
             data: [
-                {timeLabel: '1 Minute', time: 1},
-                {timeLabel: '5 Minuten', time: 5},
-                {timeLabel: '10 Minuten', time: 10},
-                {timeLabel: '15 Minuten', time: 15},
-                {timeLabel: '30 Minuten', time: 30},
-                {timeLabel: '60 Minuten', time: 60}
+                {timeLabel: this.getViewModel().data.minute, time: 1},
+                {timeLabel: Ext.String.format(minutes, 5), time: 5},
+                {timeLabel: Ext.String.format(minutes, 10), time: 10},
+                {timeLabel: Ext.String.format(minutes, 15), time: 15},
+                {timeLabel: Ext.String.format(minutes, 30), time: 30},
+                {timeLabel: Ext.String.format(minutes, 60), time: 60}
             ]
         });
         return Ext.create(Ext.form.ComboBox, {
-            fieldLabel: 'Aktualisierungsintervall',
+            bind: {
+                fieldLabel: '{refreshInterval}'
+            },
             queryMode: 'local',
             store: times,
             displayField: 'timeLabel',

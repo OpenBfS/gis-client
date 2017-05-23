@@ -1032,7 +1032,11 @@
                 "buttonTextChangeFilter": "Filter auf Layer anwenden",
                 "minDateWarnMsg": "Das Datum in diesem Feld muss nach dem {0} liegen.",
                 "maxDateWarnMsg": "Das Datum in diesem Feld muss vor dem {0} liegen.",
-                "warnMsgDateFormat": "d.m.Y"
+                "warnMsgDateFormat": "d.m.Y",
+                "refreshAutomatically": "Automatisch aktualisieren",
+                "refreshInterval": "Aktualisierungsintervall",
+                "minute": "1 Minute",
+                "minutes": "{0} Minuten"
             }
         }
     },
