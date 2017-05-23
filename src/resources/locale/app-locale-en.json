@@ -1020,12 +1020,7 @@
                 "refreshAutomatically": "Refresh automatically",
                 "refreshInterval": "Refresh interval",
                 "minute": "1 minute",
-                "minutes": "{0} minutes",
-                "test": [
-                    {
-                        "timeLabel": "60 minutes", "time": 60
-                    }
-                ]
+                "minutes": "{0} minutes"
             }
         }
     },
