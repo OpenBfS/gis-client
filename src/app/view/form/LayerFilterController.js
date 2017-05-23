@@ -53,7 +53,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         var me = this;
         Ext.Object.each(this.autorefreshMap, function(id, time) {
-            if ((new Date().getMinutes() % time) === 0) {
+            var date = Koala.util.Date.getTimeReferenceAwareMomentDate(new moment());
+            if ((date.getMinutes() % time) === 0) {
                 Koala.util.Layer.getMetadataFromUuidAndThen(id, function(metadata) {
                     me.updateFiltersForAutorefresh(metadata.filters);
                     var LayerUtil = Koala.util.Layer;
@@ -106,12 +107,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var autorefresh = view.query('checkbox')[0].checked;
         if (!autorefresh) {
             delete this.autorefreshMap[metadata.id];
-            metadata.autorefresh = false;
-            metadata.autorefreshTime = 0;
         } else {
             this.autorefreshMap[metadata.id] = view.query('combobox')[0].value;
-            metadata.autorefresh = true;
-            metadata.autorefreshTime = this.autorefreshMap[metadata.id];
         }
     },
 
@@ -147,7 +144,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      */
     updateFiltersForAutorefresh: function(filters) {
         Ext.each(filters, function(filter) {
-            var now = new Date().toISOString();
+            var now = Koala.util.Date.getTimeReferenceAwareMomentDate(new moment()).toISOString();
             if (filter.type === 'pointintime') {
                 if (now > filter.maxdatetimeinstant) {
                     now = filter.maxdatetimeinstant;
