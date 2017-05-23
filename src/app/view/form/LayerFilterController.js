@@ -27,6 +27,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
         'Ext.util.DelayedTask'
     ],
 
+    /**
+     * Maps layer uuids to the autorefresh time in minutes.
+     * @type {Object}
+     */
     autorefreshMap: {},
 
     constructor: function() {
