@@ -33,7 +33,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         me.createOverlay();
 
         me.createLineFeature();
-        console.log('init');
     },
 
     createTabs: function() {
@@ -45,16 +44,67 @@ Ext.define('Koala.view.component.CartoWindowController', {
             me.createTimeSeriesTab();
         }
 
+        if (Koala.util.Layer.isBarChartLayer(layer)) {
+            me.createBarChartTab();
+        }
+
+        me.createTableTab();
+
         me.createHtmlTab();
+
+        me.createHoverTemplateTab();
     },
 
     createTimeSeriesTab: function() {
         var me = this;
         var view = me.getView();
         var el = view.getEl().dom;
+        var layer = view.layer;
+        var feature = view.feature;
+        var timeFilter = Koala.util.Filter.getStartEndFilterFromMetadata(
+                view.layer.metadata);
+
         var timeSeriesTab = me.createTabElement({
-            title: 'Chart',
-            content: 'REPLACE WITH CHART'
+            title: 'Timeseries',
+            className: 'timeseries-tab',
+            active: true
+        });
+
+        var config = {
+            startDate: timeFilter.mindatetimeinstant,
+            endDate: timeFilter.maxdatetimeinstant,
+            width: '400px',
+            height: '400px',
+            renderTo: timeSeriesTab.getElementsByTagName('div')[0]
+        };
+
+        var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
+        var chart = Ext.create(chartObj);
+
+        el.appendChild(timeSeriesTab);
+    },
+
+    createBarChartTab: function() {
+        var me = this;
+        var view = me.getView();
+        var el = view.getEl().dom;
+        var timeSeriesTab = me.createTabElement({
+            title: 'Bar Chart',
+            innerHTML: 'Replace with barchart',
+            className: 'barchart-tab'
+        });
+
+        el.appendChild(timeSeriesTab);
+    },
+
+    createTableTab: function() {
+        var me = this;
+        var view = me.getView();
+        var el = view.getEl().dom;
+        var timeSeriesTab = me.createTabElement({
+            title: 'Table',
+            innerHTML: 'My custom Table',
+            className: 'table-tab'
         });
 
         el.appendChild(timeSeriesTab);
@@ -66,7 +116,27 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var el = view.getEl().dom;
         var timeSeriesTab = me.createTabElement({
             title: 'Html',
-            content: 'My custom HTML'
+            innerHTML: 'My custom HTML',
+            className: 'html-tab'
+        });
+
+        el.appendChild(timeSeriesTab);
+    },
+
+    createHoverTemplateTab: function() {
+        var me = this;
+        var view = me.getView();
+        var el = view.getEl().dom;
+        var layer = view.layer;
+        var feature = view.feature;
+        var template = Koala.util.Object.getPathStrOr(layer,
+                'metadata/layerConfig/olProperties/hoverTpl');
+        var innerHTML = Koala.util.String.replaceTemplateStrings(template,
+                feature);
+        var timeSeriesTab = me.createTabElement({
+            title: 'Hover Template',
+            innerHTML: innerHTML,
+            className: 'hoverTpl-tab'
         });
 
         el.appendChild(timeSeriesTab);
@@ -76,28 +146,30 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var tabIndex = view.tabs.length;
+        var featureId = view.feature.get('id');
+        var tabIdString = featureId + ' cartowindow-tab-label-'+ tabIndex;
 
         var tab = document.createElement('div');
-        tab.className = 'cartowindow-tab';
+        tab.className = featureId + ' cartowindow-tab ' + config.className;
 
         var label = document.createElement('label');
-        label.setAttribute('for', 'cartowindow-tab-label-'+ tabIndex);
+        label.setAttribute('for', tabIdString);
         label.setAttribute('tabindex', tabIndex);
 
         var input = document.createElement('input');
-        input.setAttribute('id', 'cartowindow-tab-label-' + tabIndex);
+        input.setAttribute('id', tabIdString);
         input.setAttribute('type', 'radio');
-        input.setAttribute('name', 'tabs');
-        // input.setAttribute('checked', 'true');
+        input.setAttribute('name', featureId + ' tabs');
+        input.setAttribute('checked', config.active || false);
         input.setAttribute('aria-hidden', 'true');
 
         var header = document.createElement('h2');
         header.textContent = config.title;
 
         var content = document.createElement('div');
-        content.className = 'content tab-' + tabIndex;
+        content.className = 'content tab ' + tabIndex;
+        content.innerHTML = config.innerHTML || '';
 
-        content.textContent = config.content;
         tab.appendChild(label);
         tab.appendChild(input);
         tab.appendChild(header);

@@ -24,8 +24,10 @@ Ext.define('Koala.view.component.CartoWindow',{
 
     controller: 'k-component-cartowindow',
 
-    width: 800,
-    height: 200,
+    // width: 200,
+    // minHeight: 20,
+
+    shrinkWrap: true,
 
     config: {
         map: null,

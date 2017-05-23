@@ -69,27 +69,56 @@
 
 /**
  * We target all the label/heading pairs
- * we increment the :nth-child() params by 4 as well as the left value (according to "tab" width)
+ * we increment the :nth-child() params as well as the left value (according to "tab" width)
  */
 
 .cartowindow > div.cartowindow-tab:nth-child(1) > label,
 .cartowindow > div.cartowindow-tab:nth-child(1) > h2 {
     position: absolute;
-    top: 0;
+    top: -2em;
     left: 0;
 }
 
 .cartowindow > div.cartowindow-tab:nth-child(2) > label,
 .cartowindow > div.cartowindow-tab:nth-child(2) > h2 {
     position: absolute;
-    top: 0;
+    top: -2em;
     left: 100px;
 }
 
 .cartowindow > div.cartowindow-tab:nth-child(3) > label,
 .cartowindow > div.cartowindow-tab:nth-child(3) > h2 {
-    top: 0;
+    position: absolute;
+    top: -2em;
     left: 200px;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(4) > label,
+.cartowindow > div.cartowindow-tab:nth-child(4) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 300px;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(5) > label,
+.cartowindow > div.cartowindow-tab:nth-child(5) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 400px;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(6) > label,
+.cartowindow > div.cartowindow-tab:nth-child(6) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 500px;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(7) > label,
+.cartowindow > div.cartowindow-tab:nth-child(7) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 600px;
 }
 
 /**
@@ -99,7 +128,7 @@
 .cartowindow > div.cartowindow-tab input + h2 + div {
   position: absolute !important;
   clip: rect(1px, 1px, 1px, 1px);
-  padding:0 !important;
+  padding: 5px;
   border:0 !important;
   height: 1px !important;
   width: 1px !important;
@@ -128,7 +157,7 @@
 /**
  * we hide radio buttons and also remove them from the flow
  */
-.cartowindow > div.cartowindow-tab input[name="tabs"] {
+.cartowindow > div.cartowindow-tab input[name~="tabs"] {
   opacity: 0;
   position: absolute;
 }
@@ -138,7 +167,7 @@
  * this is to style the tabs when they get focus (visual cue)
  */
 
-.cartowindow > div.cartowindow-tab input[name="tabs"]:focus + h2 {
+.cartowindow > div.cartowindow-tab input[name~="tabs"]:focus + h2 {
   outline: 1px dotted #000;
   outline-offset: 10px;
 }
@@ -154,7 +183,7 @@
 /**
  * visual cue of the selection
  */
-.cartowindow > div.cartowindow-tab input[name="tabs"]:checked + h2 {
+.cartowindow > div.cartowindow-tab input[name~="tabs"]:checked + h2 {
   background: #333;
 }
 
@@ -165,7 +194,7 @@
 
   /* hide unecessary label/control pairs */
   .cartowindow > div.cartowindow-tab label,
-  .cartowindow > div.cartowindow-tab input[name="tabs"] {
+  .cartowindow > div.cartowindow-tab input[name~="tabs"] {
     display: none;
   }
 

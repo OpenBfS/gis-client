@@ -227,6 +227,7 @@ Ext.define('Koala.view.component.D3Chart',{
                 autoScroll: false,
                 startDate: config.startDate,
                 endDate: config.endDate,
+                renderTo: config.renderTo,
                 targetLayer: olLayer,
                 selectedStations: selectedStations,
                 backgroundColor: chartConfig.backgroundColor,
