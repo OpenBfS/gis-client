@@ -356,7 +356,6 @@ Ext.define('Koala.util.Layer', {
                 }
                 var filterType = filter.type;
                 var filterTxt = '';
-
                 if (filterType === 'rodos') {
                     // TODO
                 } else if (filterType === 'value') {

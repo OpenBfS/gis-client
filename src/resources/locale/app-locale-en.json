@@ -385,6 +385,15 @@
             }
         }
     },
+    "Koala.view.window.LayerSetChooserWindow": {
+        "config": {
+            "data": {
+                "title": "Layer Set Selection",
+                "helpText": "<div>This selection window enables you to load predefined data sets (i.e. layer sets) into the map. It is not necessary to select a layer set in order to start the application.</div>"+
+                            "<div>If you close the window without selecting a layer set (X button in the upper right corner), only the standard layers will be loaded, i.e. background map, place names and contour lines. Afterwards layers with customized filter setting can be added individually.</div>"
+            }
+        }
+    },
     "Koala.view.window.MetadataInfo": {
         "config": {
             "data": {

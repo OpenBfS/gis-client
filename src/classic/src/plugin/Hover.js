@@ -113,7 +113,6 @@ Ext.define('Koala.plugin.Hover', {
                     }
                 }
             }, this, me.hoverLayerFilter, this);
-
             me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
         } else {
             return;
