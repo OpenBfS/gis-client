@@ -84,6 +84,10 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                 match.expand();
             }
 
+            if (tree && tree.expand) {
+                tree.expand();
+            }
+
             resetFilteringBtn.setDisabled(false);
         }
     },

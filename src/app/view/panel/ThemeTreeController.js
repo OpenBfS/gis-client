@@ -38,6 +38,8 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
     resetThemeTreeFiltering: function(btn) {
         var themeTree = this.getView();
         var themeStore = themeTree.getStore();
+        var layersetView = Ext.ComponentQuery.query('basigx-view-layerset')[0];
+        layersetView.setSelection(null);
         themeStore.clearFilter();
         themeStore.getRoot().expandChildren();
         btn.disable();
