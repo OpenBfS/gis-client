@@ -786,12 +786,13 @@ Ext.define('Koala.view.component.D3ChartController', {
         var replace = StringUtil.replaceTemplateStringsWithPromise;
         var config = view.getConfig().targetLayer.get('timeSeriesChartProperties');
         var promises = [];
+        var stations = view.getSelectedStations();
 
-        Ext.each(this.shapes, function(shape) {
+        Ext.each(this.shapes, function(shape, idx) {
             var name = shape.config.name;
 
             if (Ext.String.startsWith(name, 'featureurl:')) {
-                var promise = replace(config.seriesTitleTpl, shape.config);
+                var promise = replace(config.seriesTitleTpl, stations[idx]);
                 promises.push(promise);
                 promise.then(function(response) {
                     shape.config.name = response.responseText;
