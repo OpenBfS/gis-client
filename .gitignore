@@ -18,6 +18,8 @@ src/sass/example/bootstrap.jsonp
 **/.~lock*
 **/npm-debug.log
 
+docs/apidoc
+
 node_modules
 .project
 .idea
