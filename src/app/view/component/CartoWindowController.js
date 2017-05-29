@@ -20,6 +20,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-component-cartowindow',
 
+    requires: [
+        'Ext.util.CSV',
+        'Ext.Promise',
+        'Ext.Ajax'
+    ],
+
     /**
      * Called on initialize event. Only used in modern toolkit.
      *
@@ -51,8 +57,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
             me.createBarChartTab();
         }
 
-        // TODO Add if test
-        me.createTableTab();
+        if (Koala.util.Layer.isTableLayer(layer)) {
+            me.createTableTab();
+        }
 
         // TODO Add if test
         me.createHtmlTab();
@@ -65,7 +72,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     /**
-     * Create the tab which contains the rendererd TimeSeries and adds it to the
+     * Create the tab which contains the rendered TimeSeries and adds it to the
      * tabwindow.
      */
     createTimeSeriesTab: function() {
@@ -114,6 +121,61 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(timeSeriesTab);
     },
 
+    getTableData: function() {
+        var view = this.getView();
+        var layer = view.layer;
+        var feature = view.feature;
+        var url = layer.get('tableContentURL');
+        var prop = layer.get('tableContentProperty');
+
+        var promise;
+
+        if (prop) {
+            promise = Ext.Promise.resolve(feature.get(prop));
+        } else {
+            promise = new Ext.Promise(function(resolve, reject) {
+                Ext.Ajax.request({
+                    url: url,
+                    success: function(response) {
+                        resolve(response.responseText);
+                    },
+                    failure: function(response) {
+                        reject(response.status);
+                    }
+                });
+            });
+        }
+        return promise;
+    },
+
+    arrayToTable: function(data) {
+        var html = '<table>';
+        Ext.each(data, function(row) {
+            html += '<tr>';
+            Ext.each(row, function(value) {
+                html += '<td>';
+                html += value;
+                html += '</td>';
+            });
+            html += '</tr>';
+        });
+        return html + '</table>';
+    },
+
+    convertData: function(data) {
+        switch (data[0]) {
+            case '<': {
+                return data;
+            }
+            case '[': {
+                return this.arrayToTable(JSON.parse(data));
+            }
+            default: {
+                return this.arrayToTable(Ext.util.CSV.decode(data));
+            }
+        }
+    },
+
     /**
      * Create the tab which contains the table content and adds it to the
      * tabwindow.
@@ -122,13 +184,17 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var el = view.getEl().dom;
-        var timeSeriesTab = me.createTabElement({
-            title: 'Table',
-            innerHTML: 'My custom Table',
-            className: 'table-tab'
-        });
+        this.getTableData().then(function(data) {
+            var html = me.convertData(data);
 
-        el.appendChild(timeSeriesTab);
+            var timeSeriesTab = me.createTabElement({
+                title: 'Table',
+                innerHTML: html,
+                className: 'table-tab'
+            });
+
+            el.appendChild(timeSeriesTab);
+        });
     },
 
     /**

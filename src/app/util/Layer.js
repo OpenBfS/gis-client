@@ -154,6 +154,19 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Checks the properties of the layer to see if it is configured to draw
+         * a table.
+         *
+         * @param  {ol.layer.Layer} layer the layer to check
+         * @return {boolean}       whether the layer is configured to have a table tab
+         */
+        isTableLayer: function(layer) {
+            var contentProp = layer.get('tableContentProperty');
+            var contentUrl = layer.get('tableContentURL');
+            return contentProp || contentUrl;
+        },
+
+        /**
          * Checks the properties of the layer to see if it configured to draw
          * bar charts.
          *
@@ -922,6 +935,8 @@ Ext.define('Koala.util.Layer', {
                 //routeId: olProps.routeId || metadata.inspireId, // TODO: get this back in when gnos is ready
                 routeId: metadata.inspireId,
                 showCartoWindow: getBool(olProps.showCartoWindow, false),
+                tableContentProperty: olProps.tableContentProperty,
+                tableContentURL: olProps.tableContentURL,
                 timeSeriesChartProperties: metadata.layerConfig.timeSeriesChartProperties,
                 barChartProperties: metadata.layerConfig.barChartProperties
             };
