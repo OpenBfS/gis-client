@@ -346,10 +346,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var chart = view.down('d3-chart[name="' + layerName + '"]');
         var chartController = chart.getController();
         var valFromSeq = StringUtil.getValueFromSequence;
-        var coerce = StringUtil.coerce;
         var stationName = '';
+        var promise = new Ext.Promise(function(resolve) {
+            resolve(stationName);
+        });
         if (!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
-            stationName = StringUtil.replaceTemplateStrings(
+            promise = StringUtil.replaceTemplateStringsWithPromise(
                 chartConfig.seriesTitleTpl, olFeat
             );
         }
@@ -358,6 +360,17 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         if (!color) {
             color = Koala.view.component.D3BaseController.getRandomColor();
         }
+
+        promise.then(function(name) {
+            me.addShapeToChart(chartController, chartConfig, name, olFeat, color);
+        })
+        .catch(function() {
+            me.addShapeToChart(chartController, chartConfig, '', olFeat, color);
+        });
+    },
+
+    addShapeToChart: function(chartController, chartConfig, stationName, olFeat, color) {
+        var coerce = Koala.util.String.coerce;
         chartController.addShape({
             type: chartConfig.shapeType || 'line',
             curve: chartConfig.curveType || 'linear',

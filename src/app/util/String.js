@@ -84,6 +84,41 @@ Ext.define('Koala.util.String', {
         },
 
         /**
+         * Same as #replaceTemplateStrings, but resolves featureurl: prefixed
+         * templates and returns an Ext.Promise instead of the value. Resolves
+         * url values after applying #replaceTemplateStrings to the url template.
+         */
+        replaceTemplateStringsWithPromise: function(tpl, gettable, showWarnings, prefix) {
+            var val = Koala.util.String.replaceTemplateStrings(tpl, gettable, showWarnings, prefix);
+            if (Ext.String.startsWith(val, 'featureurl:')) {
+                var defaultHeaders;
+                var authHeader = Koala.util.Authentication.getAuthenticationHeader();
+                if (authHeader) {
+                    defaultHeaders = {
+                        Authorization: authHeader
+                    };
+                }
+
+                return new Ext.Promise(function(resolve, reject) {
+                    Ext.Ajax.request({
+                        url: val.substring('featureurl:'.length),
+                        defaultHeaders: defaultHeaders,
+                        method: 'GET',
+                        success: function(response) {
+                            resolve(response.responseText);
+                        },
+                        failure: function(response) {
+                            reject(response.status);
+                        }
+                    });
+                });
+            }
+            return new Ext.Promise(function(resolve) {
+                resolve(val);
+            });
+        },
+
+        /**
          * Gets a value from an comma separated string with given index
          * @param {string} sequence - the comma separated sequence
          * @param {index} index - the index to access the value_
