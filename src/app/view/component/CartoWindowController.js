@@ -35,6 +35,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         me.createLineFeature();
     },
 
+    /**
+     * Create the Tabs.
+     */
     createTabs: function() {
         var me = this;
         var view = me.getView();
@@ -48,16 +51,23 @@ Ext.define('Koala.view.component.CartoWindowController', {
             me.createBarChartTab();
         }
 
+        // TODO Add if test
         me.createTableTab();
 
+        // TODO Add if test
         me.createHtmlTab();
 
+        // TODO Add if test
         me.createHoverTemplateTab();
 
         // TODO
         // me.createCloseIconTab();
     },
 
+    /**
+     * Create the tab which contains the rendererd TimeSeries and adds it to the
+     * tabwindow.
+     */
     createTimeSeriesTab: function() {
         var me = this;
         var view = me.getView();
@@ -87,6 +97,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(timeSeriesTab);
     },
 
+    /**
+     * Create the tab which contains the rendererd BarChart and adds it to the
+     * tabwindow.
+     */
     createBarChartTab: function() {
         var me = this;
         var view = me.getView();
@@ -100,6 +114,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(timeSeriesTab);
     },
 
+    /**
+     * Create the tab which contains the table content and adds it to the
+     * tabwindow.
+     */
     createTableTab: function() {
         var me = this;
         var view = me.getView();
@@ -113,6 +131,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(timeSeriesTab);
     },
 
+    /**
+     * Create the tab which contains the html content and adds it to the
+     * tabwindow.
+     */
     createHtmlTab: function() {
         var me = this;
         var view = me.getView();
@@ -126,6 +148,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(timeSeriesTab);
     },
 
+    /**
+     * Create the tab which contains the hovertemplate and adds it to the
+     * tabwindow.
+     */
     createHoverTemplateTab: function() {
         var me = this;
         var view = me.getView();
@@ -137,7 +163,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var innerHTML = Koala.util.String.replaceTemplateStrings(template,
                 feature);
         var timeSeriesTab = me.createTabElement({
-            title: 'Hover Template',
+            title: 'Hover',
             innerHTML: innerHTML,
             className: 'hoverTpl-tab'
         });
@@ -145,6 +171,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(timeSeriesTab);
     },
 
+    /**
+     * Create a tab for the tabwindow.
+     *
+     * @param {Object} config An config object which can contain these params:
+     *               {String} title The title of the tab.
+     *               {String} innerHtml The htmlcontent of the tab.
+     *               {String} className A css class added to the tab.
+     * @return {HTMLDivElement} The returned div element.
+     */
     createTabElement: function(config) {
         var me = this;
         var view = me.getView();
@@ -182,6 +217,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         return tab;
     },
 
+    /**
+     * Creates the ol.Overlay which contains the tabwindow, adds it to the map
+     * and stores it as an attribute of the view.
+     */
     createOverlay: function() {
         var me = this;
         var view = me.getView();
@@ -200,6 +239,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
         view.overlay = overlay;
     },
 
+    /**
+     * Creates the lineFeature adds it to a layer and adds this layer to the map.
+     * It also adds the Drag functionality to the cartowindow. The feature is
+     * stored as a attribute of the view.
+     */
     createLineFeature: function() {
         var me = this;
         var view = me.getView();
@@ -260,6 +304,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         view.lineFeature = lineFeature;
     },
 
+    /**
+     * OnDestroy listener. It removes the lineFeatureVectorLayer on destroy and
+     * removes the pointerMoveListener.
+     */
     onDestroy: function() {
         var me = this;
         var view = me.getView();

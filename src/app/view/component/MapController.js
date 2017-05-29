@@ -34,9 +34,10 @@ Ext.define('Koala.view.component.MapController', {
      *
      */
     onHoverFeatureClick: function(olFeats) {
-        var me = this,
-            timeSeriesWin,
-            barChartWin;
+        var me = this;
+        var timeSeriesWin;
+        var map = me.getView().getMap();
+        var barChartWin;
 
         if (Ext.isEmpty(olFeats)) {
             return;
@@ -45,8 +46,17 @@ Ext.define('Koala.view.component.MapController', {
         Ext.each(olFeats, function(olFeat) {
             var layer = olFeat.get('layer');
 
-            // TimeSeries
-            if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
+            // Koala.util.Layer.isCartoWindowLayer(layer)
+            // if (layer.get('name') === 'dwd_niederschlag_24h') {
+            if (Koala.util.Layer.isCartoWindowLayer(layer)) {
+                Ext.create('Koala.view.component.CartoWindow', {
+                    map: map,
+                    layer: layer,
+                    feature: olFeat,
+                    renderTo: Ext.getBody()
+                });
+                return false;
+            } else if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
                 if (!timeSeriesWin) {
                     // if no timeseries window exist, create one
                     timeSeriesWin = me.openTimeseriesWindow(olFeat);
