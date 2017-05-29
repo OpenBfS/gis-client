@@ -117,6 +117,17 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Checks the properties of the layer to see if it configured to show the
+         * CartoWindow instead of the default behaviour.
+         *
+         * @param {ol.layer.Layer} layer The layer to check.
+         * @return {boolean} Whether the layer will show a CartoWindow.
+         */
+        isCartoWindowLayer: function(layer) {
+            return layer.getProperties().showCartoWindow;
+        },
+
+        /**
          * Checks the properties of the layer to see if it configured to draw
          * timeseries or bar charts.
          *
@@ -910,6 +921,7 @@ Ext.define('Koala.util.Layer', {
                 //"treeMenu": true, // TODO: remove / enhance due to new single item properties
                 //routeId: olProps.routeId || metadata.inspireId, // TODO: get this back in when gnos is ready
                 routeId: metadata.inspireId,
+                showCartoWindow: getBool(olProps.showCartoWindow, false),
                 timeSeriesChartProperties: metadata.layerConfig.timeSeriesChartProperties,
                 barChartProperties: metadata.layerConfig.barChartProperties
             };

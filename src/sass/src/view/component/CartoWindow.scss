@@ -1,0 +1,216 @@
+.cartowindow > div.cartowindow-tab > h2,
+.cartowindow > div.cartowindow-tab > input,
+.cartowindow > div.cartowindow-tab > label, {
+    display: none;
+}
+
+.cartowindow:hover > div.cartowindow-tab > h2,
+.cartowindow:hover > div.cartowindow-tab > input,
+.cartowindow:hover > div.cartowindow-tab > label, {
+    display: inherit;
+}
+
+/**
+ * tab panel widget
+ */
+.cartowindow {
+  position: relative;  /* containing block for headings (top:0) */
+  background: #999;
+}
+
+/**
+ * because labels come first in source order - we use z-index to move them in front of the headings
+ */
+.cartowindow > div.cartowindow-tab > label {
+  position: absolute;
+  z-index: 1;
+}
+
+/**
+ * labels and headings must share same values so grouping declarations in this rule prevents async edits (risk of breakage)
+ * line-height == height -> vertical centering
+ * the width dictates the offset for all headings but the first one: left offset = width * number of previous heading(s)
+ * note that width and offset of label/heading pair can be customized if necessary
+ */
+
+.cartowindow > div.cartowindow-tab > label,
+.cartowindow > div.cartowindow-tab > h2 {
+  font-size: 1.1em;
+  width: 100px;
+  height: 2em;
+  line-height: 2em;
+}
+
+/**
+ * position:relative is for the markers (the down arrow in tabs)
+ */
+.cartowindow > div.cartowindow-tab > h2 {
+  position: relative;
+  margin: 0;
+  text-align: center;
+  background: #999;
+  color: #fff;
+}
+
+.cartowindow > div.cartowindow-tab > label {
+  border-right: 1px solid #fff;
+}
+
+/**
+ * all first level labels and headings after the very first ones
+ */
+.cartowindow > div.cartowindow-tab > input,
+.cartowindow > div.cartowindow-tab > label ~ label,
+.cartowindow > div.cartowindow-tab > h2 ~ h2 {
+  position: absolute;
+  top: 0;
+}
+
+
+/**
+ * We target all the label/heading pairs
+ * we increment the :nth-child() params as well as the left value (according to "tab" width)
+ */
+
+.cartowindow > div.cartowindow-tab:nth-child(1) > label,
+.cartowindow > div.cartowindow-tab:nth-child(1) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 0;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(2) > label,
+.cartowindow > div.cartowindow-tab:nth-child(2) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 100px;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(3) > label,
+.cartowindow > div.cartowindow-tab:nth-child(3) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 200px;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(4) > label,
+.cartowindow > div.cartowindow-tab:nth-child(4) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 300px;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(5) > label,
+.cartowindow > div.cartowindow-tab:nth-child(5) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 400px;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(6) > label,
+.cartowindow > div.cartowindow-tab:nth-child(6) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 500px;
+}
+
+.cartowindow > div.cartowindow-tab:nth-child(7) > label,
+.cartowindow > div.cartowindow-tab:nth-child(7) > h2 {
+    position: absolute;
+    top: -2em;
+    left: 600px;
+}
+
+/**
+ * we visually hide all the panels
+ * https://developer.yahoo.com/blogs/ydn/clip-hidden-content-better-accessibility-53456.html
+ */
+.cartowindow > div.cartowindow-tab input + h2 + div {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 5px;
+  overflow: hidden;
+}
+/**
+ * we reveal a panel depending on which control is selected
+ */
+.cartowindow > div.cartowindow-tab input:checked + h2 + div {
+    resize: both;
+    overflow: auto;
+    position: static !important;
+    max-width: 50vw;
+    max-height: 50vh;
+}
+
+/**
+ * shows a hand cursor only to pointing device users
+ */
+.cartowindow > div.cartowindow-tab label:hover {
+  cursor: pointer;
+}
+
+.cartowindow > div.cartowindow-tab > div {
+  background: #f0f0f0;
+}
+
+/**
+ * we hide radio buttons and also remove them from the flow
+ */
+.cartowindow > div.cartowindow-tab input[name~="tabs"] {
+  opacity: 0;
+  position: absolute;
+}
+
+
+/**
+ * this is to style the tabs when they get focus (visual cue)
+ */
+
+.cartowindow > div.cartowindow-tab input[name~="tabs"]:focus + h2 {
+  outline: 1px dotted #000;
+  outline-offset: 10px;
+}
+
+
+/**
+ * reset of the above within the tab panel (for pointing-device users)
+ */
+.cartowindow:hover > div.cartowindow-tab h2 {
+  outline: none !important;
+}
+
+/**
+ * visual cue of the selection
+ */
+.cartowindow > div.cartowindow-tab input[name~="tabs"]:checked + h2 {
+  background: #333;
+}
+
+/**
+ * Make it plain/simple below 45em (stack everything)
+ */
+@media screen and (max-width: 45em) {
+
+  /* hide unecessary label/control pairs */
+  .cartowindow > div.cartowindow-tab label,
+  .cartowindow > div.cartowindow-tab input[name~="tabs"] {
+    display: none;
+  }
+
+  /* reveal all panels */
+  .cartowindow > div.cartowindow-tab > input + h2 + div {
+    display: block !important;
+    position: static !important;
+    padding: 1em !important;
+    height: auto !important;
+    width: auto !important;
+  }
+
+  /* "unstyle" the heading */
+  .cartowindow > div.cartowindow-tab h2 {
+    width: auto;
+    position: static !important;
+    background: #999 !important;
+  }
+
+}
