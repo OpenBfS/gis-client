@@ -167,6 +167,19 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Checks the properties of the layer to see if it is configured to
+         * render a custom html tab.
+         *
+         * @param  {ol.layer.Layer} layer the layer to check
+         * @return {boolean}       whether the layer is configured to have a html content tab
+         */
+        isHtmlLayer: function(layer) {
+            var contentProp = layer.get('htmlContentProperty');
+            var contentUrl = layer.get('htmlContentURL');
+            return contentProp || contentUrl;
+        },
+
+        /**
          * Checks the properties of the layer to see if it configured to draw
          * bar charts.
          *
@@ -937,6 +950,8 @@ Ext.define('Koala.util.Layer', {
                 showCartoWindow: getBool(olProps.showCartoWindow, false),
                 tableContentProperty: olProps.tableContentProperty,
                 tableContentURL: olProps.tableContentURL,
+                htmlContentProperty: olProps.htmlContentProperty,
+                htmlContentURL: olProps.htmlContentURL,
                 timeSeriesChartProperties: metadata.layerConfig.timeSeriesChartProperties,
                 barChartProperties: metadata.layerConfig.barChartProperties
             };

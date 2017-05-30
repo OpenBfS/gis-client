@@ -61,8 +61,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
             me.createTableTab();
         }
 
-        // TODO Add if test
-        me.createHtmlTab();
+        if (Koala.util.Layer.isHtmlLayer(layer)) {
+            me.createHtmlTab();
+        }
 
         // TODO Add if test
         me.createHoverTemplateTab();
@@ -121,15 +122,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(timeSeriesTab);
     },
 
-    getTableData: function() {
+    getTabData: function(urlProperty, contentProperty) {
         var view = this.getView();
         var layer = view.layer;
         var feature = view.feature;
         var url = Koala.util.String.replaceTemplateStrings(
-            layer.get('tableContentURL'),
+            layer.get(urlProperty),
             view.feature
         );
-        var prop = layer.get('tableContentProperty');
+        var prop = layer.get(contentProperty);
 
         var promise;
 
@@ -149,6 +150,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
             });
         }
         return promise;
+    },
+
+    getTableData: function() {
+        return this.getTabData('tableContentURL', 'tableContentProperty');
     },
 
     arrayToTable: function(data) {
@@ -177,6 +182,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 return this.arrayToTable(Ext.util.CSV.decode(data));
             }
         }
+    },
+
+    getHtmlData: function() {
+        return this.getTabData('htmlContentURL', 'htmlContentProperty');
     },
 
     /**
@@ -208,13 +217,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var el = view.getEl().dom;
-        var timeSeriesTab = me.createTabElement({
-            title: 'Html',
-            innerHTML: 'My custom HTML',
-            className: 'html-tab'
-        });
+        this.getHtmlData().then(function(data) {
+            var timeSeriesTab = me.createTabElement({
+                title: 'Html',
+                innerHTML: data,
+                className: 'html-tab'
+            });
 
-        el.appendChild(timeSeriesTab);
+            el.appendChild(timeSeriesTab);
+        });
     },
 
     /**
