@@ -19,6 +19,8 @@ src/sass/example/bootstrap.jsonp
 **/npm-debug.log
 
 docs/apidoc
+docs/jsdoc
+docs/jsduck
 
 node_modules
 .project

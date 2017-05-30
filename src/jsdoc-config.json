@@ -9,7 +9,7 @@
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "opts": {
-        "destination": "../docs/apidoc",
+        "destination": "../docs/jsdoc",
         "recurse": true
     }
 }
