@@ -457,7 +457,10 @@ Ext.define('Koala.util.Layer', {
                         Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
                     } finally {
                         if (Koala.util.Layer.minimumValidMetadata(obj)) {
-                            ajaxCb.call(me, obj);
+                            me.resolveMetadataLinks(obj)
+                            .then(function() {
+                                ajaxCb.call(me, obj);
+                            });
                         } else {
                             // TODO i18n
                             Ext.toast('Für den Datensatz scheinen nicht ausreichend Metadaten vorzuliegen.');
@@ -471,6 +474,87 @@ Ext.define('Koala.util.Layer', {
                     Ext.log.error(msg);
                     errCb();
                 }
+            });
+        },
+
+        /**
+         * Resolves special properties with the value url:http://xxx
+         * @param  {object} metadata the unresolved metadata
+         * @param  {mixed} promises should be called with undefined, is internally used for recursion
+         * @return {Ext.Promise}          top level call returns a promise which is resolved after all replacements are done
+         */
+        resolveMetadataLinks: function(metadata, promises) {
+            var first = promises === undefined;
+            if (first) {
+                promises = [];
+            }
+            var i;
+            if (metadata instanceof Array) {
+                for (i = 0; i < metadata.length; ++i) {
+                    this.resolveMetadataLinks(metadata[i], promises)
+                    .then(this.resolveMetadataLink(i, metadata));
+                }
+            } else if (metadata instanceof Object) {
+                var keys = Object.keys(metadata);
+                for (i = 0; i < keys.length; ++i) {
+                    this.resolveMetadataLinks(metadata[keys[i]], promises)
+                    .then(this.resolveMetadataLink(keys[i], metadata));
+                }
+            } else if (typeof metadata === 'string') {
+                var ms = metadata.match(/^url:(.+)/);
+                if (ms) {
+                    var promise = this.getMetadataValue(ms[1]);
+                    promises.push(promise);
+                    return promise;
+                }
+            }
+
+            if (first) {
+                return Ext.Promise.all(promises);
+            }
+            return new Ext.Promise(function(resolve) {
+                resolve(metadata);
+            });
+        },
+
+        /**
+         * Returns a function that sets a resolved metadata property.
+         * @param  {mixed} i        the index of the value
+         * @param  {object} metadata the metadata part where the value should be set
+         * @return {function}          a function that takes the value and sets it
+         */
+        resolveMetadataLink: function(i, metadata) {
+            return function(data) {
+                metadata[i] = data;
+            };
+        },
+
+        /**
+         * Fetches a metadata value from url.
+         * @param  {string} url url to fetch the value from
+         * @return {Ext.Promise}     a promise to the value
+         */
+        getMetadataValue: function(url) {
+            var defaultHeaders;
+            var authHeader = Koala.util.Authentication.getAuthenticationHeader();
+            if (authHeader) {
+                defaultHeaders = {
+                    Authorization: authHeader
+                };
+            }
+
+            return new Ext.Promise(function(resolve, reject) {
+                Ext.Ajax.request({
+                    url: url,
+                    defaultHeaders: defaultHeaders,
+                    method: 'GET',
+                    success: function(response) {
+                        resolve(response.responseText);
+                    },
+                    failure: function(response) {
+                        reject(response.status);
+                    }
+                });
             });
         },
 
