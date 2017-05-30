@@ -187,6 +187,15 @@
 }
 
 /**
+ * simple table style
+ */
+.bordered-table td {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    padding: 3px;
+}
+
+/**
  * Make it plain/simple below 45em (stack everything)
  */
 @media screen and (max-width: 45em) {

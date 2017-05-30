@@ -125,7 +125,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = this.getView();
         var layer = view.layer;
         var feature = view.feature;
-        var url = layer.get('tableContentURL');
+        var url = Koala.util.String.replaceTemplateStrings(
+            layer.get('tableContentURL'),
+            view.feature
+        );
         var prop = layer.get('tableContentProperty');
 
         var promise;
@@ -149,7 +152,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     arrayToTable: function(data) {
-        var html = '<table>';
+        var html = '<table class="bordered-table">';
         Ext.each(data, function(row) {
             html += '<tr>';
             Ext.each(row, function(value) {
