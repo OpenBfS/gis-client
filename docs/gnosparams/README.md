@@ -334,7 +334,7 @@
 
 **allowHover**
 
-Soll HoverInfo erlaubt werden.
+Soll HoverInfo erlaubt werden?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
@@ -345,7 +345,7 @@ Soll HoverInfo erlaubt werden.
 
 **allowFeatureInfo** // TODO Brauchen wir das noch?
 
-Soll FeatureInfo erlaubt werden.
+Soll FeatureInfo erlaubt werden?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
@@ -356,7 +356,7 @@ Soll FeatureInfo erlaubt werden.
 
 **allowDownload**
 
-Soll ein Download erlaubt werden.
+Soll ein Download erlaubt werden?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
@@ -367,7 +367,7 @@ Soll ein Download erlaubt werden.
 
 **allowRemoval**
 
-Soll das Entfernen aus dem Tree erlaubt werden.
+Soll das Entfernen aus dem Tree erlaubt werden?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
@@ -378,7 +378,7 @@ Soll das Entfernen aus dem Tree erlaubt werden.
 
 **allowShortInfo**
 
-Soll die Anzeige einer Kurzinfo erlaubt werden.
+Soll die Anzeige einer Kurzinfo erlaubt werden?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
@@ -389,7 +389,7 @@ Soll die Anzeige einer Kurzinfo erlaubt werden.
 
 **allowPrint**
 
-Soll das Drucken erlaubt werden.
+Soll das Drucken erlaubt werden?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
@@ -400,7 +400,7 @@ Soll das Drucken erlaubt werden.
 
 **allowOpacityChange**
 
-Soll die Opazität zur Laufzeit verändert werden dürfen.
+Soll die Opazität zur Laufzeit verändert werden dürfen?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
@@ -769,7 +769,7 @@ eckigen Klammern werden durch Attribute des Features ersetzt.
 
 **showGrid**
 
-  Soll ein Hintergrundgrid gezeigt werden.
+  Soll ein Hintergrundgrid gezeigt werden?
 
   | Typ | gco:CharacterString  |
   |---------------------:|:----|
@@ -935,6 +935,141 @@ https://github.com/d3/d3/blob/master/API.md#scales-d3-scale
 | Default-Wert         | linear |
 | Beispiel             | log |
 
+**xAxisAttribute**
+
+Das Attribut, dessen Wert auf der X-Achse abgezeichnet wird.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Attributname der Features |
+| Obligatorisch        | &#10003; |
+| Default-Wert         |  |
+| Beispiel             | end_measure |
+
+**yAxisAttribute**
+
+Das Attribut, dessen Wert auf der Y-Achse abgezeichnet wird.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Attributname der Features |
+| Obligatorisch        | &#10003; |
+| Default-Wert         |  |
+| Beispiel             | result_value |
+
+**rotateXAxisLabel**
+
+Sollen die Label an der X-Aches um 45 Grad rotiert werden?
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true, false  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | false |
+| Beispiel             | true |
+
 ## Timeseries Chart Properties {#timeseries} (bfs:timeSeriesChartProperty)
 
+**allowZoom**
+
+Soll der Zoom im Chart erlaubt sein?
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true, false  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | false |
+| Beispiel             | true |
+
+**allowFilterForm**
+
+Soll das Filterformular für das Chart angezeigt werden?
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true, false  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | true |
+| Beispiel             | true |
+
+**allowAddSeries**
+
+Soll das Hinzufügen einer Series ermöglicht werden?
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true, false  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | true |
+| Beispiel             | true |
+
+**curveType**
+
+Der Interpolationstyp der Kurve. „linear“, „cubicBasisSpline“, „curveMonotoneX“,
+„naturalCubicSpline“, „curveStep“, „curveStepAfter“ oder „curveStepBefore“,
+siehe https://github.com/d3/d3/blob/master/API.md#curves
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | siehe Beschreibung |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | linear |
+| Beispiel             | „cubicBasisSpline“ |
+
+**shapeType**
+
+Das Darstellungsformat der Kurve.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | line, area |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | line |
+| Beispiel             | area |
+
+
 ## Bar Chart Properties {#barchart} (bfs:barChartProperty)
+
+**chartFieldSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
+
+Liste der Attributspalten mit Werten für das Chart
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Komma separierte Liste von Attributname |
+| Obligatorisch        | &#10003; |
+| Default-Wert         |  |
+| Beispiel             |  |
+
+**chartFieldDefaultsSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
+
+Der Wert der verwendet werden soll, wenn kein Wert für das Attribut existiert.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Komma separierte Liste von Defaultwerten |
+| Obligatorisch        | &#10003; |
+| Default-Wert         |  |
+| Beispiel             |  |
+
+**chartFieldTitleSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
+
+Lesbare Variante, statt technischem Attributwert.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Komma separierte Liste von Attributname  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | chartFieldSequence |
+| Beispiel             |  |
+
+**labelFunc**  // TODO Fällt nach Änderung der Datenstruktur ggf weg.
+
+Lesbare Variante, statt technischem Attributwert.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | chartFieldSequence |
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | eval:(function(){return function(val){return val < 0.03 ? 'NN' : val + '';}}()) |
