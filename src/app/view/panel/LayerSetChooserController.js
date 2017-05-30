@@ -66,6 +66,15 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
         } else {
             var match = treeStore.findRecord('text', rec.get('text'));
 
+            // first expand, then filter!
+            if (match && match.expand) {
+                match.expand();
+            }
+
+            if (tree && tree.expand) {
+                tree.expand();
+            }
+
             treeStore.filterBy(function(record) {
                 var display = false;
                 if (record.get('text') === rec.get('text')) {
@@ -79,14 +88,6 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                 }
                 return display;
             });
-
-            if (match && match.expand) {
-                match.expand();
-            }
-
-            if (tree && tree.expand) {
-                tree.expand();
-            }
 
             resetFilteringBtn.setDisabled(false);
         }
