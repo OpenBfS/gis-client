@@ -52,7 +52,14 @@ Ext.define('Koala.view.component.Map', {
         if (hoverPlugin) {
             var selStyleFunction = staticMe.styleFromGnos('selectStyle');
             var highlightStyleFunction = staticMe.styleFromGnos('hoverStyle');
-            hoverPlugin.setPointerRestInterval(me.getPointerRestInterval());
+            var interval = me.getPointerRestInterval();
+
+            // Hotfix for Ticket #1720
+            if (Ext.isChrome && Ext.browser.version.major < 58) {
+                interval = 500;
+            }
+
+            hoverPlugin.setPointerRestInterval(interval);
             hoverPlugin.selectStyleFunction = selStyleFunction;
             hoverPlugin.highlightStyleFunction = highlightStyleFunction;
             hoverPlugin.getToolTipHtml = me.getController().getToolTipHtml;
