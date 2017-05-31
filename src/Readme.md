@@ -106,3 +106,18 @@ This area is intended for overrides like these:
 Such overrides, while automatically required, will only be included if their target
 class ("Ext.foo.Bar" in this case) is also required. This simplifies applying
 patches or extensions to other classes.
+
+## Documentation
+
+To build the documentation please use the scripts from package json:
+
+    "jsdoc": "./node_modules/.bin/jsdoc -c jsdoc-config.json",
+    "gnosdoc": "gitbook pdf ../docs/gnosparams ../docs/gnosparamsGNOS-Parameter.pdf",
+    "jsduck": "jsduck --config jsduck-config.json",
+
+"gnosdoc" requires the installation of gitbook and calibre
+    $ npm install gitbook-cli -g (we could alternativley add it to the packages)
+    $ sudo aptitude install calibre
+
+"jsduck" requires the installation of jsduck
+    $ [sudo] gem install jsduck

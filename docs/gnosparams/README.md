@@ -412,7 +412,7 @@ Soll die Opazität zur Laufzeit verändert werden dürfen?
 **hoverTpl**
 
 Template-String der beim Hovern über Features angezeigt wird. Werte in doppelten
-eckigen Klammern werden durch Attribute des Features ersetzt.  
+eckigen Klammern werden durch Attribute des Features ersetzt.
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
