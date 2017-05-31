@@ -97,6 +97,49 @@ Ext.define('Koala.util.Object', {
 
         coerceAll: function(obj) {
             return this.getConfigByPrefix(obj, '', true);
+        },
+
+        /**
+         * Returns a map from list[n][key] to list[n].
+         * @param  {array} list an array of objects
+         * @param  {string} key  the key to extract and use
+         * @return {object}      the map
+         */
+        arrayToMap: function(list, key) {
+            var map = {};
+            Ext.each(list, function(obj) {
+                map[obj[key]] = obj;
+            });
+            return map;
+        },
+
+        /**
+         * Returns an object mapping list[n][key] to list[n][valueKey].
+         * @param  {array} list     an array of objects
+         * @param  {string} key      the key to extract and use
+         * @param  {string} valueKey the key to extract the value
+         * @return {object}          the object
+         */
+        arrayToObject: function(list, key, valueKey) {
+            var map = {};
+            Ext.each(list, function(obj) {
+                map[obj[key]] = obj[valueKey];
+            });
+            return map;
+        },
+
+        /**
+         * Returns the inverse object, mapping the values to their key in the
+         * original object. Note that the values must be unique!
+         * @param  {object} obj the original object
+         * @return {object}     the inverse object
+         */
+        inverse: function(obj) {
+            var map = {};
+            Ext.iterate(obj, function(key, value) {
+                map[value] = key;
+            });
+            return map;
         }
     }
 });

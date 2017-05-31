@@ -181,7 +181,7 @@ Ext.define('Koala.util.Filter', {
          * @param {String} allowedValues A string with the raw allowed
          *     values, must conform to any of the above
          * @param {String} rawMulti A string (`"true"" or `"false"`) indicating
-         *     if this comobo should allow multiselection.
+         *     if this combo should allow multiselection.
          * @return {Object} A configuration for a combobox or a multiselect
          *     select element.
          */
@@ -202,7 +202,10 @@ Ext.define('Koala.util.Filter', {
                     allowBlank: true,
                     forceSelection: true,
                     displayField: staticMe.COMBO_DSP_FIELD,
-                    valueField: staticMe.COMBO_VAL_FIELD
+                    valueField: staticMe.COMBO_VAL_FIELD,
+                    listeners: {
+                        change: 'onFilterChanged'
+                    }
                 };
             } else { // modern
                 if (multi) {
@@ -218,7 +221,10 @@ Ext.define('Koala.util.Filter', {
                             // labeled.
                             xtype: 'field',
                             labelWidth: '100%'
-                        }]
+                        }],
+                        listeners: {
+                            change: 'onFilterChanged'
+                        }
                     };
                 } else {
                     combo = {
@@ -228,7 +234,10 @@ Ext.define('Koala.util.Filter', {
                         editable: false,
                         allowBlank: true,
                         displayField: staticMe.COMBO_DSP_FIELD,
-                        valueField: staticMe.COMBO_VAL_FIELD
+                        valueField: staticMe.COMBO_VAL_FIELD,
+                        listeners: {
+                            change: 'onFilterChanged'
+                        }
                     };
                 }
             }
@@ -758,7 +767,10 @@ Ext.define('Koala.util.Filter', {
                 validator: me.makeDateValidator(
                     minValue, maxValue
                 ),
-                format: format
+                format: format,
+                listeners: {
+                    change: 'onFilterChanged'
+                }
             });
 
             var hourSpinner = me.getSpinner(
@@ -859,7 +871,8 @@ Ext.define('Koala.util.Filter', {
                 format: format,
                 validator: minMaxDurationAndOrderValidator,
                 listeners: {
-                    validitychange: me.revalidatePartnerField
+                    validitychange: me.revalidatePartnerField,
+                    change: 'onFilterChanged'
                 }
             });
             var minHourSpinner = me.getSpinner(
@@ -890,7 +903,8 @@ Ext.define('Koala.util.Filter', {
                 format: format,
                 validator: minMaxDurationAndOrderValidator,
                 listeners: {
-                    validitychange: me.revalidatePartnerField
+                    validitychange: me.revalidatePartnerField,
+                    change: 'onFilterChanged'
                 }
             });
             var maxHourSpinner = me.getSpinner(
