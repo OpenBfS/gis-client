@@ -188,6 +188,7 @@ Ext.define('Koala.view.form.LayerFilter', {
             bind: {
                 fieldLabel: '{refreshInterval}'
             },
+            name: 'autorefresh',
             value: value,
             queryMode: 'local',
             store: times,

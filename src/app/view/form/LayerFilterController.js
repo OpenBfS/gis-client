@@ -64,6 +64,11 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     var LayerUtil = Koala.util.Layer;
 
                     var existingLayer = layersById[id];
+                    if (!existingLayer) {
+                        // layer was removed from map
+                        delete me.__proto__.autorefreshMap[id];
+                        return;
+                    }
                     var layer = LayerUtil.layerFromMetadata(metadata);
                     existingLayer.setSource(layer.getSource());
 
@@ -110,11 +115,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
      */
     updateAutorefresh: function(view, metadata) {
         var autorefresh = view.query('checkbox')[0].checked;
-        var proto = Koala.view.form.LayerFilterController.prototype;
         if (!autorefresh) {
-            delete proto.autorefreshMap[metadata.id];
+            delete this.__proto__.autorefreshMap[metadata.id];
         } else {
-            proto.autorefreshMap[metadata.id] = view.query('combobox')[0].value;
+            this.__proto__.autorefreshMap[metadata.id] = view.query('combobox[name=autorefresh]')[0].value;
         }
     },
 
