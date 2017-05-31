@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,9 +165,17 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawAxes();
         me.drawGridAxes();
         me.drawShapes();
-        me.drawLegend();
 
-        me.chartRendered = true;
+        this.resolveDynamicTemplateUrls()
+        .then(function() {
+            me.drawLegend();
+            me.chartRendered = true;
+        })
+        .catch(function() {
+            me.drawLegend();
+            me.chartRendered = true;
+        });
+
     },
 
     /**
@@ -770,6 +778,32 @@ Ext.define('Koala.view.component.D3ChartController', {
             y: 0,
             k: 1
         }, 500);
+    },
+
+    resolveDynamicTemplateUrls: function() {
+        var view = this.getView();
+        var StringUtil = Koala.util.String;
+        var replace = StringUtil.replaceTemplateStringsWithPromise;
+        var config = view.getConfig().targetLayer.get('timeSeriesChartProperties');
+        var promises = [];
+        var stations = view.getSelectedStations();
+
+        Ext.each(this.shapes, function(shape, idx) {
+            var name = shape.config.name;
+
+            if (Ext.String.startsWith(name, 'featureurl:')) {
+                var promise = replace(config.seriesTitleTpl, stations[idx]);
+                promises.push(promise);
+                promise.then(function(response) {
+                    shape.config.name = response.responseText;
+                })
+                .catch(function() {
+                    shape.config.name = '';
+                });
+            }
+        });
+
+        return Ext.Promise.all(promises);
     },
 
     /**

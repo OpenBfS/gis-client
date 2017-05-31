@@ -170,13 +170,42 @@ Ext.define('Koala.view.component.CartoWindowController', {
         return html + '</table>';
     },
 
+    geoJsonToTable: function(collection) {
+        var html = '<table class="bordered-table">';
+        var first = true;
+        var headerRow = '<tr>';
+        var row;
+        Ext.each(collection.features, function(feat) {
+            row = '<tr>';
+            Ext.iterate(feat.properties, function(key, prop) {
+                row += '<td>';
+                row += prop;
+                row += '</td>';
+                if (first) {
+                    headerRow += '<th>' + key + '</th>';
+                }
+            });
+            if (first) {
+                first = false;
+                html += headerRow + '</tr>';
+            }
+            html += row + '</tr>';
+        });
+        return html + '</table>';
+    },
+
     convertData: function(data) {
         switch (data[0]) {
             case '<': {
                 return data;
             }
             case '[': {
+                // case of simple arrays in array
                 return this.arrayToTable(JSON.parse(data));
+            }
+            case '{': {
+                // case of GeoJSON
+                return this.geoJsonToTable(JSON.parse(data));
             }
             default: {
                 return this.arrayToTable(Ext.util.CSV.decode(data));

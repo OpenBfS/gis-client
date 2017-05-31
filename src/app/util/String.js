@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,6 +81,41 @@ Ext.define('Koala.util.String', {
                 }
             });
             return tpl;
+        },
+
+        /**
+         * Same as #replaceTemplateStrings, but resolves featureurl: prefixed
+         * templates and returns an Ext.Promise instead of the value. Resolves
+         * url values after applying #replaceTemplateStrings to the url template.
+         */
+        replaceTemplateStringsWithPromise: function(tpl, gettable, showWarnings, prefix) {
+            var val = Koala.util.String.replaceTemplateStrings(tpl, gettable, showWarnings, prefix);
+            if (Ext.String.startsWith(val, 'featureurl:')) {
+                var defaultHeaders;
+                var authHeader = Koala.util.Authentication.getAuthenticationHeader();
+                if (authHeader) {
+                    defaultHeaders = {
+                        Authorization: authHeader
+                    };
+                }
+
+                return new Ext.Promise(function(resolve, reject) {
+                    Ext.Ajax.request({
+                        url: val.substring('featureurl:'.length),
+                        defaultHeaders: defaultHeaders,
+                        method: 'GET',
+                        success: function(response) {
+                            resolve(response.responseText);
+                        },
+                        failure: function(response) {
+                            reject(response.status);
+                        }
+                    });
+                });
+            }
+            return new Ext.Promise(function(resolve) {
+                resolve(val);
+            });
         },
 
         /**
