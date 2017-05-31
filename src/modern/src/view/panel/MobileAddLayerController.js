@@ -380,7 +380,7 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
         var map = BasiGX.util.Map.getMapComponent().getMap();
         Ext.each(checkboxes, function(checkbox) {
             if (checkbox.isChecked() && checkbox.isDisabled() !== true) {
-                me.fireEvent('beforewmsadd', checkbox.olLayer);
+                me.getView().fireEvent('beforewmsadd', checkbox.olLayer);
                 map.addLayer(checkbox.olLayer);
                 me.fireEvent('wmsadd', checkbox.olLayer);
                 checkbox.setDisabled(true);

@@ -113,6 +113,10 @@ Ext.define('Koala.view.panel.MobileAddLayer',{
     }],
 
     listeners: {
-        initialize: 'onInit'
+        initialize: 'onInit',
+        beforewmsadd: function(olLayer) {
+            olLayer.set('nameWithSuffix', olLayer.get('name'));
+            olLayer.set('allowRemoval', true);
+        }
     }
 });
