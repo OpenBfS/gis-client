@@ -1,5 +1,5 @@
 /* global window, location */
-/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  * calls Ext.application(). This is the ideal place to handle application launch and
  * initialization details.
  *
- * @class Koala.Application
+ * @class Koala.Application Koala.Application
  */
 Ext.define('Koala.Application', {
     extend: 'Ext.app.Application',

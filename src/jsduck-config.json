@@ -1,6 +1,6 @@
 {
     "--title": "Koala Documentation",
-    "-o": "apidoc",
+    "-o": "jsduck",
     "--": [
         "app/",
         "classic/",

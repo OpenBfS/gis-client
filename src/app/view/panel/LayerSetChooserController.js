@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2016 terrestris GmbH & Co. KG
+/* Copyright (c) 2015-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,15 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
         } else {
             var match = treeStore.findRecord('text', rec.get('text'));
 
+            // first expand, then filter!
+            if (match && match.expand) {
+                match.expand();
+            }
+
+            if (tree && tree.expand) {
+                tree.expand();
+            }
+
             treeStore.filterBy(function(record) {
                 var display = false;
                 if (record.get('text') === rec.get('text')) {
@@ -79,14 +88,6 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                 }
                 return display;
             });
-
-            if (match && match.expand) {
-                match.expand();
-            }
-
-            if (tree && tree.expand) {
-                tree.expand();
-            }
 
             resetFilteringBtn.setDisabled(false);
         }
