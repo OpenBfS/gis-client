@@ -150,15 +150,28 @@ Ext.define('Koala.view.form.LayerFilter', {
     },
 
     getAutorefreshCheckbox: function() {
+        var layer = this.getLayer();
+        var checked = false;
+        if (layer) {
+            var id = layer.metadata.id;
+            checked = Koala.view.form.LayerFilterController.prototype.autorefreshMap[id];
+        }
         return Ext.create('Ext.form.field.Checkbox', {
             bind: {
                 fieldLabel: '{refreshAutomatically}'
             },
+            checked: checked,
             labelWidth: '100%'
         });
     },
 
     getAutorefreshDropdown: function() {
+        var layer = this.getLayer();
+        var value = null;
+        if (layer) {
+            var id = layer.metadata.id;
+            value = Koala.view.form.LayerFilterController.prototype.autorefreshMap[id];
+        }
         var minutes = this.getViewModel().data.minutes;
         var times = Ext.create('Ext.data.Store', {
             fields: ['timeLabel', 'time'],
@@ -175,6 +188,7 @@ Ext.define('Koala.view.form.LayerFilter', {
             bind: {
                 fieldLabel: '{refreshInterval}'
             },
+            value: value,
             queryMode: 'local',
             store: times,
             displayField: 'timeLabel',
