@@ -27,6 +27,25 @@ Ext.define('Koala.util.Date', {
          */
         DEFAULT_DATE_FORMAT: 'LLL',
 
+        /**
+         * The used formats for the moment shortcuts.
+         * Extends the moment defaults.
+         * See momentjs long-date-format documentation: http://bit.ly/2qAx6wr
+         *
+         * @type {Object}
+         */
+        DATE_FORMAT_LOCALES: {
+            en: {
+                LLL: 'YYYY-MM-DD HH:mm:ss'
+            },
+            de: {
+                LLL: 'DD.MM.YYYY HH:mm:ss'
+            },
+            fr: {
+                LLL: 'DD/MM/YYYY HH:mm:ss'
+            }
+        },
+
         /* i18n */
         txtUtc: '',
         txtLocal: '',
@@ -186,4 +205,16 @@ Ext.define('Koala.util.Date', {
         }
     }
 
+}, function() {
+    // Update the global moment locale formats with the one configured above.
+    var staticMe = this;
+    moment.updateLocale('en', {
+        longDateFormat: staticMe.DATE_FORMAT_LOCALES.en
+    });
+    moment.updateLocale('de', {
+        longDateFormat: staticMe.DATE_FORMAT_LOCALES.de
+    });
+    moment.updateLocale('fr', {
+        longDateFormat: staticMe.DATE_FORMAT_LOCALES.fr
+    });
 });
