@@ -95,10 +95,7 @@ Ext.define('Koala.view.panel.ThemeTree', {
 
     listeners: {
         select: 'setupShowFilterWinCheck',
-        itemdblclick: 'addLayerWithDefaultFilters',
-        expand: function() {
-            this.update();
-        }
+        itemdblclick: 'addLayerWithDefaultFilters'
     },
 
     initComponent: function() {
