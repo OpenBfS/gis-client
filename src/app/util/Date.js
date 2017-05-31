@@ -205,16 +205,4 @@ Ext.define('Koala.util.Date', {
         }
     }
 
-}, function() {
-    // Update the global moment locale formats with the one configured above.
-    var staticMe = this;
-    moment.updateLocale('en', {
-        longDateFormat: staticMe.DATE_FORMAT_LOCALES.en
-    });
-    moment.updateLocale('de', {
-        longDateFormat: staticMe.DATE_FORMAT_LOCALES.de
-    });
-    moment.updateLocale('fr', {
-        longDateFormat: staticMe.DATE_FORMAT_LOCALES.fr
-    });
 });
