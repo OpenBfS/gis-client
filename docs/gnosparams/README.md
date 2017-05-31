@@ -591,6 +591,33 @@ Flag zum de-/aktivieren des CartoWindow-Modus.
 | Default-Wert         | false |
 | Beispiel             | true |
 
+**tableContentProperty**
+
+Wenn gesetzt, wird im CartoWindow-Modus ein Table-Tab angezeigt. Die
+Tabelle kann dabei aus GeoJSON, JSON (arrays in array) und CSV erzeugt
+werden, es kann auch direkt rohes HTML angezeigt werden.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | string siehe Beschreibung |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+| Beispiel             | [[1,2,3],[4,5,6]] |
+
+**tableContentURL**
+
+Wie **tableContentProperty**, jedoch wird der Inhalt aus der
+angegebenen URL geladen. Es können Ersetzungen verwendet werden
+(doppelte eckige Klammern), das Kontextobjekt ist das angeclickte
+Feature. Die Ersetzungen finden in der URL statt.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | URL |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+| Beispiel             | http://bfs.de/test.csv |
+
 
 ## Generische Chart Properties {#genericcharts} (bfs:timeSeriesChartProperty)
 
