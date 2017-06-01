@@ -391,7 +391,34 @@
     "Koala.view.window.HelpWindow": {
         "config": {
             "data": {
-                "helpWinTitle": "Help"
+                "helpWinTitle": "Help",
+                "fallbackHtml": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
+                        "<h2> Welcome </h2>"+
+                        "<div>The "+
+                        "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>Federal Office for Radiation Protection (BfS)</a>"+
+                        " provides with the "+
+                        "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
+                        " its own internet portal for the search and visualization of spatial data (geodata) and web services (geodata services). Measurement data from the BfS as well as data from federal agencies, federal state authorities and other public authorities are available. Most of the data comes from the \"Integrated Measuring and Information System for the Surveillance of Environmental Radioactivity\" "+
+                        "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>(IMIS)</a>"+
+                        ".</div>"+
+                        "<div>"+
+                        "<p>Over the past few years, the relevant legal provisions and requirements, such as the "+
+                        "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>German Geodata Access Act (GeoZG)</a>"+
+                        " that implements the "+
+                        "<a href='http://inspire.ec.europa.eu/' target='_blank'>European INSPIRE Directive</a>"+
+                        ", have contributed to significant advances in the technical development and "+
+                        "<a href='http://www.opengeospatial.org/standards' target='_blank'>standardization</a>"+
+                        " of search, visualization and download services with respect to the provision of geodata.</p>"+
+                        "<p>This has led to user-friendly access to the services provided by other sources. A central service is provided by "+
+                        "<a href='http://www.geoportal.de/EN/Geoportal/geoportal.html?lang=en' target='_blank'>Geoportal-Deutschland</a>"+
+                        ", but you can also use this GIS software provided by BfS.</p>"+
+                        "<p>BfS endeavours to constantly expand the availability of information beyond such standardized services.</p>"+
+                        "</div>"+
+                        "<div>This application cannot only be used to find the desired data and represent it geographically, but it is also aimed at analysing data according to the user’s individual requirements. The current representations of time series or bar charts are only the first steps. We intend to refine and expand the application’s functionalities in the future.</div>"+
+                        "<div>We are implementing a transparent information policy by providing the data as open data (cf. BfS Geoportal - Imprint/Terms of Use) and by developing our applications in the form of open source software "+
+                        "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/EN/2017/0102-bfs-open-source.html' target='_blank'>(message by BfS)</a>"+
+                        ".</div>"+
+                        "<div>This development concept ensures an effective, non-profit use of resources.</div>"
             }
         }
     },
