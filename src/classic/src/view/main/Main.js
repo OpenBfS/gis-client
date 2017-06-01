@@ -226,6 +226,7 @@ Ext.define('Koala.view.main.Main', {
                                     hasUncheckAllBtn: true,
                                     includeSubLayer: true,
                                     versionsWmsAutomatically: true,
+                                    defaultUrl: BasiGX.util.Application.getAppContext().wmsUrls[0],
                                     wmsBaseUrls: BasiGX.util.Application.getAppContext().wmsUrls,
                                     listeners: {
                                         beforewmsadd: function(olLayer) {
