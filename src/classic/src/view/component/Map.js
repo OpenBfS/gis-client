@@ -27,7 +27,8 @@ Ext.define('Koala.view.component.Map', {
 
     config: {
         hoverFeatureClickBufferMS: 250,
-        pointerRestInterval: 20
+        // Hotfix for Ticket #1720
+        pointerRestInterval: (Ext.isChrome && Ext.browser.version.major < 58) ? 500 : 20
     },
 
     /**
@@ -53,12 +54,6 @@ Ext.define('Koala.view.component.Map', {
             var selStyleFunction = staticMe.styleFromGnos('selectStyle');
             var highlightStyleFunction = staticMe.styleFromGnos('hoverStyle');
             var interval = me.getPointerRestInterval();
-
-            // Hotfix for Ticket #1720
-            if (Ext.isChrome && Ext.browser.version.major < 58) {
-                interval = 500;
-            }
-
             hoverPlugin.setPointerRestInterval(interval);
             hoverPlugin.selectStyleFunction = selStyleFunction;
             hoverPlugin.highlightStyleFunction = highlightStyleFunction;
