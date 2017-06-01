@@ -190,6 +190,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                         return d.value;
                     }
                 });
+                //limit chart data to 80% of chart height
+                dataRange[1] = dataRange[1]/0.8;
 
                 if (Ext.isDefined(axis.min)) {
                     min = Koala.util.String.coerce(axis.min);
