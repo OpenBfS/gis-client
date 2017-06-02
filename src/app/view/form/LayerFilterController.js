@@ -43,7 +43,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * Refreshes the layers where the user activated auto refresh.
      */
     refreshLayers: function() {
-        this.layerUpdater.delay(60000);
+        this.__proto__.layerUpdater.delay(60000);
 
         var mapComponent = BasiGX.util.Map.getMapComponent('gx_map');
         var map = mapComponent.getMap();
@@ -56,7 +56,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         });
 
         var me = this;
-        Ext.Object.each(this.autorefreshMap, function(id, time) {
+        Ext.Object.each(this.__proto__.autorefreshMap, function(id, time) {
             var date = Koala.util.Date.getTimeReferenceAwareMomentDate(new moment());
             if ((date.minutes() % time) === 0) {
                 Koala.util.Layer.getMetadataFromUuidAndThen(id, function(metadata) {
@@ -64,6 +64,11 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     var LayerUtil = Koala.util.Layer;
 
                     var existingLayer = layersById[id];
+                    if (!existingLayer) {
+                        // layer was removed from map
+                        delete me.__proto__.autorefreshMap[id];
+                        return;
+                    }
                     var layer = LayerUtil.layerFromMetadata(metadata);
                     existingLayer.setSource(layer.getSource());
 
@@ -89,6 +94,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var filters = view.getFilters();
         filters = me.updateFiltersFromForm(filters);
         metadata.filters = filters;
+        this.updateAutorefresh(view, metadata);
 
         // Create a complete new layer to get its source…
         var newLayer = LayerUtil.layerFromMetadata(metadata);
@@ -110,9 +116,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
     updateAutorefresh: function(view, metadata) {
         var autorefresh = view.query('checkbox')[0].checked;
         if (!autorefresh) {
-            delete this.autorefreshMap[metadata.id];
+            delete this.__proto__.autorefreshMap[metadata.id];
         } else {
-            this.autorefreshMap[metadata.id] = view.query('combobox')[0].value;
+            this.__proto__.autorefreshMap[metadata.id] = view.query('combobox[name=autorefresh]')[0].value;
         }
     },
 
