@@ -41,7 +41,7 @@ Ext.define('Koala.view.component.CartoWindow',{
     listeners: {
         boxready: 'onInitialize',
         initialize: 'onInitialize',
-        destroy: 'onDestroy'
+        beforedestroy: 'onBeforeDestroy'
     }
 
 });

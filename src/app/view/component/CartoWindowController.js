@@ -53,11 +53,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createTabs: function() {
         var me = this;
         var view = me.getView();
-        // TODO Strangly the view gets assigned the view.tabs from the previous
-        // cartowindow so we need to reset it. Maybe we need a viewmodel.
-        view.tabs = [];
-
         var layer = view.getLayer();
+        me.createCloseElement();
 
         if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
             me.createTimeSeriesTab();
@@ -75,11 +72,47 @@ Ext.define('Koala.view.component.CartoWindowController', {
             me.createHtmlTab();
         }
 
-        // TODO Add if test
-        me.createHoverTemplateTab();
+        if (layer.get('hoverTpl')) {
+            me.createHoverTemplateTab();
+        }
 
-        // TODO
-        // me.createCloseIconTab();
+        me.updateCloseElementPosition();
+    },
+
+    /**
+     * Creates the closeElement and adds it to the tabwindow.
+     */
+    createCloseElement: function() {
+        var me = this;
+        var view = me.getView();
+        var el = view.getEl().dom;
+        var featureId = view.feature.get('id');
+        var closeElement = Ext.DomHelper.createDom({
+            tag: 'div',
+            html: '<i class="fa fa-times-circle" aria-hidden="true"></i>',
+            cls: featureId + ' closeElement'
+        });
+
+        closeElement.addEventListener('click', function() {
+            view.destroy();
+        });
+
+        el.appendChild(closeElement);
+    },
+
+    /**
+     * Updates the position of the close element due to the amount of rendered
+     * tabs.
+     */
+    updateCloseElementPosition: function() {
+        var me = this;
+        var view = me.getView();
+        var el = view.getEl();
+        var viewModel = me.getViewModel();
+        var tabs = viewModel.get('tabs');
+        var tabIndex = tabs.length;
+        var closeElement = el.down('.closeElement');
+        closeElement.setStyle('left', (tabIndex*100) + 'px');
     },
 
     /**
@@ -245,6 +278,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             });
 
             el.appendChild(timeSeriesTab);
+            me.updateCloseElementPosition();
         });
     },
 
@@ -264,6 +298,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             });
 
             el.appendChild(timeSeriesTab);
+            me.updateCloseElementPosition();
         });
     },
 
@@ -452,10 +487,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     /**
-     * OnDestroy listener. It removes the lineLayer on destroy and
+     * onBeforeDestroy listener. It removes the lineLayer before destroy and
      * removes the pointerMoveListener.
      */
-    onDestroy: function() {
+    onBeforeDestroy: function() {
         var me = this;
         var view = me.getView();
         var viewModel = me.getViewModel();

@@ -18,6 +18,27 @@
   background: #999;
 }
 
+.cartowindow > .closeElement {
+    cursor: pointer;
+    display: none;
+    position: absolute;
+    height: 2.2em;
+    top: -2.2em;
+    line-height: 2em;
+    background: #999;
+    color: #fff;
+    padding: 0.1em 0.2em;
+    width: 2.1em;
+}
+
+.cartowindow:hover > .closeElement {
+    display: inherit;
+}
+
+.cartowindow > .closeElement > i.fa {
+    font-size: 2em;
+}
+
 /**
  * because labels come first in source order - we use z-index to move them in front of the headings
  */

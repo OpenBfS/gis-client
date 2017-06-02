@@ -21,9 +21,9 @@ Ext.define('Koala.view.component.CartoWindowModel', {
     alias: 'viewmodel.k-component-cartowindow',
 
     data: {
-        overlay: null,
         lineFeature: null,
         lineLayer: null,
+        overlay: null,
         tabs: []
     }
 
