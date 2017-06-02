@@ -316,5 +316,38 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         //deselect ThemeTreeItems
         me.deselectThemeTreeItems();
+    },
+
+    /**
+     * Checks if any other filter is configured as depending on the changed one.
+     * If so, the corresponding combobox is updated with new values according
+     * to the configured metadata using the current filter values as context
+     * object.
+     *
+     * @param  {object} field the component which was updated
+     */
+    onFilterChanged: function(field) {
+        var Objects = Koala.util.Object;
+        var view = this.getView();
+        var filterName = field.config.name;
+
+        var metadata = view.getMetadata();
+        var filters = view.getFilters();
+        var currentFilters = this.updateFiltersFromForm(filters);
+        var context = Objects.arrayToObject(currentFilters, 'param', 'effectivevalue');
+        var origFilters = Objects.arrayToMap(metadata.filters, 'param');
+        var path = 'layerConfig/olProperties/filterDependencies';
+        var depsString = Objects.getPathStrOr(metadata, path, '{}');
+
+        var deps = JSON.parse(depsString);
+        deps = Objects.inverse(deps);
+        if (deps[filterName]) {
+            var store = view.down('combobox[name=' + deps[filterName] + ']').getStore();
+            var filter = origFilters[deps[filterName]];
+            Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context)
+            .then(function(data) {
+                store.setData(JSON.parse(data));
+            });
+        }
     }
 });
