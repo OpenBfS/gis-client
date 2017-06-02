@@ -53,10 +53,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createTabs: function() {
         var me = this;
         var view = me.getView();
-
         // TODO Strangly the view gets assigned the view.tabs from the previous
         // cartowindow so we need to reset it. Maybe we need a viewmodel.
         view.tabs = [];
+
         var layer = view.getLayer();
 
         if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
@@ -302,7 +302,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createTabElement: function(config) {
         var me = this;
         var view = me.getView();
-        var tabIndex = view.tabs.length;
+        var viewModel = me.getViewModel();
+        var tabs = viewModel.get('tabs');
+        var tabIndex = tabs.length;
         var featureId = view.feature.get('id');
         var tabIdString = featureId + ' cartowindow-tab-label-'+ tabIndex;
 
@@ -340,7 +342,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }]
         });
 
-        view.tabs.push(tab);
+        tabs.push(tab);
         return tab;
     },
 
@@ -351,6 +353,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createOverlay: function() {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var map = view.getMap();
 
         var overlay = new ol.Overlay({
@@ -363,7 +366,37 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         map.addOverlay(overlay);
 
-        view.overlay = overlay;
+        viewModel.set('overlay', overlay);
+    },
+
+    /**
+     * This method creates a vectorlayer which stores the lineFeatures of the
+     * carto-windows. If the layer allready exists it will use this one instead.
+     */
+    getOrCreateLineLayer: function() {
+        var me = this;
+        var view = me.getView();
+        var viewModel = me.getViewModel();
+        var map = view.getMap();
+        var lineLayer = BasiGX.util.Layer.getLayerByName('carto-window-lines');
+
+        if (!lineLayer) {
+            var lineStyle = view.getLayer().get('cartoWindowLineStyle');
+            lineLayer = new ol.layer.Vector({
+                source: new ol.source.Vector(),
+                style: new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: lineStyle.split(',')[0],
+                        width: lineStyle.split(',')[1]
+                    })
+                }),
+                name: 'carto-window-lines',
+                proofPrintable: true
+            });
+            lineLayer.set(BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER, false);
+            map.addLayer(lineLayer);
+        }
+        viewModel.set('lineLayer', lineLayer);
     },
 
     /**
@@ -374,11 +407,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createLineFeature: function() {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var map = view.getMap();
         var feature = view.getFeature();
         var coords = feature.getGeometry().getCoordinates();
         var el = view.getEl().dom;
-        var overlayer = view.overlay;
+        var overlay = viewModel.get('overlay');
 
         var lineFeature = new ol.Feature({
             geometry: new ol.geom.LineString([coords, coords])
@@ -394,58 +428,27 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.addEventListener('mousedown', function(event) {
             if (event.target.tagName === 'LABEL') {
                 dragPan.setActive(false);
-                overlayer.set('dragging', true);
+                overlay.set('dragging', true);
             }
         });
         el.addEventListener('mouseup', function() {
-            if (overlayer.get('dragging') === true) {
+            if (overlay.get('dragging') === true) {
                 dragPan.setActive(true);
-                overlayer.set('dragging', false);
+                overlay.set('dragging', false);
             }
         });
 
         view.pointerMoveListener = function(evt) {
-            if (overlayer.get('dragging') === true) {
-                overlayer.setPosition(evt.coordinate);
+            if (overlay.get('dragging') === true) {
+                overlay.setPosition(evt.coordinate);
                 lineFeature.getGeometry().setCoordinates([coords, evt.coordinate]);
             }
         };
 
         map.on('pointermove', view.pointerMoveListener);
 
-        view.lineLayer.getSource().addFeature(lineFeature);
-        view.lineFeature = lineFeature;
-    },
-
-    /**
-     * This method creates a vectorlayer which stores the lineFeatures of the
-     * carto-windows. If the layer allready exists it will use this one instead.
-     */
-    getOrCreateLineLayer: function() {
-        var me = this;
-        var view = me.getView();
-        var map = view.getMap();
-        var lineLayer = BasiGX.util.Layer.getLayerByName('carto-window-lines');
-        var lineStyle = view.getLayer().get('cartoWindowLineStyle');
-
-        if (!lineLayer) {
-            view.lineLayer = new ol.layer.Vector({
-                source: new ol.source.Vector(),
-                style: new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: lineStyle.split(',')[0],
-                        width: lineStyle.split(',')[1]
-                    })
-                }),
-                name: 'carto-window-lines',
-                proofPrintable: true
-            });
-            view.lineLayer.set(BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER,
-                false);
-            map.addLayer(view.lineLayer);
-        } else {
-            view.lineLayer = lineLayer;
-        }
+        viewModel.get('lineLayer').getSource().addFeature(lineFeature);
+        viewModel.set('lineFeature', lineFeature);
     },
 
     /**
@@ -455,10 +458,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
     onDestroy: function() {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var map = view.getMap();
+        var lineLayer = viewModel.get('lineLayer');
 
         map.un('pointermove', view.pointerMoveListener);
-        map.removeLayer(view.lineLayer);
+        map.removeLayer(lineLayer);
     }
 
 });
