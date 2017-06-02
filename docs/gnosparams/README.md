@@ -618,6 +618,31 @@ Feature. Die Ersetzungen finden in der URL statt.
 | Default-Wert         | leer |
 | Beispiel             | http://bfs.de/test.csv |
 
+**htmlContentProperty**
+
+Wenn gesetzt, wird im CartoWindow-Modus ein HTML-Tab angezeigt.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | HTML-string |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+| Beispiel             | <p>Beschreibung</p> |
+
+**htmlContentURL**
+
+Wie **htmlContentProperty**, jedoch wird der Inhalt aus der
+angegebenen URL geladen. Es können Ersetzungen verwendet werden
+(doppelte eckige Klammern), das Kontextobjekt ist das angeclickte
+Feature. Die Ersetzungen finden in der URL statt.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | URL |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+| Beispiel             | http://bfs.de/test.html |
+
 
 ## Generische Chart Properties {#genericcharts} (bfs:timeSeriesChartProperty)
 
