@@ -179,18 +179,53 @@ Ext.define('Koala.util.Filter', {
          * values and the flag `rawMulti`.
          *
          * @param {String} allowedValues A string with the raw allowed
-         *     values, must conform to any of the above
+         *                               values, must conform to any of the
+         *                               above.
          * @param {String} rawMulti A string (`"true"" or `"false"`) indicating
-         *     if this combo should allow multiselection.
+         *                          if this combo should allow multiselection.
+         * @param {Ext.XTemplate} displayTpl An optional XTemplate for the
+         *                                   display of the combobbox.
+         * @param {Ext.XTemplate} listTpl An optional XTemplate for the
+         *                                listitems of the combobox.
          * @return {Object} A configuration for a combobox or a multiselect
-         *     select element.
+         *                  select element.
+         * @param {Object} filter
+         *
          */
-        getComboFromAllowedValues: function(allowedValues, rawMulti) {
+        getComboFromFilter: function(filter) {
             var staticMe = this;
+            var allowedValues = filter.allowedValues;
+            var allowMultipleSelect = filter.allowMultipleSelect;
             var store = staticMe.getStoreFromAllowedValues(allowedValues);
-            var multi = Koala.util.String.coerce(rawMulti);
+            var multi = Koala.util.String.coerce(allowMultipleSelect);
             var combo;
             var xtype;
+
+            if (filter.type === 'rodostime') {
+                var getFormatedDate = function(values) {
+                    var dspField = staticMe.COMBO_DSP_FIELD;
+                    values = Ext.isArray(values) ? values[0] : values;
+                    var dateString = values[dspField];
+                    var moment = Koala.util.Date.getUtcMoment(dateString);
+                    return Koala.util.Date.getFormattedDate(moment);
+                };
+                var listTpl = Ext.create('Ext.XTemplate',
+                    '<tpl for=".">',
+                        '<div class="x-boundlist-item">',
+                            '{[this.getFormatedDate(values)]}',
+                        '</div>',
+                    '</tpl>',
+                    {
+                        getFormatedDate: getFormatedDate
+                    }
+                );
+                var displayTpl = Ext.create('Ext.XTemplate',
+                        '{[this.getFormatedDate(values)]}',
+                    {
+                        getFormatedDate: getFormatedDate
+                    }
+                );
+            }
 
             if (!Ext.isModern) { // classic
                 xtype = multi ? 'multiselect' : 'combo';
@@ -205,7 +240,10 @@ Ext.define('Koala.util.Filter', {
                     valueField: staticMe.COMBO_VAL_FIELD,
                     listeners: {
                         change: 'onFilterChanged'
-                    }
+                    },
+                    displayTpl: displayTpl,
+                    tpl: listTpl,
+                    width: 400
                 };
             } else { // modern
                 if (multi) {
@@ -214,7 +252,7 @@ Ext.define('Koala.util.Filter', {
                         xtype: 'list',
                         store: store,
                         mode: 'MULTI',
-                        itemTpl: '{' + staticMe.COMBO_DSP_FIELD + '}',
+                        itemTpl: displayTpl || '{' + staticMe.COMBO_DSP_FIELD + '}',
                         items: [{
                             // The list view itself doesn't contain a label,
                             // therefore we insert a basic field that can be
@@ -227,14 +265,23 @@ Ext.define('Koala.util.Filter', {
                         }
                     };
                 } else {
+                    var displayField = staticMe.COMBO_DSP_FIELD;
+                    if (filter.type === 'rodostime') {
+                        displayField = staticMe.COMBO_DSP_FIELD+ '_special';
+                        store.each(function(rec) {
+                            var dateString = rec.get(staticMe.COMBO_DSP_FIELD);
+                            var moment = Koala.util.Date.getUtcMoment(dateString);
+                            var formated = Koala.util.Date.getFormattedDate(moment);
+                            rec.set(displayField, formated);
+                        });
+                    }
                     combo = {
                         xtype: 'selectfield',
                         store: store,
                         queryMode: 'local',
-                        editable: false,
-                        allowBlank: true,
-                        displayField: staticMe.COMBO_DSP_FIELD,
+                        displayField: displayField,
                         valueField: staticMe.COMBO_VAL_FIELD,
+                        usePicker: true,
                         listeners: {
                             change: 'onFilterChanged'
                         }

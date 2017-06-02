@@ -130,6 +130,17 @@ Ext.define('Koala.Application', {
         if (loadmask) {
             loadmask.destroy();
         }
+
+        // Update the global moment locale formats with the one configured above.
+        moment.updateLocale('en', {
+            longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.en
+        });
+        moment.updateLocale('de', {
+            longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.de
+        });
+        moment.updateLocale('fr', {
+            longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.fr
+        });
     }
 
 });

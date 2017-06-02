@@ -20,6 +20,10 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-panel-themetree',
 
+    require: [
+        'Koala.view.form.RodosFilter'
+    ],
+
     currentTask: null,
 
     toggleLayerSetView: function() {
@@ -52,12 +56,41 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         }
         me.currentTask = new Ext.util.DelayedTask(function() {
             if (item.isLeaf()) {
-                Koala.util.Layer.showChangeFilterSettingsWinByUuid(
-                    item.get('uuid')
+                Koala.util.Layer.getMetadataFromUuidAndThen(item.get('uuid'),
+                    function(metadata) {
+                        if (item.get('isRodosLayer') && item.get('rodosFilters')) {
+                            metadata.filters = Ext.Array.merge(
+                                metadata.filters, item.get('rodosFilters')
+                            );
+                            metadata.isRodosLayer = item.get('isRodosLayer');
+                            metadata.description = item.get('description');
+                        }
+                        Koala.util.Layer.showChangeFilterSettingsWin(metadata);
+                    }
                 );
             }
         });
         me.currentTask.delay(500);
+    },
+
+    showRodosFilter: function(view, rowIndex, colIndex, item) {
+        var viewModel = this.getViewModel();
+        var win = Ext.ComponentQuery.query('window[name=rodos-window]')[0];
+        if (!win) {
+            var x = item.getX() + item.getWidth();
+            var y = item.getY();
+            Ext.create('Ext.window.Window', {
+                title: viewModel.get('rodosWindowTitle'),
+                name: 'rodos-window',
+                layout: 'fit',
+                items: [{
+                    xtype: 'k-form-rodosfilter',
+                    minWidth: 400
+                }]
+            }).showAt(x, y);
+        } else {
+            BasiGX.util.Animate.shake(win);
+        }
     },
 
     addLayerWithDefaultFilters: function(treepanel, item) {

@@ -14,18 +14,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.ThemeTreeModel
+ * @class Koala.store.RodosProjects
  */
-Ext.define('Koala.view.panel.ThemeTreeModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-panel-themetree',
-    data: {
-        title: '',
-        tooltip: '',
-        tooltext: '',
-        btnTextResetThemeTreeFiltering: '',
-        btnTooltipResetThemeTreeFiltering: '',
-        rodosWindowTitle: ''
-    }
+Ext.define('Koala.store.RodosProjects', {
+    extend: 'Ext.data.Store',
 
+    alias: 'store.k-rodosprojects',
+
+    fields: [{
+        name: 'modelchainname',
+        type: 'string'
+    }, {
+        name: 'name',
+        type: 'string'
+    }, {
+        name: 'project_uid',
+        type: 'string'
+    }, {
+        name: 'comment',
+        type: 'string'
+    }, {
+        name: 'calculationDate',
+        type: 'date'
+    }, {
+        name: 'user',
+        type: 'string'
+    }],
+
+    proxy: {
+        type: 'ajax',
+        reader: {
+            type: 'json',
+            rootProperty: 'rodos_projects'
+        }
+    }
 });

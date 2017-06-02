@@ -46,7 +46,7 @@ Ext.define('Koala.view.panel.MobileMetadataInfo', {
 
     bodyPadding: '10px',
 
-    scrollable: 'y',
+    scrollable: true,
 
     bind: {
         title: '{name}'

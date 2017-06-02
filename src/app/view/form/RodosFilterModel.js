@@ -14,18 +14,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.ThemeTreeModel
+ * @class Koala.view.form.RodosFilterModel
  */
-Ext.define('Koala.view.panel.ThemeTreeModel', {
+Ext.define('Koala.view.form.RodosFilterModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-panel-themetree',
+    alias: 'viewmodel.k-form-rodosfilter',
+
     data: {
-        title: '',
-        tooltip: '',
-        tooltext: '',
-        btnTextResetThemeTreeFiltering: '',
-        btnTooltipResetThemeTreeFiltering: '',
-        rodosWindowTitle: ''
+        projectComboLabel: '',
+
+        rodosResults: null,
+        selectedProject: null,
+        rodosProjectsUrl: '/rodos-servlet',
+        rodosResultsUrl: '/rodos-servlet'
+    },
+
+    stores: {
+        projectStore: {
+            type: 'k-rodosprojects',
+            autoLoad: true,
+            proxy: {
+                url: '{rodosProjectsUrl}'
+            }
+        }
     }
 
 });

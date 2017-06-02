@@ -4,6 +4,8 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
 
     requires: ['BasiGX.view.panel.MobileWindow'],
 
+    currentTask: null,
+
     onShow: function() {
         var me = this;
         var view = me.getView();
@@ -23,6 +25,10 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
                     reader: {
                         type: 'json'
                     }
+                },
+                listeners: {
+                    load: me.onTreeStoreLoad,
+                    scope: me
                 }
             });
             treeList.setStore(treeStore);
@@ -30,7 +36,21 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         }
     },
 
-    currentTask: null,
+    onTreeStoreLoad: function(store) {
+        var me = this;
+        var view = me.getView();
+        var treeList = view.down('treelist');
+        store.each(function(rec) {
+            if (rec.get('text').indexOf('RODOS-Prognosen') > -1) {
+                var item = treeList.getItem(rec);
+                var iconEl = item.el.query('.x-treelist-item-icon')[0];
+                iconEl.style.left = 'inherit';
+                iconEl.style.right = '10px';
+                iconEl.innerHTML = '<i id="rodos-filter-button" class="x-fa fa-filter"></i>';
+                return false;
+            }
+        });
+    },
 
     clearTask: function() {
         var me = this;
@@ -45,20 +65,41 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
      * Called on singletap, this methdos sets up a delayed handler which may
      * show the layerfilter window.
      *
+     * @param {Ext.event.Event} event The Ext.event.Event event
+     *                                encapsulating the DOM event.
      * @param {HTMLElement} node The target of the tap.
      */
-    setupShowFilterWinCheck: function() {
+    setupShowFilterWinCheck: function(event, node) {
         var me = this;
         var treelist = me.getView().down('treelist');
         me.clearTask();
         var selection = treelist.getSelection();
         me.currentTask = new Ext.util.DelayedTask(function() {
             if (selection && selection.isLeaf()) {
-                Koala.util.Layer.getMetadataFromUuidAndThen(
-                    selection.get('uuid'), me.showChangeFilterSettingsWin.bind(me));
+                Koala.util.Layer.getMetadataFromUuidAndThen(selection.get('uuid'),
+                    function(metadata) {
+                        if (selection.get('isRodosLayer') && selection.get('rodosFilters')) {
+                            metadata.filters = Ext.Array.merge(
+                                metadata.filters, selection.get('rodosFilters')
+                            );
+                            metadata.isRodosLayer = selection.get('isRodosLayer');
+                            metadata.description = selection.get('description');
+                        }
+                        me.showChangeFilterSettingsWin(metadata);
+                    }
+                );
+            }
+            if (selection.get('text').indexOf('RODOS-Prognosen') > -1 &&
+                    node.id === 'rodos-filter-button') {
+                me.showRodosFilterPanel();
             }
         });
         me.currentTask.delay(200);
+    },
+
+    showRodosFilterPanel: function() {
+        var view = this.getView();
+        view.up('app-main').down('[name=rodosContainer]').show();
     },
 
     addLayerWithDefaultFilters: function() {

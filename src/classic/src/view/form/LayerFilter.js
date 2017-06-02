@@ -96,10 +96,9 @@ Ext.define('Koala.view.form.LayerFilter', {
                     me.addPointInTimeFilter(filter, idx);
                     hasTimeFilter = true;
                     break;
-                case 'rodos':
-                    break;
+                case 'rodostime':
                 case 'value':
-                    me.createValueFilter(filter, idx);
+                    me.addValueFilter(filter, idx);
                     break;
                 default:
                     Ext.log.warn('Unexpected filter type: ' + filter.type);
@@ -225,18 +224,6 @@ Ext.define('Koala.view.form.LayerFilter', {
     },
 
     /**
-     * Creates and adds a rodos filter at the specified index. Currently not
-     * doing anything.
-     *
-     * // TODO specify and implement
-     *
-     * @param {Object} filter A filter specification object of type rodos.
-     * @param {Number} idx The index of the filter in the list of all filters.
-     */
-    createRODOSFilter: function() {
-    },
-
-    /**
      * Adds a timerange filter at the specified index.
      *
      * @param {Object} filter A filter specification object of type timerange.
@@ -256,21 +243,27 @@ Ext.define('Koala.view.form.LayerFilter', {
      * @param {Object} filter A filter specification object of type `value`.
      * @param {Number} idx The index of the filter in the list of all filters.
      */
-    createValueFilter: function(filter, idx) {
+    addValueFilter: function(filter, idx) {
         var FilterUtil = Koala.util.Filter;
         var field = null;
+        var value;
+        if (filter.type === 'rodostime' &&
+                moment.isMoment(filter.effectivedatetime)) {
+            value = filter.effectivedatetime.format();
+        } else {
+            value = filter.effectivevalue || filter.defaultValue;
+        }
+
         var sharedCfg = {
-            labelWidth: 70,
+            labelWidth: 120,
             name: filter.param,
-            fieldLabel: filter.alias,
-            value: filter.effectivevalue || filter.defaultValue,
+            fieldLabel: filter.alias || filter.param,
+            value: value,
             emptyText: filter.defaultValue
         };
+
         if (filter.allowedValues) {
-            field = FilterUtil.getComboFromAllowedValues(
-                filter.allowedValues,
-                filter.allowMultipleSelect
-            );
+            field = FilterUtil.getComboFromFilter(filter);
         } else {
             field = {
                 xtype: 'textfield'

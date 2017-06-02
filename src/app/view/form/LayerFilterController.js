@@ -203,7 +203,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     if (!Ext.Array.contains(view.ignoreFields, key)) {
                         // Request the value as moment object.
                         var val = field.getValue(true);
-                        if (moment.isMoment(val)) {
+                        // Transform if we have a 'rodostime'-Filter
+                        if (filter.type === 'rodostime' && !moment.isMoment(val)) {
+                            val = Koala.util.Date.getUtcMoment(val);
+                        } else if (moment.isMoment(val)) {
                             // We have to add hours & minutes, the date field
                             // has precision DAY:
                             val = FilterUtil.setHoursAndMinutes(val, field);
@@ -279,15 +282,23 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var filter = filters[idx];
         var filterType = (filter.type || '').toLowerCase();
         var param = filter.param;
-        if (filterType === 'timerange') {
-            var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
-            filter.effectivemindatetime = keyVals[keys.startName];
-            filter.effectivemaxdatetime = keyVals[keys.endName];
-        } else if (filterType === 'pointintime') {
-            filter.effectivedatetime = keyVals[param];
-        } else if (filterType === 'value') {
-            filter.effectivevalue = keyVals[param];
+        switch (filterType) {
+            case 'timerange':
+                var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
+                filter.effectivemindatetime = keyVals[keys.startName];
+                filter.effectivemaxdatetime = keyVals[keys.endName];
+                break;
+            case 'pointintime':
+            case 'rodostime':
+                filter.effectivedatetime = keyVals[param];
+                break;
+            case 'value':
+                filter.effectivevalue = keyVals[param];
+                break;
+            default:
+                Ext.log.warn('Unexpected filter type ' + filterType + ' specified');
         }
+
         filters[idx] = filter;
         return filters;
     },

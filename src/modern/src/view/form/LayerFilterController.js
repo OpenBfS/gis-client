@@ -68,8 +68,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 case 'pointintime':
                     me.createPointInTimeFilter(filter, idx);
                     break;
-                case 'rodos':
-                    break;
+                case 'rodostime':
                 case 'value':
                     me.createValueFilter(filter, idx);
                     break;
@@ -183,7 +182,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
                         key = field.getName();
                         if (!Ext.Array.contains(view.ignoreFields, key)) {
                             var val = field.getValue(true);
-                            if (moment.isMoment(val)) {
+                            if (filter.type === 'rodostime' && !moment.isMoment(val)) {
+                                val = Koala.util.Date.getUtcMoment(val);
+                            } else if (moment.isMoment(val)) {
                                 // we have to add hours & minutes, the date field
                                 // has precision DAY:
                                 val = FilterUtil.setHoursAndMinutes(val, field);
@@ -266,15 +267,24 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var filter = filters[idx];
         var filterType = (filter.type || '').toLowerCase();
         var param = filter.param;
-        if (filterType === 'timerange') {
-            var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
-            filter.effectivemindatetime = keyVals[keys.startName];
-            filter.effectivemaxdatetime = keyVals[keys.endName];
-        } else if (filterType === 'pointintime') {
-            filter.effectivedatetime = keyVals[param];
-        } else if (filterType === 'value') {
-            filter.effectivevalue = keyVals[param];
+
+        switch (filterType) {
+            case 'timerange':
+                var keys = FilterUtil.startAndEndFieldnamesFromMetadataParam(param);
+                filter.effectivemindatetime = keyVals[keys.startName];
+                filter.effectivemaxdatetime = keyVals[keys.endName];
+                break;
+            case 'pointintime':
+            case 'rodostime':
+                filter.effectivedatetime = keyVals[param];
+                break;
+            case 'value':
+                filter.effectivevalue = keyVals[param];
+                break;
+            default:
+
         }
+
         filters[idx] = filter;
         return filters;
     },
@@ -525,18 +535,23 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var view = this.getView();
         var FilterUtil = Koala.util.Filter;
         var field = null;
+        var value;
+        if (filter.type === 'rodostime' &&
+                moment.isMoment(filter.effectivedatetime)) {
+            value = filter.effectivedatetime.format();
+        } else {
+            value = filter.effectivevalue || filter.defaultValue;
+        }
         var sharedCfg = {
             labelAlign: 'top',
             name: filter.param,
-            label: filter.alias,
-            value: filter.effectivevalue || filter.defaultValue,
+            label: filter.alias || filter.param,
+            value: value,
             emptyText: filter.defaultValue
         };
+
         if (filter.allowedValues) {
-            field = FilterUtil.getComboFromAllowedValues(
-                filter.allowedValues,
-                filter.allowMultipleSelect
-            );
+            field = FilterUtil.getComboFromFilter(filter);
         } else {
             field = {
                 xtype: 'textfield'

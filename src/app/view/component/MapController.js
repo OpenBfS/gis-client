@@ -72,7 +72,7 @@ Ext.define('Koala.view.component.MapController', {
                 me.offsetBarChartWin(barChartWin);
                 Ext.WindowManager.bringToFront(barChartWin);
             } else {
-                me.openGetFeatureInfoWindow(olFeat);
+                Ext.log.warn('No timeseries- or barchart-config found.');
             }
         });
 
@@ -189,20 +189,6 @@ Ext.define('Koala.view.component.MapController', {
         // show the window itself
         win.show();
 
-        return win;
-    },
-
-    /**
-    *
-    */
-    openGetFeatureInfoWindow: function() {
-        var win = Ext.ComponentQuery.query('window[name=getfeatureinfowin]')[0];
-
-       // create the window if it doesn't exist already
-        if (!win) {
-//           win = Ext.create("Koala.view.window.GetFeatureInfoWindow");
-        }
-//       win.show();
         return win;
     },
 

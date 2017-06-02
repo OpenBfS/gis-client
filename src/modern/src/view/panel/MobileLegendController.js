@@ -477,32 +477,44 @@ Ext.define('Koala.view.panel.MobileLegendController', {
      */
     showLayerInfo: function(layer) {
         var view = this.getView();
+        var metadata = layer.metadata;
         var metadataInfoPanel = view.up('app-main').down('k-panel-mobilemetadatainfo');
+        var vm = metadataInfoPanel.getViewModel();
 
-        var cql = 'Identifier = \'' + layer.metadata.id + '\'';
-        var metadataStore = Ext.create('Koala.store.MetadataSearch');
-        metadataStore.getProxy().setExtraParam('constraint', cql);
-        metadataStore.on('load', function(store, recs) {
-            var rec = recs && recs[0];
-            if (rec && metadataInfoPanel) {
-                var vm = metadataInfoPanel.getViewModel();
-                var fieldNames = Koala.view.panel.MobileMetadataInfo.fieldNames;
-                var data = [];
-
-                Ext.Object.each(fieldNames, function(key, value) {
-                    data.push({
-                        'key': value,
-                        'value': rec.get(key)
-                    });
-                });
-
-                vm.set('name', rec.get('name'));
-                vm.set('data', data);
+        if (metadata && metadata.isRodosLayer) {
+            if (metadata.description) {
+                vm.set('name', metadata.treeTitle);
+                metadataInfoPanel.down('dataview').hide();
+                metadataInfoPanel.setHtml(metadata.description);
                 metadataInfoPanel.show();
             }
-            Ext.defer(metadataStore.destroy, 1000, metadataStore);
-        }, this, {single: true});
-        metadataStore.load();
+        } else {
+            metadataInfoPanel.down('dataview').show();
+            var cql = 'Identifier = \'' + layer.metadata.id + '\'';
+            var metadataStore = Ext.create('Koala.store.MetadataSearch');
+            metadataStore.getProxy().setExtraParam('constraint', cql);
+            metadataStore.on('load', function(store, recs) {
+                var rec = recs && recs[0];
+                if (rec && metadataInfoPanel) {
+                    var fieldNames = Koala.view.panel.MobileMetadataInfo.fieldNames;
+                    var data = [];
+
+                    Ext.Object.each(fieldNames, function(key, value) {
+                        data.push({
+                            'key': value,
+                            'value': rec.get(key)
+                        });
+                    });
+
+                    vm.set('name', rec.get('name'));
+                    vm.set('data', data);
+                    metadataInfoPanel.show();
+                }
+                Ext.defer(metadataStore.destroy, 1000, metadataStore);
+            }, this, {single: true});
+            metadataStore.load();
+        }
+
     },
 
     /**

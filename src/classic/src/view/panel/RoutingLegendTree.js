@@ -220,7 +220,21 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         shortInfoHandler: function(btn) {
             var record = btn.layerRec;
-            var cql = 'Identifier = \'' + record.get('metadata').id + '\'';
+            var metadata = record.get('metadata');
+
+            if (metadata.isRodosLayer) {
+                if (metadata.description) {
+                    Ext.create('Ext.window.Window', {
+                        title: metadata.treeTitle,
+                        layout: 'fit',
+                        html: metadata.description,
+                        autoShow: true
+                    });
+                }
+                return;
+            }
+
+            var cql = 'Identifier = \'' + metadata.id + '\'';
             var metadataStore = Ext.create('Koala.store.MetadataSearch');
             metadataStore.getProxy().setExtraParam('constraint', cql);
             metadataStore.on('load', function(store, recs) {
