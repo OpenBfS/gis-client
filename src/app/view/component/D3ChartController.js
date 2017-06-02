@@ -1412,7 +1412,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
 
         Ext.each(seriesData, function(item) {
-            if (Koala.Application.isUtc()) {
+            if (Koala.Application.isUtc() && item[xAxisAttr]) {
                 item[xAxisAttr] = Koala.util.Date.removeUtcOffset(item[xAxisAttr]);
             }
         });

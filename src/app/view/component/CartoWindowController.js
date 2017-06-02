@@ -53,6 +53,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createTabs: function() {
         var me = this;
         var view = me.getView();
+
+        // TODO Strangly the view gets assigned the view.tabs from the previous
+        // cartowindow so we need to reset it. Maybe we need a viewmodel.
+        view.tabs = [];
         var layer = view.getLayer();
 
         if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
@@ -308,7 +312,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
             children: [{
                 tag: 'label',
                 for: tabIdString,
-                tabIndex: tabIndex
+                tabIndex: tabIndex,
+                style: {
+                    position: 'absolute',
+                    top: '-2em',
+                    left: (tabIndex * 100) + 'px'
+                }
             }, {
                 tag: 'input',
                 id: tabIdString,
@@ -318,7 +327,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 'aria-hidden': true
             }, {
                 tag: 'h2',
-                html: config.title
+                html: config.title,
+                style: {
+                    position: 'absolute',
+                    top: '-2em',
+                    left: (tabIndex * 100) + 'px'
+                }
             }, {
                 tag: 'div',
                 cls: 'content tab ' + tabIndex,
@@ -443,7 +457,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var map = view.getMap();
 
-        map.un('pointermove', me.pointerMoveListener);
+        map.un('pointermove', view.pointerMoveListener);
         map.removeLayer(view.lineLayer);
     }
 
