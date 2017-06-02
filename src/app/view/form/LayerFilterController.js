@@ -114,7 +114,11 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @param  {Object} metadata layer metadata, must be set
      */
     updateAutorefresh: function(view, metadata) {
-        var autorefresh = view.query('checkbox')[0].checked;
+        var box = view.down('checkbox[name=autorefreshcheckbox]');
+        if (!box) {
+            return;
+        }
+        var autorefresh = box.checked;
         if (!autorefresh) {
             delete this.__proto__.autorefreshMap[metadata.id];
         } else {
