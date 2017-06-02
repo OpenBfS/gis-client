@@ -23,7 +23,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
     requires: [
         'Ext.util.CSV',
         'Ext.Promise',
-        'Ext.Ajax'
+        'Ext.Ajax',
+        'BasiGX.util.Layer'
     ],
 
     /**
@@ -38,7 +39,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         me.createOverlay();
 
+        me.getOrCreateLineLayer();
+
         me.createLineFeature();
+
     },
 
     /**
@@ -393,26 +397,42 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         map.on('pointermove', view.pointerMoveListener);
 
-        me.lineFeatureVectorLayer = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [lineFeature]
-            }),
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'blue',
-                    width: 10
-                })
-            }),
-            name: 'Proof Layer',
-            proofPrintable: true
-        });
-        map.addLayer(me.lineFeatureVectorLayer);
-
+        view.lineLayer.getSource().addFeature(lineFeature);
         view.lineFeature = lineFeature;
     },
 
     /**
-     * OnDestroy listener. It removes the lineFeatureVectorLayer on destroy and
+     * This method creates a vectorlayer which stores the lineFeatures of the
+     * carto-windows. If the layer allready exists it will use this one instead.
+     */
+    getOrCreateLineLayer: function() {
+        var me = this;
+        var view = me.getView();
+        var map = view.getMap();
+        var lineLayer = BasiGX.util.Layer.getLayerByName('carto-window-lines');
+
+        if (!lineLayer) {
+            view.lineLayer = new ol.layer.Vector({
+                source: new ol.source.Vector(),
+                style: new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'blue',
+                        width: 10
+                    })
+                }),
+                name: 'carto-window-lines',
+                proofPrintable: true
+            });
+            view.lineLayer.set(BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER,
+                false);
+            map.addLayer(view.lineLayer);
+        } else {
+            view.lineLayer = lineLayer;
+        }
+    },
+
+    /**
+     * OnDestroy listener. It removes the lineLayer on destroy and
      * removes the pointerMoveListener.
      */
     onDestroy: function() {
@@ -421,7 +441,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var map = view.getMap();
 
         map.un('pointermove', me.pointerMoveListener);
-        map.removeLayer(me.lineFeatureVectorLayer);
+        map.removeLayer(view.lineLayer);
     }
 
 });

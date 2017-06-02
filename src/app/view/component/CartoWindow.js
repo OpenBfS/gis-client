@@ -39,7 +39,7 @@ Ext.define('Koala.view.component.CartoWindow',{
 
     lineFeature: null,
 
-    lineFeatureVectorLayer: null,
+    lineLayer: null,
 
     pointerMoveListener: null,
 
