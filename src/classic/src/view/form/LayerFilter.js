@@ -160,6 +160,7 @@ Ext.define('Koala.view.form.LayerFilter', {
             bind: {
                 fieldLabel: '{refreshAutomatically}'
             },
+            name: 'autorefreshcheckbox',
             checked: checked,
             labelWidth: '100%'
         });
