@@ -24,7 +24,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Ext.util.CSV',
         'Ext.Promise',
         'Ext.Ajax',
-        'BasiGX.util.Layer'
+        'BasiGX.util.Layer',
+        'Koala.util.AppContext',
+        'Koala.util.Object'
     ],
 
     /**
@@ -410,14 +412,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var map = view.getMap();
         var lineLayer = BasiGX.util.Layer.getLayerByName('carto-window-lines');
+        var lineStyle = view.getLayer().get('cartoWindowLineStyle');
 
         if (!lineLayer) {
             view.lineLayer = new ol.layer.Vector({
                 source: new ol.source.Vector(),
                 style: new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: 'blue',
-                        width: 10
+                        color: lineStyle.split(',')[0],
+                        width: lineStyle.split(',')[1]
                     })
                 }),
                 name: 'carto-window-lines',

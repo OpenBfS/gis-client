@@ -1046,6 +1046,7 @@ Ext.define('Koala.util.Layer', {
                 tableContentURL: olProps.tableContentURL,
                 htmlContentProperty: olProps.htmlContentProperty,
                 htmlContentURL: olProps.htmlContentURL,
+                cartoWindowLineStyle: olProps.cartoWindowLineStyle || '#294d71,4',
                 timeSeriesChartProperties: metadata.layerConfig.timeSeriesChartProperties,
                 barChartProperties: metadata.layerConfig.barChartProperties
             };

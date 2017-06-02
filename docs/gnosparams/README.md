@@ -643,6 +643,18 @@ Feature. Die Ersetzungen finden in der URL statt.
 | Default-Wert         | leer |
 | Beispiel             | http://bfs.de/test.html |
 
+**cartoWindowLineStyle**
+
+Der Style der Verbinungslinien zwischen CartoWindow und entsprechendem Feature.
+Kommasepariert werden Farbe und Stärke der Linie angegeben.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Kommaseparierter String |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | '#294d71,4' |
+| Beispiel             | '#FF0000,2' |
+
 
 ## Generische Chart Properties {#genericcharts} (bfs:timeSeriesChartProperty)
 
