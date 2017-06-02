@@ -296,31 +296,29 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var featureId = view.feature.get('id');
         var tabIdString = featureId + ' cartowindow-tab-label-'+ tabIndex;
 
-        var tab = document.createElement('div');
-        tab.className = featureId + ' cartowindow-tab ' + config.className;
-
-        var label = document.createElement('label');
-        label.setAttribute('for', tabIdString);
-        label.setAttribute('tabindex', tabIndex);
-
-        var input = document.createElement('input');
-        input.setAttribute('id', tabIdString);
-        input.setAttribute('type', 'radio');
-        input.setAttribute('name', featureId + ' tabs');
-        input.setAttribute('checked', config.active || false);
-        input.setAttribute('aria-hidden', 'true');
-
-        var header = document.createElement('h2');
-        header.textContent = config.title;
-
-        var content = document.createElement('div');
-        content.className = 'content tab ' + tabIndex;
-        content.innerHTML = config.innerHTML || '';
-
-        tab.appendChild(label);
-        tab.appendChild(input);
-        tab.appendChild(header);
-        tab.appendChild(content);
+        var tab = Ext.DomHelper.createDom({
+            tag: 'div',
+            cls: featureId + ' cartowindow-tab ' + config.className,
+            children: [{
+                tag: 'label',
+                for: tabIdString,
+                tabIndex: tabIndex
+            }, {
+                tag: 'input',
+                id: tabIdString,
+                type: 'radio',
+                name: featureId + ' tabs',
+                checked: config.active || false,
+                'aria-hidden': true
+            }, {
+                tag: 'h2',
+                html: config.title
+            }, {
+                tag: 'div',
+                cls: 'content tab ' + tabIndex,
+                html: config.innerHTML || ''
+            }]
+        });
 
         view.tabs.push(tab);
         return tab;
