@@ -328,10 +328,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                 }
             });
 
-                //limit chart data to 80% of chart height
-                if ((orient !== 'bottom') && (!Ext.isDefined(axis.max) || (Ext.isDefined(axis.max) && (axisDomain[1] > axis.max)))){
-                   axisDomain[1] = axisDomain[1]/0.8;
-                }
+            //limit chart data to 80% of chart height
+            if ((orient !== 'bottom') && (!Ext.isDefined(axis.max) || (Ext.isDefined(axis.max) && (axisDomain[1] > axis.max)))) {
+                axisDomain[1] = axisDomain[1]/0.8;
+            }
 
             // actually set the domain
             if (axisDomain) {
