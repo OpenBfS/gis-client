@@ -67,6 +67,24 @@ Ext.define('Koala.util.Routing', {
             mapView.setZoom(zoom);
         },
 
+        beforeRodosProjectRoute: function(projectUuid, action) {
+            var treeQueryString = Ext.isModern ?
+                'k-panel-treepanel > treelist' :
+                'k-panel-themetree';
+            var treePanel = Ext.ComponentQuery.query(treeQueryString)[0];
+            var treePanelViewModel = treePanel.getViewModel();
+            treePanelViewModel.set('selectedRodosProject', projectUuid);
+            action.resume();
+        },
+
+        /**
+         * [description]
+         * @return {[type]} [description]
+         */
+        onRodosProjectRoute: function(projectUuid) {
+            Koala.util.Rodos.requestLayersOfProject(projectUuid);
+        },
+
         /**
          * Called before the actual #onLayerTreeRoute handlers layer adding to the
          * map, this method ensures that the correct openlayers objects are build
@@ -98,7 +116,7 @@ Ext.define('Koala.util.Routing', {
                     LayerUtil.getMetadataFromUuid(uuid).then(function(md) {
                         gotLayers++;
                         var metadataClone = Ext.clone(md);
-                        me.applyPermalinkFiltersToMetadata(uuid, md.filters, config.filters);
+                        me.applyPermalinkFiltersToMetadata(uuid, md, config.filters);
 
                         var olLayer = LayerUtil.layerFromMetadata(md);
 
@@ -125,7 +143,8 @@ Ext.define('Koala.util.Routing', {
          *                                metadataFilter.
          * @private
          */
-        applyPermalinkFiltersToMetadata: function(uuid, metadataFilters, configFilters) {
+        applyPermalinkFiltersToMetadata: function(uuid, metadata, configFilters) {
+            var metadataFilters = metadata.filters;
             Ext.each(metadataFilters, function(mdFilter) {
                 var permalinkFilter = Ext.Array.findBy(configFilters, function(filter) {
                     var isPointInTime = filter.type === 'pointintime';
@@ -305,14 +324,31 @@ Ext.define('Koala.util.Routing', {
                 if (!Ext.Object.isEmpty(permaObj)) {
                     layersString += JSON.stringify(permaObj);
                     layersString = encodeURIComponent(layersString);
+                    layersString = 'layers/' + layersString;
                 }
             }
 
-            var hash = Ext.String.format('map/{0}/{1}/{2}|layers/{3}',
-                Math.round(lon),
-                Math.round(lat),
-                zoom,
-                layersString);
+            var mapString = Ext.String.format('map/{0}/{1}/{2}',
+                    Math.round(lon),
+                    Math.round(lat),
+                    zoom
+                );
+
+            var treeQueryString = Ext.isModern ?
+                'k-panel-treepanel > treelist' :
+                'k-panel-themetree';
+            var treePanel = Ext.ComponentQuery.query(treeQueryString)[0];
+            var treePanelViewModel = treePanel.getViewModel();
+            var rodosProjectUuid = treePanelViewModel.get('selectedRodosProject');
+
+            if (rodosProjectUuid) {
+                var rodosProjectString = 'rodosproject/' + rodosProjectUuid;
+            }
+
+            var hash = Ext.String.format('{0}|{1}|{2}',
+                mapString,
+                layersString,
+                rodosProjectString);
 
             return hash;
         },

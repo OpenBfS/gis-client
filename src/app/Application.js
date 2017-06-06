@@ -68,6 +68,10 @@ Ext.define('Koala.Application', {
             conditions: {
                 ':layers': '(.*)'
             }
+        },
+        'rodosproject/:rodosproject': {
+            before: 'beforeRodosProjectRoute',
+            action: 'onRodosProjectRoute'
         }
     },
 
@@ -92,17 +96,31 @@ Ext.define('Koala.Application', {
 
     /**
      * Listens to the layers route and does some prechecks. See
-     * Koala.util.Routing.onMapRoute for detailed implementation docs.
+     * Koala.util.Routing.beforeLayerTreeRoute for detailed implementation docs.
      * @type {function}
      */
     beforeLayerTreeRoute: Koala.util.Routing.beforeLayerTreeRoute,
 
     /**
      * Listens to the layers route after beforeLayerTreeRoute. See
-     * Koala.util.Routing.onMapRoute for detailed implementation docs.
+     * Koala.util.Routing.onLayerTreeRoute for detailed implementation docs.
      * @type {function}
      */
     onLayerTreeRoute: Koala.util.Routing.onLayerTreeRoute,
+
+    /**
+     * Listens to the rodosproject route. See
+     * Koala.util.Routing.beforeRodosProjectRoute for detailed implementation docs.
+     * @type {function}
+     */
+    beforeRodosProjectRoute: Koala.util.Routing.beforeRodosProjectRoute,
+
+    /**
+     * Listens to the rodosproject route. See
+     * Koala.util.Routing.onRodosProjectRoute for detailed implementation docs.
+     * @type {function}
+     */
+    onRodosProjectRoute: Koala.util.Routing.onRodosProjectRoute,
 
     /**
      * Gets called on an unmatched route. See Koala.util.Routing.onMapRoute
