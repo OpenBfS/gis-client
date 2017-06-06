@@ -14,34 +14,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.component.CartoWindow
+ * @class Koala.view.component.CartoWindowModel
  */
-Ext.define('Koala.view.component.CartoWindow',{
-    extend: 'Ext.Component',
-    xtype: 'k-component-cartowindow',
+Ext.define('Koala.view.component.CartoWindowModel', {
+    extend: 'Ext.app.ViewModel',
+    alias: 'viewmodel.k-component-cartowindow',
 
-    cls: 'cartowindow',
-
-    controller: 'k-component-cartowindow',
-    viewModel: 'k-component-cartowindow',
-
-    // width: 200,
-    // minHeight: 20,
-
-    shrinkWrap: true,
-
-    pointerMoveListener: null,
-
-    config: {
-        map: null,
-        layer: null,
-        feature: null
-    },
-
-    listeners: {
-        boxready: 'onInitialize',
-        initialize: 'onInitialize',
-        beforedestroy: 'onBeforeDestroy'
+    data: {
+        lineFeature: null,
+        lineLayer: null,
+        overlay: null,
+        tabs: []
     }
 
 });

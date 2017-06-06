@@ -18,6 +18,27 @@
   background: #999;
 }
 
+.cartowindow > .closeElement {
+    cursor: pointer;
+    display: none;
+    position: absolute;
+    height: 2.2em;
+    top: -2.2em;
+    line-height: 2em;
+    background: #999;
+    color: #fff;
+    padding: 0.1em 0.2em;
+    width: 2.1em;
+}
+
+.cartowindow:hover > .closeElement {
+    display: inherit;
+}
+
+.cartowindow > .closeElement > i.fa {
+    font-size: 2em;
+}
+
 /**
  * because labels come first in source order - we use z-index to move them in front of the headings
  */
@@ -66,61 +87,6 @@
   top: 0;
 }
 
-
-/**
- * We target all the label/heading pairs
- * we increment the :nth-child() params as well as the left value (according to "tab" width)
- */
-
-.cartowindow > div.cartowindow-tab:nth-child(1) > label,
-.cartowindow > div.cartowindow-tab:nth-child(1) > h2 {
-    position: absolute;
-    top: -2em;
-    left: 0;
-}
-
-.cartowindow > div.cartowindow-tab:nth-child(2) > label,
-.cartowindow > div.cartowindow-tab:nth-child(2) > h2 {
-    position: absolute;
-    top: -2em;
-    left: 100px;
-}
-
-.cartowindow > div.cartowindow-tab:nth-child(3) > label,
-.cartowindow > div.cartowindow-tab:nth-child(3) > h2 {
-    position: absolute;
-    top: -2em;
-    left: 200px;
-}
-
-.cartowindow > div.cartowindow-tab:nth-child(4) > label,
-.cartowindow > div.cartowindow-tab:nth-child(4) > h2 {
-    position: absolute;
-    top: -2em;
-    left: 300px;
-}
-
-.cartowindow > div.cartowindow-tab:nth-child(5) > label,
-.cartowindow > div.cartowindow-tab:nth-child(5) > h2 {
-    position: absolute;
-    top: -2em;
-    left: 400px;
-}
-
-.cartowindow > div.cartowindow-tab:nth-child(6) > label,
-.cartowindow > div.cartowindow-tab:nth-child(6) > h2 {
-    position: absolute;
-    top: -2em;
-    left: 500px;
-}
-
-.cartowindow > div.cartowindow-tab:nth-child(7) > label,
-.cartowindow > div.cartowindow-tab:nth-child(7) > h2 {
-    position: absolute;
-    top: -2em;
-    left: 600px;
-}
-
 /**
  * we visually hide all the panels
  * https://developer.yahoo.com/blogs/ydn/clip-hidden-content-better-accessibility-53456.html
@@ -131,6 +97,7 @@
   padding: 5px;
   overflow: hidden;
 }
+
 /**
  * we reveal a panel depending on which control is selected
  */

@@ -23,7 +23,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
     requires: [
         'Ext.util.CSV',
         'Ext.Promise',
-        'Ext.Ajax'
+        'Ext.Ajax',
+        'BasiGX.util.Layer',
+        'Koala.util.AppContext',
+        'Koala.util.Object'
     ],
 
     /**
@@ -38,7 +41,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         me.createOverlay();
 
+        me.getOrCreateLineLayer();
+
         me.createLineFeature();
+
     },
 
     /**
@@ -48,6 +54,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var layer = view.getLayer();
+        me.createCloseElement();
 
         if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
             me.createTimeSeriesTab();
@@ -65,11 +72,47 @@ Ext.define('Koala.view.component.CartoWindowController', {
             me.createHtmlTab();
         }
 
-        // TODO Add if test
-        me.createHoverTemplateTab();
+        if (layer.get('hoverTpl')) {
+            me.createHoverTemplateTab();
+        }
 
-        // TODO
-        // me.createCloseIconTab();
+        me.updateCloseElementPosition();
+    },
+
+    /**
+     * Creates the closeElement and adds it to the tabwindow.
+     */
+    createCloseElement: function() {
+        var me = this;
+        var view = me.getView();
+        var el = view.getEl().dom;
+        var featureId = view.feature.get('id');
+        var closeElement = Ext.DomHelper.createDom({
+            tag: 'div',
+            html: '<i class="fa fa-times-circle" aria-hidden="true"></i>',
+            cls: featureId + ' closeElement'
+        });
+
+        closeElement.addEventListener('click', function() {
+            view.destroy();
+        });
+
+        el.appendChild(closeElement);
+    },
+
+    /**
+     * Updates the position of the close element due to the amount of rendered
+     * tabs.
+     */
+    updateCloseElementPosition: function() {
+        var me = this;
+        var view = me.getView();
+        var el = view.getEl();
+        var viewModel = me.getViewModel();
+        var tabs = viewModel.get('tabs');
+        var tabIndex = tabs.length;
+        var closeElement = el.down('.closeElement');
+        closeElement.setStyle('left', (tabIndex*100) + 'px');
     },
 
     /**
@@ -235,6 +278,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             });
 
             el.appendChild(timeSeriesTab);
+            me.updateCloseElementPosition();
         });
     },
 
@@ -254,6 +298,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             });
 
             el.appendChild(timeSeriesTab);
+            me.updateCloseElementPosition();
         });
     },
 
@@ -292,37 +337,47 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createTabElement: function(config) {
         var me = this;
         var view = me.getView();
-        var tabIndex = view.tabs.length;
+        var viewModel = me.getViewModel();
+        var tabs = viewModel.get('tabs');
+        var tabIndex = tabs.length;
         var featureId = view.feature.get('id');
         var tabIdString = featureId + ' cartowindow-tab-label-'+ tabIndex;
 
-        var tab = document.createElement('div');
-        tab.className = featureId + ' cartowindow-tab ' + config.className;
+        var tab = Ext.DomHelper.createDom({
+            tag: 'div',
+            cls: featureId + ' cartowindow-tab ' + config.className,
+            children: [{
+                tag: 'label',
+                for: tabIdString,
+                tabIndex: tabIndex,
+                style: {
+                    position: 'absolute',
+                    top: '-2em',
+                    left: (tabIndex * 100) + 'px'
+                }
+            }, {
+                tag: 'input',
+                id: tabIdString,
+                type: 'radio',
+                name: featureId + ' tabs',
+                checked: config.active || false,
+                'aria-hidden': true
+            }, {
+                tag: 'h2',
+                html: config.title,
+                style: {
+                    position: 'absolute',
+                    top: '-2em',
+                    left: (tabIndex * 100) + 'px'
+                }
+            }, {
+                tag: 'div',
+                cls: 'content tab ' + tabIndex,
+                html: config.innerHTML || ''
+            }]
+        });
 
-        var label = document.createElement('label');
-        label.setAttribute('for', tabIdString);
-        label.setAttribute('tabindex', tabIndex);
-
-        var input = document.createElement('input');
-        input.setAttribute('id', tabIdString);
-        input.setAttribute('type', 'radio');
-        input.setAttribute('name', featureId + ' tabs');
-        input.setAttribute('checked', config.active || false);
-        input.setAttribute('aria-hidden', 'true');
-
-        var header = document.createElement('h2');
-        header.textContent = config.title;
-
-        var content = document.createElement('div');
-        content.className = 'content tab ' + tabIndex;
-        content.innerHTML = config.innerHTML || '';
-
-        tab.appendChild(label);
-        tab.appendChild(input);
-        tab.appendChild(header);
-        tab.appendChild(content);
-
-        view.tabs.push(tab);
+        tabs.push(tab);
         return tab;
     },
 
@@ -333,6 +388,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createOverlay: function() {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var map = view.getMap();
 
         var overlay = new ol.Overlay({
@@ -345,7 +401,37 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         map.addOverlay(overlay);
 
-        view.overlay = overlay;
+        viewModel.set('overlay', overlay);
+    },
+
+    /**
+     * This method creates a vectorlayer which stores the lineFeatures of the
+     * carto-windows. If the layer allready exists it will use this one instead.
+     */
+    getOrCreateLineLayer: function() {
+        var me = this;
+        var view = me.getView();
+        var viewModel = me.getViewModel();
+        var map = view.getMap();
+        var lineLayer = BasiGX.util.Layer.getLayerByName('carto-window-lines');
+
+        if (!lineLayer) {
+            var lineStyle = view.getLayer().get('cartoWindowLineStyle');
+            lineLayer = new ol.layer.Vector({
+                source: new ol.source.Vector(),
+                style: new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: lineStyle.split(',')[0],
+                        width: lineStyle.split(',')[1]
+                    })
+                }),
+                name: 'carto-window-lines',
+                proofPrintable: true
+            });
+            lineLayer.set(BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER, false);
+            map.addLayer(lineLayer);
+        }
+        viewModel.set('lineLayer', lineLayer);
     },
 
     /**
@@ -356,11 +442,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createLineFeature: function() {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var map = view.getMap();
         var feature = view.getFeature();
         var coords = feature.getGeometry().getCoordinates();
         var el = view.getEl().dom;
-        var overlayer = view.overlay;
+        var overlay = viewModel.get('overlay');
 
         var lineFeature = new ol.Feature({
             geometry: new ol.geom.LineString([coords, coords])
@@ -376,54 +463,42 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.addEventListener('mousedown', function(event) {
             if (event.target.tagName === 'LABEL') {
                 dragPan.setActive(false);
-                overlayer.set('dragging', true);
+                overlay.set('dragging', true);
             }
         });
         el.addEventListener('mouseup', function() {
-            if (overlayer.get('dragging') === true) {
+            if (overlay.get('dragging') === true) {
                 dragPan.setActive(true);
-                overlayer.set('dragging', false);
+                overlay.set('dragging', false);
             }
         });
 
         view.pointerMoveListener = function(evt) {
-            if (overlayer.get('dragging') === true) {
-                overlayer.setPosition(evt.coordinate);
+            if (overlay.get('dragging') === true) {
+                overlay.setPosition(evt.coordinate);
                 lineFeature.getGeometry().setCoordinates([coords, evt.coordinate]);
             }
         };
 
         map.on('pointermove', view.pointerMoveListener);
 
-        me.lineFeatureVectorLayer = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [lineFeature]
-            }),
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'blue',
-                    width: 10
-                })
-            }),
-            name: 'Proof Layer',
-            proofPrintable: true
-        });
-        map.addLayer(me.lineFeatureVectorLayer);
-
-        view.lineFeature = lineFeature;
+        viewModel.get('lineLayer').getSource().addFeature(lineFeature);
+        viewModel.set('lineFeature', lineFeature);
     },
 
     /**
-     * OnDestroy listener. It removes the lineFeatureVectorLayer on destroy and
+     * onBeforeDestroy listener. It removes the lineLayer before destroy and
      * removes the pointerMoveListener.
      */
-    onDestroy: function() {
+    onBeforeDestroy: function() {
         var me = this;
         var view = me.getView();
+        var viewModel = me.getViewModel();
         var map = view.getMap();
+        var lineLayer = viewModel.get('lineLayer');
 
-        map.un('pointermove', me.pointerMoveListener);
-        map.removeLayer(me.lineFeatureVectorLayer);
+        map.un('pointermove', view.pointerMoveListener);
+        map.removeLayer(lineLayer);
     }
 
 });
