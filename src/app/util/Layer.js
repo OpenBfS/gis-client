@@ -136,8 +136,8 @@ Ext.define('Koala.util.Layer', {
          *     charts.
          */
         isChartableLayer: function(l) {
-            var me = Koala.util.Layer;
-            return me.isTimeseriesChartLayer(l) || me.isBarChartLayer(l);
+            var staticMe = Koala.util.Layer;
+            return staticMe.isTimeseriesChartLayer(l) || staticMe.isBarChartLayer(l);
         },
 
         /**
@@ -275,7 +275,8 @@ Ext.define('Koala.util.Layer', {
          *     or `filters`.
          */
         getFiltersFromMetadata: function(metadata) {
-            if (!this.metadataHasFilters(metadata)) {
+            var staticMe = Koala.util.Layer;
+            if (!staticMe.metadataHasFilters(metadata)) {
                 return null;
             }
             var filter = metadata.filter;
@@ -312,7 +313,8 @@ Ext.define('Koala.util.Layer', {
         },
 
         getEffectiveTimeFilterFromMetadata: function(metadata) {
-            var filters = Ext.clone(this.getFiltersFromMetadata(metadata));
+            var staticMe = Koala.util.Layer;
+            var filters = Ext.clone(staticMe.getFiltersFromMetadata(metadata));
             var timeTypes = ['pointintime', 'timerange'];
             var effectiveFilter = null;
             if (filters !== null) {
@@ -356,10 +358,11 @@ Ext.define('Koala.util.Layer', {
          *     utc-mode.
          */
         appIsUtc: function() {
+            var staticMe = Koala.util.Layer;
             if ('Application' in Koala) {
                 return Koala.Application.isUtc();
             }
-            return !this.appIsLocal();
+            return !staticMe.appIsLocal();
         },
 
         /**
@@ -371,7 +374,7 @@ Ext.define('Koala.util.Layer', {
          * @returns {string} A textual representation of the filters or ''.
          */
         getFiltersTextFromMetadata: function(metadata) {
-            var staticMe = this;
+            var staticMe = Koala.util.Layer;
             var filters = null;
             if (Array.isArray(metadata)) { // it's a 'filters' array
                 filters = metadata;
@@ -441,16 +444,15 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
-         * @param {string} uuid
-         * @returns {object} metadata json object
+         * This fetches the metadata from gnos by a the given uuid. It returns
+         * an Ext.Promise to work with the metadata.
+         *
+         * @param {String} uuid The uuid of a gnos layer.
+         * @returns {Ext.Promise} An Ext.Promise. The resolve function receives
+         *                        the metadata as an object.
          */
-        getMetadataFromUuidAndThen: function(uuid, ajaxCb, errCb) {
-            var me = this;
-
-            if (!Ext.isFunction(errCb)) {
-                errCb = Ext.emptyFn;
-            }
-
+        getMetadataFromUuid: function(uuid) {
+            var staticMe = Koala.util.Layer;
             var appContext = BasiGX.view.component.Map.guess().appContext;
             var urls = appContext.data.merge.urls;
             var defaultHeaders;
@@ -461,55 +463,54 @@ Ext.define('Koala.util.Layer', {
                 };
             }
 
-            Ext.Ajax.request({
-                url: urls['metadata-xml2json'],
-                params: {
-                    uuid: uuid
-                },
-                defaultHeaders: defaultHeaders,
-                method: 'GET',
+            return new Ext.Promise(function(resolve, reject) {
+                Ext.Ajax.request({
+                    url: urls['metadata-xml2json'],
+                    params: {
+                        uuid: uuid
+                    },
+                    defaultHeaders: defaultHeaders,
+                    method: 'GET',
+                    success: function(response) {
+                        var obj;
+                        try {
+                            // replace any occurencies of \{\{ (as it may still be
+                            // stored in db) with the new delimiters [[
+                            //
+                            // These arrive here as \\{\\{ (the backslash has been
+                            // escaped for the JSON format)
+                            //
+                            // Since both { and \ have a special meaning in regular
+                            // expressions, we need to escape them again with a \
+                            var escapedCurlyOpen = /\\\\\{\\\\\{/g;
+                            var escapedCurlyClose = /\\\\\}\\\\\}/g;
+                            var txt = response.responseText;
 
-                success: function(response) {
-                    var obj;
-                    try {
-                        // replace any occurencies of \{\{ (as it may still be
-                        // stored in db) with the new delimiters [[
-                        //
-                        // These arrive here as \\{\\{ (the backslash has been
-                        // escaped for the JSON format)
-                        //
-                        // Since both { and \ have a special meaning in regular
-                        // expressions, we need to escape them again with a \
-                        var escapedCurlyOpen = /\\\\\{\\\\\{/g;
-                        var escapedCurlyClose = /\\\\\}\\\\\}/g;
-                        var txt = response.responseText;
-
-                        txt = txt.replace(escapedCurlyOpen, '[[');
-                        txt = txt.replace(escapedCurlyClose, ']]');
-                        obj = Ext.decode(txt);
-                    } catch (ex) {
-                        // TODO i18n
-                        Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
-                    } finally {
-                        if (Koala.util.Layer.minimumValidMetadata(obj)) {
-                            me.resolveMetadataLinks(obj)
-                            .then(function() {
-                                ajaxCb.call(me, obj);
-                            });
-                        } else {
-                            // TODO i18n
-                            Ext.toast('Für den Datensatz scheinen nicht ausreichend Metadaten vorzuliegen.');
+                            txt = txt.replace(escapedCurlyOpen, '[[');
+                            txt = txt.replace(escapedCurlyClose, ']]');
+                            obj = Ext.decode(txt);
+                        } catch (ex) {
+                            Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
+                        } finally {
+                            if (Koala.util.Layer.minimumValidMetadata(obj)) {
+                                // TODO Can we move this out of here?
+                                staticMe.resolveMetadataLinks(obj)
+                                .then(function() {
+                                    resolve(obj);
+                                });
+                            } else {
+                                reject('Für den Datensatz scheinen nicht ausreichend Metadaten vorzuliegen.');
+                            }
                         }
-                    }
-                },
-
-                failure: function(response) {
-                    var msg = 'server-side failure with status code ' +
+                    },
+                    failure: function(response) {
+                        var msg = 'server-side failure with status code ' +
                         response.status;
-                    Ext.log.error(msg);
-                    errCb();
-                }
+                        reject(msg);
+                    }
+                });
             });
+
         },
 
         /**
@@ -519,6 +520,7 @@ Ext.define('Koala.util.Layer', {
          * @return {Ext.Promise}          top level call returns a promise which is resolved after all replacements are done
          */
         resolveMetadataLinks: function(metadata, promises) {
+            var staticMe = Koala.util.Layer;
             var first = promises === undefined;
             if (first) {
                 promises = [];
@@ -526,19 +528,19 @@ Ext.define('Koala.util.Layer', {
             var i;
             if (metadata instanceof Array) {
                 for (i = 0; i < metadata.length; ++i) {
-                    this.resolveMetadataLinks(metadata[i], promises)
-                    .then(this.resolveMetadataLink(i, metadata));
+                    staticMe.resolveMetadataLinks(metadata[i], promises)
+                    .then(staticMe.resolveMetadataLink(i, metadata));
                 }
             } else if (metadata instanceof Object) {
                 var keys = Object.keys(metadata);
                 for (i = 0; i < keys.length; ++i) {
-                    this.resolveMetadataLinks(metadata[keys[i]], promises)
-                    .then(this.resolveMetadataLink(keys[i], metadata));
+                    staticMe.resolveMetadataLinks(metadata[keys[i]], promises)
+                    .then(staticMe.resolveMetadataLink(keys[i], metadata));
                 }
             } else if (typeof metadata === 'string') {
                 var ms = metadata.match(/^url:(.+)/);
                 if (ms) {
-                    var promise = this.getMetadataValue(ms[1]);
+                    var promise = staticMe.getMetadataValue(ms[1]);
                     promises.push(promise);
                     return promise;
                 }
@@ -604,11 +606,11 @@ Ext.define('Koala.util.Layer', {
         },
 
         addLayerToMap: function(metadata) {
-            var me = this;
+            var staticMe = Koala.util.Layer;
             var metadataClone = Ext.clone(metadata);
-            var layer = me.layerFromMetadata(metadata);
-            me.setOriginalMetadata(layer, metadataClone);
-            me.addOlLayerToMap(layer);
+            var layer = staticMe.layerFromMetadata(metadata);
+            staticMe.setOriginalMetadata(layer, metadataClone);
+            staticMe.addOlLayerToMap(layer);
         },
 
         /**
@@ -618,7 +620,7 @@ Ext.define('Koala.util.Layer', {
          * (E.g from the filterpanel) have been added to the map and the tree.
          */
         repaintLayerFilterIndication: function() {
-            var me = this;
+            var staticMe = Koala.util.Layer;
             var selector = 'k-panel-routing-legendtree';
             var treePanel = Ext.ComponentQuery.query(selector)[0];
             if (!treePanel) {
@@ -629,7 +631,7 @@ Ext.define('Koala.util.Layer', {
                 var layer = treeNode.getOlLayer();
                 var suffixId = layer.get('__suffix_id__');
                 if (suffixId) {
-                    var txt = me.getFiltersTextFromMetadata(layer.metadata);
+                    var txt = staticMe.getFiltersTextFromMetadata(layer.metadata);
                     var filterIndicator = Ext.get(suffixId);
                     if (filterIndicator) {
                         filterIndicator.setHtml(txt);
@@ -674,10 +676,10 @@ Ext.define('Koala.util.Layer', {
          * @param {Array<ol.layer.Base>} layers The array of layers to add.
          */
         addOlLayersToMap: function(layers) {
-            var me = Koala.util.Layer;
+            var staticMe = Koala.util.Layer;
             Ext.each(layers, function(layer) {
                 if (layer) {
-                    me.addOlLayerToMap(layer);
+                    staticMe.addOlLayerToMap(layer);
                 }
             });
         },
@@ -688,15 +690,15 @@ Ext.define('Koala.util.Layer', {
          * @param {ol.layer.Base} layer The layer to add.
          */
         addOlLayerToMap: function(layer) {
-            var me = this;
+            var staticMe = Koala.util.Layer;
 
-            if (!me.hasOriginalMetadata(layer)) {
+            if (!staticMe.hasOriginalMetadata(layer)) {
                 Ext.log.warn('Layer did not have original GNOS metadata ' +
                     'at the expected location');
             }
 
-            var suffixId = me.getSuffixId();
-            var suffix = me.getLayerNameSuffix(suffixId);
+            var suffixId = staticMe.getSuffixId();
+            var suffix = staticMe.getLayerNameSuffix(suffixId);
 
             layer.set('__suffix_id__', suffixId);
             layer.set('suffix', suffix);
@@ -707,12 +709,12 @@ Ext.define('Koala.util.Layer', {
             var mapComp = Ext.ComponentQuery.query('basigx-component-map')[0];
             // attach a listener to the new layer, so that hover artifacts on
             // the get cleaned up when visibility changes base-component-map
-            me.bindLayerVisibilityHandlers(layer, mapComp);
+            staticMe.bindLayerVisibilityHandlers(layer, mapComp);
             mapComp.addLayer(layer);
 
             // Select the newly added layer in the legend tree (handles classic
             // and modern)
-            me.setAsActiveInLegendTree(layer);
+            staticMe.setAsActiveInLegendTree(layer);
         },
 
         /**
@@ -745,7 +747,7 @@ Ext.define('Koala.util.Layer', {
          *
          */
         bindLayerVisibilityHandlers: function(layer, mapComp) {
-            var me = this;
+            var staticMe = Koala.util.Layer;
             if (!mapComp.getPlugin) {
                 return;
             }
@@ -757,7 +759,7 @@ Ext.define('Koala.util.Layer', {
                     // additionally, if the new layer is a group layer, we need to
                     // bind ourself for all sublayers
                     layer.getLayers().forEach(function(subLayer) {
-                        me.bindLayerVisibilityHandlers(subLayer, mapComp);
+                        staticMe.bindLayerVisibilityHandlers(subLayer, mapComp);
                     });
                 }
             }
@@ -776,7 +778,7 @@ Ext.define('Koala.util.Layer', {
          *     layer with the filter added to the map.
          */
         showChangeFilterSettingsWin: function(metadata, layer) {
-            var staticMe = this;
+            var staticMe = Koala.util.Layer;
             var existingLayer = layer ? layer : null;
             var filters = staticMe.getFiltersFromMetadata(metadata);
 
@@ -816,14 +818,16 @@ Ext.define('Koala.util.Layer', {
          * @public
          */
         addLayerByUuid: function(uuid) {
-            this.getMetadataFromUuidAndThen(uuid, this.addLayerToMap);
+            var staticMe = Koala.util.Layer;
+            staticMe.getMetadataFromUuid(uuid).then(staticMe.addLayerToMap);
         },
 
         /**
          * @public
          */
         showChangeFilterSettingsWinByUuid: function(uuid) {
-            this.getMetadataFromUuidAndThen(uuid, this.showChangeFilterSettingsWin);
+            var staticMe = Koala.util.Layer;
+            staticMe.getMetadataFromUuid(uuid).then(staticMe.showChangeFilterSettingsWin);
         },
 
         /**
@@ -873,17 +877,18 @@ Ext.define('Koala.util.Layer', {
         },
 
         layerFromMetadata: function(metadata) {
-            var layerClassDecision = this.getLayerClassFromMetadata(metadata);
+            var staticMe = Koala.util.Layer;
+            var layerClassDecision = staticMe.getLayerClassFromMetadata(metadata);
             var LayerClass = layerClassDecision.clazz;
-            var SourceClass = this.getSourceClassFromMetadata(metadata, layerClassDecision);
+            var SourceClass = staticMe.getSourceClassFromMetadata(metadata, layerClassDecision);
             var layerConfig = {};
             var sourceConfig = {};
 
             // apply default filter to layer, if needed
             metadata = Koala.util.Layer.adjustMetadataAccordingToFilters(metadata);
 
-            var internalLayerConfig = this.getInternalLayerConfig(metadata); //TODO arguments?
-            var internalSourceConfig = this.getInternalSourceConfig(metadata, SourceClass);
+            var internalLayerConfig = staticMe.getInternalLayerConfig(metadata); //TODO arguments?
+            var internalSourceConfig = staticMe.getInternalSourceConfig(metadata, SourceClass);
 
             var olProps = metadata.layerConfig ?
                     metadata.layerConfig.olProperties || {} :
@@ -914,13 +919,12 @@ Ext.define('Koala.util.Layer', {
                 var printUuid = metadata.layerConfig.olProperties.printLayer;
                 var printLayer;
 
-                this.getMetadataFromUuidAndThen(printUuid, (function(md) {
+                staticMe.getMetadataFromUuid(printUuid).then(function(md) {
                     var metadataClone = Ext.clone(md);
-                    printLayer = this.layerFromMetadata(md);
-                    this.setOriginalMetadata(printLayer, metadataClone);
+                    printLayer = staticMe.layerFromMetadata(md);
+                    staticMe.setOriginalMetadata(printLayer, metadataClone);
                     layer.set('printLayer', printLayer);
-                }).bind(this)
-                );
+                });
             }
             return layer;
         },
@@ -1178,8 +1182,8 @@ Ext.define('Koala.util.Layer', {
          *     filter.
          */
         isSpecialStylesValueFilter: function(f) {
-            var me = this;
-            if (me.isViewParamFilter(f) &&
+            var staticMe = Koala.util.Layer;
+            if (staticMe.isViewParamFilter(f) &&
                 f.type === 'value' &&
                 f.param === 'STYLES') {
                 return true;
@@ -1197,8 +1201,8 @@ Ext.define('Koala.util.Layer', {
          *     `'test_data'`-filter.
          */
         isSpecialTestDataValueFilter: function(f) {
-            var me = this;
-            if (me.isViewParamFilter(f) &&
+            var staticMe = Koala.util.Layer;
+            if (staticMe.isViewParamFilter(f) &&
                 f.type === 'value' &&
                 f.param === 'test_data' &&
                 f.value === 'true') {
@@ -1228,7 +1232,8 @@ Ext.define('Koala.util.Layer', {
          *     location of any request.
          */
         isStandardLocationFilter: function(f) {
-            return !this.isViewParamFilter(f);
+            var staticMe = Koala.util.Layer;
+            return !staticMe.isViewParamFilter(f);
         },
 
         /**
@@ -1243,11 +1248,11 @@ Ext.define('Koala.util.Layer', {
          * @return {Object} The possibly altered metadata object.
          */
         handleSpecialStylesViewParamFilter: function(metadata) {
-            var me = this;
+            var staticMe = Koala.util.Layer;
             var filters = Ext.Array.clone(metadata.filters);
             var stylesFilter;
             Ext.each(filters, function(filter) {
-                if (me.isSpecialStylesValueFilter(filter)) {
+                if (staticMe.isSpecialStylesValueFilter(filter)) {
                     stylesFilter = filter;
                 }
             });
@@ -1272,11 +1277,11 @@ Ext.define('Koala.util.Layer', {
          * @return {Object} The possibly altered metadata object.
          */
         handleSpecialTestDataViewParamFilter: function(metadata) {
-            var me = this;
+            var staticMe = Koala.util.Layer;
             var filters = Ext.Array.clone(metadata.filters);
             var testDataFilter;
             Ext.each(filters, function(filter) {
-                if (me.isSpecialTestDataValueFilter(filter)) {
+                if (staticMe.isSpecialTestDataValueFilter(filter)) {
                     testDataFilter = filter;
                 }
             });
@@ -1293,29 +1298,29 @@ Ext.define('Koala.util.Layer', {
          *
          */
         adjustMetadataAccordingToFilters: function(metadata) {
-            var me = this;
-            var filters = this.getFiltersFromMetadata(metadata);
+            var staticMe = Koala.util.Layer;
+            var filters = staticMe.getFiltersFromMetadata(metadata);
 
             if (!filters) {
                 return metadata;
             }
 
-            metadata = me.applyDefaultsIfNotChangedByUser(metadata, filters);
+            metadata = staticMe.applyDefaultsIfNotChangedByUser(metadata, filters);
 
             // TODO Rethink this handling, special wish by SB to get this in
             //      fast; building upon the handling of 'test_data' by BfS
-            metadata = me.handleSpecialStylesViewParamFilter(metadata);
-            metadata = me.handleSpecialTestDataViewParamFilter(metadata);
+            metadata = staticMe.handleSpecialStylesViewParamFilter(metadata);
+            metadata = staticMe.handleSpecialTestDataViewParamFilter(metadata);
 
             // get them again, they may have changed…
-            filters = me.getFiltersFromMetadata(metadata);
+            filters = staticMe.getFiltersFromMetadata(metadata);
 
-            metadata = me.moveFiltersToViewparams(metadata, filters);
+            metadata = staticMe.moveFiltersToViewparams(metadata, filters);
 
             if (filters.length !== 0) {
                 // The filters should not be encoded in the viewparams, but as
                 // WMS-T and friends
-                metadata = me.adjustMetadataFiltersToStandardLocations(
+                metadata = staticMe.adjustMetadataFiltersToStandardLocations(
                     metadata,
                     filters
                 );
@@ -1327,23 +1332,23 @@ Ext.define('Koala.util.Layer', {
          *
          */
         applyDefaultsIfNotChangedByUser: function(metadata, filters) {
-            var me = this;
+            var staticMe = Koala.util.Layer;
             var adjustedFilters = [];
             Ext.each(filters, function(filter) {
                 var filterType = (filter.type || '').toLowerCase();
                 var adjFilter;
                 switch (filterType) {
                     case 'timerange':
-                        adjFilter = me.applyDefaultsTimerangeFilter(filter);
+                        adjFilter = staticMe.applyDefaultsTimerangeFilter(filter);
                         break;
                     case 'rodostime':
-                        adjFilter = me.applyDefaultsRodosTimeFilter(filter);
+                        adjFilter = staticMe.applyDefaultsRodosTimeFilter(filter);
                         break;
                     case 'pointintime':
-                        adjFilter = me.applyDefaultsPointInTimeFilter(filter);
+                        adjFilter = staticMe.applyDefaultsPointInTimeFilter(filter);
                         break;
                     case 'value':
-                        adjFilter = me.applyDefaultsValueFilter(filter);
+                        adjFilter = staticMe.applyDefaultsValueFilter(filter);
                         break;
                     default:
                         break;
@@ -1437,23 +1442,23 @@ Ext.define('Koala.util.Layer', {
         },
 
         adjustMetadataFiltersToStandardLocations: function(metadata, filters) {
-            var me = this;
+            var staticMe = Koala.util.Layer;
             Ext.each(filters, function(filter) {
-                if (!filter || !me.isStandardLocationFilter(filter)) {
+                if (!filter || !staticMe.isStandardLocationFilter(filter)) {
                     // any non-standard, e.g. viewparam filters, are ignored.
                     return;
                 }
                 var filterType = (filter.type || '').toLowerCase();
                 switch (filterType) {
                     case 'timerange':
-                        metadata = me.configureMetadataWithTimerange(metadata, filter);
+                        metadata = staticMe.configureMetadataWithTimerange(metadata, filter);
                         break;
                     case 'pointintime':
                     case 'rodostime':
-                        metadata = me.configureMetadataWithPointInTime(metadata, filter);
+                        metadata = staticMe.configureMetadataWithPointInTime(metadata, filter);
                         break;
                     case 'value':
-                        metadata = me.configureMetadataWithValue(metadata, filter);
+                        metadata = staticMe.configureMetadataWithValue(metadata, filter);
                         break;
                     default:
                         break;
@@ -1767,9 +1772,10 @@ Ext.define('Koala.util.Layer', {
          */
         configureMetadataWithValue: function(metadata, filter) {
             // VALUE becomes a CQL filter
+            var staticMe = Koala.util.Layer;
             var olProps = metadata.layerConfig.olProperties;
             var cqlKey = 'param_cql_filter';
-            var stringified = this.stringifyValueFilter(filter);
+            var stringified = staticMe.stringifyValueFilter(filter);
             if (cqlKey in olProps) {
                 Ext.log.info('Overwriting existing CQL Filter in URL.' +
                     ' Is this intentional? If you changed a filter, the' +
@@ -1785,13 +1791,13 @@ Ext.define('Koala.util.Layer', {
         },
 
         moveFiltersToViewparams: function(metadata, filters) {
-            var me = this;
+            var staticMe = Koala.util.Layer;
             var keyVals = {};
             Ext.each(filters, function(filter) {
                 // Only consider viewparam filters here
-                var isViewParam = filter && me.isViewParamFilter(filter);
+                var isViewParam = filter && staticMe.isViewParamFilter(filter);
                 // do not handle STYLES filter, this is done elsewhere
-                var isSpecialStyles = filter && me.isSpecialStylesValueFilter(filter);
+                var isSpecialStyles = filter && staticMe.isSpecialStylesValueFilter(filter);
 
                 if (isViewParam && !isSpecialStyles) {
                     var params = filter.param.split(',');
@@ -1851,7 +1857,7 @@ Ext.define('Koala.util.Layer', {
          * @return {string} The download URL.
          */
         getDownloadUrlWithFilter: function(layer) {
-            var staticMe = this;
+            var staticMe = Koala.util.Layer;
             var baseUrl = layer.get('downloadUrl');
             var url = baseUrl;
             var metadata = layer.metadata;
@@ -1877,7 +1883,7 @@ Ext.define('Koala.util.Layer', {
         },
 
         filtersToCql: function(filters) {
-            var staticMe = this;
+            var staticMe = Koala.util.Layer;
             if (!filters || filters.length < 1) {
                 return '';
             }
@@ -1891,7 +1897,7 @@ Ext.define('Koala.util.Layer', {
         },
 
         filterToCql: function(filter) {
-            var staticMe = this;
+            var staticMe = Koala.util.Layer;
             var type = filter.type;
             var cql = '';
             switch (type) {
@@ -1929,13 +1935,13 @@ Ext.define('Koala.util.Layer', {
          *   layers; e.g. no folders.
          */
         getOrderedFlatLayers: function(layers) {
-            var me = Koala.util.Layer;
+            var staticMe = Koala.util.Layer;
             var flatList = [];
 
             Ext.each(layers, function(layer) {
                 if (layer) {
                     if (!layer.leaf) {
-                        var flatChildren = me.getOrderedFlatLayers(
+                        var flatChildren = staticMe.getOrderedFlatLayers(
                             layer.children
                         );
                         flatList = Ext.Array.push(flatList, flatChildren);

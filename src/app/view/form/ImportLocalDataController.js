@@ -198,7 +198,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var me = this;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
 
-        layerUtil.getMetadataFromUuidAndThen(uuid, function(metadata) {
+        layerUtil.getMetadataFromUuid(uuid).then(function(metadata) {
             // Make some specific settings for local data:
             var cfg = me.getInternalLayerConfig(metadata);
 

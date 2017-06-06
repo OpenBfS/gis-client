@@ -95,7 +95,7 @@ Ext.define('Koala.util.Routing', {
             Ext.iterate(permaObj, function(uuid, config) {
                 if (Koala.util.String.isUuid(uuid)) {
                     expectedLayers++;
-                    LayerUtil.getMetadataFromUuidAndThen(uuid, function(md) {
+                    LayerUtil.getMetadataFromUuid(uuid).then(function(md) {
                         gotLayers++;
                         var metadataClone = Ext.clone(md);
                         me.applyPermalinkFiltersToMetadata(uuid, md.filters, config.filters);

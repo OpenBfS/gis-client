@@ -56,7 +56,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         }
         me.currentTask = new Ext.util.DelayedTask(function() {
             if (item.isLeaf()) {
-                Koala.util.Layer.getMetadataFromUuidAndThen(item.get('uuid'),
+                Koala.util.Layer.getMetadataFromUuid(item.get('uuid')).then(
                     function(metadata) {
                         if (item.get('isRodosLayer') && item.get('rodosFilters')) {
                             metadata.filters = Ext.Array.merge(
