@@ -539,171 +539,233 @@ Ext.define('Koala.view.form.Print', {
         var printLayers = [];
         var serializedLayers = [];
 
-        mapComponent.getLayers().forEach(function(layer) {
-            if (layer.get('printLayer')) {
-                printLayers.push(layer.get('printLayer'));
-            } else {
-                var isChecked = !!layer.checked;
-                var hasName = isChecked && !!layer.get('name');
-                var nonOpaque = hasName && (layer.get('opacity') > 0);
-                var inTree = nonOpaque && (layer.get(
-                    BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER
-                ) !== false); // may be undefined for certain layers
+        var overlays = mapComponent.getMap().getOverlays();
 
-                if (isChecked && hasName && nonOpaque && inTree) {
-                    if (layer instanceof ol.layer.Vector &&
-                        layer.getSource().getFeatures().length < 1) {
+        var promises = [];
+
+        overlays.forEach(function(overlay) {
+            var coords = overlay.getPosition();
+            var containerEl = overlay.getElement();
+            var promise = html2canvas(containerEl,{allowTaint: true});
+            promises.push(promise);
+            promise.then(function(canvas) {
+                printLayers.push({
+                    type: 'chart',
+                    coordinates: coords,
+                    popup: canvas.toDataURL('image/png'),
+                    width: containerEl.offsetWidth,
+                    height: containerEl.offsetHeight,
+                    getSource: function() {
+                        return this;
+                    }
+                });
+            });
+        });
+
+        Ext.Promise.all(promises).then(function() {
+            mapComponent.getLayers().forEach(function(layer) {
+                if (layer.get('printLayer')) {
+                    printLayers.push(layer.get('printLayer'));
+                } else {
+                    var isChecked = !!layer.checked;
+                    var hasName = isChecked && !!layer.get('name');
+                    var nonOpaque = hasName && (layer.get('opacity') > 0);
+                    var inTree = nonOpaque && (layer.get(
+                        BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER
+                    ) !== false); // may be undefined for certain layers
+
+                    if (isChecked && hasName && nonOpaque && inTree) {
+                        if (layer instanceof ol.layer.Vector &&
+                            layer.getSource().getFeatures().length < 1) {
+                            return false;
+                        }
+                        printLayers.push(layer);
+                    } else {
                         return false;
                     }
-                    printLayers.push(layer);
-                } else {
-                    return false;
-                }
-            }
-        });
-
-        Ext.each(printLayers, function(layer) {
-            var source = layer.getSource();
-            var serialized = {};
-
-            var serializer = GeoExt.data.MapfishPrintProvider
-                .findSerializerBySource(source);
-            if (serializer) {
-                serialized = serializer.serialize(layer, source, viewRes);
-                serializedLayers.push(serialized);
-            }
-        }, this);
-
-        var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
-        var fieldsets = view.query(fsSelector);
-
-        Ext.each(fieldsets, function(fs) {
-            var name = fs.name;
-            // TODO double check when rotated
-            var featureBbox = fs.extentFeature.getGeometry().getExtent();
-            var dpi = fs.down('[name="dpi"]').getValue();
-
-            attributes[name] = {
-                bbox: featureBbox,
-                dpi: dpi,
-                // TODO Order of Layers in print seems to be reversed.
-                layers: serializedLayers.reverse(),
-                projection: projection,
-                rotation: rotation
-            };
-
-        }, this);
-
-        // Get all Fields except the DPI Field
-        // TODO This query should be optimized or changed into some
-        // different kind of logic
-        var additionalFields = view.query(
-            'fieldset[name=attributes]>field[name!=dpi],' +
-            'fieldset[name=attributes]>container>textfield[name!=dpi]'
-        );
-
-        Ext.each(additionalFields, function(field) {
-            if (field.getName() === 'scalebar') {
-                attributes.scalebar = view.getScaleBarObject();
-                // handle the desire to have a scalebar or not by setting
-                // colors to transparent, crude but we didn' find a better
-                // solution. See https://github.com/terrestris/BasiGX/pull/74#issuecomment-209954558
-                if (field.getValue() === false) {
-                    attributes.scalebar = view.setScalebarInvisible(
-                        attributes.scalebar
-                    );
-                }
-            } else if (field.getName() === 'northArrow') {
-                attributes.northArrow = view.getNorthArrowObject();
-                // handle the desire to have a northArrow or not by setting
-                // colors to transparent, crude but we didn' find a better
-                // solution. See https://github.com/terrestris/BasiGX/pull/74#issuecomment-209954558
-                if (field.getValue() === false) {
-                    attributes.northArrow = view.setNorthArrowInvisible(
-                        attributes.northArrow
-                    );
-                }
-            } else {
-                attributes[field.getName()] = field.getValue();
-            }
-        }, this);
-
-        var legendFieldset = view.down('fieldset[name="legendsFieldset"]');
-        if (legendFieldset && !legendFieldset.getCollapsed()) {
-            attributes.legend = view.getLegendObject();
-
-            // Override layer name in legend with valze from legendTextField
-            Ext.each(attributes.legend.classes, function(clazz) {
-                var legendTextField = legendFieldset.down(
-                        'textfield[name=' + clazz.name + '_legendtext]');
-                var layer = BasiGX.util.Layer.getLayerByName(clazz.name);
-                var currentLegendUrl = Koala.util.Layer.getCurrentLegendUrl(layer);
-
-                if (currentLegendUrl) {
-                    clazz.icons[0] = currentLegendUrl;
-                }
-
-                if (legendTextField) {
-                    clazz.name = legendTextField.getValue();
                 }
             });
-        }
 
-        var hookedAttributes = Ext.clone(attributes);
-        Ext.iterate(attributes, function(key, value) {
-            Koala.util.Hooks.executeBeforePostHook(key, value, hookedAttributes);
-        });
+            Ext.each(printLayers, function(layer) {
+                var source = layer.getSource();
+                var serialized = {};
 
-        var app = view.down('combo[name=appCombo]').getValue();
-        var url = view.getUrl() + app + '/buildreport.' + format;
-        spec.attributes = hookedAttributes;
-        spec.layout = layout;
-        spec.outputFilename = layout;
+                var serializer = GeoExt.data.MapfishPrintProvider
+                    .findSerializerBySource(source);
+                if (serializer) {
+                    serialized = serializer.serialize(layer, source, viewRes);
+                    serializedLayers.push(serialized);
+                } else if (source.type === 'chart') {
+                    // special handling of chart/html popups
+                    serializedLayers.push({
+                        type: 'geojson',
+                        style: {
+                            version: 2,
+                            '*': {
+                                symbolizers: [
+                                    {
+                                        type: 'point',
+                                        externalGraphic: source.popup,
+                                        graphicFormat: 'image/png'
+                                        // graphicWidth: source.width,
+                                        // graphicHeight: source.height
+                                    }
+                                ]
+                            }
+                        },
+                        geojson: {
+                            type: 'FeatureCollection',
+                            totalFeatures: 1,
+                            features: [
+                                {
+                                    type: 'Feature',
+                                    properties: {},
+                                    geometry: {
+                                        type: 'Point',
+                                        coordinates: source.coordinates
+                                    }
+                                }
+                            ],
+                            crs: {
+                                type: 'name',
+                                properties: {
+                                    name: projection
+                                }
+                            }
+                        }
+                    });
+                }
+            }, view);
 
-        var irixCheckBox = this.down('[name="irix-fieldset-checkbox"]');
-        if (irixCheckBox.getValue()) {
-            var irixJson = {};
-            var mapfishPrint = [];
+            var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
+            var fieldsets = view.query(fsSelector);
 
-            if (view.isValid()) {
-                spec.outputFormat = format;
-                mapfishPrint[0] = spec;
-                irixJson = this.setUpIrixJson(mapfishPrint);
-                url = this.getIrixUrl();
+            Ext.each(fieldsets, function(fs) {
+                var name = fs.name;
+                // TODO double check when rotated
+                var featureBbox = fs.extentFeature.getGeometry().getExtent();
+                var dpi = fs.down('[name="dpi"]').getValue();
+
+                attributes[name] = {
+                    bbox: featureBbox,
+                    dpi: dpi,
+                    layers: serializedLayers.reverse(),
+                    projection: projection,
+                    rotation: rotation
+                };
+
+            }, view);
+
+            // Get all Fields except the DPI Field
+            // TODO This query should be optimized or changed into some
+            // different kind of logic
+            var additionalFields = view.query(
+                'fieldset[name=attributes]>field[name!=dpi],' +
+                'fieldset[name=attributes]>container>textfield[name!=dpi]'
+            );
+
+            Ext.each(additionalFields, function(field) {
+                if (field.getName() === 'scalebar') {
+                    attributes.scalebar = view.getScaleBarObject();
+                    // handle the desire to have a scalebar or not by setting
+                    // colors to transparent, crude but we didn' find a better
+                    // solution. See https://github.com/terrestris/BasiGX/pull/74#issuecomment-209954558
+                    if (field.getValue() === false) {
+                        attributes.scalebar = view.setScalebarInvisible(
+                            attributes.scalebar
+                        );
+                    }
+                } else if (field.getName() === 'northArrow') {
+                    attributes.northArrow = view.getNorthArrowObject();
+                    // handle the desire to have a northArrow or not by setting
+                    // colors to transparent, crude but we didn' find a better
+                    // solution. See https://github.com/terrestris/BasiGX/pull/74#issuecomment-209954558
+                    if (field.getValue() === false) {
+                        attributes.northArrow = view.setNorthArrowInvisible(
+                            attributes.northArrow
+                        );
+                    }
+                } else {
+                    attributes[field.getName()] = field.getValue();
+                }
+            }, view);
+
+            var legendFieldset = view.down('fieldset[name="legendsFieldset"]');
+            if (legendFieldset && !legendFieldset.getCollapsed()) {
+                attributes.legend = view.getLegendObject();
+
+                // Override layer name in legend with valze from legendTextField
+                Ext.each(attributes.legend.classes, function(clazz) {
+                    var legendTextField = legendFieldset.down(
+                            'textfield[name=' + clazz.name + '_legendtext]');
+                    var layer = BasiGX.util.Layer.getLayerByName(clazz.name);
+                    var currentLegendUrl = Koala.util.Layer.getCurrentLegendUrl(layer);
+
+                    if (currentLegendUrl) {
+                        clazz.icons[0] = currentLegendUrl;
+                    }
+
+                    if (legendTextField) {
+                        clazz.name = legendTextField.getValue();
+                    }
+                });
+            }
+
+            var hookedAttributes = Ext.clone(attributes);
+            Ext.iterate(attributes, function(key, value) {
+                Koala.util.Hooks.executeBeforePostHook(key, value, hookedAttributes);
+            });
+
+            var app = view.down('combo[name=appCombo]').getValue();
+            var url = view.getUrl() + app + '/buildreport.' + format;
+            spec.attributes = hookedAttributes;
+            spec.layout = layout;
+            spec.outputFilename = layout;
+
+            var irixCheckBox = view.down('[name="irix-fieldset-checkbox"]');
+            if (irixCheckBox.getValue()) {
+                var irixJson = {};
+                var mapfishPrint = [];
+
+                if (view.isValid()) {
+                    spec.outputFormat = format;
+                    mapfishPrint[0] = spec;
+                    irixJson = view.setUpIrixJson(mapfishPrint);
+                    url = view.getIrixUrl();
+                    Ext.Ajax.request({
+                        url: url,
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        jsonData: irixJson,
+                        scope: view,
+                        success: view.irixPostSuccessHandler,
+                        failure: view.genericPostFailureHandler,
+                        timeout: view.getTimeoutMilliseconds()
+                    });
+                }
+            } else {
+                var startTime = new Date().getTime();
                 Ext.Ajax.request({
-                    url: url,
+                    url: view.getUrl() + app + '/report.' + format,
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    jsonData: irixJson,
+                    jsonData: Ext.encode(spec),
                     scope: view,
-                    success: view.irixPostSuccessHandler,
+                    success: function(response) {
+                        var data = Ext.decode(response.responseText);
+                        view.setLoading(format + ' ' +
+                            view.getViewModel().get('downloadOngoingMiddleText'));
+                        view.downloadWhenReady(startTime, data);
+                    },
                     failure: view.genericPostFailureHandler,
                     timeout: view.getTimeoutMilliseconds()
                 });
             }
-        } else {
-            var startTime = new Date().getTime();
-            Ext.Ajax.request({
-                url: view.getUrl() + app + '/report.' + format,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                jsonData: Ext.encode(spec),
-                scope: view,
-                success: function(response) {
-                    var data = Ext.decode(response.responseText);
-                    view.setLoading(format + ' ' +
-                        view.getViewModel().get('downloadOngoingMiddleText'));
-                    view.downloadWhenReady(startTime, data);
-                },
-                failure: view.genericPostFailureHandler,
-                timeout: view.getTimeoutMilliseconds()
-            });
-        }
-
+        });
     },
 
     /**
