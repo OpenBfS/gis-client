@@ -5,7 +5,7 @@ Folgenden erläutert werden.
 
 ## appContext.json {#appcontext}
 
-In der Datei *appContext.json* werden verschiedene Werte gesetzt, die vom
+In der Datei `appContext.json` werden verschiedene Werte gesetzt, die vom
 Client-Code ausgelesen werden die sich ggf veränder können. So muss z.B. der
 Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 ändern.
@@ -52,10 +52,10 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
   durchzuführen.
   * **username**
 
-  Der Username des **application_user**s.
+    Der Username des **application_user**s.
   * **password**
 
-  Das Passwort des **application_user**s.
+    Das Passwort des **application_user**s.
 
 * **imis_user**
 
@@ -63,13 +63,13 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
   wird zu prüfen, ob initial die Hilfe angezeigt werden soll.
   * **imis_roles**
 
-  Ein Array von Imis-Rollen die der **imis_user** inne hat.
+    Ein Array von Imis-Rollen die der **imis_user** inne hat.
   * **uid**
 
-  Die user id des **imis_user**s.
+    Die user id des **imis_user**s.
   * **username**
 
-  Der Username des **imis_user**s.
+    Der Username des **imis_user**s.
   * **userroles**
 
   Ein Array von User-Rollen die der **imis_user** inner hat.
@@ -93,10 +93,10 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
   Enthält die Konfiguration für die verwendeten Felder der räumlichen Suche.
   * **searchColumn**
 
-  Gibt an über welches Feld die räumliche Suche durchgeführt werden soll.
+    Gibt an über welches Feld die räumliche Suche durchgeführt werden soll.
   * **geomColumn**
 
-  Gibt an welches Feld die Geometrie der Ergebnisse der räumlichen Suche enthält.
+    Gibt an welches Feld die Geometrie der Ergebnisse der räumlichen Suche enthält.
 
 * **startCenter**
 
@@ -123,7 +123,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 * **tools**
 
   Array von Strings, die die aktivierten Werkzeuge der Anwendung steuern.
-  Mögliche Werte sind: `'addWmsBtn'`, `'printBtn'`, `'importLocalDataBtn'`
+  Mögliche Werte sind: `"addWmsBtn"`, `"printBtn"`, `"importLocalDataBtn"`
 
 * **vectorIcons**
 
@@ -152,5 +152,47 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
   Der Name des Zeichen Layers wie er im RoutingLegendTree zu lesen ist.
 
 ## irixContext.json {#irixcontext}
+
+Die Datei `irixContext.json` enthält die Konfiguriton des Formulars, das – zusätzlich
+zum existierenden DruckFormular – an das Irix-Print-Servlets übermittelt wird.
+
+* **fields**
+
+  Enthält ein Array von Konfigurationsobjekten für Formularfelder.
+  Die Konfigurationsobjekte bestehen aus mehreren Attributen:
+  * **type**
+
+    Gibt den Typen des Formularfelds an. Mögliche werte sind:
+    * `"text"`: Ein Feld zur Eingabe von Text.
+    * `"combo"`: Ein Auswahlfeld verschiedener Werte.
+    * `"datetime"`: Ein Feld zur Auswahl von Datum und Uhrzeit.
+    * `"fieldset"`: Ein Container für Felder beliebigen Typs.
+
+  * **name**
+
+    Identifikator des Formularfelds. **name** gibt auch an unter welche Key der
+    Wert des Feldes an das irix-servlet geschickt wird.
+  * **label**
+
+    Das Label für das entsprechende Formularfeld.
+  * **defaultValue**
+
+    Der Default-Wert der zu Beginn im Formularfeld angezeigt werden soll.
+  * **allowBlank**
+
+    Gibt an ob das Feld leer bleiben darf (`true`) oder ausgefüllt werden muss
+    (`false`).
+  * **values** (nur für **type** `"combo"`)
+
+    Ein zweidimensionales Array das die möglichen Werte einer ComboBox angibt.
+    Die Arrays der zweiten Dimension bestehen dabei aus dem tatsächlichen Werte,
+    der an das servlet geschickt wird an erster Stelle und dem Anzeigenamen an
+    zweiter Stelle. z.b.: `["Emergency", "Notfall"]`
+    In diesem Fall wird "Emergency" an das Servlet gesendet, wenn "Notfall"
+    ausgewählt wird.
+  * **fields** (nur für **type** `"fieldset"`)
+
+    Ein Array von **fields** Objekten.
+
 ## layerprofile.json {#layerprofile}
 ## layerset.json {#layerset}
