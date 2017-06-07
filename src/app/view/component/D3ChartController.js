@@ -1210,7 +1210,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 chartConfig, 'param_', true);
 
         // Merge the layer viewparams to the chart params
-        paramConfig.viewparams += ';' + layerViewParams;
+        paramConfig.viewparams = paramConfig.viewparams
+                ? paramConfig + ';' + layerViewParams
+                : layerViewParams;
 
         // Replace all template strings
         Ext.iterate(paramConfig, function(k, v) {
@@ -1229,7 +1231,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         };
 
         Ext.apply(requestParams, paramConfig);
-
         return requestParams;
     },
 
@@ -1242,8 +1243,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
+        var requestUrl = Koala.util.Object.getPathStrOr(targetLayer,
+                'metadata/layerConfig/wfs/url');
 
-        return targetLayer.metadata.layerConfig.wfs.url;
+        return requestUrl;
     },
 
     /**

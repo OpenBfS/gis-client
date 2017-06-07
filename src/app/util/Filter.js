@@ -97,11 +97,15 @@ Ext.define('Koala.util.Filter', {
             var filters = metadata.filters;
             if (filters) {
                 Ext.each(filters, function(filter) {
-                    if (filter.type === 'pointintime') {
-                        endDate = filter.effectivedatetime;
-                    }
-                    if (filter.type === 'timerange') {
-                        endDate = filter.effectivemaxdatetime;
+                    switch (filter.type) {
+                        case 'pointintime':
+                        case 'rodostime':
+                            endDate = filter.effectivedatetime;
+                            break;
+                        case 'timerange':
+                            endDate = filter.effectivemaxdatetime;
+                            break;
+                        default:
                     }
                 });
             }
