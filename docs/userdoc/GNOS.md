@@ -1,4 +1,9 @@
-# LayerInformation {#layerinformation}
+# GeoNetwork {#geonetwork}
+
+Die Layer des Geoportals werden über das GeoNetwork opensource (GNOS) konfiguriert.
+Die unten stehenden Parameter beeinflussen dabei verschiedenen Aspekte wie Zugriff,
+Darstellung und aktivierte Funktionalitäten.
+Zudem können die anzuzeigenden Charts der Layer konfiguriert werden.
 
 ## Layer Type {#layertype}
 ### WMS {#layertype-wms}
