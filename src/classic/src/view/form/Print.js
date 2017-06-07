@@ -546,7 +546,7 @@ Ext.define('Koala.view.form.Print', {
         overlays.forEach(function(overlay) {
             var coords = overlay.getPosition();
             var containerEl = overlay.getElement();
-            var promise = html2canvas(containerEl,{allowTaint: true});
+            var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
                 printLayers.push({
