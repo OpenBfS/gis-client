@@ -153,7 +153,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
 ## irixContext.json {#irixcontext}
 
-Die Datei `irixContext.json` enthält die Konfiguriton des Formulars, das – zusätzlich
+Die Datei `irixContext.json` enthält die Konfiguration des Formulars, das – zusätzlich
 zum existierenden DruckFormular – an das Irix-Print-Servlets übermittelt wird.
 
 * **fields**
@@ -195,4 +195,66 @@ zum existierenden DruckFormular – an das Irix-Print-Servlets übermittelt wird
     Ein Array von **fields** Objekten.
 
 ## layerprofile.json {#layerprofile}
+
+  Die Datei `layerprofile.json` enthält die Konfiguration der Layer Profilwahl.
+  Sie besteht aus einem Array von Konfigurationsobjekten mit folgenden Attributen:
+
+  * **isLayerProfile**
+
+    Sollte in der Datei `layerprofile.json` immer auf `'true'`  stehen.
+  * **text**
+
+    Der Text, der für das entsprechenden Layerprofil angezeigt werden soll.
+  * **thumb**
+
+    Pfad zum Symbol, das für das entsprechenden Layerprofil angezeigt werden soll.
+  * **children**
+
+    Ein Array von Konfigurationsobjekten für Treenodes.
+
+    * **leaf**
+
+      Gibt an, ob es sich um einen Layer (`true`) oder einen Ordner (`false`)
+      handelt.
+    * **text**
+
+      Der Layer-/Ordnername.
+    * **visible**
+
+      Gibt an, ob der Layer/Ordner inital sichtbar gestellt werden soll.
+    * **uuid**
+
+      Die UUID des Layers im GeoNetwork.
+
 ## layerset.json {#layerset}
+
+  Die Datei `layerset.json` enthält die Konfiguration für die Layerset Auswahl
+  bzw. den Themenbaum. Sie besteht aus einem Array von Konfigurationsobjekten
+  mit folgenden Attributen:
+
+  * **isLayerProfile**
+
+    Sollte in der Datei `layerset.json` immer auf `'false'`  stehen.
+  * **text**
+
+    Der Text, der für das entsprechenden Layerprofil angezeigt werden soll.
+  * **thumb**
+
+    Pfad zum Symbol, das für das entsprechenden Layerprofil angezeigt werden soll.
+  * **children**
+
+    Ein Array von Konfigurationsobjekten für Treenodes.
+
+    * **leaf**
+
+      Gibt an, ob es sich um einen Layer (`true`) oder einen Ordner (`false`)
+      handelt.
+    * **text**
+
+      Der Layer-/Ordnername.
+    * **visible**
+
+      Gibt an, ob der Layer/Ordner inital sichtbar gestellt werden soll.
+    * **uuid**
+
+      Die UUID des Layers im GeoNetwork.
