@@ -67,19 +67,9 @@ Ext.define('Koala.util.Routing', {
             mapView.setZoom(zoom);
         },
 
-        beforeRodosProjectRoute: function(projectUuid, action) {
-            var treeQueryString = Ext.isModern ?
-                'k-panel-treepanel > treelist' :
-                'k-panel-themetree';
-            var treePanel = Ext.ComponentQuery.query(treeQueryString)[0];
-            var treePanelViewModel = treePanel.getViewModel();
-            treePanelViewModel.set('selectedRodosProject', projectUuid);
-            action.resume();
-        },
-
         /**
-         * [description]
-         * @return {[type]} [description]
+         * Reads the projectUid from the url and calls
+         * #Koala.util.Rodos.requestLayersOfProject to prepare the tree.
          */
         onRodosProjectRoute: function(projectUuid) {
             Koala.util.Rodos.requestLayersOfProject(projectUuid);

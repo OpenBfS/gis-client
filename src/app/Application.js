@@ -70,7 +70,6 @@ Ext.define('Koala.Application', {
             }
         },
         'rodosproject/:rodosproject': {
-            before: 'beforeRodosProjectRoute',
             action: 'onRodosProjectRoute'
         }
     },
