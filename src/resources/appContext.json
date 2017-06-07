@@ -45,22 +45,18 @@
                 "764e5d95-c851-4a08-b3f0-c304f610e69f"
             ],
             "mapConfig": {
-                "projection": "EPSG:3857",
-                "zoom": 0
+                "projection": "EPSG:3857"
             },
-
             "tools": [
                 "addWmsBtn",
                 "printBtn"
             ],
-
             "vectorIcons": [
                 {
                     "src": "resources/vectorIcons/atomicon.png",
                     "caption": "Atom"
                 }
             ],
-
             "vectorProjections": [{
                 "code": "EPSG:3857",
                 "label": "EPSG:3857"
@@ -74,7 +70,6 @@
                 "code": "EPSG:25832",
                 "label": "EPSG:25832"
             }],
-
             "vectorTemplates": [{
                 "uuid": "241ae25f-c180-475b-9734-4947f75137e1",
                 "label": "Local Vector Data Template (drinkwater)"
@@ -85,10 +80,8 @@
                 "uuid": "0613135b-8a4a-496d-b4a2-bf67831c620d",
                 "label": "Local Vector Data Template (bundeslaender)"
             }],
-
             "wmsUrls": ["http://ows.terrestris.de/osm/service",
                 "http://ows.mundialis.de/services/service" ],
-
             "redLineLayerName": "Messungen"
         }
     },
