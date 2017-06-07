@@ -495,7 +495,6 @@ Ext.define('Koala.util.Layer', {
                             if (Koala.util.Layer.minimumValidMetadata(obj)) {
                                 // TODO Can we move this out of here?
                                 staticMe.resolveMetadataLinks(obj)
-                                .then(staticMe.checkForRodosFilters(obj))
                                 .then(function() {
                                     resolve(obj);
                                 });
@@ -553,60 +552,6 @@ Ext.define('Koala.util.Layer', {
             return new Ext.Promise(function(resolve) {
                 resolve(metadata);
             });
-        },
-
-        checkForRodosFilters: function(metadata) {
-            var rodosProperty = Koala.util.Object.getPathStrOr(metadata,
-                'layerConfig/olProperties/rodosLayer', false);
-            var isRodosLayer = Koala.util.String.coerce(rodosProperty);
-            var appContext = Koala.util.AppContext.getAppContext();
-            var baseUrl = Koala.util.Object.getPathStrOr(appContext,
-                'data/merge/urls/rodos-results');
-            var treeQueryString = Ext.isModern ?
-                'k-panel-treepanel > treelist' :
-                'k-panel-themetree';
-            var treePanel = Ext.ComponentQuery.query(treeQueryString)[0];
-            var treePanelViewModel = treePanel.getViewModel();
-            // TODO get from route
-            var rodosProjectUuid = treePanelViewModel.get('selectedRodosProject');
-
-            if (isRodosLayer && baseUrl && rodosProjectUuid) {
-                var defaultHeaders;
-                var authHeader = Koala.util.Authentication.getAuthenticationHeader();
-                if (authHeader) {
-                    defaultHeaders = {
-                        Authorization: authHeader
-                    };
-                }
-
-                return new Ext.Promise(function(resolve, reject) {
-                    Ext.Ajax.request({
-                        url: baseUrl + rodosProjectUuid,
-                        defaultHeaders: defaultHeaders,
-                        method: 'GET',
-                        success: function(response) {
-                            var responseObj = Ext.decode(response.responseText);
-                            var layerCfgs = responseObj.rodos_results.layers;
-                            var layerCfg = Ext.Array.findBy(layerCfgs, function(cfg) {
-                                return cfg.gnos_uid === metadata.id;
-                            });
-
-                            if (layerCfg) {
-                                metadata.filters = Ext.Array.merge(metadata.filters,
-                                    layerCfg.filters);
-                            }
-                            resolve(metadata);
-                        },
-                        failure: function(response) {
-                            reject(response.status);
-                        }
-                    });
-                });
-            } else {
-                return new Ext.Promise(function(resolve) {
-                    resolve(metadata);
-                });
-            }
         },
 
         /**

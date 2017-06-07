@@ -113,7 +113,9 @@ Ext.define('Koala.util.Routing', {
             Ext.iterate(permaObj, function(uuid, config) {
                 if (Koala.util.String.isUuid(uuid)) {
                     expectedLayers++;
-                    LayerUtil.getMetadataFromUuid(uuid).then(function(md) {
+                    LayerUtil.getMetadataFromUuid(uuid)
+                    .then(me.checkForRodosFilters)
+                    .then(function(md) {
                         gotLayers++;
                         var metadataClone = Ext.clone(md);
                         me.applyPermalinkFiltersToMetadata(uuid, md, config.filters);
@@ -141,19 +143,21 @@ Ext.define('Koala.util.Routing', {
          *                      filters to.
          * @param {Array} metadataFilters An array of objects representing a
          *                                metadataFilter.
+         * @param {Object} configFilters The filters from the permalink
          * @private
          */
         applyPermalinkFiltersToMetadata: function(uuid, metadata, configFilters) {
             var metadataFilters = metadata.filters;
             Ext.each(metadataFilters, function(mdFilter) {
                 var permalinkFilter = Ext.Array.findBy(configFilters, function(filter) {
+                    var isRodosTime = filter.type === 'rodostime';
                     var isPointInTime = filter.type === 'pointintime';
                     var isTimeRange = filter.type === 'timerange';
                     var sameType = mdFilter.type === filter.type;
                     var sameAlias = mdFilter.alias === filter.alias;
 
                     if (sameType) {
-                        if (isPointInTime || isTimeRange || sameAlias) {
+                        if (isPointInTime || isTimeRange || sameAlias || isRodosTime) {
                             return true;
                         }
                         return false;
@@ -164,60 +168,142 @@ Ext.define('Koala.util.Routing', {
                 var minDate;
                 var maxDate;
                 if (permalinkFilter) {
-                    if (mdFilter.type === 'pointintime') {
-                        maxDate = Koala.util.Date.getUtcMoment(
-                            mdFilter.maxdatetimeinstant);
-                        minDate = Koala.util.Date.getUtcMoment(
-                            mdFilter.mindatetimeinstant);
-                        var effectiveDateTime = Koala.util.Date.getUtcMoment(
-                            permalinkFilter.effectivedatetime, 'x');
-                        // '[]': Include both min and max value.
-                        if (effectiveDateTime.isBetween(minDate, maxDate, null, '[]')) {
-                            permalinkFilter.effectivedatetime = effectiveDateTime;
-                            Ext.apply(mdFilter, permalinkFilter);
-                        } else {
-                            Ext.toast('Permalink contains illegal pointintime filter');
-                        }
-                    }
-                    if (mdFilter.type === 'timerange') {
-                        maxDate = Koala.util.Date.getUtcMoment(
-                            mdFilter.maxdatetimeinstant);
-                        minDate = Koala.util.Date.getUtcMoment(
-                            mdFilter.mindatetimeinstant);
-                        var effectiveMinDateTime = Koala.util.Date.getUtcMoment(
-                            permalinkFilter.effectivemindatetime, 'x');
-                        var effectiveMaxDateTime = Koala.util.Date.getUtcMoment(
-                            permalinkFilter.effectivemaxdatetime, 'x');
-                        if (effectiveMinDateTime.isBetween(minDate, maxDate, null, '[]') &&
-                                effectiveMaxDateTime.isBetween(minDate, maxDate, null, '[]')) {
-                            permalinkFilter.effectivemindatetime =
-                                effectiveMinDateTime;
-                            permalinkFilter.effectivemaxdatetime =
-                                effectiveMaxDateTime;
-                            Ext.apply(mdFilter, permalinkFilter);
-                        } else {
-                            Ext.toast('Permalink contains illegal timerange filter');
-                        }
-                    }
-                    if (mdFilter.type === 'value') {
-                        var allowedStore = Koala.util.Filter.getStoreFromAllowedValues(mdFilter.allowedValues);
-                        var containsIllegal = false;
-
-                        Ext.each(permalinkFilter.effectivevalue, function(value) {
-                            var matchingRecord = allowedStore.findRecord('val', value);
-                            if (!matchingRecord) {
-                                containsIllegal = true;
+                    switch (mdFilter.type) {
+                        case 'rodostime':
+                            var isAllowed = false;
+                            var effectiveRodosTime = Koala.util.Date.getUtcMoment(
+                                permalinkFilter.effectivedatetime, 'x');
+                            Ext.each(mdFilter.allowedValues, function(allowedValue) {
+                                if (effectiveRodosTime.isSame(allowedValue.val)) {
+                                    isAllowed = true;
+                                    return false;
+                                }
+                            });
+                            if (isAllowed) {
+                                permalinkFilter.effectivedatetime = effectiveRodosTime;
+                                Ext.apply(mdFilter, permalinkFilter);
+                            } else {
+                                Ext.toast('Permalink contains illegal pointintime filter');
                             }
-                        });
+                            break;
+                        case 'pointintime':
+                            maxDate = Koala.util.Date.getUtcMoment(
+                                mdFilter.maxdatetimeinstant);
+                            minDate = Koala.util.Date.getUtcMoment(
+                                mdFilter.mindatetimeinstant);
+                            var effectiveDateTime = Koala.util.Date.getUtcMoment(
+                                permalinkFilter.effectivedatetime, 'x');
+                            // '[]': Include both min and max value.
+                            if (effectiveDateTime.isBetween(minDate, maxDate, null, '[]')) {
+                                permalinkFilter.effectivedatetime = effectiveDateTime;
+                                Ext.apply(mdFilter, permalinkFilter);
+                            } else {
+                                Ext.toast('Permalink contains illegal pointintime filter');
+                            }
+                            break;
+                        case 'timerange':
+                            maxDate = Koala.util.Date.getUtcMoment(
+                                mdFilter.maxdatetimeinstant);
+                            minDate = Koala.util.Date.getUtcMoment(
+                                mdFilter.mindatetimeinstant);
+                            var effectiveMinDateTime = Koala.util.Date.getUtcMoment(
+                                permalinkFilter.effectivemindatetime, 'x');
+                            var effectiveMaxDateTime = Koala.util.Date.getUtcMoment(
+                                permalinkFilter.effectivemaxdatetime, 'x');
+                            if (effectiveMinDateTime.isBetween(minDate, maxDate, null, '[]') &&
+                                    effectiveMaxDateTime.isBetween(minDate, maxDate, null, '[]')) {
+                                permalinkFilter.effectivemindatetime =
+                                    effectiveMinDateTime;
+                                permalinkFilter.effectivemaxdatetime =
+                                    effectiveMaxDateTime;
+                                Ext.apply(mdFilter, permalinkFilter);
+                            } else {
+                                Ext.toast('Permalink contains illegal timerange filter');
+                            }
+                            break;
+                        case 'value':
+                            var allowedStore = Koala.util.Filter.getStoreFromAllowedValues(mdFilter.allowedValues);
+                            var containsIllegal = false;
 
-                        if (!containsIllegal) {
-                            Ext.apply(mdFilter, permalinkFilter);
-                        } else {
-                            Ext.toast('Permalink contains illegal value filter');
-                        }
+                            Ext.each(permalinkFilter.effectivevalue, function(value) {
+                                var matchingRecord = allowedStore.findRecord('val', value);
+                                if (!matchingRecord) {
+                                    containsIllegal = true;
+                                }
+                            });
+
+                            if (!containsIllegal) {
+                                Ext.apply(mdFilter, permalinkFilter);
+                            } else {
+                                Ext.toast('Permalink contains illegal value filter');
+                            }
+                            break;
+                        default:
+                            Ext.toast('Permalink contains unknown filter');
+                            break;
                     }
                 }
             });
+        },
+
+        /**
+         * Checks for evntual rodos filters for the relevant layer. Applies them
+         * and
+         *
+         * @param {object} metadata The metadata json object.
+         * @returns {Ext.Promise} An Ext.Promise. The resolve function receives
+         *                        the metadata as an object.
+         */
+        checkForRodosFilters: function(metadata) {
+            var me = Koala.util.Routing;
+            var rodosProperty = Koala.util.Object.getPathStrOr(metadata,
+                'layerConfig/olProperties/rodosLayer', false);
+            var isRodosLayer = Koala.util.String.coerce(rodosProperty);
+            var appContext = Koala.util.AppContext.getAppContext();
+            var baseUrl = Koala.util.Object.getPathStrOr(appContext,
+                'data/merge/urls/rodos-results');
+            var routeObj = me.parseCurrentHash();
+            var rodosProjectUuid = routeObj.rodosproject;
+
+            if (isRodosLayer && baseUrl && rodosProjectUuid) {
+                var defaultHeaders;
+                var authHeader = Koala.util.Authentication.getAuthenticationHeader();
+                if (authHeader) {
+                    defaultHeaders = {
+                        Authorization: authHeader
+                    };
+                }
+
+                return new Ext.Promise(function(resolve, reject) {
+                    Ext.Ajax.request({
+                        url: baseUrl + rodosProjectUuid,
+                        defaultHeaders: defaultHeaders,
+                        method: 'GET',
+                        success: function(response) {
+                            var responseObj = Ext.decode(response.responseText);
+                            var layerCfgs = responseObj.rodos_results.layers;
+                            var layerCfg = Ext.Array.findBy(layerCfgs, function(cfg) {
+                                return cfg.gnos_uid === metadata.id;
+                            });
+
+                            if (layerCfg) {
+                                // NOTE The merge seems not to work correctly. So
+                                // use this with causion.
+                                metadata.filters = Ext.Array.merge(metadata.filters,
+                                    layerCfg.filters);
+                            }
+                            resolve(metadata);
+                        },
+                        failure: function(response) {
+                            reject(response.status);
+                        }
+                    });
+                });
+            } else {
+                return new Ext.Promise(function(resolve) {
+                    resolve(metadata);
+                });
+            }
         },
 
         /**
@@ -263,6 +349,33 @@ Ext.define('Koala.util.Routing', {
             } else {
                 viewController.redirectTo(route);
             }
+        },
+
+        /**
+         * Parses the current routing hash and returns a object representation.
+         * @return {Object} An object representation of the current hash.
+         */
+        parseCurrentHash: function() {
+            var hash = window.location.hash.replace('#', '');
+            var hashParts = hash.split('|');
+            var routeObj = {};
+            Ext.each(hashParts, function(part) {
+                var partParts = part.split('/');
+                partParts = Ext.Array.map(partParts, function(value, index) {
+                    if (index > 0) {
+                        var uriComponent = decodeURIComponent(value);
+                        return Ext.decode(uriComponent, true) || uriComponent;
+                    } else {
+                        return value;
+                    }
+                });
+                routeObj[partParts[0]] = Ext.Array.slice(partParts, 1);
+                // Just one value for our route
+                if (partParts.length === 2) {
+                    routeObj[partParts[0]] = partParts[1];
+                }
+            });
+            return routeObj;
         },
 
         /**
@@ -365,6 +478,10 @@ Ext.define('Koala.util.Routing', {
 
             switch (filter.type) {
                 // valueOf() returns the timestamp value of the moment date.
+                case 'rodostime':
+                    permaObj.effectivedatetime = filter.effectivedatetime
+                        .valueOf();
+                    break;
                 case 'pointintime':
                     permaObj.effectivedatetime = filter.effectivedatetime
                         .valueOf();
