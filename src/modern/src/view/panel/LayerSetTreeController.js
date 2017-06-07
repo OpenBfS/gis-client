@@ -76,7 +76,7 @@ Ext.define('Koala.view.panel.LayerSetTreeController', {
         var selection = treelist.getSelection();
         me.currentTask = new Ext.util.DelayedTask(function() {
             if (selection && selection.isLeaf()) {
-                Koala.util.Layer.getMetadataFromUuidAndThen(selection.get('uuid'),
+                Koala.util.Layer.getMetadataFromUuid(selection.get('uuid')).then(
                     function(metadata) {
                         if (selection.get('isRodosLayer') && selection.get('rodosFilters')) {
                             metadata.filters = Ext.Array.merge(

@@ -182,9 +182,8 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                     increaseAndCheckIfDone();
                 };
 
-                LayerUtil.getMetadataFromUuidAndThen(
-                    uuid, successCallback, errorCallback
-                );
+                LayerUtil.getMetadataFromUuid(uuid).then(
+                        successCallback, errorCallback);
             }
         });
     },

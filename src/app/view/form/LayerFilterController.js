@@ -59,7 +59,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         Ext.Object.each(this.__proto__.autorefreshMap, function(id, time) {
             var date = Koala.util.Date.getTimeReferenceAwareMomentDate(new moment());
             if ((date.minutes() % time) === 0) {
-                Koala.util.Layer.getMetadataFromUuidAndThen(id, function(metadata) {
+                Koala.util.Layer.getMetadataFromUuid(id).then(function(metadata) {
                     me.updateFiltersForAutorefresh(metadata.filters);
                     var LayerUtil = Koala.util.Layer;
 
@@ -75,7 +75,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     me.updateMetadataLegendTree(existingLayer, metadata);
                     me.deselectThemeTreeItems();
                     LayerUtil.repaintLayerFilterIndication();
-                }, function() {});
+                });
             }
         });
     },
