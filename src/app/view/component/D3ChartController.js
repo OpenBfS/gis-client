@@ -1211,7 +1211,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // Merge the layer viewparams to the chart params
         paramConfig.viewparams = paramConfig.viewparams
-                ? paramConfig + ';' + layerViewParams
+                ? paramConfig.viewparams + ';' + layerViewParams
                 : layerViewParams;
 
         // Replace all template strings
@@ -1229,6 +1229,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             filter: me.getDateTimeRangeFilter(startString, endString, timeField),
             sortBy: timeField
         };
+
 
         Ext.apply(requestParams, paramConfig);
         return requestParams;
@@ -1325,26 +1326,26 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // TODO refactor this gathering of the needed filter attribute
         var filters = targetLayer.metadata.filters;
-        var timeRangeFilter;
+        var timeFilter;
         var intervalInSeconds;
 
         Ext.each(filters, function(filter) {
             var fType = (filter && filter.type) || '';
-            if (fType === 'timerange' || fType === 'pointintime') {
-                timeRangeFilter = filter;
+            if (fType === 'timerange' || fType === 'pointintime' || fType === 'rodostime') {
+                timeFilter = filter;
                 return false;
             }
         });
 
-        if (!timeRangeFilter) {
-            Ext.log.warn('Failed to determine a timerange filter');
+        if (!timeFilter) {
+            Ext.log.warn('Failed to determine a time filter');
         }
 
         // don't accidently overwrite the configured filter…
-        timeRangeFilter = Ext.clone(timeRangeFilter);
+        timeFilter = Ext.clone(timeFilter);
 
         intervalInSeconds = me.getIntervalInSeconds(
-            timeRangeFilter.interval, timeRangeFilter.unit
+            timeFilter.interval, timeFilter.unit
         );
 
         return intervalInSeconds;
@@ -1486,6 +1487,10 @@ Ext.define('Koala.view.component.D3ChartController', {
     getIntervalInSeconds: function(interval, unit) {
         var multiplier = 0;
 
+        // TODO Just a Fallback for RODOS Testing REMOVE !!!
+        interval = interval || 1;
+        unit = unit || 'hours';
+
         switch (unit.toLowerCase()) {
             case 'seconds':
                 multiplier = 1;
@@ -1512,17 +1517,23 @@ Ext.define('Koala.view.component.D3ChartController', {
         var filter;
 
         filter = '' +
-            '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
-              '<a:PropertyIsBetween>' +
-                '<a:PropertyName>' + timeField + '</a:PropertyName>' +
-                '<a:LowerBoundary>'+
-                  '<a:Literal>' + startDate + '</a:Literal>' +
-                '</a:LowerBoundary>' +
-                '<a:UpperBoundary>' +
-                  '<a:Literal>' + endDate + '</a:Literal>' +
-                '</a:UpperBoundary>' +
-              '</a:PropertyIsBetween>' +
-            '</a:Filter>';
+            '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">' +
+            //   '<And>' +
+                //   '<PropertyIsEqualTo>' +
+                //     '<PropertyName>dataitem_id</PropertyName>' +
+                //     '<Literal>5</Literal>' +
+                //   '</PropertyIsEqualTo>' +
+                  '<PropertyIsBetween>' +
+                    '<PropertyName>' + timeField + '</PropertyName>' +
+                    '<LowerBoundary>'+
+                      '<Literal>' + startDate + '</Literal>' +
+                    '</LowerBoundary>' +
+                    '<UpperBoundary>' +
+                      '<Literal>' + endDate + '</Literal>' +
+                    '</UpperBoundary>' +
+                  '</PropertyIsBetween>' +
+            //   '</And>' +
+            '</Filter>';
 
         return filter;
     },

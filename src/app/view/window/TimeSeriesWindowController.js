@@ -521,6 +521,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             // window and update the store
             view.add(me.createTimeSeriesChartPanel(olLayer, olFeat));
         }
-    }
+    },
+
+    onFilterChanged: function() {}
 
 });
