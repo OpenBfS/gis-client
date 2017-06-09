@@ -14,8 +14,8 @@
         "btoa": true,
         "d3": false,
         "download": false,
-        "domtoimage": false,
-        "moment": true
+        "moment": true,
+        "html2canvas": true
     },
     "rules": {
         "comma-dangle": 2,
