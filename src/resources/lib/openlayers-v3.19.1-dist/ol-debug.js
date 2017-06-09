@@ -1,6 +1,6 @@
 // OpenLayers 3. See https://openlayers.org/
 // License: https://raw.githubusercontent.com/openlayers/ol3/master/LICENSE.md
-// Version: v3.19.1
+// Version: v3.19.1-1-g6834ab9
 ;(function (root, factory) {
   if (typeof exports === "object") {
     module.exports = factory();
@@ -30302,7 +30302,7 @@ ol.renderer.canvas.TileLayer.prototype.forEachLayerAtPixel = function(
   this.composeFrame(frameState, this.getLayer().getLayerState(), this.context);
 
   var imageData = this.context.getImageData(
-      pixel[0], pixel[1], 1, 1).data;
+      pixel[0] * pixelRatio, pixel[1] * pixelRatio, 1, 1).data;
 
   if (imageData[3] > 0) {
     return callback.call(thisArg, this.getLayer(),  imageData);
@@ -88467,7 +88467,7 @@ goog.exportProperty(
     ol.control.ZoomToExtent.prototype,
     'unByKey',
     ol.control.ZoomToExtent.prototype.unByKey);
-ol.VERSION = 'v3.19.1';
+ol.VERSION = 'v3.19.1-1-g6834ab9';
 OPENLAYERS.ol = ol;
 
   return OPENLAYERS.ol;
