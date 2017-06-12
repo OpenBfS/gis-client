@@ -580,6 +580,8 @@ Ext.define('Koala.view.form.Print', {
                             return false;
                         }
                         printLayers.push(layer);
+                    } else if (layer.get('printSpecial')) {
+                        printLayers.push(layer);
                     } else {
                         return false;
                     }
