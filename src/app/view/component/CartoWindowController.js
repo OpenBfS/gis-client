@@ -426,7 +426,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     })
                 }),
                 name: 'carto-window-lines',
-                proofPrintable: true
+                printSpecial: true
             });
             lineLayer.set(BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER, false);
             map.addLayer(lineLayer);
