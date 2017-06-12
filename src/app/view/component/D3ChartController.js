@@ -287,13 +287,13 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // We have to check if min and max make sense in relation to
             // the scale; 0 doesn't make sense if scale is logarithmic
-            if (axis.scale === 'log' && (min === 0 || max === 0)) {
+            if (axis.scale === 'log' && (min === 0 || max === 0 || !min || !max)) {
                 Ext.log.warn('Correcting min/max value for y-axis as' +
                     ' logarithmic scales don\'t work with 0');
-                if (min === 0) {
+                if (min === 0 || !min) {
                     min = 0.00000001;
                 }
-                if (max === 0) {
+                if (max === 0 || !max) {
                     max = 0.00000001;
                 }
             }
@@ -630,7 +630,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .enter()
                     .append('text')
                         .filter(function(d) {
-                            return Ext.isDefined(d[yField]);
+                            var cy = me.scales[orientY](d[yField]);
+                            return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
                         })
                         .text(function(d) {
                             return d[yField];
@@ -694,7 +695,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .data(me.data[shapeId])
                     .enter().append('circle')
                         .filter(function(d) {
-                            return Ext.isDefined(d[yField]);
+                            var cy = me.scales[orientY](d[yField]);
+                            return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
                         })
                             .style('fill', color)
                             .style('stroke', darkerColor)
@@ -1399,6 +1401,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         // requests object.
         var stationId = station.get(chartConfig.featureIdentifyField || 'id');
 
+
         var compareableDate;
         var matchingFeature;
         var seriesData = [];
@@ -1423,9 +1426,9 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                 me.chartDataAvailable = true;
                 newRawData[valueField] = matchingFeature.properties[yAxisAttr];
-            }
 
-            seriesData.push(newRawData);
+                seriesData.push(newRawData);
+            }
             startDate.add(intervalInSeconds, 'seconds');
         }
 
