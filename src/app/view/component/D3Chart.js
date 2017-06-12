@@ -134,7 +134,7 @@ Ext.define('Koala.view.component.D3Chart',{
                     xField: chartConfig.xAxisAttribute,
                     yField: chartConfig.yAxisAttribute,
                     name: stationName,
-                    id: olFeat.get('id'),
+                    id: olFeat.get(chartConfig.featureIdentifyField || 'id'),
                     color: color,
                     opacity: chartConfig.strokeOpacity || DEFAULTS.STROKE_OPACITY,
                     width: chartConfig.strokeWidth || DEFAULTS.STROKE_WIDTH,
