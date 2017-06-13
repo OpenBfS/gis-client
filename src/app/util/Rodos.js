@@ -63,7 +63,8 @@ Ext.define('Koala.util.Rodos', {
             var treePanel = Ext.ComponentQuery.query(queryString)[0];
             var treePanelViewModel = treePanel.getViewModel();
             var treeStore = treePanel.getStore();
-            // TODO The name may change when a projected is selected
+            // `findRecord` finds a record where the first param BEGINS with the
+            // second one.
             var rodosFolder = treeStore.findRecord('text', 'RODOS-Prognosen');
             var projectName = results.name;
             var newText = Ext.String.format('RODOS-Prognosen ({0})', projectName);
@@ -85,7 +86,6 @@ Ext.define('Koala.util.Rodos', {
 
                 if (treeNodeObj.uuid && treeNodeObj.text) {
                     rodosFolder.appendChild(treeNodeObj);
-                    // rodosFolder.expand();
                 }
             });
         }

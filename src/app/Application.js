@@ -109,13 +109,6 @@ Ext.define('Koala.Application', {
 
     /**
      * Listens to the rodosproject route. See
-     * Koala.util.Routing.beforeRodosProjectRoute for detailed implementation docs.
-     * @type {function}
-     */
-    beforeRodosProjectRoute: Koala.util.Routing.beforeRodosProjectRoute,
-
-    /**
-     * Listens to the rodosproject route. See
      * Koala.util.Routing.onRodosProjectRoute for detailed implementation docs.
      * @type {function}
      */
