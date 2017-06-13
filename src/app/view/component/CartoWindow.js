@@ -25,12 +25,21 @@ Ext.define('Koala.view.component.CartoWindow',{
     controller: 'k-component-cartowindow',
     viewModel: 'k-component-cartowindow',
 
-    // width: 200,
-    // minHeight: 20,
-
     shrinkWrap: true,
 
     pointerMoveListener: null,
+
+    /**
+     * The minimum width of the content div of the tabs.
+     * @type {Number}
+     */
+    contentMinWidth: 50,
+
+    /**
+     * The minimum height of the content div of the tabs.
+     * @type {Number}
+     */
+    contentMinHeight: 50,
 
     config: {
         map: null,

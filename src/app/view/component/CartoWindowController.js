@@ -372,10 +372,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 }
             }, {
                 tag: 'div',
-                cls: 'content tab ' + tabIndex,
+                cls: 'content tab-' + tabIndex,
                 html: config.innerHTML || ''
             }]
         });
+
+        Ext.create('Ext.resizer.Resizer', {
+            target: tab.querySelector('.content'),
+            handles: 'se'
+        });
+
+        var input = tab.querySelector('input');
+        input.addEventListener('change', me.updateLineFeature.bind(me));
 
         tabs.push(tab);
         return tab;
@@ -393,7 +401,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         var overlay = new ol.Overlay({
             position: view.getFeature().getGeometry().getCoordinates(),
-            positioning: 'center-center',
+            positioning: 'top-left',
             element: view.getEl().dom,
             stopEvent: true,
             dragging: false
@@ -464,26 +472,84 @@ Ext.define('Koala.view.component.CartoWindowController', {
             if (event.target.tagName === 'LABEL') {
                 dragPan.setActive(false);
                 overlay.set('dragging', true);
+            } else if (Ext.Array.contains(event.target.classList, 'x-resizable-handle')) {
+                overlay.set('resizing', true);
+                me.resizeTarget = Ext.get(event.target).up('.cartowindow-tab').down('.content');
             }
         });
-        el.addEventListener('mouseup', function() {
+
+        view.onMouseUp = function() {
             if (overlay.get('dragging') === true) {
                 dragPan.setActive(true);
                 overlay.set('dragging', false);
             }
-        });
+        };
+
+        view.onMouseUpWindow = function() {
+            overlay.set('resizing', false);
+        };
 
         view.pointerMoveListener = function(evt) {
             if (overlay.get('dragging') === true) {
                 overlay.setPosition(evt.coordinate);
-                lineFeature.getGeometry().setCoordinates([coords, evt.coordinate]);
+                me.updateLineFeature();
+            } else if (overlay.get('resizing') === true) {
+                var target = me.resizeTarget;
+                var targetX = target.getX();
+                var targetY = target.getY();
+                var evtX = evt.originalEvent.clientX;
+                var evtY = evt.originalEvent.clientY;
+                var newWidth = evtX - targetX;
+                var newHeight = evtY - targetY;
+                newWidth = newWidth > view.contentMinWidth
+                        ? newWidth
+                        : view.contentMinWidth || 0;
+                newHeight = newHeight > view.contentMinHeight
+                        ? newHeight
+                        : view.contentMinHeight || 0;
+
+                var timeSeriesEl = target.down('[id^=d3-chart]');
+                if (timeSeriesEl) {
+                    var chart = Ext.getCmp(timeSeriesEl.id);
+                    chart.setWidth(newWidth - 20);
+                    chart.setHeight(newHeight - 20);
+                }
+                target.setWidth(newWidth);
+                target.setHeight(newHeight);
+                me.updateLineFeature();
             }
         };
 
+        el.addEventListener('mouseup', view.onMouseUp);
+        window.addEventListener('mouseup', view.onMouseUpWindow);
         map.on('pointermove', view.pointerMoveListener);
 
         viewModel.get('lineLayer').getSource().addFeature(lineFeature);
         viewModel.set('lineFeature', lineFeature);
+    },
+
+    /**
+     * Updates the coordinates of the drawn lineFeature. And sets the
+     * centerCoords property on the overlay.
+     */
+    updateLineFeature: function() {
+        var me = this;
+        var view = me.getView();
+        var viewModel = me.getViewModel();
+        var map = view.getMap();
+        var feature = view.getFeature();
+        var lineFeature = viewModel.get('lineFeature');
+        var featureStartCoords = feature.getGeometry().getCoordinates();
+        var overlay = viewModel.get('overlay');
+        var overlayerCoords = overlay.getPosition();
+        var overlayerTopLeftPixel = map.getPixelFromCoordinate(overlayerCoords);
+        var overlayWidth = overlay.getElement().clientWidth;
+        var overlayHeight = overlay.getElement().clientHeight;
+        var centerPixel = [overlayWidth/2 + overlayerTopLeftPixel[0],
+                            overlayHeight/2 + overlayerTopLeftPixel[1]];
+        var centerCoords = map.getCoordinateFromPixel(centerPixel);
+        lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
+        overlay.centerCoords = centerCoords;
     },
 
     /**
@@ -498,6 +564,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var lineLayer = viewModel.get('lineLayer');
 
         map.un('pointermove', view.pointerMoveListener);
+        window.removeEventListener('mouseup', view.onMouseUpWindow);
         map.removeLayer(lineLayer);
     }
 
