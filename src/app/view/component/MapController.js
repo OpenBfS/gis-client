@@ -45,10 +45,11 @@ Ext.define('Koala.view.component.MapController', {
 
         Ext.each(olFeats, function(olFeat) {
             var layer = olFeat.get('layer');
+            var isCarto = Koala.util.Layer.isCartoWindowLayer(layer);
+            var isTimeSeries = Koala.util.Layer.isTimeseriesChartLayer(layer);
+            var isBarChart = Koala.util.Layer.isBarChartLayer(layer);
 
-            // Koala.util.Layer.isCartoWindowLayer(layer)
-            // if (layer.get('name') === 'dwd_niederschlag_24h') {
-            if (Koala.util.Layer.isCartoWindowLayer(layer)) {
+            if (isCarto) {
                 Ext.create('Koala.view.component.CartoWindow', {
                     map: map,
                     layer: layer,
@@ -56,21 +57,23 @@ Ext.define('Koala.view.component.MapController', {
                     renderTo: Ext.getBody()
                 });
                 return false;
-            } else if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
-                if (!timeSeriesWin) {
-                    // if no timeseries window exist, create one
-                    timeSeriesWin = me.openTimeseriesWindow(olFeat);
-                } else {
-                    // just add any further series to the existing window
-                    timeSeriesWin.getController().updateTimeSeriesChart(layer, olFeat);
+            } else if (isTimeSeries || isBarChart) {
+                if (isTimeSeries) {
+                    if (!timeSeriesWin) {
+                        // if no timeseries window exist, create one
+                        timeSeriesWin = me.openTimeseriesWindow(olFeat);
+                    } else {
+                        // just add any further series to the existing window
+                        timeSeriesWin.getController().updateTimeSeriesChart(layer, olFeat);
+                    }
+                    Ext.WindowManager.bringToFront(timeSeriesWin);
+                    // Open new BarchartWindow for each feature. Move if overlapping.
                 }
-                Ext.WindowManager.bringToFront(timeSeriesWin);
-
-            // Open new BarchartWindow for each feature. Move if overlapping.
-            } if (Koala.util.Layer.isBarChartLayer(layer)) {
-                barChartWin = me.openBarChartWindow(olFeat);
-                me.offsetBarChartWin(barChartWin);
-                Ext.WindowManager.bringToFront(barChartWin);
+                if (isBarChart) {
+                    barChartWin = me.openBarChartWindow(olFeat);
+                    me.offsetBarChartWin(barChartWin);
+                    Ext.WindowManager.bringToFront(barChartWin);
+                }
             } else {
                 Ext.log.warn('No timeseries- or barchart-config found.');
             }

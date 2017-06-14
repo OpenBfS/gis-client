@@ -103,7 +103,18 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             me.currentTask.cancel();
         }
         if (item.isLeaf()) {
-            Koala.util.Layer.addLayerByUuid(item.get('uuid'));
+            Koala.util.Layer.getMetadataFromUuid(item.get('uuid')).then(
+                function(metadata) {
+                    if (item.get('isRodosLayer') && item.get('rodosFilters')) {
+                        metadata.filters = Ext.Array.merge(
+                            metadata.filters, item.get('rodosFilters')
+                        );
+                        metadata.isRodosLayer = item.get('isRodosLayer');
+                        metadata.description = item.get('description');
+                    }
+                    Koala.util.Layer.addLayerToMap(metadata);
+                }
+            );
         } else {
             Ext.each(item.children, function(layer) {
                 Koala.util.Layer.addLayerByUuid(layer.uuid);

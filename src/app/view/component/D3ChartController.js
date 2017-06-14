@@ -287,13 +287,13 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // We have to check if min and max make sense in relation to
             // the scale; 0 doesn't make sense if scale is logarithmic
-            if (axis.scale === 'log' && (min === 0 || max === 0)) {
+            if (axis.scale === 'log' && (min === 0 || max === 0 || !min || !max)) {
                 Ext.log.warn('Correcting min/max value for y-axis as' +
                     ' logarithmic scales don\'t work with 0');
-                if (min === 0) {
+                if (min === 0 || !min) {
                     min = 0.00000001;
                 }
-                if (max === 0) {
+                if (max === 0 || !max) {
                     max = 0.00000001;
                 }
             }
@@ -614,9 +614,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .on('mouseover', function() {
                                 var tooltipCmp = me.tooltipCmp;
                                 var tooltipTpl = shapeConfig.tooltipTpl;
+                                var chartProps = view.getTargetLayer().get('timeSeriesChartProperties');
 
                                 var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
-                                    return station.get('id') === shapeId;
+                                    return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
                                 });
 
                                 var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
@@ -629,7 +630,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .enter()
                     .append('text')
                         .filter(function(d) {
-                            return Ext.isDefined(d[yField]);
+                            var cy = me.scales[orientY](d[yField]);
+                            return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
                         })
                         .text(function(d) {
                             return d[yField];
@@ -693,7 +695,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .data(me.data[shapeId])
                     .enter().append('circle')
                         .filter(function(d) {
-                            return Ext.isDefined(d[yField]);
+                            var cy = me.scales[orientY](d[yField]);
+                            return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
                         })
                             .style('fill', color)
                             .style('stroke', darkerColor)
@@ -701,9 +704,11 @@ Ext.define('Koala.view.component.D3ChartController', {
                             .on('mouseover', function(data) {
                                 var tooltipCmp = me.tooltipCmp;
                                 var tooltipTpl = shapeConfig.tooltipTpl;
+                                var chartProps = me.getView().getTargetLayer()
+                                        .get('timeSeriesChartProperties');
 
                                 var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
-                                    return station.get('id') === shapeId;
+                                    return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
                                 });
 
                                 var tooltipData = Ext.clone(data);
@@ -1003,8 +1008,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = this.getView();
         var allSelectedStations = view.getSelectedStations();
         var requestUrl = me.getChartDataRequestUrl();
+        var chartProps = view.getTargetLayer()
+                .get('timeSeriesChartProperties');
         var feat = Ext.Array.findBy(allSelectedStations, function(station) {
-            return station.get('id') === stationId;
+            return station.get(chartProps.featureIdentifyField || 'id') === stationId;
         });
         var requestParams = me.getChartDataRequestParams(feat, true);
 
@@ -1073,9 +1080,11 @@ Ext.define('Koala.view.component.D3ChartController', {
      *
      */
     deleteSelectedStation: function(shapeId) {
-        var stations = this.getView().getSelectedStations();
+        var view = this.getView();
+        var stations = view.getSelectedStations();
+        var chartProps = view.getTargetLayer().get('timeSeriesChartProperties');
         var stationToRemove = Ext.Array.findBy(stations, function(station) {
-            return station.get('id') === shapeId;
+            return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
         });
         Ext.Array.remove(stations, stationToRemove);
     },
@@ -1154,10 +1163,12 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     getChartDataForStation: function(selectedStation) {
         var me = this;
+        var layer = selectedStation.get('layer');
+        var chartProperties = layer.get('timeSeriesChartProperties');
 
         // The id of the selected station is also the key in the pending
         // requests object.
-        var stationId = selectedStation.get('id');
+        var stationId = selectedStation.get(chartProperties.featureIdentifyField || 'id');
 
         // Store the actual request object, so we are able to abort it if we are
         // called faster than the response arrives.
@@ -1191,7 +1202,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
                 targetLayer.metadata);
         var timeField = filterConfig.parameter;
-
         var startString = startDate.toISOString();
         var endString = endDate.toISOString();
 
@@ -1210,7 +1220,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 chartConfig, 'param_', true);
 
         // Merge the layer viewparams to the chart params
-        paramConfig.viewparams += ';' + layerViewParams;
+        paramConfig.viewparams = paramConfig.viewparams
+                ? paramConfig.viewparams + ';' + layerViewParams
+                : layerViewParams;
 
         // Replace all template strings
         Ext.iterate(paramConfig, function(k, v) {
@@ -1224,12 +1236,11 @@ Ext.define('Koala.view.component.D3ChartController', {
             request: 'GetFeature',
             typeName: chartConfig.dataFeatureType,
             outputFormat: 'application/json',
-            filter: me.getDateTimeRangeFilter(startString, endString, timeField),
+            filter: me.getWfsFilter(station, startString, endString, timeField),
             sortBy: timeField
         };
 
         Ext.apply(requestParams, paramConfig);
-
         return requestParams;
     },
 
@@ -1242,8 +1253,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
+        var requestUrl = Koala.util.Object.getPathStrOr(targetLayer,
+                'metadata/layerConfig/wfs/url');
 
-        return targetLayer.metadata.layerConfig.wfs.url;
+        return requestUrl;
     },
 
     /**
@@ -1297,10 +1310,12 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     onChartDataRequestCallback: function(station) {
         var me = this;
+        var view = me.getView();
+        var chartProps = view.getTargetLayer().get('timeSeriesChartProperties');
 
         // The id of the selected station is also the key in the pending
         // requests object.
-        var stationId = station.get('id');
+        var stationId = station.get(chartProps.featureIdentifyField || 'id');
 
         // Called for both success and failure, this will delete the
         // entry in the pending requests object.
@@ -1322,26 +1337,26 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // TODO refactor this gathering of the needed filter attribute
         var filters = targetLayer.metadata.filters;
-        var timeRangeFilter;
+        var timeFilter;
         var intervalInSeconds;
 
         Ext.each(filters, function(filter) {
             var fType = (filter && filter.type) || '';
-            if (fType === 'timerange' || fType === 'pointintime') {
-                timeRangeFilter = filter;
+            if (fType === 'timerange' || fType === 'pointintime' || fType === 'rodostime') {
+                timeFilter = filter;
                 return false;
             }
         });
 
-        if (!timeRangeFilter) {
-            Ext.log.warn('Failed to determine a timerange filter');
+        if (!timeFilter) {
+            Ext.log.warn('Failed to determine a time filter');
         }
 
         // don't accidently overwrite the configured filter…
-        timeRangeFilter = Ext.clone(timeRangeFilter);
+        timeFilter = Ext.clone(timeFilter);
 
         intervalInSeconds = me.getIntervalInSeconds(
-            timeRangeFilter.interval, timeRangeFilter.unit
+            timeFilter.interval, timeFilter.unit
         );
 
         return intervalInSeconds;
@@ -1384,7 +1399,8 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // The id of the selected station is also the key in the pending
         // requests object.
-        var stationId = station.get('id');
+        var stationId = station.get(chartConfig.featureIdentifyField || 'id');
+
 
         var compareableDate;
         var matchingFeature;
@@ -1410,9 +1426,9 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                 me.chartDataAvailable = true;
                 newRawData[valueField] = matchingFeature.properties[yAxisAttr];
-            }
 
-            seriesData.push(newRawData);
+                seriesData.push(newRawData);
+            }
             startDate.add(intervalInSeconds, 'seconds');
         }
 
@@ -1503,24 +1519,84 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
+     * Get an OGC WFS-Filter for the ChartData. It adds a timeRangeFilter
+     * and an additional value-filter for rodosLayer.
      *
+     * @param {ol.Feature} station The clicked feature.
+     * @param {String} startString ISO 8601 representation of the startDate.
+     * @param {String} endString ISO 8601 representation of the endDate.
+     * @param {String} timeField The field which contains the date information.
+     * @return {String} The xml representation of the OGC WFS-Filter.
      */
-    getDateTimeRangeFilter: function(startDate, endDate, timeField) {
-        var filter;
+    getWfsFilter: function(station, startString, endString, timeField) {
+        var me = this;
+        var view = me.getView();
+        var layer = view.getTargetLayer();
+        var chartingMetadata = layer.get('timeSeriesChartProperties');
+        var identifyField = chartingMetadata.featureIdentifyField || 'id';
+        var timeRangeFilter = me.getPropertyIsBetweenFilter(
+                startString, endString, timeField);
+        var propertyFilter;
+        var rodosProperty = Koala.util.Object.getPathStrOr(layer.metadata,
+            'layerConfig/olProperties/rodosLayer', false);
+        var isRodosLayer = Koala.util.String.coerce(rodosProperty);
+        if (isRodosLayer) {
+            propertyFilter = me.getPropertyIsEqualToFilter(identifyField,
+                    station.get(identifyField));
+        }
 
-        filter = '' +
-            '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
-              '<a:PropertyIsBetween>' +
-                '<a:PropertyName>' + timeField + '</a:PropertyName>' +
-                '<a:LowerBoundary>'+
-                  '<a:Literal>' + startDate + '</a:Literal>' +
-                '</a:LowerBoundary>' +
-                '<a:UpperBoundary>' +
-                  '<a:Literal>' + endDate + '</a:Literal>' +
-                '</a:UpperBoundary>' +
-              '</a:PropertyIsBetween>' +
-            '</a:Filter>';
+        var filter = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">';
+        if (Ext.isString(timeRangeFilter) && Ext.isString(propertyFilter)) {
+            filter += '<And>';
+            filter += timeRangeFilter;
+            filter += propertyFilter;
+            filter += '</And>';
+        } else if (timeRangeFilter) {
+            filter += timeRangeFilter;
+        } else if (propertyFilter) {
+            filter += propertyFilter;
+        }
+        filter += '</Filter>';
+        return filter;
+    },
 
+    /**
+     * Get an OGC 'PropertyIsBetween' WFS-Filter for the ChartData.
+     *
+     * @param {String} lowerBoundary The lowerBoundary of the filter.
+     * @param {String} upperBoundary The upperBoundary of the filter.
+     * @param {String} field The field on which the filter should look.
+     * @return {String} The xml representation of the OGC 'PropertyIsBetween'
+     *                  WFS-Filter.
+     */
+    getPropertyIsBetweenFilter: function(lowerBoundary, upperBoundary, field) {
+        var filter = '' +
+            '<PropertyIsBetween>' +
+                '<PropertyName>' + field + '</PropertyName>' +
+                    '<LowerBoundary>'+
+                    '<Literal>' + lowerBoundary + '</Literal>' +
+                '</LowerBoundary>' +
+                '<UpperBoundary>' +
+                    '<Literal>' + upperBoundary + '</Literal>' +
+                '</UpperBoundary>' +
+            '</PropertyIsBetween>';
+        return filter;
+    },
+
+    /**
+     * Get an OGC 'PropertyIsEqualTo' WFS-Filter for the ChartData.
+     *
+     * @param {String} field The field on which the filter should look.
+     * @param {String} value The value the field should have.
+     * @return {String} The xml representation of the OGC 'PropertyIsEqualTo'
+     *                  WFS-Filter.
+     */
+    getPropertyIsEqualToFilter: function(field, value) {
+        var filter = '' +
+            '<PropertyIsEqualTo>' +
+              '<PropertyName>' + field + '</PropertyName>' +
+              '<Literal>' + value + '</Literal>' +
+            '</PropertyIsEqualTo>';
         return filter;
     },
 

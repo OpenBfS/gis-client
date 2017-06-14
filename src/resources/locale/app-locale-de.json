@@ -32,6 +32,12 @@
             "msgNotBetweenMinMax": "Datum/Uhrzeit liegen nicht im erlaubten Wertebereich"
         }
     },
+    "Koala.util.Routing": {
+        "statics": {
+            "illegalFilter": "Der Permalink enthält einen fehlerhaften '{0}'-Filter.",
+            "unknownFilter": "Der Permalink enthält einen unbekannten Filter."
+        }
+    },
     "Koala.util.String": {
         "statics": {
             "defaultDateFormat": "d.m.Y H:i:s"

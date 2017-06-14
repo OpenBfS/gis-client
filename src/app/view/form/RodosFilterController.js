@@ -21,6 +21,7 @@ Ext.define('Koala.view.form.RodosFilterController', {
     alias: 'controller.k-form-rodosfilter',
 
     requires: [
+        'Koala.util.Rodos'
     ],
 
     /**
@@ -35,73 +36,8 @@ Ext.define('Koala.view.form.RodosFilterController', {
             Ext.Logger.warn('No project_uid found.');
             return;
         }
-        this.requestLayersOfProject(projectUid);
-    },
-
-    /**
-     * Requests the layers of the selected project.
-     *
-     * @param {String} projectUid The project_uid of the selected project.
-     */
-    requestLayersOfProject: function(projectUid) {
-        var me = this;
-        var viewModel = this.getViewModel();
-        var baseUrl = viewModel.get('rodosResultsUrl');
-
-        Ext.Ajax.request({
-            url: baseUrl + projectUid,
-            success: function(response) {
-                var obj = Ext.decode(response.responseText);
-                if (obj && obj.rodos_results) {
-                    me.setRodosLayers(obj.rodos_results);
-                }
-                me.closeRodosFilter();
-            },
-            failure: function(response) {
-                Ext.Logger.warn('No RODOS-layers found for project '
-                    + projectUid + ': ' + response.status);
-            }
-        });
-    },
-
-    /**
-     * Sets the layers of the "RODOS-Prognosen" folder. It replaces the current
-     * layers with the given layers.
-     *
-     * @param {Object} results the resultobject of the request to the RODOS
-     *                         servlet for a specfic project.
-     */
-    setRodosLayers: function(results) {
-        var layers = results.layers;
-        var queryString = Ext.isModern ?
-            'k-panel-treepanel > treelist' :
-            'k-panel-themetree';
-        var treeStore = Ext.ComponentQuery.query(queryString)[0].getStore();
-        // TODO The name may change when a projected ist selected
-        var rodosFolder = treeStore.findRecord('text', 'RODOS-Prognosen');
-        var selectedProject = this.getViewModel().get('selectedProject');
-        var projectName = selectedProject.get('name');
-        var newText = Ext.String.format('RODOS-Prognosen ({0})', projectName);
-        rodosFolder.set('text', newText);
-
-        // Remove all current layers from tree;
-        rodosFolder.removeAll();
-
-        Ext.each(layers, function(layer) {
-            var treeNodeObj = {
-                leaf: true,
-                isRodosLayer: true,
-                rodosFilters: layer.filters,
-                text: layer.name,
-                uuid: layer.gnos_uid,
-                description: results.description
-            };
-
-            if (treeNodeObj.uuid && treeNodeObj.text) {
-                rodosFolder.appendChild(treeNodeObj);
-                rodosFolder.expand();
-            }
-        });
+        Koala.util.Rodos.requestLayersOfProject(projectUid);
+        this.closeRodosFilter();
     },
 
     /**

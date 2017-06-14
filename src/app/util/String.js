@@ -72,11 +72,15 @@ Ext.define('Koala.util.String', {
                     // it is already a Moment/date
                     if (moment.isMoment(replacement)) {
                         replacement = Koala.util.Date.getFormattedDate(replacement);
-                    } else if (moment(replacement, moment.ISO_8601, true).isValid()) {
-                        // it can be formed into a Moment/date
-                        var momentDate = Koala.util.Date.getUtcMoment(replacement);
-                        replacement = Koala.util.Date.getFormattedDate(momentDate);
                     }
+                    // TODO This is not safe. It transforms big integers into
+                    // moment objects.
+
+                    // else if (moment(replacement, moment.ISO_8601, true).isValid()) {
+                    //     // it can be formed into a Moment/date
+                    //     var momentDate = Koala.util.Date.getUtcMoment(replacement);
+                    //     replacement = Koala.util.Date.getFormattedDate(momentDate);
+                    // }
                     tpl= tpl.replace(re, replacement);
                 }
             });

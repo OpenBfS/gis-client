@@ -377,7 +377,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             xField: chartConfig.xAxisAttribute,
             yField: chartConfig.yAxisAttribute,
             name: stationName,
-            id: olFeat.get('id'),
+            id: olFeat.get(chartConfig.featureIdentifyField || 'id'),
             color: color,
             opacity: coerce(chartConfig.strokeOpacity) || 1,
             width: coerce(chartConfig.strokeWidth) || 1,
@@ -521,6 +521,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             // window and update the store
             view.add(me.createTimeSeriesChartPanel(olLayer, olFeat));
         }
-    }
+    },
+
+    onFilterChanged: function() {}
 
 });
