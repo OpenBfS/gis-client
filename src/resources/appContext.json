@@ -82,7 +82,8 @@
             }],
             "wmsUrls": ["http://ows.terrestris.de/osm/service",
                 "http://ows.mundialis.de/services/service" ],
-            "redLineLayerName": "Messungen"
+            "redLineLayerName": "Messungen",
+            "rodosFolderName": "RODOS-Prognosen"
         }
     },
     "success": true

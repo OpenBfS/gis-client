@@ -151,6 +151,11 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
   Der Name des Zeichen Layers wie er im RoutingLegendTree zu lesen ist.
 
+* **rodosFolderName**
+
+  Der Name des RODOS-Ordners im Themenbaum. Dieser muss mit dem name des
+  RODOS-Ordners in der layerSet.json übereinstimmen.
+
 ## irixContext.json {#irixcontext}
 
 Die Datei `irixContext.json` enthält die Konfiguration des Formulars, das – zusätzlich

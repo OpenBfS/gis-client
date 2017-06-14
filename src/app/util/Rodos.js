@@ -56,6 +56,9 @@ Ext.define('Koala.util.Rodos', {
          *                         servlet for a specfic project.
          */
         setRodosLayers: function(projectUid, results) {
+            var appContext = Koala.util.AppContext.getAppContext();
+            var rodosFolderName = Koala.util.Object.getPathStrOr(appContext,
+                    'data/merge/rodosFolderName', 'RODOS-Prognosen');
             var layers = results.layers;
             var queryString = Ext.isModern ?
                 'k-panel-treepanel > treelist' :
@@ -65,9 +68,9 @@ Ext.define('Koala.util.Rodos', {
             var treeStore = treePanel.getStore();
             // `findRecord` finds a record where the first param BEGINS with the
             // second one.
-            var rodosFolder = treeStore.findRecord('text', 'RODOS-Prognosen');
+            var rodosFolder = treeStore.findRecord('text', rodosFolderName);
             var projectName = results.name;
-            var newText = Ext.String.format('RODOS-Prognosen ({0})', projectName);
+            var newText = Ext.String.format('{0} ({1})',rodosFolderName, projectName);
             treePanelViewModel.set('selectedRodosProject', projectUid);
             rodosFolder.set('text', newText);
 
