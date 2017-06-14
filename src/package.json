@@ -5,6 +5,7 @@
   "description": "Koala WebGIS",
   "scripts": {
     "pretest": "npm run lint",
+    "karma": "./node_modules/karma/bin/karma start karma.conf.js",
     "test": "node test/tasks/serve-and-run-tests.js",
     "lint": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
     "lint-fix": "eslint --fix -c .eslintrc app/ classic/ modern/ && eslint --fix -c test/.eslintrc test/",
@@ -37,10 +38,19 @@
     "express": "^4.14.0",
     "istanbul": "0.4.4",
     "jsdoc": "^3.4.3",
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.1.1",
+    "karma-coverage": "^1.1.1",
+    "karma-coverage-istanbul-reporter": "^1.3.0",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.3",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-sinon": "^1.0.5",
     "mocha": "3.0.2",
     "mocha-phantomjs": "4.1.0",
     "serve-static": "^1.11.1",
-    "sinon": "1.17.7",
+    "sinon": "^1.17.7",
     "watch": "0.19.1"
   }
 }
