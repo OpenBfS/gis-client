@@ -27,6 +27,11 @@ Ext.define('Koala.util.Routing', {
     ],
 
     statics: {
+        /* begin i18n */
+        illegalFilter: '',
+        unknownFilter: '',
+        /* end i18n */
+
         /**
          * A look-up object that will be filled in #beforeLayerTreeRoute so that
          * the actual #onLayerTreeRoute can do its work. Consist of uuids as keys
@@ -137,6 +142,7 @@ Ext.define('Koala.util.Routing', {
          * @private
          */
         applyPermalinkFiltersToMetadata: function(uuid, metadata, configFilters) {
+            var me = Koala.util.Routing;
             var metadataFilters = metadata.filters;
             Ext.each(metadataFilters, function(mdFilter) {
                 var permalinkFilter = Ext.Array.findBy(configFilters, function(filter) {
@@ -173,7 +179,7 @@ Ext.define('Koala.util.Routing', {
                                 permalinkFilter.effectivedatetime = effectiveRodosTime;
                                 Ext.apply(mdFilter, permalinkFilter);
                             } else {
-                                Ext.toast('Permalink contains illegal pointintime filter');
+                                Ext.toast(Ext.String.format(me.illegalFilter, mdFilter.type));
                             }
                             break;
                         case 'pointintime':
@@ -188,7 +194,7 @@ Ext.define('Koala.util.Routing', {
                                 permalinkFilter.effectivedatetime = effectiveDateTime;
                                 Ext.apply(mdFilter, permalinkFilter);
                             } else {
-                                Ext.toast('Permalink contains illegal pointintime filter');
+                                Ext.toast(Ext.String.format(me.illegalFilter, mdFilter.type));
                             }
                             break;
                         case 'timerange':
@@ -208,7 +214,7 @@ Ext.define('Koala.util.Routing', {
                                     effectiveMaxDateTime;
                                 Ext.apply(mdFilter, permalinkFilter);
                             } else {
-                                Ext.toast('Permalink contains illegal timerange filter');
+                                Ext.toast(Ext.String.format(me.illegalFilter, mdFilter.type));
                             }
                             break;
                         case 'value':
@@ -225,11 +231,11 @@ Ext.define('Koala.util.Routing', {
                             if (!containsIllegal) {
                                 Ext.apply(mdFilter, permalinkFilter);
                             } else {
-                                Ext.toast('Permalink contains illegal value filter');
+                                Ext.toast(Ext.String.format(me.illegalFilter, mdFilter.type));
                             }
                             break;
                         default:
-                            Ext.toast('Permalink contains unknown filter');
+                            Ext.toast(me.unknownFilter);
                             break;
                     }
                 }

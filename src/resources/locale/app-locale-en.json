@@ -32,6 +32,12 @@
             "msgNotBetweenMinMax": "Date/time are not within a valid range."
         }
     },
+    "Koala.util.Routing": {
+        "statics": {
+            "illegalFilter": "The permalink contains an invalid '{0}'-filter.",
+            "unknownFilter": "The permalink contains an unknown filter."
+        }
+    },
     "Koala.util.String": {
         "statics": {
             "defaultDateFormat": "Y/m/d H:i:s"
