@@ -6,23 +6,39 @@ module.exports = function(config) {
     config.set({
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: '',
+        basePath: './',
 
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['mocha', 'sinon'],
-
+        frameworks: ['mocha', 'expect', 'sinon'],
 
         // list of files / patterns to load in the browser
         files: [
-            'test/spec/**/*.test.js'
+            './ext/build/ext-all-debug.js',
+            './resources/lib/openlayers-v3.19.1-dist/ol.js',
+            './test/raf.polyfill.js',
+            // BasiGX & GeoExt
+            {
+                pattern: 'lib/**/*.js',
+                included: true
+            },
+            './resources/lib/proj4js/proj4.js',
+            './resources/lib/proj4js/proj4-defs.js',
+            './resources/lib/d3/d3.js',
+            './resources/lib/momentjs/moment-with-locales.js',
+            './test/loader.js',
+            './test/spec/app/**/*.test.js',
+            './test/spec/classic/**/*.test.js'
         ],
 
 
         // list of files to exclude
-        exclude: [],
-
+        exclude: [
+            './lib/**/test/**/*.js',
+            './lib/**/example-generator/*.js',
+            './resources/lib/**/test/*.js'
+        ],
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -54,7 +70,11 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome', 'Firefox', 'PhantomJS'],
+        browsers: [
+            'Chrome',
+            'Firefox',
+            'PhantomJS'
+        ],
 
 
         // Continuous Integration mode
