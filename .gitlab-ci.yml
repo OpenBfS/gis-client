@@ -40,7 +40,7 @@ test:
     - branches
   script:
     - npm install
-    - npm test:ci
+    - npm test
 
 deploy:
   stage: deploy
