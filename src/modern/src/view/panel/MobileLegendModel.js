@@ -27,7 +27,9 @@ Ext.define('Koala.view.panel.MobileLegendModel', {
         removeLayerMsgBoxTitle: '',
         removeLayerMsgBoxMessage: '',
         removeLayerMsgBoxYesBtnText: '',
-        removeLayerMsgBoxNoBtnText: ''
+        removeLayerMsgBoxNoBtnText: '',
+
+        selectedRodosProject: ''
     }
 
 });

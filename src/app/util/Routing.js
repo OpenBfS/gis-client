@@ -444,10 +444,10 @@ Ext.define('Koala.util.Routing', {
                 );
 
             var treeQueryString = Ext.isModern ?
-                'k-panel-treepanel > treelist' :
+                'k-panel-treepanel  > treelist' :
                 'k-panel-themetree';
             var treePanel = Ext.ComponentQuery.query(treeQueryString)[0];
-            var treePanelViewModel = treePanel.getViewModel();
+            var treePanelViewModel = treePanel.lookupViewModel();
             var rodosProjectUuid = treePanelViewModel.get('selectedRodosProject');
 
             if (rodosProjectUuid) {
