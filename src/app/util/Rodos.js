@@ -64,7 +64,7 @@ Ext.define('Koala.util.Rodos', {
                 'k-panel-treepanel > treelist' :
                 'k-panel-themetree';
             var treePanel = Ext.ComponentQuery.query(queryString)[0];
-            var treePanelViewModel = treePanel.getViewModel();
+            var treePanelViewModel = treePanel.lookupViewModel();
             var treeStore = treePanel.getStore();
             // `findRecord` finds a record where the first param BEGINS with the
             // second one.
