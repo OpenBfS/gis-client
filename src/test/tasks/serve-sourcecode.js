@@ -31,7 +31,7 @@ var rootDir = path.join(__dirname, '..', '..');
 
 // The path where the classic view source code lives
 var classicDir = path.normalize(path.join(rootDir, 'classic', 'src'));
-// The path where the classic view source code lives
+// The path where the modern view source code lives
 var modernDir = path.normalize(path.join(rootDir, 'modern', 'src'));
 // The path where shared code lives e.g. controller etc.
 var appDir = path.normalize(path.join(rootDir, 'app'));
