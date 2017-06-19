@@ -7,7 +7,8 @@
     "pretest": "npm run lint",
     "lint": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
     "lint-fix": "eslint --fix -c .eslintrc app/ classic/ modern/ && eslint --fix -c test/.eslintrc test/",
-    "test": "npm run test:serve & npm run test:classic && npm run test:modern",
+    "test": "npm-run-all --parallel --race test:serve test:all",
+    "test:all": "npm-run-all test:classic test:modern",
     "test:classic": "karma start karma.conf.js --single-run --toolkit classic",
     "test:modern": "karma start karma.conf.js --single-run --toolkit modern",
     "test:serve": "node test/tasks/serve-sourcecode.js",
@@ -50,6 +51,7 @@
     "karma-sinon": "^1.0.5",
     "mocha": "3.0.2",
     "mocha-phantomjs": "4.1.0",
+    "npm-run-all": "^4.0.2",
     "serve-static": "^1.11.1",
     "sinon": "^1.17.7",
     "watch": "0.19.1"
