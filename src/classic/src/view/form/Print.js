@@ -544,7 +544,7 @@ Ext.define('Koala.view.form.Print', {
         var promises = [];
 
         overlays.forEach(function(overlay) {
-            var coords = overlay.getPosition();
+            var coords = overlay.centerCoords;
             var containerEl = overlay.getElement();
             var promise = html2canvas(containerEl);
             promises.push(promise);
@@ -588,6 +588,26 @@ Ext.define('Koala.view.form.Print', {
                 }
             });
 
+            var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
+            var fieldsets = view.query(fsSelector);
+            var dpi = 90;
+
+            Ext.each(fieldsets, function(fs) {
+                var name = fs.name;
+                // TODO double check when rotated
+                var featureBbox = fs.extentFeature.getGeometry().getExtent();
+                dpi = fs.down('[name="dpi"]').getValue();
+
+                attributes[name] = {
+                    bbox: featureBbox,
+                    dpi: dpi,
+                    layers: serializedLayers.reverse(),
+                    projection: projection,
+                    rotation: rotation
+                };
+
+            }, view);
+
             Ext.each(printLayers, function(layer) {
                 var source = layer.getSource();
                 var serialized = {};
@@ -598,21 +618,20 @@ Ext.define('Koala.view.form.Print', {
                     serialized = serializer.serialize(layer, source, viewRes);
                     serializedLayers.push(serialized);
                 } else if (source.type === 'chart') {
-                    // special handling of chart/html popups
+                    var symbolizer =
+                        {
+                            type: 'point',
+                            externalGraphic: source.popup,
+                            graphicFormat: 'image/png'
+                        };
+                    // TODO Find the magic multiplier
+                    symbolizer.graphicWidth = source.height / 0.75;
                     serializedLayers.push({
                         type: 'geojson',
                         style: {
                             version: 2,
                             '*': {
-                                symbolizers: [
-                                    {
-                                        type: 'point',
-                                        externalGraphic: source.popup,
-                                        graphicFormat: 'image/png'
-                                        // graphicWidth: source.width,
-                                        // graphicHeight: source.height
-                                    }
-                                ]
+                                symbolizers: [symbolizer]
                             }
                         },
                         geojson: {
@@ -637,25 +656,6 @@ Ext.define('Koala.view.form.Print', {
                         }
                     });
                 }
-            }, view);
-
-            var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
-            var fieldsets = view.query(fsSelector);
-
-            Ext.each(fieldsets, function(fs) {
-                var name = fs.name;
-                // TODO double check when rotated
-                var featureBbox = fs.extentFeature.getGeometry().getExtent();
-                var dpi = fs.down('[name="dpi"]').getValue();
-
-                attributes[name] = {
-                    bbox: featureBbox,
-                    dpi: dpi,
-                    layers: serializedLayers.reverse(),
-                    projection: projection,
-                    rotation: rotation
-                };
-
             }, view);
 
             // Get all Fields except the DPI Field
