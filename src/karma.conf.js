@@ -34,12 +34,12 @@ module.exports = function(config) {
             // GeoExt
             {
                 pattern: 'lib/GeoExt/src/**/*.js',
-                included: true
+                included: false
             },
             // BasiGX
             {
                 pattern: 'lib/BasiGX/src/**/*.js',
-                included: true
+                included: false
             },
             'resources/lib/proj4js/proj4.js',
             'resources/lib/proj4js/proj4-defs.js',
