@@ -186,9 +186,14 @@ Ext.define('Koala.view.main.MobileMainController', {
      */
     onWmsGetFeatureSuccess: function(resp) {
         var me = this;
+        var mapComponent = this.getView().down('basigx-component-map');
+        var map = mapComponent.getMap();
+        var mapProjection = map.getView().getProjection();
         var geojsonFormat = new ol.format.GeoJSON();
         var respFeatures = geojsonFormat.readFeatures(
-            resp.responseText
+            resp.responseText, {
+                featureProjection: mapProjection
+            }
         );
         if (respFeatures && respFeatures[0]) {
             me.chartableFeatureFound(respFeatures[0]);
@@ -205,9 +210,22 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var view = me.getView();
         var viewModel = view.getViewModel();
+        var mapComponent = this.getView().down('basigx-component-map');
+        var map = mapComponent.getMap();
         var panel;
+        var isCarto = Koala.util.Layer.isCartoWindowLayer(me.chartingLayer);
+        var isTimeSeries = Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer);
+        var isBarChart = Koala.util.Layer.isBarChartLayer(me.chartingLayer);
 
-        if (Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer) && Koala.util.Layer.isBarChartLayer(me.chartingLayer)) {
+        if (isCarto) {
+            Ext.create('Koala.view.component.CartoWindow', {
+                map: map,
+                layer: me.chartingLayer,
+                feature: feature,
+                renderTo: Ext.getBody()
+            });
+            return false;
+        } else if (isTimeSeries && isBarChart) {
             Ext.Msg.show({
                 title: viewModel.get('chartSlctnTitle'),
                 message: viewModel.get('chartSlctnMsg'),
@@ -230,9 +248,9 @@ Ext.define('Koala.view.main.MobileMainController', {
                     panel.show();
                 }
             });
-        } else if (Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer)) {
+        } else if (isTimeSeries) {
             panel = view.down('k-panel-timeserieschart');
-        } else if (Koala.util.Layer.isBarChartLayer(me.chartingLayer)) {
+        } else if (isBarChart) {
             panel = view.down('k-panel-barchart');
         }
         if (panel) {
