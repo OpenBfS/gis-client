@@ -25,7 +25,8 @@
  */
 var express = require('express');
 var path = require('path');
-var serveStatic = require('serve-static');
+
+var im = require('istanbul-middleware');
 
 var rootDir = path.join(__dirname, '..', '..');
 
@@ -46,22 +47,30 @@ var enableCors = function(req, res, next) {
         next();
     };
 
+// the middleware will throw warnings about files in the other dir, but will
+// serve the instrumented file nonetheless
+im.hookLoader(classicDir);
+im.hookLoader(appDir);
+im.hookLoader(modernDir);
+
+classicServer.use('/coverage', im.createHandler());
 // make the JavaScript usable from another URL (our testsuite)
 classicServer.use(enableCors);
 
 // make sure both classic and app files are being served
-classicServer.use(serveStatic(classicDir));
-classicServer.use(serveStatic(appDir));
+classicServer.use(im.createClientHandler(appDir));
+classicServer.use(im.createClientHandler(classicDir));
 
 classicServer.listen(3000);
 
 var modernServer = express();
 
+modernServer.use('/coverage', im.createHandler());
 // make the JavaScript usable from another URL (our testsuite)
 modernServer.use(enableCors);
 
 // make sure both modern and app files are being served
-modernServer.use(serveStatic(modernDir));
-modernServer.use(serveStatic(appDir));
+modernServer.use(im.createClientHandler(appDir));
+modernServer.use(im.createClientHandler(modernDir));
 
 modernServer.listen(3001);

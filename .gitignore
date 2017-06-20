@@ -9,6 +9,7 @@ src/classic.json
 src/modern.json
 src/modern.jsonp
 src/coverage
+src/coverage-combined
 src/packages/**
 src/sass/example/bootstrap.js
 src/sass/example/bootstrap.json

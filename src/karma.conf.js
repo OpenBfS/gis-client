@@ -59,7 +59,8 @@ module.exports = function(config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             'app/**/*.js': ['coverage'],
-            'classic/**/*.js': ['coverage']
+            'classic/**/*.js': ['coverage'],
+            'modern/**/*.js': ['coverage']
         },
 
         // test results reporter to use
@@ -105,8 +106,8 @@ module.exports = function(config) {
 
         // optionally, configure the reporter
         coverageReporter: {
-            type: 'html',
-            dir: 'coverage/'
+            dir: 'coverage/' + TOOLKIT,
+            type: 'json'
         }
     });
 };
