@@ -40,8 +40,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var feature = view.getFeature();
         var layer = view.getLayer();
 
+        // Cleanup hover artifacts
+        var mapComponent = Ext.ComponentQuery.query('k-component-map')[0];
+        var hoverPlugin = mapComponent.getPlugin('hoverBfS');
+        hoverPlugin.cleanupHoverArtifacts();
+
+        // Add toolkitname (modern/classic) as css class to the view
         view.addCls(Ext.toolkit);
 
+        // If the feature has no layer set as property (like in modern) we add one
         if (!feature.get('layer')) {
             feature.set('layer', layer);
         }
@@ -433,8 +440,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var viewModel = me.getViewModel();
         var map = view.getMap();
         var position = view.getFeature().getGeometry().getCoordinates();
+        var layer = view.getLayer();
+        var idField = Koala.util.Object.getPathStrOr(layer,
+            'metadata/layerConfig/olProperties/featureIdentifyField', 'id');
+        var featureId = view.getFeature().get(idField);
 
         var overlay = new ol.Overlay({
+            id: featureId,
             position: position,
             positioning: 'top-left',
             element: view.el.dom,
