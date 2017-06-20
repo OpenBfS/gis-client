@@ -53,14 +53,15 @@ Ext.define('Koala.view.component.MapController', {
             var isBarChart = Koala.util.Layer.isBarChartLayer(layer);
 
             if (isCarto) {
+                var cartoWindowId = layer.get('name') + '__' + featureId;
                 var cartoWindow = Ext.ComponentQuery.query(
-                        'k-component-cartowindow[featureId='+featureId+']')[0];
+                        'k-component-cartowindow[cartoWindowId='+cartoWindowId+']')[0];
                 if (cartoWindow) {
                     BasiGX.util.Animate.shake(cartoWindow);
                 } else {
                     Ext.create('Koala.view.component.CartoWindow', {
                         map: map,
-                        featureId: featureId,
+                        cartoWindowId: cartoWindowId,
                         layer: layer,
                         feature: olFeat,
                         renderTo: Ext.getBody()

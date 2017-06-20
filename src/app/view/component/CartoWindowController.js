@@ -102,14 +102,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var el = view.el.dom;
-        var layer = view.getLayer();
-        var idField = Koala.util.Object.getPathStrOr(layer,
-            'metadata/layerConfig/olProperties/featureIdentifyField', 'id');
-        var featureId = view.getFeature().get(idField);
+        var cartoWindowId = view.getCartoWindowId();
         var closeElement = Ext.DomHelper.createDom({
             tag: 'div',
             html: '<i class="fa fa-times-circle" aria-hidden="true"></i>',
-            cls: featureId + ' closeElement'
+            cls: cartoWindowId + ' closeElement'
         });
 
         closeElement.addEventListener('click', function() {
@@ -376,15 +373,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var viewModel = me.getViewModel();
         var tabs = viewModel.get('tabs');
         var tabIndex = tabs.length;
-        var layer = view.getLayer();
-        var idField = Koala.util.Object.getPathStrOr(layer,
-            'metadata/layerConfig/olProperties/featureIdentifyField', 'id');
-        var featureId = view.getFeature().get(idField);
-        var tabIdString = featureId + ' cartowindow-tab-label-'+ tabIndex;
+        var cartoWindowId = view.getCartoWindowId();
+        var tabIdString = cartoWindowId + ' cartowindow-tab-label-'+ tabIndex;
 
         var tab = Ext.DomHelper.createDom({
             tag: 'div',
-            cls: featureId + ' cartowindow-tab ' + config.className,
+            cls: cartoWindowId + ' cartowindow-tab ' + config.className,
             children: [{
                 tag: 'label',
                 for: tabIdString,
@@ -398,7 +392,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 tag: 'input',
                 id: tabIdString,
                 type: 'radio',
-                name: featureId + ' tabs',
+                name: cartoWindowId + ' tabs',
                 checked: config.active || false,
                 'aria-hidden': true
             }, {
@@ -440,13 +434,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var viewModel = me.getViewModel();
         var map = view.getMap();
         var position = view.getFeature().getGeometry().getCoordinates();
-        var layer = view.getLayer();
-        var idField = Koala.util.Object.getPathStrOr(layer,
-            'metadata/layerConfig/olProperties/featureIdentifyField', 'id');
-        var featureId = view.getFeature().get(idField);
+        var cartoWindowId = view.getCartoWindowId();
 
         var overlay = new ol.Overlay({
-            id: featureId,
+            id: cartoWindowId,
             position: position,
             positioning: 'top-left',
             element: view.el.dom,
