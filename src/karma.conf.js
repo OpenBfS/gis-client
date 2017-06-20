@@ -66,7 +66,7 @@ module.exports = function(config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'mocha', 'coverage'],
+        reporters: ['mocha', 'coverage'],
 
         // web server port
         port: 9876,
@@ -90,7 +90,8 @@ module.exports = function(config) {
         ],
 
         phantomjsLauncher: {
-            flags: ['--load-images=false',
+            flags: [
+                '--load-images=false',
                 '--ssl-protocol=any',
                 '--ignore-ssl-errors=true'
             ]
