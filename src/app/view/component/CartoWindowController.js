@@ -134,18 +134,43 @@ Ext.define('Koala.view.component.CartoWindowController', {
             active: true
         });
 
+        var tabElm = timeSeriesTab.getElementsByTagName('div')[0];
+
         var config = {
             startDate: timeFilter.mindatetimeinstant,
             endDate: timeFilter.maxdatetimeinstant,
             width: '400px',
             height: '400px',
-            renderTo: timeSeriesTab.getElementsByTagName('div')[0]
+            renderTo: tabElm
         };
 
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
-        Ext.create(chartObj);
+        this.chart = Ext.create(chartObj);
+
+        this.createTimeSeriesButtons(tabElm);
 
         el.appendChild(timeSeriesTab);
+    },
+
+    createTimeSeriesButtons: function(elm) {
+        var left = {
+            xtype: 'button',
+            name: 'seriesLeft',
+            glyph: 'xf104@FontAwesome',
+            tooltip: 'Layerinformationen anzeigen',
+            renderTo: elm
+        };
+        var right = {
+            xtype: 'button',
+            name: 'seriesRight',
+            glyph: 'xf105@FontAwesome',
+            tooltip: 'Layerinformationen anzeigen',
+            renderTo: elm
+        };
+        left = Ext.create(left);
+        left.el.dom.addEventListener('click', this.scrollTimeseriesLeft.bind(this));
+        right = Ext.create(right);
+        right.el.dom.addEventListener('click', this.scrollTimeseriesRight.bind(this));
     },
 
     /**
@@ -554,6 +579,16 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var centerCoords = map.getCoordinateFromPixel(centerPixel);
         lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
         overlay.centerCoords = centerCoords;
+    },
+
+    scrollTimeseriesLeft: function() {
+        // this.chart.setConfig('startDate', moment())
+        // this.chart.getController().getChartData();
+    },
+
+    scrollTimeseriesRight: function() {
+        // this.chart.setConfig('startDate', moment())
+        // this.chart.getController().getChartData();
     },
 
     /**
