@@ -143,9 +143,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
 
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
-        Ext.create(chartObj);
 
         el.appendChild(timeSeriesTab);
+        Ext.create(chartObj);
     },
 
     /**
@@ -156,13 +156,27 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var el = view.getEl().dom;
-        var timeSeriesTab = me.createTabElement({
+        var layer = view.layer;
+        var feature = view.feature;
+
+        var barChartTab = me.createTabElement({
             title: 'Bar Chart',
-            innerHTML: 'Replace with barchart',
-            className: 'barchart-tab'
+            className: 'barchart-tab',
+            active: true
         });
 
-        el.appendChild(timeSeriesTab);
+        var config = {
+            width: '400px',
+            height: '400px',
+            flex: 1,
+            renderTo: barChartTab.getElementsByTagName('div')[0]
+        };
+
+        var chartObj = Koala.view.component.D3BarChart.create(
+                layer, feature, config);
+
+        el.appendChild(barChartTab);
+        Ext.create(chartObj);
     },
 
     getTabData: function(urlProperty, contentProperty) {
@@ -512,9 +526,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
                         ? newHeight
                         : view.contentMinHeight || 0;
 
-                var timeSeriesEl = target.down('[id^=d3-chart]');
-                if (timeSeriesEl) {
-                    var chart = Ext.getCmp(timeSeriesEl.id);
+                var chartContainerEl = target.down('[id^=d3-chart]') ||
+                        target.down('[id^=d3-barchart]');
+                if (chartContainerEl) {
+                    var chart = Ext.getCmp(chartContainerEl.id);
                     chart.setWidth(newWidth - 20);
                     chart.setHeight(newHeight - 20);
                 }
