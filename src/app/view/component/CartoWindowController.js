@@ -169,10 +169,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = this.getView();
         var layer = view.layer;
         var feature = view.feature;
-        var url = Koala.util.String.replaceTemplateStrings(
-            layer.get(urlProperty),
-            view.feature
-        );
+        urlProperty = layer.get(urlProperty);
+        var url;
+        if (urlProperty) {
+            url = Koala.util.String.replaceTemplateStrings(
+                urlProperty,
+                view.feature
+            );
+        }
         var prop = layer.get(contentProperty);
 
         var promise;
