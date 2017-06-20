@@ -41,6 +41,8 @@ test:
   script:
     - npm install
     - npm test
+    - npm run combine-coverages
+    - npm run coverage-summary
 
 deploy:
   stage: deploy
