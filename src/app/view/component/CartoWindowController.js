@@ -412,7 +412,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (!Ext.isModern) {
             Ext.create('Ext.resizer.Resizer', {
                 target: tab.querySelector('.content'),
-                handles: 'se'
+                handles: 'se s e'
             });
         }
 
@@ -528,7 +528,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
 
         view.pointerMoveListener = function(event) {
-            event.preventDefault();
             if (overlay.get('dragging') === true) {
                 overlay.setPosition(event.coordinate);
                 me.updateLineFeature();
@@ -602,11 +601,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var viewModel = me.getViewModel();
         var map = view.getMap();
         var lineLayer = viewModel.get('lineLayer');
+        var lineFeature = viewModel.get('lineFeature');
         var upEvent = Ext.isModern ? 'touchend': 'mouseup';
 
         map.un('pointermove', view.pointerMoveListener);
         window.removeEventListener(upEvent, view.onMouseUpWindow);
-        map.removeLayer(lineLayer);
+        lineLayer.getSource().removeFeature(lineFeature);
     }
 
 });
