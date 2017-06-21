@@ -654,13 +654,27 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     scrollTimeseriesLeft: function() {
-        // this.chart.setConfig('startDate', moment())
-        // this.chart.getController().getChartData();
+        var startDate = this.chart.getConfig('startDate');
+        var layer = this.getView().layer;
+        var duration = Koala.util.Object.getPathStrOr(
+            layer,
+            'metadata/layerConfig/timeSeriesChartProperties/duration'
+        );
+        startDate.subtract(moment.duration(duration));
+        this.chart.setConfig('startDate', startDate);
+        this.chart.getController().getChartData();
     },
 
     scrollTimeseriesRight: function() {
-        // this.chart.setConfig('startDate', moment())
-        // this.chart.getController().getChartData();
+        var endDate = this.chart.getConfig('endDate');
+        var layer = this.getView().layer;
+        var duration = Koala.util.Object.getPathStrOr(
+            layer,
+            'metadata/layerConfig/timeSeriesChartProperties/duration'
+        );
+        endDate.add(moment.duration(duration));
+        this.chart.setConfig('endDate', endDate);
+        this.chart.getController().getChartData();
     },
 
     toggleTimeseriesLegend: function() {
