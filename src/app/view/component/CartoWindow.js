@@ -44,7 +44,8 @@ Ext.define('Koala.view.component.CartoWindow',{
     config: {
         map: null,
         layer: null,
-        feature: null
+        feature: null,
+        cartoWindowId: null
     },
 
     listeners: {

@@ -183,6 +183,7 @@ Ext.define('Koala.view.component.D3BarChart',{
                 width: config.width || chartWidth,
                 margin: config.margin || 0,
                 flex: config.flex,
+                renderTo: config.renderTo,
                 startDate: olFeat.get('end_measure'),
                 endDate: olFeat.get('end_measure'),
                 targetLayer: olLayer,
