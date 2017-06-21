@@ -105,7 +105,9 @@ Ext.define('Koala.util.Filter', {
                         case 'timerange':
                             endDate = filter.effectivemaxdatetime;
                             break;
+                        // TODO Do something
                         default:
+                            break;
                     }
                 });
             }
@@ -641,6 +643,7 @@ Ext.define('Koala.util.Filter', {
                 max = moment.utc('2100-01-01T00:00:00');
             }
 
+
             // Get clones of once passed in min and max:
             var minClone = min.clone().utc();
             var maxClone = max.clone().utc();
@@ -652,6 +655,10 @@ Ext.define('Koala.util.Filter', {
                 var field = this;
                 // Request the value as moment object.
                 var date = field.getValue(true);
+
+                if (!date) {
+                    return true;
+                }
                 // Inside this validation method we handle all dates as UTC.
                 var momentDate = date.clone().utc();
                 var realDate = momentDate;
@@ -698,6 +705,10 @@ Ext.define('Koala.util.Filter', {
 
             var startDate = minField.getValue(true);
             var endDate = maxField.getValue(true);
+
+            if (!startDate || !endDate) {
+                return true;
+            }
 
             if (startDate.isAfter(endDate)) {
                 // Invalid: start value after end value
