@@ -148,29 +148,56 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.chart = Ext.create(chartObj);
 
         this.createTimeSeriesButtons(tabElm);
+        this.createLegendVisibilityButton(tabElm);
 
         el.appendChild(timeSeriesTab);
     },
 
+    /**
+     * Create buttons to scroll/expand the timeseries start/end date.
+     * @param  {Element} elm element to render the buttons to
+     */
     createTimeSeriesButtons: function(elm) {
         var left = {
             xtype: 'button',
             name: 'seriesLeft',
             glyph: 'xf104@FontAwesome',
-            tooltip: 'Layerinformationen anzeigen',
+            bind: {
+                tooltip: this.view.getViewModel().get('expandToLeft')
+            },
             renderTo: elm
         };
         var right = {
             xtype: 'button',
             name: 'seriesRight',
             glyph: 'xf105@FontAwesome',
-            tooltip: 'Layerinformationen anzeigen',
+            bind: {
+                tooltip: this.view.getViewModel().get('expandToRight')
+            },
             renderTo: elm
         };
         left = Ext.create(left);
         left.el.dom.addEventListener('click', this.scrollTimeseriesLeft.bind(this));
         right = Ext.create(right);
         right.el.dom.addEventListener('click', this.scrollTimeseriesRight.bind(this));
+    },
+
+    /**
+     * Create legend visibility toggle button.
+     * @param  {Element} elm element to render the button to
+     */
+    createLegendVisibilityButton: function(elm) {
+        var btn = {
+            xtype: 'button',
+            name: 'toggleLegend',
+            glyph: 'xf151@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('toggleLegendVisibility')
+            },
+            renderTo: elm
+        };
+        this.legendVisibilityButton = Ext.create(btn);
+        this.legendVisibilityButton.el.dom.addEventListener('click', this.toggleTimeseriesLegend.bind(this));
     },
 
     /**
@@ -589,6 +616,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
     scrollTimeseriesRight: function() {
         // this.chart.setConfig('startDate', moment())
         // this.chart.getController().getChartData();
+    },
+
+    toggleTimeseriesLegend: function() {
+        var btn = this.legendVisibilityButton;
+        this.chart.getController().toggleLegendVisibility();
+        var glyph = btn.getGlyph();
+        if (glyph.glyphConfig === 'xf151@FontAwesome') {
+            glyph = 'xf150@FontAwesome';
+        } else {
+            glyph = 'xf151@FontAwesome';
+        }
+        btn.setGlyph(glyph);
     },
 
     /**

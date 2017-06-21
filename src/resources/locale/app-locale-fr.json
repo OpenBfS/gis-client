@@ -62,6 +62,15 @@
             }
         }
     },
+    "Koala.view.component.CartoWindow": {
+        "config": {
+            "data": {
+                "expandToLeft": "fr:Show older data",
+                "expandToRight": "fr:Show newer data",
+                "toggleLegendVisibility": "fr:Toggle legend visibility"
+            }
+        }
+    },
     "Koala.view.component.D3BarChart": {
         "config": {
             "data": {
