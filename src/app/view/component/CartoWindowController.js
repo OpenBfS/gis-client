@@ -168,21 +168,26 @@ Ext.define('Koala.view.component.CartoWindowController', {
     getTabData: function(urlProperty, contentProperty) {
         var view = this.getView();
         var layer = view.layer;
-        var feature = view.feature;
         urlProperty = layer.get(urlProperty);
-        var url;
+        contentProperty = layer.get(contentProperty);
+        var url, prop;
         if (urlProperty) {
             url = Koala.util.String.replaceTemplateStrings(
                 urlProperty,
                 view.feature
             );
         }
-        var prop = layer.get(contentProperty);
+        if (contentProperty) {
+            prop = Koala.util.String.replaceTemplateStrings(
+                contentProperty,
+                view.feature
+            );
+        }
 
         var promise;
 
         if (prop) {
-            promise = Ext.Promise.resolve(feature.get(prop));
+            promise = Ext.Promise.resolve(prop);
         } else {
             promise = new Ext.Promise(function(resolve, reject) {
                 Ext.Ajax.request({
