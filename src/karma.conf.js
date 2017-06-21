@@ -31,6 +31,7 @@ module.exports = function(config) {
             'test/' + TOOLKIT + '/loader.js',
             'resources/lib/openlayers-v3.19.1-dist/ol.js',
             'test/raf.polyfill.js',
+            'test/test-helper-functions.js',
             // GeoExt
             {
                 pattern: 'lib/GeoExt/src/**/*.js',
@@ -39,6 +40,12 @@ module.exports = function(config) {
             // BasiGX
             {
                 pattern: 'lib/BasiGX/src/**/*.js',
+                included: false
+            },
+            {
+                pattern: 'resources/appContext.json',
+                watched: true,
+                served: true,
                 included: false
             },
             'resources/lib/proj4js/proj4.js',
