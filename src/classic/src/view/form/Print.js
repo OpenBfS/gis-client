@@ -252,11 +252,13 @@ Ext.define('Koala.view.form.Print', {
 
         treeStore.on('nodemove', me.onTreeStoreNodeMove);
         treeStore.on('nodeinsert', me.onTreeStoreNodeInsert, me);
+        treeStore.on('nodeappend', me.onTreeStoreNodeInsert, me);
         treeStore.on('noderemove', me.onTreeStoreNodeRemove, me);
         timeReferenceButton.on('toggle', onUtcToggle);
         legendsFieldset.on('destroy', function() {
             treeStore.un('nodemove', me.onTreeStoreNodeMove);
             treeStore.un('nodeinsert', me.onTreeStoreNodeInsert, me);
+            treeStore.un('nodeappend', me.onTreeStoreNodeInsert, me);
             treeStore.un('noderemove', me.onTreeStoreNodeRemove, me);
             timeReferenceButton.un('toggle', onUtcToggle);
         });
@@ -592,22 +594,6 @@ Ext.define('Koala.view.form.Print', {
             var fieldsets = view.query(fsSelector);
             var dpi = 90;
 
-            Ext.each(fieldsets, function(fs) {
-                var name = fs.name;
-                // TODO double check when rotated
-                var featureBbox = fs.extentFeature.getGeometry().getExtent();
-                dpi = fs.down('[name="dpi"]').getValue();
-
-                attributes[name] = {
-                    bbox: featureBbox,
-                    dpi: dpi,
-                    layers: serializedLayers.reverse(),
-                    projection: projection,
-                    rotation: rotation
-                };
-
-            }, view);
-
             Ext.each(printLayers, function(layer) {
                 var source = layer.getSource();
                 var serialized = {};
@@ -658,6 +644,22 @@ Ext.define('Koala.view.form.Print', {
                 }
             }, view);
 
+            Ext.each(fieldsets, function(fs) {
+                var name = fs.name;
+                // TODO double check when rotated
+                var featureBbox = fs.extentFeature.getGeometry().getExtent();
+                dpi = fs.down('[name="dpi"]').getValue();
+
+                attributes[name] = {
+                    bbox: featureBbox,
+                    dpi: dpi,
+                    layers: serializedLayers.reverse(),
+                    projection: projection,
+                    rotation: rotation
+                };
+
+            }, view);
+
             // Get all Fields except the DPI Field
             // TODO This query should be optimized or changed into some
             // different kind of logic
@@ -696,7 +698,7 @@ Ext.define('Koala.view.form.Print', {
             if (legendFieldset && !legendFieldset.getCollapsed()) {
                 attributes.legend = view.getLegendObject();
 
-                // Override layer name in legend with valze from legendTextField
+                // Override layer name in legend with value from legendTextField
                 Ext.each(attributes.legend.classes, function(clazz) {
                     var legendTextField = legendFieldset.down(
                             'textfield[name=' + clazz.name + '_legendtext]');
