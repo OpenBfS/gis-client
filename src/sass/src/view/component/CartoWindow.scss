@@ -1,12 +1,12 @@
-.cartowindow > div.cartowindow-tab > h2,
-.cartowindow > div.cartowindow-tab > input,
-.cartowindow > div.cartowindow-tab > label, {
+.cartowindow.classic > div.cartowindow-tab > h2,
+.cartowindow.classic > div.cartowindow-tab > input,
+.cartowindow.classic > div.cartowindow-tab > label, {
     display: none;
 }
 
-.cartowindow:hover > div.cartowindow-tab > h2,
-.cartowindow:hover > div.cartowindow-tab > input,
-.cartowindow:hover > div.cartowindow-tab > label, {
+.cartowindow.classic:hover > div.cartowindow-tab > h2,
+.cartowindow.classic:hover > div.cartowindow-tab > input,
+.cartowindow.classic:hover > div.cartowindow-tab > label, {
     display: inherit;
 }
 

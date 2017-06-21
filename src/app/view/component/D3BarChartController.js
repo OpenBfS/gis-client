@@ -250,7 +250,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var viewId = '#' + view.getId();
         var shapeGroup = d3.select(viewId + ' .' + staticMe.CSS_CLASS.SHAPE_GROUP);
 
-        shapeGroup.node().remove();
+        if (shapeGroup.node()) {
+            shapeGroup.node().remove();
+        }
 
         me.drawShapes();
     },

@@ -45,18 +45,28 @@ Ext.define('Koala.view.component.MapController', {
 
         Ext.each(olFeats, function(olFeat) {
             var layer = olFeat.get('layer');
+            var idField = Koala.util.Object.getPathStrOr(layer,
+                'metadata/layerConfig/olProperties/featureIdentifyField', 'id');
+            var featureId = olFeat.get(idField);
             var isCarto = Koala.util.Layer.isCartoWindowLayer(layer);
             var isTimeSeries = Koala.util.Layer.isTimeseriesChartLayer(layer);
             var isBarChart = Koala.util.Layer.isBarChartLayer(layer);
 
             if (isCarto) {
-                Ext.create('Koala.view.component.CartoWindow', {
-                    map: map,
-                    layer: layer,
-                    feature: olFeat,
-                    renderTo: Ext.getBody()
-                });
-                return false;
+                var cartoWindowId = layer.get('name') + '__' + featureId;
+                var cartoWindow = Ext.ComponentQuery.query(
+                        'k-component-cartowindow[cartoWindowId='+cartoWindowId+']')[0];
+                if (cartoWindow) {
+                    BasiGX.util.Animate.shake(cartoWindow);
+                } else {
+                    Ext.create('Koala.view.component.CartoWindow', {
+                        map: map,
+                        cartoWindowId: cartoWindowId,
+                        layer: layer,
+                        feature: olFeat,
+                        renderTo: Ext.getBody()
+                    });
+                }
             } else if (isTimeSeries || isBarChart) {
                 if (isTimeSeries) {
                     if (!timeSeriesWin) {

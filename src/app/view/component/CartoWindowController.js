@@ -36,6 +36,22 @@ Ext.define('Koala.view.component.CartoWindowController', {
      */
     onInitialize: function() {
         var me = this;
+        var view = me.getView();
+        var feature = view.getFeature();
+        var layer = view.getLayer();
+
+        // Cleanup hover artifacts
+        var mapComponent = Ext.ComponentQuery.query('k-component-map')[0];
+        var hoverPlugin = mapComponent.getPlugin('hoverBfS');
+        hoverPlugin.cleanupHoverArtifacts();
+
+        // Add toolkitname (modern/classic) as css class to the view
+        view.addCls(Ext.toolkit);
+
+        // If the feature has no layer set as property (like in modern) we add one
+        if (!feature.get('layer')) {
+            feature.set('layer', layer);
+        }
 
         me.createTabs();
 
@@ -85,12 +101,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createCloseElement: function() {
         var me = this;
         var view = me.getView();
-        var el = view.getEl().dom;
-        var featureId = view.feature.get('id');
+        var el = view.el.dom;
+        var cartoWindowId = view.getCartoWindowId();
         var closeElement = Ext.DomHelper.createDom({
             tag: 'div',
             html: '<i class="fa fa-times-circle" aria-hidden="true"></i>',
-            cls: featureId + ' closeElement'
+            cls: cartoWindowId + ' closeElement'
         });
 
         closeElement.addEventListener('click', function() {
@@ -107,11 +123,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
     updateCloseElementPosition: function() {
         var me = this;
         var view = me.getView();
-        var el = view.getEl();
         var viewModel = me.getViewModel();
         var tabs = viewModel.get('tabs');
         var tabIndex = tabs.length;
-        var closeElement = el.down('.closeElement');
+        var closeElement = view.el.down('.closeElement');
         closeElement.setStyle('left', (tabIndex*100) + 'px');
     },
 
@@ -122,11 +137,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createTimeSeriesTab: function() {
         var me = this;
         var view = me.getView();
-        var el = view.getEl().dom;
-        var layer = view.layer;
-        var feature = view.feature;
+        var el = view.el.dom;
+        var layer = view.getLayer();
+        var feature = view.getFeature();
         var timeFilter = Koala.util.Filter.getStartEndFilterFromMetadata(
-                view.layer.metadata);
+                layer.metadata);
 
         var timeSeriesTab = me.createTabElement({
             title: 'Timeseries',
@@ -143,9 +158,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
 
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
-        Ext.create(chartObj);
 
         el.appendChild(timeSeriesTab);
+        Ext.create(chartObj);
     },
 
     /**
@@ -155,14 +170,28 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createBarChartTab: function() {
         var me = this;
         var view = me.getView();
-        var el = view.getEl().dom;
-        var timeSeriesTab = me.createTabElement({
+        var el = view.el.dom;
+        var layer = view.getLayer();
+        var feature = view.getFeature();
+
+        var barChartTab = me.createTabElement({
             title: 'Bar Chart',
-            innerHTML: 'Replace with barchart',
-            className: 'barchart-tab'
+            className: 'barchart-tab',
+            active: true
         });
 
-        el.appendChild(timeSeriesTab);
+        var config = {
+            width: '400px',
+            height: '400px',
+            flex: 1,
+            renderTo: barChartTab.getElementsByTagName('div')[0]
+        };
+
+        var chartObj = Koala.view.component.D3BarChart.create(
+                layer, feature, config);
+
+        el.appendChild(barChartTab);
+        Ext.create(chartObj);
     },
 
     getTabData: function(urlProperty, contentProperty) {
@@ -276,7 +305,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createTableTab: function() {
         var me = this;
         var view = me.getView();
-        var el = view.getEl().dom;
+        var el = view.el.dom;
         this.getTableData().then(function(data) {
             var html = me.convertData(data);
 
@@ -298,7 +327,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createHtmlTab: function() {
         var me = this;
         var view = me.getView();
-        var el = view.getEl().dom;
+        var el = view.el.dom;
         this.getHtmlData().then(function(data) {
             var timeSeriesTab = me.createTabElement({
                 title: 'Html',
@@ -318,9 +347,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createHoverTemplateTab: function() {
         var me = this;
         var view = me.getView();
-        var el = view.getEl().dom;
-        var layer = view.layer;
-        var feature = view.feature;
+        var el = view.el.dom;
+        var layer = view.getLayer();
+        var feature = view.getFeature();
         var template = Koala.util.Object.getPathStrOr(layer,
                 'metadata/layerConfig/olProperties/hoverTpl');
         var innerHTML = Koala.util.String.replaceTemplateStrings(template,
@@ -349,12 +378,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var viewModel = me.getViewModel();
         var tabs = viewModel.get('tabs');
         var tabIndex = tabs.length;
-        var featureId = view.feature.get('id');
-        var tabIdString = featureId + ' cartowindow-tab-label-'+ tabIndex;
+        var cartoWindowId = view.getCartoWindowId();
+        var tabIdString = cartoWindowId + ' cartowindow-tab-label-'+ tabIndex;
 
         var tab = Ext.DomHelper.createDom({
             tag: 'div',
-            cls: featureId + ' cartowindow-tab ' + config.className,
+            cls: cartoWindowId + ' cartowindow-tab ' + config.className,
             children: [{
                 tag: 'label',
                 for: tabIdString,
@@ -368,7 +397,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 tag: 'input',
                 id: tabIdString,
                 type: 'radio',
-                name: featureId + ' tabs',
+                name: cartoWindowId + ' tabs',
                 checked: config.active || false,
                 'aria-hidden': true
             }, {
@@ -386,10 +415,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }]
         });
 
-        Ext.create('Ext.resizer.Resizer', {
-            target: tab.querySelector('.content'),
-            handles: 'se'
-        });
+        if (!Ext.isModern) {
+            Ext.create('Ext.resizer.Resizer', {
+                target: tab.querySelector('.content'),
+                handles: 'se s e'
+            });
+        }
 
         var input = tab.querySelector('input');
         input.addEventListener('change', me.updateLineFeature.bind(me));
@@ -407,11 +438,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var viewModel = me.getViewModel();
         var map = view.getMap();
+        var position = view.getFeature().getGeometry().getCoordinates();
+        var cartoWindowId = view.getCartoWindowId();
 
         var overlay = new ol.Overlay({
-            position: view.getFeature().getGeometry().getCoordinates(),
+            id: cartoWindowId,
+            position: position,
             positioning: 'top-left',
-            element: view.getEl().dom,
+            element: view.el.dom,
             stopEvent: true,
             dragging: false
         });
@@ -463,7 +497,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var map = view.getMap();
         var feature = view.getFeature();
         var coords = feature.getGeometry().getCoordinates();
-        var el = view.getEl().dom;
+        var el = view.el.dom;
         var overlay = viewModel.get('overlay');
 
         var lineFeature = new ol.Feature({
@@ -477,7 +511,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         });
 
-        el.addEventListener('mousedown', function(event) {
+        var downEvent = Ext.isModern ? 'touchstart': 'mousedown';
+        var upEvent = Ext.isModern ? 'touchend': 'mouseup';
+
+        el.addEventListener(downEvent, function(event) {
             if (event.target.tagName === 'LABEL') {
                 dragPan.setActive(false);
                 overlay.set('dragging', true);
@@ -498,16 +535,16 @@ Ext.define('Koala.view.component.CartoWindowController', {
             overlay.set('resizing', false);
         };
 
-        view.pointerMoveListener = function(evt) {
+        view.pointerMoveListener = function(event) {
             if (overlay.get('dragging') === true) {
-                overlay.setPosition(evt.coordinate);
+                overlay.setPosition(event.coordinate);
                 me.updateLineFeature();
             } else if (overlay.get('resizing') === true) {
                 var target = me.resizeTarget;
                 var targetX = target.getX();
                 var targetY = target.getY();
-                var evtX = evt.originalEvent.clientX;
-                var evtY = evt.originalEvent.clientY;
+                var evtX = event.originalEvent.clientX;
+                var evtY = event.originalEvent.clientY;
                 var newWidth = evtX - targetX;
                 var newHeight = evtY - targetY;
                 newWidth = newWidth > view.contentMinWidth
@@ -517,9 +554,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
                         ? newHeight
                         : view.contentMinHeight || 0;
 
-                var timeSeriesEl = target.down('[id^=d3-chart]');
-                if (timeSeriesEl) {
-                    var chart = Ext.getCmp(timeSeriesEl.id);
+                var chartContainerEl = target.down('[id^=d3-chart]') ||
+                        target.down('[id^=d3-barchart]');
+                if (chartContainerEl) {
+                    var chart = Ext.getCmp(chartContainerEl.id);
                     chart.setWidth(newWidth - 20);
                     chart.setHeight(newHeight - 20);
                 }
@@ -529,8 +567,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         };
 
-        el.addEventListener('mouseup', view.onMouseUp);
-        window.addEventListener('mouseup', view.onMouseUpWindow);
+        el.addEventListener(upEvent, view.onMouseUp);
+        window.addEventListener(upEvent, view.onMouseUpWindow);
         map.on('pointermove', view.pointerMoveListener);
 
         viewModel.get('lineLayer').getSource().addFeature(lineFeature);
@@ -571,10 +609,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var viewModel = me.getViewModel();
         var map = view.getMap();
         var lineLayer = viewModel.get('lineLayer');
+        var lineFeature = viewModel.get('lineFeature');
+        var upEvent = Ext.isModern ? 'touchend': 'mouseup';
 
         map.un('pointermove', view.pointerMoveListener);
-        window.removeEventListener('mouseup', view.onMouseUpWindow);
-        map.removeLayer(lineLayer);
+        window.removeEventListener(upEvent, view.onMouseUpWindow);
+        lineLayer.getSource().removeFeature(lineFeature);
     }
 
 });
