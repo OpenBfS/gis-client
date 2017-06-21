@@ -60,15 +60,20 @@ Ext.define('Koala.view.form.LayerFilterController', {
             var date = Koala.util.Date.getTimeReferenceAwareMomentDate(new moment());
             if ((date.minutes() % time) === 0) {
                 Koala.util.Layer.getMetadataFromUuid(id).then(function(metadata) {
-                    me.updateFiltersForAutorefresh(metadata.filters);
-                    var LayerUtil = Koala.util.Layer;
-
                     var existingLayer = layersById[id];
                     if (!existingLayer) {
                         // layer was removed from map
                         delete me.__proto__.autorefreshMap[id];
                         return;
                     }
+
+                    var currentFilters = existingLayer.metadata.filters;
+
+                    me.overwriteValueFilters(currentFilters, metadata.filters);
+
+                    me.updateFiltersForAutorefresh(metadata.filters);
+                    var LayerUtil = Koala.util.Layer;
+
                     var layer = LayerUtil.layerFromMetadata(metadata);
                     existingLayer.setSource(layer.getSource());
 
@@ -76,6 +81,20 @@ Ext.define('Koala.view.form.LayerFilterController', {
                     me.deselectThemeTreeItems();
                     LayerUtil.repaintLayerFilterIndication();
                 });
+            }
+        });
+    },
+
+    /**
+     * Overwrites all value filters in the second filter array with the ones
+     * from the first filter array. Filter arrays must be compatible!
+     * @param  {Array} oldFilters filter array from which to copy
+     * @param  {Array} newFilters filter array to which to copy
+     */
+    overwriteValueFilters: function(oldFilters, newFilters) {
+        Ext.Array.each(oldFilters, function(filter, idx) {
+            if (filter.type === 'value') {
+                newFilters[idx] = filter;
             }
         });
     },
