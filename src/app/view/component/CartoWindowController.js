@@ -161,13 +161,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
 
-        this.chart = Ext.create(chartObj);
-
         this.createTimeSeriesButtons(tabElm);
         this.createLegendVisibilityButton(tabElm);
 
         el.appendChild(timeSeriesTab);
-        Ext.create(chartObj);
+        this.chart = Ext.create(chartObj);
     },
 
     /**
