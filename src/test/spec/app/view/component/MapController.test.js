@@ -28,7 +28,8 @@ describe('Koala.view.component.MapController', function() {
                 .returns({});
 
             controller.setView(view);
-            controller.onHoverFeatureClick([]);
+            expect(controller.onHoverFeatureClick.bind(controller))
+                .withArgs([]).to.not.throwException();
         });
 
         it('can be called with feature', function() {
