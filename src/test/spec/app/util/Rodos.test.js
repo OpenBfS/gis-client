@@ -8,12 +8,12 @@ describe('Koala.util.Rodos', function() {
     });
     describe('#requestLayersOfProject', function() {
         it('is defined', function() {
-            expect(Koala.util.Hooks.requestLayersOfProject).to.not.be(undefined);
+            expect(Koala.util.Rodos.requestLayersOfProject).to.not.be(undefined);
         });
     });
     describe('#setRodosLayers', function() {
         it('is defined', function() {
-            expect(Koala.util.Hooks.setRodosLayers).to.not.be(undefined);
+            expect(Koala.util.Rodos.setRodosLayers).to.not.be(undefined);
         });
     });
 });
