@@ -5,19 +5,23 @@ Ext.Loader.syncRequire([
 
 describe('Koala.view.component.D3ChartController', function() {
     describe('Basics', function() {
-        // mock layer
-        var layer = {};
-        layer.get = sinon.stub();
-        layer.get.returns({});
+        var ctrl;
 
-        var view = Ext.create(Koala.view.component.D3Chart.create(layer)),
+        beforeEach(function() {
+            // mock layer
+            var layer = {};
+            layer.get = sinon.stub();
+            layer.get.returns({});
+
+            var view = Ext.create(Koala.view.component.D3Chart.create(layer));
             ctrl = new Koala.view.component.D3ChartController();
-        ctrl.setView(view);
+            ctrl.setView(view);
 
-        // mock minimum reqs for drawing a chart
-        view.el = {};
-        view.el.getSize = sinon.stub().returns({width: 100, height: 100});
-        view.getAxes = sinon.stub().returns({top: {min: 1, max: 2}, left: {min: 1, max: 2}});
+            // mock minimum reqs for drawing a chart
+            view.el = {};
+            view.el.getSize = sinon.stub().returns({width: 100, height: 100});
+            view.getAxes = sinon.stub().returns({top: {min: 1, max: 2}, left: {min: 1, max: 2}});
+        });
 
         it('is defined', function() {
             expect(Koala.view.component.D3ChartController).to.not.be(undefined);
