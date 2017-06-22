@@ -526,7 +526,8 @@ describe('Koala.util.Layer', function() {
                 });
             });
             it('returns test_data filters if user is allowed to see it', function() {
-                TestUtil.setupTestObjects({
+                // Setup
+                var testObjs = TestUtil.setupTestObjects({
                     mapComponentOpts: {
                         appContextPath: 'http://localhost:9876/base/resources/appContext.json'
                     }
@@ -541,6 +542,9 @@ describe('Koala.util.Layer', function() {
 
                 var got = Koala.util.Layer.getFiltersFromMetadata(metadata);
                 expect(got).to.be(filters);
+
+                // Teardown
+                TestUtil.teardownTestObjects(testObjs);
             });
         });
 
