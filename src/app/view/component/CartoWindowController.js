@@ -675,7 +675,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
             'metadata/layerConfig/timeSeriesChartProperties/duration'
         );
         changedDate[addOrSubtract](moment.duration(duration));
-        this.chart.setConfig(startOrEndDate, changedDate);
+
+        // only change start/end date if needed
+        var start = this.chart.getConfig('startDate');
+        var end = this.chart.getConfig('endDate');
+        if (!start.isBefore(changedDate) || !end.isAfter(changedDate)) {
+            this.chart.setConfig(startOrEndDate, changedDate);
+        }
 
         if (hasZoom) {
             zoom[minOrMax] = changedDate.valueOf();
