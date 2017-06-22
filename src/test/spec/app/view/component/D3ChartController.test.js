@@ -1,19 +1,18 @@
 Ext.Loader.syncRequire([
-    'Koala.view.component.D3BarChartController',
-    'Koala.view.component.D3BarChart'
+    'Koala.view.component.D3ChartController',
+    'Koala.view.component.D3Chart'
 ]);
 
-describe('Koala.view.component.D3BarChartController', function() {
+describe('Koala.view.component.D3ChartController', function() {
     describe('Basics', function() {
         var ctrl;
+
         beforeEach(function() {
             // mock layer
             var layer = TestUtil.getMockedGetter({});
-            layer.get.returns({chartFieldSequence: 'test'});
-            var feat = TestUtil.getMockedGetter({});
 
-            var view = Ext.create(Koala.view.component.D3BarChart.create(layer, feat));
-            ctrl = new Koala.view.component.D3BarChartController();
+            var view = Ext.create(Koala.view.component.D3Chart.create(layer));
+            ctrl = new Koala.view.component.D3ChartController();
             ctrl.setView(view);
 
             // mock minimum reqs for drawing a chart
@@ -22,7 +21,7 @@ describe('Koala.view.component.D3BarChartController', function() {
         });
 
         it('is defined', function() {
-            expect(Koala.view.component.D3BarChartController).to.not.be(undefined);
+            expect(Koala.view.component.D3ChartController).to.not.be(undefined);
         });
 
         it('should construct properly', function() {
@@ -36,9 +35,14 @@ describe('Koala.view.component.D3BarChartController', function() {
         });
 
         it('should not fail to draw and redraw a chart', function() {
-            expect(ctrl.drawChart.bind(ctrl)).to.not.throwException();
-            expect(ctrl.redrawChart.bind(ctrl)).to.not.throwException();
-            expect(ctrl.deleteShapeContainerSvg.bind(ctrl)).to.not.throwException();
+            ctrl.drawChart();
+            expect(true).to.be(true);
+            ctrl.redrawChart();
+            expect(true).to.be(true);
+            ctrl.resetZoom();
+            expect(true).to.be(true);
+            ctrl.deleteShapeContainerSvg();
+            expect(true).to.be(true);
         });
     });
 });

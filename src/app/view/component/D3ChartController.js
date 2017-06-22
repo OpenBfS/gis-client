@@ -166,15 +166,18 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawGridAxes();
         me.drawShapes();
 
-        this.resolveDynamicTemplateUrls()
+        var promise = this.resolveDynamicTemplateUrls()
         .then(function() {
             me.drawLegend();
             me.chartRendered = true;
-        })
-        .catch(function() {
-            me.drawLegend();
-            me.chartRendered = true;
         });
+
+        if (promise.catch) {
+            promise.catch(function() {
+                me.drawLegend();
+                me.chartRendered = true;
+            });
+        }
 
     },
 
