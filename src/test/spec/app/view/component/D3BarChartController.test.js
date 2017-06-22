@@ -8,19 +8,16 @@ describe('Koala.view.component.D3BarChartController', function() {
         var ctrl;
         beforeEach(function() {
             // mock layer
-            var layer = {};
-            layer.get = sinon.stub();
+            var layer = TestUtil.getMockedGetter({});
             layer.get.returns({chartFieldSequence: 'test'});
-            var feat = {};
-            feat.get = sinon.stub();
+            var feat = TestUtil.getMockedGetter({});
 
             var view = Ext.create(Koala.view.component.D3BarChart.create(layer, feat));
             ctrl = new Koala.view.component.D3BarChartController();
             ctrl.setView(view);
 
             // mock minimum reqs for drawing a chart
-            view.el = {};
-            view.el.getSize = sinon.stub().returns({width: 100, height: 100});
+            view.el = TestUtil.getMockedElement();
             view.getAxes = sinon.stub().returns({top: {min: 1, max: 2}, left: {min: 1, max: 2}});
         });
 

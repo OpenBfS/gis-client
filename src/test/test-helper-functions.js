@@ -160,12 +160,47 @@
         teardownTestDiv(createdObjs.mapDiv);
     }
 
+    /**
+     * Returns a mock object that returns the defaultReturn upon get and also
+     * has a set method stub. It also has a getProperties mock that returns
+     * an empty object by default.
+     * @param  {Any} defaultReturn will be returned by the get stub with any parameters
+     * @return {Object}               the mocked object
+     */
+    function getMockedGetter(defaultReturn) {
+        var mock = {};
+        mock.get = sinon.stub().returns(defaultReturn);
+        mock.set = sinon.stub();
+        mock.getProperties = sinon.stub().returns({});
+        return mock;
+    }
+
+    /**
+     * Returns a mocked element. Current stubs:
+     *
+     * - dom.appendChild
+     * - getSize
+     * - down
+     * - getStyle
+     * @return {Object} the mocked object
+     */
+    function getMockedElement() {
+        var domMock = {};
+        domMock.appendChild = sinon.stub();
+        var mock = {dom: domMock};
+        mock.getSize = sinon.stub().returns({width: 100, height: 100});
+        mock.down = sinon.stub().returns({});
+        mock.setStyle = sinon.stub();
+        return mock;
+    }
 
     global.TestUtil = {
         getExternalScriptTag: getExternalScriptTag,
         getInlineScriptTag: getInlineScriptTag,
         setupTestDiv: setupTestDiv,
         setupTestObjects: setupTestObjects,
-        teardownTestObjects: teardownTestObjects
+        teardownTestObjects: teardownTestObjects,
+        getMockedGetter: getMockedGetter,
+        getMockedElement: getMockedElement
     };
 }(this));

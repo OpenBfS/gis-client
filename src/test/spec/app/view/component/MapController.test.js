@@ -9,6 +9,16 @@ Ext.Loader.syncRequire([
 describe('Koala.view.component.MapController', function() {
 
     describe('Basics', function() {
+        beforeEach(function() {
+            sinon.stub(Ext.ComponentQuery, 'query');
+            sinon.stub(BasiGX.util.Animate, 'shake');
+        });
+
+        afterEach(function() {
+            Ext.ComponentQuery.query.restore();
+            BasiGX.util.Animate.shake.restore();
+        });
+
         it('is defined', function() {
             expect(Koala.view.component.MapController).to.not.be(undefined);
         });
@@ -22,10 +32,6 @@ describe('Koala.view.component.MapController', function() {
             var controller = new Koala.view.component.MapController();
             var view = {};
             view.getMap = sinon.stub();
-            var layer = {};
-            layer.getProperties = sinon.stub().returns({});
-            layer.get = sinon.stub()
-                .returns({});
 
             controller.setView(view);
             expect(controller.onHoverFeatureClick.bind(controller))
@@ -36,23 +42,17 @@ describe('Koala.view.component.MapController', function() {
             var controller = new Koala.view.component.MapController();
             var view = {};
             view.getMap = sinon.stub().returns({});
-            var feat = {};
-            var layer = {};
-            layer.getProperties = sinon.stub().returns({showCartoWindow: true});
-            layer.get = sinon.stub().returns({});
+            var feat = TestUtil.getMockedGetter({});
+            var layer = TestUtil.getMockedGetter({});
+            layer.getProperties.returns({showCartoWindow: true});
             layer.get.withArgs('name').returns('test');
-            feat.get = sinon.stub().returns({});
             feat.get.withArgs('layer').returns(layer);
             feat.get.withArgs('id').returns('7');
-            sinon.stub(Ext.ComponentQuery, 'query')
-                // .withArgs('k-component-map')
+            Ext.ComponentQuery.query
                 .returns([{}]);
-            sinon.stub(BasiGX.util.Animate, 'shake');
 
             controller.setView(view);
             controller.onHoverFeatureClick([feat]);
-            Ext.ComponentQuery.query.restore();
-            BasiGX.util.Animate.shake.restore();
         });
     });
 

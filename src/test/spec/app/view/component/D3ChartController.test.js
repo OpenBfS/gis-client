@@ -9,17 +9,14 @@ describe('Koala.view.component.D3ChartController', function() {
 
         beforeEach(function() {
             // mock layer
-            var layer = {};
-            layer.get = sinon.stub();
-            layer.get.returns({});
+            var layer = TestUtil.getMockedGetter({});
 
             var view = Ext.create(Koala.view.component.D3Chart.create(layer));
             ctrl = new Koala.view.component.D3ChartController();
             ctrl.setView(view);
 
             // mock minimum reqs for drawing a chart
-            view.el = {};
-            view.el.getSize = sinon.stub().returns({width: 100, height: 100});
+            view.el = TestUtil.getMockedElement();
             view.getAxes = sinon.stub().returns({top: {min: 1, max: 2}, left: {min: 1, max: 2}});
         });
 
