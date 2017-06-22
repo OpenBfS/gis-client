@@ -124,7 +124,7 @@ Ext.define('Koala.util.Layer', {
          * @return {boolean} Whether the layer will show a CartoWindow.
          */
         isCartoWindowLayer: function(layer) {
-            return layer.getProperties().showCartoWindow;
+            return !!layer.get('showCartoWindow');
         },
 
         /**
@@ -154,6 +154,19 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Checks the properties of the layer to see if it configured to draw
+         * bar charts.
+         *
+         * @param {ol.layer.Layer} layer The layer to check.
+         * @return {boolean} Whether the layer allows to draw bar charts.
+         */
+        isBarChartLayer: function(layer) {
+            var barProps = layer.get('barChartProperties') || {};
+            var numBarProps = Ext.Object.getSize(barProps);
+            return numBarProps > 0;
+        },
+
+        /**
          * Checks the properties of the layer to see if it is configured to draw
          * a table.
          *
@@ -163,7 +176,7 @@ Ext.define('Koala.util.Layer', {
         isTableLayer: function(layer) {
             var contentProp = layer.get('tableContentProperty');
             var contentUrl = layer.get('tableContentURL');
-            return contentProp || contentUrl;
+            return !!(contentProp || contentUrl);
         },
 
         /**
@@ -176,20 +189,7 @@ Ext.define('Koala.util.Layer', {
         isHtmlLayer: function(layer) {
             var contentProp = layer.get('htmlContentProperty');
             var contentUrl = layer.get('htmlContentURL');
-            return contentProp || contentUrl;
-        },
-
-        /**
-         * Checks the properties of the layer to see if it configured to draw
-         * bar charts.
-         *
-         * @param {ol.layer.Layer} layer The layer to check.
-         * @return {boolean} Whether the layer allows to draw bar charts.
-         */
-        isBarChartLayer: function(layer) {
-            var barProps = layer.get('barChartProperties') || {};
-            var numBarProps = Ext.Object.getSize(barProps);
-            return numBarProps > 0;
+            return !!(contentProp || contentUrl);
         },
 
         /**
@@ -819,7 +819,7 @@ Ext.define('Koala.util.Layer', {
          */
         addLayerByUuid: function(uuid) {
             var staticMe = Koala.util.Layer;
-            staticMe.getMetadataFromUuid(uuid).then(staticMe.addLayerToMap);
+            return staticMe.getMetadataFromUuid(uuid).then(staticMe.addLayerToMap);
         },
 
         /**
@@ -827,7 +827,7 @@ Ext.define('Koala.util.Layer', {
          */
         showChangeFilterSettingsWinByUuid: function(uuid) {
             var staticMe = Koala.util.Layer;
-            staticMe.getMetadataFromUuid(uuid).then(staticMe.showChangeFilterSettingsWin);
+            return staticMe.getMetadataFromUuid(uuid).then(staticMe.showChangeFilterSettingsWin);
         },
 
         /**
