@@ -473,6 +473,24 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
+     * Zoom to another time interval on the x axis.
+     * @param  {moment} d0 left boundary
+     * @param  {moment} d1 right boundary
+     */
+    zoomToInterval: function(d0, d1) {
+        var me = this;
+        var chartId = '#' + me.getView().getId() + ' svg';
+        var svg = d3.select(chartId);
+        var width = me.getChartSize()[0];
+        var x = me.scales['bottom'];
+        svg.call(me.zoomInteraction)
+            .call(me.zoomInteraction.transform, d3.zoomIdentity
+                .scale(width / (x(d1) - x(d0)))
+                .translate(-x(d0), 0)
+            );
+    },
+
+    /**
      *
      */
     createShapes: function() {

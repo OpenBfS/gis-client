@@ -652,27 +652,47 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     scrollTimeseriesLeft: function() {
-        var startDate = this.chart.getConfig('startDate');
-        var layer = this.getView().layer;
-        var duration = Koala.util.Object.getPathStrOr(
-            layer,
-            'metadata/layerConfig/timeSeriesChartProperties/duration'
-        );
-        startDate.subtract(moment.duration(duration));
-        this.chart.setConfig('startDate', startDate);
-        this.chart.getController().getChartData();
+        this.scrollTimeseries('min', 'startDate', 'subtract');
     },
 
     scrollTimeseriesRight: function() {
-        var endDate = this.chart.getConfig('endDate');
+        this.scrollTimeseries('max', 'endDate', 'add');
+    },
+
+    scrollTimeseries: function(minOrMax, startOrEndDate, addOrSubtract) {
+        var controller = this.chart.getController();
+        var zoom = controller.currentDateRange;
+        var hasZoom = zoom[minOrMax] !== null;
+
+        var changedDate = this.chart.getConfig(startOrEndDate);
+        if (hasZoom) {
+            changedDate = moment(zoom[minOrMax]);
+        }
+
         var layer = this.getView().layer;
         var duration = Koala.util.Object.getPathStrOr(
             layer,
             'metadata/layerConfig/timeSeriesChartProperties/duration'
         );
-        endDate.add(moment.duration(duration));
-        this.chart.setConfig('endDate', endDate);
-        this.chart.getController().getChartData();
+        changedDate[addOrSubtract](moment.duration(duration));
+        this.chart.setConfig(startOrEndDate, changedDate);
+
+        if (hasZoom) {
+            zoom[minOrMax] = changedDate.valueOf();
+        }
+        controller.getChartData();
+        if (hasZoom) {
+            var min = zoom.min;
+            var max = zoom.max;
+            controller.on('chartdataprepared', function() {
+                // unfortunately, d3 has an internal timer resetting
+                // the zoom frequently in the first few hundred ms after
+                // creation
+                window.setTimeout(function() {
+                    controller.zoomToInterval(min, max);
+                }, 800);
+            });
+        }
     },
 
     toggleTimeseriesLegend: function() {
