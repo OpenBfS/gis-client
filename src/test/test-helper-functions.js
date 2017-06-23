@@ -181,16 +181,21 @@
      * - dom.appendChild
      * - getSize
      * - down
-     * - getStyle
+     * - setStyle
+     * - close
+     * - up
      * @return {Object} the mocked object
      */
     function getMockedElement() {
         var domMock = {};
         domMock.appendChild = sinon.stub();
+        domMock.close = sinon.stub();
         var mock = {dom: domMock};
         mock.getSize = sinon.stub().returns({width: 100, height: 100});
         mock.down = sinon.stub().returns({});
         mock.setStyle = sinon.stub();
+        mock.close = sinon.stub();
+        mock.up = sinon.stub().returns(domMock);
         return mock;
     }
 
