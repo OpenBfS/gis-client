@@ -43,7 +43,7 @@
     "karma-mocha-reporter": "2.2.3",
     "karma-phantomjs-launcher": "1.0.4",
     "karma-sinon": "1.0.5",
-    "mocha": "3.0.2",
+    "mocha": "3.4.2",
     "mocha-phantomjs": "4.1.0",
     "npm-run-all": "4.0.2",
     "serve-static": "1.11.1",
