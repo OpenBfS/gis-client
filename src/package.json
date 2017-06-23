@@ -47,7 +47,7 @@
     "mocha-phantomjs": "4.1.0",
     "npm-run-all": "4.0.2",
     "serve-static": "1.12.3",
-    "sinon": "1.17.7",
+    "sinon": "2.3.5",
     "watch": "0.19.1"
   }
 }
