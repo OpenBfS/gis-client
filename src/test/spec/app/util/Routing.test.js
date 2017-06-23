@@ -63,18 +63,22 @@ describe('Koala.util.Routing', function() {
             it('is a function', function() {
                 expect(Koala.util.Routing.beforeLayerTreeRoute).to.be.a('function');
             });
+            // TODO further tests would require Promise support
         });
 
         describe('#onLayerTreeRoute', function() {
             it('is a function', function() {
                 expect(Koala.util.Routing.onLayerTreeRoute).to.be.a('function');
             });
+            // TODO further tests would require Promise support
         });
 
         describe('#setRouteForView', function() {
             it('is a function', function() {
                 expect(Koala.util.Routing.setRouteForView).to.be.a('function');
             });
+            // TODO further tests would require a mocked up treepanel / themetree
+            // as it depends on getRoute
         });
 
         describe('#parseCurrentHash', function() {
@@ -94,6 +98,108 @@ describe('Koala.util.Routing', function() {
         describe('#getRoute', function() {
             it('is a function', function() {
                 expect(Koala.util.Routing.getRoute).to.be.a('function');
+            });
+            // TODO further tests would require a mocked up treepanel / themetree
+        });
+
+        describe('#applyPermalinkFiltersToMetadata', function() {
+            it('is a function', function() {
+                expect(Koala.util.Routing.applyPermalinkFiltersToMetadata).to.be.a('function');
+            });
+            it('applys filters from the route to the metadata', function() {
+                var metadata = {
+                    filters: [{
+                        type: 'value',
+                        param: 'foo',
+                        operator: '=',
+                        alias: 'ALIAS',
+                        effectivevalue: 'Paul',
+                        allowedValues: 'Peter,Paul'
+                    }, {
+                        allowMultipleSelect: 'false',
+                        unit: 'hours',
+                        encodeInViewParams: 'false',
+                        param: 'time',
+                        defaultValue: '2017-05-30T18:00:00Z',
+                        alias: 'Prognosezeitpunkt',
+                        interval: 1,
+                        type: 'rodostime',
+                        operator: '=',
+                        allowedValues: [{
+                            val: '2017-05-30T18:00:00Z',
+                            dsp: '2017-05-30T18:00:00Z'
+                        }, {
+                            val: '2017-05-30T19:00:00Z',
+                            dsp: '2017-05-30T19:00:00Z'
+                        }, {
+                            val: '2017-05-30T20:00:00Z',
+                            dsp: '2017-05-30T20:00:00Z'
+                        }]
+                    }, {
+                        type: 'pointintime',
+                        param: 'end_measure',
+                        interval: '24',
+                        unit: 'hours',
+                        mindatetimeformat: 'Y-m-d H:i:s',
+                        mindatetimeinstant: '2016-10-17 00:00:00',
+                        maxdatetimeformat: 'Y-m-d H:i:s',
+                        maxdatetimeinstant: '2016-10-18 00:00:00',
+                        defaulttimeformat: 'Y-m-d H:i:s',
+                        defaulttimeinstant: '2016-10-17 00:00:00'
+                    }, {
+                        type: 'timerange',
+                        param: 'DATUM',
+                        interval: '1',
+                        unit: 'minutes',
+                        maxduration: '1440',
+                        mindatetimeformat: 'Y-m-d H:i:s',
+                        mindatetimeinstant: '2000-01-01 00:00:00',
+                        maxdatetimeformat: 'Y-m-d H:i:s',
+                        maxdatetimeinstant: '2012-08-14 10:00:00',
+                        defaultstarttimeformat: 'Y-m-d H:i:s',
+                        defaultstarttimeinstant: '2012-01-01 01:00:00',
+                        defaultendtimeformat: 'Y-m-d H:i:s',
+                        defaultendtimeinstant: '2012-08-14 10:00:00'
+                    }]
+                };
+                var rodos = Koala.util.Date.getUtcMoment(new Date(1496174400000));
+                var rodosValueOf = rodos.valueOf();
+                var pit = Koala.util.Date.getUtcMoment(new Date('2016-10-17T00:00:00Z'));
+                var pitValueOf = pit.valueOf();
+                var start = Koala.util.Date.getUtcMoment(new Date('2012-01-01T01:00:00Z'));
+                var startValueOf = start.valueOf();
+                var end = Koala.util.Date.getUtcMoment(new Date('2012-08-14T10:00:00Z'));
+                var endValueOf = end.valueOf();
+
+                var valueFilterArray = [{
+                    type: 'value',
+                    effectivevalue: 'Peter',
+                    alias: 'ALIAS',
+                    param: 'foo'
+                }];
+                var rodosFilterArray = [{
+                    type: 'rodostime',
+                    effectivedatetime: rodosValueOf
+                }];
+                var pointInTimeFilterArray = [{
+                    type: 'pointintime',
+                    effectivedatetime: pitValueOf
+                }];
+                var timeRangeFilterArray = [{
+                    type: 'timerange',
+                    effectivemindatetime: startValueOf,
+                    effectivemaxdatetime: endValueOf
+                }];
+
+                Koala.util.Routing.applyPermalinkFiltersToMetadata(metadata, valueFilterArray);
+                expect(metadata.filters[0].effectivevalue).to.be('Peter');
+                Koala.util.Routing.applyPermalinkFiltersToMetadata(metadata, rodosFilterArray);
+                expect(metadata.filters[1].effectivedatetime.isSame(rodos)).to.be(true);
+                Koala.util.Routing.applyPermalinkFiltersToMetadata(metadata, pointInTimeFilterArray);
+                expect(metadata.filters[2].effectivedatetime.isSame(pit)).to.be(true);
+                Koala.util.Routing.applyPermalinkFiltersToMetadata(metadata, timeRangeFilterArray);
+                expect(metadata.filters[3].effectivemindatetime.isSame(start)).to.be(true);
+                expect(metadata.filters[3].effectivemaxdatetime.isSame(end)).to.be(true);
             });
         });
 
@@ -143,6 +249,13 @@ describe('Koala.util.Routing', function() {
                 });
                 expect(valuePerma).to.eql(valueFilter);
             });
+        });
+
+        describe('#checkForRodosFilters', function() {
+            it('is a function', function() {
+                expect(Koala.util.Routing.checkForRodosFilters).to.be.a('function');
+            });
+            // TODO further tests would require Promise support
         });
 
     });

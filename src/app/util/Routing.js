@@ -112,7 +112,7 @@ Ext.define('Koala.util.Routing', {
                         .then(function(md) {
                             gotLayers++;
                             var metadataClone = Ext.clone(md);
-                            me.applyPermalinkFiltersToMetadata(uuid, md, config.filters);
+                            me.applyPermalinkFiltersToMetadata(md, config.filters);
 
                             var olLayer = LayerUtil.layerFromMetadata(md);
 
@@ -133,14 +133,11 @@ Ext.define('Koala.util.Routing', {
         /**
          * Applies the filters stored in me.permalinkFilters to the metadata of a
          * layer. parseFiltersFromPermalink should be executed before.
-         * @param {String} uuid The metadataidentifier of the layer to apply the
-         *                      filters to.
-         * @param {Array} metadataFilters An array of objects representing a
-         *                                metadataFilter.
+         * @param {Array} metadata The metadata object of a layer.
          * @param {Object} configFilters The filters from the permalink
          * @private
          */
-        applyPermalinkFiltersToMetadata: function(uuid, metadata, configFilters) {
+        applyPermalinkFiltersToMetadata: function(metadata, configFilters) {
             var me = Koala.util.Routing;
             var metadataFilters = metadata.filters;
             Ext.each(metadataFilters, function(mdFilter) {
@@ -219,7 +216,6 @@ Ext.define('Koala.util.Routing', {
                         case 'value':
                             var allowedStore = Koala.util.Filter.getStoreFromAllowedValues(mdFilter.allowedValues);
                             var containsIllegal = false;
-
                             Ext.each(permalinkFilter.effectivevalue, function(value) {
                                 var matchingRecord = allowedStore.findRecord('val', value);
                                 if (!matchingRecord) {
