@@ -64,8 +64,7 @@ Ext.define('Koala.util.Routing', {
          * @param {Integer} zoom Zoom of the mapView.
          */
         onMapRoute: function(lon, lat, zoom) {
-            var view = Koala.app.getMainView();
-            var map = view.down('basigx-component-map').getMap();
+            var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
             var mapView = map.getView();
 
             mapView.setCenter([parseInt(lon, 10), parseInt(lat, 10)]);
