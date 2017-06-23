@@ -32,10 +32,10 @@ describe('Koala.view.form.LayerFilterController', function() {
 
         it('properly overwrites value filters', function() {
             var ctrl = new Koala.view.form.LayerFilterController();
-            var oldFilters = [{type: 'other'}, {type: 'value'}];
-            var newFilters = [{type: 'other'}, {type: 'value', other: 'newvalue'}];
+            var newFilters = [{type: 'other'}, {type: 'value'}];
+            var oldFilters = [{type: 'other'}, {type: 'value', other: 'newvalue'}];
             ctrl.overwriteValueFilters(oldFilters, newFilters);
-            expect(newFilters[1].other).to.be(undefined);
+            expect(newFilters[1].other).to.be('newvalue');
         });
 
         it('can change filters for layers', function() {
