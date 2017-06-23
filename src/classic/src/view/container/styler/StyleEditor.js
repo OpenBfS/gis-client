@@ -118,14 +118,16 @@ Ext.define('Koala.view.container.styler.StyleEditor', {
         var vectorIcons = appContext.data.merge.vectorIcons;
 
         var imageTpl = new Ext.XTemplate(
+            /* eslint-disable indent */
             '<tpl for=".">',
-            '<div class="thumb-wrap">',
-            '<div class="thumb">',
-            '<img src="{src}" height="60px" />',
-            '</div>',
-            '<span>{caption}</span>',
-            '</div>',
+                '<div class="thumb-wrap">',
+                    '<div class="thumb">',
+                        '<img src="{src}" height="60px" />',
+                    '</div>',
+                    '<span>{caption}</span>',
+                '</div>',
             '</tpl>'
+            /* eslint-enable indent */
         );
 
         var onUploadChange = function(btn, event) {

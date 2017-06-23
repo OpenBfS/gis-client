@@ -214,11 +214,13 @@ Ext.define('Koala.util.Filter', {
                     return Koala.util.Date.getFormattedDate(moment);
                 };
                 var listTpl = Ext.create('Ext.XTemplate',
+                    /* eslint-disable indent */
                     '<tpl for=".">',
-                    '<div class="x-boundlist-item">',
-                    '{[this.getFormatedDate(values)]}',
-                    '</div>',
+                        '<div class="x-boundlist-item">',
+                            '{[this.getFormatedDate(values)]}',
+                        '</div>',
                     '</tpl>',
+                    /* eslint-enable indent */
                     {
                         getFormatedDate: getFormatedDate
                     }

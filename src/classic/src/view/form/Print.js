@@ -147,8 +147,9 @@ Ext.define('Koala.view.form.Print', {
             items: [{
                 xtype: 'htmleditor',
                 value: textfield.getValue(),
-                enableFont: false, // TODO Remove if fonts are configured to
+                // TODO Remove if fonts are configured to
                 // match the server fonts,
+                enableFont: false,
                 enableAlignments: false
             }],
             bbar: ['->',
