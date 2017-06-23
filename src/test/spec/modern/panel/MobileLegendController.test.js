@@ -115,4 +115,52 @@ describe('Koala.view.panel.MobileLegendController', function() {
         // So we currently can`t add more tests here
     });
 
+    describe('onPainted', function() {
+        it('sets initial check status', function() {
+            sinon.spy(controller, 'setInitialCheckStatus');
+            controller.onPainted();
+            expect(controller.setInitialCheckStatus.calledOnce).to.be(true);
+            controller.setInitialCheckStatus.restore();
+        });
+    });
+
+    describe('toggleActiveChartingLayer', function() {
+        it('does nothing when not getting a layer', function() {
+            controller.toggleActiveChartingLayer();
+            expect(controller.activeChartingLayer).to.be(null);
+        });
+
+        it('can toggle the active charting layer', function() {
+            var layer = mapComponent.getLayers().item(0);
+            controller.toggleActiveChartingLayer(layer);
+            expect(controller.activeChartingLayer).to.be(layer);
+        });
+
+        it('double toggle untoggles active charting layer', function() {
+            var layer = mapComponent.getLayers().item(0);
+            controller.toggleActiveChartingLayer(layer);
+            controller.toggleActiveChartingLayer(layer);
+            expect(controller.activeChartingLayer).to.be(null);
+        });
+    });
+
+    describe('onLegendFilterTextClick', function() {
+        it('opens filter panel on text click', function() {
+            var layer = mapComponent.getLayers().item(0);
+            var mockPanel = {};
+            var mockForms = {};
+            var mockFilter = {};
+            mockFilter.destroy = sinon.stub();
+            mockForms.query = sinon.stub().returns([mockFilter]);
+            mockForms.setTitle = sinon.stub();
+            mockForms.add = sinon.stub();
+            mockForms.show = sinon.stub();
+            mockPanel.down = sinon.stub().returns(mockForms);
+            sinon.stub(view, 'up').returns(mockPanel);
+            controller.onLegendFilterTextClick(layer);
+            expect(mockFilter.destroy.calledOnce).to.be(true);
+            expect(mockForms.show.calledOnce).to.be(true);
+        });
+    });
+
 });
