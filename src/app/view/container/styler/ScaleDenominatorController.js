@@ -68,9 +68,9 @@ Ext.define('Koala.view.container.styler.ScaleDenominatorController', {
         var view = this.getView();
         var viewModel = this.getViewModel();
         var literalNumberField1 = view.down(
-                'numberfield[name="literalNumberField1"]');
+            'numberfield[name="literalNumberField1"]');
         var literalNumberField2 = view.down(
-                'numberfield[name="literalNumberField2"]');
+            'numberfield[name="literalNumberField2"]');
 
         switch (newValue) {
             case 'ScaleIsBetween':

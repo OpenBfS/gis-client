@@ -110,8 +110,8 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
         };
 
         var timeRangeFilterFieldset = FilterUtil.createTimeRangeFieldset(
-                'j F Y', filter, 1
-            );
+            'j F Y', filter, 1
+        );
 
         Ext.each(timeRangeFilterFieldset.query('datefield'), function(field) {
             field.labelWidth = null;

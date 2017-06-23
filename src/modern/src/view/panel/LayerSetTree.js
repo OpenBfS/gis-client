@@ -43,7 +43,7 @@ Ext.define('Koala.view.panel.LayerSetTree', {
             singletap: {
                 fn: function(event, node, options, eOpts) {
                     this.component.lookupController()
-                            .setupShowFilterWinCheck(event, node, options, eOpts);
+                        .setupShowFilterWinCheck(event, node, options, eOpts);
                 },
                 element: 'element'
             }

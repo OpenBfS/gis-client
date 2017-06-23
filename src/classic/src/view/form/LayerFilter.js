@@ -219,7 +219,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var me = this;
         var FilterUtil = Koala.util.Filter;
         var pointInTimeFilter = FilterUtil.createPointInTimeFieldset(
-                me.getFormat(), filter, idx);
+            me.getFormat(), filter, idx);
         me.add(pointInTimeFilter);
     },
 
@@ -233,7 +233,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var me = this;
         var FilterUtil = Koala.util.Filter;
         var timeRangeFilter = FilterUtil.createTimeRangeFieldset(
-                me.getFormat(), filter, idx);
+            me.getFormat(), filter, idx);
         me.add(timeRangeFilter);
     },
 

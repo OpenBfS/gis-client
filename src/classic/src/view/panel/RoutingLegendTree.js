@@ -617,7 +617,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         var treeStore = me.getStore();
 
         me.delayedRepaintLayerFilterIndication = Ext.Function.createDelayed(
-                Koala.util.Layer.repaintLayerFilterIndication, 50, Koala.util.Layer);
+            Koala.util.Layer.repaintLayerFilterIndication, 50, Koala.util.Layer);
 
         // Register moveend to update legendUrls
         map.on('moveend', me.updateLegendsWithScale, me);

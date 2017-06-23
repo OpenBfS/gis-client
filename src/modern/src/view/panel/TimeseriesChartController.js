@@ -134,7 +134,7 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         // but `datepickerfield` instances don't have `minValue`/`maxValue`…
         var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
         var maxDuration = Koala.util.Object.getPathStrOr(metadata,
-                'layerConfig/timeSeriesChartProperties/duration', null);
+            'layerConfig/timeSeriesChartProperties/duration', null);
 
         // Set the allowed max/min values for the start container.
         startDateContainer.setMaxValue(minMaxDates.max);

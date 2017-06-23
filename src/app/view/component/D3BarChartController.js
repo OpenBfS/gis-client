@@ -98,7 +98,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 value = featureProps[field];
             } else {
                 value = Koala.util.String.getValueFromSequence(
-                        defaultsSequence, idx, undefined);
+                    defaultsSequence, idx, undefined);
             }
 
             dataObj.key = key;
@@ -279,55 +279,55 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         var shapeGroup = d3.select(viewId + ' svg > g')
             .append('g')
-                .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP);
+            .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP);
 
         barWidth = (chartSize[0] / me.data.length);
         barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
 
         shapeGroup
             .selectAll('rect')
-                .data(me.data)
+            .data(me.data)
             .enter().append('g')
-                .attr('class', staticMe.CSS_CLASS.BAR)
-                .attr('id', function(d) {
-                    return d[xField];
-                })
-                .append('rect')
-                .filter(function(d) {
-                    return me.shapeFilter(d, orientY, yField);
-                })
-                    .style('fill', function(d) {
-                        return d.color || staticMe.getRandomColor();
-                    })
-                    // .style('opacity', shapeConfig.opacity)
-                    .attr('x', function(d) {
-                        return me.scales[orientX](d[xField]);
-                    })
-                    .attr('y', function(d) {
-                        return me.scales[orientY](d[yField]);
-                    })
-                    .attr('width', barWidth)
-                    .attr('height', function(d) {
-                        return chartSize[1] - me.scales[orientY](d[yField]);
-                    })
-                    .on('mouseover', function(data) {
-                        var tooltipCmp = me.tooltipCmp;
-                        var tooltipTpl = shapeConfig.tooltipTpl;
+            .attr('class', staticMe.CSS_CLASS.BAR)
+            .attr('id', function(d) {
+                return d[xField];
+            })
+            .append('rect')
+            .filter(function(d) {
+                return me.shapeFilter(d, orientY, yField);
+            })
+            .style('fill', function(d) {
+                return d.color || staticMe.getRandomColor();
+            })
+        // .style('opacity', shapeConfig.opacity)
+            .attr('x', function(d) {
+                return me.scales[orientX](d[xField]);
+            })
+            .attr('y', function(d) {
+                return me.scales[orientY](d[yField]);
+            })
+            .attr('width', barWidth)
+            .attr('height', function(d) {
+                return chartSize[1] - me.scales[orientY](d[yField]);
+            })
+            .on('mouseover', function(data) {
+                var tooltipCmp = me.tooltipCmp;
+                var tooltipTpl = shapeConfig.tooltipTpl;
 
-                        // Only proceed and show tooltip if a tooltipTpl is
-                        // given in the chartConfig.
-                        if (tooltipTpl) {
-                            var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, {
-                                xAxisAttribute: data[xField],
-                                yAxisAttribute: data[yField]
-                            });
-                            html = Koala.util.String.replaceTemplateStrings(html, data);
-                            html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
-                            tooltipCmp.setHtml(html);
-                            tooltipCmp.setTarget(this);
-                            tooltipCmp.show();
-                        }
+                // Only proceed and show tooltip if a tooltipTpl is
+                // given in the chartConfig.
+                if (tooltipTpl) {
+                    var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, {
+                        xAxisAttribute: data[xField],
+                        yAxisAttribute: data[yField]
                     });
+                    html = Koala.util.String.replaceTemplateStrings(html, data);
+                    html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
+                    tooltipCmp.setHtml(html);
+                    tooltipCmp.setTarget(this);
+                    tooltipCmp.show();
+                }
+            });
 
         var bars = d3.selectAll(viewId + ' .k-d3-bar');
 
@@ -340,7 +340,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             })
             .attr('transform', function(d) {
                 return me.getBarLabelTransform(d, orientX, orientY, xField,
-                        yField, barWidth);
+                    yField, barWidth);
             })
             .attr('text-anchor', 'middle')
             // TODO make configurable. Generic from css config
@@ -357,7 +357,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 })
                 .attr('transform', function(d) {
                     var labelTransform = me.getBarLabelTransform(d, orientX,
-                            orientY, xField, yField, barWidth);
+                        orientY, xField, yField, barWidth);
                     return labelTransform + ' rotate(-90)';
                 })
                 .attr('dy', function(d, idx, el) {
@@ -458,8 +458,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var legendParent = me.legendSvg;
         var legend = legendParent
             .append('g')
-                .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
-                .attr('transform', makeTranslate(legendMargin.left || 10, 0));
+            .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
+            .attr('transform', makeTranslate(legendMargin.left || 10, 0));
 
         me.updateLegendContainerDimensions();
 
@@ -475,7 +475,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     }
                     var barGroup = me.getBarGroupByKey(dataObj['key']);
                     me.toggleGroupVisibility(
-                        barGroup,       // the real group, containig shapepath & points
+                        barGroup, // the real group, containig shapepath & points
                         d3.select(this) // legend entry
                     );
                     var SHAPE_GROUP = CSS.SHAPE_GROUP;
@@ -490,9 +490,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var curTranslateY = (idx + 1) * legendEntryHeight;
             var legendEntry = legend
                 .append('g')
-                    .on('click', toggleVisibilityFunc)
-                    .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + dataObj.key);
+                .on('click', toggleVisibilityFunc)
+                .attr('transform', staticMe.makeTranslate(0, curTranslateY))
+                .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + dataObj.key);
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')

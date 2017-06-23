@@ -178,8 +178,8 @@ Ext.define('Koala.view.panel.MobileLegendController', {
                     Ext.Msg.show({
                         title: viewModel.get('maxLayersMsgBoxTitle'),
                         message: Ext.String.format(
-                                viewModel.get('maxLayersMsgBoxMessage'),
-                                view.getMaxVisibleLayers()),
+                            viewModel.get('maxLayersMsgBoxMessage'),
+                            view.getMaxVisibleLayers()),
                         buttons: {
                             text: viewModel.get('maxLayersMsgBoxBtnText')
                         }
@@ -236,7 +236,7 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var me = this;
         var view = me.getView();
         var filterPanel = view.up('app-main')
-                .down('k-panel-mobilepanel[name=filterContainer]');
+            .down('k-panel-mobilepanel[name=filterContainer]');
 
         if (!(olLayer instanceof ol.layer.Layer)) {
             Ext.Logger.warn('Invalid input parameter. Expected an subclass ' +
@@ -341,46 +341,46 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         var me = this;
         return new Ext.XTemplate(
             '<tpl if="this.display(values)">',
-                '<div class="tree-item-tools">',
-                  '<span class="left-items">',
-                    '<i class="fa fa-arrow-up up-icon" style="color:#157fcc;"></i>',
-                    '<i class="fa fa-arrow-down down-icon" style="color:#157fcc;"></i>',
-                  '</span>',
-                  '<tpl if="this.allowOpacityChange(values)">',
-                    '<span class="centered-items">',
-                      '<input type="range" id="slider_{id}"/>',
-                    '</span>',
-                  '</tpl>',
-                  '<span class="right-items">',
-                      '<tpl if="this.isRemovable(values)">',
-                          '<i class="fa fa-times" style="color:#157fcc;"></i>',
-                      '</tpl>',
-                      '<tpl if="this.allowShortInfo(values)">',
-                          '<i class="fa fa-info-circle info" style="color:#157fcc;"></i>',
-                      '</tpl>',
-                  '</span>',
-                '</div>',
-                '<div>',
-                  '<tpl if="this.isVisible(values)">',
-                      '<i class="fa fa-eye" style="color:#157fcc;"></i> {text}',
-                  '<tpl else>',
-                      '<i class="fa fa-eye-slash" style="color:#808080;"></i> {text}',
-                  '</tpl>',
-                  '<tpl if="this.isChartableLayer(values)">',
-                      ' <i class="fa fa-bar-chart ',
-                      '<tpl if="this.isCurrentChartingLayer(values)">',
-                          ' k-active-charting-layer',
-                      '<tpl else>',
-                          ' k-inactive-charting-layer',
-                      '</tpl>',
-                      '"></i>',
-                  '</tpl>',
-                  '<tpl if="this.getFilterText(values)">',
-                      '</br>',
-                      '<div class="legend-filter-text" style="">{[this.getFilterText(values)]}</div>',
-                  '</tpl>',
-                  '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
-                '</div>',
+            '<div class="tree-item-tools">',
+            '<span class="left-items">',
+            '<i class="fa fa-arrow-up up-icon" style="color:#157fcc;"></i>',
+            '<i class="fa fa-arrow-down down-icon" style="color:#157fcc;"></i>',
+            '</span>',
+            '<tpl if="this.allowOpacityChange(values)">',
+            '<span class="centered-items">',
+            '<input type="range" id="slider_{id}"/>',
+            '</span>',
+            '</tpl>',
+            '<span class="right-items">',
+            '<tpl if="this.isRemovable(values)">',
+            '<i class="fa fa-times" style="color:#157fcc;"></i>',
+            '</tpl>',
+            '<tpl if="this.allowShortInfo(values)">',
+            '<i class="fa fa-info-circle info" style="color:#157fcc;"></i>',
+            '</tpl>',
+            '</span>',
+            '</div>',
+            '<div>',
+            '<tpl if="this.isVisible(values)">',
+            '<i class="fa fa-eye" style="color:#157fcc;"></i> {text}',
+            '<tpl else>',
+            '<i class="fa fa-eye-slash" style="color:#808080;"></i> {text}',
+            '</tpl>',
+            '<tpl if="this.isChartableLayer(values)">',
+            ' <i class="fa fa-bar-chart ',
+            '<tpl if="this.isCurrentChartingLayer(values)">',
+            ' k-active-charting-layer',
+            '<tpl else>',
+            ' k-inactive-charting-layer',
+            '</tpl>',
+            '"></i>',
+            '</tpl>',
+            '<tpl if="this.getFilterText(values)">',
+            '</br>',
+            '<div class="legend-filter-text" style="">{[this.getFilterText(values)]}</div>',
+            '</tpl>',
+            '<img style="display:none; max-width:80%; margin-left:20px;" src="{[this.getLegendGraphicUrl(values)]}"></img>',
+            '</div>',
             '</tpl>',
             {
                 display: function(layer) {
@@ -528,8 +528,8 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         Ext.Msg.show({
             title: viewModel.get('removeLayerMsgBoxTitle'),
             message: Ext.String.format(
-                    viewModel.get('removeLayerMsgBoxMessage'),
-                    layer.get('name')),
+                viewModel.get('removeLayerMsgBoxMessage'),
+                layer.get('name')),
             buttons: [{
                 text: viewModel.get('removeLayerMsgBoxYesBtnText')
             },{

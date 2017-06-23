@@ -296,7 +296,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         Koala.util.Fullscreen.toggleFullscreen();
 
         var btnClass = Koala.util.Fullscreen.isInFullscreen() ?
-                'fa-compress' : 'fa-expand';
+            'fa-compress' : 'fa-expand';
         btn.setHtml('<i class="fa ' + btnClass + ' fa-2x"></i>');
     }
 

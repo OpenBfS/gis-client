@@ -58,7 +58,7 @@ Ext.define('Koala.util.Rodos', {
         setRodosLayers: function(projectUid, results) {
             var appContext = Koala.util.AppContext.getAppContext();
             var rodosFolderName = Koala.util.Object.getPathStrOr(appContext,
-                    'data/merge/rodosFolderName', 'RODOS-Prognosen');
+                'data/merge/rodosFolderName', 'RODOS-Prognosen');
             var layers = results.layers;
             var queryString = Ext.isModern ?
                 'k-panel-treepanel > treelist' :

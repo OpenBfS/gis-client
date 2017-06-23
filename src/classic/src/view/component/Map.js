@@ -176,7 +176,7 @@ Ext.define('Koala.view.component.Map', {
                         fill: fill,
                         stroke: stroke
                     })
-                ];
+                    ];
                 }
             };
             return fn;

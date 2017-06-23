@@ -43,23 +43,23 @@ Ext.define('Koala.view.container.styler.LabelController', {
         }
 
         var fill = textStyle && textStyle.getFill() && textStyle.getFill().getColor() !== '#333' ?
-                BasiGX.util.Color.rgbaToHex8(textStyle.getFill().getColor()) :
-                viewModel.get('fillValue');
+            BasiGX.util.Color.rgbaToHex8(textStyle.getFill().getColor()) :
+            viewModel.get('fillValue');
         var stroke = textStyle && textStyle.getStroke()?
-                BasiGX.util.Color.rgbaToHex8(textStyle.getStroke().getColor()) :
-                viewModel.get('strokeValue');
+            BasiGX.util.Color.rgbaToHex8(textStyle.getStroke().getColor()) :
+            viewModel.get('strokeValue');
         var offsetX = textStyle && textStyle.getOffsetX() ?
-                textStyle.getOffsetX() :
-                viewModel.get('offsetXValue');
+            textStyle.getOffsetX() :
+            viewModel.get('offsetXValue');
         var offsetY = textStyle && textStyle.getOffsetY() ?
-                textStyle.getOffsetY() :
-                viewModel.get('offsetYValue');
+            textStyle.getOffsetY() :
+            viewModel.get('offsetYValue');
         var rotation = textStyle && textStyle.getRotation() ?
-                textStyle.getRotation() * (180 / Math.PI) :
-                viewModel.get('rotationValue') * (180 / Math.PI);
+            textStyle.getRotation() * (180 / Math.PI) :
+            viewModel.get('rotationValue') * (180 / Math.PI);
         var text = textStyle && textStyle.getText() ?
-                textStyle.getText() :
-                viewModel.get('textValue');
+            textStyle.getText() :
+            viewModel.get('textValue');
 
         viewModel.set('fillValue', fill);
         viewModel.set('fontFamilyValue', fontFamily);
@@ -170,10 +170,10 @@ Ext.define('Koala.view.container.styler.LabelController', {
 
         var fontTpl = '{0} {1} {2}px {3}';
         var font = Ext.String.format(fontTpl,
-                textStyle.fontStyleValue.split(',')[0],
-                textStyle.fontStyleValue.split(',')[1],
-                textStyle.fontSizeValue,
-                textStyle.fontFamilyValue
+            textStyle.fontStyleValue.split(',')[0],
+            textStyle.fontStyleValue.split(',')[1],
+            textStyle.fontSizeValue,
+            textStyle.fontFamilyValue
         );
 
         var fill = new ol.style.Fill({
@@ -187,14 +187,14 @@ Ext.define('Koala.view.container.styler.LabelController', {
         var text = textStyle.textValue;
 
         var offsetX = Ext.isEmpty(textStyle.offsetXValue) ?
-                currentTextStyle.getOffsetX() :
-                textStyle.offsetXValue;
+            currentTextStyle.getOffsetX() :
+            textStyle.offsetXValue;
         var offsetY = Ext.isEmpty(textStyle.offsetYValue) ?
-                currentTextStyle.getOffsetY() :
-                textStyle.offsetYValue;
+            currentTextStyle.getOffsetY() :
+            textStyle.offsetYValue;
         var rotation = Ext.isEmpty(textStyle.rotationValue) ?
-                currentTextStyle.getRotation() * (Math.PI / 180) :
-                textStyle.rotationValue * (Math.PI / 180);
+            currentTextStyle.getRotation() * (Math.PI / 180) :
+            textStyle.rotationValue * (Math.PI / 180);
 
         currentTextStyle.setFill(fill);
         currentTextStyle.setFont(font);

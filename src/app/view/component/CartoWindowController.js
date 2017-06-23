@@ -141,7 +141,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var layer = view.getLayer();
         var feature = view.getFeature();
         var timeFilter = Koala.util.Filter.getStartEndFilterFromMetadata(
-                layer.metadata);
+            layer.metadata);
 
         var timeSeriesTab = me.createTabElement({
             title: 'Timeseries',
@@ -188,7 +188,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
 
         var chartObj = Koala.view.component.D3BarChart.create(
-                layer, feature, config);
+            layer, feature, config);
 
         el.appendChild(barChartTab);
         Ext.create(chartObj);
@@ -351,9 +351,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var layer = view.getLayer();
         var feature = view.getFeature();
         var template = Koala.util.Object.getPathStrOr(layer,
-                'metadata/layerConfig/olProperties/hoverTpl');
+            'metadata/layerConfig/olProperties/hoverTpl');
         var innerHTML = Koala.util.String.replaceTemplateStrings(template,
-                feature);
+            feature);
         var timeSeriesTab = me.createTabElement({
             title: 'Hover',
             innerHTML: innerHTML,
@@ -548,11 +548,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 var newWidth = evtX - targetX;
                 var newHeight = evtY - targetY;
                 newWidth = newWidth > view.contentMinWidth
-                        ? newWidth
-                        : view.contentMinWidth || 0;
+                    ? newWidth
+                    : view.contentMinWidth || 0;
                 newHeight = newHeight > view.contentMinHeight
-                        ? newHeight
-                        : view.contentMinHeight || 0;
+                    ? newHeight
+                    : view.contentMinHeight || 0;
 
                 var chartContainerEl = target.down('[id^=d3-chart]') ||
                         target.down('[id^=d3-barchart]');
@@ -593,7 +593,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var overlayWidth = overlay.getElement().clientWidth;
         var overlayHeight = overlay.getElement().clientHeight;
         var centerPixel = [overlayWidth/2 + overlayerTopLeftPixel[0],
-                            overlayHeight/2 + overlayerTopLeftPixel[1]];
+            overlayHeight/2 + overlayerTopLeftPixel[1]];
         var centerCoords = map.getCoordinateFromPixel(centerPixel);
         lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
         overlay.centerCoords = centerCoords;

@@ -318,7 +318,7 @@ describe('Koala.util.Filter', function() {
                 var got = Koala.util.Filter.getSpinner(filters, spinnerType, name, value);
                 if (!Ext.isModern) { // classic
                     expect(got.maxValue).to.be.equal(23);
-                } else {  // modern
+                } else { // modern
                     expect(got.options[23].value).to.be.equal(23);
                 }
             });

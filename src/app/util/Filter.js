@@ -80,7 +80,7 @@ Ext.define('Koala.util.Filter', {
          *                  the keys `parameter`, `mindatetimeinstant` and
          *                  `maxdatetimeinstant`.
          */
-         // TODO: In the test for the mindatetimeinstant is wrong
+        // TODO: In the test for the mindatetimeinstant is wrong
         getStartEndFilterFromMetadata: function(metadata) {
             var staticMe = Koala.util.Filter;
             var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
@@ -215,16 +215,16 @@ Ext.define('Koala.util.Filter', {
                 };
                 var listTpl = Ext.create('Ext.XTemplate',
                     '<tpl for=".">',
-                        '<div class="x-boundlist-item">',
-                            '{[this.getFormatedDate(values)]}',
-                        '</div>',
+                    '<div class="x-boundlist-item">',
+                    '{[this.getFormatedDate(values)]}',
+                    '</div>',
                     '</tpl>',
                     {
                         getFormatedDate: getFormatedDate
                     }
                 );
                 var displayTpl = Ext.create('Ext.XTemplate',
-                        '{[this.getFormatedDate(values)]}',
+                    '{[this.getFormatedDate(values)]}',
                     {
                         getFormatedDate: getFormatedDate
                     }
@@ -555,7 +555,7 @@ Ext.define('Koala.util.Filter', {
                 }
 
                 datefield = field.up('container[name*=timecontainer]')
-                        .down('datepickerfield');
+                    .down('datepickerfield');
                 dateVal = datefield.getValue(true);
 
                 if (field.spinnerType === MINUTE_TYPE) {
@@ -680,7 +680,7 @@ Ext.define('Koala.util.Filter', {
 
             if (!filter.fromTimeseries) {
                 var names = staticMe.startAndEndFieldnamesFromMetadataParam(
-                        filter.param);
+                    filter.param);
                 startName = names.startName;
                 endName = names.endName;
             } else {

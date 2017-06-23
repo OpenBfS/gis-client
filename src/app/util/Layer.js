@@ -299,7 +299,7 @@ Ext.define('Koala.util.Layer', {
             if (testdataFilter) {
                 var appContext = Koala.util.AppContext.getAppContext();
                 var userroles = Koala.util.Object.getPathStrOr(appContext,
-                'data/merge/imis_user/userroles');
+                    'data/merge/imis_user/userroles');
 
                 // Check if the "user" is not allowed to see 'test_data'
                 if (!(userroles && Ext.Array.contains(userroles, 'imis'))) {
@@ -428,7 +428,7 @@ Ext.define('Koala.util.Layer', {
                         if (filter.param === 'test_data' &&
                             (filter.effectivevalue.toLowerCase() === 'false' ||
                                 !filter.effectivevalue)
-                          ) {
+                        ) {
                             return;
                         }
                         filterTxt += staticMe.stringifyValueFilter(filter, true);
@@ -495,9 +495,9 @@ Ext.define('Koala.util.Layer', {
                             if (Koala.util.Layer.minimumValidMetadata(obj)) {
                                 // TODO Can we move this out of here?
                                 staticMe.resolveMetadataLinks(obj)
-                                .then(function() {
-                                    resolve(obj);
-                                });
+                                    .then(function() {
+                                        resolve(obj);
+                                    });
                             } else {
                                 reject('Für den Datensatz scheinen nicht ausreichend Metadaten vorzuliegen.');
                             }
@@ -529,13 +529,13 @@ Ext.define('Koala.util.Layer', {
             if (metadata instanceof Array) {
                 for (i = 0; i < metadata.length; ++i) {
                     staticMe.resolveMetadataLinks(metadata[i], promises)
-                    .then(staticMe.resolveMetadataLink(i, metadata));
+                        .then(staticMe.resolveMetadataLink(i, metadata));
                 }
             } else if (metadata instanceof Object) {
                 var keys = Object.keys(metadata);
                 for (i = 0; i < keys.length; ++i) {
                     staticMe.resolveMetadataLinks(metadata[keys[i]], promises)
-                    .then(staticMe.resolveMetadataLink(keys[i], metadata));
+                        .then(staticMe.resolveMetadataLink(keys[i], metadata));
                 }
             } else if (typeof metadata === 'string') {
                 var ms = metadata.match(/^url:(.+)/);
@@ -731,7 +731,7 @@ Ext.define('Koala.util.Layer', {
 
             // Get the legend tree, either classic or modern
             var legendTree = Ext.ComponentQuery.query(
-                    'k-panel-routing-legendtree, k-panel-mobilelegend > treelist')[0];
+                'k-panel-routing-legendtree, k-panel-mobilelegend > treelist')[0];
 
             if (legendTree) {
                 // Get the corresponding tree node.
@@ -786,14 +786,14 @@ Ext.define('Koala.util.Layer', {
             var themeTree = Ext.ComponentQuery.query('k-panel-themetree')[0];
             var currentSelection = themeTree.getSelection()[0];
             var title = currentSelection ?
-                    currentSelection.data.text :
-                    metadata.legendTitle;
+                currentSelection.data.text :
+                metadata.legendTitle;
 
             var winName = 'filter-win-' + metadata.id;
 
             // only allow one filter-window to be open
             var filterPanelExisting = Ext.ComponentQuery.query(
-                      'k-form-layerfilter');
+                'k-form-layerfilter');
 
             if (filterPanelExisting.length > 0) {
                 filterPanelExisting[0].up('window').close();
@@ -891,8 +891,8 @@ Ext.define('Koala.util.Layer', {
             var internalSourceConfig = staticMe.getInternalSourceConfig(metadata, SourceClass);
 
             var olProps = metadata.layerConfig ?
-                    metadata.layerConfig.olProperties || {} :
-                    {};
+                metadata.layerConfig.olProperties || {} :
+                {};
             var mdLayerConfig = Koala.util.Object.getConfigByPrefix(
                 olProps, 'layer_', true);
 
@@ -1063,7 +1063,7 @@ Ext.define('Koala.util.Layer', {
             var cfg;
             var olProps = md.layerConfig.olProperties;
             var extraParams = Koala.util.Object.getConfigByPrefix(
-                    olProps, 'param_');
+                olProps, 'param_');
             var map = Ext.ComponentQuery.query('basigx-component-map')[0].getMap();
             var projection = map.getView().getProjection();
             var projCode = projection.getCode();
@@ -1584,13 +1584,13 @@ Ext.define('Koala.util.Layer', {
                 // and the value part
                 if (displayFriendly) {
                     valuesPart = LayerUtil.getDisplayFriendlyValuesPart(
-                            op, filter.effectivevalue, filter.allowedValues
+                        op, filter.effectivevalue, filter.allowedValues
                     );
                     op = LayerUtil.getDisplayFriendlyOperation(op);
                 }
 
-                stringified = filter[paramKey] +        // name
-                    ' ' + op + ' ' +                    // NOT IN
+                stringified = filter[paramKey] + // name
+                    ' ' + op + ' ' + // NOT IN
                     valuesPart; // ('kalle', 'jupp')
             }
             if (adjusted) {
@@ -1871,10 +1871,10 @@ Ext.define('Koala.util.Layer', {
             url = Ext.String.urlAppend(url, param);
 
             var existingViewParams = Koala.util.Object.getPathStrOr(
-                    metadata,
-                    'layerConfig/olProperties/param_viewparams',
-                    null
-                );
+                metadata,
+                'layerConfig/olProperties/param_viewparams',
+                null
+            );
             if (existingViewParams !== null) {
                 var viewParams = 'VIEWPARAMS=' + existingViewParams;
                 url = Ext.String.urlAppend(url, viewParams);

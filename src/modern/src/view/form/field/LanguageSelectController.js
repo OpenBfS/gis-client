@@ -330,7 +330,7 @@ Ext.define('Koala.view.form.field.LanguageSelectController', {
                     var type = configurator.values.viewModel.type;
                     if (!Ext.isEmpty(type)) {
                         var viewClassName = Ext.ClassManager.getName(
-                                Ext.ClassManager.getByAlias('viewmodel.' +
+                            Ext.ClassManager.getByAlias('viewmodel.' +
                                     type));
                         baseLocaleObj.override = viewClassName;
                         Ext.define(viewClassName, baseLocaleObj);

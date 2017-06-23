@@ -103,17 +103,17 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     */
     drawPointInteraction: null,
 
-   /**
+    /**
     * Instance of the `ol.interaction.Draw` with type `LineString`
     */
     drawLineInteraction: null,
 
-   /**
+    /**
     * Instance of the `ol.interaction.Draw` with type `Polygon`
     */
     drawPolygonInteraction: null,
 
-   /**
+    /**
      * Instance of the `ol.interaction.Modify` to be used to modify the drawn
      * objects. Works together with the #modifySelectInteraction interaction.
      */
