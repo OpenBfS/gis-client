@@ -125,8 +125,11 @@ describe('Koala.util.Filter', function() {
                 // Setup
                 metadata.layerConfig.timeSeriesChartProperties.end_timestamp = Koala.util.Filter.NOW_STRING;
                 var expectedMoment = Koala.util.Date.getUtcMoment(new Date());
+                var upperClone = expectedMoment.clone().add(5, 'milliseconds');
                 var got = Koala.util.Filter.getStartEndFilterFromMetadata(metadata);
-                expect(expectedMoment.isSame(got.maxdatetimeinstant)).to.be(true);
+
+                expect(got.maxdatetimeinstant.isBetween(expectedMoment, upperClone, null, '[]')).to.be(true);
+
                 // Teardown
                 metadata.layerConfig.timeSeriesChartProperties.end_timestamp = '2016-10-17T00:00:00';
             });
