@@ -48,6 +48,12 @@ module.exports = function(config) {
                 served: true,
                 included: false
             },
+            {
+                pattern: 'resources/rodos/**',
+                watched: true,
+                served: true,
+                included: false
+            },
             'resources/lib/proj4js/proj4.js',
             'resources/lib/proj4js/proj4-defs.js',
             'resources/lib/d3/d3.js',
