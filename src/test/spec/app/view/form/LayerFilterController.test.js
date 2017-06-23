@@ -96,5 +96,27 @@ describe('Koala.view.form.LayerFilterController', function() {
             expect(filters[0].effectivedatetime.isSameOrBefore(moment));
             expect(filters[1].effectivemaxdatetime.isSameOrBefore(moment));
         });
+
+        it('can add layers without filters', function() {
+            var ctrl = new Koala.view.form.LayerFilterController();
+            var view = TestUtil.getMockedElement();
+            var layer = TestUtil.getMockedGetter({});
+            sinon.stub(Koala.util.Layer, 'layerFromMetadata');
+            sinon.stub(ctrl, 'deselectThemeTreeItems');
+            Koala.util.Layer.layerFromMetadata.returns(layer);
+            sinon.spy(Koala.util.Layer, 'addOlLayerToMap');
+            view.getMetadata = sinon.stub();
+            ctrl.setView(view);
+            ctrl.submitNoFilter();
+            expect(Koala.util.Layer.addOlLayerToMap.called).to.be(true);
+            Koala.util.Layer.layerFromMetadata.restore();
+            ctrl.deselectThemeTreeItems.restore();
+        });
+
+        it('can deselect theme tree items', function() {
+            Ext.ComponentQuery.query.returns([]);
+            var ctrl = new Koala.view.form.LayerFilterController();
+            expect(ctrl.deselectThemeTreeItems.bind(ctrl)).to.not.throwException();
+        });
     });
 });
