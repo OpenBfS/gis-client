@@ -149,18 +149,70 @@ Ext.define('Koala.view.component.CartoWindowController', {
             active: true
         });
 
+        var tabElm = timeSeriesTab.getElementsByTagName('div')[0];
+
         var config = {
             startDate: timeFilter.mindatetimeinstant,
             endDate: timeFilter.maxdatetimeinstant,
             width: '400px',
             height: '400px',
-            renderTo: timeSeriesTab.getElementsByTagName('div')[0]
+            renderTo: tabElm
         };
 
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
 
+        this.createTimeSeriesButtons(tabElm);
+        this.createLegendVisibilityButton(tabElm);
+
         el.appendChild(timeSeriesTab);
-        Ext.create(chartObj);
+        this.chart = Ext.create(chartObj);
+    },
+
+    /**
+     * Create buttons to scroll/expand the timeseries start/end date.
+     * @param  {Element} elm element to render the buttons to
+     */
+    createTimeSeriesButtons: function(elm) {
+        var left = {
+            xtype: 'button',
+            name: 'seriesLeft',
+            glyph: 'xf104@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('expandToLeft')
+            },
+            renderTo: elm
+        };
+        var right = {
+            xtype: 'button',
+            name: 'seriesRight',
+            glyph: 'xf105@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('expandToRight')
+            },
+            renderTo: elm
+        };
+        left = Ext.create(left);
+        left.el.dom.addEventListener('click', this.scrollTimeseriesLeft.bind(this));
+        right = Ext.create(right);
+        right.el.dom.addEventListener('click', this.scrollTimeseriesRight.bind(this));
+    },
+
+    /**
+     * Create legend visibility toggle button.
+     * @param  {Element} elm element to render the button to
+     */
+    createLegendVisibilityButton: function(elm) {
+        var btn = {
+            xtype: 'button',
+            name: 'toggleLegend',
+            glyph: 'xf151@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('toggleLegendVisibility')
+            },
+            renderTo: elm
+        };
+        this.legendVisibilityButton = Ext.create(btn);
+        this.legendVisibilityButton.el.dom.addEventListener('click', this.toggleTimeseriesLegend.bind(this));
     },
 
     /**
@@ -597,6 +649,68 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var centerCoords = map.getCoordinateFromPixel(centerPixel);
         lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
         overlay.centerCoords = centerCoords;
+    },
+
+    scrollTimeseriesLeft: function() {
+        this.scrollTimeseries('min', 'startDate', 'subtract');
+    },
+
+    scrollTimeseriesRight: function() {
+        this.scrollTimeseries('max', 'endDate', 'add');
+    },
+
+    scrollTimeseries: function(minOrMax, startOrEndDate, addOrSubtract) {
+        var controller = this.chart.getController();
+        var zoom = controller.currentDateRange;
+        var hasZoom = zoom[minOrMax] !== null;
+
+        var changedDate = this.chart.getConfig(startOrEndDate);
+        if (hasZoom) {
+            changedDate = moment(zoom[minOrMax]);
+        }
+
+        var layer = this.getView().layer;
+        var duration = Koala.util.Object.getPathStrOr(
+            layer,
+            'metadata/layerConfig/timeSeriesChartProperties/duration'
+        );
+        changedDate[addOrSubtract](moment.duration(duration));
+
+        // only change start/end date if needed
+        var start = this.chart.getConfig('startDate');
+        var end = this.chart.getConfig('endDate');
+        if (!start.isBefore(changedDate) || !end.isAfter(changedDate)) {
+            this.chart.setConfig(startOrEndDate, changedDate);
+        }
+
+        if (hasZoom) {
+            zoom[minOrMax] = changedDate.valueOf();
+        }
+        controller.getChartData();
+        if (hasZoom) {
+            var min = zoom.min;
+            var max = zoom.max;
+            controller.on('chartdataprepared', function() {
+                // unfortunately, d3 has an internal timer resetting
+                // the zoom frequently in the first few hundred ms after
+                // creation
+                window.setTimeout(function() {
+                    controller.zoomToInterval(min, max);
+                }, 800);
+            });
+        }
+    },
+
+    toggleTimeseriesLegend: function() {
+        var btn = this.legendVisibilityButton;
+        this.chart.getController().toggleLegendVisibility();
+        var glyph = btn.getGlyph();
+        if (glyph.glyphConfig === 'xf151@FontAwesome') {
+            glyph = 'xf150@FontAwesome';
+        } else {
+            glyph = 'xf151@FontAwesome';
+        }
+        btn.setGlyph(glyph);
     },
 
     /**
