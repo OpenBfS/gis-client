@@ -18,7 +18,7 @@
     "jsdoc": "jsdoc -c jsdoc-config.json",
     "userdoc": "gitbook pdf ../docs/userdoc ../docs/userdoc/User-Documentation.pdf",
     "jsduck": "jsduck --config jsduck-config.json",
-    "clean": "rm -rf apidoc && rm -rf build/* coverage coverage-combined"
+    "clean": "rimraf apidoc build/* coverage coverage-combined"
   },
   "repository": {
     "type": "git",
@@ -46,6 +46,7 @@
     "mocha": "3.4.2",
     "mocha-phantomjs": "4.1.0",
     "npm-run-all": "4.0.2",
+    "rimraf": "2.6.1",
     "serve-static": "1.12.3",
     "sinon": "2.3.5"
   }
