@@ -15,6 +15,20 @@ describe('Koala.util.Style', function() {
             it('is a function', function() {
                 expect(Koala.util.Style.isLogicalFilter).to.be.a(Function);
             });
+            it('returns true if "logicOps" is in filter', function() {
+                var filter = {
+                    logicOps: {
+                        peter: 'paul'
+                    }
+                };
+                expect(Koala.util.Style.isLogicalFilter(filter)).to.be.ok();
+            });
+            it('returns false if "logicOps" is not in filter', function() {
+                var filter = {
+                    peter: 'paul'
+                };
+                expect(Koala.util.Style.isLogicalFilter(filter)).to.not.be.ok();
+            });
         });
 
         describe('#isSpatialFilter', function() {
@@ -23,6 +37,20 @@ describe('Koala.util.Style', function() {
             });
             it('is a function', function() {
                 expect(Koala.util.Style.isSpatialFilter).to.be.a(Function);
+            });
+            it('returns true if "spatialOps" is in filter', function() {
+                var filter = {
+                    spatialOps: {
+                        peter: 'paul'
+                    }
+                };
+                expect(Koala.util.Style.isSpatialFilter(filter)).to.be.ok();
+            });
+            it('returns false if "isSpatialFilter" is not in filter', function() {
+                var filter = {
+                    peter: 'paul'
+                };
+                expect(Koala.util.Style.isSpatialFilter(filter)).to.not.be.ok();
             });
         });
 
@@ -33,6 +61,20 @@ describe('Koala.util.Style', function() {
             it('is a function', function() {
                 expect(Koala.util.Style.isComparisonFilter).to.be.a(Function);
             });
+            it('returns true if "comparisonOps" is in filter', function() {
+                var filter = {
+                    comparisonOps: {
+                        peter: 'paul'
+                    }
+                };
+                expect(Koala.util.Style.isComparisonFilter(filter)).to.be.ok();
+            });
+            it('returns false if "comparisonOps" is not in filter', function() {
+                var filter = {
+                    peter: 'paul'
+                };
+                expect(Koala.util.Style.isComparisonFilter(filter)).to.not.be.ok();
+            });
         });
 
         describe('#symbolTypeFromVectorLayer', function() {
@@ -42,6 +84,29 @@ describe('Koala.util.Style', function() {
             it('is a function', function() {
                 expect(Koala.util.Style.symbolTypeFromVectorLayer).to.be.a(Function);
             });
+            it('returns a symboltype string from a vectorlayer', function() {
+                var pointFeature = new ol.Feature({
+                    geometry: new ol.geom.Point([1, 1])
+                });
+                var multiLineFeature = new ol.Feature({
+                    geometry: new ol.geom.MultiLineString(
+                        [[1, 1], [2, 2]],
+                        [[3, 3], [4, 4]]
+                    )
+                });
+                var source = new ol.source.Vector({
+                    features: [pointFeature]
+                });
+                var vectorLayer = new ol.layer.Vector({
+                    source: source
+                });
+                var symboltype = Koala.util.Style.symbolTypeFromVectorLayer(vectorLayer);
+                expect(symboltype).to.be('Point');
+                source.clear();
+                source.addFeature(multiLineFeature);
+                symboltype = Koala.util.Style.symbolTypeFromVectorLayer(vectorLayer);
+                expect(symboltype).to.be('Line');
+            });
         });
 
         describe('#getAttributekeysFromVectorLayer', function() {
@@ -50,6 +115,21 @@ describe('Koala.util.Style', function() {
             });
             it('is a function', function() {
                 expect(Koala.util.Style.getAttributekeysFromVectorLayer).to.be.a(Function);
+            });
+            it('returns the attribute keys from a vectorlayer', function() {
+                var pointFeature = new ol.Feature({
+                    geometry: new ol.geom.Point([1, 1]),
+                    peter: 'paul',
+                    ingrid: 'dieter'
+                });
+                var source = new ol.source.Vector({
+                    features: [pointFeature]
+                });
+                var vectorLayer = new ol.layer.Vector({
+                    source: source
+                });
+                var attributeKeys = Koala.util.Style.getAttributekeysFromVectorLayer(vectorLayer);
+                expect(attributeKeys).to.eql(['geometry', 'peter', 'ingrid']);
             });
         });
 

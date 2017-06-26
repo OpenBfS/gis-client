@@ -31,6 +31,7 @@ module.exports = function(config) {
             'test/' + TOOLKIT + '/loader.js',
             'resources/lib/openlayers-v3.19.1-dist/ol.js',
             'test/raf.polyfill.js',
+            'overrides/**/*js',
             'test/test-helper-functions.js',
             'test/turn-off-ext-logger.js',
             // GeoExt
@@ -45,6 +46,12 @@ module.exports = function(config) {
             },
             {
                 pattern: 'resources/appContext.json',
+                watched: true,
+                served: true,
+                included: false
+            },
+            {
+                pattern: 'resources/rodos/**',
                 watched: true,
                 served: true,
                 included: false

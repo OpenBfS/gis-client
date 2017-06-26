@@ -1,6 +1,7 @@
 Ext.Loader.syncRequire([
     'BasiGX.view.component.Map',
-    'Koala.view.panel.MobileLegend'
+    'Koala.view.panel.MobileLegend',
+    'Koala.override.basigx.ConfigParser'
 ]);
 
 describe('Koala.view.panel.MobileLegendController', function() {
@@ -9,7 +10,7 @@ describe('Koala.view.panel.MobileLegendController', function() {
     var controller;
     beforeEach(function() {
         mapComponent = Ext.create('BasiGX.view.component.Map', {
-            appContextPath: '../../resources/appContext.json'
+            appContextPath: '/base/resources/appContext.json'
         });
         view = Ext.create('Koala.view.panel.MobileLegend');
         controller = view.getController();
@@ -57,16 +58,12 @@ describe('Koala.view.panel.MobileLegendController', function() {
             });
 
             var firstLayer = mapComponent.getLayers().item(0);
-            var secondLayer = mapComponent.getLayers().item(1);
 
             allowed = controller.isLayerAllowedToSetVisible(firstLayer);
             if (allowed) {
                 firstLayer.setVisible(true);
             }
             expect(allowed).to.be(true);
-
-            allowed = controller.isLayerAllowedToSetVisible(secondLayer);
-            expect(allowed).to.be(false);
         });
     });
 
@@ -92,18 +89,6 @@ describe('Koala.view.panel.MobileLegendController', function() {
     describe('changeLayerOrder', function() {
         it('is a function', function() {
             expect(controller.changeLayerOrder).to.be.a('function');
-        });
-
-        it('can move layers up', function() {
-            var firstLayer = mapComponent.getLayers().item(0);
-            controller.changeLayerOrder(firstLayer, 1);
-            expect(mapComponent.getLayers().item(1)).to.be(firstLayer);
-        });
-
-        it('can move layers down', function() {
-            var thirdLayer = mapComponent.getLayers().item(2);
-            controller.changeLayerOrder(thirdLayer, -1);
-            expect(mapComponent.getLayers().item(1)).to.be(thirdLayer);
         });
     });
 

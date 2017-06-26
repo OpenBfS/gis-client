@@ -121,11 +121,18 @@
         var view = new ol.View({
             center: [0, 0]
         });
-        var map = new ol.Map(Ext.apply({target: mapDiv, view: view}, mapOpts));
-        var mapComponent = Ext.create('BasiGX.view.component.Map', Ext.apply({
-            map: map,
+        var map = new ol.Map(Ext.apply({target: mapDiv, view: view},mapOpts));
+        var defaultProps = {
             renderTo: mapComponentDiv
-        }, mapComponentOpts));
+        };
+
+        if (!mapComponentOpts.appContextPath) {
+            defaultProps.map = map;
+        }
+
+        var mapComponent = Ext.create('BasiGX.view.component.Map',
+                Ext.apply(mapComponentOpts, defaultProps)
+            );
 
         return {
             map: map,
