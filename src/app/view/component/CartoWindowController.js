@@ -61,6 +61,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         me.createLineFeature();
 
+        me.createLayerListeners();
     },
 
     /**
@@ -551,10 +552,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var coords = feature.getGeometry().getCoordinates();
         var el = view.el.dom;
         var overlay = viewModel.get('overlay');
+        var cartoWindowId = view.getCartoWindowId();
 
         var lineFeature = new ol.Feature({
             geometry: new ol.geom.LineString([coords, coords])
         });
+
+        lineFeature.setId(cartoWindowId);
 
         var dragPan;
         map.getInteractions().forEach(function(interaction) {
@@ -576,18 +580,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         });
 
-        view.onMouseUp = function() {
+        me.onMouseUp = function() {
             if (overlay.get('dragging') === true) {
                 dragPan.setActive(true);
                 overlay.set('dragging', false);
             }
         };
 
-        view.onMouseUpWindow = function() {
+        me.onMouseUpWindow = function() {
             overlay.set('resizing', false);
         };
 
-        view.pointerMoveListener = function(event) {
+        me.pointerMoveListener = function(event) {
             if (overlay.get('dragging') === true) {
                 overlay.setPosition(event.coordinate);
                 me.updateLineFeature();
@@ -619,12 +623,71 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         };
 
-        el.addEventListener(upEvent, view.onMouseUp);
-        window.addEventListener(upEvent, view.onMouseUpWindow);
-        map.on('pointermove', view.pointerMoveListener);
+        el.addEventListener(upEvent, me.onMouseUp);
+        window.addEventListener(upEvent, me.onMouseUpWindow);
+        map.on('pointermove', me.pointerMoveListener);
 
         viewModel.get('lineLayer').getSource().addFeature(lineFeature);
         viewModel.set('lineFeature', lineFeature);
+    },
+
+    /**
+     * Create listeners for 'change:visible' on the layer and 'remove' on the
+     * layerCollection to sync layer, overlay and feature visibility.
+     */
+    createLayerListeners: function() {
+        var me = this;
+        var view = me.getView();
+        var layer = view.getLayer();
+        var map = view.getMap();
+        var layerCollection = map.getLayers();
+
+        layer.on('change:visible', me.onLayerVisibilityChange, me);
+        layerCollection.on('remove', me.onLayerRemove, me);
+    },
+
+    /**
+     * Handler for the layers 'change:visible' event. It syncs visibility changes
+     * between the layer and the overlay/lineFeature.
+     * @param {ol.Object.Event} evt The change:visible event.
+     */
+    onLayerVisibilityChange: function(evt) {
+        var me = this;
+        var viewModel = me.getViewModel();
+        var overlay = viewModel.get('overlay');
+        var lineFeature = viewModel.get('lineFeature');
+        var lineLayer = BasiGX.util.Layer.getLayerByName('carto-window-lines');
+
+        if (lineFeature && lineLayer && overlay) {
+            var el = overlay.getElement();
+            var lineSource = lineLayer.getSource();
+
+            if (evt.target.get('visible')) {
+                if (!lineSource.getFeatureById(lineFeature.getId())) {
+                    lineSource.addFeature(lineFeature);
+                    el.classList.remove('x-hidden');
+                }
+            } else {
+                el.classList.add('x-hidden');
+                lineSource.removeFeature(lineFeature);
+            }
+        }
+    },
+
+    /**
+     * Handler for the maps 'remove' event. It removes the overlay and lineFeature
+     * when the layer is removed.
+     * @param {ol.Collection.Event} evt The remove event.
+     */
+    onLayerRemove: function(evt) {
+        var me = this;
+        var view = me.getView();
+        var layer = view.getLayer();
+        var removedLayer = evt.element;
+
+        if (layer === removedLayer) {
+            view.destroy();
+        }
     },
 
     /**
@@ -720,14 +783,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
     onBeforeDestroy: function() {
         var me = this;
         var view = me.getView();
-        var viewModel = me.getViewModel();
+        var layer = view.getLayer();
         var map = view.getMap();
+        var layerCollection = map.getLayers();
+        var viewModel = me.getViewModel();
         var lineLayer = viewModel.get('lineLayer');
         var lineFeature = viewModel.get('lineFeature');
         var upEvent = Ext.isModern ? 'touchend': 'mouseup';
 
-        map.un('pointermove', view.pointerMoveListener);
-        window.removeEventListener(upEvent, view.onMouseUpWindow);
+        layer.un('change:visible', me.onLayerVisibilityChange, me);
+        layerCollection.un('remove', me.onLayerRemove, me);
+        map.un('pointermove', me.pointerMoveListener);
+        window.removeEventListener(upEvent, me.onMouseUpWindow);
         lineLayer.getSource().removeFeature(lineFeature);
     }
 
