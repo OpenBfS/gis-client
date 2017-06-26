@@ -211,6 +211,63 @@
         return mock;
     }
 
+    /**
+     * Returns an array of names of `Ext.Logger` / `Ext.log` methods we'll be
+     * able to turn on and off. See the methods #extLoggerBeQuiet
+     * and #extLoggerBeLoud.
+     *
+     * @return {Array<String>} The names of methods which log.
+     * @private
+     */
+    function getLogMethods() {
+        var wrappedInUnderscores = /^__.+__$/;
+        var loggerMethods = Ext.Object.getKeys(Ext.Logger);
+        loggerMethods = Ext.Array.filter(loggerMethods, function(name) {
+            return ! wrappedInUnderscores.test(name);
+        });
+        var logMethods = Ext.Object.getKeys(Ext.log);
+        logMethods = Ext.Array.filter(logMethods, function(name) {
+            return ! wrappedInUnderscores.test(name);
+        });
+        return Ext.Array.union(loggerMethods, logMethods);
+    }
+    /**
+     * Turns of the noise from `Ext.Logger` / `Ext.log` by overwriting the
+     * single log methods with a no-op-method. See also #extLoggerBeLoud to
+     * restore the original Objects.
+     */
+    function extLoggerBeQuiet() {
+        var logMethods = getLogMethods();
+        var logObjs = [Ext.Logger, Ext.log];
+        Ext.each(logObjs, function(logObj) {
+            Ext.each(logMethods, function(logMethod) {
+                var restoreName = '__' + logMethod + '__';
+                if (logObj[logMethod] && !logObj[restoreName]) {
+                    logObj[restoreName] = logObj[logMethod];
+                    logObj[logMethod] = Ext.emptyFn;
+                }
+            });
+        });
+    }
+    /**
+     * Turns the noise from `Ext.Logger` / `Ext.log` on by overwriting the
+     * single log methods with their stored original implementation. See also
+     * the method #extLoggerBeQuiet.
+     */
+    function extLoggerBeLoud() {
+        var logMethods = getLogMethods();
+        var logObjs = [Ext.Logger, Ext.log];
+        Ext.each(logObjs, function(logObj) {
+            Ext.each(logMethods, function(logMethod) {
+                var restoreName = '__' + logMethod + '__';
+                if (logObj[restoreName] && logObj[logMethod] === Ext.emptyFn) {
+                    logObj[logMethod] = logObj[restoreName];
+                    delete logObj[restoreName];
+                }
+            });
+        });
+    }
+
     global.TestUtil = {
         getExternalScriptTag: getExternalScriptTag,
         getInlineScriptTag: getInlineScriptTag,
@@ -218,6 +275,10 @@
         setupTestObjects: setupTestObjects,
         teardownTestObjects: teardownTestObjects,
         getMockedGetter: getMockedGetter,
-        getMockedElement: getMockedElement
+        getMockedElement: getMockedElement,
+        extLogger: {
+            off: extLoggerBeQuiet,
+            on: extLoggerBeLoud
+        }
     };
 }(this));
