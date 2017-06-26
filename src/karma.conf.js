@@ -32,6 +32,7 @@ module.exports = function(config) {
             'resources/lib/openlayers-v3.19.1-dist/ol.js',
             'test/raf.polyfill.js',
             'test/test-helper-functions.js',
+            'test/turn-off-ext-logger.js',
             // GeoExt
             {
                 pattern: 'lib/GeoExt/src/**/*.js',
