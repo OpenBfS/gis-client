@@ -147,8 +147,9 @@ Ext.define('Koala.view.form.Print', {
             items: [{
                 xtype: 'htmleditor',
                 value: textfield.getValue(),
-                enableFont: false, // TODO Remove if fonts are configured to
-                                   // match the server fonts,
+                // TODO Remove if fonts are configured to
+                // match the server fonts,
+                enableFont: false,
                 enableAlignments: false
             }],
             bbar: ['->',
@@ -240,9 +241,9 @@ Ext.define('Koala.view.form.Print', {
         });
 
         var timeReferenceButton = Ext.ComponentQuery.query(
-                'k-button-timereference')[0];
+            'k-button-timereference')[0];
         var treePanel = Ext.ComponentQuery.query(
-                'k-panel-routing-legendtree')[0];
+            'k-panel-routing-legendtree')[0];
         var treeStore = treePanel.getStore();
         var onUtcToggle = function() {
             Ext.each(layerLegendContainers, function(layerLegendContainer) {
@@ -306,9 +307,9 @@ Ext.define('Koala.view.form.Print', {
         });
 
         var onLayerVisibilityChange = me.onLayerVisibilityChange.bind(
-                me, layerLegendContainer);
+            me, layerLegendContainer);
         var updateLegendText = me.updateLegendText.bind(
-                me, layerLegendContainer);
+            me, layerLegendContainer);
 
         layer.on('change:visible',
             onLayerVisibilityChange
@@ -444,7 +445,7 @@ Ext.define('Koala.view.form.Print', {
      */
     onBeforeAttributeFieldsAdd: function(printForm, attributeFields, attributeRec) {
         Koala.util.Hooks.executeBeforeAddHook(
-                printForm, attributeFields, attributeRec);
+            printForm, attributeFields, attributeRec);
     },
 
     getCheckBoxBooleanFields: function(attributeRec) {
@@ -496,8 +497,8 @@ Ext.define('Koala.view.form.Print', {
 
         if (attributeFields) {
             var doContinue = me.fireEvent(
-                    'beforeattributefieldsadd', me, attributeFields, attributeRec
-                );
+                'beforeattributefieldsadd', me, attributeFields, attributeRec
+            );
             // a beforeattributefieldsadd handler may have cancelled the adding
             if (doContinue !== false) {
                 var added = fieldset.add(attributeFields);
@@ -701,7 +702,7 @@ Ext.define('Koala.view.form.Print', {
                 // Override layer name in legend with value from legendTextField
                 Ext.each(attributes.legend.classes, function(clazz) {
                     var legendTextField = legendFieldset.down(
-                            'textfield[name=' + clazz.name + '_legendtext]');
+                        'textfield[name=' + clazz.name + '_legendtext]');
                     var layer = BasiGX.util.Layer.getLayerByName(clazz.name);
                     var currentLegendUrl = Koala.util.Layer.getCurrentLegendUrl(layer);
 
@@ -841,8 +842,8 @@ Ext.define('Koala.view.form.Print', {
         var uploadOnly = 'upload';
         var repondTypes = ['respond', 'upload/respond'];
         var expectResponse = Ext.Array.contains(
-                repondTypes, chosenRequestType
-            );
+            repondTypes, chosenRequestType
+        );
 
         if (chosenRequestType === uploadOnly) {
             Ext.Msg.show({
@@ -1004,7 +1005,7 @@ Ext.define('Koala.view.form.Print', {
                     margin: '0 0 0 55',
                     handler: function() {
                         Ext.Msg.alert(me.getViewModel().get('mapBboxButton'),
-                                '<b>' + me.getViewModel().get('mapBboxLabel') +
+                            '<b>' + me.getViewModel().get('mapBboxLabel') +
                                 ':</b> ' + bboxTextfield.getValue());
                     }
                 }]

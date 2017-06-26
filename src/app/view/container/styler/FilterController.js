@@ -76,11 +76,11 @@ Ext.define('Koala.view.container.styler.FilterController', {
         var filter = viewModel.get('filter');
 
         var attributeCombo = view.down(
-                'combobox[name="attributeCombo"]');
+            'combobox[name="attributeCombo"]');
         var literalNumberField1 = view.down(
-                'numberfield[name="literalNumberField1"]');
+            'numberfield[name="literalNumberField1"]');
         var literalNumberField2 = view.down(
-                'numberfield[name="literalNumberField2"]');
+            'numberfield[name="literalNumberField2"]');
         var literalTextField = view.down('textfield[name="literalTextField"]');
 
         switch (newValue) {

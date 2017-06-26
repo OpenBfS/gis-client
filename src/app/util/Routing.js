@@ -109,22 +109,22 @@ Ext.define('Koala.util.Routing', {
                 if (Koala.util.String.isUuid(uuid)) {
                     expectedLayers++;
                     LayerUtil.getMetadataFromUuid(uuid)
-                    .then(me.checkForRodosFilters)
-                    .then(function(md) {
-                        gotLayers++;
-                        var metadataClone = Ext.clone(md);
-                        me.applyPermalinkFiltersToMetadata(uuid, md, config.filters);
+                        .then(me.checkForRodosFilters)
+                        .then(function(md) {
+                            gotLayers++;
+                            var metadataClone = Ext.clone(md);
+                            me.applyPermalinkFiltersToMetadata(uuid, md, config.filters);
 
-                        var olLayer = LayerUtil.layerFromMetadata(md);
+                            var olLayer = LayerUtil.layerFromMetadata(md);
 
-                        LayerUtil.setOriginalMetadata(olLayer, metadataClone);
-                        routeCreatedLayers[uuid] = olLayer;
+                            LayerUtil.setOriginalMetadata(olLayer, metadataClone);
+                            routeCreatedLayers[uuid] = olLayer;
 
-                        if (gotLayers === expectedLayers) {
-                            me.routeCreatedLayers = routeCreatedLayers;
-                            action.resume();
-                        }
-                    });
+                            if (gotLayers === expectedLayers) {
+                                me.routeCreatedLayers = routeCreatedLayers;
+                                action.resume();
+                            }
+                        });
                 } else {
                     Ext.log.info('Skipping route part ', uuid);
                 }
@@ -438,10 +438,10 @@ Ext.define('Koala.util.Routing', {
             }
 
             var mapString = Ext.String.format('map/{0}/{1}/{2}',
-                    Math.round(lon),
-                    Math.round(lat),
-                    zoom
-                );
+                Math.round(lon),
+                Math.round(lat),
+                zoom
+            );
 
             var treeQueryString = Ext.isModern ?
                 'k-panel-treepanel  > treelist' :

@@ -93,7 +93,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
                 itemtap: 'onItemTap'
             }
         }
-    ]
+        ]
     }, {
         xtype: 'button',
         bind: {

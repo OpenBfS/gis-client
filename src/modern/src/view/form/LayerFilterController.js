@@ -47,12 +47,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
             viewModel: me.getViewModel(),
             bind: {
                 text: view.getLayer() ?
-                        '{buttonTextChangeFilter}' :
-                        '{buttonText}'
+                    '{buttonTextChangeFilter}' :
+                    '{buttonText}'
             },
             handler: view.getLayer() ?
-                    'changeFilterForLayer' :
-                    'submitFilter',
+                'changeFilterForLayer' :
+                'submitFilter',
             margin: '0 20px',
             formBind: true
         });
@@ -684,8 +684,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
         // Check if the input value is larger than the accepted minimum
         if (newDate.isBefore(minValue)) {
             Ext.toast(Ext.String.format(
-                    minDateWarnMsg,
-                    readableMinDate
+                minDateWarnMsg,
+                readableMinDate
             ), 2000);
             field.setValue(oldDate);
             return;
@@ -694,8 +694,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
         // Check if the input value is smaller than the accepted maximum
         if (newDate.isAfter(maxValue)) {
             Ext.toast(Ext.String.format(
-                    maxDateWarnMsg,
-                    readableMaxDate
+                maxDateWarnMsg,
+                readableMaxDate
             ), 2000);
             field.setValue(oldDate);
             return;
@@ -705,7 +705,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         // needed if we were called from a timerange field)
         if (field.type === 'timerange-min' || field.type === 'timerange-max') {
             var isValid = Koala.util.Filter.validateMaxDurationTimerange
-                    .call(field);
+                .call(field);
             if (Ext.isString(isValid)) {
                 Ext.toast(isValid, 2000);
                 // TODO If an invalid oldDate is set in the metadata of the layer

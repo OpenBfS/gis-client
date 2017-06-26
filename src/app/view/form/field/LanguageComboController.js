@@ -360,8 +360,8 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
                     if (!Ext.isEmpty(type) || Ext.isString(viewModel)) {
                         var viewName = type || viewModel;
                         var viewClassName = Ext.ClassManager.getName(
-                                Ext.ClassManager
-                                    .getByAlias('viewmodel.' + viewName));
+                            Ext.ClassManager
+                                .getByAlias('viewmodel.' + viewName));
                         baseLocaleObj.override = viewClassName;
                         Ext.define(viewClassName, baseLocaleObj);
                     } else if (!Ext.isEmpty(viewModel)) {

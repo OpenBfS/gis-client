@@ -64,8 +64,8 @@ Ext.define('Koala.view.panel.MobileAddLayerController', {
 
             Ext.each(versionsToTry, function(currentVersion) {
                 var alreadyTried = Ext.Array.contains(
-                triedVersions, currentVersion
-              );
+                    triedVersions, currentVersion
+                );
 
                 if (!alreadyTried) {
                     version = currentVersion;

@@ -155,7 +155,7 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         me.createMeasureTooltip();
 
         var languageCombo = Ext.ComponentQuery.query(
-                'k-form-field-languagecombo')[0];
+            'k-form-field-languagecombo')[0];
         var locale = languageCombo.getValue();
         languageCombo.getController().requestLanguageFile(locale);
         me.map.on('pointermove', me.pointerMoveHandler, me);

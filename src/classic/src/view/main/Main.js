@@ -254,7 +254,7 @@ Ext.define('Koala.view.main.Main', {
                         var win = Ext.ComponentQuery.query('k-window-print')[0];
                         if (!win) {
                             Ext.create('Koala.view.window.Print')
-                            .showBy(btn.up('basigx-panel-menu'), 'tr');
+                                .showBy(btn.up('basigx-panel-menu'), 'tr');
                         } else {
                             BasiGX.util.Animate.shake(win);
                         }
@@ -271,7 +271,7 @@ Ext.define('Koala.view.main.Main', {
                     },
                     handler: function() {
                         var win = Ext.ComponentQuery.query(
-                                '[name=add-wms-window]')[0];
+                            '[name=add-wms-window]')[0];
                         if (!win) {
                             Ext.create('Ext.window.Window', {
                                 name: 'add-wms-window',
@@ -281,7 +281,7 @@ Ext.define('Koala.view.main.Main', {
                                 layout: 'fit',
                                 tools: [{
                                     type: 'help',
-                                        //TODO: move to app-locale
+                                    //TODO: move to app-locale
                                     tooltip: 'Hilfe',
                                     callback: function() {
                                         var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
@@ -396,7 +396,7 @@ Ext.define('Koala.view.main.Main', {
             handler: function(btn) {
                 btn.up().down('k-form-field-searchcombo').clearValue();
                 var multiSearchPanel = this.up('k-panel-header')
-                        .down('k-panel-multisearch');
+                    .down('k-panel-multisearch');
                 if (multiSearchPanel) {
                     multiSearchPanel.hide();
                 }

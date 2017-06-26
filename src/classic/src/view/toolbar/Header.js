@@ -41,7 +41,7 @@ Ext.define('Koala.view.toolbar.Header', {
 
     items: [
         '->',
-/*
+        /*
         {
             bind: {
                 text: '{btnTextFullscreen}',

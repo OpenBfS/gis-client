@@ -99,21 +99,21 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     snapInteraction: null,
 
     /**
-    * Instance of the `ol.interaction.Draw` with type `Point`
-    */
+     * Instance of the `ol.interaction.Draw` with type `Point`
+     */
     drawPointInteraction: null,
 
-   /**
-    * Instance of the `ol.interaction.Draw` with type `LineString`
-    */
+    /**
+     * Instance of the `ol.interaction.Draw` with type `LineString`
+     */
     drawLineInteraction: null,
 
-   /**
-    * Instance of the `ol.interaction.Draw` with type `Polygon`
-    */
+    /**
+     * Instance of the `ol.interaction.Draw` with type `Polygon`
+     */
     drawPolygonInteraction: null,
 
-   /**
+    /**
      * Instance of the `ol.interaction.Modify` to be used to modify the drawn
      * objects. Works together with the #modifySelectInteraction interaction.
      */

@@ -375,9 +375,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
             var store = view.down('combobox[name=' + deps[filterName] + ']').getStore();
             var filter = origFilters[deps[filterName]];
             Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context)
-            .then(function(data) {
-                store.setData(JSON.parse(data));
-            });
+                .then(function(data) {
+                    store.setData(JSON.parse(data));
+                });
         }
     }
 });

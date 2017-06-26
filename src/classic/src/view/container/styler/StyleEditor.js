@@ -37,7 +37,7 @@ Ext.define('Koala.view.container.styler.StyleEditor', {
         if (pointStyle) {
             oldStyle = redLineStyler.getRedlinePointStyle();
             renderer = redLineStyler.down(
-                    'gx_renderer[name=pointRenderPreview]');
+                'gx_renderer[name=pointRenderPreview]');
             style = redLineStyler.generatePointStyle(oldStyle, pointStyle);
 
             if (Ext.isFunction(textStyleCb)) {
@@ -48,7 +48,7 @@ Ext.define('Koala.view.container.styler.StyleEditor', {
         } else if (lineStyle) {
             oldStyle = redLineStyler.getRedlineLineStringStyle();
             renderer = redLineStyler.down(
-                    'gx_renderer[name=lineRenderPreview]');
+                'gx_renderer[name=lineRenderPreview]');
             style = redLineStyler.generateLineStringStyle(oldStyle, lineStyle);
 
             if (Ext.isFunction(textStyleCb)) {
@@ -59,7 +59,7 @@ Ext.define('Koala.view.container.styler.StyleEditor', {
         } else {
             oldStyle = redLineStyler.getRedlinePolygonStyle();
             renderer = redLineStyler.down(
-                    'gx_renderer[name=polygonRenderPreview]');
+                'gx_renderer[name=polygonRenderPreview]');
             style = redLineStyler.generatePolygonStyle(oldStyle, polygonStyle);
 
             if (Ext.isFunction(textStyleCb)) {
@@ -85,7 +85,7 @@ Ext.define('Koala.view.container.styler.StyleEditor', {
         var scale = imageProps[2];
 
         var renderer = redLineStyler.down(
-                'gx_renderer[name=pointRenderPreview]');
+            'gx_renderer[name=pointRenderPreview]');
         var oldStyle = redLineStyler.getRedlinePointStyle().getImage();
         // just set a new style if an icon style has already been set
         if (!(oldStyle instanceof ol.style.Icon)) {
@@ -118,6 +118,7 @@ Ext.define('Koala.view.container.styler.StyleEditor', {
         var vectorIcons = appContext.data.merge.vectorIcons;
 
         var imageTpl = new Ext.XTemplate(
+            /* eslint-disable indent */
             '<tpl for=".">',
                 '<div class="thumb-wrap">',
                     '<div class="thumb">',
@@ -126,6 +127,7 @@ Ext.define('Koala.view.container.styler.StyleEditor', {
                     '<span>{caption}</span>',
                 '</div>',
             '</tpl>'
+            /* eslint-enable indent */
         );
 
         var onUploadChange = function(btn, event) {

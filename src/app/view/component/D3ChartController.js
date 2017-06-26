@@ -167,10 +167,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawShapes();
 
         var promise = this.resolveDynamicTemplateUrls()
-        .then(function() {
-            me.drawLegend();
-            me.chartRendered = true;
-        });
+            .then(function() {
+                me.drawLegend();
+                me.chartRendered = true;
+            });
 
         if (promise.catch) {
             promise.catch(function() {
@@ -588,10 +588,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         // Wrap the shapes in its own <svg> element.
         var shapeSvg = d3.select(viewId + ' svg > g')
             .append('svg')
-                .attr('top', 0)
-                .attr('left', 0)
-                .attr('width', chartSize[0])
-                .attr('height', chartSize[1]);
+            .attr('top', 0)
+            .attr('left', 0)
+            .attr('width', chartSize[0])
+            .attr('height', chartSize[1]);
 
         Ext.each(me.shapes, function(shape) {
             var shapeConfig = shape.config;
@@ -605,75 +605,75 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             var shapeGroup = shapeSvg
                 .append('g')
-                    .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + shapeId)
-                    .attr('shape-type', shapeConfig.type);
+                .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
+                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + shapeId)
+                .attr('shape-type', shapeConfig.type);
 
             if (shapeConfig.type === 'bar') {
                 barWidth = (chartSize[0] / me.data[shapeId].length);
                 barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
                 shapeGroup
                     .selectAll('rect')
-                        .data(me.data[shapeId])
+                    .data(me.data[shapeId])
                     .enter().append('rect')
-                        .filter(function(d) {
-                            return Ext.isDefined(d[yField]);
-                        })
-                            .style('fill', color)
-                            .style('opacity', shapeConfig.opacity)
-                            .attr('x', function(d) {
-                                return me.scales[orientX](d[xField]);
-                            })
-                            .attr('y', function(d) {
-                                return me.scales[orientY](d[yField]);
-                            })
-                            .attr('transform', 'translate(' + ((barWidth / 2) * -1) + ', 0)')
-                            .attr('width', barWidth)
-                            .attr('height', function(d) {
-                                return chartSize[1] - me.scales[orientY](d[yField]);
-                            })
-                            .on('mouseover', function() {
-                                var tooltipCmp = me.tooltipCmp;
-                                var tooltipTpl = shapeConfig.tooltipTpl;
-                                var chartProps = view.getTargetLayer().get('timeSeriesChartProperties');
+                    .filter(function(d) {
+                        return Ext.isDefined(d[yField]);
+                    })
+                    .style('fill', color)
+                    .style('opacity', shapeConfig.opacity)
+                    .attr('x', function(d) {
+                        return me.scales[orientX](d[xField]);
+                    })
+                    .attr('y', function(d) {
+                        return me.scales[orientY](d[yField]);
+                    })
+                    .attr('transform', 'translate(' + ((barWidth / 2) * -1) + ', 0)')
+                    .attr('width', barWidth)
+                    .attr('height', function(d) {
+                        return chartSize[1] - me.scales[orientY](d[yField]);
+                    })
+                    .on('mouseover', function() {
+                        var tooltipCmp = me.tooltipCmp;
+                        var tooltipTpl = shapeConfig.tooltipTpl;
+                        var chartProps = view.getTargetLayer().get('timeSeriesChartProperties');
 
-                                var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
-                                    return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
-                                });
+                        var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
+                            return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
+                        });
 
-                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
-                                tooltipCmp.setHtml(html);
-                                tooltipCmp.setTarget(this);
-                                tooltipCmp.show();
-                            });
+                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                        tooltipCmp.setHtml(html);
+                        tooltipCmp.setTarget(this);
+                        tooltipCmp.show();
+                    });
                 shapeGroup.selectAll('text')
                     .data(me.data[shapeId])
                     .enter()
                     .append('text')
-                        .filter(function(d) {
-                            var cy = me.scales[orientY](d[yField]);
-                            return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
-                        })
-                        .text(function(d) {
-                            return d[yField];
-                        })
-                        .attr('transform', function(d) {
-                            var x = me.scales[orientX](d[xField]);
-                            var y = me.scales[orientY](d[yField]);
-                            return 'rotate(-90,' + x + ',' + y + ') translate(-15,15)';
-                        })
-                        .attr('x', function(d) {
-                            return me.scales[orientX](d[xField]);
-                        })
-                        .attr('y', function(d) {
-                            return me.scales[orientY](d[yField]);
-                        })
-                        .attr('text-anchor', 'middle')
-                        .style('font-family', 'sans-serif')
-                        .style('font-size', '11px')
-                        .style('font-weight', 'bold')
-                        .style('fill', 'white')
-                        .style('unselectable', 'on');
+                    .filter(function(d) {
+                        var cy = me.scales[orientY](d[yField]);
+                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
+                    })
+                    .text(function(d) {
+                        return d[yField];
+                    })
+                    .attr('transform', function(d) {
+                        var x = me.scales[orientX](d[xField]);
+                        var y = me.scales[orientY](d[yField]);
+                        return 'rotate(-90,' + x + ',' + y + ') translate(-15,15)';
+                    })
+                    .attr('x', function(d) {
+                        return me.scales[orientX](d[xField]);
+                    })
+                    .attr('y', function(d) {
+                        return me.scales[orientY](d[yField]);
+                    })
+                    .attr('text-anchor', 'middle')
+                    .style('font-family', 'sans-serif')
+                    .style('font-size', '11px')
+                    .style('font-weight', 'bold')
+                    .style('fill', 'white')
+                    .style('unselectable', 'on');
             } else {
                 shapeGroup.append('path')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
@@ -715,41 +715,41 @@ Ext.define('Koala.view.component.D3ChartController', {
                 pointGroup.selectAll('circle')
                     .data(me.data[shapeId])
                     .enter().append('circle')
-                        .filter(function(d) {
-                            var cy = me.scales[orientY](d[yField]);
-                            return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
-                        })
-                            .style('fill', color)
-                            .style('stroke', darkerColor)
-                            .style('stroke-width', 2)
-                            .on('mouseover', function(data) {
-                                var tooltipCmp = me.tooltipCmp;
-                                var tooltipTpl = shapeConfig.tooltipTpl;
-                                var chartProps = me.getView().getTargetLayer()
-                                        .get('timeSeriesChartProperties');
+                    .filter(function(d) {
+                        var cy = me.scales[orientY](d[yField]);
+                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
+                    })
+                    .style('fill', color)
+                    .style('stroke', darkerColor)
+                    .style('stroke-width', 2)
+                    .on('mouseover', function(data) {
+                        var tooltipCmp = me.tooltipCmp;
+                        var tooltipTpl = shapeConfig.tooltipTpl;
+                        var chartProps = me.getView().getTargetLayer()
+                            .get('timeSeriesChartProperties');
 
-                                var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
-                                    return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
-                                });
+                        var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
+                            return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
+                        });
 
-                                var tooltipData = Ext.clone(data);
-                                if (Koala.Application.isUtc()) {
-                                    tooltipData[xField] = Koala.util.Date.addUtcOffset(tooltipData[xField]);
-                                }
+                        var tooltipData = Ext.clone(data);
+                        if (Koala.Application.isUtc()) {
+                            tooltipData[xField] = Koala.util.Date.addUtcOffset(tooltipData[xField]);
+                        }
 
-                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, tooltipData);
-                                html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
-                                tooltipCmp.setHtml(html);
-                                tooltipCmp.setTarget(this);
-                                tooltipCmp.show();
-                            })
-                            .attr('cx', function(d) {
-                                return me.scales[orientX](d[xField]);
-                            })
-                            .attr('cy', function(d) {
-                                return me.scales[orientY](d[yField]);
-                            })
-                            .attr('r', 3);
+                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, tooltipData);
+                        html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
+                        tooltipCmp.setHtml(html);
+                        tooltipCmp.setTarget(this);
+                        tooltipCmp.show();
+                    })
+                    .attr('cx', function(d) {
+                        return me.scales[orientX](d[xField]);
+                    })
+                    .attr('cy', function(d) {
+                        return me.scales[orientY](d[yField]);
+                    })
+                    .attr('r', 3);
             }
 
         });
@@ -828,9 +828,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 promise.then(function(response) {
                     shape.config.name = response.responseText;
                 })
-                .catch(function() {
-                    shape.config.name = '';
-                });
+                    .catch(function() {
+                        shape.config.name = '';
+                    });
             }
         });
 
@@ -853,8 +853,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         var legendParent = me.legendSvg;
         var legend = legendParent
             .append('g')
-                .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
-                .attr('transform', makeTranslate(legendMargin.left || 10, 0));
+            .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
+            .attr('transform', makeTranslate(legendMargin.left || 10, 0));
 
         me.updateLegendContainerDimensions();
 
@@ -881,9 +881,9 @@ Ext.define('Koala.view.component.D3ChartController', {
             var curTranslateY = (idx + 1) * legendEntryHeight;
             var legendEntry = legend
                 .append('g')
-                    .on('click', toggleVisibilityFunc)
-                    .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + shapeId);
+                .on('click', toggleVisibilityFunc)
+                .attr('transform', staticMe.makeTranslate(0, curTranslateY))
+                .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + shapeId);
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
@@ -938,21 +938,21 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             var targetLayer = view.getTargetLayer();
             var allowDownload = Koala.util.Object.getPathStrOr(
-                    targetLayer,
-                    'metadata/layerConfig/olProperties/allowDownload',
-                    true
-                );
+                targetLayer,
+                'metadata/layerConfig/olProperties/allowDownload',
+                true
+            );
             allowDownload = Koala.util.String.coerce(allowDownload);
 
             if (!Ext.isModern && allowDownload) {
                 legendEntry.append('text')
                 // fa-save from FontAwesome, see http://fontawesome.io/cheatsheet/
-                .text('')
-                .attr('class', CSS.DOWNLOAD_ICON)
-                .attr('text-anchor', 'start')
-                .attr('dy', '1')
-                .attr('dx', '150') // TODO Discuss, do we need this dynamically?
-                .on('click', me.generateDownloadCallback(shape));
+                    .text('')
+                    .attr('class', CSS.DOWNLOAD_ICON)
+                    .attr('text-anchor', 'start')
+                    .attr('dy', '1')
+                    .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                    .on('click', me.generateDownloadCallback(shape));
             }
 
             legendEntry.append('text')
@@ -994,9 +994,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                     value: 'application/json',
                     forceSelection: true,
                     store: [
-                  ['gml3','gml'],
-                  ['csv','csv'],
-                  ['application/json','json']
+                        ['gml3','gml'],
+                        ['csv','csv'],
+                        ['application/json','json']
                     ]
                 }]
             }],
@@ -1030,7 +1030,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var allSelectedStations = view.getSelectedStations();
         var requestUrl = me.getChartDataRequestUrl();
         var chartProps = view.getTargetLayer()
-                .get('timeSeriesChartProperties');
+            .get('timeSeriesChartProperties');
         var feat = Ext.Array.findBy(allSelectedStations, function(station) {
             return station.get(chartProps.featureIdentifyField || 'id') === stationId;
         });
@@ -1048,7 +1048,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             success: function(response) {
                 var fileName = stationId + '_' + layerName + '.' + fileEnding;
 
-              // Use the download library to enforce a browser download.
+                // Use the download library to enforce a browser download.
                 download(response.responseText, fileName, format);
                 win.close();
             },
@@ -1138,9 +1138,9 @@ Ext.define('Koala.view.component.D3ChartController', {
         var clsShapeGroup = staticMe.CSS_CLASS.SHAPE_GROUP;
         var idxVal = staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + id;
         var selector = [
-            viewId,                      // only capture our view…
-            ' svg g.' + clsShapeGroup,   // only capture shapepaths…
-            '[idx="' + idxVal + '"]'     // only capture the right index
+            viewId, // only capture our view…
+            ' svg g.' + clsShapeGroup, // only capture shapepaths…
+            '[idx="' + idxVal + '"]' // only capture the right index
         ].join('');
         return d3.select(selector);
     },
@@ -1194,11 +1194,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         // Store the actual request object, so we are able to abort it if we are
         // called faster than the response arrives.
         var ajaxRequest = me.getChartDataRequest(
-                selectedStation,
-                me.onChartDataRequestCallback,
-                me.onChartDataRequestSuccess,
-                me.onChartDataRequestFailure,
-                me
+            selectedStation,
+            me.onChartDataRequestCallback,
+            me.onChartDataRequestSuccess,
+            me.onChartDataRequestFailure,
+            me
         );
 
         // Put the current request into our storage for possible abortion.
@@ -1221,7 +1221,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var startDate = view.getStartDate();
         var endDate = view.getEndDate();
         var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
-                targetLayer.metadata);
+            targetLayer.metadata);
         var timeField = filterConfig.parameter;
         var startString = startDate.toISOString();
         var endString = endDate.toISOString();
@@ -1234,16 +1234,16 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // Get the viewparams configured for the layer
         var layerViewParams = Koala.util.Object.getPathStrOr(
-                    targetLayer, 'metadata/layerConfig/olProperties/param_viewparams', '');
+            targetLayer, 'metadata/layerConfig/olProperties/param_viewparams', '');
 
         // Get the request params configured for the chart
         var paramConfig = Koala.util.Object.getConfigByPrefix(
-                chartConfig, 'param_', true);
+            chartConfig, 'param_', true);
 
         // Merge the layer viewparams to the chart params
         paramConfig.viewparams = paramConfig.viewparams
-                ? paramConfig.viewparams + ';' + layerViewParams
-                : layerViewParams;
+            ? paramConfig.viewparams + ';' + layerViewParams
+            : layerViewParams;
 
         // Replace all template strings
         Ext.iterate(paramConfig, function(k, v) {
@@ -1275,7 +1275,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
         var requestUrl = Koala.util.Object.getPathStrOr(targetLayer,
-                'metadata/layerConfig/wfs/url');
+            'metadata/layerConfig/wfs/url');
 
         return requestUrl;
     },
@@ -1412,11 +1412,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
 
         var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
-                targetLayer.metadata);
+            targetLayer.metadata);
         var timeField = filterConfig.parameter;
         var intervalInSeconds = me.getIntervalInSecondsForTargetLayer();
         var snapObject = me.getTimeStampSnapObject(
-                startDate, intervalInSeconds, jsonObj.features, timeField);
+            startDate, intervalInSeconds, jsonObj.features, timeField);
 
         // The id of the selected station is also the key in the pending
         // requests object.
@@ -1495,7 +1495,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @param xAxisAttr {String}
      */
     getTimeStampSnapObject: function(startDate, intervalInSeconds, features,
-            xAxisAttr) {
+        xAxisAttr) {
         var obj = {};
 
         Ext.each(features, function(feat) {
@@ -1556,14 +1556,14 @@ Ext.define('Koala.view.component.D3ChartController', {
         var chartingMetadata = layer.get('timeSeriesChartProperties');
         var identifyField = chartingMetadata.featureIdentifyField || 'id';
         var timeRangeFilter = me.getPropertyIsBetweenFilter(
-                startString, endString, timeField);
+            startString, endString, timeField);
         var propertyFilter;
         var rodosProperty = Koala.util.Object.getPathStrOr(layer.metadata,
             'layerConfig/olProperties/rodosLayer', false);
         var isRodosLayer = Koala.util.String.coerce(rodosProperty);
         if (isRodosLayer) {
             propertyFilter = me.getPropertyIsEqualToFilter(identifyField,
-                    station.get(identifyField));
+                station.get(identifyField));
         }
 
         var filter = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">';

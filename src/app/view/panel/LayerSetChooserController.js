@@ -128,7 +128,7 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
 
         var orderedFlatLayers = LayerUtil.getOrderedFlatLayers(layers);
         var orderedRealLayers = [];
-         // falsies are gone already
+        // falsies are gone already
         var numLayersToCreate = orderedFlatLayers.length;
         var numLayersCreated = 0;
 
@@ -183,7 +183,7 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
                 };
 
                 LayerUtil.getMetadataFromUuid(uuid).then(
-                        successCallback, errorCallback);
+                    successCallback, errorCallback);
             }
         });
     },

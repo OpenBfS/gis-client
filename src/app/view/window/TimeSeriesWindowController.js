@@ -49,7 +49,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     createTimeSeriesChart: function(olLayer, olFeat) {
         var timeFilter = Koala.util.Layer.getEffectiveTimeFilterFromMetadata(
-                olLayer.metadata);
+            olLayer.metadata);
         var view = this.getView();
         var addFilterForm = view.getAddFilterForm();
 
@@ -57,9 +57,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var endValue = this.getEndFieldValue();
 
         var startDate = addFilterForm ? startValue :
-                Koala.util.Date.getUtcMoment(timeFilter.mindatetimeinstant);
+            Koala.util.Date.getUtcMoment(timeFilter.mindatetimeinstant);
         var endDate = addFilterForm ? endValue :
-                Koala.util.Date.getUtcMoment(timeFilter.maxdatetimeinstant);
+            Koala.util.Date.getUtcMoment(timeFilter.maxdatetimeinstant);
 
         var config = {
             startDate: startDate,
@@ -100,10 +100,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
 
         // first try to read out explicitly configured WFS URL
         var url = Koala.util.Object.getPathStrOr(
-                olLayer.metadata,
-                'layerConfig/wfs/url',
-                null
-            );
+            olLayer.metadata,
+            'layerConfig/wfs/url',
+            null
+        );
         if (!url) {
             // … otherwise determine from wms url
             url = (olLayer.getSource().getUrls()[0]).replace(/\/wms/g, '/wfs');
@@ -244,7 +244,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         }
         var title = !Ext.isEmpty(chartConfig.titleTpl) ?
             Koala.util.String.replaceTemplateStrings(
-            chartConfig.titleTpl, olLayer) : olLayer.get('name');
+                chartConfig.titleTpl, olLayer) : olLayer.get('name');
 
         var rightColumnWrapper = {
             xtype: 'panel',
@@ -364,9 +364,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         promise.then(function(name) {
             me.addShapeToChart(chartController, chartConfig, name, olFeat, color);
         })
-        .catch(function() {
-            me.addShapeToChart(chartController, chartConfig, '', olFeat, color);
-        });
+            .catch(function() {
+                me.addShapeToChart(chartController, chartConfig, '', olFeat, color);
+            });
     },
 
     addShapeToChart: function(chartController, chartConfig, stationName, olFeat, color) {
@@ -483,7 +483,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         comboStore.filterBy(function(record) {
             if (record.data.get('timeSeriesChartProperties') &&
                !Ext.Object.isEmpty(record.data.get('timeSeriesChartProperties'))
-               ) {
+            ) {
                 return true;
             } else {
                 return false;

@@ -33,19 +33,19 @@ Ext.define('Koala.util.Fullscreen', {
         ];
         var variantNameGroups = [
             Ext.Array.clone(canonicalNames), // standardized
-            [   // new WebKit-variants
+            [ // new WebKit-variants
                 'webkitRequestFullscreen', 'webkitExitFullscreen',
                 'webkitFullscreenElement', 'webkitFullscreenEnabled'
             ],
-            [   // old WebKit-variants (Safari 5.1)
+            [ // old WebKit-variants (Safari 5.1)
                 'webkitRequestFullScreen', 'webkitCancelFullScreen',
                 'webkitCurrentFullScreenElement', 'webkitCancelFullScreen'
             ],
-            [    // Mozilla prefixed variants
+            [ // Mozilla prefixed variants
                 'mozRequestFullScreen', 'mozCancelFullScreen',
                 'mozFullScreenElement', 'mozFullScreenEnabled'
             ],
-            [    // Microsoft
+            [ // Microsoft
                 'msRequestFullscreen', 'msExitFullscreen',
                 'msFullscreenElement', 'msFullscreenEnabled'
             ]

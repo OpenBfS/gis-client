@@ -68,7 +68,7 @@ Ext.define('Koala.util.String', {
                     if (showWarnings === true) {
                         Ext.log.warn(key + ' could not be found for replacement!');
                     }
-                } else {  // check if 'replacement' represents a date
+                } else { // check if 'replacement' represents a date
                     // it is already a Moment/date
                     if (moment.isMoment(replacement)) {
                         replacement = Koala.util.Date.getFormattedDate(replacement);

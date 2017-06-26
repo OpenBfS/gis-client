@@ -78,8 +78,8 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         if (newVal.isBefore(minValue)) {
             isValid = false;
             validationMessage += Ext.String.format(
-                    minDateWarnMsg,
-                    readableMinDate
+                minDateWarnMsg,
+                readableMinDate
             ) + ' ';
         }
 
@@ -87,8 +87,8 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         if (newVal.isAfter(maxValue)) {
             isValid = false;
             validationMessage += Ext.String.format(
-                    maxDateWarnMsg,
-                    readableMaxDate
+                maxDateWarnMsg,
+                readableMaxDate
             ) + ' ';
         }
 
@@ -121,7 +121,7 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         var dateTimePickerField = field.up('k-container-datetimepicker');
         // The associated partner field.
         var partnerDateTimePickerField = Ext.ComponentQuery.query(
-                'k-container-datetimepicker[name=' +
+            'k-container-datetimepicker[name=' +
                 dateTimePickerField.getPartnerFieldName() + ']')[0];
 
         // No partner field found, we're not in a timerange.
@@ -132,9 +132,9 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         // Detect the start- and endfields based in the current field which
         // was changed.
         var startField = dateTimePickerField.isStartPartner() ?
-                dateTimePickerField : partnerDateTimePickerField;
+            dateTimePickerField : partnerDateTimePickerField;
         var endField = dateTimePickerField.isEndPartner() ?
-                dateTimePickerField : partnerDateTimePickerField;
+            dateTimePickerField : partnerDateTimePickerField;
 
         // Detect the start- and enddates based in the current field which
         // was changed and take the changed value into account. This is needed
@@ -181,10 +181,10 @@ Ext.define('Koala.view.container.date.DateTimePickerController', {
         // Revalidate the partner field
         if (validatePartnerField) {
             var partnerField = partnerDateTimePickerField.down(
-                    'datepickerfield[name=valueField]');
+                'datepickerfield[name=valueField]');
             var partnerFieldValue = partnerField.getValue(true);
             partnerDateTimePickerField.getController().validateDateField(
-                    partnerField, partnerFieldValue, false);
+                partnerField, partnerFieldValue, false);
         }
 
         return emptyMessage;

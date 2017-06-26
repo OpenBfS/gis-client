@@ -55,7 +55,7 @@ Ext.define('Koala.view.component.MapController', {
             if (isCarto) {
                 var cartoWindowId = layer.get('name') + '__' + featureId;
                 var cartoWindow = Ext.ComponentQuery.query(
-                        'k-component-cartowindow[cartoWindowId='+cartoWindowId+']')[0];
+                    'k-component-cartowindow[cartoWindowId='+cartoWindowId+']')[0];
                 if (cartoWindow) {
                     BasiGX.util.Animate.shake(cartoWindow);
                 } else {

@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- /**
+/**
   * A base class for both the D3ChartController and the D3BarChartController.
   *
   * @class Koala.view.component.D3BaseController
@@ -402,17 +402,17 @@ Ext.define('Koala.view.component.D3BaseController', {
         // additional group element to it.
         d3.select(viewId)
             .append('svg')
-                .attr('viewBox', '0 0 ' + viewSize[0] + ' ' + viewSize[1])
-                .attr('width', viewSize[0])
-                .attr('height', viewSize[1])
+            .attr('viewBox', '0 0 ' + viewSize[0] + ' ' + viewSize[1])
+            .attr('width', viewSize[0])
+            .attr('height', viewSize[1])
             .append('g')
-                .attr('transform', translate)
+            .attr('transform', translate)
             .append('rect')
-                .style('fill', view.getBackgroundColor() || '#EEE')
-                .attr('class', CSS.PLOT_BACKGROUND)
-                .attr('width', chartSize[0])
-                .attr('height', chartSize[1])
-                .attr('pointer-events', 'all');
+            .style('fill', view.getBackgroundColor() || '#EEE')
+            .attr('class', CSS.PLOT_BACKGROUND)
+            .attr('width', chartSize[0])
+            .attr('height', chartSize[1])
+            .attr('pointer-events', 'all');
 
         var containerSvg = d3.select(viewId + ' svg');
         me.containerSvg = containerSvg;
@@ -448,15 +448,15 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         d3.select(viewId)
             .append('div')
-                .attr('class', CSS.LEGEND_CONTAINER)
-                .style('width', legWidth + 'px')
-                .style('height', legHeight + 'px')
-                .style('left', legLeft + 'px' )
+            .attr('class', CSS.LEGEND_CONTAINER)
+            .style('width', legWidth + 'px')
+            .style('height', legHeight + 'px')
+            .style('left', legLeft + 'px' )
             // values below will be updated in #updateLegendContainerDimensions
             .append('svg')
-                .attr('viewBox', '0 0 ' + legWidth + ' 100')
-                .attr('width', legWidth)
-                .attr('height', '100');
+            .attr('viewBox', '0 0 ' + legWidth + ' 100')
+            .attr('width', legWidth)
+            .attr('height', '100');
         var legSvg = d3.select(viewId + ' .' + CSS.LEGEND_CONTAINER + ' svg');
 
         me.legendSvg = legSvg;
@@ -564,12 +564,12 @@ Ext.define('Koala.view.component.D3BaseController', {
             formatYear = d3.timeFormat('%Y');
 
         return (d3.timeSecond(date) < date ? formatMillisecond
-          : d3.timeMinute(date) < date ? formatSecond
-          : d3.timeHour(date) < date ? formatMinute
-          : d3.timeDay(date) < date ? formatHour
-          : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
-          : d3.timeYear(date) < date ? formatMonth
-          : formatYear)(date);
+            : d3.timeMinute(date) < date ? formatSecond
+                : d3.timeHour(date) < date ? formatMinute
+                    : d3.timeDay(date) < date ? formatHour
+                        : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
+                            : d3.timeYear(date) < date ? formatMonth
+                                : formatYear)(date);
     },
 
     /**
@@ -628,7 +628,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                 cssAxisClass = CSS.AXIS + ' ' + CSS.AXIS_X;
                 cssLabelClass = CSS.AXIS_LABEL + ' ' + CSS.AXIS_LABEL_X;
                 axisTransform = (orient === 'bottom') ?
-                        makeTranslate(0, chartSize[1]) : undefined;
+                    makeTranslate(0, chartSize[1]) : undefined;
 
                 labelTransform = makeTranslate(chartSize[0] / 2, 0);
                 labelPadding = axisConfig.labelPadding || 35;
@@ -636,7 +636,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                 cssAxisClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
                 cssLabelClass = CSS.AXIS_LABEL + ' ' + CSS.AXIS_LABEL_Y;
                 axisTransform = (orient === 'right') ?
-                        makeTranslate(chartSize[0], 0) : undefined;
+                    makeTranslate(chartSize[0], 0) : undefined;
                 var translate = makeTranslate(chartSize[1] / -2, 0);
                 labelTransform = 'rotate(-90), ' + translate;
                 labelPadding = (axisConfig.labelPadding || 25) * -1;
@@ -644,18 +644,18 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             d3.select(viewId + ' svg > g')
                 .append('g')
-                    .attr('class', cssAxisClass)
-                    .attr('transform', axisTransform)
-                    .call(me.axes[orient])
+                .attr('class', cssAxisClass)
+                .attr('transform', axisTransform)
+                .call(me.axes[orient])
                 .append('text')
-                    .attr('transform', labelTransform)
-                    .attr('dy', labelPadding)
-                    .attr('fill', axisConfig.labelColor || '#000')
-                    .attr('class', cssLabelClass)
-                    .style('text-anchor', 'middle')
-                    .style('font-weight', 'bold')
-                    .style('font-size', axisConfig.labelSize || 12)
-                    .text(axisConfig.label || '');
+                .attr('transform', labelTransform)
+                .attr('dy', labelPadding)
+                .attr('fill', axisConfig.labelColor || '#000')
+                .attr('class', cssLabelClass)
+                .style('text-anchor', 'middle')
+                .style('font-weight', 'bold')
+                .style('font-size', axisConfig.labelSize || 12)
+                .text(axisConfig.label || '');
 
             if (axisConfig.rotateXAxisLabel && (orient === 'top' || orient === 'bottom')) {
                 d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_X + ' > g > text')
@@ -689,13 +689,13 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             if (orient === 'top' || orient === 'bottom') {
                 axisTransform = (orient === 'bottom') ?
-                        makeTranslate(0, chartSize[1]) : undefined;
+                    makeTranslate(0, chartSize[1]) : undefined;
                 labelTransform = makeTranslate(chartSize[0] / 2, 0);
 
                 axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
             } else if (orient === 'left' || orient === 'right') {
                 axisTransform = (orient === 'right') ?
-                        makeTranslate(0, chartSize[1]) : undefined;
+                    makeTranslate(0, chartSize[1]) : undefined;
                 var translate = makeTranslate(chartSize[1] / -2, 0);
                 labelTransform = 'rotate(-90), ' + translate;
 
@@ -802,7 +802,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var chartNode = this.containerSvg.node();
         var chartSource = (new XMLSerializer()).serializeToString(chartNode);
         var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
-                unescape(encodeURIComponent(chartSource)));
+            unescape(encodeURIComponent(chartSource)));
 
         var chartImageWidth = chartNode.getBoundingClientRect().width;
         var chartImageHeight = chartNode.getBoundingClientRect().height;
@@ -817,7 +817,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         deleteIcons.style('display', 'none');
         var legendSource = (new XMLSerializer()).serializeToString(legendNode);
         var legendDataUri = 'data:image/svg+xml;base64,'+ btoa(
-                unescape(encodeURIComponent(legendSource)));
+            unescape(encodeURIComponent(legendSource)));
         var legendImageWidth = legendNode.getBoundingClientRect().width;
         var legendImageHeight = legendNode.getBoundingClientRect().height;
         var legendImageObject = new Image(legendImageWidth, legendImageHeight);
@@ -827,7 +827,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var ctx = canvas.getContext('2d');
         canvas.width = chartImageWidth;
         canvas.height = legendImageHeight > chartImageHeight ?
-                legendImageHeight : chartImageHeight;
+            legendImageHeight : chartImageHeight;
         ctx.fillStyle = 'white';
         ctx.fillRect(0,0,canvas.width,canvas.height);
 
@@ -874,8 +874,8 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             d3.select(viewId + ' svg > g')
                 .append('g')
-                    .attr('class', cssClass)
-                    .call(me.gridAxes[orient]);
+                .attr('class', cssClass)
+                .call(me.gridAxes[orient]);
 
             d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
                 .style('stroke-width', gridConfig.width || 1)
@@ -898,13 +898,13 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         d3.select(viewId + ' svg > g')
             .append('text')
-                .attr('transform', translate)
-                .attr('dy', (titleConfig.labelPadding || 18) * -1)
-                .attr('fill', titleConfig.labelColor || '#000')
-                .style('text-anchor', 'middle')
-                .style('font-weight', 'bold')
-                .style('font-size', titleConfig.labelSize || 20)
-                .text(titleConfig.label || '');
+            .attr('transform', translate)
+            .attr('dy', (titleConfig.labelPadding || 18) * -1)
+            .attr('fill', titleConfig.labelColor || '#000')
+            .style('text-anchor', 'middle')
+            .style('font-weight', 'bold')
+            .style('font-size', titleConfig.labelSize || 20)
+            .text(titleConfig.label || '');
     },
 
     /**
@@ -1081,7 +1081,7 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             var legendContainer = me.legendSvg.node().parentNode;
             d3.select(legendContainer).style('display', me.legendVisible ?
-                    'unset' : 'none');
+                'unset' : 'none');
 
             view.setChartMargin({
                 top: chartMargin.top,

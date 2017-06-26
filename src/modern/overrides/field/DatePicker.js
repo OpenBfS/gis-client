@@ -40,9 +40,9 @@ Ext.define('Koala.overrides.field.DatePicker', {
             }
         }
 
-       // The same date value may not be the same reference, so compare them by time.
-       // If we have dates for both, then compare the time. If they're the same we
-       // don't need to do anything.
+        // The same date value may not be the same reference, so compare them by time.
+        // If we have dates for both, then compare the time. If they're the same we
+        // don't need to do anything.
         if (value && oldValue && value.getTime() === oldValue.getTime()) {
             value = undefined;
         }
@@ -88,8 +88,8 @@ Ext.define('Koala.overrides.field.DatePicker', {
 
     getValue: function(asMoment) {
         if (asMoment) {
-           // The field's value is always local. Check if we have to adjust it
-           // to UTC (by adding the UTC offset).
+            // The field's value is always local. Check if we have to adjust it
+            // to UTC (by adding the UTC offset).
             if (Koala.Application.isUtc()) {
                 return Koala.util.Date.addUtcOffset(moment(this._value));
             } else {
@@ -101,8 +101,8 @@ Ext.define('Koala.overrides.field.DatePicker', {
 
     getMinValue: function(asMoment) {
         if (asMoment) {
-           // The field's value is always local. Check if we have to adjust it
-           // to UTC (by adding the UTC offset).
+            // The field's value is always local. Check if we have to adjust it
+            // to UTC (by adding the UTC offset).
             if (Koala.Application.isUtc()) {
                 return Koala.util.Date.addUtcOffset(moment(this._minValue));
             } else {
@@ -114,8 +114,8 @@ Ext.define('Koala.overrides.field.DatePicker', {
 
     getMaxValue: function(asMoment) {
         if (asMoment) {
-           // The field's value is always local. Check if we have to adjust it
-           // to UTC (by adding the UTC offset).
+            // The field's value is always local. Check if we have to adjust it
+            // to UTC (by adding the UTC offset).
             if (Koala.Application.isUtc()) {
                 return Koala.util.Date.addUtcOffset(moment(this._maxValue));
             } else {

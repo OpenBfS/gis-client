@@ -71,9 +71,9 @@ Ext.define('Koala.plugin.Hover', {
                         me.requestAsynchronously(url, function(resp) {
                             // TODO: replace evt/coords with real response geometry
                             var respFeatures = (new ol.format.GeoJSON())
-                                    .readFeatures(resp.responseText);
+                                .readFeatures(resp.responseText);
                             var respProjection = (new ol.format.GeoJSON())
-                                    .readProjection(resp.responseText);
+                                .readProjection(resp.responseText);
 
                             me.showHoverFeature(
                                 layer, respFeatures, respProjection
@@ -82,7 +82,7 @@ Ext.define('Koala.plugin.Hover', {
                             Ext.each(respFeatures, function(feature) {
                                 feature.set('layer', layer);
                                 var featureStyle = me.highlightStyleFunction(
-                                        feature, resolution, pixelValues);
+                                    feature, resolution, pixelValues);
                                 feature.setStyle(featureStyle);
                                 hoverFeatures.push(feature);
                             });
