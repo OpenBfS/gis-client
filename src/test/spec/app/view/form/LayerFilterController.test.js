@@ -118,5 +118,23 @@ describe('Koala.view.form.LayerFilterController', function() {
             var ctrl = new Koala.view.form.LayerFilterController();
             expect(ctrl.deselectThemeTreeItems.bind(ctrl)).to.not.throwException();
         });
+
+        it('disables utc button', function() {
+            var ctrl = new Koala.view.form.LayerFilterController();
+            var btn = {};
+            btn.disable = sinon.stub();
+            Ext.ComponentQuery.query.returns(btn);
+            ctrl.onBeforeRenderLayerFilterForm();
+            expect(btn.disable.calledOnce).to.be(true);
+        });
+
+        it('enables utc button', function() {
+            var ctrl = new Koala.view.form.LayerFilterController();
+            var btn = {};
+            btn.enable = sinon.stub();
+            Ext.ComponentQuery.query.returns(btn);
+            ctrl.onBeforeDestroyLayerFilterForm();
+            expect(btn.enable.calledOnce).to.be(true);
+        });
     });
 });

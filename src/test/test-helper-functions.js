@@ -184,6 +184,12 @@
      * - setStyle
      * - close
      * - up
+     * - setDisabled
+     * - showAt
+     * - hide
+     * - isVisible
+     * - getWidth
+     * - getLocalY
      * @return {Object} the mocked object
      */
     function getMockedElement() {
@@ -196,6 +202,12 @@
         mock.setStyle = sinon.stub();
         mock.close = sinon.stub();
         mock.up = sinon.stub().returns(domMock);
+        mock.setDisabled = sinon.stub();
+        mock.showAt = sinon.stub();
+        mock.hide = sinon.stub();
+        mock.isVisible = sinon.stub();
+        mock.getWidth = sinon.stub();
+        mock.getLocalY = sinon.stub();
         return mock;
     }
 
