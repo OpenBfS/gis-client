@@ -529,6 +529,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                         width: lineStyle.split(',')[1]
                     })
                 }),
+                zIndex: 800,
                 name: 'carto-window-lines',
                 printSpecial: true
             });
