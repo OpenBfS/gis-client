@@ -22,8 +22,8 @@ describe('Koala.util.Rodos', function() {
                 'rodos/projects/';
             var projectUid = '7e00266f-0aa9-1547-6def-063282b90958local';
 
-            Koala.util.Rodos.requestLayersOfProject(projectUid);
             var setLayersSpy = sinon.stub(Koala.util.Rodos, 'setRodosLayers');
+            Koala.util.Rodos.requestLayersOfProject(projectUid);
 
             setTimeout(function() {
                 expect(setLayersSpy.calledOnce).to.be(true);

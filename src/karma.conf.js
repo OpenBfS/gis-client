@@ -31,6 +31,7 @@ module.exports = function(config) {
             'test/' + TOOLKIT + '/loader.js',
             'resources/lib/openlayers-v3.19.1-dist/ol.js',
             'test/raf.polyfill.js',
+            'overrides/**/*js',
             'test/test-helper-functions.js',
             // GeoExt
             {

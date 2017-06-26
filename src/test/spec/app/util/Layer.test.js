@@ -824,16 +824,22 @@ describe('Koala.util.Layer', function() {
 
                     var map = BasiGX.util.Map.getMapComponent().getMap();
                     var oldLength = BasiGX.util.Layer.getAllLayers(map).length;
+
                     var promise = Koala.util.Layer.addLayerByUuid(backgroundLayerUUID);
 
                     promise.then(function() {
                         var newLength = BasiGX.util.Layer.getAllLayers(map).length;
                         expect(newLength).to.be(oldLength + 1);
                         done();
+                        // Teardown
+                        TestUtil.teardownTestObjects(testObjs);
+                    })
+                    .catch(function() {
+                        expect().fail();
+                        done();
+                        // Teardown
+                        TestUtil.teardownTestObjects(testObjs);
                     });
-
-                    // Teardown
-                    TestUtil.teardownTestObjects(testObjs);
                 } else {
                     done();
                 }
