@@ -1146,7 +1146,9 @@ Ext.define('Koala.view.component.D3BaseController', {
     updateLegendContainerDimensions: function() {
         var me = this;
         var legendParent = me.legendSvg;
-        var xtype = me.getView().getXType();
+        var view = me.getView();
+        var xtype = view.getXType ? view.getXType() : view.xtype;
+
 
         var numLegends;
         if (xtype === 'd3-barchart') { // for barcharts
