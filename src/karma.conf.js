@@ -28,6 +28,9 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             'ext/build/ext' + EXTJSPREFIX + '-all-debug.js',
+            'ext/packages/ux/classic/src/**/*js',
+            'ext/packages/ux/modern/**/*js',
+            'ext/packages/ux/src/**/*js',
             'test/' + TOOLKIT + '/loader.js',
             'resources/lib/openlayers-v3.19.1-dist/ol.js',
             'test/raf.polyfill.js',
