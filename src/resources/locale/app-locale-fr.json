@@ -861,6 +861,35 @@
             }
         }
     },
+    "BasiGX.view.form.AddWms": {
+        "config": {
+            "data": {
+                "queryParamsFieldSetTitle": "fr:Query parameters",
+                "wmsUrlTextFieldLabel": "fr:WMS-URL",
+                "wmsVersionContainerFieldLabel": "fr:Version",
+                "availableLayesFieldSetTitle": "fr:Available layers",
+                "resetBtnText": "fr:Reset",
+                "requestLayersBtnText": "fr:Query for available layers",
+                "checkAllLayersBtnText": "fr:Select all",
+                "uncheckAllLayersBtnText": "fr:Select none",
+                "addCheckedLayersBtnText": "fr:Add selected layers",
+                "errorIncompatibleWMS": "fr:The queried WMS is not compatible to the application",
+                "errorRequestFailed": "fr:Failed to retrieve entered URL",
+                "errorCouldntParseResponse": "fr:Failed to parse the response",
+                "msgRequestTimedOut": "fr:The response was not delivered in time and the request has been aborted",
+                "msgServiceException": "fr:An OGC ServiceException occured",
+                "msgCorsMisconfiguration": "fr:HTTP access control (CORS) at the target server probably misconfigured",
+                "msgUnauthorized": "fr:The client is not authorized",
+                "msgForbidden": "fr:The client does not have access to the resource",
+                "msgFileNotFound": "fr:The resource could not be found",
+                "msgTooManyRequests": "fr:The client has sent too many requests",
+                "msgServiceUnavailable": "fr:The service is not available",
+                "msgGatewayTimeOut": "fr:The server was acting as a gateway and the upstream server was too slow sending a response",
+                "msgClientError": "fr:An unspecified client error occured",
+                "msgServerError": "fr:An unspecified server error occured"
+            }
+        }
+    },
     "BasiGX.view.form.Print": {
         "config": {
             "data": {
@@ -1021,7 +1050,8 @@
     "Koala.view.form.Permalink": {
         "config": {
             "data": {
-                "refreshBtnText": "fr:Erneuern"
+                "refreshBtnText": "fr:Erneuern",
+                "copyToClipboardBtnText": "fr:In Zwischenablage kopieren"
             }
         }
     },
