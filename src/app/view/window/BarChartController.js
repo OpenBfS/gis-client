@@ -205,9 +205,9 @@ Ext.define('Koala.view.window.BarChartController', {
             view.show();
             var title = olLayer.qtitle;
             var pointintimeFilter = Koala.util.Layer
-                    .getEffectiveTimeFilterFromMetadata(olLayer.metadata);
+                .getEffectiveTimeFilterFromMetadata(olLayer.metadata);
             var filterDateString = Koala.util.Date.getFormattedDate(
-                    pointintimeFilter.effectivedatetime);
+                pointintimeFilter.effectivedatetime);
             if (filterDateString) {
                 title += ' – ' + filterDateString;
             }

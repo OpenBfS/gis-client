@@ -452,11 +452,11 @@ Ext.define('Koala.view.component.D3BaseController', {
         // Store the actual request object, so we are able to abort it if we are
         // called faster than the response arrives.
         var ajaxRequest = me.getChartDataRequest(
-                selectedStation,
-                me.onChartDataRequestCallback,
-                me.onChartDataRequestSuccess,
-                me.onChartDataRequestFailure,
-                me
+            selectedStation,
+            me.onChartDataRequestCallback,
+            me.onChartDataRequestSuccess,
+            me.onChartDataRequestFailure,
+            me
         );
 
         // Put the current request into our storage for possible abortion.

@@ -76,11 +76,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         // Get the viewparams configured for the layer
         var layerViewParams = Koala.util.Object.getPathStrOr(
-                    targetLayer, 'metadata/layerConfig/olProperties/param_viewparams', '');
+            targetLayer, 'metadata/layerConfig/olProperties/param_viewparams', '');
 
         // Get the request params configured for the chart
         var paramConfig = Koala.util.Object.getConfigByPrefix(
-                chartConfig, 'param_', true);
+            chartConfig, 'param_', true);
 
         // Merge the layer viewparams to the chart params
         if (paramConfig.viewparams) {
@@ -109,7 +109,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 var endString = filter.effectivemaxdatetime.toISOString();
                 timeField = filter.param;
                 requestFilter = me.getDateTimeRangeFilter(
-                        startString, endString, timeField);
+                    startString, endString, timeField);
                 return false;
             }
         });
@@ -200,14 +200,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         me.data[stationId] = seriesData;
         me.chartDataAvailable = true;
-
-        var value;
-        if (featureProps[field] || featureProps[field] === 0) {
-            value = featureProps[field];
-        } else {
-            value = Koala.util.String.getValueFromSequence(
-                defaultsSequence, idx, undefined);
-        }
 
         me.ajaxCounter++;
         if (me.ajaxCounter === view.getSelectedStations().length) {
@@ -312,9 +304,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
                         }
                     });
                 });
-                //limit chart data to 80% of chart height
-                dataRange[1] = dataRange[1]/0.8;
-
                 var dataRange = d3.extent(vals);
 
                 if (Ext.isDefined(axis.min)) {
@@ -536,7 +525,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             })
             .attr('transform', function(d) {
                 return me.getBarLabelTransform(d, orientXGroup, orientY, xField,
-                        yField, x1.bandwidth());
+                    yField, x1.bandwidth());
             })
             .attr('text-anchor', 'middle')
             // TODO make configurable. Generic from css config
@@ -553,7 +542,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 })
                 .attr('transform', function(d) {
                     var labelTransform = me.getBarLabelTransform(d, orientXGroup,
-                            orientY, xField, yField, x1.bandwidth());
+                        orientY, xField, yField, x1.bandwidth());
                     return labelTransform + ' rotate(-90)';
                 })
                 .attr('dy', function(d, idx, el) {
@@ -745,7 +734,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     var selector = me.getSubCategorySelector(subCategory);
                     var group = me.containerSvg.selectAll(selector);
                     me.toggleGroupVisibility(
-                        group,       // the real group, containig shapepath & points
+                        group, // the real group, containig shapepath & points
                         d3.select(this) // legend entry
                     );
 
@@ -761,14 +750,14 @@ Ext.define('Koala.view.component.D3BarChartController', {
             curTranslateY = (firstStationData.length * legendEntryHeight) + (idx + 1) * legendEntryHeight;
             var legendEntry = legend
                 .append('g')
-                    .on('click', toggleVisibilityFunc)
-                    .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                    .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + subCategory)
-                    .attr('class', function() {
-                        if (Ext.Array.contains(me.disabledSubCategories, subCategory) ) {
-                            return CSS.DISABLED_CLASS;
-                        }
-                    });
+                .on('click', toggleVisibilityFunc)
+                .attr('transform', staticMe.makeTranslate(0, curTranslateY))
+                .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + subCategory)
+                .attr('class', function() {
+                    if (Ext.Array.contains(me.disabledSubCategories, subCategory) ) {
+                        return CSS.DISABLED_CLASS;
+                    }
+                });
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
@@ -781,7 +770,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var isTime = (new moment(subCategory)).isValid();
 
             var nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
-                    new moment(subCategory)) : subCategory;
+                new moment(subCategory)) : subCategory;
             var visualLabel = staticMe.labelEnsureMaxLength(
                 nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
             );
