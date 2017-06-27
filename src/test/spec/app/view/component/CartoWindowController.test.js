@@ -1,9 +1,12 @@
-Ext.Loader.syncRequire([
+var requiredClasses = [
     'Koala.view.component.CartoWindowController',
     'Koala.view.component.CartoWindowModel',
-    'Koala.view.component.CartoWindow',
-    'Koala.plugin.Hover'
-]);
+    'Koala.view.component.CartoWindow'
+];
+if (!Ext.isModern) {
+    requiredClasses.push('Koala.plugin.Hover');
+}
+Ext.Loader.syncRequire(requiredClasses);
 
 describe('Koala.view.component.CartoWindowController', function() {
 
@@ -19,14 +22,18 @@ describe('Koala.view.component.CartoWindowController', function() {
 
         it('can be initialized', function() {
             // Setup
+            var plugins = undefined;
+            if (!Ext.isModern) {
+                plugins = [{
+                    ptype: 'hoverBfS',
+                    selectMulti: true,
+                    selectEventOrigin: 'interaction'
+                }];
+            }
             var testObjs = TestUtil.setupTestObjects({
                 mapComponentOpts: {
                     appContextPath: 'http://localhost:9876/base/resources/appContext.json',
-                    plugins: [{
-                        ptype: 'hoverBfS',
-                        selectMulti: true,
-                        selectEventOrigin: 'interaction'
-                    }]
+                    plugins: plugins
                 }
             });
             sinon.stub(Ext.ComponentQuery, 'query');
