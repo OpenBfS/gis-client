@@ -945,6 +945,35 @@
             }
         }
     },
+    "BasiGX.view.form.AddWms": {
+        "config": {
+            "data": {
+                "queryParamsFieldSetTitle": "Anfrageparameter",
+                "wmsUrlTextFieldLabel": "WMS-URL",
+                "wmsVersionContainerFieldLabel": "Version",
+                "availableLayesFieldSetTitle": "Verfügbare Layer",
+                "resetBtnText": "Zurücksetzen",
+                "requestLayersBtnText": "Verfügbare Layer abfragen",
+                "checkAllLayersBtnText": "Alle auswählen",
+                "uncheckAllLayersBtnText": "Nichts auswählen",
+                "addCheckedLayersBtnText": "Ausgewählte Layer hinzufügen",
+                "errorIncompatibleWMS": "Der angefragte WMS ist nicht kompatibel zur Anwendung",
+                "errorRequestFailed": "Die angegebene URL konnte nicht abgefragt werden",
+                "errorCouldntParseResponse": "Die erhaltene Antwort konnte nicht erfolgreich geparst werden",
+                "msgRequestTimedOut": "Die Anfrage wurde nicht schnell genug beantwortet und abgebrochen",
+                "msgServiceException": "Eine OGC ServiceException ist aufgetreten",
+                "msgCorsMisconfiguration": "HTTP access control (CORS) auf dem Zielserver vermutlich nicht korrekt konfiguriert",
+                "msgUnauthorized": "Der Client ist nicht gegenüber dem Zielserver authentifiziert",
+                "msgForbidden": "Der Client hat keinen Zugriff auf die angefragte Ressource",
+                "msgFileNotFound": "Die angefragte Ressource existiert nicht",
+                "msgTooManyRequests": "Der Client hat zu viele Anfragen gestellt",
+                "msgServiceUnavailable": "Der Server ist derzeit nicht verfügbar (zu viele Anfragen bzw. Wartungsmodus)",
+                "msgGatewayTimeOut": "Der Server fungierte als Gateway und das Originalziel hat zu langsam geantwortet",
+                "msgClientError": "Ein unspezifizierter Clientfehler ist aufgetreten",
+                "msgServerError": "Ein unspezifizierter Serverfehler ist aufgetreten"
+            }
+        }
+    },
     "BasiGX.view.form.Print": {
         "config": {
             "data": {
@@ -1094,7 +1123,8 @@
     "Koala.view.form.Permalink": {
         "config": {
             "data": {
-                "refreshBtnText": "Erneuern"
+                "refreshBtnText": "Erneuern",
+                "copyToClipboardBtnText": "In Zwischenablage kopieren"
             }
         }
     },
