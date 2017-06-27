@@ -135,7 +135,7 @@
             );
 
         return {
-            map: map,
+            map: mapComponent.getMap() || map,
             mapComponent: mapComponent,
             mapDiv: mapDiv,
             mapComponentDiv: mapComponentDiv
