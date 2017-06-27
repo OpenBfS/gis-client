@@ -46,6 +46,9 @@ Ext.define('Koala.override.basigx.ConfigParser', {
         },
 
         postprocessMap: function(context) {
+            if (!context) {
+                return;
+            }
             var me = this;
             var defaultHeaders;
             var authHeader = Koala.util.Authentication.getAuthenticationHeader(context);
@@ -54,7 +57,6 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                     Authorization: authHeader
                 };
             }
-
             var layerConfig = context.data.merge.mapLayers;
 
             Ext.each(layerConfig, function(layerUuid, index) {
