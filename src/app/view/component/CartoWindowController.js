@@ -49,7 +49,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         }
 
         // Add toolkitname (modern/classic) as css class to the view
-        view.addCls(Ext.toolkit);
+        view.addCls(Ext.isModern ? 'modern' : 'classic');
 
         // If the feature has no layer set as property (like in modern) we add one
         if (!feature.get('layer')) {
