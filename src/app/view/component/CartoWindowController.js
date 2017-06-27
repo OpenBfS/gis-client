@@ -42,8 +42,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         // Cleanup hover artifacts
         var mapComponent = Ext.ComponentQuery.query('k-component-map')[0];
+
         var hoverPlugin = mapComponent.getPlugin('hoverBfS');
-        hoverPlugin.cleanupHoverArtifacts();
+        if (hoverPlugin) {
+            hoverPlugin.cleanupHoverArtifacts();
+        }
 
         // Add toolkitname (modern/classic) as css class to the view
         view.addCls(Ext.toolkit);

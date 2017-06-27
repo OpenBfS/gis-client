@@ -1,20 +1,13 @@
 Ext.Loader.syncRequire([
     'Koala.view.component.CartoWindowController',
     'Koala.view.component.CartoWindowModel',
-    'Koala.view.component.CartoWindow'
+    'Koala.view.component.CartoWindow',
+    'Koala.plugin.Hover'
 ]);
 
 describe('Koala.view.component.CartoWindowController', function() {
 
     describe('Basics', function() {
-        beforeEach(function() {
-            sinon.stub(Ext.ComponentQuery, 'query');
-        });
-
-        afterEach(function() {
-            Ext.ComponentQuery.query.restore();
-        });
-
         it('is defined', function() {
             expect(Koala.view.component.CartoWindowController).to.not.be(undefined);
         });
@@ -25,37 +18,39 @@ describe('Koala.view.component.CartoWindowController', function() {
         });
 
         it('can be initialized', function() {
-            var controller = new Koala.view.component.CartoWindowController();
-            sinon.stub(controller, 'createOverlay');
-            sinon.stub(controller, 'getOrCreateLineLayer');
-            sinon.stub(controller, 'createLineFeature');
+            // Setup
+            var testObjs = TestUtil.setupTestObjects({
+                mapComponentOpts: {
+                    appContextPath: 'http://localhost:9876/base/resources/appContext.json',
+                    plugins: [{
+                        ptype: 'hoverBfS',
+                        selectMulti: true,
+                        selectEventOrigin: 'interaction'
+                    }]
+                }
+            });
+            sinon.stub(Ext.ComponentQuery, 'query');
+            Ext.ComponentQuery.query.withArgs('k-component-map').returns([testObjs.mapComponent]);
+            sinon.stub(BasiGX.util.Map, 'getMapComponent');
+            BasiGX.util.Map.getMapComponent.returns(testObjs.mapComponent);
+            var map = testObjs.mapComponent.getMap();
+            var layer = map.getLayers().item(0);
+            var view = Ext.create('Koala.view.component.CartoWindow', {
+                map: map,
+                cartoWindowId: 'Peter',
+                layer: layer,
+                feature: new ol.Feature({
+                    geometry: new ol.geom.Point([1, 1])
+                }),
+                renderTo: Ext.getBody()
+            });
 
-            var mockedView = {el: TestUtil.getMockedElement()};
-            var close = TestUtil.getMockedElement();
-            mockedView.el.down.returns(close);
-            var feat = TestUtil.getMockedGetter({});
-            var geom = {};
-            geom.getCoordinates = sinon.stub().returns([]);
-            feat.getGeometry = sinon.stub().returns(geom);
-            var layer = TestUtil.getMockedGetter('');
-            mockedView.layer = layer;
-            mockedView.getMap = sinon.stub();
-            mockedView.getFeature = sinon.stub().returns(feat);
-            mockedView.getLayer = sinon.stub().returns(layer);
-            mockedView.addCls = sinon.stub();
-            mockedView.getCartoWindowId = sinon.stub();
-            mockedView.lookupViewModel = sinon.stub().returns(TestUtil.getMockedGetter({}));
-            var mockedHover = {};
-            mockedHover.cleanupHoverArtifacts = sinon.stub();
-            var mockedMapComp = {};
-            mockedMapComp.getPlugin = sinon.stub().returns(mockedHover);
-            Ext.ComponentQuery.query.returns([mockedMapComp]);
-            controller.setView(mockedView);
-            controller.onInitialize();
-            expect(controller.onInitialize.bind(controller)).to.not.throwException();
-            controller.createOverlay.restore();
-            controller.getOrCreateLineLayer.restore();
-            controller.createLineFeature.restore();
+            expect(view.getController().onInitialize.bind(view.getController())).to.not.throwException();
+
+            //Teardown
+            Ext.ComponentQuery.query.restore();
+            BasiGX.util.Map.getMapComponent.restore();
+            TestUtil.teardownTestObjects(testObjs);
         });
 
         it('can convert csv data', function() {
