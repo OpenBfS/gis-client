@@ -166,10 +166,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
 
         this.createTimeSeriesButtons(tabElm);
-        this.createLegendVisibilityButton(tabElm);
 
         el.appendChild(timeSeriesTab);
-        this.chart = Ext.create(chartObj);
+        this.timeserieschart = Ext.create(chartObj);
+
+        this.createLegendVisibilityButton(tabElm, this.timeserieschart);
     },
 
     /**
@@ -205,18 +206,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * Create legend visibility toggle button.
      * @param  {Element} elm element to render the button to
      */
-    createLegendVisibilityButton: function(elm) {
+    createLegendVisibilityButton: function(elm, chartObj) {
         var btn = {
             xtype: 'button',
             name: 'toggleLegend',
             glyph: 'xf151@FontAwesome',
             bind: {
                 tooltip: this.view.getViewModel().get('toggleLegendVisibility')
-            },
-            renderTo: elm
+            }
         };
         this.legendVisibilityButton = Ext.create(btn);
-        this.legendVisibilityButton.el.dom.addEventListener('click', this.toggleTimeseriesLegend.bind(this));
+        this.legendVisibilityButton.render(elm, chartObj.xtype === 'd3-chart' ? 5 : 3);
+        this.legendVisibilityButton.el.dom.addEventListener('click', this.toggleTimeseriesLegend.bind(this, chartObj));
     },
 
     /**
@@ -236,18 +237,23 @@ Ext.define('Koala.view.component.CartoWindowController', {
             active: true
         });
 
+        var tabElm = barChartTab.getElementsByTagName('div')[0];
+
         var config = {
             width: '400px',
             height: '400px',
             flex: 1,
-            renderTo: barChartTab.getElementsByTagName('div')[0]
+            renderTo: tabElm
         };
 
         var chartObj = Koala.view.component.D3BarChart.create(
             layer, feature, config);
 
+
         el.appendChild(barChartTab);
-        Ext.create(chartObj);
+        var barChart = Ext.create(chartObj);
+
+        this.createLegendVisibilityButton(tabElm, barChart);
     },
 
     getTabData: function(urlProperty, contentProperty) {
@@ -768,9 +774,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         }
     },
 
-    toggleTimeseriesLegend: function() {
+    toggleTimeseriesLegend: function(chart) {
         var btn = this.legendVisibilityButton;
-        this.chart.getController().toggleLegendVisibility();
+        chart.getController().toggleLegendVisibility();
         var glyph = btn.getGlyph();
         if (glyph.glyphConfig === 'xf151@FontAwesome') {
             glyph = 'xf150@FontAwesome';
