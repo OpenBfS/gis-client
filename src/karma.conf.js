@@ -18,7 +18,8 @@ module.exports = function(config) {
         basePath: '',
 
         proxies: {
-            '/koalaProxy': proxyUrl
+            '/koalaProxy': proxyUrl,
+            '/resources': '/base/resources'
         },
 
         // frameworks to use
@@ -49,6 +50,12 @@ module.exports = function(config) {
             },
             {
                 pattern: 'resources/appContext.json',
+                watched: true,
+                served: true,
+                included: false
+            },
+            {
+                pattern: 'resources/locale/**',
                 watched: true,
                 served: true,
                 included: false

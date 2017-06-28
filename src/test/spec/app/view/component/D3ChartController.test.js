@@ -57,5 +57,12 @@ describe('Koala.view.component.D3ChartController', function() {
             expect(ctrl.getIntervalInSeconds(1, '')).to.be(0);
             expect(ctrl.getIntervalInSeconds).to.throwException();
         });
+
+        it('does not draw chart without data', function() {
+            ctrl.onBoxReady();
+            ctrl.fireEvent('chartdataprepared');
+            sinon.spy(ctrl, 'drawChart');
+            expect(ctrl.drawChart.calledOnce).to.not.be(true);
+        });
     });
 });
