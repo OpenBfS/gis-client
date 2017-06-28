@@ -192,6 +192,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             pushObj[groupKey].key = feature.properties[groupProp];
             pushObj[groupKey].detection_limit = feature.properties[detectionLimitProp];
             pushObj[groupKey].uncertainty = feature.properties[uncertaintyProp];
+            pushObj[groupKey].group = feature.properties[keyProp];
 
             if (createSeries) {
                 seriesData.push(pushObj);
@@ -397,6 +398,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         var groupedShapes = allShapes.selectAll(staticMe.CSS_CLASS.BAR_GROUP)
             .data(firstStationData);
+
+        me.scales.bottom = me.scales.bottom.paddingInner(0.1);
 
         var shapes = groupedShapes.enter().append('g')
             .filter(function(d) {
