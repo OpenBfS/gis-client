@@ -22,6 +22,7 @@ Ext.define('Koala.view.component.MapController', {
 
     requires: [
         'BasiGX.util.Controller',
+        'BasiGX.util.Geometry',
 
         'Koala.util.Layer',
         'Koala.view.window.TimeSeriesWindow',
@@ -140,9 +141,11 @@ Ext.define('Koala.view.component.MapController', {
             var hoverTpl = layer.get('hoverTpl');
             Ext.each(features, function(feature, featureIdx, feats) {
                 // Avoid duplicated display of hovertemplate if a feature
-                // with the same id is included multiple times in features.
+                // with the same geometry is included multiple times in features.
                 if (featureIdx > 0) {
-                    if (feature.get('id') === feats[featureIdx-1].get('id')) {
+                    var lastFeature = feats[featureIdx-1];
+                    if (BasiGX.util.Geometry.equals(feature.getGeometry(),
+                        lastFeature.getGeometry())) {
                         return;
                     }
                 }

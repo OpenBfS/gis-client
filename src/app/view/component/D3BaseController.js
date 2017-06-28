@@ -64,7 +64,6 @@ Ext.define('Koala.view.component.D3BaseController', {
             PREFIX_IDX_LEGEND_GROUP: 'legend-group-',
 
             SUFFIX_LEGEND: '-legend',
-            SUFFIX_HIDDEN: '-hidden',
 
             HIDDEN_CLASS: 'k-d3-hidden',
             DISABLED_CLASS: 'k-d3-disabled'

@@ -138,6 +138,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     onChartDataRequestSuccess: function(response, station) {
         var me = this;
+        var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
         var groupProp = barChartProperties.groupAttribute || 'end_measure';
@@ -170,7 +171,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             dataObj.key = feature.properties[keyProp];
 
             if (!me.colorsByKey[groupKey]) {
-                me.colorsByKey[groupKey] = colors[0];
+                me.colorsByKey[groupKey] = colors[0] || staticMe.getRandomColor();
                 Ext.Array.removeAt(colors, 0);
             }
 
@@ -451,7 +452,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return me.shapeFilter(d, orientY, yField);
             })
             .style('fill', function(d) {
-                return d.color || staticMe.getRandomColor();
+                return d.color;
             })
         // .style('opacity', shapeConfig.opacity)
             .attr('x', function(d) {
@@ -465,7 +466,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return chartSize[1] - me.scales[orientY](d[yField]);
             })
             .style('fill', function(d) {
-                return d.color || staticMe.getRandomColor();
+                return d.color;
             })
             // .style('opacity', shapeConfig.opacity)
             .on('mouseover', function(data) {
@@ -495,8 +496,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             })
             .attr('d', function(d) {
                 if (d.uncertainty && d.uncertainty > 0) {
-                    var lineWidth = x1.bandwidth()/3;
-                    var xCenter = x1(d[xField]) + x1.bandwidth()/2;
+                    var lineWidth = x1.bandwidth() / 3;
+                    var xCenter = x1(d[xField]) + x1.bandwidth() / 2;
                     var topVal = d[yField] + d.uncertainty;
                     var bottomVal = d[yField] - d.uncertainty;
 
@@ -581,7 +582,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     getBarLabelTransform: function(d, orientX, orientY, xField, yField, barWidth) {
         var me = this;
         var chartSize = me.getChartSize();
-        var translateX = me.scales[orientX](d[xField]) + (barWidth/2);
+        var translateX = me.scales[orientX](d[xField]) + (barWidth / 2);
         var translateY = me.scales[orientY](d[yField]) - 5 || chartSize[1];
 
         return 'translate(' + translateX + ', ' + translateY + ')';
@@ -891,34 +892,18 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
-     * [description]
-     * @return {[type]} [description]
+     * This sets the visibility of the uncertainty marker-bars.
+     * @param {boolean} visible Wheather to show the uncertainty or not.
      */
-    setUncertaintyVisiblity: function(checked) {
+    setUncertaintyVisiblity: function(visible) {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
         var group = me.containerSvg.selectAll('.' + CSS.UNCERTAINTY);
         var hideClsName = CSS.HIDDEN_CLASS;
         if (group) {
-            group.classed(hideClsName, !checked);
-            me.showUncertainty = checked;
-            me.redrawChart();
-        }
-    },
-
-    /**
-     * [description]
-     * @param {[type]} group [description]
-     * @param {[type]} visible [description]
-     * @return {[type]} [description]
-     */
-    setGroupVisibility: function(group, visible) {
-        var me = this;
-        var staticMe = Koala.view.component.D3BaseController;
-        var hideClsName = staticMe.CSS_CLASS.HIDDEN_CLASS;
-        if (group) {
             group.classed(hideClsName, !visible);
+            me.showUncertainty = visible;
             me.redrawChart();
         }
     }
