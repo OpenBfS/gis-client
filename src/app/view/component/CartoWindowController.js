@@ -733,11 +733,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     scrollTimeseries: function(minOrMax, startOrEndDate, addOrSubtract) {
-        var controller = this.chart.getController();
+        var controller = this.timeserieschart.getController();
         var zoom = controller.currentDateRange;
         var hasZoom = zoom[minOrMax] !== null;
 
-        var changedDate = this.chart.getConfig(startOrEndDate);
+        var changedDate = this.timeserieschart.getConfig(startOrEndDate);
         if (hasZoom) {
             changedDate = moment(zoom[minOrMax]);
         }
@@ -750,10 +750,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         changedDate[addOrSubtract](moment.duration(duration));
 
         // only change start/end date if needed
-        var start = this.chart.getConfig('startDate');
-        var end = this.chart.getConfig('endDate');
+        var start = this.timeserieschart.getConfig('startDate');
+        var end = this.timeserieschart.getConfig('endDate');
         if (!start.isBefore(changedDate) || !end.isAfter(changedDate)) {
-            this.chart.setConfig(startOrEndDate, changedDate);
+            this.timeserieschart.setConfig(startOrEndDate, changedDate);
         }
 
         if (hasZoom) {
