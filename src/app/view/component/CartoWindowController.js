@@ -441,7 +441,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var tabs = viewModel.get('tabs');
         var tabIndex = tabs.length;
         var cartoWindowId = view.getCartoWindowId();
-        var tabIdString = cartoWindowId + ' cartowindow-tab-label-'+ tabIndex;
+        var tabIdString = cartoWindowId + '__cartowindow-tab-label-'+ tabIndex;
 
         var tab = Ext.DomHelper.createDom({
             tag: 'div',
