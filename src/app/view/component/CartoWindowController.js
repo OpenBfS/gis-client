@@ -166,10 +166,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
 
         this.createTimeSeriesButtons(tabElm);
-        this.createLegendVisibilityButton(tabElm);
 
         el.appendChild(timeSeriesTab);
-        this.chart = Ext.create(chartObj);
+        this.timeserieschart = Ext.create(chartObj);
+
+        this.createLegendVisibilityButton(tabElm, this.timeserieschart);
     },
 
     /**
@@ -205,18 +206,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * Create legend visibility toggle button.
      * @param  {Element} elm element to render the button to
      */
-    createLegendVisibilityButton: function(elm) {
+    createLegendVisibilityButton: function(elm, chartObj) {
         var btn = {
             xtype: 'button',
             name: 'toggleLegend',
             glyph: 'xf151@FontAwesome',
             bind: {
                 tooltip: this.view.getViewModel().get('toggleLegendVisibility')
-            },
-            renderTo: elm
+            }
         };
         this.legendVisibilityButton = Ext.create(btn);
-        this.legendVisibilityButton.el.dom.addEventListener('click', this.toggleTimeseriesLegend.bind(this));
+        this.legendVisibilityButton.render(elm, chartObj.xtype === 'd3-chart' ? 5 : 3);
+        this.legendVisibilityButton.el.dom.addEventListener('click', this.toggleTimeseriesLegend.bind(this, chartObj));
     },
 
     /**
@@ -236,18 +237,23 @@ Ext.define('Koala.view.component.CartoWindowController', {
             active: true
         });
 
+        var tabElm = barChartTab.getElementsByTagName('div')[0];
+
         var config = {
             width: '400px',
             height: '400px',
             flex: 1,
-            renderTo: barChartTab.getElementsByTagName('div')[0]
+            renderTo: tabElm
         };
 
         var chartObj = Koala.view.component.D3BarChart.create(
             layer, feature, config);
 
+
         el.appendChild(barChartTab);
-        Ext.create(chartObj);
+        var barChart = Ext.create(chartObj);
+
+        this.createLegendVisibilityButton(tabElm, barChart);
     },
 
     getTabData: function(urlProperty, contentProperty) {
@@ -435,7 +441,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var tabs = viewModel.get('tabs');
         var tabIndex = tabs.length;
         var cartoWindowId = view.getCartoWindowId();
-        var tabIdString = cartoWindowId + ' cartowindow-tab-label-'+ tabIndex;
+        var tabIdString = cartoWindowId + '__cartowindow-tab-label-'+ tabIndex;
 
         var tab = Ext.DomHelper.createDom({
             tag: 'div',
@@ -727,11 +733,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     scrollTimeseries: function(minOrMax, startOrEndDate, addOrSubtract) {
-        var controller = this.chart.getController();
+        var controller = this.timeserieschart.getController();
         var zoom = controller.currentDateRange;
         var hasZoom = zoom[minOrMax] !== null;
 
-        var changedDate = this.chart.getConfig(startOrEndDate);
+        var changedDate = this.timeserieschart.getConfig(startOrEndDate);
         if (hasZoom) {
             changedDate = moment(zoom[minOrMax]);
         }
@@ -744,10 +750,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         changedDate[addOrSubtract](moment.duration(duration));
 
         // only change start/end date if needed
-        var start = this.chart.getConfig('startDate');
-        var end = this.chart.getConfig('endDate');
+        var start = this.timeserieschart.getConfig('startDate');
+        var end = this.timeserieschart.getConfig('endDate');
         if (!start.isBefore(changedDate) || !end.isAfter(changedDate)) {
-            this.chart.setConfig(startOrEndDate, changedDate);
+            this.timeserieschart.setConfig(startOrEndDate, changedDate);
         }
 
         if (hasZoom) {
@@ -768,9 +774,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         }
     },
 
-    toggleTimeseriesLegend: function() {
+    toggleTimeseriesLegend: function(chart) {
         var btn = this.legendVisibilityButton;
-        this.chart.getController().toggleLegendVisibility();
+        chart.getController().toggleLegendVisibility();
         var glyph = btn.getGlyph();
         if (glyph.glyphConfig === 'xf151@FontAwesome') {
             glyph = 'xf150@FontAwesome';
