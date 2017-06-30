@@ -73,7 +73,8 @@
             "data": {
                 "expandToLeft": "Show older data",
                 "expandToRight": "Show newer data",
-                "toggleLegendVisibility": "Toggle legend visibility"
+                "toggleLegendVisibility": "Toggle legend visibility",
+                "exportToPngText": "Download Chart"
             }
         }
     },
