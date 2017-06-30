@@ -73,7 +73,8 @@
             "data": {
                 "expandToLeft": "Ältere Daten anzeigen",
                 "expandToRight": "Neuere Daten anzeigen",
-                "toggleLegendVisibility": "Legendensichtbarkeit umstellen"
+                "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
+                "exportToPngText": "Download Chart"
             }
         }
     },

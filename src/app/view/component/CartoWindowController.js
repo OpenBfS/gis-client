@@ -171,14 +171,16 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.timeserieschart = Ext.create(chartObj);
 
         this.createLegendVisibilityButton(tabElm, this.timeserieschart);
+        this.createExportToPngButton(tabElm, this.timeserieschart);
     },
 
     /**
      * Create buttons to scroll/expand the timeseries start/end date.
-     * @param  {Element} elm element to render the buttons to
+     * @param {Element} elm element to render the buttons to
      */
     createTimeSeriesButtons: function(elm) {
         var left = {
+            cls: 'carto-window-chart-button',
             xtype: 'button',
             name: 'seriesLeft',
             glyph: 'xf104@FontAwesome',
@@ -188,6 +190,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             renderTo: elm
         };
         var right = {
+            cls: 'carto-window-chart-button',
             xtype: 'button',
             name: 'seriesRight',
             glyph: 'xf105@FontAwesome',
@@ -204,10 +207,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
     /**
      * Create legend visibility toggle button.
-     * @param  {Element} elm element to render the button to
+     * @param {Element} elm element to render the button to
+     * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
+     *          The associated chart
      */
-    createLegendVisibilityButton: function(elm, chartObj) {
+    createLegendVisibilityButton: function(elm, chart) {
         var btn = {
+            cls: 'carto-window-chart-button',
             xtype: 'button',
             name: 'toggleLegend',
             glyph: 'xf151@FontAwesome',
@@ -216,8 +222,44 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         };
         this.legendVisibilityButton = Ext.create(btn);
-        this.legendVisibilityButton.render(elm, chartObj.xtype === 'd3-chart' ? 5 : 3);
-        this.legendVisibilityButton.el.dom.addEventListener('click', this.toggleTimeseriesLegend.bind(this, chartObj));
+        this.legendVisibilityButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3);
+        this.legendVisibilityButton.el.dom.addEventListener('click',
+            this.toggleLegend.bind(this, chart));
+    },
+
+    /**
+     * Create export to png button.
+     * @param {Element} elm element to render the button to
+     * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
+     *          The associated chart
+     */
+    createExportToPngButton: function(elm, chart) {
+        var btn = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'exportToPng',
+            glyph: 'xf019@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('exportToPngText')
+            }
+        };
+        this.exportToPngButton = Ext.create(btn);
+        this.exportToPngButton.render(elm, chart.xtype === 'd3-chart' ? 6 : 4);
+        this.exportToPngButton.el.dom.addEventListener('click',
+            this.exportToPng.bind(this, chart));
+    },
+
+    /**
+     * Exports the chart to PNG and starts a download.
+     * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
+     *          The associated chartion]
+     */
+    exportToPng: function(chart) {
+        var cb = function(dataUri) {
+            download(dataUri, 'chart.png', 'image/png');
+        };
+        var chartCtrl = chart.getController();
+        chartCtrl.chartToDataUriAndThen(cb);
     },
 
     /**
@@ -254,6 +296,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var barChart = Ext.create(chartObj);
 
         this.createLegendVisibilityButton(tabElm, barChart);
+        this.createExportToPngButton(tabElm, barChart);
     },
 
     getTabData: function(urlProperty, contentProperty) {
@@ -557,6 +600,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var viewModel = me.getViewModel();
+        var mapComponent = Ext.ComponentQuery.query('k-component-map')[0];
+        var hoverPlugin = mapComponent.getPlugin('hoverBfS');
         var map = view.getMap();
         var feature = view.getFeature();
         var coords = feature.getGeometry().getCoordinates();
@@ -584,6 +629,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             if (event.target.tagName === 'LABEL') {
                 dragPan.setActive(false);
                 overlay.set('dragging', true);
+                hoverPlugin.setPointerRest(false);
             } else if (Ext.Array.contains(event.target.classList, 'x-resizable-handle')) {
                 overlay.set('resizing', true);
                 me.resizeTarget = Ext.get(event.target).up('.cartowindow-tab').down('.content');
@@ -594,6 +640,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             if (overlay.get('dragging') === true) {
                 dragPan.setActive(true);
                 overlay.set('dragging', false);
+                hoverPlugin.setPointerRest(true);
             }
         };
 
@@ -774,7 +821,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         }
     },
 
-    toggleTimeseriesLegend: function(chart) {
+    toggleLegend: function(chart) {
         var btn = this.legendVisibilityButton;
         chart.getController().toggleLegendVisibility();
         var glyph = btn.getGlyph();

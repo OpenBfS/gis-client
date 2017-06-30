@@ -21,6 +21,10 @@ Ext.define('Koala.view.component.CartoWindowModel', {
     alias: 'viewmodel.k-component-cartowindow',
 
     data: {
+        /*i18n start*/
+        toggleLegendVisibility: '',
+        exportToPngText: '',
+        /*i18n end*/
         lineFeature: null,
         lineLayer: null,
         overlay: null,

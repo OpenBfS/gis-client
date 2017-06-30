@@ -22,7 +22,6 @@ Ext.define('Koala.plugin.Hover', {
     alias: 'plugin.hoverBfS',
     id: 'hoverBfS',
 
-
     /**
      * overwrite BasiGX-onPointerRest()
      * if mouse pointer hovers over featureInfo-win, etc.,
@@ -41,6 +40,18 @@ Ext.define('Koala.plugin.Hover', {
         var hoverableProp = me.self.LAYER_HOVERABLE_PROPERTY_NAME;
         var hoverLayers = [];
         var hoverFeatures = [];
+        var overlays = map.getOverlays();
+        var breakMe = false;
+
+        // Avoid hoverTooltip when dragging a cartowindow
+        overlays.forEach(function(overlay) {
+            if (overlay.get('dragging')) {
+                breakMe = true;
+            }
+        });
+        if (breakMe) {
+            return false;
+        }
 
         if (evt.originalEvent.target.className === 'ol-unselectable') {
             me.cleanupHoverArtifacts();
