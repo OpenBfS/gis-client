@@ -701,6 +701,12 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .style('fill', dataObj.color);
 
             var nameAsTooltip = dataObj.key;
+            // TODO This check doesn't seem to be ideal as it throws a warning
+            // if a none datestring is the subCategory
+            var isTime = (new moment(nameAsTooltip, moment.ISO_8601, true)).isValid();
+
+            nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
+                new moment(nameAsTooltip)) : nameAsTooltip;
             var visualLabel = staticMe.labelEnsureMaxLength(
                 nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
             );
@@ -771,7 +777,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             // TODO This check doesn't seem to be ideal as it throws a warning
             // if a none datestring is the subCategory
-            var isTime = (new moment(subCategory)).isValid();
+            var isTime = (new moment(subCategory, moment.ISO_8601, true)).isValid();
 
             var nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
                 new moment(subCategory)) : subCategory;

@@ -809,6 +809,15 @@ Ext.define('Koala.view.component.D3BaseController', {
                 tickFormatter = me.getMultiScaleTimeFormatter;
             } else if (axisConfig.format) {
                 tickFormatter = d3.format(axisConfig.format || ',.0f');
+            } else {
+                tickFormatter = function(tickString) {
+                    var isTime = (new moment(tickString, moment.ISO_8601, true))
+                        .isValid();
+
+                    tickString = isTime ? Koala.util.Date.getFormattedDate(
+                        new moment(tickString)) : tickString;
+                    return tickString;
+                };
             }
 
             var chartAxis = axis(scale)
