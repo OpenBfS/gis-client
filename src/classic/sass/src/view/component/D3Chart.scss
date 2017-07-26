@@ -62,17 +62,17 @@ svg .k-d3-shape-group-legend text {
     opacity: 1;
     visibility: visible;
 }
-svg .k-d3-shape-group-hidden {
+
+svg .k-d3-hidden {
     opacity: 0;
     visibility: hidden;
     transition-delay: 0.4s, 0s;
-
 }
-svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden circle,
-svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden path,
-svg .k-d3-shape-group-legend .k-d3-shape-group-legend-hidden text {
+
+svg .k-d3-disabled {
     opacity: 0.3;
 }
+
 svg .k-d3-shape-group-legend .k-d3-delete-icon,
 svg .k-d3-shape-group-legend .k-d3-download-icon, {
     fill: $button-default-background-color;
@@ -109,8 +109,6 @@ svg .k-d3-grid path {
     top: 0;
     /* other properties set dynamically */
 }
-
-
 
 .k-window-barchart .x-window-header-default-top {
     padding: 0px 0px 0px 0px;

@@ -81,6 +81,7 @@
     "Koala.view.component.D3BarChart": {
         "config": {
             "data": {
+                "belowDetectionLimitLabel": "< NWG",
                 "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
             }
         }
@@ -398,6 +399,7 @@
             "data": {
                 "title": "Barchart",
                 "undoBtnText": "…zurückzoomen",
+                "uncertaintyCheckboxLabel": "Messungenauigkeit",
                 "exportAsImageBtnText": "Als Bild exportieren"
             }
         }

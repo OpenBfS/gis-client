@@ -81,6 +81,7 @@
     "Koala.view.component.D3BarChart": {
         "config": {
             "data": {
+                "belowDetectionLimitLabel": "< LDL",
                 "noDataAvailableText": "There is no data available for the specified time range. Please select a different period."
             }
         }
@@ -397,6 +398,7 @@
             "data": {
                 "title": "Bar Chart",
                 "undoBtnText": "…zoom back",
+                "uncertaintyCheckboxLabel": "Uncertainty",
                 "exportAsImageBtnText": "Export as image"
             }
         }

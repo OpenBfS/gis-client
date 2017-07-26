@@ -9,16 +9,27 @@ describe('Koala.view.component.D3BarChartController', function() {
         beforeEach(function() {
             // mock layer
             var layer = TestUtil.getMockedGetter({});
-            layer.get.returns({chartFieldSequence: 'test'});
+            layer.get.returns({
+                chartFieldSequence: 'test'
+            });
             var feat = TestUtil.getMockedGetter({});
 
             var view = Ext.create(Koala.view.component.D3BarChart.create(layer, feat));
-            ctrl = new Koala.view.component.D3BarChartController();
-            ctrl.setView(view);
+            ctrl = view.getController();
 
             // mock minimum reqs for drawing a chart
             view.el = TestUtil.getMockedElement();
-            view.getAxes = sinon.stub().returns({top: {min: 1, max: 2}, left: {min: 1, max: 2}});
+            view.getAxes = sinon.stub().returns({
+                bottom: {
+                    min: 1,
+                    max: 2,
+                    scale: 'ordinal'
+                },
+                left: {
+                    min: 1,
+                    max: 2
+                }
+            });
         });
 
         it('is defined', function() {
@@ -35,10 +46,18 @@ describe('Koala.view.component.D3BarChartController', function() {
             expect(cmp.getId()).to.not.be(undefined);
         });
 
-        it('should not fail to draw and redraw a chart', function() {
+        it('should not fail to draw a chart', function() {
+            sinon.stub(ctrl, 'createTooltip');
+            ctrl.data = [
+                [{
+                    a: 1
+                }]
+            ];
             expect(ctrl.drawChart.bind(ctrl)).to.not.throwException();
+        });
+
+        it('should not fail to redraw a chart', function() {
             expect(ctrl.redrawChart.bind(ctrl)).to.not.throwException();
-            expect(ctrl.deleteShapeContainerSvg.bind(ctrl)).to.not.throwException();
         });
 
         it('should draw the chart on box ready', function() {

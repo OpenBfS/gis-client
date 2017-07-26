@@ -21,6 +21,7 @@ Ext.define('Koala.view.component.D3BaseModel', {
     alias: 'viewmodel.component-d3base',
     data: {
         confirmDeleteTitleTpl: '',
-        confirmDeleteMsgTpl: ''
+        confirmDeleteMsgTpl: '',
+        belowDetectionLimitLabel: ''
     }
 });

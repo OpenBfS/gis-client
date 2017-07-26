@@ -57,7 +57,7 @@ Ext.define('Koala.view.component.D3BarChart',{
         startDate: null,
         endDate: null,
         shape: {},
-        selectedStation: null,
+        selectedStations: null,
         // TODO adjust dynamically in relation to axes/title label size
         chartMargin: {
             top: null,
@@ -98,8 +98,6 @@ Ext.define('Koala.view.component.D3BarChart',{
             var DEFAULTS = Koala.view.component.D3Base.DEFAULTS.BARCHART;
             var chartConfig = olLayer.get('barChartProperties');
             var StringUtil = Koala.util.String;
-            var categoryCount = chartConfig.chartFieldSequence.split(',').length;
-            var chartWidth = 200 + categoryCount * 50;
             var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
             var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
             var yLabel = chartConfig.yAxisLabel || '';
@@ -180,14 +178,14 @@ Ext.define('Koala.view.component.D3BarChart',{
                 name: olLayer.get('name'),
                 zoomEnabled: Koala.util.String.coerce(chartConfig.allowZoom),
                 height: config.height || '100%',
-                width: config.width || chartWidth,
+                width: config.width || 800, // TODO replace static value
                 margin: config.margin || 0,
                 flex: config.flex,
                 renderTo: config.renderTo,
                 startDate: olFeat.get('end_measure'),
                 endDate: olFeat.get('end_measure'),
                 targetLayer: olLayer,
-                selectedStation: olFeat,
+                selectedStations: [olFeat],
                 backgroundColor: chartConfig.backgroundColor,
                 chartMargin: chartMarginObj,
                 labelFunc: Koala.util.String.coerce(chartConfig.labelFunc),
