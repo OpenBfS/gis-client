@@ -460,7 +460,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var innerHTML = Koala.util.String.replaceTemplateStrings(template,
             feature);
         var timeSeriesTab = me.createTabElement({
-            title: 'Hover',
+            title: 'Info',
             innerHTML: innerHTML,
             className: 'hoverTpl-tab'
         });

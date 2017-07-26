@@ -498,8 +498,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 if (d.uncertainty && d.uncertainty > 0) {
                     var lineWidth = x1.bandwidth() / 3;
                     var xCenter = x1(d[xField]) + x1.bandwidth() / 2;
-                    var topVal = d[yField] + d.uncertainty;
-                    var bottomVal = d[yField] - d.uncertainty;
+                    var topVal = d[yField] + (d[yField]/100 * d.uncertainty);
+                    var bottomVal = d[yField] - (d[yField]/100 * d.uncertainty);
 
                     if (bottomVal < 0) {
                         bottomVal = 0;
