@@ -176,18 +176,19 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * @return {Array}         the updated filters
      */
     updateFiltersForAutorefresh: function(filters) {
+        var KD = Koala.util.Date;
         Ext.each(filters, function(filter) {
-            var now = Koala.util.Date.getTimeReferenceAwareMomentDate(new moment()).toISOString();
+            var now = KD.getTimeReferenceAwareMomentDate(new moment()).toISOString();
             if (filter.type === 'pointintime') {
                 if (now > filter.maxdatetimeinstant) {
-                    now = filter.maxdatetimeinstant;
+                    now = KD.getTimeReferenceAwareMomentDate(moment(filter.maxdatetimeinstant));
                 }
                 filter.effectivedatetime = moment(now);
             }
 
             if (filter.type === 'timerange') {
                 if (now > filter.maxdatetimeinstant) {
-                    now = filter.maxdatetimeinstant;
+                    now = KD.getTimeReferenceAwareMomentDate(moment(filter.maxdatetimeinstant));
                 }
                 filter.effectivemaxdatetime = moment(now);
                 filter.effectivemindatetime = moment(filter.effectivemaxdatetime).subtract(filter.maxduration, 'minutes');
