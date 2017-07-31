@@ -39,10 +39,26 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         anchor: '100%'
     },
 
+    config: {
+        // can be overriden via appContext.json: urls/irixcontext
+        irixContextUrl: 'resources/irixContext.json'
+    },
+
     initComponent: function() {
         var me = this;
+
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+        if (appContext) {
+            var configuredIrixContext = Koala.util.Object.getPathStrOr(
+                appContext, 'data/merge/urls/irix-context', false
+            );
+            if (configuredIrixContext) {
+                me.setIrixContextUrl(configuredIrixContext);
+            }
+        }
+
         Ext.Ajax.request({
-            url: 'resources/irixContext.json',
+            url: me.irixContextUrl,
 
             success: function(response) {
                 var json = Ext.decode(response.responseText);
