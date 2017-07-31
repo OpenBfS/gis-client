@@ -22,4 +22,6 @@
 
 .basigx-legend-panel .x-tree-node-text {
     white-space: normal;
+    word-break: break-all;
+    display: inline-block;
 }

@@ -83,7 +83,6 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
                 }
             });
         }
-        this.getView().scrollTo(0, 0);
     },
 
     bindUtcBtnToggleHandler: function() {
