@@ -79,6 +79,7 @@ describe('Koala.view.panel.RoutingLegendTreeController', function() {
                 fn(rec);
             };
             view.getStore = sinon.stub().returns(store);
+            view.scrollTo = sinon.stub();
             ctrl.setView(view);
             var records = [];
             if (withSelection) {
