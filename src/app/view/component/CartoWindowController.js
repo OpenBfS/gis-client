@@ -543,12 +543,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var viewModel = me.getViewModel();
         var map = view.getMap();
-        var position = view.getFeature().getGeometry().getCoordinates();
+        var feature = view.getFeature();
+        var coords = this.getFeatureAnchorPoint(feature);
+
         var cartoWindowId = view.getCartoWindowId();
 
         var overlay = new ol.Overlay({
             id: cartoWindowId,
-            position: position,
+            position: coords,
             positioning: 'top-left',
             element: view.el.dom,
             stopEvent: true,
@@ -558,6 +560,25 @@ Ext.define('Koala.view.component.CartoWindowController', {
         map.addOverlay(overlay);
 
         viewModel.set('overlay', overlay);
+    },
+
+
+
+    /**
+     * gets features anchorPoint
+     * e.g. to anchor cartoWindows
+     */
+    getFeatureAnchorPoint: function(feature) {
+        if (feature.getGeometry().getType() === 'MultiPolygon' || feature.getGeometry().getType() === 'Polygon') {
+            feature = turf.polygon(feature.getGeometry().getCoordinates()[0]);
+            coords = turf.centroid(feature).geometry.coordinates;
+        } else if(feature.getGeometry().getType() === 'Point'){
+            coords = feature.getGeometry().getCoordinates();
+        } else if(feature.getGeometry().getType() === 'Line'){
+            feature = turf.lineString(feature.getGeometry().getCoordinates()[0]);
+            coords = turf.centroid(feature).geometry.coordinates;
+        }
+        return coords;
     },
 
     /**
@@ -604,7 +625,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var hoverPlugin = mapComponent.getPlugin('hoverBfS');
         var map = view.getMap();
         var feature = view.getFeature();
-        var coords = feature.getGeometry().getCoordinates();
+        var coords = this.getFeatureAnchorPoint(feature);
         var el = view.el.dom;
         var overlay = viewModel.get('overlay');
         var cartoWindowId = view.getCartoWindowId();
@@ -758,7 +779,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var map = view.getMap();
         var feature = view.getFeature();
         var lineFeature = viewModel.get('lineFeature');
-        var featureStartCoords = feature.getGeometry().getCoordinates();
+        var featureStartCoords = this.getFeatureAnchorPoint(feature);
         var overlay = viewModel.get('overlay');
         var overlayerCoords = overlay.getPosition();
         var overlayerTopLeftPixel = map.getPixelFromCoordinate(overlayerCoords);
@@ -767,6 +788,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var centerPixel = [overlayWidth/2 + overlayerTopLeftPixel[0],
             overlayHeight/2 + overlayerTopLeftPixel[1]];
         var centerCoords = map.getCoordinateFromPixel(centerPixel);
+
         lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
         overlay.centerCoords = centerCoords;
     },
