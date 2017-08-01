@@ -314,10 +314,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
 
         el.appendChild(barChartTab);
-        var barChart = Ext.create(chartObj);
-
-        this.createLegendVisibilityButton(tabElm, barChart);
-        this.createExportToPngButton(tabElm, barChart);
+        this.barChart = Ext.create(chartObj);
+        this.createLegendVisibilityButton(tabElm, this.barChart);
+        this.createExportToPngButton(tabElm, this.barChart);
     },
 
     getTabData: function(urlProperty, contentProperty) {
@@ -905,6 +904,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
         map.un('pointermove', me.pointerMoveListener);
         window.removeEventListener(upEvent, me.onMouseUpWindow);
         lineLayer.getSource().removeFeature(lineFeature);
+
+        if (this.timeserieschart) {
+            this.timeserieschart.destroy();
+        }
+        if (this.barChart) {
+            this.barChart.destroy();
+        }
     }
 
 });
