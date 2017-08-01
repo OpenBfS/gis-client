@@ -26,6 +26,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Ext.Ajax',
         'BasiGX.util.Layer',
         'Koala.util.AppContext',
+        'Koala.util.Chart',
         'Koala.util.Object'
     ],
 
@@ -166,6 +167,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
 
         this.createTimeSeriesButtons(tabElm);
+        this.createCombineTimeseriesButton(tabElm);
 
         el.appendChild(timeSeriesTab);
         this.timeserieschart = Ext.create(chartObj);
@@ -203,6 +205,25 @@ Ext.define('Koala.view.component.CartoWindowController', {
         left.el.dom.addEventListener('click', this.scrollTimeseriesLeft.bind(this));
         right = Ext.create(right);
         right.el.dom.addEventListener('click', this.scrollTimeseriesRight.bind(this));
+    },
+
+    /**
+     * Create button to combine all timeseries carto windows.
+     * @param {Element} elm element to render the button to
+     */
+    createCombineTimeseriesButton: function(elm) {
+        var combine = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'seriesCombine',
+            glyph: 'xf066@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('combineSeries')
+            },
+            renderTo: elm
+        };
+        combine = Ext.create(combine);
+        combine.el.dom.addEventListener('click', this.combineTimeseries.bind(this));
     },
 
     /**
@@ -819,6 +840,37 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 }, 800);
             });
         }
+    },
+
+    combineTimeseries: function() {
+        var me = this;
+        var stations = this.timeserieschart.selectedStations;
+        var stationIds = [];
+        Ext.each(stations, function(station) {
+            stationIds.push(station.get('id'));
+        });
+        var newStations = [];
+        var newStationIds = [];
+
+        var allCharts = Ext.ComponentQuery.query('d3-chart');
+        Ext.each(allCharts, function(chart) {
+            Ext.each(chart.selectedStations, function(station) {
+                if (stationIds.indexOf(station.get('id')) === -1 && newStationIds.indexOf(station.get('id')) === -1) {
+                    newStations.push(station);
+                    newStationIds.push(station.get('id'));
+                }
+            });
+        });
+        Ext.each(newStations, function(station) {
+            Koala.util.Chart.addFeatureToTimeseriesChart(station.get('layer'), station, me.timeserieschart);
+        });
+        this.timeserieschart.getController().getChartData();
+        var cartos = Ext.ComponentQuery.query('k-component-cartowindow');
+        Ext.each(cartos, function(carto) {
+            if (carto !== me.getView()) {
+                carto.destroy();
+            }
+        });
     },
 
     toggleLegend: function(chart) {

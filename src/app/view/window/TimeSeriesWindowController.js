@@ -20,6 +20,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-timeserieswindow',
     requires: [
+        'Koala.util.Chart',
         'Koala.util.String',
         'Koala.model.Station',
         'Koala.view.component.D3Chart'
@@ -339,50 +340,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         }
 
         var me = this;
-        var StringUtil = Koala.util.String;
         var view = me.getView();
         var layerName = olLayer.get('name');
-        var chartConfig = olLayer.get('timeSeriesChartProperties');
         var chart = view.down('d3-chart[name="' + layerName + '"]');
-        var chartController = chart.getController();
-        var valFromSeq = StringUtil.getValueFromSequence;
-        var stationName = '';
-        var promise = new Ext.Promise(function(resolve) {
-            resolve(stationName);
-        });
-        if (!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
-            promise = StringUtil.replaceTemplateStringsWithPromise(
-                chartConfig.seriesTitleTpl, olFeat
-            );
-        }
-        var currentSeqIndex = chart.getSelectedStations().length;
-        var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, '');
-        if (!color) {
-            color = Koala.view.component.D3BaseController.getRandomColor();
-        }
 
-        promise.then(function(name) {
-            me.addShapeToChart(chartController, chartConfig, name, olFeat, color);
-        })
-            .catch(function() {
-                me.addShapeToChart(chartController, chartConfig, '', olFeat, color);
-            });
-    },
-
-    addShapeToChart: function(chartController, chartConfig, stationName, olFeat, color) {
-        var coerce = Koala.util.String.coerce;
-        chartController.addShape({
-            type: chartConfig.shapeType || 'line',
-            curve: chartConfig.curveType || 'linear',
-            xField: chartConfig.xAxisAttribute,
-            yField: chartConfig.yAxisAttribute,
-            name: stationName,
-            id: olFeat.get(chartConfig.featureIdentifyField || 'id'),
-            color: color,
-            opacity: coerce(chartConfig.strokeOpacity) || 1,
-            width: coerce(chartConfig.strokeWidth) || 1,
-            tooltipTpl: chartConfig.tooltipTpl
-        }, olFeat, false);
+        Koala.util.Chart.addFeatureToTimeseriesChart(olLayer, olFeat, chart);
     },
 
     /**
