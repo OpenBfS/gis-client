@@ -15,7 +15,8 @@
         "d3": false,
         "download": false,
         "moment": true,
-        "html2canvas": true
+        "html2canvas": true,
+        "turf": true
     },
     "rules": {
         "comma-dangle": 2,
