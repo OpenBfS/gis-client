@@ -169,11 +169,73 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.createTimeSeriesButtons(tabElm);
         this.createCombineTimeseriesButton(tabElm);
 
+        var autorefreshStore = Ext.create('Ext.data.Store', {
+            fields: ['value', 'title'],
+            data: this.getTranslatedAutorefreshData(),
+            queryMode: 'local'
+        });
+
+        var autorefreshBox = Ext.create({
+            xtype: 'checkbox',
+            name: 'autorefresh-checkbox',
+            checked: false,
+            renderTo: tabElm,
+            style: 'display: inline;',
+            padding: 3,
+            bind: {
+                boxLabel: view.getViewModel().get('autorefresh')
+            }
+        });
+        this.autorefreshCombo = Ext.create({
+            xtype: 'combo',
+            name: 'autorefresh-combo',
+            displayField: 'title',
+            padding: 3,
+            valueField: 'value',
+            style: 'display: inline;',
+            store: autorefreshStore,
+            renderTo: tabElm,
+            bind: {
+                emptyText: view.getViewModel().get('autorefreshOptions')
+            }
+        });
+
+        this.autorefreshCombo.el.dom.addEventListener('click', this.autorefreshCombo.expand.bind(this.autorefreshCombo));
+
+        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+        langCombo.on('applanguagechanged', me.setTranslatedAutorefreshData.bind(me));
+
         el.appendChild(timeSeriesTab);
         this.timeserieschart = Ext.create(chartObj);
 
         this.createLegendVisibilityButton(tabElm, this.timeserieschart);
         this.createExportToPngButton(tabElm, this.timeserieschart);
+
+        Koala.util.ChartAutoUpdater.autorefreshTimeseries(
+            this.timeserieschart,
+            this.autorefreshCombo,
+            autorefreshBox,
+            view.getLayer()
+        );
+    },
+
+    setTranslatedAutorefreshData: function() {
+        var combo = this.autorefreshCombo;
+        var value = combo.getValue();
+        var store = combo.getStore();
+        var data = this.getTranslatedAutorefreshData();
+        store.removeAll();
+        store.add(data[0], data[1]);
+        combo.setValue(value);
+    },
+
+    getTranslatedAutorefreshData: function() {
+        var view = this.getView();
+        var vm = view.getViewModel();
+        return [
+            {value: 'autorefresh-expand', title: vm.get('autorefreshExpand')},
+            {value: 'autorefresh-move', title: vm.get('autorefreshMove')}
+        ];
     },
 
     /**

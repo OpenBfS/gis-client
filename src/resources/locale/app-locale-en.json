@@ -71,6 +71,10 @@
     "Koala.view.component.CartoWindow": {
         "config": {
             "data": {
+                "autorefresh": "Autorefresh",
+                "autorefreshExpand": "Extend time window",
+                "autorefreshMove": "Move time window",
+                "autorefreshOptions": "Autorefresh options",
                 "expandToLeft": "Show older data",
                 "expandToRight": "Show newer data",
                 "toggleLegendVisibility": "Toggle legend visibility",
