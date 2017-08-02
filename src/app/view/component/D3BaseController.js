@@ -45,7 +45,9 @@ Ext.define('Koala.view.component.D3BaseController', {
             GRID_Y: 'k-d3-grid-y',
 
             SHAPE_GROUP: 'k-d3-shape-group',
+            BAR_GROUP: 'k-d3-bar-group',
             BAR: 'k-d3-bar',
+            UNCERTAINTY: 'k-d3-uncertainty',
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
             LEGEND_CONTAINER: 'k-d3-scrollable-legend-container',
@@ -62,8 +64,18 @@ Ext.define('Koala.view.component.D3BaseController', {
             PREFIX_IDX_LEGEND_GROUP: 'legend-group-',
 
             SUFFIX_LEGEND: '-legend',
-            SUFFIX_HIDDEN: '-hidden'
+
+            HIDDEN_CLASS: 'k-d3-hidden',
+            DISABLED_CLASS: 'k-d3-disabled'
         },
+
+        /**
+         * Additional space added to the (bar) chart. Adds the configured Number
+         * as percent to the datarange to create some space inside the chart.
+         *
+         * @type {Number} percent
+         */
+        ADDITIONAL_DOMAIN_SPACE: 10,
 
         /**
          * Additional margin to take into consideration when calculating the
@@ -255,17 +267,6 @@ Ext.define('Koala.view.component.D3BaseController', {
         }()),
 
         /**
-         * Used as the fallback for labeling when no explicity function is
-         * provided.
-         *
-         * @param {mixed} val The value for labeling.
-         * @return {mixed} The exact same value that was passed in.
-         */
-        identity: function(val) {
-            return val;
-        },
-
-        /**
          * Ensures that the given label is not longer than the specified max
          * length and returns a shortened string (maxLength chars + '…') to be
          * used for labeling.
@@ -332,6 +333,223 @@ Ext.define('Koala.view.component.D3BaseController', {
         right: 200,
         bottom: 20,
         left: 40
+    },
+
+    /**
+     * Used as the fallback for labeling when no explicity function is
+     * provided.
+     *
+     * @param {mixed} val The value for labeling.
+     * @return {mixed} The exact same value that was passed in.
+     */
+    getFallBackIdentity: function() {
+        var viewModel = this.getViewModel();
+        var label = viewModel.get('belowDetectionLimitLabel');
+        return function(val, object) {
+            if (object.detection_limit && object.detection_limit === '<') {
+                return label;
+            }
+            return val;
+        };
+    },
+
+    /**
+     * Note: This is private method, don't call it yourself and if you have to,
+     * remember to call it only once!
+     *
+     * @private
+     */
+    onBoxReady: function() {
+        var me = this;
+        var view = me.getView();
+
+        // We have to cleanup manually.  WHY?!
+        me.scales = {};
+        me.shapes = [];
+        me.axes = {};
+        me.gridAxes = {};
+        me.data = {};
+
+        me.on('chartdataprepared', function() {
+            var svgContainer = me.getSvgContainer();
+            if (!me.chartDataAvailable) {
+                // We explicitly hide the svg root container, as the modern
+                // toolkit's panel didn't do it automatically if we update the
+                // element via setHtml(). And as it doesn't conflict with the
+                // classic toolkit's behaviour, no additional check for the
+                // current toolkit is needed.
+                svgContainer.attr('display', 'none');
+                view.setHtml('<div class="noDataError">' +
+                    me.getViewModel().get('noDataAvailableText') +
+                    '</div>'
+                );
+                me.chartRendered = false;
+            } else {
+                // Show the svg root container, see comment above as well.
+                svgContainer.attr('display', 'unset');
+
+                var errorDiv = view.el.query('.noDataError');
+                if (errorDiv[0]) {
+                    errorDiv[0].remove();
+                }
+
+                if (me.chartRendered) {
+                    me.redrawChart();
+                } else {
+                    me.drawChart();
+                }
+            }
+        });
+
+        me.getChartData();
+    },
+
+    /**
+     *
+     */
+    getChartData: function() {
+        var me = this;
+        var view = me.getView();
+        if (view.getShowLoadMask() && view.getSelectedStations().length > 0) {
+            view.setLoading(true);
+        }
+
+        me.data = {};
+        me.chartDataAvailable = false;
+        me.abortPendingRequests();
+
+        Ext.each(view.getSelectedStations(), function(station) {
+            me.getChartDataForStation(station);
+        });
+    },
+
+    /**
+     * Aborts any loading requests in our internal pending requests object and
+     * resets both #ajaxRequests and #ajaxCounter.
+     */
+    abortPendingRequests: function() {
+        var me = this;
+        Ext.iterate(me.ajaxRequests, function(id, ajaxRequest) {
+            if (ajaxRequest && ajaxRequest.isLoading()) {
+                ajaxRequest.abort();
+            }
+        });
+        me.ajaxRequests = {};
+        me.ajaxCounter = 0;
+    },
+
+    /**
+     * TODO gettestdatafilter and set to request URL // CQL ticket #1578
+     */
+    getChartDataForStation: function(selectedStation) {
+        var me = this;
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = selectedStation.get('id');
+
+        // Store the actual request object, so we are able to abort it if we are
+        // called faster than the response arrives.
+        var ajaxRequest = me.getChartDataRequest(
+            selectedStation,
+            me.onChartDataRequestCallback,
+            me.onChartDataRequestSuccess,
+            me.onChartDataRequestFailure,
+            me
+        );
+
+        // Put the current request into our storage for possible abortion.
+        me.ajaxRequests[stationId] = ajaxRequest;
+    },
+
+    /**
+     * Returns the WFS url of the current charting target layer.
+     *
+     * @return {String} The WFS url.
+     */
+    getChartDataRequestUrl: function() {
+        var me = this;
+        var view = me.getView();
+        var targetLayer = view.getTargetLayer();
+
+        return targetLayer.metadata.layerConfig.wfs.url;
+    },
+
+    /**
+     * Returns the Ext.Ajax.request for requesting the chart data.
+     *
+     * @param {ol.Feature} station The ol.Feature to build the request function
+     *                             for. Required.
+     * @param {Function} [cbSuccess] The function to be called on success. Optional.
+     * @param {Function} [cbFailure] The function to be called on failure. Optional.
+     * @param {Function} [cbScope] The callback function to be called on
+     *                           success and failure. Optional.
+     * @return {Ext.Ajax.request} The request function.
+     */
+    getChartDataRequest: function(station, cbFn, cbSuccess, cbFailure, cbScope) {
+        var me = this;
+
+        if (!(station instanceof ol.Feature)) {
+            Ext.log.warn('No valid ol.Feature given.');
+            return;
+        }
+
+        var ajaxRequest = Ext.Ajax.request({
+            method: 'GET',
+            url: me.getChartDataRequestUrl(),
+            params: me.getChartDataRequestParams(station),
+            callback: function() {
+                if (Ext.isFunction(cbFn)) {
+                    cbFn.call(cbScope, station);
+                }
+            },
+            success: function(response) {
+                if (Ext.isFunction(cbSuccess)) {
+                    cbSuccess.call(cbScope, response, station);
+                }
+            },
+            failure: function(response) {
+                if (Ext.isFunction(cbFailure)) {
+                    cbFailure.call(cbScope, response, station);
+                }
+            }
+        });
+
+        return ajaxRequest;
+    },
+
+    /**
+     * The default callback handler for chart data requests.
+     *
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for.
+     */
+    onChartDataRequestCallback: function(station) {
+        var me = this;
+
+        // The id of the selected station is also the key in the pending
+        // requests object.
+        var stationId = station.get('id');
+
+        // Called for both success and failure, this will delete the
+        // entry in the pending requests object.
+        if (stationId in me.ajaxRequests) {
+            delete me.ajaxRequests[stationId];
+        }
+    },
+
+    /**
+     * The default handler for chart data request failures.
+     *
+     * @param {Object} response The reponse object.
+     * @param {ol.Feature} station The station the corresponding request was
+     *                             send for. Optional.
+     */
+    onChartDataRequestFailure: function(response /*station*/) {
+        // aborted requests aren't failures
+        if (!response.aborted) {
+            Ext.log.error('Failure on chartdata load');
+        }
     },
 
     /**
@@ -591,6 +809,15 @@ Ext.define('Koala.view.component.D3BaseController', {
                 tickFormatter = me.getMultiScaleTimeFormatter;
             } else if (axisConfig.format) {
                 tickFormatter = d3.format(axisConfig.format || ',.0f');
+            } else {
+                tickFormatter = function(tickString) {
+                    var isTime = (new moment(tickString, moment.ISO_8601, true))
+                        .isValid();
+
+                    tickString = isTime ? Koala.util.Date.getFormattedDate(
+                        new moment(tickString)) : tickString;
+                    return tickString;
+                };
             }
 
             var chartAxis = axis(scale)
@@ -927,12 +1154,17 @@ Ext.define('Koala.view.component.D3BaseController', {
     updateLegendContainerDimensions: function() {
         var me = this;
         var legendParent = me.legendSvg;
-        var elems = 'data' in me ? me.data : me.shapes;
+        var view = me.getView();
+        var xtype = view.getXType ? view.getXType() : view.xtype;
+
+
         var numLegends;
-        if (Ext.isArray(elems)) { // for barcharts
-            numLegends = elems.length;
-        } else if (Ext.isObject(elems)) { // for timeseries
-            numLegends = Object.keys(elems).length;
+        if (xtype === 'd3-barchart') { // for barcharts
+            var firstStationData = Ext.Object.getValues(me.data)[0];
+            numLegends = firstStationData.length;
+            numLegends += Object.keys(me.colorsByKey).length;
+        } else if (xtype === 'd3-chart') { // for timeseries
+            numLegends = Object.keys(me.data).length;
         } else {
             // Ouch, shouldn't happen.
             numLegends = 0;
@@ -1030,19 +1262,22 @@ Ext.define('Koala.view.component.D3BaseController', {
 
     /**
      * Toggles an SVG g element's visibility and the appropriate legend entry
-     * the g ususally grouops a bar and its label or a series.
+     * the g usually groups a bar and its label or a series.
      */
     toggleGroupVisibility: function(group, legendElement) {
         var staticMe = Koala.view.component.D3BaseController;
         var CSS = staticMe.CSS_CLASS;
-        var SHAPE_GROUP = CSS.SHAPE_GROUP;
-        var SUFFIX_HIDDEN = CSS.SUFFIX_HIDDEN;
-        var hideClsName = SHAPE_GROUP + SUFFIX_HIDDEN;
-        var hideClsNameLegend = SHAPE_GROUP + CSS.SUFFIX_LEGEND + SUFFIX_HIDDEN;
-        if (group) {
+        var hideClsName = CSS.HIDDEN_CLASS;
+        var disabledClsName = CSS.DISABLED_CLASS;
+
+        if (group && group.nodes().length > 0) {
             var isHidden = group.classed(hideClsName);
             group.classed(hideClsName, !isHidden);
-            legendElement.classed(hideClsNameLegend, !isHidden);
+        }
+
+        if (legendElement && legendElement.nodes().length > 0) {
+            var isDisabled = legendElement.classed(disabledClsName);
+            legendElement.classed(disabledClsName, !isDisabled);
         }
     },
 
@@ -1108,5 +1343,53 @@ Ext.define('Koala.view.component.D3BaseController', {
         var viewId = '#' + view.getId();
 
         return d3.select(viewId + ' svg');
+    },
+
+    /**
+     * Create a ogc-filter for a datetime range.
+     *
+     * @param {String} startDateString The start date as an ISO_8601 date string.
+     * @param {String} endDateString The end date as an ISO_8601 date string.
+     * @param {String} timeField The name of the timestamp field in the layer.
+     * @return {String} The ogc-filter as a string.
+     */
+    getDateTimeRangeFilter: function(startDateString, endDateString, timeField) {
+        var filter;
+
+        filter = '' +
+            '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
+              '<a:PropertyIsBetween>' +
+                '<a:PropertyName>' + timeField + '</a:PropertyName>' +
+                '<a:LowerBoundary>'+
+                  '<a:Literal>' + startDateString + '</a:Literal>' +
+                '</a:LowerBoundary>' +
+                '<a:UpperBoundary>' +
+                  '<a:Literal>' + endDateString + '</a:Literal>' +
+                '</a:UpperBoundary>' +
+              '</a:PropertyIsBetween>' +
+            '</a:Filter>';
+
+        return filter;
+    },
+
+    /**
+     * Create a ogc-filter for a point in time.
+     *
+     * @param {String} dateString An ISO_8601 date string.
+     * @param {String} timeField The name of the timestamp field in the layer.
+     * @return {String} The ogc-filter as a string.
+     */
+    getPointInTimeFilter: function(dateString, timeField) {
+        var filter;
+
+        filter = '' +
+            '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
+                '<a:PropertyIsEqualTo>' +
+                    '<a:PropertyName>' + timeField + '</a:PropertyName>' +
+                    '<a:Literal>' + dateString + '</a:Literal>' +
+                '</a:PropertyIsEqualTo>' +
+            '</a:Filter>';
+
+        return filter;
     }
 });

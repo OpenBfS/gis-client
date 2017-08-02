@@ -1142,3 +1142,36 @@ Lesbare Variante, statt technischem Attributwert.
 | Obligatorisch        | &#10799; |
 | Default-Wert         |  |
 | Beispiel             | eval:(function(){return function(val){return val < 0.03 ? 'NN' : val + '';}}()) |
+
+**detectionLimitAttribute**
+
+Das Attribut, dessen Wert die Nachweisgrenze enthält.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Attributname der Features |
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | nachweisgrenze |
+
+**uncertaintyAttribute**
+
+Das Attribut, dessen Wert die Ungenauigkeit enthält.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Attributname der Features |
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | uncertainty |
+
+**groupAttribute**
+
+Das Attribut, dessen Werte in der Ansicht in Gruppen aufgeteilt werden sollen.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Attributname der Features |
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | end_measure |
