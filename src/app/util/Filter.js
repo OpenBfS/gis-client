@@ -139,10 +139,10 @@ Ext.define('Koala.util.Filter', {
          *     values, must conform to any of the above mentioned formats.
          * @return {Ext.data.Store} The created store.
          */
-        getStoreFromAllowedValues: function(rawAllowedValues) {
+        getStoreFromAllowedValues: function(rawAllowedValues, defaultValue) {
             var staticMe = this;
-            if (rawAllowedValues && staticMe.createdStores[rawAllowedValues]) {
-                return staticMe.createdStores[rawAllowedValues];
+            if (rawAllowedValues && staticMe.createdStores[rawAllowedValues + defaultValue]) {
+                return staticMe.createdStores[rawAllowedValues + defaultValue];
             }
             var data = null;
             var VAL_FIELD = staticMe.COMBO_VAL_FIELD;
@@ -176,7 +176,7 @@ Ext.define('Koala.util.Filter', {
                 fields: [VAL_FIELD, DSP_FIELD],
                 data: data
             });
-            staticMe.createdStores[rawAllowedValues] = store;
+            staticMe.createdStores[rawAllowedValues + defaultValue] = store;
             return store;
         },
 
@@ -202,7 +202,7 @@ Ext.define('Koala.util.Filter', {
             var staticMe = this;
             var allowedValues = filter.allowedValues;
             var allowMultipleSelect = filter.allowMultipleSelect;
-            var store = staticMe.getStoreFromAllowedValues(allowedValues);
+            var store = staticMe.getStoreFromAllowedValues(allowedValues, filter.defaultValue);
             var multi = Koala.util.String.coerce(allowMultipleSelect);
             var combo;
             var xtype;
