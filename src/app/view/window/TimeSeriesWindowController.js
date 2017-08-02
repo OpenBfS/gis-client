@@ -24,7 +24,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         'Koala.util.ChartAutoUpdater',
         'Koala.util.String',
         'Koala.model.Station',
-        'Koala.view.component.D3Chart'
+        'Koala.view.component.D3Chart',
+        'Koala.view.window.Print'
     ],
 
     /**
