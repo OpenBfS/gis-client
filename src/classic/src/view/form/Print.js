@@ -32,6 +32,7 @@ Ext.define('Koala.view.form.Print', {
 
         'Koala.view.form.IrixFieldSet',
         'Koala.util.Object',
+        'Koala.util.AppContext',
 
         'Koala.view.form.PrintModel'
     ],
@@ -41,7 +42,9 @@ Ext.define('Koala.view.form.Print', {
 
     config: {
         // can be overriden via appContext.json: urls/irix-servlet
-        irixUrl: '/irix-servlet',
+        irixUrl: null,
+        // can be overriden via appContext.json: urls/irix-servlet
+        irixContext: null,
         // can be overriden via appContext.json: print-timeout
         timeoutMilliseconds: 60000,
         // can be overriden via appContext.json: urls/print-transparent-img
@@ -67,6 +70,9 @@ Ext.define('Koala.view.form.Print', {
             var configuredIrixServlet = Koala.util.Object.getPathStrOr(
                 appContext, 'data/merge/urls/irix-servlet', false
             );
+            var configuredIrixContext = Koala.util.Object.getPathStrOr(
+                appContext, 'data/merge/urls/irix-context', false
+            );
             var configuredPrintTimeout = Koala.util.Object.getPathStrOr(
                 appContext, 'data/merge/print-timeout', false
             );
@@ -74,8 +80,9 @@ Ext.define('Koala.view.form.Print', {
                 appContext, 'data/merge/urls/print-transparent-img', false
             );
 
-            if (configuredIrixServlet) {
+            if (configuredIrixServlet && configuredIrixContext) {
                 me.setIrixUrl(configuredIrixServlet);
+                me.setIrixContext(configuredIrixContext);
             }
             if (configuredPrintTimeout) {
                 me.setTimeoutMilliseconds(configuredPrintTimeout);
@@ -87,7 +94,10 @@ Ext.define('Koala.view.form.Print', {
 
         var appCombo = me.down('combo[name=appCombo]');
         appCombo.setFieldLabel('Printapp');
-        appCombo.on('select', me.addIrixFieldset, me);
+
+        if (configuredIrixServlet && configuredIrixContext) {
+            appCombo.on('select', me.addIrixFieldset, me);
+        }
 
         me.on('beforeattributefieldsadd', me.onBeforeAttributeFieldsAdd);
         me.on('attributefieldsadd', me.onAttributeFieldsAdd);
@@ -95,7 +105,11 @@ Ext.define('Koala.view.form.Print', {
 
     listeners: {
         genericfieldsetadded: function() {
-            this.addIrixCheckbox();
+            me = this;
+            // only show irix checkbox if irix-urls are configured
+            if (me.getIrixUrl() && me.getIrixContext()) {
+                this.addIrixCheckbox();
+            }
             this.addBboxFieldset();
         }
     },
@@ -728,7 +742,7 @@ Ext.define('Koala.view.form.Print', {
             spec.outputFilename = layout;
 
             var irixCheckBox = view.down('[name="irix-fieldset-checkbox"]');
-            if (irixCheckBox.getValue()) {
+            if (irixCheckBox && irixCheckBox.getValue()) {
                 var irixJson = {};
                 var mapfishPrint = [];
 
