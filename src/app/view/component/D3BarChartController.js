@@ -384,7 +384,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var viewId = '#' + view.getId();
         var chartSize = me.getChartSize();
         var labelFunc = view.getLabelFunc() || me.getFallBackIdentity();
-
         var shapeConfig = view.getShape();
         var xField = 'key';
         var yField = 'value';
@@ -451,6 +450,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .filter(function(d) {
                 return me.shapeFilter(d, orientY, yField);
             })
+            .filter(function(d) {
+                return me.drawBar(d);
+            })
             .style('fill', function(d) {
                 return d.color;
             })
@@ -463,7 +465,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             })
             .attr('width', x1.bandwidth())
             .attr('height', function(d) {
-                return chartSize[1] - me.scales[orientY](d[yField]);
+                    return chartSize[1] - me.scales[orientY](d[yField]);
             })
             .style('fill', function(d) {
                 return d.color;
@@ -492,7 +494,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .append('path')
             .attr('class', staticMe.CSS_CLASS.UNCERTAINTY)
             .filter(function() {
-                return me.showUncertainty;
+                if(me.drawBar){
+                   return me.showUncertainty;
+                }else{
+                   return false;
+                }
             })
             .attr('d', function(d) {
                 if (d.uncertainty && d.uncertainty > 0) {
@@ -529,7 +535,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             })
             .attr('transform', function(d) {
                 return me.getBarLabelTransform(d, orientXGroup, orientY, xField,
-                    yField, x1.bandwidth());
+                    yField, x1.bandwidth(), me.drawBar(d));
             })
             .attr('text-anchor', 'middle')
             // TODO make configurable. Generic from css config
@@ -546,7 +552,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 })
                 .attr('transform', function(d) {
                     var labelTransform = me.getBarLabelTransform(d, orientXGroup,
-                        orientY, xField, yField, x1.bandwidth());
+                        orientY, xField, yField, x1.bandwidth(), me.drawBar(d));
                     return labelTransform + ' rotate(-90)';
                 })
                 .attr('dy', function(d, idx, el) {
@@ -566,6 +572,27 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
+    * checks if drawBarCondition is fulfilled
+    * (this usually means if detectionLimits shall be visualized
+    * returns TRUE / FALSE
+    */
+    drawBar: function(d) {
+       var me = this;
+       var view = me.getView();
+       var drawBarCondition = view.getDrawBarCondition() || function(){return true};
+       //ToDo implement ToggleButton to show/hide
+       //detectionLimits
+       //check users rights before
+       var userRigths = false;
+       var showDetectionLimitsBtnState = true;
+       if(userRigths && showDetectionLimitsBtnState) {
+          return true;
+       }else{
+          return drawBarCondition(d);
+       }
+    },
+
+    /**
      * Returns the translate string for a single bar label.
      *
      * @param  {Object} d        The current data object to create the label
@@ -579,11 +606,15 @@ Ext.define('Koala.view.component.D3BarChartController', {
      * @param  {Number} barWidth The bar width.
      * @return {String}          The translate sting.
      */
-    getBarLabelTransform: function(d, orientX, orientY, xField, yField, barWidth) {
+    getBarLabelTransform: function(d, orientX, orientY, xField, yField, barWidth, drawBar) {
         var me = this;
         var chartSize = me.getChartSize();
         var translateX = me.scales[orientX](d[xField]) + (barWidth / 2);
-        var translateY = me.scales[orientY](d[yField]) - 5 || chartSize[1];
+        if (drawBar){
+            var translateY = me.scales[orientY](d[yField]) - 5 || chartSize[1];
+        }else{
+             var translateY = chartSize[1] -5;
+        }
 
         return 'translate(' + translateX + ', ' + translateY + ')';
     },
