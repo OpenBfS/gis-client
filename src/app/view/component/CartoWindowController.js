@@ -27,7 +27,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'BasiGX.util.Layer',
         'Koala.util.AppContext',
         'Koala.util.Chart',
-        'Koala.util.Object'
+        'Koala.util.Object',
+        'Koala.view.window.Print'
     ],
 
     /**
@@ -168,6 +169,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         this.createTimeSeriesButtons(tabElm);
         this.createCombineTimeseriesButton(tabElm);
+        this.createIrixPrintButton(tabElm);
 
         var autorefreshStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'title'],
@@ -286,6 +288,39 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
         combine = Ext.create(combine);
         combine.el.dom.addEventListener('click', this.combineTimeseries.bind(this));
+    },
+
+    /**
+     * Create button to start an irix print.
+     * @param {Element} elm element to render the button to
+     */
+    createIrixPrintButton: function(elm) {
+        var irix = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'irix-print',
+            glyph: 'xf02f@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('irixPrint')
+            },
+            renderTo: elm
+        };
+        irix = Ext.create(irix);
+        irix.el.dom.addEventListener('click', this.showIrixPrintDialog.bind(this));
+    },
+
+    showIrixPrintDialog: function() {
+        var chart = this.timeserieschart;
+        var chartCtrl = chart.getController();
+        var cb = function(dataUri) {
+            Ext.create({
+                xtype: 'k-window-print',
+                chartPrint: true,
+                chart: dataUri
+            }).show();
+        };
+        var cbScope = this;
+        chartCtrl.chartToDataUriAndThen(cb, cbScope);
     },
 
     /**

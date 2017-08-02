@@ -61,6 +61,11 @@ Ext.define('Koala.view.window.Print', {
         }
     }],
 
+    config: {
+        chartPrint: true,
+        chart: undefined
+    },
+
     constructor: function() {
         this.callParent(arguments);
 
@@ -69,7 +74,9 @@ Ext.define('Koala.view.window.Print', {
         this.add({
             xtype: 'k-form-print',
             maxHeight: Ext.getBody().getHeight() - 100,
-            url: urls['print-servlet']
+            url: urls['print-servlet'],
+            chartPrint: this.config.chartPrint,
+            chart: this.config.chart
         });
     }
 });

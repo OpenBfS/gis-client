@@ -25,6 +25,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
         autorefreshExpand: '',
         autorefreshMove: '',
         autorefreshOptions: '',
+        chartPrint: '',
         title: '',
         dateFieldStartLabel: '',
         dateFieldEndLabel: '',

@@ -444,6 +444,7 @@
                 "autorefreshExpand": "Extend time window",
                 "autorefreshMove": "Move time window",
                 "autorefreshOptions": "Autorefresh options",
+                "chartPrint": "Print",
                 "title": "Time Series",
                 "dateFieldStartLabel": "Start",
                 "dateFieldEndLabel": "End",

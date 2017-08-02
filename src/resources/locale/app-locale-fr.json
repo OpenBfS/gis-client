@@ -418,6 +418,7 @@
                 "autorefreshExpand": "fr:Extend time window",
                 "autorefreshMove": "fr:Move time window",
                 "autorefreshOptions": "fr:Autorefresh options",
+                "chartPrint": "fr:Drucken",
                 "title": "fr:Zeitreihe",
                 "dateFieldStartLabel": "fr:Start",
                 "dateFieldEndLabel": "fr:Ende",

@@ -287,6 +287,14 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             height: '100%',
             width: 180,
             items: [{
+                xtype: 'button',
+                bind: {
+                    text: '{chartPrint}'
+                },
+                handler: me.onPrintChartClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }, {
                 xtype: 'checkbox',
                 name: 'autorefresh-checkbox',
                 checked: false,
@@ -356,6 +364,20 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var chartCtrl = chart.getController();
         var cb = function(dataUri) {
             download(dataUri, 'chart.png', 'image/png');
+        };
+        var cbScope = this;
+        chartCtrl.chartToDataUriAndThen(cb, cbScope);
+    },
+
+    onPrintChartClicked: function(btn) {
+        var chart = btn.up('[name="chart-composition"]').down('d3-chart');
+        var chartCtrl = chart.getController();
+        var cb = function(dataUri) {
+            Ext.create({
+                xtype: 'k-window-print',
+                chartPrint: true,
+                chart: dataUri
+            }).show();
         };
         var cbScope = this;
         chartCtrl.chartToDataUriAndThen(cb, cbScope);

@@ -445,6 +445,7 @@
                 "autorefreshExpand": "Zeitausschnitt erweitern",
                 "autorefreshMove": "Zeitausschnitt verschieben",
                 "autorefreshOptions": "Autorefresh Optionen",
+                "chartPrint": "Drucken",
                 "title": "Zeitreihe",
                 "dateFieldStartLabel": "Start",
                 "dateFieldEndLabel": "Ende",
