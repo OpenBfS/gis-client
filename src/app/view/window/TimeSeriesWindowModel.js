@@ -21,6 +21,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
     alias: 'viewmodel.k-window-timeserieswindow',
 
     data: {
+        autorefresh: '',
+        autorefreshExpand: '',
+        autorefreshMove: '',
+        autorefreshOptions: '',
         title: '',
         dateFieldStartLabel: '',
         dateFieldEndLabel: '',

@@ -287,6 +287,7 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
                     me.setD3Locale(me.locale);
                     me.setMomentJsLocale(me.locale);
                     Koala.util.Layer.repaintLayerFilterIndication();
+                    me.getView().fireEvent('applanguagechanged', me.locale);
                 }
             }
         }

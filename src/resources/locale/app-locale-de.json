@@ -435,6 +435,10 @@
     "Koala.view.window.TimeSeriesWindow": {
         "config": {
             "data": {
+                "autorefresh": "Autorefresh",
+                "autorefreshExpand": "Zeitausschnitt erweitern",
+                "autorefreshMove": "Zeitausschnitt verschieben",
+                "autorefreshOptions": "Autorefresh Optionen",
                 "title": "Zeitreihe",
                 "dateFieldStartLabel": "Start",
                 "dateFieldEndLabel": "Ende",
