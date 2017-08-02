@@ -59,19 +59,5 @@ describe('Koala.view.component.D3BarChartController', function() {
         it('should not fail to redraw a chart', function() {
             expect(ctrl.redrawChart.bind(ctrl)).to.not.throwException();
         });
-
-        it('should draw the chart on box ready', function() {
-            sinon.spy(ctrl, 'drawChart');
-            sinon.stub(ctrl, 'prepareData');
-            ctrl.onBoxReady();
-            expect(ctrl.drawChart.calledOnce).to.be(true);
-        });
-
-        it('should draw the chart on painted', function() {
-            sinon.spy(ctrl, 'drawChart');
-            sinon.stub(ctrl, 'prepareData');
-            ctrl.onPainted();
-            expect(ctrl.drawChart.calledOnce).to.be(true);
-        });
     });
 });

@@ -465,7 +465,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             })
             .attr('width', x1.bandwidth())
             .attr('height', function(d) {
-                    return chartSize[1] - me.scales[orientY](d[yField]);
+                return chartSize[1] - me.scales[orientY](d[yField]);
             })
             .style('fill', function(d) {
                 return d.color;
@@ -494,10 +494,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .append('path')
             .attr('class', staticMe.CSS_CLASS.UNCERTAINTY)
             .filter(function() {
-                if(me.drawBar){
-                   return me.showUncertainty;
-                }else{
-                   return false;
+                if (me.drawBar) {
+                    return me.showUncertainty;
+                } else {
+                    return false;
                 }
             })
             .attr('d', function(d) {
@@ -577,19 +577,21 @@ Ext.define('Koala.view.component.D3BarChartController', {
     * returns TRUE / FALSE
     */
     drawBar: function(d) {
-       var me = this;
-       var view = me.getView();
-       var drawBarCondition = view.getDrawBarCondition() || function(){return true};
-       //ToDo implement ToggleButton to show/hide
-       //detectionLimits
-       //check users rights before
-       var userRigths = false;
-       var showDetectionLimitsBtnState = true;
-       if(userRigths && showDetectionLimitsBtnState) {
-          return true;
-       }else{
-          return drawBarCondition(d);
-       }
+        var me = this;
+        var view = me.getView();
+        var drawBarCondition = view.getDrawBarCondition() || function() {
+            return true;
+        };
+        //ToDo implement ToggleButton to show/hide
+        //detectionLimits
+        //check users rights before
+        var userRigths = false;
+        var showDetectionLimitsBtnState = true;
+        if (userRigths && showDetectionLimitsBtnState) {
+            return true;
+        } else {
+            return drawBarCondition(d);
+        }
     },
 
     /**
@@ -610,10 +612,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var chartSize = me.getChartSize();
         var translateX = me.scales[orientX](d[xField]) + (barWidth / 2);
-        if (drawBar){
-            var translateY = me.scales[orientY](d[yField]) - 5 || chartSize[1];
-        }else{
-             var translateY = chartSize[1] -5;
+        var translateY;
+        if (drawBar) {
+            translateY = me.scales[orientY](d[yField]) - 5 || chartSize[1];
+        } else {
+            translateY = chartSize[1] -5;
         }
 
         return 'translate(' + translateX + ', ' + translateY + ')';

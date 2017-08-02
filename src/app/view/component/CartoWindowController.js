@@ -651,12 +651,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * e.g. to anchor cartoWindows
      */
     getFeatureAnchorPoint: function(feature) {
+        var coords;
         if (feature.getGeometry().getType() === 'MultiPolygon' || feature.getGeometry().getType() === 'Polygon') {
             feature = turf.polygon(feature.getGeometry().getCoordinates()[0]);
             coords = turf.centroid(feature).geometry.coordinates;
-        } else if(feature.getGeometry().getType() === 'Point'){
+        } else if (feature.getGeometry().getType() === 'Point') {
             coords = feature.getGeometry().getCoordinates();
-        } else if(feature.getGeometry().getType() === 'Line'){
+        } else if (feature.getGeometry().getType() === 'Line') {
             feature = turf.lineString(feature.getGeometry().getCoordinates()[0]);
             coords = turf.centroid(feature).geometry.coordinates;
         }

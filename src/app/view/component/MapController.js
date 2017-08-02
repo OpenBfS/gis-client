@@ -44,7 +44,7 @@ Ext.define('Koala.view.component.MapController', {
             return;
         }
 
-/*        var realFeats = [];
+        /*        var realFeats = [];
         var knownIds = [];
 
         Ext.each(olFeats, function(feat) {
@@ -54,26 +54,25 @@ Ext.define('Koala.view.component.MapController', {
             knownIds.push(feat.get('id'));
             realFeats.push(feat);
         });
-       
+
         Ext.each(realFeats, function(olFeat) {
 */
-        var me = this;
         me.distinctGeoms = [];
         Ext.each(olFeats, function(olFeat) {
             if (me.distinctGeoms.length === 0) {
-                me.distinctGeoms.push(olFeat)
-            }else{
-            Ext.each(me.distinctGeoms, function(feat){
-               var distinctFeat_wkt_format = new ol.format.WKT();
-               var olFeat_wkt_format = new ol.format.WKT();
-               var WKT_distinctFeat = distinctFeat_wkt_format.writeGeometry(feat.getGeometry());
-               var WKT_olFeat = olFeat_wkt_format.writeGeometry(olFeat.getGeometry());
-               if (WKT_distinctFeat !== WKT_olFeat) {
-                   me.distinctGeoms.push(olFeat);
-               }
-            });
+                me.distinctGeoms.push(olFeat);
+            } else {
+                Ext.each(me.distinctGeoms, function(feat) {
+                    var distinctFeat_wkt_format = new ol.format.WKT();
+                    var olFeat_wkt_format = new ol.format.WKT();
+                    var WKT_distinctFeat = distinctFeat_wkt_format.writeGeometry(feat.getGeometry());
+                    var WKT_olFeat = olFeat_wkt_format.writeGeometry(olFeat.getGeometry());
+                    if (WKT_distinctFeat !== WKT_olFeat) {
+                        me.distinctGeoms.push(olFeat);
+                    }
+                });
             }
-        },me);
+        }, me);
 
         Ext.each(me.distinctGeoms, function(olFeat) {
             var layer = olFeat.get('layer');
