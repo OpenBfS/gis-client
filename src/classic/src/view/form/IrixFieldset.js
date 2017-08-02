@@ -59,7 +59,6 @@ Ext.define('Koala.view.form.IrixFieldSet',{
 
         // leave early, because irixContextUrl does not seem to be configured
         if (!me.getIrixContextUrl) {
-            Ext.log('no irixContextUrl found');
             me.callParent(arguments);
         }
 
