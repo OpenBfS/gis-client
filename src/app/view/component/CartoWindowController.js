@@ -569,6 +569,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createHoverTemplateTab: function() {
         var me = this;
         var view = me.getView();
+        var viewModel = view.getViewModel();
         var el = view.el.dom;
         var layer = view.getLayer();
         var feature = view.getFeature();
@@ -577,7 +578,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var innerHTML = Koala.util.String.replaceTemplateStrings(template,
             feature);
         var timeSeriesTab = me.createTabElement({
-            title: 'Info',
+            title: viewModel.get('info'),
             innerHTML: innerHTML,
             className: 'hoverTpl-tab'
         });
@@ -694,7 +695,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             coords = feature.getGeometry().getCoordinates();
         } else if (feature.getGeometry().getType() === 'Line') {
             feature = turf.lineString(feature.getGeometry().getCoordinates()[0]);
-            coords = turf.centroid(feature).geometry.coordinates;
+            coords = turf.along(feature, 0, 'meters').geometry.coordinates;
         }
         return coords;
     },

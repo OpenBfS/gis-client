@@ -14,9 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * A utility class to handle authentication stuff.
+ * A utility class with chart manipulation functions.
  *
- * @class Koala.util.Authentication
+ * @class Koala.util.Chart
  */
 Ext.define('Koala.util.Chart', {
 

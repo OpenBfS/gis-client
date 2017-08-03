@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * A utility class to handle authentication stuff.
+ * A utility class with functions to handle timeseries chart autorefresh.
  *
  * @class Koala.util.ChartAutoUpdater
  */

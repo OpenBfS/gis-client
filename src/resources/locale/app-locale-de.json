@@ -75,6 +75,7 @@
                 "autorefreshExpand": "Zeitausschnitt erweitern",
                 "autorefreshMove": "Zeitausschnitt verschieben",
                 "autorefreshOptions": "Autorefresh Optionen",
+                "info": "Info",
                 "expandToLeft": "Ältere Daten anzeigen",
                 "expandToRight": "Neuere Daten anzeigen",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
