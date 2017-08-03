@@ -20,9 +20,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-timeserieswindow',
     requires: [
+        'Koala.util.Chart',
+        'Koala.util.ChartAutoUpdater',
         'Koala.util.String',
         'Koala.model.Station',
-        'Koala.view.component.D3Chart'
+        'Koala.view.component.D3Chart',
+        'Koala.view.window.Print'
     ],
 
     /**
@@ -231,6 +234,26 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         combo.reset();
     },
 
+    setTranslatedAutorefreshData: function() {
+        var view = this.getView();
+        var combo = view.down('[name=autorefresh-combo]');
+        var value = combo.getValue();
+        var store = combo.getStore();
+        var data = this.getTranslatedAutorefreshData();
+        store.removeAll();
+        store.add(data[0], data[1]);
+        combo.setValue(value);
+    },
+
+    getTranslatedAutorefreshData: function() {
+        var view = this.getView();
+        var vm = view.getViewModel();
+        return [
+            {value: 'autorefresh-expand', title: vm.get('autorefreshExpand')},
+            {value: 'autorefresh-move', title: vm.get('autorefreshMove')}
+        ];
+    },
+
     /**
      *
      */
@@ -242,9 +265,16 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         if (Koala.util.String.getBool(chartConfig.allowAddSeries)) {
             addSeriesCombo = me.createTimeSeriesCombo(olLayer);
         }
+        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+        langCombo.on('applanguagechanged', me.setTranslatedAutorefreshData.bind(me));
         var title = !Ext.isEmpty(chartConfig.titleTpl) ?
             Koala.util.String.replaceTemplateStrings(
                 chartConfig.titleTpl, olLayer) : olLayer.get('name');
+
+        var autorefreshStore = Ext.create('Ext.data.Store', {
+            fields: ['value', 'title'],
+            data: this.getTranslatedAutorefreshData()
+        });
 
         var rightColumnWrapper = {
             xtype: 'panel',
@@ -258,6 +288,30 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             height: '100%',
             width: 180,
             items: [{
+                xtype: 'button',
+                bind: {
+                    text: '{chartPrint}'
+                },
+                handler: me.onPrintChartClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }, {
+                xtype: 'checkbox',
+                name: 'autorefresh-checkbox',
+                checked: false,
+                bind: {
+                    boxLabel: '{autorefresh}'
+                }
+            }, {
+                xtype: 'combo',
+                name: 'autorefresh-combo',
+                displayField: 'title',
+                valueField: 'value',
+                store: autorefreshStore,
+                bind: {
+                    emptyText: '{autorefreshOptions}'
+                }
+            }, {
                 xtype: 'button',
                 bind: {
                     text: '{exportAsImageBtnText}'
@@ -298,7 +352,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 rightColumnWrapper
             ]
         };
-
         return panel;
     },
 
@@ -312,6 +365,20 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var chartCtrl = chart.getController();
         var cb = function(dataUri) {
             download(dataUri, 'chart.png', 'image/png');
+        };
+        var cbScope = this;
+        chartCtrl.chartToDataUriAndThen(cb, cbScope);
+    },
+
+    onPrintChartClicked: function(btn) {
+        var chart = btn.up('[name="chart-composition"]').down('d3-chart');
+        var chartCtrl = chart.getController();
+        var cb = function(dataUri) {
+            Ext.create({
+                xtype: 'k-window-print',
+                chartPrint: true,
+                chart: dataUri
+            }).show();
         };
         var cbScope = this;
         chartCtrl.chartToDataUriAndThen(cb, cbScope);
@@ -339,50 +406,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         }
 
         var me = this;
-        var StringUtil = Koala.util.String;
         var view = me.getView();
         var layerName = olLayer.get('name');
-        var chartConfig = olLayer.get('timeSeriesChartProperties');
         var chart = view.down('d3-chart[name="' + layerName + '"]');
-        var chartController = chart.getController();
-        var valFromSeq = StringUtil.getValueFromSequence;
-        var stationName = '';
-        var promise = new Ext.Promise(function(resolve) {
-            resolve(stationName);
-        });
-        if (!Ext.isEmpty(chartConfig.seriesTitleTpl)) {
-            promise = StringUtil.replaceTemplateStringsWithPromise(
-                chartConfig.seriesTitleTpl, olFeat
-            );
-        }
-        var currentSeqIndex = chart.getSelectedStations().length;
-        var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, '');
-        if (!color) {
-            color = Koala.view.component.D3BaseController.getRandomColor();
-        }
 
-        promise.then(function(name) {
-            me.addShapeToChart(chartController, chartConfig, name, olFeat, color);
-        })
-            .catch(function() {
-                me.addShapeToChart(chartController, chartConfig, '', olFeat, color);
-            });
-    },
-
-    addShapeToChart: function(chartController, chartConfig, stationName, olFeat, color) {
-        var coerce = Koala.util.String.coerce;
-        chartController.addShape({
-            type: chartConfig.shapeType || 'line',
-            curve: chartConfig.curveType || 'linear',
-            xField: chartConfig.xAxisAttribute,
-            yField: chartConfig.yAxisAttribute,
-            name: stationName,
-            id: olFeat.get(chartConfig.featureIdentifyField || 'id'),
-            color: color,
-            opacity: coerce(chartConfig.strokeOpacity) || 1,
-            width: coerce(chartConfig.strokeWidth) || 1,
-            tooltipTpl: chartConfig.tooltipTpl
-        }, olFeat, false);
+        Koala.util.Chart.addFeatureToTimeseriesChart(olLayer, olFeat, chart);
     },
 
     /**
@@ -521,6 +549,20 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             // window and update the store
             view.add(me.createTimeSeriesChartPanel(olLayer, olFeat));
         }
+        this.setTranslatedAutorefreshData();
+        var optionsCombo = view.down('[name=autorefresh-combo]');
+        var autorefreshBox = view.down('[name=autorefresh-checkbox]');
+        var chart = view.down('d3-chart');
+        var startField = view.down('[name=timeseriesStartField]');
+        var endField = view.down('[name=timeseriesEndField]');
+        Koala.util.ChartAutoUpdater.autorefreshTimeseries(
+            chart,
+            optionsCombo,
+            autorefreshBox,
+            olLayer,
+            startField,
+            endField
+        );
     },
 
     onFilterChanged: function() {}

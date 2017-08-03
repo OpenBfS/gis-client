@@ -71,6 +71,11 @@
     "Koala.view.component.CartoWindow": {
         "config": {
             "data": {
+                "autorefresh": "Autorefresh",
+                "autorefreshExpand": "Zeitausschnitt erweitern",
+                "autorefreshMove": "Zeitausschnitt verschieben",
+                "autorefreshOptions": "Autorefresh Optionen",
+                "info": "Info",
                 "expandToLeft": "Ältere Daten anzeigen",
                 "expandToRight": "Neuere Daten anzeigen",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
@@ -81,6 +86,7 @@
     "Koala.view.component.D3BarChart": {
         "config": {
             "data": {
+                "belowDetectionLimitLabel": "< NWG",
                 "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
             }
         }
@@ -398,6 +404,7 @@
             "data": {
                 "title": "Barchart",
                 "undoBtnText": "…zurückzoomen",
+                "uncertaintyCheckboxLabel": "Messungenauigkeit",
                 "exportAsImageBtnText": "Als Bild exportieren"
             }
         }
@@ -435,6 +442,11 @@
     "Koala.view.window.TimeSeriesWindow": {
         "config": {
             "data": {
+                "autorefresh": "Autorefresh",
+                "autorefreshExpand": "Zeitausschnitt erweitern",
+                "autorefreshMove": "Zeitausschnitt verschieben",
+                "autorefreshOptions": "Autorefresh Optionen",
+                "chartPrint": "Drucken",
                 "title": "Zeitreihe",
                 "dateFieldStartLabel": "Start",
                 "dateFieldEndLabel": "Ende",

@@ -211,11 +211,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         // },
 
         changeFilterHandler: function(btn) {
-            var record = btn.layerRec;
             var layer = btn.layerRec.getOlLayer();
-            Koala.util.Layer.showChangeFilterSettingsWin(
-                record.get('metadata'), layer
-            );
+            Koala.util.Layer.getMetadataFromUuid(layer.metadata.id)
+                .then(function(metadata) {
+                    Koala.util.Layer.showChangeFilterSettingsWin(
+                        metadata, layer
+                    );
+                });
         },
 
         shortInfoHandler: function(btn) {

@@ -30,7 +30,7 @@ Ext.define('Koala.view.form.Print', {
         'GeoExt.data.serializer.Vector',
         'GeoExt.data.serializer.XYZ',
 
-        'Koala.view.form.IrixFieldSet',
+        'Koala.view.form.IrixFieldset',
         'Koala.util.Object',
 
         'Koala.view.form.PrintModel'
@@ -46,7 +46,9 @@ Ext.define('Koala.view.form.Print', {
         timeoutMilliseconds: 60000,
         // can be overriden via appContext.json: urls/print-transparent-img
         transparentImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif',
-        transparentColor: 'rgba(0,0,0,0)'
+        transparentColor: 'rgba(0,0,0,0)',
+        chartPrint: false,
+        chart: undefined
     },
 
     layout: 'hbox',
@@ -97,6 +99,9 @@ Ext.define('Koala.view.form.Print', {
         genericfieldsetadded: function() {
             this.addIrixCheckbox();
             this.addBboxFieldset();
+            if (this.config.chartPrint) {
+                this.down('k-form-irixfieldset').show();
+            }
         }
     },
 
@@ -549,6 +554,9 @@ Ext.define('Koala.view.form.Print', {
         overlays.forEach(function(overlay) {
             var coords = overlay.centerCoords;
             var containerEl = overlay.getElement();
+            if (!containerEl) {
+                return;
+            }
             var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
@@ -1021,6 +1029,7 @@ Ext.define('Koala.view.form.Print', {
         var irixCheckbox = Ext.create('Ext.form.field.Checkbox', {
             name: 'irix-fieldset-checkbox',
             boxLabel: 'IRIX',
+            checked: this.config.chartPrint,
             handler: function(checkbox, checked) {
                 var irixFieldset = me.down('k-form-irixfieldset');
                 if (checked) {
@@ -1058,7 +1067,9 @@ Ext.define('Koala.view.form.Print', {
         irixJson = me.adjustIrixSerialisation(irixJson);
         // always add the printapp to the top-lvel for irix:
         irixJson.printapp = me.down('[name="appCombo"]').getValue();
-        irixJson['mapfish-print'] = mapfishPrint;
+        if (!this.config.chartPrint) {
+            irixJson['mapfish-print'] = mapfishPrint;
+        }
         return irixJson;
     },
 
@@ -1091,6 +1102,17 @@ Ext.define('Koala.view.form.Print', {
                     irixJson[correctRequestTypeKey] = reqType;
                 }
             });
+        }
+        if (this.config.chartPrint) {
+            irixJson['mapfish-print'] = undefined;
+            delete irixJson['mapfish-print'];
+            irixJson['img-print'] = [{
+                mimetype: 'image/png',
+                inputFormat: 'png',
+                metadata: [],
+                outputFormat: 'png',
+                value: this.config.chart
+            }];
         }
         return irixJson;
     },

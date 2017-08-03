@@ -22,6 +22,7 @@ Ext.define('Koala.view.component.MapController', {
 
     requires: [
         'BasiGX.util.Controller',
+        'BasiGX.util.Geometry',
 
         'Koala.util.Layer',
         'Koala.view.window.TimeSeriesWindow',
@@ -43,7 +44,37 @@ Ext.define('Koala.view.component.MapController', {
             return;
         }
 
+        /*        var realFeats = [];
+        var knownIds = [];
+
+        Ext.each(olFeats, function(feat) {
+            if (Ext.Array.contains(knownIds, feat.get('id'))) {
+                return;
+            }
+            knownIds.push(feat.get('id'));
+            realFeats.push(feat);
+        });
+
+        Ext.each(realFeats, function(olFeat) {
+*/
+        me.distinctGeoms = [];
         Ext.each(olFeats, function(olFeat) {
+            if (me.distinctGeoms.length === 0) {
+                me.distinctGeoms.push(olFeat);
+            } else {
+                Ext.each(me.distinctGeoms, function(feat) {
+                    var distinctFeat_wkt_format = new ol.format.WKT();
+                    var olFeat_wkt_format = new ol.format.WKT();
+                    var WKT_distinctFeat = distinctFeat_wkt_format.writeGeometry(feat.getGeometry());
+                    var WKT_olFeat = olFeat_wkt_format.writeGeometry(olFeat.getGeometry());
+                    if (WKT_distinctFeat !== WKT_olFeat) {
+                        me.distinctGeoms.push(olFeat);
+                    }
+                });
+            }
+        }, me);
+
+        Ext.each(me.distinctGeoms, function(olFeat) {
             var layer = olFeat.get('layer');
             var idField = Koala.util.Object.getPathStrOr(layer,
                 'metadata/layerConfig/olProperties/featureIdentifyField', 'id');
@@ -114,6 +145,7 @@ Ext.define('Koala.view.component.MapController', {
             winToOffset.setPosition(x, y);
         }
     },
+
     /**
      * This is finally a complete OVERRIDE of the getToolTipHtml function from
      * the base class BasiGX.view.component.Map!
@@ -126,7 +158,17 @@ Ext.define('Koala.view.component.MapController', {
         var replaceTemplateStrings = Koala.util.String.replaceTemplateStrings;
         Ext.each(layers, function(layer, layerIdx) {
             var hoverTpl = layer.get('hoverTpl');
-            Ext.each(features, function(feature, featureIdx) {
+            Ext.each(features, function(feature, featureIdx, feats) {
+                // Avoid duplicated display of hovertemplate if a feature
+                // with the same geometry is included multiple times in features.
+                if (featureIdx > 0) {
+                    var lastFeature = feats[featureIdx-1];
+                    if (BasiGX.util.Geometry.equals(feature.getGeometry(),
+                        lastFeature.getGeometry())) {
+                        return;
+                    }
+                }
+
                 // we check for existing feature first as there maybe strange
                 // situations (e.g. when zooming while hovering)
                 // where feat is undefined and feat.get would throw an error
@@ -178,10 +220,10 @@ Ext.define('Koala.view.component.MapController', {
     *
     */
     openBarChartWindow: function(olFeat) {
+        var me = this;
         var olLayer = olFeat.get('layer');
-        var uniqueId = this.getUniqueIdByFeature(olFeat);
-        var win = Ext.create('Koala.view.window.BarChart');
-        win.getController().createOrUpdateChart(olLayer, olFeat, uniqueId);
+        var win = me.createBarChartWindow(olLayer);
+        win.getController().createOrUpdateChart(olLayer, olFeat);
         return win;
     },
 
@@ -214,6 +256,21 @@ Ext.define('Koala.view.component.MapController', {
             Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
 
         var win = Ext.create('Koala.view.window.TimeSeriesWindow', {
+            addFilterForm: addFilterForm,
+            initOlLayer: olLayer
+        });
+        return win;
+    },
+
+    /**
+     *
+     */
+    createBarChartWindow: function(olLayer) {
+        var chartConfig = olLayer.get('barChartProperties');
+        var addFilterForm = !Ext.isEmpty(chartConfig.allowFilterForm) ?
+            Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
+
+        var win = Ext.create('Koala.view.window.BarChart', {
             addFilterForm: addFilterForm,
             initOlLayer: olLayer
         });

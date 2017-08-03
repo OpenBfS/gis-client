@@ -22,4 +22,10 @@
 
 .basigx-legend-panel .x-tree-node-text {
     white-space: normal;
+    word-break: break-all;
+    display: inline-block;
+}
+
+.basigx-legend-panel .x-grid-cell-inner-treecolumn {
+    text-overflow: clip;
 }

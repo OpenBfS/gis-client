@@ -93,57 +93,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * Note: This is private method, don't call it yourself and if you have to,
-     * remember to call it only once!
-     *
-     * @private
-     */
-    onBoxReady: function() {
-        var me = this;
-        var view = me.getView();
-
-        // We have to cleanup manually.  WHY?!
-        me.scales = {};
-        me.shapes = [];
-        me.axes = {};
-        me.gridAxes = {};
-        me.data = {};
-
-        me.on('chartdataprepared', function() {
-            var svgContainer = me.getSvgContainer();
-            if (!me.chartDataAvailable) {
-                // We explicitly hide the svg root container, as the modern
-                // toolkit's panel didn't do it automatically if we update the
-                // element via setHtml(). And as it doesn't conflict with the
-                // classic toolkit's behaviour, no additional check for the
-                // current toolkit is needed.
-                svgContainer.attr('display', 'none');
-                view.setHtml('<div class="noDataError">' +
-                    me.getViewModel().get('noDataAvailableText') +
-                    '</div>'
-                );
-                me.chartRendered = false;
-            } else {
-                // Show the svg root container, see comment above as well.
-                svgContainer.attr('display', 'unset');
-
-                var errorDiv = view.el.query('.noDataError');
-                if (errorDiv[0]) {
-                    errorDiv[0].remove();
-                }
-
-                if (me.chartRendered) {
-                    me.redrawChart();
-                } else {
-                    me.drawChart();
-                }
-            }
-        });
-
-        me.getChartData();
-    },
-
-    /**
      *
      */
     drawChart: function() {
@@ -1468,20 +1417,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                 view.setLoading(false);
             }
             me.fireEvent('chartdataprepared');
-        }
-    },
-
-    /**
-     * The default handler for chart data request failures.
-     *
-     * @param {Object} response The reponse object.
-     * @param {ol.Feature} station The station the corresponding request was
-     *                             send for. Optional.
-     */
-    onChartDataRequestFailure: function(response /*station*/) {
-        // aborted requests aren't failures
-        if (!response.aborted) {
-            Ext.log.error('Failure on chartdata load');
         }
     },
 

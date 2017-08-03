@@ -145,32 +145,41 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
      */
     onInit: function() {
         var me = this;
-        var view = me.getView();
 
         if (!me.redliningVectorLayer) {
-            var appContext = Koala.util.AppContext.getAppContext();
-            var redLineLayerName = appContext.data.merge.redLineLayerName;
-
             me.redlineFeatures = new ol.Collection();
             me.redlineFeatures.on(
                 'add',
                 me.fireRedliningChanged,
                 me
             );
-            me.redliningVectorLayer = new ol.layer.Vector({
-                name: redLineLayerName || 'redLineLayer',
-                source: new ol.source.Vector({
-                    features: me.redlineFeatures
-                }),
-                style: me.redlineLayerStyle,
-                // TODO remove this in the future to allow printing this layer
-                allowPrint: false,
-                // TODO We do a check manually check on the RoutingLegendTree to
-                // disbale styling for this layer.
-                disableStyling: true
-            });
-            view.map.addLayer(me.redliningVectorLayer);
+            me.createAndAddRedliningLayerIfRemoved();
         }
+    },
+
+    createAndAddRedliningLayerIfRemoved: function() {
+        var me = this;
+        var map = me.getView().map;
+        if (map.getLayers().getArray().indexOf(me.redliningVectorLayer) !== -1) {
+            return;
+        }
+        me.redlineFeatures.clear();
+        var appContext = Koala.util.AppContext.getAppContext();
+        var redLineLayerName = appContext.data.merge.redLineLayerName;
+        me.redliningVectorLayer = new ol.layer.Vector({
+            name: redLineLayerName || 'redLineLayer',
+            source: new ol.source.Vector({
+                features: me.redlineFeatures
+            }),
+            style: me.redlineLayerStyle,
+            // TODO remove this in the future to allow printing this layer
+            allowPrint: false,
+            // TODO We do a check manually check on the RoutingLegendTree to
+            // disbale styling for this layer.
+            disableStyling: true,
+            allowRemoval: true
+        });
+        map.addLayer(me.redliningVectorLayer);
     },
 
     /**
@@ -286,6 +295,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
      */
     onDrawEnd: function(evt) {
         var me = this;
+        me.createAndAddRedliningLayerIfRemoved();
         var view = me.getView();
         var viewModel = me.getViewModel();
         var geom = evt.feature.getGeometry();
@@ -452,11 +462,17 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                         if (sf.get('isLabel') && sf.get('parentFeature') === af ) {
                             me.redlineFeatures.remove(af);
                             me.deleteSelectInteraction.getFeatures().remove(af);
+                            if (me.redlineFeatures.getLength() === 0) {
+                                view.map.removeLayer(me.redliningVectorLayer);
+                            }
                         }
 
                         if (af.get('isLabel') && af.get('parentFeature') === sf ) {
                             me.redlineFeatures.remove(af);
                             me.deleteSelectInteraction.getFeatures().remove(af);
+                            if (me.redlineFeatures.getLength() === 0) {
+                                view.map.removeLayer(me.redliningVectorLayer);
+                            }
                         }
                     });
 
@@ -501,6 +517,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var view = me.getView();
         view.helpTooltipElement.classList.add('x-hidden');
         me.redliningVectorLayer.getSource().clear();
+        view.map.removeLayer(me.redliningVectorLayer);
     },
 
     /**

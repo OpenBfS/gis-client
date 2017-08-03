@@ -26,7 +26,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Ext.Ajax',
         'BasiGX.util.Layer',
         'Koala.util.AppContext',
-        'Koala.util.Object'
+        'Koala.util.Chart',
+        'Koala.util.Object',
+        'Koala.view.window.Print'
     ],
 
     /**
@@ -166,12 +168,76 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
 
         this.createTimeSeriesButtons(tabElm);
+        this.createCombineTimeseriesButton(tabElm);
+        this.createIrixPrintButton(tabElm);
+
+        var autorefreshStore = Ext.create('Ext.data.Store', {
+            fields: ['value', 'title'],
+            data: this.getTranslatedAutorefreshData(),
+            queryMode: 'local'
+        });
+
+        var autorefreshBox = Ext.create({
+            xtype: 'checkbox',
+            name: 'autorefresh-checkbox',
+            checked: false,
+            renderTo: tabElm,
+            style: 'display: inline;',
+            padding: 3,
+            bind: {
+                boxLabel: view.getViewModel().get('autorefresh')
+            }
+        });
+        this.autorefreshCombo = Ext.create({
+            xtype: 'combo',
+            name: 'autorefresh-combo',
+            displayField: 'title',
+            padding: 3,
+            valueField: 'value',
+            style: 'display: inline;',
+            store: autorefreshStore,
+            renderTo: tabElm,
+            bind: {
+                emptyText: view.getViewModel().get('autorefreshOptions')
+            }
+        });
+
+        this.autorefreshCombo.el.dom.addEventListener('click', this.autorefreshCombo.expand.bind(this.autorefreshCombo));
+
+        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+        langCombo.on('applanguagechanged', me.setTranslatedAutorefreshData.bind(me));
 
         el.appendChild(timeSeriesTab);
         this.timeserieschart = Ext.create(chartObj);
 
         this.createLegendVisibilityButton(tabElm, this.timeserieschart);
         this.createExportToPngButton(tabElm, this.timeserieschart);
+
+        Koala.util.ChartAutoUpdater.autorefreshTimeseries(
+            this.timeserieschart,
+            this.autorefreshCombo,
+            autorefreshBox,
+            view.getLayer()
+        );
+    },
+
+    setTranslatedAutorefreshData: function() {
+        var combo = this.autorefreshCombo;
+        var value = combo.getValue();
+        var store = combo.getStore();
+        var data = this.getTranslatedAutorefreshData();
+        store.removeAll();
+        store.add(data[0], data[1]);
+        combo.setValue(value);
+    },
+
+    getTranslatedAutorefreshData: function() {
+        var view = this.getView();
+        var vm = view.getViewModel();
+        return [
+            {value: 'autorefresh-expand', title: vm.get('autorefreshExpand')},
+            {value: 'autorefresh-move', title: vm.get('autorefreshMove')}
+        ];
     },
 
     /**
@@ -203,6 +269,58 @@ Ext.define('Koala.view.component.CartoWindowController', {
         left.el.dom.addEventListener('click', this.scrollTimeseriesLeft.bind(this));
         right = Ext.create(right);
         right.el.dom.addEventListener('click', this.scrollTimeseriesRight.bind(this));
+    },
+
+    /**
+     * Create button to combine all timeseries carto windows.
+     * @param {Element} elm element to render the button to
+     */
+    createCombineTimeseriesButton: function(elm) {
+        var combine = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'seriesCombine',
+            glyph: 'xf066@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('combineSeries')
+            },
+            renderTo: elm
+        };
+        combine = Ext.create(combine);
+        combine.el.dom.addEventListener('click', this.combineTimeseries.bind(this));
+    },
+
+    /**
+     * Create button to start an irix print.
+     * @param {Element} elm element to render the button to
+     */
+    createIrixPrintButton: function(elm) {
+        var irix = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'irix-print',
+            glyph: 'xf02f@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('irixPrint')
+            },
+            renderTo: elm
+        };
+        irix = Ext.create(irix);
+        irix.el.dom.addEventListener('click', this.showIrixPrintDialog.bind(this));
+    },
+
+    showIrixPrintDialog: function() {
+        var chart = this.timeserieschart;
+        var chartCtrl = chart.getController();
+        var cb = function(dataUri) {
+            Ext.create({
+                xtype: 'k-window-print',
+                chartPrint: true,
+                chart: dataUri
+            }).show();
+        };
+        var cbScope = this;
+        chartCtrl.chartToDataUriAndThen(cb, cbScope);
     },
 
     /**
@@ -293,10 +411,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
 
         el.appendChild(barChartTab);
-        var barChart = Ext.create(chartObj);
-
-        this.createLegendVisibilityButton(tabElm, barChart);
-        this.createExportToPngButton(tabElm, barChart);
+        this.barChart = Ext.create(chartObj);
+        this.createLegendVisibilityButton(tabElm, this.barChart);
+        this.createExportToPngButton(tabElm, this.barChart);
     },
 
     getTabData: function(urlProperty, contentProperty) {
@@ -452,6 +569,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createHoverTemplateTab: function() {
         var me = this;
         var view = me.getView();
+        var viewModel = view.getViewModel();
         var el = view.el.dom;
         var layer = view.getLayer();
         var feature = view.getFeature();
@@ -460,7 +578,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var innerHTML = Koala.util.String.replaceTemplateStrings(template,
             feature);
         var timeSeriesTab = me.createTabElement({
-            title: 'Hover',
+            title: viewModel.get('info'),
             innerHTML: innerHTML,
             className: 'hoverTpl-tab'
         });
@@ -543,12 +661,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var viewModel = me.getViewModel();
         var map = view.getMap();
-        var position = view.getFeature().getGeometry().getCoordinates();
+        var feature = view.getFeature();
+        var coords = this.getFeatureAnchorPoint(feature);
+
         var cartoWindowId = view.getCartoWindowId();
 
         var overlay = new ol.Overlay({
             id: cartoWindowId,
-            position: position,
+            position: coords,
             positioning: 'top-left',
             element: view.el.dom,
             stopEvent: true,
@@ -558,6 +678,26 @@ Ext.define('Koala.view.component.CartoWindowController', {
         map.addOverlay(overlay);
 
         viewModel.set('overlay', overlay);
+    },
+
+
+
+    /**
+     * gets features anchorPoint
+     * e.g. to anchor cartoWindows
+     */
+    getFeatureAnchorPoint: function(feature) {
+        var coords;
+        if (feature.getGeometry().getType() === 'MultiPolygon' || feature.getGeometry().getType() === 'Polygon') {
+            feature = turf.polygon(feature.getGeometry().getCoordinates()[0]);
+            coords = turf.centroid(feature).geometry.coordinates;
+        } else if (feature.getGeometry().getType() === 'Point') {
+            coords = feature.getGeometry().getCoordinates();
+        } else if (feature.getGeometry().getType() === 'Line') {
+            feature = turf.lineString(feature.getGeometry().getCoordinates()[0]);
+            coords = turf.along(feature, 0, 'meters').geometry.coordinates;
+        }
+        return coords;
     },
 
     /**
@@ -604,7 +744,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var hoverPlugin = mapComponent.getPlugin('hoverBfS');
         var map = view.getMap();
         var feature = view.getFeature();
-        var coords = feature.getGeometry().getCoordinates();
+        var coords = this.getFeatureAnchorPoint(feature);
         var el = view.el.dom;
         var overlay = viewModel.get('overlay');
         var cartoWindowId = view.getCartoWindowId();
@@ -758,7 +898,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var map = view.getMap();
         var feature = view.getFeature();
         var lineFeature = viewModel.get('lineFeature');
-        var featureStartCoords = feature.getGeometry().getCoordinates();
+        var featureStartCoords = this.getFeatureAnchorPoint(feature);
         var overlay = viewModel.get('overlay');
         var overlayerCoords = overlay.getPosition();
         var overlayerTopLeftPixel = map.getPixelFromCoordinate(overlayerCoords);
@@ -767,6 +907,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var centerPixel = [overlayWidth/2 + overlayerTopLeftPixel[0],
             overlayHeight/2 + overlayerTopLeftPixel[1]];
         var centerCoords = map.getCoordinateFromPixel(centerPixel);
+
         lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
         overlay.centerCoords = centerCoords;
     },
@@ -821,6 +962,37 @@ Ext.define('Koala.view.component.CartoWindowController', {
         }
     },
 
+    combineTimeseries: function() {
+        var me = this;
+        var stations = this.timeserieschart.selectedStations;
+        var stationIds = [];
+        Ext.each(stations, function(station) {
+            stationIds.push(station.get('id'));
+        });
+        var newStations = [];
+        var newStationIds = [];
+
+        var allCharts = Ext.ComponentQuery.query('d3-chart');
+        Ext.each(allCharts, function(chart) {
+            Ext.each(chart.selectedStations, function(station) {
+                if (stationIds.indexOf(station.get('id')) === -1 && newStationIds.indexOf(station.get('id')) === -1) {
+                    newStations.push(station);
+                    newStationIds.push(station.get('id'));
+                }
+            });
+        });
+        Ext.each(newStations, function(station) {
+            Koala.util.Chart.addFeatureToTimeseriesChart(station.get('layer'), station, me.timeserieschart);
+        });
+        this.timeserieschart.getController().getChartData();
+        var cartos = Ext.ComponentQuery.query('k-component-cartowindow');
+        Ext.each(cartos, function(carto) {
+            if (carto !== me.getView()) {
+                carto.destroy();
+            }
+        });
+    },
+
     toggleLegend: function(chart) {
         var btn = this.legendVisibilityButton;
         chart.getController().toggleLegendVisibility();
@@ -853,6 +1025,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
         map.un('pointermove', me.pointerMoveListener);
         window.removeEventListener(upEvent, me.onMouseUpWindow);
         lineLayer.getSource().removeFeature(lineFeature);
+
+        if (this.timeserieschart) {
+            this.timeserieschart.destroy();
+        }
+        if (this.barChart) {
+            this.barChart.destroy();
+        }
     }
 
 });
