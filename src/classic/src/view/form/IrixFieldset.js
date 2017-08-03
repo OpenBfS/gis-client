@@ -41,7 +41,7 @@ Ext.define('Koala.view.form.IrixFieldset',{
 
     config: {
         // can be overriden via appContext.json: urls/irixcontext
-        irixContextUrl: 'resources/irixContext.json'
+        irixContextUrl: null
     },
 
     initComponent: function() {
@@ -55,6 +55,11 @@ Ext.define('Koala.view.form.IrixFieldset',{
             if (configuredIrixContext) {
                 me.setIrixContextUrl(configuredIrixContext);
             }
+        }
+
+        // leave early, because irixContextUrl does not seem to be configured
+        if (!me.getIrixContextUrl) {
+            me.callParent(arguments);
         }
 
         Ext.Ajax.request({
