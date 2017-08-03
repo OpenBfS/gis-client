@@ -1,0 +1,134 @@
+{
+    "DokpoolName": {
+        "bund": {
+            "DokpoolContentType": {
+                "trajectory": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-lage",
+                        "Free for Public Use": "bund_bfs-lage"
+                    }
+                },
+                "gammadoserate": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_auto-messungen/automatisch-intern",
+                        "Free for Public Use": "bund_auto-messungen/automatisch-sichtbar"
+                    }
+                },
+                "gammadoserate_timeseries": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen",
+                        "Free for Public Use": "bund_bfs-messungen"
+                    }
+                },
+                "airactivity": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen",
+                        "Free for Public Use": "bund_bfs-messungen"
+                    }
+                },
+                "groundcontamination": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen",
+                        "Free for Public Use": "bund_bfs-messungen"
+                    }
+                },
+                "mresult_feed": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen",
+                        "Free for Public Use": "bund_bfs-messungen"
+                    }
+                },
+                "mresult_food": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen",
+                        "Free for Public Use": "bund_bfs-messungen"
+                    }
+                },
+                "mresult_insitu": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen",
+                        "Free for Public Use": "bund_bfs-messungen"
+                    }
+                },
+                "mresult_water": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen",
+                        "Free for Public Use": "bund_bfs-messungen"
+                    }
+                },
+                "mresult_other": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen",
+                        "Free for Public Use": "bund_bfs-messungen"
+                    }
+                },
+                "rodos_affectedareas": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_plumearrival": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_plumedeparture": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_leafyvegetables_caesium": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_leafyvegetables_iodine": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_cowmilk_caesium": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_cowmilk_iodine": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_effectivedose_7d_adults": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_effectivedose_7d_children": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_thyroiddose_adults": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                },
+                "rodos_thyroiddose_children": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos",
+                        "Free for Public Use": "bund_bfs-rodos"
+                    }
+                }
+            }
+        }
+    }
+}
