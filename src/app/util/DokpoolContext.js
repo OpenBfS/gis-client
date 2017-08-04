@@ -19,19 +19,20 @@
  * @class Koala.util.DokpoolContext
  */
 Ext.define('Koala.util.DokpoolContext', {
+    extend: 'Ext.Component',
+
     requires: [
         BasiGX.view.component.Map
     ],
+
     config: {
-        // can be overriden via appContext.json: urls/dokpool-context
-        dokpoolContextUrl: 'resources/dokpoolContext.json'
+        dokpoolName: "bund",
+        dokpoolContextUrl: "resources/dokpoolContext.json",
+        dokpoolContext: null
     },
 
-    DOKPOOL_NAME: 'bund',
-
-    init: function() {
+    initComponent: function() {
         var me = this;
-        me.callParent();
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
         if (appContext) {
@@ -48,58 +49,63 @@ Ext.define('Koala.util.DokpoolContext', {
 
             success: function(response) {
                 var json = Ext.decode(response.responseText);
-                me.raw = json;
-                me.add(me.createFields(json.data.fields));
+                me.setDokpoolContext(json);
             },
 
             failure: function(response) {
                 Ext.raise('server-side failure with status code ' + response.status);
             }
         });
+        me.callParent(arguments);
     },
 
     /**
      * Get all the DokpoolContentTypes from a DokpoolContext object
      * @return [List] The found DokpoolContentTypes.
      */
-     getDokpoolContentTypes: function(){
-         return Object.keys(dokpoolContext.DOKPOOL_NAME.bund.DokpoolContentType);
-     },
+    getDokpoolContentTypes: function(){
+        var me = this;
+        return Object.keys(me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType);
+    },
 
-     /**
-      * Get the path for a specific confidentiality and dokpoolContentType
-      * from a DokpoolContext object
-      * @param "String" confidentiality
-      * @param "String" dokpoolContentType
-      * @return [List] The found path.
-      */
-     getPath: function(confidentiality, dokpoolContentType){
-         return dokpoolContext["DokpoolName"][DOKPOOL_NAME]["DokpoolContentType"][dokpoolContentType]["Confidentiality"][confidentiality];
-     },
+    /**
+     * Get the path for a specific confidentiality and dokpoolContentType
+     * from a DokpoolContext object
+     * @param "String" confidentiality
+     * @param "String" dokpoolContentType
+     * @return [List] The found path.
+     */
+    getPath: function(confidentiality, dokpoolContentType){
+        var me = this;
+        return me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType[dokpoolContentType]["Confidentiality"][confidentiality];
+    },
 
-     /**
+    /**
      * Get the confidentialities for a specific dokpoolContentType
      * from a DokpoolContext object
      * @param "String" dokpoolContentType
      * @return [List] The found confidentialities.
-      */
-     getConfidentialitiesFromDokpoolcontenttype: function(dokpoolContentType){
-         return Array.from(new Set(Object.keys(dokpoolContext.DokpoolName.DOKPOOL_NAME.DokpoolContentType[dokpoolContentType].Confidentiality)));
-     },
+     */
+    getConfidentialitiesFromDokpoolcontenttype: function(dokpoolContentType){
+        var me = this;
+        return Array.from(new Set(Object.keys(me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType[dokpoolContentType].Confidentiality)));
+    },
 
-     /**
+    /**
      * Get the dokpoolContentTypes for a specific confidentiality
      * from a DokpoolContext object
      * @param "String" confidentiality
      * @return [List] The found dokpoolContentTypes.
-      */
+     */
     getDokpoolcontenttypeFromConfidentialities: function(confidentiality){
-         var mylist = [];
-         Object.keys(dokpoolContext.DokpoolName.DOKPOOL_NAME.DokpoolContentType).forEach(function(e){
-             mylist.push(dokpoolContext.DokpoolName.DOKPOOL_NAME.DokpoolContentType[e].Confidentiality[confidentiality]);
-         });
-         //remove duplicates
-         return Array.from(new Set(mylist));
-     }
-
+        var me = this;
+        var mylist = [];
+        Object.keys(me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType).forEach(function(e){
+            if (me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType[e].Confidentiality.hasOwnProperty(confidentiality)) {
+                mylist.push(e);
+            }
+        });
+        //remove duplicates
+        return Array.from(new Set(mylist));
+    }
 });
