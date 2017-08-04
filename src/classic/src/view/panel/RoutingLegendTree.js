@@ -958,6 +958,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         // 2) select what was previously selected, and trigger the hovering
         //    configurator elsewhere
         selModel.select(selection);
+
+        me.setSize(me.getSize()[0], me.getSize()[1] + 1);
+        me.setSize(me.getSize()[0], me.getSize()[1] - 1);
     },
 
     updateLegendsWithScale: function() {
