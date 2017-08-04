@@ -107,7 +107,7 @@ Ext.define('Koala.view.form.Print', {
 
     listeners: {
         genericfieldsetadded: function() {
-            me = this;
+            var me = this;
             // only show irix checkbox if irix-urls are configured
             if (me.getIrixUrl() && me.getIrixContext()) {
                 this.addIrixCheckbox();
