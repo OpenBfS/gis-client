@@ -140,6 +140,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
+        if (!view) {
+            return;
+        }
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
         var groupProp = barChartProperties.groupAttribute || 'end_measure';
         var keyProp = barChartProperties.xAxisAttribute;

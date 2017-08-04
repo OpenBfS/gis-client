@@ -21,10 +21,42 @@
 Ext.define('Koala.util.Chart', {
 
     requires: [
-        'Koala.util.String'
+        'Koala.util.String',
+        'Koala.view.window.TimeSeriesWindow'
     ],
 
     statics: {
+
+        openTimeseriesWindow: function(olFeat) {
+            var win = Ext.ComponentQuery.query('window[name=timeserieswin]')[0];
+            var olLayer = olFeat.get('layer');
+
+            // create the window if it doesn't exist already
+            if (!win) {
+                win = Koala.util.Chart.createTimeSeriesChartWindow(olLayer);
+            }
+            win.getController().createOrUpdateChart(olLayer, olFeat);
+
+            // show the window itself
+            win.show();
+
+            return win;
+        },
+
+        /**
+         *
+         */
+        createTimeSeriesChartWindow: function(olLayer) {
+            var chartConfig = olLayer.get('timeSeriesChartProperties');
+            var addFilterForm = !Ext.isEmpty(chartConfig.allowFilterForm) ?
+                Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
+
+            var win = Ext.create('Koala.view.window.TimeSeriesWindow', {
+                addFilterForm: addFilterForm,
+                initOlLayer: olLayer
+            });
+            return win;
+        },
 
         addFeatureToTimeseriesChart: function(olLayer, olFeat, chart) {
             if (!olFeat) {
@@ -44,16 +76,23 @@ Ext.define('Koala.util.Chart', {
                     chartConfig.seriesTitleTpl, olFeat
                 );
             }
-            var currentSeqIndex = chart.getSelectedStations().length;
-            var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, '');
-            if (!color) {
-                color = Koala.view.component.D3BaseController.getRandomColor();
-            }
 
             promise.then(function(name) {
+                var currentSeqIndex = chart.getSelectedStations().length;
+
+                var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, '');
+                if (!color) {
+                    color = Koala.view.component.D3BaseController.getRandomColor();
+                }
                 Koala.util.Chart.addShapeToChart(chartController, chartConfig, name, olFeat, color);
             })
                 .catch(function() {
+                    var currentSeqIndex = chart.getSelectedStations().length;
+
+                    var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, '');
+                    if (!color) {
+                        color = Koala.view.component.D3BaseController.getRandomColor();
+                    }
                     Koala.util.Chart.addShapeToChart(chartController, chartConfig, '', olFeat, color);
                 });
         },
