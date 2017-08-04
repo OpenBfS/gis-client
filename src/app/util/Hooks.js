@@ -21,8 +21,7 @@
  */
 Ext.define('Koala.util.Hooks', {
     requires: [
-        'BasiGX.view.component.Map',
-        'Koala.util.DokpoolContext'
+        'BasiGX.view.component.Map'
     ],
     statics: {
 
