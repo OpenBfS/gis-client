@@ -959,8 +959,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         //    configurator elsewhere
         selModel.select(selection);
 
-        me.setSize(me.getSize()[0], me.getSize()[1] + 1);
-        me.setSize(me.getSize()[0], me.getSize()[1] - 1);
+        if (!me.layout.running && !me.layout.pending && me.layout.done) {
+            me.setSize(me.getSize()[0], me.getSize()[1] + 1);
+            me.setSize(me.getSize()[0], me.getSize()[1] - 1);
+        }
     },
 
     updateLegendsWithScale: function() {
