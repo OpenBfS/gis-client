@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.IrixFieldSet
+ * @class Koala.view.form.IrixFieldset
  */
 Ext.define('Koala.view.form.IrixFieldset',{
     extend: 'Ext.form.FieldSet',

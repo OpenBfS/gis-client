@@ -51,7 +51,9 @@ Ext.define('Koala.view.form.Print', {
         transparentImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif',
         transparentColor: 'rgba(0,0,0,0)',
         chartPrint: false,
-        chart: undefined
+        chart: undefined,
+        printExtentMovable: true,
+        printExtentAlwaysCentered: false
     },
 
     layout: 'hbox',
@@ -1063,7 +1065,7 @@ Ext.define('Koala.view.form.Print', {
         var checkBox = me.down('[name="irix-fieldset-checkbox"]');
 
         if (!fs) {
-            var irixFieldset = Ext.create('Koala.view.form.IrixFieldSet',{
+            var irixFieldset = Ext.create('Koala.view.form.IrixFieldset',{
                 flex: 2
             });
             me.add(irixFieldset);
