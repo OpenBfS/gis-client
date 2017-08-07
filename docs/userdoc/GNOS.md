@@ -1096,6 +1096,17 @@ Das Darstellungsformat der Kurve.
 | Default-Wert         | line |
 | Beispiel             | area |
 
+**drawPointCondition**
+
+JavaScript-Funktion, die entscheidet, ob ein Punkt in der Zeitreihe gezeichnet wird oder nicht
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | eval:(anyValidFunction) returning boolean|
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | eval:(function(){return function(obj){ if (obj.detection_limit==='<') { return false; } else { return true; } } }()) |
+
 
 ## Bar Chart Properties {#barchart} (bfs:barChartProperty)
 
@@ -1134,11 +1145,11 @@ Lesbare Variante, statt technischem Attributwert.
 
 **labelFunc**  // TODO Fällt nach Änderung der Datenstruktur ggf weg.
 
-Lesbare Variante, statt technischem Attributwert.
+JavaScript-Funktion, welche zum Generieren von Labels verwendet wird ()
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
-| Erlaubt Wertemenge   | chartFieldSequence |
+| Erlaubt Wertemenge   | eval:(anyValidFunction) returning string compatibele Value|
 | Obligatorisch        | &#10799; |
 | Default-Wert         |  |
 | Beispiel             | eval:(function(){return function(val){return val < 0.03 ? 'NN' : val + '';}}()) |
@@ -1175,3 +1186,15 @@ Das Attribut, dessen Werte in der Ansicht in Gruppen aufgeteilt werden sollen.
 | Obligatorisch        | &#10799; |
 | Default-Wert         |  |
 | Beispiel             | end_measure |
+
+**drawBarCondition**
+
+JavaScript-Funktion, die entscheidet, ob ein Punkt in der Zeitreihe gezeichnet wird oder nicht
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | eval:(anyValidFunction) returning boolean|
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | eval:(function(){return function(obj){ if (obj.detection_limit==='<') { return false; } else { return true; } } }()) |
+
