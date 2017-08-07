@@ -30,7 +30,7 @@ Ext.define('Koala.view.form.Print', {
         'GeoExt.data.serializer.Vector',
         'GeoExt.data.serializer.XYZ',
 
-        'Koala.view.form.IrixFieldset',
+        'Koala.view.form.IrixFieldSet',
         'Koala.util.Object',
         'Koala.util.AppContext',
 
