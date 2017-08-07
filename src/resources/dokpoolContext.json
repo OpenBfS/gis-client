@@ -1,0 +1,134 @@
+{
+    "DokpoolName": {
+        "bund": {
+            "DokpoolContentType": {
+                "trajectory": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-lage/von GIS",
+                        "Free for Public Use": "bund_bfs-lage/von GIS"
+                    }
+                },
+                "gammadoserate": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen/von GIS",
+                        "Free for Public Use": "bund_bfs-messungen/von GIS"
+                    }
+                },
+                "gammadoserate_timeseries": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen/von GIS",
+                        "Free for Public Use": "bund_bfs-messungen/von GIS"
+                    }
+                },
+                "airactivity": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen/von GIS",
+                        "Free for Public Use": "bund_bfs-messungen/von GIS"
+                    }
+                },
+                "groundcontamination": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen/von GIS",
+                        "Free for Public Use": "bund_bfs-messungen/von GIS"
+                    }
+                },
+                "mresult_feed": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen/von GIS",
+                        "Free for Public Use": "bund_bfs-messungen/von GIS"
+                    }
+                },
+                "mresult_food": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen/von GIS",
+                        "Free for Public Use": "bund_bfs-messungen/von GIS"
+                    }
+                },
+                "mresult_insitu": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen/von GIS",
+                        "Free for Public Use": "bund_bfs-messungen/von GIS"
+                    }
+                },
+                "mresult_water": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen/von GIS",
+                        "Free for Public Use": "bund_bfs-messungen/von GIS"
+                    }
+                },
+                "mresult_other": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-messungen/von GIS",
+                        "Free for Public Use": "bund_bfs-messungen/von GIS"
+                    }
+                },
+                "rodos_affectedareas": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_plumearrival": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_plumedeparture": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_leafyvegetables_caesium": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_leafyvegetables_iodine": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_cowmilk_caesium": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_cowmilk_iodine": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_effectivedose_7d_adults": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_effectivedose_7d_children": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_thyroiddose_adults": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                },
+                "rodos_thyroiddose_children": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_bfs-rodos/von GIS",
+                        "Free for Public Use": "bund_bfs-rodos/von GIS"
+                    }
+                }
+            }
+        }
+    }
+}

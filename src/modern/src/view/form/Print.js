@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-present terrestris GmbH & Co. KG
+/* Copyright (c) 2015-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.component.CartoWindowModel
+ * @class Koala.view.form.Print
  */
-Ext.define('Koala.view.component.CartoWindowModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-component-cartowindow',
-
-    data: {
-        /*i18n start*/
-        autorefresh: '',
-        autorefreshExpand: '',
-        autorefreshMove: '',
-        autorefreshOptions: '',
-        info: '',
-        toggleLegendVisibility: '',
-        exportToPngText: '',
-        /*i18n end*/
-        lineFeature: null,
-        lineLayer: null,
-        overlay: null,
-        tabs: []
-    }
-
+Ext.define('Koala.view.form.Print', {
+    extend: 'Ext.Component',
+    xtype: 'k-form-print'
 });

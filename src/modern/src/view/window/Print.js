@@ -17,7 +17,7 @@
  * @class Koala.view.window.Print
  */
 Ext.define('Koala.view.window.Print', {
-    extend: 'Ext.window.Window',
+    extend: 'Ext.Component',
     xtype: 'k-window-print',
 
     requires: [

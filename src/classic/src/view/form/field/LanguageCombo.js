@@ -48,6 +48,7 @@ Ext.define('Koala.view.form.field.LanguageCombo', {
     listeners: {
         change: 'onLanguageChange'
     },
+
     initComponent: function() {
         this.callParent();
         this.setValue(this.getDefaultLanguage());

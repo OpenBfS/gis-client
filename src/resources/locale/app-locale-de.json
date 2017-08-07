@@ -71,6 +71,11 @@
     "Koala.view.component.CartoWindow": {
         "config": {
             "data": {
+                "autorefresh": "Autorefresh",
+                "autorefreshExpand": "Zeitausschnitt erweitern",
+                "autorefreshMove": "Zeitausschnitt verschieben",
+                "autorefreshOptions": "Autorefresh Optionen",
+                "info": "Info",
                 "expandToLeft": "Ältere Daten anzeigen",
                 "expandToRight": "Neuere Daten anzeigen",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
@@ -437,6 +442,11 @@
     "Koala.view.window.TimeSeriesWindow": {
         "config": {
             "data": {
+                "autorefresh": "Autorefresh",
+                "autorefreshExpand": "Zeitausschnitt erweitern",
+                "autorefreshMove": "Zeitausschnitt verschieben",
+                "autorefreshOptions": "Autorefresh Optionen",
+                "chartPrint": "Drucken",
                 "title": "Zeitreihe",
                 "dateFieldStartLabel": "Start",
                 "dateFieldEndLabel": "Ende",
