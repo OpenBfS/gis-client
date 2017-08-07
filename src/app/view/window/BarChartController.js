@@ -129,6 +129,10 @@ Ext.define('Koala.view.window.BarChartController', {
         return panel;
     },
 
+    /**
+     * Toggles the axes on the bar chart.
+     * @param {object} button the bar chart toggle button
+     */
     onToggleBarChartClicked: function(button) {
         var chart = button.up('[name="chart-composition"]').down('d3-barchart');
         var ctrl = chart.getController();

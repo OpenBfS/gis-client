@@ -27,6 +27,11 @@ Ext.define('Koala.util.Chart', {
 
     statics: {
 
+        /**
+         * Opens a new timeseries window if none exists, or adds the feature
+         * to an existing one.
+         * @param {ol.Feature} olFeat the station to add
+         */
         openTimeseriesWindow: function(olFeat) {
             var win = Ext.ComponentQuery.query('window[name=timeserieswin]')[0];
             var olLayer = olFeat.get('layer');
@@ -44,7 +49,8 @@ Ext.define('Koala.util.Chart', {
         },
 
         /**
-         *
+         * Creates a new timeseries window for the given layer.
+         * @param {object} an openlayers layer object with chart config
          */
         createTimeSeriesChartWindow: function(olLayer) {
             var chartConfig = olLayer.get('timeSeriesChartProperties');
@@ -58,6 +64,12 @@ Ext.define('Koala.util.Chart', {
             return win;
         },
 
+        /**
+         * Adds a feature to a timeseries chart.
+         * @param {object} olLayer the layer upon which the chart is based
+         * @param {ol.Feature} olFeat the feature to add
+         * @param {Koala.view.component.D3Chart} chart the chart
+         */
         addFeatureToTimeseriesChart: function(olLayer, olFeat, chart) {
             if (!olFeat) {
                 return false;
@@ -97,6 +109,14 @@ Ext.define('Koala.util.Chart', {
                 });
         },
 
+        /**
+         * Helper function that adds a shape to a timeseries chart.
+         * @param {object} chartController the controller of the chart
+         * @param {object} chartConfig chart config from the layer
+         * @param {string} stationName name of the station to add
+         * @param {ol.Feature} olFeat the feature of the station
+         * @param {string} color the color to use
+         */
         addShapeToChart: function(chartController, chartConfig, stationName, olFeat, color) {
             var coerce = Koala.util.String.coerce;
             chartController.addShape({

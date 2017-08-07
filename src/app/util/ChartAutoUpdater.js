@@ -28,6 +28,16 @@ Ext.define('Koala.util.ChartAutoUpdater', {
 
     statics: {
 
+        /**
+         * Activate autorefresh for a timeseries chart. This is done for all
+         * timeseries charts and deactivates itself once the chart is destroyed.
+         * @param {Koala.view.component.D3Chart} chart the chart
+         * @param {object} optionsCombo the combo box with the autorefresh options
+         * @param {object} autorefreshCheckbox checkbox controlling if autorefresh is on
+         * @param {object} layer the layer the chart is based on
+         * @param {object} startField optional field to update with the new start value
+         * @param {object} endField optional field to update with the new end value
+         */
         autorefreshTimeseries: function(
             chart,
             optionsCombo,

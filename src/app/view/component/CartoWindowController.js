@@ -367,6 +367,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
             this.exportToPng.bind(this, chart));
     },
 
+    /**
+     * Creates the bar chart toggle button to switch axes.
+     * @param {Element} elm element to render the button to
+     * @param {Koala.view.component.D3BarChart} chart the chart to toggle
+     */
     createBarChartToggleButton: function(elm, chart) {
         var btn = {
             cls: 'carto-window-chart-button',
@@ -384,6 +389,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
             this.toggleBarChartGrouping.bind(this, chart));
     },
 
+    /**
+     * Toggles the bar charts axes.
+     * @param {Koala.view.component.D3BarChart} chart the chart to toggle axes on
+     */
     toggleBarChartGrouping: function(chart) {
         var ctrl = chart.getController();
         ctrl.groupPropToggled = !ctrl.groupPropToggled;
