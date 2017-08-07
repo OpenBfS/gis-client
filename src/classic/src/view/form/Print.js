@@ -53,7 +53,8 @@ Ext.define('Koala.view.form.Print', {
         chartPrint: false,
         chart: undefined,
         printExtentMovable: true,
-        printExtentAlwaysCentered: false
+        printExtentAlwaysCentered: false,
+        printExtentScalable: true
     },
 
     layout: 'hbox',
