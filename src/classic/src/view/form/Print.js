@@ -31,6 +31,7 @@ Ext.define('Koala.view.form.Print', {
         'GeoExt.data.serializer.XYZ',
 
         'Koala.view.form.IrixFieldSet',
+        'Koala.util.DokpoolContext',
         'Koala.util.Object',
         'Koala.util.AppContext',
 
@@ -41,6 +42,8 @@ Ext.define('Koala.view.form.Print', {
     maxWidth: 800,
 
     config: {
+        // dummy for dokpoolContext
+        dokpoolContext: null,
         // can be overriden via appContext.json: urls/irix-servlet
         irixUrl: null,
         // can be overriden via appContext.json: urls/irix-servlet
@@ -99,6 +102,8 @@ Ext.define('Koala.view.form.Print', {
 
         if (configuredIrixServlet && configuredIrixContext) {
             appCombo.on('select', me.addIrixFieldset, me);
+            var dpc = Ext.create('Koala.util.DokpoolContext');
+            me.setDokpoolContext(dpc);
         }
 
         me.on('beforeattributefieldsadd', me.onBeforeAttributeFieldsAdd);
