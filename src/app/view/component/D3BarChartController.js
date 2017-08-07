@@ -134,7 +134,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      *
      * @param {Object} reponse The response object.
      * @param {ol.Feature} station The station the corresponding request was
-     *                             send for.
+     *                             sent for.
      */
     onChartDataRequestSuccess: function(response, station) {
         var me = this;
@@ -146,6 +146,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
         var groupProp = barChartProperties.groupAttribute || 'end_measure';
         var keyProp = barChartProperties.xAxisAttribute;
+        if (this.groupPropToggled) {
+            var h = groupProp;
+            groupProp = keyProp;
+            keyProp = h;
+        }
         var valueProp = barChartProperties.yAxisAttribute;
         var detectionLimitProp = barChartProperties.detectionLimitAttribute
                 || 'nachweisgrenze';

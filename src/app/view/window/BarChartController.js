@@ -89,6 +89,14 @@ Ext.define('Koala.view.window.BarChartController', {
             }, {
                 xtype: 'button',
                 bind: {
+                    text: '{toggleGroupingButtonText}'
+                },
+                handler: me.onToggleBarChartClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }, {
+                xtype: 'button',
+                bind: {
                     text: '{exportAsImageBtnText}'
                 },
                 handler: me.onExportAsImageClicked,
@@ -119,6 +127,16 @@ Ext.define('Koala.view.window.BarChartController', {
         };
 
         return panel;
+    },
+
+    onToggleBarChartClicked: function(button) {
+        var chart = button.up('[name="chart-composition"]').down('d3-barchart');
+        var ctrl = chart.getController();
+        ctrl.groupPropToggled = !ctrl.groupPropToggled;
+        ctrl.getChartData();
+        ctrl.on('chartdataprepared', function() {
+            ctrl.redrawLegend();
+        });
     },
 
     onUncertaintyCheckChange: function(checkbox, checked) {

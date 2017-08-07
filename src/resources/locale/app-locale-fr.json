@@ -73,7 +73,8 @@
                 "expandToLeft": "fr:Show older data",
                 "expandToRight": "fr:Show newer data",
                 "toggleLegendVisibility": "fr:Toggle legend visibility",
-                "exportToPngText": "fr:Download Chart"
+                "exportToPngText": "fr:Download Chart",
+                "toggleGrouping": "fr:Gruppierung tauschen"
             }
         }
     },
@@ -387,7 +388,8 @@
                 "title": "fr:Barchart",
                 "undoBtnText": "fr:…zurückzoomen",
                 "uncertaintyCheckboxLabel": "fr:Messungenauigkeit",
-                "exportAsImageBtnText": "fr:Als Bild exportieren"
+                "exportAsImageBtnText": "fr:Als Bild exportieren",
+                "toggleGroupingButtonText": "fr:Toggle grouping"
             }
         }
     },

@@ -367,6 +367,32 @@ Ext.define('Koala.view.component.CartoWindowController', {
             this.exportToPng.bind(this, chart));
     },
 
+    createBarChartToggleButton: function(elm, chart) {
+        var btn = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            enableToggle: true,
+            name: 'toggleGroupingButton',
+            glyph: 'xf080@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('toggleGrouping')
+            }
+        };
+        this.toggleGrouping = Ext.create(btn);
+        this.toggleGrouping.render(elm, chart.xtype === 'd3-chart' ? 6 : 4);
+        this.toggleGrouping.el.dom.addEventListener('click',
+            this.toggleBarChartGrouping.bind(this, chart));
+    },
+
+    toggleBarChartGrouping: function(chart) {
+        var ctrl = chart.getController();
+        ctrl.groupPropToggled = !ctrl.groupPropToggled;
+        ctrl.getChartData();
+        ctrl.on('chartdataprepared', function() {
+            ctrl.redrawLegend();
+        });
+    },
+
     /**
      * Exports the chart to PNG and starts a download.
      * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
@@ -414,6 +440,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.barChart = Ext.create(chartObj);
         this.createLegendVisibilityButton(tabElm, this.barChart);
         this.createExportToPngButton(tabElm, this.barChart);
+        this.createBarChartToggleButton(tabElm, this.barChart);
     },
 
     getTabData: function(urlProperty, contentProperty) {
