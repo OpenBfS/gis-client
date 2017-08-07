@@ -102,7 +102,7 @@ Ext.define('Koala.view.component.MapController', {
                 if (isTimeSeries) {
                     if (!timeSeriesWin) {
                         // if no timeseries window exist, create one
-                        timeSeriesWin = me.openTimeseriesWindow(olFeat);
+                        timeSeriesWin = Koala.util.Chart.openTimeseriesWindow(olFeat);
                     } else {
                         // just add any further series to the existing window
                         timeSeriesWin.getController().updateTimeSeriesChart(layer, olFeat);
@@ -224,41 +224,6 @@ Ext.define('Koala.view.component.MapController', {
         var olLayer = olFeat.get('layer');
         var win = me.createBarChartWindow(olLayer);
         win.getController().createOrUpdateChart(olLayer, olFeat);
-        return win;
-    },
-
-    /**
-     *
-     */
-    openTimeseriesWindow: function(olFeat) {
-        var me = this;
-        var win = Ext.ComponentQuery.query('window[name=timeserieswin]')[0];
-        var olLayer = olFeat.get('layer');
-
-        // create the window if it doesn't exist already
-        if (!win) {
-            win = me.createTimeSeriesChartWindow(olLayer);
-        }
-        win.getController().createOrUpdateChart(olLayer, olFeat);
-
-        // show the window itself
-        win.show();
-
-        return win;
-    },
-
-    /**
-     *
-     */
-    createTimeSeriesChartWindow: function(olLayer) {
-        var chartConfig = olLayer.get('timeSeriesChartProperties');
-        var addFilterForm = !Ext.isEmpty(chartConfig.allowFilterForm) ?
-            Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
-
-        var win = Ext.create('Koala.view.window.TimeSeriesWindow', {
-            addFilterForm: addFilterForm,
-            initOlLayer: olLayer
-        });
         return win;
     },
 

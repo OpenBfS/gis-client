@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.IrixFieldSet
+ * @class Koala.view.form.IrixFieldset
  */
 Ext.define('Koala.view.form.IrixFieldset',{
     extend: 'Ext.form.FieldSet',
@@ -41,7 +41,7 @@ Ext.define('Koala.view.form.IrixFieldset',{
 
     config: {
         // can be overriden via appContext.json: urls/irixcontext
-        irixContextUrl: 'resources/irixContext.json'
+        irixContextUrl: null
     },
 
     initComponent: function() {
@@ -55,6 +55,11 @@ Ext.define('Koala.view.form.IrixFieldset',{
             if (configuredIrixContext) {
                 me.setIrixContextUrl(configuredIrixContext);
             }
+        }
+
+        // leave early, because irixContextUrl does not seem to be configured
+        if (!me.getIrixContextUrl) {
+            me.callParent(arguments);
         }
 
         Ext.Ajax.request({

@@ -79,7 +79,8 @@
                 "expandToLeft": "Show older data",
                 "expandToRight": "Show newer data",
                 "toggleLegendVisibility": "Toggle legend visibility",
-                "exportToPngText": "Download Chart"
+                "exportToPngText": "Download Chart",
+                "toggleGrouping": "Toggle grouping"
             }
         }
     },
@@ -404,7 +405,8 @@
                 "title": "Bar Chart",
                 "undoBtnText": "…zoom back",
                 "uncertaintyCheckboxLabel": "Uncertainty",
-                "exportAsImageBtnText": "Export as image"
+                "exportAsImageBtnText": "Export as image",
+                "toggleGroupingButtonText": "Toggle grouping"
             }
         }
     },

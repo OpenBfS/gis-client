@@ -368,6 +368,41 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     /**
+     * Creates the bar chart toggle button to switch axes.
+     * @param {Element} elm element to render the button to
+     * @param {Koala.view.component.D3BarChart} chart the chart to toggle
+     */
+    createBarChartToggleButton: function(elm, chart) {
+        var btn = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            enableToggle: true,
+            name: 'toggleGroupingButton',
+            glyph: 'xf080@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('toggleGrouping')
+            }
+        };
+        this.toggleGrouping = Ext.create(btn);
+        this.toggleGrouping.render(elm, chart.xtype === 'd3-chart' ? 6 : 4);
+        this.toggleGrouping.el.dom.addEventListener('click',
+            this.toggleBarChartGrouping.bind(this, chart));
+    },
+
+    /**
+     * Toggles the bar charts axes.
+     * @param {Koala.view.component.D3BarChart} chart the chart to toggle axes on
+     */
+    toggleBarChartGrouping: function(chart) {
+        var ctrl = chart.getController();
+        ctrl.groupPropToggled = !ctrl.groupPropToggled;
+        ctrl.getChartData();
+        ctrl.on('chartdataprepared', function() {
+            ctrl.redrawLegend();
+        });
+    },
+
+    /**
      * Exports the chart to PNG and starts a download.
      * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
      *          The associated chartion]
@@ -414,6 +449,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.barChart = Ext.create(chartObj);
         this.createLegendVisibilityButton(tabElm, this.barChart);
         this.createExportToPngButton(tabElm, this.barChart);
+        this.createBarChartToggleButton(tabElm, this.barChart);
     },
 
     getTabData: function(urlProperty, contentProperty) {
@@ -963,33 +999,25 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     combineTimeseries: function() {
-        var me = this;
-        var stations = this.timeserieschart.selectedStations;
-        var stationIds = [];
-        Ext.each(stations, function(station) {
-            stationIds.push(station.get('id'));
-        });
         var newStations = [];
         var newStationIds = [];
 
         var allCharts = Ext.ComponentQuery.query('d3-chart');
         Ext.each(allCharts, function(chart) {
             Ext.each(chart.selectedStations, function(station) {
-                if (stationIds.indexOf(station.get('id')) === -1 && newStationIds.indexOf(station.get('id')) === -1) {
+                if (newStationIds.indexOf(station.get('id')) === -1) {
                     newStations.push(station);
                     newStationIds.push(station.get('id'));
                 }
             });
         });
         Ext.each(newStations, function(station) {
-            Koala.util.Chart.addFeatureToTimeseriesChart(station.get('layer'), station, me.timeserieschart);
+            Koala.util.Chart.openTimeseriesWindow(station);
         });
         this.timeserieschart.getController().getChartData();
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');
         Ext.each(cartos, function(carto) {
-            if (carto !== me.getView()) {
-                carto.destroy();
-            }
+            carto.destroy();
         });
     },
 

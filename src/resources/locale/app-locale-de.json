@@ -79,7 +79,8 @@
                 "expandToLeft": "Ältere Daten anzeigen",
                 "expandToRight": "Neuere Daten anzeigen",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
-                "exportToPngText": "Download Chart"
+                "exportToPngText": "Download Chart",
+                "toggleGrouping": "Gruppierung tauschen"
             }
         }
     },
@@ -405,7 +406,8 @@
                 "title": "Barchart",
                 "undoBtnText": "…zurückzoomen",
                 "uncertaintyCheckboxLabel": "Messungenauigkeit",
-                "exportAsImageBtnText": "Als Bild exportieren"
+                "exportAsImageBtnText": "Als Bild exportieren",
+                "toggleGroupingButtonText": "Gruppierung wechseln"
             }
         }
     },

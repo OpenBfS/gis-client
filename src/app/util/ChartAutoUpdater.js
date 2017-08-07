@@ -28,6 +28,16 @@ Ext.define('Koala.util.ChartAutoUpdater', {
 
     statics: {
 
+        /**
+         * Activate autorefresh for a timeseries chart. This is done for all
+         * timeseries charts and deactivates itself once the chart is destroyed.
+         * @param {Koala.view.component.D3Chart} chart the chart
+         * @param {object} optionsCombo the combo box with the autorefresh options
+         * @param {object} autorefreshCheckbox checkbox controlling if autorefresh is on
+         * @param {object} layer the layer the chart is based on
+         * @param {object} startField optional field to update with the new start value
+         * @param {object} endField optional field to update with the new end value
+         */
         autorefreshTimeseries: function(
             chart,
             optionsCombo,
@@ -64,11 +74,17 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                     if (optionsCombo.getValue() === 'autorefresh-move') {
                         endDate = moment();
                         var startDate = moment(endDate);
-                        var duration = Koala.util.Object.getPathStrOr(
-                            layer,
-                            'metadata/layerConfig/timeSeriesChartProperties/duration'
-                        );
-                        startDate.subtract(moment.duration(duration));
+                        var ctrl = chart.getController();
+                        if (!ctrl.currentDateRange.min) {
+                            ctrl.currentDateRange.min = chart.getConfig('startDate');
+                        }
+                        if (!ctrl.currentDateRange.max) {
+                            ctrl.currentDateRange.max = chart.getConfig('endDate');
+                        }
+                        var duration = moment(ctrl.currentDateRange.max)
+                            .diff(moment(ctrl.currentDateRange.min));
+
+                        startDate.subtract(duration);
                         chart.setConfig('startDate', startDate);
                         chart.setConfig('endDate', endDate);
                         chart.getController().getChartData();

@@ -98,6 +98,10 @@ Ext.define('Koala.view.component.D3ChartController', {
     drawChart: function() {
         var me = this;
 
+        me.currentDateRange = {
+            min: null,
+            max: null
+        };
         me.createInteractions();
         me.drawSvgContainer();
         me.drawLegendContainer();
@@ -1281,6 +1285,9 @@ Ext.define('Koala.view.component.D3ChartController', {
     onChartDataRequestCallback: function(station) {
         var me = this;
         var view = me.getView();
+        if (!view) {
+            return;
+        }
         var chartProps = view.getTargetLayer().get('timeSeriesChartProperties');
 
         // The id of the selected station is also the key in the pending
@@ -1342,6 +1349,9 @@ Ext.define('Koala.view.component.D3ChartController', {
     onChartDataRequestSuccess: function(response, station) {
         var me = this;
         var view = me.getView();
+        if (!view) {
+            return;
+        }
         var targetLayer = view.getTargetLayer();
         var startDate = view.getStartDate().clone();
         var endDate = view.getEndDate().clone();
@@ -1398,6 +1408,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 newRawData[valueField] = matchingFeature.properties[yAxisAttr];
 
                 seriesData.push(newRawData);
+            } else {
+                seriesData.push({});
             }
             startDate.add(intervalInSeconds, 'seconds');
         }
