@@ -1404,6 +1404,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 newRawData[valueField] = matchingFeature.properties[yAxisAttr];
 
                 seriesData.push(newRawData);
+            } else {
+                seriesData.push({});
             }
             startDate.add(intervalInSeconds, 'seconds');
         }
