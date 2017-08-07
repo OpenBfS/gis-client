@@ -118,6 +118,12 @@ Ext.define('Koala.view.form.Print', {
             this.addBboxFieldset();
             if (this.config.chartPrint) {
                 this.down('k-form-irixfieldset').show();
+                this.down('[name=generic-fieldset]').hide();
+                this.down('[name=bbox-fieldset]').hide();
+                this.down('[name=legendsFieldset]').hide();
+                this.down('fieldset[name=map]').hide();
+                this.down('fieldset[name=attributes]').hide();
+                this.down('fieldset[name=print-app-fieldset]').hide();
             }
         }
     },
