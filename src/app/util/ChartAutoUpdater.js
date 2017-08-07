@@ -64,11 +64,17 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                     if (optionsCombo.getValue() === 'autorefresh-move') {
                         endDate = moment();
                         var startDate = moment(endDate);
-                        var duration = Koala.util.Object.getPathStrOr(
-                            layer,
-                            'metadata/layerConfig/timeSeriesChartProperties/duration'
-                        );
-                        startDate.subtract(moment.duration(duration));
+                        var ctrl = chart.getController();
+                        if (!ctrl.currentDateRange.min) {
+                            ctrl.currentDateRange.min = chart.getConfig('startDate');
+                        }
+                        if (!ctrl.currentDateRange.max) {
+                            ctrl.currentDateRange.max = chart.getConfig('endDate');
+                        }
+                        var duration = moment(ctrl.currentDateRange.max)
+                            .diff(moment(ctrl.currentDateRange.min));
+
+                        startDate.subtract(duration);
                         chart.setConfig('startDate', startDate);
                         chart.setConfig('endDate', endDate);
                         chart.getController().getChartData();

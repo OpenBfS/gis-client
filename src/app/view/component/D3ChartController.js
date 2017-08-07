@@ -98,6 +98,10 @@ Ext.define('Koala.view.component.D3ChartController', {
     drawChart: function() {
         var me = this;
 
+        me.currentDateRange = {
+            min: null,
+            max: null
+        };
         me.createInteractions();
         me.drawSvgContainer();
         me.drawLegendContainer();
