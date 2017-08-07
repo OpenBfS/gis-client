@@ -16,7 +16,7 @@
 /**
  * @class Koala.view.form.IrixFieldset
  */
-Ext.define('Koala.view.form.IrixFieldset',{
+Ext.define('Koala.view.form.IrixFieldSet',{
     extend: 'Ext.form.FieldSet',
 
     xtype: 'k-form-irixfieldset',
