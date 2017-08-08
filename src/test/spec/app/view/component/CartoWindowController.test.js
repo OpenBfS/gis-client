@@ -20,46 +20,6 @@ describe('Koala.view.component.CartoWindowController', function() {
             expect(controller).to.not.be(undefined);
         });
 
-        it('can be initialized', function() {
-            // Setup
-            var plugins = undefined;
-            if (!Ext.isModern) {
-                plugins = [{
-                    ptype: 'hoverBfS',
-                    selectMulti: true,
-                    selectEventOrigin: 'interaction'
-                }];
-            }
-            var testObjs = TestUtil.setupTestObjects({
-                mapComponentOpts: {
-                    appContextPath: 'http://localhost:9876/base/resources/appContext.json',
-                    plugins: plugins
-                }
-            });
-            sinon.stub(Ext.ComponentQuery, 'query');
-            Ext.ComponentQuery.query.withArgs('k-component-map').returns([testObjs.mapComponent]);
-            sinon.stub(BasiGX.util.Map, 'getMapComponent');
-            BasiGX.util.Map.getMapComponent.returns(testObjs.mapComponent);
-            var map = testObjs.mapComponent.getMap();
-            var layer = map.getLayers().item(0);
-            var view = Ext.create('Koala.view.component.CartoWindow', {
-                map: map,
-                cartoWindowId: 'Peter',
-                layer: layer,
-                feature: new ol.Feature({
-                    geometry: new ol.geom.Point([1, 1])
-                }),
-                renderTo: Ext.getBody()
-            });
-
-            expect(view.getController().onInitialize.bind(view.getController())).to.not.throwException();
-
-            //Teardown
-            Ext.ComponentQuery.query.restore();
-            BasiGX.util.Map.getMapComponent.restore();
-            TestUtil.teardownTestObjects(testObjs);
-        });
-
         it('can convert csv data', function() {
             var controller = new Koala.view.component.CartoWindowController();
             var csv = '1,2,3,4,5';
