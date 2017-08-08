@@ -20,7 +20,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-timeserieswindow',
     requires: [
-        'Koala.util.Chart',
         'Koala.util.ChartAutoUpdater',
         'Koala.util.String',
         'Koala.model.Station',

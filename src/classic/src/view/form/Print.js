@@ -54,7 +54,10 @@ Ext.define('Koala.view.form.Print', {
         transparentImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif',
         transparentColor: 'rgba(0,0,0,0)',
         chartPrint: false,
-        chart: undefined
+        chart: undefined,
+        printExtentMovable: true,
+        printExtentAlwaysCentered: false,
+        printExtentScalable: true
     },
 
     layout: 'hbox',
@@ -112,7 +115,7 @@ Ext.define('Koala.view.form.Print', {
 
     listeners: {
         genericfieldsetadded: function() {
-            me = this;
+            var me = this;
             // only show irix checkbox if irix-urls are configured
             if (me.getIrixUrl() && me.getIrixContext()) {
                 this.addIrixCheckbox();
@@ -120,6 +123,12 @@ Ext.define('Koala.view.form.Print', {
             this.addBboxFieldset();
             if (this.config.chartPrint) {
                 this.down('k-form-irixfieldset').show();
+                this.down('[name=generic-fieldset]').hide();
+                this.down('[name=bbox-fieldset]').hide();
+                this.down('[name=legendsFieldset]').hide();
+                this.down('fieldset[name=map]').hide();
+                this.down('fieldset[name=attributes]').hide();
+                this.down('fieldset[name=print-app-fieldset]').hide();
             }
         }
     },
@@ -1068,7 +1077,7 @@ Ext.define('Koala.view.form.Print', {
         var checkBox = me.down('[name="irix-fieldset-checkbox"]');
 
         if (!fs) {
-            var irixFieldset = Ext.create('Koala.view.form.IrixFieldSet',{
+            var irixFieldset = Ext.create('Koala.view.form.IrixFieldset',{
                 flex: 2
             });
             me.add(irixFieldset);

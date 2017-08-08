@@ -62,7 +62,7 @@ Ext.define('Koala.view.window.Print', {
     }],
 
     config: {
-        chartPrint: true,
+        chartPrint: false,
         chart: undefined
     },
 

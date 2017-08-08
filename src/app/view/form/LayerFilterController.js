@@ -181,17 +181,17 @@ Ext.define('Koala.view.form.LayerFilterController', {
             var now = KD.getTimeReferenceAwareMomentDate(new moment()).toISOString();
             if (filter.type === 'pointintime') {
                 if (now > filter.maxdatetimeinstant) {
-                    now = KD.getTimeReferenceAwareMomentDate(moment(filter.maxdatetimeinstant));
+                    now = KD.getTimeReferenceAwareMomentDate(KD.getUtcMoment(filter.maxdatetimeinstant));
                 }
                 filter.effectivedatetime = moment(now);
             }
 
             if (filter.type === 'timerange') {
                 if (now > filter.maxdatetimeinstant) {
-                    now = KD.getTimeReferenceAwareMomentDate(moment(filter.maxdatetimeinstant));
+                    now = KD.getTimeReferenceAwareMomentDate(KD.getUtcMoment(filter.maxdatetimeinstant));
                 }
                 filter.effectivemaxdatetime = moment(now);
-                filter.effectivemindatetime = moment(filter.effectivemaxdatetime).subtract(filter.maxduration, 'minutes');
+                filter.effectivemindatetime = KD.getUtcMoment(filter.effectivemaxdatetime).subtract(filter.maxduration, 'minutes');
             }
         });
         return filters;
