@@ -1016,10 +1016,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         Ext.each(newStations, function(station) {
             win = Koala.util.Chart.openTimeseriesWindow(station);
         });
+        var chart = win.down('d3-chart');
         if (zoom.min) {
             var startField = win.down('[name=timeseriesStartField]');
             var endField = win.down('[name=timeseriesEndField]');
-            var chart = win.down('d3-chart');
             chart.setConfig('startDate', moment(zoom.min));
             chart.setConfig('endDate', moment(zoom.max));
             startField.setValue(moment(zoom.min));
