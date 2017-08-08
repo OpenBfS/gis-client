@@ -1130,6 +1130,25 @@ Ext.define('Koala.view.form.Print', {
                     irixJson[correctRequestTypeKey] = reqType;
                 }
             });
+
+        //move "DokpoolContentType", "IsElan", "IsDoksys", "IsRodos", "IsRei"
+        //back to  "DokpoolMeta"
+        //and "ReportContext", "Confidentiality"
+        //back to "Identification"
+        irixJson.irix.Identification["ReportContext"] = irixJson.irix.ReportContext;
+        delete irixJson.irix.ReportContext;
+
+        irixJson.irix.Identification["Confidentiality"] = irixJson.irix.Confidentiality;
+        delete irixJson.irix.Confidentiality;
+
+        irixJson.irix.DokpoolMeta["DokpoolContentType"] = irixJson.irix.DokpoolContentType;
+        delete irixJson.irix.DokpoolContentType;
+
+        irixJson.irix.DokpoolMeta["IsElan"] = irixJson.irix.DokpoolBehaviour.IsElan;
+        irixJson.irix.DokpoolMeta["IsDoksys"] = irixJson.irix.DokpoolBehaviour.IsDoksys;
+        irixJson.irix.DokpoolMeta["IsRodos"] = irixJson.irix.DokpoolBehaviour.IsRodos;
+        irixJson.irix.DokpoolMeta["IsRei"] = irixJson.irix.DokpoolBehaviour.IsRei;
+        delete irixJson.irix.DokpoolBehaviour;
         }
         if (this.config.chartPrint) {
             irixJson['mapfish-print'] = undefined;
