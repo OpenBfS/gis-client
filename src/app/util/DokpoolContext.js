@@ -26,8 +26,8 @@ Ext.define('Koala.util.DokpoolContext', {
     ],
 
     config: {
-        dokpoolName: "bund",
-        dokpoolContextUrl: "resources/dokpoolContext.json",
+        dokpoolName: 'bund',
+        dokpoolContextUrl: 'resources/dokpoolContext.json',
         dokpoolContext: null
     },
 
@@ -63,7 +63,7 @@ Ext.define('Koala.util.DokpoolContext', {
      * Get all the DokpoolContentTypes from a DokpoolContext object
      * @return [List] The found DokpoolContentTypes.
      */
-    getDokpoolContentTypes: function(){
+    getDokpoolContentTypes: function() {
         var me = this;
         return Object.keys(me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType);
     },
@@ -75,9 +75,9 @@ Ext.define('Koala.util.DokpoolContext', {
      * @param "String" dokpoolContentType
      * @return [List] The found path.
      */
-    getPath: function(confidentiality, dokpoolContentType){
+    getPath: function(confidentiality, dokpoolContentType) {
         var me = this;
-        return me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType[dokpoolContentType]["Confidentiality"][confidentiality];
+        return me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType[dokpoolContentType]['Confidentiality'][confidentiality];
     },
 
     /**
@@ -86,7 +86,7 @@ Ext.define('Koala.util.DokpoolContext', {
      * @param "String" dokpoolContentType
      * @return [List] The found confidentialities.
      */
-    getConfidentialitiesFromDokpoolcontenttype: function(dokpoolContentType){
+    getConfidentialitiesFromDokpoolcontenttype: function(dokpoolContentType) {
         var me = this;
         return Array.from(new Set(Object.keys(me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType[dokpoolContentType].Confidentiality)));
     },
@@ -97,10 +97,10 @@ Ext.define('Koala.util.DokpoolContext', {
      * @param "String" confidentiality
      * @return [List] The found dokpoolContentTypes.
      */
-    getDokpoolcontenttypeFromConfidentialities: function(confidentiality){
+    getDokpoolcontenttypeFromConfidentialities: function(confidentiality) {
         var me = this;
         var mylist = [];
-        Object.keys(me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType).forEach(function(e){
+        Object.keys(me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType).forEach(function(e) {
             if (me.dokpoolContext.DokpoolName[me.dokpoolName].DokpoolContentType[e].Confidentiality.hasOwnProperty(confidentiality)) {
                 mylist.push(e);
             }

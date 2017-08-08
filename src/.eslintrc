@@ -16,7 +16,8 @@
         "download": false,
         "moment": true,
         "html2canvas": true,
-        "turf": true
+        "turf": true,
+        "Set": true
     },
     "rules": {
         "comma-dangle": 2,
