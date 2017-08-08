@@ -1004,6 +1004,15 @@
             }
         }
     },
+    "Koala.view.form.IrixFieldSet": {
+        "config": {
+            "data": {
+                "DokpoolBehaviour_label": "dem Dokpool sein Behaviour",
+                "DokpoolMeta_label": "dem Dokpool seine Metadaten",
+                "Identification_label": "allg. Informationen"
+            }
+        }
+    },
     "BasiGX.view.panel.MapContainer": {
         "config": {
             "data": {
