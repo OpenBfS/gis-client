@@ -98,11 +98,8 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
         var FilterUtil = Koala.util.Filter;
         var metadata = me.initOlLayer.metadata;
         var timeRangeFilter = FilterUtil.getStartEndFilterFromMetadata(metadata);
-        var minMaxDates = FilterUtil.getMinMaxDatesFromMetadata(metadata);
 
         var filter = {
-            mindatetimeinstant: minMaxDates.min,
-            maxdatetimeinstant: minMaxDates.max,
             defaultendtimeinstant: timeRangeFilter.maxdatetimeinstant,
             defaultstarttimeinstant: timeRangeFilter.mindatetimeinstant,
             unit: 'minutes',
