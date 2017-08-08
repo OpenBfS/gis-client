@@ -1016,13 +1016,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
         Ext.each(newStations, function(station) {
             win = Koala.util.Chart.openTimeseriesWindow(station);
         });
-        var startField = win.down('[name=timeseriesStartField]');
-        var endField = win.down('[name=timeseriesEndField]');
-        var chart = win.down('d3-chart');
-        chart.setConfig('startDate', moment(zoom.min));
-        chart.setConfig('endDate', moment(zoom.max));
-        startField.setValue(moment(zoom.min));
-        endField.setValue(moment(zoom.max));
+        if (zoom.min) {
+            var startField = win.down('[name=timeseriesStartField]');
+            var endField = win.down('[name=timeseriesEndField]');
+            var chart = win.down('d3-chart');
+            chart.setConfig('startDate', moment(zoom.min));
+            chart.setConfig('endDate', moment(zoom.max));
+            startField.setValue(moment(zoom.min));
+            endField.setValue(moment(zoom.max));
+        }
         chart.getController().getChartData();
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');
         Ext.each(cartos, function(carto) {
