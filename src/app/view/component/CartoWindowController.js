@@ -999,6 +999,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     combineTimeseries: function() {
+        var zoom = this.timeserieschart.getController().currentDateRange;
         var newStations = [];
         var newStationIds = [];
 
@@ -1011,10 +1012,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 }
             });
         });
+        var win;
         Ext.each(newStations, function(station) {
-            Koala.util.Chart.openTimeseriesWindow(station);
+            win = Koala.util.Chart.openTimeseriesWindow(station);
         });
-        this.timeserieschart.getController().getChartData();
+        var startField = win.down('[name=timeseriesStartField]');
+        var endField = win.down('[name=timeseriesEndField]');
+        var chart = win.down('d3-chart');
+        chart.setConfig('startDate', moment(zoom.min));
+        chart.setConfig('endDate', moment(zoom.max));
+        startField.setValue(moment(zoom.min));
+        endField.setValue(moment(zoom.max));
+        chart.getController().getChartData();
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');
         Ext.each(cartos, function(carto) {
             carto.destroy();
