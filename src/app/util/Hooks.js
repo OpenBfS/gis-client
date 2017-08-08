@@ -37,7 +37,13 @@ Ext.define('Koala.util.Hooks', {
          *        adjust the form before it will be created.
          */
         executeBeforeAddHook: function(form, attributeFields, attributeRec) {
-            var argumentName = attributeRec.get('name');
+            var argumentName;
+            try {
+                argumentName = attributeRec.get('name');
+            } catch (err) {
+                //e.g. there's no function "get()"
+                argumentName = attributeRec.name;
+            }
             if (argumentName && this.beforeAdd[argumentName] &&
                     Ext.isFunction(this.beforeAdd[argumentName])) {
                 this.beforeAdd[argumentName](form, attributeRec, attributeFields);
@@ -82,6 +88,29 @@ Ext.define('Koala.util.Hooks', {
                 var userName = Koala.util.Object.getPathStrOr(appContext,
                     'data/merge/imis_user/username', '');
                 attributeFields.items[0].value = userName;
+            },
+            User: function(form, attributeFields) {
+                var appContext = Koala.util.AppContext.getAppContext();
+                var userName = Koala.util.Object.getPathStrOr(appContext,
+                    'data/merge/imis_user/username', '');
+                attributeFields.value = userName;
+                attributeFields.rawValue = userName;
+                attributeFields['hidden'] = true;
+            },
+            DokpoolBehaviour: function(form, attributeFields) {
+                attributeFields.setBind({
+                    title: '{DokpoolBehaviour_label}'
+                });
+            },
+            DokpoolMeta: function(form, attributeFields) {
+                attributeFields.setBind({
+                    title: '{DokpoolMeta_label}'
+                });
+            },
+            Identification: function(form, attributeFields) {
+                attributeFields.setBind({
+                    title: '{Identification_label}'
+                });
             },
             legend_template: function(form, attributeRec, attributeFields) {
                 var layoutCombo = form.down('combo[name="layout"]');

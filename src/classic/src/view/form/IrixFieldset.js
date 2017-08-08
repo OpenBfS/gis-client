@@ -22,7 +22,8 @@ Ext.define('Koala.view.form.IrixFieldset',{
     xtype: 'k-form-irixfieldset',
 
     requires: [
-        'Koala.util.Filter'
+        'Koala.util.Filter',
+        'Koala.view.form.IrixFieldsetModel'
     ],
 
     /**
@@ -35,13 +36,14 @@ Ext.define('Koala.view.form.IrixFieldset',{
     margin: '0 0 0 5px',
     name: 'irix',
     layout: 'anchor',
+    viewModel: 'k-form-irixfieldset',
     defaults: {
         anchor: '100%'
     },
 
     config: {
         // can be overriden via appContext.json: urls/irixcontext
-        irixContextUrl: null
+        irixContextUrl: 'resources/irixContext.json'
     },
 
     initComponent: function() {
@@ -75,41 +77,48 @@ Ext.define('Koala.view.form.IrixFieldset',{
                 Ext.raise('server-side failure with status code ' + response.status);
             }
         });
+        me.on('beforeattributefieldsadd', me.onBeforeAttributeFieldsAdd);
         me.callParent(arguments);
     },
 
     createFields: function(fieldsconfig) {
         var me = this;
         var returnFields = [];
+        var myField;
 
         Ext.each(fieldsconfig, function(fieldconfig) {
             switch (fieldconfig.type) {
                 case 'fieldset':
-                    returnFields.push(me.createFieldSet(fieldconfig));
+                    myField = me.createFieldSet(fieldconfig);
                     break;
                 case 'text':
-                    returnFields.push(me.createTextField(fieldconfig));
+                    myField = me.createTextField(fieldconfig);
                     break;
                 case 'number':
-                    returnFields.push(me.createNumberField(fieldconfig));
+                    myField = me.createNumberField(fieldconfig);
                     break;
                 case 'combo':
-                    returnFields.push(me.createCombo(fieldconfig));
+                    myField = me.createCombo(fieldconfig);
                     break;
                 case 'date':
-                    returnFields.push(me.createDateField(fieldconfig));
+                    myField = me.createDateField(fieldconfig);
                     break;
                 case 'datetime':
-                    returnFields.push(me.createPointInTimeField(fieldconfig));
+                    myField = me.createPointInTimeField(fieldconfig);
                     break;
                 case 'checkbox':
-                    returnFields.push(me.createCheckbox(fieldconfig));
+                    myField = me.createCheckbox(fieldconfig);
                     break;
                 default:
                     break;
+            }//end switch
+            if (myField) {
+                me.fireEvent(
+                    'beforeattributefieldsadd', me, returnFields, myField
+                );
+                returnFields.push(myField);
             }
-        });
-
+        });//end each
         return returnFields;
     },
 
@@ -121,14 +130,18 @@ Ext.define('Koala.view.form.IrixFieldset',{
                 anchor: '100%'
             },
             name: config.name,
-            title: config.label,
+            viewModel: me.getViewModel(),
+            collapsible: config.collapsible,
+            collapsed: config.collapsed,
             items: me.createFields(config.fields)
         });
     },
 
     createTextField: function(config) {
+        var me = this;
         return Ext.create('Ext.form.field.Text', {
             name: config.name,
+            viewModel: me.getViewModel(),
             fieldLabel: config.label,
             value: config.defaultValue,
             allowBlank: config.allowBlank
@@ -136,8 +149,10 @@ Ext.define('Koala.view.form.IrixFieldset',{
     },
 
     createNumberField: function(config) {
+        var me = this;
         return Ext.create('Ext.form.field.Number', {
             name: config.name,
+            viewModel: me.getViewModel(),
             fieldLabel: config.label,
             minValue: config.minValue,
             maxValue: config.maxValue,
@@ -147,8 +162,10 @@ Ext.define('Koala.view.form.IrixFieldset',{
     },
 
     createCombo: function(config) {
+        var me = this;
         var combo = Ext.create('Ext.form.field.ComboBox', {
             name: config.name,
+            viewModel: me.getViewModel(),
             fieldLabel: config.label,
             store: config.values,
             value: config.defaultValue,
@@ -161,21 +178,25 @@ Ext.define('Koala.view.form.IrixFieldset',{
     },
 
     createDateField: function(config) {
+        var me = this;
         return Ext.create('Ext.form.field.Date', {
             name: config.name,
+            viewModel: me.getViewModel(),
             fieldLabel: config.label,
             value: config.defaultValue
         });
     },
 
     createPointInTimeField: function(config) {
+        var me = this;
         var now = new moment();
         var value = Koala.util.Date.getUtcMoment(config.defaultValue) || now;
         value = Koala.util.Date.getTimeReferenceAwareMomentDate(value);
 
         var dateField = Ext.create('Ext.form.field.Date', {
-            fieldLabel: config.label,
             name: config.name,
+            viewModel: me.getViewModel(),
+            fieldLabel: config.label,
             editable: false,
             flex: 1,
             value: value,
@@ -195,6 +216,7 @@ Ext.define('Koala.view.form.IrixFieldset',{
 
         return Ext.create('Ext.form.FieldContainer', {
             name: config.name,
+            viewModel: me.getViewModel(),
             valueField: dateField,
             layout: {
                 type: 'hbox',
@@ -211,5 +233,19 @@ Ext.define('Koala.view.form.IrixFieldset',{
             checked: config.defaultValue,
             boxLabel: ' '
         });
+    },
+
+    /**
+     * Called before a `attributefields`-object is added to the fieldset. This
+     * method will hide the legend_template and map_template fields, but also
+     * set their respective value according to a convention.
+     *
+     * @param {BasiGX.view.form.Print} printForm The print form instance.
+     * @param {Object} attributefields An `attributefields`-object, which often
+     *     are formfields like `textfields`, `combos` etc.
+     */
+    onBeforeAttributeFieldsAdd: function(printForm, attributeFields, attributeRec) {
+        Koala.util.Hooks.executeBeforeAddHook(
+            printForm, attributeFields, attributeRec);
     }
 });
