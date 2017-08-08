@@ -63,7 +63,7 @@ Ext.define('Koala.view.form.IrixFieldset',{
         if (!me.getIrixContextUrl) {
             me.callParent(arguments);
         }
- 
+
         Ext.Ajax.request({
             url: me.irixContextUrl,
 
@@ -111,13 +111,13 @@ Ext.define('Koala.view.form.IrixFieldset',{
                     break;
                 default:
                     break;
-             }//end switch
-             if (myField){
-                 var doContinue = me.fireEvent(
+            }//end switch
+            if (myField) {
+                me.fireEvent(
                     'beforeattributefieldsadd', me, returnFields, myField
-                 );
-                 returnFields.push(myField);
-             }
+                );
+                returnFields.push(myField);
+            }
         });//end each
         return returnFields;
     },
@@ -227,7 +227,6 @@ Ext.define('Koala.view.form.IrixFieldset',{
     },
 
     createCheckbox: function(config) {
-        var me = this;
         return Ext.create('Ext.form.field.Checkbox', {
             name: config.name,
             fieldLabel: config.label,

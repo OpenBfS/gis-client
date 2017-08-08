@@ -22,7 +22,7 @@ Ext.define('Koala.view.form.IrixFieldsetModel', {
     data: {
         DokpoolBehaviour_label: 'DokpoolBehaviour',
         DokpoolMeta_label: 'DokpoolMeta',
-        Identifikation_label: 'Identification',
+        Identifikation_label: 'Identification'
     }
 
 });

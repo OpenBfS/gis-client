@@ -37,12 +37,12 @@ Ext.define('Koala.util.Hooks', {
          *        adjust the form before it will be created.
          */
         executeBeforeAddHook: function(form, attributeFields, attributeRec) {
-            try{
-                var argumentName = attributeRec.get('name');
-            }
-            catch (err){
+            var argumentName;
+            try {
+                argumentName = attributeRec.get('name');
+            } catch (err) {
                 //e.g. there's no function "get()"
-                var argumentName = attributeRec.name;
+                argumentName = attributeRec.name;
             }
             if (argumentName && this.beforeAdd[argumentName] &&
                     Ext.isFunction(this.beforeAdd[argumentName])) {
@@ -98,19 +98,19 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields['hidden'] = true;
             },
             DokpoolBehaviour: function(form, attributeFields) {
-                 attributeFields.setBind({
-                      title: '{DokpoolBehaviour_label}'
-                  });
+                attributeFields.setBind({
+                    title: '{DokpoolBehaviour_label}'
+                });
             },
             DokpoolMeta: function(form, attributeFields) {
-                 attributeFields.setBind({
-                      title: '{DokpoolMeta_label}'
-                  });
+                attributeFields.setBind({
+                    title: '{DokpoolMeta_label}'
+                });
             },
             Identification: function(form, attributeFields) {
-                 attributeFields.setBind({
-                      title: '{Identification_label}'
-                  });
+                attributeFields.setBind({
+                    title: '{Identification_label}'
+                });
             },
             legend_template: function(form, attributeRec, attributeFields) {
                 var layoutCombo = form.down('combo[name="layout"]');
