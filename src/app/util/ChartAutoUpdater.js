@@ -50,6 +50,7 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                 return;
             }
             var runner = new Ext.util.TaskRunner();
+            var first = true;
 
             runner.start({
                 run: function() {
@@ -75,19 +76,23 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                         endDate = moment();
                         var startDate = moment(endDate);
                         var ctrl = chart.getController();
-                        if (!ctrl.currentDateRange.min) {
+                        if (!ctrl.currentDateRange.min || !first) {
                             ctrl.currentDateRange.min = chart.getConfig('startDate');
                         }
-                        if (!ctrl.currentDateRange.max) {
+                        if (!ctrl.currentDateRange.max || !first) {
                             ctrl.currentDateRange.max = chart.getConfig('endDate');
                         }
                         var duration = moment(ctrl.currentDateRange.max)
                             .diff(moment(ctrl.currentDateRange.min));
 
                         startDate.subtract(duration);
-                        chart.setConfig('startDate', startDate);
-                        chart.setConfig('endDate', endDate);
-                        chart.getController().getChartData();
+                        chart.setStartDate(startDate);
+                        chart.setEndDate(endDate);
+                        ctrl.currentDateRange.min = null;
+                        ctrl.currentDateRange.max = null;
+                        ctrl.useCurrentZoom = false;
+                        first = false;
+                        ctrl.getChartData();
                         if (startField) {
                             startField.setValue(startDate);
                         }
