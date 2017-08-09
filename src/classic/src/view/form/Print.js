@@ -1024,6 +1024,8 @@ Ext.define('Koala.view.form.Print', {
         bboxTextfield.on('destroy', function() {
             map.un('moveend', listenerFunction);
         });
+        me.transformInteraction.on('translateend', listenerFunction);
+        me.transformInteraction.on('scaleend', listenerFunction);
 
         var bboxFieldSet = Ext.create('Ext.form.FieldSet', {
             name: 'bbox-fieldset',
