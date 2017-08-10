@@ -25,6 +25,7 @@ Ext.define('Koala.view.window.BarChartModel', {
         undoBtnText: '',
         uncertaintyCheckboxLabel: '',
         downloadBtnText: '',
-        toggleGroupingButtonText: ''
+        toggleGroupingButtonText: '',
+        printChartButtonText: ''
     }
 });

@@ -389,7 +389,8 @@
                 "undoBtnText": "fr:…zurückzoomen",
                 "uncertaintyCheckboxLabel": "fr:Messungenauigkeit",
                 "exportAsImageBtnText": "fr:Als Bild exportieren",
-                "toggleGroupingButtonText": "fr:Toggle grouping"
+                "toggleGroupingButtonText": "fr:Toggle grouping",
+                "printChartButtonText": "fr:IMIS-Druck"
             }
         }
     },
