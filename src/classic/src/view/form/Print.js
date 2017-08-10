@@ -111,6 +111,13 @@ Ext.define('Koala.view.form.Print', {
 
         me.on('beforeattributefieldsadd', me.onBeforeAttributeFieldsAdd);
         me.on('attributefieldsadd', me.onAttributeFieldsAdd);
+
+        if (this.config.chartPrint) {
+            appCombo.getStore().on('load', function() {
+                appCombo.setValue(appCombo.getStore().getAt(1));
+                appCombo.fireEvent('select', appCombo, appCombo.getStore().getAt(1), null);
+            });
+        }
     },
 
     listeners: {
