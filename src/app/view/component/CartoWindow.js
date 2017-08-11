@@ -51,7 +51,11 @@ Ext.define('Koala.view.component.CartoWindow',{
     listeners: {
         boxready: 'onInitialize',
         initialize: 'onInitialize',
-        beforedestroy: 'onBeforeDestroy'
+        beforedestroy: 'onBeforeDestroy',
+        afterrender: function(cmp) {
+            cmp.getEl().on('mouseenter', this.controller.disableMapInteractions);
+            cmp.getEl().on('mouseleave', this.controller.enableMapInteractions);
+        }
     }
 
 });

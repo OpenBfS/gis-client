@@ -87,7 +87,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         }
 
         if (Koala.util.Layer.isTableLayer(layer)) {
-            me.createTableTab();
+            //me.createTableTab();
+            me.createGridTab();
         }
 
         if (Koala.util.Layer.isHtmlLayer(layer)) {
@@ -120,6 +121,33 @@ Ext.define('Koala.view.component.CartoWindowController', {
         });
 
         el.appendChild(closeElement);
+    },
+
+    /**
+     * onCartoWindowMouseEnter listener
+     *
+     */
+    disableMapInteractions: function() {
+        var me = this;
+        var map = me.component.map;
+        map.getInteractions().forEach(function(interaction) {
+                interaction.setActive(false);
+        });
+        console.log("mouseenter");
+    },
+
+
+    /**
+     *onCartoWindowMouseLeave listener
+     *
+     **/
+    enableMapInteractions: function(map) {
+        var me = this;
+        var map = (map && map instanceof ol.Map) ? map : me.component.map;
+        map.getInteractions().forEach(function(interaction) {
+                interaction.setActive(true);
+        });
+        console.log("mouseleave");
     },
 
     /**
@@ -579,6 +607,78 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     /**
+     * Create the tab which contains the table content as grid and adds it to the
+     * tabwindow.
+     */
+    createGridTab: function() {
+        var me = this;
+        var view = me.getView();
+        var el = view.el.dom;
+        this.getTableData().then(function(data) {
+            var tableData;
+            var gridTableTab = me.createTabElement({
+                title: 'GridTable',
+                className: 'gridtable-tab',
+                active: true
+            });
+            var tabElm = gridTableTab.getElementsByTagName('div')[0];
+
+            var store = Ext.create('Ext.data.Store', {
+                storeId:'GridTabStore',
+                autoLoad: true,
+                //data: tableData,
+                proxy: {
+                    type: 'ajax',
+                    url: 'http://dev-pom-fr.lab.bfs.de/gis_client_configs/tableContentExample.json',
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'data'
+                    }
+                }
+            });
+            var gridTab = {
+                xtype: 'grid',
+                title: 'table',
+                store: Ext.data.StoreManager.lookup('GridTabStore'),
+                columns: {
+                    items: []
+                },
+                height: '400px',
+                width: '400px',
+                flex: 1,
+                renderTo: tabElm
+            };
+
+
+            store.on('metachange',function(store, meta){
+                //TODO: if metachange -> new grid?! -> seems wrong
+                gridTab = Ext.create(gridTab);
+                console.log("metachange");
+                gridTab.reconfigure(store, meta.columns);
+                console.log(store);
+                console.log(meta);
+            });
+
+            el.appendChild(gridTableTab);
+            me.updateCloseElementPosition();
+        });
+        /*
+        this.getTableData().then(function(data) {
+            var html = me.convertData(data);
+
+            var timeSeriesTab = me.createTabElement({
+                title: 'Table',
+                innerHTML: html,
+                className: 'table-tab'
+            });
+
+            el.appendChild(timeSeriesTab);
+            me.updateCloseElementPosition();
+        });
+        */
+    },
+
+    /**
      * Create the tab which contains the html content and adds it to the
      * tabwindow.
      */
@@ -707,7 +807,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             position: coords,
             positioning: 'top-left',
             element: view.el.dom,
-            stopEvent: true,
+            stopEvent: false,
             dragging: false
         });
 
@@ -1064,6 +1164,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         map.un('pointermove', me.pointerMoveListener);
         window.removeEventListener(upEvent, me.onMouseUpWindow);
         lineLayer.getSource().removeFeature(lineFeature);
+
+        me.enableMapInteractions(map);
 
         if (this.timeserieschart) {
             this.timeserieschart.destroy();
