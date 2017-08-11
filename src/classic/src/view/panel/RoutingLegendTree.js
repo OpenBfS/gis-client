@@ -214,6 +214,21 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var layer = btn.layerRec.getOlLayer();
             Koala.util.Layer.getMetadataFromUuid(layer.metadata.id)
                 .then(function(metadata) {
+                    var queryString = Ext.isModern ?
+                        'k-panel-treepanel > treelist' :
+                        'k-panel-themetree';
+                    var treePanel = Ext.ComponentQuery.query(queryString)[0];
+                    var treeStore = treePanel.getStore();
+                    // `findRecord` finds a record where the first param BEGINS with the
+                    // second one.
+                    var item = treeStore.findRecord('uuid', metadata.id);
+                    if (item.get('isRodosLayer') && item.get('rodosFilters')) {
+                        metadata.filters = Ext.Array.merge(
+                            metadata.filters, item.get('rodosFilters')
+                        );
+                        metadata.isRodosLayer = item.get('isRodosLayer');
+                        metadata.description = item.get('description');
+                    }
                     Koala.util.Layer.showChangeFilterSettingsWin(
                         metadata, layer
                     );

@@ -407,7 +407,8 @@
                 "undoBtnText": "…zurückzoomen",
                 "uncertaintyCheckboxLabel": "Messungenauigkeit",
                 "exportAsImageBtnText": "Als Bild exportieren",
-                "toggleGroupingButtonText": "Gruppierung wechseln"
+                "toggleGroupingButtonText": "Gruppierung wechseln",
+                "printChartButtonText": "IMIS-Druck"
             }
         }
     },
