@@ -1,6 +1,25 @@
 {
     "data": {
-        "fields" : [{
+        "fields": [{
+                    "name": "DokpoolContentType",
+                    "label": "Inhaltstyp",
+                    "type": "combo",
+                    "values": [
+                        ["weatherinformation", "Wetterinformation"],
+                        ["trajectory", "Trajektorie"],
+                        ["rodosprojection", "RODOS_Prognose"],
+                        ["gammadoserate", "Messergebnis_ODL"],
+                        ["gammadoserate_timeseries", "Messergebnis_ODL Zeitreihe"],
+                        ["airactivity", "Messergebnis_Luftaktivität"],
+                        ["groundcontamination", "Messergebnis_Bodenkontamination"],
+                        ["mresult_insitu", "Messergebnis_Insitu"],
+                        ["mresult_feed", "Messergebnis_Futtermittel"],
+                        ["mresult_food", "Messergebnis_Lebensmittel"],
+                        ["mresult_water", "Messergebnis_Gewässer"]
+                    ],
+                    "defaultValue": "gammadoserate",
+                    "allowBlank": true
+                },{
                 "name": "Title",
                 "label": "Titel",
                 "type": "text",
@@ -45,28 +64,6 @@
                         "allowBlank": true
                     }]
                 },{
-                    "name": "ReportContext",
-                    "label": "Report Inhaltstyp",
-                    "type": "combo",
-                    "values": [
-                        ["Emergency", "Notfall"],
-                        ["Routine", "Routine"],
-                        ["Exercise", "Übung"],
-                        ["Test", "Test"]
-                    ],
-                    "defaultValue": "Test",
-                    "allowBlank": true
-                },{
-                    "name": "Confidentiality",
-                    "label": "Sichtbarkeit",
-                    "type": "combo",
-                    "values": [
-                        ["For Addressees Use Only", "Gruppenintern"],
-                        ["Free for Public Use", "Alle"]
-                    ],
-                    "defaultValue": "For Addressees Use Only",
-                    "allowBlank": false
-                },{
                     "name": "SequenceNumber",
                     "label": "Laufende Nr.",
                     "type": "text",
@@ -95,8 +92,59 @@
                         "defaultValue": "DE",
                         "allowBlank": true
                     }]
-                }]
+                }],
+                "collapsible": true,
+                "collapsed": true
             },{
+                    "name": "ReportContext",
+                    "label": "Report Inhaltstyp",
+                    "type": "combo",
+                    "values": [
+                        ["Emergency", "Notfall"],
+                        ["Routine", "Routine"],
+                        ["Exercise", "Übung"],
+                        ["Test", "Test"]
+                    ],
+                    "defaultValue": "Test",
+                    "allowBlank": true
+                },{
+                    "name": "Confidentiality",
+                    "label": "Sichtbarkeit",
+                    "type": "combo",
+                    "values": [
+                        ["For Addressees Use Only", "Gruppenintern"],
+                        ["Free for Public Use", "Alle"]
+                    ],
+                    "defaultValue": "Free for Public Use",
+                    "allowBlank": false
+                },{
+                "type": "fieldset",
+                "name": "DokpoolBehaviour",
+                "label": "DokpoolBehaviour",
+                "fields": [{
+                    "name": "IsElan",
+                    "label": "Is Elan",
+                    "type": "checkbox",
+                    "defaultValue": true
+                },{
+                    "name": "IsDoksys",
+                    "label": "Is Doksys",
+                    "type": "checkbox",
+                    "defaultValue": false
+                },{
+                    "name": "IsRodos",
+                    "label": "Is Rodos",
+                    "type": "checkbox",
+                    "defaultValue": false
+                },{
+                    "name": "IsRei",
+                    "label": "Is Rei",
+                    "type": "checkbox",
+                    "defaultValue": false
+                }],
+                "collapsible": true,
+                "collapsed": false
+               },{
                 "type": "fieldset",
                 "name" : "DokpoolMeta",
                 "label" : "DokpoolMeta",
@@ -112,62 +160,26 @@
                     "defaultValue": "Standard-Info",
                     "allowBlank": true
                 },{
-                    "name": "DokpoolContentType",
-                    "label": "Inhaltstyp",
+                    "name": "DokpoolName",
+                    "label": "Name des Dokpool",
                     "type": "combo",
                     "values": [
-                        ["weatherinformation", "Wetterinformation"],
-                        ["trajectory", "Trajektorie"],
-                        ["rodosprojection", "RODOS_Prognose"],
-                        ["gammadoserate", "Messergebnis_ODL"],
-                        ["airactivity", "Messergebnis_Luftaktivität"],
-                        ["groundcontamination", "Messergebnis_Bodenkontamination"],
-                        ["mresult_feed", "Messergebnis_Futtermittel"],
-                        ["mresult_food", "Messergebnis_Lebensmittel"],
-                        ["mresult_water", "Messergebnis_Gewässer"]
+                        ["bund", "bund"]
                     ],
-                    "defaultValue": "gammadoserate",
+                    "defaultValue": "bund",
                     "allowBlank": true
                 },{
-                    "name": "IsElan",
-                    "label": "Is Elan",
+                    "name": "DokpoolGroupFolder",
+                    "label": "Gruppenordner im Dokool",
                     "type": "combo",
                     "values": [
-                        ["true", "ja"],
-                        ["false", "nein"]
+                        ["bund_e-rb", "BfS Rufbereitschaft (Bund)"],
+                        ["bund_bfs-rodos/von-gis", "BfS RODOS (Bund) | von GIS"],
+                        ["bund_bfs-messungen/von-gis", "BfS Messungen (Bund) | von GIS"],
+                        ["bund_bfs-lage/von-gis", "BfS Lage (Bund) | von GIS"]
                     ],
-                    "defaultValue": "true",
-                    "allowBlank": false
-                },{
-                    "name": "IsDoksys",
-                    "label": "Is Doksys",
-                    "type": "combo",
-                    "values": [
-                        ["true", "ja"],
-                        ["false", "nein"]
-                    ],
-                    "defaultValue": "false",
-                    "allowBlank": false
-                },{
-                    "name": "IsRodos",
-                    "label": "Is Rodos",
-                    "type": "combo",
-                    "values": [
-                        ["true", "ja"],
-                        ["false", "nein"]
-                    ],
-                    "defaultValue": "false",
-                    "allowBlank": false
-                },{
-                    "name": "IsRei",
-                    "label": "Is Rei",
-                    "type": "combo",
-                    "values": [
-                        ["true", "ja"],
-                        ["false", "nein"]
-                    ],
-                    "defaultValue": "false",
-                    "allowBlank": false
+                    "defaultValue": "bund_bfs-messungen/von-gis",
+                    "allowBlank": true
                 },{
                     "name": "NetworkOperator",
                     "label": "Messnetz",
@@ -282,7 +294,9 @@
                     "label": "Probeentnahme Ende",
                     "type": "datetime",
                     "allowBlank": false
-                }]
+                }],
+                "collapsible": true,
+                "collapsed": true
             }
         ]
     },

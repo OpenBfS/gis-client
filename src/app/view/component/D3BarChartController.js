@@ -392,6 +392,14 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var viewId = '#' + view.getId();
         var chartSize = me.getChartSize();
         var labelFunc = view.getLabelFunc() || me.getFallBackIdentity();
+        var barChartProperties = view.getTargetLayer().get('barChartProperties');
+        var groupProp = barChartProperties.groupAttribute || 'end_measure';
+        var keyProp = barChartProperties.xAxisAttribute;
+        if (this.groupPropToggled) {
+            var h = groupProp;
+            groupProp = keyProp;
+            keyProp = h;
+        }
         var shapeConfig = view.getShape();
         var xField = 'key';
         var yField = 'value';
@@ -539,7 +547,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return me.shapeFilter(d, orientY, yField);
             })
             .text(function(d) {
-                return labelFunc(d[yField], d);
+                return labelFunc(d[yField], d, groupProp, keyProp);
             })
             .attr('transform', function(d) {
                 return me.getBarLabelTransform(d, orientXGroup, orientY, xField,
