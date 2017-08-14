@@ -97,6 +97,14 @@ Ext.define('Koala.view.window.BarChartController', {
             }, {
                 xtype: 'button',
                 bind: {
+                    text: '{printChartButtonText}'
+                },
+                handler: me.onPrintChartClicked,
+                scope: me,
+                margin: '0 0 10px 0'
+            }, {
+                xtype: 'button',
+                bind: {
                     text: '{exportAsImageBtnText}'
                 },
                 handler: me.onExportAsImageClicked,
@@ -141,6 +149,24 @@ Ext.define('Koala.view.window.BarChartController', {
         ctrl.on('chartdataprepared', function() {
             ctrl.redrawLegend();
         });
+    },
+
+    /**
+     * Opens the IRIX print window.
+     * @param  {object} button the print button
+     */
+    onPrintChartClicked: function(button) {
+        var chart = button.up('[name="chart-composition"]').down('d3-barchart');
+        var chartCtrl = chart.getController();
+        var cb = function(dataUri) {
+            Ext.create({
+                xtype: 'k-window-print',
+                chartPrint: true,
+                chart: dataUri
+            }).show();
+        };
+        var cbScope = this;
+        chartCtrl.chartToDataUriAndThen(cb, cbScope);
     },
 
     onUncertaintyCheckChange: function(checkbox, checked) {
