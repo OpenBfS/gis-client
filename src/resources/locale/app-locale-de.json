@@ -438,7 +438,7 @@
     "Koala.view.window.Print": {
         "config": {
             "data": {
-                "title": "Kartendruck"
+                "title": "Drucken"
             }
         }
     },
