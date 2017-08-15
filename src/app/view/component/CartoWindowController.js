@@ -169,7 +169,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         this.createTimeSeriesButtons(tabElm);
         this.createCombineTimeseriesButton(tabElm);
-        this.createIrixPrintButton(tabElm);
 
         var autorefreshStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'title'],
@@ -211,7 +210,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.timeserieschart = Ext.create(chartObj);
 
         this.createLegendVisibilityButton(tabElm, this.timeserieschart);
+        this.createIrixPrintButton(tabElm, this.timeserieschart);
         this.createExportToPngButton(tabElm, this.timeserieschart);
+
 
         Koala.util.ChartAutoUpdater.autorefreshTimeseries(
             this.timeserieschart,
@@ -294,23 +295,22 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * Create button to start an irix print.
      * @param {Element} elm element to render the button to
      */
-    createIrixPrintButton: function(elm) {
-        var irix = {
+    createIrixPrintButton: function(elm, chart) {
+        var btn = {
             cls: 'carto-window-chart-button',
             xtype: 'button',
             name: 'irix-print',
             glyph: 'xf02f@FontAwesome',
             bind: {
                 tooltip: this.view.getViewModel().get('irixPrint')
-            },
-            renderTo: elm
+            }
         };
-        irix = Ext.create(irix);
-        irix.el.dom.addEventListener('click', this.showIrixPrintDialog.bind(this));
+        this.IrixPrintButton = Ext.create(btn);
+        this.IrixPrintButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3); 
+        this.IrixPrintButton.el.dom.addEventListener('click', this.showIrixPrintDialog.bind(this, chart));
     },
 
-    showIrixPrintDialog: function() {
-        var chart = this.timeserieschart;
+    showIrixPrintDialog: function(chart) {
         var chartCtrl = chart.getController();
         var cb = function(dataUri) {
             Ext.create({
@@ -362,7 +362,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         };
         this.exportToPngButton = Ext.create(btn);
-        this.exportToPngButton.render(elm, chart.xtype === 'd3-chart' ? 6 : 4);
+        this.exportToPngButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3);
         this.exportToPngButton.el.dom.addEventListener('click',
             this.exportToPng.bind(this, chart));
     },
@@ -384,7 +384,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         };
         this.toggleGrouping = Ext.create(btn);
-        this.toggleGrouping.render(elm, chart.xtype === 'd3-chart' ? 6 : 4);
+        this.toggleGrouping.render(elm, 3);
         this.toggleGrouping.el.dom.addEventListener('click',
             this.toggleBarChartGrouping.bind(this, chart));
     },
@@ -447,9 +447,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         el.appendChild(barChartTab);
         this.barChart = Ext.create(chartObj);
-        this.createLegendVisibilityButton(tabElm, this.barChart);
-        this.createExportToPngButton(tabElm, this.barChart);
         this.createBarChartToggleButton(tabElm, this.barChart);
+        this.createLegendVisibilityButton(tabElm, this.barChart);
+        this.createIrixPrintButton(tabElm, this.barChart);
+        this.createExportToPngButton(tabElm, this.barChart);
     },
 
     getTabData: function(urlProperty, contentProperty) {
