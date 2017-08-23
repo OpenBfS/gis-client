@@ -53,6 +53,12 @@ Ext.define('Koala.view.component.CartoWindow',{
         initialize: 'onInitialize',
         beforedestroy: 'onBeforeDestroy',
         afterrender: function(cmp) {
+            cmp.getEl().on('mousedown', function() {
+                this.mouseDown = true;
+            }, cmp);
+            cmp.getEl().on('mouseup', function() {
+                this.mouseDown = false;
+            }, cmp);
             cmp.getEl().on('mouseenter', this.controller.disableMapInteractions);
             cmp.getEl().on('mouseleave', this.controller.enableMapInteractions);
         }

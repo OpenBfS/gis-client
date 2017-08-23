@@ -31,6 +31,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
+    gridFeatures: null,
     /**
      * Contains the DateValues of the charts current zoom extent.
      * @type {Object}
@@ -1369,6 +1370,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 return false;
             }
         }
+        //used for grid table in CartoWindowController
+        me.gridFeatures = Ext.clone(jsonObj.features);
 
         var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
             targetLayer.metadata);
@@ -1379,6 +1382,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // The id of the selected station is also the key in the pending
         // requests object.
+        //TODO: response shouldnt be restricted on id
         var stationId = station.get(chartConfig.featureIdentifyField || 'id');
 
 

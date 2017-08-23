@@ -37,6 +37,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     showUncertainty: true,
     colorsByKey: {},
     disabledSubCategories: [],
+    gridFeatures: null,
 
     /**
      * The default chart margin to apply.
@@ -158,6 +159,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 || 'uncertainty';
         var colors = view.getShape().color.split(',');
         var jsonObj;
+        //TODO: response shouldnt be restricted on id
         var stationId = station.get('id');
         var seriesData = [];
 
@@ -169,6 +171,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return false;
             }
         }
+        //used for grid table in CartoWindowController
+        me.gridFeatures = jsonObj.features;
 
         me.colorsByKey = {};
 
