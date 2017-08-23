@@ -1010,9 +1010,13 @@
     "Koala.view.form.IrixFieldSet": {
         "config": {
             "data": {
-                "DokpoolBehaviour_label": "dem Dokpool sein Behaviour",
-                "DokpoolMeta_label": "dem Dokpool seine Metadaten",
-                "Identification_label": "allg. Informationen"
+                "DokpoolBehaviour_label": "Dokpool Verhalten",
+                "DokpoolMeta_label": "Dokpool Metadaten",
+                "Identification_label": "allg. Informationen",
+                "DokpoolBehaviour_Elan_label": "Elan",
+                "DokpoolBehaviour_Doksys_label": "Doksys",
+                "DokpoolBehaviour_Rodos_label": "Rodos",
+                "DokpoolBehaviour_Rei_label": "Rei"
             }
         }
     },

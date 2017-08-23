@@ -30,7 +30,7 @@ Ext.define('Koala.view.form.Print', {
         'GeoExt.data.serializer.Vector',
         'GeoExt.data.serializer.XYZ',
 
-        'Koala.view.form.IrixFieldset',
+        'Koala.view.form.IrixFieldSet',
         'Koala.util.DokpoolContext',
         'Koala.util.Object',
         'Koala.util.AppContext',
@@ -760,9 +760,8 @@ Ext.define('Koala.view.form.Print', {
             }
 
             var hookedAttributes = Ext.clone(attributes);
-            Ext.iterate(attributes, function(key, value) {
-                Koala.util.Hooks.executeBeforePostHook(key, value, hookedAttributes);
-            });
+
+            Koala.util.Hooks.executeBeforePostHook(view, hookedAttributes);
 
             var app = view.down('combo[name=appCombo]').getValue();
             var url = view.getUrl() + app + '/buildreport.' + format;
@@ -779,6 +778,11 @@ Ext.define('Koala.view.form.Print', {
                     spec.outputFormat = format;
                     mapfishPrint[0] = spec;
                     irixJson = view.setUpIrixJson(mapfishPrint);
+
+            var hookedIrixAttributes = Ext.clone(irixJson);
+
+            Koala.util.Hooks.executeBeforePostHook(view, hookedIrixAttributes.irix);
+
                     url = view.getIrixUrl();
                     Ext.Ajax.request({
                         url: url,
@@ -786,7 +790,7 @@ Ext.define('Koala.view.form.Print', {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        jsonData: irixJson,
+                        jsonData: hookedIrixAttributes,
                         scope: view,
                         success: view.irixPostSuccessHandler,
                         failure: view.genericPostFailureHandler,
@@ -1086,7 +1090,7 @@ Ext.define('Koala.view.form.Print', {
         var checkBox = me.down('[name="irix-fieldset-checkbox"]');
 
         if (!fs) {
-            var irixFieldset = Ext.create('Koala.view.form.IrixFieldset',{
+            var irixFieldset = Ext.create('Koala.view.form.IrixFieldSet',{
                 flex: 2
             });
             me.add(irixFieldset);

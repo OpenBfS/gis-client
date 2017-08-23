@@ -16,13 +16,17 @@
 /**
  * @class Koala.view.form.IrixFieldsetModel
  */
-Ext.define('Koala.view.form.IrixFieldsetModel', {
+Ext.define('Koala.view.form.IrixFieldSetModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-form-irixfieldset',
     data: {
         DokpoolBehaviour_label: 'DokpoolBehaviour',
         DokpoolMeta_label: 'DokpoolMeta',
-        Identifikation_label: 'Identification'
+        Identification_label: 'Identification',
+        DokpoolBehaviour_Elan_label: 'iss Elan',
+        DokpoolBehaviour_Doksys_label: 'is Doksys',
+        DokpoolBehaviour_Rodos_label: 'is Rodos',
+        DokpoolBehaviour_Rei_label: 'is Rei'
     }
 
 });

@@ -21,7 +21,8 @@
  */
 Ext.define('Koala.util.Hooks', {
     requires: [
-        'BasiGX.view.component.Map'
+        'BasiGX.view.component.Map',
+        'Koala.util.DokpoolContext'
     ],
     statics: {
 
@@ -54,16 +55,41 @@ Ext.define('Koala.util.Hooks', {
         * Checks if a beforePost-hook is configured. If yes it just pipes the
         * params to the corresponding hook-function.
         *
-         * @param {String} attributeName The name of the intercepted attribute.
-         * @param {Object} attributeValue The value of the intercepted attribute.
-         * @param {Object} postAttributes The attributes as they are supposed to
-         *                                be posted to the printservlet.n]
-         */
-        executeBeforePostHook: function(attributeName, attributeValue, postAttributes) {
-            if (attributeName && this.beforePost[attributeName] &&
-                    Ext.isFunction(this.beforePost[attributeName])) {
-                this.beforePost[attributeName](attributeName, attributeValue, postAttributes);
+        * @param {Koala.view.form.Print} form The print form.
+        * @param {Object} postAttributes The attributes as they are supposed to
+        *                                be posted to the printservlet.n]
+        */
+        executeBeforePostHook: function(form, postAttributes) {
+            var me = this;
+            Ext.iterate(me.beforePost, function(key, func) {
+            console.log(key);
+            if(me.keyMap(postAttributes, key)){
+                me.beforePost[key](form, key, postAttributes);
+            }else{
+                console.log('key '+key+' not found in postAttributes');
+            };
+        });
+        },
+
+        /**
+        * returns value for nested key:value objects
+        * e.g. postAttributes
+        * @param {Object} obj The object with nested key:values
+        *                     e.g. postAttributes
+        * @param "String" attrString The key that is searched for
+        * @return "String" if key matched
+        *         undefined if key didn't match
+        */
+        keyMap: function(obj, attrString){
+            var path = attrString.split(".");
+            for (var i in path){
+                try{
+                    obj = obj[path[i]];
+                }catch(e){
+                    return undefined;
+                }
             }
+            return obj;
         },
 
         /**
@@ -97,10 +123,49 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.rawValue = userName;
                 attributeFields['hidden'] = true;
             },
+            DokpoolContentType: function(form, attributeFields) {
+                attributeFields.on({
+                    change: function(){
+                        console.log('DokpoolContentType changed');
+                    }
+                });
+            },
             DokpoolBehaviour: function(form, attributeFields) {
                 attributeFields.setBind({
                     title: '{DokpoolBehaviour_label}'
                 });
+                attributeFields.layout = {
+                    type: 'hbox',
+                    pack: 'justify',
+                    align: 'stretch'
+                };
+            //ToDo: check how to properly rearrange items in
+            //additional container with 
+            //layout type = 'hbox'
+            },
+            IsElan: function(form, attributeFields) {
+                attributeFields.setBind({
+                    boxLabel: '{DokpoolBehaviour_Elan_label}'
+                });
+                attributeFields.fieldLabel = '';
+            },
+            IsDoksys: function(form, attributeFields) {
+                attributeFields.setBind({
+                    boxLabel: '{DokpoolBehaviour_Doksys_label}'
+                });
+                attributeFields.fieldLabel = '';
+            },
+            IsRodos: function(form, attributeFields) {
+                attributeFields.setBind({
+                    boxLabel: '{DokpoolBehaviour_Rodos_label}'
+                });
+                attributeFields.fieldLabel = '';
+            },
+            IsRei: function(form, attributeFields) {
+                attributeFields.setBind({
+                    boxLabel: '{DokpoolBehaviour_Rei_label}'
+                });
+                attributeFields.fieldLabel = '';
             },
             DokpoolMeta: function(form, attributeFields) {
                 attributeFields.setBind({
@@ -111,6 +176,9 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.setBind({
                     title: '{Identification_label}'
                 });
+            },
+            DokpoolGroupFolder: function(form, attributeFields) {
+                attributeFields.hidden = true;
             },
             legend_template: function(form, attributeRec, attributeFields) {
                 var layoutCombo = form.down('combo[name="layout"]');
@@ -135,15 +203,26 @@ Ext.define('Koala.util.Hooks', {
          * To modify the posted params manipulate the "postAttibtes" config
          * Object.
          *
-         * @param {String} attributeName The name of the intercepted attribute.
-         * @param {Object} attributeValue The value of the intercepted attribute.
+         * @param {Koala.view.form.Print} form The print form.
+         * @param {String} key The name of the intercepted attribute.
          * @param {Object} postAttributes The attributes as they are supposed to
          *                                be posted to the printservlet.
          */
         beforePost: {
-            doc_creator: function(attributeName, attributeValue, postAttributes) {
-                if (attributeValue === 'Peter') {
-                    postAttributes[attributeName] = attributeValue + ' Stöger';
+            "title": function(form, key, postAttributes) {
+                var newTitle = '<div><b>MAP-TITLE FROM HOOK</b></div>';
+                postAttributes.title = newTitle;
+            },
+            "DokpoolMeta.DokpoolGroupFolder": function(form, key, postAttributes) {
+                var DokpoolContentType = postAttributes.DokpoolMeta.DokpoolContentType;
+                var Confidentiality = postAttributes.Identification.Confidentiality;
+//                var DokpoolName = postAttributes.DokpoolMeta.DokpoolName;
+                if (DokpoolContentType && Confidentiality){
+                    console.log('DokpoolContentType: ' + DokpoolContentType + ' && Confidentiality: ' + Confidentiality);
+                    var DokpoolGroupFolder = form.dokpoolContext.getPath(Confidentiality,DokpoolContentType);
+                    postAttributes.DokpoolMeta.DokpoolGroupFolder = DokpoolGroupFolder;
+                }else{
+                    console.log('DokpoolContentType OR Confidentiality missing');
                 }
             }
         }
