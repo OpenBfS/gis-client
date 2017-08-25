@@ -109,12 +109,91 @@ Ext.define('Koala.util.Hooks', {
          *        adjust the form before it will be created.
          */
         beforeAdd: {
+         /*
+         * Hooks for MapFish part
+         */
+            legend_template: function(form, attributeRec, attributeFields) {
+                var layoutCombo = form.down('combo[name="layout"]');
+                var currentLayout = layoutCombo.getValue();
+                attributeFields.hidden = true;
+                attributeFields.value = currentLayout + '_legend.jasper';
+            },
+            map_template: function(form, attributeRec, attributeFields) {
+                var layoutCombo = form.down('combo[name="layout"]');
+                var currentLayout = layoutCombo.getValue();
+                attributeFields.hidden = true;
+                attributeFields.value = currentLayout + '_map.jasper';
+            },
+            map: function(form, attributeRec, attributeFields) {
+                var clientInfo = attributeRec.get('clientInfo');
+                attributeFields.bind = {
+                    title: '{map_label}' + ' (' +
+                        clientInfo.width + ' × ' +
+                        clientInfo.height + ')'
+	        };
+            },
+/*
+            northArrow: function(form, attributeRec, attributeFields) {
+                attributeFields.bind = {
+                    fieldLabel: '{northArrowLabel}'
+                };
+                attributeFields.bind = {
+                    boxLabel: '{northArrowBoxLabel}'
+                };
+            },
+            scaleBar: function(form, attributeRec, attributeFields) {
+                attributeFields.bind = {
+                    fieldLabel: '{scaleBar_label}'
+                };
+                attributeFields.bind = {
+                    boxLabel: '{scaleBar_boxLabel}'
+                };
+            },
+*/
+            map_attribution: function(form, attributeRec, attributeFields) {
+                attributeFields.items[0].bind = {
+                    fieldLabel: '{map_attribution_label}'
+                };
+            },
+            is_exercise: function(form, attributeRec, attributeFields) {
+                attributeFields.bind = {
+                    fieldLabel: '{is_exercise_label}'
+                };
+            },
+            title: function(form, attributeRec, attributeFields) {
+                attributeFields.items[0].bind = {
+                    fieldLabel: '{title_label}'
+                };
+            },
+            description: function(form, attributeRec, attributeFields) {
+                attributeFields.items[0].bind = {
+                    fieldLabel: '{description_label}'
+                };
+            },
+            comment: function(form, attributeRec, attributeFields) {
+                attributeFields.items[0].bind = {
+                    fieldLabel: '{comment_label}'
+                };
+            },
+            impressum: function(form, attributeRec, attributeFields) {
+                attributeFields.items[0].bind = {
+                    fieldLabel: '{impressum_label}'
+                };
+            },
+
             doc_creator: function(form, attributeRec, attributeFields) {
                 var appContext = Koala.util.AppContext.getAppContext();
                 var userName = Koala.util.Object.getPathStrOr(appContext,
                     'data/merge/imis_user/username', '');
                 attributeFields.items[0].value = userName;
+                attributeFields.items[0].bind = {
+                    fieldLabel: '{doc_creator_label}'
+                };
+                attributeFields['hidden'] = true;
             },
+         /*
+         * Hooks for IRIX part
+         */
             User: function(form, attributeFields) {
                 var appContext = Koala.util.AppContext.getAppContext();
                 var userName = Koala.util.Object.getPathStrOr(appContext,
@@ -179,18 +258,6 @@ Ext.define('Koala.util.Hooks', {
             },
             DokpoolGroupFolder: function(form, attributeFields) {
                 attributeFields.hidden = true;
-            },
-            legend_template: function(form, attributeRec, attributeFields) {
-                var layoutCombo = form.down('combo[name="layout"]');
-                var currentLayout = layoutCombo.getValue();
-                attributeFields.hidden = true;
-                attributeFields.value = currentLayout + '_legend.jasper';
-            },
-            map_template: function(form, attributeRec, attributeFields) {
-                var layoutCombo = form.down('combo[name="layout"]');
-                var currentLayout = layoutCombo.getValue();
-                attributeFields.hidden = true;
-                attributeFields.value = currentLayout + '_map.jasper';
             }
         },
 
