@@ -74,7 +74,8 @@
                 "expandToRight": "fr:Show newer data",
                 "toggleLegendVisibility": "fr:Toggle legend visibility",
                 "exportToPngText": "fr:Download Chart",
-                "toggleGrouping": "fr:Gruppierung tauschen"
+                "toggleGrouping": "fr:Gruppierung tauschen",
+                "toggleUncertainty": "fr:Toggle uncertainty"
             }
         }
     },

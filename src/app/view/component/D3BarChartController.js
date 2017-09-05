@@ -951,7 +951,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      * This sets the visibility of the uncertainty marker-bars.
      * @param {boolean} visible Wheather to show the uncertainty or not.
      */
-    setUncertaintyVisiblity: function(visible) {
+    setUncertaintyVisibility: function(visible) {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
@@ -962,6 +962,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
             me.showUncertainty = visible;
             me.redrawChart();
         }
+    },
+
+    toggleUncertainty: function() {
+        this.setUncertaintyVisibility(!this.showUncertainty);
     }
 
 });

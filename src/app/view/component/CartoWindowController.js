@@ -453,6 +453,27 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.createLegendVisibilityButton(tabElm, this.barChart);
         this.createIrixPrintButton(tabElm, this.barChart);
         this.createExportToPngButton(tabElm, this.barChart);
+        this.createUncertaintyButton(tabElm, this.barChart);
+    },
+
+    createUncertaintyButton: function(tabElm, chart) {
+        var button = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'toggleUncertainty',
+            enableToggle: true,
+            bind: {
+                text: this.view.getViewModel().get('toggleUncertainty')
+            }
+        };
+        button = Ext.create(button);
+        button.render(tabElm, 3);
+        button.el.dom.addEventListener('click', function() {
+            var chartCtrl = chart.getController();
+            chartCtrl.toggleUncertainty();
+            button.toggle();
+        });
+        return button;
     },
 
     getTabData: function(urlProperty, contentProperty) {

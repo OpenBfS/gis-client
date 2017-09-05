@@ -80,7 +80,8 @@
                 "expandToRight": "Neuere Daten anzeigen",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
                 "exportToPngText": "Download Chart",
-                "toggleGrouping": "Gruppierung tauschen"
+                "toggleGrouping": "Gruppierung tauschen",
+                "toggleUncertainty": "Messungenauigkeit umschalten"
             }
         }
     },
