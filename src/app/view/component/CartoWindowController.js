@@ -308,7 +308,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         };
         this.IrixPrintButton = Ext.create(btn);
-        this.IrixPrintButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3); 
+        this.IrixPrintButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3);
         this.IrixPrintButton.el.dom.addEventListener('click', this.showIrixPrintDialog.bind(this, chart));
     },
 
