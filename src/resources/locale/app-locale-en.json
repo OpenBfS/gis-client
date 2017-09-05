@@ -276,7 +276,10 @@
                 "mapBboxButton": "Info",
                 "warnPrintTimedOutTitle": "Printing Error",
                 "warnPrintTimedOutText": "Printing process has exceeded the valid time limit.",
-                "updateLegendtext": "en:Legendtext"
+                "updateLegendtext": "en:Legendtext",
+                "labelUse": "…use?",
+                "northArrow": "North arrow",
+                "scalebar": "Scale bar"
             }
         }
     },

@@ -258,7 +258,10 @@
                 "mapBboxButton": "fr:Info",
                 "warnPrintTimedOutTitle": "fr:Druckfehler",
                 "warnPrintTimedOutText": "fr:Die Druckerzeugung hat das erlaubte Zeitlimit überschritten.",
-                "updateLegendtext": "fr:Legendtext"
+                "updateLegendtext": "fr:Legendtext",
+                "labelUse": "fr:…verwenden?",
+                "northArrow": "fr:North arrow",
+                "scalebar": "fr:Scale bar"
             },
         }
     },
