@@ -53,14 +53,14 @@ Ext.define('Koala.view.component.CartoWindow',{
         initialize: 'onInitialize',
         beforedestroy: 'onBeforeDestroy',
         afterrender: function(cmp) {
-            cmp.getEl().on('mousedown', function() {
+            cmp.getEl().on('mousedown', (function() {
                 this.mouseDown = true;
-            }, cmp);
-            cmp.getEl().on('mouseup', function() {
+            }).bind(this));
+            cmp.getEl().on('mouseup', (function() {
                 this.mouseDown = false;
-            }, cmp);
-            cmp.getEl().on('mouseenter', this.controller.disableMapInteractions);
-            cmp.getEl().on('mouseleave', this.controller.enableMapInteractions);
+            }).bind(this));
+            cmp.getEl().on('mouseenter', this.controller.disableMapInteractions.bind(this.controller));
+            cmp.getEl().on('mouseleave', this.controller.enableMapInteractions.bind(this.controller));
         }
     }
 

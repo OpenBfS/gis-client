@@ -130,12 +130,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
      *
      */
     disableMapInteractions: function() {
-        var me = this;
-        var map = me.component.map;
+        var map = this.getView().getMap();
         map.getInteractions().forEach(function(interaction) {
             interaction.setActive(false);
         });
-        console.log("mouseenter");
     },
 
 
@@ -143,19 +141,16 @@ Ext.define('Koala.view.component.CartoWindowController', {
      *onCartoWindowMouseLeave listener
      *
      **/
-    enableMapInteractions: function(map) {
-        var me = this;
-        var map = (map && map instanceof ol.Map) ? map : me.component.map;
-        var mouseDown = (me.component && me.component.mouseDown) ? true : false;
+    enableMapInteractions: function(force) {
+        var map = this.getView().getMap();
+        var mouseDown = this.getView().mouseDown;
 
-        if (mouseDown) {
-            console.log('enableMapInteractions escaped');
+        if (mouseDown && !force) {
             return;
         }
         map.getInteractions().forEach(function(interaction) {
             interaction.setActive(true);
         });
-        console.log("mouseleave");
     },
 
     /**
@@ -871,7 +866,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 tag: 'input',
                 id: tabIdString,
                 type: 'radio',
-                name: cartoWindowId + ' tabs',
+                name: cartoWindowId + '_tabs',
                 checked: config.active || false,
                 'aria-hidden': true
             }, {
@@ -897,7 +892,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         }
 
         var input = tab.querySelector('input');
-        input.addEventListener('change', me.updateLineFeature.bind(me));
+        input.addEventListener('change', function() {
+            me.updateLineFeature.bind(me)();
+        });
 
         tabs.push(tab);
         return tab;
@@ -969,7 +966,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 style: new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: lineStyle.split(',')[0],
-                        width: lineStyle.split(',')[1]
+                        width: parseInt(lineStyle.split(',')[1], 10)
                     })
                 }),
                 zIndex: 800,
@@ -980,6 +977,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             map.addLayer(lineLayer);
         }
         viewModel.set('lineLayer', lineLayer);
+        return lineLayer;
     },
 
     /**
@@ -1006,19 +1004,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         lineFeature.setId(cartoWindowId);
 
-        var dragPan;
-        map.getInteractions().forEach(function(interaction) {
-            if (interaction instanceof ol.interaction.DragPan) {
-                dragPan = interaction;
-            }
-        });
-
         var downEvent = Ext.isModern ? 'touchstart': 'mousedown';
         var upEvent = Ext.isModern ? 'touchend': 'mouseup';
 
         el.addEventListener(downEvent, function(event) {
             if (event.target.tagName === 'LABEL') {
-                dragPan.setActive(false);
                 overlay.set('dragging', true);
                 hoverPlugin.setPointerRest(false);
             } else if (Ext.Array.contains(event.target.classList, 'x-resizable-handle')) {
@@ -1029,7 +1019,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         me.onMouseUp = function() {
             if (overlay.get('dragging') === true) {
-                dragPan.setActive(true);
                 overlay.set('dragging', false);
                 hoverPlugin.setPointerRest(true);
             }
@@ -1143,6 +1132,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * centerCoords property on the overlay.
      */
     updateLineFeature: function() {
+        this.enableMapInteractions();
         var me = this;
         var view = me.getView();
         var viewModel = me.getViewModel();
@@ -1161,6 +1151,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
         overlay.centerCoords = centerCoords;
+        this.disableMapInteractions();
     },
 
     scrollTimeseriesLeft: function() {
