@@ -80,14 +80,17 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
             me.createTimeSeriesTab();
+            me.createGridTab(me.timeserieschart);
         }
 
         if (Koala.util.Layer.isBarChartLayer(layer)) {
             me.createBarChartTab();
+            me.createGridTab(me.barChart);
         }
 
         if (Koala.util.Layer.isTableLayer(layer)) {
-            me.createTableTab();
+            //me.createTableTab();
+            //me.createGridTabFromUrl();
         }
 
         if (Koala.util.Layer.isHtmlLayer(layer)) {
@@ -120,6 +123,34 @@ Ext.define('Koala.view.component.CartoWindowController', {
         });
 
         el.appendChild(closeElement);
+    },
+
+    /**
+     * onCartoWindowMouseEnter listener
+     *
+     */
+    disableMapInteractions: function() {
+        var map = this.getView().getMap();
+        map.getInteractions().forEach(function(interaction) {
+            interaction.setActive(false);
+        });
+    },
+
+
+    /**
+     *onCartoWindowMouseLeave listener
+     *
+     **/
+    enableMapInteractions: function(force) {
+        var map = this.getView().getMap();
+        var mouseDown = this.getView().mouseDown;
+
+        if (mouseDown && !force) {
+            return;
+        }
+        map.getInteractions().forEach(function(interaction) {
+            interaction.setActive(true);
+        });
     },
 
     /**
@@ -603,6 +634,185 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     /**
+     * Create the tab which contains the table content as grid and adds it to the
+     * tabwindow.
+     */
+    createGridTab: function(chart) {
+        var me = this;
+        var view = me.getView();
+        var el = view.el.dom;
+        var title;
+        var gridId;
+        var fields = [];
+        var columns = [];
+        var gridTableTab;
+        var tabElm;
+
+        if (!chart) {
+            return;
+        }
+        title = (chart === me.timeserieschart) ? 'TS Table' : (chart === me.barChart) ? 'BC Table' : '';
+
+        gridTableTab = me.createTabElement({
+            title: title,
+            className: 'gridtable-tab',
+            active: true
+        });
+        tabElm = gridTableTab.getElementsByTagName('div')[0];
+
+        Ext.create('Ext.data.Store', {
+            storeId:'GridTabStore',
+            autoLoad: true,
+            data: []
+        });
+
+        gridInTab = {
+            xtype: 'grid',
+            header: false,
+            store: Ext.data.StoreManager.lookup('GridTabStore'),
+            height: '400px',
+            width: '400px',
+            flex: 1,
+            plugins: 'gridfilters',
+            renderTo: tabElm,
+            chartElement: chart,
+            listeners: {
+                boxready: function() {
+                    var gridFeatures = chart.getController().on('chartdataprepared', function() {
+                        var chartController = this.chartElement.getController();
+                        var gridFeatures = chartController.gridFeatures;
+                        this.updateGrid(gridFeatures);
+                    }, this);
+                }
+            },
+            updateGrid: function(gridFeatures) {
+                var me = this;
+                var types = {};
+                var columns = [];
+                var fields = [];
+                var data = [];
+                var store = me.getStore();
+
+                Ext.each(gridFeatures, function(feat){
+                    Ext.iterate(feat.properties, function(propName, prop){
+                        var dataIndex;
+                        var type = null;
+                        var tempProp;
+                        var momentDate;
+
+                        //store recognizes 'id' -> no duplicates allowed
+                        if (propName.toLowerCase() === 'id') {
+                            tempProp = feat.properties[propName];
+                            delete feat.properties[propName];
+                            propName = 'elementId';
+                            feat.properties[propName] = tempProp;
+                        }
+                        //define data types
+                        if (typeof prop === 'number') {
+                            type = 'number';
+                        } else if (typeof prop === 'string') {
+                            type = (parseFloat(prop[0]) && moment(prop, moment.ISO_8601(), true).isValid()) ? 'date' : 'string';
+                        }
+                        if (!types[propName]) {
+                            types[propName] = [type];
+                        } else {
+                            types[propName].push(type);
+                        }
+                    });
+                    data.push(feat.properties);
+                });
+                //field and column assignment
+                Ext.iterate(types, function(propName, prop){
+                    var field = {
+                        name: propName,
+                        type: ''
+                    };
+                    var column = {
+                        text: propName,
+                        dataIndex: propName,
+                        itemId: propName,
+                        filter: {
+                            type: ''
+                        }
+                    };
+                    var uniqueTypes = Ext.Array.unique(prop);
+                    if (uniqueTypes.length > 1) {
+                        uniqueTypes = Ext.Array.remove(uniqueTypes, null);
+                    }
+                    uniqueTypes = (uniqueTypes.indexOf('string') > -1) ? ['string'] : uniqueTypes;
+                    field.type = column.filter.type = uniqueTypes[0];
+
+                    fields.push(field);
+                    columns.push(column);
+                });
+                columns[0].filter = {type: 'string'};
+                me.setColumns(columns);
+                store.setFields(fields);
+                store.loadData(data, false);
+            }
+        };
+        el.appendChild(gridTableTab);
+        me.updateCloseElementPosition();
+
+        gridInTab = Ext.create(gridInTab);
+    },
+
+    /**
+     * Create the tab which contains the table content from URL as grid and adds it to the
+     * tabwindow.
+     */
+    createGridTabFromUrl: function() {
+        this.getTableData().then(function(data) {
+            var tableData;
+            var gridTableTab = me.createTabElement({
+                title: 'GridTable',
+                className: 'gridtable-tab',
+                active: true
+            });
+            var tabElm = gridTableTab.getElementsByTagName('div')[0];
+
+            var store = Ext.create('Ext.data.Store', {
+                storeId:'GridTabStore',
+                autoLoad: true,
+                //data: tableData,
+                proxy: {
+                    type: 'ajax',
+                    url: 'http://dev-pom-fr.lab.bfs.de/gis_client_configs/tableContentExample.json',
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'data'
+                    }
+                }
+            });
+            var gridTab = {
+                xtype: 'grid',
+                header: false,
+                store: Ext.data.StoreManager.lookup('GridTabStore'),
+                columns: {
+                    items: []
+                },
+                height: '400px',
+                width: '400px',
+                flex: 1,
+                renderTo: tabElm
+            };
+
+
+            store.on('metachange',function(store, meta){
+                //TODO: if metachange -> new grid?! -> seems wrong
+                gridTab = Ext.create(gridTab);
+                console.log("metachange");
+                gridTab.reconfigure(store, meta.columns);
+                console.log(store);
+                console.log(meta);
+            });
+
+            el.appendChild(gridTableTab);
+            me.updateCloseElementPosition();
+        });
+    },
+
+    /**
      * Create the tab which contains the html content and adds it to the
      * tabwindow.
      */
@@ -680,7 +890,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 tag: 'input',
                 id: tabIdString,
                 type: 'radio',
-                name: cartoWindowId + ' tabs',
+                name: cartoWindowId + '_tabs',
                 checked: config.active || false,
                 'aria-hidden': true
             }, {
@@ -706,7 +916,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         }
 
         var input = tab.querySelector('input');
-        input.addEventListener('change', me.updateLineFeature.bind(me));
+        input.addEventListener('change', function() {
+            me.updateLineFeature.bind(me)();
+        });
 
         tabs.push(tab);
         return tab;
@@ -731,7 +943,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             position: coords,
             positioning: 'top-left',
             element: view.el.dom,
-            stopEvent: true,
+            stopEvent: false,
             dragging: false
         });
 
@@ -778,7 +990,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 style: new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: lineStyle.split(',')[0],
-                        width: lineStyle.split(',')[1]
+                        width: parseInt(lineStyle.split(',')[1], 10)
                     })
                 }),
                 zIndex: 800,
@@ -789,6 +1001,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             map.addLayer(lineLayer);
         }
         viewModel.set('lineLayer', lineLayer);
+        return lineLayer;
     },
 
     /**
@@ -815,19 +1028,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         lineFeature.setId(cartoWindowId);
 
-        var dragPan;
-        map.getInteractions().forEach(function(interaction) {
-            if (interaction instanceof ol.interaction.DragPan) {
-                dragPan = interaction;
-            }
-        });
-
         var downEvent = Ext.isModern ? 'touchstart': 'mousedown';
         var upEvent = Ext.isModern ? 'touchend': 'mouseup';
 
         el.addEventListener(downEvent, function(event) {
             if (event.target.tagName === 'LABEL') {
-                dragPan.setActive(false);
                 overlay.set('dragging', true);
                 hoverPlugin.setPointerRest(false);
             } else if (Ext.Array.contains(event.target.classList, 'x-resizable-handle')) {
@@ -838,7 +1043,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         me.onMouseUp = function() {
             if (overlay.get('dragging') === true) {
-                dragPan.setActive(true);
                 overlay.set('dragging', false);
                 hoverPlugin.setPointerRest(true);
             }
@@ -952,6 +1156,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * centerCoords property on the overlay.
      */
     updateLineFeature: function() {
+        this.enableMapInteractions();
         var me = this;
         var view = me.getView();
         var viewModel = me.getViewModel();
@@ -970,6 +1175,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
         overlay.centerCoords = centerCoords;
+        this.disableMapInteractions();
     },
 
     scrollTimeseriesLeft: function() {
@@ -1088,6 +1294,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         map.un('pointermove', me.pointerMoveListener);
         window.removeEventListener(upEvent, me.onMouseUpWindow);
         lineLayer.getSource().removeFeature(lineFeature);
+
+        me.enableMapInteractions(map);
 
         if (this.timeserieschart) {
             this.timeserieschart.destroy();

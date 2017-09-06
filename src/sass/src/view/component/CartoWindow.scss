@@ -5,7 +5,6 @@
 }
 
 .cartowindow.classic:hover > div.cartowindow-tab > h2,
-.cartowindow.classic:hover > div.cartowindow-tab > input,
 .cartowindow.classic:hover > div.cartowindow-tab > label, {
     display: inherit;
 }
@@ -172,8 +171,12 @@
     display: none;
   }
 
+.cartowindow > div.cartowindow-tab > input {
+    display: none;
+}
+
   /* reveal all panels */
-  .cartowindow > div.cartowindow-tab > input + h2 + div {
+  .cartowindow > div.cartowindow-tab > h2 + div {
     display: block !important;
     position: static !important;
     padding: 1em !important;
