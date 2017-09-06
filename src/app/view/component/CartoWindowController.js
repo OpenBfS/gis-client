@@ -81,12 +81,16 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         if (Koala.util.Layer.isTimeseriesChartLayer(layer)) {
             me.createTimeSeriesTab();
-            me.createGridTab(me.timeserieschart);
+            if (Koala.util.Layer.showTimeseriesGrid(layer)) {
+                me.createGridTab(me.timeserieschart);
+            }
         }
 
         if (Koala.util.Layer.isBarChartLayer(layer)) {
             me.createBarChartTab();
-            me.createGridTab(me.barChart);
+            if (Koala.util.Layer.showBarChartGrid(layer)) {
+                me.createGridTab(me.barChart);
+            }
         }
 
         if (Koala.util.Layer.isTableLayer(layer)) {
