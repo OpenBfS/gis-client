@@ -24,6 +24,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Ext.util.CSV',
         'Ext.Promise',
         'Ext.Ajax',
+        'Ext.panel.Panel',
         'BasiGX.util.Layer',
         'Koala.util.AppContext',
         'Koala.util.Chart',
@@ -667,11 +668,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             xtype: 'grid',
             header: false,
             store: Ext.data.StoreManager.lookup('GridTabStore'),
-            height: '400px',
-            width: '400px',
-            flex: 1,
             plugins: 'gridfilters',
-            renderTo: tabElm,
             chartElement: chart,
             listeners: {
                 boxready: function() {
@@ -749,7 +746,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(gridTableTab);
         me.updateCloseElementPosition();
 
-        Ext.create(gridInTab);
+        Ext.create({
+            xtype: 'panel',
+            layout: 'auto',
+            renderTo: tabElm,
+            items: [gridInTab]
+        });
     },
 
     /**
@@ -1069,6 +1071,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     var chart = Ext.getCmp(chartContainerEl.id);
                     chart.setWidth(newWidth - 20);
                     chart.setHeight(newHeight - 20);
+                }
+                var grid = target.down('.x-panel');
+                if (grid) {
+                    grid.setSize(newWidth - 20, newHeight - 20);
+                    grid = grid.component.down('grid');
+                    grid.setSize(newWidth - 20, newHeight - 20);
                 }
                 target.setWidth(newWidth);
                 target.setHeight(newHeight);
