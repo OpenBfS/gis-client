@@ -642,9 +642,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var el = view.el.dom;
         var title;
-        var gridId;
-        var fields = [];
-        var columns = [];
         var gridTableTab;
         var tabElm;
 
@@ -661,12 +658,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
         tabElm = gridTableTab.getElementsByTagName('div')[0];
 
         Ext.create('Ext.data.Store', {
-            storeId:'GridTabStore',
+            storeId: 'GridTabStore',
             autoLoad: true,
             data: []
         });
 
-        gridInTab = {
+        var gridInTab = {
             xtype: 'grid',
             header: false,
             store: Ext.data.StoreManager.lookup('GridTabStore'),
@@ -678,7 +675,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             chartElement: chart,
             listeners: {
                 boxready: function() {
-                    var gridFeatures = chart.getController().on('chartdataprepared', function() {
+                    chart.getController().on('chartdataprepared', function() {
                         var chartController = this.chartElement.getController();
                         var gridFeatures = chartController.gridFeatures;
                         this.updateGrid(gridFeatures);
@@ -686,19 +683,16 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 }
             },
             updateGrid: function(gridFeatures) {
-                var me = this;
                 var types = {};
                 var columns = [];
                 var fields = [];
                 var data = [];
                 var store = me.getStore();
 
-                Ext.each(gridFeatures, function(feat){
-                    Ext.iterate(feat.properties, function(propName, prop){
-                        var dataIndex;
+                Ext.each(gridFeatures, function(feat) {
+                    Ext.iterate(feat.properties, function(propName, prop) {
                         var type = null;
                         var tempProp;
-                        var momentDate;
 
                         //store recognizes 'id' -> no duplicates allowed
                         if (propName.toLowerCase() === 'id') {
@@ -722,7 +716,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     data.push(feat.properties);
                 });
                 //field and column assignment
-                Ext.iterate(types, function(propName, prop){
+                Ext.iterate(types, function(propName, prop) {
                     var field = {
                         name: propName,
                         type: ''
@@ -754,7 +748,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(gridTableTab);
         me.updateCloseElementPosition();
 
-        gridInTab = Ext.create(gridInTab);
+        Ext.create(gridInTab);
     },
 
     /**
@@ -762,8 +756,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * tabwindow.
      */
     createGridTabFromUrl: function() {
-        this.getTableData().then(function(data) {
-            var tableData;
+        var me = this;
+        this.getTableData().then(function() {
             var gridTableTab = me.createTabElement({
                 title: 'GridTable',
                 className: 'gridtable-tab',
@@ -772,7 +766,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             var tabElm = gridTableTab.getElementsByTagName('div')[0];
 
             var store = Ext.create('Ext.data.Store', {
-                storeId:'GridTabStore',
+                storeId: 'GridTabStore',
                 autoLoad: true,
                 //data: tableData,
                 proxy: {
@@ -798,16 +792,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
             };
 
 
-            store.on('metachange',function(store, meta){
+            store.on('metachange',function(str, meta) {
                 //TODO: if metachange -> new grid?! -> seems wrong
                 gridTab = Ext.create(gridTab);
-                console.log("metachange");
-                gridTab.reconfigure(store, meta.columns);
-                console.log(store);
-                console.log(meta);
+                gridTab.reconfigure(str, meta.columns);
             });
 
-            el.appendChild(gridTableTab);
+            tabElm.appendChild(gridTableTab);
             me.updateCloseElementPosition();
         });
     },
