@@ -683,6 +683,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 }
             },
             updateGrid: function(gridFeatures) {
+                me = this;
                 var types = {};
                 var columns = [];
                 var fields = [];
