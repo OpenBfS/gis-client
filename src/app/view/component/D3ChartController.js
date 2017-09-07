@@ -547,13 +547,13 @@ Ext.define('Koala.view.component.D3ChartController', {
             .attr('width', chartSize[0])
             .attr('height', chartSize[1]);
 
-        Ext.each(me.shapes, function(shape) {
+        Ext.each(me.shapes, function(shape, idx) {
             var shapeConfig = shape.config;
             var xField = shapeConfig.xField;
             var yField = shapeConfig.yField;
             var orientX = me.getAxisByField(xField);
             var orientY = me.getAxisByField(yField);
-            var color = shapeConfig.color || staticMe.getRandomColor();
+            var color = me.customColors[idx] || shapeConfig.color || staticMe.getRandomColor();
             var darkerColor = d3.color(color).darker();
             var shapeId = shapeConfig.id;
 
@@ -818,7 +818,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 return function() {
                     var target = d3.select(d3.event.target);
                     if (target && (target.classed(CSS.DELETE_ICON) ||
-                            target.classed(CSS.DOWNLOAD_ICON))) {
+                            target.classed(CSS.DOWNLOAD_ICON) ||
+                            target.classed(CSS.COLOR_ICON))) {
                         // click happened on the delete icon, no visibility
                         // toggling. The deletion is handled in an own event
                         // handler
@@ -854,7 +855,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .style('stroke', function() {
                     switch (shape.config.type) {
                         case 'line':
-                            return shape.config.color;
+                            return me.customColors[idx] || shape.config.color;
                         default:
                             return 'none';
                     }
@@ -872,13 +873,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                         case 'line':
                             return 'none';
                         default:
-                            return shape.config.color;
+                            return me.customColors[idx] || shape.config.color;
                     }
                 });
 
             var nameAsTooltip = shape.config.name;
             var visualLabel = staticMe.labelEnsureMaxLength(
-                nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
+                nameAsTooltip, (legendConfig.legendEntryMaxLength || 15)
             );
 
             legendEntry.append('text')
@@ -905,9 +906,18 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .attr('class', CSS.DOWNLOAD_ICON)
                     .attr('text-anchor', 'start')
                     .attr('dy', '1')
-                    .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                    .attr('dx', '130') // TODO Discuss, do we need this dynamically?
                     .on('click', me.generateDownloadCallback(shape));
             }
+
+            legendEntry.append('text')
+                // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('\uf1fc')
+                .attr('class', CSS.COLOR_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                .on('click', me.generateColorCallback(shape, idx));
 
             legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/

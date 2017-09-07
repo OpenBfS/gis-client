@@ -20,6 +20,11 @@
   */
 Ext.define('Koala.view.component.D3BaseController', {
     extend: 'Ext.app.ViewController',
+
+    requires: [
+        'Ext.ux.colorpick.Field'
+    ],
+
     inheritableStatics: {
         SVG_DEFS: {
             LEGEND_ICON_BACKGROUND: 'M-3 -14 h 25 v 16 h -25 Z',
@@ -51,6 +56,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             SHAPE_PATH: 'k-d3-shape-path',
             SHAPE_POINT_GROUP: 'k-d3-shape-points',
             LEGEND_CONTAINER: 'k-d3-scrollable-legend-container',
+            COLOR_ICON: 'k-d3-color-icon',
             DOWNLOAD_ICON: 'k-d3-download-icon',
             DELETE_ICON: 'k-d3-delete-icon',
 
@@ -334,6 +340,12 @@ Ext.define('Koala.view.component.D3BaseController', {
         bottom: 20,
         left: 40
     },
+
+    /**
+     * Custom colors picked by the user.
+     * @type {Array}
+     */
+    customColors: [],
 
     /**
      * Used as the fallback for labeling when no explicity function is
@@ -1204,7 +1216,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      * icon. It will call the downloadSeries function which has to be implemtend
      * in the child classes.
      *
-     * @param {Object} dataObj The current shape object to handle.]
+     * @param {Object} dataObj The current shape object to handle.
      * @return {Function} The callback to be used as click handler on the
      *                    download icon.
      */
@@ -1214,6 +1226,61 @@ Ext.define('Koala.view.component.D3BaseController', {
             me.downloadSeries(dataObj);
         };
         return downloadCallback;
+    },
+
+    /**
+     * Generates a callback that can be used for the click event on the color
+     * icon.
+     * @param  {Object} shape The shape to handle.
+     * @return {Function}       The generated callback function
+     */
+    generateColorCallback: function(shape, idx) {
+        var me = this;
+        var viewModel = this.getViewModel();
+        return function() {
+            var win = Ext.create('Ext.window.Window', {
+                title: viewModel.get('colorWindowTitle'),
+                width: 300,
+                layout: 'fit',
+                bodyPadding: 10,
+                items: [{
+                    xtype: 'container',
+                    items: [{
+                        padding: '10px 0',
+                        html: viewModel.get('colorWindowMessage')
+                    },{
+                        xtype: 'colorfield',
+                        width: '100%',
+                        name: 'chart-color-picker',
+                        value: me.customColors[idx] || shape.config.color
+                    }]
+                }],
+                bbar: [{
+                    text: viewModel.get('colorMsgButtonYes'),
+                    handler: me.colorPicked.bind(me, shape, idx)
+                }, {
+                    text: viewModel.get('colorMsgButtonNo'),
+                    handler: function() {
+                        this.up('window').close();
+                    }
+                }]
+            });
+            win.show();
+        };
+    },
+
+    /**
+     * Callback to update the color of a chart item.
+     * @param  {Object} shape the shape to update
+     * @param  {Number} idx   index of the shape
+     */
+    colorPicked: function(shape, idx) {
+        var cmp = Ext.ComponentQuery.query('[name=chart-color-picker]')[0];
+        shape.config.color = '#' + cmp.getValue();
+        this.customColors[idx] = shape.config.color;
+        this.redrawChart();
+        this.redrawLegend();
+        cmp.up('window').close();
     },
 
     /**

@@ -83,14 +83,22 @@
         "config": {
             "data": {
                 "belowDetectionLimitLabel": "fr:< NWG",
-                "noDataAvailableText": "fr:Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+                "noDataAvailableText": "fr:Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus.",
+                "colorWindowTitle": "fr:Pick color",
+                "colorWindowMessage": "fr:Please select a color:",
+                "colorMsgButtonYes": "fr:Ok",
+                "colorMsgButtonNo": "fr:Cancel"
             }
         }
     },
     "Koala.view.component.D3Chart": {
         "config": {
             "data": {
-                "noDataAvailableText": "fr:Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+                "noDataAvailableText": "fr:Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus.",
+                "colorWindowTitle": "fr:Pick color",
+                "colorWindowMessage": "fr:Please select a color:",
+                "colorMsgButtonYes": "fr:Ok",
+                "colorMsgButtonNo": "fr:Cancel"
             }
         }
     },

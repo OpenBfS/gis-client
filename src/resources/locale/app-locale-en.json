@@ -89,14 +89,22 @@
         "config": {
             "data": {
                 "belowDetectionLimitLabel": "< LDL",
-                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period."
+                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period.",
+                "colorWindowTitle": "Pick color",
+                "colorWindowMessage": "Please select a color:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Cancel"
             }
         }
     },
     "Koala.view.component.D3Chart": {
         "config": {
             "data": {
-                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period."
+                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period.",
+                "colorWindowTitle": "Pick color",
+                "colorWindowMessage": "Please select a color:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Cancel"
             }
         }
     },
