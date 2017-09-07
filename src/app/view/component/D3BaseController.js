@@ -21,10 +21,6 @@
 Ext.define('Koala.view.component.D3BaseController', {
     extend: 'Ext.app.ViewController',
 
-    requires: [
-        'Ext.ux.colorpick.Field'
-    ],
-
     inheritableStatics: {
         SVG_DEFS: {
             LEGEND_ICON_BACKGROUND: 'M-3 -14 h 25 v 16 h -25 Z',
