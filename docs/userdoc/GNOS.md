@@ -1118,6 +1118,18 @@ Falls true, wird ein Tab mit den Messdaten in einem Ext.grid angezeigt.
 | Default-Wert         | false |
 | Beispiel             | true |
 
+**thresholds**
+
+Kann ein Array von Objekten beinhalten, welches Schwellenlinien im Chart konfiguriert. Ein Threshold-Objekt muss mindestens die Werte "value", "tooltip", "label", "stroke" und "lineWidth" enthalten. Der "value" konfiguriert, bei welchem Wert (Y-Achse) die Linie gezeichnet wird. "label" ist der Text des Legendeneintrags, "tooltip" der Tooltip beim hover über der Legende. "stroke" konfiguriert den Farbwert, "lineWidth" die Linienstärke. Optional kann ein "dasharray" angegeben werden, mit dem eine gestrichelte Linie konfiguriert wird. Die kommaseparierte Liste gibt abwechselnd an, wie viele Pixel Linie bzw. keine Linie gezeichnet werden soll.
+
+| Typ | gco:CharacterString |
+|----------------------:----|
+| Erlaubte Wertemenge  | Array von Objekten |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+| Beispiel             | [{"value": 10, "tooltip": "Tooltip 1", "stroke": "#ff0000", "lineWidth": 2, "dasharray": "5, 5", "label": "Grenze 1"}, {"value": 15, "stroke": "#00ff00", "lineWidth": 1, "label": "Grenze 2", "tooltip": "Tooltip 2"}] |
+
+
 ## Bar Chart Properties {#barchart} (bfs:barChartProperty)
 
 **chartFieldSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
