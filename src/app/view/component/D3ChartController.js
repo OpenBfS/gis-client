@@ -547,6 +547,9 @@ Ext.define('Koala.view.component.D3ChartController', {
             .attr('width', chartSize[0])
             .attr('height', chartSize[1]);
 
+        var minx = Number.POSITIVE_INFINITY;
+        var maxx = Number.NEGATIVE_INFINITY;
+
         Ext.each(me.shapes, function(shape, idx) {
             var shapeConfig = shape.config;
             var xField = shapeConfig.xField;
@@ -571,6 +574,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .data(me.data[shapeId])
                     .enter().append('rect')
                     .filter(function(d) {
+                        var val = d[xField];
+                        if (val && val._isAMomentObject) {
+                            val = val.unix() * 1000;
+                        }
+
+                        if (val) {
+                            minx = Math.min(minx, val);
+                            maxx = Math.max(maxx, val);
+                        }
                         return Ext.isDefined(d[yField]);
                     })
                     .style('fill', color)
@@ -670,6 +682,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .data(me.data[shapeId])
                     .enter().append('circle')
                     .filter(function(d) {
+                        var val = d[xField];
+                        if (val && val._isAMomentObject) {
+                            val = val.unix() * 1000;
+                        }
+                        if (val) {
+                            minx = Math.min(minx, val);
+                            maxx = Math.max(maxx, val);
+                        }
+
                         var cy = me.scales[orientY](d[yField]);
                         return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
                     })
@@ -716,6 +737,9 @@ Ext.define('Koala.view.component.D3ChartController', {
             };
             me.transformPlot(me.initialPlotTransform, 0);
         }
+
+        var config = this.view.getTargetLayer().get('timeSeriesChartProperties');
+        this.drawThresholds(config, shapeSvg, minx, maxx, this.scales.bottom, this.scales.left);
     },
 
     /**
@@ -805,6 +829,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var legendMargin = legendConfig.legendMargin;
         var legendEntryHeight = me.legendEntryTargetHeight;
         var legendParent = me.legendSvg;
+        var curTranslateY;
         var legend = legendParent
             .append('g')
             .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
@@ -833,7 +858,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 };
             }());
 
-            var curTranslateY = (idx + 1) * legendEntryHeight;
+            curTranslateY = (idx + 1) * legendEntryHeight;
             var legendEntry = legend
                 .append('g')
                 .on('click', toggleVisibilityFunc)
@@ -929,6 +954,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .on('click', me.generateDeleteCallback(shape));
 
         });
+
+        var config = this.view.getTargetLayer().get('timeSeriesChartProperties');
+        this.drawThresholdLegends(config, legend, curTranslateY);
     },
 
     /**

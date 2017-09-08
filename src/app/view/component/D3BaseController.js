@@ -344,6 +344,12 @@ Ext.define('Koala.view.component.D3BaseController', {
     customColors: [],
 
     /**
+     * Color & visibility of configured thresholds.
+     * @type {Object}
+     */
+    thresholdState: {},
+
+    /**
      * Used as the fallback for labeling when no explicity function is
      * provided.
      *
@@ -770,6 +776,128 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
+     * Creates legends for any configured thresholds.
+     * @param  {Object} config          the chart configuration
+     * @param  {Object} legendContainer the legend container
+     * @param  {Number} curTranslateY current y legend position
+     */
+    drawThresholdLegends: function(config, legendContainer, curTranslateY) {
+        var me = this;
+        var staticMe = Koala.view.component.D3BaseController;
+        var thresholds;
+        if (config.thresholds) {
+            thresholds = JSON.parse(config.thresholds);
+        }
+
+        Ext.each(thresholds, function(threshold, idx) {
+            if (me.thresholdState[idx].deleted) {
+                return;
+            }
+            curTranslateY += me.legendEntryTargetHeight;
+            var legendEntry = legendContainer
+                .append('g')
+                .on('click', function() {
+                    var target = d3.select(d3.event.target);
+                    if (target && (target.classed(staticMe.CSS_CLASS.DELETE_ICON) ||
+                            target.classed(staticMe.CSS_CLASS.COLOR_ICON))) {
+                        return;
+                    }
+                    me.thresholdState[idx].visibility = !me.thresholdState[idx].visibility;
+                    me.redrawChart();
+                    me.redrawLegend();
+                })
+                .attr('transform', staticMe.makeTranslate(0, curTranslateY));
+
+            // background for the concrete legend icon, to widen clickable area.
+            legendEntry.append('path')
+                .attr('d', staticMe.SVG_DEFS.LEGEND_ICON_BACKGROUND)
+                .style('stroke', 'none')
+                // invisible, but still triggering events
+                .style('fill', 'rgba(0,0,0,0)');
+
+            var line = legendEntry.append('path')
+                .attr('d', staticMe.SVG_DEFS.LEGEND_ICON_LINE)
+                .style('stroke', me.thresholdState[idx].color || threshold.stroke)
+                .style('stroke-width', threshold.lineWidth)
+                .style('fill', 'none');
+            if (threshold.dasharray) {
+                line.style('stroke-dasharray', threshold.dasharray);
+            }
+
+            legendEntry.append('text')
+                .text(threshold.label)
+                .attr('text-anchor', 'start')
+                .attr('dy', '0')
+                .attr('dx', '25');
+
+            legendEntry.append('title')
+                .text(threshold.tooltip);
+
+            legendEntry.append('text')
+                // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('\uf1fc')
+                .attr('class', staticMe.CSS_CLASS.COLOR_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '150')
+                .on('click', me.generateColorCallback(undefined, idx));
+
+            legendEntry.append('text')
+                // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('')
+                .attr('class', staticMe.CSS_CLASS.DELETE_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '170')
+                .on('click', function() {
+                    me.thresholdState[idx].deleted = true;
+                    me.redrawChart();
+                    me.redrawLegend();
+                });
+
+            var disabledClsName = staticMe.CSS_CLASS.DISABLED_CLASS;
+
+            legendEntry.classed(disabledClsName, !me.thresholdState[idx].visibility);
+        });
+    },
+
+    /**
+     * Draws configured thresholds, if any.
+     * @param  {Object} config the chart configuration object
+     * @param  {Object} svg    the chart
+     * @param  {Number} from   the minimum x value
+     * @param  {Number} to     the maximum x value
+     * @param  {Function} x      x axis mapping function
+     * @param  {Function} y      y axis mapping function
+     */
+    drawThresholds: function(config, svg, from, to, x, y) {
+        var me = this;
+        if (config.thresholds) {
+            var thresholds = JSON.parse(config.thresholds);
+            Ext.each(thresholds, function(threshold, idx) {
+                if (!me.thresholdState[idx]) {
+                    me.thresholdState[idx] = {visibility: true};
+                }
+                if (me.thresholdState[idx].deleted) {
+                    return;
+                }
+                if (me.thresholdState[idx].visibility) {
+                    var line = svg.append('line')
+                        .attr('x1', x(from))
+                        .attr('x2', x(to))
+                        .attr('y1', y(threshold.value))
+                        .attr('y2', y(threshold.value))
+                        .style('stroke', me.thresholdState[idx].color || threshold.stroke)
+                        .style('stroke-width', threshold.lineWidth);
+                    if (threshold.dasharray) {
+                        line.style('stroke-dasharray', threshold.dasharray);
+                    }
+                }
+            });
+        }
+    },
+
+    /**
      * Method that can be adjusted to generate a custom multi scale time formatter
      * function, based on https://github.com/d3/d3-time-format
      *
@@ -1164,7 +1292,8 @@ Ext.define('Koala.view.component.D3BaseController', {
         var legendParent = me.legendSvg;
         var view = me.getView();
         var xtype = view.getXType ? view.getXType() : view.xtype;
-
+        var config = view.getTargetLayer().get('timeSeriesChartProperties');
+        var thresholds = config.thresholds ? JSON.parse(config.thresholds) : [];
 
         var numLegends;
         if (xtype === 'd3-barchart') { // for barcharts
@@ -1177,6 +1306,8 @@ Ext.define('Koala.view.component.D3BaseController', {
             // Ouch, shouldn't happen.
             numLegends = 0;
         }
+        numLegends += thresholds.length;
+
         var heightEach = me.legendEntryTargetHeight;
         var legWidth = me.legendTargetWidth;
         var legHeight = heightEach + heightEach * numLegends;
@@ -1227,13 +1358,22 @@ Ext.define('Koala.view.component.D3BaseController', {
     /**
      * Generates a callback that can be used for the click event on the color
      * icon.
-     * @param  {Object} shape The shape to handle.
+     * @param  {Object} shape The shape to handle. If undefined, the threshold
+     *                        with index idx will be updated.
      * @return {Function}       The generated callback function
      */
     generateColorCallback: function(shape, idx) {
         var me = this;
         var viewModel = this.getViewModel();
         return function() {
+            var color;
+            if (shape) {
+                color = me.customColors[idx] || shape.config.color;
+            } else {
+                var lay = me.getView().getTargetLayer();
+                var config = JSON.parse(lay.get('timeSeriesChartProperties').thresholds)[idx];
+                color = me.thresholdState[idx].color || config.stroke;
+            }
             var win = Ext.create('Ext.window.Window', {
                 title: viewModel.get('colorWindowTitle'),
                 width: 300,
@@ -1248,7 +1388,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                         xtype: 'colorfield',
                         width: '100%',
                         name: 'chart-color-picker',
-                        value: me.customColors[idx] || shape.config.color
+                        value: color
                     }]
                 }],
                 bbar: [{
@@ -1267,13 +1407,18 @@ Ext.define('Koala.view.component.D3BaseController', {
 
     /**
      * Callback to update the color of a chart item.
-     * @param  {Object} shape the shape to update
+     * @param  {Object} shape the shape to update. If undefined, the threshold
+     *                        with index idx will be updated.
      * @param  {Number} idx   index of the shape
      */
     colorPicked: function(shape, idx) {
         var cmp = Ext.ComponentQuery.query('[name=chart-color-picker]')[0];
-        shape.config.color = '#' + cmp.getValue();
-        this.customColors[idx] = shape.config.color;
+        if (shape) {
+            shape.config.color = '#' + cmp.getValue();
+            this.customColors[idx] = shape.config.color;
+        } else {
+            this.thresholdState[idx].color = '#' + cmp.getValue();
+        }
         this.redrawChart();
         this.redrawLegend();
         cmp.up('window').close();
