@@ -16,14 +16,14 @@
 /**
  * @class Koala.view.form.IrixFieldset
  */
-Ext.define('Koala.view.form.IrixFieldset',{
+Ext.define('Koala.view.form.IrixFieldSet',{
     extend: 'Ext.form.FieldSet',
 
     xtype: 'k-form-irixfieldset',
 
     requires: [
         'Koala.util.Filter',
-        'Koala.view.form.IrixFieldsetModel'
+        'Koala.view.form.IrixFieldSetModel'
     ],
 
     /**
@@ -227,8 +227,10 @@ Ext.define('Koala.view.form.IrixFieldset',{
     },
 
     createCheckbox: function(config) {
+        var me = this;
         return Ext.create('Ext.form.field.Checkbox', {
             name: config.name,
+            viewModel: me.getViewModel(),
             fieldLabel: config.label,
             checked: config.defaultValue,
             boxLabel: ' '

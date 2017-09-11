@@ -31,6 +31,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
+    gridFeatures: null,
     /**
      * Contains the DateValues of the charts current zoom extent.
      * @type {Object}
@@ -546,13 +547,16 @@ Ext.define('Koala.view.component.D3ChartController', {
             .attr('width', chartSize[0])
             .attr('height', chartSize[1]);
 
-        Ext.each(me.shapes, function(shape) {
+        var minx = Number.POSITIVE_INFINITY;
+        var maxx = Number.NEGATIVE_INFINITY;
+
+        Ext.each(me.shapes, function(shape, idx) {
             var shapeConfig = shape.config;
             var xField = shapeConfig.xField;
             var yField = shapeConfig.yField;
             var orientX = me.getAxisByField(xField);
             var orientY = me.getAxisByField(yField);
-            var color = shapeConfig.color || staticMe.getRandomColor();
+            var color = me.customColors[idx] || shapeConfig.color || staticMe.getRandomColor();
             var darkerColor = d3.color(color).darker();
             var shapeId = shapeConfig.id;
 
@@ -570,6 +574,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .data(me.data[shapeId])
                     .enter().append('rect')
                     .filter(function(d) {
+                        var val = d[xField];
+                        if (val && val._isAMomentObject) {
+                            val = val.unix() * 1000;
+                        }
+
+                        if (val) {
+                            minx = Math.min(minx, val);
+                            maxx = Math.max(maxx, val);
+                        }
                         return Ext.isDefined(d[yField]);
                     })
                     .style('fill', color)
@@ -669,6 +682,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .data(me.data[shapeId])
                     .enter().append('circle')
                     .filter(function(d) {
+                        var val = d[xField];
+                        if (val && val._isAMomentObject) {
+                            val = val.unix() * 1000;
+                        }
+                        if (val) {
+                            minx = Math.min(minx, val);
+                            maxx = Math.max(maxx, val);
+                        }
+
                         var cy = me.scales[orientY](d[yField]);
                         return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
                     })
@@ -715,6 +737,9 @@ Ext.define('Koala.view.component.D3ChartController', {
             };
             me.transformPlot(me.initialPlotTransform, 0);
         }
+
+        var config = this.view.getTargetLayer().get('timeSeriesChartProperties');
+        this.drawThresholds(config, shapeSvg, minx, maxx, this.scales.bottom, this.scales.left);
     },
 
     /**
@@ -804,6 +829,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var legendMargin = legendConfig.legendMargin;
         var legendEntryHeight = me.legendEntryTargetHeight;
         var legendParent = me.legendSvg;
+        var curTranslateY;
         var legend = legendParent
             .append('g')
             .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
@@ -817,7 +843,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 return function() {
                     var target = d3.select(d3.event.target);
                     if (target && (target.classed(CSS.DELETE_ICON) ||
-                            target.classed(CSS.DOWNLOAD_ICON))) {
+                            target.classed(CSS.DOWNLOAD_ICON) ||
+                            target.classed(CSS.COLOR_ICON))) {
                         // click happened on the delete icon, no visibility
                         // toggling. The deletion is handled in an own event
                         // handler
@@ -831,7 +858,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 };
             }());
 
-            var curTranslateY = (idx + 1) * legendEntryHeight;
+            curTranslateY = (idx + 1) * legendEntryHeight;
             var legendEntry = legend
                 .append('g')
                 .on('click', toggleVisibilityFunc)
@@ -853,7 +880,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .style('stroke', function() {
                     switch (shape.config.type) {
                         case 'line':
-                            return shape.config.color;
+                            return me.customColors[idx] || shape.config.color;
                         default:
                             return 'none';
                     }
@@ -871,13 +898,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                         case 'line':
                             return 'none';
                         default:
-                            return shape.config.color;
+                            return me.customColors[idx] || shape.config.color;
                     }
                 });
 
             var nameAsTooltip = shape.config.name;
             var visualLabel = staticMe.labelEnsureMaxLength(
-                nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
+                nameAsTooltip, (legendConfig.legendEntryMaxLength || 15)
             );
 
             legendEntry.append('text')
@@ -904,9 +931,18 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .attr('class', CSS.DOWNLOAD_ICON)
                     .attr('text-anchor', 'start')
                     .attr('dy', '1')
-                    .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                    .attr('dx', '130') // TODO Discuss, do we need this dynamically?
                     .on('click', me.generateDownloadCallback(shape));
             }
+
+            legendEntry.append('text')
+                // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('\uf1fc')
+                .attr('class', CSS.COLOR_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                .on('click', me.generateColorCallback(shape, idx));
 
             legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
@@ -918,6 +954,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .on('click', me.generateDeleteCallback(shape));
 
         });
+
+        var config = this.view.getTargetLayer().get('timeSeriesChartProperties');
+        this.drawThresholdLegends(config, legend, curTranslateY);
     },
 
     /**
@@ -1369,6 +1408,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 return false;
             }
         }
+        //used for grid table in CartoWindowController
+        me.gridFeatures = Ext.clone(jsonObj.features);
 
         var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
             targetLayer.metadata);
@@ -1379,6 +1420,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // The id of the selected station is also the key in the pending
         // requests object.
+        //TODO: response shouldnt be restricted on id
         var stationId = station.get(chartConfig.featureIdentifyField || 'id');
 
 

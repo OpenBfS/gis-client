@@ -80,7 +80,8 @@
                 "expandToRight": "Neuere Daten anzeigen",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
                 "exportToPngText": "Download Chart",
-                "toggleGrouping": "Gruppierung tauschen"
+                "toggleGrouping": "Gruppierung tauschen",
+                "toggleUncertainty": "Messungenauigkeit umschalten"
             }
         }
     },
@@ -88,14 +89,22 @@
         "config": {
             "data": {
                 "belowDetectionLimitLabel": "< NWG",
-                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus.",
+                "colorWindowTitle": "Farbe auswählen",
+                "colorWindowMessage": "Bitte wählen Sie eine Farbe aus:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Abbrechen"
             }
         }
     },
     "Koala.view.component.D3Chart": {
         "config": {
             "data": {
-                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus.",
+                "colorWindowTitle": "Farbe auswählen",
+                "colorWindowMessage": "Bitte wählen Sie eine Farbe aus:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Abbrechen"
             }
         }
     },
@@ -248,6 +257,18 @@
                 "layoutComboLabel": "Layout",
                 "attributesTitle": "Eigenschaften",
                 "mapTitleLabel": "Kartentitel",
+                "map_label": "Karte",
+                "northArrowLabel": "Nordpfeil",
+                "northArrowBoxLabel": "...verwenden ? JO",
+                "scaleBar_label": "Maßstab",
+                "scaleBar_boxLabel": "...verwenden ? JO",
+                "map_attribution_label": "Karten-Attributierung",
+                "is_exercise_label": "ÜBUNG",
+                "title_label": "Titel",
+                "description_label": "Beschreibung",
+                "comment_label": "Kommentar",
+                "impressum_label": "Impressum",
+                "doc_creator_label": "Ersteller",
                 "serverUploadSuccessTitle": "Druck erfolgreich",
                 "serverUploadSuccess": "Druck wurde erfolgreich initiiert.",
                 "serverErrorTitle": "Fehler beim Druck",
@@ -264,7 +285,10 @@
                 "mapBboxButton": "Info",
                 "warnPrintTimedOutTitle": "Druckfehler",
                 "warnPrintTimedOutText": "Die Druckerzeugung hat das erlaubte Zeitlimit überschritten.",
-                "updateLegendtext": "Legendtext"
+                "updateLegendtext": "Legendentext",
+                "labelUse": "…verwenden?",
+                "northArrow": "Nordpfeil",
+                "scalebar": "Massstabsleiste"
             },
         }
     },
@@ -438,7 +462,7 @@
     "Koala.view.window.Print": {
         "config": {
             "data": {
-                "title": "Kartendruck"
+                "title": "Drucken"
             }
         }
     },
@@ -575,7 +599,7 @@
                                 "<li style='color:#294d71; font-weight:bold'>Geographische Übersicht</li>"+
                                     "<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht. Befindet sich der Mauszeiger innerhalb der Karte, werden rechts neben der Maßstabsleiste die geographischen Koordinaten der aktuellen Position des Mauszeigers angezeigt.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
-                                    "<div>1.7.0.0</div>"+
+                                    "<div>1.9.0-SNAPSHOT</div>"+
                             "</ol>"
                 },
                 "profileSelection": {
@@ -1010,9 +1034,13 @@
     "Koala.view.form.IrixFieldSet": {
         "config": {
             "data": {
-                "DokpoolBehaviour_label": "dem Dokpool sein Behaviour",
-                "DokpoolMeta_label": "dem Dokpool seine Metadaten",
-                "Identification_label": "allg. Informationen"
+                "DokpoolBehaviour_label": "Dokpool Verhalten",
+                "DokpoolMeta_label": "Dokpool Metadaten",
+                "Identification_label": "allg. Informationen",
+                "DokpoolBehaviour_Elan_label": "Elan",
+                "DokpoolBehaviour_Doksys_label": "Doksys",
+                "DokpoolBehaviour_Rodos_label": "Rodos",
+                "DokpoolBehaviour_Rei_label": "Rei"
             }
         }
     },
@@ -1212,7 +1240,7 @@
                                 "<div>In der Legende werden die Symbole der Layer erläutert.</div>"+
                                 "<div>Zusätzlich lassen sich Einstellungen an der Darstellung der Layer vornehmen. Layer lassen sich ein- bzw. ausblenden oder gänzlich entfernen. Die Abfrage von Layern lässt sich aktivieren bzw. deaktivieren und es können Filtereinstellungen vorgenommen werden. Des Weiteren ist es möglich die Zeichenreihenfolge der Layer mithilfe der Pfeiltasten anzupassen.</div><br />"+
                             "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
-                                "<div>1.7.0.0</div>"+
+                                "<div>1.9.0-SNAPSHOT</div>"+
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Karte</h1>",
                 "helpMapHtml": "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>2.2 Auswahl</i>). Standardmäßig sind die Layer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - OSM\" geladen. Eine Berührung innerhalb der Karte öffnet ein temporäres Fenster das die geographischen Koordinaten der getippten Position anzeigt.</div><br />"+

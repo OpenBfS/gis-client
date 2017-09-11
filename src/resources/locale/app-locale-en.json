@@ -80,7 +80,8 @@
                 "expandToRight": "Show newer data",
                 "toggleLegendVisibility": "Toggle legend visibility",
                 "exportToPngText": "Download Chart",
-                "toggleGrouping": "Toggle grouping"
+                "toggleGrouping": "Toggle grouping",
+                "toggleUncertainty": "Toggle uncertainty"
             }
         }
     },
@@ -88,14 +89,22 @@
         "config": {
             "data": {
                 "belowDetectionLimitLabel": "< LDL",
-                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period."
+                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period.",
+                "colorWindowTitle": "Pick color",
+                "colorWindowMessage": "Please select a color:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Cancel"
             }
         }
     },
     "Koala.view.component.D3Chart": {
         "config": {
             "data": {
-                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period."
+                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period.",
+                "colorWindowTitle": "Pick color",
+                "colorWindowMessage": "Please select a color:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Cancel"
             }
         }
     },
@@ -237,17 +246,29 @@
     "Koala.view.form.Print": {
         "config": {
             "data": {
-                "title": "en:Drucken",
-                "labelDpi": "en:DPI",
-                "printButtonSuffix": "en:anfordern",
-                "downloadButtonPrefix": "en:Download",
-                "printFormat": "en:pdf",
-                "printAppFieldSetTitle": "en:Vorlage",
-                "genericFieldSetTitle": "en:Einstellungen",
-                "formatComboLabel": "en:Format",
-                "layoutComboLabel": "en:Layout",
-                "attributesTitle": "en:Eigenschaften",
+                "title": "print",
+                "labelDpi": "DPI",
+                "printButtonSuffix": "get print",
+                "downloadButtonPrefix": "download",
+                "printFormat": "pdf",
+                "printAppFieldSetTitle": "template",
+                "genericFieldSetTitle": "settings",
+                "formatComboLabel": "format",
+                "layoutComboLabel": "layout",
+                "attributesTitle": "attributes",
                 "mapTitleLabel": "en:Kartentitel",
+                "map_label": "map",
+                "northArrow_label": "north arrow",
+                "northArrow_boxLabel": "en:...verwenden ?",
+                "scaleBar_label": "scalebar",
+                "scaleBar_boxLabel": "en:...verwenden ?",
+                "map_attribution_label": "map attribution",
+                "is_exercise_label": "EXERCISE",
+                "title_label": "titel",
+                "description_label": "description",
+                "comment_label": "comment",
+                "impressum_label": "impressum",
+                "doc_creator_label": "creator",
                 "serverUploadSuccessTitle": "Print successfully completed",
                 "serverUploadSuccess": "Print successfully initiated.",
                 "serverErrorTitle": "Print Error",
@@ -264,7 +285,10 @@
                 "mapBboxButton": "Info",
                 "warnPrintTimedOutTitle": "Printing Error",
                 "warnPrintTimedOutText": "Printing process has exceeded the valid time limit.",
-                "updateLegendtext": "en:Legendtext"
+                "updateLegendtext": "en:Legendtext",
+                "labelUse": "…use?",
+                "northArrow": "North arrow",
+                "scalebar": "Scale bar"
             }
         }
     },
@@ -437,7 +461,7 @@
     "Koala.view.window.Print": {
         "config": {
             "data": {
-                "title": "Map Printing"
+                "title": "Print"
             }
         }
     },
@@ -574,7 +598,7 @@
                                 "<li style='color:#294d71; font-weight:bold'>Geographical overview</li>"+
                                     "<div>The geographical overview allows you to navigate via an overview map. The scalebar serves as a reference with respect to the current view. As long as the mouse pointer is in the map, the geographical coordinates of the mouse pointer's current position are displayed to the right of the scalebar.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Software version</li>"+
-                                    "<div>1.7.0.0</div>"+
+                                    "<div>1.9.0-SNAPSHOT</div>"+
                             "</ol>"
                 },
                 "profileSelection": {
@@ -994,9 +1018,13 @@
     "Koala.view.form.IrixFieldSet": {
         "config": {
             "data": {
-                "DokpoolBehaviour_label": "en:dem Dokpool sein Behaviour",
-                "DokpoolMeta_label": "en:dem Dokpool seine Metadaten",
-                "Identification_label": "en:allg. Informationen"
+                "DokpoolBehaviour_label": "en:Dokpool Verhalten",
+                "DokpoolMeta_label": "en:Dokpool Metadaten",
+                "Identification_label": "en:allg. Informationen",
+                "DokpoolBehaviour_Elan_label": "Elan",
+                "DokpoolBehaviour_Doksys_label": "Doksys",
+                "DokpoolBehaviour_Rodos_label": "Rodos",
+                "DokpoolBehaviour_Rei_label": "Rei"
             }
         }
     },
@@ -1197,7 +1225,7 @@
                                 "<div>The legend explains the symbols used in the layers.</div>"+
                                 "<div>It is also possible to change the settings for the layer presentation. Via the legend, you can hide or show or even completely delete individual layers. You can activate or deactivate the layer query in the legend and you can change the filter settings. It is also possible to change the mapping order of the layers with the help of the arrow buttons.</div><br />"+
                             "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
-                                "<div>1.7.0.0</div>"+
+                                "<div>1.9.0-SNAPSHOT</div>"+
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Map</h1>",
                 "helpMapHtml": "<div>The map displays the selected layers/data sets (please refer to Section <i>2.2 Selection</i> for details on adding layers). The layers \"Place names\", \"Contour lines\" and \"Background map - OSM\" are loaded by default. Tap into the map to open a temporary window that displays the geographical coordinates of the selected position.</div><br />"+

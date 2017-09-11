@@ -30,6 +30,7 @@ Ext.define('Koala.view.component.CartoWindowModel', {
         toggleLegendVisibility: '',
         exportToPngText: '',
         toggleGrouping: '',
+        toggleUncertainty: '',
         /*i18n end*/
         lineFeature: null,
         lineLayer: null,

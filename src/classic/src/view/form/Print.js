@@ -30,7 +30,7 @@ Ext.define('Koala.view.form.Print', {
         'GeoExt.data.serializer.Vector',
         'GeoExt.data.serializer.XYZ',
 
-        'Koala.view.form.IrixFieldset',
+        'Koala.view.form.IrixFieldSet',
         'Koala.util.DokpoolContext',
         'Koala.util.Object',
         'Koala.util.AppContext',
@@ -157,6 +157,7 @@ Ext.define('Koala.view.form.Print', {
             margin: '5px 0px',
             items: [{
                 xtype: 'textfield',
+                viewModel: me.getViewModel(),
                 name: attributeRec.get('name'),
                 fieldLabel: attributeRec.get('name'),
                 value: attributeRec.get('default'),
@@ -489,8 +490,10 @@ Ext.define('Koala.view.form.Print', {
     },
 
     getCheckBoxBooleanFields: function(attributeRec) {
+        var me = this;
         return {
             xtype: 'checkbox',
+            viewModel: me.getViewModel(),
             name: attributeRec.get('name'),
             checked: true,
             fieldLabel: attributeRec.get('name')
@@ -510,13 +513,16 @@ Ext.define('Koala.view.form.Print', {
         switch (attributeRec.get('type')) {
             case 'MapAttributeValues':
                 attributeFields = me.getMapAttributeFields(attributeRec);
+                attributeFields.viewModel = me.getViewModel();
                 map.on('moveend', me.renderAllClientInfos, me);
                 break;
             case 'NorthArrowAttributeValues':
                 attributeFields = me.getNorthArrowAttributeFields(attributeRec);
+                attributeFields.viewModel = me.getViewModel();
                 break;
             case 'ScalebarAttributeValues':
                 attributeFields = me.getScalebarAttributeFields(attributeRec);
+                attributeFields.viewModel = me.getViewModel();
                 break;
             case 'LegendAttributeValue':
                 attributeFields = me.getLegendAttributeFields(attributeRec);
@@ -760,9 +766,8 @@ Ext.define('Koala.view.form.Print', {
             }
 
             var hookedAttributes = Ext.clone(attributes);
-            Ext.iterate(attributes, function(key, value) {
-                Koala.util.Hooks.executeBeforePostHook(key, value, hookedAttributes);
-            });
+
+            Koala.util.Hooks.executeBeforePostHook(view, hookedAttributes);
 
             var app = view.down('combo[name=appCombo]').getValue();
             var url = view.getUrl() + app + '/buildreport.' + format;
@@ -779,6 +784,11 @@ Ext.define('Koala.view.form.Print', {
                     spec.outputFormat = format;
                     mapfishPrint[0] = spec;
                     irixJson = view.setUpIrixJson(mapfishPrint);
+
+                    var hookedIrixAttributes = Ext.clone(irixJson);
+
+                    Koala.util.Hooks.executeBeforePostHook(view, hookedIrixAttributes.irix);
+
                     url = view.getIrixUrl();
                     Ext.Ajax.request({
                         url: url,
@@ -786,7 +796,7 @@ Ext.define('Koala.view.form.Print', {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        jsonData: irixJson,
+                        jsonData: hookedIrixAttributes,
                         scope: view,
                         success: view.irixPostSuccessHandler,
                         failure: view.genericPostFailureHandler,
@@ -1086,7 +1096,7 @@ Ext.define('Koala.view.form.Print', {
         var checkBox = me.down('[name="irix-fieldset-checkbox"]');
 
         if (!fs) {
-            var irixFieldset = Ext.create('Koala.view.form.IrixFieldset',{
+            var irixFieldset = Ext.create('Koala.view.form.IrixFieldSet',{
                 flex: 2
             });
             me.add(irixFieldset);
