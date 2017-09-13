@@ -11,6 +11,57 @@ module.exports = function(config) {
     var TOOLKIT = config.toolkit || 'classic';
     var EXTJSPREFIX = TOOLKIT === 'modern' ? '-modern' : '';
     var proxyUrl = 'http://localhost:300' + TOOLKIT === 'classic' ? '0' : '1';
+    var files = [
+        'ext/build/ext' + EXTJSPREFIX + '-all-debug.js',
+        'ext/packages/ux/classic/src/**/*js',
+        'ext/packages/ux/modern/**/*js',
+        'ext/packages/ux/src/**/*js',
+        'test/' + TOOLKIT + '/loader.js',
+        'resources/lib/openlayers-v3.19.1-dist/ol.js',
+        'test/raf.polyfill.js',
+        'overrides/**/*js',
+        'test/test-helper-functions.js',
+        'test/turn-off-ext-logger.js',
+        // GeoExt
+        {
+            pattern: 'lib/GeoExt/src/**/*.js',
+            included: false
+        },
+        // BasiGX
+        {
+            pattern: 'lib/BasiGX/src/**/*.js',
+            included: false
+        },
+        {
+            pattern: 'resources/appContext.json',
+            watched: true,
+            served: true,
+            included: false
+        },
+        {
+            pattern: 'resources/locale/**',
+            watched: true,
+            served: true,
+            included: false
+        },
+        {
+            pattern: 'resources/rodos/**',
+            watched: true,
+            served: true,
+            included: false
+        },
+        'resources/lib/proj4js/proj4.js',
+        'resources/lib/proj4js/proj4-defs.js',
+        'resources/lib/d3/d3.js',
+        'resources/lib/momentjs/moment-with-locales.js',
+        'resources/lib/turfjs-4.5.2/turf.min.js',
+        '/koalaProxy'
+    ];
+
+    if (TOOLKIT === 'classic') {
+        files.push('test/spec/app/**/*.test.js');
+    }
+    files.push('test/spec/' + TOOLKIT + '/**/*.test.js');
 
     config.set({
 
@@ -27,54 +78,7 @@ module.exports = function(config) {
         frameworks: ['mocha', 'expect', 'sinon'],
 
         // list of files / patterns to load in the browser
-        files: [
-            'ext/build/ext' + EXTJSPREFIX + '-all-debug.js',
-            'ext/packages/ux/classic/src/**/*js',
-            'ext/packages/ux/modern/**/*js',
-            'ext/packages/ux/src/**/*js',
-            'test/' + TOOLKIT + '/loader.js',
-            'resources/lib/openlayers-v3.19.1-dist/ol.js',
-            'test/raf.polyfill.js',
-            'overrides/**/*js',
-            'test/test-helper-functions.js',
-            'test/turn-off-ext-logger.js',
-            // GeoExt
-            {
-                pattern: 'lib/GeoExt/src/**/*.js',
-                included: false
-            },
-            // BasiGX
-            {
-                pattern: 'lib/BasiGX/src/**/*.js',
-                included: false
-            },
-            {
-                pattern: 'resources/appContext.json',
-                watched: true,
-                served: true,
-                included: false
-            },
-            {
-                pattern: 'resources/locale/**',
-                watched: true,
-                served: true,
-                included: false
-            },
-            {
-                pattern: 'resources/rodos/**',
-                watched: true,
-                served: true,
-                included: false
-            },
-            'resources/lib/proj4js/proj4.js',
-            'resources/lib/proj4js/proj4-defs.js',
-            'resources/lib/d3/d3.js',
-            'resources/lib/momentjs/moment-with-locales.js',
-            'resources/lib/turfjs-4.5.2/turf.min.js',
-            '/koalaProxy',
-            'test/spec/app/**/*.test.js',
-            'test/spec/' + TOOLKIT + '/**/*.test.js'
-        ],
+        files: files,
 
         // list of files to exclude
         exclude: [
