@@ -974,10 +974,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         //    configurator elsewhere
         selModel.select(selection);
 
-        if (!me.layout.running && !me.layout.pending && me.layout.done) {
-            me.setSize(me.getSize()[0], me.getSize()[1] + 1);
-            me.setSize(me.getSize()[0], me.getSize()[1] - 1);
-        }
+        //TODO: If enabled, bug in legend.
+        //      reproduce: Add layer, close legend -> [E] Layout run failed
+        //      Legend cannot be opened again.
+        // if (!me.layout.running && !me.layout.pending && me.layout.done) {
+        //     me.setSize(me.getSize()[0], me.getSize()[1] + 1);
+        //     me.setSize(me.getSize()[0], me.getSize()[1] - 1);
+        // }
     },
 
     updateLegendsWithScale: function() {
