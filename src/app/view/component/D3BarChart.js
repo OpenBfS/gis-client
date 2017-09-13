@@ -242,7 +242,7 @@ Ext.define('Koala.view.component.D3BarChart',{
                 },
                 title: {
                     label: title,
-                    labelSize: chartConfig.titleSize,
+                    labelSize: chartConfig.titleSize || 12,
                     labelColor: chartConfig.titleColor,
                     labelPadding: chartConfig.titlePadding
                 }
