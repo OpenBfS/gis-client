@@ -78,6 +78,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         selectionchange: 'onSelectionChange',
         beforerender: 'bindUtcBtnToggleHandler',
         beforedestroy: 'unbindUtcBtnToggleHandler',
+        cellclick: function() {
+            this.getScrollable().scrollTo(0);
+        },
         // Ensure the layer filter text indicator will be drawn
         expand: {
             fn: 'onFirstExpand',
@@ -973,14 +976,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         // 2) select what was previously selected, and trigger the hovering
         //    configurator elsewhere
         selModel.select(selection);
-
-        //TODO: If enabled, bug in legend.
-        //      reproduce: Add layer, close legend -> [E] Layout run failed
-        //      Legend cannot be opened again.
-        // if (!me.layout.running && !me.layout.pending && me.layout.done) {
-        //     me.setSize(me.getSize()[0], me.getSize()[1] + 1);
-        //     me.setSize(me.getSize()[0], me.getSize()[1] - 1);
-        // }
     },
 
     updateLegendsWithScale: function() {
