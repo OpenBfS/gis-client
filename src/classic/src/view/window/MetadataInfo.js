@@ -47,6 +47,13 @@ Ext.define('Koala.view.window.MetadataInfo', {
         record: null
     },
 
+    listeners: {
+        afterlayout: function() {
+            this.el.selectable();
+            this.el.select('.x-unselectable').selectable();
+        }
+    },
+
     statics: {
         /**
          * A very basic reusable renderer that allows multiple lines inside of
