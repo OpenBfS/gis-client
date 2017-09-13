@@ -81,6 +81,8 @@ Ext.define('Koala.view.window.HelpWindow', {
                 treelist = me.lookupReference('treelist'),
                 store = treelist.getStore(),
                 selection = treelist.getSelection();
+            this.el.selectable();
+            this.el.select('.x-unselectable').selectable();
             if (store && !selection) {
                 var winController = me.getController();
                 winController.removeTopicByTools();
