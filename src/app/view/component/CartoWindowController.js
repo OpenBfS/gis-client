@@ -707,7 +707,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
                         if (typeof prop === 'number') {
                             type = 'number';
                         } else if (typeof prop === 'string') {
-                            type = (parseFloat(prop[0]) && moment(prop, moment.ISO_8601(), true).isValid()) ? 'date' : 'string';
+                            if (parseFloat(prop[0])) {
+                                var dateVal = moment(prop, moment.ISO_8601(), true);
+                                type = (dateVal.isValid()) ? 'date' : 'string';
+                            }
                         }
                         if (!types[propName]) {
                             types[propName] = [type];
@@ -737,6 +740,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     }
                     uniqueTypes = (uniqueTypes.indexOf('string') > -1) ? ['string'] : uniqueTypes;
                     field.type = column.filter.type = uniqueTypes[0];
+
+                    if (field.type === 'date') {
+                        column.renderer = function(val) {
+                            var dateVal = moment(val, moment.ISO_8601(), true);
+                            return Koala.util.Date.getFormattedDate(dateVal);
+                        };
+                    }
 
                     fields.push(field);
                     columns.push(column);
