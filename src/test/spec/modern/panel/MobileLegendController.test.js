@@ -73,6 +73,8 @@ describe('Koala.view.panel.MobileLegendController', function() {
         });
         it('asks for confirmation', function() {
             var firstLayer = mapComponent.getLayers().item(0);
+            // Msg is undefined when running mobile only tests
+            Ext.Msg = Ext.Msg || {show: function() {}};
             // setup
             var spy = sinon.spy(Ext.Msg, 'show');
 

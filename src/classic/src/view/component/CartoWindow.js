@@ -20,6 +20,11 @@ Ext.define('Koala.view.component.CartoWindow',{
     extend: 'Ext.Component',
     xtype: 'k-component-cartowindow',
 
+    requires: [
+        'Ext.grid.Panel',
+        'Ext.grid.filters.Filters'
+    ],
+
     cls: 'cartowindow',
 
     controller: 'k-component-cartowindow',
@@ -61,6 +66,7 @@ Ext.define('Koala.view.component.CartoWindow',{
             }).bind(this));
             cmp.getEl().on('mouseenter', this.controller.disableMapInteractions.bind(this.controller));
             cmp.getEl().on('mouseleave', this.controller.enableMapInteractions.bind(this.controller));
+            cmp.getEl().select('.x-unselectable').selectable();
         }
     }
 
