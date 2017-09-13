@@ -78,8 +78,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         selectionchange: 'onSelectionChange',
         beforerender: 'bindUtcBtnToggleHandler',
         beforedestroy: 'unbindUtcBtnToggleHandler',
-        cellclick: function() {
-            this.getScrollable().scrollTo(0);
+        focusenter: function() {
+            this.updateLayout();
         },
         // Ensure the layer filter text indicator will be drawn
         expand: {
