@@ -172,7 +172,7 @@ Ext.define('Koala.view.window.BarChartController', {
     onUncertaintyCheckChange: function(checkbox, checked) {
         var chart = checkbox.up('[name="chart-composition"]').down('d3-barchart');
         var chartCtrl = chart.getController();
-        chartCtrl.setUncertaintyVisiblity(checked);
+        chartCtrl.setUncertaintyVisibility(checked);
     },
 
     /**

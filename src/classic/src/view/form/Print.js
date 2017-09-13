@@ -785,9 +785,9 @@ Ext.define('Koala.view.form.Print', {
                     mapfishPrint[0] = spec;
                     irixJson = view.setUpIrixJson(mapfishPrint);
 
-            var hookedIrixAttributes = Ext.clone(irixJson);
+                    var hookedIrixAttributes = Ext.clone(irixJson);
 
-            Koala.util.Hooks.executeBeforePostHook(view, hookedIrixAttributes.irix);
+                    Koala.util.Hooks.executeBeforePostHook(view, hookedIrixAttributes.irix);
 
                     url = view.getIrixUrl();
                     Ext.Ajax.request({

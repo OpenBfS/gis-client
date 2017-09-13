@@ -167,6 +167,30 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Checks the properties of the layer to see if it is configured to show
+         * a timeseries grid.
+         *
+         * @param {ol.layer.Layer} layer The layer to check.
+         * @return {boolean} Whether the layer allows to draw the grid.
+         */
+        showTimeseriesGrid: function(layer) {
+            var timeseriesProps = layer.get('timeSeriesChartProperties') || {};
+            return timeseriesProps.showTimeseriesGrid === true || timeseriesProps.showTimeseriesGrid === 'true';
+        },
+
+        /**
+         * Checks the properties of the layer to see if it is configured to show
+         * a bar chart grid.
+         *
+         * @param {ol.layer.Layer} layer The layer to check.
+         * @return {boolean} Whether the layer allows to draw the grid.
+         */
+        showBarChartGrid: function(layer) {
+            var barChartProps = layer.get('barChartProperties') || {};
+            return barChartProps.showBarchartGrid === true || barChartProps.showBarchartGrid === 'true';
+        },
+
+        /**
          * Checks the properties of the layer to see if it is configured to draw
          * a table.
          *

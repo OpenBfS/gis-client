@@ -37,6 +37,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     showUncertainty: true,
     colorsByKey: {},
     disabledSubCategories: [],
+    gridFeatures: null,
 
     /**
      * The default chart margin to apply.
@@ -158,6 +159,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 || 'uncertainty';
         var colors = view.getShape().color.split(',');
         var jsonObj;
+        //TODO: response shouldnt be restricted on id
         var stationId = station.get('id');
         var seriesData = [];
 
@@ -169,6 +171,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return false;
             }
         }
+        //used for grid table in CartoWindowController
+        me.gridFeatures = jsonObj.features;
 
         me.colorsByKey = {};
 
@@ -179,7 +183,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             dataObj.key = feature.properties[keyProp];
 
             if (!me.colorsByKey[groupKey]) {
-                me.colorsByKey[groupKey] = colors[0] || staticMe.getRandomColor();
+                me.colorsByKey[groupKey] = me.customColors[groupKey] || colors[0] || staticMe.getRandomColor();
                 Ext.Array.removeAt(colors, 0);
             }
 
@@ -196,7 +200,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 pushObj[groupKey] = {};
             }
 
-            pushObj[groupKey].color = me.colorsByKey[groupKey];
+            pushObj[groupKey].color = me.customColors[groupKey] || me.colorsByKey[groupKey];
             pushObj[groupKey].value = feature.properties[valueProp];
             pushObj[groupKey].key = feature.properties[groupProp];
             pushObj[groupKey].detection_limit = feature.properties[detectionLimitProp];
@@ -469,8 +473,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .filter(function(d) {
                 return me.drawBar(d);
             })
-            .style('fill', function(d) {
-                return d.color;
+            .style('fill', function(d, idx) {
+                return me.customColors[idx] || d.color;
             })
         // .style('opacity', shapeConfig.opacity)
             .attr('x', function(d) {
@@ -483,8 +487,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .attr('height', function(d) {
                 return chartSize[1] - me.scales[orientY](d[yField]);
             })
-            .style('fill', function(d) {
-                return d.color;
+            .style('fill', function(d, idx) {
+                return me.customColors[idx] || d.color;
             })
             // .style('opacity', shapeConfig.opacity)
             .on('mouseover', function(data) {
@@ -534,8 +538,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     'L' + xCenter + ',' + yTop + 'M' + (xCenter - lineWidth) + ',' + yTop + 'L' + (xCenter + lineWidth) + ',' + yTop;
                 }
             })
-            .attr('stroke', function(d) {
-                var extColor = Ext.util.Color.create(d.color);
+            .attr('stroke', function(d, idx) {
+                var extColor = Ext.util.Color.create(me.customColors[idx] || d.color);
                 extColor.darken(0.4);
                 return extColor.toHex();
             })
@@ -758,7 +762,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
                 new moment(nameAsTooltip)) : nameAsTooltip;
             var visualLabel = staticMe.labelEnsureMaxLength(
-                nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
+                nameAsTooltip, (legendConfig.legendEntryMaxLength || 15)
             );
 
             legendEntry.append('text')
@@ -785,7 +789,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
-                    if (target && target.classed(CSS.DELETE_ICON)) {
+                    if (target && (target.classed(CSS.DELETE_ICON) ||
+                        target.classed(CSS.COLOR_ICON))) {
                         // click happened on the delete icon, no visibility
                         // toggling. The deletion is handled in an own event
                         // handler
@@ -823,7 +828,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             legendEntry.append('path')
                 .attr('d', SVG_DEFS.LEGEND_ICON_BACKGROUND)
                 .style('stroke', 'none')
-                .style('fill', me.colorsByKey[subCategory]);
+                .style('fill', me.customColors[idx] || me.colorsByKey[subCategory]);
 
             // TODO This check doesn't seem to be ideal as it throws a warning
             // if a none datestring is the subCategory
@@ -832,7 +837,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
                 new moment(subCategory)) : subCategory;
             var visualLabel = staticMe.labelEnsureMaxLength(
-                nameAsTooltip, (legendConfig.legendEntryMaxLength || 17)
+                nameAsTooltip, (legendConfig.legendEntryMaxLength || 15)
             );
 
             legendEntry.append('text')
@@ -853,6 +858,14 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('dx', '160')
                 .on('click', me.deleteSubCategory.bind(me, subCategory));
 
+            legendEntry.append('text')
+                // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('\uf1fc')
+                .attr('class', CSS.COLOR_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '140') // TODO Discuss, do we need this dynamically?
+                .on('click', me.generateColorCallback({config: {color: me.colorsByKey[subCategory]}}, idx));
         });
     },
 
@@ -951,7 +964,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      * This sets the visibility of the uncertainty marker-bars.
      * @param {boolean} visible Wheather to show the uncertainty or not.
      */
-    setUncertaintyVisiblity: function(visible) {
+    setUncertaintyVisibility: function(visible) {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var CSS = staticMe.CSS_CLASS;
@@ -962,6 +975,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
             me.showUncertainty = visible;
             me.redrawChart();
         }
+    },
+
+    toggleUncertainty: function() {
+        this.setUncertaintyVisibility(!this.showUncertainty);
     }
 
 });

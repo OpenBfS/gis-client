@@ -61,14 +61,11 @@ Ext.define('Koala.util.Hooks', {
         */
         executeBeforePostHook: function(form, postAttributes) {
             var me = this;
-            Ext.iterate(me.beforePost, function(key, func) {
-            console.log(key);
-            if(me.keyMap(postAttributes, key)){
-                me.beforePost[key](form, key, postAttributes);
-            }else{
-                console.log('key '+key+' not found in postAttributes');
-            };
-        });
+            Ext.iterate(me.beforePost, function(key) {
+                if (me.keyMap(postAttributes, key)) {
+                    me.beforePost[key](form, key, postAttributes);
+                }
+            });
         },
 
         /**
@@ -80,12 +77,12 @@ Ext.define('Koala.util.Hooks', {
         * @return "String" if key matched
         *         undefined if key didn't match
         */
-        keyMap: function(obj, attrString){
-            var path = attrString.split(".");
-            for (var i in path){
-                try{
+        keyMap: function(obj, attrString) {
+            var path = attrString.split('.');
+            for (var i in path) {
+                try {
                     obj = obj[path[i]];
-                }catch(e){
+                } catch (e) {
                     return undefined;
                 }
             }
@@ -109,9 +106,9 @@ Ext.define('Koala.util.Hooks', {
          *        adjust the form before it will be created.
          */
         beforeAdd: {
-         /*
-         * Hooks for MapFish part
-         */
+            /*
+            * Hooks for MapFish part
+            */
             legend_template: function(form, attributeRec, attributeFields) {
                 var layoutCombo = form.down('combo[name="layout"]');
                 var currentLayout = layoutCombo.getValue();
@@ -130,9 +127,9 @@ Ext.define('Koala.util.Hooks', {
                     title: '{map_label}' + ' (' +
                         clientInfo.width + ' × ' +
                         clientInfo.height + ')'
-	        };
+                };
             },
-/*
+            /*
             northArrow: function(form, attributeRec, attributeFields) {
                 attributeFields.bind = {
                     fieldLabel: '{northArrowLabel}'
@@ -191,9 +188,9 @@ Ext.define('Koala.util.Hooks', {
                 };
                 attributeFields['hidden'] = true;
             },
-         /*
-         * Hooks for IRIX part
-         */
+            /*
+            * Hooks for IRIX part
+            */
             User: function(form, attributeFields) {
                 var appContext = Koala.util.AppContext.getAppContext();
                 var userName = Koala.util.Object.getPathStrOr(appContext,
@@ -204,8 +201,8 @@ Ext.define('Koala.util.Hooks', {
             },
             DokpoolContentType: function(form, attributeFields) {
                 attributeFields.on({
-                    change: function(){
-                        console.log('DokpoolContentType changed');
+                    change: function() {
+                        // console.log('DokpoolContentType changed');
                     }
                 });
             },
@@ -219,7 +216,7 @@ Ext.define('Koala.util.Hooks', {
                     align: 'stretch'
                 };
             //ToDo: check how to properly rearrange items in
-            //additional container with 
+            //additional container with
             //layout type = 'hbox'
             },
             IsElan: function(form, attributeFields) {
@@ -276,20 +273,20 @@ Ext.define('Koala.util.Hooks', {
          *                                be posted to the printservlet.
          */
         beforePost: {
-            "title": function(form, key, postAttributes) {
+            'title': function(form, key, postAttributes) {
                 var newTitle = '<div><b>MAP-TITLE FROM HOOK</b></div>';
                 postAttributes.title = newTitle;
             },
-            "DokpoolMeta.DokpoolGroupFolder": function(form, key, postAttributes) {
+            'DokpoolMeta.DokpoolGroupFolder': function(form, key, postAttributes) {
                 var DokpoolContentType = postAttributes.DokpoolMeta.DokpoolContentType;
                 var Confidentiality = postAttributes.Identification.Confidentiality;
-//                var DokpoolName = postAttributes.DokpoolMeta.DokpoolName;
-                if (DokpoolContentType && Confidentiality){
-                    console.log('DokpoolContentType: ' + DokpoolContentType + ' && Confidentiality: ' + Confidentiality);
+                //                var DokpoolName = postAttributes.DokpoolMeta.DokpoolName;
+                if (DokpoolContentType && Confidentiality) {
+                    //console.log('DokpoolContentType: ' + DokpoolContentType + ' && Confidentiality: ' + Confidentiality);
                     var DokpoolGroupFolder = form.dokpoolContext.getPath(Confidentiality,DokpoolContentType);
                     postAttributes.DokpoolMeta.DokpoolGroupFolder = DokpoolGroupFolder;
-                }else{
-                    console.log('DokpoolContentType OR Confidentiality missing');
+                // } else {
+                //     console.log('DokpoolContentType OR Confidentiality missing');
                 }
             }
         }

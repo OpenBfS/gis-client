@@ -80,7 +80,8 @@
                 "expandToRight": "Neuere Daten anzeigen",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
                 "exportToPngText": "Download Chart",
-                "toggleGrouping": "Gruppierung tauschen"
+                "toggleGrouping": "Gruppierung tauschen",
+                "toggleUncertainty": "Messungenauigkeit umschalten"
             }
         }
     },
@@ -88,14 +89,22 @@
         "config": {
             "data": {
                 "belowDetectionLimitLabel": "< NWG",
-                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus.",
+                "colorWindowTitle": "Farbe auswählen",
+                "colorWindowMessage": "Bitte wählen Sie eine Farbe aus:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Abbrechen"
             }
         }
     },
     "Koala.view.component.D3Chart": {
         "config": {
             "data": {
-                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus."
+                "noDataAvailableText": "Für den ausgewählten Zeitraum existieren keine Daten. Bitte wählen Sie einen anderen Zeitraum aus.",
+                "colorWindowTitle": "Farbe auswählen",
+                "colorWindowMessage": "Bitte wählen Sie eine Farbe aus:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Abbrechen"
             }
         }
     },
@@ -276,7 +285,10 @@
                 "mapBboxButton": "Info",
                 "warnPrintTimedOutTitle": "Druckfehler",
                 "warnPrintTimedOutText": "Die Druckerzeugung hat das erlaubte Zeitlimit überschritten.",
-                "updateLegendtext": "Legendtext"
+                "updateLegendtext": "Legendentext",
+                "labelUse": "…verwenden?",
+                "northArrow": "Nordpfeil",
+                "scalebar": "Massstabsleiste"
             },
         }
     },
@@ -1228,7 +1240,11 @@
                                 "<div>In der Legende werden die Symbole der Layer erläutert.</div>"+
                                 "<div>Zusätzlich lassen sich Einstellungen an der Darstellung der Layer vornehmen. Layer lassen sich ein- bzw. ausblenden oder gänzlich entfernen. Die Abfrage von Layern lässt sich aktivieren bzw. deaktivieren und es können Filtereinstellungen vorgenommen werden. Des Weiteren ist es möglich die Zeichenreihenfolge der Layer mithilfe der Pfeiltasten anzupassen.</div><br />"+
                             "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
+<<<<<<< HEAD
                                 "<div>1.8.1-SNAPSHOT</div>"+
+=======
+                                "<div>1.9.0-SNAPSHOT</div>"+
+>>>>>>> origin/master
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Karte</h1>",
                 "helpMapHtml": "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>2.2 Auswahl</i>). Standardmäßig sind die Layer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - OSM\" geladen. Eine Berührung innerhalb der Karte öffnet ein temporäres Fenster das die geographischen Koordinaten der getippten Position anzeigt.</div><br />"+
