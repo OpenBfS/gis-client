@@ -80,7 +80,8 @@
                 "expandToRight": "Show newer data",
                 "toggleLegendVisibility": "Toggle legend visibility",
                 "exportToPngText": "Download Chart",
-                "toggleGrouping": "Toggle grouping"
+                "toggleGrouping": "Toggle grouping",
+                "toggleUncertainty": "Toggle uncertainty"
             }
         }
     },
@@ -88,14 +89,22 @@
         "config": {
             "data": {
                 "belowDetectionLimitLabel": "< LDL",
-                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period."
+                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period.",
+                "colorWindowTitle": "Pick color",
+                "colorWindowMessage": "Please select a color:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Cancel"
             }
         }
     },
     "Koala.view.component.D3Chart": {
         "config": {
             "data": {
-                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period."
+                "noDataAvailableText": "There is no data available for the specified time range. Please select a different period.",
+                "colorWindowTitle": "Pick color",
+                "colorWindowMessage": "Please select a color:",
+                "colorMsgButtonYes": "Ok",
+                "colorMsgButtonNo": "Cancel"
             }
         }
     },
@@ -276,7 +285,10 @@
                 "mapBboxButton": "Info",
                 "warnPrintTimedOutTitle": "Printing Error",
                 "warnPrintTimedOutText": "Printing process has exceeded the valid time limit.",
-                "updateLegendtext": "en:Legendtext"
+                "updateLegendtext": "en:Legendtext",
+                "labelUse": "…use?",
+                "northArrow": "North arrow",
+                "scalebar": "Scale bar"
             }
         }
     },

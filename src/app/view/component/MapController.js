@@ -78,6 +78,7 @@ Ext.define('Koala.view.component.MapController', {
             var layer = olFeat.get('layer');
             var idField = Koala.util.Object.getPathStrOr(layer,
                 'metadata/layerConfig/olProperties/featureIdentifyField', 'id');
+
             var featureId = olFeat.get(idField);
             var isCarto = Koala.util.Layer.isCartoWindowLayer(layer);
             var isTimeSeries = Koala.util.Layer.isTimeseriesChartLayer(layer);
