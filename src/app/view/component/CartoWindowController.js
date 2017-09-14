@@ -941,7 +941,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     grid.setSize(newWidth - 20, newHeight - 20);
                 }
                 me.updateLineFeature();
-            })
+            });
         }
 
         var input = tab.querySelector('input');
