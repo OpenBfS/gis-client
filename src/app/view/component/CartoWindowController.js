@@ -473,8 +473,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var tabElm = barChartTab.getElementsByTagName('div')[0];
 
         var config = {
-            width: '400px',
-            height: '400px',
+            width: '500px',
+            height: '300px',
             flex: 1,
             renderTo: tabElm
         };
@@ -671,6 +671,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var gridInTab = {
             xtype: 'grid',
             header: false,
+            layout: 'fit',
             store: Ext.data.StoreManager.lookup('GridTabStore'),
             plugins: 'gridfilters',
             chartElement: chart,
@@ -762,7 +763,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         Ext.create({
             xtype: 'panel',
-            layout: 'auto',
+            layout: 'fit',
+            width: '500px',
+            height: '300px',
             renderTo: tabElm,
             items: [gridInTab]
         });
