@@ -920,10 +920,29 @@ Ext.define('Koala.view.component.CartoWindowController', {
         });
 
         if (!Ext.isModern) {
-            Ext.create('Ext.resizer.Resizer', {
+            var resizer = Ext.create('Ext.resizer.Resizer', {
                 target: tab.querySelector('.content'),
                 handles: 'se s e'
             });
+            resizer.on('resize', function(self, width, height) {
+                var newWidth = Math.max(width, view.contentMinWidth);
+                var newHeight = Math.max(height, view.contentMinHeight);
+
+                var chartContainerEl = self.el.down('[id^=d3-chart]') ||
+                        self.el.down('[id^=d3-barchart]');
+                if (chartContainerEl) {
+                    var chart = Ext.getCmp(chartContainerEl.id);
+                    chart.setWidth(newWidth - 20);
+                    chart.setHeight(newHeight - 40);
+                }
+                var grid = self.el.down('.x-panel');
+                if (grid) {
+                    grid.setSize(newWidth - 20, newHeight - 20);
+                    grid = grid.component.down('grid');
+                    grid.setSize(newWidth - 20, newHeight - 20);
+                }
+                me.updateLineFeature();
+            })
         }
 
         var input = tab.querySelector('input');
@@ -1068,36 +1087,38 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 overlay.setPosition(event.coordinate);
                 me.updateLineFeature();
             } else if (overlay.get('resizing') === true) {
-                var target = me.resizeTarget;
-                var targetX = target.getX();
-                var targetY = target.getY();
-                var evtX = event.originalEvent.clientX;
-                var evtY = event.originalEvent.clientY;
-                var newWidth = evtX - targetX;
-                var newHeight = evtY - targetY;
-                newWidth = newWidth > view.contentMinWidth
-                    ? newWidth
-                    : view.contentMinWidth || 0;
-                newHeight = newHeight > view.contentMinHeight
-                    ? newHeight
-                    : view.contentMinHeight || 0;
-
-                var chartContainerEl = target.down('[id^=d3-chart]') ||
-                        target.down('[id^=d3-barchart]');
-                if (chartContainerEl) {
-                    var chart = Ext.getCmp(chartContainerEl.id);
-                    chart.setWidth(newWidth - 20);
-                    chart.setHeight(newHeight - 20);
-                }
-                var grid = target.down('.x-panel');
-                if (grid) {
-                    grid.setSize(newWidth - 20, newHeight - 20);
-                    grid = grid.component.down('grid');
-                    grid.setSize(newWidth - 20, newHeight - 20);
-                }
-                target.setWidth(newWidth);
-                target.setHeight(newHeight);
-                me.updateLineFeature();
+                // var target = me.resizeTarget;
+                // var targetX = target.getX();
+                // var targetY = target.getY();
+                // var evtX = event.originalEvent.clientX;
+                // var evtY = event.originalEvent.clientY;
+                // var newWidth = evtX - targetX;
+                // var newHeight = evtY - targetY;
+                // newWidth = newWidth > view.contentMinWidth
+                //     ? newWidth
+                //     : view.contentMinWidth || 0;
+                // newHeight = newHeight > view.contentMinHeight
+                //     ? newHeight
+                //     : view.contentMinHeight || 0;
+                //
+                // var chartContainerEl = target.down('[id^=d3-chart]') ||
+                //         target.down('[id^=d3-barchart]');
+                // if (chartContainerEl) {
+                //     var chart = Ext.getCmp(chartContainerEl.id);
+                //     chart.setWidth(newWidth - 20);
+                //     chart.setHeight(newHeight - 30);
+                //     console.log('chart size', newWidth -20, newHeight -30)
+                // }
+                // var grid = target.down('.x-panel');
+                // if (grid) {
+                //     grid.setSize(newWidth - 20, newHeight - 20);
+                //     grid = grid.component.down('grid');
+                //     grid.setSize(newWidth - 20, newHeight - 20);
+                // }
+                // console.log('new target ', newWidth, newHeight)
+                // target.setWidth(newWidth);
+                // target.setHeight(newHeight);
+                // me.updateLineFeature();
             }
         };
 
