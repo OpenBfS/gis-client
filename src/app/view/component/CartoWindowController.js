@@ -1325,6 +1325,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var lineLayer = viewModel.get('lineLayer');
         var lineFeature = viewModel.get('lineFeature');
         var upEvent = Ext.isModern ? 'touchend': 'mouseup';
+        var overlay = viewModel.get('overlay');
+        map.removeOverlay(overlay);
 
         layer.un('change:visible', me.onLayerVisibilityChange, me);
         layerCollection.un('remove', me.onLayerRemove, me);
