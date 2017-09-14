@@ -507,7 +507,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         button.el.dom.addEventListener('click', function() {
             var chartCtrl = chart.getController();
             chartCtrl.toggleUncertainty();
-            button.toggle();
         });
         return button;
     },
