@@ -599,7 +599,7 @@
                                 "<li style='color:#294d71; font-weight:bold'>Geographische Übersicht</li>"+
                                     "<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht. Befindet sich der Mauszeiger innerhalb der Karte, werden rechts neben der Maßstabsleiste die geographischen Koordinaten der aktuellen Position des Mauszeigers angezeigt.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
-                                    "<div>1.10.0.0</div>"+
+                                    "<div>1.10.0-SNAPSHOT</div>"+
                             "</ol>"
                 },
                 "profileSelection": {
