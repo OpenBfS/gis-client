@@ -273,10 +273,12 @@ Ext.define('Koala.util.Hooks', {
          *                                be posted to the printservlet.
          */
         beforePost: {
+/*
             'title': function(form, key, postAttributes) {
                 var newTitle = '<div><b>MAP-TITLE FROM HOOK</b></div>';
                 postAttributes.title = newTitle;
             },
+*/
             'DokpoolMeta.DokpoolGroupFolder': function(form, key, postAttributes) {
                 var DokpoolContentType = postAttributes.DokpoolMeta.DokpoolContentType;
                 var Confidentiality = postAttributes.Identification.Confidentiality;
