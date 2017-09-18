@@ -598,7 +598,7 @@
                                 "<li style='color:#294d71; font-weight:bold'>Geographical overview</li>"+
                                     "<div>The geographical overview allows you to navigate via an overview map. The scalebar serves as a reference with respect to the current view. As long as the mouse pointer is in the map, the geographical coordinates of the mouse pointer's current position are displayed to the right of the scalebar.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Software version</li>"+
-                                    "<div>1.10.0-SNAPSHOT</div>"+
+                                    "<div>1.10.1.0</div>"+
                             "</ol>"
                 },
                 "profileSelection": {
