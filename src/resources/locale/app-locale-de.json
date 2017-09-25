@@ -1240,11 +1240,7 @@
                                 "<div>In der Legende werden die Symbole der Layer erläutert.</div>"+
                                 "<div>Zusätzlich lassen sich Einstellungen an der Darstellung der Layer vornehmen. Layer lassen sich ein- bzw. ausblenden oder gänzlich entfernen. Die Abfrage von Layern lässt sich aktivieren bzw. deaktivieren und es können Filtereinstellungen vorgenommen werden. Des Weiteren ist es möglich die Zeichenreihenfolge der Layer mithilfe der Pfeiltasten anzupassen.</div><br />"+
                             "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
-<<<<<<< HEAD
-                                "<div>1.8.1-SNAPSHOT</div>"+
-=======
-                                "<div>1.9.0-SNAPSHOT</div>"+
->>>>>>> origin/master
+                                "<div>1.8.3-SNAPSHOT</div>"+
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Karte</h1>",
                 "helpMapHtml": "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>2.2 Auswahl</i>). Standardmäßig sind die Layer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - OSM\" geladen. Eine Berührung innerhalb der Karte öffnet ein temporäres Fenster das die geographischen Koordinaten der getippten Position anzeigt.</div><br />"+

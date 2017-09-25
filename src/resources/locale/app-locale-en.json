@@ -1225,11 +1225,7 @@
                                 "<div>The legend explains the symbols used in the layers.</div>"+
                                 "<div>It is also possible to change the settings for the layer presentation. Via the legend, you can hide or show or even completely delete individual layers. You can activate or deactivate the layer query in the legend and you can change the filter settings. It is also possible to change the mapping order of the layers with the help of the arrow buttons.</div><br />"+
                             "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
-<<<<<<< HEAD
-                                "<div>1.8.1-SNAPSHOT</div>"+
-=======
-                                "<div>1.9.0-SNAPSHOT</div>"+
->>>>>>> origin/master
+                                "<div>1.8.3-SNAPSHOT</div>"+
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Map</h1>",
                 "helpMapHtml": "<div>The map displays the selected layers/data sets (please refer to Section <i>2.2 Selection</i> for details on adding layers). The layers \"Place names\", \"Contour lines\" and \"Background map - OSM\" are loaded by default. Tap into the map to open a temporary window that displays the geographical coordinates of the selected position.</div><br />"+
