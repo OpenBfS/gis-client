@@ -464,7 +464,10 @@ Ext.define('Koala.view.form.Print', {
      * @return {String} The markup representation for the legendtext.
      */
     prepareLegendTextHtml: function(layer) {
-        var layerName = layer.get('name');
+        var layerName = layer.get('name'); // fallback
+        if ('metadata' in layer && 'printTitle' in layer.metadata) {
+            layerName = layer.metadata.printTitle;
+        }
         var filterText = Koala.util.Layer.getFiltersTextFromMetadata(
             layer.metadata);
 
