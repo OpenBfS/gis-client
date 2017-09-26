@@ -616,7 +616,7 @@ Ext.define('Koala.view.form.Print', {
 
         Ext.Promise.all(promises).then(function() {
             mapComponent.getLayers().forEach(function(layer) {
-                if (layer.get('printLayer')) {
+                if (layer.get('printLayer') && !!layer.checked) {
                     printLayers.push(layer.get('printLayer'));
                 } else {
                     var isChecked = !!layer.checked;
