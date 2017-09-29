@@ -90,6 +90,7 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
             });
 
             resetFilteringBtn.setDisabled(false);
+            me.getView().hide();
         }
     },
 
