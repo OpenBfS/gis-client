@@ -336,11 +336,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
             cls: 'carto-window-chart-button',
             xtype: 'button',
             name: 'irix-print',
-            text: 'DokPool ',
             glyph: 'xf039@FontAwesome',
             iconAlign: 'right',
             bind: {
-                tooltip: this.view.getViewModel().get('irixPrint')
+                tooltip: this.view.getViewModel().get('irixPrintTooltip'),
+                text: this.view.getViewModel().get('irixPrintText')
             }
         };
         this.IrixPrintButton = Ext.create(btn);
