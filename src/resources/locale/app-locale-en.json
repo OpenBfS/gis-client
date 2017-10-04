@@ -81,7 +81,9 @@
                 "toggleLegendVisibility": "Toggle legend visibility",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Toggle grouping",
-                "toggleUncertainty": "Toggle uncertainty"
+                "toggleUncertainty": "Toggle uncertainty",
+                "irixPrintText": "DokPool",
+                "irixPrintTooltip": "export chart into DokPool"
             }
         }
     },
@@ -279,6 +281,7 @@
                 "printLegendsFieldSetTitle": "Print Legends",
                 "unexpectedResponse": "Printing process returned unexpected response.",
                 "printButtonPrefix": "Document",
+                "printButtonDokpoolText": "send to Dokpool",
                 "downloadButtonSuffix": "Download",
                 "downloadOngoingMiddleText": " will be prepared",
                 "mapBboxLabel": "BBOX",
@@ -472,7 +475,7 @@
                 "autorefreshExpand": "Extend time window",
                 "autorefreshMove": "Move time window",
                 "autorefreshOptions": "Autorefresh options",
-                "chartPrint": "Print",
+                "chartPrint": "Dokpool ",
                 "title": "Time Series",
                 "dateFieldStartLabel": "Start",
                 "dateFieldEndLabel": "End",

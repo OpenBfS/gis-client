@@ -81,7 +81,9 @@
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Gruppierung tauschen",
-                "toggleUncertainty": "Messungenauigkeit umschalten"
+                "toggleUncertainty": "Messungenauigkeit umschalten",
+                "irixPrintText": "DokPool",
+                "irixPrintTooltip": "exportieren des Charts nach DokPool"
             }
         }
     },
@@ -279,6 +281,7 @@
                 "unexpectedResponseTitle": "Unerwartete Antwort",
                 "unexpectedResponse": "Der Druck lieferte eine unerwartete Antwort.",
                 "printButtonPrefix": "Dokument",
+                "printButtonDokpoolText": "an Dokpool senden",
                 "downloadButtonSuffix": "herunterladen",
                 "downloadOngoingMiddleText": " wird vorbereitet",
                 "mapBboxLabel": "BBOX",
@@ -473,7 +476,7 @@
                 "autorefreshExpand": "Zeitausschnitt erweitern",
                 "autorefreshMove": "Zeitausschnitt verschieben",
                 "autorefreshOptions": "Autorefresh Optionen",
-                "chartPrint": "Drucken",
+                "chartPrint": "Dokpool ",
                 "title": "Zeitreihe",
                 "dateFieldStartLabel": "Start",
                 "dateFieldEndLabel": "Ende",

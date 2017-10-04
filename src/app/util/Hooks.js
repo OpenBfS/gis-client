@@ -38,6 +38,7 @@ Ext.define('Koala.util.Hooks', {
          *        adjust the form before it will be created.
          */
         executeBeforeAddHook: function(form, attributeFields, attributeRec) {
+//debugger;
             var argumentName;
             try {
                 argumentName = attributeRec.get('name');
@@ -198,6 +199,22 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.value = userName;
                 attributeFields.rawValue = userName;
                 attributeFields['hidden'] = true;
+            },
+            requestType: function(form, attributeFields) {
+                attributeFields.on({
+                    change: function() {
+                        var createPrintBtn = form.up().down('button[name="createPrint"]');
+                        if(createPrintBtn && attributeFields.value !== 'respond'){
+                            createPrintBtn.setBind({
+                                text: '{printButtonDokpoolText}'
+                            });
+                        }else{
+                            createPrintBtn.setBind({
+                                text: '{printFormat:uppercase} {printButtonSuffix}'
+                            });
+                        };
+                    }
+                });
             },
             DokpoolContentType: function(form, attributeFields) {
                 attributeFields.on({
