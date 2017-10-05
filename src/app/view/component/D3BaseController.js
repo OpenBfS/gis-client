@@ -1388,7 +1388,15 @@ Ext.define('Koala.view.component.D3BaseController', {
                         xtype: 'colorfield',
                         width: '100%',
                         name: 'chart-color-picker',
-                        value: color
+                        value: color,
+                        listeners: {
+                            change: function(field, value) {
+                                field.setFieldStyle({
+                                    fontSize: 0,
+                                    backgroundColor: '#' + value
+                                });
+                            }
+                        }
                     }]
                 }],
                 bbar: [{
