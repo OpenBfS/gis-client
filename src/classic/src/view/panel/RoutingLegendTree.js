@@ -203,39 +203,62 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             }
         },
 
-        // getFilterText: function(record){
-        //     var layer = record.getOlLayer();
-        //     var LayerUtil = Koala.util.Layer;
-        //
-        //     if (!layer || !layer.metadata){
-        //         return '';
-        //     }
-        //     return LayerUtil.getFiltersTextFromMetadata(layer.metadata);
-        // },
-
         changeFilterHandler: function(btn) {
             var layer = btn.layerRec.getOlLayer();
+
+            //for layers with time filter check metadata once more
+            // since available mindate / maxdate might have changed meanwhile
+            var filters = layer.metadata.filters;
+            var hasTimeFilter = false;
+            var timeFilterIdx;
+            Ext.each(filters, function(filter, idx) {
+                var type = (filter.type || '').toLowerCase();
+                switch (type) {
+                    case 'timerange':
+                    hasTimeFilter = true;
+                    timeFilterIdx = idx;
+                    break;
+                    case 'pointintime':
+                    hasTimeFilter = true;
+                    timeFilterIdx = idx;
+                    break;
+            }
+            });
+
+            var adjustedMetadata = Ext.clone(layer.metadata);
+
+            if (hasTimeFilter) {
             Koala.util.Layer.getMetadataFromUuid(layer.metadata.id)
-                .then(function(metadata) {
-                    var queryString = Ext.isModern ?
-                        'k-panel-treepanel > treelist' :
-                        'k-panel-themetree';
-                    var treePanel = Ext.ComponentQuery.query(queryString)[0];
-                    var treeStore = treePanel.getStore();
-                    // `findRecord` finds a record where the first param BEGINS with the
-                    // second one.
-                    var item = treeStore.findRecord('uuid', metadata.id);
-                    if (item.get('isRodosLayer') && item.get('rodosFilters')) {
-                        metadata.filters = Ext.Array.merge(
-                            metadata.filters, item.get('rodosFilters')
-                        );
-                        metadata.isRodosLayer = item.get('isRodosLayer');
-                        metadata.description = item.get('description');
+                .then(function(metadata) {//waiting for response an then...
+                    var newMinDate;
+                    var newMaxDate;
+                    Ext.each(metadata.filters, function(filter) {
+                        var type = (filter.type || '').toLowerCase();
+                        switch (type) {
+                            case 'timerange':
+                            newMinDate = filter.mindatetimeinstant;
+                            newMaxDate = filter.maxdatetimeinstant;
+                            adjustedMetadata.filters[timeFilterIdx].mindatetimeinstant = newMinDate;
+                            adjustedMetadata.filters[timeFilterIdx].maxdatetimeinstant = newMaxDate;
+                            break;
+                            case 'pointintime':
+                            newMinDate = filter.mindatetimeinstant;
+                            newMaxDate = filter.maxdatetimeinstant;
+                            adjustedMetadata.filters[timeFilterIdx].mindatetimeinstant = newMinDate;
+                            adjustedMetadata.filters[timeFilterIdx].maxdatetimeinstant = newMaxDate;
+                            break;
                     }
+                    });
+
                     Koala.util.Layer.showChangeFilterSettingsWin(
-                        metadata, layer
+                        adjustedMetadata, layer
                     );
                 });
+             } else {//no request for metadata necessary
+             Koala.util.Layer.showChangeFilterSettingsWin(
+                 adjustedMetadata, layer
+             );
+             }
         },
 
         shortInfoHandler: function(btn) {
