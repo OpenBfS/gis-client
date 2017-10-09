@@ -601,8 +601,6 @@
                                     "<div>Layer lassen sich ein- bzw. ausblenden, gänzlich entfernen, sowie Änderungen an den Filtereinstellungen vornehmen. Des Weiteren ist es möglich die Zeichenreihenfolge durch Verschieben der Layer anzupassen.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Geographische Übersicht</li>"+
                                     "<div>Die geographische Übersicht bietet das Navigieren über eine Übersichtskarte. Die Maßstabsleiste dient als Bezugsgröße der aktuellen Ansicht. Befindet sich der Mauszeiger innerhalb der Karte, werden rechts neben der Maßstabsleiste die geographischen Koordinaten der aktuellen Position des Mauszeigers angezeigt.</div><br />"+
-                                "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
-                                    "<div>1.11.0-SNAPSHOT</div>"+
                             "</ol>"
                 },
                 "profileSelection": {
@@ -954,6 +952,10 @@
                             " dient als Referenz des aktuellen Kartenmaßstabs und bietet eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m) oder Kilometern (km).</p>"+
                             "<p>Befindet sich der Mauszeiger innerhalb der Karte, werden rechts neben der Maßstabsleiste die geographischen Koordinaten der aktuellen Position des Mauszeigers angezeigt.</p>"+
                             "</div>"
+                },
+                "softwareVersion": {
+                    "title": "Softwareversion",
+                    "html": "Softwareversion konnte nicht dynamisch bezogen werden."
                 }
             }
         }
@@ -1242,8 +1244,6 @@
                             "<li style='color:#294d71; font-weight:bold'>Legende</li>"+
                                 "<div>In der Legende werden die Symbole der Layer erläutert.</div>"+
                                 "<div>Zusätzlich lassen sich Einstellungen an der Darstellung der Layer vornehmen. Layer lassen sich ein- bzw. ausblenden oder gänzlich entfernen. Die Abfrage von Layern lässt sich aktivieren bzw. deaktivieren und es können Filtereinstellungen vorgenommen werden. Des Weiteren ist es möglich die Zeichenreihenfolge der Layer mithilfe der Pfeiltasten anzupassen.</div><br />"+
-                            "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
-                                "<div>1.11.0-SNAPSHOT</div>"+
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Karte</h1>",
                 "helpMapHtml": "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>2.2 Auswahl</i>). Standardmäßig sind die Layer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - OSM\" geladen. Eine Berührung innerhalb der Karte öffnet ein temporäres Fenster das die geographischen Koordinaten der getippten Position anzeigt.</div><br />"+
@@ -1330,7 +1330,9 @@
                                   ". Die Transparenz kann über den Schieberegler "+
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_slider_transparent.png' title='Schieberegler Transparenz' alt='mobile_slider_transparent.png' width='84' height='22' style='vertical-align:middle'>"+
                                   " eingestellt werden.</div><br />"+
-                                  "<div>Um Filtereinstellungen eines Layers zu ändern, berühren Sie die Filterinformationen des entsprechenden Layers innerhalb der Legende. Wie unter Punkt <i>2.2 Auswahl</i> beschrieben, können Sie nun Änderungen vornehmen.</div>"
+                                  "<div>Um Filtereinstellungen eines Layers zu ändern, berühren Sie die Filterinformationen des entsprechenden Layers innerhalb der Legende. Wie unter Punkt <i>2.2 Auswahl</i> beschrieben, können Sie nun Änderungen vornehmen.</div>",
+                  "helpSoftwareVersionTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>Softwareversion</h1>",
+                  "helpSoftwareVersionHtml": "Softwareversion konnte nicht dynamisch bezogen werden."
             }
         }
     },

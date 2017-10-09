@@ -600,8 +600,6 @@
                                     "<div>You can hide or show layers, completely delete layers or change layer-specific filter settings. It is also possible to change the mapping order by shifting the layers.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Geographical overview</li>"+
                                     "<div>The geographical overview allows you to navigate via an overview map. The scalebar serves as a reference with respect to the current view. As long as the mouse pointer is in the map, the geographical coordinates of the mouse pointer's current position are displayed to the right of the scalebar.</div><br />"+
-                                "<li style='color:#294d71; font-weight:bold'>Software version</li>"+
-                                    "<div>1.11.0-SNAPSHOT</div>"+
                             "</ol>"
                 },
                 "profileSelection": {
@@ -953,6 +951,10 @@
                             " serves as a reference to the current map scale. It thus helps to compare the current view. The scalebar varies by length according to the zoom level. It shows the length in metres (m) or kilometres (km).</p>"+
                             "<p>As long as the mouse pointer is in the map, the geographical coordinates of the <i>mouse pointer's</i> current position are displayed to the right of the scalebar.</p>"+
                             "</div>"
+                },
+                "softwareVersion": {
+                    "title": "Software version",
+                    "html": "Software version could not be obtained dynamically."
                 }
             }
         }
@@ -1227,8 +1229,6 @@
                             "<li style='color:#294d71; font-weight:bold'>Legend</li>"+
                                 "<div>The legend explains the symbols used in the layers.</div>"+
                                 "<div>It is also possible to change the settings for the layer presentation. Via the legend, you can hide or show or even completely delete individual layers. You can activate or deactivate the layer query in the legend and you can change the filter settings. It is also possible to change the mapping order of the layers with the help of the arrow buttons.</div><br />"+
-                            "<li style='color:#294d71; font-weight:bold'>Software-Version</li>"+
-                                "<div>1.11.0-SNAPSHOT</div>"+
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Map</h1>",
                 "helpMapHtml": "<div>The map displays the selected layers/data sets (please refer to Section <i>2.2 Selection</i> for details on adding layers). The layers \"Place names\", \"Contour lines\" and \"Background map - OSM\" are loaded by default. Tap into the map to open a temporary window that displays the geographical coordinates of the selected position.</div><br />"+
@@ -1315,7 +1315,9 @@
                                   " to obtain metadata. You can adjust the transparency with the help of the slider "+
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_slider_transparent.png' title='Slider transparency' alt='mobile_slider_transparent.png' width='84' height='22' style='vertical-align:middle'>"+
                                   ".</div><br />"+
-                                  "<div>If you wish to change the filter settings for a layer, touch the filter data relating to the relevant layer within the legend. You can now change the settings, as described in Section <i>2.2 Selection</i>.</div>"
+                                  "<div>If you wish to change the filter settings for a layer, touch the filter data relating to the relevant layer within the legend. You can now change the settings, as described in Section <i>2.2 Selection</i>.</div>",
+                  "helpSoftwareVersionTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>Software version</h1>",
+                  "helpSoftwareVersionHtml": "Software version could not be obtained dynamically."
             }
         }
     },
