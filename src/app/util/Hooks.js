@@ -38,7 +38,6 @@ Ext.define('Koala.util.Hooks', {
          *        adjust the form before it will be created.
          */
         executeBeforeAddHook: function(form, attributeFields, attributeRec) {
-//debugger;
             var argumentName;
             try {
                 argumentName = attributeRec.get('name');
@@ -204,15 +203,15 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.on({
                     change: function() {
                         var createPrintBtn = form.up().down('button[name="createPrint"]');
-                        if(createPrintBtn && attributeFields.value !== 'respond'){
+                        if (createPrintBtn && attributeFields.value !== 'respond') {
                             createPrintBtn.setBind({
                                 text: '{printButtonDokpoolText}'
                             });
-                        }else{
+                        } else {
                             createPrintBtn.setBind({
                                 text: '{printFormat:uppercase} {printButtonSuffix}'
                             });
-                        };
+                        }
                     }
                 });
             },
@@ -290,12 +289,6 @@ Ext.define('Koala.util.Hooks', {
          *                                be posted to the printservlet.
          */
         beforePost: {
-/*
-            'title': function(form, key, postAttributes) {
-                var newTitle = '<div><b>MAP-TITLE FROM HOOK</b></div>';
-                postAttributes.title = newTitle;
-            },
-*/
             'DokpoolMeta.DokpoolGroupFolder': function(form, key, postAttributes) {
                 var DokpoolContentType = postAttributes.DokpoolMeta.DokpoolContentType;
                 var Confidentiality = postAttributes.Identification.Confidentiality;

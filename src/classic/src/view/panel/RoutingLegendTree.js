@@ -215,50 +215,50 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 var type = (filter.type || '').toLowerCase();
                 switch (type) {
                     case 'timerange':
-                    hasTimeFilter = true;
-                    timeFilterIdx = idx;
-                    break;
+                        hasTimeFilter = true;
+                        timeFilterIdx = idx;
+                        break;
                     case 'pointintime':
-                    hasTimeFilter = true;
-                    timeFilterIdx = idx;
-                    break;
-            }
+                        hasTimeFilter = true;
+                        timeFilterIdx = idx;
+                        break;
+                }
             });
 
             var adjustedMetadata = Ext.clone(layer.metadata);
 
             if (hasTimeFilter) {
-            Koala.util.Layer.getMetadataFromUuid(layer.metadata.id)
-                .then(function(metadata) {//waiting for response an then...
-                    var newMinDate;
-                    var newMaxDate;
-                    Ext.each(metadata.filters, function(filter) {
-                        var type = (filter.type || '').toLowerCase();
-                        switch (type) {
-                            case 'timerange':
-                            newMinDate = filter.mindatetimeinstant;
-                            newMaxDate = filter.maxdatetimeinstant;
-                            adjustedMetadata.filters[timeFilterIdx].mindatetimeinstant = newMinDate;
-                            adjustedMetadata.filters[timeFilterIdx].maxdatetimeinstant = newMaxDate;
-                            break;
-                            case 'pointintime':
-                            newMinDate = filter.mindatetimeinstant;
-                            newMaxDate = filter.maxdatetimeinstant;
-                            adjustedMetadata.filters[timeFilterIdx].mindatetimeinstant = newMinDate;
-                            adjustedMetadata.filters[timeFilterIdx].maxdatetimeinstant = newMaxDate;
-                            break;
-                    }
-                    });
+                Koala.util.Layer.getMetadataFromUuid(layer.metadata.id)
+                    .then(function(metadata) {//waiting for response an then...
+                        var newMinDate;
+                        var newMaxDate;
+                        Ext.each(metadata.filters, function(filter) {
+                            var type = (filter.type || '').toLowerCase();
+                            switch (type) {
+                                case 'timerange':
+                                    newMinDate = filter.mindatetimeinstant;
+                                    newMaxDate = filter.maxdatetimeinstant;
+                                    adjustedMetadata.filters[timeFilterIdx].mindatetimeinstant = newMinDate;
+                                    adjustedMetadata.filters[timeFilterIdx].maxdatetimeinstant = newMaxDate;
+                                    break;
+                                case 'pointintime':
+                                    newMinDate = filter.mindatetimeinstant;
+                                    newMaxDate = filter.maxdatetimeinstant;
+                                    adjustedMetadata.filters[timeFilterIdx].mindatetimeinstant = newMinDate;
+                                    adjustedMetadata.filters[timeFilterIdx].maxdatetimeinstant = newMaxDate;
+                                    break;
+                            }
+                        });
 
-                    Koala.util.Layer.showChangeFilterSettingsWin(
-                        adjustedMetadata, layer
-                    );
-                });
-             } else {//no request for metadata necessary
-             Koala.util.Layer.showChangeFilterSettingsWin(
-                 adjustedMetadata, layer
-             );
-             }
+                        Koala.util.Layer.showChangeFilterSettingsWin(
+                            adjustedMetadata, layer
+                        );
+                    });
+            } else {//no request for metadata necessary
+                Koala.util.Layer.showChangeFilterSettingsWin(
+                    adjustedMetadata, layer
+                );
+            }
         },
 
         shortInfoHandler: function(btn) {

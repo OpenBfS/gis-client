@@ -72,9 +72,8 @@ Ext.define('Koala.util.String', {
                     // it is already a Moment/date
                     if (moment.isMoment(replacement)) {
                         replacement = Koala.util.Date.getFormattedDate(replacement);
-                    }
-                    // keep in mind that it transforms big integers defined as string into moment objects.
-                    else if ((typeof replacement !== 'number') && moment(replacement, moment.ISO_8601, true).isValid()) {
+                    } else if ((typeof replacement !== 'number') && moment(replacement, moment.ISO_8601, true).isValid()) {
+                        // keep in mind that it transforms big integers defined as string into moment objects.
                         // it can be formed into a Moment/date
                         var momentDate = Koala.util.Date.getUtcMoment(replacement);
                         replacement = Koala.util.Date.getFormattedDate(momentDate);
