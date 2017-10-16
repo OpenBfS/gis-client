@@ -285,6 +285,17 @@ Ext.define('Koala.view.component.D3ChartController', {
                 }
             });
 
+            if (max < axisDomain[1] && orient === 'left') {
+                var config = me.getView().getConfig();
+                var ticks = Koala.util.Chart.recalculateAxisTicks(config);
+                var axes = me.getView().getAxes();
+                axes.left.tickValues = ticks;
+                if (ticks) {
+                    axes.left.ticks = ticks.length;
+                }
+                me.getView().setAxes(axes);
+            }
+
             //limit chart data to 80% of chart height
             if ((orient !== 'bottom') && (!Ext.isDefined(axis.max) || (Ext.isDefined(axis.max) && (axisDomain[1] > axis.max)))) {
                 axisDomain[1] = axisDomain[1]/0.8;
