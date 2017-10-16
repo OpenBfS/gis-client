@@ -531,6 +531,20 @@ Ext.define('Koala.util.Filter', {
         },
 
         /**
+         * Sets the hour and minutes fields to the values from the date.
+         * @param  {Moment} momentDate the date to extract the hours/minutes from
+         * @param  {Ext.form.field.Date} dateField  the date field next to the
+         * minutes/hour spinners
+         */
+        replaceHoursAndMinutes: function(momentDate, dateField) {
+            var container = dateField.up();
+            var hourspinner = container.down('[name$="hourspinner"]');
+            var minutespinner = container.down('[name$="minutespinner"]');
+            hourspinner.setValue(momentDate.get('hours'));
+            minutespinner.setValue(momentDate.get('minutes'));
+        },
+
+        /**
          * A reusable eventhandler for the `change` event of the spinners for
          * hours or minutes that are inside of an `fieldcontainer` which holds
          * associated `datefield`. Will update the value of the `datefield` on

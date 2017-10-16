@@ -29,6 +29,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Koala.util.AppContext',
         'Koala.util.Chart',
         'Koala.util.Object',
+        'Koala.util.Date',
+        'Koala.util.Filter',
         'Koala.view.window.Print'
     ],
 
@@ -1237,6 +1239,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var newStations = [];
         var newStationIds = [];
         var DateUtil = Koala.util.Date;
+        var FilterUtil = Koala.util.Filter;
 
         var allCharts = Ext.ComponentQuery.query('d3-chart');
         Ext.each(allCharts, function(chart) {
@@ -1257,10 +1260,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
             var endField = win.down('[name=timeseriesEndField]');
             var start = DateUtil.getTimeReferenceAwareMomentDate(moment(zoom.min));
             var end = DateUtil.getTimeReferenceAwareMomentDate(moment(zoom.max));
-            chart.setConfig('startDate', start);
-            chart.setConfig('endDate', end);
             startField.setValue(start);
             endField.setValue(end);
+            FilterUtil.replaceHoursAndMinutes(start, startField);
+            FilterUtil.replaceHoursAndMinutes(end, endField);
+            chart.setConfig('startDate', start);
+            chart.setConfig('endDate', end);
         }
         chart.getController().getChartData();
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');
