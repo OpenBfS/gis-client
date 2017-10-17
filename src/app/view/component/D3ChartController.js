@@ -78,6 +78,12 @@ Ext.define('Koala.view.component.D3ChartController', {
     chartDataAvailable: false,
 
     /**
+     * Boolean flag that indicates if the key that should zoom the y-axis
+     * is currently pressed.
+     */
+    zoomYAxisBtnPressed: false,
+
+    /**
      * Fired once all chart data is available from the data requests.
      *
      * @event chartdataprepared
@@ -119,6 +125,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawAxes();
         me.drawGridAxes();
         me.drawShapes();
+        me.registerKeyboardHandler(me);
 
         var promise = this.resolveDynamicTemplateUrls()
             .then(function() {
@@ -401,16 +408,45 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 .style('text-anchor', 'end');
                         }
 
-                    } else if (orient === 'left' || orient === 'right') {
-                        // axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
-                        //
-                        // axis.call(axisGenerator.scale(
-                        //     d3.event.transform.rescaleY(scaleGenerator)));
+                    } else if (me.zoomYAxisBtnPressed && (orient === 'left' || orient === 'right')) {
+                        axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
+                        var scaleY = transform.rescaleY(scaleGenerator);
 
-                        // d3.selectAll('circle')
-                        //     .attr('cy', function(d) {
-                        //         return scaleGenerator(d[shape.config.xField]);
-                        //     });
+                        Ext.each(me.shapes, function(shape) {
+                            var shapeId = shape.config.id;
+                            var shapePathSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
+                                    ' .' + CSS.SHAPE_PATH;
+                            var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
+                                    ' .' + CSS.SHAPE_POINT_GROUP + ' circle';
+
+                            d3.select(shapePathSelector)
+                                .attr('d', shape.shape.y(function(d) {
+                                    var val = d[shape.config.yField];
+                                    if (!val) {
+                                        return null;
+                                    }
+                                    return scaleY(d[shape.config.yField]);
+                                }));
+
+                            d3.selectAll(shapePointsSelector)
+                                .attr('cy', function(d) {
+                                    var val = d[shape.config.yField];
+                                    if (!val) {
+                                        return null;
+                                    }
+                                    return scaleY(val);
+                                });
+                        });
+
+                        axis.call(axisGenerator.scale(scaleY));
+
+                        if (view.getAxes()[orient].rotateYAxisLabel) {
+                            d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_Y + ' > g > text')
+                                .attr('transform', 'rotate(-55)')
+                                .attr('dx', '-10px')
+                                .attr('dy', '1px')
+                                .style('text-anchor', 'end');
+                        }
                     }
                 });
 
@@ -425,10 +461,11 @@ Ext.define('Koala.view.component.D3ChartController', {
                             axis = d3.select(axisSelector + '.' + CSS.GRID_X);
                             axis.call(axisGenerator.scale(
                                 d3.event.transform.rescaleX(scaleGenerator)));
-                        } else if (orient === 'left' || orient === 'right') {
-                            // axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
-                            // axis.call(axisGenerator.scale(
-                            //     d3.event.transform.rescaleY(scaleGenerator)));
+                        } else if (me.zoomYAxisBtnPressed &&
+                          (orient === 'left' || orient === 'right')) {
+                            axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
+                            axis.call(axisGenerator.scale(
+                                d3.event.transform.rescaleY(scaleGenerator)));
                         }
                     });
 
@@ -754,6 +791,23 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
+     * Register keyboard handler to detect keypress
+     */
+    registerKeyboardHandler: function(me) {
+
+        d3.select(window).on('keydown', function() {
+            if (d3.event.shiftKey) {
+                d3.event.preventDefault();
+                d3.event.stopPropagation();
+                me.zoomYAxisBtnPressed = true;
+            }
+        });
+        d3.select(window).on('keyup', function() {
+            me.zoomYAxisBtnPressed = d3.event.shiftKey;
+        });
+    },
+
+    /**
      * [transformPlot description]
      * @return {[type]} [description]
      */
@@ -793,11 +847,10 @@ Ext.define('Koala.view.component.D3ChartController', {
      * Reset the zoom status to the initial zoom (after changing the data).
      */
     resetZoom: function() {
-        this.transformPlot({
-            x: 0,
-            y: 0,
-            k: 1
-        }, 500);
+        var me = this;
+        var viewId = '#' + me.getView().getId();
+        var plot = d3.select(viewId + ' svg');
+        this.zoomInteraction.scaleTo(plot, 1);
     },
 
     resolveDynamicTemplateUrls: function() {
