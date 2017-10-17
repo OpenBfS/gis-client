@@ -1456,12 +1456,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             startDate.add(intervalInSeconds, 'seconds');
         }
 
-        Ext.each(seriesData, function(item) {
-            if (Koala.Application.isUtc() && item[xAxisAttr]) {
-                item[xAxisAttr] = Koala.util.Date.removeUtcOffset(item[xAxisAttr]);
-            }
-        });
-
         me.data[stationId] = seriesData;
 
         me.ajaxCounter++;

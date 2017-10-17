@@ -908,6 +908,11 @@ Ext.define('Koala.view.component.D3BaseController', {
      * @return {function} The multi-scale time format function.
      */
     getMultiScaleTimeFormatter: function(date) {
+        date = moment(date);
+        if (Koala.Application.isUtc()) {
+            date = Koala.util.Date.removeUtcOffset(date);
+        }
+        date = Koala.util.Date.getTimeReferenceAwareMomentDate(date);
         var formatMillisecond = d3.timeFormat('.%L'),
             formatSecond = d3.timeFormat(':%S'),
             formatMinute = d3.timeFormat('%H:%M'),

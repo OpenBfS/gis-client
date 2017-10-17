@@ -1258,8 +1258,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (zoom.min) {
             var startField = win.down('[name=timeseriesStartField]');
             var endField = win.down('[name=timeseriesEndField]');
-            var start = DateUtil.getTimeReferenceAwareMomentDate(moment(zoom.min));
-            var end = DateUtil.getTimeReferenceAwareMomentDate(moment(zoom.max));
+            var start = DateUtil.getTimeReferenceAwareMomentDate(moment.utc(zoom.min));
+            var end = DateUtil.getTimeReferenceAwareMomentDate(moment.utc(zoom.max));
+
             startField.setValue(start);
             endField.setValue(end);
             FilterUtil.replaceHoursAndMinutes(start, startField);
