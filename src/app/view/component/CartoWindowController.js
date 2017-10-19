@@ -29,6 +29,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Koala.util.AppContext',
         'Koala.util.Chart',
         'Koala.util.Object',
+        'Koala.util.Date',
+        'Koala.util.Filter',
         'Koala.view.window.Print'
     ],
 
@@ -1253,6 +1255,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var zoom = this.timeserieschart.getController().currentDateRange;
         var newStations = [];
         var newStationIds = [];
+        var DateUtil = Koala.util.Date;
+        var FilterUtil = Koala.util.Filter;
 
         var allCharts = Ext.ComponentQuery.query('d3-chart');
         Ext.each(allCharts, function(chart) {
@@ -1271,10 +1275,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (zoom.min) {
             var startField = win.down('[name=timeseriesStartField]');
             var endField = win.down('[name=timeseriesEndField]');
-            chart.setConfig('startDate', moment(zoom.min));
-            chart.setConfig('endDate', moment(zoom.max));
-            startField.setValue(moment(zoom.min));
-            endField.setValue(moment(zoom.max));
+            var start = DateUtil.getTimeReferenceAwareMomentDate(moment.utc(zoom.min));
+            var end = DateUtil.getTimeReferenceAwareMomentDate(moment.utc(zoom.max));
+
+            startField.setValue(start);
+            endField.setValue(end);
+            FilterUtil.replaceHoursAndMinutes(start, startField);
+            FilterUtil.replaceHoursAndMinutes(end, endField);
+            chart.setConfig('startDate', start);
+            chart.setConfig('endDate', end);
         }
         chart.getController().getChartData();
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');
