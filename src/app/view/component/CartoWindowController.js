@@ -302,10 +302,27 @@ Ext.define('Koala.view.component.CartoWindowController', {
             },
             renderTo: elm
         };
+        var maxExtent = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'seriesLeft',
+            glyph: 'xf0b2@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('maxExtent')
+            },
+            renderTo: elm
+        };
         left = Ext.create(left);
         left.el.dom.addEventListener('click', this.scrollTimeseriesLeft.bind(this));
         right = Ext.create(right);
         right.el.dom.addEventListener('click', this.scrollTimeseriesRight.bind(this));
+        maxExtent = Ext.create(maxExtent);
+        maxExtent.el.dom.addEventListener('click', this.zoomToMaxExtent.bind(this));
+    },
+
+    zoomToMaxExtent: function() {
+        var chartCtrl = this.timeserieschart.getController();
+        chartCtrl.resetZoom();
     },
 
     /**
