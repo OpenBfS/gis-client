@@ -62,5 +62,12 @@ Ext.define('Koala.view.panel.MobileHelp',{
             title: '{helpLegendTitle}',
             html: '{helpLegendHtml}'
         }
+    }, {
+        xtype: 'fieldset',
+        padding: 5,
+        bind: {
+            title: '{helpSoftwareVersionTitle}',
+            html: (Ext.manifest) ? Ext.manifest.version : '{helpSoftwareVersionHtml}'
+        }
     }]
 });

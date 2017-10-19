@@ -291,6 +291,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 bind: {
                     text: '{chartPrint}'
                 },
+                glyph: 'xf039@FontAwesome',
+                iconAlign: 'right',
                 handler: me.onPrintChartClicked,
                 scope: me,
                 margin: '0 0 10px 0'

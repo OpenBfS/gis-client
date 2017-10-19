@@ -188,6 +188,11 @@ Ext.define('Koala.view.window.HelpModel', {
                     text: '{geographicOverview.title}',
                     content: '{geographicOverview.html}',
                     leaf: true
+                }, {
+                    id: 'softwareVersion',
+                    text: '{softwareVersion.title}',
+                    content: (Ext.manifest) ? Ext.manifest.version : '{softwareVersion.html}',
+                    leaf: true
                 }]
             }
         }

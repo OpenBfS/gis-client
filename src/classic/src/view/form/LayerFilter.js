@@ -53,11 +53,12 @@ Ext.define('Koala.view.form.LayerFilter', {
 
     listeners: {
         beforerender: 'onBeforeRenderLayerFilterForm',
-        beforedestroy: 'onBeforeDestroyLayerFilterForm',
-        afterlayout: function() {
-            this.el.selectable();
-            this.el.select('.x-unselectable').selectable();
-        }
+        beforedestroy: 'onBeforeDestroyLayerFilterForm'
+        //enable text selection
+        // afterlayout: function() {
+        //     this.el.selectable();
+        //     this.el.select('.x-unselectable').selectable();
+        // }
     },
 
     config: {

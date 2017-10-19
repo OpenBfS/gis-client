@@ -31,6 +31,8 @@ Ext.define('Koala.view.component.CartoWindowModel', {
         exportToPngText: '',
         toggleGrouping: '',
         toggleUncertainty: '',
+        irixPrintText: '',
+        irixPrintTooltip: '',
         /*i18n end*/
         lineFeature: null,
         lineLayer: null,

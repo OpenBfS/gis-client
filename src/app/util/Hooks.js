@@ -199,6 +199,22 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.rawValue = userName;
                 attributeFields['hidden'] = true;
             },
+            requestType: function(form, attributeFields) {
+                attributeFields.on({
+                    change: function() {
+                        var createPrintBtn = form.up().down('button[name="createPrint"]');
+                        if (createPrintBtn && attributeFields.value !== 'respond') {
+                            createPrintBtn.setBind({
+                                text: '{printButtonDokpoolText}'
+                            });
+                        } else {
+                            createPrintBtn.setBind({
+                                text: '{printFormat:uppercase} {printButtonSuffix}'
+                            });
+                        }
+                    }
+                });
+            },
             DokpoolContentType: function(form, attributeFields) {
                 attributeFields.on({
                     change: function() {
@@ -273,10 +289,6 @@ Ext.define('Koala.util.Hooks', {
          *                                be posted to the printservlet.
          */
         beforePost: {
-            'title': function(form, key, postAttributes) {
-                var newTitle = '<div><b>MAP-TITLE FROM HOOK</b></div>';
-                postAttributes.title = newTitle;
-            },
             'DokpoolMeta.DokpoolGroupFolder': function(form, key, postAttributes) {
                 var DokpoolContentType = postAttributes.DokpoolMeta.DokpoolContentType;
                 var Confidentiality = postAttributes.Identification.Confidentiality;

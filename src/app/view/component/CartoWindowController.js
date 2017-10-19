@@ -355,11 +355,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
             cls: 'carto-window-chart-button',
             xtype: 'button',
             name: 'irix-print',
-            text: 'DokPool ',
             glyph: 'xf039@FontAwesome',
             iconAlign: 'right',
             bind: {
-                tooltip: this.view.getViewModel().get('irixPrint')
+                tooltip: this.view.getViewModel().get('irixPrintTooltip'),
+                text: this.view.getViewModel().get('irixPrintText')
             }
         };
         this.IrixPrintButton = Ext.create(btn);
@@ -727,8 +727,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
                             type = 'number';
                         } else if (typeof prop === 'string') {
                             if (parseFloat(prop[0])) {
-                                var dateVal = moment(prop, moment.ISO_8601(), true);
+                                var dateVal = moment(prop, moment.ISO_8601, true);
                                 type = (dateVal.isValid()) ? 'date' : 'string';
+                            } else {
+                                type = 'string';
                             }
                         }
                         if (!types[propName]) {
@@ -762,7 +764,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
                     if (field.type === 'date') {
                         column.renderer = function(val) {
-                            var dateVal = moment(val, moment.ISO_8601(), true);
+                            var dateVal = moment(val, moment.ISO_8601, true);
                             return Koala.util.Date.getFormattedDate(dateVal);
                         };
                     }
@@ -770,7 +772,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     fields.push(field);
                     columns.push(column);
                 });
-                columns[0].filter = {type: 'string'};
                 me.setColumns(columns);
                 store.setFields(fields);
                 store.loadData(data, false);
