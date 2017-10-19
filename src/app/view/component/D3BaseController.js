@@ -1181,8 +1181,10 @@ Ext.define('Koala.view.component.D3BaseController', {
         var legendNode = legendD3.node();
         var downloadIcons = legendD3.selectAll('.k-d3-download-icon');
         var deleteIcons = legendD3.selectAll('.k-d3-delete-icon');
+        var colorIcons = legendD3.selectAll('.k-d3-color-icon');
         downloadIcons.style('display', 'none');
         deleteIcons.style('display', 'none');
+        colorIcons.style('display', 'none');
         var legendSource = (new XMLSerializer()).serializeToString(legendNode);
         var legendDataUri = 'data:image/svg+xml;base64,'+ btoa(
             unescape(encodeURIComponent(legendSource)));
@@ -1209,6 +1211,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                 var dataUri = canvas.toDataURL(outputFormat);
                 downloadIcons.style('display', 'block');
                 deleteIcons.style('display', 'block');
+                colorIcons.style('display', 'block');
                 cb.call(cbScope, dataUri);
             };
         };
