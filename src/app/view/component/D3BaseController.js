@@ -873,6 +873,11 @@ Ext.define('Koala.view.component.D3BaseController', {
     drawThresholds: function(config, svg, from, to, x, y) {
         var me = this;
         if (config.thresholds) {
+            var exactInterval = me.getView().getConfig().useExactInterval;
+            if (exactInterval) {
+                from = me.getView().getStartDate();
+                to = me.getView().getEndDate();
+            }
             var thresholds = JSON.parse(config.thresholds);
             Ext.each(thresholds, function(threshold, idx) {
                 if (!me.thresholdState[idx]) {

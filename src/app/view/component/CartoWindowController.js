@@ -1285,6 +1285,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             FilterUtil.replaceHoursAndMinutes(end, endField);
             chart.setConfig('startDate', start);
             chart.setConfig('endDate', end);
+            chart.setConfig('useExactInterval', true);
         }
         chart.getController().getChartData();
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');

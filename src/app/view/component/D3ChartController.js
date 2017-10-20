@@ -307,6 +307,10 @@ Ext.define('Koala.view.component.D3ChartController', {
             if ((orient !== 'bottom') && (!Ext.isDefined(axis.max) || (Ext.isDefined(axis.max) && (axisDomain[1] > axis.max)))) {
                 axisDomain[1] = axisDomain[1]/0.8;
             }
+            if (orient === 'bottom' && me.getView().getConfig().useExactInterval) {
+                axisDomain[0] = me.getView().getStartDate();
+                axisDomain[1] = me.getView().getEndDate();
+            }
 
             // actually set the domain
             if (axisDomain) {
