@@ -148,7 +148,8 @@ Ext.define('Koala.view.component.D3ChartController', {
     redrawChart: function() {
         var me = this;
 
-        if (me.chartRendered && me.chartDataAvailable) {
+        if (me.chartRendered && (me.chartDataAvailable ||
+            me.getView().getConfig().alwaysRenderChart)) {
             // Reset the shapes and scales
             me.shapes = [];
             me.scales = {};
@@ -312,12 +313,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                 axisDomain[1] = me.getView().getEndDate();
             }
 
+            if (!axisDomain || isNaN(axisDomain[0])) {
+                axisDomain = [0, 1];
+            }
+
             // actually set the domain
-            if (axisDomain) {
-                var domain = me.scales[orient].domain(axisDomain);
-                if (makeDomainNice) {
-                    domain.nice();
-                }
+            var domain = me.scales[orient].domain(axisDomain);
+            if (makeDomainNice) {
+                domain.nice();
             }
         });
     },
