@@ -850,7 +850,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         var viewId = '#' + me.getView().getId();
         var plot = d3.select(viewId + ' svg');
+        var bak = this.zoomYAxisBtnPressed;
+        this.zoomYAxisBtnPressed = true;
         this.zoomInteraction.scaleTo(plot, 1);
+        this.zoomYAxisBtnPressed = bak;
     },
 
     resolveDynamicTemplateUrls: function() {
