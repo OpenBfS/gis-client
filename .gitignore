@@ -26,3 +26,4 @@ docs/jsduck
 node_modules
 .project
 .idea
+.sencha/app/codegen.json
