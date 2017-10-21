@@ -30,6 +30,6 @@ $SENCHA_CMD app install --framework=ext
 $SENCHA_CMD app clean
 $SENCHA_CMD app build
 
-ln -sf $WORKSPACE/src/build/production/Koala $WORKSPACE/webgis
+ln -sf $WORKSPACE/src/build/production/Koala $WORKSPACE/gis
 
 cd $WORKSPACE
