@@ -2,7 +2,7 @@
   "private": true,
   "name": "Koala",
   "version": "1.5.1",
-  "description": "Koala WebGIS",
+  "description": "IMIS3 GIS",
   "scripts": {
     "pretest": "npm run lint",
     "lint": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://redmine-koala.bfs.de/scm/git/gis_client"
+    "url": "https://github.com/OpenBfS/gis_client"
   },
   "author": "terrestris GmbH & Co. KG <info@terrestris.de>",
   "license": "gpl-3",
