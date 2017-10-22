@@ -1,18 +1,18 @@
+sudo: false
 language: node_js
 node_js:
   - "7.10"
   - "8.5"
-sudo: false
 cache:
   directories:
     - node_modules
+git:
+  submodules: true
 before_install:
-  - "git submodule sync"
-  - "git submodule update --init --recursive --force"
   - "curl -L http://cdn.sencha.com/cmd/6.2.2.36/no-jre/SenchaCmd-6.2.2.36-linux-amd64.sh.zip -o SenchaCmd-6.2.2.36-linux-amd64.sh.zip"
   - "unzip -n SenchaCmd-6.2.2.36-linux-amd64.sh.zip"
-  - "./SenchaCmd-6.2.2.36-linux-amd64.sh -q -dir "/opt/Sencha"
-  - curl -L http://cdn.sencha.com/ext/gpl/ext-6.2.0-gpl.zip -o ext-6.2.0-gpl.zip"
+  - "./SenchaCmd-6.2.2.36-linux-amd64.sh -q -dir /opt/Sencha"
+  - "curl -L http://cdn.sencha.com/ext/gpl/ext-6.2.0-gpl.zip -o ext-6.2.0-gpl.zip"
   - "unzip -n ext-6.2.0-gpl.zip"
   - "cd src"
   - "ln -s ../ext-6.2.0 ext"
