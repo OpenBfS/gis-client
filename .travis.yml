@@ -18,7 +18,7 @@ before_install:
   - "ln -s ../ext-6.2.0 ext"
   - "ls -hal"
   - "/opt/Sencha/sencha app install --framework=ext"
-  - "/opt/Sencha/sencha app upgrade ext"
+#  - "/opt/Sencha/sencha app upgrade ext"
   - "/opt/Sencha/sencha app build"
   - "npm config set shrinkwrap false"
   - "test ! -d node_modules || npm prune"
