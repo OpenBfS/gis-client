@@ -1,6 +1,6 @@
 IMIS3 GIS-Client
 ===========
-Dies ist eine Kopie des ExtJS basierten Klienten der vom Bundesamt für STrahöenschutz zur kartographischen webbasierten Visualisierung von Umweltdaten entwickelt und eingesetzt wird.
+Dies ist eine Kopie des ExtJS basierten Klienten der vom Bundesamt für Strahlenschutz zur kartographischen webbasierten Visualisierung von Umweltdaten entwickelt und eingesetzt wird.
 
 Um den vollen Umfang der Software zu nutzen ist es erforderlich den Kliengten mit anderen Produkten des BfS gemeinsam einzustetzen.
 
