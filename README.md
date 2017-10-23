@@ -38,10 +38,10 @@ Die Dokumentation findet sich nach der Generierung im Order `docs`.
 JSDuck ist unter der Adresse https://github.com/senchalabs/jsduck
 zu finden und muss installiert werden.
 
-Dies ist auch aus dem src-Ordner mit npm möglich:
+Die Dokumentation kann dann mit folgendem befehl gebaut werden:
 
 ```
-npm install
+npm run jsduck
 ```
 
 Einstellungen bezüglich der Generierung der Dokumentation sind in der Datei
