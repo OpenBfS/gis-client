@@ -7,7 +7,8 @@ EXTJS_VERSION="6.2.0"
 
 if [ ! -e SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip ]
 then
-  wget http://cdn.sencha.com/cmd/${SENCHA_CMD_VERSION}/no-jre/SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip
+  curl -L http://cdn.sencha.com/cmd/${SENCHA_CMD_VERSION}/no-jre/SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip \
+       -o SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip
 fi
 
 unzip SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip
@@ -15,7 +16,8 @@ unzip SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip
 
 if [ ! -e ext-${EXTJS_VERSION}-gpl.zip ]
 then
-  wget http://cdn.sencha.com/ext/gpl/ext-${EXTJS_VERSION}-gpl.zip
+  curl -L http://cdn.sencha.com/ext/gpl/ext-${EXTJS_VERSION}-gpl.zip \
+       -o ext-${EXTJS_VERSION}-gpl.zip
 fi
 
 unzip ext-${EXTJS_VERSION}-gpl.zip
