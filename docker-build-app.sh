@@ -11,7 +11,7 @@ then
        -o SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip
 fi
 
-unzip SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip
+unzip -nq SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip
 ./SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh -q -dir "/opt/${SENCHA_CMD_VERSION}"
 
 if [ ! -e ext-${EXTJS_VERSION}-gpl.zip ]
@@ -20,7 +20,7 @@ then
        -o ext-${EXTJS_VERSION}-gpl.zip
 fi
 
-unzip ext-${EXTJS_VERSION}-gpl.zip
+unzip -nq ext-${EXTJS_VERSION}-gpl.zip
 
 SENCHA_CMD="/opt/${SENCHA_CMD_VERSION}/sencha"
 
