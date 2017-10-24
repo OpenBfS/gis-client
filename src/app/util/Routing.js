@@ -318,7 +318,8 @@ Ext.define('Koala.util.Routing', {
                 if (Koala.util.String.isUuid(uuid) && Ext.isDefined(olLayer)) {
                     olLayer.set('visible', booleanState);
                     Koala.util.Layer.addOlLayerToMap(olLayer);
-                    if (Ext.isNumeric(autoRefreshInterval)) {
+                    if (Ext.isNumeric(autoRefreshInterval) && Koala.view.form.
+                        LayerFilterController.prototype.autorefreshMap) {
                         Koala.view.form.LayerFilterController.prototype.
                             autorefreshMap[uuid] = autoRefreshInterval;
                         // need to instantiate the controller for autoupdates
@@ -423,8 +424,12 @@ Ext.define('Koala.util.Routing', {
                     var uuid = metadata.id;
                     var isVisible = layer.get('visible') ? 1 : 0;
                     var filters = [];
-                    var autoRefreshInterval = Koala.view.form.
-                        LayerFilterController.prototype.autorefreshMap[uuid];
+                    var autoRefreshInterval;
+                    if (Koala.view.form.LayerFilterController.
+                        prototype.autorefreshMap) {
+                        autoRefreshInterval = Koala.view.form.
+                            LayerFilterController.prototype.autorefreshMap[uuid];
+                    }
 
                     permaObj[uuid] = {};
                     permaObj[uuid].isVisible = isVisible;
