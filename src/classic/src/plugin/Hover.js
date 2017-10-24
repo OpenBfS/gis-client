@@ -114,7 +114,9 @@ Ext.define('Koala.plugin.Hover', {
                             }
                             var featureClone = feat.clone();
                             featureClone.set('layer', layer);
-                            hoverLayers.push(layer);
+                            if (!Ext.Array.contains(hoverLayers, layer)) {
+                                hoverLayers.push(layer);
+                            }
                             hoverFeatures.push(featureClone);
                             me.showHoverFeature(layer, hoverFeatures);
                             me.currentHoverTarget = feat;
