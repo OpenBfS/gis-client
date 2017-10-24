@@ -386,7 +386,9 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         me.on('chartdataprepared', function() {
             var svgContainer = me.getSvgContainer();
-            if (!me.chartDataAvailable) {
+            var alwaysRender = me.getView().getConfig().alwaysRenderChart;
+
+            if (!me.chartDataAvailable && !alwaysRender) {
                 // We explicitly hide the svg root container, as the modern
                 // toolkit's panel didn't do it automatically if we update the
                 // element via setHtml(). And as it doesn't conflict with the
@@ -873,6 +875,11 @@ Ext.define('Koala.view.component.D3BaseController', {
     drawThresholds: function(config, svg, from, to, x, y) {
         var me = this;
         if (config.thresholds) {
+            var exactInterval = me.getView().getConfig().useExactInterval;
+            if (exactInterval) {
+                from = me.getView().getStartDate();
+                to = me.getView().getEndDate();
+            }
             var thresholds = JSON.parse(config.thresholds);
             Ext.each(thresholds, function(threshold, idx) {
                 if (!me.thresholdState[idx]) {
@@ -882,11 +889,12 @@ Ext.define('Koala.view.component.D3BaseController', {
                     return;
                 }
                 if (me.thresholdState[idx].visibility) {
+                    var yval = y(threshold.value);
                     var line = svg.append('line')
                         .attr('x1', x(from))
                         .attr('x2', x(to))
-                        .attr('y1', y(threshold.value))
-                        .attr('y2', y(threshold.value))
+                        .attr('y1', yval)
+                        .attr('y2', yval)
                         .style('stroke', me.thresholdState[idx].color || threshold.stroke)
                         .style('stroke-width', threshold.lineWidth);
                     if (threshold.dasharray) {
