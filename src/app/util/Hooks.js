@@ -22,7 +22,8 @@
 Ext.define('Koala.util.Hooks', {
     requires: [
         'BasiGX.view.component.Map',
-        'Koala.util.DokpoolContext'
+        'Koala.util.DokpoolContext',
+        'Koala.util.DokpoolRequest'
     ],
     statics: {
 
@@ -231,7 +232,7 @@ Ext.define('Koala.util.Hooks', {
                     pack: 'justify',
                     align: 'stretch'
                 };
-            //ToDo: check how to properly rearrange items in
+            //TODO: check how to properly rearrange items in
             //additional container with
             //layout type = 'hbox'
             },
@@ -240,6 +241,23 @@ Ext.define('Koala.util.Hooks', {
                     boxLabel: '{DokpoolBehaviour_Elan_label}'
                 });
                 attributeFields.fieldLabel = '';
+
+                attributeFields.on({
+                    change: function() {
+                        var me = this,
+                            isChecked = me.getValue(),
+                            tagfieldScenario = me.up('fieldset[name="irix"]').down('tagfield[name="ElanScenarios"]');
+
+                        if (tagfieldScenario) {
+                            if (isChecked) {
+                                tagfieldScenario.setDisabled(false);
+                            } else {
+                                tagfieldScenario.reset();
+                                tagfieldScenario.setDisabled(true);
+                            }
+                        }
+                    }
+                });
             },
             IsDoksys: function(form, attributeFields) {
                 attributeFields.setBind({
@@ -262,6 +280,36 @@ Ext.define('Koala.util.Hooks', {
             DokpoolMeta: function(form, attributeFields) {
                 attributeFields.setBind({
                     title: '{DokpoolMeta_label}'
+                });
+            },
+            ElanScenarios: function(form, attributeFields) {
+                attributeFields.setBind({
+                    fieldLabel: '{ElanScenarios_label}'
+                });
+
+                Koala.util.DokpoolRequest.getActiveElanScenarios()
+                    .then(function(elanResponse) {
+                        var store,
+                            data = [],
+                            valueField = attributeFields.valueField,
+                            displayField = attributeFields.displayField;
+
+                        if (!elanResponse.items) {
+                            Ext.toast("unexpected Elan scenarios response - " + JSON.stringify(elanResponse));
+                            return;
+                        }
+                        store = Ext.create('Ext.data.Store');
+                        elanResponse.items.forEach(function(item) {
+                            var dataRow = {};
+                            var splValueField = item[valueField].split('/');
+                            var adjValueField = splValueField[splValueField.length-1];
+                            dataRow[valueField] = adjValueField;
+                            dataRow[displayField] = item[displayField];
+                            data.push(dataRow);
+                        });
+                        store.setData(data);
+                        store.setFields([valueField, displayField]);
+                        attributeFields.setStore(store);
                 });
             },
             Identification: function(form, attributeFields) {

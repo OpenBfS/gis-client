@@ -43,6 +43,15 @@
                 "defaultValue": "respond",
                 "allowBlank": true
             },{
+                "name": "ElanScenarios",
+                "label": "Elan Ereignisse",
+                "type": "tagfield",
+                "valueField": "@id",
+                "displayField": "title",
+                "values": [],
+                "defaultValue": "",
+                "allowBlank": true
+            },{
                 "type": "fieldset",
                 "name": "Identification",
                 "label": "Kopfinformation",

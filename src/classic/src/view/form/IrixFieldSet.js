@@ -109,6 +109,9 @@ Ext.define('Koala.view.form.IrixFieldSet',{
                 case 'checkbox':
                     myField = me.createCheckbox(fieldconfig);
                     break;
+                case 'tagfield':
+                    myField = me.createTagField(fieldconfig);
+                    break;
                 default:
                     break;
             }//end switch
@@ -234,6 +237,18 @@ Ext.define('Koala.view.form.IrixFieldSet',{
             fieldLabel: config.label,
             checked: config.defaultValue,
             boxLabel: ' '
+        });
+    },
+
+    createTagField: function(config) {
+        var me = this;
+        return Ext.create('Ext.form.field.Tag', {
+            name: config.name,
+            viewModel: me.getViewModel(),
+            fieldLabel: config.label,
+            displayField: config.displayField || config.valueField,
+            valueField: config.valueField,
+            queryMode: 'local'
         });
     },
 

@@ -1126,9 +1126,10 @@ Ext.define('Koala.view.form.Print', {
     /**
      * Certain fields must live inside the irix fieldset, as they only make
      * sense for this type of "print"; yet their serialisation cannot live in
-     * dedicted irix-object, as it is e.g. expected on the top-level. This
-     * method will adjust a JSON (e.g. from formItemToJson), and shuffle certain
-     * key / value pairs around: currently only 'request-type'.
+     * dedicted irix-object, as it is e.g. expected on the top-level. Thus
+     * the "irixContext.json" represents the allocation how it shall look like inside
+     * the print window. This method will adjust a JSON (e.g. from formItemToJson),
+     * and shuffle certain key / value pairs around: currently only 'request-type'.
      *
      * @param {object} irixJson The JSON for the IRIX service, a representation
      *     of the form.
@@ -1157,6 +1158,8 @@ Ext.define('Koala.view.form.Print', {
             //back to  "DokpoolMeta"
             //and "ReportContext", "Confidentiality"
             //back to "Identification"
+            //and "ElanScenarios"
+            //back to "DokpoolMeta"
             irixJson.irix.Identification.ReportContext = irixJson.irix.ReportContext;
             delete irixJson.irix.ReportContext;
 
@@ -1171,6 +1174,10 @@ Ext.define('Koala.view.form.Print', {
             irixJson.irix.DokpoolMeta.IsRodos = irixJson.irix.DokpoolBehaviour.IsRodos;
             irixJson.irix.DokpoolMeta.IsRei = irixJson.irix.DokpoolBehaviour.IsRei;
             delete irixJson.irix.DokpoolBehaviour;
+
+            irixJson.irix.DokpoolMeta.ElanScenarios = {};
+            irixJson.irix.DokpoolMeta.ElanScenarios.ElanScenario = irixJson.irix.ElanScenarios;
+            delete irixJson.irix.ElanScenarios;
         }
         if (this.config.chartPrint) {
             irixJson['mapfish-print'] = undefined;
