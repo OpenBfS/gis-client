@@ -374,9 +374,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                     if (orient === 'top' || orient === 'bottom') {
                         axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
                         var scaleX = transform.rescaleX(scaleGenerator);
+                        var all = me.shapes.slice();
+                        all = all.concat(me.attachedSeriesShapes);
 
-                        Ext.each(me.shapes, function(shape) {
+                        Ext.each(all, function(shape) {
                             var shapeId = shape.config.id;
+                            var attachedSeriesNumber = shape.config.attachedSeriesNumber;
+                            if (attachedSeriesNumber) {
+                                shapeId = shapeId + '_' + attachedSeriesNumber;
+                            }
                             var shapePathSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
                                     ' .' + CSS.SHAPE_PATH;
                             var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
@@ -502,6 +508,39 @@ Ext.define('Koala.view.component.D3ChartController', {
             );
     },
 
+    createShape: function(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize) {
+        var staticMe = Koala.view.component.D3ChartController;
+
+        var shape = shapeType()
+            // set the curve interpolator
+            .curve(curveType)
+            .defined(function(d) {
+                return Ext.isDefined(d[xField]);
+            })
+            // set the x accessor
+            .x(function(d) {
+                return normalizeX(d[xField]);
+            });
+
+        if (shapeType === staticMe.TYPE.line) {
+            shape
+                // set the y accessor
+                .y(function(d) {
+                    return normalizeY(d[yField]);
+                });
+        }
+
+        if (shapeType === staticMe.TYPE.area) {
+            shape
+                .y1(function(d) {
+                    return normalizeY(d[yField]);
+                })
+                .y0(chartSize[1]);
+        }
+
+        return shape;
+    },
+
     /**
      *
      */
@@ -515,6 +554,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         // Alternatively we could reuse the `shape`, if we detect that
         // it already exists in the `shapes` array.
         me.shapes = [];
+        me.attachedSeriesShapes = [];
 
         Ext.each(view.getShapes(), function(shapeConfig) {
             var shapeType = staticMe.TYPE[shapeConfig.type || 'line'];
@@ -527,33 +567,11 @@ Ext.define('Koala.view.component.D3ChartController', {
             var normalizeY = me.scales[orientY];
             var shape;
 
+            var attachedSeries = shapeConfig.attachedSeries ?
+                JSON.parse(shapeConfig.attachedSeries) : [];
+
             if (shapeType) {
-                shape = shapeType()
-                    // set the curve interpolator
-                    .curve(curveType)
-                    .defined(function(d) {
-                        return Ext.isDefined(d[xField]);
-                    })
-                    // set the x accessor
-                    .x(function(d) {
-                        return normalizeX(d[xField]);
-                    });
-
-                if (shapeType === staticMe.TYPE.line) {
-                    shape
-                        // set the y accessor
-                        .y(function(d) {
-                            return normalizeY(d[yField]);
-                        });
-                }
-
-                if (shapeType === staticMe.TYPE.area) {
-                    shape
-                        .y1(function(d) {
-                            return normalizeY(d[yField]);
-                        })
-                        .y0(chartSize[1]);
-                }
+                shape = me.createShape(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize);
             } else {
                 // TODO: check if this can be removed
                 shape = {};
@@ -563,6 +581,20 @@ Ext.define('Koala.view.component.D3ChartController', {
                 config: shapeConfig,
                 shape: shape
             });
+
+            var idx = 0;
+            Ext.each(attachedSeries, function(config) {
+                shapeConfig = Ext.clone(shapeConfig);
+                shapeConfig.color = config.stroke;
+                shapeConfig.yField = config.valueField;
+                shapeConfig.orientY = 'left';
+                shapeConfig.attachedSeriesNumber = ++idx;
+                shape = me.createShape(shapeType, curveType, xField, config.valueField, normalizeX, normalizeY, chartSize);
+                me.attachedSeriesShapes.push({
+                    config: shapeConfig,
+                    shape: shape
+                });
+            });
         });
     },
 
@@ -571,7 +603,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     getAxisByField: function(field) {
         var view = this.getView();
-        var axisOrientation;
+        var axisOrientation = 'left';
 
         Ext.iterate(view.getAxes(), function(orient, axisConfig) {
             if (axisConfig.dataIndex === field) {
@@ -604,8 +636,13 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         var minx = Number.POSITIVE_INFINITY;
         var maxx = Number.NEGATIVE_INFINITY;
+        var all = [];
+        all = all.concat(this.shapes);
+        Ext.each(this.attachedSeriesShapes, function(shapes) {
+            all = all.concat(shapes);
+        });
 
-        Ext.each(me.shapes, function(shape, idx) {
+        Ext.each(all, function(shape, idx) {
             var shapeConfig = shape.config;
             var xField = shapeConfig.xField;
             var yField = shapeConfig.yField;
@@ -614,11 +651,17 @@ Ext.define('Koala.view.component.D3ChartController', {
             var color = me.customColors[idx] || shapeConfig.color || staticMe.getRandomColor();
             var darkerColor = d3.color(color).darker();
             var shapeId = shapeConfig.id;
+            var attachedSeriesNumber = shapeConfig.attachedSeriesNumber;
+            var index = shapeId;
+            if (attachedSeriesNumber) {
+                index += '_' + attachedSeriesNumber;
+            }
 
             var shapeGroup = shapeSvg
                 .append('g')
                 .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
-                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + shapeId)
+                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP +
+                    index)
                 .attr('shape-type', shapeConfig.type);
 
             if (shapeConfig.type === 'bar') {
@@ -698,7 +741,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             } else {
                 shapeGroup.append('path')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_PATH + shapeId)
+                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_PATH +
+                        index)
                     .datum(me.data[shapeId])
                     .style('fill', function() {
                         switch (shapeConfig.type) {
@@ -729,7 +773,8 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                 var pointGroup = shapeGroup.append('g')
                     .attr('class', staticMe.CSS_CLASS.SHAPE_POINT_GROUP)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP + shapeId);
+                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP +
+                        index);
 
                 // TODO refactor the selectAll method below; DK
                 //      pointGroup.enter()???
@@ -1472,6 +1517,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         var xAxisAttr = chartConfig.xAxisAttribute;
         var yAxisAttr = chartConfig.yAxisAttribute;
         var valueField = chartConfig.yAxisAttribute;
+        var attachedSeries = chartConfig.attachedSeries ?
+            JSON.parse(chartConfig.attachedSeries) : [];
         var jsonObj;
 
         if (response && response.responseText) {
@@ -1510,6 +1557,13 @@ Ext.define('Koala.view.component.D3ChartController', {
             firstDiffSeconds = Math.abs(firstFeatSeconds - startSeconds);
         }
 
+        function valueExtractor(rawData, feature) {
+            return function(config) {
+                rawData[config.valueField] =
+                    feature.properties[config.valueField];
+            };
+        }
+
         // Iterate until startDate <= endDate
         while (startDate.diff(endDate) <= 0) {
             var newRawData = {};
@@ -1522,6 +1576,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                 me.chartDataAvailable = true;
                 newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+                Ext.each(attachedSeries, valueExtractor(newRawData, matchingFeature));
 
                 seriesData.push(newRawData);
             } else {

@@ -140,7 +140,8 @@ Ext.define('Koala.view.component.D3Chart',{
                     color: color,
                     opacity: chartConfig.strokeOpacity || DEFAULTS.STROKE_OPACITY,
                     width: chartConfig.strokeWidth || DEFAULTS.STROKE_WIDTH,
-                    tooltipTpl: chartConfig.tooltipTpl
+                    tooltipTpl: chartConfig.tooltipTpl,
+                    attachedSeries: chartConfig.attachedSeries
                 }];
 
                 selectedStations = [olFeat];
