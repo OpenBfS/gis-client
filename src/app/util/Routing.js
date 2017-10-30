@@ -23,7 +23,8 @@ Ext.define('Koala.util.Routing', {
         'Koala.util.Layer',
         'Ext.util.DelayedTask',
         'BasiGX.util.Map',
-        'BasiGX.util.Layer'
+        'BasiGX.util.Layer',
+        'Koala.view.form.LayerFilterController'
     ],
 
     statics: {
@@ -312,10 +313,21 @@ Ext.define('Koala.util.Routing', {
 
             Ext.iterate(permaObj, function(uuid, config) {
                 var booleanState = config.isVisible;
+                var autoRefreshInterval = config.autoRefreshInterval;
                 var olLayer = me.routeCreatedLayers[uuid];
                 if (Koala.util.String.isUuid(uuid) && Ext.isDefined(olLayer)) {
                     olLayer.set('visible', booleanState);
                     Koala.util.Layer.addOlLayerToMap(olLayer);
+                    if (Ext.isNumeric(autoRefreshInterval) && Koala.view.form.
+                        LayerFilterController.prototype.autorefreshMap) {
+                        Koala.view.form.LayerFilterController.prototype.
+                            autorefreshMap[uuid] = autoRefreshInterval;
+                        // need to instantiate the controller for autoupdates
+                        // to trigger
+                        var lfc = Ext.create(
+                            'Koala.view.form.LayerFilterController');
+                        lfc.refreshLayers();
+                    }
                 }
             });
             me.routeCreatedLayers = null;
@@ -412,6 +424,12 @@ Ext.define('Koala.util.Routing', {
                     var uuid = metadata.id;
                     var isVisible = layer.get('visible') ? 1 : 0;
                     var filters = [];
+                    var autoRefreshInterval;
+                    if (Koala.view.form.LayerFilterController.
+                        prototype.autorefreshMap) {
+                        autoRefreshInterval = Koala.view.form.
+                            LayerFilterController.prototype.autorefreshMap[uuid];
+                    }
 
                     permaObj[uuid] = {};
                     permaObj[uuid].isVisible = isVisible;
@@ -423,6 +441,11 @@ Ext.define('Koala.util.Routing', {
                     });
 
                     permaObj[uuid].filters = filters;
+
+                    if (autoRefreshInterval) {
+                        permaObj[uuid].autoRefreshInterval =
+                            autoRefreshInterval;
+                    }
                 });
 
                 if (!Ext.Object.isEmpty(permaObj)) {
