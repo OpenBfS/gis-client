@@ -378,7 +378,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             Ext.create({
                 xtype: 'k-window-print',
                 chartPrint: true,
-                chart: dataUri
+                chart: dataUri,
+                irixPrint: true
             }).show();
         };
         var cbScope = this;

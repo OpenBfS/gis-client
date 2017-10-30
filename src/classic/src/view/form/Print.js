@@ -57,7 +57,8 @@ Ext.define('Koala.view.form.Print', {
         chart: undefined,
         printExtentMovable: true,
         printExtentAlwaysCentered: false,
-        printExtentScalable: true
+        printExtentScalable: true,
+        skipMapMode: false
     },
 
     layout: 'hbox',
@@ -66,6 +67,7 @@ Ext.define('Koala.view.form.Print', {
 
     initComponent: function() {
         var me = this;
+        var dpc;
         me.callParent();
 
         /**
@@ -105,7 +107,7 @@ Ext.define('Koala.view.form.Print', {
 
         if (configuredIrixServlet && configuredIrixContext) {
             appCombo.on('select', me.addIrixFieldset, me);
-            var dpc = Ext.create('Koala.util.DokpoolContext');
+            dpc = Ext.create('Koala.util.DokpoolContext');
             me.setDokpoolContext(dpc);
         }
 
@@ -700,7 +702,10 @@ Ext.define('Koala.view.form.Print', {
             Ext.each(fieldsets, function(fs) {
                 var name = fs.name;
                 // TODO double check when rotated
-                var featureBbox = fs.extentFeature.getGeometry().getExtent();
+                var featureBbox;
+                if (fs.extentFeature) {
+                    fs.extentFeature.getGeometry().getExtent();
+                }
                 dpi = fs.down('[name="dpi"]').getValue();
 
                 attributes[name] = {
@@ -1015,7 +1020,9 @@ Ext.define('Koala.view.form.Print', {
 
         Ext.each(fieldsets, function(fs) {
             // TODO double check when rotated
-            featureBbox = fs.extentFeature.getGeometry().getExtent();
+            if (fs.extentFeature) {
+                featureBbox = fs.extentFeature.getGeometry().getExtent();
+            }
         }, this);
 
         bboxTextfield.setValue(featureBbox);
@@ -1044,8 +1051,10 @@ Ext.define('Koala.view.form.Print', {
         bboxTextfield.on('destroy', function() {
             map.un('moveend', listenerFunction);
         });
-        me.transformInteraction.on('translateend', listenerFunction);
-        me.transformInteraction.on('scaleend', listenerFunction);
+        if (me.transformInteraction) {
+            me.transformInteraction.on('translateend', listenerFunction);
+            me.transformInteraction.on('scaleend', listenerFunction);
+        }
 
         var bboxFieldSet = Ext.create('Ext.form.FieldSet', {
             name: 'bbox-fieldset',
