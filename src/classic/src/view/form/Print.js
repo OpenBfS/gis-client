@@ -704,7 +704,7 @@ Ext.define('Koala.view.form.Print', {
                 // TODO double check when rotated
                 var featureBbox;
                 if (fs.extentFeature) {
-                    fs.extentFeature.getGeometry().getExtent();
+                    featureBbox = fs.extentFeature.getGeometry().getExtent();
                 }
                 dpi = fs.down('[name="dpi"]').getValue();
 
