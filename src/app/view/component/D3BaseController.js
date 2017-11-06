@@ -986,9 +986,6 @@ Ext.define('Koala.view.component.D3BaseController', {
     createAxis: function(axisConfig, orient, scale) {
         var staticMe = Koala.view.component.D3BaseController;
         var axis = staticMe.ORIENTATION[orient];
-        var config = this.getView().getConfig();
-        var metadata = config.targetLayer.metadata;
-        var label = metadata.layerConfig.barChartProperties
 
         // https://github.com/d3/d3-format
         var tickFormatter;
@@ -997,9 +994,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         } else if (axisConfig.format) {
             tickFormatter = d3.format(axisConfig.format || ',.0f');
         } else {
-            tickFormatter = function(tickString, tickIndex) {
-                console.log(config, tickIndex)
-
+            tickFormatter = function(tickString) {
                 var isTime = (new moment(tickString, moment.ISO_8601, true))
                     .isValid();
 
