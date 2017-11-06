@@ -115,6 +115,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         me.createScales();
         me.createAxes();
+        me.createAttachedSeriesAxes();
         me.createGridAxes();
         me.createShapes();
         me.createTooltip();
@@ -160,6 +161,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             me.createScales();
             me.createAxes();
+            me.createAttachedSeriesAxes();
             me.createGridAxes();
             me.createShapes();
 
@@ -621,10 +623,19 @@ Ext.define('Koala.view.component.D3ChartController', {
     drawShapes: function() {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
+        var makeTranslate = staticMe.makeTranslate;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var chartSize = me.getChartSize();
         var barWidth;
+
+        var metadata = view.getConfig().targetLayer.metadata;
+        var series = Koala.util.Object.getPathStrOr(
+            metadata,
+            'layerConfig/timeSeriesChartProperties/attachedSeries',
+            '[]'
+        );
+        series = JSON.parse(series);
 
         // Wrap the shapes in its own <svg> element.
         var shapeSvg = d3.select(viewId + ' svg > g')
@@ -632,7 +643,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             .attr('top', 0)
             .attr('left', 0)
             .attr('width', chartSize[0])
-            .attr('height', chartSize[1]);
+            .attr('height', chartSize[1])
+            .attr('viewBox', '0 0 ' + chartSize[0] + ' ' + chartSize[1]);
 
         var minx = Number.POSITIVE_INFINITY;
         var maxx = Number.NEGATIVE_INFINITY;
@@ -660,6 +672,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var shapeGroup = shapeSvg
                 .append('g')
                 .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
+                .attr('transform', makeTranslate(30 * series.length, 0))
                 .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP +
                     index)
                 .attr('shape-type', shapeConfig.type);
@@ -786,6 +799,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         if (val && val._isAMomentObject) {
                             val = val.unix() * 1000;
                         }
+
                         if (val) {
                             minx = Math.min(minx, val);
                             maxx = Math.max(maxx, val);

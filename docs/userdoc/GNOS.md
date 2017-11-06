@@ -793,7 +793,7 @@ Ein ISO_8601 duration string der den Zeitraum der darzustellenden Daten beschrei
 
 **labelPadding**
 
-  Der Abstand zwischen Aches und Label.
+  Der Abstand zwischen Achse und Label.
 
   | Typ | gco:CharacterString  |
   |---------------------:|:----|
@@ -1028,7 +1028,7 @@ Das Attribut, dessen Wert auf der Y-Achse abgezeichnet wird.
 
 **rotateXAxisLabel**
 
-Sollen die Label an der X-Aches um 45 Grad rotiert werden?
+Sollen die Label an der X-Achse um 45 Grad rotiert werden?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
