@@ -639,6 +639,8 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         // Wrap the shapes in its own <svg> element.
         var shapeSvg = d3.select(viewId + ' svg > g')
+            .append('g')
+            .attr('transform', makeTranslate(30 * series.length, 0))
             .append('svg')
             .attr('top', 0)
             .attr('left', 0)
@@ -672,7 +674,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             var shapeGroup = shapeSvg
                 .append('g')
                 .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
-                .attr('transform', makeTranslate(30 * series.length, 0))
                 .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP +
                     index)
                 .attr('shape-type', shapeConfig.type);
