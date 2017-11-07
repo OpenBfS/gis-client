@@ -50,6 +50,9 @@ Ext.define('Koala.util.Object', {
          *    found or the found value is empty.
          */
         getPathOr: function(obj, parts, valWhenEmpty) {
+            if (!obj) {
+                return valWhenEmpty;
+            }
             var lastIdx = parts.length - 1;
             var curObj = obj;
             var val;
