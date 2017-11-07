@@ -146,6 +146,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         }
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
         var groupProp = barChartProperties.groupAttribute || 'end_measure';
+        var labelProp = barChartProperties.groupLabelAttribute || groupProp;
         var keyProp = barChartProperties.xAxisAttribute;
         if (this.groupPropToggled) {
             var h = groupProp;
@@ -175,12 +176,14 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.gridFeatures = jsonObj.features;
 
         me.colorsByKey = {};
+        me.labels = [];
 
         Ext.each(jsonObj.features, function(feature) {
             var dataObj = {};
             var groupKey = feature.properties[groupProp];
+
             var createSeries = true;
-            dataObj.key = feature.properties[keyProp];
+            dataObj.key = feature.properties[labelProp ? labelProp : keyProp];
 
             if (!me.colorsByKey[groupKey]) {
                 me.colorsByKey[groupKey] = me.customColors[groupKey] || colors[0] || staticMe.getRandomColor();
@@ -189,7 +192,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             var pushObj = dataObj;
             Ext.each(seriesData, function(tuple) {
-                if (tuple.key === feature.properties[keyProp]) {
+                if (tuple.key === feature.properties[labelProp ? labelProp : keyProp]) {
                     pushObj = tuple;
                     createSeries = false;
                     return false;
@@ -198,11 +201,12 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             if (!Ext.isObject(pushObj[groupKey])) {
                 pushObj[groupKey] = {};
+                me.labels.push(feature.properties[labelProp ? labelProp : groupKey]);
             }
 
             pushObj[groupKey].color = me.customColors[groupKey] || me.colorsByKey[groupKey];
             pushObj[groupKey].value = feature.properties[valueProp];
-            pushObj[groupKey].key = feature.properties[groupProp];
+            pushObj[groupKey].key = feature.properties[labelProp ? labelProp : groupProp];
             pushObj[groupKey].detection_limit = feature.properties[detectionLimitProp];
             pushObj[groupKey].uncertainty = feature.properties[uncertaintyProp];
             pushObj[groupKey].group = feature.properties[keyProp];
@@ -452,17 +456,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             });
             // .attr('class', staticMe.CSS_CLASS.BAR);
 
-        var keys = [];
-        Ext.each(firstStationData, function(dataGroup) {
-            Ext.iterate(dataGroup, function(k) {
-                if (k !== 'key' && k !== 'hidden') {
-                    Ext.Array.include(keys, k);
-                }
-            });
-        });
-
         var x1 = d3.scaleBand().padding(0.1);
-        x1.domain(keys).rangeRound([0, me.scales[orientX].bandwidth()]);
+        x1.domain(me.labels).rangeRound([0, me.scales[orientX].bandwidth()]);
         me.scales[orientXGroup] = x1;
 
         bars
