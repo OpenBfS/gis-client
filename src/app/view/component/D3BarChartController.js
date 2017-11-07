@@ -38,6 +38,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     colorsByKey: {},
     disabledSubCategories: [],
     gridFeatures: null,
+    labels: [],
 
     /**
      * The default chart margin to apply.
