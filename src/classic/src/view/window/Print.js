@@ -63,7 +63,8 @@ Ext.define('Koala.view.window.Print', {
 
     config: {
         chartPrint: false,
-        chart: undefined
+        chart: undefined,
+        irixPrint: false
     },
 
     constructor: function() {
@@ -76,7 +77,8 @@ Ext.define('Koala.view.window.Print', {
             maxHeight: Ext.getBody().getHeight() - 100,
             url: urls['print-servlet'],
             chartPrint: this.config.chartPrint,
-            chart: this.config.chart
+            chart: this.config.chart,
+            skipMapMode: this.config.irixPrint
         });
     }
 });
