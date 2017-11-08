@@ -48,6 +48,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
         removeSeriesQuestionTitle: '',
         removeSeriesQuestionTpl: '',
         startLabel: '',
+        toggleDataBelowIdentificationThreshold: '',
         endLabel: ''
     }
 });

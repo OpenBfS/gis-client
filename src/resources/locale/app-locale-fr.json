@@ -453,6 +453,7 @@
                 "removeSeriesQuestionTitle": "fr:Rückfrage",
                 "removeSeriesQuestionTpl": "fr:Serie '{0}' entfernen?",
                 "startLabel": "fr:Start",
+                "toggleDataBelowIdentificationThreshold": "fr:Show data below < Id. Thresh.",
                 "endLabel": "fr:Ende"
             }
         }

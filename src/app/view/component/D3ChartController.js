@@ -275,7 +275,11 @@ Ext.define('Koala.view.component.D3ChartController', {
             Ext.each(me.shapes, function(shape) {
                 var data = me.data[shape.config.id];
                 var extent = d3.extent(data, function(d) {
-                    return d[axis.dataIndex];
+                    var val = d[axis.dataIndex];
+                    if (d.drawAsZero && orient === 'left') {
+                        val = d.minValue;
+                    }
+                    return val;
                 });
 
                 if (!axisDomain) {
@@ -440,7 +444,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     if (!val) {
                                         return null;
                                     }
-                                    return scaleY(d[shape.config.yField]);
+                                    if (d.drawAsZero) {
+                                        val = d.minValue;
+                                    }
+                                    return scaleY(val);
                                 }));
 
                             d3.selectAll(shapePointsSelector)
@@ -448,6 +455,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     var val = d[shape.config.yField];
                                     if (!val) {
                                         return null;
+                                    }
+                                    if (d.drawAsZero) {
+                                        val = d.minValue;
                                     }
                                     return scaleY(val);
                                 });
@@ -528,7 +538,11 @@ Ext.define('Koala.view.component.D3ChartController', {
             shape
                 // set the y accessor
                 .y(function(d) {
-                    return normalizeY(d[yField]);
+                    var val = d[yField];
+                    if (d.drawAsZero) {
+                        val = d.minValue;
+                    }
+                    return normalizeY(val);
                 });
         }
 
@@ -837,7 +851,11 @@ Ext.define('Koala.view.component.D3ChartController', {
                         return me.scales[orientX](d[xField]);
                     })
                     .attr('cy', function(d) {
-                        return me.scales[orientY](d[yField]);
+                        var val = d[yField];
+                        if (d.drawAsZero) {
+                            val = d.minValue;
+                        }
+                        return me.scales[orientY](val);
                     })
                     .attr('r', 3);
             }
@@ -1590,6 +1608,11 @@ Ext.define('Koala.view.component.D3ChartController', {
                 newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
 
                 me.chartDataAvailable = true;
+                if (matchingFeature.properties.value_constraint === '< NWG' &&
+                    !view.getShowIdentificationThresholdData()) {
+                    newRawData.drawAsZero = true;
+                    newRawData.minValue = chartConfig.yAxis_minimum;
+                }
                 newRawData[valueField] = matchingFeature.properties[yAxisAttr];
                 Ext.each(attachedSeries, valueExtractor(newRawData, matchingFeature));
 

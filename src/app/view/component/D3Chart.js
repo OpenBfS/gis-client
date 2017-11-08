@@ -80,7 +80,8 @@ Ext.define('Koala.view.component.D3Chart',{
         axes: {
         },
         useExactInterval: false,
-        alwaysRenderChart: false
+        alwaysRenderChart: false,
+        showIdentificationThresholdData: false
     },
 
     statics: {

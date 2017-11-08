@@ -494,6 +494,7 @@
                 "removeSeriesQuestionTitle": "Request",
                 "removeSeriesQuestionTpl": "Remove series '{0}'?",
                 "startLabel": "Start",
+                "toggleDataBelowIdentificationThreshold": "Show data below < Id. Thresh.",
                 "endLabel": "End"
             }
         }
