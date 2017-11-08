@@ -1208,6 +1208,8 @@ Ext.define('Koala.view.form.Print', {
                     json[child.name] = me.formItemToJson(child);
                 }
 
+            } else if (child instanceof Ext.Container) {
+                json[child.name] = child.down('textfield').getValue();
             } else {
                 json[child.name] = child.getValue();
             }

@@ -94,6 +94,9 @@ Ext.define('Koala.view.form.IrixFieldSet',{
                 case 'text':
                     myField = me.createTextField(fieldconfig);
                     break;
+                case 'string':
+                    myField = me.createStringFieldContainer(fieldconfig);
+                    break;
                 case 'number':
                     myField = me.createNumberField(fieldconfig);
                     break;
@@ -148,6 +151,31 @@ Ext.define('Koala.view.form.IrixFieldSet',{
             fieldLabel: config.label,
             value: config.defaultValue,
             allowBlank: config.allowBlank
+        });
+    },
+
+    createStringFieldContainer: function(config) {
+        var me = this;
+        var formPrint = me.up('k-form-print');
+        return Ext.create('Ext.Container', {
+            xtype: 'container',
+            layout: 'hbox',
+            name: config.name,
+            margin: '5px 0px',
+            items: [{
+                xtype: 'textfield',
+                viewModel: me.getViewModel(),
+                name: config.name,
+                fieldLabel: config.label,
+                value: config.defaultValue,
+                allowBlank: config.allowBlank,
+                editable: false
+            }, {
+                xtype: 'button',
+                name: config.name + '_editbutton',
+                handler: formPrint.onTextFieldEditButtonClicked,
+                iconCls: 'fa fa-pencil'
+            }]
         });
     },
 

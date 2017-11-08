@@ -1046,7 +1046,8 @@
                 "DokpoolBehaviour_Elan_label": "Elan",
                 "DokpoolBehaviour_Doksys_label": "Doksys",
                 "DokpoolBehaviour_Rodos_label": "Rodos",
-                "DokpoolBehaviour_Rei_label": "Rei"
+                "DokpoolBehaviour_Rei_label": "Rei",
+                "Permalink_text": "Darstellung im GIS anzeigen"
             }
         }
     },

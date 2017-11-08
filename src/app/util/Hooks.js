@@ -192,6 +192,21 @@ Ext.define('Koala.util.Hooks', {
             /*
             * Hooks for IRIX part
             */
+            Text: function(form, attributeRec) {
+                var route = Koala.util.Routing.getRoute();
+                var hrefWithoutHash = window.location.origin +
+                    window.location.pathname +
+                    window.location.search;
+                var permalink = hrefWithoutHash + '#' + route;
+                var textField = attributeRec.down('textfield');
+                var defaultVal = textField.getValue();
+                var newVal = '<br><a target="_blank" href="' + permalink + '">{Permalink_text}</a>';
+
+                newVal = (defaultVal) ? defaultVal + newVal : newVal;
+                textField.setBind({
+                    value: newVal
+                });
+            },
             User: function(form, attributeFields) {
                 var appContext = Koala.util.AppContext.getAppContext();
                 var userName = Koala.util.Object.getPathStrOr(appContext,
@@ -348,6 +363,29 @@ Ext.define('Koala.util.Hooks', {
                 // } else {
                 //     console.log('DokpoolContentType OR Confidentiality missing');
                 }
+            },
+            //Permalink gets updated before post
+            'Text': function(form, key, postAttributes) {
+                var route = Koala.util.Routing.getRoute();
+                var hrefWithoutHash = window.location.origin +
+                    window.location.pathname +
+                    window.location.search;
+                var permalink = hrefWithoutHash + '#' + route;
+                var text = postAttributes[key];
+                var hrefs = text.match(/href="(.*?)"/g);
+                var obsPermalink;
+
+                if (hrefs.length > 1) {
+                    for (var i = 0; i < hrefs.length; i++) {
+                        if (hrefs[i].includes(window.location.origin) && hrefs[i].includes('#map')) {
+                            obsPermalink = hrefs[i];
+                            break;
+                        }
+                    }
+                } else {
+                    obsPermalink = hrefs[0];
+                }
+                postAttributes[key] = text.replace(obsPermalink, 'href="' + permalink + '"');
             }
         }
     }

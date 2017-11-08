@@ -27,7 +27,8 @@ Ext.define('Koala.view.form.IrixFieldSetModel', {
         DokpoolBehaviour_Elan_label: 'is Elan',
         DokpoolBehaviour_Doksys_label: 'is Doksys',
         DokpoolBehaviour_Rodos_label: 'is Rodos',
-        DokpoolBehaviour_Rei_label: 'is Rei'
+        DokpoolBehaviour_Rei_label: 'is Rei',
+        Permalink_text: 'Darstellung im GIS anzeigen'
     }
 
 });
