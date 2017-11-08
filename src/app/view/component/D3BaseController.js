@@ -770,26 +770,30 @@ Ext.define('Koala.view.component.D3BaseController', {
         }
     },
 
+    createScale: function(orient, axisConfig, chartSize) {
+        var staticMe = Koala.view.component.D3BaseController;
+        var scaleType = staticMe.SCALE[axisConfig.scale || 'linear'];
+        var range;
+
+        if (orient === 'top' || orient === 'bottom') {
+            range = [0, chartSize[0]];
+        } else if (orient === 'left' || orient === 'right') {
+            range = [chartSize[1], 0];
+        }
+
+        return scaleType().range(range);
+    },
+
     /**
      *
      */
     createScales: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3BaseController;
         var view = me.getView();
         var chartSize = me.getChartSize();
 
         Ext.iterate(view.getAxes(), function(orient, axisConfig) {
-            var scaleType = staticMe.SCALE[axisConfig.scale || 'linear'];
-            var range;
-
-            if (orient === 'top' || orient === 'bottom') {
-                range = [0, chartSize[0]];
-            } else if (orient === 'left' || orient === 'right') {
-                range = [chartSize[1], 0];
-            }
-
-            me.scales[orient] = scaleType().range(range);
+            me.scales[orient] = me.createScale(orient, axisConfig, chartSize);
         });
     },
 
@@ -936,15 +940,14 @@ Ext.define('Koala.view.component.D3BaseController', {
         series = JSON.parse(series);
         var idx = 0;
         Ext.each(series, function(config) {
-            // var y = d3.scale.linear().range([chartSize[1], 0]);
+            var label = config.dspUnit || '';
+            var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
+            var scale = me.createScale('left', axisConfig, chartSize);
+            var axis = me.createAxis(axisConfig, 'left', scale);
 
-            // TODO extract values from actual data?
-            // y.domain([0, d3.max(data, function(d) {
-            //     return Math.max(d[config.valueField]);
-            // })]);
+            me.setDomainForScale(axisConfig, scale, 'left', axisConfig);
 
-            var axis = me.createAxis(config, 'left', me.scales['left']);
-            me.drawAxis('left', config, chartSize, viewId, axis, 30 * (++idx));
+            me.drawAxis('left', axisConfig, chartSize, viewId, axis, 30 * (++idx));
             me.attachedSeriesAxes.push(axis);
         });
     },

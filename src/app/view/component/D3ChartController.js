@@ -224,6 +224,99 @@ Ext.define('Koala.view.component.D3ChartController', {
         this.zoomInteraction = this.createZoomInteraction();
     },
 
+    setDomainForScale: function(axis, scale, orient, config) {
+        var me = this;
+        // solution with min and max
+        var axisDomain;
+        var makeDomainNice = true;
+        var min;
+        var max;
+
+        if (Ext.isDefined(axis.min)) {
+            min = Koala.util.String.coerce(axis.min);
+            makeDomainNice = false; // if one was given, don't auto-enhance
+        }
+        if (Ext.isDefined(axis.max)) {
+            max = Koala.util.String.coerce(axis.max);
+            makeDomainNice = false; // if one was given, don't auto-enhance
+        }
+
+        // We have to check if min and max make sense in relation to
+        // the scale; 0 doesn't make sense if scale is logarithmic
+        if (axis.scale === 'log' && (min === 0 || max === 0 || !min || !max)) {
+            Ext.log.warn('Correcting min/max value for y-axis as' +
+                ' logarithmic scales don\'t work with 0');
+            if (min === 0 || !min) {
+                min = 0.00000001;
+            }
+            if (max === 0 || !max) {
+                max = 0.00000001;
+            }
+        }
+
+        if (Ext.isDefined(min) && Ext.isDefined(max)) {
+            // We're basically done for this axis, both min and max were
+            // given. We need to iterate over the data nonetheless, so as to
+            // extend the minimim and maximum in case of outliers.
+            axisDomain = [min, max];
+        }
+
+        Ext.each(this.shapes, function(shape) {
+            var data = me.data[shape.config.id];
+
+            var extent = d3.extent(data, function(d) {
+                var val = d[axis.dataIndex];
+                if (d.drawAsZero && orient === 'left') {
+                    val = d.minValue;
+                }
+                return val;
+            });
+
+            if (!axisDomain) {
+                // first iteration / shape
+                axisDomain = [extent[0], extent[1]];
+            } else {
+                // any other run, take the new min and max if they are
+                // actually bigger or smaller.
+                // This may lead to the fact that configured min/may values
+                // do *not* take precedence, which is intended
+                axisDomain[0] = Math.min(extent[0], axisDomain[0]);
+                axisDomain[1] = Math.max(extent[1], axisDomain[1]);
+                // TODO once we have this for xAxis, we need to be more
+                //      verbose here…
+                // TODO double check that Math.min also works for dates,
+                //      first checks look good, though.
+            }
+        });
+
+        if (max < axisDomain[1] && orient === 'left') {
+            var ticks = Koala.util.Chart.recalculateAxisTicks(axis);
+            axis.tickValues = ticks;
+            if (ticks) {
+                axis.ticks = ticks.length;
+            }
+        }
+
+        //limit chart data to 80% of chart height
+        if ((orient !== 'bottom') && (!Ext.isDefined(axis.max) || (Ext.isDefined(axis.max) && (axisDomain[1] > axis.max)))) {
+            axisDomain[1] = axisDomain[1]/0.8;
+        }
+        if (orient === 'bottom' && config.useExactInterval) {
+            axisDomain[0] = me.getView().getStartDate();
+            axisDomain[1] = me.getView().getEndDate();
+        }
+
+        if (!axisDomain || isNaN(axisDomain[0])) {
+            axisDomain = [0, 1];
+        }
+
+        // actually set the domain
+        var domain = scale.domain(axisDomain);
+        if (makeDomainNice) {
+            domain.nice();
+        }
+    },
+
     /**
      * Sets the domain for each scale in the chart by the use of the extent of
      * the given input data values.
@@ -236,98 +329,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         // corresponding data index for each scale. Set the extent (max/min range
         // in this data index) for each scale.
         Ext.iterate(me.scales, function(orient) {
-            // solution with min and max
             var axis = view.getAxes()[orient];
-            var axisDomain;
-            var makeDomainNice = true;
-            var min;
-            var max;
-
-            if (Ext.isDefined(axis.min)) {
-                min = Koala.util.String.coerce(axis.min);
-                makeDomainNice = false; // if one was given, don't auto-enhance
-            }
-            if (Ext.isDefined(axis.max)) {
-                max = Koala.util.String.coerce(axis.max);
-                makeDomainNice = false; // if one was given, don't auto-enhance
-            }
-
-            // We have to check if min and max make sense in relation to
-            // the scale; 0 doesn't make sense if scale is logarithmic
-            if (axis.scale === 'log' && (min === 0 || max === 0 || !min || !max)) {
-                Ext.log.warn('Correcting min/max value for y-axis as' +
-                    ' logarithmic scales don\'t work with 0');
-                if (min === 0 || !min) {
-                    min = 0.00000001;
-                }
-                if (max === 0 || !max) {
-                    max = 0.00000001;
-                }
-            }
-
-            if (Ext.isDefined(min) && Ext.isDefined(max)) {
-                // We're basically done for this axis, both min and max were
-                // given. We need to iterate over the data nonetheless, so as to
-                // extend the minimim and maximum in case of outliers.
-                axisDomain = [min, max];
-            }
-
-            Ext.each(me.shapes, function(shape) {
-                var data = me.data[shape.config.id];
-                var extent = d3.extent(data, function(d) {
-                    var val = d[axis.dataIndex];
-                    if (d.drawAsZero && orient === 'left') {
-                        val = d.minValue;
-                    }
-                    return val;
-                });
-
-                if (!axisDomain) {
-                    // first iteration / shape
-                    axisDomain = [extent[0], extent[1]];
-                } else {
-                    // any other run, take the new min and max if they are
-                    // actually bigger or smaller.
-                    // This may lead to the fact that configured min/may values
-                    // do *not* take precedence, which is intended
-                    axisDomain[0] = Math.min(extent[0], axisDomain[0]);
-                    axisDomain[1] = Math.max(extent[1], axisDomain[1]);
-                    // TODO once we have this for xAxis, we need to be more
-                    //      verbose here…
-                    // TODO double check that Math.min also works for dates,
-                    //      first checks look good, though.
-                }
-            });
-
-            if (max < axisDomain[1] && orient === 'left') {
-                var config = me.getView().getConfig();
-                var ticks = Koala.util.Chart.recalculateAxisTicks(config);
-                var axes = me.getView().getAxes();
-                axes.left.tickValues = ticks;
-                if (ticks) {
-                    axes.left.ticks = ticks.length;
-                }
-                me.getView().setAxes(axes);
-            }
-
-            //limit chart data to 80% of chart height
-            if ((orient !== 'bottom') && (!Ext.isDefined(axis.max) || (Ext.isDefined(axis.max) && (axisDomain[1] > axis.max)))) {
-                axisDomain[1] = axisDomain[1]/0.8;
-            }
-            if (orient === 'bottom' && me.getView().getConfig().useExactInterval) {
-                axisDomain[0] = me.getView().getStartDate();
-                axisDomain[1] = me.getView().getEndDate();
-            }
-
-            if (!axisDomain || isNaN(axisDomain[0])) {
-                axisDomain = [0, 1];
-            }
-
-            // actually set the domain
-            var domain = me.scales[orient].domain(axisDomain);
-            if (makeDomainNice) {
-                domain.nice();
-            }
+            var config = me.getView().getConfig();
+            var scale = me.scales[orient];
+            me.setDomainForScale(axis, scale, orient, config);
         });
     },
 
@@ -602,10 +607,10 @@ Ext.define('Koala.view.component.D3ChartController', {
             Ext.each(attachedSeries, function(config) {
                 shapeConfig = Ext.clone(shapeConfig);
                 shapeConfig.color = config.stroke;
-                shapeConfig.yField = config.valueField;
+                shapeConfig.yField = config.yAxisAttribute;
                 shapeConfig.orientY = 'left';
                 shapeConfig.attachedSeriesNumber = ++idx;
-                shape = me.createShape(shapeType, curveType, xField, config.valueField, normalizeX, normalizeY, chartSize);
+                shape = me.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, normalizeY, chartSize);
                 me.attachedSeriesShapes.push({
                     config: shapeConfig,
                     shape: shape
@@ -1577,7 +1582,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         //TODO: response shouldnt be restricted on id
         var stationId = station.get(chartConfig.featureIdentifyField || 'id');
 
-
         var compareableDate;
         var matchingFeature;
         var seriesData = [];
@@ -1592,8 +1596,8 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         function valueExtractor(rawData, feature) {
             return function(config) {
-                rawData[config.valueField] =
-                    feature.properties[config.valueField];
+                rawData[config.yAxisAttribute] =
+                    feature.properties[config.yAxisAttribute];
             };
         }
 
