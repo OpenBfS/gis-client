@@ -310,7 +310,7 @@ Ext.define('Koala.util.Hooks', {
                             displayField = attributeFields.displayField;
 
                         if (!elanResponse.items) {
-                            Ext.toast("unexpected Elan scenarios response - " + JSON.stringify(elanResponse));
+                            Ext.toast('unexpected Elan scenarios response - ' + JSON.stringify(elanResponse));
                             return;
                         }
                         store = Ext.create('Ext.data.Store');
@@ -325,7 +325,7 @@ Ext.define('Koala.util.Hooks', {
                         store.setData(data);
                         store.setFields([valueField, displayField]);
                         attributeFields.setStore(store);
-                });
+                    });
             },
             Identification: function(form, attributeFields) {
                 attributeFields.setBind({
