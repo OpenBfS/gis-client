@@ -932,6 +932,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var chartSize = this.getChartSize();
         var viewId = '#' + view.getId();
         me.attachedSeriesAxes = [];
+        me.attachedSeriesScales = [];
         var series = Koala.util.Object.getPathStrOr(
             metadata,
             'layerConfig/timeSeriesChartProperties/attachedSeries',
@@ -947,8 +948,9 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             me.setDomainForScale(axisConfig, scale, 'left', axisConfig);
 
-            me.drawAxis('left', axisConfig, chartSize, viewId, axis, 30 * (++idx));
+            me.drawAxis('left', axisConfig, chartSize, viewId, axis, 30 * (++idx), idx);
             me.attachedSeriesAxes.push(axis);
+            me.attachedSeriesScales.push(scale);
         });
     },
 
@@ -1038,8 +1040,9 @@ Ext.define('Koala.view.component.D3BaseController', {
      * @param  {String}  viewId     the Ext view id
      * @param  {Object} axis the d3 axis object
      * @param  {Number} offsetX the x offset, if any
+     * @param  {Number} index the index, if an index should be set
      */
-    drawAxis: function(orient, axisConfig, chartSize, viewId, axis, offsetX) {
+    drawAxis: function(orient, axisConfig, chartSize, viewId, axis, offsetX, index) {
         var staticMe = Koala.view.component.D3BaseController;
         var makeTranslate = staticMe.makeTranslate;
         var CSS = staticMe.CSS_CLASS;
@@ -1067,6 +1070,9 @@ Ext.define('Koala.view.component.D3BaseController', {
             labelPadding = axisConfig.labelPadding || 35;
         } else if (orient === 'left' || orient === 'right') {
             cssAxisClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
+            if (index) {
+                cssAxisClass += '_' + index;
+            }
             cssLabelClass = CSS.AXIS_LABEL + ' ' + CSS.AXIS_LABEL_Y;
             axisTransform = (orient === 'right') ?
                 makeTranslate(chartSize[0], 0) : undefined;

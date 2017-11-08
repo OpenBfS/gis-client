@@ -376,11 +376,29 @@ Ext.define('Koala.view.component.D3ChartController', {
                 var shapeGroupSelectorTpl = viewId + ' .' + CSS.SHAPE_GROUP +
                         '[idx=' + CSS.PREFIX_IDX_SHAPE_GROUP + '{0}]';
 
-                Ext.iterate(me.axes, function(orient) {
+                var allAxes = [];
+                Ext.iterate(me.axes, function(orient, axis) {
+                    allAxes.push({
+                        axis: axis,
+                        scale: me.scales[orient],
+                        orient: orient
+                    });
+                });
+                Ext.iterate(me.attachedSeriesAxes, function(axis, idx) {
+                    allAxes.push({
+                        axis: axis,
+                        scale: me.attachedSeriesScales[idx],
+                        orient: 'left',
+                        attachedSeriesIndex: idx + 1
+                    });
+                });
+
+                Ext.each(allAxes, function(axisConf) {
                     var axis;
                     var axisSelector = viewId + ' svg g.' + CSS.AXIS;
-                    var axisGenerator = me.axes[orient];
-                    var scaleGenerator = me.scales[orient];
+                    var axisGenerator = axisConf.axis;
+                    var scaleGenerator = axisConf.scale;
+                    var orient = axisConf.orient;
 
                     if (orient === 'top' || orient === 'bottom') {
                         axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
@@ -471,11 +489,23 @@ Ext.define('Koala.view.component.D3ChartController', {
                         }
 
                     } else if (me.zoomYAxisBtnPressed && (orient === 'left' || orient === 'right')) {
-                        axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
+                        var curSelector = axisSelector + '.' + CSS.AXIS_Y;
+                        if (axisConf.attachedSeriesIndex !== undefined) {
+                            curSelector += '_' + axisConf.attachedSeriesIndex;
+                        }
+                        axis = d3.select(curSelector);
                         var scaleY = transform.rescaleY(scaleGenerator);
 
-                        Ext.each(me.shapes, function(shape) {
+                        all = me.shapes.slice();
+                        all = all.concat(me.attachedSeriesShapes);
+
+                        Ext.each(all, function(shape) {
                             var shapeId = shape.config.id;
+                            var attachedSeriesNumber = shape.config.attachedSeriesNumber;
+                            if (attachedSeriesNumber) {
+                                shapeId = shapeId + '_' + attachedSeriesNumber;
+                            }
+
                             var shapePathSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
                                     ' .' + CSS.SHAPE_PATH;
                             var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
