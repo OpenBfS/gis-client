@@ -97,6 +97,8 @@ Ext.define('Koala.view.component.D3Chart',{
          * @return {Koala.view.component.D3Chart} The created chart.
          */
         create: function(olLayer, olFeat, config) {
+            var staticMe = Koala.view.component.D3Chart;
+
             var DEFAULTS = Koala.view.component.D3Base.DEFAULTS.CHART;
             var chartConfig = olLayer.get('timeSeriesChartProperties');
             var StringUtil = Koala.util.String;
@@ -141,14 +143,12 @@ Ext.define('Koala.view.component.D3Chart',{
                     color: color,
                     opacity: chartConfig.strokeOpacity || DEFAULTS.STROKE_OPACITY,
                     width: chartConfig.strokeWidth || DEFAULTS.STROKE_WIDTH,
-                    tooltipTpl: chartConfig.tooltipTpl
+                    tooltipTpl: chartConfig.tooltipTpl,
+                    attachedSeries: chartConfig.attachedSeries
                 }];
 
                 selectedStations = [olFeat];
             }
-
-            var chartUtil = Koala.util.Chart;
-            var yAxisTickValues = chartUtil.recalculateAxisTicks(chartConfig);
 
             /* use relevant filter text to label chart */
             var filters = Ext.clone(Koala.util.Layer.getFiltersFromMetadata(olLayer.metadata));
@@ -165,6 +165,8 @@ Ext.define('Koala.view.component.D3Chart',{
             //ToDo: introduce wrapping function to handle linebreaks in D3BaseController
             var cqlFilterText = cqlFilterTextHTML.replace(/<br \/>/g, ', ');
 
+            var leftAxisLabel = Koala.util.String.replaceTemplateStrings(yLabel, olFeat) + ' ' + (chartConfig.dspUnit || '');
+            var leftAxis = staticMe.extractLeftAxisConfig(chartConfig, leftAxisLabel);
 
             var chart = {
                 xtype: 'd3-chart',
@@ -193,21 +195,7 @@ Ext.define('Koala.view.component.D3Chart',{
                     opacity: chartConfig.gridStrokeOpacity
                 },
                 axes: {
-                    left: {
-                        scale: chartConfig.yAxisScale,
-                        dataIndex: chartConfig.yAxisAttribute,
-                        format: chartConfig.yAxisFormat,
-                        label: Koala.util.String.replaceTemplateStrings(yLabel, olFeat) + ' ' + (chartConfig.dspUnit || ''),
-                        labelPadding: chartConfig.labelPadding,
-                        labelColor: chartConfig.labelColor,
-                        labelSize: chartConfig.labelSize,
-                        ticks: chartConfig.yAxisTicks,
-                        tickValues: yAxisTickValues,
-                        tickSize: chartConfig.tickSize,
-                        tickPadding: chartConfig.tickPadding,
-                        min: Koala.util.String.coerce(chartConfig.yAxisMin),
-                        max: Koala.util.String.coerce(chartConfig.yAxisMax)
-                    },
+                    left: leftAxis,
                     bottom: {
                         scale: chartConfig.xAxisScale,
                         dataIndex: chartConfig.xAxisAttribute,
@@ -233,6 +221,27 @@ Ext.define('Koala.view.component.D3Chart',{
                 }
             };
             return chart;
+        },
+
+        extractLeftAxisConfig: function(chartConfig, label) {
+            var chartUtil = Koala.util.Chart;
+            var yAxisTickValues = chartUtil.recalculateAxisTicks(chartConfig);
+
+            return {
+                scale: chartConfig.yAxisScale,
+                dataIndex: chartConfig.yAxisAttribute,
+                format: chartConfig.yAxisFormat,
+                label: label,
+                labelPadding: chartConfig.labelPadding,
+                labelColor: chartConfig.labelColor,
+                labelSize: chartConfig.labelSize,
+                ticks: chartConfig.yAxisTicks,
+                tickValues: yAxisTickValues,
+                tickSize: chartConfig.tickSize,
+                tickPadding: chartConfig.tickPadding,
+                min: Koala.util.String.coerce(chartConfig.yAxisMin),
+                max: Koala.util.String.coerce(chartConfig.yAxisMax)
+            };
         }
     }
 });

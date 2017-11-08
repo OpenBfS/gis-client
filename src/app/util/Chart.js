@@ -129,7 +129,8 @@ Ext.define('Koala.util.Chart', {
                 color: color,
                 opacity: coerce(chartConfig.strokeOpacity) || 1,
                 width: coerce(chartConfig.strokeWidth) || 1,
-                tooltipTpl: chartConfig.tooltipTpl
+                tooltipTpl: chartConfig.tooltipTpl,
+                attachedSeries: chartConfig.attachedSeries
             }, olFeat, false);
         },
 
