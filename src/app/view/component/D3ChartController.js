@@ -115,7 +115,6 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         me.createScales();
         me.createAxes();
-        me.createAttachedSeriesAxes();
         me.createGridAxes();
         me.createShapes();
         me.createTooltip();
@@ -125,6 +124,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.drawTitle();
         me.drawAxes();
         me.drawGridAxes();
+        me.createAttachedSeriesAxes();
         me.drawShapes();
         me.registerKeyboardHandler(me);
 
