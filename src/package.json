@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "Koala",
+  "name": "IMIS3GIS",
   "version": "1.5.1",
-  "description": "Koala WebGIS",
+  "description": "IMIS3 GIS",
   "scripts": {
     "pretest": "npm run lint",
     "lint": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://redmine-koala.bfs.de/scm/git/gis_client"
+    "url": "https://github.com/OpenBfS/gis_client"
   },
   "author": "terrestris GmbH & Co. KG <info@terrestris.de>",
   "license": "gpl-3",
@@ -33,6 +33,7 @@
     "istanbul": "0.4.5",
     "istanbul-middleware": "0.2.2",
     "jsdoc": "3.4.3",
+    "jsduck": "1.1.2",
     "karma": "1.7.0",
     "karma-chrome-launcher": "2.2.0",
     "karma-coverage": "1.1.1",

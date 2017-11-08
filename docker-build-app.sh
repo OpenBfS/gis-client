@@ -2,25 +2,36 @@
 
 CUR_DIR=`pwd`
 WORKSPACE=$CUR_DIR
-SENCHA_CMD_VERSION="6.2.1.29"
+SENCHA_CMD_VERSION="6.2.2.36"
 EXTJS_VERSION="6.2.0"
 
-wget http://cdn.sencha.com/cmd/$SENCHA_CMD_VERSION/no-jre/SenchaCmd-$SENCHA_CMD_VERSION-linux-amd64.sh.zip
-unzip SenchaCmd-$SENCHA_CMD_VERSION-linux-amd64.sh.zip
-./SenchaCmd-$SENCHA_CMD_VERSION-linux-amd64.sh -q -dir "/opt/$SENCHA_CMD_VERSION"
-wget http://cdn.sencha.com/ext/gpl/ext-$EXTJS_VERSION-gpl.zip
-unzip ext-$EXTJS_VERSION-gpl.zip
+if [ ! -e SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip ]
+then
+  curl -L http://cdn.sencha.com/cmd/${SENCHA_CMD_VERSION}/no-jre/SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip \
+       -o SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip
+fi
 
-SENCHA_CMD="/opt/$SENCHA_CMD_VERSION/sencha"
+unzip -nq SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip
+./SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh -q -dir "/opt/${SENCHA_CMD_VERSION}"
 
-cd $WORKSPACE/src/
+if [ ! -e ext-${EXTJS_VERSION}-gpl.zip ]
+then
+  curl -L http://cdn.sencha.com/ext/gpl/ext-${EXTJS_VERSION}-gpl.zip \
+       -o ext-${EXTJS_VERSION}-gpl.zip
+fi
 
-$SENCHA_CMD app upgrade $WORKSPACE/ext-$EXTJS_VERSION
-$SENCHA_CMD app clean
-$SENCHA_CMD app build
+unzip -nq ext-${EXTJS_VERSION}-gpl.zip
 
-ln -sf $WORKSPACE/src/build/production/Koala $WORKSPACE/webgis
+SENCHA_CMD="/opt/${SENCHA_CMD_VERSION}/sencha"
 
-#$SENCHA_CMD app watch
+cd ${WORKSPACE}/src/
 
-cd $WORKSPACE
+ln -s ${WORKSPACE}/ext-${EXTJS_VERSION} ext
+${SENCHA_CMD} app install --framework=ext
+#${SENCHA_CMD} app upgrade ${WORKSPACE}/ext-${EXTJS_VERSION}
+${SENCHA_CMD} app clean
+${SENCHA_CMD} app build
+
+ln -sf ${WORKSPACE}/src/build/production/Koala ${WORKSPACE}/gis
+
+cd ${WORKSPACE}
