@@ -607,9 +607,13 @@ Ext.define('Koala.view.component.D3BaseController', {
             '[]'
         );
         series = JSON.parse(series);
+        var totalOffset = 0;
+        Ext.each(series, function(s) {
+            totalOffset += s.axisWidth || 40;
+        });
 
         return [
-            viewSize[0] - chartMargin.left - chartMargin.right - series.length * 30,
+            viewSize[0] - chartMargin.left - chartMargin.right - totalOffset,
             viewSize[1] - chartMargin.top - chartMargin.bottom
         ];
     },
@@ -646,6 +650,10 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         var translate = makeTranslate(chartMargin.left, chartMargin.top);
         var viewSize = me.getViewSize();
+        var totalOffset = 0;
+        Ext.each(series, function(s) {
+            totalOffset += s.axisWidth || 40;
+        });
 
         // Get the container view by its ID and append the SVG including an
         // additional group element to it.
@@ -657,7 +665,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             .append('g')
             .attr('transform', translate)
             .append('rect')
-            .attr('transform', makeTranslate(30 * series.length, 0))
+            .attr('transform', makeTranslate(totalOffset, 0))
             .style('fill', view.getBackgroundColor() || '#EEE')
             .attr('class', CSS.PLOT_BACKGROUND)
             .attr('width', chartSize[0])
@@ -930,7 +938,6 @@ Ext.define('Koala.view.component.D3BaseController', {
         var view = this.getView();
         var metadata = view.getConfig().targetLayer.metadata;
         var chartSize = this.getChartSize();
-        var viewId = '#' + view.getId();
         me.attachedSeriesAxes = [];
         me.attachedSeriesScales = [];
         var series = Koala.util.Object.getPathStrOr(
@@ -939,7 +946,6 @@ Ext.define('Koala.view.component.D3BaseController', {
             '[]'
         );
         series = JSON.parse(series);
-        var idx = 0;
         Ext.each(series, function(config) {
             var label = config.dspUnit || '';
             var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
@@ -948,9 +954,31 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             me.setDomainForScale(axisConfig, scale, 'left', axisConfig);
 
-            me.drawAxis('left', axisConfig, chartSize, viewId, axis, 30 * (++idx), idx);
             me.attachedSeriesAxes.push(axis);
             me.attachedSeriesScales.push(scale);
+        });
+    },
+
+    drawAttachedSeriesAxis: function() {
+        var me = this;
+        var view = this.getView();
+        var metadata = view.getConfig().targetLayer.metadata;
+        var chartSize = this.getChartSize();
+        var viewId = '#' + view.getId();
+        var series = Koala.util.Object.getPathStrOr(
+            metadata,
+            'layerConfig/timeSeriesChartProperties/attachedSeries',
+            '[]'
+        );
+        series = JSON.parse(series);
+        var drawOffset = 0;
+        Ext.each(series, function(config, idx) {
+            var label = config.dspUnit || '';
+            var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
+            var axis = me.attachedSeriesAxes[idx];
+            var axisWidth = (config.axisWidth || 40) + drawOffset;
+            drawOffset += axisWidth;
+            me.drawAxis('left', axisConfig, chartSize, viewId, axis, axisWidth, idx + 1);
         });
     },
 
@@ -1059,12 +1087,16 @@ Ext.define('Koala.view.component.D3BaseController', {
         var labelPadding;
         var cssAxisClass;
         var cssLabelClass;
+        var totalOffset = 0;
+        Ext.each(series, function(s) {
+            totalOffset += s.axisWidth || 40;
+        });
 
         if (orient === 'top' || orient === 'bottom') {
             cssAxisClass = CSS.AXIS + ' ' + CSS.AXIS_X;
             cssLabelClass = CSS.AXIS_LABEL + ' ' + CSS.AXIS_LABEL_X;
             axisTransform = (orient === 'bottom') ?
-                makeTranslate(30 * series.length, chartSize[1]) : undefined;
+                makeTranslate(totalOffset, chartSize[1]) : undefined;
 
             labelTransform = makeTranslate(chartSize[0] / 2, 0);
             labelPadding = axisConfig.labelPadding || 35;
@@ -1128,53 +1160,77 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     redrawAxes: function() {
         var me = this;
+        var view = me.getView();
+        var axesConfig = view.getAxes();
+
+        Ext.iterate(axesConfig, function(orient) {
+            var axisGenerator = me.axes[orient];
+            me.redrawAxis(axisGenerator, orient);
+        });
+    },
+
+    /**
+     *
+     */
+    redrawAttachedSeriesAxes: function() {
+        var me = this;
+
+        Ext.each(me.attachedSeriesAxes, function(axis) {
+            me.redrawAxis(axis, 'left');
+        });
+    },
+
+    /**
+     * Redraw a single axis
+     */
+    redrawAxis: function(axisGenerator, orient) {
+        var me = this;
         var staticMe = Koala.view.component.D3BaseController;
         var makeTranslate = staticMe.makeTranslate;
-        var CSS = staticMe.CSS_CLASS;
+        var axisTransform;
+        var labelTransform;
+        var axis;
         var view = me.getView();
         var viewId = '#' + view.getId();
-        var axesConfig = view.getAxes();
-        var axisSelector = viewId + ' svg g.' + CSS.AXIS;
         var chartSize = me.getChartSize();
-        var metadata = this.getView().getConfig().targetLayer.metadata;
-        var series = Koala.util.Object.getPathStrOr(
+        var CSS = staticMe.CSS_CLASS;
+        var axisSelector = viewId + ' svg g.' + CSS.AXIS;
+        var totalOffset = 0;
+        var metadata = view.getConfig().targetLayer.metadata;
+        var seriesConfigs = Koala.util.Object.getPathStrOr(
             metadata,
             'layerConfig/timeSeriesChartProperties/attachedSeries',
             '[]'
         );
-        series = JSON.parse(series);
-
-        Ext.iterate(axesConfig, function(orient) {
-            var axisGenerator = me.axes[orient];
-            var axisTransform;
-            var labelTransform;
-            var axis;
-
-            if (orient === 'top' || orient === 'bottom') {
-                axisTransform = (orient === 'bottom') ?
-                    makeTranslate(30 * series.length, chartSize[1]) : undefined;
-                labelTransform = makeTranslate(chartSize[0] / 2, 0);
-
-                axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
-            } else if (orient === 'left' || orient === 'right') {
-                axisTransform = (orient === 'right') ?
-                    makeTranslate(0, chartSize[1]) : undefined;
-                var translate = makeTranslate(chartSize[1] / -2, 0);
-                labelTransform = 'rotate(-90), ' + translate;
-
-                axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
-            }
-
-            axis
-                .transition()
-                .attr('transform', axisTransform)
-                .call(axisGenerator);
-
-            // Redraw the axis label
-            axis.select('.' + CSS.AXIS_LABEL)
-                .transition()
-                .attr('transform', labelTransform);
+        seriesConfigs = JSON.parse(seriesConfigs);
+        Ext.each(seriesConfigs, function(s) {
+            totalOffset += s.axisWidth || 40;
         });
+
+        if (orient === 'top' || orient === 'bottom') {
+            axisTransform = (orient === 'bottom') ?
+                makeTranslate(totalOffset, chartSize[1]) : undefined;
+            labelTransform = makeTranslate(chartSize[0] / 2, 0);
+
+            axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
+        } else if (orient === 'left' || orient === 'right') {
+            axisTransform = (orient === 'right') ?
+                makeTranslate(0, chartSize[1]) : undefined;
+            var translate = makeTranslate(chartSize[1] / -2, 0);
+            labelTransform = 'rotate(-90), ' + translate;
+
+            axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
+        }
+
+        axis
+            .transition()
+            .attr('transform', axisTransform)
+            .call(axisGenerator);
+
+        // Redraw the axis label
+        axis.select('.' + CSS.AXIS_LABEL)
+            .transition()
+            .attr('transform', labelTransform);
     },
 
     /**
