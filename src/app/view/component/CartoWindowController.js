@@ -373,7 +373,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             Ext.create({
                 xtype: 'k-window-print',
                 chartPrint: true,
-                chart: dataUri
+                chart: dataUri,
+                irixPrint: true
             }).show();
         };
         var cbScope = this;
