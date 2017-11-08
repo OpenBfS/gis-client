@@ -398,6 +398,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     ' .' + CSS.SHAPE_PATH;
                             var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
                                     ' .' + CSS.SHAPE_POINT_GROUP + ' circle';
+                            var shapeRectsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
+                                    ' .' + CSS.SHAPE_POINT_GROUP + ' rect';
+                            var shapePolygonsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
+                                    ' .' + CSS.SHAPE_POINT_GROUP + ' svg';
 
                             d3.select(shapePathSelector)
                                 .attr('d', shape.shape.x(function(d) {
@@ -413,6 +417,40 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     var val = d[shape.config.xField];
                                     if (!val) {
                                         return null;
+                                    }
+                                    return scaleX(val);
+                                });
+                            d3.selectAll(shapeRectsSelector)
+                                .filter(function(d) {
+                                    return Ext.isDefined(d.style) && d.style.type === 'rect';
+                                })
+                                .attr('x', function(d) {
+                                    var val = d[shape.config.xField];
+                                    if (!val) {
+                                        return null;
+                                    }
+                                    if (d.style && d.style.width) {
+                                        var w = Koala.util.String.coerce(d.style.width);
+                                        if (Ext.isNumber(w)) {
+                                            return scaleX(val) - w / 2;
+                                        }
+                                    }
+                                    return scaleX(val);
+                                });
+                            d3.selectAll(shapePolygonsSelector)
+                                .filter(function(d) {
+                                    return Ext.isDefined(d.style) && d.style.type === 'star';
+                                })
+                                .attr('x', function(d) {
+                                    var val = d[shape.config.xField];
+                                    if (!val) {
+                                        return null;
+                                    }
+                                    if (d.style && d.style.radius) {
+                                        var w = Koala.util.String.coerce(d.style.radius);
+                                        if (Ext.isNumber(w)) {
+                                            return scaleX(val) - w;
+                                        }
                                     }
                                     return scaleX(val);
                                 });
@@ -442,6 +480,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     ' .' + CSS.SHAPE_PATH;
                             var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
                                     ' .' + CSS.SHAPE_POINT_GROUP + ' circle';
+                            var shapeRectsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
+                                    ' .' + CSS.SHAPE_POINT_GROUP + ' rect';
+                            var shapePolygonsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
+                                    ' .' + CSS.SHAPE_POINT_GROUP + ' svg';
 
                             d3.select(shapePathSelector)
                                 .attr('d', shape.shape.y(function(d) {
@@ -463,6 +505,40 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     }
                                     if (d.drawAsZero) {
                                         val = d.minValue;
+                                    }
+                                    return scaleY(val);
+                                });
+                            d3.selectAll(shapeRectsSelector)
+                                .filter(function(d) {
+                                    return Ext.isDefined(d.style) && d.style.type === 'rect';
+                                })
+                                .attr('y', function(d) {
+                                    var val = d[shape.config.yField];
+                                    if (!val) {
+                                        return null;
+                                    }
+                                    if (d.style && d.style.height) {
+                                        var h = Koala.util.String.coerce(d.style.height);
+                                        if (Ext.isNumber(h)) {
+                                            return scaleY(val) - h / 2;
+                                        }
+                                    }
+                                    return scaleY(val);
+                                });
+                            d3.selectAll(shapePolygonsSelector)
+                                .filter(function(d) {
+                                    return Ext.isDefined(d.style) && d.style.type === 'star';
+                                })
+                                .attr('y', function(d) {
+                                    var val = d[shape.config.yField];
+                                    if (!val) {
+                                        return null;
+                                    }
+                                    if (d.style && d.style.radius) {
+                                        var w = Koala.util.String.coerce(d.style.radius);
+                                        if (Ext.isNumber(w)) {
+                                            return scaleY(val) - w;
+                                        }
                                     }
                                     return scaleY(val);
                                 });
@@ -809,8 +885,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP +
                         index);
 
-                // TODO refactor the selectAll method below; DK
-                //      pointGroup.enter()???
+                // handle the style-type 'circle' or, if no style was given,
+                // use circles as default
                 pointGroup.selectAll('circle')
                     .data(me.data[shapeId])
                     .enter().append('circle')
@@ -826,7 +902,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                         }
 
                         var cy = me.scales[orientY](d[yField]);
-                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy);
+                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
+                            ((Ext.isDefined(d.style) && d.style.type === 'circle') || !Ext.isDefined(d.style));
                     })
                     .style('fill', color)
                     .style('stroke', darkerColor)
@@ -862,7 +939,210 @@ Ext.define('Koala.view.component.D3ChartController', {
                         }
                         return me.scales[orientY](val);
                     })
-                    .attr('r', 3);
+                    .attr('r', function(d) {
+                        if (d.style && d.style.radius) {
+                            var r = Koala.util.String.coerce(d.style.radius);
+                            if (Ext.isNumber(r)) {
+                                return r;
+                            }
+                        }
+                        return 3;
+                    });
+
+                // handle the style-type 'rect'
+                pointGroup.selectAll('rect')
+                    .data(me.data[shapeId])
+                    .enter().append('rect')
+                    .filter(function(d) {
+                        var val = d[xField];
+                        if (val && val._isAMomentObject) {
+                            val = val.unix() * 1000;
+                        }
+                        if (val) {
+                            minx = Math.min(minx, val);
+                            maxx = Math.max(maxx, val);
+                        }
+
+                        var cy = me.scales[orientY](d[yField]);
+                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
+                            (Ext.isDefined(d.style) && d.style.type === 'rect');
+                    })
+                    .style('fill', color)
+                    .style('stroke', darkerColor)
+                    .style('stroke-width', 2)
+                    .on('mouseover', function(data) {
+                        var tooltipCmp = me.tooltipCmp;
+                        var tooltipTpl = shapeConfig.tooltipTpl;
+                        var chartProps = me.getView().getTargetLayer()
+                            .get('timeSeriesChartProperties');
+
+                        var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
+                            return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
+                        });
+
+                        var tooltipData = Ext.clone(data);
+                        if (Koala.Application.isUtc()) {
+                            tooltipData[xField] = Koala.util.Date.addUtcOffset(tooltipData[xField]);
+                        }
+
+                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, tooltipData);
+                        html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
+                        tooltipCmp.setHtml(html);
+                        tooltipCmp.setTarget(this);
+                        tooltipCmp.show();
+                    })
+                    .attr('x', function(d) {
+                        if (d.style && d.style.width) {
+                            var w = Koala.util.String.coerce(d.style.width);
+                            if (Ext.isNumber(w)) {
+                                return me.scales[orientX](d[xField]) - w / 2;
+                            }
+                        }
+                        return me.scales[orientX](d[xField]) - 5;
+                    })
+                    .attr('y', function(d) {
+                        if (d.style && d.style.height) {
+                            var h = Koala.util.String.coerce(d.style.height);
+                            if (Ext.isNumber(h)) {
+                                return me.scales[orientY](d[yField]) - h / 2;
+                            }
+                        }
+                        return me.scales[orientY](d[yField]) - 5;
+                    })
+                    .attr('width', function(d) {
+                        if (d.style && d.style.width) {
+                            var w = Koala.util.String.coerce(d.style.width);
+                            if (Ext.isNumber(w)) {
+                                return w;
+                            }
+                        }
+                        return 10;
+                    })
+                    .attr('height', function(d) {
+                        if (d.style && d.style.height) {
+                            var h = Koala.util.String.coerce(d.style.height);
+                            if (Ext.isNumber(h)) {
+                                return h;
+                            }
+                        }
+                        return 10;
+                    });
+
+                // handle the style-type 'star'
+                pointGroup.selectAll('polygon')
+                    .data(me.data[shapeId]).enter()
+                    .append('svg')
+                    .attr('x', function(d) {
+                        if (d.style && d.style.radius) {
+                            var w = Koala.util.String.coerce(d.style.radius);
+                            if (Ext.isNumber(w)) {
+                                return me.scales[orientX](d[xField]) - w;
+                            }
+                        }
+                        return me.scales[orientX](d[xField]) - 5;
+                    })
+                    .attr('y', function(d) {
+                        if (d.style && d.style.radius) {
+                            var h = Koala.util.String.coerce(d.style.radius);
+                            if (Ext.isNumber(h)) {
+                                return me.scales[orientY](d[yField]) - h;
+                            }
+                        }
+                        return me.scales[orientY](d[yField]) - 5;
+                    })
+                    .attr('width', function(d) {
+                        if (d.style && d.style.radius) {
+                            var w = Koala.util.String.coerce(d.style.radius);
+                            if (Ext.isNumber(w)) {
+                                return w * 2;
+                            }
+                        }
+                        return 10;
+                    })
+                    .attr('height', function(d) {
+                        if (d.style && d.style.radius) {
+                            var h = Koala.util.String.coerce(d.style.radius);
+                            if (Ext.isNumber(h)) {
+                                return h * 2;
+                            }
+                        }
+                        return 10;
+                    })
+                    .append('polygon')
+                    .filter(function(d) {
+                        var val = d[xField];
+                        if (val && val._isAMomentObject) {
+                            val = val.unix() * 1000;
+                        }
+                        if (val) {
+                            minx = Math.min(minx, val);
+                            maxx = Math.max(maxx, val);
+                        }
+
+                        var cy = me.scales[orientY](d[yField]);
+                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
+                            (Ext.isDefined(d.style) && d.style.type === 'star');
+                    })
+                    .style('fill', color)
+                    .style('stroke', darkerColor)
+                    .style('stroke-width', 2)
+                    .on('mouseover', function(data) {
+                        var tooltipCmp = me.tooltipCmp;
+                        var tooltipTpl = shapeConfig.tooltipTpl;
+                        var chartProps = me.getView().getTargetLayer()
+                            .get('timeSeriesChartProperties');
+
+                        var selectedStation = Ext.Array.findBy(me.getView().getSelectedStations(), function(station) {
+                            return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
+                        });
+
+                        var tooltipData = Ext.clone(data);
+                        if (Koala.Application.isUtc()) {
+                            tooltipData[xField] = Koala.util.Date.addUtcOffset(tooltipData[xField]);
+                        }
+
+                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, tooltipData);
+                        html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
+                        tooltipCmp.setHtml(html);
+                        tooltipCmp.setTarget(this);
+                        tooltipCmp.show();
+                    })
+                    .attr('points', function(d) {
+                        // inspired by http://svgdiscovery.com/C02/create-svg-star-polygon.htm
+                        var radius = 10;
+                        var sides = 5;
+                        if (d.style && d.style.radius) {
+                            var r = Koala.util.String.coerce(d.style.radius);
+                            if (Ext.isNumber(r)) {
+                                radius = r;
+                            }
+                        }
+                        if (d.style && d.style.sides) {
+                            var s = Koala.util.String.coerce(d.style.sides);
+                            if (Ext.isNumber(s)) {
+                                sides = s;
+                            }
+                        }
+                        var theta = Math.PI * 2 / sides;
+                        var x = radius;
+                        var y = radius;
+                        var star = '';
+                        for (var i = 0; i < sides; i++) {
+                            var k = i + 1;
+                            var sineAngle = Math.sin(theta * k);
+                            var cosineAngle = Math.cos(theta * k);
+                            var x1 = radius / 2 * sineAngle + x;
+                            var y1 = radius / 2 * cosineAngle + y;
+                            var sineAngleAlpha = Math.sin(theta * k + 0.5 * theta);
+                            var cosineAngleAlpha = Math.cos(theta * k + 0.5 * theta);
+                            var x2 = radius * sineAngleAlpha + x;
+                            var y2 = radius * cosineAngleAlpha + y;
+
+                            star += x1 + ',' + y1 + ' ';
+                            star += x2 + ',' + y2 + ' ';
+                        }
+                        return star;
+                    });
             }
 
         });
@@ -1557,7 +1837,16 @@ Ext.define('Koala.view.component.D3ChartController', {
         var valueField = chartConfig.yAxisAttribute;
         var attachedSeries = chartConfig.attachedSeries ?
             JSON.parse(chartConfig.attachedSeries) : [];
+        var featureStyle;
         var jsonObj;
+
+        if (chartConfig.featureStyle) {
+            try {
+                featureStyle = JSON.parse(chartConfig.featureStyle);
+            } catch (e) {
+                Ext.log.error('Error on parsing the featureStyle');
+            }
+        }
 
         if (response && response.responseText) {
             try {
@@ -1620,6 +1909,11 @@ Ext.define('Koala.view.component.D3ChartController', {
                 newRawData[valueField] = matchingFeature.properties[yAxisAttr];
                 Ext.each(attachedSeries, valueExtractor(newRawData, matchingFeature));
 
+                if (featureStyle) {
+                    newRawData = me.appendStyleToShape(
+                        featureStyle, matchingFeature, newRawData);
+                }
+
                 seriesData.push(newRawData);
             } else {
                 seriesData.push({});
@@ -1637,6 +1931,43 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
             me.fireEvent('chartdataprepared');
         }
+    },
+
+    /**
+     * Appends a possible given featurestyle to the chart shape
+     * @param {Object} featureStyle The featureStyle object.
+     * @param {ol.Feature} matchingFeature The matchingFeature.
+     * @param {Object} newRawData The rawData object the style will get appended to.
+     */
+    appendStyleToShape: function(featureStyle, matchingFeature, newRawData) {
+        Ext.each(featureStyle, function(style) {
+            var val = matchingFeature.properties[style.attribute];
+            if (val) {
+                val = Koala.util.String.coerce(val);
+                var styleVal = Koala.util.String.coerce(style.value);
+                var op = style.operator;
+                var min;
+                var max;
+                if (Ext.isString(styleVal)) {
+                    var split = styleVal.split(',');
+                    if (split.length === 2) {
+                        min = split[0];
+                        max = split[1];
+                    }
+                }
+                if ((op === 'eq' && val === styleVal) ||
+                    (op === 'ne' && val !== styleVal) ||
+                    (op === 'gt' && val > styleVal) ||
+                    (op === 'lt' && val < styleVal) ||
+                    (op === 'lte' && val <= styleVal) ||
+                    (op === 'gte' && val >= styleVal) ||
+                    (op === 'between' && min && max && val >= min && val <= max)) {
+                    newRawData.style = style.style;
+                    return false;
+                }
+            }
+        }, this);
+        return newRawData;
     },
 
     /**

@@ -747,6 +747,81 @@ Ein ISO_8601 duration string der den Zeitraum der darzustellenden Daten beschrei
   | Default-Wert         |  |
   | Beispiel             | Y-m-d H:i:s  |
 
+**featureStyle**
+
+Der regelbasierte Stil für die Messwerte.
+Der Wert ist ein Array von Objekten, die die Regel
+und den Stil definieren.
+
+| Typ | gco:CharacterString |
+|---------------------:|:----|
+| Erlaubte Wertemenge  | Array von Objekten |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+
+Beispiel:
+```
+[{
+      "attribute": "validated",
+      "operator": "eq",`
+      "value": true,`
+      "style": {`
+          "type": "circle",`
+          "radius": "5"`
+      }`
+  }, {`
+      "attribute": "value",`
+      "operator": "eq",
+      "value": 0.09,
+      "style": {
+          "type": "circle",
+          "radius": "10"
+      }
+  }, {
+      "attribute": "value",
+      "operator": "between",
+      "value": "0.09,0.1",
+      "style": {
+          "type": "star",
+          "sides": 5,
+          "radius": 10
+      }
+  }, {
+      "attribute": "value",
+      "operator": "gt",
+      "value": 0.1,
+      "style": {
+          "type": "rect",
+          "width": 15,
+          "height": 20
+      }
+  }]
+```
+
+* attribute -> Das Attribut das ausgewertet werden soll
+
+* operator -> Der Operator für die Regel. Kann einen der folgenden Werte annehmen:
+'eq' (equals),  
+'ne' (not equals),  
+'gt' (greater than),  
+'lt' (lower than),  
+'lte' (lower than equals),  
+'gte' (greater than equals),  
+'between' (Gültigkeitsbereich).  
+Wenn 'between' verwendet werden soll, muss der 'value' als kommasperarierter String definiert werden mit genau 2 Werten: "1.06,5"
+
+* value -> Der Wert für die Bedingung
+
+* style -> Das Style Objekt das angewendet werden soll, wenn die Regel zutrifft
+
+  * type -> Form für die Darstellung. Derzeit unterstützt sind "circle", "rect" und "star"
+
+  * type "rect" -> hat als properties "width" und "height"
+
+  * type "circle" -> hat als properties "radius"
+
+  * type "star" -> hat als properties "sides" (Anzahl der Sternseiten) und "radius"
+
 **gridStrokeColor**
 
   Die Strichfarbe des Hintergrundgrids.
