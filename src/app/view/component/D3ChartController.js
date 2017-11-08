@@ -1031,6 +1031,20 @@ Ext.define('Koala.view.component.D3ChartController', {
                 // handle the style-type 'star'
                 pointGroup.selectAll('polygon')
                     .data(me.data[shapeId]).enter()
+                    .filter(function(d) {
+                        var val = d[xField];
+                        if (val && val._isAMomentObject) {
+                            val = val.unix() * 1000;
+                        }
+                        if (val) {
+                            minx = Math.min(minx, val);
+                            maxx = Math.max(maxx, val);
+                        }
+
+                        var cy = me.scales[orientY](d[yField]);
+                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
+                            (Ext.isDefined(d.style) && d.style.type === 'star');
+                    })
                     .append('svg')
                     .attr('x', function(d) {
                         if (d.style && d.style.radius) {
@@ -1069,20 +1083,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                         return 10;
                     })
                     .append('polygon')
-                    .filter(function(d) {
-                        var val = d[xField];
-                        if (val && val._isAMomentObject) {
-                            val = val.unix() * 1000;
-                        }
-                        if (val) {
-                            minx = Math.min(minx, val);
-                            maxx = Math.max(maxx, val);
-                        }
-
-                        var cy = me.scales[orientY](d[yField]);
-                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
-                            (Ext.isDefined(d.style) && d.style.type === 'star');
-                    })
                     .style('fill', color)
                     .style('stroke', darkerColor)
                     .style('stroke-width', 2)
