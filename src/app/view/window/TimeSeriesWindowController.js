@@ -258,6 +258,10 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
      */
     createTimeSeriesChartPanel: function(olLayer, olFeat) {
         var me = this;
+        var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
+        var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
+        var maySeeIdThresholdButton = Ext.Array.contains(imisRoles, 'imis') ||
+            Ext.Array.contains(imisRoles, 'ruf');
         var chart = me.createTimeSeriesChart(olLayer, olFeat);
         var chartConfig = olLayer.get('timeSeriesChartProperties');
         var addSeriesCombo;
@@ -323,6 +327,16 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             }, {
                 xtype: 'button',
                 bind: {
+                    text: '{toggleDataBelowIdentificationThreshold}'
+                },
+                handler: me.toggleDataBelowIdentificationThreshold,
+                enableToggle: true,
+                hidden: !maySeeIdThresholdButton,
+                scope: me,
+                margin: '0 0 10px 0'
+            }, {
+                xtype: 'button',
+                bind: {
                     text: '{undoBtnText}'
                 },
                 hidden: !Koala.util.String.coerce(chartConfig.allowZoom),
@@ -354,6 +368,19 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             ]
         };
         return panel;
+    },
+
+    /**
+     * Called when an authorized user wants to toggle visibility of the real
+     * values below identification threshold.
+     * @param {Ext.button.Button} btn the toggle button
+     */
+    toggleDataBelowIdentificationThreshold: function(btn) {
+        var view = this.getView();
+        var chart = view.down('d3-chart');
+        chart.setShowIdentificationThresholdData(btn.pressed);
+        var ctrl = chart.getController();
+        ctrl.getChartData();
     },
 
     /**
