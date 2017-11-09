@@ -118,13 +118,14 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.createGridAxes();
         me.createShapes();
         me.createTooltip();
+        me.createAttachedSeriesAxes();
 
         me.setDomainForScales();
 
         me.drawTitle();
         me.drawAxes();
+        me.drawAttachedSeriesAxis();
         me.drawGridAxes();
-        me.createAttachedSeriesAxes();
         me.drawShapes();
         me.registerKeyboardHandler(me);
 
@@ -161,14 +162,15 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             me.createScales();
             me.createAxes();
-            me.createAttachedSeriesAxes();
             me.createGridAxes();
             me.createShapes();
+            me.createAttachedSeriesAxes();
 
             me.setDomainForScales();
 
             me.redrawTitle();
             me.redrawAxes();
+            me.redrawAttachedSeriesAxes();
             me.redrawGridAxes();
             me.drawShapes();
             me.updateLegendContainerPosition();
@@ -289,7 +291,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
         });
 
-        if (max < axisDomain[1] && orient === 'left') {
+        if (max && max < axisDomain[1] && orient === 'left') {
             var ticks = Koala.util.Chart.recalculateAxisTicks(axis);
             axis.tickValues = ticks;
             if (ticks) {
@@ -761,11 +763,15 @@ Ext.define('Koala.view.component.D3ChartController', {
             '[]'
         );
         series = JSON.parse(series);
+        var totalOffset = 0;
+        Ext.each(series, function(s) {
+            totalOffset += s.axisWidth || 40;
+        });
 
         // Wrap the shapes in its own <svg> element.
         var shapeSvg = d3.select(viewId + ' svg > g')
             .append('g')
-            .attr('transform', makeTranslate(30 * series.length, 0))
+            .attr('transform', makeTranslate(totalOffset, 0))
             .append('svg')
             .attr('top', 0)
             .attr('left', 0)
