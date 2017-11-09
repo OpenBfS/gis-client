@@ -25,6 +25,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     scales: {},
     shapes: [],
+    attachedSeriesVisibleById: {},
     axes: {},
     gridAxes: {},
     tooltipCmp: null,
@@ -142,6 +143,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
 
+        me.recalculatePositionsAndVisibility();
     },
 
     /**
@@ -178,6 +180,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // Reset the zoom to the initial extent
             me.resetZoom();
+            me.recalculatePositionsAndVisibility();
         }
     },
 
@@ -701,15 +704,16 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             if (shapeType) {
                 shape = me.createShape(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize);
-            } else {
-                // TODO: check if this can be removed
-                shape = {};
             }
 
-            me.shapes.push({
+            var shapeObj = {
                 config: shapeConfig,
                 shape: shape
-            });
+            };
+            me.shapes.push(shapeObj);
+            if (!me.attachedSeriesVisibleById[shapeConfig.id]) {
+                me.attachedSeriesVisibleById[shapeConfig.id] = [];
+            }
 
             var idx = 0;
             Ext.each(attachedSeries, function(config) {
@@ -772,6 +776,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var shapeSvg = d3.select(viewId + ' svg > g')
             .append('g')
             .attr('transform', makeTranslate(totalOffset, 0))
+            .attr('class', 'k-d3-shape-container')
             .append('svg')
             .attr('top', 0)
             .attr('left', 0)
@@ -802,9 +807,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                 index += '_' + attachedSeriesNumber;
             }
 
+            var classes = staticMe.CSS_CLASS.SHAPE_GROUP;
+            if (attachedSeriesNumber && !me.attachedSeriesVisibleById[shapeId][attachedSeriesNumber-1]) {
+                classes += ' k-d3-hidden';
+            }
+
             var shapeGroup = shapeSvg
                 .append('g')
-                .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
+                .attr('class', classes)
                 .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP +
                     index)
                 .attr('shape-type', shapeConfig.type);
@@ -1337,6 +1347,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .on('click', toggleVisibilityFunc)
                 .attr('transform', staticMe.makeTranslate(0, curTranslateY))
                 .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + shapeId);
+            legendEntry.on('contextmenu', me.getContextmenuFunction(shape));
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
@@ -1430,6 +1441,46 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         var config = this.view.getTargetLayer().get('timeSeriesChartProperties');
         this.drawThresholdLegends(config, legend, curTranslateY);
+    },
+
+    /**
+     * Get the legend entry contextmenu callback function.
+     * @param  {Object} shape the shape the contextmenu callback is for.
+     * @return {function}       the callback that might show the attached series
+     * contextmenu if attached series are configured.
+     */
+    getContextmenuFunction: function(shape) {
+        var me = this;
+        return function() {
+            d3.event.preventDefault();
+            if (shape.config.attachedSeries) {
+                var series = JSON.parse(shape.config.attachedSeries);
+                var items = [];
+                Ext.each(series, function(config, index) {
+                    var visible = me.attachedSeriesVisibleById[shape.config.id][index];
+                    items.push({
+                        xtype: 'menucheckitem',
+                        text: config.dspUnit,
+                        checked: visible,
+                        listeners: {
+                            'checkchange': function(_, checked) {
+                                me.attachedSeriesVisibleById[shape.config.id][index] = checked;
+                                var sel = '[idx=shape-group-' + shape.config.id +
+                                    '_' + (index + 1) + ']';
+                                d3.select(sel).classed('k-d3-hidden', !checked);
+                                me.recalculatePositionsAndVisibility();
+                            }
+                        }
+                    });
+                });
+                if (items.length > 0) {
+                    var menu = Ext.create('Ext.menu.Menu', {
+                        items: items
+                    });
+                    menu.showAt(d3.event.clientX, d3.event.clientY);
+                }
+            }
+        };
     },
 
     /**
@@ -2175,6 +2226,52 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
         return doesContainSeries;
+    },
+
+    /**
+     * Recalculates all positions in case of multiple y axes. This probably only
+     * works in case of an x/y axis at left/bottom and possibly multiple
+     * attached series.
+     */
+    recalculatePositionsAndVisibility: function() {
+        var me = this;
+        var visibleSeries = {};
+        var translateX = 0;
+
+        Ext.each(this.attachedSeriesShapes, function(shape) {
+            var idx = shape.config.attachedSeriesNumber - 1;
+            if (me.attachedSeriesVisibleById[shape.config.id][idx]) {
+                visibleSeries[idx] = JSON.parse(shape.config.attachedSeries)[idx];
+            } else {
+                if (!visibleSeries[idx]) {
+                    visibleSeries[idx] = false;
+                }
+            }
+        });
+
+        Ext.iterate(visibleSeries, function(idx, config) {
+            if (config) {
+                translateX += (config.axisWidth || 40);
+            }
+            var sel = '.k-d3-axis-y_' + (parseFloat(idx) + 1);
+            var visible = config ? true : false;
+
+            d3.select(sel)
+                .classed('k-d3-hidden', !visible)
+                .attr('transform', 'translate(' + translateX + ',0)');
+        });
+        var chart = d3.selectAll('.k-d3-shape-container,.k-d3-plot-background');
+        if (chart.node()) {
+            chart.attr('transform', 'translate(' + translateX + ',0)');
+        }
+        var axis = d3.select('.k-d3-axis-x');
+        if (axis.node()) {
+            var cur = axis.attr('transform');
+            var ms = cur.match(/,\s*(\d+)/);
+            var oldy = parseFloat(ms[1]);
+            d3.select('.k-d3-axis-x')
+                .attr('transform', 'translate(' + translateX + ',' + oldy + ')');
+        }
     }
 
 });

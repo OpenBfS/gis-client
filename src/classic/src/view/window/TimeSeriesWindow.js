@@ -45,7 +45,7 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
     constrainHeader: true,
     collapsible: true,
     maxHeight: 800,
-    height: 300,
+    height: 350,
     width: 900,
     layout: {
         type: 'vbox'
