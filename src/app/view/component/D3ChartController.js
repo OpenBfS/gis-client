@@ -303,7 +303,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
 
         //limit chart data to 80% of chart height
-        if ((orient !== 'bottom') && (!Ext.isDefined(axis.max) || (Ext.isDefined(axis.max) && (axisDomain[1] > axis.max)))) {
+        if (axisDomain && (orient !== 'bottom') && (!Ext.isDefined(axis.max) || (Ext.isDefined(axis.max) && (axisDomain[1] > axis.max)))) {
             axisDomain[1] = axisDomain[1]/0.8;
         }
         if (orient === 'bottom' && config.useExactInterval) {
@@ -718,7 +718,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var idx = 0;
             Ext.each(attachedSeries, function(config) {
                 shapeConfig = Ext.clone(shapeConfig);
-                shapeConfig.color = config.stroke;
+                shapeConfig.color = config.color;
                 shapeConfig.yField = config.yAxisAttribute;
                 shapeConfig.orientY = 'left';
                 shapeConfig.attachedSeriesNumber = ++idx;
@@ -1604,6 +1604,14 @@ Ext.define('Koala.view.component.D3ChartController', {
             return shapeConfig.id === shapeId;
         });
         Ext.Array.remove(shapeConfigs, shapeConfigToRemove);
+
+        var attachedShapeConfigsToRemove = [];
+        Ext.each(this.attachedSeriesShapes, function(shape) {
+            if (shape.config.id === shapeId) {
+                attachedShapeConfigsToRemove.push(shape);
+            }
+        });
+        Ext.Array.remove(this.attachedSeriesShapes, attachedShapeConfigsToRemove);
     },
 
     /**

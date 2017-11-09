@@ -1586,8 +1586,22 @@ Ext.define('Koala.view.component.D3BaseController', {
     colorPicked: function(shape, idx) {
         var cmp = Ext.ComponentQuery.query('[name=chart-color-picker]')[0];
         if (shape) {
+            var oldColor = shape.config.color;
             shape.config.color = '#' + cmp.getValue();
             this.customColors[idx] = shape.config.color;
+            // if we have attachedSeries and it has the same color as the parent
+            // we will also apply the new color to the attached series
+            if (shape.config.attachedSeries) {
+                var as = Koala.util.String.coerce(shape.config.attachedSeries);
+                if (Ext.isArray(as)) {
+                    Ext.each(as, function(series) {
+                        if (!series.color || series.color === oldColor) {
+                            series.color = shape.config.color;
+                        }
+                    });
+                    shape.config.attachedSeries = JSON.stringify(as);
+                }
+            }
         } else {
             this.thresholdState[idx].color = '#' + cmp.getValue();
         }
