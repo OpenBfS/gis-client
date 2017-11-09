@@ -704,9 +704,6 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             if (shapeType) {
                 shape = me.createShape(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize);
-            } else {
-                // TODO: check if this can be removed
-                shape = {};
             }
 
             var shapeObj = {
