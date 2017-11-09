@@ -31,7 +31,8 @@ before_script:
   - git submodule update --init --recursive --force
   - git clone git@gitlab.intranet.terrestris.de:libraries/ext-6.2.0.git /ext
   - cd src
-  - sencha app upgrade /ext
+  - ln -s /ext
+  - sencha app install --framework=ext
   - sencha app build
 
 test:

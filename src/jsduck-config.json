@@ -1,5 +1,5 @@
 {
-    "--title": "Koala Documentation",
+    "--title": "IMIS3 GIS Documentation",
     "-o": "jsduck",
     "--": [
         "app/",
@@ -8,7 +8,7 @@
         "ext/packages/core/src/",
         "ext/packages/charts/src/",
         "ext/packages/ux/classic/src/",
-        "packages/remote/BasiGX/src",
-        "packages/remote/GeoExt/src"
+        "lib/BasiGX/src",
+        "lib/GeoExt/src"
     ]
 }

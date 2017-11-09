@@ -22,7 +22,9 @@ src/sass/example/bootstrap.jsonp
 docs/apidoc
 docs/jsdoc
 docs/jsduck
+src/jsduck
 
 node_modules
 .project
 .idea
+.sencha
