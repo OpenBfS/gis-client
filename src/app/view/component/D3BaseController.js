@@ -1116,6 +1116,11 @@ Ext.define('Koala.view.component.D3BaseController', {
             labelPadding = (axisConfig.labelPadding || 25) * -1;
         }
 
+        if (index !== undefined) {
+            // attached series axes hidden by default
+            cssAxisClass += ' k-d3-hidden';
+        }
+
         d3.select(viewId + ' svg > g')
             .append('g')
             .attr('class', cssAxisClass)

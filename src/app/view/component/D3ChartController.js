@@ -142,6 +142,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
 
+        me.recalculatePositions();
     },
 
     /**
@@ -178,6 +179,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // Reset the zoom to the initial extent
             me.resetZoom();
+            me.recalculatePositions();
         }
     },
 
@@ -701,6 +703,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             if (shapeType) {
                 shape = me.createShape(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize);
+                shapeConfig.visible = true;
             } else {
                 // TODO: check if this can be removed
                 shape = {};
@@ -718,6 +721,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 shapeConfig.yField = config.yAxisAttribute;
                 shapeConfig.orientY = 'left';
                 shapeConfig.attachedSeriesNumber = ++idx;
+                shapeConfig.visible = false;
                 shape = me.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, normalizeY, chartSize);
                 me.attachedSeriesShapes.push({
                     config: shapeConfig,
@@ -772,6 +776,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var shapeSvg = d3.select(viewId + ' svg > g')
             .append('g')
             .attr('transform', makeTranslate(totalOffset, 0))
+            .attr('class', 'k-d3-shape-container')
             .append('svg')
             .attr('top', 0)
             .attr('left', 0)
@@ -802,9 +807,14 @@ Ext.define('Koala.view.component.D3ChartController', {
                 index += '_' + attachedSeriesNumber;
             }
 
+            var classes = staticMe.CSS_CLASS.SHAPE_GROUP;
+            if (!shapeConfig.visible) {
+                classes += ' k-d3-hidden';
+            }
+
             var shapeGroup = shapeSvg
                 .append('g')
-                .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP)
+                .attr('class', classes)
                 .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP +
                     index)
                 .attr('shape-type', shapeConfig.type);
@@ -1337,6 +1347,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .on('click', toggleVisibilityFunc)
                 .attr('transform', staticMe.makeTranslate(0, curTranslateY))
                 .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + shapeId);
+            legendEntry.on('contextmenu', me.getContextmenuFunction(shape));
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
@@ -1430,6 +1441,46 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         var config = this.view.getTargetLayer().get('timeSeriesChartProperties');
         this.drawThresholdLegends(config, legend, curTranslateY);
+    },
+
+    /**
+     * Get the legend entry contextmenu callback function.
+     * @param  {Object} shape the shape the contextmenu callback is for.
+     * @return {function}       the callback that might show the attached series
+     * contextmenu if attached series are configured.
+     */
+    getContextmenuFunction: function(shape) {
+        var me = this;
+        return function() {
+            d3.event.preventDefault();
+            if (shape.config.attachedSeries) {
+                var series = JSON.parse(shape.config.attachedSeries);
+                var items = [];
+                Ext.each(series, function(config, index) {
+                    items.push({
+                        xtype: 'menucheckitem',
+                        text: config.dspUnit,
+                        listeners: {
+                            'checkchange': function(_, checked) {
+                                config.visible = checked;
+                                var sel = '[idx=shape-group-' + shape.config.id +
+                                    '_' + (index + 1) + ']';
+                                d3.select(sel).classed('k-d3-hidden', !checked);
+                                sel = '.k-d3-axis-y_' + (index + 1);
+                                d3.select(sel).classed('k-d3-hidden', !checked);
+                                me.recalculatePositions();
+                            }
+                        }
+                    });
+                });
+                if (items.length > 0) {
+                    var menu = Ext.create('Ext.menu.Menu', {
+                        items: items
+                    });
+                    menu.showAt(d3.event.clientX, d3.event.clientY);
+                }
+            }
+        };
     },
 
     /**
@@ -2175,6 +2226,32 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
         return doesContainSeries;
+    },
+
+    /**
+     * Recalculates all positions in case of multiple y axes. This probably only
+     * works in case of an x/y axis at left/bottom and possibly multiple
+     * attached series.
+     */
+    recalculatePositions: function() {
+        var translateX = 0;
+        Ext.each(this.attachedSeriesShapes, function(shape, idx) {
+            var cfg = JSON.parse(shape.config.attachedSeries)[idx];
+            var sel = '[idx=shape-group-' + shape.config.id + '_' + (idx + 1) + ']';
+            var hidden = d3.select(sel).classed('k-d3-hidden');
+            if (!hidden) {
+                translateX += (cfg.axisWidth || 40);
+            }
+            d3.select('.k-d3-axis-y_' + (idx + 1))
+                .attr('transform', 'translate(' + translateX + ',0)');
+        });
+        d3.selectAll('.k-d3-shape-container,.k-d3-plot-background')
+            .attr('transform', 'translate(' + translateX + ',0)');
+        var cur = d3.select('.k-d3-axis-x').attr('transform');
+        var ms = cur.match(/,(\d+)/);
+        var oldy = parseFloat(ms[1]);
+        d3.select('.k-d3-axis-x')
+            .attr('transform', 'translate(' + translateX + ',' + oldy + ')');
     }
 
 });
