@@ -2262,11 +2262,14 @@ Ext.define('Koala.view.component.D3ChartController', {
         });
         d3.selectAll('.k-d3-shape-container,.k-d3-plot-background')
             .attr('transform', 'translate(' + translateX + ',0)');
-        var cur = d3.select('.k-d3-axis-x').attr('transform');
-        var ms = cur.match(/,\s*(\d+)/);
-        var oldy = parseFloat(ms[1]);
-        d3.select('.k-d3-axis-x')
-            .attr('transform', 'translate(' + translateX + ',' + oldy + ')');
+        var axis = d3.select('.k-d3-axis-x');
+        if (axis) {
+            var cur = axis.attr('transform');
+            var ms = cur.match(/,\s*(\d+)/);
+            var oldy = parseFloat(ms[1]);
+            d3.select('.k-d3-axis-x')
+                .attr('transform', 'translate(' + translateX + ',' + oldy + ')');
+        }
     }
 
 });
