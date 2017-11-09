@@ -25,6 +25,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     scales: {},
     shapes: [],
+    attachedSeriesVisibleById: {},
     axes: {},
     gridAxes: {},
     tooltipCmp: null,
@@ -142,7 +143,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
 
-        me.recalculatePositions();
+        me.recalculatePositionsAndVisibility();
     },
 
     /**
@@ -179,7 +180,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // Reset the zoom to the initial extent
             me.resetZoom();
-            me.recalculatePositions();
+            me.recalculatePositionsAndVisibility();
         }
     },
 
@@ -703,32 +704,27 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             if (shapeType) {
                 shape = me.createShape(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize);
-                shapeConfig.visible = true;
             } else {
                 // TODO: check if this can be removed
                 shape = {};
             }
 
-            me.shapes.push({
+            var shapeObj = {
                 config: shapeConfig,
                 shape: shape
-            });
+            };
+            me.shapes.push(shapeObj);
+            if (!me.attachedSeriesVisibleById[shapeConfig.id]) {
+                me.attachedSeriesVisibleById[shapeConfig.id] = [];
+            }
 
             var idx = 0;
             Ext.each(attachedSeries, function(config) {
-                // in case of redraw, figure out if the attached series was
-                // previously hidden or not
-                var sel = d3.select('.k-d3-axis-y_' + (idx + 1));
-                var visible = false;
-                if (sel.node()) {
-                    visible = !sel.classed('k-d3-hidden');
-                }
                 shapeConfig = Ext.clone(shapeConfig);
                 shapeConfig.color = config.stroke;
                 shapeConfig.yField = config.yAxisAttribute;
                 shapeConfig.orientY = 'left';
                 shapeConfig.attachedSeriesNumber = ++idx;
-                shapeConfig.visible = visible;
                 shape = me.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, normalizeY, chartSize);
                 me.attachedSeriesShapes.push({
                     config: shapeConfig,
@@ -815,7 +811,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
 
             var classes = staticMe.CSS_CLASS.SHAPE_GROUP;
-            if (!shapeConfig.visible) {
+            if (attachedSeriesNumber && !me.attachedSeriesVisibleById[shapeId][attachedSeriesNumber-1]) {
                 classes += ' k-d3-hidden';
             }
 
@@ -1464,20 +1460,18 @@ Ext.define('Koala.view.component.D3ChartController', {
                 var series = JSON.parse(shape.config.attachedSeries);
                 var items = [];
                 Ext.each(series, function(config, index) {
+                    var visible = me.attachedSeriesVisibleById[shape.config.id][index];
                     items.push({
                         xtype: 'menucheckitem',
                         text: config.dspUnit,
-                        checked: me.isAttachedSeriesVisible(shape.config.id, index),
+                        checked: visible,
                         listeners: {
                             'checkchange': function(_, checked) {
-                                shape.config.visible = checked;
+                                me.attachedSeriesVisibleById[shape.config.id][index] = checked;
                                 var sel = '[idx=shape-group-' + shape.config.id +
                                     '_' + (index + 1) + ']';
                                 d3.select(sel).classed('k-d3-hidden', !checked);
-                                sel = '.k-d3-axis-y_' + (index + 1);
-                                d3.select(sel).classed('k-d3-hidden', !checked);
-                                me.updateAttachedSeriesConfig();
-                                me.recalculatePositions();
+                                me.recalculatePositionsAndVisibility();
                             }
                         }
                     });
@@ -2242,14 +2236,31 @@ Ext.define('Koala.view.component.D3ChartController', {
      * works in case of an x/y axis at left/bottom and possibly multiple
      * attached series.
      */
-    recalculatePositions: function() {
+    recalculatePositionsAndVisibility: function() {
+        var me = this;
+        var visibleSeries = {};
         var translateX = 0;
-        Ext.each(this.attachedSeriesShapes, function(shape, idx) {
-            var cfg = JSON.parse(shape.config.attachedSeries)[idx];
-            if (shape.config.visible) {
-                translateX += (cfg.axisWidth || 40);
+
+        Ext.each(this.attachedSeriesShapes, function(shape) {
+            var idx = shape.config.attachedSeriesNumber - 1;
+            if (me.attachedSeriesVisibleById[shape.config.id][idx]) {
+                visibleSeries[idx] = JSON.parse(shape.config.attachedSeries)[idx];
+            } else {
+                if (!visibleSeries[idx]) {
+                    visibleSeries[idx] = false;
+                }
             }
-            d3.select('.k-d3-axis-y_' + (idx + 1))
+        });
+
+        Ext.iterate(visibleSeries, function(idx, config) {
+            if (config) {
+                translateX += (config.axisWidth || 40);
+            }
+            var sel = '.k-d3-axis-y_' + (parseFloat(idx) + 1);
+            var visible = config ? true : false;
+
+            d3.select(sel)
+                .classed('k-d3-hidden', !visible)
                 .attr('transform', 'translate(' + translateX + ',0)');
         });
         d3.selectAll('.k-d3-shape-container,.k-d3-plot-background')
@@ -2259,38 +2270,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         var oldy = parseFloat(ms[1]);
         d3.select('.k-d3-axis-x')
             .attr('transform', 'translate(' + translateX + ',' + oldy + ')');
-    },
-
-    /**
-     * Updates the visibility flag in the attached series shapes' config.
-     */
-    updateAttachedSeriesConfig: function() {
-        Ext.each(this.attachedSeriesShapes, function(shape, idx) {
-            var sel = '[idx=shape-group-' + shape.config.id + '_' + (idx + 1) + ']';
-            var hidden = d3.select(sel).classed('k-d3-hidden');
-            shape.config.visible = !hidden;
-        });
-    },
-
-    /**
-     * Figure out if an attached series is currently visible.
-     * @param {String} shapeId  any shape id with the attached series
-     * @param {Number} index  zero based attached series index
-     * @return {Boolean} true, if either the legend or the series are currently
-     * visible.
-     */
-    isAttachedSeriesVisible: function(shapeId, index) {
-        var sel = '[idx=shape-group-' + shapeId + '_' + (index + 1) + ']';
-        sel = d3.select(sel);
-        var hidden = true;
-        if (sel.node()) {
-            hidden = hidden && sel.classed('k-d3-hidden');
-        }
-        sel = d3.select('k-d3-axis-y_' + (index + 1));
-        if (sel.node()) {
-            hidden = hidden && sel.classed('k-d3-hidden');
-        }
-        return !hidden;
     }
 
 });
