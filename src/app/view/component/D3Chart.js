@@ -133,6 +133,19 @@ Ext.define('Koala.view.component.D3Chart',{
                 if (!color) {
                     color = Koala.view.component.D3BaseController.getRandomColor();
                 }
+                // if an attached series is given and has no color defined,
+                // apply the base color to it
+                if (chartConfig.attachedSeries) {
+                    var as = Koala.util.String.coerce(chartConfig.attachedSeries);
+                    if (Ext.isArray(as)) {
+                        Ext.each(as, function(series) {
+                            if (!series.color) {
+                                series.color = color;
+                            }
+                        });
+                        chartConfig.attachedSeries = JSON.stringify(as);
+                    }
+                }
                 shapes = [{
                     type: chartConfig.shapeType || DEFAULTS.LEFT_AXIS_TYPE,
                     curve: chartConfig.curveType || DEFAULTS.LEFT_AXIS_CURVE,

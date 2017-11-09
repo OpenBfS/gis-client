@@ -714,7 +714,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var idx = 0;
             Ext.each(attachedSeries, function(config) {
                 shapeConfig = Ext.clone(shapeConfig);
-                shapeConfig.color = config.stroke;
+                shapeConfig.color = config.color;
                 shapeConfig.yField = config.yAxisAttribute;
                 shapeConfig.orientY = 'left';
                 shapeConfig.attachedSeriesNumber = ++idx;
