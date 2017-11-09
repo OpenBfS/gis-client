@@ -2260,10 +2260,12 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .classed('k-d3-hidden', !visible)
                 .attr('transform', 'translate(' + translateX + ',0)');
         });
-        d3.selectAll('.k-d3-shape-container,.k-d3-plot-background')
-            .attr('transform', 'translate(' + translateX + ',0)');
+        var chart = d3.selectAll('.k-d3-shape-container,.k-d3-plot-background');
+        if (chart.node()) {
+            chart.attr('transform', 'translate(' + translateX + ',0)');
+        }
         var axis = d3.select('.k-d3-axis-x');
-        if (axis) {
+        if (axis.node()) {
             var cur = axis.attr('transform');
             var ms = cur.match(/,\s*(\d+)/);
             var oldy = parseFloat(ms[1]);
