@@ -1054,35 +1054,10 @@ Ext.define('Koala.view.component.D3BaseController', {
      * Creates the grid axis.
      */
     createGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3BaseController;
-        var chartSize = me.getChartSize();
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var axis = staticMe.ORIENTATION[orient];
-            var scale = me.scales[orient];
-            var tickSize;
-
-            if (orient === 'top' || orient === 'bottom') {
-                tickSize = chartSize[1];
-            } else if (orient === 'left' || orient === 'right') {
-                tickSize = chartSize[0] * -1;
-            }
-
-            var chartAxis = axis(scale)
-                .tickFormat('')
-                .tickSize(tickSize);
-
-            me.gridAxes[orient] = chartAxis;
-        });
+        var Axes = Koala.util.ChartAxes;
+        var gridConfig = this.getView().getGrid();
+        var chartSize = this.getChartSize();
+        Axes.createGridAxes(gridConfig, chartSize, this.scales, this.gridAxes);
     },
 
     /**

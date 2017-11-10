@@ -222,6 +222,36 @@ Ext.define('Koala.util.ChartAxes', {
             axis.select('.' + CSS.AXIS_LABEL)
                 .transition()
                 .attr('transform', labelTransform);
+        },
+
+        /**
+         * Creates the grid axis.
+         */
+        createGridAxes: function(gridConfig, chartSize, scales, gridAxes) {
+            if (!gridConfig.show) {
+                return false;
+            }
+
+            var staticMe = Koala.view.component.D3BaseController;
+            var orientations = ['bottom', 'left'];
+
+            Ext.each(orientations, function(orient) {
+                var axis = staticMe.ORIENTATION[orient];
+                var scale = scales[orient];
+                var tickSize;
+
+                if (orient === 'top' || orient === 'bottom') {
+                    tickSize = chartSize[1];
+                } else if (orient === 'left' || orient === 'right') {
+                    tickSize = chartSize[0] * -1;
+                }
+
+                var chartAxis = axis(scale)
+                    .tickFormat('')
+                    .tickSize(tickSize);
+
+                gridAxes[orient] = chartAxis;
+            });
         }
 
     }
