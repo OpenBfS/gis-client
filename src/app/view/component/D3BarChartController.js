@@ -20,6 +20,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
     extend: 'Koala.view.component.D3BaseController',
     alias: 'controller.component-d3barchart',
 
+    requires: [
+        'Koala.util.Ogc'
+    ],
+
     /**
      *
      */
@@ -69,6 +73,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      * @return {Object} The request object.
      */
     getChartDataRequestParams: function(station) {
+        var Ogc = Koala.util.Ogc;
         var me = this;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
@@ -104,13 +109,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 var dateString;
                 dateString = filter.effectivedatetime.toISOString();
                 timeField = filter.param;
-                requestFilter = me.getPointInTimeFilter(dateString, timeField);
+                requestFilter = Ogc.getPointInTimeFilter(dateString, timeField);
                 return false;
             } else if (filter.type === 'timerange') {
                 var startString = filter.effectivemindatetime.toISOString();
                 var endString = filter.effectivemaxdatetime.toISOString();
                 timeField = filter.param;
-                requestFilter = me.getDateTimeRangeFilter(
+                requestFilter = Ogc.getDateTimeRangeFilter(
                     startString, endString, timeField);
                 return false;
             }
