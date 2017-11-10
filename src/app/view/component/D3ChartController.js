@@ -143,7 +143,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
 
-        me.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
+        Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
     },
 
     /**
@@ -180,7 +180,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // Reset the zoom to the initial extent
             me.resetZoom();
-            me.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
+            Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
         }
     },
 
@@ -1470,7 +1470,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 var sel = '[idx=shape-group-' + shape.config.id +
                                     '_' + (index + 1) + ']';
                                 d3.select(sel).classed('k-d3-hidden', !checked);
-                                me.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
+                                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
                             }
                         }
                     });
