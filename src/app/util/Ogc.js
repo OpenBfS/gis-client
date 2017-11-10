@@ -18,6 +18,11 @@
  */
 Ext.define('Koala.util.Ogc', {
 
+    requires: [
+        'Koala.util.String',
+        'Koala.util.Object'
+    ],
+
     statics: {
 
         /**
@@ -65,6 +70,87 @@ Ext.define('Koala.util.Ogc', {
                     '</a:PropertyIsEqualTo>' +
                 '</a:Filter>';
 
+            return filter;
+        },
+
+        /**
+         * Get an OGC WFS-Filter for the ChartData. It adds a timeRangeFilter
+         * and an additional value-filter for rodosLayer.
+         *
+         * @param {ol.Feature} station The clicked feature.
+         * @param {String} startString ISO 8601 representation of the startDate.
+         * @param {String} endString ISO 8601 representation of the endDate.
+         * @param {String} timeField The field which contains the date information.
+         * @param {ol.Layer} layer the layer to request
+         * @return {String} The xml representation of the OGC WFS-Filter.
+         */
+        getWfsFilter: function(station, startString, endString, timeField, layer) {
+            var me = this;
+            var chartingMetadata = layer.get('timeSeriesChartProperties');
+            var identifyField = chartingMetadata.featureIdentifyField || 'id';
+            var timeRangeFilter = me.getPropertyIsBetweenFilter(
+                startString, endString, timeField);
+            var propertyFilter;
+            var rodosProperty = Koala.util.Object.getPathStrOr(layer.metadata,
+                'layerConfig/olProperties/rodosLayer', false);
+            var isRodosLayer = Koala.util.String.coerce(rodosProperty);
+            if (isRodosLayer) {
+                propertyFilter = me.getPropertyIsEqualToFilter(identifyField,
+                    station.get(identifyField));
+            }
+
+            var filter = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">';
+            if (Ext.isString(timeRangeFilter) && Ext.isString(propertyFilter)) {
+                filter += '<And>';
+                filter += timeRangeFilter;
+                filter += propertyFilter;
+                filter += '</And>';
+            } else if (timeRangeFilter) {
+                filter += timeRangeFilter;
+            } else if (propertyFilter) {
+                filter += propertyFilter;
+            }
+            filter += '</Filter>';
+            return filter;
+        },
+
+        /**
+         * Get an OGC 'PropertyIsBetween' WFS-Filter for the ChartData.
+         *
+         * @param {String} lowerBoundary The lowerBoundary of the filter.
+         * @param {String} upperBoundary The upperBoundary of the filter.
+         * @param {String} field The field on which the filter should look.
+         * @return {String} The xml representation of the OGC 'PropertyIsBetween'
+         *                  WFS-Filter.
+         */
+        getPropertyIsBetweenFilter: function(lowerBoundary, upperBoundary, field) {
+            var filter = '' +
+                '<PropertyIsBetween>' +
+                    '<PropertyName>' + field + '</PropertyName>' +
+                        '<LowerBoundary>'+
+                        '<Literal>' + lowerBoundary + '</Literal>' +
+                    '</LowerBoundary>' +
+                    '<UpperBoundary>' +
+                        '<Literal>' + upperBoundary + '</Literal>' +
+                    '</UpperBoundary>' +
+                '</PropertyIsBetween>';
+            return filter;
+        },
+
+        /**
+         * Get an OGC 'PropertyIsEqualTo' WFS-Filter for the ChartData.
+         *
+         * @param {String} field The field on which the filter should look.
+         * @param {String} value The value the field should have.
+         * @return {String} The xml representation of the OGC 'PropertyIsEqualTo'
+         *                  WFS-Filter.
+         */
+        getPropertyIsEqualToFilter: function(field, value) {
+            var filter = '' +
+                '<PropertyIsEqualTo>' +
+                  '<PropertyName>' + field + '</PropertyName>' +
+                  '<Literal>' + value + '</Literal>' +
+                '</PropertyIsEqualTo>';
             return filter;
         }
 

@@ -24,6 +24,8 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
     requires: [
         'Koala.view.window.TimeSeriesWindowController',
         'Koala.view.window.TimeSeriesWindowModel',
+        'Koala.util.ChartAxes',
+        'Koala.util.ChartConstants',
         'Koala.util.Date',
         'Koala.util.Filter',
         'Koala.util.String',
