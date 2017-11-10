@@ -194,7 +194,10 @@ Ext.define('Koala.util.Chart', {
             if (chartConfig.yTickValues) {
                 yAxisTickValues = [];
                 Ext.each(chartConfig.yTickValues.split(','), function(val) {
-                    yAxisTickValues.push(StringUtil.coerce(val));
+                    var coercedVal = StringUtil.coerce(val);
+                    if (chartConfig.yAxisScale === 'log' && coercedVal === 0) {
+                        yAxisTickValues.push(coercedVal);
+                    }
                 });
             }
             return yAxisTickValues;
