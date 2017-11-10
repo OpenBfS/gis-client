@@ -22,157 +22,6 @@ Ext.define('Koala.view.component.D3BaseController', {
     extend: 'Ext.app.ViewController',
 
     inheritableStatics: {
-        SVG_DEFS: {
-            LEGEND_ICON_BACKGROUND: 'M-3 -14 h 25 v 16 h -25 Z',
-            LEGEND_ICON_AREA: 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6 M20 -6 v 6 h -20 v -6 Z',
-            LEGEND_ICON_BAR: 'M0 -10 h 6 v 12 h -6 Z M7 -6 h 6 v 8 h -6 Z M14 -10 h 6 v 12 h -6 Z',
-            LEGEND_ICON_LINE: 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6'
-        },
-        /**
-         * An object containing CSS classes and parts (suffixes, prefixes) to
-         * generate CSS classes.
-         *
-         * @type {Object}
-         */
-        CSS_CLASS: {
-            AXIS: 'k-d3-axis',
-            AXIS_X: 'k-d3-axis-x',
-            AXIS_Y: 'k-d3-axis-y',
-
-            PLOT_BACKGROUND: 'k-d3-plot-background',
-
-            GRID: 'k-d3-grid',
-            GRID_X: 'k-d3-grid-x',
-            GRID_Y: 'k-d3-grid-y',
-
-            SHAPE_GROUP: 'k-d3-shape-group',
-            BAR_GROUP: 'k-d3-bar-group',
-            BAR: 'k-d3-bar',
-            UNCERTAINTY: 'k-d3-uncertainty',
-            SHAPE_PATH: 'k-d3-shape-path',
-            SHAPE_POINT_GROUP: 'k-d3-shape-points',
-            LEGEND_CONTAINER: 'k-d3-scrollable-legend-container',
-            COLOR_ICON: 'k-d3-color-icon',
-            DOWNLOAD_ICON: 'k-d3-download-icon',
-            DELETE_ICON: 'k-d3-delete-icon',
-
-            AXIS_LABEL: 'k-d3-axis-label',
-            AXIS_LABEL_X: 'k-d3-axis-label-x',
-            AXIS_LABEL_Y: 'k-d3-axis-label-y',
-
-            PREFIX_IDX_SHAPE_GROUP: 'shape-group-',
-            PREFIX_IDX_SHAPE_PATH: 'shape-path-',
-            PREFIX_IDX_SHAPE_POINT_GROUP: 'shape-points-',
-            PREFIX_IDX_LEGEND_GROUP: 'legend-group-',
-
-            SUFFIX_LEGEND: '-legend',
-
-            HIDDEN_CLASS: 'k-d3-hidden',
-            DISABLED_CLASS: 'k-d3-disabled'
-        },
-
-        /**
-         * Additional space added to the (bar) chart. Adds the configured Number
-         * as percent to the datarange to create some space inside the chart.
-         *
-         * @type {Number} percent
-         */
-        ADDITIONAL_DOMAIN_SPACE: 10,
-
-        /**
-         * Additional margin to take into consideration when calculating the
-         * width of the bars.
-         *
-         * @type {Number}
-         */
-        ADDITIONAL_BAR_MARGIN: 5,
-
-        /**
-         * Static mapping of supported D3 axis generators. See the
-         * {@link https://github.com/d3/d3-axis/blob/master/README.md#axisTop|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} top - Return a top-oriented axis generator.
-         * @type {function} right - Return a right-oriented axis generator.
-         * @type {function} bottom - Return a bottom-oriented axis generator.
-         * @type {function} left - Return a left-oriented axis generator.
-         */
-        ORIENTATION: {
-            top: d3.axisTop,
-            right: d3.axisRight,
-            bottom: d3.axisBottom,
-            left: d3.axisLeft
-        },
-
-        /**
-         * Static mapping of supported d3 scales. In D3 Scales are functions that
-         * map from an input domain to an output range. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#scales-d3-scale|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - Return a quantitative linear scale.
-         * @type {function} pow - Return a quantitative power scale.
-         * @type {function} sqrt - Return a quantitative power scale with exponent 0.5.
-         * @type {function} log - Return a quantitative logarithmic scale.
-         * @type {function} ident - Return a quantitative identity scale.
-         * @type {function} time - Return a linear scale for time.
-         * @type {function} utc - Return a linear scale for UTC.
-         */
-        SCALE: {
-            linear: d3.scaleLinear,
-            pow: d3.scalePow,
-            sqrt: d3.scaleSqrt,
-            log: d3.scaleLog,
-            ident: d3.scaleIdentity,
-            time: d3.scaleTime,
-            ordinal: d3.scaleBand
-        },
-
-        /**
-         * Static mapping of supported d3 shape types. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#shapes-d3-shape|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} line - Return a line generator.
-         * @type {function} area - Return an area generator.
-         * @type {function} bar - TODO
-         */
-        TYPE: {
-            line: d3.line,
-            area: d3.area,
-            // TODO: set another type?!
-            bar: d3.line
-        },
-
-        /**
-         * Static mapping of supported d3 curve types. In D3 the curve type
-         * represents the interpolation between points in a continous shape. See
-         * the {@link https://github.com/d3/d3/blob/master/API.md#curves|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - A polyline through specified points.
-         * @type {function} cubicBasisSpline - A cubic basis spline using the
-         *       specified control points.
-         * @type {function} curveMonotoneX - A cubic spline that preserves
-         *       monotonicity in y, assuming monotonicity in x.
-         * @type {function} naturalCubicSpline - A natural cubic spline with the
-         *       second derivative of the spline set to zero at the endpoints.
-         * @type {function} curveStep - A piecewise constant function. The y-value
-         *       changes at the midpoint of each pair of adjacent x-values.
-         * @type {function} curveStepAfter - A piecewise constant function. The
-         *       y-value changes after the x-value.
-         * @type {function} curveStepBefore - A piecewise constant function. The
-         *       y-value changes before the x-value.
-         */
-        CURVE: {
-            linear: d3.curveLinear,
-            cubicBasisSpline: d3.curveBasis,
-            curveMonotoneX: d3.curveMonotoneX,
-            naturalCubicSpline: d3.curveNatural,
-            curveStep: d3.curveStep,
-            curveStepAfter: d3.curveStepAfter,
-            curveStepBefore: d3.curveStepBefore
-        },
 
         /**
          * Given a SVG `<path>` (from a d3 selection), modify the start point by
@@ -634,7 +483,7 @@ Ext.define('Koala.view.component.D3BaseController', {
     drawSvgContainer: function() {
         var me = this;
         var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
+        var CSS = Koala.util.ChartConstants.CSS_CLASS;
         var makeTranslate = staticMe.makeTranslate;
         var view = me.getView();
         var viewId = '#' + view.getId();
@@ -692,8 +541,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     drawLegendContainer: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
+        var CSS = Koala.util.ChartConstants.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var viewSize = me.getViewSize();
@@ -779,8 +627,7 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     createScale: function(orient, axisConfig, chartSize) {
-        var staticMe = Koala.view.component.D3BaseController;
-        var scaleType = staticMe.SCALE[axisConfig.scale || 'linear'];
+        var scaleType = Koala.util.ChartConstants.SCALE[axisConfig.scale || 'linear'];
         var range;
 
         if (orient === 'top' || orient === 'bottom') {
@@ -813,6 +660,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     drawThresholdLegends: function(config, legendContainer, curTranslateY) {
         var me = this;
+        var Const = Koala.util.ChartConstants;
         var staticMe = Koala.view.component.D3BaseController;
         var thresholds;
         if (config.thresholds) {
@@ -828,8 +676,8 @@ Ext.define('Koala.view.component.D3BaseController', {
                 .append('g')
                 .on('click', function() {
                     var target = d3.select(d3.event.target);
-                    if (target && (target.classed(staticMe.CSS_CLASS.DELETE_ICON) ||
-                            target.classed(staticMe.CSS_CLASS.COLOR_ICON))) {
+                    if (target && (target.classed(Const.CSS_CLASS.DELETE_ICON) ||
+                            target.classed(Const.CSS_CLASS.COLOR_ICON))) {
                         return;
                     }
                     me.thresholdState[idx].visibility = !me.thresholdState[idx].visibility;
@@ -840,13 +688,13 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
-                .attr('d', staticMe.SVG_DEFS.LEGEND_ICON_BACKGROUND)
+                .attr('d', Const.SVG_DEFS.LEGEND_ICON_BACKGROUND)
                 .style('stroke', 'none')
                 // invisible, but still triggering events
                 .style('fill', 'rgba(0,0,0,0)');
 
             var line = legendEntry.append('path')
-                .attr('d', staticMe.SVG_DEFS.LEGEND_ICON_LINE)
+                .attr('d', Const.SVG_DEFS.LEGEND_ICON_LINE)
                 .style('stroke', me.thresholdState[idx].color || threshold.stroke)
                 .style('stroke-width', threshold.lineWidth)
                 .style('fill', 'none');
@@ -866,7 +714,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             legendEntry.append('text')
                 // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('\uf1fc')
-                .attr('class', staticMe.CSS_CLASS.COLOR_ICON)
+                .attr('class', Const.CSS_CLASS.COLOR_ICON)
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
                 .attr('dx', '150')
@@ -875,7 +723,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('')
-                .attr('class', staticMe.CSS_CLASS.DELETE_ICON)
+                .attr('class', Const.CSS_CLASS.DELETE_ICON)
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
                 .attr('dx', '170')
@@ -885,7 +733,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                     me.redrawLegend();
                 });
 
-            var disabledClsName = staticMe.CSS_CLASS.DISABLED_CLASS;
+            var disabledClsName = Const.CSS_CLASS.DISABLED_CLASS;
 
             legendEntry.classed(disabledClsName, !me.thresholdState[idx].visibility);
         });
@@ -1072,8 +920,8 @@ Ext.define('Koala.view.component.D3BaseController', {
             return false;
         }
 
-        var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var viewId = '#' + view.getId();
         var axisSelector = viewId + ' svg g.' + CSS.GRID;
         var orientations = ['bottom', 'left'];
@@ -1172,8 +1020,8 @@ Ext.define('Koala.view.component.D3BaseController', {
             return false;
         }
 
-        var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var viewId = '#' + view.getId();
         var orientations = ['bottom', 'left'];
 
@@ -1414,7 +1262,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     deleteLegendEntry: function(id) {
         var me = this;
-        var CSS = Koala.view.component.D3BaseController.CSS_CLASS;
+        var CSS = Koala.util.ChartConstants.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var selectorTpl = '{0} g[idx="{1}{2}"]';
@@ -1446,8 +1294,8 @@ Ext.define('Koala.view.component.D3BaseController', {
      * the g usually groups a bar and its label or a series.
      */
     toggleGroupVisibility: function(group, legendElement) {
-        var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var hideClsName = CSS.HIDDEN_CLASS;
         var disabledClsName = CSS.DISABLED_CLASS;
 
@@ -1468,8 +1316,8 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     redrawLegend: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var legendCls = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND;
         var legend = this.legendSvg.select('g.' + legendCls);
         if (legend) {

@@ -23,7 +23,8 @@ Ext.define('Koala.util.ChartAxes', {
     requires: [
         'Koala.view.component.D3BaseController',
         'Koala.util.Date',
-        'Koala.util.Object'
+        'Koala.util.Object',
+        'Koala.util.ChartConstants'
     ],
 
     statics: {
@@ -63,8 +64,8 @@ Ext.define('Koala.util.ChartAxes', {
         },
 
         createAxis: function(axisConfig, orient, scale) {
-            var staticMe = Koala.view.component.D3BaseController;
-            var axis = staticMe.ORIENTATION[orient];
+            var Const = Koala.util.ChartConstants;
+            var axis = Const.ORIENTATION[orient];
 
             // https://github.com/d3/d3-format
             var tickFormatter;
@@ -104,8 +105,9 @@ Ext.define('Koala.util.ChartAxes', {
          */
         drawAxis: function(orient, axisConfig, chartSize, viewId, axis, offsetX, index, metadata) {
             var staticMe = Koala.view.component.D3BaseController;
+            var Const = Koala.util.ChartConstants;
             var makeTranslate = staticMe.makeTranslate;
-            var CSS = staticMe.CSS_CLASS;
+            var CSS = Const.CSS_CLASS;
             var series = Koala.util.Object.getPathStrOr(
                 metadata,
                 'layerConfig/timeSeriesChartProperties/attachedSeries',
@@ -180,11 +182,12 @@ Ext.define('Koala.util.ChartAxes', {
          */
         redrawAxis: function(axisGenerator, orient, metadata, chartSize, viewId) {
             var staticMe = Koala.view.component.D3BaseController;
+            var Const = Koala.util.ChartConstants;
             var makeTranslate = staticMe.makeTranslate;
             var axisTransform;
             var labelTransform;
             var axis;
-            var CSS = staticMe.CSS_CLASS;
+            var CSS = Const.CSS_CLASS;
             var axisSelector = '#' + viewId + ' svg g.' + CSS.AXIS;
             var totalOffset = 0;
             var seriesConfigs = Koala.util.Object.getPathStrOr(
@@ -231,11 +234,11 @@ Ext.define('Koala.util.ChartAxes', {
                 return false;
             }
 
-            var staticMe = Koala.view.component.D3BaseController;
+            var Const = Koala.util.ChartConstants;
             var orientations = ['bottom', 'left'];
 
             Ext.each(orientations, function(orient) {
-                var axis = staticMe.ORIENTATION[orient];
+                var axis = Const.ORIENTATION[orient];
                 var scale = scales[orient];
                 var tickSize;
 

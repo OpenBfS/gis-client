@@ -365,8 +365,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     createZoomInteraction: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var gridConfig = view.getGrid();
@@ -637,7 +637,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     createShape: function(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize) {
-        var staticMe = Koala.view.component.D3ChartController;
+        var Const = Koala.util.ChartConstants;
 
         var shape = shapeType()
             // set the curve interpolator
@@ -650,7 +650,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 return normalizeX(d[xField]);
             });
 
-        if (shapeType === staticMe.TYPE.line) {
+        if (shapeType === Const.TYPE.line) {
             shape
                 // set the y accessor
                 .y(function(d) {
@@ -662,7 +662,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 });
         }
 
-        if (shapeType === staticMe.TYPE.area) {
+        if (shapeType === Const.TYPE.area) {
             shape
                 .y1(function(d) {
                     return normalizeY(d[yField]);
@@ -678,7 +678,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     createShapes: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
+        var Const = Koala.util.ChartConstants;
         var view = me.getView();
         var chartSize = me.getChartSize();
 
@@ -689,8 +689,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.attachedSeriesShapes = [];
 
         Ext.each(view.getShapes(), function(shapeConfig) {
-            var shapeType = staticMe.TYPE[shapeConfig.type || 'line'];
-            var curveType = staticMe.CURVE[shapeConfig.curve || 'linear'];
+            var shapeType = Const.TYPE[shapeConfig.type || 'line'];
+            var curveType = Const.CURVE[shapeConfig.curve || 'linear'];
             var xField = shapeConfig.xField;
             var yField = shapeConfig.yField;
             var orientX = me.getAxisByField(xField);
@@ -754,6 +754,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     drawShapes: function() {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
+        var Const = Koala.util.ChartConstants;
         var makeTranslate = staticMe.makeTranslate;
         var view = me.getView();
         var viewId = '#' + view.getId();
@@ -807,7 +808,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 index += '_' + attachedSeriesNumber;
             }
 
-            var classes = staticMe.CSS_CLASS.SHAPE_GROUP;
+            var classes = Const.CSS_CLASS.SHAPE_GROUP;
             if (attachedSeriesNumber && !me.attachedSeriesVisibleById[shapeId][attachedSeriesNumber-1]) {
                 classes += ' k-d3-hidden';
             }
@@ -815,13 +816,13 @@ Ext.define('Koala.view.component.D3ChartController', {
             var shapeGroup = shapeSvg
                 .append('g')
                 .attr('class', classes)
-                .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP +
+                .attr('idx', Const.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP +
                     index)
                 .attr('shape-type', shapeConfig.type);
 
             if (shapeConfig.type === 'bar') {
                 barWidth = (chartSize[0] / me.data[shapeId].length);
-                barWidth -= staticMe.ADDITIONAL_BAR_MARGIN;
+                barWidth -= Const.ADDITIONAL_BAR_MARGIN;
                 shapeGroup
                     .selectAll('rect')
                     .data(me.data[shapeId])
@@ -895,8 +896,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .style('unselectable', 'on');
             } else {
                 shapeGroup.append('path')
-                    .attr('class', staticMe.CSS_CLASS.SHAPE_PATH)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_PATH +
+                    .attr('class', Const.CSS_CLASS.SHAPE_PATH)
+                    .attr('idx', Const.CSS_CLASS.PREFIX_IDX_SHAPE_PATH +
                         index)
                     .datum(me.data[shapeId])
                     .style('fill', function() {
@@ -927,8 +928,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .attr('d', shape.shape);
 
                 var pointGroup = shapeGroup.append('g')
-                    .attr('class', staticMe.CSS_CLASS.SHAPE_POINT_GROUP)
-                    .attr('idx', staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP +
+                    .attr('class', Const.CSS_CLASS.SHAPE_POINT_GROUP)
+                    .attr('idx', Const.CSS_CLASS.PREFIX_IDX_SHAPE_POINT_GROUP +
                         index);
 
                 // handle the style-type 'circle' or, if no style was given,
@@ -1229,8 +1230,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     transformPlot: function(transform, duration) {
         var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var viewId = '#' + me.getView().getId();
         var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
 
@@ -1304,9 +1305,10 @@ Ext.define('Koala.view.component.D3ChartController', {
     drawLegend: function() {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;
+        var Const = Koala.util.ChartConstants;
         var makeTranslate = staticMe.makeTranslate;
-        var CSS = staticMe.CSS_CLASS;
-        var SVG_DEFS = staticMe.SVG_DEFS;
+        var CSS = Const.CSS_CLASS;
+        var SVG_DEFS = Const.SVG_DEFS;
         var view = me.getView();
         var legendConfig = view.getLegend();
         var legendMargin = legendConfig.legendMargin;
@@ -1657,10 +1659,10 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     shapeGroupById: function(id) {
         var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
+        var Const = Koala.util.ChartConstants;
         var viewId = '#' + me.getView().getId();
-        var clsShapeGroup = staticMe.CSS_CLASS.SHAPE_GROUP;
-        var idxVal = staticMe.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + id;
+        var clsShapeGroup = Const.CSS_CLASS.SHAPE_GROUP;
+        var idxVal = Const.CSS_CLASS.PREFIX_IDX_SHAPE_GROUP + id;
         var selector = [
             viewId, // only capture our view…
             ' svg g.' + clsShapeGroup, // only capture shapepaths…
