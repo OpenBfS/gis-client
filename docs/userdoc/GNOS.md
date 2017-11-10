@@ -1204,6 +1204,17 @@ Kann ein Array von Objekten beinhalten, welches Schwellenlinien im Chart konfigu
 | Default-Wert         | leer |
 | Beispiel             | [{"value": 10, "tooltip": "Tooltip 1", "stroke": "#ff0000", "lineWidth": 2, "dasharray": "5, 5", "label": "Grenze 1"}, {"value": 15, "stroke": "#00ff00", "lineWidth": 1, "label": "Grenze 2", "tooltip": "Tooltip 2"}] |
 
+**attachedSeries**
+
+Kann ein Array von Objekten beinhalten, welches zusätzliche Zeitreihen konfiguriert. Das Objekt kann die gleichen Konfigurationsoptionen beinhalten, wie ein normales Zeitreihen-Diagramm. Zusätzlich kann die Breite der Y-Achse mittels "axisWidth" konfiguriert werden.
+
+| Typ | gco:CharacterString |
+|----------------------:----|
+| Erlaubte Wertemenge  | Array von Objekten |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | [] |
+| Beispiel             | [{"yAxisAttribute": "value_oberergw", "axisWidth": 60, "labelPadding": 40, "dspUnit": "Oberer Grenzwert"}, {"yAxisAttribute": "value_unterergw", "dspUnit": "Unterer Grenzwert", "color": "#00ff00"}] |
+
 
 ## Bar Chart Properties {#barchart} (bfs:barChartProperty)
 
