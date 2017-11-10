@@ -143,7 +143,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
 
-        me.recalculatePositionsAndVisibility();
+        me.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
     },
 
     /**
@@ -180,7 +180,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // Reset the zoom to the initial extent
             me.resetZoom();
-            me.recalculatePositionsAndVisibility();
+            me.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
         }
     },
 
@@ -1470,7 +1470,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 var sel = '[idx=shape-group-' + shape.config.id +
                                     '_' + (index + 1) + ']';
                                 d3.select(sel).classed('k-d3-hidden', !checked);
-                                me.recalculatePositionsAndVisibility();
+                                me.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
                             }
                         }
                     });
@@ -1970,52 +1970,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
         return doesContainSeries;
-    },
-
-    /**
-     * Recalculates all positions in case of multiple y axes. This probably only
-     * works in case of an x/y axis at left/bottom and possibly multiple
-     * attached series.
-     */
-    recalculatePositionsAndVisibility: function() {
-        var me = this;
-        var visibleSeries = {};
-        var translateX = 0;
-
-        Ext.each(this.attachedSeriesShapes, function(shape) {
-            var idx = shape.config.attachedSeriesNumber - 1;
-            if (me.attachedSeriesVisibleById[shape.config.id][idx]) {
-                visibleSeries[idx] = JSON.parse(shape.config.attachedSeries)[idx];
-            } else {
-                if (!visibleSeries[idx]) {
-                    visibleSeries[idx] = false;
-                }
-            }
-        });
-
-        Ext.iterate(visibleSeries, function(idx, config) {
-            if (config) {
-                translateX += (config.axisWidth || 40);
-            }
-            var sel = '.k-d3-axis-y_' + (parseFloat(idx) + 1);
-            var visible = config ? true : false;
-
-            d3.select(sel)
-                .classed('k-d3-hidden', !visible)
-                .attr('transform', 'translate(' + translateX + ',0)');
-        });
-        var chart = d3.selectAll('.k-d3-shape-container,.k-d3-plot-background');
-        if (chart.node()) {
-            chart.attr('transform', 'translate(' + translateX + ',0)');
-        }
-        var axis = d3.select('.k-d3-axis-x');
-        if (axis.node()) {
-            var cur = axis.attr('transform');
-            var ms = cur.match(/,\s*(\d+)/);
-            var oldy = parseFloat(ms[1]);
-            d3.select('.k-d3-axis-x')
-                .attr('transform', 'translate(' + translateX + ',' + oldy + ')');
-        }
     }
 
 });

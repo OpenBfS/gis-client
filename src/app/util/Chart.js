@@ -198,6 +198,52 @@ Ext.define('Koala.util.Chart', {
                 });
             }
             return yAxisTickValues;
+        },
+
+        /**
+         * Recalculates all positions in case of multiple y axes. This probably only
+         * works in case of an x/y axis at left/bottom and possibly multiple
+         * attached series.
+         */
+        recalculatePositionsAndVisibility: function(attachedSeriesShapes) {
+            var me = this;
+            var visibleSeries = {};
+            var translateX = 0;
+
+            Ext.each(attachedSeriesShapes, function(shape) {
+                var idx = shape.config.attachedSeriesNumber - 1;
+                if (me.attachedSeriesVisibleById[shape.config.id][idx]) {
+                    visibleSeries[idx] = JSON.parse(shape.config.attachedSeries)[idx];
+                } else {
+                    if (!visibleSeries[idx]) {
+                        visibleSeries[idx] = false;
+                    }
+                }
+            });
+
+            Ext.iterate(visibleSeries, function(idx, config) {
+                if (config) {
+                    translateX += (config.axisWidth || 40);
+                }
+                var sel = '.k-d3-axis-y_' + (parseFloat(idx) + 1);
+                var visible = config ? true : false;
+
+                d3.select(sel)
+                    .classed('k-d3-hidden', !visible)
+                    .attr('transform', 'translate(' + translateX + ',0)');
+            });
+            var chart = d3.selectAll('.k-d3-shape-container,.k-d3-plot-background');
+            if (chart.node()) {
+                chart.attr('transform', 'translate(' + translateX + ',0)');
+            }
+            var axis = d3.select('.k-d3-axis-x');
+            if (axis.node()) {
+                var cur = axis.attr('transform');
+                var ms = cur.match(/,\s*(\d+)/);
+                var oldy = parseFloat(ms[1]);
+                d3.select('.k-d3-axis-x')
+                    .attr('transform', 'translate(' + translateX + ',' + oldy + ')');
+            }
         }
 
     }
