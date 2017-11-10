@@ -231,6 +231,10 @@ Ext.define('Koala.util.ChartAxes', {
                 axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
             }
 
+            if (!axis) {
+                return;
+            }
+
             axis
                 .transition()
                 .attr('transform', axisTransform)

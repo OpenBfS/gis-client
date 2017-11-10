@@ -368,11 +368,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 }
 
                 // Actually set the domain
-                if (axisDomain) {
-                    var domain = me.scales[orient].domain(axisDomain);
-                    if (makeDomainNice) {
-                        domain.nice();
-                    }
+                var domain = me.scales[orient].domain(axisDomain);
+                if (makeDomainNice) {
+                    domain.nice();
                 }
             }
         });

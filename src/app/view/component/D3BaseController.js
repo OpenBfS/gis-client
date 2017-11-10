@@ -936,6 +936,10 @@ Ext.define('Koala.view.component.D3BaseController', {
                 axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
             }
 
+            if (!axis) {
+                return;
+            }
+
             axis
                 .transition()
                 .call(axisGenerator);

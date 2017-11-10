@@ -99,7 +99,7 @@ Ext.define('Koala.util.Style', {
          *
          */
         resolveTextStylePlaceholder: function(olStyle, feature, placeHolder) {
-            if (!olStyle.getText() instanceof ol.style.Text) {
+            if (!(olStyle.getText() instanceof ol.style.Text)) {
                 return false;
             }
 
