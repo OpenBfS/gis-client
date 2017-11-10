@@ -63,6 +63,13 @@ Ext.define('Koala.util.ChartAxes', {
                                     : formatYear)(date);
         },
 
+        /**
+         * Creates a new d3 axis.
+         * @param  {object} axisConfig configuration object for the axis
+         * @param  {Function}  orient     the d3 axis orientation function
+         * @param  {Function}  scale      the d3 axis scale function
+         * @return {Function}             the newly created d3 axis
+         */
         createAxis: function(axisConfig, orient, scale) {
             var Const = Koala.util.ChartConstants;
             var axis = Const.ORIENTATION[orient];
@@ -178,7 +185,12 @@ Ext.define('Koala.util.ChartAxes', {
         },
 
         /**
-         * Redraw a single axis
+         * Redraw a single axis.
+         * @param  {function} axisGenerator the d3 axis
+         * @param  {String}  orient        the axis orientations
+         * @param  {Object}  metadata      the current layer metadata
+         * @param  {Array}  chartSize     the chart size
+         * @param  {String}  viewId        the id of the chart viewId
          */
         redrawAxis: function(axisGenerator, orient, metadata, chartSize, viewId) {
             var staticMe = Koala.view.component.D3BaseController;

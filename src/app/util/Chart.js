@@ -244,6 +244,54 @@ Ext.define('Koala.util.Chart', {
                 d3.select('.k-d3-axis-x')
                     .attr('transform', 'translate(' + translateX + ',' + oldy + ')');
             }
+        },
+
+        /**
+         * Creates a new shape according to the input parameters.
+         * @param  {function} shapeType  the d3 shape function to use
+         * @param  {function} curveType  the d3 curve function to use
+         * @param  {String} xField     the data index for the x value
+         * @param  {String} yField     the data index for the y value
+         * @param  {function} normalizeX the d3 x normalization function to use
+         * @param  {function} normalizeY the d3 y normalization function to use
+         * @param  {Array} chartSize  the chart size
+         * @return {Function}            the new d3 shape
+         */
+        createShape: function(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize) {
+            var Const = Koala.util.ChartConstants;
+
+            var shape = shapeType()
+                // set the curve interpolator
+                .curve(curveType)
+                .defined(function(d) {
+                    return Ext.isDefined(d[xField]);
+                })
+                // set the x accessor
+                .x(function(d) {
+                    return normalizeX(d[xField]);
+                });
+
+            if (shapeType === Const.TYPE.line) {
+                shape
+                    // set the y accessor
+                    .y(function(d) {
+                        var val = d[yField];
+                        if (d.drawAsZero) {
+                            val = d.minValue;
+                        }
+                        return normalizeY(val);
+                    });
+            }
+
+            if (shapeType === Const.TYPE.area) {
+                shape
+                    .y1(function(d) {
+                        return normalizeY(d[yField]);
+                    })
+                    .y0(chartSize[1]);
+            }
+
+            return shape;
         }
 
     }

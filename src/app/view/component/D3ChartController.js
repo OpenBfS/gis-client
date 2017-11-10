@@ -636,49 +636,13 @@ Ext.define('Koala.view.component.D3ChartController', {
             );
     },
 
-    createShape: function(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize) {
-        var Const = Koala.util.ChartConstants;
-
-        var shape = shapeType()
-            // set the curve interpolator
-            .curve(curveType)
-            .defined(function(d) {
-                return Ext.isDefined(d[xField]);
-            })
-            // set the x accessor
-            .x(function(d) {
-                return normalizeX(d[xField]);
-            });
-
-        if (shapeType === Const.TYPE.line) {
-            shape
-                // set the y accessor
-                .y(function(d) {
-                    var val = d[yField];
-                    if (d.drawAsZero) {
-                        val = d.minValue;
-                    }
-                    return normalizeY(val);
-                });
-        }
-
-        if (shapeType === Const.TYPE.area) {
-            shape
-                .y1(function(d) {
-                    return normalizeY(d[yField]);
-                })
-                .y0(chartSize[1]);
-        }
-
-        return shape;
-    },
-
     /**
      *
      */
     createShapes: function() {
         var me = this;
         var Const = Koala.util.ChartConstants;
+        var Chart = Koala.util.Chart;
         var view = me.getView();
         var chartSize = me.getChartSize();
 
@@ -703,7 +667,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 JSON.parse(shapeConfig.attachedSeries) : [];
 
             if (shapeType) {
-                shape = me.createShape(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize);
+                shape = Chart.createShape(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize);
             }
 
             var shapeObj = {
@@ -722,7 +686,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 shapeConfig.yField = config.yAxisAttribute;
                 shapeConfig.orientY = 'left';
                 shapeConfig.attachedSeriesNumber = ++idx;
-                shape = me.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, normalizeY, chartSize);
+                shape = Chart.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, normalizeY, chartSize);
                 me.attachedSeriesShapes.push({
                     config: shapeConfig,
                     shape: shape
