@@ -50,15 +50,6 @@ describe('Koala.view.component.D3ChartController', function() {
             expect(ctrl.deleteEverything.bind(ctrl)).withArgs({config: {id: 1}}).to.not.throwException();
         });
 
-        it('can convert intervals to seconds', function() {
-            expect(ctrl.getIntervalInSeconds(1, 'seconds')).to.be(1);
-            expect(ctrl.getIntervalInSeconds(1, 'minutes')).to.be(60);
-            expect(ctrl.getIntervalInSeconds(1, 'hours')).to.be(3600);
-            expect(ctrl.getIntervalInSeconds(1, 'days')).to.be(86400);
-            expect(ctrl.getIntervalInSeconds(1, '')).to.be(0);
-            expect(ctrl.getIntervalInSeconds).to.throwException();
-        });
-
         it('does not draw chart without data', function() {
             ctrl.onBoxReady();
             ctrl.fireEvent('chartdataprepared');

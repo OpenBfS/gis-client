@@ -1878,44 +1878,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * Returns the normalized interval based on the time filter attributes
-     * (interval and units) of the current target layer.
-     *
-     * @return {Integer} The normalized interval.
-     */
-    getIntervalInSecondsForTargetLayer: function() {
-        var me = this;
-        var view = me.getView();
-        var targetLayer = view.getTargetLayer();
-
-        // TODO refactor this gathering of the needed filter attribute
-        var filters = targetLayer.metadata.filters;
-        var timeFilter;
-        var intervalInSeconds;
-
-        Ext.each(filters, function(filter) {
-            var fType = (filter && filter.type) || '';
-            if (fType === 'timerange' || fType === 'pointintime' || fType === 'rodostime') {
-                timeFilter = filter;
-                return false;
-            }
-        });
-
-        if (!timeFilter) {
-            Ext.log.warn('Failed to determine a time filter');
-        }
-
-        // don't accidently overwrite the configured filter…
-        timeFilter = Ext.clone(timeFilter);
-
-        intervalInSeconds = me.getIntervalInSeconds(
-            timeFilter.interval, timeFilter.unit
-        );
-
-        return intervalInSeconds;
-    },
-
-    /**
      * Function to be called on request success.
      *
      * @param {Object} reponse The response object.
@@ -1932,94 +1894,36 @@ Ext.define('Koala.view.component.D3ChartController', {
         var startDate = view.getStartDate().clone();
         var endDate = view.getEndDate().clone();
         var chartConfig = targetLayer.get('timeSeriesChartProperties');
-        var xAxisAttr = chartConfig.xAxisAttribute;
-        var yAxisAttr = chartConfig.yAxisAttribute;
-        var valueField = chartConfig.yAxisAttribute;
-        var attachedSeries = chartConfig.attachedSeries ?
-            JSON.parse(chartConfig.attachedSeries) : [];
-        var featureStyle;
-        var jsonObj;
-
-        if (chartConfig.featureStyle) {
-            try {
-                featureStyle = JSON.parse(chartConfig.featureStyle);
-            } catch (e) {
-                Ext.log.error('Error on parsing the featureStyle');
-            }
-        }
+        var data;
 
         if (response && response.responseText) {
             try {
-                jsonObj = Ext.decode(response.responseText);
+                data = Ext.decode(response.responseText);
             } catch (err) {
                 Ext.log.error('Could not parse the response: ', err);
                 return false;
             }
         }
-        //used for grid table in CartoWindowController
-        me.gridFeatures = Ext.clone(jsonObj.features);
 
-        var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
-            targetLayer.metadata);
-        var timeField = filterConfig.parameter;
-        var intervalInSeconds = me.getIntervalInSecondsForTargetLayer();
-        var snapObject = me.getTimeStampSnapObject(
-            startDate, intervalInSeconds, jsonObj.features, timeField);
+        //used for grid table in CartoWindowController
+        me.gridFeatures = Ext.clone(data.features);
+
+        var seriesData = Koala.util.ChartData.convertToTimeseriesData(
+            chartConfig,
+            data,
+            targetLayer.metadata,
+            station,
+            startDate,
+            endDate,
+            view.getShowIdentificationThresholdData()
+        );
+
+        me.chartDataAvailable = true;
 
         // The id of the selected station is also the key in the pending
         // requests object.
         //TODO: response shouldnt be restricted on id
         var stationId = station.get(chartConfig.featureIdentifyField || 'id');
-
-        var compareableDate;
-        var matchingFeature;
-        var seriesData = [];
-
-        var firstDiffSeconds;
-        if (jsonObj.features[0]) {
-            var startSeconds = startDate.unix();
-            var firstFeatDate = Koala.util.Date.getUtcMoment(jsonObj.features[0].properties[xAxisAttr]);
-            var firstFeatSeconds = firstFeatDate.unix();
-            firstDiffSeconds = Math.abs(firstFeatSeconds - startSeconds);
-        }
-
-        function valueExtractor(rawData, feature) {
-            return function(config) {
-                rawData[config.yAxisAttribute] =
-                    feature.properties[config.yAxisAttribute];
-            };
-        }
-
-        // Iterate until startDate <= endDate
-        while (startDate.diff(endDate) <= 0) {
-            var newRawData = {};
-
-            compareableDate = startDate.unix() + firstDiffSeconds;
-            matchingFeature = snapObject[compareableDate];
-
-            if (matchingFeature) {
-                newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
-
-                me.chartDataAvailable = true;
-                if (matchingFeature.properties.value_constraint === '< NWG' &&
-                    !view.getShowIdentificationThresholdData()) {
-                    newRawData.drawAsZero = true;
-                    newRawData.minValue = chartConfig.yAxis_minimum;
-                }
-                newRawData[valueField] = matchingFeature.properties[yAxisAttr];
-                Ext.each(attachedSeries, valueExtractor(newRawData, matchingFeature));
-
-                if (featureStyle) {
-                    newRawData = me.appendStyleToShape(
-                        featureStyle, matchingFeature, newRawData);
-                }
-
-                seriesData.push(newRawData);
-            } else {
-                seriesData.push({});
-            }
-            startDate.add(intervalInSeconds, 'seconds');
-        }
 
         me.data[stationId] = seriesData;
 
@@ -2031,97 +1935,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
             me.fireEvent('chartdataprepared');
         }
-    },
-
-    /**
-     * Appends a possible given featurestyle to the chart shape
-     * @param {Object} featureStyle The featureStyle object.
-     * @param {ol.Feature} matchingFeature The matchingFeature.
-     * @param {Object} newRawData The rawData object the style will get appended to.
-     */
-    appendStyleToShape: function(featureStyle, matchingFeature, newRawData) {
-        Ext.each(featureStyle, function(style) {
-            var val = matchingFeature.properties[style.attribute];
-            if (val) {
-                val = Koala.util.String.coerce(val);
-                var styleVal = Koala.util.String.coerce(style.value);
-                var op = style.operator;
-                var min;
-                var max;
-                if (Ext.isString(styleVal)) {
-                    var split = styleVal.split(',');
-                    if (split.length === 2) {
-                        min = split[0];
-                        max = split[1];
-                    }
-                }
-                if ((op === 'eq' && val === styleVal) ||
-                    (op === 'ne' && val !== styleVal) ||
-                    (op === 'gt' && val > styleVal) ||
-                    (op === 'lt' && val < styleVal) ||
-                    (op === 'lte' && val <= styleVal) ||
-                    (op === 'gte' && val >= styleVal) ||
-                    (op === 'between' && min && max && val >= min && val <= max)) {
-                    newRawData.style = style.style;
-                    return false;
-                }
-            }
-        }, this);
-        return newRawData;
-    },
-
-    /**
-     * We create an object of the features where the key is a timestamp.
-     * You can then easily access the feature of a given date.
-     *
-     * @param startDate {Date}
-     * @param intervalInSeconds {Integer}
-     * @param features {Array[ol.Feature]}
-     * @param xAxisAttr {String}
-     */
-    getTimeStampSnapObject: function(startDate, intervalInSeconds, features,
-        xAxisAttr) {
-        var obj = {};
-
-        Ext.each(features, function(feat) {
-            // Dates in features are always in UTC, `new Date` seems to be
-            // respecting the format
-            var featDate = Koala.util.Date.getUtcMoment(feat.properties[xAxisAttr]);
-
-            var featDateSeconds = featDate.unix();
-
-            obj[featDateSeconds] = feat;
-        });
-
-        return obj;
-    },
-
-    /**
-     * Normalize interval and unit to seconds.
-     *
-     * @param interval {Integer}
-     * @param unit {String["seconds", "minutes", "hours", "days"]}
-     */
-    getIntervalInSeconds: function(interval, unit) {
-        var multiplier = 0;
-
-        switch (unit.toLowerCase()) {
-            case 'seconds':
-                multiplier = 1;
-                break;
-            case 'minutes':
-                multiplier = 60;
-                break;
-            case 'hours':
-                multiplier = 3600;
-                break;
-            case 'days':
-                multiplier = 86400;
-                break;
-            default:
-                break;
-        }
-        return multiplier * interval;
     },
 
     /**
