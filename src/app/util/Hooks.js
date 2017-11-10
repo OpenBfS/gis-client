@@ -200,9 +200,10 @@ Ext.define('Koala.util.Hooks', {
                 var permalink = hrefWithoutHash + '#' + route;
                 var textField = attributeRec.down('textfield');
                 var defaultVal = textField.getValue();
-                var newVal = '<br><a target="_blank" href="' + permalink + '">{Permalink_text}</a>';
+                var newLine = '<br>';
+                var permalinkTag = '<a target="_blank" href="' + permalink + '">{Permalink_text}</a>';
+                var newVal = (defaultVal) ? defaultVal + newLine + permalinkTag : permalinkTag;
 
-                newVal = (defaultVal) ? defaultVal + newVal : newVal;
                 textField.setBind({
                     value: newVal
                 });
@@ -375,17 +376,19 @@ Ext.define('Koala.util.Hooks', {
                 var hrefs = text.match(/href="(.*?)"/g);
                 var obsPermalink;
 
-                if (hrefs.length > 1) {
-                    for (var i = 0; i < hrefs.length; i++) {
-                        if (hrefs[i].includes(window.location.origin) && hrefs[i].includes('#map')) {
-                            obsPermalink = hrefs[i];
-                            break;
+                if (hrefs) {
+                    if (hrefs.length > 1) {
+                        for (var i = 0; i < hrefs.length; i++) {
+                            if (hrefs[i].includes(window.location.origin) && hrefs[i].includes('#map')) {
+                                obsPermalink = hrefs[i];
+                                break;
+                            }
                         }
+                    } else {
+                        obsPermalink = hrefs[0];
                     }
-                } else {
-                    obsPermalink = hrefs[0];
+                    postAttributes[key] = text.replace(obsPermalink, 'href="' + permalink + '"');
                 }
-                postAttributes[key] = text.replace(obsPermalink, 'href="' + permalink + '"');
             }
         }
     }
