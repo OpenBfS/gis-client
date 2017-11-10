@@ -91,6 +91,10 @@ Ext.define('Koala.util.ChartAxes', {
                 };
             }
 
+            if (!axis) {
+                return;
+            }
+
             return axis(scale)
                 .ticks(axisConfig.ticks)
                 .tickValues(axisConfig.tickValues)

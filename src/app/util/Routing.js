@@ -493,9 +493,6 @@ Ext.define('Koala.util.Routing', {
             switch (filter.type) {
                 // valueOf() returns the timestamp value of the moment date.
                 case 'rodostime':
-                    permaObj.effectivedatetime = filter.effectivedatetime
-                        .valueOf();
-                    break;
                 case 'pointintime':
                     permaObj.effectivedatetime = filter.effectivedatetime
                         .valueOf();
