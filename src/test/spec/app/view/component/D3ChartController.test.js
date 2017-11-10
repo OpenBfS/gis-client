@@ -1,6 +1,7 @@
 Ext.Loader.syncRequire([
     'Koala.view.component.D3ChartController',
-    'Koala.view.component.D3Chart'
+    'Koala.view.component.D3Chart',
+    'Koala.util.ChartAxes'
 ]);
 
 describe('Koala.view.component.D3ChartController', function() {
