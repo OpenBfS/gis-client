@@ -129,7 +129,7 @@ Ext.define('Koala.util.ChartData', {
         convertToTimeseriesData: function(
             chartConfig,
             data,
-            metadata,
+            targetLayer,
             station,
             startDate,
             endDate,
@@ -151,9 +151,9 @@ Ext.define('Koala.util.ChartData', {
             }
 
             var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
-                metadata);
+                targetLayer.metadata);
             var timeField = filterConfig.parameter;
-            var intervalInSeconds = this.getIntervalInSecondsForTargetLayer();
+            var intervalInSeconds = this.getIntervalInSecondsForTargetLayer(targetLayer);
             var snapObject = this.getTimeStampSnapObject(
                 startDate, intervalInSeconds, data.features, timeField);
 

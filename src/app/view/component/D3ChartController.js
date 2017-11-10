@@ -1911,7 +1911,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var seriesData = Koala.util.ChartData.convertToTimeseriesData(
             chartConfig,
             data,
-            targetLayer.metadata,
+            targetLayer,
             station,
             startDate,
             endDate,
