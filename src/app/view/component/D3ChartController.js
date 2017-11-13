@@ -1996,7 +1996,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
 
                 me.chartDataAvailable = true;
-                if (matchingFeature.properties.value_constraint === '< NWG' &&
+                if (matchingFeature.properties.value_constraint === '<' &&
                     !view.getShowIdentificationThresholdData()) {
                     newRawData.drawAsZero = true;
                     newRawData.minValue = chartConfig.yAxis_minimum;
