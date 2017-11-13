@@ -365,12 +365,11 @@ Ext.define('Koala.util.Filter', {
             }
 
             var enableSpinner = false;
-            if (spinnerType === HOURS && (unit === MINUTES || unit === HOURS)) {
+            if ((spinnerType === HOURS && (unit === MINUTES || unit === HOURS)) ||
+                (spinnerType === MINUTES && unit === MINUTES)) {
                 // we are creating an hour spinner, and the filter has an
                 // interval/unit combination that is less than one day, enable
-                enableSpinner = true;
-            } else if (spinnerType === MINUTES && unit === MINUTES) {
-                // we are creating a minute spinner, and the filter has an
+                // or we are creating a minute spinner, and the filter has an
                 // interval/unit combination that deals with minutes
                 enableSpinner = true;
             }

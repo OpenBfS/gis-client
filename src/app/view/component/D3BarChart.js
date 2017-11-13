@@ -117,62 +117,8 @@ Ext.define('Koala.view.component.D3BarChart',{
                 };
             }
 
-            // There are four ways and combinations of defining the ticks and
-            // the min and max values on the y axis based on the chart configs
-            // yAxisTicks, yAxisMin, yAxisMax and yTickValues:
-            // 1. Fully automatically: If neither yAxisTicks, yAxisMin,
-            // yAxisMax or yTickValues are set in the chartConfig object, the
-            // min and max values are determined by the chart data and will be
-            // fit into a "nice" range with a a proper count of ticks.
-            // 2. Fully automatically (hinted): If yAxisTicks is set, the min
-            // and max values are determined by the chart data (as above), but
-            // the number of ticks will be set by the parameter. Note: The count
-            // is only a hint for d3 and is just a approximate value.
-            // 3. Automatic step size: If yAxisTicks, yAxisMin and yAxisMax are
-            // set, the min and max axis values are rendered as given and the
-            // tick count is the number of additional ticks to be set between
-            // the min an max ticks.
-            // 4. Fully manual: If yTickValues is given, only the ticks in
-            // this parameter are shown on the axis.
-            var yAxisTickValues;
-            if (chartConfig.yAxisTicks && chartConfig.yAxisMin &&
-                    chartConfig.yAxisMax) {
-                var rangeMin = StringUtil.coerce(chartConfig.yAxisMin);
-                var rangeMax = StringUtil.coerce(chartConfig.yAxisMax);
-                var tickCnt = StringUtil.coerce(chartConfig.yAxisTicks);
-
-                // Tick count must be greater than 0
-                if (tickCnt < 0) {
-                    tickCnt = 0;
-                }
-
-                // Logarithmic scales with min/max values of 0 are
-                // not possible.
-                if (chartConfig.yAxisScale === 'log' && (rangeMin === 0 ||
-                        rangeMax === 0)) {
-                    if (rangeMin === 0) {
-                        rangeMin = 0.00000001;
-                    }
-                    if (rangeMax === 0) {
-                        rangeMax = 0.00000001;
-                    }
-                }
-
-                var rangeStep = Math.abs(rangeMax - rangeMin) / (tickCnt + 1);
-                yAxisTickValues = d3.range(rangeMin, rangeMax + rangeStep,
-                    rangeStep);
-            }
-
-            if (chartConfig.yTickValues) {
-                yAxisTickValues = [];
-                Ext.each(chartConfig.yTickValues.split(','), function(val) {
-                    var coercedVal = StringUtil.coerce(val);
-                    if (chartConfig.yAxisScale === 'log' && coercedVal === 0) {
-                        coercedVal = 0.00000001;
-                    }
-                    yAxisTickValues.push(StringUtil.coerce(coercedVal));
-                });
-            }
+            var chartUtil = Koala.util.Chart;
+            var yAxisTickValues = chartUtil.recalculateAxisTicks(chartConfig);
 
             var chart = {
                 xtype: 'd3-barchart',
