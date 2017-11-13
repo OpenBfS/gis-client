@@ -1,4 +1,11 @@
 {
+    "Koala.util.Clone": {
+        "statics": {
+            "error": "fr:Error",
+            "couldNotLoad": "fr:The data could not be loaded.",
+            "couldNotParse": "fr:The data could not be parsed."
+        }
+    },
     "Koala.util.Layer": {
         "statics": {
             "txtUntil": "fr:bis",

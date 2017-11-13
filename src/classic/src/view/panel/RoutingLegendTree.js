@@ -23,6 +23,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
     requires: [
         'Koala.store.MetadataSearch',
+        'Koala.util.Clone',
         'Koala.util.Layer',
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
@@ -163,6 +164,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var allowChangeFilter = olLayer.metadata || false;
             var allowDownload = olLayer.get('allowDownload') || false;
             var allowRemoval = olLayer.get('allowRemoval') || false;
+            var allowClone = olLayer.get('allowClone') || false;
             var allowStyle = olLayer instanceof ol.layer.Vector &&
                     !olLayer.get('disableStyling');
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
@@ -172,6 +174,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var changeFilterBtn = comp.down('button[name="filter"]');
             var downloadBtn = comp.down('button[name="download"]');
             var removalBtn = comp.down('button[name="removal"]');
+            var cloneBtn = comp.down('button[name="clone"]');
             var styleBtn = comp.down('button[name="style"]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
@@ -191,6 +194,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             }
             if (removalBtn) {
                 removalBtn.setVisible(allowRemoval);
+            }
+            if (cloneBtn) {
+                cloneBtn.setVisible(allowClone);
             }
             if (styleBtn) {
                 styleBtn.setVisible(allowStyle);
@@ -313,6 +319,11 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     }
                 }
             });
+        },
+
+        cloneHandler: function(btn) {
+            var layer = btn.layerRec.getOlLayer();
+            Koala.util.Clone.cloneLayer(layer);
         },
 
         styleHandler: function(btn) {
@@ -442,6 +453,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 name: 'removal',
                 glyph: 'xf00d@FontAwesome',
                 tooltip: 'Layer entfernen'
+                // We'll assign a handler to handle clicks here once the
+                // class is defined and we can access the static methods
+            }, {
+                xtype: 'button',
+                name: 'clone',
+                glyph: 'xf0c5@FontAwesome',
+                tooltip: 'Objekte klonen'
                 // We'll assign a handler to handle clicks here once the
                 // class is defined and we can access the static methods
             }, {
@@ -1040,6 +1058,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var infoBtnCfg = cls.findByProp(menuItems, 'name', 'shortInfo');
     var downloadBtnCfg = cls.findByProp(menuItems, 'name', 'download');
     var removalBtnCfg = cls.findByProp(menuItems, 'name', 'removal');
+    var cloneBtnCfg = cls.findByProp(menuItems, 'name', 'clone');
     var styleBtnCfg = cls.findByProp(menuItems, 'name', 'style');
     var opacitySliderCfg = cls.findByProp(menuItems, 'name', 'opacityChange');
 
@@ -1057,6 +1076,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     }
     if (removalBtnCfg) {
         removalBtnCfg.handler = cls.removalHandler;
+    }
+    if (cloneBtnCfg) {
+        cloneBtnCfg.handler = cls.cloneHandler;
     }
     if (styleBtnCfg) {
         styleBtnCfg.handler = cls.styleHandler;

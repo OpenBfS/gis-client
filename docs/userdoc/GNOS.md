@@ -337,6 +337,17 @@ Zudem können die anzuzeigenden Charts der Layer konfiguriert werden.
 
 ## OpenLayers Properties {#openlayers} (bfs:olProperty)
 
+**allowClone**
+
+Darf der Layer geklont werden?
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubte Wertemenge   | true, false |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | false |
+| Beispiel             | true |
+
 **allowHover**
 
 Soll HoverInfo erlaubt werden?

@@ -1,4 +1,11 @@
 {
+    "Koala.util.Clone": {
+        "statics": {
+            "error": "Fehler",
+            "couldNotLoad": "Die Daten konnten nicht geladen werden.",
+            "couldNotParse": "Die Daten konnten nicht ausgewertet werden."
+        }
+    },
     "Koala.util.Date": {
         "statics": {
             "txtUtc": "(UTC)",
