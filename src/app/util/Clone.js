@@ -25,6 +25,12 @@ Ext.define('Koala.util.Clone', {
 
     statics: {
 
+        /* i18n */
+        error: '',
+        couldNotLoad: '',
+        couldNotParse: '',
+        /* i18n */
+
         /**
          * Creates a clone of the given layer.
          * @param  {ol.layer.Layer} layer the layer to clone
@@ -86,7 +92,7 @@ Ext.define('Koala.util.Clone', {
                 source.addFeatures(features);
                 Koala.util.Layer.addOlLayerToMap(layer);
             } catch (e) {
-                Ext.Msg.alert('Fehler', 'Die Daten konnten nicht ausgewertet werden.');
+                Ext.Msg.alert(this.error, this.couldNotParse);
             }
         },
 
@@ -94,7 +100,7 @@ Ext.define('Koala.util.Clone', {
          * The failure callback when features could not be loaded.
          */
         getFeatureFail: function() {
-            Ext.Msg.alert('Fehler', 'Die Daten konnten nicht geladen werden.');
+            Ext.Msg.alert(this.error, this.couldNotLoad);
         }
 
     }
