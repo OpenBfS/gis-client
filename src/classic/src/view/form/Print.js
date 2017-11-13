@@ -105,6 +105,12 @@ Ext.define('Koala.view.form.Print', {
         var appCombo = me.down('combo[name=appCombo]');
         appCombo.setFieldLabel('Printapp');
 
+        //prevent slow connectivity issues
+        appCombo.setDisabled(true);
+        appCombo.getStore().on('datachanged', function() {
+            this.setDisabled(false);
+        }, appCombo);
+
         if (configuredIrixServlet && configuredIrixContext) {
             appCombo.on('select', me.addIrixFieldset, me);
             dpc = Ext.create('Koala.util.DokpoolContext');
