@@ -556,6 +556,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         }
         var layer = selection[0].data;
         if (layer instanceof ol.layer.Vector) {
+            if (this.featureGrid) {
+                this.featureGrid.hide();
+                this.featureGrid.destroy();
+            }
             this.featureGrid = Ext.create({
                 xtype: 'window',
                 layout: 'fit',
@@ -569,6 +573,11 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 }]
             });
             this.featureGrid.show();
+        } else {
+            if (this.featureGrid) {
+                this.featureGrid.hide();
+                this.featureGrid.destroy();
+            }
         }
     },
 
