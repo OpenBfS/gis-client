@@ -1059,6 +1059,16 @@
             }
         }
     },
+    "BasiGX.view.grid.FeatureGrid": {
+        "config": {
+            "data": {
+                "renameButton": "Umbenennen",
+                "renameBox": "Bitte geben Sie den neuen Spaltennamen an:",
+                "deleteTitle": "Löschen",
+                "deleteQuestion": "Wollen Sie die Spalte wirklich löschen?"
+            }
+        }
+    },
     "BasiGX.view.panel.MapContainer": {
         "config": {
             "data": {
