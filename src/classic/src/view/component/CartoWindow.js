@@ -58,15 +58,27 @@ Ext.define('Koala.view.component.CartoWindow',{
         initialize: 'onInitialize',
         beforedestroy: 'onBeforeDestroy',
         afterrender: function(cmp) {
-            cmp.getEl().on('mousedown', (function() {
+            var el = cmp.getEl();
+            var ctrl = this.controller;
+
+            var handleMouseDown = (function() {
                 this.mouseDown = true;
-            }).bind(this));
-            cmp.getEl().on('mouseup', (function() {
+            }).bind(this);
+            var handleMouseUp = (function() {
                 this.mouseDown = false;
-            }).bind(this));
-            cmp.getEl().on('mouseenter', this.controller.disableMapInteractions.bind(this.controller));
-            cmp.getEl().on('mouseleave', this.controller.enableMapInteractions.bind(this.controller));
-            cmp.getEl().select('.x-unselectable').selectable();
+            }).bind(this);
+            var disableInteractions = ctrl.disableMapInteractions.bind(ctrl);
+            var enableInteractions = ctrl.enableMapInteractions.bind(ctrl);
+
+            el.on({
+                mousedown: handleMouseDown,
+                mouseup: handleMouseUp,
+                mouseenter: disableInteractions,
+                mouseleave: enableInteractions
+            });
+
+            // re-enable text-selection
+            el.select('.x-unselectable').selectable();
         }
     }
 
