@@ -2,12 +2,12 @@ IMIS3 GIS-Client
 ===========
 Dies ist eine Kopie des ExtJS basierten Klienten der vom Bundesamt für Strahlenschutz zur kartographischen webbasierten Visualisierung von Umweltdaten entwickelt und eingesetzt wird.
 
-Um den vollen Umfang der Software zu nutzen ist es erforderlich den Kliengten mit anderen Produkten des BfS gemeinsam einzustetzen.
+Um den vollen Umfang der Software zu nutzen ist es erforderlich den Klienten mit anderen Produkten des BfS gemeinsam einzusetzen.
 
 Weitere Informationen finden sich auf der Projektwebseite unter
 der Adresse: https://github.com/OpenBfS/gis-client
 
-Die Software entseht im Rahmen der Neuentwicklung des IMIS (in v3).
+Die Software entsteht im Rahmen der Neuentwicklung des IMIS (in v3).
 
 Kontakt
 -------
@@ -38,7 +38,7 @@ Die Dokumentation findet sich nach der Generierung im Order `docs`.
 JSDuck ist unter der Adresse https://github.com/senchalabs/jsduck
 zu finden und muss installiert werden.
 
-Die Dokumentation kann dann mit folgendem befehl gebaut werden:
+Die Dokumentation kann dann mit folgendem Befehl gebaut werden:
 
 ```
 npm run jsduck
