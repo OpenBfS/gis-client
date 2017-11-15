@@ -22,6 +22,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     xtype: 'k-panel-routing-legendtree',
 
     requires: [
+        'BasiGX.view.grid.FeatureGrid',
         'Koala.store.MetadataSearch',
         'Koala.util.Clone',
         'Koala.util.Layer',
@@ -537,6 +538,44 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         me.bindUpdateHandlers();
         me.bindLoadIndicationHandlers();
+        me.on('selectionchange', me.toggleFeatureGrid.bind(me));
+    },
+
+    /**
+     * Toggles display of the feature grid.
+     * @param  {Object} selectionModel the selection model
+     */
+    toggleFeatureGrid: function(selectionModel) {
+        var selection = selectionModel.getSelection();
+        if (selection.length === 0) {
+            if (this.featureGrid) {
+                this.featureGrid.destroy();
+            }
+            return;
+        }
+        var layer = selection[0].data;
+        if (layer instanceof ol.layer.Vector) {
+            if (this.featureGrid) {
+                this.featureGrid.destroy();
+            }
+            this.featureGrid = Ext.create({
+                xtype: 'window',
+                layout: 'fit',
+                title: layer.get('name'),
+                items: [{
+                    xtype: 'basigx-grid-featuregrid',
+                    layer: layer,
+                    width: 500,
+                    height: 300,
+                    scrollable: true
+                }]
+            });
+            this.featureGrid.show();
+        } else {
+            if (this.featureGrid) {
+                this.featureGrid.destroy();
+            }
+        }
     },
 
     /**

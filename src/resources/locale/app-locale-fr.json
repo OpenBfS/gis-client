@@ -943,6 +943,16 @@
             }
         }
     },
+    "BasiGX.view.grid.FeatureGrid": {
+        "config": {
+            "data": {
+                "renameButton": "fr:Rename",
+                "renameBox": "fr:Please specify the new column name:",
+                "deleteTitle": "fr:Delete",
+                "deleteQuestion": "fr:Do you really want to delete the column?"
+            }
+        }
+    },
     "BasiGX.view.panel.MapContainer": {
         "config": {
             "data": {
