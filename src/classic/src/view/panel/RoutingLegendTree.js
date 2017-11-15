@@ -563,11 +563,22 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 layout: 'fit',
                 title: layer.get('name'),
                 items: [{
-                    xtype: 'basigx-grid-featuregrid',
-                    layer: layer,
-                    width: 500,
-                    height: 300,
-                    scrollable: true
+                    xtype: 'panel',
+                    layout: 'vbox',
+                    items: [{
+                        xtype: 'buttongroup',
+                        rowspan: 3,
+                        items: [{
+                            xtype: 'basigx-button-mergeselection',
+                            padding: 5
+                        }]
+                    }, {
+                        xtype: 'basigx-grid-featuregrid',
+                        layer: layer,
+                        width: 500,
+                        height: 300,
+                        scrollable: true
+                    }]
                 }]
             });
             this.featureGrid.show();

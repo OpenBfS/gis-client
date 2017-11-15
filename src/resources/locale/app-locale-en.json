@@ -974,11 +974,27 @@
             }
         }
     },
+    "BasiGX.util.Merge": {
+        "statics": {
+            "adoptAttributes": "Adopt attributes",
+            "applyText": "Apply",
+            "cancelText": "Cancel",
+            "windowTitle": "Merge features"
+        }
+    },
     "BasiGX.view.button.AddWms": {
         "config": {
             "data": {
                 "tooltip": "Add WMS...",
                 "text": "WMS"
+            }
+        }
+    },
+    "BasiGX.view.button.MergeSelection": {
+        "config": {
+            "data": {
+                "tooltip": "Merge selected features into this layer",
+                "text": "Merge features"
             }
         }
     },
