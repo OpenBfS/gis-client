@@ -2,3 +2,5 @@ theme: jekyll-theme-minimal
 title: OpenBfS GIS Client 
 description: Main website for the BfS GIS Client, a JavaScript Toolkit for Rich Web Mapping Applications based on GeoExt 3, ExtJS 6 and OpenLayers 4. Includes links to examples, API-documentation and tests.
 show_downloads: "true"
+encoding: UTF-8
+future: true
