@@ -208,14 +208,13 @@ Ext.define('Koala.util.Chart', {
          * works in case of an x/y axis at left/bottom and possibly multiple
          * attached series.
          */
-        recalculatePositionsAndVisibility: function(attachedSeriesShapes) {
-            var me = this;
+        recalculatePositionsAndVisibility: function(attachedSeriesShapes, attachedSeriesVisibleById) {
             var visibleSeries = {};
             var translateX = 0;
 
             Ext.each(attachedSeriesShapes, function(shape) {
                 var idx = shape.config.attachedSeriesNumber - 1;
-                if (me.attachedSeriesVisibleById[shape.config.id][idx]) {
+                if (attachedSeriesVisibleById[shape.config.id][idx]) {
                     visibleSeries[idx] = JSON.parse(shape.config.attachedSeries)[idx];
                 } else {
                     if (!visibleSeries[idx]) {
