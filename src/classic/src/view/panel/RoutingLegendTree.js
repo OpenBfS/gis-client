@@ -546,6 +546,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
      * @param  {Object} selectionModel the selection model
      */
     toggleFeatureGrid: function(selectionModel) {
+        var map = Ext.ComponentQuery.query('basigx-component-map')[0];
         var selection = selectionModel.getSelection();
         if (selection.length === 0) {
             if (this.featureGrid) {
@@ -575,6 +576,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     }, {
                         xtype: 'basigx-grid-featuregrid',
                         layer: layer,
+                        map: map,
                         width: 500,
                         height: 300,
                         scrollable: true
