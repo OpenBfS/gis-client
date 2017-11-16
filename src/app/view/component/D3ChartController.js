@@ -1871,7 +1871,6 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         //used for grid table in CartoWindowController
         me.gridFeatures = Ext.clone(data.features);
-
         var seriesData = Koala.util.ChartData.convertToTimeseriesData(
             chartConfig,
             data,
