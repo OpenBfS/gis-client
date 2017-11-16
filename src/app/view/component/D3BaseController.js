@@ -514,6 +514,8 @@ Ext.define('Koala.view.component.D3BaseController', {
             .attr('class', CSS.PLOT_BACKGROUND)
             .attr('width', chartSize[0])
             .attr('height', chartSize[1])
+            // to make y axis line visible
+            .attr('transform', 'translate(1, 0)')
             .attr('pointer-events', 'all');
     },
 
