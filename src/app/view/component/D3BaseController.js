@@ -483,26 +483,13 @@ Ext.define('Koala.view.component.D3BaseController', {
     drawSvgContainer: function() {
         var me = this;
         var staticMe = Koala.view.component.D3BaseController;
-        var CSS = Koala.util.ChartConstants.CSS_CLASS;
         var makeTranslate = staticMe.makeTranslate;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
-        var chartSize = me.getChartSize();
-        var metadata = view.getConfig().targetLayer.metadata;
-        var series = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        series = JSON.parse(series);
 
         var translate = makeTranslate(chartMargin.left, chartMargin.top);
         var viewSize = me.getViewSize();
-        var totalOffset = 0;
-        Ext.each(series, function(s) {
-            totalOffset += s.axisWidth || 40;
-        });
 
         // Get the container view by its ID and append the SVG including an
         // additional group element to it.
@@ -512,17 +499,22 @@ Ext.define('Koala.view.component.D3BaseController', {
             .attr('width', viewSize[0])
             .attr('height', viewSize[1])
             .append('g')
-            .attr('transform', translate)
-            .append('rect')
-            .attr('transform', makeTranslate(totalOffset, 0))
+            .attr('transform', translate);
+
+        var containerSvg = d3.select(viewId + ' svg');
+        me.containerSvg = containerSvg;
+    },
+
+    appendBackground: function(node) {
+        var view = this.getView();
+        var chartSize = this.getChartSize();
+        var CSS = Koala.util.ChartConstants.CSS_CLASS;
+        node.append('rect')
             .style('fill', view.getBackgroundColor() || '#EEE')
             .attr('class', CSS.PLOT_BACKGROUND)
             .attr('width', chartSize[0])
             .attr('height', chartSize[1])
             .attr('pointer-events', 'all');
-
-        var containerSvg = d3.select(viewId + ' svg');
-        me.containerSvg = containerSvg;
     },
 
     /**

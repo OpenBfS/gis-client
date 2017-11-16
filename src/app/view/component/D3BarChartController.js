@@ -423,6 +423,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var allShapes = d3.select(viewId + ' svg > g')
             .append('g')
             .attr('class', Const.CSS_CLASS.SHAPE_GROUP);
+        this.appendBackground(allShapes);
 
         var groupedShapes = allShapes.selectAll(Const.CSS_CLASS.BAR_GROUP)
             .data(firstStationData);

@@ -144,6 +144,14 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
 
         Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById);
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+
+        // register zoom interaction if requested
+        if (view.getZoomEnabled()) {
+            var plot = d3.select(viewId + ' svg > g > g > svg');
+            plot.call(me.zoomInteraction);
+        }
     },
 
     /**
@@ -347,16 +355,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     drawSvgContainer: function() {
         var me = this;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
 
         me.callParent();
-
-        // register zoom interaction if requested
-        if (view.getZoomEnabled()) {
-            var plot = d3.select(viewId + ' svg');
-            plot.call(me.zoomInteraction);
-        }
     },
 
     /**
@@ -748,6 +748,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             .attr('width', chartSize[0])
             .attr('height', chartSize[1])
             .attr('viewBox', '0 0 ' + chartSize[0] + ' ' + chartSize[1]);
+        this.appendBackground(shapeSvg);
 
         var minx = Number.POSITIVE_INFINITY;
         var maxx = Number.NEGATIVE_INFINITY;
