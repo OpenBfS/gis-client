@@ -186,7 +186,7 @@ Ext.define('Koala.util.ChartData', {
                 if (matchingFeature) {
                     newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
 
-                    if (matchingFeature.properties.value_constraint === '< NWG' &&
+                    if (matchingFeature.properties.value_constraint === '<' &&
                         !showIdentificationThresholdData) {
                         newRawData.drawAsZero = true;
                         newRawData.minValue = chartConfig.yAxis_minimum;
