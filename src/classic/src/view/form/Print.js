@@ -165,7 +165,6 @@ Ext.define('Koala.view.form.Print', {
             margin: '5px 0px',
             items: [{
                 xtype: 'textfield',
-                viewModel: me.getViewModel(),
                 name: attributeRec.get('name'),
                 fieldLabel: attributeRec.get('name'),
                 value: attributeRec.get('default'),
@@ -224,7 +223,6 @@ Ext.define('Koala.view.form.Print', {
     getLegendAttributeFields: function() {
         var me = this;
         var legendsFieldset = Ext.create('Ext.form.FieldSet', {
-            viewModel: me.getViewModel(),
             bind: {
                 title: '{printLegendsFieldSetTitle}'
             },
@@ -504,7 +502,6 @@ Ext.define('Koala.view.form.Print', {
         var me = this;
         return {
             xtype: 'checkbox',
-            viewModel: me.getViewModel(),
             name: attributeRec.get('name'),
             checked: true,
             fieldLabel: attributeRec.get('name')
@@ -524,16 +521,13 @@ Ext.define('Koala.view.form.Print', {
         switch (attributeRec.get('type')) {
             case 'MapAttributeValues':
                 attributeFields = me.getMapAttributeFields(attributeRec);
-                attributeFields.viewModel = me.getViewModel();
                 map.on('moveend', me.renderAllClientInfos, me);
                 break;
             case 'NorthArrowAttributeValues':
                 attributeFields = me.getNorthArrowAttributeFields(attributeRec);
-                attributeFields.viewModel = me.getViewModel();
                 break;
             case 'ScalebarAttributeValues':
                 attributeFields = me.getScalebarAttributeFields(attributeRec);
-                attributeFields.viewModel = me.getViewModel();
                 break;
             case 'LegendAttributeValue':
                 attributeFields = me.getLegendAttributeFields(attributeRec);
