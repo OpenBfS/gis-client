@@ -62,3 +62,14 @@ Installation
 ------------
 FIXME: put Install in separate `INSTALL.markdown`.
 Für Informationen zur Installation schauen Sie in die `INSTALL.markdown` Datei.
+
+Development
+-----------
+To get the application initially running in your local SenchaCmd dev environment, the following steps may be helpful to avoid CORS problems and to get the needed services available from the original BfS Geoportal:
+```
+cp custom-bfs-proxy.conf /etc/apache2/sites-available/bfs.conf
+# may be adapt the file to your needs
+sudo a2ensite bfs
+sudo a2enmod proxy proxy_http
+sudo systemctl reload apache2
+```
