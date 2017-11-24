@@ -2,23 +2,21 @@
     "data": {
         "merge": {
             "urls": {
-                "metadata-xml2json": "http://bfs-docker.intranet.terrestris.de/geonetwork/srv/ger/xml_iso19139Tojson",
-                "metadata-search": "http://bfs-docker.intranet.terrestris.de/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://bfs-docker.intranet.terrestris.de/geoserver/bfs/ows",
+                "metadata-xml2json": "/ogc/catalog/srv/ger/xml_iso19139Tojson",
+                "metadata-search": "/ogc/catalog/srv/ger/csw?",
+                "spatial-search": "/ogc/opendata/ows",
                 "print-servlet": "http://bfs-docker.intranet.terrestris.de/bfs-printservice/print/",
                 "irix-servlet": "http://bfs-docker.intranet.terrestris.de/irix-servlet",
                 "irix-context": "resources/irixContext.json",
                 "rodos-projects": "resources/rodos/projects.json",
                 "rodos-results": "resources/rodos/projects/",
-
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
-
                 "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
             },
             "application_user": {
-                "username": "admin",
-                "password": "admin"
+                "username": "data_reader",
+                "password": "data_reader"
             },
             "imis_user": {
               "imisroles": [
@@ -33,18 +31,20 @@
                 "public"
               ]
             },
+            "mapLayers": [
+                "8bc03d7b-ac22-4e85-a4ca-b2cd477e82ae",
+                "c96fd875-6ee6-4a93-b73e-708cac4b1842",
+                "95e391bb-f86f-4d0b-8179-df69c358f3b4"
+            ],
+            "metadataSearchFields": ["title",  "abstract"],
             "print-timeout": 60000,
-            "metadataSearchFields": ["title", "abstract"],
-            "spatialSearchTypeName": "bfs:verwaltung_4326_geozg_sort",
             "spatialSearchFields": {
-                "searchColumn": "NAME",
-                "geomColumn": "BOX_GEO"
+                "geomColumn": "BOX_GEO",
+                "searchColumn": "MYNAME"
             },
+            "spatialSearchTypeName": "opendata:vg_250",
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
-            "mapLayers": [
-                "a7a60958-9be3-4f78-948a-4cd0814abd2c"
-            ],
             "mapConfig": {
                 "projection": "EPSG:3857"
             },
