@@ -992,10 +992,11 @@
     },
     "BasiGX.util.Merge": {
         "statics": {
-            "adoptAttributes": "Attribute übernehmen",
+            "adoptAttributes": "Attribute hinzufügen",
             "applyText": "Übernehmen",
             "cancelText": "Abbrechen",
-            "windowTitle": "Features übernehmen"
+            "windowTitle": "Features übernehmen",
+            "matchText": "Attribute zuordnen:"
         }
     },
     "BasiGX.view.button.AddWms": {
