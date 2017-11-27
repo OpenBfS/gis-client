@@ -575,7 +575,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                         height: 50,
                         items: [{
                             xtype: 'basigx-button-mergeselection',
-                            padding: 5
+                            padding: 5,
+                            sourceLayer: 'planungsradien_vector'
                         }]
                     }, {
                         xtype: 'basigx-grid-featuregrid',
