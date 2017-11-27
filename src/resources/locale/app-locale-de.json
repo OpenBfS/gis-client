@@ -991,11 +991,30 @@
             }
         }
     },
+    "BasiGX.view.window.MergeWindow": {
+        "config": {
+            "data": {
+                "adoptAttributes": "Attribute hinzufügen",
+                "applyText": "Übernehmen",
+                "cancelText": "Abbrechen",
+                "windowTitle": "Features übernehmen",
+                "matchText": "Attribute zuordnen:"
+            }
+        }
+    },
     "BasiGX.view.button.AddWms": {
         "config": {
             "data": {
                 "tooltip": "WMS hinzufügen...",
                 "text": "WMS"
+            }
+        }
+    },
+    "BasiGX.view.button.MergeSelection": {
+        "config": {
+            "data": {
+                "tooltip": "Selektierte Features in diesen Layer übernehmen",
+                "text": "Features übernehmen"
             }
         }
     },

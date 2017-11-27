@@ -546,6 +546,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
      * @param  {Object} selectionModel the selection model
      */
     toggleFeatureGrid: function(selectionModel) {
+        var map = Ext.ComponentQuery.query('basigx-component-map')[0];
         var selection = selectionModel.getSelection();
         if (selection.length === 0) {
             if (this.featureGrid) {
@@ -561,13 +562,29 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             this.featureGrid = Ext.create({
                 xtype: 'window',
                 layout: 'fit',
+                width: 500,
+                height: 300,
                 title: layer.get('name'),
+                scrollable: true,
                 items: [{
-                    xtype: 'basigx-grid-featuregrid',
-                    layer: layer,
-                    width: 500,
-                    height: 300,
-                    scrollable: true
+                    xtype: 'panel',
+                    layout: 'border',
+                    items: [{
+                        xtype: 'buttongroup',
+                        region: 'north',
+                        height: 50,
+                        items: [{
+                            xtype: 'basigx-button-mergeselection',
+                            padding: 5,
+                            sourceLayer: 'planungsradien_vector'
+                        }]
+                    }, {
+                        xtype: 'basigx-grid-featuregrid',
+                        layer: layer,
+                        layout: 'fit',
+                        region: 'center',
+                        map: map
+                    }]
                 }]
             });
             this.featureGrid.show();
