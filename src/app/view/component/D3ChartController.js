@@ -143,7 +143,15 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
 
-        Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
+        Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById);
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+
+        // register zoom interaction if requested
+        if (view.getZoomEnabled()) {
+            var plot = d3.select(viewId + ' svg > g > g > svg');
+            plot.call(me.zoomInteraction);
+        }
     },
 
     /**
@@ -180,7 +188,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             // Reset the zoom to the initial extent
             me.resetZoom();
-            Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
+            Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById);
         }
     },
 
@@ -347,16 +355,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     drawSvgContainer: function() {
         var me = this;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
 
         me.callParent();
-
-        // register zoom interaction if requested
-        if (view.getZoomEnabled()) {
-            var plot = d3.select(viewId + ' svg');
-            plot.call(me.zoomInteraction);
-        }
     },
 
     /**
@@ -748,6 +748,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             .attr('width', chartSize[0])
             .attr('height', chartSize[1])
             .attr('viewBox', '0 0 ' + chartSize[0] + ' ' + chartSize[1]);
+        this.appendBackground(shapeSvg);
 
         var minx = Number.POSITIVE_INFINITY;
         var maxx = Number.NEGATIVE_INFINITY;
@@ -1434,7 +1435,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 var sel = '[idx=shape-group-' + shape.config.id +
                                     '_' + (index + 1) + ']';
                                 d3.select(sel).classed('k-d3-hidden', !checked);
-                                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes);
+                                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById);
                             }
                         }
                     });
@@ -1871,7 +1872,6 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         //used for grid table in CartoWindowController
         me.gridFeatures = Ext.clone(data.features);
-
         var seriesData = Koala.util.ChartData.convertToTimeseriesData(
             chartConfig,
             data,
