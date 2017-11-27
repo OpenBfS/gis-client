@@ -37,9 +37,29 @@ Ext.define('Koala.util.Clone', {
          */
         cloneLayer: function(layer) {
             var url = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wfs/url');
-            if (url) {
+
+            if (layer instanceof ol.layer.Vector) {
+                this.cloneVectorLayer(layer);
+            } else if (url) {
                 this.cloneLayerFromWfs(layer, url);
             }
+        },
+
+        cloneVectorLayer: function(layer) {
+            var Layer = Koala.util.Layer;
+            var features = layer.getSource().getFeatures();
+            var metadata = Koala.util.Metadata.prepareClonedMetadata(layer.metadata);
+            var source = new ol.source.Vector();
+            Ext.each(features, function(feature) {
+                source.addFeature(feature.clone());
+            });
+            var config = Layer.getInternalLayerConfig(metadata);
+            config.source = source;
+            config.metadata = metadata;
+            config.name = layer.get('name') + '_vector';
+            var result = new ol.layer.Vector(config);
+            result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
+            Koala.util.Layer.addOlLayerToMap(result);
         },
 
         /**
@@ -86,6 +106,7 @@ Ext.define('Koala.util.Clone', {
             config.name = config.name + '_vector';
             var layer = new ol.layer.Vector(config);
             layer.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
+            layer.metadata = metadata;
 
             var fmt = new ol.format.GeoJSON();
             try {
