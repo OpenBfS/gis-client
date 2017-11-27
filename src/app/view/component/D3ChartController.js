@@ -501,8 +501,11 @@ Ext.define('Koala.view.component.D3ChartController', {
                         axis = d3.select(curSelector);
                         var scaleY = transform.rescaleY(scaleGenerator);
 
-                        all = me.shapes.slice();
-                        all = all.concat(me.attachedSeriesShapes);
+                        if (axisConf.attachedSeriesIndex === undefined) {
+                            all = me.shapes.slice();
+                        } else {
+                            all = me.attachedSeriesShapes[axisConf.attachedSeriesIndex];
+                        }
 
                         Ext.each(all, function(shape) {
                             var shapeId = shape.config.id;
@@ -510,7 +513,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                             if (attachedSeriesNumber) {
                                 shapeId = shapeId + '_' + attachedSeriesNumber;
                             }
-
                             var shapePathSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
                                     ' .' + CSS.SHAPE_PATH;
                             var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
