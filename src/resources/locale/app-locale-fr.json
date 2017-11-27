@@ -889,13 +889,15 @@
             }
         }
     },
-    "BasiGX.util.Merge": {
-        "statics": {
-            "adoptAttributes": "fr:Adopt attributes",
-            "applyText": "fr:Apply",
-            "cancelText": "fr:Cancel",
-            "windowTitle": "fr:Merge features",
-            "matchText": "fr:Please select attributes to be mapped:"
+    "BasiGX.view.window.MergeWindow": {
+        "config": {
+            "data": {
+                "adoptAttributes": "fr:Adopt attributes",
+                "applyText": "fr:Apply",
+                "cancelText": "fr:Cancel",
+                "windowTitle": "fr:Merge features",
+                "matchText": "fr:Please select attributes to be mapped:"
+            }
         }
     },
     "BasiGX.view.button.AddWms": {

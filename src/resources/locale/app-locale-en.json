@@ -974,13 +974,15 @@
             }
         }
     },
-    "BasiGX.util.Merge": {
-        "statics": {
-            "adoptAttributes": "Attributes to add",
-            "applyText": "Apply",
-            "cancelText": "Cancel",
-            "windowTitle": "Merge features",
-            "matchText": "Please select attributes to be mapped:"
+    "BasiGX.view.window.MergeWindow": {
+        "config": {
+            "data": {
+                "adoptAttributes": "Attributes to add",
+                "applyText": "Apply",
+                "cancelText": "Cancel",
+                "windowTitle": "Merge features",
+                "matchText": "Please select attributes to be mapped:"
+            }
         }
     },
     "BasiGX.view.button.AddWms": {
