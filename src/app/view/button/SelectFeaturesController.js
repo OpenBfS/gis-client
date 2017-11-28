@@ -390,7 +390,7 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
             );
 
             if (cqlFilter) {
-                var ogcCqlFilter = BasiGX.util.WFS.getCqlFilter(cqlFilter);
+                var ogcCqlFilter = BasiGX.util.WFS.getOgcFromCqlFilter(cqlFilter);
                 filter = BasiGX.util.WFS.combineFilters([ogcCqlFilter, filter]);
             }
 
