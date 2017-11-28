@@ -41,6 +41,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.button.Permalink',
         'Koala.view.button.ShowRedliningToolsContainer',
         'Koala.view.button.ToggleFullscreen',
+        'Koala.view.button.SelectFeatures',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
@@ -119,6 +120,8 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'k-button-permalink'
             }, {
                 xtype: 'basigx-button-togglelegend'
+            }, {
+                xtype: 'k-button-selectfeatures'
             }]
         },
         listeners: {

@@ -58,6 +58,19 @@
             }
         }
     },
+    "Koala.view.button.SelectFeaturesController": {
+        "error": "Error",
+        "couldNotLoad": "The data could not be loaded.",
+        "couldNotParse": "The data could not be parsed.",
+        "noSingleActiveLayerFound": "Please select a single active Layer"
+    },
+    "Koala.view.button.SelectFeaturesModel": {
+        "config": {
+            "data":{
+                "tooltip": "Select features of the active Layer"
+            }
+        }
+    },
     "Koala.view.button.ShowRedliningToolsContainer": {
         "config": {
             "data": {

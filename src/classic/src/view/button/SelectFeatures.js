@@ -14,25 +14,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * This class is the view model for the Main view of the application.
- *
- * @class Koala.view.main.MainModel
+ * @class Koala.view.button.SelectFeatures
  */
-Ext.define('Koala.view.main.MainModel', {
-    extend: 'Ext.app.ViewModel',
+Ext.define('Koala.view.button.SelectFeatures', {
+    extend: 'Ext.button.Button',
+    xtype: 'k-button-selectfeatures',
+    requires: [
+        'Koala.view.button.SelectFeaturesController',
+        'Koala.view.button.SelectFeaturesModel'
+    ],
 
-    alias: 'viewmodel.app-main',
+    controller: 'k-button-selectfeatures',
+    viewModel: {
+        type: 'k-button-selectfeatures'
+    },
 
-    data: {
-        addWmsButtonText: '',
-        addWmsButtonTooltip: '',
-        buttonGroupTopTitle: '',
-        printButtonText: '',
-        printButtonTooltip: '',
-        importLocalDataButtonText: 'Import',
-        importLocalDataButtonTooltip: 'Import local data',
-        importLocalDataWindowText: 'Import',
-        headerTitle: '',
-        selectedFeaturesLayer: null
-    }
+    glyph: 'xf125@FontAwesome',
+
+    bind: {
+        text: null,
+        tooltip: '{tooltip}'
+    },
+
+    listeners: {
+        click: 'onClick'
+    },
+
+    enableToggle: true,
+
+    buttonPressed: false
 });
