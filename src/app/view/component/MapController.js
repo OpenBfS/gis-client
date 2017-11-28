@@ -147,59 +147,6 @@ Ext.define('Koala.view.component.MapController', {
         }
     },
 
-    /**
-     * This is finally a complete OVERRIDE of the getToolTipHtml function from
-     * the base class BasiGX.view.component.Map!
-     */
-    getToolTipHtml: function(layers, features) {
-        var innerHtml = '';
-        var lineBreak = '<br />';
-        var layersLen = layers && layers.length;
-        var featuresLen = features && features.length;
-        var replaceTemplateStrings = Koala.util.String.replaceTemplateStrings;
-        Ext.each(layers, function(layer, layerIdx) {
-            var hoverTpl = layer.get('hoverTpl');
-            Ext.each(features, function(feature, featureIdx, feats) {
-                // Avoid duplicated display of hovertemplate if a feature
-                // with the same geometry is included multiple times in features.
-                if (featureIdx > 0) {
-                    var lastFeature = feats[featureIdx-1];
-                    if (BasiGX.util.Geometry.equals(feature.getGeometry(),
-                        lastFeature.getGeometry())) {
-                        return;
-                    }
-                }
-
-                // we check for existing feature first as there maybe strange
-                // situations (e.g. when zooming while hovering)
-                // where feat is undefined and feat.get would throw an error
-                if (feature && feature.get('layer') === layer) {
-                    var tooltipFeature = hoverTpl;
-                    tooltipFeature = replaceTemplateStrings(
-                        tooltipFeature, layer, false);
-                    tooltipFeature = replaceTemplateStrings(
-                        tooltipFeature, layer, false, 'layer.');
-                    tooltipFeature = replaceTemplateStrings(
-                        tooltipFeature, feature, false);
-                    tooltipFeature = replaceTemplateStrings(
-                        tooltipFeature, feature, false, 'feature.');
-                    innerHtml += tooltipFeature;
-                    if (featureIdx + 1 !== featuresLen) {
-                        // not the last feature, append linebreak
-                        innerHtml += lineBreak;
-                    }
-                }
-            });
-
-            if (layerIdx + 1 !== layersLen) {
-                // not the last layer, append linebreak
-                innerHtml += lineBreak;
-            }
-        });
-
-        return innerHtml;
-    },
-
     onDroppedExternalVectorData: function(event) {
         Ext.create('Ext.window.Window', {
             // TODO i18n

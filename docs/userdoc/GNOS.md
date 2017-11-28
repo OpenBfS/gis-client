@@ -1306,6 +1306,17 @@ Das Attribut, dessen Werte in der Ansicht in Gruppen aufgeteilt werden sollen.
 | Default-Wert         |  |
 | Beispiel             | end_measure |
 
+**groupLabelAttribute**
+
+Das Attribut, das bei Gruppierung angezeigt werden soll.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Attributname der Features |
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | end_measure |
+
 **drawBarCondition**
 
 JavaScript-Funktion, die entscheidet, ob ein Punkt in der Zeitreihe gezeichnet wird oder nicht

@@ -57,7 +57,6 @@ Ext.define('Koala.view.component.Map', {
             hoverPlugin.setPointerRestInterval(interval);
             hoverPlugin.selectStyleFunction = selStyleFunction;
             hoverPlugin.highlightStyleFunction = highlightStyleFunction;
-            hoverPlugin.getToolTipHtml = me.getController().getToolTipHtml;
         }
 
         // TODO We should may move this to another place.

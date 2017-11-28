@@ -80,6 +80,7 @@
                 "expandToLeft": "fr:Show older data",
                 "expandToRight": "fr:Show newer data",
                 "toggleLegendVisibility": "fr:Toggle legend visibility",
+                "displayIdentificationThreshold": "fr:Display data < identification threshold",
                 "exportToPngText": "fr:Download Chart",
                 "toggleGrouping": "fr:Gruppierung tauschen",
                 "toggleUncertainty": "fr:Toggle uncertainty"
