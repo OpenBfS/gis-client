@@ -189,7 +189,7 @@ Ext.define('Koala.util.ChartData', {
                     if (matchingFeature.properties.value_constraint === '<' &&
                         !showIdentificationThresholdData) {
                         newRawData.drawAsZero = true;
-                        newRawData.minValue = chartConfig.yAxis_minimum;
+                        newRawData.minValue = chartConfig.yAxisMin || '0';
                     }
                     newRawData[valueField] = matchingFeature.properties[yAxisAttr];
                     Ext.each(attachedSeries, valueExtractor(newRawData, matchingFeature));
