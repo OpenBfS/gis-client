@@ -117,6 +117,88 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Gets the name of the first geometry field of the given layer by
+         * issuing a WFS DescribeFeatureType request against the GeoServer
+         *
+         * @param {ol.layer.Layer} layer The layer to use
+         * @param {Function} successCb The success callback function
+         * @param {Function} errorCb The failure callback function
+         */
+        getGeometryFieldNameForLayer: function(layer, successCb, errorCb) {
+            if (!layer || !successCb || !errorCb) {
+                Ext.log.error('Invalid arguments for method ' +
+                    '`getGeometryFieldNameForLayer`');
+                return;
+            }
+            var url = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wfs/url');
+            if (!url) {
+                Ext.log.error('No WFS URL for the given layer could be found');
+                errorCb.call();
+                return;
+            }
+            var name = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wms/layers');
+            url = Ext.String.urlAppend(url, 'request=DescribeFeatureType');
+            url = Ext.String.urlAppend(url, 'typename=' + name);
+            url = Ext.String.urlAppend(url, 'service=WFS');
+            url = Ext.String.urlAppend(url, 'version=1.1.0');
+            url = Ext.String.urlAppend(url, 'outputformat=application/json');
+
+            Ext.Ajax.request({
+                url: url,
+                success: function(response) {
+                    Koala.util.Layer.getDescribeFeatureTypeSuccess(
+                        successCb,
+                        response
+                    );
+                },
+                failure: errorCb,
+                timeout: 120000
+            });
+        },
+
+        /**
+         * Method tries to detect the name of the geometry field from a
+         * DescribeFeatureType response and calls the success callback.
+         * @param {Function} successCb The success callback function
+         * @param {String} response The response to parse
+         */
+        getDescribeFeatureTypeSuccess: function(successCb, response) {
+            try {
+                var json = JSON.parse(response.responseText);
+                var geometryField = '';
+                var geometryWhiteList = [
+                    'gml:Geometry',
+                    'gml:MultiGeometry',
+                    'gml:Surface',
+                    'gml:MultiSurface',
+                    'gml:Point',
+                    'gml:MultiPoint',
+                    'gml:LineString',
+                    'gml:MultiLineString',
+                    'gml:Polygon',
+                    'gml:MultiPolygon'
+                ];
+
+                Ext.each(json.featureTypes, function(ft) {
+                    Ext.each(ft.properties, function(prop) {
+                        var t = prop.type;
+                        if (Ext.Array.contains(geometryWhiteList, t)) {
+                            geometryField = prop.name;
+                            return false;
+                        }
+                    });
+                    if (geometryField) {
+                        return false;
+                    }
+                });
+                successCb.call(geometryField);
+            } catch (e) {
+                Ext.log.error('Could not determine geometryfield for layer: ' +
+                    e);
+            }
+        },
+
+        /**
          * Checks the properties of the layer to see if it configured to show the
          * CartoWindow instead of the default behaviour.
          *
