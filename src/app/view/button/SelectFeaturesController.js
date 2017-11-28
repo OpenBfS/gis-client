@@ -80,8 +80,9 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
         }
 
         if (!this.selectionLayer) {
+            var displayInLayerSwitcherKey =
+                BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
             this.selectionLayer = new ol.layer.Vector({
-                'DISPLAY_IN_LEGENDTREE': false,
                 source: new ol.source.Vector,
                 style: new ol.style.Style({
                     fill: new ol.style.Fill({
@@ -99,6 +100,7 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
                     })
                 })
             });
+            this.selectionLayer.set(displayInLayerSwitcherKey, false);
             this.mapComponent.map.addLayer(this.selectionLayer);
             var mainVm = Ext.ComponentQuery.query('app-main')[0].getViewModel();
             mainVm.set('selectedFeaturesLayer', this.selectionLayer);
