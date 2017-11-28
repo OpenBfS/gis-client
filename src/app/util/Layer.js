@@ -399,7 +399,7 @@ Ext.define('Koala.util.Layer', {
          */
         getFiltersTextFromMetadata: function(metadata) {
             var staticMe = Koala.util.Layer;
-            var filters = null;
+            var filters;
             if (Array.isArray(metadata)) { // it's a 'filters' array
                 filters = metadata;
             } else if (metadata !== null && typeof(metadata) === 'object') {
@@ -905,8 +905,8 @@ Ext.define('Koala.util.Layer', {
             var layerClassDecision = staticMe.getLayerClassFromMetadata(metadata);
             var LayerClass = layerClassDecision.clazz;
             var SourceClass = staticMe.getSourceClassFromMetadata(metadata, layerClassDecision);
-            var layerConfig = {};
-            var sourceConfig = {};
+            var layerConfig;
+            var sourceConfig;
 
             // apply default filter to layer, if needed
             metadata = Koala.util.Layer.adjustMetadataAccordingToFilters(metadata);
@@ -1052,6 +1052,7 @@ Ext.define('Koala.util.Layer', {
                 allowFeatureInfo: getBool(olProps.allowFeatureInfo, true),
                 allowDownload: getBool(olProps.allowDownload, true),
                 allowRemoval: getBool(olProps.allowRemoval, true),
+                allowClone: getBool(olProps.allowClone, false),
                 allowShortInfo: getBool(olProps.allowShortInfo, true),
                 allowPrint: getBool(olProps.allowPrint, true),
                 allowOpacityChange: getBool(olProps.allowOpacityChange, true),
@@ -1167,8 +1168,8 @@ Ext.define('Koala.util.Layer', {
                     var origin = ol.extent.getTopLeft(projection.getExtent());
                     var projectionExtent = projection.getExtent();
                     var size = ol.extent.getWidth(projectionExtent) / 256;
-                    var resolutions = new Array(19);
-                    var matrixIds = new Array(19);
+                    var resolutions = [];
+                    var matrixIds = [];
                     for (var z = 0; z < 19; ++z) {
                         // generate resolutions and matrixIds arrays for this
                         // WMTS
@@ -1569,7 +1570,7 @@ Ext.define('Koala.util.Layer', {
             }
             var op = (filter.operator || '').toUpperCase();
             var adjusted = false;
-            var stringified = '';
+            var stringified;
 
             if (!Ext.isArray(filter.effectivevalue)) {
                 if (op === '!=' || op === 'NEQ' || op === 'NOT IN') {
@@ -1726,6 +1727,7 @@ Ext.define('Koala.util.Layer', {
                     break;
                 case 'NOT IN':
                     displayFriendly = LayerUtil.dspSignNotIn;
+                    break;
                 default:
                     // catches some other unexpected filter
                     displayFriendly = sanitizedOp;

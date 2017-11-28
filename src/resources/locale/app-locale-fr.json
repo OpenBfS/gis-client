@@ -1,4 +1,11 @@
 {
+    "Koala.util.Clone": {
+        "statics": {
+            "error": "fr:Error",
+            "couldNotLoad": "fr:The data could not be loaded.",
+            "couldNotParse": "fr:The data could not be parsed."
+        }
+    },
     "Koala.util.Layer": {
         "statics": {
             "txtUntil": "fr:bis",
@@ -73,6 +80,7 @@
                 "expandToLeft": "fr:Show older data",
                 "expandToRight": "fr:Show newer data",
                 "toggleLegendVisibility": "fr:Toggle legend visibility",
+                "displayIdentificationThreshold": "fr:Display data < identification threshold",
                 "exportToPngText": "fr:Download Chart",
                 "toggleGrouping": "fr:Gruppierung tauschen",
                 "toggleUncertainty": "fr:Toggle uncertainty"
@@ -933,6 +941,16 @@
                 "layoutComboLabel": "fr:Layout",
                 "attributesTitle": "fr:Eigenschaften",
                 "mapTitleLabel": "fr:Kartentitel"
+            }
+        }
+    },
+    "BasiGX.view.grid.FeatureGrid": {
+        "config": {
+            "data": {
+                "renameButton": "fr:Rename",
+                "renameBox": "fr:Please specify the new column name:",
+                "deleteTitle": "fr:Delete",
+                "deleteQuestion": "fr:Do you really want to delete the column?"
             }
         }
     },

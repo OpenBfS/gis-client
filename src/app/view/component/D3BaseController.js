@@ -22,157 +22,6 @@ Ext.define('Koala.view.component.D3BaseController', {
     extend: 'Ext.app.ViewController',
 
     inheritableStatics: {
-        SVG_DEFS: {
-            LEGEND_ICON_BACKGROUND: 'M-3 -14 h 25 v 16 h -25 Z',
-            LEGEND_ICON_AREA: 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6 M20 -6 v 6 h -20 v -6 Z',
-            LEGEND_ICON_BAR: 'M0 -10 h 6 v 12 h -6 Z M7 -6 h 6 v 8 h -6 Z M14 -10 h 6 v 12 h -6 Z',
-            LEGEND_ICON_LINE: 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6'
-        },
-        /**
-         * An object containing CSS classes and parts (suffixes, prefixes) to
-         * generate CSS classes.
-         *
-         * @type {Object}
-         */
-        CSS_CLASS: {
-            AXIS: 'k-d3-axis',
-            AXIS_X: 'k-d3-axis-x',
-            AXIS_Y: 'k-d3-axis-y',
-
-            PLOT_BACKGROUND: 'k-d3-plot-background',
-
-            GRID: 'k-d3-grid',
-            GRID_X: 'k-d3-grid-x',
-            GRID_Y: 'k-d3-grid-y',
-
-            SHAPE_GROUP: 'k-d3-shape-group',
-            BAR_GROUP: 'k-d3-bar-group',
-            BAR: 'k-d3-bar',
-            UNCERTAINTY: 'k-d3-uncertainty',
-            SHAPE_PATH: 'k-d3-shape-path',
-            SHAPE_POINT_GROUP: 'k-d3-shape-points',
-            LEGEND_CONTAINER: 'k-d3-scrollable-legend-container',
-            COLOR_ICON: 'k-d3-color-icon',
-            DOWNLOAD_ICON: 'k-d3-download-icon',
-            DELETE_ICON: 'k-d3-delete-icon',
-
-            AXIS_LABEL: 'k-d3-axis-label',
-            AXIS_LABEL_X: 'k-d3-axis-label-x',
-            AXIS_LABEL_Y: 'k-d3-axis-label-y',
-
-            PREFIX_IDX_SHAPE_GROUP: 'shape-group-',
-            PREFIX_IDX_SHAPE_PATH: 'shape-path-',
-            PREFIX_IDX_SHAPE_POINT_GROUP: 'shape-points-',
-            PREFIX_IDX_LEGEND_GROUP: 'legend-group-',
-
-            SUFFIX_LEGEND: '-legend',
-
-            HIDDEN_CLASS: 'k-d3-hidden',
-            DISABLED_CLASS: 'k-d3-disabled'
-        },
-
-        /**
-         * Additional space added to the (bar) chart. Adds the configured Number
-         * as percent to the datarange to create some space inside the chart.
-         *
-         * @type {Number} percent
-         */
-        ADDITIONAL_DOMAIN_SPACE: 10,
-
-        /**
-         * Additional margin to take into consideration when calculating the
-         * width of the bars.
-         *
-         * @type {Number}
-         */
-        ADDITIONAL_BAR_MARGIN: 5,
-
-        /**
-         * Static mapping of supported D3 axis generators. See the
-         * {@link https://github.com/d3/d3-axis/blob/master/README.md#axisTop|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} top - Return a top-oriented axis generator.
-         * @type {function} right - Return a right-oriented axis generator.
-         * @type {function} bottom - Return a bottom-oriented axis generator.
-         * @type {function} left - Return a left-oriented axis generator.
-         */
-        ORIENTATION: {
-            top: d3.axisTop,
-            right: d3.axisRight,
-            bottom: d3.axisBottom,
-            left: d3.axisLeft
-        },
-
-        /**
-         * Static mapping of supported d3 scales. In D3 Scales are functions that
-         * map from an input domain to an output range. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#scales-d3-scale|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - Return a quantitative linear scale.
-         * @type {function} pow - Return a quantitative power scale.
-         * @type {function} sqrt - Return a quantitative power scale with exponent 0.5.
-         * @type {function} log - Return a quantitative logarithmic scale.
-         * @type {function} ident - Return a quantitative identity scale.
-         * @type {function} time - Return a linear scale for time.
-         * @type {function} utc - Return a linear scale for UTC.
-         */
-        SCALE: {
-            linear: d3.scaleLinear,
-            pow: d3.scalePow,
-            sqrt: d3.scaleSqrt,
-            log: d3.scaleLog,
-            ident: d3.scaleIdentity,
-            time: d3.scaleTime,
-            ordinal: d3.scaleBand
-        },
-
-        /**
-         * Static mapping of supported d3 shape types. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#shapes-d3-shape|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} line - Return a line generator.
-         * @type {function} area - Return an area generator.
-         * @type {function} bar - TODO
-         */
-        TYPE: {
-            line: d3.line,
-            area: d3.area,
-            // TODO: set another type?!
-            bar: d3.line
-        },
-
-        /**
-         * Static mapping of supported d3 curve types. In D3 the curve type
-         * represents the interpolation between points in a continous shape. See
-         * the {@link https://github.com/d3/d3/blob/master/API.md#curves|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - A polyline through specified points.
-         * @type {function} cubicBasisSpline - A cubic basis spline using the
-         *       specified control points.
-         * @type {function} curveMonotoneX - A cubic spline that preserves
-         *       monotonicity in y, assuming monotonicity in x.
-         * @type {function} naturalCubicSpline - A natural cubic spline with the
-         *       second derivative of the spline set to zero at the endpoints.
-         * @type {function} curveStep - A piecewise constant function. The y-value
-         *       changes at the midpoint of each pair of adjacent x-values.
-         * @type {function} curveStepAfter - A piecewise constant function. The
-         *       y-value changes after the x-value.
-         * @type {function} curveStepBefore - A piecewise constant function. The
-         *       y-value changes before the x-value.
-         */
-        CURVE: {
-            linear: d3.curveLinear,
-            cubicBasisSpline: d3.curveBasis,
-            curveMonotoneX: d3.curveMonotoneX,
-            naturalCubicSpline: d3.curveNatural,
-            curveStep: d3.curveStep,
-            curveStepAfter: d3.curveStepAfter,
-            curveStepBefore: d3.curveStepBefore
-        },
 
         /**
          * Given a SVG `<path>` (from a d3 selection), modify the start point by
@@ -634,26 +483,13 @@ Ext.define('Koala.view.component.D3BaseController', {
     drawSvgContainer: function() {
         var me = this;
         var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
         var makeTranslate = staticMe.makeTranslate;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
-        var chartSize = me.getChartSize();
-        var metadata = view.getConfig().targetLayer.metadata;
-        var series = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        series = JSON.parse(series);
 
         var translate = makeTranslate(chartMargin.left, chartMargin.top);
         var viewSize = me.getViewSize();
-        var totalOffset = 0;
-        Ext.each(series, function(s) {
-            totalOffset += s.axisWidth || 40;
-        });
 
         // Get the container view by its ID and append the SVG including an
         // additional group element to it.
@@ -663,17 +499,24 @@ Ext.define('Koala.view.component.D3BaseController', {
             .attr('width', viewSize[0])
             .attr('height', viewSize[1])
             .append('g')
-            .attr('transform', translate)
-            .append('rect')
-            .attr('transform', makeTranslate(totalOffset, 0))
+            .attr('transform', translate);
+
+        var containerSvg = d3.select(viewId + ' svg');
+        me.containerSvg = containerSvg;
+    },
+
+    appendBackground: function(node) {
+        var view = this.getView();
+        var chartSize = this.getChartSize();
+        var CSS = Koala.util.ChartConstants.CSS_CLASS;
+        node.append('rect')
             .style('fill', view.getBackgroundColor() || '#EEE')
             .attr('class', CSS.PLOT_BACKGROUND)
             .attr('width', chartSize[0])
             .attr('height', chartSize[1])
+            // to make y axis line visible
+            .attr('transform', 'translate(1, 0)')
             .attr('pointer-events', 'all');
-
-        var containerSvg = d3.select(viewId + ' svg');
-        me.containerSvg = containerSvg;
     },
 
     /**
@@ -692,8 +535,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     drawLegendContainer: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
+        var CSS = Koala.util.ChartConstants.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var viewSize = me.getViewSize();
@@ -779,8 +621,7 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     createScale: function(orient, axisConfig, chartSize) {
-        var staticMe = Koala.view.component.D3BaseController;
-        var scaleType = staticMe.SCALE[axisConfig.scale || 'linear'];
+        var scaleType = Koala.util.ChartConstants.SCALE[axisConfig.scale || 'linear'];
         var range;
 
         if (orient === 'top' || orient === 'bottom') {
@@ -813,6 +654,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     drawThresholdLegends: function(config, legendContainer, curTranslateY) {
         var me = this;
+        var Const = Koala.util.ChartConstants;
         var staticMe = Koala.view.component.D3BaseController;
         var thresholds;
         if (config.thresholds) {
@@ -828,8 +670,8 @@ Ext.define('Koala.view.component.D3BaseController', {
                 .append('g')
                 .on('click', function() {
                     var target = d3.select(d3.event.target);
-                    if (target && (target.classed(staticMe.CSS_CLASS.DELETE_ICON) ||
-                            target.classed(staticMe.CSS_CLASS.COLOR_ICON))) {
+                    if (target && (target.classed(Const.CSS_CLASS.DELETE_ICON) ||
+                            target.classed(Const.CSS_CLASS.COLOR_ICON))) {
                         return;
                     }
                     me.thresholdState[idx].visibility = !me.thresholdState[idx].visibility;
@@ -840,13 +682,13 @@ Ext.define('Koala.view.component.D3BaseController', {
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
-                .attr('d', staticMe.SVG_DEFS.LEGEND_ICON_BACKGROUND)
+                .attr('d', Const.SVG_DEFS.LEGEND_ICON_BACKGROUND)
                 .style('stroke', 'none')
                 // invisible, but still triggering events
                 .style('fill', 'rgba(0,0,0,0)');
 
             var line = legendEntry.append('path')
-                .attr('d', staticMe.SVG_DEFS.LEGEND_ICON_LINE)
+                .attr('d', Const.SVG_DEFS.LEGEND_ICON_LINE)
                 .style('stroke', me.thresholdState[idx].color || threshold.stroke)
                 .style('stroke-width', threshold.lineWidth)
                 .style('fill', 'none');
@@ -866,7 +708,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             legendEntry.append('text')
                 // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('\uf1fc')
-                .attr('class', staticMe.CSS_CLASS.COLOR_ICON)
+                .attr('class', Const.CSS_CLASS.COLOR_ICON)
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
                 .attr('dx', '150')
@@ -875,7 +717,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
                 .text('')
-                .attr('class', staticMe.CSS_CLASS.DELETE_ICON)
+                .attr('class', Const.CSS_CLASS.DELETE_ICON)
                 .attr('text-anchor', 'start')
                 .attr('dy', '1')
                 .attr('dx', '170')
@@ -885,7 +727,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                     me.redrawLegend();
                 });
 
-            var disabledClsName = staticMe.CSS_CLASS.DISABLED_CLASS;
+            var disabledClsName = Const.CSS_CLASS.DISABLED_CLASS;
 
             legendEntry.classed(disabledClsName, !me.thresholdState[idx].visibility);
         });
@@ -937,6 +779,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var me = this;
         var view = this.getView();
         var metadata = view.getConfig().targetLayer.metadata;
+        var Axes = Koala.util.ChartAxes;
         var chartSize = this.getChartSize();
         me.attachedSeriesAxes = [];
         me.attachedSeriesScales = [];
@@ -950,7 +793,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             var label = config.dspUnit || '';
             var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
             var scale = me.createScale('left', axisConfig, chartSize);
-            var axis = me.createAxis(axisConfig, 'left', scale);
+            var axis = Axes.createAxis(axisConfig, 'left', scale);
 
             me.setDomainForScale(axisConfig, scale, 'left', axisConfig);
 
@@ -965,6 +808,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var metadata = view.getConfig().targetLayer.metadata;
         var chartSize = this.getChartSize();
         var viewId = '#' + view.getId();
+        var Axes = Koala.util.ChartAxes;
         var series = Koala.util.Object.getPathStrOr(
             metadata,
             'layerConfig/timeSeriesChartProperties/attachedSeries',
@@ -978,71 +822,8 @@ Ext.define('Koala.view.component.D3BaseController', {
             var axis = me.attachedSeriesAxes[idx];
             var axisWidth = (config.axisWidth || 40) + drawOffset;
             drawOffset += axisWidth;
-            me.drawAxis('left', axisConfig, chartSize, viewId, axis, axisWidth, idx + 1);
+            Axes.drawAxis('left', axisConfig, chartSize, viewId, axis, axisWidth, idx + 1, metadata);
         });
-    },
-
-    /**
-     * Method that can be adjusted to generate a custom multi scale time formatter
-     * function, based on https://github.com/d3/d3-time-format
-     *
-     * See https://github.com/d3/d3-time-format/blob/master/README.md#locale_format
-     * for available D3 datetime formats.
-     *
-     * @param  {Date} date The current Date object.
-     * @return {function} The multi-scale time format function.
-     */
-    getMultiScaleTimeFormatter: function(date) {
-        date = moment(date);
-        if (Koala.Application.isUtc()) {
-            date = Koala.util.Date.removeUtcOffset(date);
-        }
-        date = Koala.util.Date.getTimeReferenceAwareMomentDate(date);
-        var formatMillisecond = d3.timeFormat('.%L'),
-            formatSecond = d3.timeFormat(':%S'),
-            formatMinute = d3.timeFormat('%H:%M'),
-            formatHour = d3.timeFormat('%H:%M'),
-            formatDay = d3.timeFormat('%a %d'),
-            formatWeek = d3.timeFormat('%b %d'),
-            formatMonth = d3.timeFormat('%B'),
-            formatYear = d3.timeFormat('%Y');
-
-        return (d3.timeSecond(date) < date ? formatMillisecond
-            : d3.timeMinute(date) < date ? formatSecond
-                : d3.timeHour(date) < date ? formatMinute
-                    : d3.timeDay(date) < date ? formatHour
-                        : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
-                            : d3.timeYear(date) < date ? formatMonth
-                                : formatYear)(date);
-    },
-
-    createAxis: function(axisConfig, orient, scale) {
-        var staticMe = Koala.view.component.D3BaseController;
-        var axis = staticMe.ORIENTATION[orient];
-
-        // https://github.com/d3/d3-format
-        var tickFormatter;
-        if (axisConfig.scale === 'time') {
-            tickFormatter = this.getMultiScaleTimeFormatter;
-        } else if (axisConfig.format) {
-            tickFormatter = d3.format(axisConfig.format || ',.0f');
-        } else {
-            tickFormatter = function(tickString) {
-                var isTime = (new moment(tickString, moment.ISO_8601, true))
-                    .isValid();
-
-                tickString = isTime ? Koala.util.Date.getFormattedDate(
-                    new moment(tickString)) : tickString;
-                return tickString;
-            };
-        }
-
-        return axis(scale)
-            .ticks(axisConfig.ticks)
-            .tickValues(axisConfig.tickValues)
-            .tickFormat(tickFormatter)
-            .tickSize(axisConfig.tickSize || 6)
-            .tickPadding(axisConfig.tickPadding || 3);
     },
 
     /**
@@ -1050,99 +831,15 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     createAxes: function() {
         var me = this;
+        var Axes = Koala.util.ChartAxes;
         var view = me.getView();
         var axesConfig = view.getAxes();
 
         Ext.iterate(axesConfig, function(orient, axisConfig) {
             var scale = me.scales[orient];
-            var axis = me.createAxis(axisConfig, orient, scale);
+            var axis = Axes.createAxis(axisConfig, orient, scale);
             me.axes[orient] = axis;
         });
-    },
-
-    /**
-     * Render a single axis.
-     * @param  {String}  orient     top/left/bottom/top
-     * @param  {Object} axisConfig axis configuration object
-     * @param  {Array}  chartSize  pixel size of the chart
-     * @param  {String}  viewId     the Ext view id
-     * @param  {Object} axis the d3 axis object
-     * @param  {Number} offsetX the x offset, if any
-     * @param  {Number} index the index, if an index should be set
-     */
-    drawAxis: function(orient, axisConfig, chartSize, viewId, axis, offsetX, index) {
-        var staticMe = Koala.view.component.D3BaseController;
-        var makeTranslate = staticMe.makeTranslate;
-        var CSS = staticMe.CSS_CLASS;
-        var metadata = this.getView().getConfig().targetLayer.metadata;
-        var series = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        series = JSON.parse(series);
-
-        var axisTransform;
-        var labelTransform;
-        var labelPadding;
-        var cssAxisClass;
-        var cssLabelClass;
-        var totalOffset = 0;
-        Ext.each(series, function(s) {
-            totalOffset += s.axisWidth || 40;
-        });
-
-        if (orient === 'top' || orient === 'bottom') {
-            cssAxisClass = CSS.AXIS + ' ' + CSS.AXIS_X;
-            cssLabelClass = CSS.AXIS_LABEL + ' ' + CSS.AXIS_LABEL_X;
-            axisTransform = (orient === 'bottom') ?
-                makeTranslate(totalOffset, chartSize[1]) : undefined;
-
-            labelTransform = makeTranslate(chartSize[0] / 2, 0);
-            labelPadding = axisConfig.labelPadding || 35;
-        } else if (orient === 'left' || orient === 'right') {
-            cssAxisClass = CSS.AXIS + ' ' + CSS.AXIS_Y;
-            if (index) {
-                cssAxisClass += '_' + index;
-            }
-            cssLabelClass = CSS.AXIS_LABEL + ' ' + CSS.AXIS_LABEL_Y;
-            axisTransform = (orient === 'right') ?
-                makeTranslate(chartSize[0], 0) : undefined;
-            if (offsetX) {
-                axisTransform = makeTranslate(offsetX, 0);
-            }
-            var translate = makeTranslate(chartSize[1] / -2, 0);
-            labelTransform = 'rotate(-90), ' + translate;
-            labelPadding = (axisConfig.labelPadding || 25) * -1;
-        }
-
-        if (index !== undefined) {
-            // attached series axes hidden by default
-            cssAxisClass += ' k-d3-hidden';
-        }
-
-        d3.select(viewId + ' svg > g')
-            .append('g')
-            .attr('class', cssAxisClass)
-            .attr('transform', axisTransform)
-            .call(axis)
-            .append('text')
-            .attr('transform', labelTransform)
-            .attr('dy', labelPadding)
-            .attr('fill', axisConfig.labelColor || '#000')
-            .attr('class', cssLabelClass)
-            .style('text-anchor', 'middle')
-            .style('font-weight', 'bold')
-            .style('font-size', axisConfig.labelSize || 12)
-            .text(axisConfig.label || '');
-
-        if (axisConfig.rotateXAxisLabel && (orient === 'top' || orient === 'bottom')) {
-            d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_X + ' > g > text')
-                .attr('transform', 'rotate(-55)')
-                .attr('dx', '-10px')
-                .attr('dy', '1px')
-                .style('text-anchor', 'end');
-        }
     },
 
     /**
@@ -1154,9 +851,11 @@ Ext.define('Koala.view.component.D3BaseController', {
         var viewId = '#' + view.getId();
         var axesConfig = view.getAxes();
         var chartSize = this.getChartSize();
+        var metadata = view.getConfig().targetLayer.metadata;
+        var Axes = Koala.util.ChartAxes;
 
         Ext.iterate(axesConfig, function(orient, axisConfig) {
-            me.drawAxis(orient, axisConfig, chartSize, viewId, me.axes[orient]);
+            Axes.drawAxis(orient, axisConfig, chartSize, viewId, me.axes[orient], undefined, undefined, metadata);
         });
     },
 
@@ -1167,10 +866,14 @@ Ext.define('Koala.view.component.D3BaseController', {
         var me = this;
         var view = me.getView();
         var axesConfig = view.getAxes();
+        var metadata = view.getConfig().targetLayer.metadata;
+        var Axes = Koala.util.ChartAxes;
+        var chartSize = this.getChartSize();
+        var viewId = view.getId();
 
         Ext.iterate(axesConfig, function(orient) {
             var axisGenerator = me.axes[orient];
-            me.redrawAxis(axisGenerator, orient);
+            Axes.redrawAxis(axisGenerator, orient, metadata, chartSize, viewId);
         });
     },
 
@@ -1179,98 +882,24 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     redrawAttachedSeriesAxes: function() {
         var me = this;
+        var metadata = this.getView().getConfig().targetLayer.metadata;
+        var Axes = Koala.util.ChartAxes;
+        var chartSize = this.getChartSize();
+        var viewId = this.getView().getId();
 
         Ext.each(me.attachedSeriesAxes, function(axis) {
-            me.redrawAxis(axis, 'left');
+            Axes.redrawAxis(axis, 'left', metadata, chartSize, viewId);
         });
-    },
-
-    /**
-     * Redraw a single axis
-     */
-    redrawAxis: function(axisGenerator, orient) {
-        var me = this;
-        var staticMe = Koala.view.component.D3BaseController;
-        var makeTranslate = staticMe.makeTranslate;
-        var axisTransform;
-        var labelTransform;
-        var axis;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var chartSize = me.getChartSize();
-        var CSS = staticMe.CSS_CLASS;
-        var axisSelector = viewId + ' svg g.' + CSS.AXIS;
-        var totalOffset = 0;
-        var metadata = view.getConfig().targetLayer.metadata;
-        var seriesConfigs = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        seriesConfigs = JSON.parse(seriesConfigs);
-        Ext.each(seriesConfigs, function(s) {
-            totalOffset += s.axisWidth || 40;
-        });
-
-        if (orient === 'top' || orient === 'bottom') {
-            axisTransform = (orient === 'bottom') ?
-                makeTranslate(totalOffset, chartSize[1]) : undefined;
-            labelTransform = makeTranslate(chartSize[0] / 2, 0);
-
-            axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
-        } else if (orient === 'left' || orient === 'right') {
-            axisTransform = (orient === 'right') ?
-                makeTranslate(0, chartSize[1]) : undefined;
-            var translate = makeTranslate(chartSize[1] / -2, 0);
-            labelTransform = 'rotate(-90), ' + translate;
-
-            axis = d3.select(axisSelector + '.' + CSS.AXIS_Y);
-        }
-
-        axis
-            .transition()
-            .attr('transform', axisTransform)
-            .call(axisGenerator);
-
-        // Redraw the axis label
-        axis.select('.' + CSS.AXIS_LABEL)
-            .transition()
-            .attr('transform', labelTransform);
     },
 
     /**
      * Creates the grid axis.
      */
     createGridAxes: function() {
-        var me = this;
-        var view = me.getView();
-        var gridConfig = view.getGrid();
-
-        if (!gridConfig.show) {
-            return false;
-        }
-
-        var staticMe = Koala.view.component.D3BaseController;
-        var chartSize = me.getChartSize();
-        var orientations = ['bottom', 'left'];
-
-        Ext.each(orientations, function(orient) {
-            var axis = staticMe.ORIENTATION[orient];
-            var scale = me.scales[orient];
-            var tickSize;
-
-            if (orient === 'top' || orient === 'bottom') {
-                tickSize = chartSize[1];
-            } else if (orient === 'left' || orient === 'right') {
-                tickSize = chartSize[0] * -1;
-            }
-
-            var chartAxis = axis(scale)
-                .tickFormat('')
-                .tickSize(tickSize);
-
-            me.gridAxes[orient] = chartAxis;
-        });
+        var Axes = Koala.util.ChartAxes;
+        var gridConfig = this.getView().getGrid();
+        var chartSize = this.getChartSize();
+        Axes.createGridAxes(gridConfig, chartSize, this.scales, this.gridAxes);
     },
 
     /**
@@ -1285,8 +914,8 @@ Ext.define('Koala.view.component.D3BaseController', {
             return false;
         }
 
-        var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var viewId = '#' + view.getId();
         var axisSelector = viewId + ' svg g.' + CSS.GRID;
         var orientations = ['bottom', 'left'];
@@ -1299,6 +928,10 @@ Ext.define('Koala.view.component.D3BaseController', {
                 axis = d3.select(axisSelector + '.' + CSS.GRID_X);
             } else if (orient === 'left' || orient === 'right') {
                 axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
+            }
+
+            if (!axis) {
+                return;
             }
 
             axis
@@ -1385,8 +1018,8 @@ Ext.define('Koala.view.component.D3BaseController', {
             return false;
         }
 
-        var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var viewId = '#' + view.getId();
         var orientations = ['bottom', 'left'];
 
@@ -1627,7 +1260,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     deleteLegendEntry: function(id) {
         var me = this;
-        var CSS = Koala.view.component.D3BaseController.CSS_CLASS;
+        var CSS = Koala.util.ChartConstants.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var selectorTpl = '{0} g[idx="{1}{2}"]';
@@ -1659,8 +1292,8 @@ Ext.define('Koala.view.component.D3BaseController', {
      * the g usually groups a bar and its label or a series.
      */
     toggleGroupVisibility: function(group, legendElement) {
-        var staticMe = Koala.view.component.D3BaseController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var hideClsName = CSS.HIDDEN_CLASS;
         var disabledClsName = CSS.DISABLED_CLASS;
 
@@ -1681,8 +1314,8 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     redrawLegend: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var legendCls = CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND;
         var legend = this.legendSvg.select('g.' + legendCls);
         if (legend) {
@@ -1737,53 +1370,6 @@ Ext.define('Koala.view.component.D3BaseController', {
         var viewId = '#' + view.getId();
 
         return d3.select(viewId + ' svg');
-    },
-
-    /**
-     * Create a ogc-filter for a datetime range.
-     *
-     * @param {String} startDateString The start date as an ISO_8601 date string.
-     * @param {String} endDateString The end date as an ISO_8601 date string.
-     * @param {String} timeField The name of the timestamp field in the layer.
-     * @return {String} The ogc-filter as a string.
-     */
-    getDateTimeRangeFilter: function(startDateString, endDateString, timeField) {
-        var filter;
-
-        filter = '' +
-            '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
-              '<a:PropertyIsBetween>' +
-                '<a:PropertyName>' + timeField + '</a:PropertyName>' +
-                '<a:LowerBoundary>'+
-                  '<a:Literal>' + startDateString + '</a:Literal>' +
-                '</a:LowerBoundary>' +
-                '<a:UpperBoundary>' +
-                  '<a:Literal>' + endDateString + '</a:Literal>' +
-                '</a:UpperBoundary>' +
-              '</a:PropertyIsBetween>' +
-            '</a:Filter>';
-
-        return filter;
-    },
-
-    /**
-     * Create a ogc-filter for a point in time.
-     *
-     * @param {String} dateString An ISO_8601 date string.
-     * @param {String} timeField The name of the timestamp field in the layer.
-     * @return {String} The ogc-filter as a string.
-     */
-    getPointInTimeFilter: function(dateString, timeField) {
-        var filter;
-
-        filter = '' +
-            '<a:Filter xmlns:a="http://www.opengis.net/ogc">' +
-                '<a:PropertyIsEqualTo>' +
-                    '<a:PropertyName>' + timeField + '</a:PropertyName>' +
-                    '<a:Literal>' + dateString + '</a:Literal>' +
-                '</a:PropertyIsEqualTo>' +
-            '</a:Filter>';
-
-        return filter;
     }
+
 });

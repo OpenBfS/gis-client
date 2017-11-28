@@ -22,7 +22,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     xtype: 'k-panel-routing-legendtree',
 
     requires: [
+        'BasiGX.view.grid.FeatureGrid',
         'Koala.store.MetadataSearch',
+        'Koala.util.Clone',
         'Koala.util.Layer',
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
@@ -163,6 +165,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var allowChangeFilter = olLayer.metadata || false;
             var allowDownload = olLayer.get('allowDownload') || false;
             var allowRemoval = olLayer.get('allowRemoval') || false;
+            var allowClone = olLayer.get('allowClone') || false;
             var allowStyle = olLayer instanceof ol.layer.Vector &&
                     !olLayer.get('disableStyling');
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
@@ -172,6 +175,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var changeFilterBtn = comp.down('button[name="filter"]');
             var downloadBtn = comp.down('button[name="download"]');
             var removalBtn = comp.down('button[name="removal"]');
+            var cloneBtn = comp.down('button[name="clone"]');
             var styleBtn = comp.down('button[name="style"]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
@@ -191,6 +195,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             }
             if (removalBtn) {
                 removalBtn.setVisible(allowRemoval);
+            }
+            if (cloneBtn) {
+                cloneBtn.setVisible(allowClone);
             }
             if (styleBtn) {
                 styleBtn.setVisible(allowStyle);
@@ -313,6 +320,11 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     }
                 }
             });
+        },
+
+        cloneHandler: function(btn) {
+            var layer = btn.layerRec.getOlLayer();
+            Koala.util.Clone.cloneLayer(layer);
         },
 
         styleHandler: function(btn) {
@@ -446,6 +458,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 // class is defined and we can access the static methods
             }, {
                 xtype: 'button',
+                name: 'clone',
+                glyph: 'xf0c5@FontAwesome',
+                tooltip: 'Objekte klonen'
+                // We'll assign a handler to handle clicks here once the
+                // class is defined and we can access the static methods
+            }, {
+                xtype: 'button',
                 name: 'style',
                 glyph: 'xf1fc@FontAwesome',
                 tooltip: 'Layerstil anpassen'
@@ -519,6 +538,44 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         me.bindUpdateHandlers();
         me.bindLoadIndicationHandlers();
+        me.on('selectionchange', me.toggleFeatureGrid.bind(me));
+    },
+
+    /**
+     * Toggles display of the feature grid.
+     * @param  {Object} selectionModel the selection model
+     */
+    toggleFeatureGrid: function(selectionModel) {
+        var selection = selectionModel.getSelection();
+        if (selection.length === 0) {
+            if (this.featureGrid) {
+                this.featureGrid.destroy();
+            }
+            return;
+        }
+        var layer = selection[0].data;
+        if (layer instanceof ol.layer.Vector) {
+            if (this.featureGrid) {
+                this.featureGrid.destroy();
+            }
+            this.featureGrid = Ext.create({
+                xtype: 'window',
+                layout: 'fit',
+                title: layer.get('name'),
+                items: [{
+                    xtype: 'basigx-grid-featuregrid',
+                    layer: layer,
+                    width: 500,
+                    height: 300,
+                    scrollable: true
+                }]
+            });
+            this.featureGrid.show();
+        } else {
+            if (this.featureGrid) {
+                this.featureGrid.destroy();
+            }
+        }
     },
 
     /**
@@ -1040,6 +1097,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var infoBtnCfg = cls.findByProp(menuItems, 'name', 'shortInfo');
     var downloadBtnCfg = cls.findByProp(menuItems, 'name', 'download');
     var removalBtnCfg = cls.findByProp(menuItems, 'name', 'removal');
+    var cloneBtnCfg = cls.findByProp(menuItems, 'name', 'clone');
     var styleBtnCfg = cls.findByProp(menuItems, 'name', 'style');
     var opacitySliderCfg = cls.findByProp(menuItems, 'name', 'opacityChange');
 
@@ -1057,6 +1115,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     }
     if (removalBtnCfg) {
         removalBtnCfg.handler = cls.removalHandler;
+    }
+    if (cloneBtnCfg) {
+        cloneBtnCfg.handler = cls.cloneHandler;
     }
     if (styleBtnCfg) {
         styleBtnCfg.handler = cls.styleHandler;

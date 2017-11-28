@@ -1,4 +1,11 @@
 {
+    "Koala.util.Clone": {
+        "statics": {
+            "error": "Error",
+            "couldNotLoad": "The data could not be loaded.",
+            "couldNotParse": "The data could not be parsed."
+        }
+    },
     "Koala.util.Date": {
         "statics": {
             "txtUtc": "(UTC)",
@@ -82,6 +89,7 @@
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Toggle grouping",
                 "toggleUncertainty": "Toggle uncertainty",
+                "displayIdentificationThreshold": "Display data < identification threshold",
                 "irixPrintText": "DokPool",
                 "irixPrintTooltip": "export chart into DokPool"
             }
@@ -1033,6 +1041,16 @@
                 "DokpoolBehaviour_Rodos_label": "Rodos",
                 "DokpoolBehaviour_Rei_label": "Rei",
                 "Permalink_text": "en:Darstellung im GIS anzeigen"
+            }
+        }
+    },
+    "BasiGX.view.grid.FeatureGrid": {
+        "config": {
+            "data": {
+                "renameButton": "Rename",
+                "renameBox": "Please specify the new column name:",
+                "deleteTitle": "Delete",
+                "deleteQuestion": "Do you really want to delete the column?"
             }
         }
     },

@@ -255,8 +255,28 @@
     "children": [
       {
         "leaf": true,
-        "text": "Verwaltungsgrenzen Deutschland",
-        "uuid": "699dad1a-7252-426f-9e8f-39e39074142f"
+        "text": "Infrastruktureinrichtungen",
+        "uuid": "ec748d3b-9710-41ae-9c89-46c30ddba207"
+      },
+      {
+        "leaf": true,
+        "text": "Planungsradien des Katastrophenschutzes",
+        "uuid": "88415902-4ca7-4d1c-b714-64cc917fc2ab"
+      },
+      {
+        "leaf": true,
+        "text": "Verwaltungsgrenzen",
+        "uuid": "75ecfcd1-4948-4403-bc6b-ab75a2c955d6"
+      },
+      {
+        "leaf": true,
+        "text": "UV-Index TEST",
+        "uuid": "95050a76-1b87-42e6-8335-5a6522d37973"
+      },
+      {
+        "leaf": true,
+        "text": "UV-Messwerte TEST",
+        "uuid": "32167b6d-d2b0-4a51-bcd9-a56567fdf6ea"
       }
     ],
     "isLayerProfile": false,

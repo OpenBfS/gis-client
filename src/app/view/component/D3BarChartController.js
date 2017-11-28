@@ -20,6 +20,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
     extend: 'Koala.view.component.D3BaseController',
     alias: 'controller.component-d3barchart',
 
+    requires: [
+        'Koala.util.Ogc'
+    ],
+
     /**
      *
      */
@@ -69,6 +73,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      * @return {Object} The request object.
      */
     getChartDataRequestParams: function(station) {
+        var Ogc = Koala.util.Ogc;
         var me = this;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
@@ -104,13 +109,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 var dateString;
                 dateString = filter.effectivedatetime.toISOString();
                 timeField = filter.param;
-                requestFilter = me.getPointInTimeFilter(dateString, timeField);
+                requestFilter = Ogc.getPointInTimeFilter(dateString, timeField);
                 return false;
             } else if (filter.type === 'timerange') {
                 var startString = filter.effectivemindatetime.toISOString();
                 var endString = filter.effectivemaxdatetime.toISOString();
                 timeField = filter.param;
-                requestFilter = me.getDateTimeRangeFilter(
+                requestFilter = Ogc.getDateTimeRangeFilter(
                     startString, endString, timeField);
                 return false;
             }
@@ -288,7 +293,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     setDomainForScales: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
+        var Const = Koala.util.ChartConstants;
         var view = me.getView();
 
         // Iterate over all scales/axis orientations and all shapes to find the
@@ -335,7 +340,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     max = Koala.util.String.coerce(axis.max);
                     makeDomainNice = false; // if one was given, don't auto-enhance
                 } else {
-                    var additionalSpace = dataRange[1]/100*staticMe.ADDITIONAL_DOMAIN_SPACE;
+                    var additionalSpace = dataRange[1]/100*Const.ADDITIONAL_DOMAIN_SPACE;
                     max = dataRange[1] + additionalSpace;
                 }
 
@@ -363,11 +368,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 }
 
                 // Actually set the domain
-                if (axisDomain) {
-                    var domain = me.scales[orient].domain(axisDomain);
-                    if (makeDomainNice) {
-                        domain.nice();
-                    }
+                var domain = me.scales[orient].domain(axisDomain);
+                if (makeDomainNice) {
+                    domain.nice();
                 }
             }
         });
@@ -378,10 +381,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     redrawShapes: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
+        var Const = Koala.util.ChartConstants;
         var view = me.getView();
         var viewId = '#' + view.getId();
-        var shapeGroup = d3.select(viewId + ' .' + staticMe.CSS_CLASS.SHAPE_GROUP);
+        var shapeGroup = d3.select(viewId + ' .' + Const.CSS_CLASS.SHAPE_GROUP);
 
         if (shapeGroup.node()) {
             shapeGroup.node().remove();
@@ -395,7 +398,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     drawShapes: function() {
         var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
+        var Const = Koala.util.ChartConstants;
         var view = me.getView();
         var selectedStation = view.getSelectedStations()[0];
         var viewId = '#' + view.getId();
@@ -419,9 +422,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         var allShapes = d3.select(viewId + ' svg > g')
             .append('g')
-            .attr('class', staticMe.CSS_CLASS.SHAPE_GROUP);
+            .attr('class', Const.CSS_CLASS.SHAPE_GROUP);
+        this.appendBackground(allShapes);
 
-        var groupedShapes = allShapes.selectAll(staticMe.CSS_CLASS.BAR_GROUP)
+        var groupedShapes = allShapes.selectAll(Const.CSS_CLASS.BAR_GROUP)
             .data(firstStationData);
 
         me.scales.bottom = me.scales.bottom.paddingInner(0.1);
@@ -433,7 +437,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .attr('transform', function(d) {
                 return 'translate(' + me.scales[orientX](d[xField]) + ',0)';
             })
-            .attr('class', staticMe.CSS_CLASS.BAR_GROUP)
+            .attr('class', Const.CSS_CLASS.BAR_GROUP)
             .attr('id', function(d) {
                 return d[xField];
             });
@@ -453,7 +457,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .attr('class', function(d) {
                 var subCategories = Ext.Object.getKeys(me.colorsByKey);
                 var categoryIndex = subCategories.indexOf(d.key);
-                return staticMe.CSS_CLASS.BAR + ' subcategory-' + categoryIndex;
+                return Const.CSS_CLASS.BAR + ' subcategory-' + categoryIndex;
             });
             // .attr('class', staticMe.CSS_CLASS.BAR);
 
@@ -508,7 +512,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         // Uncertainty
         bars
             .append('path')
-            .attr('class', staticMe.CSS_CLASS.UNCERTAINTY)
+            .attr('class', Const.CSS_CLASS.UNCERTAINTY)
             .filter(function() {
                 if (me.drawBar) {
                     return me.showUncertainty;
@@ -685,9 +689,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
     drawLegend: function() {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
+        var Const = Koala.util.ChartConstants;
         var makeTranslate = staticMe.makeTranslate;
-        var CSS = staticMe.CSS_CLASS;
-        var SVG_DEFS = staticMe.SVG_DEFS;
+        var CSS = Const.CSS_CLASS;
+        var SVG_DEFS = Const.SVG_DEFS;
         var view = me.getView();
         var legendConfig = view.getLegend();
         var legendMargin = legendConfig.legendMargin;
@@ -947,8 +952,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     getBarGroupByKey: function(key) {
         var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var view = me.getView();
         var viewId = '#' + view.getId();
         var selector = viewId + ' svg g.' + CSS.SHAPE_GROUP +
@@ -962,8 +967,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     setUncertaintyVisibility: function(visible) {
         var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var CSS = staticMe.CSS_CLASS;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
         var group = me.containerSvg.selectAll('.' + CSS.UNCERTAINTY);
         var hideClsName = CSS.HIDDEN_CLASS;
         if (group) {

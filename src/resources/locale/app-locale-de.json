@@ -1,4 +1,11 @@
 {
+    "Koala.util.Clone": {
+        "statics": {
+            "error": "Fehler",
+            "couldNotLoad": "Die Daten konnten nicht geladen werden.",
+            "couldNotParse": "Die Daten konnten nicht ausgewertet werden."
+        }
+    },
     "Koala.util.Date": {
         "statics": {
             "txtUtc": "(UTC)",
@@ -82,6 +89,7 @@
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Gruppierung tauschen",
                 "toggleUncertainty": "Messungenauigkeit umschalten",
+                "displayIdentificationThreshold": "Daten < NWG anzeigen",
                 "irixPrintText": "DokPool",
                 "irixPrintTooltip": "exportieren des Charts nach DokPool"
             }
@@ -1049,6 +1057,16 @@
                 "DokpoolBehaviour_Rodos_label": "Rodos",
                 "DokpoolBehaviour_Rei_label": "Rei",
                 "Permalink_text": "Darstellung im GIS anzeigen"
+            }
+        }
+    },
+    "BasiGX.view.grid.FeatureGrid": {
+        "config": {
+            "data": {
+                "renameButton": "Umbenennen",
+                "renameBox": "Bitte geben Sie den neuen Spaltennamen an:",
+                "deleteTitle": "Löschen",
+                "deleteQuestion": "Wollen Sie die Spalte wirklich löschen?"
             }
         }
     },

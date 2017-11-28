@@ -86,10 +86,14 @@ Ext.define('Koala.view.form.ImportLocalData',{
         }, {
             xtype: 'combobox',
             name: 'template',
-            allowBlank: false,
+            // TODO change this to false as soon as we fixed the
+            // metadatatemplates uuids!
+            allowBlank: true,
             bind: {
-                fieldLabel: '{templateLabel}',
-                value: '{templateUuid}'
+                fieldLabel: '{templateLabel}'
+                // TODO get this back in as soon as we fixed the
+                // metadatatemplates uuids!
+                // value: '{templateUuid}'
             },
             valueField: 'uuid',
             displayField: 'label',

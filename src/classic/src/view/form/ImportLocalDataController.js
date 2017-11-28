@@ -198,7 +198,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var me = this;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
 
-        layerUtil.getMetadataFromUuid(uuid).then(function(metadata) {
+        var gotMetadataCallback = function(metadata) {
+
             // Make some specific settings for local data:
             var cfg = me.getInternalLayerConfig(metadata);
 
@@ -243,7 +244,13 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
 
             // Finally add the layer to the map.
             layerUtil.addOlLayerToMap(layer);
-        });
+        };
+
+        layerUtil.getMetadataFromUuid(uuid)
+            .then(gotMetadataCallback)
+            .catch(function() {
+                gotMetadataCallback(null);
+            });
 
         map.getLayers().once('add', function(evt) {
             // TODO this has to be replaced once we have multiple maps
@@ -267,17 +274,24 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     },
 
     /**
-    * Copy of "Koala.util.Layer.getInternalLayerConfig" but diffrent defaults.
+    * Copy of "Koala.util.Layer.getInternalLayerConfig" but different defaults.
+    *
+    * TODO reuse somehow to reduce copy and pasted code.
     */
     getInternalLayerConfig: function(metadata) {
-        var olProps = metadata.layerConfig.olProperties;
-        olProps = Koala.util.Object.coerceAll(olProps);
+        var getPathStrOr = Koala.util.Object.getPathStrOr;
         var getBool = Koala.util.String.getBool;
+
+        var olProps = getPathStrOr(metadata, 'layerConfig/olProperties', {});
+        olProps = Koala.util.Object.coerceAll(olProps);
 
         var shallHover = false;
         if (!Ext.isEmpty(olProps.hoverTpl) && olProps.allowHover !== false) {
             shallHover = true;
         }
+        var downloadUrl = getPathStrOr(metadata, 'layerConfig/download/url', undefined);
+        var timeSeriesChartProperties = getPathStrOr(metadata, 'layerConfig/timeSeriesChartProperties', undefined);
+        var barChartProperties = getPathStrOr(metadata, 'layerConfig/barChartProperties', undefined);
 
         return {
             legendUrl: olProps.legendUrl || '',
@@ -294,9 +308,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             hoverStyle: olProps.hoverStyle,
             selectStyle: olProps.selectStyle || olProps.hoverStyle,
             hasLegend: getBool(olProps.hasLegend, false),
-            downloadUrl: metadata.layerConfig.download ? metadata.layerConfig.download.url : undefined,
-            timeSeriesChartProperties: metadata.layerConfig.timeSeriesChartProperties,
-            barChartProperties: metadata.layerConfig.barChartProperties
+            downloadUrl: downloadUrl,
+            timeSeriesChartProperties: timeSeriesChartProperties,
+            barChartProperties: barChartProperties
         };
     }
 
