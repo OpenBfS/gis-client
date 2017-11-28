@@ -531,6 +531,15 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         // call parent
         me.callParent();
 
+        // filter out unwanted layers
+        me.store.filterBy(function(rec) {
+            var layer = rec.getOlLayer();
+            if (layer && layer.get('DISPLAY_IN_LEGENDTREE') === false) {
+                return false;
+            }
+            return true;
+        });
+
         me.checkAddCollapseExpandButtons();
 
         // configure rowexpanderwithcomponents-plugin

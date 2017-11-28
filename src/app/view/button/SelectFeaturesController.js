@@ -81,6 +81,7 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
 
         if (!this.selectionLayer) {
             this.selectionLayer = new ol.layer.Vector({
+                'DISPLAY_IN_LEGENDTREE': false,
                 source: new ol.source.Vector,
                 style: new ol.style.Style({
                     fill: new ol.style.Fill({
