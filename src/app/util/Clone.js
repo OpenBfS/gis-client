@@ -45,6 +45,10 @@ Ext.define('Koala.util.Clone', {
             }
         },
 
+        /**
+         * Clones the given layer by cloning all contained features.
+         * @param  {ol.layer.Vector} layer the vector layerRec
+         */
         cloneVectorLayer: function(layer) {
             var Layer = Koala.util.Layer;
             var features = layer.getSource().getFeatures();
