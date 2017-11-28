@@ -903,11 +903,30 @@
             }
         }
     },
+    "BasiGX.view.window.MergeWindow": {
+        "config": {
+            "data": {
+                "adoptAttributes": "fr:Adopt attributes",
+                "applyText": "fr:Apply",
+                "cancelText": "fr:Cancel",
+                "windowTitle": "fr:Merge features",
+                "matchText": "fr:Please select attributes to be mapped:"
+            }
+        }
+    },
     "BasiGX.view.button.AddWms": {
         "config": {
             "data": {
                 "tooltip": "fr:WMS hinzufügen...",
                 "text": "fr:WMS"
+            }
+        }
+    },
+    "BasiGX.view.button.MergeSelection": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Merge selected features into this layer",
+                "text": "fr:Merge features"
             }
         }
     },
