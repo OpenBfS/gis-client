@@ -128,7 +128,6 @@ Ext.define('Koala.util.Layer', {
             if (!layer || !successCb || !errorCb) {
                 Ext.log.error('Invalid arguments for method ' +
                     '`getGeometryFieldNameForLayer`');
-                errorCb.call();
                 return;
             }
             var url = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wfs/url');
