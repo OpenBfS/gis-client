@@ -41,7 +41,7 @@ Ext.define('Koala.util.Clone', {
             var url = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wfs/url');
 
             if (layer instanceof ol.layer.Vector) {
-                this.cloneVectorLayer(layer);
+                this.cloneVectorLayer(layer, name, maxFeatures);
             } else if (url) {
                 this.cloneLayerFromWfs(layer, url, name, maxFeatures);
             }
@@ -50,19 +50,25 @@ Ext.define('Koala.util.Clone', {
         /**
          * Clones the given layer by cloning all contained features.
          * @param  {ol.layer.Vector} layer the vector layerRec
+         * @param  {String} name the new layer name
+         * @param  {Number} maxFeatures maximum features to clone
          */
-        cloneVectorLayer: function(layer) {
+        cloneVectorLayer: function(layer, name, maxFeatures) {
             var Layer = Koala.util.Layer;
             var features = layer.getSource().getFeatures();
             var metadata = Koala.util.Metadata.prepareClonedMetadata(layer.metadata);
             var source = new ol.source.Vector();
             Ext.each(features, function(feature) {
+                if (maxFeatures === 0) {
+                    return false;
+                }
+                --maxFeatures;
                 source.addFeature(feature.clone());
             });
             var config = Layer.getInternalLayerConfig(metadata);
             config.source = source;
             config.metadata = metadata;
-            config.name = layer.get('name') + '_vector';
+            config.name = name;
             var result = new ol.layer.Vector(config);
             result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
             Koala.util.Layer.addOlLayerToMap(result);
