@@ -427,6 +427,18 @@
             }
         }
     },
+    "Koala.view.window.CloneWindow": {
+        "config": {
+            "data": {
+                "title": "fr:Clone layer",
+                "boundingBoxLabel": "fr:Restrict to visible area",
+                "maxFeaturesLabel": "fr:Maximum number of objects",
+                "layerNameLabel": "fr:Name of the new layer",
+                "okButtonLabel": "fr:Clone",
+                "cancelButtonLabel": "fr:Cancel"
+            }
+        }
+    },
     "Koala.view.window.MetadataInfo": {
         "config": {
             "data": {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-present terrestris GmbH & Co. KG
+/* Copyright (c) 2017-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,11 +34,13 @@ Ext.define('Koala.util.Clone', {
         /**
          * Creates a clone of the given layer.
          * @param  {ol.layer.Layer} layer the layer to clone
+         * @param  {String} name the new layer name
+         * @param  {Number} maxFeatures maximum features to request
          */
-        cloneLayer: function(layer) {
+        cloneLayer: function(layer, name, maxFeatures) {
             var url = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wfs/url');
             if (url) {
-                this.cloneLayerFromWfs(layer, url);
+                this.cloneLayerFromWfs(layer, url, name, maxFeatures);
             }
         },
 
@@ -46,13 +48,14 @@ Ext.define('Koala.util.Clone', {
          * Clones the given layer from WFS using the given url.
          * @param  {ol.layer.Layer} layer the layer to cloneBtn
          * @param  {String} url   the WFS base url
+         * @param  {String} layerName  the new layer name
+         * @param  {Number} maxFeatures maximum features to request
          */
-        cloneLayerFromWfs: function(layer, url) {
+        cloneLayerFromWfs: function(layer, url, layerName, maxFeatures) {
             var name = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wms/layers');
             var filter = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/olProperties/param_cql_filter');
             url = Ext.String.urlAppend(url, 'request=GetFeature');
-            // TODO remove maxfeatures
-            url = Ext.String.urlAppend(url, 'maxFeatures=50');
+            url = Ext.String.urlAppend(url, 'maxFeatures=' + maxFeatures);
             url = Ext.String.urlAppend(url, 'typename=' + name);
             url = Ext.String.urlAppend(url, 'service=WFS');
             url = Ext.String.urlAppend(url, 'version=1.1.0');
@@ -65,7 +68,7 @@ Ext.define('Koala.util.Clone', {
 
             Ext.Ajax.request({
                 url: url,
-                success: this.getFeatureSuccess.bind(this, layer, metadata),
+                success: this.getFeatureSuccess.bind(this, layer, metadata, layerName),
                 failure: this.getFeatureFail.bind(this),
                 timeout: 120000
             });
@@ -75,15 +78,16 @@ Ext.define('Koala.util.Clone', {
          * The success callback after features have been loaded.
          * @param  {ol.layer.Layer} originalLayer the original layerRec
          * @param  {Object} metadata      the layer metadata
+         * @param  {String} name          the new layer name
          * @param  {Object} response      the xhr response object
          */
-        getFeatureSuccess: function(originalLayer, metadata, response) {
+        getFeatureSuccess: function(originalLayer, metadata, name, response) {
             var Layer = Koala.util.Layer;
             var source = new ol.source.Vector();
             var config = Layer.getInternalLayerConfig(metadata);
             config.source = source;
             config.metadata = metadata;
-            config.name = config.name + '_vector';
+            config.name = name;
             var layer = new ol.layer.Vector(config);
             layer.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
 

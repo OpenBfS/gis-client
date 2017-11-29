@@ -460,6 +460,18 @@
             }
         }
     },
+    "Koala.view.window.CloneWindow": {
+        "config": {
+            "data": {
+                "title": "Layer klonen",
+                "boundingBoxLabel": "Auf sichtbaren Bereich einschränken",
+                "maxFeaturesLabel": "Maximale Anzahl an Objekten",
+                "layerNameLabel": "Name des neuen Layers",
+                "okButtonLabel": "Klonen",
+                "cancelButtonLabel": "Abbrechen"
+            }
+        }
+    },
     "Koala.view.window.LayerSetChooserWindow": {
         "config": {
             "data": {
