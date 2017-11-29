@@ -81,10 +81,10 @@ describe('Koala.util.Filter', function() {
                         end_timestamp: '2016-10-17T00:00:00',
                         duration: 'P4WT',
                         end_timestamp_format: 'Y-m-dTH:i:s',
-                        yAxis_minimum: '0',
-                        yAxis_maximum: '0.3',
-                        xAxis_minimum: '2006-09-19T00:00:00',
-                        xAxis_maximum: '2016-10-17T00:00:00'
+                        yAxisMin: '0',
+                        yAxisMax: '0.3',
+                        xAxisMin: '2006-09-19T00:00:00',
+                        xAxisMax: '2016-10-17T00:00:00'
                     }
                 }
             };
