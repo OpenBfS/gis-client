@@ -20,16 +20,11 @@ Ext.define('Koala.util.Clone', {
 
     requires: [
         'Koala.util.Metadata',
-        'Koala.util.Layer'
+        'Koala.util.Layer',
+        'Koala.util.SelectFeatures'
     ],
 
     statics: {
-
-        /* i18n */
-        error: '',
-        couldNotLoad: '',
-        couldNotParse: '',
-        /* i18n */
 
         /**
          * Creates a clone of the given layer.
@@ -37,106 +32,46 @@ Ext.define('Koala.util.Clone', {
          * @param  {String} name the new layer name
          * @param  {Number} maxFeatures maximum features to request
          */
-        cloneLayer: function(layer, name, maxFeatures) {
-            var url = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wfs/url');
+        cloneLayer: function(sourceLayer, name, maxFeatures, bbox) {
+            var targetLayer = this.createLayer(sourceLayer, name);
+            var SelectFeatures = Koala.util.SelectFeatures;
 
-            if (layer instanceof ol.layer.Vector) {
-                this.cloneVectorLayer(layer, name, maxFeatures);
-            } else if (url) {
-                this.cloneLayerFromWfs(layer, url, name, maxFeatures);
+            if (sourceLayer instanceof ol.layer.Vector) {
+                if (bbox) {
+                    SelectFeatures.getFeaturesFromVectorLayerByBbox(
+                        sourceLayer,
+                        targetLayer,
+                        bbox
+                    );
+                } else {
+                    SelectFeatures.getAllFeaturesFromVectorLayer(
+                        sourceLayer,
+                        targetLayer
+                    );
+                }
+            } else {
+                SelectFeatures.getFeaturesFromWmsLayerByBbox(
+                    sourceLayer,
+                    targetLayer,
+                    bbox,
+                    maxFeatures
+                );
             }
         },
 
-        /**
-         * Clones the given layer by cloning all contained features.
-         * @param  {ol.layer.Vector} layer the vector layerRec
-         * @param  {String} name the new layer name
-         * @param  {Number} maxFeatures maximum features to clone
-         */
-        cloneVectorLayer: function(layer, name, maxFeatures) {
+        createLayer: function(layer, name) {
             var Layer = Koala.util.Layer;
-            var features = layer.getSource().getFeatures();
             var metadata = Koala.util.Metadata.prepareClonedMetadata(layer.metadata);
             var source = new ol.source.Vector();
-            Ext.each(features, function(feature) {
-                if (maxFeatures === 0) {
-                    return false;
-                }
-                --maxFeatures;
-                source.addFeature(feature.clone());
-            });
             var config = Layer.getInternalLayerConfig(metadata);
             config.source = source;
             config.metadata = metadata;
             config.name = name;
             var result = new ol.layer.Vector(config);
             result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
+            result.metadata = Ext.clone(metadata);
             Koala.util.Layer.addOlLayerToMap(result);
-        },
-
-        /**
-         * Clones the given layer from WFS using the given url.
-         * @param  {ol.layer.Layer} layer the layer to cloneBtn
-         * @param  {String} url   the WFS base url
-         * @param  {String} layerName  the new layer name
-         * @param  {Number} maxFeatures maximum features to request
-         */
-        cloneLayerFromWfs: function(layer, url, layerName, maxFeatures) {
-            var name = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wms/layers');
-            var filter = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/olProperties/param_cql_filter');
-            url = Ext.String.urlAppend(url, 'request=GetFeature');
-            url = Ext.String.urlAppend(url, 'maxFeatures=' + maxFeatures);
-            url = Ext.String.urlAppend(url, 'typename=' + name);
-            url = Ext.String.urlAppend(url, 'service=WFS');
-            url = Ext.String.urlAppend(url, 'version=1.1.0');
-            url = Ext.String.urlAppend(url, 'outputformat=application/json');
-            if (filter) {
-                url = Ext.String.urlAppend(url, 'cql_filter=' + filter);
-            }
-
-            var metadata = Koala.util.Metadata.prepareClonedMetadata(layer.metadata);
-
-            Ext.Ajax.request({
-                url: url,
-                success: this.getFeatureSuccess.bind(this, layer, metadata, layerName),
-                failure: this.getFeatureFail.bind(this),
-                timeout: 120000
-            });
-        },
-
-        /**
-         * The success callback after features have been loaded.
-         * @param  {ol.layer.Layer} originalLayer the original layerRec
-         * @param  {Object} metadata      the layer metadata
-         * @param  {String} name          the new layer name
-         * @param  {Object} response      the xhr response object
-         */
-        getFeatureSuccess: function(originalLayer, metadata, name, response) {
-            var Layer = Koala.util.Layer;
-            var source = new ol.source.Vector();
-            var config = Layer.getInternalLayerConfig(metadata);
-            config.source = source;
-            config.metadata = metadata;
-            config.name = name;
-            var layer = new ol.layer.Vector(config);
-            layer.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
-            layer.metadata = metadata;
-
-            var fmt = new ol.format.GeoJSON();
-            try {
-                var features = fmt.readFeatures(response.responseText);
-                source.addFeatures(features);
-                Koala.util.Layer.addOlLayerToMap(layer);
-            } catch (e) {
-                Ext.Msg.alert(this.error, this.couldNotParse);
-            }
-        },
-
-        /**
-         * The failure callback when features could not be loaded.
-         */
-        getFeatureFail: function() {
-            Ext.Msg.alert(this.error, this.couldNotLoad);
+            return result;
         }
 
     }

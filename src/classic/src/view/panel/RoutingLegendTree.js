@@ -562,6 +562,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             return;
         }
         var layer = selection[0].data;
+
         if (layer instanceof ol.layer.Vector) {
             if (this.featureGrid) {
                 this.featureGrid.destroy();

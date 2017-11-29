@@ -37,7 +37,13 @@ Ext.define('Koala.view.window.CloneWindowController', {
         var view = this.getView();
         var name = view.down('textfield').getValue();
         var maxFeatures = view.down('numberfield').getValue();
-        Koala.util.Clone.cloneLayer(view.getSourceLayer(), name, maxFeatures);
+        var useBbox = view.down('checkbox').getValue();
+        var bbox;
+        if (useBbox) {
+            var map = BasiGX.util.Map.getMapComponent().map;
+            bbox = map.getView().calculateExtent(map.getSize());
+        }
+        Koala.util.Clone.cloneLayer(view.getSourceLayer(), name, maxFeatures, bbox);
         view.close();
     }
 
