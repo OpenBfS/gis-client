@@ -568,11 +568,18 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 this.featureGrid.destroy();
             }
 
+            var tree = Ext.ComponentQuery.query('basigx-panel-menu')[0];
+            var x = tree.getWidth() + 5;
+            var header = Ext.ComponentQuery.query('k-panel-header')[0];
+            var y = header.getHeight() + 5;
+
             this.featureGrid = Ext.create({
                 xtype: 'window',
                 layout: 'fit',
                 width: 500,
                 height: 300,
+                x: x,
+                y: y,
                 title: layer.get('name'),
                 scrollable: true,
                 items: [{
