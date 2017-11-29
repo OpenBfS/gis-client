@@ -496,6 +496,17 @@ Gibt die Opacity des Layers an.
 | Default-Wert         | 1 |
 | Beispiel             | 0.8 |
 
+**rodosLayer**
+
+Flag, ob der Layer ein Rodos-Layer ist.
+
+| Typ | gco:Boolean  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true/false |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | false |
+| Beispiel             | true |
+
 **routeId**
 
 Id für den RoutingLegendTree. //TODO wird das noch benötigt?

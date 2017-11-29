@@ -567,9 +567,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 this.featureGrid.destroy();
             }
 
-            var mainVm = Ext.ComponentQuery.query('app-main')[0].getViewModel();
-            var sourceLayer = mainVm.get('selectedFeaturesLayer');
-
             this.featureGrid = Ext.create({
                 xtype: 'window',
                 layout: 'fit',
@@ -587,7 +584,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                         items: [{
                             xtype: 'basigx-button-mergeselection',
                             padding: 5,
-                            sourceLayer: sourceLayer
+                            bind: {
+                                disabled: '{noFeaturesSelected}',
+                                sourceLayer: '{selectedFeaturesLayer}'
+                            }
                         }]
                     }, {
                         xtype: 'basigx-grid-featuregrid',

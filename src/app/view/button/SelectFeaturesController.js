@@ -172,8 +172,6 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
         // disable keylistener
         window.removeEventListener('keydown', this.keydownHandler, true);
         window.removeEventListener('keyup', this.keyupHandler, true);
-        // clear the select layers selections
-        this.selectionLayer.getSource().clear();
     },
 
     /**
