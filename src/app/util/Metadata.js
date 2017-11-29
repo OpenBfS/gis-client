@@ -28,6 +28,9 @@ Ext.define('Koala.util.Metadata', {
          * @return {Object}          the cloned metadata
          */
         prepareClonedMetadata: function(metadata) {
+            if (!metadata) {
+                return metadata;
+            }
             metadata = Ext.clone(metadata);
 
             delete metadata.id;
