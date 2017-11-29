@@ -21,16 +21,12 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
     alias: 'controller.k-button-selectfeatures',
     requires: [
         'BasiGX.util.Map',
-        'BasiGX.util.WFS',
-        'BasiGX.util.SLD',
         'Koala.util.Object',
-        'Koala.util.Layer'
+        'Koala.util.Layer',
+        'Koala.util.SelectFeatures'
     ],
 
     /** i18n */
-    error: '',
-    couldNotLoad: '',
-    couldNotParse: '',
     noSingleActiveLayerFound: '',
     /** i18n end */
 
@@ -228,9 +224,18 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
         extent[3] = extent[3] + buffer;
 
         if (this.layerToSelectOn instanceof ol.layer.Vector) {
-            this.getFeaturesFromVectorLayer(extent);
+            Koala.util.SelectFeatures.getFeaturesFromVectorLayerByBbox(
+                this.layerToSelectOn,
+                this.selectionLayer,
+                extent
+            );
+            this.mapComponent.setLoading(false);
         } else {
-            this.getFeaturesFromWmsLayer(extent);
+            Koala.util.SelectFeatures.getFeaturesFromWmsLayerByBbox(
+                this.layerToSelectOn,
+                this.selectionLayer,
+                extent
+            );
         }
     },
 
@@ -241,9 +246,18 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
         this.mapComponent.setLoading(true);
         var extent = this.dragBoxInteraction.getGeometry().getExtent();
         if (this.layerToSelectOn instanceof ol.layer.Vector) {
-            this.getFeaturesFromVectorLayer(extent);
+            Koala.util.SelectFeatures.getFeaturesFromVectorLayerByBbox(
+                this.layerToSelectOn,
+                this.selectionLayer,
+                extent
+            );
+            this.mapComponent.setLoading(false);
         } else {
-            this.getFeaturesFromWmsLayer(extent);
+            Koala.util.SelectFeatures.getFeaturesFromWmsLayerByBbox(
+                this.layerToSelectOn,
+                this.selectionLayer,
+                extent
+            );
         }
 
     },
@@ -268,184 +282,6 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
      */
     boxStart: function() {
         this.determineLayerToSelectOn();
-    },
-
-    /**
-     * Adds the given features to the vectorlayer, if they do not exist in its
-     * source already. Features that do already exist will get removed.
-     * Feature removal will only work if the key `featureIdentifyField` has been
-     * set on the layer in GNOS to a unique and existing field
-     * @param {array} features The array of features that should be handled
-     */
-    addOrRemoveSelectedFeatures: function(features) {
-        var me = this;
-        var exisitingFeatures = me.selectionLayer.getSource().getFeatures();
-        var featureIdentifyField = Koala.util.Object.getPathStrOr(
-            me.layerToSelectOn.metadata, 'layerConfig/olProperties/featureIdentifyField');
-        var featureType = Koala.util.Object.getPathStrOr(
-            me.layerToSelectOn.metadata, 'layerConfig/wms/layers');
-        Ext.each(features, function(feature) {
-            var alreadyExistingFeature;
-            Ext.each(exisitingFeatures, function(exisitingFeature) {
-                if (featureIdentifyField && featureType) {
-                    if (exisitingFeature.__featureType__ && exisitingFeature.__featureType__ === featureType) {
-                        // comparing a feature from the same featuretype, lets check for the id
-                        var existingId = exisitingFeature.getProperties()[featureIdentifyField];
-                        var newId = feature.getProperties()[featureIdentifyField];
-                        if (existingId && newId && existingId === newId) {
-                            alreadyExistingFeature = exisitingFeature;
-                            return false;
-                        }
-                    }
-                }
-            });
-            if (alreadyExistingFeature) {
-                me.selectionLayer.getSource().removeFeature(alreadyExistingFeature);
-            } else {
-                // save the featuretype for later comparisons
-                feature.__featureType__ = featureType;
-                me.selectionLayer.getSource().addFeatures([feature]);
-            }
-        });
-    },
-
-    /**
-     * Retrieves features from an existing VectorLayer by the given extent
-     * @param {array} extent The extent array to retrieve features in
-     */
-    getFeaturesFromVectorLayer: function(extent) {
-        var me = this;
-        me.layerToSelectOn.getSource().forEachFeatureIntersectingExtent(
-            extent, function(feature) {
-                var clone = Ext.clone(feature);
-                me.addOrRemoveSelectedFeatures([clone]);
-            }
-        );
-        me.mapComponent.setLoading(false);
-    },
-
-    /**
-     * Retrieves features from an WMSLayer by the given extent
-     * @param {array} extent The extent array to retrieve features in
-     */
-    getFeaturesFromWmsLayer: function(extent) {
-        var me = this;
-        Koala.util.Layer.getGeometryFieldNameForLayer(
-            me.layerToSelectOn,
-            function() {
-                var field = this.toString();
-                me.getDescribeFeatureSuccess(extent, field);
-            },
-            me.getDescribeFeatureFail.bind(this)
-        );
-    },
-
-    /**
-     * Callback to issue a GetFeature request with all required filters
-     * @param {array} extent The extent array to retrieve features in
-     * @param {string} geometryField The name of the field containing the geometry
-     */
-    getDescribeFeatureSuccess: function(extent, geometryField) {
-        var me = this;
-        var layer = this.layerToSelectOn;
-        if (Ext.isEmpty(geometryField)) {
-            Ext.log.error('Could not determine geometryfield for layer ', layer);
-            return;
-        }
-        var wmsUrl = Koala.util.Object.getPathStrOr(layer.metadata,
-            'layerConfig/wms/url');
-        var wfsUrl = Koala.util.Object.getPathStrOr(layer.metadata,
-            'layerConfig/wfs/url');
-        var name = Koala.util.Object.getPathStrOr(
-            layer.metadata, 'layerConfig/wms/layers');
-        var filters = Koala.util.Object.getPathStrOr(
-            layer.metadata, 'filters');
-        var cqlFilter = Koala.util.Object.getPathStrOr(
-            layer.metadata, 'layerConfig/olProperties/param_cql_filter');
-        var mapComponent = BasiGX.util.Map.getMapComponent();
-        var srs = mapComponent.map.getView().getProjection().getCode();
-        var sldFilters;
-        var dimensionAttribute = 'end_measure';
-        if (filters && filters[0]) {
-            dimensionAttribute = filters[0].param;
-        }
-
-        var successCb = function(response) {
-            var sld = response.responseText;
-            var sldObject = BasiGX.util.SLD.toSldObject(sld);
-            var rules = BasiGX.util.SLD.rulesFromSldObject(sldObject);
-            if (!Ext.isEmpty(rules)) {
-                // get all sld filters
-                sldFilters = BasiGX.util.SLD.getFilterEncodingFromSldRules(
-                    rules
-                );
-            }
-
-            var filter = BasiGX.util.WFS.getTimeAndSldCompliantFilter(
-                layer,
-                dimensionAttribute,
-                sldFilters,
-                me.mapComponent.map,
-                geometryField,
-                extent
-            );
-
-            if (cqlFilter) {
-                var ogcCqlFilter = BasiGX.util.WFS.getOgcFromCqlFilter(cqlFilter);
-                filter = BasiGX.util.WFS.combineFilters([ogcCqlFilter, filter]);
-            }
-
-            BasiGX.util.WFS.executeWfsGetFeature(
-                wfsUrl,
-                layer,
-                srs,
-                [],
-                geometryField,
-                filter,
-                me.getFeatureSuccess.bind(me)
-            );
-        };
-
-        var errorCb = function() {
-            Ext.log.error('Could not get the SLD for layer');
-            me.mapComponent.setLoading(false);
-        };
-        BasiGX.util.SLD.getSldFromGeoserver(wmsUrl, name, successCb, errorCb);
-    },
-
-    /**
-     * Callback on DescribeFeatureType failure
-     */
-    getDescribeFeatureFail: function() {
-        Ext.log.error('Could not determine geometryfield for layer');
-        this.mapComponent.setLoading(false);
-    },
-
-    /**
-     * Callback on GetFeatures success
-     * @param {object} response The response containing the features
-     */
-    getFeatureSuccess: function(response) {
-        var format = new ol.format.GeoJSON();
-        try {
-            var features = format.readFeatures(response.responseText);
-            if (!this.shiftKeyPressed) {
-                // always remove all selections when user does not select with
-                // the shift key
-                this.selectionLayer.getSource().clear();
-            }
-            this.addOrRemoveSelectedFeatures(features);
-        } catch (e) {
-            Ext.Msg.alert(this.error, this.couldNotParse);
-        }
-        this.mapComponent.setLoading(false);
-    },
-
-    /**
-     * The failure callback when features could not be loaded.
-     */
-    getFeatureFail: function() {
-        this.mapComponent.setLoading(false);
-        Ext.Msg.alert(this.error, this.couldNotLoad);
     }
+
 });
