@@ -236,15 +236,6 @@ Ext.define('Koala.util.Routing', {
                     }
                 }
             });
-
-            // for rodos layers, also append the tablename filter
-            Ext.each(configFilters, function(filter) {
-                if (filter.type === 'value' && filter.param === 'tablename') {
-                    filter.encodeInViewParams = 'true';
-                    filter.operator = '=';
-                    metadataFilters.push(filter);
-                }
-            });
         },
 
         /**
