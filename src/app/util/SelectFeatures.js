@@ -75,6 +75,24 @@ Ext.define('Koala.util.SelectFeatures', {
         },
 
         /**
+         * Clones all features from an existing VectorLayer to a target layer
+         * @param {ol.layer.Base} sourceLayer The layer holding the source features
+         * @param {ol.layer.Base} targetLayer The layer receiving the features
+         */
+        getAllFeaturesFromVectorLayer: function(sourceLayer, targetLayer) {
+            var features = sourceLayer.getSource().getFeatures();
+            var clonedFeatures = [];
+            Ext.each(features, function(feature) {
+                clonedFeatures.push(Ext.clone(feature));
+            });
+            Koala.util.SelectFeatures.addOrRemoveSelectedFeatures(
+                sourceLayer,
+                targetLayer,
+                clonedFeatures
+            );
+        },
+
+        /**
          * Retrieves features from an existing VectorLayer by the given extent
          * @param {ol.layer.Base} sourceLayer The layer holding the source features
          * @param {ol.layer.Base} targetLayer The layer receiving the features
@@ -94,21 +112,46 @@ Ext.define('Koala.util.SelectFeatures', {
         },
 
         /**
-         * Retrieves features from an WMSLayer by the given extent
+         * Retrieves all features from an WMSLayer, limited by maxFeatures
          * @param {ol.layer.Base} sourceLayer The layer holding the source features
          * @param {ol.layer.Base} targetLayer The layer receiving the features
-         * @param {array} extent The extent array to retrieve features in
+         * @param {Integer} maxFeatures The maximum number of features to get
          */
-        getFeaturesFromWmsLayerByBbox: function(sourceLayer, targetLayer, extent) {
-            var me = this;
+        getAllFeaturesFromWmsLayer: function(sourceLayer, targetLayer, maxFeatures) {
+            if (!maxFeatures) {
+                maxFeatures = 1000;
+            }
             Koala.util.Layer.getGeometryFieldNameForLayer(
                 sourceLayer,
                 function() {
                     var field = this.toString();
                     Koala.util.SelectFeatures.getDescribeFeatureSuccess(
-                        sourceLayer, targetLayer, extent, field);
+                        sourceLayer, targetLayer, null, field, maxFeatures);
                 },
-                me.getDescribeFeatureFail.bind(this)
+                Koala.util.SelectFeatures.getDescribeFeatureFail.bind(this)
+            );
+        },
+
+        /**
+         * Retrieves features from an WMSLayer by the given extent
+         * @param {ol.layer.Base} sourceLayer The layer holding the source features
+         * @param {ol.layer.Base} targetLayer The layer receiving the features
+         * @param {array} extent The extent array to retrieve features in
+         * @param {Integer} maxFeatures The maximum number of features to get
+         */
+        getFeaturesFromWmsLayerByBbox: function(sourceLayer, targetLayer,
+            extent, maxFeatures) {
+            if (!maxFeatures) {
+                maxFeatures = 1000;
+            }
+            Koala.util.Layer.getGeometryFieldNameForLayer(
+                sourceLayer,
+                function() {
+                    var field = this.toString();
+                    Koala.util.SelectFeatures.getDescribeFeatureSuccess(
+                        sourceLayer, targetLayer, extent, field, maxFeatures);
+                },
+                Koala.util.SelectFeatures.getDescribeFeatureFail.bind(this)
             );
         },
 
@@ -118,8 +161,10 @@ Ext.define('Koala.util.SelectFeatures', {
          * @param {ol.layer.Base} targetLayer The layer receiving the features
          * @param {array} extent The extent array to retrieve features in
          * @param {string} geometryField The name of the field containing the geometry
+         * @param {Integer} maxFeatures The maximum number of features to get
          */
-        getDescribeFeatureSuccess: function(sourceLayer, targetLayer, extent, geometryField) {
+        getDescribeFeatureSuccess: function(sourceLayer, targetLayer, extent,
+            geometryField, maxFeatures) {
             if (Ext.isEmpty(geometryField)) {
                 Ext.log.error('Could not determine geometryfield for layer ',
                     sourceLayer);
@@ -175,6 +220,7 @@ Ext.define('Koala.util.SelectFeatures', {
                     [],
                     geometryField,
                     filter,
+                    maxFeatures,
                     function(res) {
                         Koala.util.SelectFeatures.getFeatureSuccess(
                             sourceLayer, targetLayer, res);
