@@ -28,30 +28,34 @@ Ext.define('Koala.util.Clone', {
 
         /**
          * Creates a clone of the given layer.
-         * @param  {ol.layer.Layer} layer the layer to clone
+         * @param  {ol.layer.Layer} sourceLayer the layer to clone the metadata
+         * from
          * @param  {String} name the new layer name
          * @param  {Number} maxFeatures maximum features to request
+         * @param  {Array} bbox the bounding box to clone from, or undefined
+         * @param  {ol.layer.Layer} dataSourceLayer the layer to clone the
+         * data from, or undefined
          */
-        cloneLayer: function(sourceLayer, name, maxFeatures, bbox) {
+        cloneLayer: function(sourceLayer, name, maxFeatures, bbox, dataSourceLayer) {
             var targetLayer = this.createLayer(sourceLayer, name);
             var SelectFeatures = Koala.util.SelectFeatures;
 
-            if (sourceLayer instanceof ol.layer.Vector) {
+            if (dataSourceLayer instanceof ol.layer.Vector) {
                 if (bbox) {
                     SelectFeatures.getFeaturesFromVectorLayerByBbox(
-                        sourceLayer,
+                        dataSourceLayer,
                         targetLayer,
                         bbox
                     );
                 } else {
                     SelectFeatures.getAllFeaturesFromVectorLayer(
-                        sourceLayer,
+                        dataSourceLayer,
                         targetLayer
                     );
                 }
-            } else {
+            } else if (dataSourceLayer) {
                 SelectFeatures.getFeaturesFromWmsLayerByBbox(
-                    sourceLayer,
+                    dataSourceLayer,
                     targetLayer,
                     bbox,
                     maxFeatures
@@ -59,6 +63,12 @@ Ext.define('Koala.util.Clone', {
             }
         },
 
+        /**
+         * Create a cloned layer and add it to the map.
+         * @param  {ol.layer.Layer} layer the layer to clone the metadata from
+         * @param  {String} name  the new layer's name
+         * @return {ol.layer.Vector}       the new layer
+         */
         createLayer: function(layer, name) {
             var Layer = Koala.util.Layer;
             var metadata = Koala.util.Metadata.prepareClonedMetadata(layer.metadata);

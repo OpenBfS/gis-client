@@ -81,6 +81,7 @@ Ext.define('Koala.view.window.CloneWindow', {
             }
         }, {
             xtype: 'checkbox',
+            name: 'bbox',
             bind: {
                 boxLabel: '{boundingBoxLabel}'
             }
@@ -94,6 +95,29 @@ Ext.define('Koala.view.window.CloneWindow', {
             bind: {
                 fieldLabel: '{maxFeaturesLabel}'
             }
+        }, {
+            xtype: 'fieldcontainer',
+            bind: {
+                fieldLabel: 'Daten übernehmen'
+            },
+            labelWidth: 200,
+            name: 'datasource-radios',
+            defaultType: 'radiofield',
+            layout: 'vbox',
+            items: [{
+                boxLabel: 'Daten des ausgewählten Layers verwenden',
+                inputValue: 'useLayer',
+                name: 'layer',
+                checked: true
+            }, {
+                boxLabel: 'keine Daten übernehmen',
+                inputValue: 'emptyLayer',
+                name: 'layer'
+            }, {
+                boxLabel: 'Daten aus Selektion übernehmen',
+                inputValue: 'selectionLayer',
+                name: 'layer'
+            }]
         }]
     }]
 

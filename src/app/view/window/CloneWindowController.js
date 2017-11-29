@@ -43,7 +43,27 @@ Ext.define('Koala.view.window.CloneWindowController', {
             var map = BasiGX.util.Map.getMapComponent().map;
             bbox = map.getView().calculateExtent(map.getSize());
         }
-        Koala.util.Clone.cloneLayer(view.getSourceLayer(), name, maxFeatures, bbox);
+
+        var dataSourceType = view.down('[name=datasource-radios]')
+            .down('[checked=true]').inputValue;
+        var dataSourceLayer;
+
+        switch (dataSourceType) {
+            case 'selectionLayer':
+                dataSourceLayer = view.getViewModel().get('selectedFeaturesLayer');
+                break;
+            case 'useLayer':
+                dataSourceLayer = view.getSourceLayer();
+                break;
+        }
+
+        Koala.util.Clone.cloneLayer(
+            view.getSourceLayer(),
+            name,
+            maxFeatures,
+            bbox,
+            dataSourceLayer
+        );
         view.close();
     }
 
