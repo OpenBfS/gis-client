@@ -64,6 +64,12 @@ Ext.define('Koala.view.window.CloneWindowController', {
             bbox,
             dataSourceLayer
         );
+        // show the feature grid after cloning
+        var legendTree = Ext.ComponentQuery.query(
+            'k-panel-routing-legendtree')[0];
+        if (legendTree) {
+            legendTree.toggleFeatureGrid(legendTree.getSelectionModel());
+        }
         view.close();
     }
 

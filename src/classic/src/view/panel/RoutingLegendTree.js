@@ -545,7 +545,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         me.bindUpdateHandlers();
         me.bindLoadIndicationHandlers();
-        me.on('selectionchange', me.toggleFeatureGrid.bind(me));
+        me.on('itemclick', me.toggleFeatureGrid.bind(me));
     },
 
     /**
