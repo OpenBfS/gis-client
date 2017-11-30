@@ -1067,6 +1067,28 @@ https://github.com/d3/d3/blob/master/API.md#scales-d3-scale
 | Default-Wert         | time |
 | Beispiel             | linear |
 
+**showYAxis**
+
+Steuert (nur für attached series!), ob eine y-Achse gezeichnet werden soll oder nicht.
+
+| Typ | gco:Boolean  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true/false |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | false |
+| Beispiel             | false |
+
+**yAxisMin/Max**
+
+Min/Max-Wert der Y-Achse. Wenn angegeben, müssen min und max beide konfiguriert werden.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Zahl |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | berechnet aus Daten |
+| Beispiel             | 0.1 |
+
 **yAxisFormat**
 
 Das Templateformat für das Y-Achsen-Label. Siehe: https://github.com/d3/d3-format
