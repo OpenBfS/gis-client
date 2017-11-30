@@ -212,8 +212,12 @@ Ext.define('Koala.util.ChartAxes', {
                 '[]'
             );
             seriesConfigs = JSON.parse(seriesConfigs);
+            var idx = 0;
             Ext.each(seriesConfigs, function(s) {
-                totalOffset += s.axisWidth || 40;
+                var node = d3.select('.k-d3-axis-y_' + (++idx));
+                if (node.node() && !node.classed('k-d3-hidden')) {
+                    totalOffset += s.axisWidth || 40;
+                }
             });
 
             if (orient === 'top' || orient === 'bottom') {

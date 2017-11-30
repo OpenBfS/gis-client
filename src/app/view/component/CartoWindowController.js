@@ -210,6 +210,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         this.createTimeSeriesButtons(tabElm);
         this.createCombineTimeseriesButton(tabElm);
+        this.createIdentificationThresholdButton(tabElm);
 
         var autorefreshStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'title'],
@@ -347,6 +348,43 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
         combine = Ext.create(combine);
         combine.el.dom.addEventListener('click', this.combineTimeseries.bind(this));
+    },
+
+    /**
+     * Create the button to toggle identification threshold data display.
+     * @param  {Element} elm the tab element
+     */
+    createIdentificationThresholdButton: function(elm) {
+        var button = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'identificationThreshold',
+            enableToggle: true,
+            glyph: 'xf201@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('displayIdentificationThreshold')
+            },
+            renderTo: elm,
+            handler: this.toggleIdentificationThreshold.bind(this)
+        };
+        var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
+        var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
+        var maySeeIdThresholdButton = Ext.Array.contains(imisRoles, 'imis') ||
+            Ext.Array.contains(imisRoles, 'ruf');
+
+        if (maySeeIdThresholdButton) {
+            Ext.create(button);
+        }
+    },
+
+    /**
+     * Toggle display of identification threshold data.
+     * @param  {Ext.button.button} btn the toggle buttons
+     */
+    toggleIdentificationThreshold: function(btn) {
+        this.timeserieschart.setShowIdentificationThresholdData(btn.pressed);
+        var ctrl = this.timeserieschart.getController();
+        ctrl.getChartData();
     },
 
     /**

@@ -58,6 +58,19 @@
             }
         }
     },
+    "Koala.view.button.SelectFeaturesController": {
+        "error": "Fehler",
+        "couldNotLoad": "Die Daten konnten nicht geladen werden.",
+        "couldNotParse": "Die Daten konnten nicht ausgewertet werden.",
+        "noSingleActiveLayerFound": "Bitte selektieren Sie einen aktiven Layer"
+    },
+    "Koala.view.button.SelectFeatures": {
+        "config": {
+            "data": {
+                "tooltip": "Objekte des aktiven Layers selektieren"
+            }
+        }
+    },
     "Koala.view.button.ShowRedliningToolsContainer": {
         "config": {
             "data":{
@@ -89,6 +102,7 @@
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Gruppierung tauschen",
                 "toggleUncertainty": "Messungenauigkeit umschalten",
+                "displayIdentificationThreshold": "Daten < NWG anzeigen",
                 "irixPrintText": "DokPool",
                 "irixPrintTooltip": "exportieren des Charts nach DokPool"
             }
@@ -990,11 +1004,30 @@
             }
         }
     },
+    "BasiGX.view.window.MergeWindow": {
+        "config": {
+            "data": {
+                "adoptAttributes": "Attribute hinzufügen",
+                "applyText": "Übernehmen",
+                "cancelText": "Abbrechen",
+                "windowTitle": "Features übernehmen",
+                "matchText": "Attribute zuordnen:"
+            }
+        }
+    },
     "BasiGX.view.button.AddWms": {
         "config": {
             "data": {
                 "tooltip": "WMS hinzufügen...",
                 "text": "WMS"
+            }
+        }
+    },
+    "BasiGX.view.button.MergeSelection": {
+        "config": {
+            "data": {
+                "tooltip": "Selektierte Features in diesen Layer übernehmen",
+                "text": "Features übernehmen"
             }
         }
     },

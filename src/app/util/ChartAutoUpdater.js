@@ -60,9 +60,6 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                         return;
                     }
 
-                    chart.setConfig('useExactInterval', false);
-                    chart.setConfig('alwaysRenderChart', false);
-
                     if (!autorefreshCheckbox.getValue()) {
                         return;
                     }

@@ -58,6 +58,19 @@
             }
         }
     },
+    "Koala.view.button.SelectFeaturesController": {
+        "error": "Error",
+        "couldNotLoad": "The data could not be loaded.",
+        "couldNotParse": "The data could not be parsed.",
+        "noSingleActiveLayerFound": "Please select a single active Layer"
+    },
+    "Koala.view.button.SelectFeaturesModel": {
+        "config": {
+            "data":{
+                "tooltip": "Select features of the active Layer"
+            }
+        }
+    },
     "Koala.view.button.ShowRedliningToolsContainer": {
         "config": {
             "data": {
@@ -89,6 +102,7 @@
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Toggle grouping",
                 "toggleUncertainty": "Toggle uncertainty",
+                "displayIdentificationThreshold": "Display data < identification threshold",
                 "irixPrintText": "DokPool",
                 "irixPrintTooltip": "export chart into DokPool"
             }
@@ -974,11 +988,30 @@
             }
         }
     },
+    "BasiGX.view.window.MergeWindow": {
+        "config": {
+            "data": {
+                "adoptAttributes": "Attributes to add",
+                "applyText": "Apply",
+                "cancelText": "Cancel",
+                "windowTitle": "Merge features",
+                "matchText": "Please select attributes to be mapped:"
+            }
+        }
+    },
     "BasiGX.view.button.AddWms": {
         "config": {
             "data": {
                 "tooltip": "Add WMS...",
                 "text": "WMS"
+            }
+        }
+    },
+    "BasiGX.view.button.MergeSelection": {
+        "config": {
+            "data": {
+                "tooltip": "Merge selected features into this layer",
+                "text": "Merge features"
             }
         }
     },
