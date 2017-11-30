@@ -1,11 +1,4 @@
 {
-    "Koala.util.Clone": {
-        "statics": {
-            "error": "fr:Error",
-            "couldNotLoad": "fr:The data could not be loaded.",
-            "couldNotParse": "fr:The data could not be parsed."
-        }
-    },
     "Koala.util.Layer": {
         "statics": {
             "txtUntil": "fr:bis",
@@ -428,6 +421,18 @@
                 "exportAsImageBtnText": "fr:Als Bild exportieren",
                 "toggleGroupingButtonText": "fr:Toggle grouping",
                 "printChartButtonText": "fr:IMIS-Druck"
+            }
+        }
+    },
+    "Koala.view.window.CloneWindow": {
+        "config": {
+            "data": {
+                "title": "fr:Clone layer",
+                "boundingBoxLabel": "fr:Restrict to visible area",
+                "maxFeaturesLabel": "fr:Maximum number of objects",
+                "layerNameLabel": "fr:Name of the new layer",
+                "okButtonLabel": "fr:Clone",
+                "cancelButtonLabel": "fr:Cancel"
             }
         }
     },

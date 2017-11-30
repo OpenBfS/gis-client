@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-present terrestris GmbH & Co. KG
+/* Copyright (c) 2017-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,88 +20,68 @@ Ext.define('Koala.util.Clone', {
 
     requires: [
         'Koala.util.Metadata',
-        'Koala.util.Layer'
+        'Koala.util.Layer',
+        'Koala.util.SelectFeatures'
     ],
 
     statics: {
 
-        /* i18n */
-        error: '',
-        couldNotLoad: '',
-        couldNotParse: '',
-        /* i18n */
-
         /**
          * Creates a clone of the given layer.
-         * @param  {ol.layer.Layer} layer the layer to clone
+         * @param  {ol.layer.Layer} sourceLayer the layer to clone the metadata
+         * from
+         * @param  {String} name the new layer name
+         * @param  {Number} maxFeatures maximum features to request
+         * @param  {Array} bbox the bounding box to clone from, or undefined
+         * @param  {ol.layer.Layer} dataSourceLayer the layer to clone the
+         * data from, or undefined
          */
-        cloneLayer: function(layer) {
-            var url = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wfs/url');
-            if (url) {
-                this.cloneLayerFromWfs(layer, url);
+        cloneLayer: function(sourceLayer, name, maxFeatures, bbox, dataSourceLayer) {
+            var targetLayer = this.createLayer(sourceLayer, name);
+            var SelectFeatures = Koala.util.SelectFeatures;
+
+            if (dataSourceLayer instanceof ol.layer.Vector) {
+                if (bbox) {
+                    SelectFeatures.getFeaturesFromVectorLayerByBbox(
+                        dataSourceLayer,
+                        targetLayer,
+                        bbox
+                    );
+                } else {
+                    SelectFeatures.getAllFeaturesFromVectorLayer(
+                        dataSourceLayer,
+                        targetLayer
+                    );
+                }
+            } else if (dataSourceLayer) {
+                SelectFeatures.getFeaturesFromWmsLayerByBbox(
+                    dataSourceLayer,
+                    targetLayer,
+                    bbox,
+                    maxFeatures
+                );
             }
         },
 
         /**
-         * Clones the given layer from WFS using the given url.
-         * @param  {ol.layer.Layer} layer the layer to cloneBtn
-         * @param  {String} url   the WFS base url
+         * Create a cloned layer and add it to the map.
+         * @param  {ol.layer.Layer} layer the layer to clone the metadata from
+         * @param  {String} name  the new layer's name
+         * @return {ol.layer.Vector}       the new layer
          */
-        cloneLayerFromWfs: function(layer, url) {
-            var name = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wms/layers');
-            var filter = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/olProperties/param_cql_filter');
-            url = Ext.String.urlAppend(url, 'request=GetFeature');
-            // TODO remove maxfeatures
-            url = Ext.String.urlAppend(url, 'maxFeatures=50');
-            url = Ext.String.urlAppend(url, 'typename=' + name);
-            url = Ext.String.urlAppend(url, 'service=WFS');
-            url = Ext.String.urlAppend(url, 'version=1.1.0');
-            url = Ext.String.urlAppend(url, 'outputformat=application/json');
-            if (filter) {
-                url = Ext.String.urlAppend(url, 'cql_filter=' + filter);
-            }
-
-            var metadata = Koala.util.Metadata.prepareClonedMetadata(layer.metadata);
-
-            Ext.Ajax.request({
-                url: url,
-                success: this.getFeatureSuccess.bind(this, layer, metadata),
-                failure: this.getFeatureFail.bind(this),
-                timeout: 120000
-            });
-        },
-
-        /**
-         * The success callback after features have been loaded.
-         * @param  {ol.layer.Layer} originalLayer the original layerRec
-         * @param  {Object} metadata      the layer metadata
-         * @param  {Object} response      the xhr response object
-         */
-        getFeatureSuccess: function(originalLayer, metadata, response) {
+        createLayer: function(layer, name) {
             var Layer = Koala.util.Layer;
+            var metadata = Koala.util.Metadata.prepareClonedMetadata(layer.metadata);
             var source = new ol.source.Vector();
             var config = Layer.getInternalLayerConfig(metadata);
             config.source = source;
             config.metadata = metadata;
-            config.name = config.name + '_vector';
-            var layer = new ol.layer.Vector(config);
-            layer.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
-
-            var fmt = new ol.format.GeoJSON();
-            try {
-                var features = fmt.readFeatures(response.responseText);
-                source.addFeatures(features);
-                Koala.util.Layer.addOlLayerToMap(layer);
-            } catch (e) {
-                Ext.Msg.alert(this.error, this.couldNotParse);
-            }
-        },
-
-        /**
-         * The failure callback when features could not be loaded.
-         */
-        getFeatureFail: function() {
-            Ext.Msg.alert(this.error, this.couldNotLoad);
+            config.name = name;
+            var result = new ol.layer.Vector(config);
+            result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
+            result.metadata = Ext.clone(metadata);
+            Koala.util.Layer.addOlLayerToMap(result);
+            return result;
         }
 
     }
