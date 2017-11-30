@@ -22,7 +22,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
             // TODO Refactor
             if (window.location.hash.indexOf('center') > 0) {
                 var centerString = location.hash.split('center/')[1].
-                split('|')[0];
+                    split('|')[0];
                 config.startCenter = centerString;
             }
 
@@ -36,8 +36,10 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                     minResolution: config.minResolution,
                     projection: config.mapConfig.projection || 'EPSG:3857',
                     units: 'm',
-                    resolutions: me.convertStringToNumericArray(
-                        'float', config.mapConfig.resolutions)
+                    resolutions: config.mapConfig.resolutions ?
+                        me.convertStringToNumericArray(
+                            'float', config.mapConfig.resolutions)
+                        : undefined
                 }),
                 logo: false
             });
@@ -71,14 +73,14 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                     success: function(response) {
                         var obj;
                         try {
-                              // replace any occurencies of \{\{ (as it may still be
-                              // stored in db) with the new delimiters [[
-                              //
-                              // These arrive here as \\{\\{ (the backslash has been
-                              // escaped for the JSON format)
-                              //
-                              // Since both { and \ have a special meaning in regular
-                              // expressions, we need to escape them again with a \
+                            // replace any occurencies of \{\{ (as it may still be
+                            // stored in db) with the new delimiters [[
+                            //
+                            // These arrive here as \\{\\{ (the backslash has been
+                            // escaped for the JSON format)
+                            //
+                            // Since both { and \ have a special meaning in regular
+                            // expressions, we need to escape them again with a \
                             var escapedCurlyOpen = /\\\\\{\\\\\{/g;
                             var escapedCurlyClose = /\\\\\}\\\\\}/g;
                             var txt = response.responseText;

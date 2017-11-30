@@ -1,11 +1,4 @@
 {
-    "Koala.util.Clone": {
-        "statics": {
-            "error": "Fehler",
-            "couldNotLoad": "Die Daten konnten nicht geladen werden.",
-            "couldNotParse": "Die Daten konnten nicht ausgewertet werden."
-        }
-    },
     "Koala.util.Date": {
         "statics": {
             "txtUtc": "(UTC)",
@@ -461,6 +454,18 @@
                 "exportAsImageBtnText": "Als Bild exportieren",
                 "toggleGroupingButtonText": "Gruppierung wechseln",
                 "printChartButtonText": "IMIS-Druck"
+            }
+        }
+    },
+    "Koala.view.window.CloneWindow": {
+        "config": {
+            "data": {
+                "title": "Layer klonen",
+                "boundingBoxLabel": "Auf sichtbaren Bereich einschränken",
+                "maxFeaturesLabel": "Maximale Anzahl an Objekten",
+                "layerNameLabel": "Name des neuen Layers",
+                "okButtonLabel": "Klonen",
+                "cancelButtonLabel": "Abbrechen"
             }
         }
     },

@@ -28,7 +28,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.util.Layer',
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
-        'Koala.view.window.MetadataInfo'
+        'Koala.view.window.MetadataInfo',
+        'Koala.view.window.CloneWindow'
     ],
 
     controller: 'k-panel-routing-legendtree',
@@ -322,9 +323,15 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             });
         },
 
+        /**
+         * Open the clone window for possible cloning action.
+         * @param  {Ext.button.button} btn the clone button
+         */
         cloneHandler: function(btn) {
-            var layer = btn.layerRec.getOlLayer();
-            Koala.util.Clone.cloneLayer(layer);
+            Ext.create({
+                xtype: 'k-window-clone',
+                sourceLayer: btn.layerRec.getOlLayer()
+            });
         },
 
         styleHandler: function(btn) {
@@ -555,16 +562,24 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             return;
         }
         var layer = selection[0].data;
+
         if (layer instanceof ol.layer.Vector) {
             if (this.featureGrid) {
                 this.featureGrid.destroy();
             }
+
+            var tree = Ext.ComponentQuery.query('basigx-panel-menu')[0];
+            var x = tree.getWidth() + 5;
+            var header = Ext.ComponentQuery.query('k-panel-header')[0];
+            var y = header.getHeight() + 5;
 
             this.featureGrid = Ext.create({
                 xtype: 'window',
                 layout: 'fit',
                 width: 500,
                 height: 300,
+                x: x,
+                y: y,
                 title: layer.get('name'),
                 scrollable: true,
                 items: [{
