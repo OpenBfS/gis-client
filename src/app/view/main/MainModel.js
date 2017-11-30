@@ -33,6 +33,22 @@ Ext.define('Koala.view.main.MainModel', {
         importLocalDataButtonTooltip: 'Import local data',
         importLocalDataWindowText: 'Import',
         headerTitle: '',
-        selectedFeaturesLayer: null
+        selectedFeaturesLayer: null,
+        noFeaturesSelected: true
+    },
+    formulas: {
+        noFeaturesSelected: function(get) {
+            var me = this;
+            var layer = get('selectedFeaturesLayer');
+            if (layer) {
+                layer.getSource().on('change', function(evt) {
+                    this.set('noFeaturesSelected',
+                        evt.target.getFeatures().length === 0
+                    );
+                }, me);
+                return false;
+            }
+            return true;
+        }
     }
 });

@@ -45,6 +45,13 @@
             "unknownFilter": "The permalink contains an unknown filter."
         }
     },
+    "Koala.util.SelectFeatures": {
+        "statics": {
+            "error": "Error",
+            "couldNotLoad": "The data could not be loaded.",
+            "couldNotParse": "The data could not be parsed."
+        }
+    },
     "Koala.util.String": {
         "statics": {
             "defaultDateFormat": "Y/m/d H:i:s"
@@ -59,9 +66,6 @@
         }
     },
     "Koala.view.button.SelectFeaturesController": {
-        "error": "Error",
-        "couldNotLoad": "The data could not be loaded.",
-        "couldNotParse": "The data could not be parsed.",
         "noSingleActiveLayerFound": "Please select a single active Layer"
     },
     "Koala.view.button.SelectFeaturesModel": {
