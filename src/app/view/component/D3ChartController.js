@@ -117,9 +117,9 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.createScales();
         me.createAxes();
         me.createGridAxes();
+        me.createAttachedSeriesAxes();
         me.createShapes();
         me.createTooltip();
-        me.createAttachedSeriesAxes();
 
         me.setDomainForScales();
 
@@ -687,8 +687,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 shapeConfig.color = config.color;
                 shapeConfig.yField = config.yAxisAttribute;
                 shapeConfig.orientY = 'left';
+                var scale = me.attachedSeriesScales[idx];
                 shapeConfig.attachedSeriesNumber = ++idx;
-                shape = Chart.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, normalizeY, chartSize);
+                shape = Chart.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, scale, chartSize);
                 me.attachedSeriesShapes.push({
                     config: shapeConfig,
                     shape: shape
