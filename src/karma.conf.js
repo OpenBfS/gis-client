@@ -116,7 +116,7 @@ module.exports = function(config) {
         browsers: [
             // 'Chrome',
             // 'Firefox',
-            'PhantomJS'
+            'ChromeHeadless'
         ],
 
         phantomjsLauncher: {
