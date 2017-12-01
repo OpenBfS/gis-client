@@ -119,12 +119,11 @@ module.exports = function(config) {
             'Chromium_no_sandbox'
         ],
 
-        phantomjsLauncher: {
-            flags: [
-                '--load-images=false',
-                '--ssl-protocol=any',
-                '--ignore-ssl-errors=true'
-            ]
+        customLaunchers: {
+            Chromium_no_sandbox: {
+                base: 'ChromiumHeadless',
+                flags: ['--no-sandbox']
+            }
         },
 
         // Continuous Integration mode
