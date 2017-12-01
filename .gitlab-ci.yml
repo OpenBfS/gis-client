@@ -32,8 +32,11 @@ before_script:
   - git clone git@gitlab.intranet.terrestris.de:libraries/ext-6.2.0.git /ext
   - cd src
   - ln -s /ext
-  - sencha app install --framework=ext
-  - sencha app build
+  - wget -q http://cdn.sencha.com/cmd/6.2.2/no-jre/SenchaCmd-6.2.2-linux-amd64.sh.zip
+  - unzip wget -q SenchaCmd-6.2.2-linux-amd64.sh.zip
+  - ./SenchaCmd-6.2.2.36-linux-amd64.sh -q
+  - $HOME/bin/Sencha/Cmd/6.2.2.36/sencha app install --framework=ext
+  - $HOME/bin/Sencha/Cmd/6.2.2.36/sencha app build
 
 test:
   stage: test
