@@ -224,11 +224,11 @@ Ext.define('Koala.util.Chart', {
             });
 
             Ext.iterate(visibleSeries, function(idx, config) {
-                if (config) {
+                if (config && config.showYAxis) {
                     translateX += (config.axisWidth || 40);
                 }
                 var sel = '.k-d3-axis-y_' + (parseFloat(idx) + 1);
-                var visible = config ? true : false;
+                var visible = config && config.showYAxis;
 
                 d3.select(sel)
                     .classed('k-d3-hidden', !visible)
