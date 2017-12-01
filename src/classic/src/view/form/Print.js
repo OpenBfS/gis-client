@@ -499,7 +499,6 @@ Ext.define('Koala.view.form.Print', {
     },
 
     getCheckBoxBooleanFields: function(attributeRec) {
-        var me = this;
         return {
             xtype: 'checkbox',
             name: attributeRec.get('name'),
