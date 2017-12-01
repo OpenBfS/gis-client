@@ -931,6 +931,33 @@
             }
         }
     },
+    "BasiGX.view.button.DigitizePoint": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Digitize new point",
+                "digitizePointText": "fr:Point"
+            }
+
+        }
+    },
+    "BasiGX.view.button.DigitizeLine": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Digitize new line",
+                "digitizeLineText": "fr:Line"
+            }
+
+        }
+    },
+    "BasiGX.view.button.DigitizePolygon": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Digitize new polygon",
+                "digitizePolygonText": "fr:Polygon"
+            }
+
+        }
+    },
     "BasiGX.view.button.MergeSelection": {
         "config": {
             "data": {

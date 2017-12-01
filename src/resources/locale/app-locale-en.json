@@ -1016,6 +1016,33 @@
             }
         }
     },
+    "BasiGX.view.button.DigitizePoint": {
+        "config": {
+            "data": {
+                "tooltip": "Digitize new point",
+                "digitizePointText": "Point"
+            }
+
+        }
+    },
+    "BasiGX.view.button.DigitizeLine": {
+        "config": {
+            "data": {
+                "tooltip": "Digitize new line",
+                "digitizeLineText": "Line"
+            }
+
+        }
+    },
+    "BasiGX.view.button.DigitizePolygon": {
+        "config": {
+            "data": {
+                "tooltip": "Digitize new polygon",
+                "digitizePolygonText": "Polygon"
+            }
+
+        }
+    },
     "BasiGX.view.button.MergeSelection": {
         "config": {
             "data": {
