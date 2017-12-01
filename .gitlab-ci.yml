@@ -33,6 +33,7 @@ before_script:
   - cd src
   - ln -s /ext
   - wget -q http://cdn.sencha.com/cmd/6.2.2/no-jre/SenchaCmd-6.2.2-linux-amd64.sh.zip
+  - apt install unzip
   - unzip wget -q SenchaCmd-6.2.2-linux-amd64.sh.zip
   - ./SenchaCmd-6.2.2.36-linux-amd64.sh -q
   - $HOME/bin/Sencha/Cmd/6.2.2.36/sencha app install --framework=ext
