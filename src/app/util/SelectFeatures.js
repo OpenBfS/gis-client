@@ -47,13 +47,29 @@ Ext.define('Koala.util.SelectFeatures', {
             var exisitingFeatures = targetLayer.getSource().getFeatures();
             var featureIdentifyField = Koala.util.Object.getPathStrOr(
                 sourceLayer.metadata, 'layerConfig/olProperties/featureIdentifyField');
-            var featureType = Koala.util.Object.getPathStrOr(
+            var layerIdentifier = Koala.util.Object.getPathStrOr(
                 sourceLayer.metadata, 'layerConfig/wms/layers');
+            if (!layerIdentifier) {
+                layerIdentifier = sourceLayer.id;
+            }
+            var shiftKeyPressed = false;
+            var selectBtn = Ext.ComponentQuery.query(
+                'k-button-selectfeatures')[0];
+            if (selectBtn) {
+                shiftKeyPressed = selectBtn.getController().shiftKeyPressed;
+            }
+            if (!shiftKeyPressed) {
+                // always remove all selections when user does not select with
+                // the shift key
+                targetLayer.getSource().clear();
+                exisitingFeatures = [];
+            }
             Ext.each(features, function(feature) {
                 var alreadyExistingFeature;
                 Ext.each(exisitingFeatures, function(exisitingFeature) {
-                    if (featureIdentifyField && featureType) {
-                        if (exisitingFeature.__featureType__ && exisitingFeature.__featureType__ === featureType) {
+                    if (featureIdentifyField && layerIdentifier) {
+                        if (exisitingFeature.__layerIdentifier__ &&
+                            exisitingFeature.__layerIdentifier__ === layerIdentifier) {
                             // comparing a feature from the same featuretype, lets check for the id
                             var existingId = exisitingFeature.getProperties()[featureIdentifyField];
                             var newId = feature.getProperties()[featureIdentifyField];
@@ -67,8 +83,8 @@ Ext.define('Koala.util.SelectFeatures', {
                 if (alreadyExistingFeature) {
                     targetLayer.getSource().removeFeature(alreadyExistingFeature);
                 } else {
-                    // save the featuretype for later comparisons
-                    feature.__featureType__ = featureType;
+                    // save the layerIdentifier for later comparisons
+                    feature.__layerIdentifier__ = layerIdentifier;
                     targetLayer.getSource().addFeatures([feature]);
                 }
             });
@@ -99,15 +115,16 @@ Ext.define('Koala.util.SelectFeatures', {
          * @param {array} extent The extent array to retrieve features in
          */
         getFeaturesFromVectorLayerByBbox: function(sourceLayer, targetLayer, extent) {
+            var clones = [];
             sourceLayer.getSource().forEachFeatureIntersectingExtent(
                 extent, function(feature) {
-                    var clone = Ext.clone(feature);
-                    Koala.util.SelectFeatures.addOrRemoveSelectedFeatures(
-                        sourceLayer,
-                        targetLayer,
-                        [clone]
-                    );
+                    clones.push(Ext.clone(feature));
                 }
+            );
+            Koala.util.SelectFeatures.addOrRemoveSelectedFeatures(
+                sourceLayer,
+                targetLayer,
+                clones
             );
         },
 
@@ -252,29 +269,20 @@ Ext.define('Koala.util.SelectFeatures', {
          */
         getFeatureSuccess: function(sourceLayer, targetLayer, response) {
             var format = new ol.format.GeoJSON();
-            var shiftKeyPressed = false;
-            var selectBtn = Ext.ComponentQuery.query(
-                'k-button-selectfeatures')[0];
-            if (selectBtn) {
-                shiftKeyPressed = selectBtn.getController().shiftKeyPressed;
-            }
+            var mapComponent = BasiGX.util.Map.getMapComponent();
             try {
                 var features = format.readFeatures(response.responseText);
-                if (!shiftKeyPressed) {
-                    // always remove all selections when user does not select with
-                    // the shift key
-                    targetLayer.getSource().clear();
-                }
-                Koala.util.SelectFeatures.addOrRemoveSelectedFeatures(
-                    sourceLayer,
-                    targetLayer,
-                    features
-                );
             } catch (e) {
                 Ext.Msg.alert(Koala.util.SelectFeatures.error,
                     Koala.util.SelectFeatures.couldNotParse);
+                mapComponent.setLoading(false);
+                return;
             }
-            var mapComponent = BasiGX.util.Map.getMapComponent();
+            Koala.util.SelectFeatures.addOrRemoveSelectedFeatures(
+                sourceLayer,
+                targetLayer,
+                features
+            );
             mapComponent.setLoading(false);
         },
 
