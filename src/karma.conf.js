@@ -116,7 +116,7 @@ module.exports = function(config) {
         browsers: [
             // 'Chrome',
             // 'Firefox',
-            'ChromeHeadless'
+            'Chromium_no_sandbox'
         ],
 
         phantomjsLauncher: {
