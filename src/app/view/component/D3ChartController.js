@@ -120,6 +120,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.createShapes();
         me.createTooltip();
         me.createAttachedSeriesAxes();
+        me.createAttachedSeriesShapes();
 
         me.setDomainForScales();
 
@@ -175,6 +176,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             me.createGridAxes();
             me.createShapes();
             me.createAttachedSeriesAxes();
+            me.createAttachedSeriesShapes();
 
             me.setDomainForScales();
 
@@ -665,9 +667,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             var normalizeY = me.scales[orientY];
             var shape;
 
-            var attachedSeries = shapeConfig.attachedSeries ?
-                JSON.parse(shapeConfig.attachedSeries) : [];
-
             if (shapeType) {
                 shape = Chart.createShape(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize);
             }
@@ -680,6 +679,29 @@ Ext.define('Koala.view.component.D3ChartController', {
             if (!me.attachedSeriesVisibleById[shapeConfig.id]) {
                 me.attachedSeriesVisibleById[shapeConfig.id] = [];
             }
+        });
+    },
+
+    createAttachedSeriesShapes: function() {
+        var Const = Koala.util.ChartConstants;
+        var Chart = Koala.util.Chart;
+        var chartSize = this.getChartSize();
+        var me = this;
+        me.attachedSeriesShapes = [];
+
+        Ext.each(this.getView().getShapes(), function(shapeConfig) {
+            var shapeType = Const.TYPE[shapeConfig.type || 'line'];
+            var curveType = Const.CURVE[shapeConfig.curve || 'linear'];
+            var xField = shapeConfig.xField;
+            var orientX = me.getAxisByField(xField);
+            var normalizeX = me.scales[orientX];
+
+            var attachedSeries = shapeConfig.attachedSeries ?
+                JSON.parse(shapeConfig.attachedSeries) : [];
+
+            if (!me.attachedSeriesVisibleById[shapeConfig.id]) {
+                me.attachedSeriesVisibleById[shapeConfig.id] = [];
+            }
 
             var idx = 0;
             Ext.each(attachedSeries, function(config) {
@@ -687,8 +709,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 shapeConfig.color = config.color;
                 shapeConfig.yField = config.yAxisAttribute;
                 shapeConfig.orientY = 'left';
+                var scale = me.attachedSeriesScales[idx];
                 shapeConfig.attachedSeriesNumber = ++idx;
-                shape = Chart.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, normalizeY, chartSize);
+                var shape = Chart.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, scale, chartSize);
                 me.attachedSeriesShapes.push({
                     config: shapeConfig,
                     shape: shape
@@ -774,10 +797,12 @@ Ext.define('Koala.view.component.D3ChartController', {
             if (attachedSeriesNumber) {
                 index += '_' + attachedSeriesNumber;
             }
+            var yScale = me.scales[orientY];
 
             var classes = Const.CSS_CLASS.SHAPE_GROUP;
             if (attachedSeriesNumber && !me.attachedSeriesVisibleById[shapeId][attachedSeriesNumber-1]) {
                 classes += ' k-d3-hidden';
+                yScale = me.attachedSeriesScales[attachedSeriesNumber - 1];
             }
 
             var shapeGroup = shapeSvg
@@ -915,7 +940,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             maxx = Math.max(maxx, val);
                         }
 
-                        var cy = me.scales[orientY](d[yField]);
+                        var cy = yScale(d[yField]);
                         return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
                             ((Ext.isDefined(d.style) && d.style.type === 'circle') || !Ext.isDefined(d.style));
                     })
@@ -951,7 +976,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         if (d.drawAsZero) {
                             val = d.minValue;
                         }
-                        return me.scales[orientY](val);
+                        return yScale(val);
                     })
                     .attr('r', function(d) {
                         if (d.style && d.style.radius) {
@@ -977,7 +1002,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             maxx = Math.max(maxx, val);
                         }
 
-                        var cy = me.scales[orientY](d[yField]);
+                        var cy = yScale(d[yField]);
                         return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
                             (Ext.isDefined(d.style) && d.style.type === 'rect');
                     })
@@ -1021,7 +1046,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 return me.scales[orientY](d[yField]) - h / 2;
                             }
                         }
-                        return me.scales[orientY](d[yField]) - 5;
+                        return yScale(d[yField]) - 5;
                     })
                     .attr('width', function(d) {
                         if (d.style && d.style.width) {
@@ -1055,7 +1080,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             maxx = Math.max(maxx, val);
                         }
 
-                        var cy = me.scales[orientY](d[yField]);
+                        var cy = yScale(d[yField]);
                         return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
                             (Ext.isDefined(d.style) && d.style.type === 'star');
                     })
@@ -1073,7 +1098,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         if (d.style && d.style.radius) {
                             var h = Koala.util.String.coerce(d.style.radius);
                             if (Ext.isNumber(h)) {
-                                return me.scales[orientY](d[yField]) - h;
+                                return yScale(d[yField]) - h;
                             }
                         }
                         return me.scales[orientY](d[yField]) - 5;
