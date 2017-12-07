@@ -614,6 +614,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                         layer: layer,
                         layout: 'fit',
                         region: 'center',
+                        bind: {
+                            selectionLayer: '{selectedFeaturesLayer}'
+                        },
                         map: map
                     }]
                 }]
