@@ -596,6 +596,18 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                                 disabled: '{noFeaturesSelected}',
                                 sourceLayer: '{selectedFeaturesLayer}'
                             }
+                        }, {
+                            xtype: 'basigx-button-digitize-point',
+                            map: map.map,
+                            layer: layer
+                        }, {
+                            xtype: 'basigx-button-digitize-line',
+                            map: map.map,
+                            layer: layer
+                        }, {
+                            xtype: 'basigx-button-digitize-polygon',
+                            map: map.map,
+                            layer: layer
                         }]
                     }, {
                         xtype: 'basigx-grid-featuregrid',

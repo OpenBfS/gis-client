@@ -1032,6 +1032,33 @@
             }
         }
     },
+    "BasiGX.view.button.DigitizePoint": {
+        "config": {
+            "data": {
+                "tooltip": "Neuen Punkt digitalisieren",
+                "digitizePointText": "Punkt"
+            }
+
+        }
+    },
+    "BasiGX.view.button.DigitizeLine": {
+        "config": {
+            "data": {
+                "tooltip": "Neue Linie digitalisieren",
+                "digitizeLineText": "Linie"
+            }
+
+        }
+    },
+    "BasiGX.view.button.DigitizePolygon": {
+        "config": {
+            "data": {
+                "tooltip": "Neues Polygon digitalisieren",
+                "digitizePolygonText": "Polygon"
+            }
+
+        }
+    },
     "BasiGX.view.button.MergeSelection": {
         "config": {
             "data": {
