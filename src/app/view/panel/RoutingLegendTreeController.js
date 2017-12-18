@@ -69,7 +69,9 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
             // hoverTpl
             Ext.each(selectedRecords, function(selectedRecord) {
                 olLayer = selectedRecord.getOlLayer();
-                if (olLayer && olLayer.get( keyHovertpl )) {
+                //TODO: 2nd if-clause is a workaround cause keyHoverable gets misused as boolean to see whether layer is selected or not
+                //      -> logical fix in BasiGX necessary
+                if (olLayer && olLayer.get( keyHovertpl ) && (olLayer.metadata.layerConfig.olProperties.allowHover === "true")) {
                     olLayer.set(keyHoverable, true);
                 }
             });
