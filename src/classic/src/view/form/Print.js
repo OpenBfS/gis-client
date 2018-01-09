@@ -226,6 +226,7 @@ Ext.define('Koala.view.form.Print', {
             bind: {
                 title: '{printLegendsFieldSetTitle}'
             },
+            id: 'legendsFieldset',
             name: 'legendsFieldset',
             checkboxName: 'legendsFieldsetCheckBox',
             checkboxToggle: true
@@ -249,8 +250,6 @@ Ext.define('Koala.view.form.Print', {
 
         if (layerCheckbox && !legendFieldset.getCollapsed() &&
                 layer.checked &&
-                layer.get('name') &&
-                layer.get('name') !== 'Hintergrundkarte' &&
                 layer.get('opacity') > 0 &&
                 layer.get('allowPrint') &&
                 layerCheckbox.layer === layer &&
@@ -281,7 +280,7 @@ Ext.define('Koala.view.form.Print', {
         layers.reverse();
 
         Ext.each(layers, function(layer) {
-            if (layer.get('visible') && layer.get('allowPrint')) {
+            if (layer.get('visible') && layer.get('allowPrint') && layer.get('legendUrl') !== '') {
                 var layerLegendContainer = me.createLegendContainer(layer);
                 layerLegendContainers.push(layerLegendContainer);
             }
@@ -417,6 +416,10 @@ Ext.define('Koala.view.form.Print', {
         var legendContainer = me.createLegendContainer(layer);
         var legendsFieldset = me.down('fieldset[name="legendsFieldset"]');
         legendsFieldset.insert(0, legendContainer);
+
+        if(legendsFieldset.items.items["length"] > 0 && legendsFieldset.hidden === true){
+            Ext.getCmp('legendsFieldset').show();
+        }
     },
 
     /**
