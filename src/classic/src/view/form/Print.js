@@ -417,7 +417,7 @@ Ext.define('Koala.view.form.Print', {
         var legendsFieldset = me.down('fieldset[name="legendsFieldset"]');
         legendsFieldset.insert(0, legendContainer);
 
-        if(legendsFieldset.items.items["length"] > 0 && legendsFieldset.hidden === true){
+        if (legendsFieldset.items.items.length > 0 && legendsFieldset.hidden === true) {
             Ext.getCmp('legendsFieldset').show();
         }
     },
