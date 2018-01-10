@@ -661,7 +661,13 @@ Ext.define('Koala.view.form.Print', {
                 if (serializer) {
                     serialized = serializer.serialize(layer, source, viewRes);
                     serializedLayers.push(serialized);
-                } else if (source.type === 'chart') {
+                }
+            }, view);
+
+            Ext.each(printLayers, function(layer) {
+                var source = layer.getSource();
+
+                if (source.type === 'chart') {
                     var symbolizer =
                         {
                             type: 'point',
