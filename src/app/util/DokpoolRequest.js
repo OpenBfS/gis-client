@@ -55,6 +55,10 @@ Ext.define('Koala.util.DokpoolRequest', {
                     'data/merge/urls/dokpool-scenarios'),
                 url = (dpType) ? baseUrl + me.elanScenarioSearch + dpType : baseUrl + me.elanScenarioSearch;
 
+            if (!baseUrl) {
+                return Ext.Promise.resolve({});
+            }
+
             return new Ext.Promise(function(resolve, reject) {
                 Ext.Ajax.request({
                     url: url,
