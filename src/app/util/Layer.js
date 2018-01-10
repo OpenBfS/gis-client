@@ -1974,10 +1974,11 @@ Ext.define('Koala.util.Layer', {
                 return url;
             }
             var cql = staticMe.filtersToCql(filters);
-            var param = 'CQL_FILTER=' + encodeURIComponent(cql);
-            // TODO check if we already have a CQL_FILTER in layer or base-url?!?
-            url = Ext.String.urlAppend(url, param);
-
+            if (cql !== '') {
+                var param = 'CQL_FILTER=' + encodeURIComponent(cql);
+                // TODO check if we already have a CQL_FILTER in layer or base-url?!?
+                url = Ext.String.urlAppend(url, param);
+            }
             var existingViewParams = Koala.util.Object.getPathStrOr(
                 metadata,
                 'layerConfig/olProperties/param_viewparams',

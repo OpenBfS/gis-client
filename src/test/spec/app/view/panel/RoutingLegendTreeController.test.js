@@ -80,6 +80,13 @@ describe('Koala.view.panel.RoutingLegendTreeController', function() {
             };
             view.getStore = sinon.stub().returns(store);
             view.scrollTo = sinon.stub();
+            layer.metadata = {
+                layerConfig: {
+                    olProperties: {
+                        allowHover: false
+                    }
+                }
+            };
             ctrl.setView(view);
             var records = [];
             if (withSelection) {
