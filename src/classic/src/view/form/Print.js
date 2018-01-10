@@ -280,7 +280,7 @@ Ext.define('Koala.view.form.Print', {
         layers.reverse();
 
         Ext.each(layers, function(layer) {
-            if (layer.get('visible') && layer.get('allowPrint') && layer.get('legendUrl') !== '') {
+            if (layer.get('allowPrint') && layer.get('legendUrl') !== '') {
                 var layerLegendContainer = me.createLegendContainer(layer);
                 layerLegendContainers.push(layerLegendContainer);
             }
@@ -325,6 +325,7 @@ Ext.define('Koala.view.form.Print', {
         var layerLegendContainer = Ext.create('Ext.container.Container', {
             layer: layer,
             name: layer.get('name') + '_layerLegendContainer',
+            disabled: !layer.get('visible'),
             items: [{
                 xtype: 'checkbox',
                 checked: true,
