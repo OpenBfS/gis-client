@@ -189,7 +189,7 @@ Ext.define('Koala.util.ChartData', {
                     if (matchingFeature.properties.value_constraint === '<' &&
                         !showIdentificationThresholdData) {
                         newRawData.drawAsZero = true;
-                        newRawData.minValue = chartConfig.yAxisMin || '0';
+                        newRawData.minValue = chartConfig.yAxisMin || 0;
                     }
                     newRawData[valueField] = matchingFeature.properties[yAxisAttr];
                     Ext.each(attachedSeries, valueExtractor(newRawData, matchingFeature));
@@ -230,13 +230,14 @@ Ext.define('Koala.util.ChartData', {
                             max = split[1];
                         }
                     }
+
                     if ((op === 'eq' && val === styleVal) ||
                         (op === 'ne' && val !== styleVal) ||
                         (op === 'gt' && val > styleVal) ||
                         (op === 'lt' && val < styleVal) ||
                         (op === 'lte' && val <= styleVal) ||
                         (op === 'gte' && val >= styleVal) ||
-                        (op === 'between' && min && max && val >= min && val <= max)) {
+                        (op === 'between' && Ext.isDefined(min) && Ext.isDefined(max) && val >= min && val <= max)) {
                         newRawData.style = style.style;
                         return false;
                     }

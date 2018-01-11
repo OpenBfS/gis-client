@@ -1080,8 +1080,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                             maxx = Math.max(maxx, val);
                         }
 
-                        var cy = yScale(d[yField]);
-                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
+                        var yValue = d[yField];
+                        if (d.drawAsZero) {
+                            yValue = d.minValue;
+                        }
+
+                        var cy = yScale(yValue);
+                        return Ext.isDefined(yValue) && Ext.isNumber(cy) &&
                             (Ext.isDefined(d.style) && d.style.type === 'star');
                     })
                     .append('svg')

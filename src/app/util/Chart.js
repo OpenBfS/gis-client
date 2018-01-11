@@ -279,7 +279,9 @@ Ext.define('Koala.util.Chart', {
                     .y(function(d) {
                         var val = d[yField];
                         if (d.drawAsZero) {
-                            val = d.minValue;
+                            val = parseInt(d.minValue, 10);
+                            // ATTENTION: original data cannot be reused if overridden here!
+                            d[yField] = val;
                         }
                         return normalizeY(val);
                     });
