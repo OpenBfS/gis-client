@@ -1925,6 +1925,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 view.setLoading(false);
             }
             me.fireEvent('chartdataprepared');
+            me.redrawAxes();
         }
     },
 
