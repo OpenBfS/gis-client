@@ -62,21 +62,26 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         // leave early, because irixContextUrl does not seem to be configured
         if (!me.getIrixContextUrl) {
             me.callParent(arguments);
+            return;
         }
 
-        Ext.Ajax.request({
-            url: me.irixContextUrl,
+        me.irixFieldsetLoaded = new Ext.Promise(function(resolve) {
+            Ext.Ajax.request({
+                url: me.irixContextUrl,
 
-            success: function(response) {
-                var json = Ext.decode(response.responseText);
-                me.raw = json;
-                me.add(me.createFields(json.data.fields));
-            },
+                success: function(response) {
+                    var json = Ext.decode(response.responseText);
+                    me.raw = json;
+                    me.add(me.createFields(json.data.fields));
+                    resolve();
+                },
 
-            failure: function(response) {
-                Ext.raise('server-side failure with status code ' + response.status);
-            }
+                failure: function(response) {
+                    Ext.raise('server-side failure with status code ' + response.status);
+                }
+            });
         });
+
         me.on('beforeattributefieldsadd', me.onBeforeAttributeFieldsAdd);
         me.callParent(arguments);
     },

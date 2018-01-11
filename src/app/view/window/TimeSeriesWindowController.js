@@ -402,12 +402,19 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var chart = btn.up('[name="chart-composition"]').down('d3-chart');
         var chartCtrl = chart.getController();
         var cb = function(dataUri) {
-            Ext.create({
+            var printWin = Ext.create({
                 xtype: 'k-window-print',
                 chartPrint: true,
                 chart: dataUri,
-                irixPrint: true
-            }).show();
+                irixPrint: true,
+                autoShow: false
+            });
+            printWin.down('k-form-print').irixFieldsetLoaded.then(function() {
+                var fieldset = printWin.down('k-form-irixfieldset');
+                fieldset.irixFieldsetLoaded.then(function() {
+                    printWin.show();
+                });
+            });
         };
         var cbScope = this;
         chartCtrl.chartToDataUriAndThen(cb, cbScope);

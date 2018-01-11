@@ -65,10 +65,16 @@ Ext.define('Koala.view.form.Print', {
 
     viewModel: 'k-form-print',
 
+    irixFieldsetLoaded: undefined,
+
     initComponent: function() {
         var me = this;
         var dpc;
         me.callParent();
+
+        me.irixFieldsetLoaded = new Ext.Promise(function(resolve) {
+            me.resolveIrixFieldsetLoaded = resolve.bind(this);
+        });
 
         /**
          * necessary to override the BasiGXs bind.
@@ -1121,6 +1127,7 @@ Ext.define('Koala.view.form.Print', {
                 flex: 2
             });
             me.add(irixFieldset);
+            me.resolveIrixFieldsetLoaded();
         } else {
             checkBox.setValue(false);
         }
