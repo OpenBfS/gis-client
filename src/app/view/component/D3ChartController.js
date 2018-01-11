@@ -556,6 +556,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     if (!val) {
                                         return null;
                                     }
+                                    if (d.drawAsZero) {
+                                        val = d.minValue;
+                                    }
                                     if (d.style && d.style.height) {
                                         var h = Koala.util.String.coerce(d.style.height);
                                         if (Ext.isNumber(h)) {
@@ -572,6 +575,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     var val = d[shape.config.yField];
                                     if (!val) {
                                         return null;
+                                    }
+                                    if (d.drawAsZero) {
+                                        val = d.minValue;
                                     }
                                     if (d.style && d.style.radius) {
                                         var w = Koala.util.String.coerce(d.style.radius);
