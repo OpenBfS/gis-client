@@ -138,11 +138,6 @@ Ext.define('Koala.view.component.D3Chart',{
                 if (chartConfig.attachedSeries) {
                     var as = Koala.util.String.coerce(chartConfig.attachedSeries);
                     if (Ext.isArray(as)) {
-                        Ext.each(as, function(series) {
-                            if (!series.color) {
-                                series.color = color;
-                            }
-                        });
                         chartConfig.attachedSeries = JSON.stringify(as);
                     }
                 }
