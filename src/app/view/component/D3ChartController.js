@@ -940,8 +940,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                             maxx = Math.max(maxx, val);
                         }
 
-                        var cy = yScale(d[yField]);
-                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
+                        var yValue = d[yField];
+                        if (d.drawAsZero) {
+                            yValue = d.minValue;
+                        }
+
+                        var cy = yScale(yValue);
+                        return Ext.isDefined(yValue) && Ext.isNumber(cy) &&
                             ((Ext.isDefined(d.style) && d.style.type === 'circle') || !Ext.isDefined(d.style));
                     })
                     .style('fill', color)
@@ -1002,8 +1007,13 @@ Ext.define('Koala.view.component.D3ChartController', {
                             maxx = Math.max(maxx, val);
                         }
 
-                        var cy = yScale(d[yField]);
-                        return Ext.isDefined(d[yField]) && Ext.isNumber(cy) &&
+                        var yValue = d[yField];
+                        if (d.drawAsZero) {
+                            yValue = d.minValue;
+                        }
+
+                        var cy = yScale(yValue);
+                        return Ext.isDefined(yValue) && Ext.isNumber(cy) &&
                             (Ext.isDefined(d.style) && d.style.type === 'rect');
                     })
                     .style('fill', color)
@@ -1041,12 +1051,17 @@ Ext.define('Koala.view.component.D3ChartController', {
                     })
                     .attr('y', function(d) {
                         if (d.style && d.style.height) {
+                            var yValue = d[yField];
+                            if (d.drawAsZero) {
+                                yValue = d.minValue;
+                            }
+
                             var h = Koala.util.String.coerce(d.style.height);
                             if (Ext.isNumber(h)) {
-                                return me.scales[orientY](d[yField]) - h / 2;
+                                return me.scales[orientY](yValue) - h / 2;
                             }
                         }
-                        return yScale(d[yField]) - 5;
+                        return yScale(yValue) - 5;
                     })
                     .attr('width', function(d) {
                         if (d.style && d.style.width) {
@@ -1101,12 +1116,16 @@ Ext.define('Koala.view.component.D3ChartController', {
                     })
                     .attr('y', function(d) {
                         if (d.style && d.style.radius) {
+                            var yValue = d[yField];
+                            if (d.drawAsZero) {
+                                yValue = d.minValue;
+                            }
                             var h = Koala.util.String.coerce(d.style.radius);
                             if (Ext.isNumber(h)) {
-                                return yScale(d[yField]) - h;
+                                return yScale(yValue) - h;
                             }
                         }
-                        return me.scales[orientY](d[yField]) - 5;
+                        return me.scales[orientY](yValue) - 5;
                     })
                     .attr('width', function(d) {
                         if (d.style && d.style.radius) {
