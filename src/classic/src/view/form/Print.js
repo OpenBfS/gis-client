@@ -65,10 +65,16 @@ Ext.define('Koala.view.form.Print', {
 
     viewModel: 'k-form-print',
 
+    irixFieldsetLoaded: undefined,
+
     initComponent: function() {
         var me = this;
         var dpc;
         me.callParent();
+
+        me.irixFieldsetLoaded = new Ext.Promise(function(resolve) {
+            me.resolveIrixFieldsetLoaded = resolve.bind(this);
+        });
 
         /**
          * necessary to override the BasiGXs bind.
@@ -280,7 +286,7 @@ Ext.define('Koala.view.form.Print', {
         layers.reverse();
 
         Ext.each(layers, function(layer) {
-            if (layer.get('visible') && layer.get('allowPrint') && layer.get('legendUrl') !== '') {
+            if (layer.get('allowPrint') && layer.get('legendUrl') !== '') {
                 var layerLegendContainer = me.createLegendContainer(layer);
                 layerLegendContainers.push(layerLegendContainer);
             }
@@ -325,6 +331,7 @@ Ext.define('Koala.view.form.Print', {
         var layerLegendContainer = Ext.create('Ext.container.Container', {
             layer: layer,
             name: layer.get('name') + '_layerLegendContainer',
+            disabled: !layer.get('visible'),
             items: [{
                 xtype: 'checkbox',
                 checked: true,
@@ -660,7 +667,13 @@ Ext.define('Koala.view.form.Print', {
                 if (serializer) {
                     serialized = serializer.serialize(layer, source, viewRes);
                     serializedLayers.push(serialized);
-                } else if (source.type === 'chart') {
+                }
+            }, view);
+
+            Ext.each(printLayers, function(layer) {
+                var source = layer.getSource();
+
+                if (source.type === 'chart') {
                     var symbolizer =
                         {
                             type: 'point',
@@ -1114,6 +1127,7 @@ Ext.define('Koala.view.form.Print', {
                 flex: 2
             });
             me.add(irixFieldset);
+            me.resolveIrixFieldsetLoaded();
         } else {
             checkBox.setValue(false);
         }

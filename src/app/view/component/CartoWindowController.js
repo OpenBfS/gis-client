@@ -411,12 +411,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
     showIrixPrintDialog: function(chart) {
         var chartCtrl = chart.getController();
         var cb = function(dataUri) {
-            Ext.create({
+            var printWin = Ext.create({
                 xtype: 'k-window-print',
                 chartPrint: true,
                 chart: dataUri,
                 irixPrint: true
-            }).show();
+            });
+            printWin.down('k-form-print').irixFieldsetLoaded.then(function() {
+                var fieldset = printWin.down('k-form-irixfieldset');
+                fieldset.irixFieldsetLoaded.then(function() {
+                    printWin.show();
+                });
+            });
         };
         var cbScope = this;
         chartCtrl.chartToDataUriAndThen(cb, cbScope);

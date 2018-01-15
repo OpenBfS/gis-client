@@ -141,7 +141,7 @@ Ext.define('Koala.util.Chart', {
          * @return {Array} the array with the new tick values
          */
         recalculateAxisTicks: function(chartConfig) {
-            // There are four ways and combinations of defining the ticks and
+            // There are five ways and combinations of defining the ticks and
             // the min and max values on the y axis based on the chart configs
             // yAxisTicks, yAxisMin, yAxisMax and yTickValues:
             // 1. Fully automatically: If neither yAxisTicks, yAxisMin,
@@ -279,7 +279,7 @@ Ext.define('Koala.util.Chart', {
                     .y(function(d) {
                         var val = d[yField];
                         if (d.drawAsZero) {
-                            val = d.minValue;
+                            val = parseInt(d.minValue, 10);
                         }
                         return normalizeY(val);
                     });
