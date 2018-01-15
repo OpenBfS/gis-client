@@ -846,6 +846,7 @@ Ext.define('Koala.util.Layer', {
                     // Select the tree node
                     legendTree.setSelection(treeNode);
                 }
+                legendTree.toggleFeatureGrid(legendTree.getSelectionModel());
             }
         },
 
