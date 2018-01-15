@@ -1151,7 +1151,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         me.pointerMoveListener = function(event) {
             if (overlay.get('dragging') === true) {
-                overlay.setPosition(event.coordinate);
+                var position = overlay.getPosition();
+                var res = overlay.getMap().getView().getResolution();
+                position[0] += event.originalEvent.movementX * res;
+                position[1] -= event.originalEvent.movementY * res;
+                overlay.setPosition(position);
                 me.updateLineFeature();
             }
         };
