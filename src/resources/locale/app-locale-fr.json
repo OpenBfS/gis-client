@@ -379,7 +379,8 @@
                 "downloadMessage": "fr:Download Layerdaten?",
                 "downloadButtonYes": "Oui",
                 "downloadButtonNo": "Non",
-                "outputFormatText": "fr:Ausgabeformat"
+                "outputFormatText": "fr:Ausgabeformat",
+                "saveLayerText": "fr:Save layer"
             }
         }
     },

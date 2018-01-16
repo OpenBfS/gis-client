@@ -17,7 +17,13 @@
         "moment": true,
         "html2canvas": true,
         "turf": true,
-        "Set": true
+        "Set": true,
+        "Blob": true,
+        "XMLHttpRequest": true,
+        "FormData": true,
+        "shpwrite": true,
+        "atob": true,
+        "Uint8Array": true
     },
     "rules": {
         "comma-dangle": 2,
