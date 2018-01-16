@@ -72,7 +72,7 @@ Ext.define('Koala.util.Clone', {
         createLayer: function(layer, name) {
             var Layer = Koala.util.Layer;
             var metadata = Koala.util.Metadata.prepareClonedMetadata(layer.metadata);
-            var source = new ol.source.Vector();
+            var source = new ol.source.Vector({features: new ol.Collection()});
             var config = Layer.getInternalLayerConfig(metadata);
             config.source = source;
             config.metadata = metadata;

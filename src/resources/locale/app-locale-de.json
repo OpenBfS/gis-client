@@ -1037,7 +1037,7 @@
         "config": {
             "data": {
                 "tooltip": "Neuen Punkt digitalisieren",
-                "digitizePointText": "Punkt"
+                "digitizePointText": ""
             }
 
         }
@@ -1046,7 +1046,7 @@
         "config": {
             "data": {
                 "tooltip": "Neue Linie digitalisieren",
-                "digitizeLineText": "Linie"
+                "digitizeLineText": ""
             }
 
         }
@@ -1055,9 +1055,33 @@
         "config": {
             "data": {
                 "tooltip": "Neues Polygon digitalisieren",
-                "digitizePolygonText": "Polygon"
+                "digitizePolygonText": ""
             }
 
+        }
+    },
+    "BasiGX.view.button.DigitizeMoveObject": {
+        "config": {
+            "data": {
+                "tooltip": "Objekt verschieben",
+                "moveObjectBtnText": ""
+            }
+        }
+    },
+    "BasiGX.view.button.DigitizeModifyObject": {
+        "config": {
+            "data": {
+                "tooltip": "Objekt modifizieren",
+                "modifyObjectBtnText": ""
+            }
+        }
+    },
+    "BasiGX.view.button.DigitizeDeleteObject": {
+        "config": {
+            "data": {
+                "tooltip": "Objekt löschen",
+                "deleteObjectBtnText": ""
+            }
         }
     },
     "BasiGX.view.button.MergeSelection": {

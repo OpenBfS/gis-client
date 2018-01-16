@@ -1021,27 +1021,48 @@
         "config": {
             "data": {
                 "tooltip": "Digitize new point",
-                "digitizePointText": "Point"
+                "digitizePointText": ""
             }
-
         }
     },
     "BasiGX.view.button.DigitizeLine": {
         "config": {
             "data": {
                 "tooltip": "Digitize new line",
-                "digitizeLineText": "Line"
+                "digitizeLineText": ""
             }
-
         }
     },
     "BasiGX.view.button.DigitizePolygon": {
         "config": {
             "data": {
                 "tooltip": "Digitize new polygon",
-                "digitizePolygonText": "Polygon"
+                "digitizePolygonText": ""
             }
-
+        }
+    },
+    "BasiGX.view.button.DigitizeMoveObject": {
+        "config": {
+            "data": {
+                "tooltip": "Move an object",
+                "moveObjectBtnText": ""
+            }
+        }
+    },
+    "BasiGX.view.button.DigitizeModifyObject": {
+        "config": {
+            "data": {
+                "tooltip": "Modify an object",
+                "modifyObjectBtnText": ""
+            }
+        }
+    },
+    "BasiGX.view.button.DigitizeDeleteObject": {
+        "config": {
+            "data": {
+                "tooltip": "Delete an object",
+                "deleteObjectBtnText": ""
+            }
         }
     },
     "BasiGX.view.button.MergeSelection": {

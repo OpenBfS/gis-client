@@ -959,6 +959,30 @@
 
         }
     },
+    "BasiGX.view.button.DigitizeMoveObject": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Move an object",
+                "moveObjectBtnText": ""
+            }
+        }
+    },
+    "BasiGX.view.button.DigitizeModifyObject": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Modify an object",
+                "modifyObjectBtnText": ""
+            }
+        }
+    },
+    "BasiGX.view.button.DigitizeDeleteObject": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Delete an object",
+                "deleteObjectBtnText": ""
+            }
+        }
+    },
     "BasiGX.view.button.MergeSelection": {
         "config": {
             "data": {

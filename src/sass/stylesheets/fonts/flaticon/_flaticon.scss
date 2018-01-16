@@ -1,0 +1,75 @@
+/**
+    Flaticon icon font: Flaticon
+    Creation date: 10/10/2016 09:59
+    Designed by Anna Rieger (terrestris GmbH & Co. KG) from Flaticon
+    mailto: rieger [at] terrestris [dot] de
+*/
+
+@font-face {
+    font-family: "Flaticon";
+    src: url("./flaticon/Flaticon.eot");
+    src: url("./flaticon/Flaticon.eot?#iefix") format("embedded-opentype"),
+        url("./flaticon/Flaticon.woff") format("woff"),
+        url("./flaticon/Flaticon.ttf") format("truetype"),
+        url("./flaticon/Flaticon.svg#Flaticon") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: "Flaticon";
+        src: url("./flaticon/Flaticon.svg#Flaticon") format("svg");
+    }
+}
+
+.fi:before{
+    display: inline-block;
+    font-family: "Flaticon";
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-decoration: inherit;
+    text-rendering: optimizeLegibility;
+    text-transform: none;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+}
+
+.flaticon-circle:before { content: "\f100"; }
+.flaticon-circle-1:before { content: "\f101"; }
+.flaticon-circle-2:before { content: "\f102"; }
+.flaticon-circle-outline:before { content: "\f103"; }
+.flaticon-divide-mathematical-sign:before { content: "\f104"; }
+.flaticon-drawing:before { content: "\f105"; }
+.flaticon-edit-picture:before { content: "\f106"; }
+.flaticon-hexagon:before { content: "\f107"; }
+.flaticon-multimedia:before { content: "\f108"; }
+.flaticon-photo:before { content: "\f109"; }
+.flaticon-post-it:before { content: "\f10a"; }
+.flaticon-ruler:before { content: "\f10b"; }
+.flaticon-shape:before { content: "\f10c"; }
+.flaticon-shapes:before { content: "\f10d"; }
+.flaticon-tool:before { content: "\f10e"; }
+.flaticon-tools:before { content: "\f10f"; }
+.flaticon-two:before { content: "\f110"; }
+
+$font-Flaticon-circle: "\f100";
+$font-Flaticon-circle-1: "\f101";
+$font-Flaticon-circle-2: "\f102";
+$font-Flaticon-circle-outline: "\f103";
+$font-Flaticon-divide-mathematical-sign: "\f104";
+$font-Flaticon-drawing: "\f105";
+$font-Flaticon-edit-picture: "\f106";
+$font-Flaticon-hexagon: "\f107";
+$font-Flaticon-multimedia: "\f108";
+$font-Flaticon-photo: "\f109";
+$font-Flaticon-post-it: "\f10a";
+$font-Flaticon-ruler: "\f10b";
+$font-Flaticon-shape: "\f10c";
+$font-Flaticon-shapes: "\f10d";
+$font-Flaticon-tool: "\f10e";
+$font-Flaticon-tools: "\f10f";
+$font-Flaticon-two: "\f110";
