@@ -19,7 +19,8 @@
 Ext.define('Koala.util.Import', {
 
     requires: [
-        'Koala.util.AppContext'
+        'Koala.util.AppContext',
+        'Koala.util.Metadata'
     ],
 
     statics: {
@@ -110,7 +111,8 @@ Ext.define('Koala.util.Import', {
             };
             this.prepareImport(config)
                 .then(this.prepareTask.bind(this, importMetadata))
-                .then(this.performImport.bind(this, importMetadata));
+                .then(this.performImport.bind(this, importMetadata))
+                .then(Koala.util.Metadata.prepareMetadata.bind(Koala.util.Metadata, layer.metadata));
         }
 
     }

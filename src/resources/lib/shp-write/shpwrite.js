@@ -12979,7 +12979,7 @@ function justType(type, TYPE) {
     return function(gj) {
         var oftype = gj.features.filter(isType(type));
         return {
-            geometries: (TYPE === 'POLYGON' || TYPE === 'POLYLINE') ? oftype.map(justCoords) : oftype.map(justCoords),
+            geometries: oftype.map(justCoords),
             properties: oftype.map(justProps),
             type: TYPE
         };
@@ -12987,13 +12987,7 @@ function justType(type, TYPE) {
 }
 
 function justCoords(t) {
-    if (t.geometry.coordinates[0] !== undefined &&
-        t.geometry.coordinates[0][0] !== undefined &&
-        t.geometry.coordinates[0][0][0] !== undefined) {
-        return t.geometry.coordinates;
-    } else {
-        return t.geometry.coordinates;
-    }
+    return t.geometry.coordinates;
 }
 
 function justProps(t) {
@@ -13216,8 +13210,7 @@ module.exports = write;
 
 // Low-level writing interface
 function write(rows, geometry_type, geometries, callback) {
-console.log('records:', rows.length)
-console.log(geometries)
+
     var TYPE = types.geometries[geometry_type],
         writer = writers[TYPE],
         parts = writer.parts(geometries, TYPE),
@@ -13228,7 +13221,7 @@ console.log(geometries)
         shxBuffer = new ArrayBuffer(shxLength),
         shxView = new DataView(shxBuffer),
         extent = writer.extent(geometries);
-console.log(shxLength, shpLength, parts)
+
     writeHeader(shpView, TYPE);
     writeHeader(shxView, TYPE);
     writeExtent(extent, shpView);

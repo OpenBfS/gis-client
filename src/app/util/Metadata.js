@@ -18,6 +18,10 @@
  */
 Ext.define('Koala.util.Metadata', {
 
+    requires: [
+        'Koala.util.AppContext'
+    ],
+
     statics: {
 
         /**
@@ -33,12 +37,76 @@ Ext.define('Koala.util.Metadata', {
             }
             metadata = Ext.clone(metadata);
 
-            delete metadata.id;
+            // delete metadata.id;
             delete metadata.layerConfig.wms;
             delete metadata.barChartProperties;
             delete metadata.timeSeriesChartProperties;
 
             return metadata;
+        },
+
+        loginToGnos: function(context) {
+            return new Ext.Promise(function(resolve) {
+                var iframe = document.createElement('iframe');
+                document.querySelector('body').appendChild(iframe);
+                iframe.onload = function() {
+                    var cookie = iframe.contentDocument.cookie;
+                    var ms = cookie.match(/XSRF-TOKEN=([0-9\-a-f]+);/);
+                    context.csrfToken = ms[1];
+                    resolve();
+                };
+                iframe.setAttribute('hidden', 'true');
+                iframe.setAttribute('src', context.config['metadata-base-url'] + 'srv/eng/info?type=me');
+            });
+        },
+
+        cloneOldMetadata: function(context) {
+            var url = context.config['metadata-base-url'];
+            var me = this;
+
+            var resolveFunc, rejectFunc;
+
+            var promise = new Ext.Promise(function(resolve, reject) {
+                resolveFunc = resolve;
+                rejectFunc = reject;
+            });
+
+            Ext.Ajax.request({
+                url: url + 'srv/api/0.1/records/duplicate?group=1&sourceUuid=' +
+                    context.uuid + '&metadataType=METADATA&isVisibleByAllGroupMembers=false&isChildOfSource=false',
+                method: 'PUT',
+                username: context.config['metadata-username'],
+                password: context.config['metadata-password'],
+                headers: {
+                    'X-XSRF-TOKEN': context.csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                withCredentials: true,
+                params: {
+                    group: 1,
+                    metadataType: 'METADATA',
+                    sourceUuid: context.uuid
+                },
+                success: function(xhr) {
+                    console.log(xhr.responseText)
+                    resolveFunc();
+                }
+            });
+
+            return promise;
+        },
+
+        prepareMetadata: function(metadata) {
+            var config = Koala.util.AppContext.getAppContext();
+            config = config.data.merge['import'];
+            var context = {
+                config: config,
+                uuid: metadata.id
+            }
+            this.loginToGnos(context)
+                .then(this.cloneOldMetadata.bind(this, context));
+                // .then(this.extractCsrfToken.bind(this, context));
         }
 
     }
