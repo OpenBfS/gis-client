@@ -20,6 +20,16 @@
                 "username": "admin",
                 "password": "admin"
             },
+            "import": {
+                "base-url": "http://localhost/geoserver/",
+                "username": "admin",
+                "password": "admingeoserver",
+                "target-workspace": "test",
+                "target-store": "test",
+                "metadata-base-url": "http://localhost/geonetwork/",
+                "metadata-username": "admin",
+                "metadata-password": "admin"
+            },
             "imis_user": {
               "imisroles": [
                 "ruf"
@@ -43,7 +53,7 @@
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
             "mapLayers": [
-                "a7a60958-9be3-4f78-948a-4cd0814abd2c"
+                "ed0f7d52-8e50-4c6e-b26d-813d9d28d5b3"
             ],
             "mapConfig": {
                 "projection": "EPSG:3857"

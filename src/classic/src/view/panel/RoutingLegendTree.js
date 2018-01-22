@@ -25,6 +25,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'BasiGX.view.grid.FeatureGrid',
         'Koala.store.MetadataSearch',
         'Koala.util.Clone',
+        'Koala.util.Import',
         'Koala.util.Layer',
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
@@ -568,6 +569,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 this.featureGrid.destroy();
             }
 
+            var viewModel = this.getViewModel();
+
             var tree = Ext.ComponentQuery.query('basigx-panel-menu')[0];
             var x = tree.getWidth() + 5;
             var header = Ext.ComponentQuery.query('k-panel-header')[0];
@@ -608,6 +611,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                             xtype: 'basigx-button-digitize-polygon',
                             map: map.map,
                             layer: layer
+                        }, {
+                            xtype: 'button',
+                            text: viewModel.get('saveLayerText'),
+                            handler: function() {
+                                Koala.util.Import.importLayer(layer);
+                            }
                         }]
                     }, {
                         xtype: 'basigx-grid-featuregrid',
