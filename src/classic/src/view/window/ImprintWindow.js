@@ -71,6 +71,15 @@ Ext.define('Koala.view.window.ImprintWindow', {
         }
     }],
 
+    initComponent: function() {
+        var me = this;
+        var currentViewSize = Ext.getBody().getViewSize();
+        me.callParent();
+
+        me.setHeight(currentViewSize.height - 400);
+        me.setWidth(currentViewSize.width - 400);
+    },
+
     //select default node 'imprint'
     listeners: {
         afterlayout: function() {
