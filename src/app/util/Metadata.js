@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-present terrestris GmbH & Co. KG
+/* Copyright (c) 2018-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,56 @@ Ext.define('Koala.util.Metadata', {
     statics: {
 
         /**
+         * Get a CSW filter filtering by uuid.
+         * @param  {String} uuid the uuid to filter on
+         * @return {String}      a CSW/filter encoding snippet
+         */
+        getCswFilter: function(uuid) {
+            return '<csw:Constraint version="1.1.0">' +
+                '<ogc:Filter>' +
+                '<ogc:PropertyIsEqualTo>' +
+                '<ogc:PropertyName>gmd:fileIdentifier/gco:CharacterString</ogc:PropertyName>' +
+                '<ogc:Literal>' + uuid + '</ogc:Literal>' +
+                '</ogc:PropertyIsEqualTo>' +
+                '</ogc:Filter>' +
+                '</csw:Constraint>';
+        },
+
+        /**
+         * Get a CSW property update snippet.
+         * @param  {String} property property path to update
+         * @param  {String} value    the new values
+         * @return {String}          the CSW property snippet
+         */
+        getPropertyUpdate: function(property, value) {
+            return '<csw:RecordProperty>' +
+                '<csw:Name>' + property + '</csw:Name>' +
+                '<csw:Value>' + value + '</csw:Value>' +
+                '</csw:RecordProperty>';
+        },
+
+        /**
+         * Constructs a CSW update transaction to prepare the new metadata.
+         * @param  {Object} context a context object containing config
+         * @return {String}         an XML transaction request
+         */
+        getCswUpdate: function(context) {
+            return '<?xml version="1.0" encoding="UTF-8"?>' +
+                '<csw:Transaction service="CSW" version="2.0.2" ' +
+                'xmlns:csw="http://www.opengis.net/cat/csw" ' +
+                'xmlns:ogc="http://www.opengis.net/ogc" ' +
+                'xmlns:gmd="http://www.isotc211.org/2005/gmd" ' +
+                'xmlns:bfs="http://geonetwork.org/bfs" ' +
+                'xmlns:gco="http://www.isotc211.org/2005/gco">' +
+                '<csw:Update>' +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_WMSLayerType', '') +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:timeSeriesChartProperty', '') +
+                this.getCswFilter(context.newUuid) +
+                '</csw:Update>' +
+                '</csw:Transaction>';
+        },
+
+        /**
          * Prepares/clones a metadata object for cloned layers. This will delete
          * some properties out of the metadata object so it can be stored in
          * GNOS for a newly created layer.
@@ -45,51 +95,80 @@ Ext.define('Koala.util.Metadata', {
             return metadata;
         },
 
+        /**
+         * Log into the GNOS. In order to get the CSRF token:
+         * * an unsuccessful POST must be made
+         * * an iframe has to be loaded with a GNOS URL to access the cookie
+         *
+         * Unfortunately this seems to be the only way to access the token. See
+         * also the official docs:
+         * https://geonetwork-opensource.org/manuals/3.4.x/en/customizing-application/misc.html#invalid-csrf-token
+         * @param  {Object} context context object with the config
+         * @return {Promise} a promise that resolves once the token has been
+         * extracted
+         */
         loginToGnos: function(context) {
             return new Ext.Promise(function(resolve) {
+                var url = context.config['metadata-base-url'];
+
                 var iframe = document.createElement('iframe');
                 document.querySelector('body').appendChild(iframe);
                 iframe.onload = function() {
-                    var cookie = iframe.contentDocument.cookie;
-                    var ms = cookie.match(/XSRF-TOKEN=([0-9\-a-f]+);/);
-                    context.csrfToken = ms[1];
-                    resolve();
+                    var req = Ext.Ajax.request({
+                        url: url + 'srv/eng/info',
+                        method: 'POST',
+                        username: context.config['metadata-username'],
+                        password: context.config['metadata-password'],
+                        withCredentials: true
+                    });
+
+                    req.then(function() {
+                        // request will always fail
+                    }, function() {
+                        var cookie = iframe.contentDocument.cookie;
+                        var ms = cookie.match(/XSRF-TOKEN=([0-9\-a-f]+)/);
+                        context.csrfToken = ms[1];
+                        resolve();
+                    });
                 };
                 iframe.setAttribute('hidden', 'true');
-                iframe.setAttribute('src', context.config['metadata-base-url'] + 'srv/eng/info?type=me');
+                iframe.setAttribute('src', url + 'catalog/components/viewer/wmsimport/partials/kmlimport.html');
             });
         },
 
+        /**
+         * Duplicates the old metadata record via REST API.
+         * @param  {Object} context context object with config and old uuid
+         * @return {Promise} a promise resolving once duplication has been done
+         */
         cloneOldMetadata: function(context) {
             var url = context.config['metadata-base-url'];
-            var me = this;
 
-            var resolveFunc, rejectFunc;
+            var resolveFunc;
 
-            var promise = new Ext.Promise(function(resolve, reject) {
+            var promise = new Ext.Promise(function(resolve) {
                 resolveFunc = resolve;
-                rejectFunc = reject;
             });
+
+            var user = context.config['metadata-username'];
+            var pass = context.config['metadata-password'];
 
             Ext.Ajax.request({
                 url: url + 'srv/api/0.1/records/duplicate?group=1&sourceUuid=' +
                     context.uuid + '&metadataType=METADATA&isVisibleByAllGroupMembers=false&isChildOfSource=false',
                 method: 'PUT',
-                username: context.config['metadata-username'],
-                password: context.config['metadata-password'],
+                username: user,
+                password: pass,
                 headers: {
                     'X-XSRF-TOKEN': context.csrfToken,
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'Authorization': 'Basic ' + btoa(user + ':' + pass)
                 },
                 withCredentials: true,
-                params: {
-                    group: 1,
-                    metadataType: 'METADATA',
-                    sourceUuid: context.uuid
-                },
                 success: function(xhr) {
-                    console.log(xhr.responseText)
+                    var id = xhr.responseText;
+                    context.newId = id;
                     resolveFunc();
                 }
             });
@@ -97,16 +176,80 @@ Ext.define('Koala.util.Metadata', {
             return promise;
         },
 
+        /**
+         * Determines the new uuid using the new integer id.
+         * @param  {Object} context the context object with config and id
+         * @return {Promise}  the promise resolving once the uuid has been found
+         */
+        determineNewUuid: function(context) {
+            var url = context.config['metadata-base-url'];
+
+            var resolveFunc;
+
+            var promise = new Ext.Promise(function(resolve) {
+                resolveFunc = resolve;
+            });
+
+            var user = context.config['metadata-username'];
+            var pass = context.config['metadata-password'];
+
+            Ext.Ajax.request({
+                url: url + 'srv/api/0.1/records/' + context.newId,
+                method: 'GET',
+                username: user,
+                password: pass,
+                headers: {
+                    'X-XSRF-TOKEN': context.csrfToken,
+                    'Accept': 'application/json'
+                },
+                withCredentials: true,
+                success: function(xhr) {
+                    var metadata = JSON.parse(xhr.responseText);
+                    context.newUuid = metadata['gmd:fileIdentifier']['gco:CharacterString']['#text'];
+                    resolveFunc();
+                }
+            });
+
+            return promise;
+        },
+
+        /**
+         * Updates the metadata in the GNOS via CSW-T.
+         * @param  {Object} context the context object with config and uuid.
+         * @return {Promise}         the xhr promise
+         */
+        updateMetadata: function(context) {
+            var url = context.config['metadata-base-url'];
+            var user = context.config['metadata-username'];
+            var pass = context.config['metadata-password'];
+
+            var xml = this.getCswUpdate(context);
+
+            return Ext.Ajax.request({
+                url: url + 'srv/eng/csw-publication',
+                method: 'POST',
+                username: user,
+                password: pass,
+                withCredentials: true,
+                xmlData: xml
+            });
+        },
+
+        /**
+         * Prepares the metadata for a cloned layer.
+         * @param  {Object} metadata the original metadata Object
+         */
         prepareMetadata: function(metadata) {
             var config = Koala.util.AppContext.getAppContext();
             config = config.data.merge['import'];
             var context = {
                 config: config,
                 uuid: metadata.id
-            }
+            };
             this.loginToGnos(context)
-                .then(this.cloneOldMetadata.bind(this, context));
-                // .then(this.extractCsrfToken.bind(this, context));
+                .then(this.cloneOldMetadata.bind(this, context))
+                .then(this.determineNewUuid.bind(this, context))
+                .then(this.updateMetadata.bind(this, context));
         }
 
     }

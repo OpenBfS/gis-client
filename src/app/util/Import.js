@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-present terrestris GmbH & Co. KG
+/* Copyright (c) 2018-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,10 +25,19 @@ Ext.define('Koala.util.Import', {
 
     statics: {
 
+        /**
+         * Import the given layer.
+         * @param  {ol.layer.Vector} layer the vector layer to import
+         */
         importLayer: function(layer) {
             this.importData(layer);
         },
 
+        /**
+         * Prepares the initial empty import.
+         * @param  {Object} config config object
+         * @return {Promise} the promise resolving once the import is created
+         */
         prepareImport: function(config) {
             var url = config['base-url'] + 'rest/imports';
             return Ext.Ajax.request({
@@ -55,6 +64,12 @@ Ext.define('Koala.util.Import', {
             });
         },
 
+        /**
+         * Prepares the actual import task by uploading the data.
+         * @param  {Object} importMetadata context object with the config
+         * @param  {XMLHttpRequest} xhr request containing the import id
+         * @return {Promise} promise resolving once the upload has completed
+         */
         prepareTask: function(importMetadata, xhr) {
             var response = JSON.parse(xhr.responseText);
             var importId = response.import.id;
@@ -83,8 +98,13 @@ Ext.define('Koala.util.Import', {
             return promise;
         },
 
+        /**
+         * Triggers the actual import.
+         * @param  {Object} importMetadata config object
+         * @return {Promise} promise resolving once the import is done
+         */
         performImport: function(importMetadata) {
-            var url = importMetadata.config['base-url'] + 'rest/imports/' + importMetadata.importId + '?async=true';
+            var url = importMetadata.config['base-url'] + 'rest/imports/' + importMetadata.importId;
             return Ext.Ajax.request({
                 url: url,
                 method: 'POST',
@@ -94,6 +114,11 @@ Ext.define('Koala.util.Import', {
             });
         },
 
+        /**
+         * Imports the given layer. Generates a blob in shape file format and
+         * uses the Geoserver importer extension to import it into the db.
+         * @param  {ol.layer.Vector} layer the layer to imports
+         */
         importData: function(layer) {
             var config = Koala.util.AppContext.getAppContext();
             config = config.data.merge['import'];
