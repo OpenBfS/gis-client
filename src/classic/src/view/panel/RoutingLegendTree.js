@@ -602,15 +602,46 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                         }, {
                             xtype: 'basigx-button-digitize-point',
                             map: map.map,
-                            layer: layer
+                            layer: layer,
+                            glyph: 'xf100@Flaticon'
                         }, {
                             xtype: 'basigx-button-digitize-line',
                             map: map.map,
-                            layer: layer
+                            layer: layer,
+                            glyph: 'xf104@Flaticon'
                         }, {
                             xtype: 'basigx-button-digitize-polygon',
                             map: map.map,
-                            layer: layer
+                            layer: layer,
+                            glyph: 'xf107@Flaticon'
+                        }, {
+                            xtype: 'basigx-button-digitize-move-object',
+                            collection: layer.getSource().getFeaturesCollection(),
+                            map: map.map,
+                            glyph: 'xf108@Flaticon'
+                        }, {
+                            xtype: 'basigx-button-digitize-modify-object',
+                            map: map.map,
+                            collection: layer.getSource().getFeaturesCollection(),
+                            glyph: 'xf044@FontAwesome'
+                        }, {
+                            xtype: 'basigx-button-digitize-delete-object',
+                            map: map.map,
+                            collection: layer.getSource().getFeaturesCollection(),
+                            glyph: 'xf12d@FontAwesome'
+                        }, {
+                            xtype: 'basigx-button-spatial-operator-union',
+                            targetVectorLayer: layer,
+                            selectionVectorLayer: this.getViewModel().get(
+                                'selectedFeaturesLayer'),
+                            text: '',
+                            glyph: 'xf111@FontAwesome'
+                        }, {
+                            xtype: 'basigx-button-spatial-operator-intersect',
+                            targetVectorLayer: layer,
+                            selectionVectorLayer: this.getViewModel().get(
+                                'selectedFeaturesLayer'),
+                            glyph: 'xf10c@FontAwesome'
                         }, {
                             xtype: 'button',
                             text: viewModel.get('saveLayerText'),

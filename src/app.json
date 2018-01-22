@@ -449,7 +449,8 @@
             "output": "resources"
         },
         {
-            "path": "sass/etc/fonts"
+            "path": "sass/etc/fonts",
+            "path": "sass/stylesheets/fonts" // flaticon font
         },
         "resources",
         "${toolkit.name}/resources",
