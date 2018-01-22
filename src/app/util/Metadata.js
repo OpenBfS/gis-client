@@ -249,7 +249,7 @@ Ext.define('Koala.util.Metadata', {
             config = config.data.merge['import'];
             var context = {
                 config: config,
-                uuid: '94a451c2-fa4a-4bb8-8137-87310da99c71',//metadata.id,
+                uuid: metadata.id,
                 newLayerName: metadata.newLayerName
             };
             this.loginToGnos(context)
