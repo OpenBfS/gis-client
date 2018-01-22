@@ -25,9 +25,6 @@ Ext.define('Koala.util.Help', {
     ],
 
     statics: {
-        /* i18n */
-        tooltip: '',
-        /*  i18n */
         topic: null,
         parentOfTopic: null,
 
