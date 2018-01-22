@@ -48,22 +48,12 @@ Ext.define('Koala.view.window.LayerSetChooserWindow', {
     minHeight: 300,
     tools: [{
         type: 'help',
-        //TODO: move to app-locale
-        tooltip: 'Hilfe',
-        callback: function() {
-            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-            if (!helpWin) {
-                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                helpWin.on('afterlayout', function() {
-                    var helpWinController = this.getController();
-                    helpWinController.setTopic('profileSelection');
-                }, helpWin, {single: true});
-            } else {
-                BasiGX.util.Animate.shake(helpWin);
-                var helpWinController = helpWin.getController();
-                helpWinController.setTopic('profileSelection');
-            }
-        }
+        bind: {
+            tooltip: '{helpTooltip}'
+        },
+        topic: 'profileSelection',
+        parentOfTopic: 'tools',
+        callback: Koala.util.Help.showHelpWindow
     }],
     items: [{
         xtype: 'k-panel-layersetchooser',

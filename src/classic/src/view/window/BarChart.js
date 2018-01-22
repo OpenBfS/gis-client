@@ -47,22 +47,12 @@ Ext.define('Koala.view.window.BarChart', {
     layout: 'vbox',
     tools: [{
         type: 'help',
-        //TODO: move to app-locale
-        tooltip: 'Hilfe',
-        callback: function() {
-            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-            if (!helpWin) {
-                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                helpWin.on('afterlayout', function() {
-                    var helpWinController = this.getController();
-                    helpWinController.setTopic('mapGeoObjects', 'map');
-                }, helpWin, {single: true});
-            } else {
-                BasiGX.util.Animate.shake(helpWin);
-                var helpWinController = helpWin.getController();
-                helpWinController.setTopic('mapGeoObjects', 'map');
-            }
-        }
+        bind: {
+            tooltip: '{helpTooltip}'
+        },
+        topic: 'mapGeoObjects',
+        parentOfTopic: 'map',
+        callback: Koala.util.Help.showHelpWindow
     }],
     defaults: {
         flex: 1,

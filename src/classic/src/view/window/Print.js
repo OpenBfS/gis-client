@@ -43,22 +43,12 @@ Ext.define('Koala.view.window.Print', {
 
     tools: [{
         type: 'help',
-        //TODO: move to app-locale
-        tooltip: 'Hilfe',
-        callback: function() {
-            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-            if (!helpWin) {
-                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                helpWin.on('afterlayout', function() {
-                    var helpWinController = this.getController();
-                    helpWinController.setTopic('toolsPrint', 'tools');
-                }, helpWin, {single: true});
-            } else {
-                BasiGX.util.Animate.shake(helpWin);
-                var helpWinController = helpWin.getController();
-                helpWinController.setTopic('toolsPrint', 'tools');
-            }
-        }
+        bind: {
+            tooltip: '{helpTooltip}'
+        },
+        topic: 'toolsPrint',
+        parentOfTopic: 'tools',
+        callback: Koala.util.Help.showHelpWindow
     }],
 
     config: {
