@@ -56,21 +56,9 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
     },
 
     /**
-     * Handles the activation of interactions to select features
+     *
      */
-    enableSelectControl: function() {
-        if (!this.legendTree) {
-            this.legendTree = Ext.ComponentQuery.query(
-                'k-panel-routing-legendtree, k-panel-mobilelegend > treelist')[0];
-        }
-
-        var selection = this.legendTree.getSelection();
-        if (selection.length !== 1) {
-            Ext.Msg.alert(this.error, this.noSingleActiveLayerFound);
-            this.getView().setPressed(false);
-            return;
-        }
-
+    setupSelectionLayer: function() {
         if (!this.mapComponent) {
             this.mapComponent = BasiGX.util.Map.getMapComponent('k-component-map');
         }
@@ -100,6 +88,27 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
             this.mapComponent.map.addLayer(this.selectionLayer);
             var mainVm = Ext.ComponentQuery.query('app-main')[0].getViewModel();
             mainVm.set('selectedFeaturesLayer', this.selectionLayer);
+        }
+    },
+
+    /**
+     * Handles the activation of interactions to select features
+     */
+    enableSelectControl: function() {
+        if (!this.legendTree) {
+            this.legendTree = Ext.ComponentQuery.query(
+                'k-panel-routing-legendtree, k-panel-mobilelegend > treelist')[0];
+        }
+
+        var selection = this.legendTree.getSelection();
+        if (selection.length !== 1) {
+            Ext.Msg.alert(this.error, this.noSingleActiveLayerFound);
+            this.getView().setPressed(false);
+            return;
+        }
+
+        if (!this.mapComponent) {
+            this.mapComponent = BasiGX.util.Map.getMapComponent('k-component-map');
         }
 
         if (!this.dragBoxInteraction) {

@@ -983,6 +983,44 @@
             }
         }
     },
+    "BasiGX.view.button.SpatialOperatorUnion": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Union geometries",
+                "text": "",
+                "invalidResultGeometryText": "fr:The process returned an invalid geometry. Please try again",
+                "noValidOrNotEnoughGeometriesSelectedText": "fr:Please select at least 2 valid objects",
+                "tooManyFeaturesSelectedText": "fr:Please select {0} objects as maximum. If you want to edit more objects, repeat the operation in multiple steps",
+                "masterSlaveFeatureDialogTitle": "fr:Select objects",
+                "firstFeatureNameInGrid": "fr:Object 1",
+                "secondFeatureNameInGrid": "fr:Object 2",
+                "firstGridTitle": "fr:Object to be edited",
+                "secondGridTitle": "fr:Helper object",
+                "gridDescriptionText": "fr:The objects geometry on the left side will be edited. The object on the right side will remain untouched. Drag and drop objects to switch their assignment",
+                "startOperationFromGridText": "fr:Start operation",
+                "invalidGridSelectionText": "fr:Invalid selection"
+            }
+        }
+    },
+    "BasiGX.view.button.SpatialOperatorIntersect": {
+        "config": {
+            "data": {
+                "tooltip": "fr:Intersect geometries",
+                "text": "",
+                "invalidResultGeometryText": "fr:The process returned an invalid geometry. Please try again",
+                "noValidOrNotEnoughGeometriesSelectedText": "fr:Please select at least 2 valid objects",
+                "tooManyFeaturesSelectedText": "fr:Please select {0} objects as maximum. If you want to edit more objects, repeat the operation in multiple steps",
+                "masterSlaveFeatureDialogTitle": "fr:Select objects",
+                "firstFeatureNameInGrid": "fr:Object 1",
+                "secondFeatureNameInGrid": "fr:Object 2",
+                "firstGridTitle": "fr:Object to be edited",
+                "secondGridTitle": "fr:Helper object",
+                "gridDescriptionText": "fr:The objects geometry on the left side will be edited. The object on the right side will remain untouched. Drag and drop objects to switch their assignment",
+                "startOperationFromGridText": "fr:Start operation",
+                "invalidGridSelectionText": "fr:Invalid selection"
+            }
+        }
+    },
     "BasiGX.view.button.MergeSelection": {
         "config": {
             "data": {

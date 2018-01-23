@@ -634,7 +634,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                             targetVectorLayer: layer,
                             selectionVectorLayer: this.getViewModel().get(
                                 'selectedFeaturesLayer'),
-                            text: '',
                             glyph: 'xf111@FontAwesome'
                         }, {
                             xtype: 'basigx-button-spatial-operator-intersect',
