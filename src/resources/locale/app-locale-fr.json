@@ -344,7 +344,9 @@
                 "chartSlctnMsg": "fr:Layer hat Zeitreihen-, als auch Säulendiagramm. Welches Diagramm soll dargestellt werden?",
                 "chartSlctnTimeSeriesBtn": "fr:Zeitreihendigramm",
                 "chartSlctnBarChartBtn": "fr:Säulendiagramm",
-                "rodosPanelTitle": "RODOS-Filter"
+                "rodosPanelTitle": "RODOS-Filter",
+                "helpTooltip": "fr:Hilfe",
+                "headerTitle": "GEOPORTAL"
             }
         }
     },
@@ -492,7 +494,7 @@
     "Koala.view.window.HelpWindow": {
         "config": {
             "data": {
-                "title": "fr:Hilfe"
+                "helpWinTitle": "fr:Hilfe"
             }
         }
     },

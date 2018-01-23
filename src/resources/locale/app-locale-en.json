@@ -367,6 +367,7 @@
                 "chartSlctnTimeSeriesBtn": "Time Series",
                 "chartSlctnBarChartBtn": "Bar Chart",
                 "rodosPanelTitle": "RODOS-Filter",
+                "helpTooltip": "Help",
                 "headerTitle": "GEOPORTAL"
             }
         }
