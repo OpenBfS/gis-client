@@ -18,16 +18,15 @@
  */
 Ext.define('Koala.util.Help', {
 
-    requires: [
-        'Koala.view.window.HelpWindow',
-        'Koala.view.window.HelpModel',
-        'Koala.view.window.HelpController'
-    ],
-
     statics: {
         topic: null,
         parentOfTopic: null,
 
+        /**
+         * Opens the help-window. If topic and parentOfTopic is defined  (see 'HelpModel' helpNavItems-ID)
+         * the respective page will be shown, the topic in the navigation will be selected and the parent-node
+         * of the topic will be opened. If neither are defined, the help-window opens the default page.
+         */
         showHelpWindow: function() {
             var me = this;
             var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
