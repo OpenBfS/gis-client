@@ -33,7 +33,7 @@ Ext.define('Koala.util.Metadata', {
             return '<csw:Constraint version="1.1.0">' +
                 '<ogc:Filter>' +
                 '<ogc:PropertyIsEqualTo>' +
-                '<ogc:PropertyName>gmd:fileIdentifier/gco:CharacterString</ogc:PropertyName>' +
+                '<ogc:PropertyName>Identifier</ogc:PropertyName>' +
                 '<ogc:Literal>' + uuid + '</ogc:Literal>' +
                 '</ogc:PropertyIsEqualTo>' +
                 '</ogc:Filter>' +
@@ -44,12 +44,14 @@ Ext.define('Koala.util.Metadata', {
          * Get a CSW property update snippet.
          * @param  {String} property property path to update
          * @param  {String} value    the new values
+         * @param  {Boolean} add whether to create an 'add' node
          * @return {String}          the CSW property snippet
          */
-        getPropertyUpdate: function(property, value) {
+        getPropertyUpdate: function(property, value, add) {
             return '<csw:RecordProperty>' +
                 '<csw:Name>' + property + '</csw:Name>' +
-                '<csw:Value>' + value + '</csw:Value>' +
+                '<csw:Value>' + (add ? '<gn_add>' : '' + value) +
+                (add ? '</gn_add>' : '') + '</csw:Value>' +
                 '</csw:RecordProperty>';
         },
 
@@ -61,14 +63,17 @@ Ext.define('Koala.util.Metadata', {
         getCswUpdate: function(context) {
             return '<?xml version="1.0" encoding="UTF-8"?>' +
                 '<csw:Transaction service="CSW" version="2.0.2" ' +
-                'xmlns:csw="http://www.opengis.net/cat/csw" ' +
+                'xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" ' +
                 'xmlns:ogc="http://www.opengis.net/ogc" ' +
                 'xmlns:gmd="http://www.isotc211.org/2005/gmd" ' +
                 'xmlns:bfs="http://geonetwork.org/bfs" ' +
                 'xmlns:gco="http://www.isotc211.org/2005/gco">' +
                 '<csw:Update>' +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_WMSLayerType', '') +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation' +
+                    '/bfs:MD_WMSLayerType/bfs:layerType/bfs:MD_WMSLayerType/' +
+                    'bfs:layer/gco:CharacterString', context.newLayerName) +
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:timeSeriesChartProperty', '') +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:barChartProperty', '') +
                 this.getCswFilter(context.newUuid) +
                 '</csw:Update>' +
                 '</csw:Transaction>';
@@ -244,7 +249,8 @@ Ext.define('Koala.util.Metadata', {
             config = config.data.merge['import'];
             var context = {
                 config: config,
-                uuid: metadata.id
+                uuid: metadata.id,
+                newLayerName: metadata.newLayerName
             };
             this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))

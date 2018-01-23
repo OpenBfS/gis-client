@@ -115,6 +115,27 @@ Ext.define('Koala.util.Import', {
         },
 
         /**
+         * Fetch the task info to get the new layer name.
+         * @param  {Object} context context with config
+         * @return {Promise} a promise that resolves once the newLayerName is
+         * set on the layer object
+         */
+        getLayerName: function(context) {
+            var url = context.config['base-url'] + 'rest/imports/' + context.importId + '/tasks/0';
+            return Ext.Ajax.request({
+                url: url,
+                method: 'GET',
+                username: context.config.username,
+                password: context.config.password,
+                withCredentials: true,
+                success: function(xhr) {
+                    var data = JSON.parse(xhr.responseText);
+                    context.layer.metadata.newLayerName = data.task.layer.name;
+                }
+            });
+        },
+
+        /**
          * Imports the given layer. Generates a blob in shape file format and
          * uses the Geoserver importer extension to import it into the db.
          * @param  {ol.layer.Vector} layer the layer to imports
@@ -137,6 +158,7 @@ Ext.define('Koala.util.Import', {
             this.prepareImport(config)
                 .then(this.prepareTask.bind(this, importMetadata))
                 .then(this.performImport.bind(this, importMetadata))
+                .then(this.getLayerName.bind(this, importMetadata))
                 .then(Koala.util.Metadata.prepareMetadata.bind(Koala.util.Metadata, layer.metadata));
         }
 

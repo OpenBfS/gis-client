@@ -42,7 +42,7 @@
                   "uuid" : "08e36567-cf9a-4e22-8774-e83a3452da7b"
                },
                {
-                  "text" : "ODL brutto 10min Fl�che",
+                  "text" : "ODL brutto 10min Fläche",
                   "leaf" : true,
                   "uuid" : "8d76d000-06b2-4295-a6d7-7abf9b644c95"
                },
@@ -64,7 +64,7 @@
                {
                   "uuid" : "f11e365a-6d80-4942-aa65-7607c637438a",
                   "leaf" : true,
-                  "text" : "ODL 1 h Fl�che"
+                  "text" : "ODL 1 h Fläche"
                },
                {
                   "uuid" : "83cb1604-3d8c-490b-b807-5e7cb17f3b22",
@@ -95,7 +95,7 @@
             "children" : [
                {
                   "leaf" : true,
-                  "text" : "nuklidspez. Aktivit�tskonzentration",
+                  "text" : "nuklidspez. Aktivitätskonzentration",
                   "uuid" : "bdf004f9-8c09-4ddf-8a70-22ab876d045e"
                },
                {
@@ -105,7 +105,7 @@
                }
             ],
             "thumb" : "layer_sets/boden03_thumb.jpg",
-            "text" : "Bodenoberfl�che",
+            "text" : "Bodenoberfläche",
             "isLayerProfile" : false
          },
          {
@@ -146,7 +146,7 @@
                },
                {
                   "uuid" : "fc967ce2-e132-440f-adc0-fa33c94f5892",
-                  "text" : "Jod gasf�rmig (Tagesmittel)",
+                  "text" : "Jod gasförmig (Tagesmittel)",
                   "leaf" : true
                }
             ],
@@ -158,12 +158,12 @@
             "children" : [
                {
                   "leaf" : true,
-                  "text" : "Niederschlagsh�he 24 h",
+                  "text" : "Niederschlagshöhe 24 h",
                   "uuid" : "e093c245-a476-4efa-a951-68163b2e0462"
                },
                {
                   "leaf" : true,
-                  "text" : "Gesamt-Beta Aktivit�t im Niederschlag",
+                  "text" : "Gesamt-Beta Aktivität im Niederschlag",
                   "uuid" : "71bfd6fe-6d65-41ca-949e-659fd6bfc450"
                }
             ],
@@ -174,7 +174,7 @@
             "isLayerProfile" : false,
             "children" : [
                {
-                  "text" : "nuklidspez. Aktivit�tskonzentration",
+                  "text" : "nuklidspez. Aktivitätskonzentration",
                   "leaf" : true,
                   "uuid" : "8d55a057-a78e-4a19-a7c5-2b17c0d2b26f"
                }
@@ -185,7 +185,7 @@
             "thumb" : "layer_sets/wasser_thumb.jpg",
             "children" : [
                {
-                  "text" : "Gesamt-Gamma k�nstl. an BSH-Stationen",
+                  "text" : "Gesamt-Gamma künstl. an BSH-Stationen",
                   "leaf" : true,
                   "uuid" : "8d64842f-3555-4542-94fb-8d2d9c1d5c4e"
                },
@@ -195,7 +195,7 @@
                   "text" : "Gesamt-Gamma/Beta an BfG-Stationen"
                },
                {
-                  "text" : "Nuklide in sonstigen Gew�ssern",
+                  "text" : "Nuklide in sonstigen Gewässern",
                   "leaf" : true,
                   "uuid" : "c17845ff-3349-4f9f-96d0-0b6d7a52023d"
                },
@@ -238,7 +238,7 @@
                {
                   "uuid" : "8eb25892-3f90-4e31-917e-15c9a9fe88b8",
                   "leaf" : true,
-                  "text" : "Nuklide in Gem�se"
+                  "text" : "Nuklide in Gemüse"
                },
                {
                   "leaf" : true,
