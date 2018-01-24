@@ -1975,7 +1975,7 @@ Ext.define('Koala.util.Layer', {
                 return url;
             }
             var cql = staticMe.filtersToCql(filters);
-            if (cql !== '') {
+            if (Ext.String.trim(cql) !== '') {
                 var param = 'CQL_FILTER=' + encodeURIComponent(cql);
                 // TODO check if we already have a CQL_FILTER in layer or base-url?!?
                 url = Ext.String.urlAppend(url, param);
