@@ -37,6 +37,7 @@ Ext.define('Koala.view.main.Main', {
         'BasiGX.util.Animate',
 
         'Koala.util.AppContext',
+        'Koala.util.Help',
 
         'Koala.view.button.Permalink',
         'Koala.view.button.ShowRedliningToolsContainer',
@@ -45,6 +46,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
+        'Koala.view.window.HelpWindow',
         'Koala.view.window.Print',
 
         'Koala.util.Layer'
@@ -206,22 +208,12 @@ Ext.define('Koala.view.main.Main', {
                                 layout: 'fit',
                                 tools: [{
                                     type: 'help',
-                                    //TODO: move to app-locale
-                                    tooltip: 'Hilfe',
-                                    callback: function() {
-                                        var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-                                        if (!helpWin) {
-                                            helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                                            helpWin.on('afterlayout', function() {
-                                                var helpWinController = this.getController();
-                                                helpWinController.setTopic('toolsWms', 'tools');
-                                            }, helpWin, {single: true});
-                                        } else {
-                                            BasiGX.util.Animate.shake(helpWin);
-                                            var helpWinController = helpWin.getController();
-                                            helpWinController.setTopic('toolsWms', 'tools');
-                                        }
-                                    }
+                                    bind: {
+                                        tooltip: '{helpTooltip}'
+                                    },
+                                    topic: 'toolsWms',
+                                    parentOfTopic: 'tools',
+                                    callback: Koala.util.Help.showHelpWindow
                                 }],
                                 items: [{
                                     xtype: 'basigx-form-addwms',
@@ -284,22 +276,12 @@ Ext.define('Koala.view.main.Main', {
                                 layout: 'fit',
                                 tools: [{
                                     type: 'help',
-                                    //TODO: move to app-locale
-                                    tooltip: 'Hilfe',
-                                    callback: function() {
-                                        var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-                                        if (!helpWin) {
-                                            helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                                            helpWin.on('afterlayout', function() {
-                                                var helpWinController = this.getController();
-                                                helpWinController.setTopic('toolsImport', 'tools');
-                                            }, helpWin, {single: true});
-                                        } else {
-                                            BasiGX.util.Animate.shake(helpWin);
-                                            var helpWinController = helpWin.getController();
-                                            helpWinController.setTopic('toolsImport', 'tools');
-                                        }
-                                    }
+                                    bind: {
+                                        tooltip: '{helpTooltip}'
+                                    },
+                                    topic: 'toolsImport',
+                                    parentOfTopic: 'tools',
+                                    callback: Koala.util.Help.showHelpWindow
                                 }],
                                 items: [{
                                     xtype: 'k-form-importLocalData'
