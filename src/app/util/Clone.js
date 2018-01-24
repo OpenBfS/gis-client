@@ -77,6 +77,7 @@ Ext.define('Koala.util.Clone', {
             config.source = source;
             config.metadata = metadata;
             config.name = name;
+            config.persisted = false;
             var result = new ol.layer.Vector(config);
             result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
             result.metadata = Ext.clone(metadata);

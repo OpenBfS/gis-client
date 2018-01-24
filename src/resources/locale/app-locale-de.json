@@ -411,7 +411,8 @@
                 "downloadButtonYes": "Ja",
                 "downloadButtonNo": "Nein",
                 "outputFormatText": "Ausgabeformat",
-                "saveLayerText": "Layer speichern"
+                "saveLayerText": "Layer speichern",
+                "wfstsuccess": "Die Änderungen wurden erfolgreich gespeichert.<br>Objekte hinzugefügt: {0}<br>Objekte aktualisiert: {1}<br>Objekte gelöscht: {2}"
             }
         }
     },

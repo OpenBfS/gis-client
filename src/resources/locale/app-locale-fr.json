@@ -382,7 +382,8 @@
                 "downloadButtonYes": "Oui",
                 "downloadButtonNo": "Non",
                 "outputFormatText": "fr:Ausgabeformat",
-                "saveLayerText": "fr:Save layer"
+                "saveLayerText": "fr:Save layer",
+                "wfstsuccess": "fr:Changes successfully saved.<br>Objects inserted: {0}<br>Objects updated: {1}<br>Objects deleted: {2}"
             }
         }
     },

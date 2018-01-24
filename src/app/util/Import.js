@@ -20,7 +20,8 @@ Ext.define('Koala.util.Import', {
 
     requires: [
         'Koala.util.AppContext',
-        'Koala.util.Metadata'
+        'Koala.util.Metadata',
+        'Koala.util.WFST'
     ],
 
     statics: {
@@ -29,8 +30,16 @@ Ext.define('Koala.util.Import', {
          * Import the given layer.
          * @param  {ol.layer.Vector} layer the vector layer to import
          */
-        importLayer: function(layer) {
-            this.importData(layer);
+        importOrUpdateLayer: function(layer, wfstInserts, wfstUpdates,
+            wfstDeletes, wfstSuccessCallback, wfstFailureCallback) {
+            // persisted flag gets set explicitly to false on layer clone
+            var persisted = layer.get('persisted');
+            if (persisted === false) {
+                this.importData(layer);
+            } else {
+                Koala.util.WFST.transact(layer, wfstInserts, wfstUpdates,
+                    wfstDeletes, wfstSuccessCallback, wfstFailureCallback);
+            }
         },
 
         /**
@@ -43,9 +52,6 @@ Ext.define('Koala.util.Import', {
             return Ext.Ajax.request({
                 url: url,
                 method: 'POST',
-                username: config.username,
-                password: config.password,
-                withCredentials: true,
                 isUpload: true,
                 jsonData: {
                     import: {
@@ -82,6 +88,7 @@ Ext.define('Koala.util.Import', {
             });
             data.set(name + '.zip', new Blob([bytes]), name + '.zip');
             var request = new XMLHttpRequest();
+
             request.open('POST', url);
 
             var resolveFunc;
@@ -107,10 +114,7 @@ Ext.define('Koala.util.Import', {
             var url = importMetadata.config['base-url'] + 'rest/imports/' + importMetadata.importId;
             return Ext.Ajax.request({
                 url: url,
-                method: 'POST',
-                username: importMetadata.config.username,
-                password: importMetadata.config.password,
-                withCredentials: true
+                method: 'POST'
             });
         },
 
@@ -125,9 +129,6 @@ Ext.define('Koala.util.Import', {
             return Ext.Ajax.request({
                 url: url,
                 method: 'GET',
-                username: context.config.username,
-                password: context.config.password,
-                withCredentials: true,
                 success: function(xhr) {
                     var data = JSON.parse(xhr.responseText);
                     context.layer.metadata.newLayerName = data.task.layer.name;
@@ -159,7 +160,16 @@ Ext.define('Koala.util.Import', {
                 .then(this.prepareTask.bind(this, importMetadata))
                 .then(this.performImport.bind(this, importMetadata))
                 .then(this.getLayerName.bind(this, importMetadata))
-                .then(Koala.util.Metadata.prepareMetadata.bind(Koala.util.Metadata, layer.metadata));
+                .then(Koala.util.Metadata.prepareMetadata.bind(Koala.util.Metadata, layer.metadata))
+                .then(this.setPersistedFlag.bind(this, layer));
+        },
+
+        /**
+         * Sets the persisted flag on the layer in order to determine if we
+         * can updated via WFS-T
+         */
+        setPersistedFlag: function(layer) {
+            layer.set('persisted', true);
         }
 
     }

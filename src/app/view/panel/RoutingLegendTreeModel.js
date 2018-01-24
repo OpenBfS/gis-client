@@ -35,7 +35,8 @@ Ext.define('Koala.view.panel.RoutingLegendTreeModel', {
         downloadButtonYes: '',
         downloadButtonNo: '',
         saveLayerText: '',
-        outputFormatText: ''
+        outputFormatText: '',
+        wfstsuccess: ''
     }
 
 });
