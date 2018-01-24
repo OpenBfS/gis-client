@@ -19,7 +19,6 @@
 Ext.define('Koala.util.Help', {
 
     requires: [
-        'Koala.view.window.HelpWindow',
         'BasiGX.util.Animate'
     ],
 
