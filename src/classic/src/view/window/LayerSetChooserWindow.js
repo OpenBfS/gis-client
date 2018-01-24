@@ -22,6 +22,7 @@ Ext.define('Koala.view.window.LayerSetChooserWindow', {
     cls: 'k-window-layersetchooserwindow',
 
     requires: [
+        'Koala.util.Help',
         'Koala.view.window.LayerSetChooserWindowController',
         'Koala.view.window.LayerSetChooserWindowModel',
 
@@ -53,7 +54,9 @@ Ext.define('Koala.view.window.LayerSetChooserWindow', {
         },
         topic: 'profileSelection',
         parentOfTopic: 'tools',
-        callback: Koala.util.Help.showHelpWindow
+        callback: function() {
+            Koala.util.Help.showHelpWindow();
+        }
     }],
     items: [{
         xtype: 'k-panel-layersetchooser',

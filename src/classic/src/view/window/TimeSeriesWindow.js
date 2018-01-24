@@ -29,6 +29,7 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
         'Koala.util.ChartData',
         'Koala.util.Date',
         'Koala.util.Filter',
+        'Koala.util.Help',
         'Koala.util.String',
 
         'Ext.form.field.Date'
@@ -60,7 +61,9 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
         },
         topic: 'mapGeoObjects',
         parentOfTopic: 'map',
-        callback: Koala.util.Help.showHelpWindow
+        callback: function() {
+            Koala.util.Help.showHelpWindow();
+        }
     }],
     defaults: {
         flex: 1,

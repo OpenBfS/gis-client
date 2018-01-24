@@ -21,6 +21,7 @@ Ext.define('Koala.view.button.PermalinkController', {
     alias: 'controller.k-button-permalink',
 
     requires: [
+        'Koala.util.Help',
         'Koala.view.form.Permalink'
     ],
 
@@ -43,7 +44,9 @@ Ext.define('Koala.view.button.PermalinkController', {
                     },
                     topic: 'mapNavigationPermalink',
                     parentOfTopic: 'mapNavigation',
-                    callback: Koala.util.Help.showHelpWindow
+                    callback: function() {
+                        Koala.util.Help.showHelpWindow();
+                    }
                 }],
                 items: [{
                     xtype: 'k-form-permalink'

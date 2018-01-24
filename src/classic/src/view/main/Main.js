@@ -37,6 +37,7 @@ Ext.define('Koala.view.main.Main', {
         'BasiGX.util.Animate',
 
         'Koala.util.AppContext',
+        'Koala.util.Help',
 
         'Koala.view.button.Permalink',
         'Koala.view.button.ShowRedliningToolsContainer',
@@ -45,6 +46,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
+        'Koala.view.window.HelpWindow',
         'Koala.view.window.Print',
 
         'Koala.util.Layer'

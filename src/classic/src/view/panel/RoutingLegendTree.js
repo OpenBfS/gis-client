@@ -25,6 +25,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'BasiGX.view.grid.FeatureGrid',
         'Koala.store.MetadataSearch',
         'Koala.util.Clone',
+        'Koala.util.Help',
         'Koala.util.Import',
         'Koala.util.Layer',
         'Koala.view.panel.RoutingLegendTreeController',
@@ -64,7 +65,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             tooltip: '{helpTooltip}'
         },
         topic: 'legendHelp',
-        callback: Koala.util.Help.showHelpWindow
+        callback: function() {
+            Koala.util.Help.showHelpWindow();
+        }
     }],
 
     listeners: {

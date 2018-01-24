@@ -22,6 +22,7 @@ Ext.define('Koala.view.window.BarChart', {
     cls: 'k-window-barchart',
 
     requires: [
+        'Koala.util.Help',
         'Koala.view.window.BarChartController',
         'Koala.view.window.BarChartModel',
 
@@ -52,7 +53,9 @@ Ext.define('Koala.view.window.BarChart', {
         },
         topic: 'mapGeoObjects',
         parentOfTopic: 'map',
-        callback: Koala.util.Help.showHelpWindow
+        callback: function() {
+            Koala.util.Help.showHelpWindow();
+        }
     }],
     defaults: {
         flex: 1,

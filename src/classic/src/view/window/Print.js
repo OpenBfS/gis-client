@@ -21,6 +21,7 @@ Ext.define('Koala.view.window.Print', {
     xtype: 'k-window-print',
 
     requires: [
+        'Koala.util.Help',
         'Koala.view.window.PrintController',
         'Koala.view.window.PrintModel',
 
@@ -48,7 +49,9 @@ Ext.define('Koala.view.window.Print', {
         },
         topic: 'toolsPrint',
         parentOfTopic: 'tools',
-        callback: Koala.util.Help.showHelpWindow
+        callback: function() {
+            Koala.util.Help.showHelpWindow();
+        }
     }],
 
     config: {
