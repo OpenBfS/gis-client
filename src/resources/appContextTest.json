@@ -4,7 +4,7 @@
             "urls": {
                 "metadata-xml2json": "http://10.133.7.63/geonetwork/srv/ger/xml_iso19139Tojson",
                 "metadata-search": "http://10.133.7.63/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://10.133.7.63/geoserver/bfs/ows",
+                "spatial-search": "http://10.133.7.63/ogc/bfs/ows",
                 "print-servlet": "http://10.133.7.63/bfs-printservice/print/",
                 "irix-servlet": "http://10.133.7.63/irix-servlet",
                 "irix-context": "resources/irixContext.json",
