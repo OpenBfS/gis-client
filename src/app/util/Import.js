@@ -149,7 +149,13 @@ Ext.define('Koala.util.Import', {
                 dataProjection: 'EPSG:4326',
                 featureProjection: 'EPSG:3857'
             });
-            var bytes = shpwrite.zip(geojson);
+            var bytes = shpwrite.zip(geojson, {
+                types: {
+                    polygon: layer.get('name') + '_polygons',
+                    line: layer.get('name') + '_lines',
+                    point: layer.get('name') + '_points'
+                }
+            });
             var importMetadata = {
                 config: config,
                 bytes: bytes,
