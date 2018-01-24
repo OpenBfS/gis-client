@@ -121,10 +121,7 @@ Ext.define('Koala.util.Metadata', {
                 iframe.onload = function() {
                     var req = Ext.Ajax.request({
                         url: url + 'srv/eng/info',
-                        method: 'POST',
-                        username: context.config['metadata-username'],
-                        password: context.config['metadata-password'],
-                        withCredentials: true
+                        method: 'POST'
                     });
 
                     req.then(function() {
@@ -155,22 +152,15 @@ Ext.define('Koala.util.Metadata', {
                 resolveFunc = resolve;
             });
 
-            var user = context.config['metadata-username'];
-            var pass = context.config['metadata-password'];
-
             Ext.Ajax.request({
                 url: url + 'srv/api/0.1/records/duplicate?group=1&sourceUuid=' +
                     context.uuid + '&metadataType=METADATA&isVisibleByAllGroupMembers=false&isChildOfSource=false',
                 method: 'PUT',
-                username: user,
-                password: pass,
                 headers: {
                     'X-XSRF-TOKEN': context.csrfToken,
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': 'Basic ' + btoa(user + ':' + pass)
+                    'Accept': 'application/json'
                 },
-                withCredentials: true,
                 success: function(xhr) {
                     var id = xhr.responseText;
                     context.newId = id;
@@ -195,19 +185,13 @@ Ext.define('Koala.util.Metadata', {
                 resolveFunc = resolve;
             });
 
-            var user = context.config['metadata-username'];
-            var pass = context.config['metadata-password'];
-
             Ext.Ajax.request({
                 url: url + 'srv/api/0.1/records/' + context.newId,
                 method: 'GET',
-                username: user,
-                password: pass,
                 headers: {
                     'X-XSRF-TOKEN': context.csrfToken,
                     'Accept': 'application/json'
                 },
-                withCredentials: true,
                 success: function(xhr) {
                     var metadata = JSON.parse(xhr.responseText);
                     context.newUuid = metadata['gmd:fileIdentifier']['gco:CharacterString']['#text'];
@@ -225,17 +209,11 @@ Ext.define('Koala.util.Metadata', {
          */
         updateMetadata: function(context) {
             var url = context.config['metadata-base-url'];
-            var user = context.config['metadata-username'];
-            var pass = context.config['metadata-password'];
-
             var xml = this.getCswUpdate(context);
 
             return Ext.Ajax.request({
                 url: url + 'srv/eng/csw-publication',
                 method: 'POST',
-                username: user,
-                password: pass,
-                withCredentials: true,
                 xmlData: xml
             });
         },

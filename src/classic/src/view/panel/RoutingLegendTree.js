@@ -556,12 +556,42 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         }
         var layer = selection[0].data;
 
+        layer.getSource().on('addfeature', function(evt) {
+            this.handleFeatureChanged(evt, layer);
+        }, this);
+        layer.getSource().on('changefeature', function(evt) {
+            this.handleFeatureChanged(evt, layer);
+        }, this);
+        layer.getSource().on('removefeature', function(evt) {
+            this.handleFeatureChanged(evt, layer);
+        }, this);
+
         if (layer instanceof ol.layer.Vector) {
             if (this.featureGrid) {
                 this.featureGrid.destroy();
             }
 
             var viewModel = this.getViewModel();
+
+            var wfstSuccessCallback = function(msg) {
+                var me = Ext.ComponentQuery.query(
+                    'k-panel-routing-legendtree')[0];
+                me.featureGrid.wfstDeletes = [];
+                me.featureGrid.wfstUpdates = [];
+                me.featureGrid.wfstInserts = [];
+                var result = msg.transactionSummary;
+                var text = Ext.String.format(
+                    viewModel.get('wfstsuccess'),
+                    result.totalInserted,
+                    result.totalUpdated,
+                    result.totalDeleted
+                );
+                Ext.Msg.alert('Info', text);
+            };
+
+            var wfstFailureCallback = function(msg) {
+                Ext.Msg.alert('Error', msg);
+            };
 
             var tree = Ext.ComponentQuery.query('basigx-panel-menu')[0];
             var x = tree.getWidth() + 5;
@@ -577,6 +607,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 y: y,
                 title: layer.get('name'),
                 scrollable: true,
+                wfstInserts: [],
+                wfstUpdates: [],
+                wfstDeletes: [],
                 items: [{
                     xtype: 'panel',
                     layout: 'border',
@@ -636,8 +669,16 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                         }, {
                             xtype: 'button',
                             text: viewModel.get('saveLayerText'),
-                            handler: function() {
-                                Koala.util.Import.importLayer(layer);
+                            handler: function(btn) {
+                                var grid = btn.up('window');
+                                Koala.util.Import.importOrUpdateLayer(
+                                    layer,
+                                    grid.wfstInserts,
+                                    grid.wfstUpdates,
+                                    grid.wfstDeletes,
+                                    wfstSuccessCallback,
+                                    wfstFailureCallback
+                                );
                             }
                         }]
                     }, {
@@ -655,8 +696,43 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             this.featureGrid.show();
         } else {
             if (this.featureGrid) {
+                layer.getSource().un('addfeature', function(evt) {
+                    this.handleFeatureChanged(evt, layer);
+                }, this);
+                layer.getSource().un('changefeature', function(evt) {
+                    this.handleFeatureChanged(evt, layer);
+                }, this);
+                layer.getSource().un('removefeature', function(evt) {
+                    this.handleFeatureChanged(evt, layer);
+                }, this);
                 this.featureGrid.destroy();
             }
+        }
+    },
+
+    /**
+     * Populates the different arrays for WFS Transactions
+     */
+    handleFeatureChanged: function(evt, layer) {
+        // dont populate arrays when the layer is not persisted yet
+        if (layer.get('persisted') === false) {
+            return;
+        }
+        var type = evt.type;
+        var feature = evt.feature;
+        var grid = this.featureGrid;
+        switch (type) {
+            case 'removefeature':
+                grid.wfstDeletes.push(feature);
+                break;
+            case 'addfeature':
+                grid.wfstInserts.push(feature);
+                break;
+            case 'changefeature':
+                grid.wfstUpdates.push(feature);
+                break;
+            default:
+                break;
         }
     },
 
