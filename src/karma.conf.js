@@ -55,6 +55,8 @@ module.exports = function(config) {
         'resources/lib/d3/d3.js',
         'resources/lib/momentjs/moment-with-locales.js',
         'resources/lib/turfjs-4.5.2/turf.min.js',
+        'resources/lib/jsts/jsts.min.js',
+        'resources/lib/shp-write/shpwrite.js',
         '/koalaProxy'
     ];
 
@@ -114,7 +116,7 @@ module.exports = function(config) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
-            // 'Chrome',
+            // 'Chrome'
             // 'Firefox',
             'Chromium_no_sandbox'
         ],

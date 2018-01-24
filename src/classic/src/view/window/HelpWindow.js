@@ -74,6 +74,15 @@ Ext.define('Koala.view.window.HelpWindow', {
         }
     }],
 
+    initComponent: function() {
+        var me = this;
+        var currentViewSize = Ext.getBody().getViewSize();
+        me.callParent();
+
+        me.setHeight(currentViewSize.height - 400);
+        me.setWidth(currentViewSize.width - 400);
+    },
+
     //select default node 'quick-reference'
     listeners: {
         afterlayout: function() {
