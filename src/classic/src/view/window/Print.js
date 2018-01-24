@@ -21,6 +21,7 @@ Ext.define('Koala.view.window.Print', {
     xtype: 'k-window-print',
 
     requires: [
+        'Koala.util.Help',
         'Koala.view.window.PrintController',
         'Koala.view.window.PrintModel',
 
@@ -43,21 +44,13 @@ Ext.define('Koala.view.window.Print', {
 
     tools: [{
         type: 'help',
-        //TODO: move to app-locale
-        tooltip: 'Hilfe',
+        bind: {
+            tooltip: '{helpTooltip}'
+        },
+        topic: 'toolsPrint',
+        parentOfTopic: 'tools',
         callback: function() {
-            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-            if (!helpWin) {
-                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                helpWin.on('afterlayout', function() {
-                    var helpWinController = this.getController();
-                    helpWinController.setTopic('toolsPrint', 'tools');
-                }, helpWin, {single: true});
-            } else {
-                BasiGX.util.Animate.shake(helpWin);
-                var helpWinController = helpWin.getController();
-                helpWinController.setTopic('toolsPrint', 'tools');
-            }
+            Koala.util.Help.showHelpWindow();
         }
     }],
 

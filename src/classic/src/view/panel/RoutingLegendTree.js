@@ -25,6 +25,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'BasiGX.view.grid.FeatureGrid',
         'Koala.store.MetadataSearch',
         'Koala.util.Clone',
+        'Koala.util.Help',
         'Koala.util.Import',
         'Koala.util.Layer',
         'Koala.view.panel.RoutingLegendTreeController',
@@ -60,21 +61,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
     tools: [{
         type: 'help',
-        //TODO: move to app-locale
-        tooltip: 'Hilfe',
+        bind: {
+            tooltip: '{helpTooltip}'
+        },
+        topic: 'legendHelp',
         callback: function() {
-            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
-            if (!helpWin) {
-                helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                helpWin.on('afterlayout', function() {
-                    var helpWinController = this.getController();
-                    helpWinController.setTopic('legendHelp');
-                }, helpWin, {single: true});
-            } else {
-                BasiGX.util.Animate.shake(helpWin);
-                var helpWinController = helpWin.getController();
-                helpWinController.setTopic('legendHelp');
-            }
+            Koala.util.Help.showHelpWindow();
         }
     }],
 
