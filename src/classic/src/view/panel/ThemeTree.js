@@ -21,6 +21,7 @@ Ext.define('Koala.view.panel.ThemeTree', {
     xtype: 'k-panel-themetree',
 
     requires: [
+        'Koala.util.Help',
         'Koala.view.component.TextTool',
         'Koala.view.panel.ThemeTreeController',
         'Koala.view.panel.ThemeTreeModel'
@@ -66,7 +67,9 @@ Ext.define('Koala.view.panel.ThemeTree', {
             tooltip: '{helpTooltip}'
         },
         topic: 'layerSelection',
-        callback: Koala.util.Help.showHelpWindow
+        callback: function() {
+            Koala.util.Help.showHelpWindow();
+        }
     }],
 
     fbar: [

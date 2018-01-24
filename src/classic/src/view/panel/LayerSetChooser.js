@@ -22,6 +22,7 @@ Ext.define('Koala.view.panel.LayerSetChooser', {
 
     requires: [
         'Koala.view.panel.LayerSetChooserController',
+        'Koala.util.Help',
         'Koala.util.Layer'
     ],
 
@@ -49,7 +50,9 @@ Ext.define('Koala.view.panel.LayerSetChooser', {
             tooltip: '{helpTooltip}'
         },
         topic: 'layerSelection',
-        callback: Koala.util.Help.showHelpWindow
+        callback: function() {
+            Koala.util.Help.showHelpWindow();
+        }
     }],
 
     /**
