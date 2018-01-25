@@ -37,8 +37,12 @@ Ext.define('Koala.util.Import', {
             if (persisted === false) {
                 this.importData(layer);
             } else {
-                Koala.util.WFST.transact(layer, wfstInserts, wfstUpdates,
-                    wfstDeletes, wfstSuccessCallback, wfstFailureCallback);
+                var count = wfstDeletes.length + wfstInserts.length +
+                    wfstUpdates.length;
+                if (count > 0) {
+                    Koala.util.WFST.transact(layer, wfstInserts, wfstUpdates,
+                        wfstDeletes, wfstSuccessCallback, wfstFailureCallback);
+                }
             }
         },
 
@@ -167,7 +171,8 @@ Ext.define('Koala.util.Import', {
                 .then(this.performImport.bind(this, importMetadata))
                 .then(this.getLayerName.bind(this, importMetadata))
                 .then(Koala.util.Metadata.prepareMetadata.bind(Koala.util.Metadata, layer.metadata))
-                .then(this.setPersistedFlag.bind(this, layer));
+                .then(this.setPersistedFlag.bind(this, layer))
+                .then(this.closeFeatureGrid.bind(this));
         },
 
         /**
@@ -176,8 +181,19 @@ Ext.define('Koala.util.Import', {
          */
         setPersistedFlag: function(layer) {
             layer.set('persisted', true);
-        }
+        },
 
+        /**
+         * Close all open featuregrid windows.
+         */
+        closeFeatureGrid: function() {
+            var wins = Ext.ComponentQuery.query('k-window-featuregrid');
+            if (wins.length > 0) {
+                Ext.each(wins, function(win) {
+                    win.destroy();
+                });
+            }
+        }
     }
 
 });

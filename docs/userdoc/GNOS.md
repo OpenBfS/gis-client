@@ -348,6 +348,17 @@ Darf der Layer geklont werden?
 | Default-Wert         | false |
 | Beispiel             | true |
 
+**allowEdit**
+
+Darf der Layer (über WFS-T) editiert werden?
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubte Wertemenge   | true, false |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | false |
+| Beispiel             | true |
+
 **allowHover**
 
 Soll HoverInfo erlaubt werden?

@@ -142,6 +142,7 @@ Ext.define('Koala.util.SelectFeatures', {
                 sourceLayer,
                 function() {
                     var field = this.toString();
+                    targetLayer.set('geometryFieldName', field);
                     Koala.util.SelectFeatures.getDescribeFeatureSuccess(
                         sourceLayer, targetLayer, null, field, maxFeatures);
                 },
@@ -165,6 +166,7 @@ Ext.define('Koala.util.SelectFeatures', {
                 sourceLayer,
                 function() {
                     var field = this.toString();
+                    targetLayer.set('geometryFieldName', field);
                     Koala.util.SelectFeatures.getDescribeFeatureSuccess(
                         sourceLayer, targetLayer, extent, field, maxFeatures);
                 },
@@ -284,6 +286,7 @@ Ext.define('Koala.util.SelectFeatures', {
                 features
             );
             mapComponent.setLoading(false);
+            Ext.fireEvent('selectFeatures:featuresReceived');
         },
 
         /**

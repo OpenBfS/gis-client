@@ -23,6 +23,7 @@
             "import": {
                 "base-url": "http://localhost/bfs-geoserver/",
                 "target-workspace": "bfs",
+                "target-workspace-uri": "www.imis.bfs.de/bfs",
                 "target-store": "bfs_geodata",
                 "metadata-base-url": "http://localhost/geonetwork/",
             },
