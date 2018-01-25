@@ -31,11 +31,8 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
     },
 
     constrainHeader: true,
-
     originalLayer: null,
-
     layer: null,
-
     layout: 'fit',
     width: 650,
     height: 300,
@@ -43,7 +40,6 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
     wfstInserts: [],
     wfstUpdates: [],
     wfstDeletes: [],
-
     listeners: {
         destroy: 'beforeDestroy'
     },
@@ -56,25 +52,6 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
         var map = Ext.ComponentQuery.query('basigx-component-map')[0];
 
         if (!(me.layer instanceof ol.layer.Vector)) {
-            //convert to WFS layer
-            // var url = Koala.util.Object.getPathStrOr(me.layer.metadata,
-            //     'layerConfig/wfs/url');
-            // if (!url) {
-            //     Ext.log.error('Could not edit a layer that has no WFS-URL ' +
-            //         ' configured');
-            //     return;
-            // }
-
-            // var vectorSource = new ol.source.Vector({
-            //     format: new ol.format.GeoJSON(),
-            //     url: function(extent) {
-            //         return 'https://ahocevar.com/geoserver/wfs?service=WFS&' +
-            //           'version=1.1.0&request=GetFeature&typename=osm:water_areas&' +
-            //           'outputFormat=application/json&srsname=EPSG:3857&' +
-            //           'bbox=' + extent.join(',') + ',EPSG:3857';
-            //     }
-            // });
-
             // create empty layer to fill with features
             me.layer = new ol.layer.Vector({
                 source: new ol.source.Vector({
