@@ -25,6 +25,27 @@ Ext.define('Koala.util.WFST', {
 
     statics: {
 
+        /**
+         * The duration for a feature lock in minutes
+         */
+        lockTime: 1,
+
+        /**
+         * Flag holding the state if features are currently locked.
+         * Will get set to false after running out the `lockTime`
+         */
+        lockAquired: false,
+
+        /**
+         * Starts a WFS Transaction for the given feature arrays
+         *
+         * @param {ol.layer} layer The layer the features come from
+         * @param {Array} wfstInsert The Array holding the features to insert
+         * @param {Array} wfstUpdates The Array holding the features to update
+         * @param {Array} wfstDeletes The Array holding the features to delete
+         * @param {Function} wfstSuccessCallback The callback on success
+         * @param {Function} wfstFailureCallback The callback on failure
+         */
         transact: function(layer, wfstInserts, wfstUpdates, wfstDeletes,
             wfstSuccessCallback, wfstFailureCallback) {
             var format = new ol.format.WFS;
@@ -36,6 +57,11 @@ Ext.define('Koala.util.WFST', {
                 'layerConfig/wfs/url');
             var layerName = Koala.util.Object.getPathStrOr(layer.metadata,
                 'newLayerName');
+            if (!layerName) {
+                layerName = Koala.util.Object.getPathStrOr(
+                    layer.metadata, 'layerConfig/wms/layers');
+                layerName = layerName.split(':')[1];
+            }
 
             var opts = {
                 featureNS: config['target-workspace'],
@@ -51,6 +77,12 @@ Ext.define('Koala.util.WFST', {
             );
             var serializer = new XMLSerializer();
             xml = serializer.serializeToString(xml);
+
+            // override the geometryname, as its hardcoded through OpenLayers
+            // to `geometry`
+            xml = xml.replace(
+                '<Property><Name>geometry</Name>',
+                '<Property><Name>' + layer.get('geometryFieldName') + '</Name>');
             Ext.Ajax.request({
                 url: url,
                 xmlData: xml,
@@ -69,9 +101,6 @@ Ext.define('Koala.util.WFST', {
                         return;
                     }
 
-                    // TODO: extract feature ids from possible inserts and
-                    // assign them to the corresponding features with `setId`.
-                    // Alternatively, reload the layers source...
                     var result = transactionResponse.transactionSummary;
                     if ((result.totalDeleted && result.totalDeleted > 0) ||
                         (result.totalInserted && result.totalInserted > 0) ||
@@ -92,6 +121,66 @@ Ext.define('Koala.util.WFST', {
                     wfstFailureCallback.call(this, msg);
                 }
             });
+        },
+
+        /**
+         * Issues a WFS-T LockFeature
+         *
+         * @param {ol.layer} layer The layer the lock should be aquired for
+         * @return {Ext.Promise} The AJAX Request as a promise
+         */
+        lockFeatures: function(layer) {
+            var layerName = Koala.util.Object.getPathStrOr(layer.metadata,
+                'newLayerName');
+            var config = Koala.util.AppContext.getAppContext();
+            config = config.data.merge['import'];
+            var nsUri = config['target-workspace-uri'];
+            var url = Koala.util.Object.getPathStrOr(layer.metadata,
+                'layerConfig/wfs/url');
+            var xmlTemplate = '<LockFeature ' +
+                'xmlns="http://www.opengis.net/wfs" ' +
+                'xmlns:ns="{0}" ' +
+                'service="WFS" ' +
+                'expiry="' + Koala.util.WFST.lockTime + '" ' +
+                'version="1.1.0">' +
+                '<Lock typeName="ns:{1}"/>' +
+                '</LockFeature>';
+            var xml = Ext.String.format(xmlTemplate, nsUri, layerName);
+            return Ext.Ajax.request({
+                url: url,
+                xmlData: xml,
+                method: 'POST'
+            });
+        },
+
+        /**
+         * Handles the response from the LockFeature request.
+         * If it was successful, the `lockAquired` flag will be set to true
+         * and automatically set to false after the lock has expired
+         *
+         * @param {Object} response The XHR response of the request
+         * @return {String} A message if the request was successful
+         */
+        handleLockFeaturesResponse: function(response) {
+            var resText = response.responseText;
+            var msg;
+            if (resText.indexOf('<wfs:LockId>') > 0) {
+                var lockId = resText.split(
+                    '<wfs:LockId>')[1].split('</wfs:LockId>')[0];
+                Koala.util.WFST.lockAquired = true;
+                var task = new Ext.util.DelayedTask(function() {
+                    Koala.util.WFST.lockAquired = false;
+                });
+                task.delay(Koala.util.WFST.lockTime * 1000 * 60);
+                Ext.log.info('WFS-T Lock aquired with id ' + lockId +
+                    ', will time out in ' + Koala.util.WFST.lockTime +
+                    ' minutes'
+                );
+                msg = lockId;
+            } else {
+                msg = 'Could not aquire an WFST-Lock';
+            }
+            return msg;
         }
     }
 });

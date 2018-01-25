@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-present terrestris GmbH & Co. KG
+/* Copyright (c) 2018-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.RoutingLegendTreeModel
+ * @class Koala.view.window.HelpModel
  */
-Ext.define('Koala.view.panel.RoutingLegendTreeModel', {
+Ext.define('Koala.view.window.FeatureGridWindowModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-panel-routing-legendtree',
-    data: {
-        btnTxtCollapseAll: '',
-        btnTooltipCollapseAll: '',
-        btnTxtExpandAll: '',
-        btnTooltipExpandAll: '',
-        btnTxtToggleAll: '',
-        btnTooltipToggleAll: '',
-        btnTxtRemoveAllLayersAll: '',
-        btnTooltipRemoveAllLayers: '',
-        confirmTitleRemoveAllLayersAll: '',
-        confirmMsgRemoveAllLayers: '',
-        downloadTitle: '',
-        downloadMessage: '',
-        downloadButtonYes: '',
-        downloadButtonNo: ''
-    }
+    alias: 'viewmodel.k-window-featuregrid',
 
+    data: {
+        saveLayerText: '',
+        wfstSuccess: '',
+        wfstFailure: '',
+        wfstLockFail: '',
+        wfstLockSuccess: '',
+        wfstLockExpired: '',
+        wfstLockButton: '',
+        layerNotSavedYet: ''
+    }
 });

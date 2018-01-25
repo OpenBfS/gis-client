@@ -845,7 +845,6 @@ Ext.define('Koala.util.Layer', {
                 if (treeNode) {
                     // Select the tree node
                     legendTree.setSelection(treeNode);
-                    legendTree.toggleFeatureGrid(legendTree.getSelectionModel());
                 }
             }
         },
@@ -1136,6 +1135,7 @@ Ext.define('Koala.util.Layer', {
                 allowDownload: getBool(olProps.allowDownload, true),
                 allowRemoval: getBool(olProps.allowRemoval, true),
                 allowClone: getBool(olProps.allowClone, false),
+                allowEdit: getBool(olProps.allowEdit, false),
                 allowShortInfo: getBool(olProps.allowShortInfo, true),
                 allowPrint: getBool(olProps.allowPrint, true),
                 allowOpacityChange: getBool(olProps.allowOpacityChange, true),

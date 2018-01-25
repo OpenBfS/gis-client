@@ -410,9 +410,7 @@
                 "downloadMessage": "Download Layerdaten?",
                 "downloadButtonYes": "Yes",
                 "downloadButtonNo": "No",
-                "outputFormatText": "Output Format",
-                "saveLayerText": "Save layer",
-                "wfstsuccess": "Changes successfully saved.<br>Objects inserted: {0}<br>Objects updated: {1}<br>Objects deleted: {2}"
+                "outputFormatText": "Output Format"
             }
         }
     },
@@ -468,6 +466,20 @@
                 "layerNameLabel": "Name of the new layer",
                 "okButtonLabel": "Clone",
                 "cancelButtonLabel": "Cancel"
+            }
+        }
+    },
+    "Koala.view.window.FeatureGridWindow": {
+        "config": {
+            "data": {
+                "saveLayerText": "Save layer",
+                "wfstSuccess": "Changes successfully saved.<br>Objects inserted: {0}<br>Objects updated: {1}<br>Objects deleted: {2}",
+                "wfstFailure": "Changes could not be saved. Please try again later.",
+                "wfstLockFail": "The WFS-T Lock request was rejeceted",
+                "wfstLockSuccess": "The WFS-T Lock request was successful. The lock will timeout in {0} minute(s)",
+                "wfstLockExpired": "The WFS-T Lock has expired",
+                "wfstLockButton": "WFS-T Lock",
+                "layerNotSavedYet": "The layer has not been saved yet"
             }
         }
     },

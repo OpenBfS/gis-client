@@ -22,7 +22,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     xtype: 'k-panel-routing-legendtree',
 
     requires: [
-        'BasiGX.view.grid.FeatureGrid',
         'Koala.store.MetadataSearch',
         'Koala.util.Clone',
         'Koala.util.Help',
@@ -31,7 +30,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
         'Koala.view.window.MetadataInfo',
-        'Koala.view.window.CloneWindow'
+        'Koala.view.window.CloneWindow',
+        'Koala.view.window.FeatureGridWindow'
     ],
 
     controller: 'k-panel-routing-legendtree',
@@ -160,6 +160,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var allowDownload = olLayer.get('allowDownload') || false;
             var allowRemoval = olLayer.get('allowRemoval') || false;
             var allowClone = olLayer.get('allowClone') || false;
+            var allowEdit = olLayer.get('allowEdit') || false;
             var allowStyle = olLayer instanceof ol.layer.Vector &&
                     !olLayer.get('disableStyling');
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
@@ -170,6 +171,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var downloadBtn = comp.down('button[name="download"]');
             var removalBtn = comp.down('button[name="removal"]');
             var cloneBtn = comp.down('button[name="clone"]');
+            var editBtn = comp.down('button[name="edit"]');
             var styleBtn = comp.down('button[name="style"]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
@@ -192,6 +194,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             }
             if (cloneBtn) {
                 cloneBtn.setVisible(allowClone);
+            }
+            if (editBtn) {
+                editBtn.setVisible(allowEdit);
             }
             if (styleBtn) {
                 styleBtn.setVisible(allowStyle);
@@ -325,6 +330,23 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 xtype: 'k-window-clone',
                 sourceLayer: btn.layerRec.getOlLayer()
             });
+        },
+
+        /**
+         * Open the edit window with featuregrid.
+         */
+        editHandler: function(btn) {
+            var layer = btn.up().layerRec.data;
+            var wins = Ext.ComponentQuery.query('k-window-featuregrid');
+            if (wins.length > 0) {
+                Ext.each(wins, function(win) {
+                    win.destroy();
+                });
+            }
+            var gridWin = Ext.create('Koala.view.window.FeatureGridWindow', {
+                layer: layer
+            });
+            gridWin.show();
         },
 
         styleHandler: function(btn) {
@@ -465,6 +487,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 // class is defined and we can access the static methods
             }, {
                 xtype: 'button',
+                name: 'edit',
+                glyph: 'xf040@FontAwesome',
+                tooltip: 'Layerobjekte editieren'
+                // We'll assign a handler to handle clicks here once the
+                // class is defined and we can access the static methods
+            }, {
+                xtype: 'button',
                 name: 'style',
                 glyph: 'xf1fc@FontAwesome',
                 tooltip: 'Layerstil anpassen'
@@ -538,202 +567,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         me.bindUpdateHandlers();
         me.bindLoadIndicationHandlers();
-        me.on('itemclick', me.toggleFeatureGrid.bind(me));
-    },
-
-    /**
-     * Toggles display of the feature grid.
-     * @param  {Object} selectionModel the selection model
-     */
-    toggleFeatureGrid: function(selectionModel) {
-        var map = Ext.ComponentQuery.query('basigx-component-map')[0];
-        var selection = selectionModel.getSelection();
-        if (selection.length === 0) {
-            if (this.featureGrid) {
-                this.featureGrid.destroy();
-            }
-            return;
-        }
-        var layer = selection[0].data;
-
-        layer.getSource().on('addfeature', function(evt) {
-            this.handleFeatureChanged(evt, layer);
-        }, this);
-        layer.getSource().on('changefeature', function(evt) {
-            this.handleFeatureChanged(evt, layer);
-        }, this);
-        layer.getSource().on('removefeature', function(evt) {
-            this.handleFeatureChanged(evt, layer);
-        }, this);
-
-        if (layer instanceof ol.layer.Vector) {
-            if (this.featureGrid) {
-                this.featureGrid.destroy();
-            }
-
-            var viewModel = this.getViewModel();
-
-            var wfstSuccessCallback = function(msg) {
-                var me = Ext.ComponentQuery.query(
-                    'k-panel-routing-legendtree')[0];
-                me.featureGrid.wfstDeletes = [];
-                me.featureGrid.wfstUpdates = [];
-                me.featureGrid.wfstInserts = [];
-                var result = msg.transactionSummary;
-                var text = Ext.String.format(
-                    viewModel.get('wfstsuccess'),
-                    result.totalInserted,
-                    result.totalUpdated,
-                    result.totalDeleted
-                );
-                Ext.Msg.alert('Info', text);
-            };
-
-            var wfstFailureCallback = function(msg) {
-                Ext.Msg.alert('Error', msg);
-            };
-
-            var tree = Ext.ComponentQuery.query('basigx-panel-menu')[0];
-            var x = tree.getWidth() + 5;
-            var header = Ext.ComponentQuery.query('k-panel-header')[0];
-            var y = header.getHeight() + 5;
-
-            this.featureGrid = Ext.create({
-                xtype: 'window',
-                layout: 'fit',
-                width: 500,
-                height: 300,
-                x: x,
-                y: y,
-                title: layer.get('name'),
-                scrollable: true,
-                wfstInserts: [],
-                wfstUpdates: [],
-                wfstDeletes: [],
-                items: [{
-                    xtype: 'panel',
-                    layout: 'border',
-                    items: [{
-                        xtype: 'buttongroup',
-                        region: 'north',
-                        height: 50,
-                        items: [{
-                            xtype: 'basigx-button-mergeselection',
-                            padding: 5,
-                            bind: {
-                                disabled: '{noFeaturesSelected}',
-                                sourceLayer: '{selectedFeaturesLayer}'
-                            }
-                        }, {
-                            xtype: 'basigx-button-digitize-point',
-                            map: map.map,
-                            layer: layer,
-                            glyph: 'xf100@Flaticon'
-                        }, {
-                            xtype: 'basigx-button-digitize-line',
-                            map: map.map,
-                            layer: layer,
-                            glyph: 'xf104@Flaticon'
-                        }, {
-                            xtype: 'basigx-button-digitize-polygon',
-                            map: map.map,
-                            layer: layer,
-                            glyph: 'xf107@Flaticon'
-                        }, {
-                            xtype: 'basigx-button-digitize-move-object',
-                            collection: layer.getSource().getFeaturesCollection(),
-                            map: map.map,
-                            glyph: 'xf108@Flaticon'
-                        }, {
-                            xtype: 'basigx-button-digitize-modify-object',
-                            map: map.map,
-                            collection: layer.getSource().getFeaturesCollection(),
-                            glyph: 'xf044@FontAwesome'
-                        }, {
-                            xtype: 'basigx-button-digitize-delete-object',
-                            map: map.map,
-                            collection: layer.getSource().getFeaturesCollection(),
-                            glyph: 'xf12d@FontAwesome'
-                        }, {
-                            xtype: 'basigx-button-spatial-operator-union',
-                            targetVectorLayer: layer,
-                            selectionVectorLayer: this.getViewModel().get(
-                                'selectedFeaturesLayer'),
-                            glyph: 'xf111@FontAwesome'
-                        }, {
-                            xtype: 'basigx-button-spatial-operator-intersect',
-                            targetVectorLayer: layer,
-                            selectionVectorLayer: this.getViewModel().get(
-                                'selectedFeaturesLayer'),
-                            glyph: 'xf10c@FontAwesome'
-                        }, {
-                            xtype: 'button',
-                            text: viewModel.get('saveLayerText'),
-                            handler: function(btn) {
-                                var grid = btn.up('window');
-                                Koala.util.Import.importOrUpdateLayer(
-                                    layer,
-                                    grid.wfstInserts,
-                                    grid.wfstUpdates,
-                                    grid.wfstDeletes,
-                                    wfstSuccessCallback,
-                                    wfstFailureCallback
-                                );
-                            }
-                        }]
-                    }, {
-                        xtype: 'basigx-grid-featuregrid',
-                        layer: layer,
-                        layout: 'fit',
-                        region: 'center',
-                        bind: {
-                            selectionLayer: '{selectedFeaturesLayer}'
-                        },
-                        map: map
-                    }]
-                }]
-            });
-            this.featureGrid.show();
-        } else {
-            if (this.featureGrid) {
-                layer.getSource().un('addfeature', function(evt) {
-                    this.handleFeatureChanged(evt, layer);
-                }, this);
-                layer.getSource().un('changefeature', function(evt) {
-                    this.handleFeatureChanged(evt, layer);
-                }, this);
-                layer.getSource().un('removefeature', function(evt) {
-                    this.handleFeatureChanged(evt, layer);
-                }, this);
-                this.featureGrid.destroy();
-            }
-        }
-    },
-
-    /**
-     * Populates the different arrays for WFS Transactions
-     */
-    handleFeatureChanged: function(evt, layer) {
-        // dont populate arrays when the layer is not persisted yet
-        if (layer.get('persisted') === false) {
-            return;
-        }
-        var type = evt.type;
-        var feature = evt.feature;
-        var grid = this.featureGrid;
-        switch (type) {
-            case 'removefeature':
-                grid.wfstDeletes.push(feature);
-                break;
-            case 'addfeature':
-                grid.wfstInserts.push(feature);
-                break;
-            case 'changefeature':
-                grid.wfstUpdates.push(feature);
-                break;
-            default:
-                break;
-        }
     },
 
     /**
@@ -1256,6 +1089,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var downloadBtnCfg = cls.findByProp(menuItems, 'name', 'download');
     var removalBtnCfg = cls.findByProp(menuItems, 'name', 'removal');
     var cloneBtnCfg = cls.findByProp(menuItems, 'name', 'clone');
+    var editBtnCfg = cls.findByProp(menuItems, 'name', 'edit');
     var styleBtnCfg = cls.findByProp(menuItems, 'name', 'style');
     var opacitySliderCfg = cls.findByProp(menuItems, 'name', 'opacityChange');
 
@@ -1276,6 +1110,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     }
     if (cloneBtnCfg) {
         cloneBtnCfg.handler = cls.cloneHandler;
+    }
+    if (editBtnCfg) {
+        editBtnCfg.handler = cls.editHandler;
     }
     if (styleBtnCfg) {
         styleBtnCfg.handler = cls.styleHandler;
