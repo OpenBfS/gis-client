@@ -23,6 +23,7 @@
             "import": {
                 "base-url": "http://10.133.7.63/ogc/",
                 "target-workspace": "bfs",
+                "target-workspace-uri": "www.imis.bfs.de/bfs",
                 "target-store": "bfs_geodata",
                 "metadata-base-url": "http://10.133.7.63/geonetwork/",
             },

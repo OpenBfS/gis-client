@@ -33,7 +33,7 @@ module.exports = function(config) {
             included: false
         },
         {
-            pattern: 'resources/appContext.json',
+            pattern: 'resources/appContext*.json',
             watched: true,
             served: true,
             included: false
