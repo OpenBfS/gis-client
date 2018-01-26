@@ -83,14 +83,13 @@ Ext.define('Koala.util.WFST', {
             // override the geometryname, as its hardcoded through OpenLayers
             // to `geometry`
             xml = xml.replace(
-                '<Property><Name>geometry</Name>',
+                /<Property><Name>geometry<\/Name>/g,
                 '<Property><Name>' + layer.get('geometryFieldName') + '</Name>');
             // insert the lockId, if available
             if (Koala.util.WFST.lockId) {
                 // TODO fails on FF, XML seems to be serialized differently
-                xml = xml.replace('http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">',
-                    'http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><LockId>' +
-                Koala.util.WFST.lockId + '</LockId>');
+                xml = xml.replace(/http:\/\/schemas.opengis.net\/wfs\/1.1.0\/wfs.xsd">/g,
+                    '$1<LockId>' + Koala.util.WFST.lockId + '</LockId>');
                 xml = xml.replace('XMLSchema-instance">',
                     'XMLSchema-instance"><LockId>' +
                 Koala.util.WFST.lockId + '</LockId>');
