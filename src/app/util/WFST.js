@@ -132,6 +132,11 @@ Ext.define('Koala.util.WFST', {
         lockFeatures: function(layer) {
             var layerName = Koala.util.Object.getPathStrOr(layer.metadata,
                 'newLayerName');
+            if (!layerName) {
+                layerName = Koala.util.Object.getPathStrOr(
+                    layer.metadata, 'layerConfig/wms/layers');
+                layerName = layerName.split(':')[1];
+            }
             var config = Koala.util.AppContext.getAppContext();
             config = config.data.merge['import'];
             var nsUri = config['target-workspace-uri'];

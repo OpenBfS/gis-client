@@ -54,11 +54,10 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
      * @param {ol.layer} layer The layer the lock should be aquired for
      */
     getFeatureLock: function(btn, layer) {
-        var panel = Ext.ComponentQuery.query(
-            'k-panel-routing-legendtree')[0];
+        var me = this;
         if (layer.get('persisted') === false) {
             btn.setPressed(false);
-            Ext.toast(panel.getViewModel().get(
+            Ext.toast(this.getViewModel().get(
                 'layerNotSavedYet'));
             return;
         }
@@ -67,19 +66,19 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
                 then(Koala.util.WFST.handleLockFeaturesResponse).
                 then(function(msg) {
                     if (msg === 'Could not aquire an WFST-Lock') {
-                        Ext.toast(panel.getViewModel().get(
+                        Ext.toast(me.getViewModel().get(
                             'wfstLockFail'));
                         btn.setPressed(false);
                         return;
                     } else {
-                        var text = Ext.String.format(panel.getViewModel().get(
+                        var text = Ext.String.format(me.getViewModel().get(
                             'wfstLockSuccess'), Koala.util.WFST.lockTime);
                         Ext.toast(text);
                         btn.setPressed(true);
 
                         var task = new Ext.util.DelayedTask(function() {
                             if (Koala.util.WFST.lockAquired === false) {
-                                Ext.toast(panel.getViewModel().get(
+                                Ext.toast(me.getViewModel().get(
                                     'wfstLockExpired'));
                                 btn.setPressed(false);
                             }
@@ -88,7 +87,7 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
                     }
                 }).
                 otherwise(function() {
-                    Ext.toast(panel.getViewModel().get(
+                    Ext.toast(me.getViewModel().get(
                         'wfstLockFail'));
                     btn.setPressed(false);
                 });
