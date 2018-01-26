@@ -82,9 +82,12 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
 
                         var task = new Ext.util.DelayedTask(function() {
                             if (Koala.util.WFST.lockAquired === false) {
-                                Ext.toast(me.getViewModel().get(
-                                    'wfstLockExpired'));
-                                btn.setPressed(false);
+                                // check if window has been closed already
+                                if (me.getView()) {
+                                    Ext.toast(me.getViewModel().get(
+                                        'wfstLockExpired'));
+                                    btn.setPressed(false);
+                                }
                             }
                         });
                         task.delay(Koala.util.WFST.lockTime * 1000 * 60);
