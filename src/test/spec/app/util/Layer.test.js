@@ -529,7 +529,7 @@ describe('Koala.util.Layer', function() {
                 // Setup
                 var testObjs = TestUtil.setupTestObjects({
                     mapComponentOpts: {
-                        appContextPath: 'http://localhost:9876/base/resources/appContext.json'
+                        appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
                     }
                 });
                 var filters = [{
@@ -586,7 +586,7 @@ describe('Koala.util.Layer', function() {
                     //Setup
                     var testObjs = TestUtil.setupTestObjects({
                         mapComponentOpts: {
-                            appContextPath: 'http://localhost:9876/base/resources/appContext.json'
+                            appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
                         }
                     });
                     var backgroundLayerUUID = '8ef4f2c1-183f-4f2e-8953-2d2c74446a78';
