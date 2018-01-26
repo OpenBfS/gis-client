@@ -2,9 +2,9 @@
     "data": {
         "merge": {
             "urls": {
-                "metadata-xml2json": "http://bfs-docker.intranet.terrestris.de/geonetwork/srv/ger/xml_iso19139Tojson",
-                "metadata-search": "http://bfs-docker.intranet.terrestris.de/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://bfs-docker.intranet.terrestris.de/ogc/bfs/ows",
+                "metadata-xml2json": "http://localhost/geonetwork/srv/ger/xml_iso19139Tojson",
+                "metadata-search": "http://localhost/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://localhost/ogc/bfs/ows",
                 "print-servlet": "http://bfs-docker.intranet.terrestris.de/bfs-printservice/print/",
                 "irix-servlet": "http://bfs-docker.intranet.terrestris.de/irix-servlet",
                 "irix-context": "resources/irixContext.json",
