@@ -4,7 +4,7 @@
             "urls": {
                 "metadata-xml2json": "http://bfs-docker.intranet.terrestris.de/geonetwork/srv/ger/xml_iso19139Tojson",
                 "metadata-search": "http://bfs-docker.intranet.terrestris.de/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://bfs-docker.intranet.terrestris.de/geoserver/bfs/ows",
+                "spatial-search": "http://bfs-docker.intranet.terrestris.de/ogc/bfs/ows",
                 "print-servlet": "http://bfs-docker.intranet.terrestris.de/bfs-printservice/print/",
                 "irix-servlet": "http://bfs-docker.intranet.terrestris.de/irix-servlet",
                 "irix-context": "resources/irixContext.json",
@@ -21,11 +21,11 @@
                 "password": "admin"
             },
             "import": {
-                "base-url": "http://localhost/bfs-geoserver/",
+                "base-url": "http://localhost/ogc/",
                 "target-workspace": "bfs",
                 "target-workspace-uri": "www.imis.bfs.de/bfs",
                 "target-store": "bfs_geodata",
-                "metadata-base-url": "http://localhost/geonetwork/",
+                "metadata-base-url": "http://localhost/geonetwork/"
             },
             "imis_user": {
               "imisroles": [
@@ -50,7 +50,6 @@
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
             "mapLayers": [
-                "2a0f1aa4-3f5e-41a4-90e5-91eb97036da3"
             ],
             "mapConfig": {
                 "projection": "EPSG:3857"
@@ -79,13 +78,13 @@
                 "label": "EPSG:25832"
             }],
             "vectorTemplates": [{
-                "uuid": "241ae25f-c180-475b-9734-4947f75137e1",
+                "uuid": "f4984e29-6b4a-4ebb-a5f0-5dddd07e8943",
                 "label": "Local Vector Data Template (drinkwater)"
             }, {
-                "uuid": "5fdc824d-dc67-46cc-a87e-1c99f13557cf",
+                "uuid": "f4984e29-6b4a-4ebb-a5f0-5dddd07e8943",
                 "label": "Local Vector Data Template (buildings)"
             }, {
-                "uuid": "0613135b-8a4a-496d-b4a2-bf67831c620d",
+                "uuid": "f4984e29-6b4a-4ebb-a5f0-5dddd07e8943",
                 "label": "Local Vector Data Template (bundeslaender)"
             }],
             "wmsUrls": ["http://ows.terrestris.de/osm/service",
