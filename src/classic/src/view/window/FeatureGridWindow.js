@@ -41,7 +41,7 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
     wfstUpdates: [],
     wfstDeletes: [],
     listeners: {
-        destroy: 'beforeDestroy'
+        beforedestroy: 'onDestroy'
     },
 
     initComponent: function() {
@@ -210,4 +210,5 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
         }];
         me.callParent();
     }
+
 });

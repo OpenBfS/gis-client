@@ -232,7 +232,7 @@ Ext.define('Koala.util.Metadata', {
                 uuid: metadata.id,
                 newLayerName: metadata.newLayerName
             };
-            this.loginToGnos(context)
+            return this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))
                 .then(this.determineNewUuid.bind(this, context))
                 .then(this.updateMetadata.bind(this, context));

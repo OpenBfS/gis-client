@@ -20,11 +20,13 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-featuregrid',
 
-    beforeDestroy: function() {
+    onDestroy: function() {
         var view = this.getView();
-        this.unregisterListeners.bind(view)();
+        this.unregisterListeners();
         var map = BasiGX.util.Map.getMapComponent().map;
-        map.removeLayer(view.layer);
+        if (view.originalLayer !== view.layer) {
+            map.removeLayer(view.layer);
+        }
     },
 
     /**
@@ -132,14 +134,15 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
      */
     registerListeners: function() {
         var me = this;
-        me.getView().layer.getSource().on('addfeature', function(evt) {
-            me.handleFeatureChanged(evt, me.getView().layer);
+        var layer = me.getView().layer;
+        layer.getSource().on('addfeature', function(evt) {
+            me.handleFeatureChanged(evt, layer);
         }, me);
-        me.getView().layer.getSource().on('changefeature', function(evt) {
-            me.handleFeatureChanged(evt, me.getView().layer);
+        layer.getSource().on('changefeature', function(evt) {
+            me.handleFeatureChanged(evt, layer);
         }, me);
-        me.getView().layer.getSource().on('removefeature', function(evt) {
-            me.handleFeatureChanged(evt, me.getView().layer);
+        layer.getSource().on('removefeature', function(evt) {
+            me.handleFeatureChanged(evt, layer);
         }, me);
     },
 
@@ -148,14 +151,15 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
      */
     unregisterListeners: function() {
         var me = this;
-        me.layer.getSource().un('addfeature', function(evt) {
-            me.handleFeatureChanged(evt, me.layer);
+        var layer = me.getView().layer;
+        layer.getSource().un('addfeature', function(evt) {
+            me.handleFeatureChanged(evt, layer);
         }, me);
-        me.layer.getSource().un('changefeature', function(evt) {
-            me.handleFeatureChanged(evt, me.layer);
+        layer.getSource().un('changefeature', function(evt) {
+            me.handleFeatureChanged(evt, layer);
         }, me);
-        me.layer.getSource().un('removefeature', function(evt) {
-            me.handleFeatureChanged(evt, me.layer);
+        layer.getSource().un('removefeature', function(evt) {
+            me.handleFeatureChanged(evt, layer);
         }, me);
     }
 });
