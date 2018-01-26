@@ -38,7 +38,9 @@ Ext.define('Koala.util.SelectFeatures', {
          * Adds the given features to the vectorlayer, if they do not exist in its
          * source already. Features that do already exist will get removed.
          * Feature removal will only work if the key `featureIdentifyField` has been
-         * set on the layer in GNOS to a unique and existing field
+         * set on the layer in GNOS to a unique and existing field. Please note
+         * that this will remove all features in the target layer if the
+         * shift key was not pressed when selecting features!
          * @param {ol.layer.Base} sourceLayer The layer holding the source features
          * @param {ol.layer.Base} targetLayer The layer receiving the features
          * @param {array} features The array of features that should be handled

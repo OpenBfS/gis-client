@@ -20,6 +20,10 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-featuregrid',
 
+    require: [
+        'Koala.util.WFST'
+    ],
+
     onDestroy: function() {
         var view = this.getView();
         this.unregisterListeners();
@@ -134,13 +138,13 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
     registerListeners: function() {
         var me = this;
         var layer = me.getView().layer;
-        layer.getSource().on('addfeature', function(evt) {
+        layer.getSource().on('addfeature', this.onAddFeature = function(evt) {
             me.handleFeatureChanged(evt, layer);
         }, me);
-        layer.getSource().on('changefeature', function(evt) {
+        layer.getSource().on('changefeature', this.onChangeFeature = function(evt) {
             me.handleFeatureChanged(evt, layer);
         }, me);
-        layer.getSource().on('removefeature', function(evt) {
+        layer.getSource().on('removefeature', this.onRemoveFeature = function(evt) {
             me.handleFeatureChanged(evt, layer);
         }, me);
     },
@@ -151,14 +155,9 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
     unregisterListeners: function() {
         var me = this;
         var layer = me.getView().layer;
-        layer.getSource().un('addfeature', function(evt) {
-            me.handleFeatureChanged(evt, layer);
-        }, me);
-        layer.getSource().un('changefeature', function(evt) {
-            me.handleFeatureChanged(evt, layer);
-        }, me);
-        layer.getSource().un('removefeature', function(evt) {
-            me.handleFeatureChanged(evt, layer);
-        }, me);
+        layer.getSource().un('addfeature', this.onAddFeature, me);
+        layer.getSource().un('changefeature', this.onChangeFeature, me);
+        layer.getSource().un('removefeature', this.onRemoveFeature, me);
     }
+
 });

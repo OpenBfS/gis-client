@@ -83,11 +83,9 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
         var viewModel = me.getViewModel();
 
         var wfstSuccessCallback = function(msg) {
-            var featuregridWin = Ext.ComponentQuery.query(
-                'k-window-featuregrid')[0];
-            featuregridWin.wfstDeletes = [];
-            featuregridWin.wfstUpdates = [];
-            featuregridWin.wfstInserts = [];
+            me.wfstDeletes = [];
+            me.wfstUpdates = [];
+            me.wfstInserts = [];
             var result = msg.transactionSummary;
             var text = Ext.String.format(
                 viewModel.get('wfstSuccess'),
@@ -96,6 +94,7 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                 result.totalDeleted
             );
             Ext.Msg.alert('Info', text);
+            me.close();
         };
 
         var wfstFailureCallback = function(msg) {
@@ -186,7 +185,6 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                         text: viewModel.get('saveLayerText')
                     },
                     handler: function() {
-                        // var grid = btn.up('window');
                         Koala.util.Import.importOrUpdateLayer(
                             me.layer,
                             me.wfstInserts,
