@@ -95,6 +95,10 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
             );
             Ext.Msg.alert('Info', text);
             me.close();
+            // update wms layer cache
+            if (!(me.originalLayer instanceof ol.layer.Vector)) {
+                me.originalLayer.getSource().updateParams({'date': new Date()});
+            }
         };
 
         var wfstFailureCallback = function(msg) {
