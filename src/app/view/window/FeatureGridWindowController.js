@@ -20,11 +20,17 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-featuregrid',
 
-    beforeDestroy: function() {
+    require: [
+        'Koala.util.WFST'
+    ],
+
+    onDestroy: function() {
         var view = this.getView();
-        this.unregisterListeners.bind(view)();
+        this.unregisterListeners();
         var map = BasiGX.util.Map.getMapComponent().map;
-        map.removeLayer(view.layer);
+        if (view.originalLayer !== view.layer) {
+            map.removeLayer(view.layer);
+        }
     },
 
     /**
@@ -52,11 +58,10 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
      * @param {ol.layer} layer The layer the lock should be aquired for
      */
     getFeatureLock: function(btn, layer) {
-        var panel = Ext.ComponentQuery.query(
-            'k-panel-routing-legendtree')[0];
+        var me = this;
         if (layer.get('persisted') === false) {
             btn.setPressed(false);
-            Ext.toast(panel.getViewModel().get(
+            Ext.toast(this.getViewModel().get(
                 'layerNotSavedYet'));
             return;
         }
@@ -65,28 +70,31 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
                 then(Koala.util.WFST.handleLockFeaturesResponse).
                 then(function(msg) {
                     if (msg === 'Could not aquire an WFST-Lock') {
-                        Ext.toast(panel.getViewModel().get(
+                        Ext.toast(me.getViewModel().get(
                             'wfstLockFail'));
                         btn.setPressed(false);
                         return;
                     } else {
-                        var text = Ext.String.format(panel.getViewModel().get(
+                        var text = Ext.String.format(me.getViewModel().get(
                             'wfstLockSuccess'), Koala.util.WFST.lockTime);
                         Ext.toast(text);
                         btn.setPressed(true);
 
                         var task = new Ext.util.DelayedTask(function() {
                             if (Koala.util.WFST.lockAquired === false) {
-                                Ext.toast(panel.getViewModel().get(
-                                    'wfstLockExpired'));
-                                btn.setPressed(false);
+                                // check if window has been closed already
+                                if (me.getView()) {
+                                    Ext.toast(me.getViewModel().get(
+                                        'wfstLockExpired'));
+                                    btn.setPressed(false);
+                                }
                             }
                         });
                         task.delay(Koala.util.WFST.lockTime * 1000 * 60);
                     }
                 }).
                 otherwise(function() {
-                    Ext.toast(panel.getViewModel().get(
+                    Ext.toast(me.getViewModel().get(
                         'wfstLockFail'));
                     btn.setPressed(false);
                 });
@@ -132,14 +140,15 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
      */
     registerListeners: function() {
         var me = this;
-        me.getView().layer.getSource().on('addfeature', function(evt) {
-            me.handleFeatureChanged(evt, me.getView().layer);
+        var layer = me.getView().layer;
+        layer.getSource().on('addfeature', this.onAddFeature = function(evt) {
+            me.handleFeatureChanged(evt, layer);
         }, me);
-        me.getView().layer.getSource().on('changefeature', function(evt) {
-            me.handleFeatureChanged(evt, me.getView().layer);
+        layer.getSource().on('changefeature', this.onChangeFeature = function(evt) {
+            me.handleFeatureChanged(evt, layer);
         }, me);
-        me.getView().layer.getSource().on('removefeature', function(evt) {
-            me.handleFeatureChanged(evt, me.getView().layer);
+        layer.getSource().on('removefeature', this.onRemoveFeature = function(evt) {
+            me.handleFeatureChanged(evt, layer);
         }, me);
     },
 
@@ -148,14 +157,10 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
      */
     unregisterListeners: function() {
         var me = this;
-        me.layer.getSource().un('addfeature', function(evt) {
-            me.handleFeatureChanged(evt, me.layer);
-        }, me);
-        me.layer.getSource().un('changefeature', function(evt) {
-            me.handleFeatureChanged(evt, me.layer);
-        }, me);
-        me.layer.getSource().un('removefeature', function(evt) {
-            me.handleFeatureChanged(evt, me.layer);
-        }, me);
+        var layer = me.getView().layer;
+        layer.getSource().un('addfeature', this.onAddFeature, me);
+        layer.getSource().un('changefeature', this.onChangeFeature, me);
+        layer.getSource().un('removefeature', this.onRemoveFeature, me);
     }
+
 });

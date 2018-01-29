@@ -10,11 +10,16 @@
             "text" : "Kerntechnische Anlagen",
             "thumb" : "layer_sets/kerntechnik_thumb.png",
             "children" : [
-               {
-                  "uuid" : "88415902-4ca7-4d1c-b714-64cc917fc2ab",
-                  "text" : "Planungsradien des Katastrophenschutzes",
-                  "leaf" : true
-               },
+                {
+                   "uuid" : "8ef4f2c1-183f-4f2e-8953-2d2c74446a78",
+                   "text" : "WFS-T Planungsradien",
+                   "leaf" : true
+                },
+                {
+                   "uuid" : "88415902-4ca7-4d1c-b714-64cc917fc2ab",
+                   "text" : "Planungsradien des Katastrophenschutzes",
+                   "leaf" : true
+                },
                {
                   "leaf" : true,
                   "text" : "Kernkraftwerk",

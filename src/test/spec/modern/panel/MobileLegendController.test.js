@@ -10,7 +10,7 @@ describe('Koala.view.panel.MobileLegendController', function() {
     var controller;
     beforeEach(function() {
         mapComponent = Ext.create('BasiGX.view.component.Map', {
-            appContextPath: '/base/resources/appContext.json'
+            appContextPath: '/base/resources/appContextTest.json'
         });
         view = Ext.create('Koala.view.panel.MobileLegend');
         controller = view.getController();

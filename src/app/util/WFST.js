@@ -63,8 +63,10 @@ Ext.define('Koala.util.WFST', {
                 layerName = layerName.split(':')[1];
             }
 
+            var nsUri = config['target-workspace-uri'];
+
             var opts = {
-                featureNS: config['target-workspace'],
+                featureNS: nsUri,
                 featurePrefix: config['target-workspace'],
                 featureType: layerName,
                 srsName: projection
@@ -81,8 +83,18 @@ Ext.define('Koala.util.WFST', {
             // override the geometryname, as its hardcoded through OpenLayers
             // to `geometry`
             xml = xml.replace(
-                '<Property><Name>geometry</Name>',
+                /<Property><Name>geometry<\/Name>/g,
                 '<Property><Name>' + layer.get('geometryFieldName') + '</Name>');
+            // insert the lockId, if available
+            if (Koala.util.WFST.lockId) {
+                // TODO fails on FF, XML seems to be serialized differently
+                xml = xml.replace(/http:\/\/schemas.opengis.net\/wfs\/1.1.0\/wfs.xsd">/g,
+                    '$1<LockId>' + Koala.util.WFST.lockId + '</LockId>');
+                xml = xml.replace('XMLSchema-instance">',
+                    'XMLSchema-instance"><LockId>' +
+                Koala.util.WFST.lockId + '</LockId>');
+            }
+
             Ext.Ajax.request({
                 url: url,
                 xmlData: xml,
@@ -132,6 +144,11 @@ Ext.define('Koala.util.WFST', {
         lockFeatures: function(layer) {
             var layerName = Koala.util.Object.getPathStrOr(layer.metadata,
                 'newLayerName');
+            if (!layerName) {
+                layerName = Koala.util.Object.getPathStrOr(
+                    layer.metadata, 'layerConfig/wms/layers');
+                layerName = layerName.split(':')[1];
+            }
             var config = Koala.util.AppContext.getAppContext();
             config = config.data.merge['import'];
             var nsUri = config['target-workspace-uri'];
@@ -168,8 +185,10 @@ Ext.define('Koala.util.WFST', {
                 var lockId = resText.split(
                     '<wfs:LockId>')[1].split('</wfs:LockId>')[0];
                 Koala.util.WFST.lockAquired = true;
+                Koala.util.WFST.lockId = lockId;
                 var task = new Ext.util.DelayedTask(function() {
                     Koala.util.WFST.lockAquired = false;
+                    Koala.util.WFST.lockId = undefined;
                 });
                 task.delay(Koala.util.WFST.lockTime * 1000 * 60);
                 Ext.log.info('WFS-T Lock aquired with id ' + lockId +
