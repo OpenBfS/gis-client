@@ -589,7 +589,7 @@ describe('Koala.util.Layer', function() {
                             appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
                         }
                     });
-                    var backgroundLayerUUID = '8ef4f2c1-183f-4f2e-8953-2d2c74446a78';
+                    var backgroundLayerUUID = '88415902-4ca7-4d1c-b714-64cc917fc2ab';
                     var promise = Koala.util.Layer.getMetadataFromUuid(backgroundLayerUUID);
                     expect(promise).to.be.a(Ext.Promise);
                     promise.then(function(metadata) {
@@ -820,7 +820,7 @@ describe('Koala.util.Layer', function() {
                             appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
                         }
                     });
-                    var backgroundLayerUUID = '8ef4f2c1-183f-4f2e-8953-2d2c74446a78';
+                    var backgroundLayerUUID = '88415902-4ca7-4d1c-b714-64cc917fc2ab';
 
                     var map = BasiGX.util.Map.getMapComponent().getMap();
                     var oldLength = BasiGX.util.Layer.getAllLayers(map).length;
