@@ -128,17 +128,20 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                     xtype: 'basigx-button-digitize-point',
                     map: map.map,
                     layer: me.layer,
-                    glyph: 'xf100@Flaticon'
+                    glyph: 'xf100@Flaticon',
+                    multi: true
                 }, {
                     xtype: 'basigx-button-digitize-line',
                     map: map.map,
                     layer: me.layer,
-                    glyph: 'xf104@Flaticon'
+                    glyph: 'xf104@Flaticon',
+                    multi: true
                 }, {
                     xtype: 'basigx-button-digitize-polygon',
                     map: map.map,
                     layer: me.layer,
-                    glyph: 'xf107@Flaticon'
+                    glyph: 'xf107@Flaticon',
+                    multi: true
                 }, {
                     xtype: 'basigx-button-digitize-move-object',
                     collection: me.layer.getSource().getFeaturesCollection(),
