@@ -11,7 +11,7 @@
             "thumb" : "layer_sets/kerntechnik_thumb.png",
             "children" : [
                 {
-                   "uuid" : "8ef4f2c1-183f-4f2e-8953-2d2c74446a78",
+                   "uuid" : "f7912742-9604-43b8-9b35-b625a01fbbd7",
                    "text" : "WFS-T Planungsradien",
                    "leaf" : true
                 },
