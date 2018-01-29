@@ -82,9 +82,12 @@ Ext.define('Koala.util.WFST', {
 
             // override the geometryname, as its hardcoded through OpenLayers
             // to `geometry`
+            var gname = layer.get('geometryFieldName');
             xml = xml.replace(
                 /<Property><Name>geometry<\/Name>/g,
-                '<Property><Name>' + layer.get('geometryFieldName') + '</Name>');
+                '<Property><Name>' + gname + '</Name>');
+            xml = xml.replace(/<geometry>/g, '<' + gname + '>');
+            xml = xml.replace(/<\/geometry>/g, '</' + gname + '>');
             // insert the lockId, if available
             if (Koala.util.WFST.lockId) {
                 // TODO fails on FF, XML seems to be serialized differently
