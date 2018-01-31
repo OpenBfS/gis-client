@@ -523,11 +523,16 @@ Ext.define('Koala.util.Layer', {
                         break;
                     case 'rodostime':
                     case 'pointintime':
-                        var date, time;
-                        date = filter.effectivedatetime;
-                        time = Koala.util.Date.getFormattedDate(date);
+                        var startDate, endDate;
 
-                        filterTxt += time;
+                        // endFormat
+                        endDate = Koala.util.Date.getFormattedDate(filter.effectivedatetime);
+
+                        startDate = Koala.util.Date.getMomentDatefromIntervalAndDate(filter.effectivedatetime, parseInt(filter.interval), filter.unit);
+                        // startFormat
+                        startDate = Koala.util.Date.getFormattedDate(startDate);
+
+                        filterTxt += startDate + ' -<br />' + endDate;
                         break;
                     case 'value':
                         // Empty or false "test_data" filters should not be shown in the legend
