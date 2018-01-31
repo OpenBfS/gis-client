@@ -2,7 +2,7 @@
     "data": {
         "merge": {
             "urls": {
-                "metadata-xml2json": "http://10.133.7.63/geonetwork/srv/ger/xml_iso19139Tojson",
+                "metadata-xml2json": "http://10.133.7.63/geonetwork/srv/api/0.1/records/",
                 "metadata-search": "http://10.133.7.63/geonetwork/srv/ger/csw?",
                 "spatial-search": "http://10.133.7.63/ogc/bfs/ows",
                 "print-servlet": "http://10.133.7.63/bfs-printservice/print/",
