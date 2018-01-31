@@ -572,13 +572,33 @@ Ext.define('Koala.util.Layer', {
             }
 
             return new Ext.Promise(function(resolve, reject) {
+                var binary = !!window.TextDecoder;
                 Ext.Ajax.request({
                     url: urls['metadata-xml2json'] + uuid,
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
+                    binary: binary,
                     success: function(response) {
                         var obj;
                         try {
+                            // ATTENTION
+                            // GNOS seems to send json via REST API ISO-8859-1
+                            // encoded, so we're trying to fix it here.
+                            // Only works for non IE machines unfortunately
+                            var txt;
+                            if (window.TextDecoder) {
+                                try {
+                                    var decoder = new TextDecoder('ISO-8859-1');
+                                    txt = decoder.decode(response.responseBytes);
+                                } catch (e) {
+                                    // fallback to utf-8
+                                    decoder = new TextDecoder('UTF-8');
+                                    txt = decoder.decode(response.responseBytes);
+                                }
+                            } else {
+                                txt = response.responseText;
+                            }
+
                             // replace any occurencies of \{\{ (as it may still be
                             // stored in db) with the new delimiters [[
                             //
@@ -589,7 +609,6 @@ Ext.define('Koala.util.Layer', {
                             // expressions, we need to escape them again with a \
                             var escapedCurlyOpen = /\\\\\{\\\\\{/g;
                             var escapedCurlyClose = /\\\\\}\\\\\}/g;
-                            var txt = response.responseText;
 
                             txt = txt.replace(escapedCurlyOpen, '[[');
                             txt = txt.replace(escapedCurlyClose, ']]');
