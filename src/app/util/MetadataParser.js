@@ -193,8 +193,8 @@ Ext.define('Koala.util.MetadataParser', {
         parsePointInTimeFilter: function(json) {
             var config = {
                 type: 'pointintime',
-                defaultdatetimeformat: this.getStr(json, 'bfs:defaultValue/bfs:TimeFormat/'),
-                defaultdatetimeinstant: this.getStr(json, 'bfs:defaultValue/bfs:TimeInstant/')
+                defaulttimeformat: this.getStr(json, 'bfs:defaultValue/bfs:TimeFormat/'),
+                defaulttimeinstant: this.getStr(json, 'bfs:defaultValue/bfs:TimeInstant/')
             };
             this.parseCommonTimeFilter(json, config);
             return config;
