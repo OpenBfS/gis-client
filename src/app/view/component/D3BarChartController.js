@@ -162,6 +162,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var valueProp = barChartProperties.yAxisAttribute;
         var detectionLimitProp = barChartProperties.detectionLimitAttribute
                 || 'nachweisgrenze';
+
         var uncertaintyProp = barChartProperties.uncertaintyAttribute
                 || 'uncertainty';
         var colors = view.getShape().color.split(',');
@@ -183,13 +184,22 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         me.colorsByKey = {};
         me.labels = [];
+        me.legendLabels = [];
 
         Ext.each(jsonObj.features, function(feature) {
             var dataObj = {};
             var groupKey = feature.properties[groupProp];
 
             var createSeries = true;
-            dataObj.key = feature.properties[labelProp ? labelProp : keyProp];
+            dataObj.key = feature.properties[keyProp];
+
+            var legendText = groupKey;
+            if (labelProp) {
+                legendText = feature.properties[labelProp];
+            }
+            if (me.legendLabels.indexOf(legendText) === -1) {
+                me.legendLabels.push(legendText);
+            }
 
             if (!me.colorsByKey[groupKey]) {
                 me.colorsByKey[groupKey] = me.customColors[groupKey] || colors[0] || staticMe.getRandomColor();
@@ -198,7 +208,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             var pushObj = dataObj;
             Ext.each(seriesData, function(tuple) {
-                if (tuple.key === feature.properties[labelProp ? labelProp : keyProp]) {
+                if (tuple.key === feature.properties[keyProp]) {
                     pushObj = tuple;
                     createSeries = false;
                     return false;
@@ -207,12 +217,12 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             if (!Ext.isObject(pushObj[groupKey])) {
                 pushObj[groupKey] = {};
-                me.labels.push(feature.properties[labelProp ? labelProp : groupKey]);
+                me.labels.push(feature.properties[groupKey]);
             }
 
             pushObj[groupKey].color = me.customColors[groupKey] || me.colorsByKey[groupKey];
             pushObj[groupKey].value = feature.properties[valueProp];
-            pushObj[groupKey].key = feature.properties[labelProp ? labelProp : groupProp];
+            pushObj[groupKey].key = feature.properties[groupProp];
             pushObj[groupKey].detection_limit = feature.properties[detectionLimitProp];
             pushObj[groupKey].uncertainty = feature.properties[uncertaintyProp];
             pushObj[groupKey].group = feature.properties[keyProp];
@@ -524,6 +534,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 if (d.uncertainty && d.uncertainty > 0) {
                     var lineWidth = x1.bandwidth() / 3;
                     var xCenter = x1(d[xField]) + x1.bandwidth() / 2;
+                    if (isNaN(xCenter)) {
+                        return;
+                    }
                     var topVal = d[yField] + (d[yField]/100 * d.uncertainty);
                     var bottomVal = d[yField] - (d[yField]/100 * d.uncertainty);
 
@@ -637,6 +650,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
             translateY = me.scales[orientY](d[yField]) - 5 || chartSize[1];
         } else {
             translateY = chartSize[1] -5;
+        }
+
+        if (isNaN(translateX) || isNaN(translateY)) {
+            return '';
         }
 
         return 'translate(' + translateX + ', ' + translateY + ')';
@@ -785,8 +802,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .on('click', me.generateDeleteCallback(dataObj));
         });
 
-        var subCategories = me.scales.bottom_group.domain();
-        Ext.each(subCategories, function(subCategory, idx) {
+        Ext.each(me.legendLabels, function(subCategory, idx) {
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
