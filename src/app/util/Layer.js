@@ -503,11 +503,12 @@ Ext.define('Koala.util.Layer', {
                 }
                 var filterType = filter.type;
                 var filterTxt = '';
+                var startDate, endDate;
 
                 switch (filterType) {
                     case 'timerange':
-                        var startDate, startTime;
-                        var endDate, endTime;
+                        var startTime;
+                        var endTime;
 
                         startDate = filter.effectivemindatetime;
                         endDate = filter.effectivemaxdatetime;
@@ -524,12 +525,11 @@ Ext.define('Koala.util.Layer', {
                         break;
                     case 'rodostime':
                     case 'pointintime':
-                        var startDate, endDate;
 
                         // endFormat
                         endDate = Koala.util.Date.getFormattedDate(filter.effectivedatetime);
 
-                        startDate = Koala.util.Date.getMomentDatefromIntervalAndDate(filter.effectivedatetime, parseInt(filter.interval), filter.unit);
+                        startDate = Koala.util.Date.getMomentDatefromIntervalAndDate(filter.effectivedatetime, parseInt(filter.interval, 10), filter.unit);
                         // startFormat
                         startDate = Koala.util.Date.getFormattedDate(startDate);
 
