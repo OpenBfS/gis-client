@@ -51,10 +51,11 @@ Ext.define('Koala.util.MetadataParser', {
          * @return {Object} the parsed object
          */
         parseWmsLayer: function(json) {
+            var getVal = Koala.util.Object.getPathStrOr;
             return {
                 url: this.getTrimmedUrl(json),
                 layers: this.getStr(json, 'bfs:layer/'),
-                transparent: this.getStr(json, 'bfs:transparent/'),
+                transparent: getVal(json, 'bfs:transparent/gco:Boolean/#text'),
                 version: this.getStr(json, 'bfs:version/'),
                 styles: this.getStr(json, 'bfs:styles/'),
                 format: this.getStr(json, 'bfs:format/')
