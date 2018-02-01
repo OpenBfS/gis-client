@@ -584,7 +584,7 @@ Ext.define('Koala.util.Layer', {
                             // ATTENTION
                             // GNOS seems to send json via REST API ISO-8859-1
                             // encoded, so we're trying to fix it here.
-                            // Only works for non IE machines unfortunately
+                            // For IE browsers a polyfill is used.
                             var txt;
                             if (window.TextDecoder) {
                                 try {
