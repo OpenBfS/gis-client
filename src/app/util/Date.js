@@ -180,6 +180,30 @@ Ext.define('Koala.util.Date', {
         },
 
         /**
+         * Returns a moment date object calculated by a moment date as basis and an interval.
+         * By default method will subtract the interval from given date
+         *
+         * @method
+         * @param {moment} momentDate The moment date as basis
+         * @param {Integer} interval The interval that shall be subtracted or added
+         * @param {String} unit The unit of the interval ('hours' or 'minutes')
+         * @param {Boolean} [isStart] 'true' if momentDate is the start date (interval will be added)
+         *
+         * @return {moment} The calculated date.
+         */
+        getMomentDatefromIntervalAndDate: function(momentDate, interval, unit, isStart) {
+            if (!moment.isMoment(momentDate)) {
+                Ext.Logger.warn('`momentDate` must be a Moment date object.');
+                return;
+            }
+
+            var dateClone = momentDate.clone();
+            var calcDate = (isStart) ? dateClone.add(interval, unit) : dateClone.subtract(interval, unit);
+
+            return calcDate;
+        },
+
+        /**
          * Returns a moment date object aware of the current application's
          * time reference.
          *
