@@ -24,6 +24,7 @@ Ext.define('Koala.util.Layer', {
         'Koala.util.Authentication',
         'Koala.util.Date',
         'Koala.util.Filter',
+        'Koala.util.MetadataParser',
         'Koala.util.String',
         'Koala.util.Object'
 
@@ -565,21 +566,39 @@ Ext.define('Koala.util.Layer', {
             var authHeader = Koala.util.Authentication.getAuthenticationHeader();
             if (authHeader) {
                 defaultHeaders = {
-                    Authorization: authHeader
+                    Authorization: authHeader,
+                    Accept: 'application/json'
                 };
             }
 
             return new Ext.Promise(function(resolve, reject) {
+                var binary = !!window.TextDecoder;
                 Ext.Ajax.request({
-                    url: urls['metadata-xml2json'],
-                    params: {
-                        uuid: uuid
-                    },
+                    url: urls['metadata-xml2json'] + uuid,
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
+                    binary: binary,
                     success: function(response) {
                         var obj;
                         try {
+                            // ATTENTION
+                            // GNOS seems to send json via REST API ISO-8859-1
+                            // encoded, so we're trying to fix it here.
+                            // For IE browsers a polyfill is used.
+                            var txt;
+                            if (window.TextDecoder) {
+                                try {
+                                    var decoder = new TextDecoder('ISO-8859-1');
+                                    txt = decoder.decode(response.responseBytes);
+                                } catch (e) {
+                                    // fallback to utf-8
+                                    decoder = new TextDecoder('UTF-8');
+                                    txt = decoder.decode(response.responseBytes);
+                                }
+                            } else {
+                                txt = response.responseText;
+                            }
+
                             // replace any occurencies of \{\{ (as it may still be
                             // stored in db) with the new delimiters [[
                             //
@@ -590,11 +609,11 @@ Ext.define('Koala.util.Layer', {
                             // expressions, we need to escape them again with a \
                             var escapedCurlyOpen = /\\\\\{\\\\\{/g;
                             var escapedCurlyClose = /\\\\\}\\\\\}/g;
-                            var txt = response.responseText;
 
                             txt = txt.replace(escapedCurlyOpen, '[[');
                             txt = txt.replace(escapedCurlyClose, ']]');
                             obj = Ext.decode(txt);
+                            obj = Koala.util.MetadataParser.parseMetadata(obj);
                         } catch (ex) {
                             Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
                         } finally {

@@ -2,7 +2,7 @@
     "data": {
         "merge": {
             "urls": {
-                "metadata-xml2json": "http://localhost/geonetwork/srv/ger/xml_iso19139Tojson",
+                "metadata-xml2json": "http://localhost/geonetwork/srv/api/0.1/records/",
                 "metadata-search": "http://localhost/geonetwork/srv/ger/csw?",
                 "spatial-search": "http://localhost/ogc/bfs/ows",
                 "print-servlet": "http://bfs-docker.intranet.terrestris.de/bfs-printservice/print/",

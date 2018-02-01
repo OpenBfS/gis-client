@@ -23,7 +23,8 @@
         "FormData": true,
         "shpwrite": true,
         "atob": true,
-        "Uint8Array": true
+        "Uint8Array": true,
+        "TextDecoder": true
     },
     "rules": {
         "comma-dangle": 2,
