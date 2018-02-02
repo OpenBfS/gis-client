@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": false,
   "name": "@openbfs/imis3gis",
   "version": "1.11.0-SNAPSHOT",
   "description": "IMIS3 GIS",
