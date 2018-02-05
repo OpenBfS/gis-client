@@ -124,7 +124,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var cartoWindowId = view.getCartoWindowId();
         var closeElement = Ext.DomHelper.createDom({
             tag: 'div',
-            html: '<i class="fa fa-times-circle" aria-hidden="true"></i>',
+            html: '<i class="fa fa-times-circle  fa-2x" aria-hidden="true"></i>',
             cls: cartoWindowId + ' closeElement'
         });
 
@@ -191,7 +191,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             layer.metadata);
 
         var timeSeriesTab = me.createTabElement({
-            title: 'Timeseries',
+            //title: 'Timeseries',
+            title: '<i class="fa fa-line-chart  fa-2x" aria-hidden="true"></i>',
             className: 'timeseries-tab',
             active: true
         });
@@ -532,7 +533,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var feature = view.getFeature();
 
         var barChartTab = me.createTabElement({
-            title: 'Bar Chart',
+            //title: 'Bar Chart',
+            title: '<i class="fa fa-bar-chart  fa-2x" aria-hidden="true"></i>',
             className: 'barchart-tab',
             active: true
         });
@@ -694,7 +696,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             var html = me.convertData(data);
 
             var timeSeriesTab = me.createTabElement({
-                title: 'Table',
+                //title: 'Table',
+                title: '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>',
                 innerHTML: html,
                 className: 'table-tab'
             });
@@ -719,7 +722,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (!chart) {
             return;
         }
-        title = (chart === me.timeserieschart) ? 'TS Table' : (chart === me.barChart) ? 'BC Table' : '';
+        //title = (chart === me.timeserieschart) ? 'TS Table' : (chart === me.barChart) ? 'BC Table' : '';
+        title = (chart === me.timeserieschart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : (chart === me.barChart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : '';
 
         gridTableTab = me.createTabElement({
             title: title,
@@ -846,7 +850,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         this.getTableData().then(function() {
             var gridTableTab = me.createTabElement({
-                title: 'GridTable',
+                //title: 'GridTable',
+                title: '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>',
                 className: 'gridtable-tab',
                 active: true
             });
@@ -900,7 +905,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var el = view.el.dom;
         this.getHtmlData().then(function(data) {
             var timeSeriesTab = me.createTabElement({
-                title: 'Html',
+                //title: 'Html',
+                title: '<i class="fa fa-leanpub  fa-2x" aria-hidden="true"></i>',
                 innerHTML: data,
                 className: 'html-tab'
             });
@@ -926,7 +932,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var innerHTML = Koala.util.String.replaceTemplateStrings(template,
             feature);
         var timeSeriesTab = me.createTabElement({
-            title: viewModel.get('info'),
+            //title: viewModel.get('info'),
+            title: '<i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>',
             innerHTML: innerHTML,
             className: 'hoverTpl-tab'
         });
