@@ -126,6 +126,7 @@ Ext.define('Koala.Application', {
      * dialog which reloads the page on confirmation.
      */
     onAppUpdate: function() {
+        //FIXME add i18n support
         Ext.Msg.confirm('Application Update', 'This application has an update, reload?',
             function(choice) {
                 if (choice === 'yes') {
@@ -150,6 +151,15 @@ Ext.define('Koala.Application', {
         });
         moment.updateLocale('fr', {
             longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.fr
+        });
+        // ask before closing/refreshing the window.
+        // Not all browsers will respect this, depending on settings
+        window.addEventListener('beforeunload', function (evt){
+            // match different handling from different browsers
+            //FIXME add i18n support
+            var confirmMessage = 'Wollen Sie diese Seite verlassen/neu laden? Nicht gespeicherte lokale Änderungen gehen dadurch verloren.';
+            evt.returnValue = confirmMessage;
+            return confirmMessage;
         });
     }
 

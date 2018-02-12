@@ -124,7 +124,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var cartoWindowId = view.getCartoWindowId();
         var closeElement = Ext.DomHelper.createDom({
             tag: 'div',
-            html: '<i class="fa fa-times-circle" aria-hidden="true"></i>',
+            html: '<i class="fa fa-times-circle  fa-2x" aria-hidden="true"></i>',
             cls: cartoWindowId + ' closeElement'
         });
 
@@ -191,7 +191,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             layer.metadata);
 
         var timeSeriesTab = me.createTabElement({
-            title: 'Timeseries',
+            //title: 'Timeseries',
+            title: '<i class="fa fa-line-chart  fa-2x" aria-hidden="true"></i>',
             className: 'timeseries-tab',
             active: true
         });
@@ -532,7 +533,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var feature = view.getFeature();
 
         var barChartTab = me.createTabElement({
-            title: 'Bar Chart',
+            //title: 'Bar Chart',
+            title: '<i class="fa fa-bar-chart  fa-2x" aria-hidden="true"></i>',
             className: 'barchart-tab',
             active: true
         });
@@ -694,7 +696,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             var html = me.convertData(data);
 
             var timeSeriesTab = me.createTabElement({
-                title: 'Table',
+                //title: 'Table',
+                title: '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>',
                 innerHTML: html,
                 className: 'table-tab'
             });
@@ -719,7 +722,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (!chart) {
             return;
         }
-        title = (chart === me.timeserieschart) ? 'TS Table' : (chart === me.barChart) ? 'BC Table' : '';
+        //title = (chart === me.timeserieschart) ? 'TS Table' : (chart === me.barChart) ? 'BC Table' : '';
+        title = (chart === me.timeserieschart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : (chart === me.barChart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : '';
 
         gridTableTab = me.createTabElement({
             title: title,
@@ -846,7 +850,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         this.getTableData().then(function() {
             var gridTableTab = me.createTabElement({
-                title: 'GridTable',
+                //title: 'GridTable',
+                title: '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>',
                 className: 'gridtable-tab',
                 active: true
             });
@@ -900,7 +905,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var el = view.el.dom;
         this.getHtmlData().then(function(data) {
             var timeSeriesTab = me.createTabElement({
-                title: 'Html',
+                //title: 'Html',
+                title: '<i class="fa fa-leanpub  fa-2x" aria-hidden="true"></i>',
                 innerHTML: data,
                 className: 'html-tab'
             });
@@ -926,7 +932,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var innerHTML = Koala.util.String.replaceTemplateStrings(template,
             feature);
         var timeSeriesTab = me.createTabElement({
-            title: viewModel.get('info'),
+            //title: viewModel.get('info'),
+            title: '<i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>',
             innerHTML: innerHTML,
             className: 'hoverTpl-tab'
         });
@@ -1241,15 +1248,51 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var lineFeature = viewModel.get('lineFeature');
         var featureStartCoords = this.getFeatureAnchorPoint(feature);
         var overlay = viewModel.get('overlay');
-        var overlayerCoords = overlay.getPosition();
-        var overlayerTopLeftPixel = map.getPixelFromCoordinate(overlayerCoords);
-        var overlayWidth = overlay.getElement().clientWidth;
+        var overlayCoords = overlay.getPosition();
+        var overlayWidth = overlay.getElement().clientWidth
         var overlayHeight = overlay.getElement().clientHeight;
-        var centerPixel = [overlayWidth/2 + overlayerTopLeftPixel[0],
-            overlayHeight/2 + overlayerTopLeftPixel[1]];
+        var featureStartCoords = this.getFeatureAnchorPoint(feature);
+
+        var overlayTopLeftPixel = map.getPixelFromCoordinate(overlayCoords);
+        var overlayTopRightPixel = [overlayTopLeftPixel[0] + overlayWidth, overlayTopLeftPixel[1]];
+        var overlayBottomRightPixel = [overlayTopLeftPixel[0] + overlayWidth, overlayTopLeftPixel[1] + overlayHeight];
+        var overlayBottomLeftPixel = [overlayTopLeftPixel[0], overlayTopLeftPixel[1] + overlayHeight];
+        var overlayTopPixel = [overlayTopLeftPixel[0] + overlayWidth/2, overlayTopLeftPixel[1]];
+        var overlayRightPixel = [overlayTopLeftPixel[0] + overlayWidth, overlayTopLeftPixel[1] + overlayHeight/2];
+        var overlayBottomPixel = [overlayTopLeftPixel[0] + overlayWidth/2, overlayTopLeftPixel[1] + overlayHeight];
+        var overlayLeftPixel = [overlayTopLeftPixel[0], overlayTopLeftPixel[1] + overlayHeight/2];
+
+        var overlayTopLeftCoords = map.getCoordinateFromPixel(overlayTopLeftPixel);
+        var overlayTopRightCoords = map.getCoordinateFromPixel(overlayTopRightPixel);
+        var overlayBottomRightCoords = map.getCoordinateFromPixel(overlayBottomRightPixel);
+        var overlayBottomLeftCoords = map.getCoordinateFromPixel(overlayBottomLeftPixel);
+        var overlayTopCoords = map.getCoordinateFromPixel(overlayTopPixel);
+        var overlayRightCoords = map.getCoordinateFromPixel(overlayRightPixel);
+        var overlayBottomCoords = map.getCoordinateFromPixel(overlayBottomPixel);
+        var overlayLeftCoords = map.getCoordinateFromPixel(overlayLeftPixel);
+
+
+        var centerPixel = [overlayWidth/2 + overlayTopLeftPixel[0],
+            overlayHeight/2 + overlayTopLeftPixel[1]];
         var centerCoords = map.getCoordinateFromPixel(centerPixel);
 
-        lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
+        //could be adjusted to snap corners only
+        var pointsWGS84 = turf.featureCollection([
+            turf.toWgs84(turf.point(overlayTopLeftCoords)),
+            turf.toWgs84(turf.point(overlayTopRightCoords)),
+            turf.toWgs84(turf.point(overlayBottomLeftCoords)),
+            turf.toWgs84(turf.point(overlayBottomRightCoords)),
+            turf.toWgs84(turf.point(overlayTopCoords)),
+            turf.toWgs84(turf.point(overlayRightCoords)),
+            turf.toWgs84(turf.point(overlayBottomCoords)),
+            turf.toWgs84(turf.point(overlayLeftCoords))
+        ]);
+
+        var featureStartPointWGS84 = turf.toWgs84(turf.point(featureStartCoords));
+        var nearestCornerCoordsWGS84 = turf.nearestPoint(featureStartPointWGS84, pointsWGS84);
+        var nearestCornerCoords = turf.toMercator(nearestCornerCoordsWGS84);
+
+        lineFeature.getGeometry().setCoordinates([featureStartCoords, nearestCornerCoords.geometry.coordinates]);
         overlay.centerCoords = centerCoords;
         this.disableMapInteractions();
     },

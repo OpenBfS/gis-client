@@ -1,0 +1,27 @@
+syntax: glob
+
+apidoc
+bootstrap.css
+bootstrap.js
+build/**
+ext/**
+classic.json
+modern.json
+modern.jsonp
+coverage
+coverage-combined
+packages/**
+sass/example/bootstrap.js
+sass/example/bootstrap.json
+classic.jsonp
+sass/example/bootstrap.jsonp
+
+**/.~lock*
+**/npm-debug.log
+
+jsduck
+
+node_modules
+.project
+.idea
+.sencha
