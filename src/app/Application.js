@@ -27,7 +27,17 @@ Ext.define('Koala.Application', {
 
     name: 'Koala',
 
+    requires: [
+        'Koala.util.Routing'
+    ],
+
     statics: {
+
+        timereferenceNotFound: '',
+        applicationUpdateTitle: '',
+        applicationUpdateText: '',
+        reloadMessage: '',
+
         /**
          * Return the current timereference for the application or null if
          * we cannot determine the desired.
@@ -35,7 +45,7 @@ Ext.define('Koala.Application', {
         getTimereference: function() {
             var btn = Ext.ComponentQuery.query('k-button-timereference')[0];
             if (!btn) {
-                Ext.log.error('Could not find a timereference button');
+                Ext.log.error(this.timereferenceNotFound);
                 return null;
             }
             return btn.getCurrent();
@@ -126,8 +136,7 @@ Ext.define('Koala.Application', {
      * dialog which reloads the page on confirmation.
      */
     onAppUpdate: function() {
-        //FIXME add i18n support
-        Ext.Msg.confirm('Application Update', 'This application has an update, reload?',
+        Ext.Msg.confirm(this.applicationUpdateTitle, this.applicationUpdateText,
             function(choice) {
                 if (choice === 'yes') {
                     window.location.reload();
@@ -137,6 +146,7 @@ Ext.define('Koala.Application', {
     },
 
     launch: function() {
+        var me = this;
         var loadmask = Ext.get('loadmask');
         if (loadmask) {
             loadmask.destroy();
@@ -154,10 +164,9 @@ Ext.define('Koala.Application', {
         });
         // ask before closing/refreshing the window.
         // Not all browsers will respect this, depending on settings
-        window.addEventListener('beforeunload', function (evt){
+        window.addEventListener('beforeunload', function(evt) {
             // match different handling from different browsers
-            //FIXME add i18n support
-            var confirmMessage = 'Wollen Sie diese Seite verlassen/neu laden? Nicht gespeicherte lokale Änderungen gehen dadurch verloren.';
+            var confirmMessage = me.leavePageText;
             evt.returnValue = confirmMessage;
             return confirmMessage;
         });

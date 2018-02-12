@@ -1,4 +1,12 @@
 {
+    "Koala.Application": {
+        "statics": {
+            "timereferenceNotFound": "Zeitbezug-Button konnte nicht gefunden werden.",
+            "applicationUpdateTitle": "Anwendungsupdate",
+            "applicationUpdateText": "Für diese Anwendung steht ein Update zur Verfügung. Jetzt neu laden?",
+            "leavePageText": "Wollen Sie diese Seite verlassen/neu laden? Nicht gespeicherte lokale Änderungen gehen dadurch verloren."
+        }
+    },
     "Koala.util.Date": {
         "statics": {
             "txtUtc": "(UTC)",
