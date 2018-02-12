@@ -923,7 +923,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createHoverTemplateTab: function() {
         var me = this;
         var view = me.getView();
-        var viewModel = view.getViewModel();
         var el = view.el.dom;
         var layer = view.getLayer();
         var feature = view.getFeature();
@@ -1249,9 +1248,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var featureStartCoords = this.getFeatureAnchorPoint(feature);
         var overlay = viewModel.get('overlay');
         var overlayCoords = overlay.getPosition();
-        var overlayWidth = overlay.getElement().clientWidth
+        var overlayWidth = overlay.getElement().clientWidth;
         var overlayHeight = overlay.getElement().clientHeight;
-        var featureStartCoords = this.getFeatureAnchorPoint(feature);
 
         var overlayTopLeftPixel = map.getPixelFromCoordinate(overlayCoords);
         var overlayTopRightPixel = [overlayTopLeftPixel[0] + overlayWidth, overlayTopLeftPixel[1]];
