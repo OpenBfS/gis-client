@@ -210,22 +210,11 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var view = me.getView();
         var viewModel = view.getViewModel();
-        var mapComponent = this.getView().down('basigx-component-map');
-        var map = mapComponent.getMap();
         var panel;
-        var isCarto = Koala.util.Layer.isCartoWindowLayer(me.chartingLayer);
         var isTimeSeries = Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer);
         var isBarChart = Koala.util.Layer.isBarChartLayer(me.chartingLayer);
 
-        if (isCarto) {
-            Ext.create('Koala.view.component.CartoWindow', {
-                map: map,
-                layer: me.chartingLayer,
-                feature: feature,
-                renderTo: Ext.getBody()
-            });
-            return false;
-        } else if (isTimeSeries && isBarChart) {
+        if (isTimeSeries && isBarChart) {
             Ext.Msg.show({
                 title: viewModel.get('chartSlctnTitle'),
                 message: viewModel.get('chartSlctnMsg'),

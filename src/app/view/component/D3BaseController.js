@@ -275,7 +275,8 @@ Ext.define('Koala.view.component.D3BaseController', {
     getChartData: function() {
         var me = this;
         var view = me.getView();
-        if (view.getShowLoadMask() && view.getSelectedStations().length > 0) {
+        if (view.getShowLoadMask() && view.getSelectedStations().length > 0 &&
+            view.setLoading) {
             view.setLoading(true);
         }
 
