@@ -140,10 +140,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
      * Function to be called on request success.
      *
      * @param {Object} reponse The response object.
-     * @param {ol.Feature} station The station the corresponding request was
-     *                             sent for.
      */
-    onChartDataRequestSuccess: function(response, station) {
+    onChartDataRequestSuccess: function(response) {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
@@ -154,7 +152,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var groupProp = barChartProperties.groupAttribute || 'end_measure';
         var labelProp = barChartProperties.groupLabelAttribute || groupProp;
         var keyProp = barChartProperties.xAxisAttribute;
-        if (this.groupPropToggled) {
+        // looks strange to toggle if !toggled, but that's actually the desired
+        // behaviour
+        if (!this.groupPropToggled) {
             var h = groupProp;
             groupProp = keyProp;
             keyProp = h;
@@ -167,8 +167,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 || 'uncertainty';
         var colors = view.getShape().color.split(',');
         var jsonObj;
-        //TODO: response shouldnt be restricted on id
-        var stationId = station.get('id');
+
         var seriesData = [];
 
         if (response && response.responseText) {
@@ -186,20 +185,24 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.labels = [];
         me.legendLabels = [];
 
+        var ids = [];
+
+        Ext.each(jsonObj.features, function(feature) {
+            var id = feature.properties.id;
+            if (ids.indexOf(id) === -1) {
+                ids.push(id);
+                if (labelProp) {
+                    me.labels.push(feature.properties[labelProp]);
+                }
+            }
+        });
+
         Ext.each(jsonObj.features, function(feature) {
             var dataObj = {};
             var groupKey = feature.properties[groupProp];
 
             var createSeries = true;
             dataObj.key = feature.properties[keyProp];
-
-            var legendText = groupKey;
-            if (labelProp) {
-                legendText = feature.properties[labelProp];
-            }
-            if (me.legendLabels.indexOf(legendText) === -1) {
-                me.legendLabels.push(legendText);
-            }
 
             if (!me.colorsByKey[groupKey]) {
                 me.colorsByKey[groupKey] = me.customColors[groupKey] || colors[0] || staticMe.getRandomColor();
@@ -217,7 +220,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             if (!Ext.isObject(pushObj[groupKey])) {
                 pushObj[groupKey] = {};
-                me.labels.push(feature.properties[groupKey]);
             }
 
             pushObj[groupKey].color = me.customColors[groupKey] || me.colorsByKey[groupKey];
@@ -232,7 +234,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             }
         });
 
-        me.data[stationId] = seriesData;
+        me.data = seriesData;
         me.chartDataAvailable = true;
 
         me.ajaxCounter++;
@@ -315,7 +317,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var makeDomainNice = true;
             var min;
             var max;
-            var firstStationData = Ext.Object.getValues(me.data)[0];
+            var firstStationData = Ext.Object.getValues(me.data);
 
             if (axis && axis.scale === 'ordinal') {
                 axisDomain = firstStationData.map(function(d) {
@@ -428,7 +430,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var orientX = 'bottom';
         var orientXGroup = 'bottom_group';
         var orientY = 'left';
-        var firstStationData = Ext.Object.getValues(me.data)[0];
+        var firstStationData = Ext.Object.getValues(me.data);
 
         var allShapes = d3.select(viewId + ' svg > g')
             .append('g')
@@ -452,6 +454,18 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return d[xField];
             });
 
+        var x1 = d3.scaleBand().padding(0.1);
+        var keys = [];
+        Ext.each(me.data, function(data) {
+            Ext.iterate(data, function(key, val) {
+                if (Ext.isObject(val) && keys.indexOf(key) === -1) {
+                    keys.push(key);
+                }
+            });
+        });
+        x1.domain(keys).rangeRound([0, me.scales[orientX].bandwidth()]);
+        me.scales[orientXGroup] = x1;
+
         var bars = shapes.selectAll('rect')
             .data(function(d) {
                 var values = Ext.Object.getValues(d);
@@ -470,10 +484,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return Const.CSS_CLASS.BAR + ' subcategory-' + categoryIndex;
             });
             // .attr('class', staticMe.CSS_CLASS.BAR);
-
-        var x1 = d3.scaleBand().padding(0.1);
-        x1.domain(me.labels).rangeRound([0, me.scales[orientX].bandwidth()]);
-        me.scales[orientXGroup] = x1;
 
         bars
             .append('rect')
@@ -533,10 +543,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .attr('d', function(d) {
                 if (d.uncertainty && d.uncertainty > 0) {
                     var lineWidth = x1.bandwidth() / 3;
-                    var xCenter = x1(d[xField]) + x1.bandwidth() / 2;
-                    if (isNaN(xCenter)) {
-                        return;
-                    }
+                    var xCenter = x1(d.key) + x1.bandwidth() / 2;
                     var topVal = d[yField] + (d[yField]/100 * d.uncertainty);
                     var bottomVal = d[yField] - (d[yField]/100 * d.uncertainty);
 
@@ -652,10 +659,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             translateY = chartSize[1] -5;
         }
 
-        if (isNaN(translateX) || isNaN(translateY)) {
-            return '';
-        }
-
         return 'translate(' + translateX + ', ' + translateY + ')';
     },
 
@@ -724,8 +727,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         me.updateLegendContainerDimensions();
 
-        var firstStationData = Ext.Object.getValues(me.data)[0];
+        var firstStationData = Ext.Object.getValues(me.data);
         var curTranslateY;
+
+        var labels = me.scales.bottom.domain();
+        if (!me.groupPropToggled) {
+            labels = me.labels;
+        }
 
         Ext.each(firstStationData, function(dataObj, idx) {
             var toggleVisibilityFunc = (function() {
@@ -772,7 +780,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('d', SVG_DEFS.LEGEND_ICON_BAR)
                 .style('fill', dataObj.color);
 
-            var nameAsTooltip = dataObj.key;
+            var nameAsTooltip = labels[idx];
             // TODO This check doesn't seem to be ideal as it throws a warning
             // if a none datestring is the subCategory
             var isTime = (new moment(nameAsTooltip, moment.ISO_8601, true)).isValid();
@@ -802,7 +810,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .on('click', me.generateDeleteCallback(dataObj));
         });
 
-        Ext.each(me.legendLabels, function(subCategory, idx) {
+        var subCategories = me.scales.bottom_group.domain();
+        Ext.each(subCategories, function(subCategory, idx) {
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
@@ -849,10 +858,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             // TODO This check doesn't seem to be ideal as it throws a warning
             // if a none datestring is the subCategory
-            var isTime = (new moment(subCategory, moment.ISO_8601, true)).isValid();
+            var label = me.groupPropToggled ? me.labels[idx] : subCategory;
+            var isTime = (new moment(label, moment.ISO_8601, true)).isValid();
 
             var nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
-                new moment(subCategory)) : subCategory;
+                new moment(label)) : label;
             var visualLabel = staticMe.labelEnsureMaxLength(
                 nameAsTooltip, (legendConfig.legendEntryMaxLength || 15)
             );
@@ -907,7 +917,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     deleteSubCategory: function(subCategory) {
         var me = this;
         // Data
-        var firstStationData = Ext.Object.getValues(me.data)[0];
+        var firstStationData = Ext.Object.getValues(me.data);
         Ext.each(firstStationData, function(category) {
             if (category[subCategory]) {
                 delete category[subCategory];
@@ -946,7 +956,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      */
     deleteData: function(dataKey) {
         var me = this;
-        var firstStationData = Ext.Object.getValues(me.data)[0];
+        var firstStationData = Ext.Object.getValues(me.data);
         var dataObjToDelete = Ext.Array.findBy(firstStationData, function(dataObj) {
             return dataObj.key === dataKey;
         });
