@@ -1095,7 +1095,7 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         var numLegends;
         if (xtype === 'd3-barchart') { // for barcharts
-            var firstStationData = Ext.Object.getValues(me.data)[0];
+            var firstStationData = Ext.Object.getValues(me.data);
             numLegends = firstStationData.length;
             numLegends += Object.keys(me.colorsByKey).length;
         } else if (xtype === 'd3-chart') { // for timeseries
