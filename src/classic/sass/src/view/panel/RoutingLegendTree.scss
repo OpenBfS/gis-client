@@ -26,6 +26,10 @@
     display: inline-block;
 }
 
-.basigx-legend-panel .x-grid-cell-inner-treecolumn {
-    text-overflow: clip;
+.basigx-legend-panel .x-grid-item-container {
+    width: 95% !important;
+}
+
+.basigx-legend-panel .x-tree-node-text {
+    width: 85%;
 }

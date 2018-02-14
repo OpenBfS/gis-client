@@ -227,7 +227,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         me.ajaxCounter++;
         if (me.ajaxCounter === view.getSelectedStations().length) {
-            if (view.getShowLoadMask()) {
+            if (view.getShowLoadMask() && view.setLoading) {
                 view.setLoading(false);
             }
             me.fireEvent('chartdataprepared');
@@ -859,14 +859,16 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 .attr('dx', '160')
                 .on('click', me.deleteSubCategory.bind(me, subCategory));
 
-            legendEntry.append('text')
-                // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
-                .text('\uf1fc')
-                .attr('class', CSS.COLOR_ICON)
-                .attr('text-anchor', 'start')
-                .attr('dy', '1')
-                .attr('dx', '140') // TODO Discuss, do we need this dynamically?
-                .on('click', me.generateColorCallback({config: {color: me.colorsByKey[subCategory]}}, idx));
+            if (Ext.isClassic) {
+                legendEntry.append('text')
+                    // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                    .text('\uf1fc')
+                    .attr('class', CSS.COLOR_ICON)
+                    .attr('text-anchor', 'start')
+                    .attr('dy', '1')
+                    .attr('dx', '140') // TODO Discuss, do we need this dynamically?
+                    .on('click', me.generateColorCallback({config: {color: me.colorsByKey[subCategory]}}, idx));
+            }
         });
     },
 

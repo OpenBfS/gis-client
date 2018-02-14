@@ -1,12 +1,13 @@
 .cartowindow.classic > div.cartowindow-tab > h2,
 .cartowindow.classic > div.cartowindow-tab > input,
 .cartowindow.classic > div.cartowindow-tab > label, {
-    display: none;
+    visibility: hidden;
+    transition: visibility .5s;
 }
 
 .cartowindow.classic:hover > div.cartowindow-tab > h2,
 .cartowindow.classic:hover > div.cartowindow-tab > label, {
-    display: inherit;
+    visibility: visible;
 }
 
 /**
@@ -20,7 +21,8 @@
 
 .cartowindow > .closeElement {
     cursor: pointer;
-    display: none;
+    visibility: hidden;
+    transition: visibility .5s;
     position: absolute;
     height: 2.2em;
     top: -2.2em;
@@ -32,7 +34,7 @@
 }
 
 .cartowindow:hover > .closeElement {
-    display: inherit;
+    visibility: visible;
 }
 
 .cartowindow > .closeElement > i.fa {
