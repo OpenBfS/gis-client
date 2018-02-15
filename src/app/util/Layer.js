@@ -538,7 +538,7 @@ Ext.define('Koala.util.Layer', {
                     case 'value':
                         // Empty or false "test_data" filters should not be shown in the legend
                         if (filter.param === 'test_data' &&
-                            (filter.effectivevalue.toLowerCase() === 'false' ||
+                            (Ext.isString(filter.effectivevalue) && filter.effectivevalue.toLowerCase() === 'false' ||
                                 !filter.effectivevalue)
                         ) {
                             return;
