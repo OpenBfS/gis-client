@@ -240,12 +240,14 @@ Ext.define('Koala.util.MetadataParser', {
          */
         parseValueFilter: function(json) {
             var getVal = Koala.util.Object.getPathStrOr;
+            var defaultValue = this.getStr(json, 'bfs:defaultValue/');
+            var allowedValues = this.getStr(json, 'bfs:allowedValues/');
             return {
                 type: 'value',
                 param: this.getStr(json, 'bfs:paramName/'),
                 alias: this.getStr(json, 'bfs:paramAlias/'),
-                defaultValue: Ext.encode(this.getStr(json, 'bfs:defaultValue/')),
-                allowedValues: Ext.encode(this.getStr(json, 'bfs:allowedValues/')),
+                defaultValue: Ext.isString(defaultValue) ? defaultValue : Ext.encode(defaultValue),
+                allowedValues: Ext.isString(allowedValues) ? allowedValues : Ext.encode(allowedValues),
                 operator: this.getStr(json, 'bfs:operator/'),
                 allowMultipleSelect: getVal(json, 'bfs:allowMultipleSelect/gco:Boolean/#text'),
                 encodeInViewParams: getVal(json, 'bfs:encodeInViewParams/gco:Boolean/#text')
