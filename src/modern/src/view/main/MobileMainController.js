@@ -209,43 +209,159 @@ Ext.define('Koala.view.main.MobileMainController', {
     chartableFeatureFound: function(feature) {
         var me = this;
         var view = me.getView();
-        var viewModel = view.getViewModel();
         var panel;
         var isTimeSeries = Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer);
         var isBarChart = Koala.util.Layer.isBarChartLayer(me.chartingLayer);
 
-        if (isTimeSeries && isBarChart) {
-            Ext.Msg.show({
-                title: viewModel.get('chartSlctnTitle'),
-                message: viewModel.get('chartSlctnMsg'),
-                closable: true,
-                minWidth: 350,
-                buttons: [{
-                    text: viewModel.get('chartSlctnTimeSeriesBtn'),
-                    margin: '5 5 5 5'
-                },{
-                    text: viewModel.get('chartSlctnBarChartBtn'),
-                    margin: '5 5 5 5'
-                }],
-                fn: function(btnId) {
-                    if (btnId === viewModel.get('chartSlctnTimeSeriesBtn')) {
-                        panel = view.down('k-panel-timeserieschart');
-                    } else if (btnId === viewModel.get('chartSlctnBarChartBtn')) {
-                        panel = view.down('k-panel-barchart');
-                    }
-                    panel.getController().updateFor(me.chartingLayer, feature);
-                    panel.show();
-                }
-            });
-        } else if (isTimeSeries) {
-            panel = view.down('k-panel-timeserieschart');
-        } else if (isBarChart) {
-            panel = view.down('k-panel-barchart');
-        }
-        if (panel) {
-            panel.getController().updateFor(me.chartingLayer, feature);
+        var carouselPanel = view.down('panel[name=cartopanel]');
+        carouselPanel.show();
+        var carousel = view.down('carousel');
+        var chart;
+        // handle barchart
+        panel = view.down('k-panel-barchart');
+        if (isBarChart) {
+            if (!panel) {
+                panel = Ext.create('Koala.view.panel.BarChart');
+                carousel.insert(0, panel);
+            }
             panel.show();
+            panel.getController().updateFor(me.chartingLayer, feature);
+            chart = view.down('d3-barchart');
+        } else {
+            if (panel) {
+                panel.close();
+            }
         }
+        // handle timeseries
+        panel = view.down('k-panel-timeserieschart');
+        if (isTimeSeries) {
+            if (!panel) {
+                panel = Ext.create('Koala.view.panel.TimeseriesChart');
+                carousel.insert(0, panel);
+            }
+            panel.show();
+            panel.getController().updateFor(me.chartingLayer, feature);
+            chart = view.down('d3-chart');
+        } else {
+            if (panel) {
+                panel.close();
+            }
+        }
+        carousel.setActiveItem(0);
+        var grid = me.createGridTab(chart);
+        var gridpanel = carousel.down('panel[name=gridpanel]');
+        gridpanel.add(grid);
+    },
+
+    /**
+     * Create the tab which contains the table content as grid and adds it to the
+     * tabwindow.
+     */
+    createGridTab: function(chart) {
+        var me = this;
+        if (!chart) {
+            return;
+        }
+
+        Ext.create('Ext.data.Store', {
+            storeId: 'GridTabStore',
+            autoLoad: true,
+            data: []
+        });
+
+        var gridInTab = {
+            xtype: 'grid',
+            width: '100%',
+            height: '90%',
+            header: false,
+            store: Ext.data.StoreManager.lookup('GridTabStore'),
+            // plugins: 'gridfilters',// not available in modern framework
+            chartElement: chart,
+            listeners: {
+                painted: function() {
+                    chart.getController().on('chartdataprepared', function() {
+                        var chartController = this.chartElement.getController();
+                        var gridFeatures = chartController.gridFeatures;
+                        this.updateGrid(gridFeatures);
+                    }, this, {single: true});
+                }
+            },
+            updateGrid: function(gridFeatures) {
+                me = this;
+                var types = {};
+                var columns = [];
+                var fields = [];
+                var data = [];
+                var store = me.getStore();
+
+                Ext.each(gridFeatures, function(feat) {
+                    Ext.iterate(feat.properties, function(propName, prop) {
+                        var type = null;
+                        var tempProp;
+
+                        //store recognizes 'id' -> no duplicates allowed
+                        if (propName.toLowerCase() === 'id') {
+                            tempProp = feat.properties[propName];
+                            delete feat.properties[propName];
+                            propName = 'elementId';
+                            feat.properties[propName] = tempProp;
+                        }
+                        //define data types
+                        if (typeof prop === 'number') {
+                            type = 'number';
+                        } else if (typeof prop === 'string') {
+                            if (parseFloat(prop[0])) {
+                                var dateVal = moment(prop, moment.ISO_8601, true);
+                                type = (dateVal.isValid()) ? 'date' : 'string';
+                            } else {
+                                type = 'string';
+                            }
+                        }
+                        if (!types[propName]) {
+                            types[propName] = [type];
+                        } else {
+                            types[propName].push(type);
+                        }
+                    });
+                    data.push(feat.properties);
+                });
+                //field and column assignment
+                Ext.iterate(types, function(propName, prop) {
+                    var field = {
+                        name: propName,
+                        type: ''
+                    };
+                    var column = {
+                        text: propName,
+                        dataIndex: propName,
+                        itemId: propName,
+                        filter: {
+                            type: ''
+                        }
+                    };
+                    var uniqueTypes = Ext.Array.unique(prop);
+                    if (uniqueTypes.length > 1) {
+                        uniqueTypes = Ext.Array.remove(uniqueTypes, null);
+                    }
+                    uniqueTypes = (uniqueTypes.indexOf('string') > -1) ? ['string'] : uniqueTypes;
+                    field.type = column.filter.type = uniqueTypes[0];
+
+                    if (field.type === 'date') {
+                        column.renderer = function(val) {
+                            var dateVal = moment(val, moment.ISO_8601, true);
+                            return Koala.util.Date.getFormattedDate(dateVal);
+                        };
+                    }
+
+                    fields.push(field);
+                    columns.push(column);
+                });
+                me.setColumns(columns);
+                store.setFields(fields);
+                store.loadData(data, false);
+            }
+        };
+        return gridInTab;
     },
 
     /**

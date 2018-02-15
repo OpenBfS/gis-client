@@ -214,15 +214,47 @@ Ext.define('Koala.view.main.Main', {
         left: 0,
         hidden: true
     }, {
-        xtype: 'k-panel-barchart',
+        xtype: 'panel',
+        name: 'cartopanel',
+        title: 'Information',
+        modal: true,
         width: '100%',
-        left: 0,
-        hidden: true
-    }, {
-        xtype: 'k-panel-timeserieschart',
-        width: '100%',
-        left: 0,
-        hidden: true
+        height: '100%',
+        zIndex: 9999,
+        tools: [{
+            type: 'close',
+            handler: function(panel) {
+                panel.hide();
+            }
+        }],
+        hidden: true,
+        items: [{
+            xtype: 'carousel',
+            name: 'cartocarousel',
+            width: '100%',
+            height: '100%',
+            items: [{
+                xtype: 'k-panel-timeserieschart'
+            }, {
+                xtype: 'k-panel-barchart'
+            }, {
+                xtype: 'panel',
+                name: 'gridpanel',
+                listeners: {
+                    deactivate: function() {
+                        //TODO: handle zindex / target / event propagation
+                    },
+                    activate: function() {
+                        //TODO: handle zindex / target / event propagation
+                    }
+                }
+            }, {
+                html: 'Item 2',
+                style: 'background-color: #759E60'
+            }, {
+                html: 'Item 3'
+            }]
+        }]
     }, {
         xtype: 'k-panel-mobilepanel',
         bind: {
