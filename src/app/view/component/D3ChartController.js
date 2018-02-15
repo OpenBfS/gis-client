@@ -304,6 +304,10 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
         });
 
+        if (!axisDomain || isNaN(axisDomain[0])) {
+            axisDomain = [0, 1];
+        }
+
         if (max && max < axisDomain[1] && orient === 'left') {
             var ticks = Koala.util.Chart.recalculateAxisTicks(axis);
             axis.tickValues = ticks;
@@ -319,10 +323,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (orient === 'bottom' && config.useExactInterval) {
             axisDomain[0] = me.getView().getStartDate();
             axisDomain[1] = me.getView().getEndDate();
-        }
-
-        if (!axisDomain || isNaN(axisDomain[0])) {
-            axisDomain = [0, 1];
         }
 
         // actually set the domain
@@ -1733,6 +1733,11 @@ Ext.define('Koala.view.component.D3ChartController', {
     getChartDataForStation: function(selectedStation) {
         var me = this;
         var layer = selectedStation.get('layer');
+        // layer may be undefined in mobile environment
+        if (!layer) {
+            var view = me.getView();
+            layer = view.getTargetLayer();
+        }
         var chartProperties = layer.get('timeSeriesChartProperties');
 
         // The id of the selected station is also the key in the pending
