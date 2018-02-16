@@ -216,64 +216,65 @@ Ext.define('Koala.view.main.MobileMainController', {
         var carouselPanel = view.down('panel[name=cartopanel]');
         carouselPanel.show();
         var carousel = view.down('carousel');
-        var chart;
+        var oldItemCount = carousel.getItems().length;
+        var charts = [];
         // handle barchart
-        panel = view.down('k-panel-barchart');
         if (isBarChart) {
-            if (!panel) {
-                panel = Ext.create('Koala.view.panel.BarChart');
-                carousel.insert(0, panel);
-            }
-            panel.show();
+            panel = Ext.create({
+                xtype: 'k-panel-barchart'
+            });
+            carousel.add(panel);
             panel.getController().updateFor(me.chartingLayer, feature);
-            chart = view.down('d3-barchart');
-        } else {
-            if (panel) {
-                panel.close();
-            }
+            charts.push(panel.down('d3-barchart'));
         }
         // handle timeseries
-        panel = view.down('k-panel-timeserieschart');
         if (isTimeSeries) {
-            if (!panel) {
-                panel = Ext.create('Koala.view.panel.TimeseriesChart');
-                carousel.insert(0, panel);
-            }
-            panel.show();
+            // TODO think about how to properly update timeseries without
+            // confusion for the users
+            panel = Ext.create({
+                xtype: 'k-panel-timeserieschart'
+            });
+            carousel.add(panel);
             panel.getController().updateFor(me.chartingLayer, feature);
-            chart = view.down('d3-chart');
-        } else {
-            if (panel) {
-                panel.close();
-            }
+            charts.push(panel.down('d3-chart'));
         }
-        carousel.setActiveItem(0);
-        var grid = me.createGridTab(chart);
-        var gridpanel = carousel.down('panel[name=gridpanel]');
-        gridpanel.add(grid);
+        Ext.each(charts, function(chart) {
+            var grid = me.createGridTab(chart);
+            panel = Ext.create({
+                xtype: 'panel'
+            });
+            carousel.add(panel);
+            panel.add(grid);
+        });
 
         panel = carousel.down('panel[name=htmlpanel]');
         if (Koala.util.Layer.isHtmlLayer(me.chartingLayer)) {
+            panel = Ext.create({
+                xtype: 'panel'
+            });
             var html = Koala.util.Carto.getHtmlData(me.chartingLayer, feature);
             panel.setHtml(html);
-            panel.show();
-        } else {
-            if (panel) {
-                panel.close();
-            }
+            carousel.add(panel);
         }
         panel = carousel.down('panel[name=hoverpanel]');
         if (me.chartingLayer.get('hoverTpl')) {
+            panel = Ext.create({
+                xtype: 'panel'
+            });
             var template = Koala.util.Object.getPathStrOr(me.chartingLayer,
                 'metadata/layerConfig/olProperties/hoverTpl');
             var hover = Koala.util.String.replaceTemplateStrings(template,
                 feature);
             panel.setHtml(hover);
-            panel.show();
-        } else {
-            if (panel) {
-                panel.close();
-            }
+            carousel.add(panel);
+        }
+        // removeAll is not used, as it breaks the carousel
+        // This may look odd, but just removes all old panels and leaves in
+        // the new ones plus the indicator child
+        carousel.setActiveItem(oldItemCount - 1);
+        for (var i = 1; i < oldItemCount; ++i) {
+            var item = carousel.removeAt(1);
+            item.destroy();
         }
     },
 

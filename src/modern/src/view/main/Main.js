@@ -235,20 +235,7 @@ Ext.define('Koala.view.main.Main', {
             name: 'cartocarousel',
             width: '100%',
             height: '100%',
-            items: [{
-                xtype: 'k-panel-timeserieschart'
-            }, {
-                xtype: 'k-panel-barchart'
-            }, {
-                xtype: 'panel',
-                name: 'gridpanel'
-            }, {
-                xtype: 'panel',
-                name: 'htmlpanel'
-            }, {
-                xtype: 'panel',
-                name: 'hoverpanel'
-            }]
+            items: []
         }]
     }, {
         xtype: 'k-panel-mobilepanel',
