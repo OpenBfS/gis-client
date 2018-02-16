@@ -27,6 +27,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Ext.panel.Panel',
         'BasiGX.util.Layer',
         'Koala.util.AppContext',
+        'Koala.util.Carto',
         'Koala.util.Chart',
         'Koala.util.ChartAxes',
         'Koala.util.ChartConstants',
