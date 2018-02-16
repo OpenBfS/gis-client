@@ -21,6 +21,7 @@ Ext.define('Koala.view.main.Main', {
     xtype: 'app-main',
 
     requires: [
+        'Koala.view.container.LockableCarousel',
         'Koala.view.main.MobileMainModel',
         'Koala.view.main.MobileMainController',
 
@@ -229,7 +230,7 @@ Ext.define('Koala.view.main.Main', {
         }],
         hidden: true,
         items: [{
-            xtype: 'carousel',
+            xtype: 'lockable-carousel',
             name: 'cartocarousel',
             width: '100%',
             height: '100%',

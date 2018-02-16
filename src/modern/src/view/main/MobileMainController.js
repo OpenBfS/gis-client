@@ -284,6 +284,12 @@ Ext.define('Koala.view.main.MobileMainController', {
                         var gridFeatures = chartController.gridFeatures;
                         this.updateGrid(gridFeatures);
                     }, this, {single: true});
+                },
+                itemtouchstart: function() {
+                    this.up('carousel').lock();
+                },
+                itemtouchend: function() {
+                    this.up('carousel').unlock();
                 }
             },
             updateGrid: function(gridFeatures) {
