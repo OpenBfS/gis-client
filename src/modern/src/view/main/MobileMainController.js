@@ -224,6 +224,7 @@ Ext.define('Koala.view.main.MobileMainController', {
                 xtype: 'k-panel-barchart'
             });
             carousel.add(panel);
+            this.registerSwipeHandler(panel, carousel);
             panel.getController().updateFor(me.chartingLayer, feature);
             charts.push(panel.down('d3-barchart'));
         }
@@ -235,6 +236,7 @@ Ext.define('Koala.view.main.MobileMainController', {
                 xtype: 'k-panel-timeserieschart'
             });
             carousel.add(panel);
+            this.registerSwipeHandler(panel, carousel);
             panel.getController().updateFor(me.chartingLayer, feature);
             charts.push(panel.down('d3-chart'));
         }
@@ -244,6 +246,7 @@ Ext.define('Koala.view.main.MobileMainController', {
                 xtype: 'panel'
             });
             carousel.add(panel);
+            me.registerSwipeHandler(panel, carousel);
             panel.add(grid);
         });
 
@@ -255,6 +258,7 @@ Ext.define('Koala.view.main.MobileMainController', {
             var html = Koala.util.Carto.getHtmlData(me.chartingLayer, feature);
             panel.setHtml(html);
             carousel.add(panel);
+            this.registerSwipeHandler(panel, carousel);
         }
         panel = carousel.down('panel[name=hoverpanel]');
         if (me.chartingLayer.get('hoverTpl')) {
@@ -267,6 +271,7 @@ Ext.define('Koala.view.main.MobileMainController', {
                 feature);
             panel.setHtml(hover);
             carousel.add(panel);
+            this.registerSwipeHandler(panel, carousel);
         }
         // removeAll is not used, as it breaks the carousel
         // This may look odd, but just removes all old panels and leaves in
@@ -276,6 +281,18 @@ Ext.define('Koala.view.main.MobileMainController', {
             var item = carousel.removeAt(1);
             item.destroy();
         }
+    },
+
+    registerSwipeHandler: function(panel, carousel) {
+        panel.el.on('swipe', function(event) {
+            if (event.direction === 'up') {
+                if (carousel.items.items.length === 2) {
+                    carousel.up('panel[name=cartopanel]').hide();
+                } else {
+                    carousel.remove(panel);
+                }
+            }
+        });
     },
 
     /**
