@@ -33,6 +33,7 @@ Ext.define('Koala.view.main.Main', {
 
         'Koala.view.form.LayerFilter',
 
+        'Koala.util.Carto',
         'Koala.util.Routing',
         'Koala.util.Fullscreen',
 
