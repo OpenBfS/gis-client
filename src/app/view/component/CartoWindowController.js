@@ -580,110 +580,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         return button;
     },
 
-    getTabData: function(urlProperty, contentProperty) {
-        var view = this.getView();
-        var layer = view.layer;
-        urlProperty = layer.get(urlProperty);
-        contentProperty = layer.get(contentProperty);
-        var url, prop;
-        if (urlProperty) {
-            url = Koala.util.String.replaceTemplateStrings(
-                urlProperty,
-                view.feature
-            );
-        }
-        if (contentProperty) {
-            prop = Koala.util.String.replaceTemplateStrings(
-                contentProperty,
-                view.feature
-            );
-        }
-
-        var promise;
-
-        if (prop) {
-            promise = Ext.Promise.resolve(prop);
-        } else {
-            promise = new Ext.Promise(function(resolve, reject) {
-                Ext.Ajax.request({
-                    url: url,
-                    success: function(response) {
-                        resolve(response.responseText);
-                    },
-                    failure: function(response) {
-                        reject(response.status);
-                    }
-                });
-            });
-        }
-        return promise;
-    },
-
-    getTableData: function() {
-        return this.getTabData('tableContentURL', 'tableContentProperty');
-    },
-
-    arrayToTable: function(data) {
-        var html = '<table class="bordered-table">';
-        Ext.each(data, function(row) {
-            html += '<tr>';
-            Ext.each(row, function(value) {
-                html += '<td>';
-                html += value;
-                html += '</td>';
-            });
-            html += '</tr>';
-        });
-        return html + '</table>';
-    },
-
-    geoJsonToTable: function(collection) {
-        var html = '<table class="bordered-table">';
-        var first = true;
-        var headerRow = '<tr>';
-        var row;
-        Ext.each(collection.features, function(feat) {
-            row = '<tr>';
-            Ext.iterate(feat.properties, function(key, prop) {
-                row += '<td>';
-                row += prop;
-                row += '</td>';
-                if (first) {
-                    headerRow += '<th>' + key + '</th>';
-                }
-            });
-            if (first) {
-                first = false;
-                html += headerRow + '</tr>';
-            }
-            html += row + '</tr>';
-        });
-        return html + '</table>';
-    },
-
-    convertData: function(data) {
-        switch (data[0]) {
-            case '<': {
-                return data;
-            }
-            case '[': {
-                // case of simple arrays in array
-                return this.arrayToTable(JSON.parse(data));
-            }
-            case '{': {
-                // case of GeoJSON
-                return this.geoJsonToTable(JSON.parse(data));
-            }
-            default: {
-                return this.arrayToTable(Ext.util.CSV.decode(data));
-            }
-        }
-    },
-
-    getHtmlData: function() {
-        return this.getTabData('htmlContentURL', 'htmlContentProperty');
-    },
-
     /**
      * Create the tab which contains the table content and adds it to the
      * tabwindow.
@@ -692,8 +588,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var el = view.el.dom;
-        this.getTableData().then(function(data) {
-            var html = me.convertData(data);
+        Koala.util.Carto.getTableData(view.layer, view.feature).then(function(data) {
+            var html = Koala.util.Carto.convertData(data);
 
             var timeSeriesTab = me.createTabElement({
                 //title: 'Table',
@@ -848,7 +744,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
      */
     createGridTabFromUrl: function() {
         var me = this;
-        this.getTableData().then(function() {
+        var view = this.getView();
+        Koala.util.Carto.getTableData(view.layer, view.feature).then(function() {
             var gridTableTab = me.createTabElement({
                 //title: 'GridTable',
                 title: '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>',
@@ -903,7 +800,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var el = view.el.dom;
-        this.getHtmlData().then(function(data) {
+        Koala.util.Carto.getHtmlData(view.layer, view.feature).then(function(data) {
             var timeSeriesTab = me.createTabElement({
                 //title: 'Html',
                 title: '<i class="fa fa-leanpub  fa-2x" aria-hidden="true"></i>',

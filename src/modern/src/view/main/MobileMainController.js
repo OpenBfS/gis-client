@@ -251,6 +251,30 @@ Ext.define('Koala.view.main.MobileMainController', {
         var grid = me.createGridTab(chart);
         var gridpanel = carousel.down('panel[name=gridpanel]');
         gridpanel.add(grid);
+
+        panel = carousel.down('panel[name=htmlpanel]');
+        if (Koala.util.Layer.isHtmlLayer(me.chartingLayer)) {
+            var html = Koala.util.Carto.getHtmlData(me.chartingLayer, feature);
+            panel.setHtml(html);
+            panel.show();
+        } else {
+            if (panel) {
+                panel.close();
+            }
+        }
+        panel = carousel.down('panel[name=hoverpanel]');
+        if (me.chartingLayer.get('hoverTpl')) {
+            var template = Koala.util.Object.getPathStrOr(me.chartingLayer,
+                'metadata/layerConfig/olProperties/hoverTpl');
+            var hover = Koala.util.String.replaceTemplateStrings(template,
+                feature);
+            panel.setHtml(hover);
+            panel.show();
+        } else {
+            if (panel) {
+                panel.close();
+            }
+        }
     },
 
     /**

@@ -242,10 +242,11 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'panel',
                 name: 'gridpanel'
             }, {
-                html: 'Item 2',
-                style: 'background-color: #759E60'
+                xtype: 'panel',
+                name: 'htmlpanel'
             }, {
-                html: 'Item 3'
+                xtype: 'panel',
+                name: 'hoverpanel'
             }]
         }]
     }, {
