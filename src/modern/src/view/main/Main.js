@@ -240,15 +240,7 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'k-panel-barchart'
             }, {
                 xtype: 'panel',
-                name: 'gridpanel',
-                listeners: {
-                    deactivate: function() {
-                        //TODO: handle zindex / target / event propagation
-                    },
-                    activate: function() {
-                        //TODO: handle zindex / target / event propagation
-                    }
-                }
+                name: 'gridpanel'
             }, {
                 html: 'Item 2',
                 style: 'background-color: #759E60'
