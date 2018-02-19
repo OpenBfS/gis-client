@@ -17,7 +17,7 @@
  * @class Koala.view.panel.BarChart
  */
 Ext.define('Koala.view.panel.BarChart', {
-    extend: 'Koala.view.panel.MobilePanel',
+    extend: 'Ext.Panel',
     xtype: 'k-panel-barchart',
 
     requires: [

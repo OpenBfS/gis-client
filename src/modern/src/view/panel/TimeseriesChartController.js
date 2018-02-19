@@ -40,7 +40,9 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         var view = me.getView();
 
         // Redraw the chart as the underlying data may have been changed.
-        view.down('d3-chart').getController().redrawChart();
+        if (view.down('d3-chart')) {
+            view.down('d3-chart').getController().redrawChart();
+        }
     },
 
     onTimeReferenceChanged: function() {

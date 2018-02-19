@@ -21,6 +21,7 @@ Ext.define('Koala.view.main.Main', {
     xtype: 'app-main',
 
     requires: [
+        'Koala.view.container.LockableCarousel',
         'Koala.view.main.MobileMainModel',
         'Koala.view.main.MobileMainController',
 
@@ -32,6 +33,7 @@ Ext.define('Koala.view.main.Main', {
 
         'Koala.view.form.LayerFilter',
 
+        'Koala.util.Carto',
         'Koala.util.Routing',
         'Koala.util.Fullscreen',
 
@@ -214,15 +216,27 @@ Ext.define('Koala.view.main.Main', {
         left: 0,
         hidden: true
     }, {
-        xtype: 'k-panel-barchart',
+        xtype: 'panel',
+        name: 'cartopanel',
+        title: 'Information',
+        modal: true,
         width: '100%',
-        left: 0,
-        hidden: true
-    }, {
-        xtype: 'k-panel-timeserieschart',
-        width: '100%',
-        left: 0,
-        hidden: true
+        height: '100%',
+        zIndex: 9999,
+        tools: [{
+            type: 'close',
+            handler: function(panel) {
+                panel.hide();
+            }
+        }],
+        hidden: true,
+        items: [{
+            xtype: 'lockable-carousel',
+            name: 'cartocarousel',
+            width: '100%',
+            height: '100%',
+            items: []
+        }]
     }, {
         xtype: 'k-panel-mobilepanel',
         bind: {
