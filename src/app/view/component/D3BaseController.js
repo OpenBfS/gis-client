@@ -872,9 +872,9 @@ Ext.define('Koala.view.component.D3BaseController', {
         var chartSize = this.getChartSize();
         var viewId = view.getId();
 
-        Ext.iterate(axesConfig, function(orient) {
+        Ext.iterate(axesConfig, function(orient, config) {
             var axisGenerator = me.axes[orient];
-            Axes.redrawAxis(axisGenerator, orient, metadata, chartSize, viewId);
+            Axes.redrawAxis(axisGenerator, orient, metadata, chartSize, viewId, config);
         });
     },
 
