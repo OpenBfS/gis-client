@@ -28,6 +28,8 @@ Ext.define('Koala.view.main.MobileMainController', {
 
     chartingLayer: null,
 
+    loadMask: null,
+
     /**
      * TODO needed only while developing, will eventually be removed
      */
@@ -50,6 +52,17 @@ Ext.define('Koala.view.main.MobileMainController', {
         // me.addDummyDevLayers(); // TODO remove!!!!!!
         me.setupChartingLayerChangeHandler();
         me.setupMapClickHandler();
+
+        if (!me.loadMask) {
+            me.loadMask = Ext.Viewport.add({
+                masked: {
+                    xtype: 'loadmask',
+                    message: 'Bitte warten..',
+                    indicator: true,
+                    zIndex: 9999
+                }
+            });
+        }
 
         //open help initially if user is neither "ruf", "imis" nor "bfs"
         if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
@@ -134,10 +147,12 @@ Ext.define('Koala.view.main.MobileMainController', {
             var url = me.chartingLayer.getSource().getGetFeatureInfoUrl(
                 coordinate, resolution, projCode, urlParams
             );
+            me.loadMask.show();
             me.pendingRequest = Ext.Ajax.request({
                 url: url,
                 scope: me,
                 callback: function() {
+                    me.loadMask.hide();
                     me.pendingRequest = null;
                 },
                 success: me.onWmsGetFeatureSuccess,
@@ -209,6 +224,7 @@ Ext.define('Koala.view.main.MobileMainController', {
     chartableFeatureFound: function(feature) {
         var me = this;
         var view = me.getView();
+        var viewModel = view.getViewModel();
         var panel;
         var isTimeSeries = Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer);
         var isBarChart = Koala.util.Layer.isBarChartLayer(me.chartingLayer);
@@ -243,7 +259,14 @@ Ext.define('Koala.view.main.MobileMainController', {
         Ext.each(charts, function(chart) {
             var grid = me.createGridTab(chart);
             panel = Ext.create({
-                xtype: 'panel'
+                xtype: 'panel',
+                title: viewModel.get('gridTabTitle'),
+                tools: [{
+                    type: 'close',
+                    handler: function() {
+                        carouselPanel.hide();
+                    }
+                }]
             });
             carousel.add(panel);
             me.registerSwipeHandler(panel, carousel);
@@ -253,7 +276,15 @@ Ext.define('Koala.view.main.MobileMainController', {
         panel = carousel.down('panel[name=htmlpanel]');
         if (Koala.util.Layer.isHtmlLayer(me.chartingLayer)) {
             panel = Ext.create({
-                xtype: 'panel'
+                xtype: 'panel',
+                title: viewModel.get('htmlTabTitle'),
+                bodyPadding: 5,
+                tools: [{
+                    type: 'close',
+                    handler: function() {
+                        carouselPanel.hide();
+                    }
+                }]
             });
             var html = Koala.util.Carto.getHtmlData(me.chartingLayer, feature);
             panel.setHtml(html);
@@ -263,7 +294,15 @@ Ext.define('Koala.view.main.MobileMainController', {
         panel = carousel.down('panel[name=hoverpanel]');
         if (me.chartingLayer.get('hoverTpl')) {
             panel = Ext.create({
-                xtype: 'panel'
+                xtype: 'panel',
+                title: viewModel.get('hoverinfoTabTitle'),
+                bodyPadding: 5,
+                tools: [{
+                    type: 'close',
+                    handler: function() {
+                        carouselPanel.hide();
+                    }
+                }]
             });
             var template = Koala.util.Object.getPathStrOr(me.chartingLayer,
                 'metadata/layerConfig/olProperties/hoverTpl');

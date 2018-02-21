@@ -376,7 +376,10 @@
                 "chartSlctnBarChartBtn": "Säulendiagramm",
                 "rodosPanelTitle": "RODOS-Filter",
                 "helpTooltip": "Hilfe",
-                "headerTitle": "GEOPORTAL"
+                "headerTitle": "GEOPORTAL",
+                "gridTabTitle": "Tabellarische Ansicht",
+                "htmlTabTitle": "Information",
+                "hoverinfoTabTitle": "Information"
             }
         }
     },
