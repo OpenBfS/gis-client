@@ -1095,9 +1095,8 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         var numLegends;
         if (xtype === 'd3-barchart') { // for barcharts
-            var firstStationData = Ext.Object.getValues(me.data);
-            numLegends = firstStationData.length;
-            numLegends += Object.keys(me.colorsByKey).length;
+            numLegends = me.data.length;
+            numLegends += Ext.Object.getValues(me.colorsByKey).length;
         } else if (xtype === 'd3-chart') { // for timeseries
             numLegends = Object.keys(me.data).length;
         } else {
@@ -1106,9 +1105,13 @@ Ext.define('Koala.view.component.D3BaseController', {
         }
         numLegends += thresholds.length;
 
+        var selector = '.k-d3-scrollable-legend-container g > text tspan';
+        var lineCount = d3.selectAll(selector).size();
+        lineCount = lineCount - numLegends;
+
         var heightEach = me.legendEntryTargetHeight;
         var legWidth = me.legendTargetWidth;
-        var legHeight = heightEach + heightEach * numLegends;
+        var legHeight = heightEach + heightEach * numLegends + lineCount * 14;
         legendParent
             .attr('viewBox', '0 0 ' + legWidth + ' ' + legHeight)
             .attr('width', legWidth)
