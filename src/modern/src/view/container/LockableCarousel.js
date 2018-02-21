@@ -18,6 +18,7 @@
  */
 Ext.define('Koala.view.container.LockableCarousel', {
     extend: 'Ext.Carousel',
+    requires: ['Ext.behavior.Draggable'],
 
     xtype: 'lockable-carousel',
 
