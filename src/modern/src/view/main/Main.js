@@ -218,17 +218,11 @@ Ext.define('Koala.view.main.Main', {
     }, {
         xtype: 'panel',
         name: 'cartopanel',
-        title: 'Information',
+        header: false,
         modal: true,
         width: '100%',
         height: '100%',
-        zIndex: 9999,
-        tools: [{
-            type: 'close',
-            handler: function(panel) {
-                panel.hide();
-            }
-        }],
+        zIndex: 9998,
         hidden: true,
         items: [{
             xtype: 'lockable-carousel',

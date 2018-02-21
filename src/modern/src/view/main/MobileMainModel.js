@@ -29,6 +29,8 @@ Ext.define('Koala.view.main.MobileMainModel', {
         chartSlctnMsg: '',
         chartSlctnTimeSeriesBtn: '',
         chartSlctnBarChartBtn: '',
-        rodosPanelTitle: ''
+        rodosPanelTitle: '',
+        gridTabTitle: ''
+
     }
 });

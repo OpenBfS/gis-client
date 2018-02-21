@@ -39,6 +39,11 @@ Ext.define('Koala.view.panel.BarChart', {
     tools: [{
         type: 'collapse',
         handler: 'onCollapseLegendToolClick'
+    }, {
+        type: 'close',
+        handler: function(panel) {
+            panel.up('panel[name=cartopanel]').hide();
+        }
     }],
 
     items: []

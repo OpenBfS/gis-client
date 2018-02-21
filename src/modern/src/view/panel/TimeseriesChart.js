@@ -46,6 +46,11 @@ Ext.define('Koala.view.panel.TimeseriesChart', {
     }, {
         type: 'collapse',
         handler: 'onCollapseLegendToolClick'
+    }, {
+        type: 'close',
+        handler: function(panel) {
+            panel.up('panel[name=cartopanel]').hide();
+        }
     }],
 
     items: [{
