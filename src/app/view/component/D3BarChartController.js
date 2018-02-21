@@ -787,12 +787,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
                 new moment(nameAsTooltip)) : nameAsTooltip;
-            var visualLabel = staticMe.labelEnsureMaxLength(
-                nameAsTooltip, (legendConfig.legendEntryMaxLength || 15)
-            );
 
             legendEntry.append('text')
-                .text(visualLabel)
+                .text(nameAsTooltip)
                 .attr('text-anchor', 'start')
                 .attr('dy', '0')
                 .attr('dx', '25');
@@ -863,12 +860,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             var nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
                 new moment(label)) : label;
-            var visualLabel = staticMe.labelEnsureMaxLength(
-                nameAsTooltip, (legendConfig.legendEntryMaxLength || 15)
-            );
 
             legendEntry.append('text')
-                .text(visualLabel)
+                .text(nameAsTooltip)
                 .attr('text-anchor', 'start')
                 .attr('dy', '0')
                 .attr('dx', '25');
@@ -896,6 +890,35 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     .on('click', me.generateColorCallback({config: {color: me.colorsByKey[subCategory]}}, idx));
             }
         });
+        me.wrapAndResizeLegend();
+    },
+
+    wrapAndResizeLegend: function() {
+        var me = this;
+        // raise the buffer to reflect special cases with legend and delete icons
+        Koala.util.Label.distanceBuffer = 70;
+        Koala.util.Label.handleLabelWrap(
+            '.k-d3-scrollable-legend-container',
+            ' g > text:not(.k-d3-color-icon):not(.k-d3-delete-icon)',
+            25,
+            1.2,
+            true
+        );
+        // reset buffer back to default
+        Koala.util.Label.distanceBuffer = 20;
+        var selector = '.k-d3-scrollable-legend-container g > text' +
+            ':not(.k-d3-color-icon):not(.k-d3-delete-icon)';
+        var y = me.legendEntryTargetHeight;
+        d3.selectAll(selector).each(function() {
+            var count = d3.select(this).selectAll('tspan').size();
+            var parent = d3.select(this).node().parentNode;
+            d3.select(parent)
+                .attr('transform', 'translate(0,' + y + ')');
+            // every additional tspan will lead to an extra height on the parent
+            y += 14 * (count -1) + me.legendEntryTargetHeight;
+        });
+        // resize the container
+        me.updateLegendContainerDimensions();
     },
 
     /**

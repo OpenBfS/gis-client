@@ -23,6 +23,7 @@ Ext.define('Koala.util.ChartAxes', {
     requires: [
         'Koala.view.component.D3BaseController',
         'Koala.util.Date',
+        'Koala.util.Label',
         'Koala.util.Object',
         'Koala.util.ChartConstants'
     ],
@@ -185,6 +186,8 @@ Ext.define('Koala.util.ChartAxes', {
                     .attr('dx', '-10px')
                     .attr('dy', '1px')
                     .style('text-anchor', 'end');
+            } else if (orient === 'top' || orient === 'bottom') {
+                Koala.util.Label.handleLabelWrap('.' + CSS.AXIS + '.' + CSS.AXIS_X);
             }
         },
 
@@ -256,6 +259,15 @@ Ext.define('Koala.util.ChartAxes', {
                     .attr('dx', '-10px')
                     .attr('dy', '1px')
                     .style('text-anchor', 'end');
+            } else {
+                if (orient === 'top' || orient === 'bottom') {
+                    // timeout because of resize animations,
+                    // width determination is wrong when calculating instantly
+                    window.setTimeout(function() {
+                        Koala.util.Label.handleLabelWrap(axisSelector + '.' + CSS.AXIS_X);
+                    }, 500);
+                }
+
             }
         },
 
