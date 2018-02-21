@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "Koala",
-  "version": "1.5.1",
+  "version": "1.6.10",
   "description": "Koala WebGIS",
   "scripts": {
     "pretest": "npm run lint",
