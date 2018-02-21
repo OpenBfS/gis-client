@@ -322,15 +322,23 @@ Ext.define('Koala.view.main.MobileMainController', {
         }
     },
 
-    registerSwipeHandler: function(panel, carousel) {
-        panel.el.on('swipe', function(event) {
-            if (event.direction === 'up') {
-                if (carousel.items.items.length === 2) {
-                    carousel.up('panel[name=cartopanel]').hide();
-                } else {
-                    carousel.remove(panel);
-                }
+    registerSwipeHandler: function(panel) {
+        panel.el.on('touchstart', function(event) {
+            this.scrollDeltaX = event.clientX;
+            this.scrollDeltaY = event.clientY;
+        });
+        panel.el.on('touchmove', function(event) {
+            var xdiff = this.scrollDeltaX - event.clientX;
+            var ydiff = this.scrollDeltaY - event.clientY;
+            if (panel.getActiveItem().xtype === 'grid') {
+                panel.getActiveItem().getScrollable().scrollBy(xdiff, ydiff);
+                this.scrollDeltaX = event.clientX;
+                this.scrollDeltaY = event.clientY;
             }
+        });
+        panel.el.on('touchend', function() {
+            this.scrollDeltaX = 0;
+            this.scrollDeltaY = 0;
         });
     },
 
