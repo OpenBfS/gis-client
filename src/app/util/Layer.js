@@ -571,13 +571,13 @@ Ext.define('Koala.util.Layer', {
             var authHeader = Koala.util.Authentication.getAuthenticationHeader();
             if (authHeader) {
                 defaultHeaders = {
-                    Authorization: authHeader,
-                    Accept: 'application/json'
+                    Authorization: authHeader//,
+                    // Accept: 'application/json'
                 };
             }
 
             return new Ext.Promise(function(resolve, reject) {
-                var binary = !!window.TextDecoder;
+                // var binary = !!window.TextDecoder;
                 Ext.Ajax.request({
                     // url: urls['metadata-xml2json'] + uuid,
                     url: urls['metadata-xml2json'],
@@ -586,7 +586,7 @@ Ext.define('Koala.util.Layer', {
                     },
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
-                    binary: binary,
+                    // binary: binary,
                     success: function(response) {
                         var obj;
                         try {
