@@ -65,7 +65,11 @@ Ext.define('Koala.override.basigx.ConfigParser', {
 
             Ext.each(layerConfig, function(layerUuid, index) {
                 Ext.Ajax.request({
-                    url: context.data.merge.urls['metadata-xml2json'] + layerUuid,
+                    // url: context.data.merge.urls['metadata-xml2json'] + layerUuid,
+                    url: context.data.merge.urls['metadata-xml2json'],
+                    params: {
+                        uuid: layerUuid
+                    },
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
                     async: false,
