@@ -129,11 +129,6 @@ Ext.define('Koala.view.main.MobileMainController', {
             // we may be want show tooltips?
             return;
         }
-        if (!LayerUtil.isChartableLayer(me.chartingLayer)) {
-            // Should never happen™
-            Ext.log.warn('Illegal chartable layer defined');
-            return;
-        }
 
         if (LayerUtil.isWmsLayer(me.chartingLayer)) {
             var mapView = evt.map.getView();
@@ -287,7 +282,10 @@ Ext.define('Koala.view.main.MobileMainController', {
                 }]
             });
             var html = Koala.util.Carto.getHtmlData(me.chartingLayer, feature);
-            panel.setHtml(html);
+            var htmlPanel = panel;
+            html.then(function(markup) {
+                htmlPanel.setHtml(markup, true);
+            });
             carousel.add(panel);
             this.registerSwipeHandler(panel, carousel);
         }
