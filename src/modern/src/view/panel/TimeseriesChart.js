@@ -17,7 +17,7 @@
  * @class Koala.view.panel.TimeseriesChart
  */
 Ext.define('Koala.view.panel.TimeseriesChart', {
-    extend: 'Koala.view.panel.MobilePanel',
+    extend: 'Ext.Panel',
     xtype: 'k-panel-timeserieschart',
 
     requires: [
@@ -46,6 +46,11 @@ Ext.define('Koala.view.panel.TimeseriesChart', {
     }, {
         type: 'collapse',
         handler: 'onCollapseLegendToolClick'
+    }, {
+        type: 'close',
+        handler: function(panel) {
+            panel.up('panel[name=cartopanel]').hide();
+        }
     }],
 
     items: [{

@@ -23,6 +23,7 @@ Ext.define('Koala.util.ChartAxes', {
     requires: [
         'Koala.view.component.D3BaseController',
         'Koala.util.Date',
+        'Koala.util.Label',
         'Koala.util.Object',
         'Koala.util.ChartConstants'
     ],
@@ -185,6 +186,8 @@ Ext.define('Koala.util.ChartAxes', {
                     .attr('dx', '-10px')
                     .attr('dy', '1px')
                     .style('text-anchor', 'end');
+            } else if (orient === 'top' || orient === 'bottom') {
+                Koala.util.Label.handleLabelWrap('.' + CSS.AXIS + '.' + CSS.AXIS_X);
             }
         },
 
@@ -195,8 +198,9 @@ Ext.define('Koala.util.ChartAxes', {
          * @param  {Object}  metadata      the current layer metadata
          * @param  {Array}  chartSize     the chart size
          * @param  {String}  viewId        the id of the chart viewId
+         * @param  {Object} axisConfig axis configuration object
          */
-        redrawAxis: function(axisGenerator, orient, metadata, chartSize, viewId) {
+        redrawAxis: function(axisGenerator, orient, metadata, chartSize, viewId, axisConfig) {
             var staticMe = Koala.view.component.D3BaseController;
             var Const = Koala.util.ChartConstants;
             var makeTranslate = staticMe.makeTranslate;
@@ -248,6 +252,23 @@ Ext.define('Koala.util.ChartAxes', {
             axis.select('.' + CSS.AXIS_LABEL)
                 .transition()
                 .attr('transform', labelTransform);
+
+            if (axisConfig.rotateXAxisLabel && (orient === 'top' || orient === 'bottom')) {
+                d3.selectAll(axisSelector + '.' + CSS.AXIS_X + ' > g > text')
+                    .attr('transform', 'rotate(-55)')
+                    .attr('dx', '-10px')
+                    .attr('dy', '1px')
+                    .style('text-anchor', 'end');
+            } else {
+                if (orient === 'top' || orient === 'bottom') {
+                    // timeout because of resize animations,
+                    // width determination is wrong when calculating instantly
+                    window.setTimeout(function() {
+                        Koala.util.Label.handleLabelWrap(axisSelector + '.' + CSS.AXIS_X);
+                    }, 500);
+                }
+
+            }
         },
 
         /**

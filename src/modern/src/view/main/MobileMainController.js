@@ -28,6 +28,8 @@ Ext.define('Koala.view.main.MobileMainController', {
 
     chartingLayer: null,
 
+    loadMask: null,
+
     /**
      * TODO needed only while developing, will eventually be removed
      */
@@ -50,6 +52,17 @@ Ext.define('Koala.view.main.MobileMainController', {
         // me.addDummyDevLayers(); // TODO remove!!!!!!
         me.setupChartingLayerChangeHandler();
         me.setupMapClickHandler();
+
+        if (!me.loadMask) {
+            me.loadMask = Ext.Viewport.add({
+                masked: {
+                    xtype: 'loadmask',
+                    message: 'Bitte warten..',
+                    indicator: true,
+                    zIndex: 9999
+                }
+            });
+        }
 
         //open help initially if user is neither "ruf", "imis" nor "bfs"
         if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
@@ -134,10 +147,12 @@ Ext.define('Koala.view.main.MobileMainController', {
             var url = me.chartingLayer.getSource().getGetFeatureInfoUrl(
                 coordinate, resolution, projCode, urlParams
             );
+            me.loadMask.show();
             me.pendingRequest = Ext.Ajax.request({
                 url: url,
                 scope: me,
                 callback: function() {
+                    me.loadMask.hide();
                     me.pendingRequest = null;
                 },
                 success: me.onWmsGetFeatureSuccess,
@@ -210,53 +225,238 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var view = me.getView();
         var viewModel = view.getViewModel();
-        var mapComponent = this.getView().down('basigx-component-map');
-        var map = mapComponent.getMap();
         var panel;
-        var isCarto = Koala.util.Layer.isCartoWindowLayer(me.chartingLayer);
         var isTimeSeries = Koala.util.Layer.isTimeseriesChartLayer(me.chartingLayer);
         var isBarChart = Koala.util.Layer.isBarChartLayer(me.chartingLayer);
 
-        if (isCarto) {
-            Ext.create('Koala.view.component.CartoWindow', {
-                map: map,
-                layer: me.chartingLayer,
-                feature: feature,
-                renderTo: Ext.getBody()
+        var carouselPanel = view.down('panel[name=cartopanel]');
+        carouselPanel.show();
+        var carousel = view.down('carousel');
+        var oldItemCount = carousel.getItems().length;
+        var charts = [];
+        // handle barchart
+        if (isBarChart) {
+            panel = Ext.create({
+                xtype: 'k-panel-barchart'
             });
-            return false;
-        } else if (isTimeSeries && isBarChart) {
-            Ext.Msg.show({
-                title: viewModel.get('chartSlctnTitle'),
-                message: viewModel.get('chartSlctnMsg'),
-                closable: true,
-                minWidth: 350,
-                buttons: [{
-                    text: viewModel.get('chartSlctnTimeSeriesBtn'),
-                    margin: '5 5 5 5'
-                },{
-                    text: viewModel.get('chartSlctnBarChartBtn'),
-                    margin: '5 5 5 5'
-                }],
-                fn: function(btnId) {
-                    if (btnId === viewModel.get('chartSlctnTimeSeriesBtn')) {
-                        panel = view.down('k-panel-timeserieschart');
-                    } else if (btnId === viewModel.get('chartSlctnBarChartBtn')) {
-                        panel = view.down('k-panel-barchart');
-                    }
-                    panel.getController().updateFor(me.chartingLayer, feature);
-                    panel.show();
-                }
-            });
-        } else if (isTimeSeries) {
-            panel = view.down('k-panel-timeserieschart');
-        } else if (isBarChart) {
-            panel = view.down('k-panel-barchart');
-        }
-        if (panel) {
+            carousel.add(panel);
+            this.registerSwipeHandler(panel, carousel);
             panel.getController().updateFor(me.chartingLayer, feature);
-            panel.show();
+            charts.push(panel.down('d3-barchart'));
         }
+        // handle timeseries
+        if (isTimeSeries) {
+            // TODO think about how to properly update timeseries without
+            // confusion for the users
+            panel = Ext.create({
+                xtype: 'k-panel-timeserieschart'
+            });
+            carousel.add(panel);
+            this.registerSwipeHandler(panel, carousel);
+            panel.getController().updateFor(me.chartingLayer, feature);
+            charts.push(panel.down('d3-chart'));
+        }
+        Ext.each(charts, function(chart) {
+            var grid = me.createGridTab(chart);
+            panel = Ext.create({
+                xtype: 'panel',
+                title: viewModel.get('gridTabTitle'),
+                tools: [{
+                    type: 'close',
+                    handler: function() {
+                        carouselPanel.hide();
+                    }
+                }]
+            });
+            carousel.add(panel);
+            me.registerSwipeHandler(panel, carousel);
+            panel.add(grid);
+        });
+
+        panel = carousel.down('panel[name=htmlpanel]');
+        if (Koala.util.Layer.isHtmlLayer(me.chartingLayer)) {
+            panel = Ext.create({
+                xtype: 'panel',
+                title: viewModel.get('htmlTabTitle'),
+                bodyPadding: 5,
+                tools: [{
+                    type: 'close',
+                    handler: function() {
+                        carouselPanel.hide();
+                    }
+                }]
+            });
+            var html = Koala.util.Carto.getHtmlData(me.chartingLayer, feature);
+            panel.setHtml(html);
+            carousel.add(panel);
+            this.registerSwipeHandler(panel, carousel);
+        }
+        panel = carousel.down('panel[name=hoverpanel]');
+        if (me.chartingLayer.get('hoverTpl')) {
+            panel = Ext.create({
+                xtype: 'panel',
+                title: viewModel.get('hoverinfoTabTitle'),
+                bodyPadding: 5,
+                tools: [{
+                    type: 'close',
+                    handler: function() {
+                        carouselPanel.hide();
+                    }
+                }]
+            });
+            var template = Koala.util.Object.getPathStrOr(me.chartingLayer,
+                'metadata/layerConfig/olProperties/hoverTpl');
+            var hover = Koala.util.String.replaceTemplateStrings(template,
+                feature);
+            panel.setHtml(hover);
+            carousel.add(panel);
+            this.registerSwipeHandler(panel, carousel);
+        }
+        // removeAll is not used, as it breaks the carousel
+        // This may look odd, but just removes all old panels and leaves in
+        // the new ones plus the indicator child
+        carousel.setActiveItem(oldItemCount - 1);
+        for (var i = 1; i < oldItemCount; ++i) {
+            var item = carousel.removeAt(1);
+            item.destroy();
+        }
+    },
+
+    registerSwipeHandler: function(panel) {
+        panel.el.on('touchstart', function(event) {
+            this.scrollDeltaX = event.clientX;
+            this.scrollDeltaY = event.clientY;
+        });
+        panel.el.on('touchmove', function(event) {
+            var xdiff = this.scrollDeltaX - event.clientX;
+            var ydiff = this.scrollDeltaY - event.clientY;
+            if (panel.getActiveItem().xtype === 'grid') {
+                panel.getActiveItem().getScrollable().scrollBy(xdiff, ydiff);
+                this.scrollDeltaX = event.clientX;
+                this.scrollDeltaY = event.clientY;
+            }
+        });
+        panel.el.on('touchend', function() {
+            this.scrollDeltaX = 0;
+            this.scrollDeltaY = 0;
+        });
+    },
+
+    /**
+     * Create the tab which contains the table content as grid and adds it to the
+     * tabwindow.
+     */
+    createGridTab: function(chart) {
+        var me = this;
+        if (!chart) {
+            return;
+        }
+
+        Ext.create('Ext.data.Store', {
+            storeId: 'GridTabStore',
+            autoLoad: true,
+            data: []
+        });
+
+        var gridInTab = {
+            xtype: 'grid',
+            width: '100%',
+            height: '90%',
+            header: false,
+            store: Ext.data.StoreManager.lookup('GridTabStore'),
+            // plugins: 'gridfilters',// not available in modern framework
+            chartElement: chart,
+            listeners: {
+                painted: function() {
+                    chart.getController().on('chartdataprepared', function() {
+                        var chartController = this.chartElement.getController();
+                        var gridFeatures = chartController.gridFeatures;
+                        this.updateGrid(gridFeatures);
+                    }, this, {single: true});
+                },
+                itemtouchstart: function() {
+                    this.up('carousel').lock();
+                },
+                itemtouchend: function() {
+                    this.up('carousel').unlock();
+                }
+            },
+            updateGrid: function(gridFeatures) {
+                me = this;
+                var types = {};
+                var columns = [];
+                var fields = [];
+                var data = [];
+                var store = me.getStore();
+
+                Ext.each(gridFeatures, function(feat) {
+                    Ext.iterate(feat.properties, function(propName, prop) {
+                        var type = null;
+                        var tempProp;
+
+                        //store recognizes 'id' -> no duplicates allowed
+                        if (propName.toLowerCase() === 'id') {
+                            tempProp = feat.properties[propName];
+                            delete feat.properties[propName];
+                            propName = 'elementId';
+                            feat.properties[propName] = tempProp;
+                        }
+                        //define data types
+                        if (typeof prop === 'number') {
+                            type = 'number';
+                        } else if (typeof prop === 'string') {
+                            if (parseFloat(prop[0])) {
+                                var dateVal = moment(prop, moment.ISO_8601, true);
+                                type = (dateVal.isValid()) ? 'date' : 'string';
+                            } else {
+                                type = 'string';
+                            }
+                        }
+                        if (!types[propName]) {
+                            types[propName] = [type];
+                        } else {
+                            types[propName].push(type);
+                        }
+                    });
+                    data.push(feat.properties);
+                });
+                //field and column assignment
+                Ext.iterate(types, function(propName, prop) {
+                    var field = {
+                        name: propName,
+                        type: ''
+                    };
+                    var column = {
+                        text: propName,
+                        dataIndex: propName,
+                        itemId: propName,
+                        filter: {
+                            type: ''
+                        }
+                    };
+                    var uniqueTypes = Ext.Array.unique(prop);
+                    if (uniqueTypes.length > 1) {
+                        uniqueTypes = Ext.Array.remove(uniqueTypes, null);
+                    }
+                    uniqueTypes = (uniqueTypes.indexOf('string') > -1) ? ['string'] : uniqueTypes;
+                    field.type = column.filter.type = uniqueTypes[0];
+
+                    if (field.type === 'date') {
+                        column.renderer = function(val) {
+                            var dateVal = moment(val, moment.ISO_8601, true);
+                            return Koala.util.Date.getFormattedDate(dateVal);
+                        };
+                    }
+
+                    fields.push(field);
+                    columns.push(column);
+                });
+                me.setColumns(columns);
+                store.setFields(fields);
+                store.loadData(data, false);
+            }
+        };
+        return gridInTab;
     },
 
     /**

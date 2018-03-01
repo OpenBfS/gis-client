@@ -275,7 +275,8 @@ Ext.define('Koala.view.component.D3BaseController', {
     getChartData: function() {
         var me = this;
         var view = me.getView();
-        if (view.getShowLoadMask() && view.getSelectedStations().length > 0) {
+        if (view.getShowLoadMask() && view.getSelectedStations().length > 0 &&
+            view.setLoading) {
             view.setLoading(true);
         }
 
@@ -871,9 +872,9 @@ Ext.define('Koala.view.component.D3BaseController', {
         var chartSize = this.getChartSize();
         var viewId = view.getId();
 
-        Ext.iterate(axesConfig, function(orient) {
+        Ext.iterate(axesConfig, function(orient, config) {
             var axisGenerator = me.axes[orient];
-            Axes.redrawAxis(axisGenerator, orient, metadata, chartSize, viewId);
+            Axes.redrawAxis(axisGenerator, orient, metadata, chartSize, viewId, config);
         });
     },
 
@@ -1094,9 +1095,8 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         var numLegends;
         if (xtype === 'd3-barchart') { // for barcharts
-            var firstStationData = Ext.Object.getValues(me.data)[0];
-            numLegends = firstStationData.length;
-            numLegends += Object.keys(me.colorsByKey).length;
+            numLegends = me.data.length;
+            numLegends += Ext.Object.getValues(me.colorsByKey).length;
         } else if (xtype === 'd3-chart') { // for timeseries
             numLegends = Object.keys(me.data).length;
         } else {
@@ -1105,9 +1105,13 @@ Ext.define('Koala.view.component.D3BaseController', {
         }
         numLegends += thresholds.length;
 
+        var selector = '.k-d3-scrollable-legend-container g > text tspan';
+        var lineCount = d3.selectAll(selector).size();
+        lineCount = lineCount - numLegends;
+
         var heightEach = me.legendEntryTargetHeight;
         var legWidth = me.legendTargetWidth;
-        var legHeight = heightEach + heightEach * numLegends;
+        var legHeight = heightEach + heightEach * numLegends + lineCount * 14;
         legendParent
             .attr('viewBox', '0 0 ' + legWidth + ' ' + legHeight)
             .attr('width', legWidth)

@@ -313,7 +313,7 @@ Ext.define('Koala.view.main.Main', {
             constrain: true,
             resizeHandles: 'w nw n',
             collapsed: false,
-            minWidth: 200,
+            minWidth: 250,
             maxWidth: 700,
             listeners: {
                 afterrender: {

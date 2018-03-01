@@ -17,7 +17,7 @@ module.exports = function(config) {
         'ext/packages/ux/modern/**/*js',
         'ext/packages/ux/src/**/*js',
         'test/' + TOOLKIT + '/loader.js',
-        'resources/lib/openlayers-v3.19.1-dist/ol.js',
+        'resources/lib/openlayers-v4.6.4-dist/ol.js',
         'test/raf.polyfill.js',
         'overrides/**/*js',
         'test/test-helper-functions.js',
@@ -54,9 +54,7 @@ module.exports = function(config) {
         'resources/lib/proj4js/proj4-defs.js',
         'resources/lib/d3/d3.js',
         'resources/lib/momentjs/moment-with-locales.js',
-        'resources/lib/turfjs-4.5.2/turf.min.js',
-        'resources/lib/jsts/jsts.min.js',
-        'resources/lib/shp-write/shpwrite.js',
+        'resources/lib/turfjs-5.1.6/turf.min.js',
         '/koalaProxy'
     ];
 

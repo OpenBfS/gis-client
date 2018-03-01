@@ -538,7 +538,7 @@ Ext.define('Koala.util.Layer', {
                     case 'value':
                         // Empty or false "test_data" filters should not be shown in the legend
                         if (filter.param === 'test_data' &&
-                            (filter.effectivevalue.toLowerCase() === 'false' ||
+                            (Ext.isString(filter.effectivevalue) && filter.effectivevalue.toLowerCase() === 'false' ||
                                 !filter.effectivevalue)
                         ) {
                             return;
@@ -571,38 +571,44 @@ Ext.define('Koala.util.Layer', {
             var authHeader = Koala.util.Authentication.getAuthenticationHeader();
             if (authHeader) {
                 defaultHeaders = {
-                    Authorization: authHeader,
-                    Accept: 'application/json'
+                    Authorization: authHeader//,
+                    // Accept: 'application/json'
                 };
             }
 
             return new Ext.Promise(function(resolve, reject) {
-                var binary = !!window.TextDecoder;
+                // var binary = !!window.TextDecoder;
                 Ext.Ajax.request({
-                    url: urls['metadata-xml2json'] + uuid,
+                    // url: urls['metadata-xml2json'] + uuid,
+                    url: urls['metadata-xml2json'],
+                    params: {
+                        uuid: uuid
+                    },
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
-                    binary: binary,
+                    // binary: binary,
                     success: function(response) {
                         var obj;
                         try {
                             // ATTENTION
+                            // metadata parsing is commented out for now until
+                            // migration to GNOS 3.4 is completed
                             // GNOS seems to send json via REST API ISO-8859-1
                             // encoded, so we're trying to fix it here.
                             // For IE browsers a polyfill is used.
                             var txt;
-                            if (window.TextDecoder) {
-                                try {
-                                    var decoder = new TextDecoder('ISO-8859-1');
-                                    txt = decoder.decode(response.responseBytes);
-                                } catch (e) {
-                                    // fallback to utf-8
-                                    decoder = new TextDecoder('UTF-8');
-                                    txt = decoder.decode(response.responseBytes);
-                                }
-                            } else {
-                                txt = response.responseText;
-                            }
+                            // if (window.TextDecoder) {
+                            //     try {
+                            //         var decoder = new TextDecoder('ISO-8859-1');
+                            //         txt = decoder.decode(response.responseBytes);
+                            //     } catch (e) {
+                            //         // fallback to utf-8
+                            //         decoder = new TextDecoder('UTF-8');
+                            //         txt = decoder.decode(response.responseBytes);
+                            //     }
+                            // } else {
+                            txt = response.responseText;
+                            // }
 
                             // replace any occurencies of \{\{ (as it may still be
                             // stored in db) with the new delimiters [[
@@ -618,7 +624,7 @@ Ext.define('Koala.util.Layer', {
                             txt = txt.replace(escapedCurlyOpen, '[[');
                             txt = txt.replace(escapedCurlyClose, ']]');
                             obj = Ext.decode(txt);
-                            obj = Koala.util.MetadataParser.parseMetadata(obj);
+                            // obj = Koala.util.MetadataParser.parseMetadata(obj);
                         } catch (ex) {
                             Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
                         } finally {

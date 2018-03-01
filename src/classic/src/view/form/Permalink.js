@@ -36,22 +36,54 @@ Ext.define('Koala.view.form.Permalink', {
     },
 
     items: [{
-        xtype: 'textfield',
+        xtype: 'textarea',
         name: 'textfield-permalink',
         editable: false,
         listeners: {
-            afterrender: function(textfield) {
-                var permalink = textfield.up('form').getPermalink();
-                textfield.setValue(permalink);
-            },
+            afterrender: function(textarea) {
+                var permalink = textarea.up('form').getPermalink();
+                textarea.setValue(permalink);
+            }
+            /*,
             change: function(textfield) {
                 var width = Ext.util.TextMetrics.measure(
                     textfield.getEl(), textfield.getValue()).width;
                 textfield.setWidth(width + 20);
-            }
+            }*/
         }
     }],
 
+    buttons: [{
+        bind: {
+            text: '{refreshBtnText}'
+        },
+        handler: function(btn) {
+            var permalink = btn.up('form').getPermalink();
+            var textfield = btn.up('form').down('textfield');
+            textfield.setValue(permalink);
+        }
+    }, {
+        bind: {
+            text: '{copyToClipboardBtnText}'
+        },
+        listeners: {
+            boxready: function(btn) {
+                btn.setHidden(
+                    !BasiGX.util.CopyClipboard.copyToClipboardSupported);
+            },
+            initialize: function(btn) {
+                btn.setHidden(
+                    !BasiGX.util.CopyClipboard.copyToClipboardSupported);
+            }
+        },
+        handler: function(btn) {
+            var textfield = btn.up('form').down('textfield');
+            var value = textfield.getValue();
+
+            BasiGX.util.CopyClipboard.copyTextToClipboard(value);
+            Ext.ComponentQuery.query('[name=permalink-window]')[0].close();
+        }
+    }],
     getPermalink: function() {
         var route = Koala.util.Routing.getRoute();
         var hrefWithoutHash = window.location.origin +

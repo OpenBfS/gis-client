@@ -504,7 +504,13 @@ Ext.define('Koala.util.Routing', {
                         .valueOf();
                     break;
                 case 'value':
-                    permaObj.effectivevalue = filter.effectivevalue;
+                    // for some reason, strings may be double encoded here
+                    // TODO figure out why, until then, try to decode them
+                    try {
+                        permaObj.effectivevalue = JSON.parse(filter.effectivevalue);
+                    } catch (e) {
+                        permaObj.effectivevalue = filter.effectivevalue;
+                    }
                     permaObj.alias = filter.alias;
                     permaObj.param = filter.param;
                     break;

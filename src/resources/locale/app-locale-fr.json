@@ -1,4 +1,12 @@
 {
+    "Koala.Application": {
+        "statics": {
+            "timereferenceNotFound": "fr:Time reference button could not be found.",
+            "applicationUpdateTitle": "fr:Application Update",
+            "applicationUpdateText": "fr:This application has an update. Reload now?",
+            "leavePageText": "fr:Do you want to leave this page? Unsaved data will be lost."
+        }
+    },
     "Koala.util.Layer": {
         "statics": {
             "txtUntil": "fr:bis",
@@ -346,7 +354,10 @@
                 "chartSlctnBarChartBtn": "fr:Säulendiagramm",
                 "rodosPanelTitle": "RODOS-Filter",
                 "helpTooltip": "fr:Hilfe",
-                "headerTitle": "GEOPORTAL"
+                "headerTitle": "GEOPORTAL",
+                "gridTabTitle": "fr: Table View",
+                "htmlTabTitle": "fr: Information",
+                "hoverinfoTabTitle": "fr: Information"
             }
         }
     },

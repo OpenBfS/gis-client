@@ -27,6 +27,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Ext.panel.Panel',
         'BasiGX.util.Layer',
         'Koala.util.AppContext',
+        'Koala.util.Carto',
         'Koala.util.Chart',
         'Koala.util.ChartAxes',
         'Koala.util.ChartConstants',
@@ -124,7 +125,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var cartoWindowId = view.getCartoWindowId();
         var closeElement = Ext.DomHelper.createDom({
             tag: 'div',
-            html: '<i class="fa fa-times-circle" aria-hidden="true"></i>',
+            html: '<i class="fa fa-times-circle  fa-2x" aria-hidden="true"></i>',
             cls: cartoWindowId + ' closeElement'
         });
 
@@ -191,7 +192,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             layer.metadata);
 
         var timeSeriesTab = me.createTabElement({
-            title: 'Timeseries',
+            //title: 'Timeseries',
+            title: '<i class="fa fa-line-chart  fa-2x" aria-hidden="true"></i>',
             className: 'timeseries-tab',
             active: true
         });
@@ -532,7 +534,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var feature = view.getFeature();
 
         var barChartTab = me.createTabElement({
-            title: 'Bar Chart',
+            //title: 'Bar Chart',
+            title: '<i class="fa fa-bar-chart  fa-2x" aria-hidden="true"></i>',
             className: 'barchart-tab',
             active: true
         });
@@ -578,110 +581,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         return button;
     },
 
-    getTabData: function(urlProperty, contentProperty) {
-        var view = this.getView();
-        var layer = view.layer;
-        urlProperty = layer.get(urlProperty);
-        contentProperty = layer.get(contentProperty);
-        var url, prop;
-        if (urlProperty) {
-            url = Koala.util.String.replaceTemplateStrings(
-                urlProperty,
-                view.feature
-            );
-        }
-        if (contentProperty) {
-            prop = Koala.util.String.replaceTemplateStrings(
-                contentProperty,
-                view.feature
-            );
-        }
-
-        var promise;
-
-        if (prop) {
-            promise = Ext.Promise.resolve(prop);
-        } else {
-            promise = new Ext.Promise(function(resolve, reject) {
-                Ext.Ajax.request({
-                    url: url,
-                    success: function(response) {
-                        resolve(response.responseText);
-                    },
-                    failure: function(response) {
-                        reject(response.status);
-                    }
-                });
-            });
-        }
-        return promise;
-    },
-
-    getTableData: function() {
-        return this.getTabData('tableContentURL', 'tableContentProperty');
-    },
-
-    arrayToTable: function(data) {
-        var html = '<table class="bordered-table">';
-        Ext.each(data, function(row) {
-            html += '<tr>';
-            Ext.each(row, function(value) {
-                html += '<td>';
-                html += value;
-                html += '</td>';
-            });
-            html += '</tr>';
-        });
-        return html + '</table>';
-    },
-
-    geoJsonToTable: function(collection) {
-        var html = '<table class="bordered-table">';
-        var first = true;
-        var headerRow = '<tr>';
-        var row;
-        Ext.each(collection.features, function(feat) {
-            row = '<tr>';
-            Ext.iterate(feat.properties, function(key, prop) {
-                row += '<td>';
-                row += prop;
-                row += '</td>';
-                if (first) {
-                    headerRow += '<th>' + key + '</th>';
-                }
-            });
-            if (first) {
-                first = false;
-                html += headerRow + '</tr>';
-            }
-            html += row + '</tr>';
-        });
-        return html + '</table>';
-    },
-
-    convertData: function(data) {
-        switch (data[0]) {
-            case '<': {
-                return data;
-            }
-            case '[': {
-                // case of simple arrays in array
-                return this.arrayToTable(JSON.parse(data));
-            }
-            case '{': {
-                // case of GeoJSON
-                return this.geoJsonToTable(JSON.parse(data));
-            }
-            default: {
-                return this.arrayToTable(Ext.util.CSV.decode(data));
-            }
-        }
-    },
-
-    getHtmlData: function() {
-        return this.getTabData('htmlContentURL', 'htmlContentProperty');
-    },
-
     /**
      * Create the tab which contains the table content and adds it to the
      * tabwindow.
@@ -690,11 +589,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var el = view.el.dom;
-        this.getTableData().then(function(data) {
-            var html = me.convertData(data);
+        Koala.util.Carto.getTableData(view.layer, view.feature).then(function(data) {
+            var html = Koala.util.Carto.convertData(data);
 
             var timeSeriesTab = me.createTabElement({
-                title: 'Table',
+                //title: 'Table',
+                title: '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>',
                 innerHTML: html,
                 className: 'table-tab'
             });
@@ -719,7 +619,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (!chart) {
             return;
         }
-        title = (chart === me.timeserieschart) ? 'TS Table' : (chart === me.barChart) ? 'BC Table' : '';
+        //title = (chart === me.timeserieschart) ? 'TS Table' : (chart === me.barChart) ? 'BC Table' : '';
+        title = (chart === me.timeserieschart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : (chart === me.barChart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : '';
 
         gridTableTab = me.createTabElement({
             title: title,
@@ -844,9 +745,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
      */
     createGridTabFromUrl: function() {
         var me = this;
-        this.getTableData().then(function() {
+        var view = this.getView();
+        Koala.util.Carto.getTableData(view.layer, view.feature).then(function() {
             var gridTableTab = me.createTabElement({
-                title: 'GridTable',
+                //title: 'GridTable',
+                title: '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>',
                 className: 'gridtable-tab',
                 active: true
             });
@@ -898,9 +801,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var me = this;
         var view = me.getView();
         var el = view.el.dom;
-        this.getHtmlData().then(function(data) {
+        Koala.util.Carto.getHtmlData(view.layer, view.feature).then(function(data) {
             var timeSeriesTab = me.createTabElement({
-                title: 'Html',
+                //title: 'Html',
+                title: '<i class="fa fa-leanpub  fa-2x" aria-hidden="true"></i>',
                 innerHTML: data,
                 className: 'html-tab'
             });
@@ -917,7 +821,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
     createHoverTemplateTab: function() {
         var me = this;
         var view = me.getView();
-        var viewModel = view.getViewModel();
         var el = view.el.dom;
         var layer = view.getLayer();
         var feature = view.getFeature();
@@ -926,7 +829,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var innerHTML = Koala.util.String.replaceTemplateStrings(template,
             feature);
         var timeSeriesTab = me.createTabElement({
-            title: viewModel.get('info'),
+            //title: viewModel.get('info'),
+            title: '<i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>',
             innerHTML: innerHTML,
             className: 'hoverTpl-tab'
         });
@@ -1241,15 +1145,50 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var lineFeature = viewModel.get('lineFeature');
         var featureStartCoords = this.getFeatureAnchorPoint(feature);
         var overlay = viewModel.get('overlay');
-        var overlayerCoords = overlay.getPosition();
-        var overlayerTopLeftPixel = map.getPixelFromCoordinate(overlayerCoords);
+        var overlayCoords = overlay.getPosition();
         var overlayWidth = overlay.getElement().clientWidth;
         var overlayHeight = overlay.getElement().clientHeight;
-        var centerPixel = [overlayWidth/2 + overlayerTopLeftPixel[0],
-            overlayHeight/2 + overlayerTopLeftPixel[1]];
+
+        var overlayTopLeftPixel = map.getPixelFromCoordinate(overlayCoords);
+        var overlayTopRightPixel = [overlayTopLeftPixel[0] + overlayWidth, overlayTopLeftPixel[1]];
+        var overlayBottomRightPixel = [overlayTopLeftPixel[0] + overlayWidth, overlayTopLeftPixel[1] + overlayHeight];
+        var overlayBottomLeftPixel = [overlayTopLeftPixel[0], overlayTopLeftPixel[1] + overlayHeight];
+        var overlayTopPixel = [overlayTopLeftPixel[0] + overlayWidth/2, overlayTopLeftPixel[1]];
+        var overlayRightPixel = [overlayTopLeftPixel[0] + overlayWidth, overlayTopLeftPixel[1] + overlayHeight/2];
+        var overlayBottomPixel = [overlayTopLeftPixel[0] + overlayWidth/2, overlayTopLeftPixel[1] + overlayHeight];
+        var overlayLeftPixel = [overlayTopLeftPixel[0], overlayTopLeftPixel[1] + overlayHeight/2];
+
+        var overlayTopLeftCoords = map.getCoordinateFromPixel(overlayTopLeftPixel);
+        var overlayTopRightCoords = map.getCoordinateFromPixel(overlayTopRightPixel);
+        var overlayBottomRightCoords = map.getCoordinateFromPixel(overlayBottomRightPixel);
+        var overlayBottomLeftCoords = map.getCoordinateFromPixel(overlayBottomLeftPixel);
+        var overlayTopCoords = map.getCoordinateFromPixel(overlayTopPixel);
+        var overlayRightCoords = map.getCoordinateFromPixel(overlayRightPixel);
+        var overlayBottomCoords = map.getCoordinateFromPixel(overlayBottomPixel);
+        var overlayLeftCoords = map.getCoordinateFromPixel(overlayLeftPixel);
+
+
+        var centerPixel = [overlayWidth/2 + overlayTopLeftPixel[0],
+            overlayHeight/2 + overlayTopLeftPixel[1]];
         var centerCoords = map.getCoordinateFromPixel(centerPixel);
 
-        lineFeature.getGeometry().setCoordinates([featureStartCoords, centerCoords]);
+        //could be adjusted to snap corners only
+        var pointsWGS84 = turf.featureCollection([
+            turf.toWgs84(turf.point(overlayTopLeftCoords)),
+            turf.toWgs84(turf.point(overlayTopRightCoords)),
+            turf.toWgs84(turf.point(overlayBottomLeftCoords)),
+            turf.toWgs84(turf.point(overlayBottomRightCoords)),
+            turf.toWgs84(turf.point(overlayTopCoords)),
+            turf.toWgs84(turf.point(overlayRightCoords)),
+            turf.toWgs84(turf.point(overlayBottomCoords)),
+            turf.toWgs84(turf.point(overlayLeftCoords))
+        ]);
+
+        var featureStartPointWGS84 = turf.toWgs84(turf.point(featureStartCoords));
+        var nearestCornerCoordsWGS84 = turf.nearestPoint(featureStartPointWGS84, pointsWGS84);
+        var nearestCornerCoords = turf.toMercator(nearestCornerCoordsWGS84);
+
+        lineFeature.getGeometry().setCoordinates([featureStartCoords, nearestCornerCoords.geometry.coordinates]);
         overlay.centerCoords = centerCoords;
         this.disableMapInteractions();
     },

@@ -57,15 +57,19 @@ Ext.define('Koala.override.basigx.ConfigParser', {
             var authHeader = Koala.util.Authentication.getAuthenticationHeader(context);
             if (authHeader) {
                 defaultHeaders = {
-                    Authorization: authHeader,
-                    Accept: 'application/json'
+                    Authorization: authHeader//,
+                    // Accept: 'application/json'
                 };
             }
             var layerConfig = context.data.merge.mapLayers;
 
             Ext.each(layerConfig, function(layerUuid, index) {
                 Ext.Ajax.request({
-                    url: context.data.merge.urls['metadata-xml2json'] + layerUuid,
+                    // url: context.data.merge.urls['metadata-xml2json'] + layerUuid,
+                    url: context.data.merge.urls['metadata-xml2json'],
+                    params: {
+                        uuid: layerUuid
+                    },
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
                     async: false,
@@ -87,7 +91,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                             txt = txt.replace(escapedCurlyOpen, '[[');
                             txt = txt.replace(escapedCurlyClose, ']]');
                             obj = Ext.decode(txt);
-                            obj = Koala.util.MetadataParser.parseMetadata(obj);
+                            // obj = Koala.util.MetadataParser.parseMetadata(obj);
                         } catch (ex) {
                             // TODO i18n
                             Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');

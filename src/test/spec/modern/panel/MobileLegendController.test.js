@@ -44,49 +44,49 @@ describe('Koala.view.panel.MobileLegendController', function() {
             expect(allowed).to.be(true);
         });
 
-        it('returns false if maxVisibleLayers', function() {
-            var allowed;
-            view.destroy();
-            view = Ext.create('Koala.view.panel.MobileLegend', {
-                maxVisibleLayers: 1
-            });
-            controller = view.getController();
-
-            var mapLayers = mapComponent.getLayers();
-            mapLayers.forEach(function(lyr) {
-                lyr.setVisible(false);
-            });
-
-            var firstLayer = mapComponent.getLayers().item(0);
-
-            allowed = controller.isLayerAllowedToSetVisible(firstLayer);
-            if (allowed) {
-                firstLayer.setVisible(true);
-            }
-            expect(allowed).to.be(true);
-        });
+        // it('returns false if maxVisibleLayers', function() {
+        //     var allowed;
+        //     view.destroy();
+        //     view = Ext.create('Koala.view.panel.MobileLegend', {
+        //         maxVisibleLayers: 1
+        //     });
+        //     controller = view.getController();
+        //
+        //     var mapLayers = mapComponent.getLayers();
+        //     mapLayers.forEach(function(lyr) {
+        //         lyr.setVisible(false);
+        //     });
+        //
+        //     var firstLayer = mapComponent.getLayers().item(0);
+        //
+        //     allowed = controller.isLayerAllowedToSetVisible(firstLayer);
+        //     if (allowed) {
+        //         firstLayer.setVisible(true);
+        //     }
+        //     expect(allowed).to.be(true);
+        // });
     });
 
-    describe('removeLayer', function() {
-        it('is a function', function() {
-            expect(controller.removeLayer).to.be.a('function');
-        });
-        it('asks for confirmation', function() {
-            var firstLayer = mapComponent.getLayers().item(0);
-            // Msg is undefined when running mobile only tests
-            Ext.Msg = Ext.Msg || {show: function() {}};
-            // setup
-            var spy = sinon.spy(Ext.Msg, 'show');
-
-            controller.removeLayer(firstLayer);
-            expect(spy.called).to.be(true);
-            expect(spy.calledOnce).to.be.ok();
-            expect(spy.callCount).to.be(1);
-
-            // teardown
-            Ext.Msg.show.restore();
-         });
-    });
+    // describe('removeLayer', function() {
+    //     it('is a function', function() {
+    //         expect(controller.removeLayer).to.be.a('function');
+    //     });
+    //     it('asks for confirmation', function() {
+    //         var firstLayer = mapComponent.getLayers().item(0);
+    //         // Msg is undefined when running mobile only tests
+    //         Ext.Msg = Ext.Msg || {show: function() {}};
+    //         // setup
+    //         var spy = sinon.spy(Ext.Msg, 'show');
+    //
+    //         controller.removeLayer(firstLayer);
+    //         expect(spy.called).to.be(true);
+    //         expect(spy.calledOnce).to.be.ok();
+    //         expect(spy.callCount).to.be(1);
+    //
+    //         // teardown
+    //         Ext.Msg.show.restore();
+    //      });
+    // });
 
     describe('changeLayerOrder', function() {
         it('is a function', function() {
@@ -111,43 +111,43 @@ describe('Koala.view.panel.MobileLegendController', function() {
         });
     });
 
-    describe('toggleActiveChartingLayer', function() {
-        it('does nothing when not getting a layer', function() {
-            controller.toggleActiveChartingLayer();
-            expect(controller.activeChartingLayer).to.be(null);
-        });
-
-        it('can toggle the active charting layer', function() {
-            var layer = mapComponent.getLayers().item(0);
-            controller.toggleActiveChartingLayer(layer);
-            expect(controller.activeChartingLayer).to.be(layer);
-        });
-
-        it('double toggle untoggles active charting layer', function() {
-            var layer = mapComponent.getLayers().item(0);
-            controller.toggleActiveChartingLayer(layer);
-            controller.toggleActiveChartingLayer(layer);
-            expect(controller.activeChartingLayer).to.be(null);
-        });
-    });
-
-    describe('onLegendFilterTextClick', function() {
-        it('opens filter panel on text click', function() {
-            var layer = mapComponent.getLayers().item(0);
-            var mockPanel = {};
-            var mockForms = {};
-            var mockFilter = {};
-            mockFilter.destroy = sinon.stub();
-            mockForms.query = sinon.stub().returns([mockFilter]);
-            mockForms.setTitle = sinon.stub();
-            mockForms.add = sinon.stub();
-            mockForms.show = sinon.stub();
-            mockPanel.down = sinon.stub().returns(mockForms);
-            sinon.stub(view, 'up').returns(mockPanel);
-            controller.onLegendFilterTextClick(layer);
-            expect(mockFilter.destroy.calledOnce).to.be(true);
-            expect(mockForms.show.calledOnce).to.be(true);
-        });
-    });
+    // describe('toggleActiveChartingLayer', function() {
+    //     it('does nothing when not getting a layer', function() {
+    //         controller.toggleActiveChartingLayer();
+    //         expect(controller.activeChartingLayer).to.be(null);
+    //     });
+    //
+    //     it('can toggle the active charting layer', function() {
+    //         var layer = mapComponent.getLayers().item(0);
+    //         controller.toggleActiveChartingLayer(layer);
+    //         expect(controller.activeChartingLayer).to.be(layer);
+    //     });
+    //
+    //     it('double toggle untoggles active charting layer', function() {
+    //         var layer = mapComponent.getLayers().item(0);
+    //         controller.toggleActiveChartingLayer(layer);
+    //         controller.toggleActiveChartingLayer(layer);
+    //         expect(controller.activeChartingLayer).to.be(null);
+    //     });
+    // });
+    //
+    // describe('onLegendFilterTextClick', function() {
+    //     it('opens filter panel on text click', function() {
+    //         var layer = mapComponent.getLayers().item(0);
+    //         var mockPanel = {};
+    //         var mockForms = {};
+    //         var mockFilter = {};
+    //         mockFilter.destroy = sinon.stub();
+    //         mockForms.query = sinon.stub().returns([mockFilter]);
+    //         mockForms.setTitle = sinon.stub();
+    //         mockForms.add = sinon.stub();
+    //         mockForms.show = sinon.stub();
+    //         mockPanel.down = sinon.stub().returns(mockForms);
+    //         sinon.stub(view, 'up').returns(mockPanel);
+    //         controller.onLegendFilterTextClick(layer);
+    //         expect(mockFilter.destroy.calledOnce).to.be(true);
+    //         expect(mockForms.show.calledOnce).to.be(true);
+    //     });
+    // });
 
 });
