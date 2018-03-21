@@ -2,11 +2,11 @@
     "data": {
         "merge": {
             "urls": {
-                "metadata-xml2json": "http://10.133.7.63/geonetwork/srv/api/0.1/records/",
-                "metadata-search": "http://10.133.7.63/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://10.133.7.63/ogc/bfs/ows",
-                "print-servlet": "http://10.133.7.63/bfs-printservice/print/",
-                "irix-servlet": "http://10.133.7.63/irix-servlet",
+                "metadata-xml2json": "http://10.133.7.82/geonetwork/srv/api/0.1/records/",
+                "metadata-search": "http://10.133.7.82/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://10.133.7.82/ogc/bfs/ows",
+                "print-servlet": "http://10.133.7.82/bfs-printservice/print/",
+                "irix-servlet": "http://10.133.7.82/irix-servlet",
                 "irix-context": "resources/irixContext.json",
                 "rodos-projects": "resources/rodos/projects.json",
                 "rodos-results": "resources/rodos/projects/",
@@ -21,11 +21,11 @@
                 "password": "admin"
             },
             "import": {
-                "base-url": "http://10.133.7.63/ogc/",
+                "base-url": "http://10.133.7.82/ogc/",
                 "target-workspace": "bfs",
                 "target-workspace-uri": "www.imis.bfs.de/bfs",
                 "target-store": "bfs_geodata",
-                "metadata-base-url": "http://10.133.7.63/geonetwork/",
+                "metadata-base-url": "http://10.133.7.82/geonetwork/",
             },
             "imis_user": {
               "imisroles": [

@@ -37,8 +37,9 @@ Ext.define('Koala.view.window.Print', {
         title: '{title}'
     },
 
+    collapsible: true,
     resizable: false,
-    constrain: true,
+    constrainHeader: true,
 
     layout: 'fit',
 

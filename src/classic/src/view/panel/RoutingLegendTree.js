@@ -479,7 +479,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 xtype: 'button',
                 name: 'clone',
                 glyph: 'xf0c5@FontAwesome',
-                tooltip: 'Objekte klonen'
+                tooltip: 'Objekte klonen',
+                listeners: {
+                    boxready: Koala.util.AppContext.generateCheckToolVisibility('cloneBtn')
+                }
                 // We'll assign a handler to handle clicks here once the
                 // class is defined and we can access the static methods
             }, {
