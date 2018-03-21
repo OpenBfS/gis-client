@@ -234,7 +234,7 @@ Ext.define('Koala.util.Chart', {
                     .classed('k-d3-hidden', !visible)
                     .attr('transform', 'translate(' + translateX + ',0)');
             });
-            var chart = d3.selectAll('.k-d3-shape-container');
+            var chart = d3.selectAll('.k-d3-shape-container,.k-d3-grid');
             if (chart.node()) {
                 chart.attr('transform', 'translate(' + translateX + ',0)');
             }
