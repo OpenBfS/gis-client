@@ -879,21 +879,6 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
-     *
-     */
-    redrawAttachedSeriesAxes: function() {
-        var me = this;
-        var metadata = this.getView().getConfig().targetLayer.metadata;
-        var Axes = Koala.util.ChartAxes;
-        var chartSize = this.getChartSize();
-        var viewId = this.getView().getId();
-
-        Ext.each(me.attachedSeriesAxes, function(axis) {
-            Axes.redrawAxis(axis, 'left', metadata, chartSize, viewId);
-        });
-    },
-
-    /**
      * Creates the grid axis.
      */
     createGridAxes: function() {

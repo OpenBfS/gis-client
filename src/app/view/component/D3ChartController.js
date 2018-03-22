@@ -182,7 +182,6 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             me.redrawTitle();
             me.redrawAxes();
-            me.redrawAttachedSeriesAxes();
             me.redrawGridAxes();
             me.drawShapes();
             me.updateLegendContainerPosition();
@@ -810,6 +809,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             var classes = Const.CSS_CLASS.SHAPE_GROUP;
             if (attachedSeriesNumber && !me.attachedSeriesVisibleById[shapeId][attachedSeriesNumber-1]) {
                 classes += ' k-d3-hidden';
+            }
+            if (attachedSeriesNumber) {
                 yScale = me.attachedSeriesScales[attachedSeriesNumber - 1];
             }
 
@@ -1066,7 +1067,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                             var h = Koala.util.String.coerce(d.style.height);
                             if (Ext.isNumber(h)) {
-                                return me.scales[orientY](yValue) - h / 2;
+                                return yScale(yValue) - h / 2;
                             }
                         }
                         return yScale(yValue) - 5;
@@ -1133,7 +1134,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 return yScale(yValue) - h;
                             }
                         }
-                        return me.scales[orientY](yValue) - 5;
+                        return yScale(yValue) - 5;
                     })
                     .attr('width', function(d) {
                         if (d.style && d.style.radius) {
@@ -1517,6 +1518,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                     '_' + (index + 1) + ']';
                                 d3.select(sel).classed('k-d3-hidden', !checked);
                                 Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
+                                me.redrawChart();
                             }
                         }
                     });
