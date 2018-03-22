@@ -823,13 +823,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var el = view.el.dom;
         var layer = view.getLayer();
-        var feature = view.getFeature();
-        var template = Koala.util.Object.getPathStrOr(layer,
-            'metadata/layerConfig/olProperties/hoverTpl');
-        var innerHTML = Koala.util.String.replaceTemplateStrings(template,
-            feature);
+        var features = view.getFeatureGroup();
+        var hoverPlugin = BasiGX.view.component.Map.guess().getPlugin('hoverBfS');
+        var innerHTML = hoverPlugin.getToolTipHtml(layer, features);
         var timeSeriesTab = me.createTabElement({
-            //title: viewModel.get('info'),
             title: '<i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>',
             innerHTML: innerHTML,
             className: 'hoverTpl-tab'

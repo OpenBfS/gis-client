@@ -58,9 +58,11 @@ Ext.define('Koala.view.component.MapController', {
         Ext.each(realFeats, function(olFeat) {
 */
         me.distinctGeoms = [];
+        var groups = {};
         Ext.each(olFeats, function(olFeat) {
             if (me.distinctGeoms.length === 0) {
                 me.distinctGeoms.push(olFeat);
+                groups[olFeat.get('id')] = [olFeat];
             } else {
                 Ext.each(me.distinctGeoms, function(feat) {
                     var distinctFeat_wkt_format = new ol.format.WKT();
@@ -69,6 +71,9 @@ Ext.define('Koala.view.component.MapController', {
                     var WKT_olFeat = olFeat_wkt_format.writeGeometry(olFeat.getGeometry());
                     if (WKT_distinctFeat !== WKT_olFeat) {
                         me.distinctGeoms.push(olFeat);
+                        groups[olFeat.get('id')] = [olFeat];
+                    } else {
+                        groups[feat.get('id')].push(olFeat);
                     }
                 });
             }
@@ -96,6 +101,7 @@ Ext.define('Koala.view.component.MapController', {
                         cartoWindowId: cartoWindowId,
                         layer: layer,
                         feature: olFeat,
+                        featureGroup: groups[olFeat.get('id')],
                         renderTo: Ext.getBody()
                     });
                 }
