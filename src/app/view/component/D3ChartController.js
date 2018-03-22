@@ -160,16 +160,17 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     redrawChart: function() {
         var me = this;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
 
         if (me.chartRendered && (me.chartDataAvailable ||
-            me.getView().getConfig().alwaysRenderChart)) {
+            view.getConfig().alwaysRenderChart)) {
             // Reset the shapes and scales
             me.shapes = [];
             me.scales = {};
 
-            me.updateSvgContainerSize();
-
             me.deleteShapeContainerSvg();
+            me.updateSvgContainerSize();
 
             me.createScales();
             me.createAxes();
@@ -188,9 +189,12 @@ Ext.define('Koala.view.component.D3ChartController', {
             me.redrawLegend();
 
             // Reset the zoom to the initial extent
+            if (view.getZoomEnabled()) {
+                me.createInteractions();
+                d3.select(viewId + ' svg > g > g.k-d3-shape-container')
+                    .call(me.zoomInteraction);
+            }
             me.resetZoom();
-            var view = me.getView();
-            var viewId = '#' + view.getId();
             Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
         }
     },

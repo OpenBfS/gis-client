@@ -525,7 +525,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     deleteShapeContainerSvg: function() {
         var view = this.getView();
-        var svg = d3.select('#' + view.getId() + ' svg svg');
+        var svg = d3.select('#' + view.getId() + ' svg g.k-d3-shape-container');
         if (svg && !svg.empty()) {
             svg.node().remove();
         }
@@ -596,7 +596,8 @@ Ext.define('Koala.view.component.D3BaseController', {
         // may have changed.
         if (view.getZoomEnabled()) {
             me.createInteractions();
-            svgContainer.call(me.zoomInteraction);
+            d3.select(viewId + ' svg > g > g.k-d3-shape-container')
+                .call(me.zoomInteraction);
         }
     },
 
