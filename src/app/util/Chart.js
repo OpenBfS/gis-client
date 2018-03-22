@@ -208,7 +208,7 @@ Ext.define('Koala.util.Chart', {
          * works in case of an x/y axis at left/bottom and possibly multiple
          * attached series.
          */
-        recalculatePositionsAndVisibility: function(attachedSeriesShapes, attachedSeriesVisibleById) {
+        recalculatePositionsAndVisibility: function(attachedSeriesShapes, attachedSeriesVisibleById, viewId) {
             var visibleSeries = {};
             var translateX = 0;
 
@@ -227,23 +227,23 @@ Ext.define('Koala.util.Chart', {
                 if (config && config.showYAxis) {
                     translateX += (config.axisWidth || 40);
                 }
-                var sel = '.k-d3-axis-y_' + (parseFloat(idx) + 1);
+                var sel = viewId + ' .k-d3-axis-y_' + (parseFloat(idx) + 1);
                 var visible = config && config.showYAxis;
 
                 d3.select(sel)
                     .classed('k-d3-hidden', !visible)
                     .attr('transform', 'translate(' + translateX + ',0)');
             });
-            var chart = d3.selectAll('.k-d3-shape-container,.k-d3-grid');
+            var chart = d3.selectAll(viewId + ' .k-d3-shape-container,' + viewId + ' .k-d3-grid');
             if (chart.node()) {
                 chart.attr('transform', 'translate(' + translateX + ',0)');
             }
-            var axis = d3.select('.k-d3-axis-x');
+            var axis = d3.select(viewId + ' .k-d3-axis-x');
             if (axis.node()) {
                 var cur = axis.attr('transform');
                 var ms = cur.match(/,\s*(\d+)/);
                 var oldy = parseFloat(ms[1]);
-                d3.select('.k-d3-axis-x')
+                d3.select(viewId + ' .k-d3-axis-x')
                     .attr('transform', 'translate(' + translateX + ',' + oldy + ')');
             }
         },
