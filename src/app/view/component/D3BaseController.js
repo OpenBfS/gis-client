@@ -450,20 +450,23 @@ Ext.define('Koala.view.component.D3BaseController', {
         var view = me.getView();
         var viewSize = me.getViewSize();
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
-        var metadata = view.getConfig().targetLayer.metadata;
-        var series = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        series = JSON.parse(series);
-        var totalOffset = 0;
-        Ext.each(series, function(s) {
-            totalOffset += s.axisWidth || 40;
-        });
+
+        var series = this.attachedSeriesShapes;
+        var offset = 0;
+        if (series && series.length > 0) {
+            var configs = JSON.parse(series[0].config.attachedSeries);
+            var id = series[0].config.id;
+            Ext.each(configs, function(config, idx) {
+                var width = config.axisWidth || 40;
+                var visible = me.attachedSeriesVisibleById[id][idx];
+                if (visible) {
+                    offset += width;
+                }
+            });
+        }
 
         return [
-            viewSize[0] - chartMargin.left - chartMargin.right - totalOffset,
+            viewSize[0] - chartMargin.left - chartMargin.right - offset,
             viewSize[1] - chartMargin.top - chartMargin.bottom
         ];
     },
