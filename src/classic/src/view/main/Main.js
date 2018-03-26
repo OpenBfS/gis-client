@@ -121,9 +121,10 @@ Ext.define('Koala.view.main.Main', {
             },{
                 xtype: 'k-button-permalink'
             }, {
-                xtype: 'basigx-button-togglelegend'
-            }, {
-                xtype: 'k-button-selectfeatures'
+                xtype: 'k-button-selectfeatures',
+                listeners: {
+                    boxready: Koala.util.AppContext.generateCheckToolVisibility('selectFeaturesBtn')
+                }
             }]
         },
         listeners: {

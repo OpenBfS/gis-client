@@ -233,7 +233,10 @@ Ext.define('Koala.util.SelectFeatures', {
                     var ogcCqlFilter = BasiGX.util.WFS.getOgcFromCqlFilter(cqlFilter);
                     filter = BasiGX.util.WFS.combineFilters([ogcCqlFilter, filter]);
                 }
-
+                var parms = sourceLayer.getSource().getParams();
+                if (parms['viewparams']) {
+                    wfsUrl += 'viewparams=' + parms['viewparams'];
+                }
                 BasiGX.util.WFS.executeWfsGetFeature(
                     wfsUrl,
                     sourceLayer,
