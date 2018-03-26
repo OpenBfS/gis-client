@@ -923,7 +923,7 @@ Wenn 'between' verwendet werden soll, muss der 'value' als kommasperarierter Str
 
 **legendEntryMaxLength**
 
-  Die maximale Anzahl an Legendeneinträgen.
+  Die maximale Breite von Legendentexten in Zeichen.
 
   | Typ | gco:CharacterString  |
   |---------------------:|:----|
