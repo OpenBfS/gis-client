@@ -144,9 +144,9 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
 
-        Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById);
         var view = me.getView();
         var viewId = '#' + view.getId();
+        Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
 
         // register zoom interaction if requested
         if (view.getZoomEnabled()) {
@@ -160,16 +160,17 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     redrawChart: function() {
         var me = this;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
 
         if (me.chartRendered && (me.chartDataAvailable ||
-            me.getView().getConfig().alwaysRenderChart)) {
+            view.getConfig().alwaysRenderChart)) {
             // Reset the shapes and scales
             me.shapes = [];
             me.scales = {};
 
-            me.updateSvgContainerSize();
-
             me.deleteShapeContainerSvg();
+            me.updateSvgContainerSize();
 
             me.createScales();
             me.createAxes();
@@ -182,15 +183,19 @@ Ext.define('Koala.view.component.D3ChartController', {
 
             me.redrawTitle();
             me.redrawAxes();
-            me.redrawAttachedSeriesAxes();
             me.redrawGridAxes();
             me.drawShapes();
             me.updateLegendContainerPosition();
             me.redrawLegend();
 
             // Reset the zoom to the initial extent
+            if (view.getZoomEnabled()) {
+                me.createInteractions();
+                d3.select(viewId + ' svg > g > g.k-d3-shape-container')
+                    .call(me.zoomInteraction);
+            }
             me.resetZoom();
-            Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById);
+            Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
         }
     },
 
@@ -808,6 +813,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             var classes = Const.CSS_CLASS.SHAPE_GROUP;
             if (attachedSeriesNumber && !me.attachedSeriesVisibleById[shapeId][attachedSeriesNumber-1]) {
                 classes += ' k-d3-hidden';
+            }
+            if (attachedSeriesNumber) {
                 yScale = me.attachedSeriesScales[attachedSeriesNumber - 1];
             }
 
@@ -1064,7 +1071,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
                             var h = Koala.util.String.coerce(d.style.height);
                             if (Ext.isNumber(h)) {
-                                return me.scales[orientY](yValue) - h / 2;
+                                return yScale(yValue) - h / 2;
                             }
                         }
                         return yScale(yValue) - 5;
@@ -1131,7 +1138,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 return yScale(yValue) - h;
                             }
                         }
-                        return me.scales[orientY](yValue) - 5;
+                        return yScale(yValue) - 5;
                     })
                     .attr('width', function(d) {
                         if (d.style && d.style.radius) {
@@ -1371,7 +1378,21 @@ Ext.define('Koala.view.component.D3ChartController', {
                 .on('click', toggleVisibilityFunc)
                 .attr('transform', staticMe.makeTranslate(0, curTranslateY))
                 .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + shapeId);
-            legendEntry.on('contextmenu', me.getContextmenuFunction(shape));
+            if (Ext.isModern) {
+                // looks like there's no longtouch event? new Ext.Element won't
+                // help either (svg not supported?)
+                var timer;
+                legendEntry.on('touchstart', function() {
+                    timer = window.setTimeout(me.getContextmenuFunction(shape), 500);
+                });
+                legendEntry.on('touchend', function() {
+                    if (timer) {
+                        window.clearTimeout(timer);
+                    }
+                });
+            } else {
+                legendEntry.on('contextmenu', me.getContextmenuFunction(shape));
+            }
 
             // background for the concrete legend icon, to widen clickable area.
             legendEntry.append('path')
@@ -1443,14 +1464,16 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .on('click', me.generateDownloadCallback(shape));
             }
 
-            legendEntry.append('text')
-                // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
-                .text('\uf1fc')
-                .attr('class', CSS.COLOR_ICON)
-                .attr('text-anchor', 'start')
-                .attr('dy', '1')
-                .attr('dx', '150') // TODO Discuss, do we need this dynamically?
-                .on('click', me.generateColorCallback(shape, idx));
+            if (!Ext.isModern) {
+                legendEntry.append('text')
+                    // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                    .text('\uf1fc')
+                    .attr('class', CSS.COLOR_ICON)
+                    .attr('text-anchor', 'start')
+                    .attr('dy', '1')
+                    .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                    .on('click', me.generateColorCallback(shape, idx));
+            }
 
             legendEntry.append('text')
                 // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
@@ -1475,33 +1498,48 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     getContextmenuFunction: function(shape) {
         var me = this;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
         return function() {
-            d3.event.preventDefault();
+            // we only have a d3 event in classic
+            if (d3.event) {
+                d3.event.preventDefault();
+            }
             if (shape.config.attachedSeries) {
                 var series = JSON.parse(shape.config.attachedSeries);
                 var items = [];
                 Ext.each(series, function(config, index) {
                     var visible = me.attachedSeriesVisibleById[shape.config.id][index];
                     items.push({
-                        xtype: 'menucheckitem',
-                        text: config.dspUnit,
+                        xtype: 'checkboxfield',
+                        fieldLabel: config.dspUnit,
+                        label: config.dspUnit,
                         checked: visible,
                         listeners: {
-                            'checkchange': function(_, checked) {
+                            change: function(_, checked) {
                                 me.attachedSeriesVisibleById[shape.config.id][index] = checked;
                                 var sel = '[idx=shape-group-' + shape.config.id +
                                     '_' + (index + 1) + ']';
                                 d3.select(sel).classed('k-d3-hidden', !checked);
-                                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById);
+                                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
+                                me.redrawChart();
                             }
                         }
                     });
                 });
                 if (items.length > 0) {
-                    var menu = Ext.create('Ext.menu.Menu', {
+                    var menuType = 'Ext.menu.Menu';
+                    if (Ext.isModern) {
+                        menuType = 'Ext.Menu';
+                    }
+                    var menu = Ext.create(menuType, {
                         items: items
                     });
-                    menu.showAt(d3.event.clientX, d3.event.clientY);
+                    if (Ext.isClassic) {
+                        menu.showAt(d3.event.clientX, d3.event.clientY);
+                    } else {
+                        menu.show();
+                    }
                 }
             }
         };

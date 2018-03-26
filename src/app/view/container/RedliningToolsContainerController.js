@@ -172,8 +172,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                 features: me.redlineFeatures
             }),
             style: me.redlineLayerStyle,
-            // TODO remove this in the future to allow printing this layer
-            allowPrint: false,
+            printSpecial: true,
             // TODO We do a check manually check on the RoutingLegendTree to
             // disbale styling for this layer.
             disableStyling: true,

@@ -609,7 +609,7 @@ Ext.define('Koala.view.form.Print', {
         overlays.forEach(function(overlay) {
             var coords = overlay.centerCoords;
             var containerEl = overlay.getElement();
-            if (!containerEl) {
+            if (!containerEl || !containerEl.parentNode) {
                 return;
             }
             var promise = html2canvas(containerEl);
@@ -680,8 +680,7 @@ Ext.define('Koala.view.form.Print', {
                             externalGraphic: source.popup,
                             graphicFormat: 'image/png'
                         };
-                    // TODO Find the magic multiplier
-                    symbolizer.graphicWidth = source.height / 0.75;
+                    symbolizer.graphicWidth = source.height;
                     serializedLayers.push({
                         type: 'geojson',
                         style: {

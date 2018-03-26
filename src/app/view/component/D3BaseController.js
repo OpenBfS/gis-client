@@ -450,20 +450,29 @@ Ext.define('Koala.view.component.D3BaseController', {
         var view = me.getView();
         var viewSize = me.getViewSize();
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
-        var metadata = view.getConfig().targetLayer.metadata;
-        var series = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        series = JSON.parse(series);
-        var totalOffset = 0;
-        Ext.each(series, function(s) {
-            totalOffset += s.axisWidth || 40;
-        });
+
+        var series = this.attachedSeriesShapes;
+        var offset = 0;
+        if (series && series.length > 0) {
+            var configs = JSON.parse(series[0].config.attachedSeries);
+            var visibility = [];
+            Ext.each(series, function(shape) {
+                var id = shape.config.id;
+                Ext.each(configs, function(config, idx) {
+                    var visible = me.attachedSeriesVisibleById[id][idx];
+                    visibility[idx] = visibility[idx] || visible;
+                });
+            });
+            Ext.each(configs, function(config, idx) {
+                var width = config.axisWidth || 40;
+                if (visibility[idx]) {
+                    offset += width;
+                }
+            });
+        }
 
         return [
-            viewSize[0] - chartMargin.left - chartMargin.right - totalOffset,
+            viewSize[0] - chartMargin.left - chartMargin.right - offset,
             viewSize[1] - chartMargin.top - chartMargin.bottom
         ];
     },
@@ -525,7 +534,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     deleteShapeContainerSvg: function() {
         var view = this.getView();
-        var svg = d3.select('#' + view.getId() + ' svg svg');
+        var svg = d3.select('#' + view.getId() + ' svg g.k-d3-shape-container');
         if (svg && !svg.empty()) {
             svg.node().remove();
         }
@@ -596,7 +605,8 @@ Ext.define('Koala.view.component.D3BaseController', {
         // may have changed.
         if (view.getZoomEnabled()) {
             me.createInteractions();
-            svgContainer.call(me.zoomInteraction);
+            d3.select(viewId + ' svg > g > g.k-d3-shape-container')
+                .call(me.zoomInteraction);
         }
     },
 
@@ -875,21 +885,6 @@ Ext.define('Koala.view.component.D3BaseController', {
         Ext.iterate(axesConfig, function(orient, config) {
             var axisGenerator = me.axes[orient];
             Axes.redrawAxis(axisGenerator, orient, metadata, chartSize, viewId, config);
-        });
-    },
-
-    /**
-     *
-     */
-    redrawAttachedSeriesAxes: function() {
-        var me = this;
-        var metadata = this.getView().getConfig().targetLayer.metadata;
-        var Axes = Koala.util.ChartAxes;
-        var chartSize = this.getChartSize();
-        var viewId = this.getView().getId();
-
-        Ext.each(me.attachedSeriesAxes, function(axis) {
-            Axes.redrawAxis(axis, 'left', metadata, chartSize, viewId);
         });
     },
 
