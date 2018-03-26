@@ -455,11 +455,17 @@ Ext.define('Koala.view.component.D3BaseController', {
         var offset = 0;
         if (series && series.length > 0) {
             var configs = JSON.parse(series[0].config.attachedSeries);
-            var id = series[0].config.id;
+            var visibility = [];
+            Ext.each(series, function(shape) {
+                var id = shape.config.id;
+                Ext.each(configs, function(config, idx) {
+                    var visible = me.attachedSeriesVisibleById[id][idx];
+                    visibility[idx] = visibility[idx] || visible;
+                });
+            });
             Ext.each(configs, function(config, idx) {
                 var width = config.axisWidth || 40;
-                var visible = me.attachedSeriesVisibleById[id][idx];
-                if (visible) {
+                if (visibility[idx]) {
                     offset += width;
                 }
             });
