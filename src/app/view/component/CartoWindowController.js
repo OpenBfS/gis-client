@@ -142,7 +142,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
      */
     disableMapInteractions: function() {
         var map = this.getView().getMap();
+        var me = this;
+        this.interactionActiveList = [];
         map.getInteractions().forEach(function(interaction) {
+            me.interactionActiveList.push(interaction.getActive());
             interaction.setActive(false);
         });
     },
@@ -155,12 +158,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
     enableMapInteractions: function(force) {
         var map = this.getView().getMap();
         var mouseDown = this.getView().mouseDown;
+        var me = this;
 
         if (mouseDown && !force) {
             return;
         }
-        map.getInteractions().forEach(function(interaction) {
-            interaction.setActive(true);
+        map.getInteractions().forEach(function(interaction, idx) {
+            var active = me.interactionActiveList ? me.interactionActiveList[idx] : true;
+            interaction.setActive(active);
         });
     },
 

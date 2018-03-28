@@ -28,6 +28,7 @@ Ext.define('Koala.view.form.Print', {
         'GeoExt.data.serializer.ImageWMS',
         'GeoExt.data.serializer.TileWMS',
         'GeoExt.data.serializer.Vector',
+        'GeoExt.data.serializer.WMTS',
         'GeoExt.data.serializer.XYZ',
         'GeoExt.data.serializer.WMTS',
 

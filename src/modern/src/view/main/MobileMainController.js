@@ -274,6 +274,8 @@ Ext.define('Koala.view.main.MobileMainController', {
                 xtype: 'panel',
                 title: viewModel.get('htmlTabTitle'),
                 bodyPadding: 5,
+                width: '100%',
+                height: '100%',
                 tools: [{
                     type: 'close',
                     handler: function() {
@@ -284,7 +286,12 @@ Ext.define('Koala.view.main.MobileMainController', {
             var html = Koala.util.Carto.getHtmlData(me.chartingLayer, feature);
             var htmlPanel = panel;
             html.then(function(markup) {
-                htmlPanel.setHtml(markup, true);
+                var el = Ext.dom.Helper.createDom(markup);
+                el.width = '100%';
+                el.height = '100%';
+                htmlPanel.setHtml(el);
+                el.parentNode.style.width = '100%';
+                el.parentNode.style.height = '100%';
             });
             carousel.add(panel);
             this.registerSwipeHandler(panel, carousel);
