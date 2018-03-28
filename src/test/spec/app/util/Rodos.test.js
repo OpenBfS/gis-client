@@ -14,7 +14,7 @@ describe('Koala.util.Rodos', function() {
             //Setup
             var testObjs = TestUtil.setupTestObjects({
                 mapComponentOpts: {
-                    appContextPath: '/base/resources/appContext.json'
+                    appContextPath: '/base/resources/appContextTest.json'
                 }
             });
             var appContext = Koala.util.AppContext.getAppContext();
