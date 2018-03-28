@@ -164,7 +164,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             return;
         }
         map.getInteractions().forEach(function(interaction, idx) {
-            interaction.setActive(me.interactionActiveList[idx]);
+            var active = me.interactionActiveList ? me.interactionActiveList[idx] : true;
+            interaction.setActive(active);
         });
     },
 
