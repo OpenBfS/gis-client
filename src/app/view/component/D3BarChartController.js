@@ -270,6 +270,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.drawLegend();
 
         me.chartRendered = true;
+        me.redrawChart();
+        me.updateLegendContainerPosition();
     },
 
     /**
@@ -725,8 +727,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
             .attr('transform', makeTranslate(legendMargin.left || 10, 0));
 
-        me.updateLegendContainerDimensions();
-
         var firstStationData = Ext.Object.getValues(me.data);
         var curTranslateY;
 
@@ -891,34 +891,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             }
         });
         me.wrapAndResizeLegend();
-    },
-
-    wrapAndResizeLegend: function() {
-        var me = this;
-        // raise the buffer to reflect special cases with legend and delete icons
-        Koala.util.Label.distanceBuffer = 70;
-        Koala.util.Label.handleLabelWrap(
-            '.k-d3-scrollable-legend-container',
-            ' g > text:not(.k-d3-color-icon):not(.k-d3-delete-icon)',
-            25,
-            1.2,
-            true
-        );
-        // reset buffer back to default
-        Koala.util.Label.distanceBuffer = 20;
-        var selector = '.k-d3-scrollable-legend-container g > text' +
-            ':not(.k-d3-color-icon):not(.k-d3-delete-icon)';
-        var y = me.legendEntryTargetHeight;
-        d3.selectAll(selector).each(function() {
-            var count = d3.select(this).selectAll('tspan').size();
-            var parent = d3.select(this).node().parentNode;
-            d3.select(parent)
-                .attr('transform', 'translate(0,' + y + ')');
-            // every additional tspan will lead to an extra height on the parent
-            y += 14 * (count -1) + me.legendEntryTargetHeight;
-        });
-        // resize the container
-        me.updateLegendContainerDimensions();
     },
 
     /**
