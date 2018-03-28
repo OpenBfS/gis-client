@@ -29,6 +29,7 @@ Ext.define('Koala.view.form.Print', {
         'GeoExt.data.serializer.TileWMS',
         'GeoExt.data.serializer.Vector',
         'GeoExt.data.serializer.XYZ',
+        'GeoExt.data.serializer.WMTS',
 
         'Koala.view.form.IrixFieldSet',
         'Koala.util.DokpoolContext',
@@ -631,7 +632,10 @@ Ext.define('Koala.view.form.Print', {
         Ext.Promise.all(promises).then(function() {
             mapComponent.getLayers().forEach(function(layer) {
                 if (layer.get('printLayer') && !!layer.checked) {
-                    printLayers.push(layer.get('printLayer'));
+                    var printLayer = layer.get('printLayer');
+                    // adopt the opacity of the original layer on the print layer
+                    printLayer.setOpacity(layer.get('opacity'));
+                    printLayers.push(printLayer);
                 } else {
                     var isChecked = !!layer.checked;
                     var hasName = isChecked && !!layer.get('name');
