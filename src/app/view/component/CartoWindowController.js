@@ -203,7 +203,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var config = {
             startDate: timeFilter.mindatetimeinstant,
             endDate: timeFilter.maxdatetimeinstant,
-            width: '500px',
+            width: '548px',
             height: '225px',
             renderTo: tabElm
         };

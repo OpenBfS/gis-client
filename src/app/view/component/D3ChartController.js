@@ -125,33 +125,36 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.setDomainForScales();
 
         me.drawTitle();
-        me.drawAxes();
-        me.drawAttachedSeriesAxis();
-        me.drawGridAxes();
-        me.drawShapes();
-        me.registerKeyboardHandler(me);
-
-        var promise = this.resolveDynamicTemplateUrls()
-            .then(function() {
-                me.drawLegend();
-                me.chartRendered = true;
-            });
-
-        if (promise.catch) {
-            promise.catch(function() {
-                me.drawLegend();
-                me.chartRendered = true;
-            });
-        }
-
         var view = me.getView();
         var viewId = '#' + view.getId();
-        Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
 
-        // register zoom interaction if requested
-        if (view.getZoomEnabled()) {
-            var plot = d3.select(viewId + ' svg > g > g > svg');
-            plot.call(me.zoomInteraction);
+        function continueDrawing() {
+            me.drawLegend();
+            me.updateSvgContainerSize();
+            me.updateLegendContainerPosition();
+            me.drawAxes();
+            me.drawAttachedSeriesAxis();
+            me.drawGridAxes();
+            me.drawShapes();
+            me.registerKeyboardHandler(me);
+            Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
+            me.chartRendered = true;
+            // register zoom interaction if requested
+            if (view.getZoomEnabled()) {
+                var plot = d3.select(viewId + ' svg > g > g > svg');
+                plot.call(me.zoomInteraction);
+            }
+            // force redraw once to fix initial rendering problems for now.
+            // The whole rendering process should be streamlined/refactored
+            // so that there's no difference in 'drawing' and 'redrawing'!
+            me.redrawChart();
+        }
+
+        var promise = this.resolveDynamicTemplateUrls()
+            .then(continueDrawing);
+
+        if (promise.catch) {
+            promise.catch(continueDrawing);
         }
     },
 
@@ -170,14 +173,20 @@ Ext.define('Koala.view.component.D3ChartController', {
             me.scales = {};
 
             me.deleteShapeContainerSvg();
-            me.updateSvgContainerSize();
 
             me.createScales();
             me.createAxes();
+            // dirty hack to prevent jumping axis:
+            d3.select(viewId + ' .k-d3-axis-x').style('display', 'none');
             me.createGridAxes();
             me.createShapes();
             me.createAttachedSeriesAxes();
             me.createAttachedSeriesShapes();
+
+            me.updateLegendContainerPosition();
+            me.redrawLegend();
+
+            me.updateSvgContainerSize();
 
             me.setDomainForScales();
 
@@ -185,8 +194,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             me.redrawAxes();
             me.redrawGridAxes();
             me.drawShapes();
-            me.updateLegendContainerPosition();
-            me.redrawLegend();
 
             // Reset the zoom to the initial extent
             if (view.getZoomEnabled()) {
@@ -195,7 +202,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .call(me.zoomInteraction);
             }
             me.resetZoom();
-            Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
+            window.setTimeout(function() {
+                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
+                d3.select(viewId + ' .k-d3-axis-x').style('display', 'block');
+            }, 300);
         }
     },
 
@@ -609,7 +619,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 if (gridConfig.show) {
                     Ext.iterate(me.gridAxes, function(orient) {
                         var axis;
-                        var axisSelector = 'svg g.' + CSS.GRID;
+                        var axisSelector = viewId + ' svg g.' + CSS.GRID;
                         var axisGenerator = me.gridAxes[orient];
                         var scaleGenerator = me.scales[orient];
 
@@ -630,6 +640,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         .style('stroke', gridConfig.color || '#d3d3d3')
                         .style('stroke-opacity', gridConfig.opacity || 0.7);
                 }
+                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
             });
     },
 
@@ -1349,8 +1360,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
             .attr('transform', makeTranslate(legendMargin.left || 10, 0));
 
-        me.updateLegendContainerDimensions();
-
         Ext.each(me.shapes, function(shape, idx) {
             var shapeId = shape.config.id;
             var toggleVisibilityFunc = (function() {
@@ -1432,12 +1441,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 });
 
             var nameAsTooltip = shape.config.name;
-            var visualLabel = staticMe.labelEnsureMaxLength(
-                nameAsTooltip, (legendConfig.legendEntryMaxLength || 15)
-            );
 
             legendEntry.append('text')
-                .text(visualLabel)
+                .text(nameAsTooltip)
                 .attr('text-anchor', 'start')
                 .attr('dy', '0')
                 .attr('dx', '25');
@@ -1488,6 +1494,7 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         var config = this.view.getTargetLayer().get('timeSeriesChartProperties');
         this.drawThresholdLegends(config, legend, curTranslateY);
+        me.wrapAndResizeLegend();
     },
 
     /**
@@ -1498,8 +1505,6 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     getContextmenuFunction: function(shape) {
         var me = this;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
         return function() {
             // we only have a d3 event in classic
             if (d3.event) {
@@ -1521,7 +1526,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 var sel = '[idx=shape-group-' + shape.config.id +
                                     '_' + (index + 1) + ']';
                                 d3.select(sel).classed('k-d3-hidden', !checked);
-                                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
                                 me.redrawChart();
                             }
                         }
