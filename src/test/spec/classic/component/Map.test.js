@@ -6,7 +6,7 @@ describe('Koala.view.component.Map', function() {
         beforeEach(function() {
             testObjs = TestUtil.setupTestObjects({
                mapComponentOpts: {
-                   appContextPath: 'http://localhost:9876/base/resources/appContext.json'
+                   appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
                }
             });
         });
