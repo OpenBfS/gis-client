@@ -30,7 +30,7 @@ describe('Koala.util.Routing', function() {
                 //Setup
                 var testObjs = TestUtil.setupTestObjects({
                     mapComponentOpts: {
-                        appContextPath: 'http://localhost:9876/base/resources/appContext.json'
+                        appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
                     }
                 });
 

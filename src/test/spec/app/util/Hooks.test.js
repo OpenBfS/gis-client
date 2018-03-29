@@ -14,7 +14,7 @@ describe('Koala.util.Hooks', function() {
             // Setup
             var testObjs = TestUtil.setupTestObjects({
                 mapComponentOpts: {
-                    appContextPath: 'http://localhost:9876/base/resources/appContext.json'
+                    appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
                 }
             });
             var fakeForm = 'im the form argument';
@@ -58,7 +58,7 @@ describe('Koala.util.Hooks', function() {
             // Setup
             var testObjs = TestUtil.setupTestObjects({
                 mapComponentOpts: {
-                    appContextPath: 'http://localhost:9876/base/resources/appContext.json'
+                    appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
                 }
             });
             var attributeName = 'doc_creator';

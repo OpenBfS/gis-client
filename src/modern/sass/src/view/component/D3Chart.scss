@@ -65,6 +65,16 @@ svg text {
                                   not supported by any browser */
 }
 
+svg .k-d3-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition-delay: 0.4s, 0s;
+}
+
+svg .k-d3-shape-group-legend {
+  -webkit-touch-callout: none;
+}
+
 svg .k-d3-grid {
     pointer-events: none;
 }

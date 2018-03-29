@@ -142,7 +142,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
      */
     disableMapInteractions: function() {
         var map = this.getView().getMap();
+        var me = this;
+        this.interactionActiveList = [];
         map.getInteractions().forEach(function(interaction) {
+            me.interactionActiveList.push(interaction.getActive());
             interaction.setActive(false);
         });
     },
@@ -155,12 +158,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
     enableMapInteractions: function(force) {
         var map = this.getView().getMap();
         var mouseDown = this.getView().mouseDown;
+        var me = this;
 
         if (mouseDown && !force) {
             return;
         }
-        map.getInteractions().forEach(function(interaction) {
-            interaction.setActive(true);
+        map.getInteractions().forEach(function(interaction, idx) {
+            var active = me.interactionActiveList ? me.interactionActiveList[idx] : true;
+            interaction.setActive(active);
         });
     },
 
@@ -203,7 +208,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var config = {
             startDate: timeFilter.mindatetimeinstant,
             endDate: timeFilter.maxdatetimeinstant,
-            width: '500px',
+            width: '548px',
             height: '225px',
             renderTo: tabElm
         };
@@ -823,13 +828,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var el = view.el.dom;
         var layer = view.getLayer();
-        var feature = view.getFeature();
-        var template = Koala.util.Object.getPathStrOr(layer,
-            'metadata/layerConfig/olProperties/hoverTpl');
-        var innerHTML = Koala.util.String.replaceTemplateStrings(template,
-            feature);
+        var features = view.getFeatureGroup();
+        var hoverPlugin = BasiGX.view.component.Map.guess().getPlugin('hoverBfS');
+        var innerHTML = hoverPlugin.getToolTipHtml(layer, features);
         var timeSeriesTab = me.createTabElement({
-            //title: viewModel.get('info'),
             title: '<i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>',
             innerHTML: innerHTML,
             className: 'hoverTpl-tab'

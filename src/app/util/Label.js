@@ -96,6 +96,21 @@ Ext.define('Koala.util.Label', {
                     i++;
                 }
             });
+        },
+
+        /**
+         * Calculate the minimum legend width by extracting the width of the
+         * biggest label.
+         * @param  {String} id the id of the chart
+         * @return {Number}    the length of the biggest legend label
+         */
+        getMinimumLegendWidth: function(id) {
+            var max = 0;
+            d3.selectAll(id + ' .k-d3-shape-group-legend text')
+                .each(function() {
+                    max = Math.max(this.getBBox().width, max);
+                });
+            return max;
         }
     }
 });

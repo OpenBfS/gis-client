@@ -15,12 +15,12 @@ describe('Koala.util.AppContext', function() {
         beforeEach(function(done) {
             testObjs = TestUtil.setupTestObjects({
                 mapComponentOpts: {
-                    appContextPath: 'http://localhost:9876/base/resources/appContext.json'
+                    appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
                 }
             });
             mapComponent = testObjs.mapComponent;
             Ext.Ajax.request({
-                url: 'http://localhost:9876/base/resources/appContext.json',
+                url: 'http://localhost:9876/base/resources/appContextTest.json',
                 success: function(response) {
                     realAppContext = Ext.decode(response.responseText);
                     done();

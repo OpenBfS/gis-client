@@ -60,7 +60,6 @@ Ext.define('Koala.view.panel.TimeseriesChart', {
     }],
 
     listeners: {
-        initialize: 'onInitialize',
-        painted: 'onPainted'
+        initialize: 'onInitialize'
     }
 });

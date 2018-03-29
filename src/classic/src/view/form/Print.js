@@ -28,7 +28,9 @@ Ext.define('Koala.view.form.Print', {
         'GeoExt.data.serializer.ImageWMS',
         'GeoExt.data.serializer.TileWMS',
         'GeoExt.data.serializer.Vector',
+        'GeoExt.data.serializer.WMTS',
         'GeoExt.data.serializer.XYZ',
+        'GeoExt.data.serializer.WMTS',
 
         'Koala.view.form.IrixFieldSet',
         'Koala.util.DokpoolContext',
@@ -609,7 +611,7 @@ Ext.define('Koala.view.form.Print', {
         overlays.forEach(function(overlay) {
             var coords = overlay.centerCoords;
             var containerEl = overlay.getElement();
-            if (!containerEl) {
+            if (!containerEl || !containerEl.parentNode) {
                 return;
             }
             var promise = html2canvas(containerEl);
@@ -631,7 +633,10 @@ Ext.define('Koala.view.form.Print', {
         Ext.Promise.all(promises).then(function() {
             mapComponent.getLayers().forEach(function(layer) {
                 if (layer.get('printLayer') && !!layer.checked) {
-                    printLayers.push(layer.get('printLayer'));
+                    var printLayer = layer.get('printLayer');
+                    // adopt the opacity of the original layer on the print layer
+                    printLayer.setOpacity(layer.get('opacity'));
+                    printLayers.push(printLayer);
                 } else {
                     var isChecked = !!layer.checked;
                     var hasName = isChecked && !!layer.get('name');
@@ -680,8 +685,7 @@ Ext.define('Koala.view.form.Print', {
                             externalGraphic: source.popup,
                             graphicFormat: 'image/png'
                         };
-                    // TODO Find the magic multiplier
-                    symbolizer.graphicWidth = source.height / 0.75;
+                    symbolizer.graphicWidth = source.height;
                     serializedLayers.push({
                         type: 'geojson',
                         style: {

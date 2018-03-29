@@ -50,6 +50,7 @@ Ext.define('Koala.view.component.CartoWindow',{
         map: null,
         layer: null,
         feature: null,
+        featureGroup: null,
         cartoWindowId: null
     },
 

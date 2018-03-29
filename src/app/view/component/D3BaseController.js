@@ -450,20 +450,35 @@ Ext.define('Koala.view.component.D3BaseController', {
         var view = me.getView();
         var viewSize = me.getViewSize();
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
-        var metadata = view.getConfig().targetLayer.metadata;
-        var series = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        series = JSON.parse(series);
-        var totalOffset = 0;
-        Ext.each(series, function(s) {
-            totalOffset += s.axisWidth || 40;
-        });
+
+        var extraWidth = 100;
+        if (Ext.isModern) {
+            extraWidth -= 40;
+        }
+        var legWidth = Koala.util.Label.getMinimumLegendWidth('#' + view.getId()) + extraWidth;
+
+        var series = this.attachedSeriesShapes;
+        var offset = 0;
+        if (series && series.length > 0) {
+            var configs = JSON.parse(series[0].config.attachedSeries);
+            var visibility = [];
+            Ext.each(series, function(shape) {
+                var id = shape.config.id;
+                Ext.each(configs, function(config, idx) {
+                    var visible = me.attachedSeriesVisibleById[id][idx];
+                    visibility[idx] = visibility[idx] || visible;
+                });
+            });
+            Ext.each(configs, function(config, idx) {
+                var width = config.axisWidth || 40;
+                if (visibility[idx]) {
+                    offset += width;
+                }
+            });
+        }
 
         return [
-            viewSize[0] - chartMargin.left - chartMargin.right - totalOffset,
+            viewSize[0] - chartMargin.left - offset - legWidth,
             viewSize[1] - chartMargin.top - chartMargin.bottom
         ];
     },
@@ -490,15 +505,15 @@ Ext.define('Koala.view.component.D3BaseController', {
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
 
         var translate = makeTranslate(chartMargin.left, chartMargin.top);
-        var viewSize = me.getViewSize();
+        var chartSize = me.getChartSize();
 
         // Get the container view by its ID and append the SVG including an
         // additional group element to it.
         d3.select(viewId)
             .append('svg')
-            .attr('viewBox', '0 0 ' + viewSize[0] + ' ' + viewSize[1])
-            .attr('width', viewSize[0])
-            .attr('height', viewSize[1])
+            .attr('viewBox', '0 0 ' + chartSize[0] + ' ' + chartSize[1])
+            .attr('width', chartSize[0])
+            .attr('height', chartSize[1])
             .append('g')
             .attr('transform', translate);
 
@@ -525,7 +540,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     deleteShapeContainerSvg: function() {
         var view = this.getView();
-        var svg = d3.select('#' + view.getId() + ' svg svg');
+        var svg = d3.select('#' + view.getId() + ' svg g.k-d3-shape-container');
         if (svg && !svg.empty()) {
             svg.node().remove();
         }
@@ -540,11 +555,9 @@ Ext.define('Koala.view.component.D3BaseController', {
         var view = me.getView();
         var viewId = '#' + view.getId();
         var viewSize = me.getViewSize();
-        var viewWidth = viewSize[0];
         var viewHeight = viewSize[1];
 
         var legWidth = me.legendTargetWidth;
-        var legLeft = viewWidth - legWidth;
         var legHeight = viewHeight;
 
         d3.select(viewId)
@@ -552,7 +565,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             .attr('class', CSS.LEGEND_CONTAINER)
             .style('width', legWidth + 'px')
             .style('height', legHeight + 'px')
-            .style('left', legLeft + 'px' )
+            .style('right', '0px' )
             // values below will be updated in #updateLegendContainerDimensions
             .append('svg')
             .attr('viewBox', '0 0 ' + legWidth + ' 100')
@@ -596,7 +609,8 @@ Ext.define('Koala.view.component.D3BaseController', {
         // may have changed.
         if (view.getZoomEnabled()) {
             me.createInteractions();
-            svgContainer.call(me.zoomInteraction);
+            d3.select(viewId + ' svg > g > g.k-d3-shape-container')
+                .call(me.zoomInteraction);
         }
     },
 
@@ -606,16 +620,14 @@ Ext.define('Koala.view.component.D3BaseController', {
     updateLegendContainerPosition: function() {
         var me = this;
         var viewSize = me.getViewSize();
-        var viewWidth = viewSize[0];
         var viewHeight = viewSize[1];
-        var legWidth = me.legendTargetWidth;
-        var legLeft = viewWidth - legWidth;
+        var legWidth = me.calculateLegendWidth();
         var legHeight = viewHeight;
         var legendNode = me.legendSvg.node();
 
         if (legendNode && legendNode.parentNode) {
             d3.select(legendNode.parentNode)
-                .style('left', legLeft + 'px')
+                .style('right', '0px')
                 .style('width', legWidth + 'px')
                 .style('height', legHeight + 'px');
         }
@@ -879,21 +891,6 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
-     *
-     */
-    redrawAttachedSeriesAxes: function() {
-        var me = this;
-        var metadata = this.getView().getConfig().targetLayer.metadata;
-        var Axes = Koala.util.ChartAxes;
-        var chartSize = this.getChartSize();
-        var viewId = this.getView().getId();
-
-        Ext.each(me.attachedSeriesAxes, function(axis) {
-            Axes.redrawAxis(axis, 'left', metadata, chartSize, viewId);
-        });
-    },
-
-    /**
      * Creates the grid axis.
      */
     createGridAxes: function() {
@@ -1078,6 +1075,35 @@ Ext.define('Koala.view.component.D3BaseController', {
         me.drawTitle();
     },
 
+    wrapAndResizeLegend: function() {
+        var me = this;
+        var id = '#' + this.getView().getId();
+        // raise the buffer to reflect special cases with legend and delete icons
+        Koala.util.Label.distanceBuffer = 70;
+        Koala.util.Label.handleLabelWrap(
+            id + ' .k-d3-scrollable-legend-container',
+            ' g > text:not(.k-d3-color-icon):not(.k-d3-delete-icon):not(.k-d3-download-icon)',
+            25,
+            1.2,
+            true
+        );
+        // reset buffer back to default
+        Koala.util.Label.distanceBuffer = 20;
+        var selector = id + ' .k-d3-scrollable-legend-container g > text' +
+            ':not(.k-d3-color-icon):not(.k-d3-delete-icon):not(.k-d3-download-icon)';
+        var y = me.legendEntryTargetHeight;
+        d3.selectAll(selector).each(function() {
+            var count = d3.select(this).selectAll('tspan').size();
+            var parent = d3.select(this).node().parentNode;
+            d3.select(parent)
+                .attr('transform', 'translate(0,' + y + ')');
+            // every additional tspan will lead to an extra height on the parent
+            y += 14 * (count -1) + me.legendEntryTargetHeight;
+        });
+        // resize the container
+        me.updateLegendContainerDimensions();
+    },
+
     /**
      * The legend entries for all elements is in its own svg, which itself lives
      * in a scrollable div. For the SVG to be actually scrollable, we have to
@@ -1092,6 +1118,14 @@ Ext.define('Koala.view.component.D3BaseController', {
         var xtype = view.getXType ? view.getXType() : view.xtype;
         var config = view.getTargetLayer().get('timeSeriesChartProperties');
         var thresholds = config.thresholds ? JSON.parse(config.thresholds) : [];
+        var targetLayer = view.getTargetLayer();
+        var allowDownload = Koala.util.Object.getPathStrOr(
+            targetLayer,
+            'metadata/layerConfig/olProperties/allowDownload',
+            true
+        );
+        allowDownload = Koala.util.String.coerce(allowDownload);
+        allowDownload = allowDownload && !(this instanceof Koala.view.component.D3BarChartController);
 
         var numLegends;
         if (xtype === 'd3-barchart') { // for barcharts
@@ -1107,15 +1141,53 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         var selector = '.k-d3-scrollable-legend-container g > text tspan';
         var lineCount = d3.selectAll(selector).size();
-        lineCount = lineCount - numLegends;
+        lineCount = Math.max(lineCount - numLegends, 0);
 
         var heightEach = me.legendEntryTargetHeight;
-        var legWidth = me.legendTargetWidth;
+        var legWidth = this.calculateLegendWidth();
         var legHeight = heightEach + heightEach * numLegends + lineCount * 14;
         legendParent
             .attr('viewBox', '0 0 ' + legWidth + ' ' + legHeight)
             .attr('width', legWidth)
             .attr('height', legHeight);
+        d3.select('#' + view.getId() + ' .k-d3-scrollable-legend-container')
+            .style('width', legWidth + 'px');
+
+        var curx = legWidth - 30;
+        d3.selectAll('#' + view.getId() + ' text.k-d3-delete-icon')
+            .attr('dx', curx);
+        if (!Ext.isModern) {
+            var off = 20;
+            if (allowDownload) {
+                d3.selectAll('#' + view.getId() + ' text.k-d3-download-icon')
+                    .attr('dx', curx - off);
+                off += 20;
+            }
+            d3.selectAll('#' + view.getId() + ' text.k-d3-color-icon')
+                .attr('dx', curx - off);
+        }
+    },
+
+    calculateLegendWidth: function() {
+        var view = this.getView();
+        var targetLayer = view.getTargetLayer();
+        var allowDownload = Koala.util.Object.getPathStrOr(
+            targetLayer,
+            'metadata/layerConfig/olProperties/allowDownload',
+            true
+        );
+        allowDownload = Koala.util.String.coerce(allowDownload);
+        allowDownload = allowDownload && !(this instanceof Koala.view.component.D3BarChartController);
+
+        var extraWidth = 100;
+        if (Ext.isModern) {
+            extraWidth -= 40;
+        } else {
+            if (!allowDownload) {
+                extraWidth -= 20;
+            }
+        }
+        return Koala.util.Label.getMinimumLegendWidth('#' + view.getId()) + extraWidth;
     },
 
     /**

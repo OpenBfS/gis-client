@@ -35,16 +35,6 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
         });
     },
 
-    onPainted: function() {
-        var me = this;
-        var view = me.getView();
-
-        // Redraw the chart as the underlying data may have been changed.
-        if (view.down('d3-chart')) {
-            view.down('d3-chart').getController().redrawChart();
-        }
-    },
-
     onTimeReferenceChanged: function() {
         var me = this;
         var view = me.getView();
