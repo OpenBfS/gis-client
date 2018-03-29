@@ -451,7 +451,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var viewSize = me.getViewSize();
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
 
-        var extraWidth = 100;
+        var extraWidth = 110;
         if (Ext.isModern) {
             extraWidth -= 40;
         }
@@ -1153,7 +1153,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         d3.select('#' + view.getId() + ' .k-d3-scrollable-legend-container')
             .style('width', legWidth + 'px');
 
-        var curx = legWidth - 30;
+        var curx = legWidth - 40;
         d3.selectAll('#' + view.getId() + ' text.k-d3-delete-icon')
             .attr('dx', curx);
         if (!Ext.isModern) {
@@ -1179,7 +1179,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         allowDownload = Koala.util.String.coerce(allowDownload);
         allowDownload = allowDownload && !(this instanceof Koala.view.component.D3BarChartController);
 
-        var extraWidth = 100;
+        var extraWidth = 110;
         if (Ext.isModern) {
             extraWidth -= 40;
         } else {
