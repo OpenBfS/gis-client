@@ -452,6 +452,9 @@
     "Koala.view.window.FeatureGridWindow": {
         "config": {
             "data": {
+                "downloadLayerText": "fr:Download",
+                "geoJsonText": "fr:GeoJSON",
+                "shapefileText": "fr:Shapefile",
                 "saveLayerText": "fr:Save layer",
                 "wfstSuccess": "fr:Changes successfully saved.<br>Objects inserted: {0}<br>Objects updated: {1}<br>Objects deleted: {2}",
                 "wfstFailure": "fr:Changes could not be saved. Please try again later.",

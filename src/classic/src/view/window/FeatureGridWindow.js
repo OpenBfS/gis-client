@@ -22,6 +22,7 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
 
     requires: [
         'BasiGX.view.grid.FeatureGrid',
+        'BasiGX.util.Download',
         'Koala.util.Import'
     ],
 
@@ -34,7 +35,7 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
     originalLayer: null,
     layer: null,
     layout: 'fit',
-    width: 650,
+    width: 750,
     height: 300,
     scrollable: true,
     wfstInserts: [],
@@ -206,6 +207,13 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                             wfstFailureCallback
                         );
                     }
+                }, {
+                    xtype: 'button',
+                    id: 'feature-grid-download-button',
+                    bind: {
+                        text: viewModel.get('downloadLayerText')
+                    },
+                    handler: 'downloadLayer'
                 }]
             }, {
                 xtype: 'basigx-grid-featuregrid',

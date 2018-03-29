@@ -161,6 +161,27 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
         layer.getSource().un('addfeature', this.onAddFeature, me);
         layer.getSource().un('changefeature', this.onChangeFeature, me);
         layer.getSource().un('removefeature', this.onRemoveFeature, me);
+    },
+
+    downloadLayer: function() {
+        var map = Ext.ComponentQuery.query('basigx-component-map')[0];
+        var view = this.getView();
+        var viewModel = this.getView().getViewModel();
+        var menu = Ext.create('Ext.menu.Menu', {
+            items: [{
+                text: viewModel.get('geoJsonText'),
+                handler: function() {
+                    BasiGX.util.Download.downloadLayer(view.layer, map.map, 'geojson');
+                }
+            }, {
+                text: viewModel.get('shapefileText'),
+                handler: function() {
+                    BasiGX.util.Download.downloadLayer(view.layer, map.map, 'zip');
+                }
+            }]
+        });
+        var btn = view.down('#feature-grid-download-button');
+        menu.showBy(btn);
     }
 
 });
