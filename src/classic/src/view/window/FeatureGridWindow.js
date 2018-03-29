@@ -111,6 +111,10 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
         var header = Ext.ComponentQuery.query('k-panel-header')[0];
         var y = header.getHeight() + 5;
 
+        var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
+        var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
+        var extendedRights = Ext.Array.contains(imisRoles, 'ruf');
+
         me.x = x;
         me.y = y;
         me.setTitle(me.layer.get('name'));
@@ -182,12 +186,13 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                     bind: {
                         text: viewModel.get('wfstLockButton')
                     },
-                    hidden: me.layer.get('persisted') === false,
+                    hidden: me.layer.get('persisted') === false || !extendedRights,
                     handler: function(btn) {
                         me.getController().getFeatureLock(btn, me.layer);
                     }
                 }, {
                     xtype: 'button',
+                    hidden: !extendedRights,
                     bind: {
                         text: viewModel.get('saveLayerText')
                     },
