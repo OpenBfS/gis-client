@@ -141,9 +141,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
      *
      */
     disableMapInteractions: function() {
+        if (this.disabled) {
+            return;
+        }
         var map = this.getView().getMap();
         var me = this;
         this.interactionActiveList = [];
+        this.disabled = true;
         map.getInteractions().forEach(function(interaction) {
             me.interactionActiveList.push(interaction.getActive());
             interaction.setActive(false);
@@ -167,6 +171,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             var active = me.interactionActiveList ? me.interactionActiveList[idx] : true;
             interaction.setActive(active);
         });
+        this.disabled = false;
     },
 
     /**
