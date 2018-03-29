@@ -136,7 +136,8 @@ Ext.define('Koala.Application', {
      * dialog which reloads the page on confirmation.
      */
     onAppUpdate: function() {
-        Ext.Msg.confirm(this.applicationUpdateTitle, this.applicationUpdateText,
+        Ext.Msg.confirm(Koala.Application.applicationUpdateTitle,
+            Koala.Application.applicationUpdateText,
             function(choice) {
                 if (choice === 'yes') {
                     window.location.reload();
