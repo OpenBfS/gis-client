@@ -164,7 +164,7 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
     },
 
     downloadLayer: function() {
-        var map = Ext.ComponentQuery.query('basigx-component-map')[0];
+        var map = BasiGX.util.Map.getMapComponent();
         var view = this.getView();
         var viewModel = view.getViewModel();
         var menu = Ext.create('Ext.menu.Menu', {
