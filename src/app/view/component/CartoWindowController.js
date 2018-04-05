@@ -212,8 +212,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var config = {
             startDate: timeFilter.mindatetimeinstant,
             endDate: timeFilter.maxdatetimeinstant,
-            width: '548px',
-            height: '225px',
+            width: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartWidth) || 500,
+            height: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartHeight) || 250,
             renderTo: tabElm
         };
 
@@ -552,8 +552,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var tabElm = barChartTab.getElementsByTagName('div')[0];
 
         var config = {
-            width: '500px',
-            height: '300px',
+            width: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartWidth) || 500,
+            height: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartHeight) || 250,
             flex: 1,
             renderTo: tabElm
         };
