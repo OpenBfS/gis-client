@@ -688,13 +688,13 @@
                         "html": "<hr style='color:#294d71' />"+
                                 "<h2>2.2 <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Objektinformationen abfragen</h2>"+
                                 "<div>"+
-                                "<p>Zur Abfrage von <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Objekten ist es wichtig, dass der entsprechende Layer in der Legende ausgewählt ist. Ein ausgewählter Layer ist mit einer türkisfarbenen Fläche markiert (siehe Grafik: <i>2.2 Informationen zu einzelnen Objekten</i>).</p>"+
+                                "<p>Zur Abfrage von <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Objekten ist es wichtig, dass der entsprechende Layer in der Legende ausgewählt ist. Ein ausgewählter Layer ist mit einer grauen Fläche markiert (siehe Grafik: <i>2.2 Informationen zu einzelnen Objekten</i>).</p>"+
                                 "<p>Um Informationen von einzelnen Objekten zu erhalten (beispielsweise die 1h Ortsdosisleistung einer bestimmten Station), bewegen Sie den <i>Mauszeiger</i> über die entsprechende Geometrie eines Objektes (im unteren Beispiel entspricht dies einer Punktdarstellung). Diese wird farblich hervorgehoben und die entsprechenden Informationen erscheinen. Je nach Zoomstufe ist es möglich, dass mehrere Geometrien selektiert und die Informationen präsentiert werden. Zoomen Sie in diesem Fall zum gewünschten Objekt, für eine eindeutige Auswahl.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_hoverGeometry.png' title='Informationen zu einzelnen Objekten' alt'graphic_hoverGeometry.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Informationen zu einzelnen Objekten</b>"+
                                 "</div><br />"+
-                                "<p>Objekte denen Werte zugrunde liegen, können mit einem Klick auf die entsprechende Geometrie in einem Diagramm betrachtet werden. Diese sind bei Werten mit zeitlichem Bezug in einem Liniendiagramm (z.B. <abbr title='Ortsdosisleistung (Ambient Dose Rate)'>ODL</abbr> 1h) und für Wertereihen (z.B. Nuklide in Boden) in einem Balkendiagramm dargestellt.</p>"+
+                                "<p>Objekte denen Werte zugrunde liegen, können mit einem Klick auf die entsprechende Geometrie in einem Diagramm betrachtet werden. Diese sind bei Werten mit zeitlichem Bezug in einem Liniendiagramm (z.B. <abbr title='Ortsdosisleistung (Ambient Dose Rate)'>ODL</abbr> 1h) und für Wertereihen (z.B. \"nuklidspez. Aktivitätskonzentration\" im Layer-Set \"Boden\") in einem Balkendiagramm dargestellt.</p>"+
                                 "<p>Grafik <i>2.2 Zeitreihen</i> zeigt Zeitreihen von drei verschiedenen Stationen am Beispiel der 1h Werte der Ortsdosisleistung. Es können jederzeit Stationen entweder über das Anklicken eines Objektes auf der Karte, oder über das Feld \"Serie hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingSerial.png' title='Auswahlfeld: Serie hinzufügen' alt='selectionBox_addingSerial.png' width='170' height='24' style='vertical-align:middle'>"+
                                 " ergänzt werden. In diesem Feld ist es mithilfe einer Texteingabe möglich, direkt nach einem bestimmten Objekt zu suchen. Alternativ lassen sich sämtliche Serien über das <i>Pfeilsymbol</i> anzeigen.<br>"+
@@ -711,8 +711,8 @@
                                 "<p>Oberhalb des Liniendiagramms lässt sich die Darstellung über die Eingabe eines Start- und Enddatums präzisieren. Alternativ ist ein Datum über das Kalendersymbol "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Knopf: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
                                 " auswählbar. Anschließend bestätigt man die Auswahl über den \"OK\"-Knopf "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_ok.png' title='Knopf: OK' alt='button_ok.png' width='35' height='24' style='vertical-align:middle'>"+
                                 ". Möchte man zur ursprünglichen zeitlichen Auswahl zurückkehren, ist dies über den Knopf \"Reset\" "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_ok.png' title='Knopf: OK' alt='button_ok.png' width='35' height='24' style='vertical-align:middle'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/button_reset.png' title='Knopf: Reset' alt='button_reset.png' width='51' height='24' style='vertical-align:middle'>"+
                                 " ausführbar. Das Auswahlfeld \"Chart hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingChart.png' title='Auswahlfeld: Chart hinzufügen' alt='selectionBox_addingChart.png' width='162' height='24' style='vertical-align:middle'>"+
@@ -734,7 +734,7 @@
                 "tools": {
                     "title": "3. Werkzeuge",
                     "html": "<h2>3. Werkzeuge</h2>"+
-                            "<div>Die Werkzeugleiste befindet sich im linken oberen Eck unterhalb des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Logos. Ein Klick auf den entsprechenden Knopf öffnet den jeweiligen Dienst der nachfolgend näher erläutert ist (navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt).</div><br />",
+                            "<div>Auf der linken Seite der Anwendung befindet sich die Werkzeugleiste. Ein Klick auf den entsprechenden Knopf öffnet den jeweiligen Dienst der nachfolgend näher erläutert ist (navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt).</div><br />",
                     "wms": {
                         "title": "3.1 <abbr title='Web Map Service'>WMS</abbr> Dienst",
                         "html": "<hr style='color:#294d71' />"+
@@ -749,7 +749,7 @@
                                 "<p>Durch das Setzen von Häkchen können die Layer ausgewählt werden, die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Knopf \"Ausgewählte Layer hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Knopf: Ausgewählte Layer hinzufügen' alt='button_addLayers.png' width='192' height='24' style='vertical-align:middle'>"+
                                 ". Diese werden initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</p>"+
-                                "<p>In Grafik <i>3.1 Arbeitsablauf des <abbr title='Web Map Service'>WMS</abbr>-Dienstes</i> wird der Layer \"Topographic <abbr title='OpenStreetMap'>OSM</abbr> <abbr title='Web Map Service'>WMS</abbr> - by mundalis\" der Karte hinzugefügt.</p><br />"+
+                                "<p>In Grafik <i>3.1 Arbeitsablauf des <abbr title='Web Map Service'>WMS</abbr>-Dienstes</i> wird der Layer \"Topographic <abbr title='OpenStreetMap'>OSM</abbr> <abbr title='Web Map Service'>WMS</abbr> - by terrestris\" der Karte hinzugefügt.</p><br />"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='Arbeitsablauf des WMS-Dienstes' alt='graphic_wms_workflow.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>3.1 Arbeitsablauf des <abbr title='Web Map Service'>WMS</abbr>-Dienstes</b>"+
@@ -792,11 +792,11 @@
                     "title": "4. Auswahl",
                     "html":     "<h2>4. Auswahl</h2>"+
                                 "<div>"+
-                                "<p>Über die Auswahl lassen sich Layer der Karte hinzufügen. Das Auswahlfenster ist im Menü unterhalb des Bedienfeldes \"Werkzeuge\" zu finden. Initial ist das Fenster geschlossen und kann mit einem einfachen Klick auf den Schriftzug \"Auswahl\" oder auf der türkisfarbene Leiste geöffnet werden (siehe Grafik <i>4. Arbeitsablauf der Layerauswahl</i>).</p>"+
-                                "<p>Das Menü ist in der Breite anpassbar. Bewegt man den <i>Mauszeiger</i> an den rechten Rand des Menüs, ändert sich das Symbol zu einem Doppelpfeil "+
+                                "<p>Über die Auswahl lassen sich Layer der Karte hinzufügen. Das Auswahlfenster ist im Menü unterhalb des Bedienfeldes \"Werkzeuge\" zu finden. Initial ist das Fenster geschlossen und kann mit einem einfachen Klick auf den Schriftzug \"Auswahl\" oder auf der grauen Leiste geöffnet werden (siehe Grafik <i>4. Arbeitsablauf der Layerauswahl</i>).</p>"+
+                                "<p>Das Menü ist in der Größe anpassbar. Bewegt man den <i>Mauszeiger</i> an den Rand des Menüs, ändert sich das Symbol zu einem Doppelpfeil "+
                                 "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
-                                " und die Breite lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
-                                "<p>Jeder Layer befindet sich in einem Layer-Set, das eine fachliche Einteilung widerspiegelt. Möchte man beispielsweise den Layer \"<abbr title='ultraviolett'>UV</abbr> Index aktueller Tagesverlauf\" der Karte hinzufügen, findet man diesen unter dem Layer-Set \"Sonstiges\".</p>"+
+                                " und die Größe lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
+                                "<p>Jeder Layer befindet sich in einem Layer-Set, das eine fachliche Einteilung widerspiegelt. Möchte man beispielsweise den Layer \"<abbr title='ultraviolett'>UV</abbr> Index aktueller Tagesverlauf\" der Karte hinzufügen, findet man diesen unter dem Layer-Set \"<abbr title='ultraviolett'>UV</abbr>-Strahlung\".</p>"+
                                 "<p>Die Anordnung im Auswahlfenster entspricht der eines allgemeingebräuchlichen Dateisystems, mit Ordnern und Dateien. Die Layer-Sets entsprechen den Ordnern, während die Layer den Dateien gleich kommen. Möchte man einen Ordner ausklappen um sich die zugeordneten Layer anzeigen zu lassen, ist dies mit einem einfachen Klick auf das Plus-Symbol links neben des Ordnersymbols möglich. Alternativ kann auch ein Doppelklick auf die Ordnerbeschriftung ausgeführt werden.</p>"+
                                 "<p>Ein einfacher Klick auf die Layerbezeichnung öffnet ein layerspezifisches Fenster. Je nach Art des Layers beinhaltet das Fenster gegebenenfalls Einstellungen um die Daten mithilfe eines Zeit- und/oder Wertefilters einzuschränken. Sofern ein Layer über keine Zeit- bzw. Wertefilter verfügt, enthält das Fenster lediglich einen Knopf für das Hinzufügen des entsprechenden Layers (siehe Grafik <i>4. layerspezifisches Fenster - Layer ohne Filter</i>).</p>"+
                                 "<div style='font-size:11px'>"+
@@ -806,7 +806,7 @@
                                 "<p>Ein Doppelklick auf die Layerbezeichnung fügt einen Layer der Karte unmittelbar hinzu. Hierbei werden Standardeinstellungen übernommen. Dabei werden Layer mit zeitlichem Bezug auf die aktuellsten Daten gesetzt.</p>"+
                                 "<p>In Grafik <i>4. Arbeitsablauf der Layerauswahl</i> ist das Hinzufügen der Ortsdosisleistung 1h dargestellt. Das einzustellende Datum bezieht sich auf den Endzeitpunkt der Datenerfassung. Die Festlegung des Datums kann entweder durch einfache Eingabe oder durch die Auswahl eines Tages aus dem Kalender ausgeführt werden. Dieser öffnet sich mit einem Klick auf das Kalendersymbol "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Knopf: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
-                                ". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. \"Nuklide in Boden\"). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereitgestellt. Der Wertefilter entspricht bei diesem Layer das Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Eine Mehrfachauswahl ist mit gedrückter Shift-Taste (auch: "+
+                                ". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. \"nuklidspez. Aktivitätskonzentration\" im Layer-Set \"Boden\"). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereitgestellt. Der Wertefilter entspricht bei diesem Layer das Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Eine Mehrfachauswahl ist mit gedrückter Shift-Taste (auch: "+
                                 "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
                                 ", Umstelltaste, Hochstelltaste) möglich. Ein Klick auf den Knopf \"Ausgewählten Layer hinzufügen\" stellt den Layer zur Betrachtung bereit.</p>"+
                                 "<div style='font-size:11px'>"+
@@ -814,7 +814,7 @@
                                 "<b>4. Arbeitsablauf der Layerauswahl</b>"+
                                 "</div><br />"+
                                 "<h3>Layer-Set Auswahl</h3>"+
-                                "<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe Grafik <i>4. Arbeitsablauf der Layer-Set Auswahl</i>). In der türkisfarbenen Leiste der \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster mit Layer-Sets, die mit einem repräsentativen Bild des entsprechenden Themas versehen sind. Klickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Des Weiteren können mit einem Doppelklick auf ein Thema die gesamten korrespondierenden Layer der Legende hinzugefügt werden. Im unteren Teil der \"Layer-Set Auswahl\" kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden. Sofern die Auswahl an Layern eingegrenzt wurde, ist es mithilfe des Knopfs \"Alle Layer\" "+
+                                "<p>Neben der Möglichkeit Layer über das Auswahlfenster zu suchen, kann eine Suche auch über die Auswahl der Layer-Sets erfolgen (siehe Grafik <i>4. Arbeitsablauf der Layer-Set Auswahl</i>). In der grauen Leiste der \"Auswahl \" klicken Sie auf \"Thema wechseln\". Es öffnet sich ein Fenster mit Layer-Sets, die mit einem repräsentativen Bild des entsprechenden Themas versehen sind. Klickt man auf eines der Themen bzw. der entsprechenden Bilder, öffnet sich im Auswahlfenster der betreffende Ordner mit den zugehörigen Layern. Des Weiteren können mit einem Doppelklick auf ein Thema die gesamten korrespondierenden Layer der Legende hinzugefügt werden. Im unteren Teil der \"Layer-Set Auswahl\" kann über Eingabe eines Filters (Suchbegriffes) die Auswahl an Themen eingeschränkt werden. Sofern die Auswahl an Layern eingegrenzt wurde, ist es mithilfe des Knopfs \"Alle Layer\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_allLayers.png' title='Knopf: Alle Layer' alt='button_allLayers.png' width='75' height='24' style='vertical-align:middle'>"+
                                 " möglich, sich sämtliche Layer wieder anzeigen zu lassen.</p>"+
                                 "<p>Das Hinzufügen eines Layers erfolgt, wie oben beschrieben, mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf die Layerbeschriftung.</p>"+
@@ -958,10 +958,10 @@
                             "<p>Die Legende beinhaltet sämtliche Layer die in die Kartenansicht geladen sind. Das Hinzufügen weiterer Layer ist unter dem Punkt <i>4. Auswahl</i> beschrieben. Die Legende kann entweder über den Knopf "+
                             "<img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Knopf: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'>"+
                             ", oder durch einen direkten Klick auf den blauen Balken mit der Aufschrift \"Legende\" geöffnet werden. </p>"+
-                            "<p>Die Legende ist in der Breite anpassbar. Bewegt man den <i>Mauszeiger</i> an den linken Rand der Legende, ändert sich das Symbol zu einem Doppelpfeil "+
+                            "<p>Die Legende ist in der Größe anpassbar. Bewegt man den <i>Mauszeiger</i> an den Rand der Legende, ändert sich das Symbol zu einem Doppelpfeil "+
                             "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
-                            " und die Breite lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
-                            "<p>Wie in Punkt <i>2.2 Informationen zu einzelnen Objekten</i> erwähnt, ist darauf zu achten, dass der entsprechende Layer für Abfragen der Geometrien selektiert ist. Ein ausgewählter Layer wird in der Legende mit einer türkisfarbenen Fläche markiert (siehe Grafik <i>8. Legende - Layer verschieben</i>). Das Kästchen auf der linken Seite des Layernamen steuert, ob ein Layer in der Karte angezeigt wird (Häckchen gesetzt "+
+                            " und die Größe lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
+                            "<p>Wie in Punkt <i>2.2 Informationen zu einzelnen Objekten</i> erwähnt, ist darauf zu achten, dass der entsprechende Layer für Abfragen der Geometrien selektiert ist. Ein ausgewählter Layer wird in der Legende mit einer grauen Fläche markiert (siehe Grafik <i>8. Legende - Layer verschieben</i>). Das Kästchen auf der linken Seite des Layernamen steuert, ob ein Layer in der Karte angezeigt wird (Häckchen gesetzt "+
                             "<img class='img' src='classic/resources/img/helpPage/checkbox_true.png' title='Kontrollkästchen - aktiv' alt='checkbox_true.png' width='14' height='14' style='vertical-align:middle'>"+
                             " ) oder nicht (leeres Kästchen "+
                             "<img class='img' src='classic/resources/img/helpPage/checkbox_false.png' title='Kontrollkästchen - inaktiv' alt='checkbox_false.png' width='13' height='13' style='vertical-align:middle'>"+
@@ -1007,7 +1007,9 @@
                             "<p>Die Maßstabsleiste "+
                             "<img class='img' src='classic/resources/img/helpPage/info_scaleBar.png' title='Maßstabsleiste' alt='info_scaleBar.png' width='99' height='13' style='vertical-align:middle'>"+
                             " dient als Referenz des aktuellen Kartenmaßstabs und bietet eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m) oder Kilometern (km).</p>"+
-                            "<p>Befindet sich der Mauszeiger innerhalb der Karte, werden rechts neben der Maßstabsleiste die geographischen Koordinaten der aktuellen Position des Mauszeigers angezeigt.</p>"+
+                            "<p>Befindet sich der Mauszeiger innerhalb der Karte, werden rechts neben der Maßstabsleiste die geographischen Koordinaten "+
+                            "<img class='img' src='classic/resources/img/helpPage/info_coordinates.png' title='Koordinatenanzeige' alt='info_coordinates.png' width='62' height='22' style='vertical-align:middle'>"+
+                            " der aktuellen Position des Mauszeigers angezeigt.</p>"+
                             "</div>"
                 },
                 "softwareVersion": {
@@ -1492,7 +1494,7 @@
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Diagramm inaktiv' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
                                   " auf aktiv "+
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
-                                  " gesetzt wird. Ein ausgewählter Layer ist in der Legende mit einer türkisfarbenen Fläche markiert. Eine Berührung auf die Layerbezeichnung öffnet die Zeichenerklärung.</div><br />"+
+                                  " gesetzt wird. Ein ausgewählter Layer ist in der Legende mit einer grauen Fläche markiert. Eine Berührung auf die Layerbezeichnung öffnet die Zeichenerklärung.</div><br />"+
                                   "<div>Die Reihenfolge der Layer bestimmt die Hierarchie der Kartenzeichnung. Entsprechend wird der oberste Layer über alle Folgenden gezeichnet. Die Reihenfolge kann geändert werden, indem man die Pfeile in gewünschter Richtung betätigt "+
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_button_moveLayer.png' title='Layerreihenfolge ändern' alt='mobile_button_moveLayer.png' width='53' height='21' style='vertical-align:middle'>"+
                                   "</div><br />"+

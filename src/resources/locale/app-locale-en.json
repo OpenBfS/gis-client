@@ -687,7 +687,7 @@
                         "html": "<hr style='color:#294d71' />"+
                                 "<h2>2.2 Retrieving information on <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> objects</h2>"+
                                 "<div>"+
-                                "<p>If you wish to retrieve information on <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> objects, please make sure that the relevant layer is selected in the legend. Selected layers are labelled in turquoise (cf. Figure <i>2.2 Information on individual objects</i>).</p>"+
+                                "<p>If you wish to retrieve information on <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> objects, please make sure that the relevant layer is selected in the legend. Selected layers are labelled in gray (cf. Figure <i>2.2 Information on individual objects</i>).</p>"+
                                 "<p>You will obtain information on individual objects (such as the 1 h ambient dose rate at a particular location) by moving the <i>mouse pointer</i> over the relevant geometry (represented as dots in the example below). The selected object will be highlighted in colour and the relevant data will appear. Depending on the zoom level, you may have selected more than one geometry so that the relevant data is displayed for several objects. Zoom to the desired object in this case to obtain an unambiguous selection.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_hoverGeometry_en.png' title='Information on individual objects' alt'graphic_hoverGeometry_en.png' style='max-height: 100%; max-width: 100%;'><br>"+
@@ -733,7 +733,7 @@
                 "tools": {
                     "title": "3. Tools",
                     "html": "<h2>3. Tools</h2>"+
-                            "<div>The tool bar is in the top-left corner, just below the <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> logo. Click a button to open the relevant service. The services are explained in more detail in the following paragraphs (please navigate to the desired item on the left-hand side of the Help page menu).</div><br />",
+                            "<div>The tool bar is in the top-left corner of the application. Click a button to open the relevant service. The services are explained in more detail in the following paragraphs (please navigate to the desired item on the left-hand side of the Help page menu).</div><br />",
                     "wms": {
                         "title": "3.1 <abbr title='Web Map Service'>WMS</abbr> service",
                         "html": "<hr style='color:#294d71' />"+
@@ -748,7 +748,7 @@
                                 "<p>Check the boxes for the required layers so that they will be shown in the legend and thus also on the map. Confirm the selection with the \"Add Selected Layer\" button "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Add Selected Layer' alt='button_addLayers.png' width='192' height='24' style='vertical-align:middle'>"+
                                 ". Initially, these layers will be positioned hierarchically at the top of the legend and thus mapped over all the other layers in the representation.</p>"+
-                                "<p>Figure <i>3.1 <abbr title='Web Map Service'>WMS</abbr> service workflow</i> shows how the layer \"Topographic <abbr title='OpenStreetMap'>OSM</abbr> <abbr title='Web Map Service'>WMS</abbr> - by mundalis\" is added to the map.</p><br />"+
+                                "<p>Figure <i>3.1 <abbr title='Web Map Service'>WMS</abbr> service workflow</i> shows how the layer \"Topographic <abbr title='OpenStreetMap'>OSM</abbr> <abbr title='Web Map Service'>WMS</abbr> - by terrestris\" is added to the map.</p><br />"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='WMS service workflow' alt='graphic_wms_workflow.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>3.1 <abbr title='Web Map Service'>WMS</abbr> service workflow</b>"+
@@ -791,11 +791,11 @@
                     "title": "4. Selection",
                     "html":     "<h2>4. Selection</h2>"+
                                 "<div>"+
-                                "<p>Via the selection window it is possible to add layers to the map. You will find the selection window in the menu below the \"Tools\" panel. Initially, the window is closed. It can be opened by clicking onto the phrase \"Selection\" or onto the turquoise-coloured bar (cf. Figure <i>4. Layer selection workflow</i>).</p>"+
-                                "<p>The menu width can be adjusted. If you move the <i>mouse pointer</i> to the right-hand margin of the menu, the icon changes into a double-arrow "+
+                                "<p>Via the selection window it is possible to add layers to the map. You will find the selection window in the menu below the \"Tools\" panel. Initially, the window is closed. It can be opened by clicking onto the phrase \"Selection\" or onto the gray-coloured bar (cf. Figure <i>4. Layer selection workflow</i>).</p>"+
+                                "<p>The menu size can be adjusted. If you move the <i>mouse pointer</i> to the margin of the menu, the icon changes into a double-arrow "+
                                 "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
-                                " and you can adjust the width by holding the left <i>mouse button</i> down.</p>"+
-                                "<p>Every layer is part of a layer set that reflects a technical classification. For example, if you wish to add the layer \"<abbr title='ultraviolett'>UV</abbr> Index aktueller Tagesverlauf\" to the map, you will find it in the layer set \"miscellaneous\".</p>"+
+                                " and you can adjust the size by holding the left <i>mouse button</i> down.</p>"+
+                                "<p>Every layer is part of a layer set that reflects a technical classification. For example, if you wish to add the layer \"<abbr title='ultraviolett'>UV</abbr> Index aktueller Tagesverlauf\" to the map, you will find it in the layer set \"<abbr title='ultraviolett'>UV</abbr>-Strahlung\".</p>"+
                                 "<p>The selection window is structured like a common file system, including folders and files. The layer sets equate to folders, while the layers equate to files. If you wish to unfold a folder in order to view the layers contained therein, simply click on the plus icon to the left of the folder icon. Alternatively, you can double-click the folder name.</p>"+
                                 "<p>A single click onto the layer name will open a layer-specific window. Depending on the type of layer, the window may also include settings so that you can restrict the data with the help of a time filter and/or value filter. If a layer does not include any time or value filters, the window will only contain a button for adding the relevant layer (cf. Figure <i>4. Layer-specific window - layer without filter</i>).</p>"+
                                 "<div style='font-size:11px'>"+
@@ -813,7 +813,7 @@
                                 "<b>4. Layer selection workflow</b>"+
                                 "</div><br />"+
                                 "<h3>Layer set selection</h3>"+
-                                "<p>In addition to the option of searching for layers via the selection window, it is also possible to search for layers via the layer set selection (cf. Figure <i>4. Layer set selection workflow</i>). Click onto \"Change Topic\" in the turquoise-coloured bar of the \"Selection\" window. This will open a window containing a selection of layer sets that are illustrated with an appropriate image. If you click on one of the subjects or the relevant image, the corresponding folder with the associated layers will open in the selection window. You can also add all corresponding layers to the legend by double-clicking onto the subject. In the lower part of the \"Layer Set Selection\" window you can restrict the selection of subjects by entering a filter term (search term). I the selection of layers was restricted, press the \"All Layer\" button "+
+                                "<p>In addition to the option of searching for layers via the selection window, it is also possible to search for layers via the layer set selection (cf. Figure <i>4. Layer set selection workflow</i>). Click onto \"Change Topic\" in the gray-coloured bar of the \"Selection\" window. This will open a window containing a selection of layer sets that are illustrated with an appropriate image. If you click on one of the subjects or the relevant image, the corresponding folder with the associated layers will open in the selection window. You can also add all corresponding layers to the legend by double-clicking onto the subject. In the lower part of the \"Layer Set Selection\" window you can restrict the selection of subjects by entering a filter term (search term). I the selection of layers was restricted, press the \"All Layer\" button "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_allLayers_en.png' title='All layers' alt='button_allLayers_en.png' width='75' height='24' style='vertical-align:middle'>"+
                                 " to show all available layers.</p>"+
                                 "<p>Add a layer, as described above, by clicking once or twice (apply standard settings) on the layer name.</p>"+
@@ -957,10 +957,10 @@
                             "<p>The legend comprises all layers that are loaded into the map view. Please refer to Section <i>4. Selection</i> for more information on adding layers. To open the legend, either use the button "+
                             "<img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Open legend' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'>"+
                             " or click directly onto the blue bar labelled \"Legend\".</p>"+
-                            "<p>The legend width can be adjusted. If you move the mouse pointer to the left-hand margin of the legend, the icon changes into a double-arrow "+
+                            "<p>The legend size can be adjusted. If you move the mouse pointer to the margin of the legend, the icon changes into a double-arrow "+
                             "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='mouse pointer resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
-                            ". Hold the left <i>mouse button</i> down to adjust the width.</p>"+
-                            "<p>As mentioned above in Section <i>2.2 Retrieving information on individual objects</i>, please ensure that the relevant layer is selected for retrieving information on the desired geometries. Selected layers are labelled in turquoise in the legend (cf. Figure <i>8. Legend - Shifting a layer</i>). The checkbox to the left of the layer name governs whether a layer is shown on the map (checkbox checked "+
+                            ". Hold the left <i>mouse button</i> down to adjust the size.</p>"+
+                            "<p>As mentioned above in Section <i>2.2 Retrieving information on individual objects</i>, please ensure that the relevant layer is selected for retrieving information on the desired geometries. Selected layers are labelled in gray in the legend (cf. Figure <i>8. Legend - Shifting a layer</i>). The checkbox to the left of the layer name governs whether a layer is shown on the map (checkbox checked "+
                             "<img class='img' src='classic/resources/img/helpPage/checkbox_true.png' title='checkbox checked' alt='checkbox_true.png' width='14' height='14' style='vertical-align:middle'>"+
                             " ) or not (checkbox unchecked "+
                             "<img class='img' src='classic/resources/img/helpPage/checkbox_false.png' title='checkbox unchecked' alt='checkbox_false.png' width='13' height='13' style='vertical-align:middle'>"+
@@ -1006,7 +1006,9 @@
                             "<p>The scalebar "+
                             "<img class='img' src='classic/resources/img/helpPage/info_scaleBar.png' title='Scalebar' alt='info_scaleBar.png' width='99' height='13' style='vertical-align:middle'>"+
                             " serves as a reference to the current map scale. It thus helps to compare the current view. The scalebar varies by length according to the zoom level. It shows the length in metres (m) or kilometres (km).</p>"+
-                            "<p>As long as the mouse pointer is in the map, the geographical coordinates of the <i>mouse pointer's</i> current position are displayed to the right of the scalebar.</p>"+
+                            "<p>As long as the mouse pointer is in the map, the geographical coordinates "+
+                            "<img class='img' src='classic/resources/img/helpPage/info_coordinates.png' title='coordinate display' alt='info_coordinates.png' width='62' height='22' style='vertical-align:middle'>"+
+                            " of the <i>mouse pointer's</i> current position are displayed to the right of the scalebar.</p>"+
                             "</div>"
                 },
                 "softwareVersion": {
@@ -1474,7 +1476,7 @@
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Active chart' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
                                   " and not deactivated "+
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Inactive chart' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
-                                  ". Selected layers are labelled in turquoise in the legend. Touch the layer name to open an explanation of the signs and symbols.</div><br />"+
+                                  ". Selected layers are labelled in gray in the legend. Touch the layer name to open an explanation of the signs and symbols.</div><br />"+
                                   "<div>The layer sequence defines the hierarchy in the mapping. Thus, the topmost layer will be mapped over the following layers. You can change the sequence with the help of the corresponding arrows "+
                                   "<img class='img' src='modern/resources/img/helpPage/mobile_button_moveLayer.png' title='Define layer sequence' alt='mobile_button_moveLayer.png' width='53' height='21' style='vertical-align:middle'>"+
                                   "</div><br />"+
