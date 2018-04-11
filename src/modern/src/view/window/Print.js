@@ -46,9 +46,9 @@ Ext.define('Koala.view.window.Print', {
         bind: {
             tooltip: '{helpTooltip}'
         },
-        topic: 'toolsPrint',
-        parentOfTopic: 'tools',
-        callback: Koala.util.Help.showHelpWindow
+        callback: function() {
+            Koala.util.Help.showHelpWindow('toolsPrint', 'tools');
+        }
     }],
 
     config: {
