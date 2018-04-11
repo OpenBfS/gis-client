@@ -562,28 +562,28 @@
                 "fallbackHtml": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
                         "<h2> Willkommen </h2>"+
                         "<div>Das "+
-                        "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>Bundesamt für Strahlenschutz (BfS)</a>"+
+                        "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>Bundesamt für Strahlenschutz (<abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+
                         " stellt mit dem "+
-                        "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
-                        " ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des BfS sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
-                        "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>Integrierten Mess- und Informationssystem (IMIS)</a>"+
+                        "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'><abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Geoportal</a>"+
+                        " ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
+                        "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>Integrierten Mess- und Informationssystem (<abbr title='Integriertes Mess- und Informationssystem zur Überwachung der Umweltradioaktivität (Integrated Measuring and Information System for the Monitoring of Environmental Radioactivity)'>IMIS</abbr>)</a>"+
                         ".</div>"+
                         "<div>"+
                         "<p>Für die Bereitstellung von Geoinformationen haben gesetzliche Grundlagen, wie das "+
-                        "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>Geodatenzugangsgesetz (GeoZG)</a>"+
+                        "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>Geodatenzugangsgesetz (<abbr title='Geodatenzugangsgesetz'>GeoZG</abbr>)</a>"+
                         " als Umsetzung der Europäische "+
-                        "<a href='http://inspire.ec.europa.eu/' target='_blank'>INSPIRE Richtlinie</a>"+
+                        "<a href='http://inspire.ec.europa.eu/' target='_blank'><abbr title='Infrastructure for Spatial Information in Europe (Geodateninfrastruktur in Europa)'>INSPIRE</abbr> Richtlinie</a>"+
                         ", in den vergangenen Jahren die technischen Entwicklungen und "+
                         "<a href='http://www.opengeospatial.org/standards' target='_blank'>Normierungen</a>"+
                         " von Such-, Darstellungs- und Download-Dienste erheblich vorangetrieben.</p>"+
                         "<p>Unter anderem wurden dadurch nutzerfreundlich Zugriffe auf Dienste anderer Quellen möglich, wie dies zentral im "+
                         "<a href='http://www.geoportal.de/DE/Geoportal/geoportal.html?lang=de' target='_blank'>Geoportal-Deutschland</a>"+
-                        " aber auch in der vorliegenden GIS-Software des BfS möglich ist.</p>"+
-                        "<p>Das BfS ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>"+
+                        " aber auch in der vorliegenden <abbr title='geografisches Informationssystem (Geographic Information System)'>GIS</abbr>-Software des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> möglich ist.</p>"+
+                        "<p>Das <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>"+
                         "</div>"+
                         "<div>Diese Anwendung soll nicht nur helfen die gewünschten Daten zu finden und geographisch darzustellen, sondern wenn möglich auch nach individuellen Bedürfnissen zu analysieren. Zeitreihendarstellungen oder Säulendiagramme sind dabei erste Schritte, die zukünftig noch ausgebaut werden sollen.</div>"+
-                        "<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe BfS Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software "+
-                        "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html' target='_blank'>(Kurzmeldung des BfS)</a>"+
+                        "<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software "+
+                        "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html' target='_blank'>(Kurzmeldung des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+
                         ".</div>"+
                         "<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>"
             }
@@ -597,28 +597,28 @@
                     "html": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
                             "<h2> Willkommen </h2>"+
                             "<div>Das "+
-                            "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>Bundesamt für Strahlenschutz (BfS)</a>"+
+                            "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>Bundesamt für Strahlenschutz (<abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+
                             " stellt mit dem "+
-                            "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
-                            " ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des BfS sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
+                            "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'><abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Geoportal</a>"+
+                            " ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
                             "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>Integrierten Mess- und Informationssystem (IMIS)</a>"+
                             ".</div>"+
                             "<div>"+
                             "<p>Für die Bereitstellung von Geoinformationen haben gesetzliche Grundlagen, wie das "+
-                            "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>Geodatenzugangsgesetz (GeoZG)</a>"+
+                            "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>Geodatenzugangsgesetz (<abbr title='Geodatenzugangsgesetz'>GeoZG</abbr>)</a>"+
                             " als Umsetzung der Europäische "+
-                            "<a href='http://inspire.ec.europa.eu/' target='_blank'>INSPIRE Richtlinie</a>"+
+                            "<a href='http://inspire.ec.europa.eu/' target='_blank'><abbr title='Infrastructure for Spatial Information in Europe (Geodateninfrastruktur in Europa)'>INSPIRE</abbr> Richtlinie</a>"+
                             ", in den vergangenen Jahren die technischen Entwicklungen und "+
                             "<a href='http://www.opengeospatial.org/standards' target='_blank'>Normierungen</a>"+
                             " von Such-, Darstellungs- und Download-Dienste erheblich vorangetrieben.</p>"+
                             "<p>Unter anderem wurden dadurch nutzerfreundlich Zugriffe auf Dienste anderer Quellen möglich, wie dies zentral im "+
                             "<a href='http://www.geoportal.de/DE/Geoportal/geoportal.html?lang=de' target='_blank'>Geoportal-Deutschland</a>"+
-                            " aber auch in der vorliegenden GIS-Software des BfS möglich ist.</p>"+
-                            "<p>Das BfS ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>"+
+                            " aber auch in der vorliegenden <abbr title='geografisches Informationssystem (Geographic Information System)'>GIS</abbr>-Software des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> möglich ist.</p>"+
+                            "<p>Das <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>"+
                             "</div>"+
                             "<div>Diese Anwendung soll nicht nur helfen die gewünschten Daten zu finden und geographisch darzustellen, sondern wenn möglich auch nach individuellen Bedürfnissen zu analysieren. Zeitreihendarstellungen oder Säulendiagramme sind dabei erste Schritte, die zukünftig noch ausgebaut werden sollen.</div>"+
-                            "<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe BfS Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software "+
-                            "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html' target='_blank'>(Kurzmeldung des BfS)</a>"+
+                            "<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software "+
+                            "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html' target='_blank'>(Kurzmeldung des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+
                             ".</div>"+
                             "<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>"
                         },
@@ -630,7 +630,7 @@
                             "<ol>"+
                                 "<div><img class='img' src='classic/resources/img/helpPage/graphic_overview.png' title='Übersicht' alt='overview.png' style='max-height: 100%; max-width: 100%;'></div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Layer Profilwahl</li>"+
-                                    "<div>Dieses Auswahlfenster ermöglicht eine vordefinierte Auswahl mehrerer Datensätze in die Karte zu laden (sogenannte Layer-Sets). Ein Layer-Set besteht aus einzelnen Layern, die in der Karte eine thematische Ebene darstellen. Das Fenster öffnet sich beim initialen Laden der Seite. Es ist nicht erforderlich ein Layer-Set auszuwählen um die Anwendung zu starten. Die Layer-Sets/Themen-Sets stellen eine Hilfestellung dar, um thematisch ähnliche Datensätze mit einem Klick zu laden. Wird das Fenster ohne Wahl eines Layer-Sets geschlossen, werden lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - OSM\" geladen.</div><br />"+
+                                    "<div>Dieses Auswahlfenster ermöglicht eine vordefinierte Auswahl mehrerer Datensätze in die Karte zu laden (sogenannte Layer-Sets). Ein Layer-Set besteht aus einzelnen Layern, die in der Karte eine thematische Ebene darstellen. Das Fenster öffnet sich beim initialen Laden der Seite. Es ist nicht erforderlich ein Layer-Set auszuwählen um die Anwendung zu starten. Die Layer-Sets/Themen-Sets stellen eine Hilfestellung dar, um thematisch ähnliche Datensätze mit einem Klick zu laden. Wird das Fenster ohne Wahl eines Layer-Sets geschlossen, werden lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - <abbr title='OpenStreetMap'>OSM</abbr>\" geladen.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Karte</li>"+
                                     "<div>In der Karte werden die gewählten Datensätze dargestellt. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Klickt man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Werkzeuge</li>"+
@@ -639,14 +639,14 @@
                                     "<div>Die \"Auswahl\" bietet die Möglichkeit einzelne Layer zur Darstellung in die Karte zu laden. Die Layer sind in Themen (Layer-Set) untergliedert und lassen sich über die Ordnerstruktur auswählen. Klickt man auf \"Thema wechseln\" öffnet sich ein Fenster, indem eine Themenauswahl mithilfe einer grafischen Oberfläche möglich ist.</div>"+
                                     "<div>Das Hinzufügen eines Layers erfolgt mit einem einfachen bzw. doppelten Klick (Standardeinstellungen übernehmen) auf den Layernamen.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Multisuchleiste</li>"+
-                                    "<div>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten (z.B. Stadtname), sowie nach Daten und Diensten des BfS.</div><br />"+
+                                    "<div>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten (z.B. Stadtname), sowie nach Daten und Diensten des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Einstellungen</li>"+
                                     "<div>Folgende Einstellungen lassen sich für die Anwendung vornehmen:</div>"+
                                 "<ul>"+
-                                    "<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale Zeit (Systemzeit des Rechners) oder auf UTC (Coordinated Universal Time)</li>"+
+                                    "<li>Zeitbezug: Einstellung des zeitlichen Bezuges entweder auf lokale Zeit (Systemzeit des Rechners) oder auf <abbr title='koordinierte Weltzeit (Coordinated Universal Time)'>UTC</abbr> (Coordinated Universal Time)</li>"+
                                     "<li>Hilfe: Öffnen des Hilfefensters</li>"+
                                     "<li>Impressum: Öffnet das Fenster des Impressums sowie der Nutzungsbedingungen</li>"+
-                                    "<li>Sprachauswahl: Ändern der Sprache in Deutsch (DE) oder Englisch (EN)</li>"+
+                                    "<li>Sprachauswahl: Ändern der Sprache in Deutsch (<abbr title='Deutsch (German)'>DE</abbr>) oder Englisch (<abbr title='Englisch (English)'>EN</abbr>)</li>"+
                                 "</ul><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Navigation</li>"+
                                     "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
@@ -662,14 +662,15 @@
                 "profileSelection": {
                     "title": "1. Layer Profilwahl",
                     "html": "<h2> 1. Layer Profilwahl </h2>"+
-                            "<div>Dieses Auswahlfenster ermöglicht eine vordefinierte Auswahl mehrerer Datensätze in die Karte zu laden (sogenannte Layer-Sets). Ein Layer-Set besteht aus einzelnen Layern, die in der Karte eine thematische Ebene darstellen. Das Fenster öffnet sich beim initialen Laden der Seite. Es ist nicht erforderlich ein Layer-Set auszuwählen um die Anwendung zu starten. Die Layer-Sets/Themen-Sets stellen eine Hilfestellung dar, um thematisch ähnliche Datensätze mit einem Klick zu laden. Wird das Fenster ohne Wahl eines Layer-Sets geschlossen, werden lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - OSM\" geladen.</div>"+
+                            "<div>Dieses Auswahlfenster ermöglicht eine vordefinierte Auswahl mehrerer Datensätze in die Karte zu laden (sogenannte Layer-Sets). Ein Layer-Set besteht aus einzelnen Layern, die in der Karte eine thematische Ebene darstellen. Das Fenster öffnet sich beim initialen Laden der Seite. Es ist nicht erforderlich ein Layer-Set auszuwählen um die Anwendung zu starten. Die Layer-Sets/Themen-Sets stellen eine Hilfestellung dar, um thematisch ähnliche Datensätze mit einem Klick zu laden. Wird das Fenster ohne Wahl eines Layer-Sets geschlossen, werden lediglich die Standardlayer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - "+
+                            "<abbr title='OpenStreetMap'>OSM</abbr>\" geladen.</div>"+
                             "<div>Über die Eingabe eines Begriffs als Filter lässt sich die Auswahl der Layer-Sets einschränken.</div><br />"+
                             "<img class='img' src='classic/resources/img/helpPage/window_profileSelection.png' title='Layer Profilwahl' alt='window_profileSelection.png' style='max-height: 100%; max-width: 100%;'>"
                 },
                 "map": {
                     "title": "2. Karte",
                     "html": "<h2> 2. Karte </h2>"+
-                            "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>4. Auswahl</i>). Standardmäßig sind die Layer \"Höhenlinien\", \"Ortsnamen\" und \"Hintergrundkarte - OSM\" geladen. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Die Geometrie wird farblich hervorgehoben und ist nun anklickbar. Klickt man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />",
+                            "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>4. Auswahl</i>). Standardmäßig sind die Layer \"Höhenlinien\", \"Ortsnamen\" und \"Hintergrundkarte - <abbr title='OpenStreetMap'>OSM</abbr>\" geladen. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Die Geometrie wird farblich hervorgehoben und ist nun anklickbar. Klickt man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />",
                     "overview": {
                         "title": "2.1 Übersicht",
                         "html": "<hr style='color:#294d71' />"+
@@ -683,17 +684,17 @@
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_map.png' title='Karte' alt='graphic_map.png' style='max-height: 100%; max-width: 100%;'><br />"
                     },
                     "geoObjects": {
-                        "title": "2.2 BfS-Objektinformationen abfragen",
+                        "title": "2.2 <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Objektinformationen abfragen",
                         "html": "<hr style='color:#294d71' />"+
-                                "<h2>2.2 BfS-Objektinformationen abfragen</h2>"+
+                                "<h2>2.2 <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Objektinformationen abfragen</h2>"+
                                 "<div>"+
-                                "<p>Zur Abfrage von BfS-Objekten ist es wichtig, dass der entsprechende Layer in der Legende ausgewählt ist. Ein ausgewählter Layer ist mit einer türkisfarbenen Fläche markiert (siehe Grafik: <i>2.2 Informationen zu einzelnen Objekten</i>).</p>"+
+                                "<p>Zur Abfrage von <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Objekten ist es wichtig, dass der entsprechende Layer in der Legende ausgewählt ist. Ein ausgewählter Layer ist mit einer türkisfarbenen Fläche markiert (siehe Grafik: <i>2.2 Informationen zu einzelnen Objekten</i>).</p>"+
                                 "<p>Um Informationen von einzelnen Objekten zu erhalten (beispielsweise die 1h Ortsdosisleistung einer bestimmten Station), bewegen Sie den <i>Mauszeiger</i> über die entsprechende Geometrie eines Objektes (im unteren Beispiel entspricht dies einer Punktdarstellung). Diese wird farblich hervorgehoben und die entsprechenden Informationen erscheinen. Je nach Zoomstufe ist es möglich, dass mehrere Geometrien selektiert und die Informationen präsentiert werden. Zoomen Sie in diesem Fall zum gewünschten Objekt, für eine eindeutige Auswahl.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_hoverGeometry.png' title='Informationen zu einzelnen Objekten' alt'graphic_hoverGeometry.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Informationen zu einzelnen Objekten</b>"+
                                 "</div><br />"+
-                                "<p>Objekte denen Werte zugrunde liegen, können mit einem Klick auf die entsprechende Geometrie in einem Diagramm betrachtet werden. Diese sind bei Werten mit zeitlichem Bezug in einem Liniendiagramm (z.B. ODL 1h) und für Wertereihen (z.B. Nuklide in Boden) in einem Balkendiagramm dargestellt.</p>"+
+                                "<p>Objekte denen Werte zugrunde liegen, können mit einem Klick auf die entsprechende Geometrie in einem Diagramm betrachtet werden. Diese sind bei Werten mit zeitlichem Bezug in einem Liniendiagramm (z.B. <abbr title='Ortsdosisleistung (Ambient Dose Rate)'>ODL</abbr> 1h) und für Wertereihen (z.B. Nuklide in Boden) in einem Balkendiagramm dargestellt.</p>"+
                                 "<p>Grafik <i>2.2 Zeitreihen</i> zeigt Zeitreihen von drei verschiedenen Stationen am Beispiel der 1h Werte der Ortsdosisleistung. Es können jederzeit Stationen entweder über das Anklicken eines Objektes auf der Karte, oder über das Feld \"Serie hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingSerial.png' title='Auswahlfeld: Serie hinzufügen' alt='selectionBox_addingSerial.png' width='170' height='24' style='vertical-align:middle'>"+
                                 " ergänzt werden. In diesem Feld ist es mithilfe einer Texteingabe möglich, direkt nach einem bestimmten Objekt zu suchen. Alternativ lassen sich sämtliche Serien über das <i>Pfeilsymbol</i> anzeigen.<br>"+
@@ -702,7 +703,7 @@
                                 " möglich. Alternativ lassen sich die Zoomfunktionen mit dem <i>Mausrad</i> steuern.</p>"+
                                 "<p>Das Download-Symbol "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_saveTimeSeries.png' title='Knopf: download' alt='button_saveTimeSeries.png' width='17' height='16' style='vertical-align:middle'>"+
-                                " ermöglicht das Herunterladen einzelner Zeitreihen. Diese können entweder im JSON-, CSV- oder GML-Format gesichert werden. Bestätigen Sie nach der Auswahl des gewünschten Formats den Download, der letztlich im Download-Pfad Ihres Browsers abgelegt wird. Wählen Sie mithilfe der Zoomfunktionalitäten innerhalb des Diagramms den gewünschten Bereich aus, den Sie herunterladen möchten.</p>"+
+                                " ermöglicht das Herunterladen einzelner Zeitreihen. Diese können entweder im <abbr title='JavaScript Object Notation'>JSON</abbr>-, <abbr title='Comma Separated Values'>CSV</abbr>- oder <abbr title='Geography Markup Language'>GML</abbr>-Format gesichert werden. Bestätigen Sie nach der Auswahl des gewünschten Formats den Download, der letztlich im Download-Pfad Ihres Browsers abgelegt wird. Wählen Sie mithilfe der Zoomfunktionalitäten innerhalb des Diagramms den gewünschten Bereich aus, den Sie herunterladen möchten.</p>"+
                                 "<p>Einzelne Serien, beispielsweise \"Helgoland / Unterland\", können mit einem Klick auf die Diagrammlegende ein- bzw. ausgeschalten werden. Eine Serie kann auch gänzlich aus dem Diagramm entfernt werden. Hierzu betätigt man den X-Knopf "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
                                 " neben der Layerbezeichnung.</p>"+
@@ -733,25 +734,25 @@
                 "tools": {
                     "title": "3. Werkzeuge",
                     "html": "<h2>3. Werkzeuge</h2>"+
-                            "<div>Die Werkzeugleiste befindet sich im linken oberen Eck unterhalb des BfS-Logos. Ein Klick auf den entsprechenden Knopf öffnet den jeweiligen Dienst der nachfolgend näher erläutert ist (navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt).</div><br />",
+                            "<div>Die Werkzeugleiste befindet sich im linken oberen Eck unterhalb des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Logos. Ein Klick auf den entsprechenden Knopf öffnet den jeweiligen Dienst der nachfolgend näher erläutert ist (navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt).</div><br />",
                     "wms": {
-                        "title": "3.1 WMS Dienst",
+                        "title": "3.1 <abbr title='Web Map Service'>WMS</abbr> Dienst",
                         "html": "<hr style='color:#294d71' />"+
-                                "<h2>3.1 WMS Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='64' height='24' style='vertical-align:middle'> </h2>"+
+                                "<h2>3.1 <abbr title='Web Map Service'>WMS</abbr> Dienst <img class='img' src='classic/resources/img/helpPage/button_wms.png' title='WMS-Button' alt='button_wms.png' width='64' height='24' style='vertical-align:middle'> </h2>"+
                                 "<div>"+
-                                "<p>Der WMS Dienst ermöglicht das Hinzufügen von WMS-Layern innerhalb des BfS Geoportals. Dadurch sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar. "+
-                                "Detailliertere Informationen rund um das Thema <i>Web Map Service</i> finden Sie unter folgender Adresse:  <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a></p>"+
-                                "<p>Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld \"WMS-URL\" eine gültige Anfrage ein oder wählen eine vordefinierte URL aus.</p>"+
+                                "<p>Der <abbr title='Web Map Service'>WMS</abbr> Dienst ermöglicht das Hinzufügen von <abbr title='Web Map Service'>WMS</abbr>-Layern innerhalb des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportals. Dadurch sind Analysen bzw. Darstellungen mit externen Geodaten realisierbar. "+
+                                "Detailliertere Informationen rund um das Thema <i>Web Map Service</i> finden Sie unter folgender Adresse:  <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'><abbr title='Open Geospatial Consortium'>OGC</abbr> Compliance Wiki - <abbr title='Web Map Service'>WMS</abbr></a></p>"+
+                                "<p>Zunächst müssen die Anfrageparameter gesetzt werden. Hierzu tragen Sie in das Feld \"<abbr title='Web Map Service'>WMS</abbr>-<abbr title='Uniform Resource Locator'>URL</abbr>\" eine gültige Anfrage ein oder wählen eine vordefinierte <abbr title='Uniform Resource Locator'>URL</abbr> aus.</p>"+
                                 "<p>In der Folge drücken Sie auf den Knopf \"Verfügbare Layer abfragen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_getLayers.png' title='Knopf: Verfügbare Layer abfragen' alt='button_getLayers.png' width='170' height='24' style='vertical-align:middle'>"+
                                 ". Die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt.</p>"+
                                 "<p>Durch das Setzen von Häkchen können die Layer ausgewählt werden, die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Knopf \"Ausgewählte Layer hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_addLayers.png' title='Knopf: Ausgewählte Layer hinzufügen' alt='button_addLayers.png' width='192' height='24' style='vertical-align:middle'>"+
                                 ". Diese werden initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</p>"+
-                                "<p>In Grafik <i>3.1 Arbeitsablauf des WMS-Dienstes</i> wird der Layer \"Topographic OSM WMS - by mundalis\" der Karte hinzugefügt.</p><br />"+
+                                "<p>In Grafik <i>3.1 Arbeitsablauf des <abbr title='Web Map Service'>WMS</abbr>-Dienstes</i> wird der Layer \"Topographic <abbr title='OpenStreetMap'>OSM</abbr> <abbr title='Web Map Service'>WMS</abbr> - by mundalis\" der Karte hinzugefügt.</p><br />"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_wms_workflow.png' title='Arbeitsablauf des WMS-Dienstes' alt='graphic_wms_workflow.png' style='max-height: 100%; max-width: 100%;'><br>"+
-                                "<b>3.1 Arbeitsablauf des WMS-Dienstes</b>"+
+                                "<b>3.1 Arbeitsablauf des <abbr title='Web Map Service'>WMS</abbr>-Dienstes</b>"+
                                 "</div>"+
                                 "</div>"
                         },
@@ -795,7 +796,7 @@
                                 "<p>Das Menü ist in der Breite anpassbar. Bewegt man den <i>Mauszeiger</i> an den rechten Rand des Menüs, ändert sich das Symbol zu einem Doppelpfeil "+
                                 "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
                                 " und die Breite lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+
-                                "<p>Jeder Layer befindet sich in einem Layer-Set, das eine fachliche Einteilung widerspiegelt. Möchte man beispielsweise den Layer \"UV Index aktueller Tagesverlauf\" der Karte hinzufügen, findet man diesen unter dem Layer-Set \"Sonstiges\".</p>"+
+                                "<p>Jeder Layer befindet sich in einem Layer-Set, das eine fachliche Einteilung widerspiegelt. Möchte man beispielsweise den Layer \"<abbr title='ultraviolett'>UV</abbr> Index aktueller Tagesverlauf\" der Karte hinzufügen, findet man diesen unter dem Layer-Set \"Sonstiges\".</p>"+
                                 "<p>Die Anordnung im Auswahlfenster entspricht der eines allgemeingebräuchlichen Dateisystems, mit Ordnern und Dateien. Die Layer-Sets entsprechen den Ordnern, während die Layer den Dateien gleich kommen. Möchte man einen Ordner ausklappen um sich die zugeordneten Layer anzeigen zu lassen, ist dies mit einem einfachen Klick auf das Plus-Symbol links neben des Ordnersymbols möglich. Alternativ kann auch ein Doppelklick auf die Ordnerbeschriftung ausgeführt werden.</p>"+
                                 "<p>Ein einfacher Klick auf die Layerbezeichnung öffnet ein layerspezifisches Fenster. Je nach Art des Layers beinhaltet das Fenster gegebenenfalls Einstellungen um die Daten mithilfe eines Zeit- und/oder Wertefilters einzuschränken. Sofern ein Layer über keine Zeit- bzw. Wertefilter verfügt, enthält das Fenster lediglich einen Knopf für das Hinzufügen des entsprechenden Layers (siehe Grafik <i>4. layerspezifisches Fenster - Layer ohne Filter</i>).</p>"+
                                 "<div style='font-size:11px'>"+
@@ -827,7 +828,7 @@
                     "title": "5. Multisuchleiste",
                     "html":     "<h2>5. Multisuchleiste</h2>"+
                                 "<div>"+
-                                "<p>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS. Durch einfache Texteingabe innerhalb des Suchfeldes werden die Ergebnisse in einem Fenster unterhalb der Leiste gesondert angezeigt. Ein Klick auf das Kreuzsymbol "+
+                                "<p>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>. Durch einfache Texteingabe innerhalb des Suchfeldes werden die Ergebnisse in einem Fenster unterhalb der Leiste gesondert angezeigt. Ein Klick auf das Kreuzsymbol "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_search_delete.png' title='Kreuzsymbol: Löschen der Eingabe' alt='button_search_delete.png' width='24' height='24' style='vertical-align:middle'>"+
                                 " auf der rechten Seite des Suchfeldes löscht die Eingabe und schließt die Ergebnisfenster.</p>"+
                                 "<h3>Räumliche Suche</h3>"+
@@ -836,8 +837,8 @@
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_search_location.png' title='Räumliche Suche' alt'graphic_search_location.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>5. Räumliche Suche</b>"+
                                 "</div><br />"+
-                                "<h3>Daten und Dienste des BfS</h3>"+
-                                "<p>Neben der räumlichen Suche wird parallel nach Daten und Diensten des BfS gesucht (siehe Grafik <i>5. Datensuche</i>).</p>"+
+                                "<h3>Daten und Dienste des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr></h3>"+
+                                "<p>Neben der räumlichen Suche wird parallel nach Daten und Diensten des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> gesucht (siehe Grafik <i>5. Datensuche</i>).</p>"+
                                 "<p>Weitere Informationen finden sich im Metadatenfenster, das sich mit einem Klick auf den Informationsknopf "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_search_info.png' title='Informationsknopf' alt='button_search_info.png' width='15' height='15' style='vertical-align:middle'>"+
                                 " öffnet. Daten und Dienste, die mit einem Knopf in Form einer Karte und einem Plus-Symbol "+
@@ -852,14 +853,14 @@
                 "settings": {
                     "title": "6. Einstellungen",
                     "html": "<h2>6. Einstellungen</h2>"+
-                            "<div>Die Einstellungen des BfS Geoportals befinden sich im rechten oberen Eck der Anwendung. Ein Klick auf den entsprechenden Knopf öffnet bzw. aktiviert die jeweilige Funktion, welche nachfolgend näher erläutert werden. Navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt.</div><br />",
+                            "<div>Die Einstellungen des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportals befinden sich im rechten oberen Eck der Anwendung. Ein Klick auf den entsprechenden Knopf öffnet bzw. aktiviert die jeweilige Funktion, welche nachfolgend näher erläutert werden. Navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt.</div><br />",
                     "timeRef": {
                         "title": "6.1 Zeitbezug",
                         "html": "<hr style='color:#294d71' />"+
                                 "<h2>6.1 Zeitbezug <img class='img' src='classic/resources/img/helpPage/button_settings_timeRef_utc.png' title='Knopf: Zeitbezug' alt='button_settings_timeRef_utc.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Der Zeitbezug ist standardmäßig auf <i>koordinierter Weltzeit - UTC</i> eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen.</p>"+
-                                "<p>Betätigt man den Knopf \"Zeitbezug (UTC)\", wird die Zeit in der Anzeige des Klienten auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt (siehe Grafik <i>6.1 Zeitbezug</i>). Das bedeutet im Einzelnen, dass die Uhrzeit von der Systemzeit des Rechners bezogen wird.</p>"+
+                                "<p>Der Zeitbezug ist standardmäßig auf <i>koordinierter Weltzeit - <abbr title='koordinierte Weltzeit (Coordinated Universal Time)'>UTC</abbr></i> eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen.</p>"+
+                                "<p>Betätigt man den Knopf \"Zeitbezug (<abbr title='koordinierte Weltzeit (Coordinated Universal Time)'>UTC</abbr>)\", wird die Zeit in der Anzeige des Klienten auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt (siehe Grafik <i>6.1 Zeitbezug</i>). Das bedeutet im Einzelnen, dass die Uhrzeit von der Systemzeit des Rechners bezogen wird.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_timeRef.png' title='Zeitbezug' alt'graphic_timeRef.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>6.1 Zeitbezug</b>"+
@@ -871,7 +872,7 @@
                         "html": "<hr style='color:#294d71' />"+
                                 "<h2>6.2 Hilfe <img class='img' src='classic/resources/img/helpPage/button_settings_help.png' title='Knopf: Hilfe' alt='button_settings_help.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Der Knopf \"Hilfe\" öffnet das Hilfefenster, das in einzelnen Unterpunkten die Funktionalitäten des BfS Geoportals beschreibt.</p>"+
+                                "<p>Der Knopf \"Hilfe\" öffnet das Hilfefenster, das in einzelnen Unterpunkten die Funktionalitäten des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportals beschreibt.</p>"+
                                 "</div>"
                         },
                     "imprint": {
@@ -879,7 +880,7 @@
                         "html": "<hr style='color:#294d71' />"+
                                 "<h2>6.3 Impressum <img class='img' src='classic/resources/img/helpPage/button_settings_imprint.png' title='Knopf: Impressum' alt='button_settings_imprint.png' width='83' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Der Knopf \"Impressum\" öffnet das Impressum sowie die Nutzungsbedingungen des BfS Geoportals.</p>"+
+                                "<p>Der Knopf \"Impressum\" öffnet das Impressum sowie die Nutzungsbedingungen des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportals.</p>"+
                                 "</div>"
                         },
                     "language": {
@@ -887,7 +888,7 @@
                         "html": "<hr style='color:#294d71' />"+
                                 "<h2>6.4 Sprache <img class='img' src='classic/resources/img/helpPage/button_settings_language.png' title='Knopf: Sprache' alt='button_settings_language.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend kann mit einem Klick auf das referenzierte Kürzel die Sprache gewählt werden. Ein Klick auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"DE\" entspricht Deutsch und \"EN\" Englisch.</p>"+
+                                "<p>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend kann mit einem Klick auf das referenzierte Kürzel die Sprache gewählt werden. Ein Klick auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"<abbr title='Deutsch (German)'>DE</abbr>\" entspricht Deutsch und \"<abbr title='Englisch (English)'>EN</abbr>\" Englisch.</p>"+
                                 "<img class='img' src='classic/resources/img/helpPage/button_settings_language_all.png' title='Sprache' alt'button_settings_language_all.png' style='max-height: 100%; max-width: 100%;'>"+
                                 "</div>"
                         }
@@ -928,7 +929,7 @@
                         "html": "<hr style='color:#294d71' />"+
                                 "<h2>7.4 Vollbild <img class='img' src='classic/resources/img/helpPage/button_fullScreen.png' title='Knopf: Vollbild' alt='button_fullScreen.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Ein Klick auf den Knopf \"Vollbild\" erweitert das Sichtfeld des BfS Geoportals auf den gesamten Bildschirm. Je nach Browser, den Sie verwenden, müssen Sie den Vollbild-Modus bestätigen.</p>"+
+                                "<p>Ein Klick auf den Knopf \"Vollbild\" erweitert das Sichtfeld des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportals auf den gesamten Bildschirm. Je nach Browser, den Sie verwenden, müssen Sie den Vollbild-Modus bestätigen.</p>"+
                                 "<p>Zum Beenden des Vollbild-Modus drücken Sie die <b><i>Esc</i>-Taste</b>.</p>"+
                                 "</div>"
                         },
@@ -946,7 +947,7 @@
                         "html": "<hr style='color:#294d71' />"+
                                 "<h2>7.6 Legende öffnen <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Knopf: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Dieser Knopf öffnet bzw. schließt die Legende, die im rechten unteren Eck des BfS Geoportals zu finden ist. Diese beinhaltet sämtliche Layer, die in der Darstellung unmittelbar verfügbar sind. Alternativ kann direkt auf die Legende (blauer Balken mit der Aufschrift \"Legende\") geklickt werden.</p>"+
+                                "<p>Dieser Knopf öffnet bzw. schließt die Legende, die im rechten unteren Eck des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportals zu finden ist. Diese beinhaltet sämtliche Layer, die in der Darstellung unmittelbar verfügbar sind. Alternativ kann direkt auf die Legende (blauer Balken mit der Aufschrift \"Legende\") geklickt werden.</p>"+
                                 "</div>"
                         }
                 },
@@ -1380,27 +1381,27 @@
                 "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Willkommen</h1>",
                 "helpPrefaceHtml":
                     "<div>Das "+
-                    "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>Bundesamt für Strahlenschutz (BfS)</a>"+
+                    "<a href='http://www.bfs.de/DE/home/home_node.html' target='_blank'>Bundesamt für Strahlenschutz (<abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+
                     " stellt mit dem "+
-                    "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'>BfS-Geoportal</a>"+
-                    " ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des BfS sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
-                    "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>Integrierten Mess- und Informationssystem (IMIS)</a>"+
+                    "<a href='http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html' target='_blank'><abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>-Geoportal</a>"+
+                    " ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem "+
+                    "<a href='http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html' target='_blank'>Integrierten Mess- und Informationssystem (<abbr title='Integriertes Mess- und Informationssystem zur Überwachung der Umweltradioaktivität (Integrated Measuring and Information System for the Monitoring of Environmental Radioactivity)'>IMIS</abbr>)</a>"+
                     ".</div>"+
                     "<p>Für die Bereitstellung von Geoinformationen haben gesetzliche Grundlagen, wie das "+
-                    "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>Geodatenzugangsgesetz (GeoZG)</a>"+
+                    "<a href='http://www.gesetze-im-internet.de/geozg/' target='_blank'>Geodatenzugangsgesetz (<abbr title='Geodatenzugangsgesetz'>GeoZG</abbr>)</a>"+
                     " als Umsetzung der Europäische "+
-                    "<a href='http://inspire.ec.europa.eu/' target='_blank'>INSPIRE Richtlinie</a>"+
+                    "<a href='http://inspire.ec.europa.eu/' target='_blank'><abbr title='Infrastructure for Spatial Information in Europe (Geodateninfrastruktur in Europa)'>INSPIRE</abbr> Richtlinie</a>"+
                     ", in den vergangenen Jahren die technischen Entwicklungen und "+
                     "<a href='http://www.opengeospatial.org/standards' target='_blank'>Normierungen</a>"+
                     " von Such-, Darstellungs- und Download-Dienste erheblich vorangetrieben.</p>"+
                     "<p>Unter anderem wurden dadurch nutzerfreundlich Zugriffe auf Dienste anderer Quellen möglich, wie dies zentral im "+
                     "<a href='http://www.geoportal.de/DE/Geoportal/geoportal.html?lang=de' target='_blank'>Geoportal-Deutschland</a>"+
-                    " aber auch in der vorliegenden GIS-Software des BfS möglich ist.</p>"+
-                    "<p>Das BfS ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>"+
+                    " aber auch in der vorliegenden <abbr title='geografisches Informationssystem (Geographic Information System)'>GIS</abbr>-Software des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> möglich ist.</p>"+
+                    "<p>Das <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>"+
                     "</div>"+
                     "<div>Diese Anwendung soll nicht nur helfen die gewünschten Daten zu finden und geographisch darzustellen, sondern wenn möglich auch nach individuellen Bedürfnissen zu analysieren. Zeitreihendarstellungen oder Säulendiagramme sind dabei erste Schritte, die zukünftig noch ausgebaut werden sollen.</div>"+
-                    "<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe BfS Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software "+
-                    "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html' target='_blank'>(Kurzmeldung des BfS)</a>"+
+                    "<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software "+
+                    "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html' target='_blank'>(Kurzmeldung des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+
                     ".</div>"+
                     "<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>",
                 "helpQuickRefTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>Schnellübersicht</h1>",
@@ -1413,7 +1414,7 @@
                                 "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_off.png' title='Diagramm inaktiv' alt='mobile_legend_chart_off.png' width='20' height='15' style='vertical-align:middle'>"+
                                 ").</div><br />"+
                             "<li style='color:#294d71; font-weight:bold'>Menü</li>"+
-                                "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen (Knopf \"Auswahl\"). Zusätzlich lassen sich von externen Quellen Daten in die Karte laden (Knopf \"Externen WMS hinzufügen\"). Eine Suche von Orten bzw. Daten und Dienste des BfS ist über die Eingabe innerhalb des Suchfeldes möglich. Mithilfe des Permalink-Knopfs kann eine bestimmte Kartenansicht für einen späteren Zugriff gesichert werden. Die Sprache sowie der Zeitbezug der Anwendung lässt sich über den Menüpunkt \"Einstellungen\" anpassen. Des Weiteren finden Sie die Hilfe bzw. das Impressum über die gleichnamigen Knöpfe.</div><br />"+
+                                "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen (Knopf \"Auswahl\"). Zusätzlich lassen sich von externen Quellen Daten in die Karte laden (Knopf \"Externen <abbr title='Web Map Service'>WMS</abbr> hinzufügen\"). Eine Suche von Orten bzw. Daten und Dienste des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> ist über die Eingabe innerhalb des Suchfeldes möglich. Mithilfe des Permalink-Knopfs kann eine bestimmte Kartenansicht für einen späteren Zugriff gesichert werden. Die Sprache sowie der Zeitbezug der Anwendung lässt sich über den Menüpunkt \"Einstellungen\" anpassen. Des Weiteren finden Sie die Hilfe bzw. das Impressum über die gleichnamigen Knöpfe.</div><br />"+
                             "<li style='color:#294d71; font-weight:bold'>Navigation</li>"+
                                 "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland). Alternativ können Fingergesten verwendet werden.</div>"+
                                 "<div>Der unterste Knopf (zwei Pfeile) erweitert das Sichtfeld auf den gesamten Bildschirm des Endgerätes (sofern dies vom mobilen Browser unterstützt wird).</div><br />"+
@@ -1422,11 +1423,11 @@
                                 "<div>Zusätzlich lassen sich Einstellungen an der Darstellung der Layer vornehmen. Layer lassen sich ein- bzw. ausblenden oder gänzlich entfernen. Die Abfrage von Layern lässt sich aktivieren bzw. deaktivieren und es können Filtereinstellungen vorgenommen werden. Des Weiteren ist es möglich die Zeichenreihenfolge der Layer mithilfe der Pfeiltasten anzupassen.</div><br />"+
                             "</ol>",
                 "helpMapTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>1. Karte</h1>",
-                "helpMapHtml": "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>2.2 Auswahl</i>). Standardmäßig sind die Layer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - OSM\" geladen. Eine Berührung innerhalb der Karte öffnet ein temporäres Fenster das die geographischen Koordinaten der getippten Position anzeigt.</div><br />"+
+                "helpMapHtml": "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>2.2 Auswahl</i>). Standardmäßig sind die Layer \"Ortsnamen\", \"Höhenlinien\" und \"Hintergrundkarte - <abbr title='OpenStreetMap'>OSM</abbr>\" geladen. Eine Berührung innerhalb der Karte öffnet ein temporäres Fenster das die geographischen Koordinaten der getippten Position anzeigt.</div><br />"+
                                "<div> Layer denen Messdaten zugrunde liegen, liefern mit einer Berührung auf einen Datenpunkt/eine Station die Messdaten in Form eines Linien- bzw. Balkendiagramms. Für diese Funktion muss in der Legende das Diagrammsymbol aktiv sein "+
                                "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
                                " gesetzt ist. Weitere Informationen bezüglich der Legendeneinstellungen finden Sie unter dem Punkt <i>4. Legende</i>.</div><br />"+
-                               "<div>So öffnet sich zum Beispiel bei der Wahl des Layers \"ODL 1h\" (siehe <i>1. Arbeitsablauf Zeitreihen anzeigen</i>) bei Berührung auf eine Station ein neuer Reiter, in dem die Werte für einen bestimmten Zeitraum dargestellt werden. Eine bessere Darstellung von Linien- und Balkendiagramme wird erreicht, wenn das Endgerät (Smartphone oder Tablet) in horizontaler Lage gehalten wird (dazu muss die Funktion \"Automatisch drehen\" aktiviert sein).</div><br />"+
+                               "<div>So öffnet sich zum Beispiel bei der Wahl des Layers \"<abbr title='Ortsdosisleistung (Ambient Dose Rate)'>ODL</abbr> 1h\" (siehe <i>1. Arbeitsablauf Zeitreihen anzeigen</i>) bei Berührung auf eine Station ein neuer Reiter, in dem die Werte für einen bestimmten Zeitraum dargestellt werden. Eine bessere Darstellung von Linien- und Balkendiagramme wird erreicht, wenn das Endgerät (Smartphone oder Tablet) in horizontaler Lage gehalten wird (dazu muss die Funktion \"Automatisch drehen\" aktiviert sein).</div><br />"+
                                "<div><img class='img' src='modern/resources/img/helpPage/mobile_graphic_timeSeries.png' title='Arbeitsablauf Zeitreihen anzeigen' alt='mobile_graphic_timeSeries.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                "<b>1. Arbeitsablauf Zeitreihen anzeigen</b></div><br />"+
                                "<div>Innerhalb eines Liniendiagramms kann, wie bei der Karte, mithilfe der <i>2-Fingergestik</i> gezoomt bzw. mit <i>Wischgestik</i> die Ansicht verschoben werden. Detaillierte Informationen eines einzelnen Messpunktes sind per Berührung abrufbar. Eine Zeitreihe kann durch Berührung der Layerbezeichnung ein- bzw. ausgeblendet werden. Betätigen Sie den X-Knopf "+
@@ -1437,18 +1438,18 @@
                                "<div>Im linken unteren Eck der Kartenansicht befinden sich die Urheberrechtsangaben der internen sowie der externen Daten. Eine einfache Berührung öffnet einen neuen Reiter innerhalb des Browsers mit den entsprechenden Informationen.</div><br />"+
                                "<div>Im rechten unteren Eck der Karte befindet sich die Maßstabsleiste. Diese dient als Referenz des aktuellen Kartenmaßstabs. Demzufolge bietet sie eine Vergleichsgröße der aktuellen Ansicht. Sie variiert je nach Zoomstufe in der Größe und entspricht entweder einer Länge in Metern (m), oder Kilometern (km).</div><br />",
                 "helpMenuTitle": "<h1 style='font-weight:bold; font-size:16px; color:black'>2. Menü <img class='img' src='modern/resources/img/helpPage/mobile_button_menu.png' title='Knopf: Menü öffnen' alt='mobile_button_menu.png' width='37' height='33' style='vertical-align:middle'></h1>",
-                "helpMenuHtml": "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen (Knopf \"Auswahl\"). Zusätzlich lassen sich von externen Quellen Daten in die Karte laden (\"Externen WMS hinzufügen\"). Eine Suche von Orten bzw. Daten und Dienste des BfS ist über die Eingabe innerhalb des Suchfeldes möglich. Mithilfe des Permalink-Knopfs kann eine bestimmte Kartenansicht für einen späteren Zugriff gesichert werden. Die Sprache sowie der Zeitbezug der Anwendung lässt sich über den Menüpunkt \"Einstellungen\" anpassen. Des Weiteren finden Sie die Hilfe bzw. das Impressum über die gleichnamigen Knöpfe.</div>"+
+                "helpMenuHtml": "<div>Über das Menü lassen sich einzelne Layer der Karte hinzufügen (Knopf \"Auswahl\"). Zusätzlich lassen sich von externen Quellen Daten in die Karte laden (\"Externen <abbr title='Web Map Service'>WMS</abbr> hinzufügen\"). Eine Suche von Orten bzw. Daten und Dienste des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> ist über die Eingabe innerhalb des Suchfeldes möglich. Mithilfe des Permalink-Knopfs kann eine bestimmte Kartenansicht für einen späteren Zugriff gesichert werden. Die Sprache sowie der Zeitbezug der Anwendung lässt sich über den Menüpunkt \"Einstellungen\" anpassen. Des Weiteren finden Sie die Hilfe bzw. das Impressum über die gleichnamigen Knöpfe.</div>"+
                                 "<div>Der <i>Dreieckspfeil</i> "+
                                 "<img class='img' src='modern/resources/img/helpPage/mobile_button_backMenu.png' title='Knopf: zurück navigieren' alt='mobile_button_backMenu.png' width='16' height='21' style='vertical-align:middle'>"+
                                 ", der sich in der linken oberen Ecke befindet, ermöglicht es zur vorherigen Ansicht zurück zu wechseln.</div><br />"+
                                 "<h2 style='font-weight:bold'>2.1 Multisuchleiste</h2>"+
-                                    "<p>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des BfS. Mit einer Berührung in das Textfeld öffnet sich die Tastatur Ihres Endgerätes. Gemäß der Texteingabe werden die Ergebnisse in einem Fenster unterhalb der Leiste angezeigt. Ein Tippen auf das Kreuzsymbol "+
+                                    "<p>Die Multisuchleiste ermöglicht das Suchen von räumlichen Daten, sowie nach Daten und Diensten des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>. Mit einer Berührung in das Textfeld öffnet sich die Tastatur Ihres Endgerätes. Gemäß der Texteingabe werden die Ergebnisse in einem Fenster unterhalb der Leiste angezeigt. Ein Tippen auf das Kreuzsymbol "+
                                     "<img class='img' src='modern/resources/img/helpPage/mobile_button_deleteSearch.png' title='Suchauswahl löschen' alt='mobile_button_deleteSearch.png' width='21' height='21' style='vertical-align:middle'>"+
                                     ", an der rechten Seite des Suchfeldes, löscht die Eingabe und schließt das Ergebnisfenster.</p><br />"+
                                     "<p><b>Räumliche Suche</b><br />"+
                                     "Die Suche nach Orten erfolgt über die Multisuchleiste. Die Ergebnisse werden entsprechend der Texteingabe nach Betätigen der <i>Entertaste</i> Ihres Endgerätes angezeigt. Der gewünschte Ort wird mit einem Tippen auf den Ortsnamen ausgewählt, die Kartenansicht aktualisiert sich daraufhin automatisch.</p><br />"+
                                     "<p><b>Suche von Daten und Diensten</b><br />"+
-                                    "Neben der räumlichen Suche, wird parallel nach Daten und Diensten des BfS gesucht. Weitere Informationen finden sich im Metadatenfenster, das sich mit einer Berührung auf den Informationsknopf "+
+                                    "Neben der räumlichen Suche, wird parallel nach Daten und Diensten des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> gesucht. Weitere Informationen finden sich im Metadatenfenster, das sich mit einer Berührung auf den Informationsknopf "+
                                     "<img class='img' src='modern/resources/img/helpPage/mobile_button_search_info.png' title='Informationsknopf' alt='button_search_info.png' width='15' height='15' style='vertical-align:middle'>"+
                                     " öffnet. Daten und Dienste, die mit einem Knopf in Form einer Karte und einem Plus-Symbol "+
                                     "<img class='img' src='modern/resources/img/helpPage/mobile_button_search_addData.png' title='Knopf: Füge Daten der Karte hinzu' alt='button_search_addData.png' width='17' height='17' style='vertical-align:middle'>"+
@@ -1461,16 +1462,16 @@
                                     "<img class='img' src='modern/resources/img/helpPage/mobile_legend_chart_on.png' title='Diagramm aktiv' alt='mobile_legend_chart_on.png' width='20' height='15' style='vertical-align:middle'>"+
                                     " gesetzt.</div><br />"+
                                 "<h2 style='font-weight:bold'>2.3 Externe Layer hinzufügen</h2>"+
-                                    "<div>Der WMS Dienst ermöglicht das Hinzufügen von WMS-Layern zur Darstellung von externen Geodaten. Detailliertere Informationen rund um das Thema Web Map Service finden Sie unter folgender Adresse: <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'>OGC Compliance Wiki - WMS</a>.</div><br />"+
-                                    "<div>Der Knopf \"Layerauswahl\" öffnet eine Auswahl an vordefinierten WMS-URLs die angefragt werden können.</div>"+
-                                    "<div>Für eine individuelle WMS-Anfrage tragen Sie in das Feld \"WMS-URL\" eine gültige Anfrage ein. In der Folge drücken Sie auf den Knopf \"Verfügbare Layer abfragen\". Die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt. Durch das Setzen von Häkchen lassen sich die Layer auswählen, die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Knopf \"Ausgewählte Layer hinzufügen\". Diese sind initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</div><br />"+
+                                    "<div>Der <abbr title='Web Map Service'>WMS</abbr> Dienst ermöglicht das Hinzufügen von <abbr title='Web Map Service'>WMS</abbr>-Layern zur Darstellung von externen Geodaten. Detailliertere Informationen rund um das Thema Web Map Service finden Sie unter folgender Adresse: <a href='http://cite.opengeospatial.org/pub/cite/files/edu/wms/text/basic-index.html' target='_blank'><abbr title='Open Geospatial Consortium'>OGC</abbr> Compliance Wiki - <abbr title='Web Map Service'>WMS</abbr></a>.</div><br />"+
+                                    "<div>Der Knopf \"Layerauswahl\" öffnet eine Auswahl an vordefinierten <abbr title='Web Map Service'>WMS</abbr>-<abbr title='Uniform Resource Locator'>URL</abbr>s die angefragt werden können.</div>"+
+                                    "<div>Für eine individuelle <abbr title='Web Map Service'>WMS</abbr>-Anfrage tragen Sie in das Feld \"<abbr title='Web Map Service'>WMS</abbr>-<abbr title='Uniform Resource Locator'>URL</abbr>\" eine gültige Anfrage ein. In der Folge drücken Sie auf den Knopf \"Verfügbare Layer abfragen\". Die Ergebnisse werden im Feld \"Verfügbare Layer\" dargestellt. Durch das Setzen von Häkchen lassen sich die Layer auswählen, die letztlich in die Legende und somit in der Karte angezeigt werden sollen. Anschließend bestätigt man die Auswahl mit dem Knopf \"Ausgewählte Layer hinzufügen\". Diese sind initial hierarchisch an oberster Stelle der Legende eingeordnet und folglich in der Darstellung über alle anderen Layer gezeichnet.</div><br />"+
                                     "<h2 style='font-weight:bold'>2.4 Permalink</h2>"+
                                     "<div>Ein Permalink ist ein Hyperlink der als dauerhafte Referenz von Inhalten einer Internetadresse dient. Er enthält die Informationen der Kartenansicht (Zoomstufe und Position), sowie zusätzlich geladene Inhalte (Layer mit Filtereinstellungen).</div>"+
                                     "<div>Dadurch ist es möglich eine bestimmte Kartenansicht für einen späteren Zugriff abzuspeichern. Nach Auswahl einer gewünschten Ansicht betätigen Sie hierfür den Permalink-Knopf um den passenden Permalink zur aktuellen Ansicht sich anzeigen zu lassen.</div><br />"+
                                 "<h2 style='font-weight:bold'>2.5 Einstellungen</h2>"+
                                     "<div>In den Einstellungen kann sowohl die Sprache als auch der Zeitbezug eingestellt werden.</div><br />"+
-                                    "<div>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend lässt sich mit einer Berührung auf das referenzierte Kürzel die Sprache auswählen. Eine Berührung auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"DE\" entspricht Deutsch und \"EN\" Englisch.</div><br />"+
-                                    "<div>Der Zeitbezug ist standardmäßig auf koordinierter Weltzeit - UTC eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen. Betätigt man den Knopf \"Zeitbezug (UTC)\" wird die Zeit auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt. Das bedeutet im Einzelnen, dass die Uhrzeit von der Systemzeit des Endgerätes bezogen wird. Die lokale Uhrzeit bezieht sich lediglich auf die Anzeige des Klienten.</div><br />"+
+                                    "<div>Das Auswahlmenü der Sprache steuert die Sprache der gesamten Anwendung. Entsprechend lässt sich mit einer Berührung auf das referenzierte Kürzel die Sprache auswählen. Eine Berührung auf den Pfeil nach unten, öffnet das Auswahlmenü der verfügbaren Sprachen. \"<abbr title='Deutsch (German)'>DE</abbr>\" entspricht Deutsch und \"<abbr title='Englisch (English)'>EN</abbr>\" Englisch.</div><br />"+
+                                    "<div>Der Zeitbezug ist standardmäßig auf koordinierter Weltzeit - <abbr title='koordinierte Weltzeit (Coordinated Universal Time)'>UTC</abbr> eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen. Betätigt man den Knopf \"Zeitbezug (<abbr title='koordinierte Weltzeit (Coordinated Universal Time)'>UTC</abbr>)\" wird die Zeit auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt. Das bedeutet im Einzelnen, dass die Uhrzeit von der Systemzeit des Endgerätes bezogen wird. Die lokale Uhrzeit bezieht sich lediglich auf die Anzeige des Klienten.</div><br />"+
                                 "<h2 style='font-weight:bold'>2.6 Hilfe</h2>"+
                                     "<div>Betätigen des Knopfs öffnet die Hilfe zur mobilen Anwendung.</div><br />"+
                                 "<h2 style='font-weight:bold'>2.7 Impressum</h2>"+
