@@ -5,7 +5,7 @@ Ext.define('Koala.view.panel.SettingsController', {
     /**
      *
      */
-    onUtcChanged: function(cb, utcChecked) {
+    onTimeReferenceChanged: function(cb, utcChecked) {
         var mainView = this.getView().up('app-main');
         var mainViewModel = mainView.getViewModel();
         mainViewModel.set('useUtc', utcChecked);
