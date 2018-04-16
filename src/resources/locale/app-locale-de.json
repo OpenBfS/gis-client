@@ -464,7 +464,7 @@
                 "uncertaintyCheckboxLabel": "Messungenauigkeit",
                 "exportAsImageBtnText": "Als Bild exportieren",
                 "toggleGroupingButtonText": "Gruppierung wechseln",
-                "printChartButtonText": "IMIS-Druck"
+                "printChartButtonText": "Dokpool"
             }
         }
     },

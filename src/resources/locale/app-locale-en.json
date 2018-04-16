@@ -464,7 +464,7 @@
                 "uncertaintyCheckboxLabel": "Uncertainty",
                 "exportAsImageBtnText": "Export as image",
                 "toggleGroupingButtonText": "Toggle grouping",
-                "printChartButtonText": "IMIS Print"
+                "printChartButtonText": "Dokpool"
             }
         }
     },
