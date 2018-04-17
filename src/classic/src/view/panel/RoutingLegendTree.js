@@ -74,6 +74,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         selectionchange: 'onSelectionChange',
         beforerender: 'bindUtcBtnToggleHandler',
         beforedestroy: 'unbindUtcBtnToggleHandler',
+        checkchange: 'checkLayerAndLegendVisibility',
         // Ensure the layer filter text indicator will be drawn
         expand: {
             fn: 'onFirstExpand',
