@@ -973,6 +973,30 @@ Ext.define('Koala.util.Layer', {
             var width = layer.get('legendWidth');
             var height= layer.get('legendHeight');
             var legendUrl = layer.get('legendUrl') || '';
+            var source = layer.getSource();
+            var params;
+            if (source.getParams) {
+                params = source.getParams();
+            }
+
+            if (!legendUrl) {
+                return '';
+            }
+
+            if (layer.get('enableLegendCount')) {
+                legendUrl += '&LEGEND_OPTIONS=countMatched:true';
+                if (params && params.viewparams) {
+                    legendUrl += '&viewParams=' + params.viewparams;
+                }
+                if (params && params.TIME) {
+                    legendUrl += '&TIME=' + params.TIME;
+                }
+                if (params && params.cql_filter) {
+                    legendUrl += '&cql_filter=' + encodeURIComponent(
+                        params.cql_filter);
+                }
+            }
+
             var map = Ext.ComponentQuery.query('gx_map')[0].getMap();
             var resolution = BasiGX.util.Map.getResolution(map);
             var scale = BasiGX.util.Map.getScale(map);
@@ -980,17 +1004,12 @@ Ext.define('Koala.util.Layer', {
 
             // determine the style to add
             if (Koala.util.Layer.isWmsLayer(layer)) {
-                var source = layer.getSource();
-                var params = source.getParams();
                 var styles = params && 'STYLES' in params && params.STYLES;
                 if (styles) {
                     style = styles.split(',')[0];
                 }
             }
 
-            if (!legendUrl) {
-                return '';
-            }
             if (width) {
                 legendUrl = Ext.String.urlAppend(legendUrl, 'WIDTH=' + width);
             }
@@ -1169,6 +1188,7 @@ Ext.define('Koala.util.Layer', {
                 allowShortInfo: getBool(olProps.allowShortInfo, true),
                 allowPrint: getBool(olProps.allowPrint, true),
                 allowOpacityChange: getBool(olProps.allowOpacityChange, true),
+                enableLegendCount: getBool(olProps.enableLegendCount, false),
                 hoverable: shallHover,
                 hoverTpl: olProps.hoverTpl,
                 opacity: olProps.opacity || 1,
