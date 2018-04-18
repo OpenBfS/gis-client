@@ -97,6 +97,7 @@
                 "info": "Info",
                 "expandToLeft": "fr:Show older data",
                 "expandToRight": "fr:Show newer data",
+                "maxExtent": "fr:Diagrammansicht maximieren",
                 "toggleLegendVisibility": "fr:Toggle legend visibility",
                 "displayIdentificationThreshold": "fr:Display data < identification threshold",
                 "exportToPngText": "fr:Download Chart",

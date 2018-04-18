@@ -103,6 +103,7 @@
                 "info": "Info",
                 "expandToLeft": "Show older data",
                 "expandToRight": "Show newer data",
+                "maxExtent": "Full extent of chart view",
                 "toggleLegendVisibility": "Toggle legend visibility",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Toggle grouping",

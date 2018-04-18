@@ -103,6 +103,7 @@
                 "info": "Info",
                 "expandToLeft": "Ältere Daten anzeigen",
                 "expandToRight": "Neuere Daten anzeigen",
+                "maxExtent": "Diagrammansicht maximieren",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Gruppierung tauschen",
