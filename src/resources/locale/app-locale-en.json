@@ -104,6 +104,7 @@
                 "expandToLeft": "Show older data",
                 "expandToRight": "Show newer data",
                 "maxExtent": "Full extent of chart view",
+                "combineSeries": "Combine time series",
                 "toggleLegendVisibility": "Toggle legend visibility",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Toggle grouping",

@@ -104,6 +104,7 @@
                 "expandToLeft": "Ältere Daten anzeigen",
                 "expandToRight": "Neuere Daten anzeigen",
                 "maxExtent": "Diagrammansicht maximieren",
+                "combineSeries": "Zeitreihen zusammenführen",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Gruppierung tauschen",
