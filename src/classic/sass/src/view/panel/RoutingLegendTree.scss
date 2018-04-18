@@ -26,6 +26,10 @@
     display: inline-block;
 }
 
+.basigx-legend-panel .x-grid-cell-inner {
+    text-overflow: inherit;
+}
+
 .basigx-legend-panel .x-grid-item-container {
     width: 95% !important;
 }
