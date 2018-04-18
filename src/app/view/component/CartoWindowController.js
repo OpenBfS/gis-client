@@ -1037,6 +1037,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         var downEvent = Ext.isModern ? 'touchstart': 'mousedown';
         var upEvent = Ext.isModern ? 'touchend': 'mouseup';
+        var previousEvent;
 
         el.addEventListener(downEvent, function(event) {
             if (event.target.tagName === 'LABEL') {
@@ -1046,6 +1047,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 overlay.set('resizing', true);
                 me.resizeTarget = Ext.get(event.target).up('.cartowindow-tab').down('.content');
             }
+            previousEvent = event;
         });
 
         me.onMouseUp = function() {
@@ -1063,10 +1065,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
             if (overlay.get('dragging') === true) {
                 var position = overlay.getPosition();
                 var res = overlay.getMap().getView().getResolution();
-                position[0] += event.originalEvent.movementX * res;
-                position[1] -= event.originalEvent.movementY * res;
+                var xDiff = event.originalEvent.screenX - previousEvent.screenX;
+                var yDiff = event.originalEvent.screenY - previousEvent.screenY;
+                position[0] += xDiff * res;
+                position[1] -= yDiff * res;
                 overlay.setPosition(position);
                 me.updateLineFeature();
+                previousEvent = event.originalEvent;
             }
         };
 
