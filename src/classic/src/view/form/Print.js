@@ -614,6 +614,7 @@ Ext.define('Koala.view.form.Print', {
             if (!containerEl || !containerEl.parentNode) {
                 return;
             }
+            d3.selectAll('.k-d3-hidden').style('display', 'none');
             var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
@@ -627,6 +628,7 @@ Ext.define('Koala.view.form.Print', {
                         return this;
                     }
                 });
+                d3.selectAll('.k-d3-hidden').style('display', 'block');
             });
         });
 

@@ -801,7 +801,9 @@ Ext.define('Koala.view.component.D3BaseController', {
             'layerConfig/timeSeriesChartProperties/attachedSeries',
             '[]'
         );
-        series = JSON.parse(series);
+        try {
+            series = JSON.parse(series);
+        } catch (e) {/*silently catch*/}
         Ext.each(series, function(config) {
             var label = config.dspUnit || '';
             var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
@@ -955,6 +957,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         outputFormat = outputFormat || 'image/png';
         cbScope = cbScope || this;
         var chartNode = this.containerSvg.node();
+        d3.selectAll('.k-d3-hidden').style('display', 'none');
         var chartSource = (new XMLSerializer()).serializeToString(chartNode);
         var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
             unescape(encodeURIComponent(chartSource)));
@@ -991,6 +994,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         chartImageObject.onload = function() {
             ctx.drawImage(chartImageObject, 0, 0, chartImageWidth,
                 chartImageHeight);
+            d3.selectAll('.k-d3-hidden').style('display', 'block');
             legendImageObject.onload = function() {
                 ctx.drawImage(legendImageObject,
                     chartImageWidth - legendImageWidth, 0, legendImageWidth,
