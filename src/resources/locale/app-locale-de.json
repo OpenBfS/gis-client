@@ -121,7 +121,11 @@
                 "colorWindowTitle": "Farbe auswählen",
                 "colorWindowMessage": "Bitte wählen Sie eine Farbe aus:",
                 "colorMsgButtonYes": "Ok",
-                "colorMsgButtonNo": "Abbrechen"
+                "colorMsgButtonNo": "Abbrechen",
+                "downloadChartDataMsgTitle": "Info",
+                "downloadChartDataMsgMessage": "Aktuelle Chartdaten herunterladen?",
+                "downloadChartDataMsgButtonYes": "Ja",
+                "downloadChartDataMsgButtonNo": "Nein"
             }
         }
     },
@@ -132,7 +136,11 @@
                 "colorWindowTitle": "Farbe auswählen",
                 "colorWindowMessage": "Bitte wählen Sie eine Farbe aus:",
                 "colorMsgButtonYes": "Ok",
-                "colorMsgButtonNo": "Abbrechen"
+                "colorMsgButtonNo": "Abbrechen",
+                "downloadChartDataMsgTitle": "Info",
+                "downloadChartDataMsgMessage": "Aktuelle Chartdaten herunterladen?",
+                "downloadChartDataMsgButtonYes": "Ja",
+                "downloadChartDataMsgButtonNo": "Nein"
             }
         }
     },
