@@ -1037,6 +1037,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         var downEvent = Ext.isModern ? 'touchstart': 'mousedown';
         var upEvent = Ext.isModern ? 'touchend': 'mouseup';
+        var previousEvent;
 
         el.addEventListener(downEvent, function(event) {
             if (event.target.tagName === 'LABEL') {
@@ -1046,6 +1047,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 overlay.set('resizing', true);
                 me.resizeTarget = Ext.get(event.target).up('.cartowindow-tab').down('.content');
             }
+            previousEvent = event;
         });
 
         me.onMouseUp = function() {
@@ -1057,16 +1059,20 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         me.onMouseUpWindow = function() {
             overlay.set('resizing', false);
+            overlay.set('dragging', false);
         };
 
         me.pointerMoveListener = function(event) {
             if (overlay.get('dragging') === true) {
                 var position = overlay.getPosition();
                 var res = overlay.getMap().getView().getResolution();
-                position[0] += event.originalEvent.movementX * res;
-                position[1] -= event.originalEvent.movementY * res;
+                var xDiff = event.originalEvent.screenX - previousEvent.screenX;
+                var yDiff = event.originalEvent.screenY - previousEvent.screenY;
+                position[0] += xDiff * res;
+                position[1] -= yDiff * res;
                 overlay.setPosition(position);
                 me.updateLineFeature();
+                previousEvent = event.originalEvent;
             }
         };
 
@@ -1080,6 +1086,24 @@ Ext.define('Koala.view.component.CartoWindowController', {
         });
         window.addEventListener(upEvent, me.onMouseUpWindow);
         map.on('pointermove', me.pointerMoveListener);
+        // register additional listeners to solve the issue that when an
+        // object tag is used in the cartowindow, exisiting events will not
+        // fire anymore. Fixes issues when dragging a cartowindow with
+        // object tag in browsers like firefox, which render slowly
+        // and mouse goes over the object tag while dragging
+        window.addEventListener('pointermove', function(evt) {
+            if (overlay.get('dragging') === true) {
+                var obj = el.querySelector('object');
+                if (obj && !me.objectTagMouseOverListenerRegistered) {
+                    obj.addEventListener('mouseover', function(event) {
+                        evt = {};
+                        evt.originalEvent = event;
+                        me.pointerMoveListener(evt);
+                    });
+                    me.objectTagMouseOverListenerRegistered = true;
+                }
+            }
+        });
 
         viewModel.get('lineLayer').getSource().addFeature(lineFeature);
         viewModel.set('lineFeature', lineFeature);
