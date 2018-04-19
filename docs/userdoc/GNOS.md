@@ -1323,10 +1323,10 @@ URL, die eine Konfiguration für Farbzurodnungen im JSON Format zurückgibt.
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
-| Erlaubt Wertemenge   | Objekt  |
+| Erlaubt Wertemenge   | String  |
 | Obligatorisch        | &#10799; |
 | Default-Wert         | leer |
-| Beispiel             |
+| Beispiel Rückgabe           |
 ```
 {
   "Cs 137": {
