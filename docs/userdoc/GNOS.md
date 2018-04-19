@@ -1317,6 +1317,31 @@ Lesbare Variante, statt technischem Attributwert.
 | Default-Wert         | chartFieldSequence |
 | Beispiel             |  |
 
+**colorMappingUrl**
+
+URL, die eine Konfiguration für Farbzurodnungen im JSON Format zurückgibt.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Objekt  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+| Beispiel             |
+```
+{
+  "Cs 137": {
+    "color": "#4040ff"
+  },
+  "I 131": {
+    "color": "#0006FF"
+  },
+  "K 40": {
+    "color": "#0006FF"
+  }
+}
+```
+
+
 **labelFunc**  // TODO Fällt nach Änderung der Datenstruktur ggf weg.
 
 JavaScript-Funktion, welche zum Generieren von Labels verwendet wird ()

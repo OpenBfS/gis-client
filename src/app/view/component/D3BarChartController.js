@@ -136,12 +136,41 @@ Ext.define('Koala.view.component.D3BarChartController', {
         return requestParams;
     },
 
+    onChartDataRequestSuccess: function(chartDataResponse) {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            me.onDataComplete(chartDataResponse);
+        }
+        var barChartProperties = view.getTargetLayer().get('barChartProperties');
+
+        if (!barChartProperties.colorMappingUrl || Ext.isEmpty(
+            barChartProperties.colorMappingUrl)) {
+            me.onDataComplete(chartDataResponse);
+        }
+        view.setLoading(true);
+        Ext.Ajax.request({
+            method: 'GET',
+            url: barChartProperties.colorMappingUrl,
+            callback: function() {
+                view.setLoading(false);
+            },
+            success: function(colorDataResponse) {
+                me.onDataComplete(chartDataResponse, colorDataResponse);
+            },
+            failure: function() {
+                Ext.log.error('Error retrieving external colormap');
+                me.onDataComplete(chartDataResponse);
+            }
+        });
+    },
+
     /**
      * Function to be called on request success.
      *
      * @param {Object} reponse The response object.
      */
-    onChartDataRequestSuccess: function(response) {
+    onDataComplete: function(chartDataResponse, colorDataResponse) {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
@@ -170,15 +199,23 @@ Ext.define('Koala.view.component.D3BarChartController', {
             colors = view.getShape().color.split(',');
         }
         var jsonObj;
+        var jsonColorData;
 
         var seriesData = [];
 
-        if (response && response.responseText) {
+        if (chartDataResponse && chartDataResponse.responseText) {
             try {
-                jsonObj = Ext.decode(response.responseText);
+                jsonObj = Ext.decode(chartDataResponse.responseText);
             } catch (err) {
-                Ext.log.error('Could not parse the response: ', err);
+                Ext.log.error('Could not parse the chart data response: ', err);
                 return false;
+            }
+        }
+        if (colorDataResponse && colorDataResponse.responseText) {
+            try {
+                jsonColorData = Ext.decode(colorDataResponse.responseText);
+            } catch (err) {
+                Ext.log.error('Could not parse the color data response: ', err);
             }
         }
         //used for grid table in CartoWindowController
@@ -227,7 +264,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 pushObj[groupKey] = {};
             }
 
-            pushObj[groupKey].color = me.customColors[groupKey] || me.colorsByKey[groupKey];
+            if (jsonColorData && jsonColorData[groupKey]) {
+                pushObj[groupKey].color = jsonColorData[groupKey].color;
+            } else {
+                pushObj[groupKey].color = me.customColors[groupKey] || me.colorsByKey[groupKey];
+            }
             pushObj[groupKey].value = feature.properties[valueProp];
             pushObj[groupKey].key = feature.properties[groupProp];
             pushObj[groupKey].detection_limit = feature.properties[detectionLimitProp];
