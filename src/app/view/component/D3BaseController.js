@@ -1302,6 +1302,12 @@ Ext.define('Koala.view.component.D3BaseController', {
             var oldColor = shape.config.color;
             shape.config.color = '#' + cmp.getValue();
             this.customColors[idx] = shape.config.color;
+            // also apply the color to the same member of the other groups
+            Ext.each(this.data, function(group) {
+                if (group[shape.config.key]) {
+                    group[shape.config.key].color = shape.config.color;
+                }
+            });
             // if we have attachedSeries and it has the same color as the parent
             // we will also apply the new color to the attached series
             if (shape.config.attachedSeries) {
