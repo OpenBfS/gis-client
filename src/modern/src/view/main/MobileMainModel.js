@@ -24,7 +24,7 @@ Ext.define('Koala.view.main.MobileMainModel', {
     alias: 'viewmodel.mobile-main',
 
     data: {
-        useUtc: true,
+        useUtc: false,
         chartSlctnTitle: '',
         chartSlctnMsg: '',
         chartSlctnTimeSeriesBtn: '',

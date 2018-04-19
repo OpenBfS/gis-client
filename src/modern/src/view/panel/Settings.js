@@ -37,6 +37,7 @@ Ext.define('Koala.view.panel.Settings',{
             name: 'timereference',
             labelWidth: 150,
             value: 'local',
+            checked: true,
             bind: {
                 label: '{localLabel}'
             }
@@ -45,12 +46,11 @@ Ext.define('Koala.view.panel.Settings',{
             name: 'timereference',
             labelWidth: 150,
             value: 'UTC',
-            checked: true,
             bind: {
                 label: '{utcLabel}'
             },
             listeners: {
-                change: 'onUtcChanged'
+                change: 'onTimeReferenceChanged'
             }
         }]
     }]

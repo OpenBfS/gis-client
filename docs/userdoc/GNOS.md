@@ -1178,6 +1178,28 @@ Sollen die Label an der X-Achse um 45 Grad rotiert werden?
 | Default-Wert         | false |
 | Beispiel             | true |
 
+**chartWidth
+
+Breite des Charts in Pixel
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | ganze Zahl  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | 500 |
+
+**chartHeight
+
+Höhe des Charts in Pixel
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | ganze Zahl  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | 250 |
+
 ## Timeseries Chart Properties {#timeseries} (bfs:timeSeriesChartProperty)
 
 **allowZoom**

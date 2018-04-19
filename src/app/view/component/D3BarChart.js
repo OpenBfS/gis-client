@@ -124,8 +124,10 @@ Ext.define('Koala.view.component.D3BarChart',{
                 xtype: 'd3-barchart',
                 name: olLayer.get('name'),
                 zoomEnabled: Koala.util.String.coerce(chartConfig.allowZoom),
+                minHeight: 100,
+                minWidth: 100,
+                width: config.width || '100%',
                 height: config.height || '100%',
-                width: config.width || 800, // TODO replace static value
                 margin: config.margin || 0,
                 flex: config.flex,
                 renderTo: config.renderTo,
