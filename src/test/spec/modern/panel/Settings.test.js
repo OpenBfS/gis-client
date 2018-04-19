@@ -20,7 +20,7 @@ describe('Koala.view.panel.SettingsController', function() {
         model.set = sinon.stub();
         view.getViewModel = sinon.stub().returns(model);
         ctrl.setView(view);
-        ctrl.onUtcChanged();
+        ctrl.onTimeReferenceChanged();
         expect(model.set.calledOnce).to.be(true);
     });
 });

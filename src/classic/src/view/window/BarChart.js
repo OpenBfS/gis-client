@@ -51,10 +51,8 @@ Ext.define('Koala.view.window.BarChart', {
         bind: {
             tooltip: '{helpTooltip}'
         },
-        topic: 'mapGeoObjects',
-        parentOfTopic: 'map',
         callback: function() {
-            Koala.util.Help.showHelpWindow();
+            Koala.util.Help.showHelpWindow('mapGeoObjects', 'map');
         }
     }],
     defaults: {

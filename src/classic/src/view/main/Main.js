@@ -212,9 +212,9 @@ Ext.define('Koala.view.main.Main', {
                                     bind: {
                                         tooltip: '{helpTooltip}'
                                     },
-                                    topic: 'toolsWms',
-                                    parentOfTopic: 'tools',
-                                    callback: Koala.util.Help.showHelpWindow
+                                    callback: function() {
+                                        Koala.util.Help.showHelpWindow('toolsWms', 'tools')
+                                    }
                                 }],
                                 items: [{
                                     xtype: 'basigx-form-addwms',
@@ -280,9 +280,9 @@ Ext.define('Koala.view.main.Main', {
                                     bind: {
                                         tooltip: '{helpTooltip}'
                                     },
-                                    topic: 'toolsImport',
-                                    parentOfTopic: 'tools',
-                                    callback: Koala.util.Help.showHelpWindow
+                                    callback: function() {
+                                        Koala.util.Help.showHelpWindow('toolsImport', 'tools');
+                                    }
                                 }],
                                 items: [{
                                     xtype: 'k-form-importLocalData'

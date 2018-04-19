@@ -49,9 +49,8 @@ Ext.define('Koala.view.panel.LayerSetChooser', {
         bind: {
             tooltip: '{helpTooltip}'
         },
-        topic: 'layerSelection',
         callback: function() {
-            Koala.util.Help.showHelpWindow();
+            Koala.util.Help.showHelpWindow('layerSelection');
         }
     }],
 

@@ -64,9 +64,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         bind: {
             tooltip: '{helpTooltip}'
         },
-        topic: 'legendHelp',
         callback: function() {
-            Koala.util.Help.showHelpWindow();
+            Koala.util.Help.showHelpWindow('legendHelp');
         }
     }],
 

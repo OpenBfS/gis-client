@@ -42,10 +42,8 @@ Ext.define('Koala.view.button.PermalinkController', {
                     bind: {
                         tooltip: '{helpTooltip}'
                     },
-                    topic: 'mapNavigationPermalink',
-                    parentOfTopic: 'mapNavigation',
                     callback: function() {
-                        Koala.util.Help.showHelpWindow();
+                        Koala.util.Help.showHelpWindow('mapNavigationPermalink', 'mapNavigation');
                     }
                 }],
                 items: [{

@@ -25,28 +25,28 @@ Ext.define('Koala.view.window.HelpModel', {
         fallbackHtml: '<img class=\'img\' src=\'classic/resources/img/bfs-logo.png\' title=\'BfS-Logo\' alt=\'bfs-logo.png\' width=\'100\' height=\'39\' style=\'float:right\'>'+
             '<h2> Willkommen </h2>'+
             '<div>Das '+
-            '<a href=\'http://www.bfs.de/DE/home/home_node.html\' target=\'_blank\'>Bundesamt für Strahlenschutz (BfS)</a>'+
+            '<a href=\'http://www.bfs.de/DE/home/home_node.html\' target=\'_blank\'>Bundesamt für Strahlenschutz (<abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr>)</a>'+
             ' stellt mit dem '+
-            '<a href=\'http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html\' target=\'_blank\'>BfS-Geoportal</a>'+
-            ' ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des BfS sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem '+
-            '<a href=\'http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html\' target=\'_blank\'>Integrierten Mess- und Informationssystem (IMIS)</a>'+
+            '<a href=\'http://www.bfs.de/DE/themen/ion/umwelt/luft-boden/geoportal/geoportal.html\' target=\'_blank\'><abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr>-Geoportal</a>'+
+            ' ein eigenes Internetportal für die Suche und Darstellung raumbezogenen Daten (Geodaten) und Webdienste (Geodatendienste) bereit. Zur Verfügung stehen Messdaten des <abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr> sowie weiterer Bundes-, Landes- und anderer Behörden. Dies sind in der Mehrzahl Daten aus dem '+
+            '<a href=\'http://www.bfs.de/DE/themen/ion/notfallschutz/messnetz/imis/imis.html\' target=\'_blank\'>Integrierten Mess- und Informationssystem (<abbr title=\'Integriertes Mess- und Informationssystem zur Überwachung der Umweltradioaktivität (Integrated Measuring and Information System for the Monitoring of Environmental Radioactivity)\'>IMIS</abbr>)</a>'+
             '.</div>'+
             '<div>'+
             '<p>Für die Bereitstellung von Geoinformationen haben gesetzliche Grundlagen, wie das '+
-            '<a href=\'http://www.gesetze-im-internet.de/geozg/\' target=\'_blank\'>Geodatenzugangsgesetz (GeoZG)</a>'+
+            '<a href=\'http://www.gesetze-im-internet.de/geozg/\' target=\'_blank\'>Geodatenzugangsgesetz (<abbr title=\'Geodatenzugangsgesetz\'>GeoZG</abbr>)</a>'+
             ' als Umsetzung der Europäische '+
-            '<a href=\'http://inspire.ec.europa.eu/\' target=\'_blank\'>INSPIRE Richtlinie</a>'+
+            '<a href=\'http://inspire.ec.europa.eu/\' target=\'_blank\'><abbr title=\'Infrastructure for Spatial Information in Europe (Geodateninfrastruktur in Europa)\'>INSPIRE</abbr> Richtlinie</a>'+
             ', in den vergangenen Jahren die technischen Entwicklungen und '+
             '<a href=\'http://www.opengeospatial.org/standards\' target=\'_blank\'>Normierungen</a>'+
             ' von Such-, Darstellungs- und Download-Dienste erheblich vorangetrieben.</p>'+
             '<p>Unter anderem wurden dadurch nutzerfreundlich Zugriffe auf Dienste anderer Quellen möglich, wie dies zentral im '+
             '<a href=\'http://www.geoportal.de/DE/Geoportal/geoportal.html?lang=de\' target=\'_blank\'>Geoportal-Deutschland</a>'+
-            ' aber auch in der vorliegenden GIS-Software des BfS möglich ist.</p>'+
-            '<p>Das BfS ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>'+
+            ' aber auch in der vorliegenden <abbr title=\'geografisches Informationssystem (Geographic Information System)\'>GIS</abbr>-Software des <abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr> möglich ist.</p>'+
+            '<p>Das <abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr> ist bestrebt, sein Informationsangebot über solche standardisierte Dienste stets weiter auszubauen.</p>'+
             '</div>'+
             '<div>Diese Anwendung soll nicht nur helfen die gewünschten Daten zu finden und geographisch darzustellen, sondern wenn möglich auch nach individuellen Bedürfnissen zu analysieren. Zeitreihendarstellungen oder Säulendiagramme sind dabei erste Schritte, die zukünftig noch ausgebaut werden sollen.</div>'+
-            '<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe BfS Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software '+
-            '<a href=\'http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html\' target=\'_blank\'>(Kurzmeldung des BfS)</a>'+
+            '<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe <abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr> Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software '+
+            '<a href=\'http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html\' target=\'_blank\'>(Kurzmeldung des <abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr>)</a>'+
             '.</div>'+
             '<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>'
     },

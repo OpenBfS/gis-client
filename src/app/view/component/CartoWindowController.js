@@ -212,8 +212,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var config = {
             startDate: timeFilter.mindatetimeinstant,
             endDate: timeFilter.maxdatetimeinstant,
-            width: '548px',
-            height: '225px',
+            width: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartWidth) || 500,
+            height: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartHeight) || 250,
             renderTo: tabElm
         };
 
@@ -406,7 +406,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var btn = {
             cls: 'carto-window-chart-button',
             xtype: 'button',
-            name: 'irix-print',
+            name: 'irixPrintBtn',
             glyph: 'xf039@FontAwesome',
             iconAlign: 'right',
             bind: {
@@ -415,6 +415,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         };
         this.IrixPrintButton = Ext.create(btn);
+        this.IrixPrintButton.on('beforerender', Koala.util.AppContext.generateCheckToolVisibility('irixPrintBtn'));
         this.IrixPrintButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3);
         this.IrixPrintButton.el.dom.addEventListener('click', this.showIrixPrintDialog.bind(this, chart));
     },
@@ -552,8 +553,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var tabElm = barChartTab.getElementsByTagName('div')[0];
 
         var config = {
-            width: '500px',
-            height: '300px',
+            width: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartWidth) || 500,
+            height: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartHeight) || 250,
             flex: 1,
             renderTo: tabElm
         };

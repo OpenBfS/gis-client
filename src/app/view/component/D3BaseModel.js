@@ -22,6 +22,14 @@ Ext.define('Koala.view.component.D3BaseModel', {
     data: {
         confirmDeleteTitleTpl: '',
         confirmDeleteMsgTpl: '',
-        belowDetectionLimitLabel: ''
+        belowDetectionLimitLabel: '',
+        colorWindowTitle: '',
+        colorWindowMessage: '',
+        colorMsgButtonYes: '',
+        colorMsgButtonNo: '',
+        downloadChartDataMsgTitle: '',
+        downloadChartDataMsgMessage: '',
+        downloadChartDataMsgButtonYes: '',
+        downloadChartDataMsgButtonNo: ''
     }
 });
