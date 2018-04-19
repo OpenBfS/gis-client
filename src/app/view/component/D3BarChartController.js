@@ -143,18 +143,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
             me.onDataComplete(chartDataResponse);
         }
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
-
         if (!barChartProperties.colorMappingUrl || Ext.isEmpty(
             barChartProperties.colorMappingUrl)) {
             me.onDataComplete(chartDataResponse);
         }
-        view.setLoading(true);
         Ext.Ajax.request({
             method: 'GET',
             url: barChartProperties.colorMappingUrl,
-            callback: function() {
-                view.setLoading(false);
-            },
             success: function(colorDataResponse) {
                 me.onDataComplete(chartDataResponse, colorDataResponse);
             },
