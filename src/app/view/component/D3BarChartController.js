@@ -165,7 +165,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         var uncertaintyProp = barChartProperties.uncertaintyAttribute
                 || 'uncertainty';
-        var colors = view.getShape().color.split(',');
+        var colors = [];
+        if (view.getShape().color) {
+            colors = view.getShape().color.split(',');
+        }
         var jsonObj;
 
         var seriesData = [];
@@ -184,6 +187,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.colorsByKey = {};
         me.labels = [];
         me.legendLabels = [];
+        me.customColors = [];
+        me.disabledSubCategories = [];
 
         var ids = [];
 
@@ -495,8 +500,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .filter(function(d) {
                 return me.drawBar(d);
             })
-            .style('fill', function(d, idx) {
-                return me.customColors[idx] || d.color;
+            .style('fill', function(d) {
+                return d.color;
             })
         // .style('opacity', shapeConfig.opacity)
             .attr('x', function(d) {
@@ -509,10 +514,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .attr('height', function(d) {
                 return chartSize[1] - me.scales[orientY](d[yField]);
             })
-            .style('fill', function(d, idx) {
-                return me.customColors[idx] || d.color;
-            })
-            // .style('opacity', shapeConfig.opacity)
             .on('mouseover', function(data) {
                 var tooltipCmp = me.tooltipCmp;
                 var tooltipTpl = shapeConfig.tooltipTpl;
@@ -736,6 +737,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
         }
 
         Ext.each(firstStationData, function(dataObj, idx) {
+            if (!dataObj.key) {
+                return;
+            }
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
@@ -809,6 +813,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         var subCategories = me.scales.bottom_group.domain();
         Ext.each(subCategories, function(subCategory, idx) {
+            var shape = {};
+            shape.config = firstStationData[0][subCategory];
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
@@ -887,7 +893,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     .attr('text-anchor', 'start')
                     .attr('dy', '1')
                     .attr('dx', '140') // TODO Discuss, do we need this dynamically?
-                    .on('click', me.generateColorCallback({config: {color: me.colorsByKey[subCategory]}}, idx));
+                    .on('click', me.generateColorCallback(shape, idx));
             }
         });
         me.wrapAndResizeLegend();
@@ -937,15 +943,16 @@ Ext.define('Koala.view.component.D3BarChartController', {
      *
      */
     deleteEverything: function(dataObj) {
-        // Data
-        this.deleteData(dataObj.key);
+        var me = this;
         // Shape
-        this.deleteBarGroup(dataObj.key);
+        me.deleteBarGroup(dataObj.key);
+        // Data
+        me.deleteData(dataObj.key);
+        Ext.Array.remove(me.data, dataObj);
         // Legend
-        this.deleteLegendEntry(dataObj.key);
-
-        this.redrawChart();
-        this.redrawLegend();
+        me.deleteLegendEntry(dataObj.key);
+        me.redrawChart();
+        me.redrawLegend();
     },
 
     /**
