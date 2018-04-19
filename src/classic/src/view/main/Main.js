@@ -213,7 +213,7 @@ Ext.define('Koala.view.main.Main', {
                                         tooltip: '{helpTooltip}'
                                     },
                                     callback: function() {
-                                        Koala.util.Help.showHelpWindow('toolsWms', 'tools')
+                                        Koala.util.Help.showHelpWindow('toolsWms', 'tools');
                                     }
                                 }],
                                 items: [{
