@@ -270,14 +270,14 @@ Ext.define('Koala.view.form.LayerFilterController', {
                             '[id=' + selector + ']')[0];
                         if (img && img.el && img.el.dom) {
                             img.setLoading(true);
-                            img.el.dom.addEventListener('load', function(evt) {
+                            img.el.dom.onload = function(evt) {
                                 var extImg = Ext.ComponentQuery.query(
                                     '[id=' + evt.target.id + ']')[0];
                                 if (extImg) {
                                     extImg.setLoading(false);
                                 }
-                            });
-                            img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));
+                            };
+                            img.el.dom.src = Koala.util.Layer.getCurrentLegendUrl(layer);
                         }
                     }
                 }
