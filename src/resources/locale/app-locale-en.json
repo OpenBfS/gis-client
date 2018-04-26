@@ -79,7 +79,7 @@
     "Koala.view.button.ShowRedliningToolsContainer": {
         "config": {
             "data": {
-                "tooltip": "Drawtools"
+                "tooltip": "Measuring"
             }
         }
     },
@@ -167,7 +167,8 @@
                 "drawPolygonsBtnTooltip": "Draw area",
                 "modifyObjectBtnTooltip": "Modify objects",
                 "deleteObjectBtnTooltip": "Delete objects",
-                "clearObjectsBtnTooltip": "Delete all"
+                "clearObjectsBtnTooltip": "Delete all",
+                "layerLegendName": "Measures"
             }
         }
     },
@@ -375,7 +376,7 @@
                 "basigx-button-zoomout-tooltip": "Zoom out",
                 "basigx-button-zoomtoextent-tooltip": "Zoom to initial view",
                 "basigx-button-togglelegend-tooltip": "Toggle legend",
-                "toggleFullscreen-tooltip": "Switch between full screen and standard view",
+                "k-button-togglefullscreen-tooltip": "Switch between full screen and standard view",
                 "importLocalDataButtonText": "Import",
                 "importLocalDataButtonTooltip": "Import local files",
                 "importLocalDataWindowText": "Import",

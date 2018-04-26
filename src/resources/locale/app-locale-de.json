@@ -79,7 +79,7 @@
     "Koala.view.button.ShowRedliningToolsContainer": {
         "config": {
             "data":{
-                "tooltip": "Zeichenwerkzeuge",
+                "tooltip": "Messen",
             }
         }
     },
@@ -168,7 +168,8 @@
                 "drawPolygonsBtnTooltip": "Fläche zeichnen",
                 "modifyObjectBtnTooltip": "Zeichenobjekt modifzieren",
                 "deleteObjectBtnTooltip": "Zeichenobjekt löschen",
-                "clearObjectsBtnTooltip": "Alle Zeichenobjekte löschen"
+                "clearObjectsBtnTooltip": "Alle Zeichenobjekte löschen",
+                "layerLegendName": "Bemaßungen"
             }
         }
     },

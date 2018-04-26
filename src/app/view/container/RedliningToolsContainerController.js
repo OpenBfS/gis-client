@@ -159,7 +159,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     createAndAddRedliningLayerIfRemoved: function() {
         var me = this;
-        var map = me.getView().map;
+        var view = me.getView();
+        var map = view.map;
         if (map.getLayers().getArray().indexOf(me.redliningVectorLayer) !== -1) {
             return;
         }
@@ -167,7 +168,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var appContext = Koala.util.AppContext.getAppContext();
         var redLineLayerName = appContext.data.merge.redLineLayerName;
         me.redliningVectorLayer = new ol.layer.Vector({
-            name: redLineLayerName || 'redLineLayer',
+            name: redLineLayerName || view.getViewModel().get('layerLegendName'),
             source: new ol.source.Vector({
                 features: me.redlineFeatures
             }),
