@@ -1306,6 +1306,17 @@ Kann ein Array von Objekten beinhalten, welches zusätzliche Zeitreihen konfigur
 
 ## Bar Chart Properties {#barchart} (bfs:barChartProperty)
 
+**barWidth**
+
+Initiale Breite der Säulen in Pixel.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Integer |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | 10 |
+| Beispiel             | 20 |
+
 **chartFieldSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
 
 Liste der Attributspalten mit Werten für das Chart
