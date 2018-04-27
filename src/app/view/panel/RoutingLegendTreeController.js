@@ -134,10 +134,10 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
      */
     removeAlwaysOnTopProperty: function(node) {
         var layer = node.getOlLayer();
-        if (layer.metadata) {
-            if (layer.metadata.layerConfig.olProperties.alwaysOnTop) {
-                layer.metadata.layerConfig.olProperties.alwaysOnTop = false;
-            }
+        var path = 'metadata/layerConfig/olProperties/alwaysOnTop';
+        var alwaysOnTop = Koala.util.Object.getPathOr(layer, path, false);
+        if (alwaysOnTop) {
+            layer.metadata.layerConfig.olProperties.alwaysOnTop = false;
         }
     }
 });
