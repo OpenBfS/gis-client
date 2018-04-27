@@ -125,5 +125,19 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
         if (visible && !legendVisible) {
             rowExpanderPlugin.toggleRow(idx, node);
         }
+    },
+
+    /**
+     * Makes sure that any dragged layer will not stay on top even if configured
+     * with the alwaysOnTop property.
+     * @param  {Ext.data.NodeInterface} node the dragged tree node
+     */
+    removeAlwaysOnTopProperty: function(node) {
+        var layer = node.getOlLayer();
+        if (layer.metadata) {
+            if (layer.metadata.layerConfig.olProperties.alwaysOnTop) {
+                layer.metadata.layerConfig.olProperties.alwaysOnTop = false;
+            }
+        }
     }
 });
