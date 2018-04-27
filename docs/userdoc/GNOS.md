@@ -447,6 +447,17 @@ Soll die Legende die Anzahl der Treffer enthalten?
 | Default-Wert         | false |
 | Beispiel             | true |
 
+**alwaysOnTop**
+
+Layer erhält initial alwaysOnTop Verhalten.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true, false |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | false |
+| Beispiel             | true |
+
 **hoverTpl**
 
 Template-String der beim Hovern über Features angezeigt wird. Werte in doppelten
