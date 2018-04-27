@@ -821,6 +821,30 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Ensure that layers with the alwaysOnTop property stay on top of all
+         * other layers.
+         * @param  {ol.Map} map the openlayers map to check
+         */
+        checkAlwaysOnTopLayers: function(map) {
+            // happens when testing:
+            if (!map) {
+                return;
+            }
+            var onTopLayers = [];
+            Ext.each(map.getLayers().getArray(), function(layer) {
+                var path = 'metadata/layerConfig/olProperties/alwaysOnTop';
+                var alwaysOnTop = Koala.util.Object.getPathOr(layer, path, false);
+                if (alwaysOnTop) {
+                    onTopLayers.push(layer);
+                }
+            });
+            Ext.each(onTopLayers, function(layer) {
+                map.removeLayer(layer);
+                map.addLayer(layer);
+            });
+        },
+
+        /**
          * Adds the passed OpenLayers layer to the map.
          *
          * @param {ol.layer.Base} layer The layer to add.
@@ -847,6 +871,8 @@ Ext.define('Koala.util.Layer', {
             // the get cleaned up when visibility changes base-component-map
             staticMe.bindLayerVisibilityHandlers(layer, mapComp);
             mapComp.addLayer(layer);
+
+            Koala.util.Layer.checkAlwaysOnTopLayers(mapComp.map);
 
             // Select the newly added layer in the legend tree (handles classic
             // and modern)
