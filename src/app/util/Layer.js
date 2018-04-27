@@ -826,6 +826,10 @@ Ext.define('Koala.util.Layer', {
          * @param  {ol.Map} map the openlayers map to check
          */
         checkAlwaysOnTopLayers: function(map) {
+            // happens when testing:
+            if (!map) {
+                return;
+            }
             var onTopLayers = [];
             Ext.each(map.getLayers().getArray(), function(layer) {
                 var path = 'metadata/layerConfig/olProperties/alwaysOnTop';
