@@ -331,6 +331,12 @@ Ext.define('Koala.view.main.MobileMainController', {
         panel.el.on('touchstart', function(event) {
             this.scrollDeltaX = event.clientX;
             this.scrollDeltaY = event.clientY;
+            if (panel.getActiveItem().xtype === 'd3-barchart') {
+                if (/x-panel-title-text/.test(event.target.className)) {
+                    return;
+                }
+                panel.up('carousel').lock();
+            }
         });
         panel.el.on('touchmove', function(event) {
             var xdiff = this.scrollDeltaX - event.clientX;
@@ -344,6 +350,9 @@ Ext.define('Koala.view.main.MobileMainController', {
         panel.el.on('touchend', function() {
             this.scrollDeltaX = 0;
             this.scrollDeltaY = 0;
+            if (panel.getActiveItem().xtype === 'd3-barchart') {
+                panel.up('carousel').unlock();
+            }
         });
     },
 

@@ -476,10 +476,19 @@ Ext.define('Koala.view.component.D3BaseController', {
                 }
             });
         }
+        var chartWidth = viewSize[0] - chartMargin.left - offset - legWidth;
+        if (this.type === 'component-d3barchart') {
+            var maxCount = 0;
+            Ext.each(this.data, function(group) {
+                maxCount = Math.max(maxCount, Ext.Object.getKeys(group).length);
+            });
+            chartWidth = view.getBarWidth() * maxCount * this.data.length + parseInt(chartMargin.left, 10);
+        }
 
         return [
             viewSize[0] - chartMargin.left - offset - legWidth,
-            viewSize[1] - chartMargin.top - chartMargin.bottom
+            viewSize[1] - chartMargin.top - chartMargin.bottom,
+            chartWidth
         ];
     },
 
@@ -503,17 +512,24 @@ Ext.define('Koala.view.component.D3BaseController', {
         var view = me.getView();
         var viewId = '#' + view.getId();
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
-
+        var marginLeft = parseInt(chartMargin.left, 10);
         var translate = makeTranslate(chartMargin.left, chartMargin.top);
         var chartSize = me.getChartSize();
+        var scrollbarHeight = Ext.getScrollbarSize().height;
 
         // Get the container view by its ID and append the SVG including an
         // additional group element to it.
-        d3.select(viewId)
+        var container = d3.select(viewId);
+        if (this.type === 'component-d3barchart') {
+            container = container
+                .append('div')
+                .attr('style', 'overflow-x: auto; width: ' + chartSize[0] + 'px');
+        }
+        container
             .append('svg')
-            .attr('viewBox', '0 0 ' + chartSize[0] + ' ' + chartSize[1])
-            .attr('width', chartSize[0])
-            .attr('height', chartSize[1])
+            .attr('viewBox', '0 0 ' + (chartSize[2] + marginLeft) + ' ' + (chartSize[1] - scrollbarHeight))
+            .attr('width', (chartSize[2] + marginLeft))
+            .attr('height', chartSize[1] - scrollbarHeight)
             .append('g')
             .attr('transform', translate);
 
@@ -528,7 +544,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         node.append('rect')
             .style('fill', view.getBackgroundColor() || '#EEE')
             .attr('class', CSS.PLOT_BACKGROUND)
-            .attr('width', chartSize[0])
+            .attr('width', chartSize[2])
             .attr('height', chartSize[1])
             // to make y axis line visible
             .attr('transform', 'translate(1, 0)')
@@ -587,23 +603,45 @@ Ext.define('Koala.view.component.D3BaseController', {
         var chartSize = me.getChartSize();
         var makeTranslate = staticMe.makeTranslate;
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
+        var marginLeft = parseInt(chartMargin.left, 10);
         var translate = makeTranslate(chartMargin.left, chartMargin.top);
+        var scrollbarHeight = Ext.getScrollbarSize().height;
+
         var svgContainer = d3.select(viewId + ' svg');
         var svgGroup = d3.select(viewId + ' svg g');
         var svgRect = d3.select(viewId + ' svg rect');
         var viewSize = me.getViewSize();
+        var legWidth = me.calculateLegendWidth();
+        var barChartParent;
 
         svgContainer
             .attr('viewBox', '0 0 ' + viewSize[0] + ' ' + viewSize[1])
             .attr('width', viewSize[0])
             .attr('height', viewSize[1]);
 
-        svgGroup
-            .attr('transform', translate);
-
         svgRect
             .attr('width', chartSize[0])
             .attr('height', chartSize[1]);
+
+        if (this.type === 'component-d3barchart') {
+            barChartParent = svgContainer.select(function() {
+                return this.parentNode;
+            });
+            barChartParent
+                .style('width', (viewSize[0] - legWidth) + 'px');
+
+            svgRect
+                .attr('height', chartSize[1] - scrollbarHeight)
+                .attr('width', chartSize[2] + marginLeft);
+            svgContainer
+                .attr('height', viewSize[1] - scrollbarHeight)
+                .attr('viewBox', '0 0 ' + (marginLeft + chartSize[2]) + ' ' + (viewSize[1] - scrollbarHeight))
+                .attr('width', (chartSize[2] + marginLeft));
+        }
+
+        svgGroup
+            .attr('transform', translate);
+
 
         // Re-register the zoom interaction if requested as the charts sizes
         // may have changed.
@@ -638,7 +676,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var range;
 
         if (orient === 'top' || orient === 'bottom') {
-            range = [0, chartSize[0]];
+            range = [0, chartSize[2]];
         } else if (orient === 'left' || orient === 'right') {
             range = [chartSize[1], 0];
         }
@@ -985,7 +1023,7 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
-        canvas.width = chartImageWidth;
+        canvas.width = chartImageWidth + legendImageWidth;
         canvas.height = legendImageHeight > chartImageHeight ?
             legendImageHeight : chartImageHeight;
         ctx.fillStyle = 'white';
@@ -997,8 +1035,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             d3.selectAll('.k-d3-hidden').style('display', 'block');
             legendImageObject.onload = function() {
                 ctx.drawImage(legendImageObject,
-                    chartImageWidth - legendImageWidth, 0, legendImageWidth,
-                    legendImageHeight);
+                    chartImageWidth, 0, legendImageWidth, legendImageHeight);
                 var dataUri = canvas.toDataURL(outputFormat);
                 downloadIcons.style('display', 'block');
                 deleteIcons.style('display', 'block');
