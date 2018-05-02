@@ -78,6 +78,9 @@ Ext.define('Koala.util.Metadata', {
                     'bfs:layer/gco:CharacterString', context.newLayerName) +
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:timeSeriesChartProperty', '') +
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:barChartProperty', '') +
+                this.getPropertyUpdate('/bfs:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', context.newLayerName) +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:legendTitle/gco:CharacterString', context.newLayerName) +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:printTitle/gco:CharacterString', context.newLayerName) +
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:host/gco:CharacterString', host) +
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:path/gco:CharacterString', path) +
                 this.getCswFilter(context.newUuid) +
@@ -240,7 +243,7 @@ Ext.define('Koala.util.Metadata', {
             var context = {
                 config: config,
                 uuid: metadata.id,
-                newLayerName: metadata.newLayerName
+                newLayerName: metadata.legendTitle + ' (' + metadata.newLayerName + ')'
             };
             return this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))
