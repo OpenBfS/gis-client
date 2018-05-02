@@ -660,9 +660,10 @@
                                     "<li>Sprachauswahl: Ändern der Sprache in Deutsch (<abbr title='Deutsch (German)'>DE</abbr>) oder Englisch (<abbr title='Englisch (English)'>EN</abbr>)</li>"+
                                 "</ul><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Navigation</li>"+
-                                    "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht, sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
+                                    "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
+                                    "<div>Zeichenwerkzeuge stehen für das Messen von Punkten (Koordinatenausgabe), Strecken und Flächen bereit.</div>"+
                                     "<div>Die Darstellung der Anwendung kann über den gesamten Bildschirm eingestellt werden.</div>"+
-                                    "<div>Des Weiteren ist es möglich einen Permalink der Kartenansicht zu erzeugen. Die Legende öffnet sich beim Betätigen des untersten Knopfs der Navigation.</div><br />"+
+                                    "<div>Des Weiteren ist es möglich, einen Permalink der Kartenansicht zu erzeugen.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Legende</li>"+
                                     "<div>Die Legende umfasst die Layer, also thematischen Inhalte, die in der Karte angezeigt werden. Sie ermöglicht Einstellungen an der Kartenansicht vorzunehmen.</div>"+
                                     "<div>Layer lassen sich ein- bzw. ausblenden, gänzlich entfernen, sowie Änderungen an den Filtereinstellungen vornehmen. Des Weiteren ist es möglich die Zeichenreihenfolge durch Verschieben der Layer anzupassen.</div><br />"+
@@ -681,7 +682,7 @@
                 "map": {
                     "title": "2. Karte",
                     "html": "<h2> 2. Karte </h2>"+
-                            "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>4. Auswahl</i>). Standardmäßig sind die Layer \"Höhenlinien\", \"Ortsnamen\" und \"Hintergrundkarte - <abbr title='OpenStreetMap'>OSM</abbr>\" geladen. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Die Geometrie wird farblich hervorgehoben und ist nun anklickbar. Klickt man auf eine Geometrie öffnet sich ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />",
+                            "<div>In der Karte werden die gewählten Layer/Datensätze dargestellt (Hinzufügen von Daten siehe <i>4. Auswahl</i>). Standardmäßig sind die Layer \"Höhenlinien\", \"Ortsnamen\" und \"Hintergrundkarte - <abbr title='OpenStreetMap'>OSM</abbr>\" geladen. Eine Bewegung mit der <i>Maus</i> über eine Geometrie liefert erste Informationen des Objekts mit seinen Werten. Die Geometrie wird farblich hervorgehoben und ist nun anklickbar. Klickt man auf eine Geometrie öffnet sich entweder ein Kartodiagramm oder ein Fenster, das Zeit- bzw. Wertereihen in Form eines Linien- oder Balkendiagramms für weitere Analysen bereitstellt. Hierbei ist darauf zu achten, dass der entsprechende Layer in der Legende ausgewählt ist.</div><br />",
                     "overview": {
                         "title": "2.1 Übersicht",
                         "html": "<hr style='color:#294d71' />"+
@@ -705,40 +706,133 @@
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_hoverGeometry.png' title='Informationen zu einzelnen Objekten' alt'graphic_hoverGeometry.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>2.2 Informationen zu einzelnen Objekten</b>"+
                                 "</div><br />"+
-                                "<p>Objekte denen Werte zugrunde liegen, können mit einem Klick auf die entsprechende Geometrie in einem Diagramm betrachtet werden. Diese sind bei Werten mit zeitlichem Bezug in einem Liniendiagramm (z.B. <abbr title='Ortsdosisleistung (Ambient Dose Rate)'>ODL</abbr> 1h) und für Wertereihen (z.B. \"nuklidspez. Aktivitätskonzentration\" im Layer-Set \"Boden\") in einem Balkendiagramm dargestellt.</p>"+
-                                "<p>Grafik <i>2.2 Zeitreihen</i> zeigt Zeitreihen von drei verschiedenen Stationen am Beispiel der 1h Werte der Ortsdosisleistung. Es können jederzeit Stationen entweder über das Anklicken eines Objektes auf der Karte, oder über das Feld \"Serie hinzufügen\" "+
+                                "<p>Ein Klick auf eine Geometrie öffnet die für den Layer definierte Visualisierungsform. Die häufigste Art der Datenpräsentation im <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportal ist das Kartodiagramm. Die Besonderheit des Kartodiagramms ist, dass es den Bezug zum Objekt in der Karte mit einer Linie kennzeichnet und in verschiedenen Reitern Daten bzw. Objektinformationen präsentiert. Typische Darstellungsformen sind Zeitreihen sowie Balkendiagramme. In den nachfolgenden Punkten sind die jeweiligen Formen näher beschrieben.</p>"
+                    },
+                    "cartoWindows": {
+                        "title": "2.3 Kartodiagramme",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<p>Das Kartodiagramm beinhaltet diverse Darstellungsformen der Daten. Je nach Art des Layers werden innerhalb eines Kartodiagramms Zeitreihen, Balkendiagramme, Tabellen, zusätzliche Inhalte oder Objektinformationen in Textform bereitgestellt. Eine Verbindungslinie zur entsprechenden Geometrie innerhalb der Karte kennzeichnet den geographischen Bezug der Daten (siehe Grafik <i>2.3 Kartodiagramm - Reiter wechseln</i>).</p>"+
+                                "<div style='font-size:11px'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_cartoWin_tabChange.png' title='Kartodiagramm - Reiter wechseln' alt'graphic_cartoWin_tabChange.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<b>2.3 Kartodiagramm - Reiter wechseln</b>"+
+                                "</div><br />"+
+                                "<p>Ein Klick auf ein Objekt (z.B. eine Punktgeometrie) öffnet das Kartodiagramm. In der Regel wird zunächst der Reiter, der Objektinformationen beinhaltet, dargestellt. Diese Visualisierung ist identisch mit einem Fenster, das bereits beim Verweilen des Mauszeigers über einer Geometrie zu sehen ist. Standardmäßig wird das Kartodiagramm mit der linken oberen Ecke über das Objekt gezeichnet. Bewegt man den Mauszeiger über das Kartodiagramm, erscheinen je nach Fachlichkeit des Layers verschiedene Reiter, die mit einem Klick auswählbar sind. Das Liniendiagramm-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/tab_cartoWin_timeseries.png' title='Zeitreihen-Reiter' alt='tab_cartoWin_timeseries.png' width='50' height='15' style='vertical-align:middle'>"+
+                                " öffnet die Zeitreihe. Das Balkendiagramm-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/tab_cartoWin_barChart.png' title='Balkendiagramm-Reiter' alt='tab_cartoWin_barChart.png' width='50' height='15' style='vertical-align:middle'>"+
+                                " öffnet ein Balkendiagramm. Das Tabellen-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/tab_cartoWin_table.png' title='Tabellen-Reiter' alt='tab_cartoWin_table.png' width='50' height='15' style='vertical-align:middle'>"+
+                                " öffnet interaktive Tabellen. Das Information-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/tab_cartoWin_info.png' title='Information-Reiter' alt='tab_cartoWin_info.png' width='50' height='15' style='vertical-align:middle'>"+
+                                " zeigt wesentliche Objektinformationen an. Das Buch-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/tab_cartoWin_html.png' title='zusätzliche Inhalte-Reiter' alt='tab_cartoWin_html.png' width='50' height='15' style='vertical-align:middle'>"+
+                                " stellt zusätzliche Inhalte innerhalb des Kartodiagramms zur Verfügung. Jeder Reiter ist in der Größe anpassbar. Geschlossen wird das Kartodiagramm mit einem Klick auf das X-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/tab_cartoWin_close.png' title='Kartodiagramm schließen' alt='tab_cartoWin_close.png' width='14' height='15' style='vertical-align:middle'>"+
+                                ".</p>"+
+                                "<p>Das Kartodiagramm kann mit gedrückter linker Maustaste über einem beliebigen Kartodiagramm-Reiter verschoben werden. Es ist möglich, dass bei entsprechender Zoomstufe mehrere Kartodiagramme gleichzeitig geöffnet werden. Verschieben Sie hierzu die Kartodiagramme, um eine Überlappung zu vermeiden.</p>"+
+                                "<p>Nachfolgend werden die Kartodiagramm-Reiter im Einzelnen erläutert.</p><br />"+
+                                "<h3>Objektinformationen <img class='img' src='classic/resources/img/helpPage/tab_cartoWin_info.png' title='Information-Reiter' alt='tab_cartoWin_info.png' width='50' height='15' style='vertical-align:middle'></h3>"+
+                                "<p>Der Objektinformations-Reiter beinhaltet die wesentlichen Informationen zu einem Objekt, respektive Geometrie innerhalb der Karte (siehe Grafik <i>2.3 Kartodiagramm - Objektinformationen</i>).</p>"+
+                                "<div style='font-size:11px'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/window_cartoWin_info.png' title='Kartodiagramm - Objektinformationen' alt'graphic_cartoWin_tabChange.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<b>2.3 Kartodiagramm - Objektinformationen</b>"+
+                                "</div><br />"+
+                                "<h3>Zeitreihen <img class='img' src='classic/resources/img/helpPage/tab_cartoWin_timeseries.png' title='Zeitreihen-Reiter' alt='tab_cartoWin_timeseries.png' width='50' height='15' style='vertical-align:middle'></h3>"+
+                                "<p>Der Zeitreihen-Reiter beinhaltet Daten mit zeitlichen Bezug, die in Form eines Liniendiagramms dargestellt werden (siehe Grafik <i>2.3 Kartodiagramm - Zeitreihe</i>). Innerhalb des Diagramms ist es möglich, mit gedrückter linker Maustaste die Ansicht zu verschieben und mit dem Mausrad hinein- bzw. heraus zu zoomen. Verweilt man mit dem Mauszeiger über einem Punkt/Messwert, werden die entsprechenden Informationen angezeigt.</p>"+
+                                "<div style='font-size:11px'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/window_cartoWin_timeseries.png' title='Kartodiagramm - Zeitreihen' alt'graphic_cartoWin_timeseries.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<b>2.3 Kartodiagramm - Zeitreihe</b>"+
+                                "</div><br />"+
+                                "<p>Oberhalb des Liniendiagramms befinden sich Einstellungsmöglichkeiten der Zeitreihe. Die Pfeiltasten ermöglichen die Daten zeitlich zu erweitern. Demnach wird mit der Pfeiltaste nach links "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_left.png' title='Pfeiltaste links' alt='button_cartoWin_timeseries_left.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " die Zeitreihe um zurückliegende Werte und mit der Pfeiltaste nach rechts "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_right.png' title='Pfeiltaste rechts' alt='button_cartoWin_timeseries_right.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " um nachliegende Werte erweitert. Der Download-Knopf "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_download.png' title='Download-Knopf' alt='button_cartoWin_timeseries_download.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " ermöglicht das Herunterladen des Diagramms als Bilddatei im PNG-Format. Die Legende kann mit dem Knopf "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_toggleLegend.png' title='Legende ein-/ausblenden' alt='button_cartoWin_timeseries_toggleLegend.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " ein- bzw. ausgeblendet werden. Sofern Sie die Ansicht auf einen Bereich maximiert haben oder die Ansicht der Zeitreihe verschoben ist, kann mit dem Knopf der kreuzenden Pfeile "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_maxExtent.png' title='komplette Zeitreihendarstellung' alt='button_cartoWin_timeseries_maxExtent.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " die Diagrammansicht wieder auf die komplette Zeitreihendarstellung zurückgesetzt werden.</p>"+
+                                "<p>Der Knopf mit den entgegengesetzten Pfeilen "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_combineSeries.png' title='Zeitreihen zusammenführen' alt='button_cartoWin_timeseries_combineSeries.png' width='24' height='24' style='vertical-align:middle'>"+
+                                "ermöglicht es, sämtliche geöffneten Zeitreihen bzw. Kartodiagramme eines Layers in einem separaten Zeitreihenfenster (siehe <i>2.4 Zeitreihen</i>) zusammen zu führen. Zu beachten ist, dass der geographische Bezug bei dieser Funktion verloren geht (aus Kartodiagrammen wird ein Zeitreihenfenster).</p>"+
+                                "<p>Die Autorefresh Optionen ermöglichen es, die Daten automatisiert neu abzufragen. Sofern aktuelle Daten eingetroffen sind, wird die Zeitreihe automatisch aktualisiert. Setzen Sie hierzu mit einem Klick ein Häkchen bei \"Autorefresh\" und wählen Sie eine der Optionen unter \"Autorefresh Optionen\". \"Zeitausschnitt erweitern\" erweitert die Zeitreihe um neue Datensätze. Das heißt, dass der Startzeitpunkt der Zeitreihe erhalten bleibt. \"Zeitausschnitt verschieben\" behält die Zeitspanne bei und entsprechend wird der älteste Wert gelöscht, sobald ein aktueller Wert eintrifft.</p>"+
+                                "<p>Auf der rechten Seite der Zeitreihe befindet sich die Legende. Neben der Zeitreihenbeschriftung (z.B. Stationsname \"Norderney\") kann mit dem Pinsel-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_changeColor.png' title='Farbe ändern' alt='button_cartoWin_timeseries_changeColor.png' width='21' height='20' style='vertical-align:middle'>"+
+                                " die Farbe der Zeitreihe verändert werden. Das Download-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_saveTimeSeries.png' title='Knopf: download' alt='button_saveTimeSeries.png' width='17' height='16' style='vertical-align:middle'>"+
+                                " ermöglicht das Herunterladen einzelner Zeitreihen. Wählen Sie mithilfe der Zoomfunktionalitäten innerhalb des Diagramms den gewünschten Bereich aus, den Sie herunterladen möchten. Die Daten einzelner Zeitreihen können im JSON-, CSV- oder GML-Format gespeichert werden. Bestätigen Sie nach der Auswahl des gewünschten Formats den Download, der letztlich im Download-Pfad Ihres Browsers abgelegt wird.</p>"+
+                                "<p>Einzelne Serien können mit einem Klick auf die Diagrammlegende ein- bzw. ausgeschalten werden. Eine Serie kann auch gänzlich aus dem Diagramm entfernt werden. Hierzu betätigt man den X-Knopf "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
+                                " neben der Zeitreihenbeschriftung.</p>"+
+                                "<h3>Balkendiagramme <img class='img' src='classic/resources/img/helpPage/tab_cartoWin_barChart.png' title='Balkendiagramm-Reiter' alt='tab_cartoWin_barChart.png' width='50' height='15' style='vertical-align:middle'></h3>"+
+                                "<p>Neben einer Zeitreihe kann ein Layer auch ein Balkendiagramm besitzen. Grafik <i>2.3 Kartodiagramm - Balkendiagramm</i> zeigt ein Beispiel von Nukliden in sonstigen Nahrungsmittel. Oberhalb des Diagramms befinden sich die Einstellungsmöglichkeiten. Der Knopf \"Messgenauigkeit umschalten\" blendet die Messgenauigkeit grafisch oberhalb eines Balkens ein oder aus. Der Download-Knopf "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_download.png' title='Download-Knopf' alt='button_cartoWin_timeseries_download.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " ermöglicht das Herunterladen des Diagramms als Bilddatei im PNG-Format. Die Legende kann mit dem Knopf "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_toggleLegend.png' title='Legende ein-/ausblenden' alt='button_cartoWin_timeseries_toggleLegend.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " ein- bzw. ausgeblendet werden. Der Knopf mit dem Diagramm-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_barChart_changeGroup.png' title='Gruppierung wechseln' alt='button_cartoWin_barChart_changeGroup.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " ändert die Gruppierung der angezeigten Daten.</p>"+
+                                "<p>In nachfolgender Grafik ist ersichtlich, dass der linke Ausschnitt die Ergebnisse nach Probeentnahmen gruppiert und die einzelnen Messergebnisse nuklidspezifisch darstellt (z.B. Nuklid K 40 entspricht lilafarbener Balken). Betätigt man den Knopf mit dem Diagramm-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_barChart_changeGroup.png' title='Gruppierung wechseln' alt='button_cartoWin_barChart_changeGroup.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " wird die Gruppierung getauscht. In der Folge werden die Ergebnisse nach Nukliden gruppiert und die einzelnen Messergebnisse nach der Probeentnahme grafisch dargestellt (siehe rechter Ausschnitt). Sofern Werte unterhalb der Nachweisgrenze liegen, werden diese mit \"NWG\" gekennzeichnet.</p>"+
+                                "<div style='font-size:11px'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/graphic_cartoWin_barChart.png' title='Kartodiagramm - Balkendiagramm' alt'window_cartoWin_info.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<b>2.3 Kartodiagramm - Balkendiagramm</b>"+
+                                "</div><br />"+
+                                "<p>Innerhalb der Legende können einzelne Elemente durch Klick auf die Bezeichnung sichtbar bzw. unsichtbar gestellt werden. Neben der Bezeichnung eines Elements kann mit dem Pinsel-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_changeColor.png' title='Farbe ändern' alt='button_cartoWin_timeseries_changeColor.png' width='21' height='20' style='vertical-align:middle'>"+
+                                " die Farbe verändert werden. Der X-Knopf "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
+                                " löscht ein Element aus dem Diagramm. Betätigt man den Knopf für das Tauschen der Gruppierung, wird das entfernte Element wieder hinzugefügt.</p>"+
+                                "<h3>Tabellen <img class='img' src='classic/resources/img/helpPage/tab_cartoWin_table.png' title='Tabellen-Reiter' alt='tab_cartoWin_table.png' width='50' height='15' style='vertical-align:middle'></h3>"+
+                                "<p>Im Tabellen-Reiter werden die Daten aus Zeitreihe- bzw. Balkendiagramm zusätzlich in tabellarischer Form dargestellt (siehe Grafik <i>2.3 Kartodiagramm - Tabelle</i>). Jede Spalte bietet rechts neben der Spaltenbezeichnung die Option der Sortierung, Spalten ein- bzw. auszublenden und Filter anzuwenden. Je nach Datentyp einer Spalte (Text, Zahl oder Datum) werden adäquate Filteroptionen angeboten. Wählt man beispielsweise \"Filters\" einer Datumsspalte, kann der Datensatz über die Auswahl eines Tages im angezeigten Kalender eingegrenzt werden.</p>"+
+                                "<div style='font-size:11px'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/window_cartoWin_table.png' title='Kartodiagramm - Tabelle' alt'window_cartoWin_table.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<b>2.3 Kartodiagramm - Tabelle</b>"+
+                                "</div><br />"+
+                                "<h3>zusätzliche Inhalte <img class='img' src='classic/resources/img/helpPage/tab_cartoWin_html.png' title='zusätzliche Inhalte-Reiter' alt='tab_cartoWin_html.png' width='50' height='15' style='vertical-align:middle'></h3>"+
+                                "<p>Der Layer \"UV-Index aktueller Tagesverlauf\" verfügt beispielsweise über zusätzliche Inhalte (siehe Grafik <i>2.3 Kartodiagramm - zusätzliche Inhalte</i>). Blau hinterlegte Texte sind für weitere Inhalte anklickbar.</p>"+
+                                "<div style='font-size:11px'>"+
+                                "<img class='img' src='classic/resources/img/helpPage/window_cartoWin_additionalSource.png' title='Kartodiagramm - zusätzliche Inhalte' alt'window_cartoWin_additionalSource.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                "<b>2.3 Kartodiagramm - zusätzliche Inhalte</b>"+
+                                "</div><br />"
+                    },
+                    "timeSeries": {
+                        "title": "2.4 Zeitreihen",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<p>Grafik <i>2.4 Zeitreihen</i> zeigt Zeitreihen von drei verschiedenen Stationen am Beispiel der 1h Werte der Ortsdosisleistung. Es können jederzeit Stationen entweder über das Anklicken eines Objektes auf der Karte, oder über das Feld \"Serie hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingSerial.png' title='Auswahlfeld: Serie hinzufügen' alt='selectionBox_addingSerial.png' width='170' height='24' style='vertical-align:middle'>"+
-                                " ergänzt werden. In diesem Feld ist es mithilfe einer Texteingabe möglich, direkt nach einem bestimmten Objekt zu suchen. Alternativ lassen sich sämtliche Serien über das <i>Pfeilsymbol</i> anzeigen.<br>"+
+                                " ergänzt werden. Betätigen Sie zusätzlich den Knopf \"Zeitreihen zusammenführen\" "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_combineSeries.png' title='Zeitreihen zusammenführen' alt='button_cartoWin_timeseries_combineSeries.png' width='24' height='24' style='vertical-align:middle'>"+
+                                " bei Layern mit Kartodiagrammen. Im Feld \"Serie hinzufügen\" ist es mithilfe einer Texteingabe möglich, direkt nach einem bestimmten Objekt zu suchen. Alternativ lassen sich sämtliche Serien über das <i>Pfeilsymbol</i> anzeigen.<br>"+
                                 "Das Liniendiagramm selbst kann durch Interaktion verändert werden. Mit einem Doppelklick auf die linke <i>Maustaste</i> innerhalb des Diagramms, kann der Ausschnitt vergrößert werden. Entsprechend wird die x- und y-Achse auf die Auswahl eingestellt. Mit gedrückter linker <i>Maustaste</i> lässt sich innerhalb des Diagramms die Ansicht verschieben. Möchte man wieder herauszoomen, ist dies über den Knopf \"...zurückzoomen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_zoomBack.png' title='Knopf: ...zurückzoomen' alt='button_zoomBack.png' width='114' height='24' style='vertical-align:middle'>"+
                                 " möglich. Alternativ lassen sich die Zoomfunktionen mit dem <i>Mausrad</i> steuern.</p>"+
-                                "<p>Das Download-Symbol "+
+                                "<p>Die Autorefresh Optionen ermöglichen es, die Daten automatisiert neu abzufragen. Sofern aktuelle Daten eingetroffen sind, wird die Zeitreihe automatisch aktualisiert. Setzen Sie hierzu mit einem Klick ein Häkchen bei \"Autorefresh\" und wählen Sie eine der Optionen unter \"Autorefresh Optionen\". \"Zeitausschnitt erweitern\" erweitert die Zeitreihe um neue Datensätze. Das heißt, dass der Startzeitpunkt der Zeitreihe erhalten bleibt. \"Zeitausschnitt verschieben\" behält die Zeitspanne bei und entsprechend wird der älteste Wert gelöscht, sobald ein aktueller Wert eintrifft.</p>"+
+                                "<p>Der Knopf \"Als Bild exportieren\" ermöglicht das Herunterladen des Diagramms als Bilddatei im PNG-Format.</p>"+
+                                "<p>Auf der rechten Seite der Zeitreihe befindet sich die Legende. Neben der Zeitreihenbeschriftung (z.B. Stationsname \"Helgoland / Unterland\") kann mit dem Pinsel-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_changeColor.png' title='Farbe ändern' alt='button_cartoWin_timeseries_changeColor.png' width='21' height='20' style='vertical-align:middle'>"+
+                                " die Farbe der Zeitreihe verändert werden. Das Download-Symbol "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_saveTimeSeries.png' title='Knopf: download' alt='button_saveTimeSeries.png' width='17' height='16' style='vertical-align:middle'>"+
-                                " ermöglicht das Herunterladen einzelner Zeitreihen. Diese können entweder im <abbr title='JavaScript Object Notation'>JSON</abbr>-, <abbr title='Comma Separated Values'>CSV</abbr>- oder <abbr title='Geography Markup Language'>GML</abbr>-Format gesichert werden. Bestätigen Sie nach der Auswahl des gewünschten Formats den Download, der letztlich im Download-Pfad Ihres Browsers abgelegt wird. Wählen Sie mithilfe der Zoomfunktionalitäten innerhalb des Diagramms den gewünschten Bereich aus, den Sie herunterladen möchten.</p>"+
+                                " ermöglicht das Herunterladen einzelner Zeitreihen. Wählen Sie mithilfe der Zoomfunktionalitäten innerhalb des Diagramms den gewünschten Bereich aus, den Sie herunterladen möchten. Diese können im <abbr title='JavaScript Object Notation'>JSON</abbr>-, <abbr title='Comma Separated Values'>CSV</abbr>- oder <abbr title='Geography Markup Language'>GML</abbr>-Format gespeichert werden. Bestätigen Sie nach der Auswahl des gewünschten Formats den Download, der letztlich im Download-Pfad Ihres Browsers abgelegt wird.</p>"+
                                 "<p>Einzelne Serien, beispielsweise \"Helgoland / Unterland\", können mit einem Klick auf die Diagrammlegende ein- bzw. ausgeschalten werden. Eine Serie kann auch gänzlich aus dem Diagramm entfernt werden. Hierzu betätigt man den X-Knopf "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
-                                " neben der Layerbezeichnung.</p>"+
+                                " neben der Zeitreihenbeschriftung.</p>"+
                                 "<p>Möchte man sich einen bestimmten Wert innerhalb des Diagramms anzeigen lassen, muss lediglich der <i>Mauszeiger</i> über die gewünschte Position bewegt werden.</p>"+
                                 "<p>Oberhalb des Liniendiagramms lässt sich die Darstellung über die Eingabe eines Start- und Enddatums präzisieren. Alternativ ist ein Datum über das Kalendersymbol "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Knopf: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
                                 " auswählbar. Anschließend bestätigt man die Auswahl über den \"OK\"-Knopf "+
-                                ". Möchte man zur ursprünglichen zeitlichen Auswahl zurückkehren, ist dies über den Knopf \"Reset\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_ok.png' title='Knopf: OK' alt='button_ok.png' width='35' height='24' style='vertical-align:middle'>"+
+                                ". Möchte man zur ursprünglichen zeitlichen Auswahl zurückkehren, ist dies über den Knopf \"Reset\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_reset.png' title='Knopf: Reset' alt='button_reset.png' width='51' height='24' style='vertical-align:middle'>"+
                                 " ausführbar. Das Auswahlfeld \"Chart hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingChart.png' title='Auswahlfeld: Chart hinzufügen' alt='selectionBox_addingChart.png' width='162' height='24' style='vertical-align:middle'>"+
                                 " beinhaltet sämtliche Layer aus der Legende die als Zeitreihe hinzugefügt werden können.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_timeSeries.png' title='Zeitreihen' alt'graphic_timeSeries.png' style='max-height: 100%; max-width: 100%;'><br>"+
-                                "<b>2.2 Zeitreihen</b>"+
-                                "</div><br />"+
-                                "<p>Die Balkendiagramme, zur Darstellung der Wertereihen, sind in Grafik <i>2.2 Wertereihen</i> dargestellt. Bewegt man den <i>Mauszeiger</i> über einen Balken, wird in einem Fenster der entsprechende Wert mit Einheit angezeigt. Wie bei den Zeitreihen kann jede Serie über die Diagrammlegende ein- und ausgeschaltet werden (einzelne Serien lassen sich auch direkt über den X-Knopf "+
-                                "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
-                                " entfernen). Die y-Achse passt sich jeweils an den maximalen Wert der verbleibenden Serien an, sofern die Achsenskalierung für den Layer nicht fest vorgegeben wurde. Grafik <i>2.2 Wertereihen</i> zeigt, wie demnach die Funktion für detaillierte Analysen genutzt werden kann.</p>"+
-                                "<div style='font-size:11px'>"+
-                                "<img class='img' src='classic/resources/img/helpPage/graphic_barChart.png' title='Wertereihen' alt'graphic_barChart.png' style='max-height: 100%; max-width: 100%;'><br>"+
-                                "<b>2.2 Wertereihen</b>"+
-                                "</div>"+
+                                "<b>2.4 Zeitreihen</b>"+
                                 "</div>"
                     }
                 },
@@ -817,9 +911,10 @@
                                 "<p>Ein Doppelklick auf die Layerbezeichnung fügt einen Layer der Karte unmittelbar hinzu. Hierbei werden Standardeinstellungen übernommen. Dabei werden Layer mit zeitlichem Bezug auf die aktuellsten Daten gesetzt.</p>"+
                                 "<p>In Grafik <i>4. Arbeitsablauf der Layerauswahl</i> ist das Hinzufügen der Ortsdosisleistung 1h dargestellt. Das einzustellende Datum bezieht sich auf den Endzeitpunkt der Datenerfassung. Die Festlegung des Datums kann entweder durch einfache Eingabe oder durch die Auswahl eines Tages aus dem Kalender ausgeführt werden. Dieser öffnet sich mit einem Klick auf das Kalendersymbol "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_calender.png' title='Knopf: Kalender' alt='button_calender.png' width='18' height='17' style='vertical-align:middle'>"+
-                                ". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. \"nuklidspez. Aktivitätskonzentration\" im Layer-Set \"Boden\"). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereitgestellt. Der Wertefilter entspricht bei diesem Layer das Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Eine Mehrfachauswahl ist mit gedrückter Shift-Taste (auch: "+
+                                ". Neben der Festlegung eines Zeitpunktes ist auch die Einstellung eines Zeitraumes bei einigen Layern möglich (z.B. \"nuklidspez. Aktivitätskonzentration\" im Layer-Set \"Boden\"). In diesen Fällen wird ein Start- bzw. Enddatum zur Konfiguration bereitgestellt. Der Wertefilter in der unteren Abbildung entspricht dem Messnetz und ermöglicht somit eine weitere Präzisierung der Messwerte. Eine Mehrfachauswahl ist mit gedrückter Shift-Taste (auch: "+
                                 "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
                                 ", Umstelltaste, Hochstelltaste) möglich. Ein Klick auf den Knopf \"Ausgewählten Layer hinzufügen\" stellt den Layer zur Betrachtung bereit.</p>"+
+                                "<p>Des Weiteren besteht die Option, den zu ladenden Layer automatisch zu aktualisieren. Setzen Sie hierfür ein Häkchen bei \"Automatisch aktualisieren\" und wählen Sie ein Aktualisierungsintervall aus der unteren Auswahlliste.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_layer_selection.png' title='Arbeitsablauf der Layerauswahl' alt='graphic_layer_selection.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>4. Arbeitsablauf der Layerauswahl</b>"+
@@ -870,8 +965,7 @@
                         "html": "<hr style='color:#294d71' />"+
                                 "<h2>6.1 Zeitbezug <img class='img' src='classic/resources/img/helpPage/button_settings_timeRef_utc.png' title='Knopf: Zeitbezug' alt='button_settings_timeRef_utc.png' width='107' height='24' style='vertical-align:middle'></h2>"+
                                 "<div>"+
-                                "<p>Der Zeitbezug ist standardmäßig auf <i>koordinierter Weltzeit - <abbr title='koordinierte Weltzeit (Coordinated Universal Time)'>UTC</abbr></i> eingestellt. Gerade hinsichtlich einer internationalen Zusammenarbeit, bzw. einer Analyse von Daten über verschiedene Zeitzonen, ist eine einheitliche Zeitgröße unabdingbar. Es ist daher ratsam, mit Blick auf temporale Daten, die Einstellung des Zeitbezuges zu überprüfen.</p>"+
-                                "<p>Betätigt man den Knopf \"Zeitbezug (<abbr title='koordinierte Weltzeit (Coordinated Universal Time)'>UTC</abbr>)\", wird die Zeit in der Anzeige des Klienten auf die lokale Uhrzeit \"Zeitbezug (lokal)\" umgestellt (siehe Grafik <i>6.1 Zeitbezug</i>). Das bedeutet im Einzelnen, dass die Uhrzeit von der Systemzeit des Rechners bezogen wird.</p>"+
+                                "<p>Der Zeitbezug ist standardmäßig auf die lokale Uhrzeit eingestellt. Das bedeutet, dass die Uhrzeit von der Systemzeit des Endgerätes bezogen wird. Es ist möglich die Uhrzeit in koordinierter Weltzeit (<abbr title='koordinierte Weltzeit (Coordinated Universal Time)'>UTC</abbr>) umzustellen. Betätigen Sie hierzu den Knopf um zwischen den Zeitbezügen zu wechseln.</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_timeRef.png' title='Zeitbezug' alt'graphic_timeRef.png' style='max-height: 100%; max-width: 100%;'><br>"+
                                 "<b>6.1 Zeitbezug</b>"+
@@ -935,30 +1029,47 @@
                                 "<p>Durch einen Klick auf den Knopf wird die Ansicht des Anfangsausschnittes (Zoomstufe und Position) gezeigt. Entsprechend wird als Zentrum der Kartenansicht Deutschland dargestellt.</p>"+
                                 "</div>"
                         },
-                    "fullScreen": {
-                        "title": "7.4 Vollbild",
+                    "measure": {
+                        "title": "7.4 Messen",
                         "html": "<hr style='color:#294d71' />"+
-                                "<h2>7.4 Vollbild <img class='img' src='classic/resources/img/helpPage/button_fullScreen.png' title='Knopf: Vollbild' alt='button_fullScreen.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                "<h2>7.4 Messen <img class='img' src='classic/resources/img/helpPage/button_measures.png' title='Knopf: Messen' alt='button_measures.png' width='30' height='30' style='vertical-align:middle'></h2>"+
+                                "<div>"+
+                                "<p>Dieser Knopf ermöglicht es, Messungen innerhalb der Karte vorzunehmen. Zur Auswahl stehen Punkt- (Koordinatenausgabe), Strecken- und Flächenmessungen.</p>"+
+                                "<p>Betätigt man den Knopf öffnet sich zunächst eine Werkzeugleiste am oberen Rand der Karte. Wählen Sie für Punktmessungen den Knopf mit dem entsprechenden Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_measures_point.png' title='Knopf: Messen - Punkt zeichnen' alt='button_measures_point.png' width='30' height='30' style='vertical-align:middle'>"+
+                                ". Der Mauszeiger erhält ein Kreissymbol und ist für das Zeichnen bereit. Mit einem Klick innerhalb der Karte wird ein Punkt mit entsprechender Koordinatenbeschriftung gezeichnet. Strecken können mit dem Knopf "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_measures_line.png' title='Knopf: Messen - Linie zeichnen' alt='button_measures_line.png' width='30' height='30' style='vertical-align:middle'>"+
+                                " gezeichnet werden. Definieren Sie mit einem Klick in der Karte die jeweiligen Streckenpunkte. Abgeschlossen wird eine Linie mit einem Doppelklick innerhalb der Karte. Die Linienbeschriftung entspricht der Gesamtstrecke vom Start- bis zum Endpunkt.</p>"+
+                                "<p>Betätigen Sie für Flächenmessungen den Knopf \"Fläche zeichnen\" "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_measures_area.png' title='Knopf: Messen - Fläche zeichnen' alt='button_measures_area.png' width='30' height='30' style='vertical-align:middle'>"+
+                                ". Gezeichnet wird wie bei den Linien. Ein einfacher Klick setzt einen Zwischenpunkt, während ein Doppelklick die Zeichnung abschließt. Die Verbindungslinie von Start- zu Endpunkt wird automatisch gezeichnet, sodass stets eine geschlossene Fläche entsteht.</p>"+
+                                "<p>Gezeichnete Objekte können im Nachhinein noch bearbeitet werden. Benutzen Sie hierzu den Knopf \"Zeichenobjekt modifizieren\" "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_measures_modify.png' title='Knopf: Messen - Objekt modifizieren' alt='button_measures_modify.png' width='30' height='30' style='vertical-align:middle'>"+
+                                ". Sobald der Knopf aktiv ist, werden gezeichnete Objekte mit der Maus automatisch gefangen. Sichtbar wird dies mit einem blauen Kreis am Mauszeiger. Befindet man sich an einem bestehenden Punkt, wird dieser mit einem einfachen Klick gelöscht. Mit gedrückter Maustaste lässt sich ein Punkt/Stützpunkt verschieben. Um neue Stützpunkte einer Linie hinzuzufügen, klicken Sie auf ein Segment und verschieben mit gedrückter linker Maustaste den Punkt an die gewünschte Position.</p>"+
+                                "<p>Einzelne Objekte (vollständige Geometrie) können gezielt mit einem Klick gelöscht werden. Nutzen Sie hierzu den Knopf mit dem Radiergummi-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_measures_deleteObjects.png' title='Knopf: Messen - Objekt löschen' alt='button_measures_deleteObjects.png' width='30' height='30' style='vertical-align:middle'>"+
+                                ". Sämtliche Zeichenobjekte sind über den Knopf mit dem Mülleimer-Symbol "+
+                                "<img class='img' src='classic/resources/img/helpPage/button_measures_deleteAll.png' title='Knopf: Messen - alle Objekte löschen' alt='button_measures_deleteAll.png' width='30' height='30' style='vertical-align:middle'>"+
+                                " löschbar.</p>"+
+                                "<p>Alle Zeichenobjekte sind dem Layer \"Bemaßungen\" zugeordnet. Entsprechend kann dieser über die Legende sichtbar bzw. unsichtbar geschaltet werden.</p>"+
+                                "</div>"
+                        },
+                    "fullScreen": {
+                        "title": "7.5 Vollbild",
+                        "html": "<hr style='color:#294d71' />"+
+                                "<h2>7.5 Vollbild <img class='img' src='classic/resources/img/helpPage/button_fullScreen.png' title='Knopf: Vollbild' alt='button_fullScreen.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Ein Klick auf den Knopf \"Vollbild\" erweitert das Sichtfeld des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportals auf den gesamten Bildschirm. Je nach Browser, den Sie verwenden, müssen Sie den Vollbild-Modus bestätigen.</p>"+
                                 "<p>Zum Beenden des Vollbild-Modus drücken Sie die <b><i>Esc</i>-Taste</b>.</p>"+
                                 "</div>"
                         },
                     "permaLink": {
-                        "title": "7.5 Permalink",
+                        "title": "7.6 Permalink",
                         "html": "<hr style='color:#294d71' />"+
-                                "<h2>7.5 Permalink <img class='img' src='classic/resources/img/helpPage/button_permaLink.png' title='Knopf: Permalink' alt='button_permaLink.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                "<h2>7.6 Permalink <img class='img' src='classic/resources/img/helpPage/button_permaLink.png' title='Knopf: Permalink' alt='button_permaLink.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                 "<div>"+
                                 "<p>Ein Permalink ist ein Hyperlink der als dauerhafte Referenz von Inhalten einer Internetadresse dient. Er enthält die Informationen der Kartenansicht (Zoomstufe und Position), sowie zusätzlich geladene Inhalte (Layer mit Filtereinstellungen).</p>"+
                                 "<p>Dadurch ist es möglich eine bestimmte Kartenansicht für einen späteren Zugriff abzuspeichern. Nach Auswahl einer gewünschten Ansicht betätigen Sie hierfür den Permalink-Knopf oder drücken Sie, sollte das Permalink-Fenster bereits geöffnet sein, auf \"Erneuern\", um den zur aktuellen Ansicht passenden Permalink anzuzeigen. Der \"In Zwischenablage kopieren\"-Knopf sichert den Permalink temporär, so dass er an gewünschter Stelle wieder eingefügt werden kann.</p>"+
-                                "</div>"
-                        },
-                    "openLegend": {
-                        "title": "7.6 Legende öffnen",
-                        "html": "<hr style='color:#294d71' />"+
-                                "<h2>7.6 Legende öffnen <img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Knopf: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'></h2>"+
-                                "<div>"+
-                                "<p>Dieser Knopf öffnet bzw. schließt die Legende, die im rechten unteren Eck des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportals zu finden ist. Diese beinhaltet sämtliche Layer, die in der Darstellung unmittelbar verfügbar sind. Alternativ kann direkt auf die Legende (blauer Balken mit der Aufschrift \"Legende\") geklickt werden.</p>"+
                                 "</div>"
                         }
                 },
@@ -966,9 +1077,7 @@
                     "title": "8. Legende",
                     "html": "<h2>8. Legende</h2>"+
                             "<div>"+
-                            "<p>Die Legende beinhaltet sämtliche Layer die in die Kartenansicht geladen sind. Das Hinzufügen weiterer Layer ist unter dem Punkt <i>4. Auswahl</i> beschrieben. Die Legende kann entweder über den Knopf "+
-                            "<img class='img' src='classic/resources/img/helpPage/button_openLegend.png' title='Knopf: Legende öffnen' alt='button_openLegend.png' width='28' height='28' style='vertical-align:middle'>"+
-                            ", oder durch einen direkten Klick auf den blauen Balken mit der Aufschrift \"Legende\" geöffnet werden. </p>"+
+                            "<p>Die Legende befindet sich im rechten unteren Eck der Anwendung und beinhaltet sämtliche Layer, die in die Kartenansicht geladen sind. Diese kann über den blauen Balken mit der Aufschrift \"Layer\" geöffnet bzw. geschlossen werden. Das Hinzufügen weiterer Layer ist unter dem Punkt <i>4. Auswahl</i> beschrieben.</p>"+
                             "<p>Die Legende ist in der Größe anpassbar. Bewegt man den <i>Mauszeiger</i> an den Rand der Legende, ändert sich das Symbol zu einem Doppelpfeil "+
                             "<img class='img' src='classic/resources/img/helpPage/mouse_resize.png' title='Mauszeiger: Resize' alt='mouse_resize.png' width='22' height='12' style='vertical-align:middle'>"+
                             " und die Größe lässt sich mit gedrückter linker <i>Maustaste</i> einstellen.</p>"+

@@ -98,6 +98,16 @@ Ext.define('Koala.view.window.HelpModel', {
                         text: '{map.geoObjects.title}',
                         content: '{map.geoObjects.html}',
                         leaf: true
+                    }, {
+                        id: 'mapCartoWindows',
+                        text: '{map.cartoWindows.title}',
+                        content: '{map.cartoWindows.html}',
+                        leaf: true
+                    }, {
+                        id: 'mapTimeSeries',
+                        text: '{map.timeSeries.title}',
+                        content: '{map.timeSeries.html}',
+                        leaf: true
                     }]
                 }, {
                     id: 'tools',
@@ -165,6 +175,10 @@ Ext.define('Koala.view.window.HelpModel', {
                         content: '{mapNavigation.initMapView.html}',
                         leaf: true
                     }, {
+                        text: '{mapNavigation.measure.title}',
+                        content: '{mapNavigation.measure.html}',
+                        leaf: true
+                    }, {
                         text: '{mapNavigation.fullScreen.title}',
                         content: '{mapNavigation.fullScreen.html}',
                         leaf: true
@@ -172,10 +186,6 @@ Ext.define('Koala.view.window.HelpModel', {
                         id: 'mapNavigationPermalink',
                         text: '{mapNavigation.permaLink.title}',
                         content: '{mapNavigation.permaLink.html}',
-                        leaf: true
-                    }, {
-                        text: '{mapNavigation.openLegend.title}',
-                        content: '{mapNavigation.openLegend.html}',
                         leaf: true
                     }]
                 }, {
