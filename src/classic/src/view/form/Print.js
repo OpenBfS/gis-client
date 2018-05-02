@@ -615,9 +615,13 @@ Ext.define('Koala.view.form.Print', {
                 return;
             }
             d3.selectAll('.k-d3-hidden').style('display', 'none');
+            d3.selectAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
+                .style('display', 'none');
             var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
+                d3.selectAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
+                    .style('display', 'block');
                 printLayers.push({
                     type: 'chart',
                     coordinates: coords,
