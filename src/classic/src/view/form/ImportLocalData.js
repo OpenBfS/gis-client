@@ -84,27 +84,7 @@ Ext.define('Koala.view.form.ImportLocalData',{
                 beforerender: 'beforeProjectionComboRendered'
             }
         }, {
-            xtype: 'combobox',
-            name: 'template',
-            // TODO change this to false as soon as we fixed the
-            // metadatatemplates uuids!
-            allowBlank: true,
-            bind: {
-                fieldLabel: '{templateLabel}'
-                // TODO get this back in as soon as we fixed the
-                // metadatatemplates uuids!
-                // value: '{templateUuid}'
-            },
-            valueField: 'uuid',
-            displayField: 'label',
-            queryMode: 'local',
-            store: {
-                autoLoad: true,
-                type: 'k-vectortemplates'
-            },
-            listeners: {
-                beforerender: 'beforeVectorTemplateComboRendered'
-            }
+            xtype: 'k-form-field-vectortemplatecombo'
         }]
     }],
 

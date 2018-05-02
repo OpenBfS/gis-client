@@ -91,8 +91,10 @@ Ext.define('Koala.util.WFST', {
             // insert the lockId, if available
             if (Koala.util.WFST.lockId) {
                 // TODO fails on FF, XML seems to be serialized differently
-                xml = xml.replace(/http:\/\/schemas.opengis.net\/wfs\/1.1.0\/wfs.xsd">/g,
-                    '$1<LockId>' + Koala.util.WFST.lockId + '</LockId>');
+                xml = xml.replace(/(http:\/\/schemas.opengis.net\/wfs\/1.1.0\/wfs.xsd">)/g,
+                    function($1) {
+                        return $1 + '<LockId>' + Koala.util.WFST.lockId + '</LockId>';
+                    });
                 xml = xml.replace('XMLSchema-instance">',
                     'XMLSchema-instance"><LockId>' +
                 Koala.util.WFST.lockId + '</LockId>');
