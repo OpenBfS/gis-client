@@ -141,15 +141,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
      *
      */
     disableMapInteractions: function() {
+        if (this.interactionsDisabled) {
+            return;
+        }
         var map = this.getView().getMap();
         var me = this;
         this.interactionActiveList = [];
+        this.interactionsDisabled = true;
         map.getInteractions().forEach(function(interaction) {
             me.interactionActiveList.push(interaction.getActive());
             interaction.setActive(false);
         });
     },
-
 
     /**
      *onCartoWindowMouseLeave listener
@@ -167,6 +170,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             var active = me.interactionActiveList ? me.interactionActiveList[idx] : true;
             interaction.setActive(active);
         });
+        this.interactionsDisabled = false;
     },
 
     /**
@@ -208,8 +212,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var config = {
             startDate: timeFilter.mindatetimeinstant,
             endDate: timeFilter.maxdatetimeinstant,
-            width: '548px',
-            height: '225px',
+            width: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartWidth) || 500,
+            height: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartHeight) || 250,
             renderTo: tabElm
         };
 
@@ -402,7 +406,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var btn = {
             cls: 'carto-window-chart-button',
             xtype: 'button',
-            name: 'irix-print',
+            name: 'irixPrintBtn',
             glyph: 'xf039@FontAwesome',
             iconAlign: 'right',
             bind: {
@@ -411,6 +415,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }
         };
         this.IrixPrintButton = Ext.create(btn);
+        this.IrixPrintButton.on('beforerender', Koala.util.AppContext.generateCheckToolVisibility('irixPrintBtn'));
         this.IrixPrintButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3);
         this.IrixPrintButton.el.dom.addEventListener('click', this.showIrixPrintDialog.bind(this, chart));
     },
@@ -548,8 +553,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var tabElm = barChartTab.getElementsByTagName('div')[0];
 
         var config = {
-            width: '500px',
-            height: '300px',
+            width: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartWidth) || 500,
+            height: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartHeight) || 250,
             flex: 1,
             renderTo: tabElm
         };
@@ -1033,6 +1038,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         var downEvent = Ext.isModern ? 'touchstart': 'mousedown';
         var upEvent = Ext.isModern ? 'touchend': 'mouseup';
+        var previousEvent;
 
         el.addEventListener(downEvent, function(event) {
             if (event.target.tagName === 'LABEL') {
@@ -1042,6 +1048,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 overlay.set('resizing', true);
                 me.resizeTarget = Ext.get(event.target).up('.cartowindow-tab').down('.content');
             }
+            previousEvent = event;
         });
 
         me.onMouseUp = function() {
@@ -1053,22 +1060,51 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         me.onMouseUpWindow = function() {
             overlay.set('resizing', false);
+            overlay.set('dragging', false);
         };
 
         me.pointerMoveListener = function(event) {
             if (overlay.get('dragging') === true) {
                 var position = overlay.getPosition();
                 var res = overlay.getMap().getView().getResolution();
-                position[0] += event.originalEvent.movementX * res;
-                position[1] -= event.originalEvent.movementY * res;
+                var xDiff = event.originalEvent.screenX - previousEvent.screenX;
+                var yDiff = event.originalEvent.screenY - previousEvent.screenY;
+                position[0] += xDiff * res;
+                position[1] -= yDiff * res;
                 overlay.setPosition(position);
                 me.updateLineFeature();
+                previousEvent = event.originalEvent;
             }
         };
 
         el.addEventListener(upEvent, me.onMouseUp);
+        el.addEventListener('mouseleave', function(event) {
+            var mapEl = Ext.DomQuery.select('canvas.ol-unselectable')[0];
+            if (event.relatedTarget !== mapEl) {
+                overlay.set('dragging', false);
+                hoverPlugin.setPointerRest(true);
+            }
+        });
         window.addEventListener(upEvent, me.onMouseUpWindow);
         map.on('pointermove', me.pointerMoveListener);
+        // register additional listeners to solve the issue that when an
+        // object tag is used in the cartowindow, exisiting events will not
+        // fire anymore. Fixes issues when dragging a cartowindow with
+        // object tag in browsers like firefox, which render slowly
+        // and mouse goes over the object tag while dragging
+        window.addEventListener('pointermove', function(evt) {
+            if (overlay.get('dragging') === true) {
+                var obj = el.querySelector('object');
+                if (obj && !me.objectTagMouseOverListenerRegistered) {
+                    obj.addEventListener('mouseover', function(event) {
+                        evt = {};
+                        evt.originalEvent = event;
+                        me.pointerMoveListener(evt);
+                    });
+                    me.objectTagMouseOverListenerRegistered = true;
+                }
+            }
+        });
 
         viewModel.get('lineLayer').getSource().addFeature(lineFeature);
         viewModel.set('lineFeature', lineFeature);

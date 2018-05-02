@@ -215,7 +215,9 @@ Ext.define('Koala.util.ChartAxes', {
                 'layerConfig/timeSeriesChartProperties/attachedSeries',
                 '[]'
             );
-            seriesConfigs = JSON.parse(seriesConfigs);
+            if (Ext.isString(seriesConfigs)) {
+                seriesConfigs = JSON.parse(seriesConfigs);
+            }
             var idx = 0;
             Ext.each(seriesConfigs, function(s) {
                 var node = d3.select('.k-d3-axis-y_' + (++idx));

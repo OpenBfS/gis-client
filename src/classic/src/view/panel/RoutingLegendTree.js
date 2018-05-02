@@ -64,9 +64,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         bind: {
             tooltip: '{helpTooltip}'
         },
-        topic: 'legendHelp',
         callback: function() {
-            Koala.util.Help.showHelpWindow();
+            Koala.util.Help.showHelpWindow('legendHelp');
         }
     }],
 
@@ -74,6 +73,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         selectionchange: 'onSelectionChange',
         beforerender: 'bindUtcBtnToggleHandler',
         beforedestroy: 'unbindUtcBtnToggleHandler',
+        checkchange: 'checkLayerAndLegendVisibility',
+        itemmove: 'removeAlwaysOnTopProperty',
         // Ensure the layer filter text indicator will be drawn
         expand: {
             fn: 'onFirstExpand',
@@ -1053,10 +1054,18 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         var store = this.getStore();
         store.each(function(rec) {
             var layer = rec.getOlLayer();
-            var selector = '[name=' + layer.get('routeId') + '-legendImg]';
-            var img = Ext.ComponentQuery.query(selector)[0];
-            if (img && img.el && img.el.dom) {
-                img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));
+            var legend = Ext.ComponentQuery.query(
+                'k-panel-routing-legendtree')[0];
+            var view = legend.getView();
+            var node = view.getNode(rec);
+            if (node && node.querySelector &&
+                node.querySelector('img')) {
+                var selector = node.querySelector('img').id;
+                var img = Ext.ComponentQuery.query(
+                    '[id=' + selector + ']')[0];
+                if (img && img.el && img.el.dom) {
+                    img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));
+                }
             }
         });
     },

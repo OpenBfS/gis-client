@@ -108,5 +108,36 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
     onLegendItemDrop: function() {
         var LayerUtil = Koala.util.Layer;
         LayerUtil.repaintLayerFilterIndication();
+    },
+
+    checkLayerAndLegendVisibility: function(node, visible) {
+        var me = this;
+        var view = me.getView();
+        var treeView = view.getView();
+        var rowExpanderPlugin = view.getPlugin('rowexpanderwithcomponents');
+        var idx = treeView.indexOfRow(node);
+        var legendVisible = node.get(view.itemExpandedKey);
+        // collapse the legend when node is set to invisible
+        if (!visible && legendVisible) {
+            rowExpanderPlugin.toggleRow(idx, node);
+        }
+        // expand the legend when node is set to visible
+        if (visible && !legendVisible) {
+            rowExpanderPlugin.toggleRow(idx, node);
+        }
+    },
+
+    /**
+     * Makes sure that any dragged layer will not stay on top even if configured
+     * with the alwaysOnTop property.
+     * @param  {Ext.data.NodeInterface} node the dragged tree node
+     */
+    removeAlwaysOnTopProperty: function(node) {
+        var layer = node.getOlLayer();
+        var path = 'metadata/layerConfig/olProperties/alwaysOnTop';
+        var alwaysOnTop = Koala.util.Object.getPathOr(layer, path, false);
+        if (alwaysOnTop) {
+            layer.metadata.layerConfig.olProperties.alwaysOnTop = false;
+        }
     }
 });

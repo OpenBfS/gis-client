@@ -242,7 +242,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
     /**
      * Called during the update of a filter of an existing layer, this
-     * method will upodate the metadata of the layer everywhere it might
+     * method will update the metadata of the layer everywhere it might
      * be used.
      *
      * @param {ol.layer.Layer} layer The layer whose metadata (filter)
@@ -260,6 +260,26 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 if (layerInTree && layerInTree === layer) {
                     rec.set('metadata', metadata);
                     layerInTree.metadata = metadata;
+                    // update the legend image
+                    var view = legend.getView();
+                    var node = view.getNode(rec);
+                    if (node && node.querySelector &&
+                        node.querySelector('img')) {
+                        var selector = node.querySelector('img').id;
+                        var img = Ext.ComponentQuery.query(
+                            '[id=' + selector + ']')[0];
+                        if (img && img.el && img.el.dom) {
+                            img.setLoading(true);
+                            img.el.dom.onload = function(evt) {
+                                var extImg = Ext.ComponentQuery.query(
+                                    '[id=' + evt.target.id + ']')[0];
+                                if (extImg) {
+                                    extImg.setLoading(false);
+                                }
+                            };
+                            img.el.dom.src = Koala.util.Layer.getCurrentLegendUrl(layer);
+                        }
+                    }
                 }
             });
         });

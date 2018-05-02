@@ -136,12 +136,38 @@ Ext.define('Koala.view.component.D3BarChartController', {
         return requestParams;
     },
 
+    onChartDataRequestSuccess: function(chartDataResponse) {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            me.onDataComplete(chartDataResponse);
+            return;
+        }
+        var barChartProperties = view.getTargetLayer().get('barChartProperties');
+        if (!barChartProperties.colorMappingUrl || Ext.isEmpty(
+            barChartProperties.colorMappingUrl)) {
+            me.onDataComplete(chartDataResponse);
+            return;
+        }
+        Ext.Ajax.request({
+            method: 'GET',
+            url: barChartProperties.colorMappingUrl,
+            success: function(colorDataResponse) {
+                me.onDataComplete(chartDataResponse, colorDataResponse);
+            },
+            failure: function() {
+                Ext.log.error('Error retrieving external colormap');
+                me.onDataComplete(chartDataResponse);
+            }
+        });
+    },
+
     /**
      * Function to be called on request success.
      *
      * @param {Object} reponse The response object.
      */
-    onChartDataRequestSuccess: function(response) {
+    onDataComplete: function(chartDataResponse, colorDataResponse) {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
@@ -165,17 +191,28 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         var uncertaintyProp = barChartProperties.uncertaintyAttribute
                 || 'uncertainty';
-        var colors = view.getShape().color.split(',');
+        var colors = [];
+        if (view.getShape().color) {
+            colors = view.getShape().color.split(',');
+        }
         var jsonObj;
+        var jsonColorData;
 
         var seriesData = [];
 
-        if (response && response.responseText) {
+        if (chartDataResponse && chartDataResponse.responseText) {
             try {
-                jsonObj = Ext.decode(response.responseText);
+                jsonObj = Ext.decode(chartDataResponse.responseText);
             } catch (err) {
-                Ext.log.error('Could not parse the response: ', err);
+                Ext.log.error('Could not parse the chart data response: ', err);
                 return false;
+            }
+        }
+        if (colorDataResponse && colorDataResponse.responseText) {
+            try {
+                jsonColorData = Ext.decode(colorDataResponse.responseText);
+            } catch (err) {
+                Ext.log.error('Could not parse the color data response: ', err);
             }
         }
         //used for grid table in CartoWindowController
@@ -184,6 +221,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.colorsByKey = {};
         me.labels = [];
         me.legendLabels = [];
+        me.customColors = [];
+        me.disabledSubCategories = [];
 
         var ids = [];
 
@@ -222,7 +261,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 pushObj[groupKey] = {};
             }
 
-            pushObj[groupKey].color = me.customColors[groupKey] || me.colorsByKey[groupKey];
+            if (jsonColorData && jsonColorData[groupKey]) {
+                pushObj[groupKey].color = jsonColorData[groupKey].color;
+            } else {
+                pushObj[groupKey].color = me.customColors[groupKey] || me.colorsByKey[groupKey];
+            }
             pushObj[groupKey].value = feature.properties[valueProp];
             pushObj[groupKey].key = feature.properties[groupProp];
             pushObj[groupKey].detection_limit = feature.properties[detectionLimitProp];
@@ -495,8 +538,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .filter(function(d) {
                 return me.drawBar(d);
             })
-            .style('fill', function(d, idx) {
-                return me.customColors[idx] || d.color;
+            .style('fill', function(d) {
+                return d.color;
             })
         // .style('opacity', shapeConfig.opacity)
             .attr('x', function(d) {
@@ -509,10 +552,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             .attr('height', function(d) {
                 return chartSize[1] - me.scales[orientY](d[yField]);
             })
-            .style('fill', function(d, idx) {
-                return me.customColors[idx] || d.color;
-            })
-            // .style('opacity', shapeConfig.opacity)
             .on('mouseover', function(data) {
                 var tooltipCmp = me.tooltipCmp;
                 var tooltipTpl = shapeConfig.tooltipTpl;
@@ -736,6 +775,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
         }
 
         Ext.each(firstStationData, function(dataObj, idx) {
+            if (!dataObj.key) {
+                return;
+            }
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
@@ -809,6 +851,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         var subCategories = me.scales.bottom_group.domain();
         Ext.each(subCategories, function(subCategory, idx) {
+            var shape = {};
+            shape.config = firstStationData[0][subCategory];
             var toggleVisibilityFunc = (function() {
                 return function() {
                     var target = d3.select(d3.event.target);
@@ -887,7 +931,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     .attr('text-anchor', 'start')
                     .attr('dy', '1')
                     .attr('dx', '140') // TODO Discuss, do we need this dynamically?
-                    .on('click', me.generateColorCallback({config: {color: me.colorsByKey[subCategory]}}, idx));
+                    .on('click', me.generateColorCallback(shape, idx));
             }
         });
         me.wrapAndResizeLegend();
@@ -937,15 +981,16 @@ Ext.define('Koala.view.component.D3BarChartController', {
      *
      */
     deleteEverything: function(dataObj) {
-        // Data
-        this.deleteData(dataObj.key);
+        var me = this;
         // Shape
-        this.deleteBarGroup(dataObj.key);
+        me.deleteBarGroup(dataObj.key);
+        // Data
+        me.deleteData(dataObj.key);
+        Ext.Array.remove(me.data, dataObj);
         // Legend
-        this.deleteLegendEntry(dataObj.key);
-
-        this.redrawChart();
-        this.redrawLegend();
+        me.deleteLegendEntry(dataObj.key);
+        me.redrawChart();
+        me.redrawLegend();
     },
 
     /**

@@ -52,10 +52,8 @@ Ext.define('Koala.view.window.LayerSetChooserWindow', {
         bind: {
             tooltip: '{helpTooltip}'
         },
-        topic: 'profileSelection',
-        parentOfTopic: 'tools',
         callback: function() {
-            Koala.util.Help.showHelpWindow();
+            Koala.util.Help.showHelpWindow('profileSelection', 'tools');
         }
     }],
     items: [{

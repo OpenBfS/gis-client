@@ -436,6 +436,28 @@ Soll die Opazität zur Laufzeit verändert werden dürfen?
 | Default-Wert         | true |
 | Beispiel             | true |
 
+**enableLegendCount**
+
+Soll die Legende die Anzahl der Treffer enthalten?
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true, false |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | false |
+| Beispiel             | true |
+
+**alwaysOnTop**
+
+Layer erhält initial alwaysOnTop Verhalten.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | true, false |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | false |
+| Beispiel             | true |
+
 **hoverTpl**
 
 Template-String der beim Hovern über Features angezeigt wird. Werte in doppelten
@@ -1167,6 +1189,28 @@ Sollen die Label an der X-Achse um 45 Grad rotiert werden?
 | Default-Wert         | false |
 | Beispiel             | true |
 
+**chartWidth
+
+Breite des Charts in Pixel
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | ganze Zahl  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | 500 |
+
+**chartHeight
+
+Höhe des Charts in Pixel
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | ganze Zahl  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | 250 |
+
 ## Timeseries Chart Properties {#timeseries} (bfs:timeSeriesChartProperty)
 
 **allowZoom**
@@ -1273,6 +1317,17 @@ Kann ein Array von Objekten beinhalten, welches zusätzliche Zeitreihen konfigur
 
 ## Bar Chart Properties {#barchart} (bfs:barChartProperty)
 
+**barWidth**
+
+Initiale Breite der Säulen in Pixel.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Integer |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | 10 |
+| Beispiel             | 20 |
+
 **chartFieldSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
 
 Liste der Attributspalten mit Werten für das Chart
@@ -1305,6 +1360,31 @@ Lesbare Variante, statt technischem Attributwert.
 | Obligatorisch        | &#10799; |
 | Default-Wert         | chartFieldSequence |
 | Beispiel             |  |
+
+**colorMappingUrl**
+
+URL, die eine Konfiguration für Farbzurodnungen im JSON Format zurückgibt.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | String  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | leer |
+| Beispiel Rückgabe           |
+```
+{
+  "Cs 137": {
+    "color": "#4040ff"
+  },
+  "I 131": {
+    "color": "#0006FF"
+  },
+  "K 40": {
+    "color": "#0006FF"
+  }
+}
+```
+
 
 **labelFunc**  // TODO Fällt nach Änderung der Datenstruktur ggf weg.
 

@@ -59,10 +59,8 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
         bind: {
             tooltip: '{helpTooltip}'
         },
-        topic: 'mapGeoObjects',
-        parentOfTopic: 'map',
         callback: function() {
-            Koala.util.Help.showHelpWindow();
+            Koala.util.Help.showHelpWindow('mapGeoObjects', 'map');
         }
     }],
     defaults: {

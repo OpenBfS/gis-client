@@ -100,6 +100,9 @@ Ext.define('Koala.view.window.BarChartController', {
                     text: '{printChartButtonText}'
                 },
                 handler: me.onPrintChartClicked,
+                listeners: {
+                    boxready: Koala.util.AppContext.generateCheckToolVisibility('irixPrintBtn')
+                },
                 scope: me,
                 margin: '0 0 10px 0'
             }, {
