@@ -23,7 +23,7 @@ before_install:
   - "test ! -d node_modules || npm prune"
   - "test ! -d node_modules || npm rebuild"
 script:
-  - "npm install"
+  - "npm install ."
 #  - "npm test"
   - "npm run combine-coverages"
   - "npm run coverage-summary"
