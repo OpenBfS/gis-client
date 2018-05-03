@@ -614,6 +614,17 @@ Ext.define('Koala.view.form.Print', {
             if (!containerEl || !containerEl.parentNode) {
                 return;
             }
+            // workaround to get object tags to render properly with html2canvas
+            if (d3.select(containerEl).select('.html-tab > input').node().checked) {
+                try {
+                    var node = d3.select('.html-tab object').node().contentDocument.documentElement;
+                    if (node) {
+                        containerEl = node;
+                    }
+                } catch (e) {
+                    // no object tag found, go ahead with the original container
+                }
+            }
             d3.selectAll('.k-d3-hidden').style('display', 'none');
             var promise = html2canvas(containerEl);
             promises.push(promise);
