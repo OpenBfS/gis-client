@@ -34,55 +34,66 @@ Ext.define('Koala.util.Clone', {
          * @param  {Number} maxFeatures maximum features to request
          * @param  {Array} bbox the bounding box to clone from, or undefined
          * @param  {ol.layer.Layer} dataSourceLayer the layer to clone the
+         * @param  {String} uuid the uuid of the template to clone metadata from
          * data from, or undefined
          */
-        cloneLayer: function(sourceLayer, name, maxFeatures, bbox, dataSourceLayer) {
-            var targetLayer = this.createLayer(sourceLayer, name);
+        cloneLayer: function(sourceLayer, name, maxFeatures, bbox, dataSourceLayer, uuid) {
+            var targetLayerPromise = this.createLayer(sourceLayer, name, uuid);
             var SelectFeatures = Koala.util.SelectFeatures;
 
-            if (dataSourceLayer instanceof ol.layer.Vector) {
-                if (bbox) {
-                    SelectFeatures.getFeaturesFromVectorLayerByBbox(
+            targetLayerPromise.then(function(targetLayer) {
+                if (dataSourceLayer instanceof ol.layer.Vector) {
+                    if (bbox) {
+                        SelectFeatures.getFeaturesFromVectorLayerByBbox(
+                            dataSourceLayer,
+                            targetLayer,
+                            bbox
+                        );
+                    } else {
+                        SelectFeatures.getAllFeaturesFromVectorLayer(
+                            dataSourceLayer,
+                            targetLayer
+                        );
+                    }
+                } else if (dataSourceLayer) {
+                    SelectFeatures.getFeaturesFromWmsLayerByBbox(
                         dataSourceLayer,
                         targetLayer,
-                        bbox
-                    );
-                } else {
-                    SelectFeatures.getAllFeaturesFromVectorLayer(
-                        dataSourceLayer,
-                        targetLayer
+                        bbox,
+                        maxFeatures
                     );
                 }
-            } else if (dataSourceLayer) {
-                SelectFeatures.getFeaturesFromWmsLayerByBbox(
-                    dataSourceLayer,
-                    targetLayer,
-                    bbox,
-                    maxFeatures
-                );
-            }
+            });
         },
 
         /**
          * Create a cloned layer and add it to the map.
          * @param  {ol.layer.Layer} layer the layer to clone the metadata from
          * @param  {String} name  the new layer's name
-         * @return {ol.layer.Vector}       the new layer
+         * @param  {String} uuid the uuid of the metadata template to clone
+         * @return {Ext.Promise} a promise resolving to the new layer
          */
-        createLayer: function(layer, name) {
+        createLayer: function(layer, name, uuid) {
             var Layer = Koala.util.Layer;
-            var metadata = Koala.util.Metadata.prepareClonedMetadata(layer.metadata);
-            var source = new ol.source.Vector({features: new ol.Collection()});
-            var config = Layer.getInternalLayerConfig(metadata);
-            config.source = source;
-            config.metadata = metadata;
-            config.name = name;
-            config.persisted = false;
-            var result = new ol.layer.Vector(config);
-            result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
-            result.metadata = Ext.clone(metadata);
-            Koala.util.Layer.addOlLayerToMap(result);
-            return result;
+            var promise = new Ext.Promise(function(resolve, reject) {
+                Layer.getMetadataFromUuid(uuid)
+                    .then(function(metadata) {
+                        metadata = Koala.util.Metadata.prepareClonedMetadata(metadata);
+                        var source = new ol.source.Vector({features: new ol.Collection()});
+                        var config = Layer.getInternalLayerConfig(metadata);
+                        config.source = source;
+                        config.metadata = metadata;
+                        config.name = name;
+                        config.persisted = false;
+                        var result = new ol.layer.Vector(config);
+                        result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
+                        result.metadata = Ext.clone(metadata);
+                        Koala.util.Layer.addOlLayerToMap(result);
+                        resolve(result);
+                    })
+                    .catch(reject);
+            });
+            return promise;
         }
 
     }

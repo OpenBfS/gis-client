@@ -38,6 +38,8 @@ Ext.define('Koala.view.window.CloneWindowController', {
         var name = view.down('textfield').getValue();
         var maxFeatures = view.down('numberfield').getValue();
         var useBbox = view.down('checkbox').getValue();
+        var templateCombo = view.down('k-form-field-vectortemplatecombo');
+        var uuid = templateCombo.getViewModel().get('templateUuid');
         var bbox;
         if (useBbox) {
             var map = BasiGX.util.Map.getMapComponent().map;
@@ -62,7 +64,8 @@ Ext.define('Koala.view.window.CloneWindowController', {
             name,
             maxFeatures,
             bbox,
-            dataSourceLayer
+            dataSourceLayer,
+            uuid
         );
         view.close();
     }

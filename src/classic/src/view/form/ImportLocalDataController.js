@@ -28,7 +28,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
 
         'Koala.model.Style',
         'Koala.model.StyleRule',
-        'Koala.model.StyleSymbolizer'
+        'Koala.model.StyleSymbolizer',
+
+        'Koala.view.form.field.VectorTemplateCombo'
     ],
 
     /**
@@ -84,17 +86,6 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     beforeProjectionComboRendered: function(combo) {
         var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
         combo.getStore().setData(appContext.data.merge.vectorProjections);
-    },
-
-    /**
-     *
-     */
-    beforeVectorTemplateComboRendered: function(combo) {
-        var viewModel = this.getViewModel();
-        var store = combo.getStore();
-        var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
-        store.setData(appContext.data.merge.vectorTemplates);
-        viewModel.set('templateUuid', store.first().get('uuid'));
     },
 
     /**
@@ -192,7 +183,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     createLayer: function() {
         var viewModel = this.getViewModel();
         var layerUtil = Koala.util.Layer;
-        var uuid = viewModel.get('templateUuid');
+        var templateCombo = this.getView().down('k-form-field-vectortemplatecombo');
+        var uuid = templateCombo.getViewModel().get('templateUuid');
         var layerName = viewModel.get('layerName');
         var features = viewModel.get('features');
         var me = this;

@@ -80,13 +80,13 @@
                 "label": "EPSG:25832"
             }],
             "vectorTemplates": [{
-                "uuid": "f4984e29-6b4a-4ebb-a5f0-5dddd07e8943",
+                "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
                 "label": "Local Vector Data Template (drinkwater)"
             }, {
-                "uuid": "f4984e29-6b4a-4ebb-a5f0-5dddd07e8943",
+                "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
                 "label": "Local Vector Data Template (buildings)"
             }, {
-                "uuid": "f4984e29-6b4a-4ebb-a5f0-5dddd07e8943",
+                "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
                 "label": "Local Vector Data Template (bundeslaender)"
             }],
             "wmsUrls": ["http://ows.terrestris.de/osm/service",

@@ -61,6 +61,10 @@ Ext.define('Koala.util.Metadata', {
          * @return {String}         an XML transaction request
          */
         getCswUpdate: function(context) {
+            var ms = /(^http[s]?:\/\/[^/]+)(.+)/g.exec(context.config['base-url']);
+            var host = ms[1];
+            var path = ms[2] + 'ows';
+
             return '<?xml version="1.0" encoding="UTF-8"?>' +
                 '<csw:Transaction service="CSW" version="2.0.2" ' +
                 'xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" ' +
@@ -74,6 +78,11 @@ Ext.define('Koala.util.Metadata', {
                     'bfs:layer/gco:CharacterString', context.newLayerName) +
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:timeSeriesChartProperty', '') +
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:barChartProperty', '') +
+                this.getPropertyUpdate('/bfs:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', context.newLayerName) +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:legendTitle/gco:CharacterString', context.newLayerName) +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:printTitle/gco:CharacterString', context.newLayerName) +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:host/gco:CharacterString', host) +
+                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:path/gco:CharacterString', path) +
                 this.getCswFilter(context.newUuid) +
                 '</csw:Update>' +
                 '</csw:Transaction>';
@@ -87,6 +96,9 @@ Ext.define('Koala.util.Metadata', {
          * @return {Object}          the cloned metadata
          */
         prepareClonedMetadata: function(metadata) {
+            var config = Koala.util.AppContext.getAppContext();
+            config = config.data.merge['import'];
+
             if (!metadata) {
                 return metadata;
             }
@@ -98,6 +110,7 @@ Ext.define('Koala.util.Metadata', {
             delete metadata.timeSeriesChartProperties;
             // always allow cloned layers to be editable afterwards
             metadata.layerConfig.olProperties.allowEdit = true;
+            metadata.layerConfig.wfs.url = config['base-url'] + 'ows';
 
             return metadata;
         },
@@ -230,7 +243,7 @@ Ext.define('Koala.util.Metadata', {
             var context = {
                 config: config,
                 uuid: metadata.id,
-                newLayerName: metadata.newLayerName
+                newLayerName: metadata.legendTitle + ' (' + metadata.newLayerName + ')'
             };
             return this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))
