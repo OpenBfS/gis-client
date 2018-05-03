@@ -58,7 +58,8 @@
             "tools": [
                 "addWmsBtn",
                 "printBtn",
-                "cloneBtn"
+                "cloneBtn",
+                "selectFeaturesBtn"
             ],
             "vectorIcons": [
                 {
