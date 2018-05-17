@@ -180,7 +180,10 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                     targetVectorLayer: me.layer,
                     selectionVectorLayer: this.getViewModel().get(
                         'selectedFeaturesLayer'),
-                    glyph: 'xf10c@FontAwesome'
+                    glyph: 'xf10c@FontAwesome',
+                    fullSplit: true,
+                    maxAllowedFeaturesForOperation: 10,
+                    tolerance: 10
                 }, {
                     xtype: 'button',
                     enableToggle: true,
