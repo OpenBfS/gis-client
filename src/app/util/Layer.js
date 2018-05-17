@@ -827,7 +827,7 @@ Ext.define('Koala.util.Layer', {
          */
         checkAlwaysOnTopLayers: function(map) {
             // happens when testing:
-            if (!map) {
+            if (!map || !map.getLayers().getArray) {
                 return;
             }
             var onTopLayers = [];
