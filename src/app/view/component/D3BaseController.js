@@ -613,6 +613,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var viewSize = me.getViewSize();
         var legWidth = me.calculateLegendWidth();
         var barChartParent;
+        var svgContainerWidth = (chartSize[2] < chartSize[0]) ? chartSize[0] : chartSize[2];
 
         svgContainer
             .attr('viewBox', '0 0 ' + viewSize[0] + ' ' + viewSize[1])
@@ -636,7 +637,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             svgContainer
                 .attr('height', viewSize[1] - scrollbarHeight)
                 .attr('viewBox', '0 0 ' + (marginLeft + chartSize[2]) + ' ' + (viewSize[1] - scrollbarHeight))
-                .attr('width', (chartSize[2] + marginLeft));
+                .attr('width', (svgContainerWidth + marginLeft));
         }
 
         svgGroup
