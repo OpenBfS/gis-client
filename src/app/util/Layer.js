@@ -827,7 +827,7 @@ Ext.define('Koala.util.Layer', {
          */
         checkAlwaysOnTopLayers: function(map) {
             // happens when testing:
-            if (!map) {
+            if (!map || !map.getLayers().getArray) {
                 return;
             }
             var onTopLayers = [];
@@ -872,7 +872,8 @@ Ext.define('Koala.util.Layer', {
             staticMe.bindLayerVisibilityHandlers(layer, mapComp);
             mapComp.addLayer(layer);
 
-            Koala.util.Layer.checkAlwaysOnTopLayers(mapComp.map);
+            var map = mapComp.getMap();
+            Koala.util.Layer.checkAlwaysOnTopLayers(map);
 
             // Select the newly added layer in the legend tree (handles classic
             // and modern)

@@ -451,6 +451,11 @@ Ext.define('Koala.view.panel.MobileLegendController', {
         layersCollection.forEach(function(l, idx) {
             if (l === layer) {
                 index = idx;
+                if (layer.metadata) {
+                    if (layer.metadata.layerConfig.olProperties.alwaysOnTop) {
+                        layer.metadata.layerConfig.olProperties.alwaysOnTop = false;
+                    }
+                }
             }
         });
         var newIndex = index + orderInt;
