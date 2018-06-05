@@ -542,7 +542,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             d3.select(shapePathSelector)
                                 .attr('d', shape.shape.y(function(d) {
                                     var val = d[shape.config.yField];
-                                    if (!val) {
+                                    if (!(typeof(val) === 'number')) {
                                         return null;
                                     }
                                     if (d.drawAsZero) {
@@ -554,7 +554,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             d3.selectAll(shapePointsSelector)
                                 .attr('cy', function(d) {
                                     var val = d[shape.config.yField];
-                                    if (!val) {
+                                    if (!(typeof(val) === 'number')) {
                                         return null;
                                     }
                                     if (d.drawAsZero) {
@@ -568,7 +568,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 })
                                 .attr('y', function(d) {
                                     var val = d[shape.config.yField];
-                                    if (!val) {
+                                    if (!(typeof(val) === 'number')) {
                                         return null;
                                     }
                                     if (d.drawAsZero) {
@@ -588,7 +588,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 })
                                 .attr('y', function(d) {
                                     var val = d[shape.config.yField];
-                                    if (!val) {
+                                    if (!(typeof(val) === 'number')) {
                                         return null;
                                     }
                                     if (d.drawAsZero) {
