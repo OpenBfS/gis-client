@@ -82,15 +82,31 @@ Ext.define('Koala.view.main.Main', {
      * delay is necessary otherwise treelist.store is not ready for .setSelection()
      */
     listeners: {
-        delay: 500,
-        afterrender: function() {
-            if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
-                var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                helpWin.on('afterlayout', function() {
-                    var helpWinController = this.getController();
-                    helpWinController.setTopic('preface');
-                }, helpWin, {single: true});
-            }
+        beforerender: {
+            fn: function() {
+                var headerTitle = Koala.util.AppContext.getMergedDataByKey('headerTitle');
+                if (headerTitle) {
+                    if (Koala.util.AppContext.getMergedDataByKey('imis_user').uid === 'hoe-fr'){
+                        headerTitle = 'Höbler-GIS';
+                    }
+                    this.header.down('title').setText(headerTitle);
+                } else {
+                    this.header.down('title').setBind({text: '{headerTitle}'});
+                }
+            },
+            delay: 500
+        },
+        afterrender: {
+            fn: function(){
+                if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
+                    var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                    helpWin.on('afterlayout', function() {
+                        var helpWinController = this.getController();
+                        helpWinController.setTopic('preface');
+                    }, helpWin, {single: true});
+                }
+            },
+            delay: 500
         }
     },
 
@@ -352,9 +368,6 @@ Ext.define('Koala.view.main.Main', {
     getAdditionalHeaderItems: function() {
         var title = {
             xtype: 'title',
-            bind: {
-                text: '{headerTitle}'
-            },
             textAlign: 'center',
             autoEl: {
                 tag: 'a',
