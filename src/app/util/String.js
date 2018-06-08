@@ -196,6 +196,25 @@ Ext.define('Koala.util.String', {
             }
         },
 
+
+        /**
+        * replaces special Characters
+        * mainly used for sorting of strings with 'UMLAUT'
+        * @param {string} string - the string containing special character
+        * @returns {string} - the string where special characters have been replaced
+        */
+        replaceSpecialChar: function(string) {
+            var value = string;
+            value = value.replace(/Ä/g, 'Ae');
+            value = value.replace(/ä/g, 'ae');
+            value = value.replace(/Ö/g, 'Oe');
+            value = value.replace(/ö/g, 'oe');
+            value = value.replace(/Ü/g, 'Ue');
+            value = value.replace(/ü/g, 'ue');
+            value = value.replace(/ß/g, 'ss');
+            return value;
+        },
+
         /**
          * Transforms an utf-8 string to a base-64 encoded ASCII string.
          *
