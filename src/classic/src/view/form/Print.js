@@ -1007,7 +1007,7 @@ Ext.define('Koala.view.form.Print', {
         me.setLoading(loadMsg);
 
         if (elapsedMs > me.getTimeoutMilliseconds()) {
-            Ext.log.warn('Download aborted after ' + dspElapsedMs);
+            Ext.log.warn('Print aborted after ' + dspElapsedMs);
             me.setLoading(false);
             Ext.Msg.show({
                 buttons: Ext.MessageBox.OK,
@@ -1041,6 +1041,8 @@ Ext.define('Koala.view.form.Print', {
                     failure: function(response) {
                         Ext.log.warn('server-side failure with status code '
                             + response.status);
+                        //proceed until being successfull or reaching print-timeout
+                        me.downloadWhenReady(startTime, data);
                     },
                     timeout: 500
                 });
