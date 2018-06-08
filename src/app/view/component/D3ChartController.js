@@ -1253,7 +1253,8 @@ Ext.define('Koala.view.component.D3ChartController', {
     registerKeyboardHandler: function(me) {
 
         d3.select(window).on('keydown', function() {
-            if (d3.event.shiftKey) {
+            var cartoWin = Ext.ComponentQuery.query('k-component-cartowindow')[0];
+            if (d3.event.shiftKey && cartoWin && cartoWin.getController().interactionsDisabled) {
                 d3.event.preventDefault();
                 d3.event.stopPropagation();
                 me.zoomYAxisBtnPressed = true;
