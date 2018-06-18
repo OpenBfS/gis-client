@@ -23,6 +23,9 @@ Ext.define('Koala.view.form.TimeseriesFilterControlModel', {
         labelStartDate: '',
         labelEndDate: '',
         setFilterButtonText: '',
-        invalidInputErrMsg: ''
+        invalidInputErrMsg: '',
+        enableAutorefreshLabel: '',
+        dataBelowThresholdButton: '',
+        refreshInterval: ''
     }
 });

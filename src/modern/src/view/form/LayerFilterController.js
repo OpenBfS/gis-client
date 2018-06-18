@@ -25,6 +25,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         'Ext.field.Select',
         'Ext.dataview.List',
 
+        'Koala.util.Autorefresh',
         'Koala.util.Date',
         'Koala.util.Filter',
         'Koala.util.Layer'
@@ -98,11 +99,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         filters = me.updateFiltersFromForm(filters);
         metadata.filters = filters;
+        Koala.util.Autorefresh.updateAutorefresh(view, metadata);
         var layer = LayerUtil.layerFromMetadata(metadata);
         LayerUtil.setOriginalMetadata(layer, metadataClone);
         LayerUtil.addOlLayerToMap(layer);
 
-        me.deselectThemeTreeItems();
+        Koala.util.Autorefresh.deselectThemeTreeItems();
 
         var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
 
@@ -128,12 +130,13 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         // Create a complete new layer to get its source…
         var newLayer = LayerUtil.layerFromMetadata(metadata);
+        Koala.util.Autorefresh.updateAutorefresh(view, metadata);
         // … this is the trick to update the filter but reuse all the
         // utility logic.
         existingLayer.setSource(newLayer.getSource());
 
         me.updateMetadataLegendTree(existingLayer, metadata);
-        me.deselectThemeTreeItems();
+        Koala.util.Autorefresh.deselectThemeTreeItems();
         LayerUtil.repaintLayerFilterIndication();
 
         var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
@@ -238,25 +241,13 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var layer = LayerUtil.layerFromMetadata(metadata);
         LayerUtil.setOriginalMetadata(layer, metadataClone);
         LayerUtil.addOlLayerToMap(layer);
-        this.deselectThemeTreeItems();
+        Koala.util.Autorefresh.deselectThemeTreeItems();
 
         var mobilePanels = view.up('app-main').query('k-panel-mobilepanel');
 
         Ext.each(mobilePanels, function(panel) {
             panel.hide();
         });
-    },
-
-    /**
-     * Unselects all items after a layer was added to the map.
-     */
-    deselectThemeTreeItems: function() {
-        var tree = Ext.ComponentQuery.query('k-panel-themetree')[0];
-        var treeSelModel = tree && tree.getSelectionModel();
-        var selection = treeSelModel && treeSelModel.getSelection();
-        if (!Ext.isEmpty(selection)) {
-            treeSelModel.deselectAll();
-        }
     },
 
     /**

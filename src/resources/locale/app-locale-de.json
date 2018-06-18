@@ -37,7 +37,11 @@
         "statics": {
             "warnMsgEndBeforeStart": "Startwert muss vor Endwert liegen.",
             "warnMsgExceedsMaxDuration": "Startwert und Endwert liegen zu weit auseinander.",
-            "msgNotBetweenMinMax": "Datum/Uhrzeit liegen nicht im erlaubten Wertebereich"
+            "msgNotBetweenMinMax": "Datum/Uhrzeit liegen nicht im erlaubten Wertebereich",
+            "refreshAutomatically": "Automatisch aktualisieren",
+            "refreshInterval": "Aktualisierungsintervall",
+            "minute": "1 Minute",
+            "minutes": "{0} Minuten"
         }
     },
     "Koala.util.Routing": {
@@ -1371,7 +1375,10 @@
                 "labelStartDate": "Startdatum",
                 "labelEndDate": "Enddatum",
                 "setFilterButtonText": "Anwenden",
-                "invalidInputErrMsg": "Filter kann nicht übernommen werden. Bitte überprüfen Sie Ihre Eingaben."
+                "invalidInputErrMsg": "Filter kann nicht übernommen werden. Bitte überprüfen Sie Ihre Eingaben.",
+                "enableAutorefreshLabel": "Automatisch aktualisieren",
+                "dataBelowThresholdButton": "Daten kleiner NWG anzeigen",
+                "refreshInterval": "Aktualisierungsintervall"
             }
         }
     },
