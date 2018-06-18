@@ -1300,7 +1300,8 @@
     "Koala.view.panel.MobilePermalink": {
         "config": {
             "data": {
-                "title": "Permalink"
+                "title": "Permalink",
+                "applyFilterCheckboxBoxLabel": "Apply layer filters in permalink"
             }
         }
     },

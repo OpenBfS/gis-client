@@ -1429,7 +1429,8 @@
     "Koala.view.panel.MobilePermalink": {
         "config": {
             "data": {
-                "title": "Permalink"
+                "title": "Permalink",
+                "applyFilterCheckboxBoxLabel": "Layerfilter in Permalink übernehmen"
             }
         }
     },
