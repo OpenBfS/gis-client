@@ -3,7 +3,10 @@ Ext.define('Koala.view.panel.MobilePermalinkModel', {
     alias: 'viewmodel.k-panel-mobilepermalink',
     data: {
         title: '',
-        permalink: ''
+        applyFilterCheckboxBoxLabel: '',
+
+        permalink: '',
+        applyFilterCheckboxChecked: true
     }
 
 });

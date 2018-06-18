@@ -1316,7 +1316,8 @@
     "Koala.view.panel.MobilePermalink": {
         "config": {
             "data": {
-                "title": "Permalink"
+                "title": "Permalink",
+                "applyFilterCheckboxBoxLabel": "Apply layer filters in permalink"
             }
         }
     },
@@ -1368,7 +1369,8 @@
         "config": {
             "data": {
                 "refreshBtnText": "Refresh",
-                "copyToClipboardBtnText": "Copy to clipboard"
+                "copyToClipboardBtnText": "Copy to clipboard",
+                "applyFilterCheckboxBoxLabel": "Apply layer filters in permalink"
             }
         }
     },

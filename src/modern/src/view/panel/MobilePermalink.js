@@ -3,6 +3,8 @@ Ext.define('Koala.view.panel.MobilePermalink',{
     xtype: 'k-panel-mobilepermalink',
 
     requires: [
+        'Ext.field.Checkbox',
+
         'Koala.view.panel.MobilePermalinkController',
         'Koala.view.panel.MobilePermalinkModel'
     ],
@@ -19,7 +21,7 @@ Ext.define('Koala.view.panel.MobilePermalink',{
     },
 
     listeners: {
-        show: 'refreshPermalink'
+        show: 'onPanelShow'
     },
 
     items: [{
@@ -31,6 +33,18 @@ Ext.define('Koala.view.panel.MobilePermalink',{
         bind: {
             label: '{title}',
             value: '{permalink}'
+        }
+    }, {
+        xtype: 'checkboxfield',
+        editable: false,
+        labelAlign: 'top',
+        margin: 15,
+        bind: {
+            label: '{applyFilterCheckboxBoxLabel}',
+            checked: '{applyFilterCheckboxChecked}'
+        },
+        listeners: {
+            change: 'onApplyFilterCheckboxChange'
         }
     }]
 });

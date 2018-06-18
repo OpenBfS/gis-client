@@ -387,7 +387,7 @@ Ext.define('Koala.util.Routing', {
          * @return {String} A route expression representing the applications
          *                  state.
          */
-        getRoute: function(skipLayers) {
+        getRoute: function(skipLayers, skipLayerFilters) {
             var me = Koala.util.Routing;
             var mapComponent = BasiGX.util.Map.getMapComponent('gx_map');
             var map = mapComponent.getMap();
@@ -434,11 +434,13 @@ Ext.define('Koala.util.Routing', {
                     permaObj[uuid] = {};
                     permaObj[uuid].isVisible = isVisible;
 
-                    Ext.each(metadata.filters, function(filter) {
-                        if (filter) {
-                            filters.push(me.filterToPermaObj(filter));
-                        }
-                    });
+                    if (!skipLayerFilters) {
+                        Ext.each(metadata.filters, function(filter) {
+                            if (filter) {
+                                filters.push(me.filterToPermaObj(filter));
+                            }
+                        });
+                    }
 
                     permaObj[uuid].filters = filters;
 
