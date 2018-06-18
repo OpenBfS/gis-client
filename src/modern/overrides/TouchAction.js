@@ -27,6 +27,13 @@ Ext.define('Koala.overrides.TouchAction', {
      * @param {(TouchEvent|Ext.event.Event)} e The TouchEnd event.
      */
     onTouchEnd: function(e) {
+        // Skip the override while handling an ExtJS resizer element (e.g.
+        // in grids).
+        var className = e.getTarget() ? e.getTarget().className : '';
+        if (className === 'x-resizer-el') {
+            this.callParent(arguments);
+        }
+
         if (e instanceof Ext.event.Event) {
             e = e.browserEvent;
         }
@@ -38,6 +45,13 @@ Ext.define('Koala.overrides.TouchAction', {
      * @param {(TouchEvent|Ext.event.Event)} e The TouchMove event.
      */
     onTouchMove: function(e) {
+        // Skip the override while handling an ExtJS resizer element (e.g.
+        // in grids).
+        var className = e.getTarget() ? e.getTarget().className : '';
+        if (className === 'x-resizer-el') {
+            this.callParent(arguments);
+        }
+
         if (e instanceof Ext.event.Event) {
             e = e.browserEvent;
         }
