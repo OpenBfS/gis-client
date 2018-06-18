@@ -20,6 +20,10 @@ Ext.define('Koala.view.window.LayerSetChooserWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-layersetchooserwindow',
 
+    requires: [
+        'Koala.util.LocalStorage'
+    ],
+
     /**
      *
      */
@@ -60,5 +64,8 @@ Ext.define('Koala.view.window.LayerSetChooserWindowController', {
         view.remove('k-panel-layersetchooser');
         view.insert(helpPanel);
         view.insert(lyrSetPanel);
+    },
+    handleDontShowWindowOnStartup: function(cb, checked) {
+        Koala.util.LocalStorage.updateHideLayersetChooserWindowOnStartup(checked);
     }
 });

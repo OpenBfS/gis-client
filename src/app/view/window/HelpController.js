@@ -45,5 +45,8 @@ Ext.define('Koala.view.window.HelpController', {
         if (topicNode) {
             treelist.setSelection(topicNode);
         }
+    },
+    handleDontShowHelpOnStartup: function(cb, checked) {
+        Koala.util.LocalStorage.updateHideHelpWindowOnStartup(checked);
     }
 });

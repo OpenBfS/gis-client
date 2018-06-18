@@ -48,7 +48,8 @@ Ext.define('Koala.view.window.HelpModel', {
             '<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe <abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr> Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software '+
             '<a href=\'http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html\' target=\'_blank\'>(Kurzmeldung des <abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr>)</a>'+
             '.</div>'+
-            '<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>'
+            '<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>',
+        hideHelpWindowOnStartupMsg: ''
     },
 
     formulas: {

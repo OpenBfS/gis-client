@@ -63,6 +63,13 @@ Ext.define('Koala.view.window.LayerSetChooserWindow', {
         header: false,
         layout: 'fit'
     }],
+    bbar: [{
+        xtype: 'checkboxfield',
+        bind: {
+            boxLabel: '{hideLayersetChooserWindowOnStartupMsg}'
+        },
+        handler: 'handleDontShowWindowOnStartup'
+    }],
 
     /**
      *
