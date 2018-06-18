@@ -43,6 +43,12 @@ Ext.define('Koala.view.form.TimeseriesFilterControlController', {
         } else {
             Ext.toast(viewModel.get('invalidInputErrMsg'));
         }
+
+        var chart = timeseriesPanel.down('d3-chart');
+        var toggleField = view.down('[name=data-below-threshold-button]');
+        chart.setShowIdentificationThresholdData(toggleField.getValue());
+        var ctrl = chart.getController();
+        ctrl.getChartData();
     },
 
     /**

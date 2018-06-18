@@ -14,18 +14,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.TimeseriesFilterControlModel
+ * @class Koala.view.form.BarChartFilterControlModel
  */
-Ext.define('Koala.view.form.TimeseriesFilterControlModel', {
+Ext.define('Koala.view.form.BarChartFilterControlModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-form-timeseriesfiltercontrol',
+    alias: 'viewmodel.k-form-barchartfiltercontrol',
     data: {
-        labelStartDate: '',
-        labelEndDate: '',
         setFilterButtonText: '',
-        invalidInputErrMsg: '',
-        enableAutorefreshLabel: '',
-        dataBelowThresholdButton: '',
-        refreshInterval: ''
+        toggleUncertaintyLabel: '',
+        toggleGroupingLabel: ''
     }
 });

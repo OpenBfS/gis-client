@@ -22,7 +22,8 @@ Ext.define('Koala.view.panel.BarChart', {
 
     requires: [
         'Koala.view.panel.BarChartController',
-        'Koala.view.panel.BarChartModel'
+        'Koala.view.panel.BarChartModel',
+        'Koala.view.form.BarChartFilterControl'
     ],
 
     controller: 'k-panel-barchart',
@@ -37,6 +38,9 @@ Ext.define('Koala.view.panel.BarChart', {
     closeToolAlign: 'left',
 
     tools: [{
+        type: 'gear',
+        handler: 'onSearchToolClick'
+    }, {
         type: 'collapse',
         handler: 'onCollapseLegendToolClick'
     }, {
@@ -46,5 +50,9 @@ Ext.define('Koala.view.panel.BarChart', {
         }
     }],
 
-    items: []
+    items: [{
+        xtype: 'k-form-barchartfiltercontrol',
+        padding: 5,
+        hidden: true
+    }]
 });
