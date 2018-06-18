@@ -21,6 +21,8 @@ Ext.define('Koala.view.main.MobileMainController', {
     alias: 'controller.mobile-main',
 
     requires: [
+        'Ext.grid.plugin.ColumnResizing',
+
         'Koala.util.Fullscreen'
     ],
 
@@ -369,6 +371,9 @@ Ext.define('Koala.view.main.MobileMainController', {
             header: false,
             store: Ext.data.StoreManager.lookup('GridTabStore'),
             // plugins: 'gridfilters',// not available in modern framework
+            plugins: [{
+                type: 'columnresizing'
+            }],
             chartElement: chart,
             listeners: {
                 itemtouchstart: function() {
