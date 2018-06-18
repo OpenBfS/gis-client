@@ -1361,9 +1361,11 @@ Lesbare Variante, statt technischem Attributwert.
 | Default-Wert         | chartFieldSequence |
 | Beispiel             |  |
 
-**colorMappingUrl**
+**colorMapping**
 
-URL, die eine Konfiguration für Farbzurodnungen im JSON Format zurückgibt.
+Konfiguration für Farbzurodnungen im JSON Format. Kann ein JSON Objekt oder eine
+URL sein, die ein solches zurückliefert. URLs müssen mit dem prefix url: versehen werden.
+Beispiel: url:http://localhost/colors.json
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
