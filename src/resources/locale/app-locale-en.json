@@ -1181,6 +1181,15 @@
             }
         }
     },
+    "Koala.view.form.BarChartFilterControl": {
+        "config": {
+            "data": {
+                "setFilterButtonText": "Apply",
+                "toggleUncertaintyLabel": "Toggle uncertainty",
+                "toggleGroupingLabel": "Toggle grouping"
+            }
+        }
+    },
     "BasiGX.view.form.Print": {
         "config": {
             "data": {
