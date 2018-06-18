@@ -162,11 +162,11 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             sorters: [{
                 sorterFn: function(record1, record2) {
                     var dspName1 = Koala.util.String.replaceSpecialChar(record1.data.dspName),
-                    dspName2 = Koala.util.String.replaceSpecialChar(record2.data.dspName);
+                        dspName2 = Koala.util.String.replaceSpecialChar(record2.data.dspName);
 
                     return dspName1 > dspName2 ? 1 : (dspName1 === dspName2) ? 0 : -1;
                 },
-               direction: 'ASC'
+                direction: 'ASC'
             }],
             proxy: {
                 type: 'ajax',

@@ -86,7 +86,7 @@ Ext.define('Koala.view.main.Main', {
             fn: function() {
                 var headerTitle = Koala.util.AppContext.getMergedDataByKey('headerTitle');
                 if (headerTitle) {
-                    if (Koala.util.AppContext.getMergedDataByKey('imis_user').uid === 'hoe-fr'){
+                    if (Koala.util.AppContext.getMergedDataByKey('imis_user').uid === 'hoe-fr') {
                         headerTitle = 'Höbler-GIS';
                     }
                     this.header.down('title').setText(headerTitle);
@@ -97,7 +97,7 @@ Ext.define('Koala.view.main.Main', {
             delay: 500
         },
         afterrender: {
-            fn: function(){
+            fn: function() {
                 if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
                     var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                     helpWin.on('afterlayout', function() {
