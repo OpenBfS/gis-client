@@ -85,13 +85,13 @@ Ext.define('Koala.util.String', {
         },
 
         /**
-         * Same as #replaceTemplateStrings, but resolves featureurl: prefixed
+         * Same as #replaceTemplateStrings, but resolves url: or featureurl: prefixed
          * templates and returns an Ext.Promise instead of the value. Resolves
          * url values after applying #replaceTemplateStrings to the url template.
          */
         replaceTemplateStringsWithPromise: function(tpl, gettable, showWarnings, prefix) {
             var val = Koala.util.String.replaceTemplateStrings(tpl, gettable, showWarnings, prefix);
-            if (Ext.String.startsWith(val, 'featureurl:')) {
+            if (Ext.String.startsWith(val, 'featureurl:') || Ext.String.startsWith(val, 'url:')) {
                 var defaultHeaders;
                 var authHeader = Koala.util.Authentication.getAuthenticationHeader();
                 if (authHeader) {
@@ -99,10 +99,16 @@ Ext.define('Koala.util.String', {
                         Authorization: authHeader
                     };
                 }
+                var url;
+                if (Ext.String.startsWith(val, 'featureurl:')) {
+                    url = val.substring('featureurl:'.length);
+                } else {
+                    url = val.substring('url:'.length);
+                }
 
                 return new Ext.Promise(function(resolve, reject) {
                     Ext.Ajax.request({
-                        url: val.substring('featureurl:'.length),
+                        url: url,
                         defaultHeaders: defaultHeaders,
                         method: 'GET',
                         success: function(response) {
