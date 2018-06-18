@@ -108,6 +108,7 @@
                 "toggleLegendVisibility": "Toggle legend visibility",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Toggle grouping",
+                "toggleScale": "Y-Achsenskalierung tauschen",
                 "toggleUncertainty": "Toggle uncertainty",
                 "displayIdentificationThreshold": "Display data < identification threshold",
                 "irixPrintText": "DokPool",
@@ -561,6 +562,7 @@
                 "removeSeriesQuestionTpl": "Remove series '{0}'?",
                 "startLabel": "Start",
                 "toggleDataBelowIdentificationThreshold": "Show data below < Id. Thresh.",
+                "toggleScaleBtnText": "Toggle scale",
                 "endLabel": "End"
             }
         }
