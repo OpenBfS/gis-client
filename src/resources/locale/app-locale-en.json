@@ -112,7 +112,7 @@
                 "toggleLegendVisibility": "Toggle legend visibility",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Toggle grouping",
-                "toggleScale": "Y-Achsenskalierung tauschen",
+                "toggleScale": "Toggle y axis scale",
                 "toggleUncertainty": "Toggle uncertainty",
                 "displayIdentificationThreshold": "Display data < identification threshold",
                 "irixPrintText": "DokPool",
