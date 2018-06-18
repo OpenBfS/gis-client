@@ -312,6 +312,9 @@ Ext.define('Koala.view.main.MobileMainController', {
         }
     },
 
+    /**
+     * This listeners will fix the scrolling behaviour in Safari browser.
+     */
     registerSwipeHandler: function(panel) {
         panel.el.on('touchstart', function(event) {
             this.scrollDeltaX = event.clientX;
@@ -326,7 +329,10 @@ Ext.define('Koala.view.main.MobileMainController', {
         panel.el.on('touchmove', function(event) {
             var xdiff = this.scrollDeltaX - event.clientX;
             var ydiff = this.scrollDeltaY - event.clientY;
-            if (panel.getActiveItem().xtype === 'grid') {
+            var className = event.getTarget() ? event.getTarget().className : '';
+            // Only scroll if the current target isn't the resizer element.
+            if (panel.getActiveItem().xtype === 'grid' &&
+                    className !== 'x-resizer-el') {
                 panel.getActiveItem().getScrollable().scrollBy(xdiff, ydiff);
                 this.scrollDeltaX = event.clientX;
                 this.scrollDeltaY = event.clientY;
