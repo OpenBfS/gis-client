@@ -65,6 +65,13 @@ Ext.define('Koala.view.form.TimeseriesFilterControl', {
             label: '{dataBelowThresholdButton}'
         }
     }, {
+        xtype: 'togglefield',
+        margin: '5 0 0 0',
+        name: 'toggle-scale-button',
+        bind: {
+            label: '{toggleScaleButton}'
+        }
+    }, {
         xtype: 'checkboxfield',
         margin: '5 0 0 0',
         name: 'autorefreshcheckbox',

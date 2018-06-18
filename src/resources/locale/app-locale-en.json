@@ -1260,7 +1260,8 @@
                 "invalidInputErrMsg": "Filter cannot be assigned. Please verify your inputs.",
                 "enableAutorefreshLabel": "Refresh automatically",
                 "dataBelowThresholdButton": "Show data below threshold",
-                "refreshInterval": "Refresh interval"
+                "refreshInterval": "Refresh interval",
+                "toggleScaleButton": "Toggle scale"
             }
         }
     },
