@@ -47,7 +47,15 @@ Ext.define('Koala.view.form.TimeseriesFilterControlController', {
         var chart = timeseriesPanel.down('d3-chart');
         var toggleField = view.down('[name=data-below-threshold-button]');
         chart.setShowIdentificationThresholdData(toggleField.getValue());
+        var toggleScale = view.down('[name=toggle-scale-button]').getValue();
+        var leftAxis = chart.getAxes().left;
+        if (toggleScale && (leftAxis.scale === 'linear' || leftAxis.scale === undefined)) {
+            leftAxis.scale = 'log';
+        } else if (!toggleScale && leftAxis.scale === 'log') {
+            leftAxis.scale = 'linear';
+        }
         var ctrl = chart.getController();
+
         ctrl.getChartData();
     },
 

@@ -28,6 +28,7 @@ Ext.define('Koala.view.component.CartoWindowModel', {
         autorefreshOptions: '',
         info: '',
         toggleLegendVisibility: '',
+        toggleScale: '',
         exportToPngText: '',
         toggleGrouping: '',
         toggleUncertainty: '',

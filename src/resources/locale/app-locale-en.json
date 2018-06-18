@@ -112,6 +112,7 @@
                 "toggleLegendVisibility": "Toggle legend visibility",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Toggle grouping",
+                "toggleScale": "Toggle y axis scale",
                 "toggleUncertainty": "Toggle uncertainty",
                 "displayIdentificationThreshold": "Display data < identification threshold",
                 "irixPrintText": "DokPool",
@@ -565,6 +566,7 @@
                 "removeSeriesQuestionTpl": "Remove series '{0}'?",
                 "startLabel": "Start",
                 "toggleDataBelowIdentificationThreshold": "Show data below < Id. Thresh.",
+                "toggleScaleBtnText": "Toggle scale",
                 "endLabel": "End"
             }
         }
@@ -1258,7 +1260,8 @@
                 "invalidInputErrMsg": "Filter cannot be assigned. Please verify your inputs.",
                 "enableAutorefreshLabel": "Refresh automatically",
                 "dataBelowThresholdButton": "Show data below threshold",
-                "refreshInterval": "Refresh interval"
+                "refreshInterval": "Refresh interval",
+                "toggleScaleButton": "Toggle scale"
             }
         }
     },

@@ -112,6 +112,7 @@
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Gruppierung tauschen",
+                "toggleScale": "Y-Achsenskalierung tauschen",
                 "toggleUncertainty": "Messungenauigkeit umschalten",
                 "displayIdentificationThreshold": "Daten < NWG anzeigen",
                 "irixPrintText": "DokPool",
@@ -566,6 +567,7 @@
                 "removeSeriesQuestionTpl": "Serie '{0}' entfernen?",
                 "startLabel": "Start",
                 "toggleDataBelowIdentificationThreshold": "Daten < NWG anzeigen",
+                "toggleScaleBtnText": "Skalierung tauschen",
                 "endLabel": "Ende"
             }
         }
@@ -1387,7 +1389,8 @@
                 "invalidInputErrMsg": "Filter kann nicht übernommen werden. Bitte überprüfen Sie Ihre Eingaben.",
                 "enableAutorefreshLabel": "Automatisch aktualisieren",
                 "dataBelowThresholdButton": "Daten kleiner NWG anzeigen",
-                "refreshInterval": "Aktualisierungsintervall"
+                "refreshInterval": "Aktualisierungsintervall",
+                "toggleScaleButton": "Skalierung tauschen"
             }
         }
     },

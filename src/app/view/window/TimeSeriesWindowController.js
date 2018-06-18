@@ -74,6 +74,21 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     },
 
     /**
+     * Toggles the scale of the left axis back and forth between log and linear.
+     */
+    toggleScale: function() {
+        var chart = this.getView().down('d3-chart');
+        var leftAxis = chart.getAxes().left;
+        var ctrl = chart.getController();
+        if (leftAxis.scale === 'linear' || leftAxis.scale === undefined) {
+            leftAxis.scale = 'log';
+        } else if (leftAxis.scale === 'log') {
+            leftAxis.scale = 'linear';
+        }
+        ctrl.getChartData();
+    },
+
+    /**
      *
      */
     layerTimeFilterToCql: function(layer, urlParamTime) {
@@ -342,6 +357,15 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 hidden: !maySeeIdThresholdButton,
                 scope: me,
                 margin: '0 0 10px 0'
+            }, {
+                xtype: 'button',
+                name: 'btn-toggle-scale',
+                enableToggle: true,
+                bind: {
+                    text: '{toggleScaleBtnText}'
+                },
+                handler: this.toggleScale.bind(this),
+                margin: '0 10px 10px 0'
             }, {
                 xtype: 'button',
                 bind: {
