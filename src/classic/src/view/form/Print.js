@@ -614,6 +614,7 @@ Ext.define('Koala.view.form.Print', {
             if (!containerEl || !containerEl.parentNode) {
                 return;
             }
+            view.hideHiddenTabs();
             // workaround to get object tags to render properly with html2canvas
             if (d3.select(containerEl).select('.html-tab > input').node().checked) {
                 try {
@@ -631,6 +632,7 @@ Ext.define('Koala.view.form.Print', {
             var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
+                view.showHiddenTabs();
                 d3.selectAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
                     .style('display', 'block');
                 printLayers.push({
@@ -866,6 +868,28 @@ Ext.define('Koala.view.form.Print', {
                     failure: view.genericPostFailureHandler,
                     timeout: view.getTimeoutMilliseconds()
                 });
+            }
+        });
+    },
+
+    /**
+     * Explicitly hides the carto window tabs that are currently not visible.
+     */
+    hideHiddenTabs: function() {
+        d3.selectAll('.cartowindow > div').each(function() {
+            if (this.clientWidth === 0 || this.clientHeight === 0) {
+                d3.select(this).style('display', 'none');
+            }
+        });
+    },
+
+    /**
+     * Shows the carto window tabs with zero width or height.
+     */
+    showHiddenTabs: function() {
+        d3.selectAll('.cartowindow > div').each(function() {
+            if (this.clientWidth === 0 || this.clientHeight === 0) {
+                d3.select(this).style('display', 'block');
             }
         });
     },
