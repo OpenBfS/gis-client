@@ -21,7 +21,10 @@ Ext.define('Koala.view.form.PermalinkModel', {
     alias: 'viewmodel.k-form-permalink',
     data: {
         refreshBtnText: '',
-        copyToClipboardBtnText: ''
+        copyToClipboardBtnText: '',
+
+        permalinkValue: '',
+        applyFilterCheckboxValue: true
     }
 
 });

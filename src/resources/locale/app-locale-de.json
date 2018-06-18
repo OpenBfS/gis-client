@@ -1481,7 +1481,8 @@
         "config": {
             "data": {
                 "refreshBtnText": "Erneuern",
-                "copyToClipboardBtnText": "In Zwischenablage kopieren"
+                "copyToClipboardBtnText": "In Zwischenablage kopieren",
+                "applyFilterCheckboxBoxLabel": "Layerfilter in Permalink übernehmen"
             }
         }
     },

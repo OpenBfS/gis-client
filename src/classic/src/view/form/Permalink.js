@@ -26,30 +26,45 @@ Ext.define('Koala.view.form.Permalink', {
     xtype: 'k-form-permalink',
 
     requires: [
-        'Koala.view.form.PermalinkModel',
+        'Ext.form.field.Checkbox',
+        'Ext.layout.container.VBox',
 
-        'Koala.util.Routing'
+        'Koala.view.form.PermalinkController',
+        'Koala.view.form.PermalinkModel'
     ],
 
+    controller: 'k-form-permalink',
     viewModel: {
         type: 'k-form-permalink'
     },
 
+    layout: 'vbox',
+
+    padding: 0,
+
+    defaults: {
+        padding: 5
+    },
+
     items: [{
         xtype: 'textarea',
-        name: 'textfield-permalink',
+        flex: 1,
+        width: '100%',
         editable: false,
+        bind: {
+            value: '{permalinkValue}'
+        },
         listeners: {
-            afterrender: function(textarea) {
-                var permalink = textarea.up('form').getPermalink();
-                textarea.setValue(permalink);
-            }
-            /*,
-            change: function(textfield) {
-                var width = Ext.util.TextMetrics.measure(
-                    textfield.getEl(), textfield.getValue()).width;
-                textfield.setWidth(width + 20);
-            }*/
+            afterrender: 'onPermalinkTextAreaAfterRender'
+        }
+    }, {
+        xtype: 'checkbox',
+        bind: {
+            boxLabel: '{applyFilterCheckboxBoxLabel}',
+            value: '{applyFilterCheckboxValue}'
+        },
+        listeners: {
+            change: 'onApplyFilterCheckboxChange'
         }
     }],
 
@@ -57,40 +72,18 @@ Ext.define('Koala.view.form.Permalink', {
         bind: {
             text: '{refreshBtnText}'
         },
-        handler: function(btn) {
-            var permalink = btn.up('form').getPermalink();
-            var textfield = btn.up('form').down('textfield');
-            textfield.setValue(permalink);
+        listeners: {
+            click: 'onRefreshButtonClick'
         }
     }, {
         bind: {
             text: '{copyToClipboardBtnText}'
         },
         listeners: {
-            boxready: function(btn) {
-                btn.setHidden(
-                    !BasiGX.util.CopyClipboard.copyToClipboardSupported);
-            },
-            initialize: function(btn) {
-                btn.setHidden(
-                    !BasiGX.util.CopyClipboard.copyToClipboardSupported);
-            }
-        },
-        handler: function(btn) {
-            var textfield = btn.up('form').down('textfield');
-            var value = textfield.getValue();
-
-            BasiGX.util.CopyClipboard.copyTextToClipboard(value);
-            Ext.ComponentQuery.query('[name=permalink-window]')[0].close();
+            boxready: 'onCopyToClipboardButtonBoxReady',
+            initialize: 'onCopyToClipboardButtonBoxReady',
+            click: 'onCopyToClipboardButtonClick'
         }
-    }],
-    getPermalink: function() {
-        var route = Koala.util.Routing.getRoute();
-        var hrefWithoutHash = window.location.origin +
-            window.location.pathname +
-            window.location.search;
-        var permalink = hrefWithoutHash + '#' + route;
-        return permalink;
-    }
+    }]
 
 });

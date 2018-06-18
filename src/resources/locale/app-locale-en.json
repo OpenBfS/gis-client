@@ -1352,7 +1352,8 @@
         "config": {
             "data": {
                 "refreshBtnText": "Refresh",
-                "copyToClipboardBtnText": "Copy to clipboard"
+                "copyToClipboardBtnText": "Copy to clipboard",
+                "applyFilterCheckboxBoxLabel": "Apply layer filters in permalink"
             }
         }
     },
