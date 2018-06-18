@@ -37,7 +37,11 @@
         "statics": {
             "warnMsgEndBeforeStart": "Start date must be before end date.",
             "warnMsgExceedsMaxDuration": "Start date and end date are too far apart.",
-            "msgNotBetweenMinMax": "Date/time are not within a valid range."
+            "msgNotBetweenMinMax": "Date/time are not within a valid range.",
+            "refreshAutomatically": "Refresh automatically",
+            "refreshInterval": "Refresh interval",
+            "minute": "1 minute",
+            "minutes": "{0} minutes"
         }
     },
     "Koala.util.Routing": {
@@ -1179,6 +1183,15 @@
             }
         }
     },
+    "Koala.view.form.BarChartFilterControl": {
+        "config": {
+            "data": {
+                "setFilterButtonText": "Apply",
+                "toggleUncertaintyLabel": "Toggle uncertainty",
+                "toggleGroupingLabel": "Toggle grouping"
+            }
+        }
+    },
     "BasiGX.view.form.Print": {
         "config": {
             "data": {
@@ -1244,7 +1257,10 @@
                 "labelStartDate": "Start Date",
                 "labelEndDate": "End Date",
                 "setFilterButtonText": "Apply",
-                "invalidInputErrMsg": "Filter cannot be assigned. Please verify your inputs."
+                "invalidInputErrMsg": "Filter cannot be assigned. Please verify your inputs.",
+                "enableAutorefreshLabel": "Refresh automatically",
+                "dataBelowThresholdButton": "Show data below threshold",
+                "refreshInterval": "Refresh interval"
             }
         }
     },

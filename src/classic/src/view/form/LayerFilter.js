@@ -158,7 +158,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var checked = false;
         if (layer) {
             var id = layer.metadata.id;
-            checked = Koala.view.form.LayerFilterController.prototype.autorefreshMap[id];
+            checked = Koala.util.Autorefresh.prototype.autorefreshMap[id];
         }
         return Ext.create('Ext.form.field.Checkbox', {
             bind: {
@@ -171,36 +171,8 @@ Ext.define('Koala.view.form.LayerFilter', {
     },
 
     getAutorefreshDropdown: function() {
-        var layer = this.getLayer();
-        var value = null;
-        if (layer) {
-            var id = layer.metadata.id;
-            value = Koala.view.form.LayerFilterController.prototype.autorefreshMap[id];
-        }
-        var minutes = this.getViewModel().data.minutes;
-        var times = Ext.create('Ext.data.Store', {
-            fields: ['timeLabel', 'time'],
-            data: [
-                {timeLabel: this.getViewModel().data.minute, time: 1},
-                {timeLabel: Ext.String.format(minutes, 5), time: 5},
-                {timeLabel: Ext.String.format(minutes, 10), time: 10},
-                {timeLabel: Ext.String.format(minutes, 15), time: 15},
-                {timeLabel: Ext.String.format(minutes, 30), time: 30},
-                {timeLabel: Ext.String.format(minutes, 60), time: 60}
-            ]
-        });
-        return Ext.create('Ext.form.ComboBox', {
-            bind: {
-                fieldLabel: '{refreshInterval}'
-            },
-            name: 'autorefresh',
-            value: value,
-            queryMode: 'local',
-            store: times,
-            displayField: 'timeLabel',
-            valueField: 'time',
-            labelWidth: '100%'
-        });
+        return Koala.util.Filter.createAutorefreshDropdown(this.layer,
+            this.getViewModel());
     },
 
     addWithoutFilterBtn: function() {

@@ -25,6 +25,17 @@ Ext.define('Koala.view.panel.BarChartController', {
     ],
 
     /**
+     * Toogles the visibility of the filter form panel.
+     */
+    onSearchToolClick: function() {
+        var me = this;
+        var view = me.getView();
+        var filterForm = view.down('k-form-barchartfiltercontrol');
+
+        filterForm.setHidden(!filterForm.isHidden());
+    },
+
+    /**
      * Toggles the legend's visibility.
      */
     onCollapseLegendToolClick: function() {
@@ -43,8 +54,11 @@ Ext.define('Koala.view.panel.BarChartController', {
             width: '100%',
             height: '100%'
         };
+        var oldChart = view.down('d3-barchart');
+        if (oldChart) {
+            view.remove(oldChart, true);
+        }
         var chart = Koala.view.component.D3BarChart.create(olLayer, olFeat, config);
-        view.removeAll();
         view.add(chart);
     }
 });

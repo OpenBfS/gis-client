@@ -1006,6 +1006,42 @@ Ext.define('Koala.util.Filter', {
             });
 
             return fieldSet;
+        },
+
+        createAutorefreshDropdown: function(layer) {
+            var value = null;
+            if (layer) {
+                var id = layer.metadata.id;
+                value = Koala.util.Autorefresh.prototype.autorefreshMap[id];
+            }
+            var minutes = this.minutes;
+            var times = Ext.create('Ext.data.Store', {
+                fields: ['timeLabel', 'time'],
+                data: [
+                    {timeLabel: this.minute, time: 1},
+                    {timeLabel: Ext.String.format(minutes, 5), time: 5},
+                    {timeLabel: Ext.String.format(minutes, 10), time: 10},
+                    {timeLabel: Ext.String.format(minutes, 15), time: 15},
+                    {timeLabel: Ext.String.format(minutes, 30), time: 30},
+                    {timeLabel: Ext.String.format(minutes, 60), time: 60}
+                ]
+            });
+
+            var xtype = Ext.isModern ? 'selectfield' : 'combo';
+
+            return Ext.create({
+                xtype: xtype,
+                fieldLabel: this.refreshInterval,
+                label: this.refreshInterval,
+                name: 'autorefresh',
+                value: value,
+                queryMode: 'local',
+                store: times,
+                displayField: 'timeLabel',
+                valueField: 'time',
+                labelWidth: '50%'
+            });
         }
     }
+
 });
