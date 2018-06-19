@@ -653,6 +653,8 @@ Ext.define('Koala.view.form.Print', {
             if (!containerEl || !containerEl.parentNode) {
                 return;
             }
+            var width = containerEl.offsetWidth;
+            var height = containerEl.offsetHeight;
             view.hideHiddenTabs();
             // workaround to get object tags to render properly with html2canvas
             if (d3.select(containerEl).select('.html-tab > input').node().checked) {
@@ -671,8 +673,6 @@ Ext.define('Koala.view.form.Print', {
             var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
-                var width = containerEl.offsetWidth;
-                var height = containerEl.offsetHeight;
                 width *= ratioX;
                 height *= ratioY;
 
