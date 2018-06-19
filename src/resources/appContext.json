@@ -2,9 +2,9 @@
     "data": {
         "merge": {
             "urls": {
-                "metadata-xml2json": "http://localhost/geonetwork/srv/api/0.1/records/",
-                "metadata-search": "http://localhost/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://localhost/ogc/bfs/ows",
+                "metadata-xml2json": "http://bfs-docker/geonetwork/srv/api/0.1/records/",
+                "metadata-search": "http://bfs-docker/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://bfs-docker/ogc/bfs/ows",
                 "print-servlet": "http://bfs-docker.intranet.terrestris.de/bfs-printservice/print/",
                 "irix-servlet": "http://bfs-docker.intranet.terrestris.de/irix-servlet",
                 "irix-context": "resources/irixContext.json",
@@ -21,11 +21,11 @@
                 "password": "admin"
             },
             "import": {
-                "base-url": "http://localhost/ogc/",
+                "base-url": "http://bfs-docker/ogc/",
                 "target-workspace": "bfs",
                 "target-workspace-uri": "www.imis.bfs.de/bfs",
                 "target-store": "bfs_geodata",
-                "metadata-base-url": "http://localhost/geonetwork/"
+                "metadata-base-url": "http://bfs-docker/geonetwork/"
             },
             "imis_user": {
               "imisroles": [
@@ -52,6 +52,12 @@
             "mapLayers": [
                 "1c964894-c960-4eb2-a4f3-dd7c120d69ee"
             ],
+            "backgroundLayers": [{
+                // radon 222 in boden prognose
+              "uuid":  "2f30477a-ca0a-43cb-a34b-fcee53e6bce7",
+              "thumb": "layer_sets/odl_thumb.png"
+            }]
+            ,
             "mapConfig": {
                 "projection": "EPSG:3857"
             },
