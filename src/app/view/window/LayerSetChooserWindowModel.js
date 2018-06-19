@@ -22,6 +22,7 @@ Ext.define('Koala.view.window.LayerSetChooserWindowModel', {
 
     data: {
         title: '',
-        helpHtml: ''
+        helpHtml: '',
+        hideLayersetChooserWindowOnStartupMsg: ''
     }
 });

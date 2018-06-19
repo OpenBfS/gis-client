@@ -62,9 +62,7 @@ Ext.define('Koala.view.window.HelpWindow', {
             expanderOnly: false,
             bind: '{helpNavItems}'
         }]
-    },
-    //Content
-    {
+    }, {
         xtype: 'panel',
         region: 'center',
         scrollable: 'vertical',
@@ -72,6 +70,13 @@ Ext.define('Koala.view.window.HelpWindow', {
         bind: {
             html: '{selectionHtml}'
         }
+    }],
+    bbar: [{
+        xtype: 'checkboxfield',
+        bind: {
+            boxLabel: '{hideHelpWindowOnStartupMsg}'
+        },
+        handler: 'handleDontShowHelpOnStartup'
     }],
 
     initComponent: function() {

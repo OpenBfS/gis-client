@@ -49,7 +49,8 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.window.HelpWindow',
         'Koala.view.window.Print',
 
-        'Koala.util.Layer'
+        'Koala.util.Layer',
+        'Koala.util.LocalStorage'
     ],
 
     controller: 'main',
@@ -98,7 +99,8 @@ Ext.define('Koala.view.main.Main', {
         },
         afterrender: {
             fn: function() {
-                if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
+                var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
+                if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
                     var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                     helpWin.on('afterlayout', function() {
                         var helpWinController = this.getController();
@@ -147,10 +149,16 @@ Ext.define('Koala.view.main.Main', {
             afterrender: function() {
                 if (!location.hash) {
                     var lyrSetWin = Ext.create('Koala.view.window.LayerSetChooserWindow');
-                    if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
+
+                    var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
+                    if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
                         lyrSetWin.setHelpTxt(true);
                     }
-                    lyrSetWin.show();
+
+                    var hideWindow = Koala.util.LocalStorage.showLayersetChooserWindowOnStartup();
+                    if (!hideWindow) {
+                        lyrSetWin.show();
+                    }
                 }
                 // This needs to happen in an afterrender handler, as
                 // otherwise the BasiGX texts would count…

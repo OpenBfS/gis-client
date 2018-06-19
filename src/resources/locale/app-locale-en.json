@@ -514,7 +514,8 @@
             "data": {
                 "title": "Layer Set Selection",
                 "helpHtml": "<div>This selection window enables you to load predefined data sets (i.e. layer sets) into the map. It is not necessary to select a layer set in order to start the application.</div>"+
-                            "<div>If you close the window without selecting a layer set (X button in the upper right corner), only the standard layers will be loaded, i.e. background map, place names and contour lines. Afterwards layers with customized filter setting can be added individually.</div>"
+                            "<div>If you close the window without selecting a layer set (X button in the upper right corner), only the standard layers will be loaded, i.e. background map, place names and contour lines. Afterwards layers with customized filter setting can be added individually.</div>",
+                "hideLayersetChooserWindowOnStartupMsg": "Don't show this window on startup."
             }
         }
     },
@@ -601,7 +602,8 @@
                         "<div>We are implementing a transparent information policy by providing the data as open data (cf. <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportal - Imprint/Terms of Use) and by developing our applications in the form of open source software "+
                         "<a href='http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/EN/2017/0102-bfs-open-source.html' target='_blank'>(message by <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+
                         ".</div>"+
-                        "<div>This development concept ensures an effective, non-profit use of resources.</div>"
+                        "<div>This development concept ensures an effective, non-profit use of resources.</div>",
+                "hideHelpWindowOnStartupMsg": "Don't show help window on startup."
             }
         }
     },
