@@ -35,6 +35,7 @@ Ext.define('Koala.view.component.CartoWindowModel', {
         displayIdentificationThreshold: '',
         irixPrintText: '',
         irixPrintTooltip: '',
+        axisText: '',
         /*i18n end*/
         lineFeature: null,
         lineLayer: null,

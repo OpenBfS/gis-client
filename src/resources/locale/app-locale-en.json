@@ -116,7 +116,8 @@
                 "toggleUncertainty": "Toggle uncertainty",
                 "displayIdentificationThreshold": "Display data < identification threshold",
                 "irixPrintText": "DokPool",
-                "irixPrintTooltip": "export chart into DokPool"
+                "irixPrintTooltip": "export chart into DokPool",
+                "axisText": "Axis"
             }
         }
     },
@@ -568,7 +569,8 @@
                 "startLabel": "Start",
                 "toggleDataBelowIdentificationThreshold": "Show data below < Id. Thresh.",
                 "toggleScaleBtnText": "Toggle scale",
-                "endLabel": "End"
+                "endLabel": "End",
+                "axisText": "Axis"
             }
         }
     },
@@ -1263,7 +1265,8 @@
                 "enableAutorefreshLabel": "Refresh automatically",
                 "dataBelowThresholdButton": "Show data below threshold",
                 "refreshInterval": "Refresh interval",
-                "toggleScaleButton": "Toggle scale"
+                "toggleScaleButton": "Toggle scale",
+                "axisText": "Axis"
             }
         }
     },

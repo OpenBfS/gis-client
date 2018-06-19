@@ -100,11 +100,34 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.onBoxReady();
     },
 
+    extractAttachedSeriesAxisConfig: function() {
+        var me = this;
+        var view = this.getView();
+        var metadata = view.getConfig().targetLayer.metadata;
+        me.attachedSeriesAxisConfig = [];
+
+        var series = Koala.util.Object.getPathStrOr(
+            metadata,
+            'layerConfig/timeSeriesChartProperties/attachedSeries',
+            '[]'
+        );
+        try {
+            series = JSON.parse(series);
+        } catch (e) {/*silently catch*/}
+        Ext.each(series, function(config) {
+            var label = config.dspUnit || '';
+            var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
+            me.attachedSeriesAxisConfig.push(axisConfig);
+        });
+    },
+
     /**
      *
      */
     drawChart: function() {
         var me = this;
+
+        this.extractAttachedSeriesAxisConfig();
 
         me.currentDateRange = {
             min: null,

@@ -829,27 +829,15 @@ Ext.define('Koala.view.component.D3BaseController', {
 
     createAttachedSeriesAxes: function() {
         var me = this;
-        var view = this.getView();
-        var metadata = view.getConfig().targetLayer.metadata;
         var Axes = Koala.util.ChartAxes;
         var chartSize = this.getChartSize();
         me.attachedSeriesAxes = [];
         me.attachedSeriesScales = [];
-        var series = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        try {
-            series = JSON.parse(series);
-        } catch (e) {/*silently catch*/}
-        Ext.each(series, function(config) {
-            var label = config.dspUnit || '';
-            var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
-            var scale = me.createScale('left', axisConfig, chartSize);
-            var axis = Axes.createAxis(axisConfig, 'left', scale);
+        Ext.each(this.attachedSeriesAxisConfig, function(config) {
+            var scale = me.createScale('left', config, chartSize);
+            var axis = Axes.createAxis(config, 'left', scale);
 
-            me.setDomainForScale(axisConfig, scale, 'left', axisConfig);
+            me.setDomainForScale(config, scale, 'left', config);
 
             me.attachedSeriesAxes.push(axis);
             me.attachedSeriesScales.push(scale);

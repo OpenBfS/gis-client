@@ -27,6 +27,7 @@ Ext.define('Koala.view.form.TimeseriesFilterControlModel', {
         enableAutorefreshLabel: '',
         dataBelowThresholdButton: '',
         refreshInterval: '',
-        toggleScaleButton: ''
+        toggleScaleButton: '',
+        axisText: ''
     }
 });

@@ -40,6 +40,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowModel', {
         downloadChartDataMsgButtonYes: '',
         downloadChartDataMsgButtonNo: '',
         outputFormatText: '',
+        axisText: '',
         // below three keys aren't found in source files, can they be removed?
         startDateValue: new Date(), // this is not in the locale files
         startDateMaxValue: new Date(), // this is not in the locale files
