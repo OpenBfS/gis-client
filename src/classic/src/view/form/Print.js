@@ -588,7 +588,8 @@ Ext.define('Koala.view.form.Print', {
         var view = this;
         var spec = {};
         var mapComponent = view.getMapComponent();
-        var mapView = mapComponent.getMap().getView();
+        var map = mapComponent.getMap();
+        var mapView = map.getView();
         var viewRes = mapView.getResolution();
         var layoutCombo = view.down('combo[name="layout"]');
         var layout = layoutCombo.getValue();
@@ -607,6 +608,44 @@ Ext.define('Koala.view.form.Print', {
         var overlays = mapComponent.getMap().getOverlays();
 
         var promises = [];
+
+        var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
+        var fieldsets = view.query(fsSelector);
+        var dpi = 90;
+
+        Ext.each(printLayers, function(layer) {
+            var source = layer.getSource();
+            var serialized = {};
+
+            var serializer = GeoExt.data.MapfishPrintProvider
+                .findSerializerBySource(source);
+            if (serializer) {
+                serialized = serializer.serialize(layer, source, viewRes);
+                serializedLayers.push(serialized);
+            }
+        }, view);
+
+        var boxFeature = this.transformInteraction.layers_[0].getSource().getFeatures()[0];
+        var extent = boxFeature.getGeometry().getExtent();
+        var resolution = map.getView().getResolution();
+        var extentPixelWidth = (extent[2] - extent[0]) / resolution;
+        var extentPixelHeight = (extent[3] - extent[1]) / resolution;
+        var mapWidth, mapHeight;
+        var layouts = this.provider.capabilityRec.layouts().data.items;
+
+        Ext.each(layouts, function(lay) {
+            var atts = lay.attributes();
+            Ext.each(atts, function(attribute) {
+                Ext.each(attribute.data.items, function(att) {
+                    if (att.data.name === 'map') {
+                        mapWidth = att.data.clientInfo.width;
+                        mapHeight = att.data.clientInfo.height;
+                    }
+                });
+            });
+        });
+        var ratioX = mapWidth / extentPixelWidth;
+        var ratioY = mapHeight / extentPixelHeight;
 
         overlays.forEach(function(overlay) {
             var coords = overlay.centerCoords;
@@ -632,6 +671,11 @@ Ext.define('Koala.view.form.Print', {
             var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
+                var width = containerEl.offsetWidth;
+                var height = containerEl.offsetHeight;
+                width *= ratioX;
+                height *= ratioY;
+
                 view.showHiddenTabs();
                 d3.selectAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
                     .style('display', 'block');
@@ -639,8 +683,8 @@ Ext.define('Koala.view.form.Print', {
                     type: 'chart',
                     coordinates: coords,
                     popup: canvas.toDataURL('image/png'),
-                    width: containerEl.offsetWidth,
-                    height: containerEl.offsetHeight,
+                    width: width,
+                    height: height,
                     getSource: function() {
                         return this;
                     }
@@ -677,22 +721,6 @@ Ext.define('Koala.view.form.Print', {
                     }
                 }
             });
-
-            var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
-            var fieldsets = view.query(fsSelector);
-            var dpi = 90;
-
-            Ext.each(printLayers, function(layer) {
-                var source = layer.getSource();
-                var serialized = {};
-
-                var serializer = GeoExt.data.MapfishPrintProvider
-                    .findSerializerBySource(source);
-                if (serializer) {
-                    serialized = serializer.serialize(layer, source, viewRes);
-                    serializedLayers.push(serialized);
-                }
-            }, view);
 
             Ext.each(printLayers, function(layer) {
                 var source = layer.getSource();
