@@ -147,7 +147,7 @@ Ext.define('Koala.view.main.Main', {
             },{
                 xtype: 'k-button-backgroundlayers'
             }
-        ]
+            ]
         },
         listeners: {
             afterrender: function() {

@@ -28,10 +28,9 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
     checkChange: function(box, checked) {
         var map = BasiGX.util.Map.getMapComponent().map;
         var layerCollection = map.getLayers();
-        var layers = layerCollection.getArray();
-        var layer = this.layerInMap(box.uuid)
+        var layer = this.layerInMap(box.uuid);
         if (!layer) {
-            Koala.util.Layer.getMetadataFromUuid(box.uuid).then(function(metadata){
+            Koala.util.Layer.getMetadataFromUuid(box.uuid).then(function(metadata) {
                 layer = Koala.util.Layer.layerFromMetadata(metadata);
                 layerCollection.insertAt(0,layer);
                 layer.setVisible(checked);
@@ -48,7 +47,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         var layerCollection = map.getLayers();
         var layers = layerCollection.getArray();
         var layer ;
-        layers.forEach(function(lyr){
+        layers.forEach(function(lyr) {
             if (lyr.metadata && lyr.metadata.id === uuid) {
                 layer = lyr;
             }

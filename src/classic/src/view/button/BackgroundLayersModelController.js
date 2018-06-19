@@ -21,7 +21,7 @@ Ext.define('Koala.view.button.BackgroundLayersModelController', {
     alias: 'controller.k-button-backgroundlayers',
 
     requires: [
-        'Koala.util.Help',
+        'Koala.util.Help'
     ],
 
     /**
@@ -49,7 +49,7 @@ Ext.define('Koala.view.button.BackgroundLayersModelController', {
                 items: [{
                     xtype: 'k-panel-backgroundLayers'
                 }
-             ]
+                ]
             }).show();
         } else {
             BasiGX.util.Animate.shake(win);

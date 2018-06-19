@@ -29,7 +29,7 @@ Ext.define('Koala.view.button.BackgroundLayers', {
     viewModel: {
         type: 'k-button-backgroundlayers'
     },
-    // Initially intented to use xf279 with the map glyph but the
+    // Initially intented to use 'xf279' with the map glyph but the
     // Awesome font in Sencha is older than v4.4 and dosen't support the icon. The docs states that
     // Extjs 6.2 and higher are shipped with Awesome font 4.4 but this was not the case.
     // attmepting to upgrade the Awesome font to v5 in sencha also failed.
