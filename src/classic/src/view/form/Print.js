@@ -881,6 +881,9 @@ Ext.define('Koala.view.form.Print', {
                 d3.select(this).style('display', 'none');
             }
         });
+        d3.selectAll('.cartowindow > div > input[type=radio]').each(function() {
+            d3.select(this).style('display', 'none');
+        });
     },
 
     /**
