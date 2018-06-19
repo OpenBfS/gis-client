@@ -41,6 +41,7 @@ Ext.define('Koala.view.main.Main', {
 
         'Koala.view.button.Permalink',
         'Koala.view.button.ShowRedliningToolsContainer',
+        'Koala.view.button.BackgroundLayers',
         'Koala.view.button.ToggleFullscreen',
         'Koala.view.button.SelectFeatures',
         'Koala.view.main.MainController',
@@ -143,7 +144,10 @@ Ext.define('Koala.view.main.Main', {
                 listeners: {
                     boxready: Koala.util.AppContext.generateCheckToolVisibility('selectFeaturesBtn')
                 }
-            }]
+            },{
+                xtype: 'k-button-backgroundlayers'
+            }
+        ]
         },
         listeners: {
             afterrender: function() {

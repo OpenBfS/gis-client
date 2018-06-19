@@ -70,6 +70,14 @@
             }
         }
     },
+    "Koala.view.button.BackgroundLayers": {
+        "config": {
+            "data":{
+                "tooltip": "Hintergrundkarten",
+                "windowTitle": "Hintergrundkarten"
+            }
+        }
+    },
     "Koala.view.button.SelectFeaturesController": {
         "noSingleActiveLayerFound": "Bitte selektieren Sie einen aktiven Layer"
     },
@@ -1079,7 +1087,15 @@
                                 "<p>Ein Permalink ist ein Hyperlink der als dauerhafte Referenz von Inhalten einer Internetadresse dient. Er enthält die Informationen der Kartenansicht (Zoomstufe und Position), sowie zusätzlich geladene Inhalte (Layer mit Filtereinstellungen).</p>"+
                                 "<p>Dadurch ist es möglich eine bestimmte Kartenansicht für einen späteren Zugriff abzuspeichern. Nach Auswahl einer gewünschten Ansicht betätigen Sie hierfür den Permalink-Knopf oder drücken Sie, sollte das Permalink-Fenster bereits geöffnet sein, auf \"Erneuern\", um den zur aktuellen Ansicht passenden Permalink anzuzeigen. Der \"In Zwischenablage kopieren\"-Knopf sichert den Permalink temporär, so dass er an gewünschter Stelle wieder eingefügt werden kann.</p>"+
                                 "</div>"
-                        }
+                        },
+                    "backgroundLayers": {
+                            "title": "7.7 Hintergrundkarten",
+                            "html": "<hr style='color:#294d71' />"+
+                                    "<h2>7.7 Hintergrundkarten<img class='img' src='classic/resources/img/helpPage/button_backgroundlayers.png' title='Knopf: Permalink' alt='button_backgroundlayers.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                    "<div>"+
+                                    "<p>Das Kästchen auf der linken Seite des Hintergrundkarte steuert, ob ein Layer in der Karte angezeigt wird oder nicht.</p>"+
+                                    "</div>"
+                            }
                 },
                 "legend":{
                     "title": "8. Legende",
