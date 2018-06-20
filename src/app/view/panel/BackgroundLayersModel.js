@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.MultiSearchModel
+ * @class Koala.view.panel.BackgroundLayersModel
  */
 Ext.define('Koala.view.panel.BackgroundLayersModel', {
     extend: 'Ext.app.ViewModel',
