@@ -22,61 +22,22 @@ Ext.define('Koala.view.panel.BackgroundLayers', {
 
     requires: [
         'Koala.view.panel.BackgroundLayersController',
-        'Koala.view.panel.BackgroundLayersModel',
-        'Koala.util.Layer',
-        'Koala.util.MetadataParser'
+        'Koala.view.panel.BackgroundLayersModel'
     ],
 
     controller: 'k-panel-backgroundLayers',
     viewModel: {
         type: 'k-panel-backgroundLayers'
     },
-    /**
-     * initComponent function rendering the checkbox for each background image
-     */
-    initComponent: function() {
-        this.callParent();
-        var me = this;
-        var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
-        if (appContext && appContext.data && appContext.data.merge) {
-            var backgroundLayers = appContext.data.merge.backgroundLayers;
-            var container = this.down('container[name=backgroundlayer-checkbox-list]');
-            Ext.each(backgroundLayers, function(layerObj) {
-                Koala.util.Layer.getMetadataFromUuid(layerObj.uuid).then(function(metadata) {
-                    if (metadata) {
-                        var config = metadata.layerConfig;
-                        var layer = me.getController().layerInMap(layerObj.uuid);
-                        var layerAlreadyInMap = layer && layer.getVisible() ? true : false;
-                        if (config.olProperties && config.olProperties.toggleBgLayerMenuIcon) {
-                            var ele = [
-                                {
-                                    xtype: 'image',
-                                    alt: 'background image ',
-                                    height: 45,
-                                    width: 45,
-                                    src: 'classic/resources/img/themes/' + layerObj.thumb
-                                }, {
-                                    xtype: 'checkbox',
-                                    padding: 5,
-                                    checked: layerAlreadyInMap,
-                                    boxLabel: metadata.legendTitle,
-                                    uuid: layerObj.uuid,
-                                    listeners: {
-                                        change: 'checkChange'
-                                    }
-                                }];
-                            container.add(ele);
-                        }
-                    }
-                });
-            });
-        }
+
+    listeners: {
+        boxready: 'onBoxReady'
     },
+
     items: [{
         xtype: 'container',
         defaultType: 'checkboxfield',
         name: 'backgroundlayer-checkbox-list',
-        layout: 'hbox',
         minWidth: 350,
         minHeight: 150,
         items: []

@@ -20,7 +20,8 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-panel-backgroundLayers',
     require: [
-        'Koala.util.Layer'
+        'Koala.util.Layer',
+        'Koala.util.AppContext'
     ],
     /**
      * checkChange function - change of checkbox triggers this function
@@ -53,6 +54,45 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
             }
         });
         return layer;
+    },
+    /**
+     * onBoxReady - renderes the checkbox list for the background layers
+     */
+    onBoxReady: function() {
+        var me = this;
+        var appContext = Koala.util.AppContext.getAppContext();
+        if (appContext && appContext.data && appContext.data.merge) {
+            var backgroundLayers = appContext.data.merge.backgroundLayers;
+            var container = Ext.ComponentQuery.query('container[name=backgroundlayer-checkbox-list]')[0];
+            Ext.each(backgroundLayers, function(layerObj) {
+                Koala.util.Layer.getMetadataFromUuid(layerObj.uuid).then(function(metadata) {
+                    if (metadata) {
+                        var layer = me.layerInMap(layerObj.uuid);
+                        var layerAlreadyInMap = layer && layer.getVisible() ? true : false;
+                        var layerThumb = 'classic/resources/img/themes/' + layerObj.thumb;
+                        var ele = [
+                            {
+                                xtype: 'image',
+                                alt: 'background image ',
+                                style: 'display: inline;',
+                                height: 45,
+                                src: layerThumb
+                            }, {
+                                xtype: 'checkbox',
+                                style: 'display: inline-block; text-align: center;',
+                                padding: 5,
+                                checked: layerAlreadyInMap,
+                                boxLabel: metadata.legendTitle,
+                                uuid: layerObj.uuid,
+                                listeners: {
+                                    change: 'checkChange'
+                                }
+                            }];
+                        container.add(ele);
+                    }
+                });
+            });
+        }
     }
 
 });
