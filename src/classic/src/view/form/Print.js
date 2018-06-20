@@ -588,7 +588,8 @@ Ext.define('Koala.view.form.Print', {
         var view = this;
         var spec = {};
         var mapComponent = view.getMapComponent();
-        var mapView = mapComponent.getMap().getView();
+        var map = mapComponent.getMap();
+        var mapView = map.getView();
         var viewRes = mapView.getResolution();
         var layoutCombo = view.down('combo[name="layout"]');
         var layout = layoutCombo.getValue();
@@ -608,12 +609,53 @@ Ext.define('Koala.view.form.Print', {
 
         var promises = [];
 
+        var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
+        var fieldsets = view.query(fsSelector);
+        var dpi = 90;
+
+        Ext.each(printLayers, function(layer) {
+            var source = layer.getSource();
+            var serialized = {};
+
+            var serializer = GeoExt.data.MapfishPrintProvider
+                .findSerializerBySource(source);
+            if (serializer) {
+                serialized = serializer.serialize(layer, source, viewRes);
+                serializedLayers.push(serialized);
+            }
+        }, view);
+
+        var boxFeature = this.transformInteraction.layers_[0].getSource().getFeatures()[0];
+        var extent = boxFeature.getGeometry().getExtent();
+        var resolution = mapView.getResolution();
+        var extentPixelWidth = (extent[2] - extent[0]) / resolution;
+        var extentPixelHeight = (extent[3] - extent[1]) / resolution;
+        var mapWidth, mapHeight;
+        var layouts = this.provider.capabilityRec.layouts().data.items;
+
+        Ext.each(layouts, function(lay) {
+            var atts = lay.attributes();
+            Ext.each(atts, function(attribute) {
+                Ext.each(attribute.data.items, function(att) {
+                    if (att.data.name === 'map') {
+                        mapWidth = att.data.clientInfo.width;
+                        mapHeight = att.data.clientInfo.height;
+                    }
+                });
+            });
+        });
+        var ratioX = mapWidth / extentPixelWidth;
+        var ratioY = mapHeight / extentPixelHeight;
+
         overlays.forEach(function(overlay) {
             var coords = overlay.centerCoords;
             var containerEl = overlay.getElement();
             if (!containerEl || !containerEl.parentNode) {
                 return;
             }
+            var width = containerEl.offsetWidth;
+            var height = containerEl.offsetHeight;
+            view.hideHiddenTabs();
             // workaround to get object tags to render properly with html2canvas
             if (d3.select(containerEl).select('.html-tab > input').node().checked) {
                 try {
@@ -631,14 +673,18 @@ Ext.define('Koala.view.form.Print', {
             var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
+                width *= ratioX;
+                height *= ratioY;
+
+                view.showHiddenTabs();
                 d3.selectAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
                     .style('display', 'block');
                 printLayers.push({
                     type: 'chart',
                     coordinates: coords,
                     popup: canvas.toDataURL('image/png'),
-                    width: containerEl.offsetWidth,
-                    height: containerEl.offsetHeight,
+                    width: width,
+                    height: height,
                     getSource: function() {
                         return this;
                     }
@@ -675,22 +721,6 @@ Ext.define('Koala.view.form.Print', {
                     }
                 }
             });
-
-            var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
-            var fieldsets = view.query(fsSelector);
-            var dpi = 90;
-
-            Ext.each(printLayers, function(layer) {
-                var source = layer.getSource();
-                var serialized = {};
-
-                var serializer = GeoExt.data.MapfishPrintProvider
-                    .findSerializerBySource(source);
-                if (serializer) {
-                    serialized = serializer.serialize(layer, source, viewRes);
-                    serializedLayers.push(serialized);
-                }
-            }, view);
 
             Ext.each(printLayers, function(layer) {
                 var source = layer.getSource();
@@ -866,6 +896,31 @@ Ext.define('Koala.view.form.Print', {
                     failure: view.genericPostFailureHandler,
                     timeout: view.getTimeoutMilliseconds()
                 });
+            }
+        });
+    },
+
+    /**
+     * Explicitly hides the carto window tabs that are currently not visible.
+     */
+    hideHiddenTabs: function() {
+        d3.selectAll('.cartowindow > div').each(function() {
+            if (this.clientWidth === 0 || this.clientHeight === 0) {
+                d3.select(this).style('display', 'none');
+            }
+        });
+        d3.selectAll('.cartowindow > div > input[type=radio]').each(function() {
+            d3.select(this).style('display', 'none');
+        });
+    },
+
+    /**
+     * Shows the carto window tabs with zero width or height.
+     */
+    showHiddenTabs: function() {
+        d3.selectAll('.cartowindow > div').each(function() {
+            if (this.clientWidth === 0 || this.clientHeight === 0) {
+                d3.select(this).style('display', 'block');
             }
         });
     },
