@@ -116,7 +116,8 @@
                 "toggleUncertainty": "Messungenauigkeit umschalten",
                 "displayIdentificationThreshold": "Daten < NWG anzeigen",
                 "irixPrintText": "DokPool",
-                "irixPrintTooltip": "exportieren des Charts nach DokPool"
+                "irixPrintTooltip": "exportieren des Charts nach DokPool",
+                "axisText": "Achse"
             }
         }
     },
@@ -569,7 +570,8 @@
                 "startLabel": "Start",
                 "toggleDataBelowIdentificationThreshold": "Daten < NWG anzeigen",
                 "toggleScaleBtnText": "Skalierung tauschen",
-                "endLabel": "Ende"
+                "endLabel": "Ende",
+                "axisText": "Achse"
             }
         }
     },
@@ -1392,7 +1394,8 @@
                 "enableAutorefreshLabel": "Automatisch aktualisieren",
                 "dataBelowThresholdButton": "Daten kleiner NWG anzeigen",
                 "refreshInterval": "Aktualisierungsintervall",
-                "toggleScaleButton": "Skalierung tauschen"
+                "toggleScaleButton": "Skalierung tauschen",
+                "axisText": "Achse"
             }
         }
     },

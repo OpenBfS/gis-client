@@ -59,6 +59,30 @@ Ext.define('Koala.view.form.TimeseriesFilterControlController', {
         ctrl.getChartData();
     },
 
+    toggleScaleButtonClicked: function() {
+        var me = this;
+        var view = me.getView();
+        var viewModel = me.getViewModel();
+        var timeseriesPanel = view.up('k-panel-timeserieschart');
+        var chart = timeseriesPanel.down('d3-chart');
+        var attachedSeries = chart.getController().shapes[0].config.attachedSeries;
+        var leftAxis = chart.getAxes().left;
+
+        if (attachedSeries) {
+            Koala.util.ChartAxes.showToggleScaleMenu(
+                attachedSeries,
+                chart,
+                undefined,
+                viewModel.get('axisText')
+            );
+        } else {
+            Koala.util.ChartAxes.toggleScaleForAxis(
+                leftAxis,
+                chart.getController()
+            );
+        }
+    },
+
     /**
      * Checks if the current datetime values are valid.
      *

@@ -64,6 +64,61 @@ Ext.define('Koala.util.ChartAxes', {
                                     : formatYear)(date);
         },
 
+        toggleScaleForAxis: function(axis, controller) {
+            if (axis.scale === 'linear' || axis.scale === undefined) {
+                axis.scale = 'log';
+            } else if (axis.scale === 'log') {
+                axis.scale = 'linear';
+            }
+            controller.getChartData();
+        },
+
+        showToggleScaleMenu: function(attachedSeries, chart, elm, label) {
+            attachedSeries = JSON.parse(attachedSeries);
+            var items = [chart.getAxes().left];
+            items = items.concat(attachedSeries);
+            var menuItems = [];
+            var i = 0;
+            var me = this;
+            var controller = chart.getController();
+
+            Ext.each(items, function(axis, idx) {
+                var text = axis.yAxisLabel;
+                if (!text) {
+                    text = label + ' ' + (++i);
+                }
+                menuItems.push({
+                    text: text,
+                    handler: function() {
+                        if (idx === 0) {
+                            me.toggleScaleForAxis(
+                                chart.getAxes().left,
+                                controller
+                            );
+                        } else {
+                            me.toggleScaleForAxis(
+                                controller.attachedSeriesAxisConfig[idx-1],
+                                controller
+                            );
+                        }
+                    }
+                });
+            });
+
+            var menu = Ext.create({
+                items: menuItems,
+                xtype: 'menu'
+            });
+            if (elm) {
+                menu.showBy(elm);
+            } else {
+                Ext.Viewport.setMenu(menu, {
+                    side: 'right'
+                });
+                Ext.Viewport.showMenu('right');
+            }
+        },
+
         /**
          * Creates a new d3 axis.
          * @param  {object} axisConfig configuration object for the axis

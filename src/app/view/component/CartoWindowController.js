@@ -329,7 +329,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             },
             renderTo: elm
         };
-        var toggleScale = {
+        this.toggleScaleButton = {
             cls: 'carto-window-chart-button',
             xtype: 'button',
             enableToggle: true,
@@ -346,22 +346,29 @@ Ext.define('Koala.view.component.CartoWindowController', {
         right.el.dom.addEventListener('click', this.scrollTimeseriesRight.bind(this));
         maxExtent = Ext.create(maxExtent);
         maxExtent.el.dom.addEventListener('click', this.zoomToMaxExtent.bind(this));
-        toggleScale = Ext.create(toggleScale);
-        toggleScale.el.dom.addEventListener('click', this.toggleScale.bind(this));
+        this.toggleScaleButton = Ext.create(this.toggleScaleButton);
+        this.toggleScaleButton.el.dom.addEventListener('click', this.toggleScale.bind(this));
     },
 
     /**
      * Toggles the scale of the left axis back and forth between log and linear.
      */
     toggleScale: function() {
-        var leftAxis = this.timeserieschart.getAxes().left;
-        var ctrl = this.timeserieschart.getController();
-        if (leftAxis.scale === 'linear' || leftAxis.scale === undefined) {
-            leftAxis.scale = 'log';
-        } else if (leftAxis.scale === 'log') {
-            leftAxis.scale = 'linear';
+        var attachedSeries = this.timeserieschart.shapes[0].attachedSeries;
+        if (attachedSeries) {
+            Koala.util.ChartAxes.showToggleScaleMenu(
+                attachedSeries,
+                this.timeserieschart,
+                this.toggleScaleButton.el,
+                this.getViewModel().get('axisText')
+            );
+        } else {
+            var leftAxis = this.timeserieschart.getAxes().left;
+            Koala.util.ChartAxes.toggleScaleForAxis(
+                leftAxis,
+                this.timeserieschart.getController()
+            );
         }
-        ctrl.getChartData();
     },
 
     zoomToMaxExtent: function() {

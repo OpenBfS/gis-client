@@ -79,13 +79,21 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     toggleScale: function() {
         var chart = this.getView().down('d3-chart');
         var leftAxis = chart.getAxes().left;
-        var ctrl = chart.getController();
-        if (leftAxis.scale === 'linear' || leftAxis.scale === undefined) {
-            leftAxis.scale = 'log';
-        } else if (leftAxis.scale === 'log') {
-            leftAxis.scale = 'linear';
+
+        var attachedSeries = chart.shapes[0].attachedSeries;
+        if (attachedSeries) {
+            Koala.util.ChartAxes.showToggleScaleMenu(
+                attachedSeries,
+                chart,
+                this.getView().down('[name=btn-toggle-scale]').el,
+                this.getViewModel().get('axisText')
+            );
+        } else {
+            Koala.util.ChartAxes.toggleScaleForAxis(
+                leftAxis,
+                chart.getController()
+            );
         }
-        ctrl.getChartData();
     },
 
     /**
