@@ -86,7 +86,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         var metadata = view.getMetadata();
         var metadataClone = Ext.clone(metadata);
-        var filters = view.getFilters();
+        var filters = Ext.clone(view.getFilters());
         filters = me.updateFiltersFromForm(filters);
         metadata.filters = filters;
         Koala.util.Autorefresh.updateAutorefresh(view, metadata);
