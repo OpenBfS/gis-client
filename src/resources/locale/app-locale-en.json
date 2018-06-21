@@ -70,6 +70,14 @@
             }
         }
     },
+    "Koala.view.button.BackgroundLayers": {
+        "config": {
+            "data":{
+                "tooltip": "Background Layers",
+                "windowTitle": "Background Layers"
+            }
+        }
+    },
     "Koala.view.button.SelectFeaturesController": {
         "noSingleActiveLayerFound": "Please select a single active Layer"
     },
@@ -968,7 +976,15 @@
                                 "<div>"+
                                 "<p>This button opens or closes the legend displayed in the bottom-right corner of <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportal. The legend comprises all layers that are immediately available for representation. Alternatively, you can directly click on the legend (blue bar labelled \"Legend\").</p>"+
                                 "</div>"
-                        }
+                        },
+                    "backgroundLayers": {
+                            "title": "7.7 Background Layers",
+                            "html": "<hr style='color:#294d71' />"+
+                                    "<h2>7.7 Background Layers <img class='img' src='classic/resources/img/helpPage/button_backgroundlayers.png' title='Open legend' alt='button_backgroundlayers.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                    "<div>"+
+                                    "<p>Click on this button to see a list of all available Background Layers. The checkbox next to the layer name determines if the layer is shown on the map or not.</p>"+
+                                    "</div>"
+                            }
                 },
                 "legend":{
                     "title": "8. Legend",

@@ -188,6 +188,11 @@ Ext.define('Koala.view.window.HelpModel', {
                         text: '{mapNavigation.permaLink.title}',
                         content: '{mapNavigation.permaLink.html}',
                         leaf: true
+                    },{
+                        id: 'mapNavigationBackgroundLayers',
+                        text: '{mapNavigation.backgroundLayers.title}',
+                        content: '{mapNavigation.backgroundLayers.html}',
+                        leaf: true
                     }]
                 }, {
                     id: 'legendHelp',
