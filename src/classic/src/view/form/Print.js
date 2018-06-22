@@ -609,22 +609,6 @@ Ext.define('Koala.view.form.Print', {
 
         var promises = [];
 
-        var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
-        var fieldsets = view.query(fsSelector);
-        var dpi = 90;
-
-        Ext.each(printLayers, function(layer) {
-            var source = layer.getSource();
-            var serialized = {};
-
-            var serializer = GeoExt.data.MapfishPrintProvider
-                .findSerializerBySource(source);
-            if (serializer) {
-                serialized = serializer.serialize(layer, source, viewRes);
-                serializedLayers.push(serialized);
-            }
-        }, view);
-
         var boxFeature = this.transformInteraction.layers_[0].getSource().getFeatures()[0];
         var extent = boxFeature.getGeometry().getExtent();
         var resolution = mapView.getResolution();
@@ -721,6 +705,22 @@ Ext.define('Koala.view.form.Print', {
                     }
                 }
             });
+
+            var fsSelector = 'fieldset[name=attributes] fieldset[name=map]';
+            var fieldsets = view.query(fsSelector);
+            var dpi = 90;
+
+            Ext.each(printLayers, function(layer) {
+                var source = layer.getSource();
+                var serialized = {};
+
+                var serializer = GeoExt.data.MapfishPrintProvider
+                    .findSerializerBySource(source);
+                if (serializer) {
+                    serialized = serializer.serialize(layer, source, viewRes);
+                    serializedLayers.push(serialized);
+                }
+            }, view);
 
             Ext.each(printLayers, function(layer) {
                 var source = layer.getSource();
