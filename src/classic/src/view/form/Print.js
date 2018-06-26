@@ -641,7 +641,8 @@ Ext.define('Koala.view.form.Print', {
             var height = containerEl.offsetHeight;
             view.hideHiddenTabs();
             // workaround to get object tags to render properly with html2canvas
-            if (d3.select(containerEl).select('.html-tab > input').node().checked) {
+            var htmlNode = d3.select(containerEl).select('.html-tab > input').node();
+            if (htmlNode && htmlNode.checked) {
                 try {
                     var node = d3.select('.html-tab object').node().contentDocument.documentElement;
                     if (node) {
