@@ -36,7 +36,7 @@ Ext.define('Koala.view.button.BackgroundLayersModelController', {
         if (!win) {
             win = Ext.create('Ext.window.Window', {
                 name: 'backgroundLayers-window',
-                title: this.getViewModel().get('windowTitle'),
+                header: false,
                 bodyPadding: 10,
                 layout: 'fit',
                 constrain: true,
