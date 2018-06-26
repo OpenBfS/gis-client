@@ -19,14 +19,18 @@
 Ext.define('Koala.view.panel.BackgroundLayersController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-panel-backgroundLayers',
+
     require: [
+        'Ext.util.DelayedTask',
         'Koala.util.Layer',
         'Koala.util.AppContext'
     ],
+
     /**
      * checkChange function - change of checkbox triggers this function
      */
     checkChange: function(box, checked) {
+        var view = this.getView();
         var map = BasiGX.util.Map.getMapComponent().map;
         var layerCollection = map.getLayers();
         var layer = this.layerInMap(box.uuid);
@@ -39,7 +43,10 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         } else {
             layer.setVisible(checked);
         }
+        view.up('[name=backgroundLayers-window]').close();
+        return false;
     },
+
     /**
      * layerInMap function -  Checks to see if the layer is already in the map and returns the layer
      */
@@ -47,7 +54,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         var map = BasiGX.util.Map.getMapComponent().map;
         var layerCollection = map.getLayers();
         var layers = layerCollection.getArray();
-        var layer ;
+        var layer;
         layers.forEach(function(lyr) {
             if (lyr.metadata && lyr.metadata.id === uuid) {
                 layer = lyr;
@@ -55,39 +62,47 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         });
         return layer;
     },
+
     /**
-     * onBoxReady - renderes the checkbox list for the background layers
+     * onBoxReady - renderes the radio list for the background layers
      */
     onBoxReady: function() {
         var me = this;
         var appContext = Koala.util.AppContext.getAppContext();
         if (appContext && appContext.data && appContext.data.merge) {
             var backgroundLayers = appContext.data.merge.backgroundLayers;
-            var container = Ext.ComponentQuery.query('container[name=backgroundlayer-checkbox-list]')[0];
+            var container = this.getView().down('container[name=backgroundlayer-radio-list]');
             Ext.each(backgroundLayers, function(layerObj) {
                 Koala.util.Layer.getMetadataFromUuid(layerObj.uuid).then(function(metadata) {
                     if (metadata) {
                         var layer = me.layerInMap(layerObj.uuid);
                         var layerAlreadyInMap = layer && layer.getVisible() ? true : false;
                         var layerThumb = 'classic/resources/img/themes/' + layerObj.thumb;
-                        var ele = [
-                            {
+                        var ele = [{
+                            xtype: 'container',
+                            layout: 'hbox',
+                            flex: 1,
+                            height: '100%',
+                            width: '100%',
+                            defaultType: 'radiofield',
+                            items: [{
                                 xtype: 'image',
-                                alt: 'background image ',
-                                style: 'display: inline;',
                                 height: 45,
-                                src: layerThumb
+                                src: layerThumb,
+                                flex: 1
                             }, {
-                                xtype: 'checkbox',
-                                style: 'display: inline-block; text-align: center;',
+                                style: 'text-align: center;',
                                 padding: 5,
+                                name: 'backgroundlayers',
                                 checked: layerAlreadyInMap,
                                 boxLabel: metadata.legendTitle,
                                 uuid: layerObj.uuid,
                                 listeners: {
                                     change: 'checkChange'
-                                }
-                            }];
+                                },
+                                flex: 3
+                            }]
+                        }];
                         container.add(ele);
                     }
                 });

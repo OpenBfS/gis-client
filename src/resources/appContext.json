@@ -55,6 +55,9 @@
             "backgroundLayers": [{
               "uuid":  "2f30477a-ca0a-43cb-a34b-fcee53e6bce7",
               "thumb": "layer_sets/odl_thumb.png"
+            }, {
+              "uuid": "1c964894-c960-4eb2-a4f3-dd7c120d69ee",
+              "thumb": "layer_sets/gewaesser_thumb.png"
             }]
             ,
             "mapConfig": {

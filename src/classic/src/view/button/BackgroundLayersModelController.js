@@ -29,13 +29,21 @@ Ext.define('Koala.view.button.BackgroundLayersModelController', {
      */
     onClick: function() {
         var win = Ext.ComponentQuery.query('[name=backgroundLayers-window]')[0];
+        if (win && win.isHidden()) {
+            win.destroy();
+            win = null;
+        }
         if (!win) {
-            Ext.create('Ext.window.Window', {
+            win = Ext.create('Ext.window.Window', {
                 name: 'backgroundLayers-window',
                 title: this.getViewModel().get('windowTitle'),
                 bodyPadding: 10,
                 layout: 'fit',
                 constrain: true,
+                // need to use the close action & destruction above since
+                // destroying the window in the checkChange function will cause
+                // exceptions as the radio buttons are still being updated
+                closeAction: 'method-hide',
                 maxWidth: Ext.getBody().getViewSize().width,
                 tools: [{
                     type: 'help',
@@ -50,7 +58,7 @@ Ext.define('Koala.view.button.BackgroundLayersModelController', {
                     xtype: 'k-panel-backgroundLayers'
                 }
                 ]
-            }).show();
+            }).showBy(this.getView(), 'tr-tl');
         } else {
             BasiGX.util.Animate.shake(win);
         }
