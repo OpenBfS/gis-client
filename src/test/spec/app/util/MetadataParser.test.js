@@ -1584,16 +1584,6 @@ var barchartMetadata = {
       {'bfs:MD_Property': {
         'bfs:propertyName': {'gco:CharacterString': {
           '@xmlns:gco': 'http://www.isotc211.org/2005/gco',
-          '#text': 'colorMappingUrl'
-        }},
-        'bfs:propertyValue': {'gco:CharacterString': {
-          '@xmlns:gco': 'http://www.isotc211.org/2005/gco',
-          '#text': 'http://localhost:1841/test.json'
-        }}
-      }},
-      {'bfs:MD_Property': {
-        'bfs:propertyName': {'gco:CharacterString': {
-          '@xmlns:gco': 'http://www.isotc211.org/2005/gco',
           '#text': 'colorSequence'
         }},
         'bfs:propertyValue': {'gco:CharacterString': {
