@@ -109,7 +109,6 @@ Ext.define('Koala.util.Label', {
             d3.selectAll(id + ' .k-d3-shape-group-legend text')
                 .each(function() {
                     max = Math.max(this.getComputedTextLength(), max);
-
                 });
             return max;
         }
