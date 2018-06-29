@@ -518,8 +518,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var endDate = this.getEndFieldValue();
 
         Ext.each(charts, function(chart) {
-            var chartController = chart.getController();
-
             // update the time range for the chart
             chart.setStartDate(startDate);
             chart.setEndDate(endDate);
