@@ -524,13 +524,6 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             chart.setStartDate(startDate);
             chart.setEndDate(endDate);
 
-            var shapes = chart.getShapes();
-
-            Ext.each(shapes, function(shape) {
-                chartController.deleteShapeSeriesById(shape.id);
-                chartController.deleteLegendEntry(shape.id);
-            });
-
             // update the chart to reflect the changes
             chart.getController().getChartData();
         });
