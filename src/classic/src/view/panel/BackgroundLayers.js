@@ -36,8 +36,10 @@ Ext.define('Koala.view.panel.BackgroundLayers', {
 
     items: [{
         xtype: 'container',
-        defaultType: 'checkboxfield',
-        name: 'backgroundlayer-checkbox-list',
+        name: 'backgroundlayer-radio-list',
+        layout: 'vbox',
+        height: '100%',
+        width: '100%',
         minWidth: 350,
         minHeight: 150,
         items: []
