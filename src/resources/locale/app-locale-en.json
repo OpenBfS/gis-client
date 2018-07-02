@@ -15,7 +15,7 @@
     },
     "Koala.util.Layer": {
         "statics": {
-            "txtUntil": "until",
+            "txtUntil": "-",
             "titleAddLayer": "Layer",
             "titleAddLayerFilter": "Layer-Filter",
             "textUnknownLayer": "unknown",
