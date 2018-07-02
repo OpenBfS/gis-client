@@ -33,10 +33,18 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         var view = this.getView();
         var map = BasiGX.util.Map.getMapComponent().map;
         var layerCollection = map.getLayers();
+        var layers = layerCollection.getArray();
         var layer = this.layerInMap(box.uuid);
+        layers.forEach(function(lyr) {
+            if(lyr.isBackground){
+                map.removeLayer(lyr);
+            }
+        });
+        layerCollection = map.getLayers();
         if (!layer) {
             Koala.util.Layer.getMetadataFromUuid(box.uuid).then(function(metadata) {
                 layer = Koala.util.Layer.layerFromMetadata(metadata);
+                layer.isBackground = true;
                 layerCollection.insertAt(0,layer);
                 layer.setVisible(checked);
             });
@@ -56,7 +64,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         var layers = layerCollection.getArray();
         var layer;
         layers.forEach(function(lyr) {
-            if (lyr.metadata && lyr.metadata.id === uuid) {
+            if (lyr.metadata && (lyr.metadata.id === uuid)) {
                 layer = lyr;
             }
         });
@@ -98,7 +106,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                                 boxLabel: metadata.legendTitle,
                                 uuid: layerObj.uuid,
                                 listeners: {
-                                    change: 'checkChange'
+                                    focus: 'checkChange'
                                 },
                                 flex: 3
                             }]

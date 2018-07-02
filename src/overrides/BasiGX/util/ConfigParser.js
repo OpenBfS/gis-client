@@ -62,6 +62,11 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                 };
             }
             var layerConfig = context.data.merge.mapLayers;
+            //insert first backgroundLayer (if defined in appContext)
+            var initialBackground = context.data.merge.backgroundLayers[0].uuid;
+            if (initialBackground){
+                layerConfig.splice(0,0,initialBackground);
+            }
 
             Ext.each(layerConfig, function(layerUuid, index) {
                 Ext.Ajax.request({
@@ -98,6 +103,9 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                         } finally {
                             if (Koala.util.Layer.minimumValidMetadata(obj)) {
                                 var layer = Koala.util.Layer.layerFromMetadata(obj);
+                                if (initialBackground && (obj.id === initialBackground)) {
+                                    layer.isBackground = true;
+                                }
 
                                 //set ol.Attribution
                                 var olProps = layer.getProperties();
@@ -105,7 +113,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                                 var source = layer.getSource();
                                 source.setAttributions(attributions);
 
-                                layer.set('treeId', 'bkg'); // Do we need this?
+                                //layer.set('treeId', 'bkg'); // Do we need this?
                                 var layers = me.map.getLayers();
                                 layers.insertAt(index, layer);
                             } else {
