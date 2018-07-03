@@ -63,17 +63,22 @@ Ext.define('Koala.override.basigx.ConfigParser', {
             }
             var layerConfig = context.data.merge.mapLayers;
             //insert first backgroundLayer (if defined in appContext)
-            var initialBackground = context.data.merge.backgroundLayers[0].uuid;
+            var initialBackground = {
+                'uuid' : context.data.merge.backgroundLayers[0].uuid,
+                'visible' : true
+            };
             if (initialBackground){
                 layerConfig.splice(0,0,initialBackground);
             }
 
-            Ext.each(layerConfig, function(layerUuid, index) {
+            Ext.each(layerConfig, function(layer, index) {
+                var visibility = layer.visible;
+                var uuid = layer.uuid;
                 Ext.Ajax.request({
-                    // url: context.data.merge.urls['metadata-xml2json'] + layerUuid,
+                    // url: context.data.merge.urls['metadata-xml2json'] + uuid,
                     url: context.data.merge.urls['metadata-xml2json'],
                     params: {
-                        uuid: layerUuid
+                        uuid: uuid
                     },
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
@@ -102,8 +107,9 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                             Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
                         } finally {
                             if (Koala.util.Layer.minimumValidMetadata(obj)) {
+                                var isVisible = visibility;
                                 var layer = Koala.util.Layer.layerFromMetadata(obj);
-                                if (initialBackground && (obj.id === initialBackground)) {
+                                if (initialBackground && (obj.id === initialBackground.uuid)) {
                                     layer.isBackground = true;
                                 }
 
@@ -112,6 +118,9 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                                 var attributions = olProps.attribution ? [new ol.Attribution({html: olProps.attribution})] : undefined;
                                 var source = layer.getSource();
                                 source.setAttributions(attributions);
+
+                                //set visibility according to appContext
+                                layer.set('visible',isVisible);
 
                                 //layer.set('treeId', 'bkg'); // Do we need this?
                                 var layers = me.map.getLayers();
