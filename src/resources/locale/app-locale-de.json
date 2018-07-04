@@ -729,6 +729,7 @@
                     "cartoWindows": {
                         "title": "2.3 Kartodiagramme",
                         "html": "<hr style='color:#294d71' />"+
+                                "<h2>2.3 Kartodiagramme</h2>"+
                                 "<p>Das Kartodiagramm beinhaltet diverse Darstellungsformen der Daten. Je nach Art des Layers werden innerhalb eines Kartodiagramms Zeitreihen, Balkendiagramme, Tabellen, zusätzliche Inhalte oder Objektinformationen in Textform bereitgestellt. Eine Verbindungslinie zur entsprechenden Geometrie innerhalb der Karte kennzeichnet den geographischen Bezug der Daten (siehe Grafik <i>2.3 Kartodiagramm - Reiter wechseln</i>).</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_cartoWin_tabChange.png' title='Kartodiagramm - Reiter wechseln' alt'graphic_cartoWin_tabChange.png' style='max-height: 100%; max-width: 100%;'><br>"+
@@ -820,6 +821,7 @@
                     "timeSeries": {
                         "title": "2.4 Zeitreihen",
                         "html": "<hr style='color:#294d71' />"+
+                                "<h2>2.4 Zeitreihen</h2>"+
                                 "<p>Grafik <i>2.4 Zeitreihen</i> zeigt Zeitreihen von drei verschiedenen Stationen am Beispiel der 1h Werte der Ortsdosisleistung. Es können jederzeit Stationen entweder über das Anklicken eines Objektes auf der Karte, oder über das Feld \"Serie hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingSerial.png' title='Auswahlfeld: Serie hinzufügen' alt='selectionBox_addingSerial.png' width='170' height='24' style='vertical-align:middle'>"+
                                 " ergänzt werden. Betätigen Sie zusätzlich den Knopf \"Zeitreihen zusammenführen\" "+
