@@ -40,6 +40,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                 map.removeLayer(lyr);
             }
         });
+
         layerCollection = map.getLayers();
         if (!layer) {
             Koala.util.Layer.getMetadataFromUuid(box.uuid).then(function(metadata) {
@@ -54,6 +55,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         view.up('[name=backgroundLayers-window]').close();
         return false;
     },
+
 
     /**
      * layerInMap function -  Checks to see if the layer is already in the map and returns the layer
@@ -95,9 +97,9 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                             defaultType: 'radiofield',
                             items: [{
                                 xtype: 'image',
-                                height: 45,
-                                src: layerThumb,
-                                flex: 1
+                                height: 58,
+                                width: 110,
+                                src: layerThumb//,
                             }, {
                                 style: 'text-align: center;',
                                 padding: 5,
@@ -108,7 +110,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                                 listeners: {
                                     focus: 'checkChange'
                                 },
-                                flex: 3
+                                flex: 1
                             }]
                         }];
                         container.add(ele);
