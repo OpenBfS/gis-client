@@ -51,6 +51,7 @@ Ext.define('Koala.util.ChartAutoUpdater', {
             }
             var runner = new Ext.util.TaskRunner();
             var first = true;
+            var filterUtil = Koala.util.Filter;
 
             runner.start({
                 run: function() {
@@ -71,6 +72,7 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                         chart.setConfig('endDate', moment());
                         if (endField) {
                             endField.setValue(endDate);
+                            filterUtil.replaceHoursAndMinutes(endDate, endField);
                         }
                         chart.getController().getChartData();
                     }
@@ -99,9 +101,11 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                         ctrl.getChartData();
                         if (startField) {
                             startField.setValue(startDate);
+                            filterUtil.replaceHoursAndMinutes(startDate, startField);
                         }
                         if (endField) {
                             endField.setValue(endDate);
+                            filterUtil.replaceHoursAndMinutes(endDate, endField);
                         }
                     }
                 },
