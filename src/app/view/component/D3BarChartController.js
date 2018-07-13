@@ -35,6 +35,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     tooltipCmp: null,
     initialPlotTransform: null,
     data: {},
+    rawData: null,
     chartRendered: false,
     ajaxCounter: 0,
     chartConfig: null,
@@ -140,6 +141,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
     onChartDataRequestSuccess: function(chartDataResponse) {
         var me = this;
         var view = me.getView();
+        me.rawData = chartDataResponse.responseText;
+
         if (!view) {
             me.onDataComplete(chartDataResponse);
             return;

@@ -263,6 +263,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.timeserieschart = Ext.create(chartObj);
 
         this.createLegendVisibilityButton(tabElm, this.timeserieschart);
+        this.createDownloadChartDataButton(tabElm, this.timeserieschart);
         this.createIrixPrintButton(tabElm, this.timeserieschart);
         this.createExportToPngButton(tabElm, this.timeserieschart);
 
@@ -475,6 +476,49 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     /**
+     * Create button to downloadChartData.
+     * valid for timerseries / barcharts / grids
+     * @param {Element} elm element to render the button to
+     */
+    createDownloadChartDataButton: function(elm, chart) {
+        var btn = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'downloadChartDataBtn',
+            glyph: 'xf019@FontAwesome',
+            iconAlign: 'right',
+            bind: {
+                tooltip: this.view.getViewModel().get('downloadChartDataTooltip'),
+            }
+        };
+        this.DownloadChartDataButton = Ext.create(btn);
+        //this.IrixPrintButton.on('beforerender', Koala.util.AppContext.generateCheckToolVisibility('irixPrintBtn'));
+        this.DownloadChartDataButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3);
+        debugger;
+        this.DownloadChartDataButton.el.dom.addEventListener('click', this.downloadChartData.bind(this, chart));
+    },
+    downloadChartData: function(chart) {
+        console.log(chart.xtype);
+        if(chart.xtype === 'd3-chart' || chart.xtype === 'd3-barchart' ){
+            var chartCtrl = chart.getController();
+        }
+        var data;
+        if(chart.xtype === 'd3-chart'){
+            data = chartCtrl.rawData;
+        } else if (chart.xtype === 'd3-barchart') {
+            data = chartCtrl.rawData;
+        } else if (chart.xtype === 'grid') {
+            //ToDo
+            //get rawdata from initial response
+        }
+        //ToDo
+        //get Filename, MimeType ..
+        //from from Popup Form
+        //transform to CSV 
+        download(data, 'chartdata.json', 'application/json');
+    },
+
+    /**
      * Create legend visibility toggle button.
      * @param {Element} elm element to render the button to
      * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
@@ -507,7 +551,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             cls: 'carto-window-chart-button',
             xtype: 'button',
             name: 'exportToPng',
-            glyph: 'xf019@FontAwesome',
+            glyph: 'xf1c5@FontAwesome',
             bind: {
                 tooltip: this.view.getViewModel().get('exportToPngText')
             }
@@ -603,6 +647,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.createLegendVisibilityButton(tabElm, this.barChart);
         this.createIrixPrintButton(tabElm, this.barChart);
         this.createExportToPngButton(tabElm, this.barChart);
+        this.createDownloadChartDataButton(tabElm, this.barChart);
         this.createUncertaintyButton(tabElm, this.barChart);
     },
 
@@ -691,6 +736,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     chart.getController().on('chartdataprepared', function() {
                         var chartController = this.chartElement.getController();
                         var gridFeatures = chartController.gridFeatures;
+                        debugger;
+                        this.rawData = this.chartElement.rawData;
                         this.updateGrid(gridFeatures);
                     }, this);
                 }
@@ -772,6 +819,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
         el.appendChild(gridTableTab);
         me.updateCloseElementPosition();
+        this.createDownloadChartDataButton(tabElm, gridInTab);
 
         Ext.create({
             xtype: 'panel',
