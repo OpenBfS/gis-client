@@ -1012,7 +1012,7 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
-        canvas.width = chartImageWidth + legendImageWidth;
+        canvas.width = chartImageWidth;
         canvas.height = legendImageHeight > chartImageHeight ?
             legendImageHeight : chartImageHeight;
         ctx.fillStyle = 'white';
@@ -1024,7 +1024,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             d3.selectAll('.k-d3-hidden').style('display', 'block');
             legendImageObject.onload = function() {
                 ctx.drawImage(legendImageObject,
-                    chartImageWidth, 0, legendImageWidth, legendImageHeight);
+                    (chartImageWidth + 10 - legendImageWidth), 0, legendImageWidth, legendImageHeight);
                 var dataUri = canvas.toDataURL(outputFormat);
                 downloadIcons.style('display', 'block');
                 deleteIcons.style('display', 'block');
