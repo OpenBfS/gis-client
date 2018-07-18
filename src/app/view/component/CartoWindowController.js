@@ -488,34 +488,153 @@ Ext.define('Koala.view.component.CartoWindowController', {
             glyph: 'xf019@FontAwesome',
             iconAlign: 'right',
             bind: {
-                tooltip: this.view.getViewModel().get('downloadChartDataTooltip'),
+                tooltip: this.view.getViewModel().get('downloadChartDataTooltip')
             }
         };
         this.DownloadChartDataButton = Ext.create(btn);
-        //this.IrixPrintButton.on('beforerender', Koala.util.AppContext.generateCheckToolVisibility('irixPrintBtn'));
         this.DownloadChartDataButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3);
-        debugger;
         this.DownloadChartDataButton.el.dom.addEventListener('click', this.downloadChartData.bind(this, chart));
     },
+
+    /**
+     * configure chart data download.
+     * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
+     *          The associated chart]
+     */
     downloadChartData: function(chart) {
-        console.log(chart.xtype);
-        if(chart.xtype === 'd3-chart' || chart.xtype === 'd3-barchart' ){
-            var chartCtrl = chart.getController();
+        var me = this;
+        var viewModel = me.getViewModel();
+
+        var win = Ext.create('Ext.window.Window', {
+            title: viewModel.get('downloadAllChartDataMsgTitle'),
+            name: 'downloaddatawin',
+            width: 300,
+            layout: 'fit',
+            bodyPadding: 10,
+            items: [{
+                xtype: 'container',
+                items: [{
+                    xtype: 'textfield',
+                    width: '100%',
+                    fieldLabel: viewModel.get('downloadFilenameText'),
+                    value: 'chartData'
+                },{
+                    xtype: 'combo',
+                    id: 'formatCombo',
+                    width: '100%',
+                    fieldLabel: viewModel.get('outputFormatText'),
+                    value: 'csv',
+                    forceSelection: true,
+                    store: [
+                        ['csv','csv'],
+                        ['application/vnd.ms-excel', 'xls'],
+                        ['application/json','json']
+                    ],
+                    listeners:{
+                        'select': me.onDownloadFormatSelected
+                    }
+                },{
+                    xtype: 'combo',
+                    id: 'delimiterCombo',
+                    width: '100%',
+                    hidden: false, //initially visible because default value of formatCombo === 'csv'
+                    fieldLabel: viewModel.get('delimiterText'),
+                    value: ',',
+                    forceSelection: true,
+                    store: [
+                        [',', ','],
+                        [';', ';'],
+                        ['|', '|'],
+                        ['\\t', 'tab']
+                    ]
+                }]
+            }],
+            bbar: [{
+                text: viewModel.get('downloadAllChartDataMsgButtonYes'),
+                name: 'confirm-timeseries-download',
+                handler: me.doChartDataDownload.bind(me, chart)
+            }, {
+                text: viewModel.get('downloadAllChartDataMsgButtonNo'),
+                name: 'abort-timeseries-download',
+                handler: function() {
+                    this.up('window').close();
+                }
+            }]
+        });
+        win.show();
+    },
+
+    onDownloadFormatSelected: function(combo, record) {
+        var me = this;
+        var delimiterCombo = me.up().down('combo[id="delimiterCombo"]');
+
+        if(record.get('field2') === 'csv') {
+            delimiterCombo.setHidden(false);
+        } else {
+            delimiterCombo.setHidden(true);
         }
+    },
+
+    /**
+     * configure chart data download.
+     * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
+     *          The associated chart]
+     * @param {button} btn
+     *          Download Button from "downloaddatawin"
+     */
+    doChartDataDownload: function(chart, btn) {
+        var me = this;
+        var win = btn.up('window');
+        var formatCombo = win.down('combo[id="formatCombo"]');
+        var delimiterCombo = win.down('combo[id="delimiterCombo"]');
+        var textbox = win.down('textfield');
+
+        var mimetype = formatCombo.getSelectedRecord().get('field1');
+        var fileEnding = formatCombo.getSelectedRecord().get('field2');
+        var filename = textbox.getRawValue();
+        var fullFilename = filename +'.'+ fileEnding;
+        var chartCtrl;
         var data;
-        if(chart.xtype === 'd3-chart'){
-            data = chartCtrl.rawData;
-        } else if (chart.xtype === 'd3-barchart') {
-            data = chartCtrl.rawData;
+
+        if(chart.xtype === 'd3-chart' || chart.xtype === 'd3-barchart' ){
+            chartCtrl = chart.getController();
         } else if (chart.xtype === 'grid') {
-            //ToDo
-            //get rawdata from initial response
+            chartCtrl = chart.chartElement.getController();
         }
-        //ToDo
-        //get Filename, MimeType ..
-        //from from Popup Form
-        //transform to CSV 
-        download(data, 'chartdata.json', 'application/json');
+
+        data = chartCtrl.rawData;
+
+        if(mimetype==='csv' || mimetype==='application/vnd.ms-excel') {
+            try {
+                data = Ext.decode(data).features;
+            } catch (err) {
+                Ext.log.error('Could not parse raw data: ', err);
+            }
+
+            var featArray = [];
+            Ext.each(data, function(record,idx) {
+                var geojsonReader = new jsts.io.GeoJSONReader;
+                var wktWriter = new jsts.io.WKTWriter();
+                var geom = geojsonReader.read(record.geometry);
+                var geomWKT = wktWriter.write(geom);
+                var props = record.properties;
+
+                props['geometry'] = geomWKT;
+                featArray.push(props);
+            });
+
+            var delimiter = delimiterCombo.getSelectedRecord().get('field1');
+            var config = {
+                delimiter: delimiter
+            };
+            //toDo: tab-delimited not yet working
+            if(delimiter==="\t") {
+                 config.delimiter = '\t'
+            }
+            data = Papa.unparse(featArray, config);
+        }
+        download(data, fullFilename, mimetype);
+        win.close();
     },
 
     /**
@@ -736,8 +855,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     chart.getController().on('chartdataprepared', function() {
                         var chartController = this.chartElement.getController();
                         var gridFeatures = chartController.gridFeatures;
-                        debugger;
-                        this.rawData = this.chartElement.rawData;
+                        this.rawData = chartController.rawData;
                         this.updateGrid(gridFeatures);
                     }, this);
                 }

@@ -53,6 +53,7 @@ module.exports = function(config) {
         'resources/lib/proj4js/proj4.js',
         'resources/lib/proj4js/proj4-defs.js',
         'resources/lib/d3/d3.js',
+        'resources/lib/PapaParse/4.5.0/papaparse.min.js',
         'resources/lib/momentjs/moment-with-locales.js',
         'resources/lib/turfjs-5.1.6/turf.min.js',
         '/koalaProxy'

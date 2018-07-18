@@ -125,7 +125,14 @@
                 "displayIdentificationThreshold": "Display data < identification threshold",
                 "irixPrintText": "DokPool",
                 "irixPrintTooltip": "export chart into DokPool",
-                "axisText": "Axis"
+                "axisText": "Axis",
+                "downloadAllChartDataMsgTitle": "Download all chart data?",
+                "downloadChartDataTooltip": "Download data",
+                "downloadFilenameText": "Filename",
+                "outputFormatText": "Format",
+                "delimiterText": "Delimiter",
+                "downloadAllChartDataMsgButtonYes": "Download",
+                "downloadAllChartDataMsgButtonNo": "Cancel",
             }
         }
     },
@@ -1637,7 +1644,7 @@
                                     "<div>A permalink thus makes it possible to save a particular map view for future access. Choose the required map view and press the Permalink button to display the permalink corresponding to the current map view.</div><br />"+
                                 "<h2 style='font-weight:bold'>2.5 Settings</h2>"+
                                     "<div>The Settings menu allows you to set both the language and the reference time.</div><br />"+
-                                    "<div>The Language selection menu controls the language used for the entire application. You can choose your language by tapping on the referenced symbol. Tapping onto the downward arrow will open the selection menu showing the available languages. \"<abbr title='Deutsch (German)'>DE</abbr>\" means German, \"<abbr title='Englisch (English)'>EN</abbr>\" means English.</div><br />"+                                
+                                    "<div>The Language selection menu controls the language used for the entire application. You can choose your language by tapping on the referenced symbol. Tapping onto the downward arrow will open the selection menu showing the available languages. \"<abbr title='Deutsch (German)'>DE</abbr>\" means German, \"<abbr title='Englisch (English)'>EN</abbr>\" means English.</div><br />"+
                                     "<div>The default setting for the reference time is the local time. This means that the system time of your device will be used. It is possible to change the time to Coordinated Universal Time (<abbr title='Coordinated Universal Time'>UTC</abbr>). Activate the corresponding button, depending on your preferred reference time.</div><br />"+
                                 "<h2 style='font-weight:bold'>2.6 Help</h2>"+
                                     "<div>Use this button to open the Help pages for the mobile application.</div><br />"+

@@ -36,6 +36,13 @@ Ext.define('Koala.view.component.CartoWindowModel', {
         irixPrintText: '',
         irixPrintTooltip: '',
         axisText: '',
+        downloadAllChartDataMsgTitle: '',
+        downloadChartDataTooltip: '',
+        downloadFilenameText: '',
+        outputFormatText: '',
+        delimiterText: '',
+        downloadAllChartDataMsgButtonYes: '',
+        downloadAllChartDataMsgButtonNo: '',
         /*i18n end*/
         lineFeature: null,
         lineLayer: null,
