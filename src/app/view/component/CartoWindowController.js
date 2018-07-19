@@ -508,7 +508,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var win = Ext.create('Ext.window.Window', {
             title: viewModel.get('downloadAllChartDataMsgTitle'),
             name: 'downloaddatawin',
-            width: 300,
+            width: 330,
             layout: 'fit',
             bodyPadding: 10,
             items: [{
@@ -517,17 +517,22 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     xtype: 'textfield',
                     width: '100%',
                     fieldLabel: viewModel.get('downloadFilenameText'),
-                    value: 'chartData'
+                    labelWidth: 120,
+                    value: 'chartData',
+                    validator: function (val) {
+                        errMsg = viewModel.get('filenameNotValidText');
+                        return ((val.length > 3) && (val.search(/ /) === -1)) ? true : errMsg;
+                    }
                 },{
                     xtype: 'combo',
                     id: 'formatCombo',
                     width: '100%',
                     fieldLabel: viewModel.get('outputFormatText'),
+                    labelWidth: 120,
                     value: 'csv',
                     forceSelection: true,
                     store: [
                         ['csv','csv'],
-                        ['application/vnd.ms-excel', 'xls'],
                         ['application/json','json']
                     ],
                     listeners:{
@@ -539,6 +544,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     width: '100%',
                     hidden: false, //initially visible because default value of formatCombo === 'csv'
                     fieldLabel: viewModel.get('delimiterText'),
+                    labelWidth: 120,
                     value: ',',
                     forceSelection: true,
                     store: [
@@ -547,6 +553,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
                         ['|', '|'],
                         ['\\t', 'tab']
                     ]
+                },{
+                    xtype: 'checkbox',
+                    id: 'quoteCheckbox',
+                    hidden: false, //initially visible because default value of formatCombo === 'csv'
+                    fieldLabel: viewModel.get('quoteText'),
+                    labelWidth: 120,
+                    value: true
                 }]
             }],
             bbar: [{
@@ -567,11 +580,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
     onDownloadFormatSelected: function(combo, record) {
         var me = this;
         var delimiterCombo = me.up().down('combo[id="delimiterCombo"]');
+        var quoteCheckbox = me.up().down('checkbox[id="quoteCheckbox"]');
 
         if(record.get('field2') === 'csv') {
             delimiterCombo.setHidden(false);
+            quoteCheckbox.setHidden(false);
         } else {
             delimiterCombo.setHidden(true);
+            quoteCheckbox.setHidden(true);
         }
     },
 
@@ -587,11 +603,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var win = btn.up('window');
         var formatCombo = win.down('combo[id="formatCombo"]');
         var delimiterCombo = win.down('combo[id="delimiterCombo"]');
+        var quoteCheckbox = win.down('checkbox[id="quoteCheckbox"]');
         var textbox = win.down('textfield');
 
         var mimetype = formatCombo.getSelectedRecord().get('field1');
         var fileEnding = formatCombo.getSelectedRecord().get('field2');
-        var filename = textbox.getRawValue();
+        var filename = textbox.getRawValue().replace(/ /g,'_');
         var fullFilename = filename +'.'+ fileEnding;
         var chartCtrl;
         var data;
@@ -624,13 +641,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
             });
 
             var delimiter = delimiterCombo.getSelectedRecord().get('field1');
+            var quoteStrings = quoteCheckbox.getValue();
             var config = {
-                delimiter: delimiter
+                delimiter: delimiter,
+                quotes: quoteStrings,
+                quoteChar: '"',
+                fastMode: false
             };
+
             //toDo: tab-delimited not yet working
-            if(delimiter==="\t") {
-                 config.delimiter = '\t'
-            }
             data = Papa.unparse(featArray, config);
         }
         download(data, fullFilename, mimetype);
