@@ -504,6 +504,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
     downloadChartData: function(chart) {
         var me = this;
         var viewModel = me.getViewModel();
+        var feature = me.getView().getFeature();
+        var fileName = 'chartData';
+        if(feature.getProperties().locality_name){
+            fileName = feature.getProperties().locality_name.replace(/,/g,'').replace(/ /g,'_');
+        } else if(feature.getProperties().id){
+            fileName = feature.getProperties().id;
+        }
 
         var win = Ext.create('Ext.window.Window', {
             title: viewModel.get('downloadAllChartDataMsgTitle'),
@@ -518,7 +525,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     width: '100%',
                     fieldLabel: viewModel.get('downloadFilenameText'),
                     labelWidth: 120,
-                    value: 'chartData',
+                    value: fileName,
+                    allowBlank: false,
+                    minLength: 3,
                     validator: function (val) {
                         errMsg = viewModel.get('filenameNotValidText');
                         return ((val.length > 3) && (val.search(/ /) === -1)) ? true : errMsg;
@@ -551,7 +560,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                         [',', ','],
                         [';', ';'],
                         ['|', '|'],
-                        ['\\t', 'tab']
+                        ['\t', 'tab']
                     ]
                 },{
                     xtype: 'checkbox',
@@ -600,11 +609,22 @@ Ext.define('Koala.view.component.CartoWindowController', {
      */
     doChartDataDownload: function(chart, btn) {
         var me = this;
+        var viewModel = me.getViewModel();
         var win = btn.up('window');
         var formatCombo = win.down('combo[id="formatCombo"]');
         var delimiterCombo = win.down('combo[id="delimiterCombo"]');
         var quoteCheckbox = win.down('checkbox[id="quoteCheckbox"]');
         var textbox = win.down('textfield');
+        if(textbox.getValue().length < 3){
+            //Ext.MessageBox.Info('Info', 'Please enter a valid filename');
+            Ext.Msg.show({
+                title   : 'Info',
+                msg     : viewModel.get('MsgNoValidFilenameText'),
+                icon    : Ext.MessageBox.INFO,
+                buttons : Ext.MessageBox.OK
+            });
+            return;
+        }
 
         var mimetype = formatCombo.getSelectedRecord().get('field1');
         var fileEnding = formatCombo.getSelectedRecord().get('field2');
