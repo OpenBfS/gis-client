@@ -263,7 +263,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.timeserieschart = Ext.create(chartObj);
 
         this.createLegendVisibilityButton(tabElm, this.timeserieschart);
-        this.createDownloadChartDataButton(tabElm, this.timeserieschart);
+        //this.createDownloadChartDataButton(tabElm, this.timeserieschart);
         this.createIrixPrintButton(tabElm, this.timeserieschart);
         this.createExportToPngButton(tabElm, this.timeserieschart);
 
@@ -616,7 +616,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var quoteCheckbox = win.down('checkbox[id="quoteCheckbox"]');
         var textbox = win.down('textfield');
         if(textbox.getValue().length < 3){
-            //Ext.MessageBox.Info('Info', 'Please enter a valid filename');
             Ext.Msg.show({
                 title   : 'Info',
                 msg     : viewModel.get('MsgNoValidFilenameText'),
