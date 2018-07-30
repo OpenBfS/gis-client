@@ -60,7 +60,7 @@ Ext.define('Koala.view.button.BackgroundLayersModelController', {
                 ]
             }).showBy(this.getView(), 'tr-tl');
         } else {
-            BasiGX.util.Animate.shake(win);
+            win.close();
         }
     }
 

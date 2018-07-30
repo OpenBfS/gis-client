@@ -24,7 +24,9 @@
         "shpwrite": true,
         "atob": true,
         "Uint8Array": true,
-        "TextDecoder": true
+        "TextDecoder": true,
+        "Papa": true,
+        "jsts": true
     },
     "rules": {
         "comma-dangle": 2,

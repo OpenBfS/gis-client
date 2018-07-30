@@ -833,7 +833,7 @@ Ext.define('Koala.util.Layer', {
             var onTopLayers = [];
             Ext.each(map.getLayers().getArray(), function(layer) {
                 var path = 'metadata/layerConfig/olProperties/alwaysOnTop';
-                var alwaysOnTop = Koala.util.Object.getPathOr(layer, path, false);
+                var alwaysOnTop = Koala.util.Object.getPathStrOr(layer, path, false);
                 if (alwaysOnTop) {
                     onTopLayers.push(layer);
                 }
