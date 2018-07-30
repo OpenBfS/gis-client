@@ -208,7 +208,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             store: store,
             displayField: 'dspName',
             valueField: 'id',
-            emptyText: 'Serie hinzufügen',
+            bind: {
+                emptyText: '{selectSeriesComboEmptyText}'
+            },
             queryParam: 'CQL_FILTER',
             listeners: {
                 select: Ext.Function.bind(me.onTimeSeriesComboSelect,

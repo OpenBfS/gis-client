@@ -15,7 +15,7 @@
     },
     "Koala.util.Layer": {
         "statics": {
-            "txtUntil": "bis",
+            "txtUntil": "-",
             "titleAddLayer": "Layer",
             "titleAddLayerFilter": "Layerfilter",
             "textUnknownLayer": "Unbekannt",
@@ -118,14 +118,24 @@
                 "maxExtent": "Diagrammansicht maximieren",
                 "combineSeries": "Zeitreihen zusammenführen",
                 "toggleLegendVisibility": "Legendensichtbarkeit umstellen",
-                "exportToPngText": "Download Chart",
+                "exportToPngText": "Download Grafik",
                 "toggleGrouping": "Gruppierung tauschen",
                 "toggleScale": "Y-Achsenskalierung tauschen",
                 "toggleUncertainty": "Messungenauigkeit umschalten",
                 "displayIdentificationThreshold": "Daten < NWG anzeigen",
                 "irixPrintText": "DokPool",
                 "irixPrintTooltip": "exportieren des Charts nach DokPool",
-                "axisText": "Achse"
+                "axisText": "Achse",
+                "downloadAllChartDataMsgTitle": "Daten herunterladen",
+                "downloadChartDataTooltip": "Download Daten",
+                "downloadFilenameText": "Dateiname",
+                "filenameNotValidText": "Leerzeichen sind nicht erlaubt!",
+                "MsgNoValidFilenameText": "Bitte einen gültigen Dateinamen eingeben",
+                "outputFormatText": "Format",
+                "delimiterText": "Trennzeichen",
+                "quoteText": "Anführungszeichen (\" \") verwenden",
+                "downloadAllChartDataMsgButtonYes": "Herunterladen",
+                "downloadAllChartDataMsgButtonNo": "Abbrechen",
             }
         }
     },
@@ -565,6 +575,7 @@
                 "resetFilterBtnText": "Reset",
                 "selectChartLayerComboLabel": "",
                 "selectChartLayerComboEmptyText": "Chart hinzufügen",
+                "selectSeriesComboEmptyText": "Serie hinzufügen",
                 "undoBtnText": "…zurückzoomen",
                 "exportAsImageBtnText": "Als Bild exportieren",
                 "downloadChartDataMsgTitle": "Info",
@@ -681,7 +692,8 @@
                                     "<div>Ermöglicht das Vergrößern und Verkleinern der Kartenansicht sowie das Verschieben der Ansicht auf die ursprüngliche Position (Zentrum von Deutschland).</div>"+
                                     "<div>Zeichenwerkzeuge stehen für das Messen von Punkten (Koordinatenausgabe), Strecken und Flächen bereit.</div>"+
                                     "<div>Die Darstellung der Anwendung kann über den gesamten Bildschirm eingestellt werden.</div>"+
-                                    "<div>Des Weiteren ist es möglich, einen Permalink der Kartenansicht zu erzeugen.</div><br />"+
+                                    "<div>Des Weiteren ist es möglich, einen Permalink der Kartenansicht zu erzeugen.</div>"+
+                                    "<div>Über den untersten Knopf lässt sich die Hintergrundkarte wechseln.</div><br />"+
                                 "<li style='color:#294d71; font-weight:bold'>Legende</li>"+
                                     "<div>Die Legende umfasst die Layer, also thematischen Inhalte, die in der Karte angezeigt werden. Sie ermöglicht Einstellungen an der Kartenansicht vorzunehmen.</div>"+
                                     "<div>Layer lassen sich ein- bzw. ausblenden, gänzlich entfernen, sowie Änderungen an den Filtereinstellungen vornehmen. Des Weiteren ist es möglich die Zeichenreihenfolge durch Verschieben der Layer anzupassen.</div><br />"+
@@ -729,6 +741,7 @@
                     "cartoWindows": {
                         "title": "2.3 Kartodiagramme",
                         "html": "<hr style='color:#294d71' />"+
+                                "<h2>2.3 Kartodiagramme</h2>"+
                                 "<p>Das Kartodiagramm beinhaltet diverse Darstellungsformen der Daten. Je nach Art des Layers werden innerhalb eines Kartodiagramms Zeitreihen, Balkendiagramme, Tabellen, zusätzliche Inhalte oder Objektinformationen in Textform bereitgestellt. Eine Verbindungslinie zur entsprechenden Geometrie innerhalb der Karte kennzeichnet den geographischen Bezug der Daten (siehe Grafik <i>2.3 Kartodiagramm - Reiter wechseln</i>).</p>"+
                                 "<div style='font-size:11px'>"+
                                 "<img class='img' src='classic/resources/img/helpPage/graphic_cartoWin_tabChange.png' title='Kartodiagramm - Reiter wechseln' alt'graphic_cartoWin_tabChange.png' style='max-height: 100%; max-width: 100%;'><br>"+
@@ -783,7 +796,7 @@
                                 " ermöglicht das Herunterladen einzelner Zeitreihen. Wählen Sie mithilfe der Zoomfunktionalitäten innerhalb des Diagramms den gewünschten Bereich aus, den Sie herunterladen möchten. Die Daten einzelner Zeitreihen können im JSON-, CSV- oder GML-Format gespeichert werden. Bestätigen Sie nach der Auswahl des gewünschten Formats den Download, der letztlich im Download-Pfad Ihres Browsers abgelegt wird.</p>"+
                                 "<p>Einzelne Serien können mit einem Klick auf die Diagrammlegende ein- bzw. ausgeschalten werden. Eine Serie kann auch gänzlich aus dem Diagramm entfernt werden. Hierzu betätigt man den X-Knopf "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
-                                " neben der Zeitreihenbeschriftung.</p>"+
+                                " neben der Zeitreihenbeschriftung.</p><br />"+
                                 "<h3>Balkendiagramme <img class='img' src='classic/resources/img/helpPage/tab_cartoWin_barChart.png' title='Balkendiagramm-Reiter' alt='tab_cartoWin_barChart.png' width='50' height='15' style='vertical-align:middle'></h3>"+
                                 "<p>Neben einer Zeitreihe kann ein Layer auch ein Balkendiagramm besitzen. Grafik <i>2.3 Kartodiagramm - Balkendiagramm</i> zeigt ein Beispiel von Nukliden in sonstigen Nahrungsmittel. Oberhalb des Diagramms befinden sich die Einstellungsmöglichkeiten. Der Knopf \"Messgenauigkeit umschalten\" blendet die Messgenauigkeit grafisch oberhalb eines Balkens ein oder aus. Der Download-Knopf "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_download.png' title='Download-Knopf' alt='button_cartoWin_timeseries_download.png' width='24' height='24' style='vertical-align:middle'>"+
@@ -803,7 +816,7 @@
                                 "<img class='img' src='classic/resources/img/helpPage/button_cartoWin_timeseries_changeColor.png' title='Farbe ändern' alt='button_cartoWin_timeseries_changeColor.png' width='21' height='20' style='vertical-align:middle'>"+
                                 " die Farbe verändert werden. Der X-Knopf "+
                                 "<img class='img' src='classic/resources/img/helpPage/button_series_delete.png' title='Knopf: Serie entfernen' alt='button_series_delete.png' width='14' height='13' style='vertical-align:middle'>"+
-                                " löscht ein Element aus dem Diagramm. Betätigt man den Knopf für das Tauschen der Gruppierung, wird das entfernte Element wieder hinzugefügt.</p>"+
+                                " löscht ein Element aus dem Diagramm. Betätigt man den Knopf für das Tauschen der Gruppierung, wird das entfernte Element wieder hinzugefügt.</p><br />"+
                                 "<h3>Tabellen <img class='img' src='classic/resources/img/helpPage/tab_cartoWin_table.png' title='Tabellen-Reiter' alt='tab_cartoWin_table.png' width='50' height='15' style='vertical-align:middle'></h3>"+
                                 "<p>Im Tabellen-Reiter werden die Daten aus Zeitreihe- bzw. Balkendiagramm zusätzlich in tabellarischer Form dargestellt (siehe Grafik <i>2.3 Kartodiagramm - Tabelle</i>). Jede Spalte bietet rechts neben der Spaltenbezeichnung die Option der Sortierung, Spalten ein- bzw. auszublenden und Filter anzuwenden. Je nach Datentyp einer Spalte (Text, Zahl oder Datum) werden adäquate Filteroptionen angeboten. Wählt man beispielsweise \"Filters\" einer Datumsspalte, kann der Datensatz über die Auswahl eines Tages im angezeigten Kalender eingegrenzt werden.</p>"+
                                 "<div style='font-size:11px'>"+
@@ -820,6 +833,7 @@
                     "timeSeries": {
                         "title": "2.4 Zeitreihen",
                         "html": "<hr style='color:#294d71' />"+
+                                "<h2>2.4 Zeitreihen</h2>"+
                                 "<p>Grafik <i>2.4 Zeitreihen</i> zeigt Zeitreihen von drei verschiedenen Stationen am Beispiel der 1h Werte der Ortsdosisleistung. Es können jederzeit Stationen entweder über das Anklicken eines Objektes auf der Karte, oder über das Feld \"Serie hinzufügen\" "+
                                 "<img class='img' src='classic/resources/img/helpPage/selectionBox_addingSerial.png' title='Auswahlfeld: Serie hinzufügen' alt='selectionBox_addingSerial.png' width='170' height='24' style='vertical-align:middle'>"+
                                 " ergänzt werden. Betätigen Sie zusätzlich den Knopf \"Zeitreihen zusammenführen\" "+
@@ -1016,7 +1030,7 @@
                                 "</div>"
                         }
                 },
-                "mapNavigation":{
+                "mapNavigation": {
                     "title": "7. Navigation",
                     "html": "<h2>7. Navigation</h2>"+
                             "<div>Die Navigation liefert Funktionen bezüglich der Kartenansicht. Die Knöpfe sind auf der rechten Seite der Anwendung platziert. Ein Klick auf den entsprechenden Knopf aktiviert die jeweilige Funktion, die nachfolgend näher erläutert werden. Navigieren Sie hierfür links im Menü der Hilfeseite auf den gewünschten Unterpunkt.</div><br />",
@@ -1030,7 +1044,7 @@
                                 "<img class='img' src='classic/resources/img/helpPage/key_shift.png' title='Umschalttaste' alt='key_shift.png' width='16' height='18' style='vertical-align:middle'>"+
                                 ", Umstelltaste, Hochstelltaste) sowie linker <i>Maustaste</i> kann innerhalb der Karte ein Zoomfenster erzeugt werden.</p>"+
                                 "</div>"
-                        },
+                    },
                     "zoomOut": {
                         "title": "7.2 Herauszoomen",
                         "html": "<hr style='color:#294d71' />"+
@@ -1038,7 +1052,7 @@
                                 "<div>"+
                                 "<p>Der Knopf zoomt mit vordefinierter Stufe aus die Karte heraus. Das heißt, dass der Maßstab der aktuellen Ansicht kleiner wird. Alternativ kann das <i>Mausrad</i> direkt in der Kartenansicht für das Herauszoomen benutzt werden.</p>"+
                                 "</div>"
-                        },
+                    },
                     "initMapView": {
                         "title": "7.3 initiale Kartenansicht",
                         "html": "<hr style='color:#294d71' />"+
@@ -1046,7 +1060,7 @@
                                 "<div>"+
                                 "<p>Durch einen Klick auf den Knopf wird die Ansicht des Anfangsausschnittes (Zoomstufe und Position) gezeigt. Entsprechend wird als Zentrum der Kartenansicht Deutschland dargestellt.</p>"+
                                 "</div>"
-                        },
+                    },
                     "measure": {
                         "title": "7.4 Messen",
                         "html": "<hr style='color:#294d71' />"+
@@ -1071,7 +1085,7 @@
                                 " löschbar.</p>"+
                                 "<p>Alle Zeichenobjekte sind dem Layer \"Bemaßungen\" zugeordnet. Entsprechend kann dieser über die Legende sichtbar bzw. unsichtbar geschaltet werden.</p>"+
                                 "</div>"
-                        },
+                    },
                     "fullScreen": {
                         "title": "7.5 Vollbild",
                         "html": "<hr style='color:#294d71' />"+
@@ -1080,7 +1094,7 @@
                                 "<p>Ein Klick auf den Knopf \"Vollbild\" erweitert das Sichtfeld des <abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr> Geoportals auf den gesamten Bildschirm. Je nach Browser, den Sie verwenden, müssen Sie den Vollbild-Modus bestätigen.</p>"+
                                 "<p>Zum Beenden des Vollbild-Modus drücken Sie die <b><i>Esc</i>-Taste</b>.</p>"+
                                 "</div>"
-                        },
+                    },
                     "permaLink": {
                         "title": "7.6 Permalink",
                         "html": "<hr style='color:#294d71' />"+
@@ -1089,15 +1103,18 @@
                                 "<p>Ein Permalink ist ein Hyperlink der als dauerhafte Referenz von Inhalten einer Internetadresse dient. Er enthält die Informationen der Kartenansicht (Zoomstufe und Position), sowie zusätzlich geladene Inhalte (Layer mit Filtereinstellungen).</p>"+
                                 "<p>Dadurch ist es möglich eine bestimmte Kartenansicht für einen späteren Zugriff abzuspeichern. Nach Auswahl einer gewünschten Ansicht betätigen Sie hierfür den Permalink-Knopf oder drücken Sie, sollte das Permalink-Fenster bereits geöffnet sein, auf \"Erneuern\", um den zur aktuellen Ansicht passenden Permalink anzuzeigen. Der \"In Zwischenablage kopieren\"-Knopf sichert den Permalink temporär, so dass er an gewünschter Stelle wieder eingefügt werden kann.</p>"+
                                 "</div>"
-                        },
+                    },
                     "backgroundLayers": {
                             "title": "7.7 Hintergrundkarten",
                             "html": "<hr style='color:#294d71' />"+
-                                    "<h2>7.7 Hintergrundkarten<img class='img' src='classic/resources/img/helpPage/button_backgroundlayers.png' title='Knopf: Permalink' alt='button_backgroundlayers.png' width='28' height='28' style='vertical-align:middle'></h2>"+
+                                    "<h2>7.7 Hintergrundkarten <img class='img' src='classic/resources/img/helpPage/button_toggleBackground.png' title='Knopf: Hintergrundkarten wechseln' alt='button_toggleBackground.png' width='28' height='28' style='vertical-align:middle'></h2>"+
                                     "<div>"+
-                                    "<p>Das Kästchen auf der linken Seite des Hintergrundkarte steuert, ob ein Layer in der Karte angezeigt wird oder nicht.</p>"+
+                                    "<p>Der Knopf öffnet ein Fenster mit verschiedenen Hintergrundkarten die zur Verfügung stehen. Das Auswahlfeld auf der linken Seite des Textes zeigt an, ob eine Karte derzeit ausgewählt ist oder nicht. Mit einem Klick wählen Sie die gewünschte Hintergrundkarte aus.</p>"+
+                                    "<div style='font-size:11px'>"+
+                                    "<img class='img' src='classic/resources/img/helpPage/window_toggleBackground.png' title='Auswahl der Hintergrundkarten' alt='window_toggleBackground.png' style='max-height: 100%; max-width: 100%;'><br>"+
+                                    "<b>7.7 Auswahl der Hintergrundkarten</b>"+
                                     "</div>"
-                            }
+                    }
                 },
                 "legend":{
                     "title": "8. Legende",

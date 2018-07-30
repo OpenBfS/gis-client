@@ -32,6 +32,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
+    rawData: null,
     gridFeatures: null,
     /**
      * Contains the DateValues of the charts current zoom extent.
@@ -1996,6 +1997,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 return false;
             }
         }
+        me.rawData = response.responseText;
 
         //used for grid table in CartoWindowController
         me.gridFeatures = Ext.clone(data.features);

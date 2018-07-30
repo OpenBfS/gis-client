@@ -33,10 +33,19 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         var view = this.getView();
         var map = BasiGX.util.Map.getMapComponent().map;
         var layerCollection = map.getLayers();
+        var layers = layerCollection.getArray();
         var layer = this.layerInMap(box.uuid);
+        layers.forEach(function(lyr) {
+            if (lyr.isBackground) {
+                map.removeLayer(lyr);
+            }
+        });
+
+        layerCollection = map.getLayers();
         if (!layer) {
             Koala.util.Layer.getMetadataFromUuid(box.uuid).then(function(metadata) {
                 layer = Koala.util.Layer.layerFromMetadata(metadata);
+                layer.isBackground = true;
                 layerCollection.insertAt(0,layer);
                 layer.setVisible(checked);
             });
@@ -47,6 +56,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         return false;
     },
 
+
     /**
      * layerInMap function -  Checks to see if the layer is already in the map and returns the layer
      */
@@ -56,7 +66,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         var layers = layerCollection.getArray();
         var layer;
         layers.forEach(function(lyr) {
-            if (lyr.metadata && lyr.metadata.id === uuid) {
+            if (lyr.metadata && (lyr.metadata.id === uuid)) {
                 layer = lyr;
             }
         });
@@ -87,9 +97,9 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                             defaultType: 'radiofield',
                             items: [{
                                 xtype: 'image',
-                                height: 45,
-                                src: layerThumb,
-                                flex: 1
+                                height: 58,
+                                width: 110,
+                                src: layerThumb//,
                             }, {
                                 style: 'text-align: center;',
                                 padding: 5,
@@ -98,9 +108,9 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                                 boxLabel: metadata.legendTitle,
                                 uuid: layerObj.uuid,
                                 listeners: {
-                                    change: 'checkChange'
+                                    focus: 'checkChange'
                                 },
-                                flex: 3
+                                flex: 1
                             }]
                         }];
                         container.add(ele);
