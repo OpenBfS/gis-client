@@ -165,7 +165,8 @@
                 "colorMsgButtonNo": "Cancel",
                 "downloadChartDataMsgMessage": "download current chart data?",
                 "downloadChartDataMsgButtonYes": "Ok",
-                "downloadChartDataMsgButtonNo": "Cancel"
+                "downloadChartDataMsgButtonNo": "Cancel",
+                "downloadAllText": "Download all chart data"
             }
         }
     },
