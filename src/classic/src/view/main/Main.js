@@ -123,7 +123,9 @@ Ext.define('Koala.view.main.Main', {
             plugins: [{
                 ptype: 'hoverBfS',
                 selectMulti: true,
-                selectEventOrigin: 'interaction'
+                selectEventOrigin: 'interaction',
+                maxHeight: 500,
+                className: 'ol-overlay-container ol-selectable k-feature-hover'
             }]
         },
         toolbarConfig: {
