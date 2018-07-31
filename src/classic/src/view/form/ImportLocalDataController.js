@@ -297,6 +297,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             legendUrl: olProps.legendUrl || '',
             legendHeight: olProps.legendHeight,
             legendWidth: olProps.legendWidth,
+            allowHover: shallHover,
             allowFeatureInfo: getBool(olProps.allowFeatureInfo, true),
             allowDownload: getBool(olProps.allowDownload, false),
             allowRemoval: getBool(olProps.allowRemoval, true),

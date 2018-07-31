@@ -73,6 +73,9 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
                 //      -> logical fix in BasiGX necessary
                 var hoverPath = 'metadata/layerConfig/olProperties/allowHover';
                 var allowHover = Koala.util.Object.getPathStrOr(olLayer, hoverPath, undefined);
+                if (!olLayer.metadata) {
+                    allowHover = '' + olLayer.get('allowHover');
+                }
                 if (olLayer && olLayer.get( keyHovertpl ) && (allowHover === 'true')) {
                     olLayer.set(keyHoverable, true);
                 }
