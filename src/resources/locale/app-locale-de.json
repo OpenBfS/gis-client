@@ -166,7 +166,8 @@
                 "downloadChartDataMsgTitle": "Info",
                 "downloadChartDataMsgMessage": "Aktuelle Chartdaten herunterladen?",
                 "downloadChartDataMsgButtonYes": "Ja",
-                "downloadChartDataMsgButtonNo": "Nein"
+                "downloadChartDataMsgButtonNo": "Nein",
+                "downloadAllText": "Alle Chartdaten herunterladen"
             }
         }
     },

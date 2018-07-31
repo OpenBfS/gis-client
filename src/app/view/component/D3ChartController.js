@@ -91,6 +91,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @event chartdataprepared
      */
 
+    featuresByStation: {},
+
     /**
      * Called on initialize event. Only used in modern toolkit.
      *
@@ -1593,7 +1595,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 items: [{
                     padding: '10px 0',
                     html: viewModel.get('downloadChartDataMsgMessage')
-                },{
+                }, {
                     xtype: 'combo',
                     width: '100%',
                     fieldLabel: viewModel.get('outputFormatText'),
@@ -1604,12 +1606,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                         ['csv','csv'],
                         ['application/json','json']
                     ]
+                }, {
+                    xtype: 'checkboxfield',
+                    fieldLabel: viewModel.get('downloadAllText')
                 }]
             }],
             bbar: [{
                 text: viewModel.get('downloadChartDataMsgButtonYes'),
                 name: 'confirm-timeseries-download',
-                handler: me.doWfsDownload.bind(me, dataObj)
+                handler: me.downloadChartData.bind(me, dataObj)
             }, {
                 text: viewModel.get('downloadChartDataMsgButtonNo'),
                 name: 'abort-timeseries-download',
@@ -1622,46 +1627,67 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * Executes the WFS-Request and starts the real download on success.
+     * Converts the download features to GeoJSON and downloads via data uri.
      *
      * @param {Object} dataObj The config object of the selected Series.
      * @param {Ext.button.Button} btn The button we clicked on.
      */
-    doWfsDownload: function(dataObj, btn) {
-        var me = this;
+    downloadChartData: function(dataObj, btn) {
         var stationId = dataObj.config.id;
         var win = btn.up('window');
         var combo = win.down('combo');
-        var view = this.getView();
-        var allSelectedStations = view.getSelectedStations();
-        var requestUrl = me.getChartDataRequestUrl();
-        var chartProps = view.getTargetLayer()
-            .get('timeSeriesChartProperties');
-        var feat = Ext.Array.findBy(allSelectedStations, function(station) {
-            return station.get(chartProps.featureIdentifyField || 'id') === stationId;
-        });
-        var requestParams = me.getChartDataRequestParams(feat, true);
+        var checkbox = win.down('checkboxfield');
 
         var format = combo.getValue();
+        var all = checkbox.getValue();
+        var features = [];
+        if (all) {
+            Ext.iterate(this.featuresByStation, function(id, feats) {
+                features = features.concat(feats);
+            });
+        } else {
+            features = this.featuresByStation[stationId];
+        }
+        var fmt;
+
+        switch (format) {
+            case 'gml3': {
+                fmt = new ol.format.GeoJSON();
+                features = fmt.readFeatures({
+                    type: 'FeatureCollection',
+                    features: features
+                });
+                fmt = new ol.format.GML3({
+                    featureNS: 'http://www.bfs.de/namespace',
+                    featureType: 'Measure'
+                });
+                features = fmt.writeFeatures(features);
+                break;
+            }
+            case 'application/json': {
+                features = JSON.stringify({
+                    type: 'FeatureCollection',
+                    features: features
+                });
+                break;
+            }
+            case 'csv': {
+                features = features.map(function(feature) {
+                    return feature.properties;
+                });
+                features = Papa.unparse(features);
+                break;
+            }
+            default: {
+                Ext.log('Unhandled format: ' + format);
+            }
+        }
+
         var layerName = this.getView().config.name.replace(' ','_');
         var fileEnding = combo.getSelectedRecord().get('field2');
-        requestParams.outputFormat = format;
 
-        Ext.Ajax.request({
-            method: 'GET',
-            url: requestUrl,
-            params: requestParams,
-            success: function(response) {
-                var fileName = stationId + '_' + layerName + '.' + fileEnding;
-
-                // Use the download library to enforce a browser download.
-                download(response.responseText, fileName, format);
-                win.close();
-            },
-            failure: function(response) {
-                Ext.log.warn('Download Error: ', response);
-            }
-        });
+        download(features, layerName + '.' + fileEnding, format);
+        win.close();
     },
 
 
@@ -1770,6 +1796,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
 
         me.data = {};
+        me.featuresByStation = {};
         me.chartDataAvailable = false;
         me.abortPendingRequests();
 
@@ -2018,6 +2045,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         //TODO: response shouldnt be restricted on id
         var stationId = station.get(chartConfig.featureIdentifyField || 'id');
 
+        me.featuresByStation[stationId] = data.features;
         me.data[stationId] = seriesData;
 
         me.ajaxCounter++;
