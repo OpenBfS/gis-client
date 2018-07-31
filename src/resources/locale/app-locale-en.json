@@ -352,7 +352,8 @@
                 "updateLegendtext": "en:Legendtext",
                 "labelUse": "…use?",
                 "northArrow": "North arrow",
-                "scalebar": "Scale bar"
+                "scalebar": "Scale bar",
+                "unlinkTooltip": "Remove link"
             }
         }
     },

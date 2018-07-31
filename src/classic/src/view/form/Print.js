@@ -193,6 +193,7 @@ Ext.define('Koala.view.form.Print', {
      * container as the editbutton.
      */
     onTextFieldEditButtonClicked: function() {
+        var me = this.up('k-form-print');
         var textfield = this.up('container').down('textfield');
         Ext.create('Ext.window.Window', {
             title: textfield.getFieldLabel() + ' HTML',
@@ -206,7 +207,20 @@ Ext.define('Koala.view.form.Print', {
                 // TODO Remove if fonts are configured to
                 // match the server fonts,
                 enableFont: false,
-                enableAlignments: false
+                enableAlignments: false,
+                listeners: {
+                    render: function() {
+                        this.getToolbar().add([{
+                            xtype: 'button',
+                            iconCls: 'x-fa fa-unlink',
+                            handler: function() {
+                                this.relayCmd('unlink');
+                            },
+                            scope: this,
+                            tooltip: me.getViewModel().get('unlinkTooltip')
+                        }]);
+                    }
+                }
             }],
             bbar: ['->',
                 {

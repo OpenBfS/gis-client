@@ -353,7 +353,8 @@
                 "updateLegendtext": "Legendentext",
                 "labelUse": "…verwenden?",
                 "northArrow": "Nordpfeil",
-                "scalebar": "Massstabsleiste"
+                "scalebar": "Massstabsleiste",
+                "unlinkTooltip": "Link entfernen"
             },
         }
     },
