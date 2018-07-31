@@ -73,7 +73,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
 
             Ext.each(layerConfig, function(layer, index) {
                 var visibility = layer.visible;
-                var uuid = layer.uuid;
+                var uuid = layer.uuid || layer;
                 Ext.Ajax.request({
                     // url: context.data.merge.urls['metadata-xml2json'] + uuid,
                     url: context.data.merge.urls['metadata-xml2json'],
