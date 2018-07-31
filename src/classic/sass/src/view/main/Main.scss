@@ -50,3 +50,8 @@
 .ol-attribution.ol-uncollapsible a:active {
     color: #333;
 }
+
+.ol-overlay-container.ol-selectable.k-feature-hover {
+    max-height: 500px;
+    overflow: auto;
+}
