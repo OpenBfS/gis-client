@@ -120,7 +120,7 @@
                 "toggleLegendVisibility": "Toggle legend visibility",
                 "exportToPngText": "Download Chart",
                 "toggleGrouping": "Toggle grouping",
-                "toggleScale": "Toggle y axis scale",
+                "toggleScale": "linear/log",
                 "toggleUncertainty": "Toggle uncertainty",
                 "displayIdentificationThreshold": "Display data < identification threshold",
                 "irixPrintText": "DokPool",
@@ -589,7 +589,7 @@
                 "removeSeriesQuestionTpl": "Remove series '{0}'?",
                 "startLabel": "Start",
                 "toggleDataBelowIdentificationThreshold": "Show data below < Id. Thresh.",
-                "toggleScaleBtnText": "Toggle scale",
+                "toggleScaleBtnText": "linear/logarithmic",
                 "endLabel": "End",
                 "axisText": "Axis"
             }
@@ -1410,7 +1410,7 @@
                 "enableAutorefreshLabel": "Refresh automatically",
                 "dataBelowThresholdButton": "Show data below threshold",
                 "refreshInterval": "Refresh interval",
-                "toggleScaleButton": "Toggle scale",
+                "toggleScaleButton": "linear/logarithmic",
                 "axisText": "Axis"
             }
         }
