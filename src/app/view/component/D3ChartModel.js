@@ -21,6 +21,9 @@ Ext.define('Koala.view.component.D3ChartModel', {
     alias: 'viewmodel.component-d3chart',
     data: {
         noDataAvailableText: '',
-        downloadAllText: ''
+        downloadAllText: '',
+        outputFormatText: '',
+        delimiterText: '',
+        quoteText: ''
     }
 });

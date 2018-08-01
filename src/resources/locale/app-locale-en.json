@@ -163,10 +163,13 @@
                 "colorWindowMessage": "Please select a color:",
                 "colorMsgButtonYes": "Ok",
                 "colorMsgButtonNo": "Cancel",
-                "downloadChartDataMsgMessage": "download current chart data?",
+                "downloadChartDataMsgMessage": "Download current data",
                 "downloadChartDataMsgButtonYes": "Ok",
                 "downloadChartDataMsgButtonNo": "Cancel",
-                "downloadAllText": "Download all chart data"
+                "downloadAllText": "all stations?",
+                "outputFormatText": "Format",
+                "delimiterText": "Delimiter",
+                "quoteText": "use double quotes (\" \")"
             }
         }
     },

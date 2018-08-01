@@ -1593,22 +1593,49 @@ Ext.define('Koala.view.component.D3ChartController', {
             items: [{
                 xtype: 'container',
                 items: [{
-                    padding: '10px 0',
+                    padding: '5 0 0 0',
                     html: viewModel.get('downloadChartDataMsgMessage')
                 }, {
+                    xtype: 'checkboxfield',
+                    fieldLabel: viewModel.get('downloadAllText'),
+                    value: true
+                }, {
                     xtype: 'combo',
+                    id: 'formatCombo',
                     width: '100%',
                     fieldLabel: viewModel.get('outputFormatText'),
-                    value: 'application/json',
+                    value: 'csv',
                     forceSelection: true,
                     store: [
                         ['gml3','gml'],
                         ['csv','csv'],
                         ['application/json','json']
+                    ],
+                    listeners: {
+                        'select': me.onDownloadFormatSelected
+                    }
+                }, {
+                    xtype: 'combo',
+                    id: 'delimiterCombo',
+                    width: '100%',
+                    hidden: false, //initially visible because default value of formatCombo === 'csv'
+                    fieldLabel: viewModel.get('delimiterText'),
+                    labelWidth: 120,
+                    value: ',',
+                    forceSelection: true,
+                    store: [
+                        [',', ','],
+                        [';', ';'],
+                        ['|', '|'],
+                        ['\t', 'tab']
                     ]
                 }, {
-                    xtype: 'checkboxfield',
-                    fieldLabel: viewModel.get('downloadAllText')
+                    xtype: 'checkbox',
+                    id: 'quoteCheckbox',
+                    hidden: false, //initially visible because default value of formatCombo === 'csv'
+                    fieldLabel: viewModel.get('quoteText'),
+                    labelWidth: 120,
+                    value: true
                 }]
             }],
             bbar: [{
@@ -1627,6 +1654,24 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
+     * toggles visibility of delimiterCombo & quoteCheckbox
+     * depending on selected download format
+     */
+     onDownloadFormatSelected: function(combo, record) {
+         var me = this;
+         var delimiterCombo = me.up().down('combo[id="delimiterCombo"]');
+         var quoteCheckbox = me.up().down('checkbox[id="quoteCheckbox"]');
+
+         if (record.get('field2') === 'csv') {
+             delimiterCombo.setHidden(false);
+             quoteCheckbox.setHidden(false);
+         } else {
+             delimiterCombo.setHidden(true);
+             quoteCheckbox.setHidden(true);
+         }
+     },
+
+    /**
      * Converts the download features to GeoJSON and downloads via data uri.
      *
      * @param {Object} dataObj The config object of the selected Series.
@@ -1635,10 +1680,12 @@ Ext.define('Koala.view.component.D3ChartController', {
     downloadChartData: function(dataObj, btn) {
         var stationId = dataObj.config.id;
         var win = btn.up('window');
-        var combo = win.down('combo');
+        var formatCombo = win.down('combo[id="formatCombo"]');
         var checkbox = win.down('checkboxfield');
+        var delimiterCombo = win.down('combo[id="delimiterCombo"]');
+        var quoteCheckbox = win.down('checkbox[id="quoteCheckbox"]');
 
-        var format = combo.getValue();
+        var format = formatCombo.getValue();
         var all = checkbox.getValue();
         var features = [];
         if (all) {
@@ -1675,7 +1722,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                 features = features.map(function(feature) {
                     return feature.properties;
                 });
-                features = Papa.unparse(features);
+                var delimiter = delimiterCombo.getSelectedRecord().get('field1');
+                var quoteStrings = quoteCheckbox.getValue();
+                var config = {
+                    delimiter: delimiter,
+                    quotes: quoteStrings,
+                    quoteChar: '"',
+                    fastMode: false
+                };
+                features = Papa.unparse(features, config);
                 break;
             }
             default: {
@@ -1684,7 +1739,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
 
         var layerName = this.getView().config.name.replace(' ','_');
-        var fileEnding = combo.getSelectedRecord().get('field2');
+        var fileEnding = formatCombo.getSelectedRecord().get('field2');
 
         download(features, layerName + '.' + fileEnding, format);
         win.close();
