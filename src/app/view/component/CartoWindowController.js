@@ -669,7 +669,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 fastMode: false
             };
 
-            //toDo: tab-delimited not yet working
             data = Papa.unparse(featArray, config);
         }
         download(data, fullFilename, mimetype);
