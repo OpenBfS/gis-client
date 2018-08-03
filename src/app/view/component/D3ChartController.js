@@ -1657,19 +1657,19 @@ Ext.define('Koala.view.component.D3ChartController', {
      * toggles visibility of delimiterCombo & quoteCheckbox
      * depending on selected download format
      */
-     onDownloadFormatSelected: function(combo, record) {
-         var me = this;
-         var delimiterCombo = me.up().down('combo[id="delimiterCombo"]');
-         var quoteCheckbox = me.up().down('checkbox[id="quoteCheckbox"]');
+    onDownloadFormatSelected: function(combo, record) {
+        var me = this;
+        var delimiterCombo = me.up().down('combo[id="delimiterCombo"]');
+        var quoteCheckbox = me.up().down('checkbox[id="quoteCheckbox"]');
 
-         if (record.get('field2') === 'csv') {
-             delimiterCombo.setHidden(false);
-             quoteCheckbox.setHidden(false);
-         } else {
-             delimiterCombo.setHidden(true);
-             quoteCheckbox.setHidden(true);
-         }
-     },
+        if (record.get('field2') === 'csv') {
+            delimiterCombo.setHidden(false);
+            quoteCheckbox.setHidden(false);
+        } else {
+            delimiterCombo.setHidden(true);
+            quoteCheckbox.setHidden(true);
+        }
+    },
 
     /**
      * Converts the download features to GeoJSON and downloads via data uri.
