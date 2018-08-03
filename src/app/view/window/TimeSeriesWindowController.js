@@ -74,6 +74,29 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     },
 
     /**
+     * Toggles the scale of the left axis back and forth between log and linear.
+     */
+    toggleScale: function() {
+        var chart = this.getView().down('d3-chart');
+        var leftAxis = chart.getAxes().left;
+
+        var attachedSeries = chart.shapes[0].attachedSeries;
+        if (attachedSeries) {
+            Koala.util.ChartAxes.showToggleScaleMenu(
+                attachedSeries,
+                chart,
+                this.getView().down('[name=btn-toggle-scale]').el,
+                this.getViewModel().get('axisText')
+            );
+        } else {
+            Koala.util.ChartAxes.toggleScaleForAxis(
+                leftAxis,
+                chart.getController()
+            );
+        }
+    },
+
+    /**
      *
      */
     layerTimeFilterToCql: function(layer, urlParamTime) {
@@ -160,7 +183,12 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var store = Ext.create('Ext.data.Store', {
             model: model,
             sorters: [{
-                property: 'dspName',
+                sorterFn: function(record1, record2) {
+                    var dspName1 = Koala.util.String.replaceSpecialChar(record1.data.dspName),
+                        dspName2 = Koala.util.String.replaceSpecialChar(record2.data.dspName);
+
+                    return dspName1 > dspName2 ? 1 : (dspName1 === dspName2) ? 0 : -1;
+                },
                 direction: 'ASC'
             }],
             proxy: {
@@ -180,7 +208,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
             store: store,
             displayField: 'dspName',
             valueField: 'id',
-            emptyText: 'Serie hinzufügen',
+            bind: {
+                emptyText: '{selectSeriesComboEmptyText}'
+            },
             queryParam: 'CQL_FILTER',
             listeners: {
                 select: Ext.Function.bind(me.onTimeSeriesComboSelect,
@@ -339,6 +369,15 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
                 margin: '0 0 10px 0'
             }, {
                 xtype: 'button',
+                name: 'btn-toggle-scale',
+                enableToggle: true,
+                bind: {
+                    text: '{toggleScaleBtnText}'
+                },
+                handler: this.toggleScale.bind(this),
+                margin: '0 10px 10px 0'
+            }, {
+                xtype: 'button',
                 bind: {
                     text: '{undoBtnText}'
                 },
@@ -481,18 +520,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var endDate = this.getEndFieldValue();
 
         Ext.each(charts, function(chart) {
-            var chartController = chart.getController();
-
             // update the time range for the chart
             chart.setStartDate(startDate);
             chart.setEndDate(endDate);
-
-            var shapes = chart.getShapes();
-
-            Ext.each(shapes, function(shape) {
-                chartController.deleteShapeSeriesById(shape.id);
-                chartController.deleteLegendEntry(shape.id);
-            });
 
             // update the chart to reflect the changes
             chart.getController().getChartData();

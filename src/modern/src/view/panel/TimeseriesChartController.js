@@ -156,6 +156,9 @@ Ext.define('Koala.view.panel.TimeseriesChartController', {
             // update the time range for the chart
             chart.setStartDate(startDate);
             chart.setEndDate(endDate);
+            var filterView = me.getView().up().down('k-form-timeseriesfiltercontrol');
+            var metadata = chart.getTargetLayer().metadata;
+            Koala.util.Autorefresh.updateAutorefresh(filterView, metadata);
 
             var shapes = chart.getShapes();
 

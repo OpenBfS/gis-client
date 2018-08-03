@@ -21,7 +21,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
     alias: 'controller.component-d3barchart',
 
     requires: [
-        'Koala.util.Ogc'
+        'Koala.util.Ogc',
+        'Koala.util.String'
     ],
 
     /**
@@ -34,6 +35,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     tooltipCmp: null,
     initialPlotTransform: null,
     data: {},
+    rawData: null,
     chartRendered: false,
     ajaxCounter: 0,
     chartConfig: null,
@@ -139,26 +141,38 @@ Ext.define('Koala.view.component.D3BarChartController', {
     onChartDataRequestSuccess: function(chartDataResponse) {
         var me = this;
         var view = me.getView();
+        me.rawData = chartDataResponse.responseText;
+
         if (!view) {
             me.onDataComplete(chartDataResponse);
             return;
         }
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
-        if (!barChartProperties.colorMappingUrl || Ext.isEmpty(
-            barChartProperties.colorMappingUrl)) {
+        if (!barChartProperties.colorMapping || Ext.isEmpty(
+            barChartProperties.colorMapping)) {
             me.onDataComplete(chartDataResponse);
             return;
         }
-        Ext.Ajax.request({
-            method: 'GET',
-            url: barChartProperties.colorMappingUrl,
-            success: function(colorDataResponse) {
-                me.onDataComplete(chartDataResponse, colorDataResponse);
-            },
-            failure: function() {
-                Ext.log.error('Error retrieving external colormap');
-                me.onDataComplete(chartDataResponse);
+        var promise;
+        if (Ext.String.startsWith(barChartProperties.colorMapping, 'url:')) {
+            promise = Koala.util.String.replaceTemplateStringsWithPromise(
+                barChartProperties.colorMapping
+            );
+        } else {
+            promise = new Ext.Promise(function(resolve) {
+                resolve(barChartProperties.colorMapping);
+            });
+        }
+
+        promise.then(function(colorMap) {
+            if (Ext.isString(colorMap)) {
+                try {
+                    colorMap = Ext.decode(colorMap);
+                } catch (err) {
+                    Ext.log.error('Could not parse the color data response: ', err);
+                }
             }
+            me.onDataComplete(chartDataResponse, colorMap);
         });
     },
 
@@ -167,7 +181,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
      *
      * @param {Object} reponse The response object.
      */
-    onDataComplete: function(chartDataResponse, colorDataResponse) {
+    onDataComplete: function(chartDataResponse, colorMap) {
         var me = this;
         var staticMe = Koala.view.component.D3BarChartController;
         var view = me.getView();
@@ -196,7 +210,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             colors = view.getShape().color.split(',');
         }
         var jsonObj;
-        var jsonColorData;
 
         var seriesData = [];
 
@@ -208,13 +221,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 return false;
             }
         }
-        if (colorDataResponse && colorDataResponse.responseText) {
-            try {
-                jsonColorData = Ext.decode(colorDataResponse.responseText);
-            } catch (err) {
-                Ext.log.error('Could not parse the color data response: ', err);
-            }
-        }
+
         //used for grid table in CartoWindowController
         me.gridFeatures = jsonObj.features;
 
@@ -244,7 +251,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
             dataObj.key = feature.properties[keyProp];
 
             if (!me.colorsByKey[groupKey]) {
-                me.colorsByKey[groupKey] = me.customColors[groupKey] || colors[0] || staticMe.getRandomColor();
+                me.colorsByKey[groupKey] =
+                  me.customColors[groupKey] ||
+                  (colorMap && colorMap[groupKey] ? colorMap[groupKey].color : null) ||
+                  colors[0] ||
+                  staticMe.getRandomColor();
                 Ext.Array.removeAt(colors, 0);
             }
 
@@ -261,8 +272,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
                 pushObj[groupKey] = {};
             }
 
-            if (jsonColorData && jsonColorData[groupKey]) {
-                pushObj[groupKey].color = jsonColorData[groupKey].color;
+            if (colorMap && colorMap[groupKey]) {
+                pushObj[groupKey].color = colorMap[groupKey].color;
             } else {
                 pushObj[groupKey].color = me.customColors[groupKey] || me.colorsByKey[groupKey];
             }

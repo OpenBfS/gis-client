@@ -320,7 +320,7 @@
             "isLayerProfile" : false
          },
          {
-            "thumb" : "layer_sets/uv_thumb.jpg",
+            "thumb" : "layer_sets/uv_thumb.png",
             "children" : [
                {
                   "uuid" : "95050a76-1b87-42e6-8335-5a6522d37973",

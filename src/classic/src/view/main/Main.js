@@ -41,6 +41,7 @@ Ext.define('Koala.view.main.Main', {
 
         'Koala.view.button.Permalink',
         'Koala.view.button.ShowRedliningToolsContainer',
+        'Koala.view.button.BackgroundLayers',
         'Koala.view.button.ToggleFullscreen',
         'Koala.view.button.SelectFeatures',
         'Koala.view.main.MainController',
@@ -49,7 +50,8 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.window.HelpWindow',
         'Koala.view.window.Print',
 
-        'Koala.util.Layer'
+        'Koala.util.Layer',
+        'Koala.util.LocalStorage'
     ],
 
     controller: 'main',
@@ -82,15 +84,32 @@ Ext.define('Koala.view.main.Main', {
      * delay is necessary otherwise treelist.store is not ready for .setSelection()
      */
     listeners: {
-        delay: 500,
-        afterrender: function() {
-            if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
-                var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                helpWin.on('afterlayout', function() {
-                    var helpWinController = this.getController();
-                    helpWinController.setTopic('preface');
-                }, helpWin, {single: true});
-            }
+        beforerender: {
+            fn: function() {
+                var headerTitle = Koala.util.AppContext.getMergedDataByKey('headerTitle');
+                if (headerTitle) {
+                    if (Koala.util.AppContext.getMergedDataByKey('imis_user').uid === 'hoe-fr') {
+                        headerTitle = 'Höbler-GIS';
+                    }
+                    this.header.down('title').setText(headerTitle);
+                } else {
+                    this.header.down('title').setBind({text: '{headerTitle}'});
+                }
+            },
+            delay: 500
+        },
+        afterrender: {
+            fn: function() {
+                var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
+                if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
+                    var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                    helpWin.on('afterlayout', function() {
+                        var helpWinController = this.getController();
+                        helpWinController.setTopic('preface');
+                    }, helpWin, {single: true});
+                }
+            },
+            delay: 500
         }
     },
 
@@ -104,7 +123,9 @@ Ext.define('Koala.view.main.Main', {
             plugins: [{
                 ptype: 'hoverBfS',
                 selectMulti: true,
-                selectEventOrigin: 'interaction'
+                selectEventOrigin: 'interaction',
+                maxHeight: 500,
+                className: 'ol-overlay-container ol-selectable k-feature-hover'
             }]
         },
         toolbarConfig: {
@@ -125,16 +146,25 @@ Ext.define('Koala.view.main.Main', {
                 listeners: {
                     boxready: Koala.util.AppContext.generateCheckToolVisibility('selectFeaturesBtn')
                 }
-            }]
+            },{
+                xtype: 'k-button-backgroundlayers'
+            }
+            ]
         },
         listeners: {
             afterrender: function() {
                 if (!location.hash) {
                     var lyrSetWin = Ext.create('Koala.view.window.LayerSetChooserWindow');
-                    if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs'])) {
+
+                    var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
+                    if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
                         lyrSetWin.setHelpTxt(true);
                     }
-                    lyrSetWin.show();
+
+                    var hideWindow = Koala.util.LocalStorage.showLayersetChooserWindowOnStartup();
+                    if (!hideWindow) {
+                        lyrSetWin.show();
+                    }
                 }
                 // This needs to happen in an afterrender handler, as
                 // otherwise the BasiGX texts would count…
@@ -314,6 +344,7 @@ Ext.define('Koala.view.main.Main', {
             constrain: true,
             resizeHandles: 'w nw n',
             collapsed: false,
+            width: 300,
             minWidth: 250,
             maxWidth: 700,
             listeners: {
@@ -352,9 +383,6 @@ Ext.define('Koala.view.main.Main', {
     getAdditionalHeaderItems: function() {
         var title = {
             xtype: 'title',
-            bind: {
-                text: '{headerTitle}'
-            },
             textAlign: 'center',
             autoEl: {
                 tag: 'a',

@@ -820,13 +820,13 @@ Ext.define('Koala.util.Layer', {
          */
         checkAlwaysOnTopLayers: function(map) {
             // happens when testing:
-            if (!map) {
+            if (!map || !map.getLayers().getArray) {
                 return;
             }
             var onTopLayers = [];
             Ext.each(map.getLayers().getArray(), function(layer) {
                 var path = 'metadata/layerConfig/olProperties/alwaysOnTop';
-                var alwaysOnTop = Koala.util.Object.getPathOr(layer, path, false);
+                var alwaysOnTop = Koala.util.Object.getPathStrOr(layer, path, false);
                 if (alwaysOnTop) {
                     onTopLayers.push(layer);
                 }
@@ -865,7 +865,8 @@ Ext.define('Koala.util.Layer', {
             staticMe.bindLayerVisibilityHandlers(layer, mapComp);
             mapComp.addLayer(layer);
 
-            Koala.util.Layer.checkAlwaysOnTopLayers(mapComp.map);
+            var map = mapComp.getMap();
+            Koala.util.Layer.checkAlwaysOnTopLayers(map);
 
             // Select the newly added layer in the legend tree (handles classic
             // and modern)
@@ -1217,7 +1218,7 @@ Ext.define('Koala.util.Layer', {
                 selectStyle: olProps.selectStyle || olProps.hoverStyle,
                 hasLegend: getBool(olProps.hasLegend, true),
                 downloadUrl: metadata.layerConfig.download ? metadata.layerConfig.download.url : undefined,
-                attribution: olProps.attribution || '',
+                attribution: olProps.source_attributions || '',
                 // "treeId": metadata.inspireId, //TODO: is now routeId
                 //"treeMenu": true, // TODO: remove / enhance due to new single item properties
                 //routeId: olProps.routeId || metadata.inspireId, // TODO: get this back in when gnos is ready

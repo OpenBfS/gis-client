@@ -60,7 +60,7 @@ Ext.define('Koala.view.window.TimeSeriesWindow', {
             tooltip: '{helpTooltip}'
         },
         callback: function() {
-            Koala.util.Help.showHelpWindow('mapGeoObjects', 'map');
+            Koala.util.Help.showHelpWindow('mapTimeSeries', 'map');
         }
     }],
     defaults: {

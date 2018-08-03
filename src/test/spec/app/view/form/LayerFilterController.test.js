@@ -1,4 +1,5 @@
 Ext.Loader.syncRequire(['Koala.view.form.LayerFilterController']);
+Ext.Loader.syncRequire(['Koala.util.Autorefresh']);
 
 describe('Koala.view.form.LayerFilterController', function() {
     describe('Basics', function() {
@@ -26,12 +27,12 @@ describe('Koala.view.form.LayerFilterController', function() {
         });
 
         it('can refresh layers', function() {
-            var ctrl = new Koala.view.form.LayerFilterController();
+            var ctrl = Koala.util.Autorefresh;
             expect(ctrl.refreshLayers.bind(ctrl)).to.not.throwException();
         });
 
         it('properly overwrites value filters', function() {
-            var ctrl = new Koala.view.form.LayerFilterController();
+            var ctrl = Koala.util.Autorefresh;
             var newFilters = [{type: 'other'}, {type: 'value'}];
             var oldFilters = [{type: 'other'}, {type: 'value', other: 'newvalue'}];
             ctrl.overwriteValueFilters(oldFilters, newFilters);
@@ -55,14 +56,14 @@ describe('Koala.view.form.LayerFilterController', function() {
             view.getLayer = sinon.stub().returns(layer);
             view.getFilters = sinon.stub().returns([]);
             ctrl.setView(view);
-            sinon.stub(ctrl, 'updateMetadataLegendTree');
-            sinon.stub(ctrl, 'deselectThemeTreeItems');
+            sinon.stub(Koala.util.Autorefresh, 'updateMetadataLegendTree');
+            sinon.stub(Koala.util.Autorefresh, 'deselectThemeTreeItems');
             expect(ctrl.changeFilterForLayer.bind(ctrl)).to.not.throwException();
             Koala.util.Layer.getOriginalMetadata.restore();
             Koala.util.Layer.layerFromMetadata.restore();
             Koala.util.Layer.repaintLayerFilterIndication.restore();
-            ctrl.updateMetadataLegendTree.restore();
-            ctrl.deselectThemeTreeItems.restore();
+            Koala.util.Autorefresh.updateMetadataLegendTree.restore();
+            Koala.util.Autorefresh.deselectThemeTreeItems.restore();
         });
 
         it('can submit filters', function() {
@@ -74,16 +75,15 @@ describe('Koala.view.form.LayerFilterController', function() {
             sinon.stub(Koala.util.Layer, 'layerFromMetadata');
             Koala.util.Layer.layerFromMetadata.returns(layer);
             ctrl.setView(view);
-            sinon.stub(ctrl, 'deselectThemeTreeItems');
+            sinon.stub(Koala.util.Autorefresh, 'deselectThemeTreeItems');
             expect(ctrl.submitFilter.bind(ctrl)).to.not.throwException();
             Koala.util.Layer.layerFromMetadata.restore();
-            ctrl.deselectThemeTreeItems.restore();
+            Koala.util.Autorefresh.deselectThemeTreeItems.restore();
         });
 
         it('can update filters for autorefresh', function() {
             sinon.stub(Koala.util.Date, 'getTimeReferenceAwareMomentDate');
             Koala.util.Date.getTimeReferenceAwareMomentDate.returns(moment());
-            var ctrl = new Koala.view.form.LayerFilterController();
             var filters = [{
                 type: 'pointintime',
                 maxdatetimeinstant: moment('2015-01-01').toISOString()
@@ -91,7 +91,7 @@ describe('Koala.view.form.LayerFilterController', function() {
                 type: 'timerange',
                 maxdatetimeinstant: moment('2015-01-01').toISOString()
             }];
-            ctrl.updateFiltersForAutorefresh(filters);
+            Koala.util.Autorefresh.updateFiltersForAutorefresh(filters);
             Koala.util.Date.getTimeReferenceAwareMomentDate.restore();
             expect(filters[0].effectivedatetime.isSameOrBefore(moment));
             expect(filters[1].effectivemaxdatetime.isSameOrBefore(moment));
@@ -102,7 +102,7 @@ describe('Koala.view.form.LayerFilterController', function() {
             var view = TestUtil.getMockedElement();
             var layer = TestUtil.getMockedGetter({});
             sinon.stub(Koala.util.Layer, 'layerFromMetadata');
-            sinon.stub(ctrl, 'deselectThemeTreeItems');
+            sinon.stub(Koala.util.Autorefresh, 'deselectThemeTreeItems');
             Koala.util.Layer.layerFromMetadata.returns(layer);
             sinon.spy(Koala.util.Layer, 'addOlLayerToMap');
             view.getMetadata = sinon.stub();
@@ -110,13 +110,12 @@ describe('Koala.view.form.LayerFilterController', function() {
             ctrl.submitNoFilter();
             expect(Koala.util.Layer.addOlLayerToMap.called).to.be(true);
             Koala.util.Layer.layerFromMetadata.restore();
-            ctrl.deselectThemeTreeItems.restore();
+            Koala.util.Autorefresh.deselectThemeTreeItems.restore();
         });
 
         it('can deselect theme tree items', function() {
             Ext.ComponentQuery.query.returns([]);
-            var ctrl = new Koala.view.form.LayerFilterController();
-            expect(ctrl.deselectThemeTreeItems.bind(ctrl)).to.not.throwException();
+            expect(Koala.util.Autorefresh.deselectThemeTreeItems.bind(Koala.util.Autorefresh)).to.not.throwException();
         });
 
         it('disables utc button', function() {

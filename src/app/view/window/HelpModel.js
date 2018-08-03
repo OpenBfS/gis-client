@@ -48,7 +48,8 @@ Ext.define('Koala.view.window.HelpModel', {
             '<div>Zur Umsetzung einer transparenten Informationspolitik sehen wir unter anderem die Bereitstellung als offene Daten (siehe <abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr> Geoportal - Impressum/Nutzungsbedingungen) sowie die Entwicklung aller unserer Anwendungen als Open-Source-Software '+
             '<a href=\'http://www.bfs.de/SharedDocs/Kurzmeldungen/BfS/DE/2017/0102-bfs-open-source.html\' target=\'_blank\'>(Kurzmeldung des <abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr>)</a>'+
             '.</div>'+
-            '<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>'
+            '<div>Durch dieses Entwicklungskonzept wird darüber hinaus ein effektiver, gemeinnütziger Ressourceneinsatz gewährleistet.</div>',
+        hideHelpWindowOnStartupMsg: ''
     },
 
     formulas: {
@@ -97,6 +98,16 @@ Ext.define('Koala.view.window.HelpModel', {
                         id: 'mapGeoObjects',
                         text: '{map.geoObjects.title}',
                         content: '{map.geoObjects.html}',
+                        leaf: true
+                    }, {
+                        id: 'mapCartoWindows',
+                        text: '{map.cartoWindows.title}',
+                        content: '{map.cartoWindows.html}',
+                        leaf: true
+                    }, {
+                        id: 'mapTimeSeries',
+                        text: '{map.timeSeries.title}',
+                        content: '{map.timeSeries.html}',
                         leaf: true
                     }]
                 }, {
@@ -165,6 +176,10 @@ Ext.define('Koala.view.window.HelpModel', {
                         content: '{mapNavigation.initMapView.html}',
                         leaf: true
                     }, {
+                        text: '{mapNavigation.measure.title}',
+                        content: '{mapNavigation.measure.html}',
+                        leaf: true
+                    }, {
                         text: '{mapNavigation.fullScreen.title}',
                         content: '{mapNavigation.fullScreen.html}',
                         leaf: true
@@ -173,9 +188,10 @@ Ext.define('Koala.view.window.HelpModel', {
                         text: '{mapNavigation.permaLink.title}',
                         content: '{mapNavigation.permaLink.html}',
                         leaf: true
-                    }, {
-                        text: '{mapNavigation.openLegend.title}',
-                        content: '{mapNavigation.openLegend.html}',
+                    },{
+                        id: 'mapNavigationBackgroundLayers',
+                        text: '{mapNavigation.backgroundLayers.title}',
+                        content: '{mapNavigation.backgroundLayers.html}',
                         leaf: true
                     }]
                 }, {

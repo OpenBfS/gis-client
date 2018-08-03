@@ -613,6 +613,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var viewSize = me.getViewSize();
         var legWidth = me.calculateLegendWidth();
         var barChartParent;
+        var svgContainerWidth = (chartSize[2] < chartSize[0]) ? chartSize[0] : chartSize[2];
 
         svgContainer
             .attr('viewBox', '0 0 ' + viewSize[0] + ' ' + viewSize[1])
@@ -636,7 +637,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             svgContainer
                 .attr('height', viewSize[1] - scrollbarHeight)
                 .attr('viewBox', '0 0 ' + (marginLeft + chartSize[2]) + ' ' + (viewSize[1] - scrollbarHeight))
-                .attr('width', (chartSize[2] + marginLeft));
+                .attr('width', (svgContainerWidth + marginLeft));
         }
 
         svgGroup
@@ -828,27 +829,15 @@ Ext.define('Koala.view.component.D3BaseController', {
 
     createAttachedSeriesAxes: function() {
         var me = this;
-        var view = this.getView();
-        var metadata = view.getConfig().targetLayer.metadata;
         var Axes = Koala.util.ChartAxes;
         var chartSize = this.getChartSize();
         me.attachedSeriesAxes = [];
         me.attachedSeriesScales = [];
-        var series = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        try {
-            series = JSON.parse(series);
-        } catch (e) {/*silently catch*/}
-        Ext.each(series, function(config) {
-            var label = config.dspUnit || '';
-            var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
-            var scale = me.createScale('left', axisConfig, chartSize);
-            var axis = Axes.createAxis(axisConfig, 'left', scale);
+        Ext.each(this.attachedSeriesAxisConfig, function(config) {
+            var scale = me.createScale('left', config, chartSize);
+            var axis = Axes.createAxis(config, 'left', scale);
 
-            me.setDomainForScale(axisConfig, scale, 'left', axisConfig);
+            me.setDomainForScale(config, scale, 'left', config);
 
             me.attachedSeriesAxes.push(axis);
             me.attachedSeriesScales.push(scale);
@@ -1023,7 +1012,8 @@ Ext.define('Koala.view.component.D3BaseController', {
 
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
-        canvas.width = chartImageWidth + legendImageWidth;
+        // TODO: harmonize barchart and timeseries width-calculation
+        canvas.width = (cbScope.type === 'component-d3barchart') ? chartImageWidth + legendImageWidth : chartImageWidth;
         canvas.height = legendImageHeight > chartImageHeight ?
             legendImageHeight : chartImageHeight;
         ctx.fillStyle = 'white';
@@ -1035,7 +1025,8 @@ Ext.define('Koala.view.component.D3BaseController', {
             d3.selectAll('.k-d3-hidden').style('display', 'block');
             legendImageObject.onload = function() {
                 ctx.drawImage(legendImageObject,
-                    chartImageWidth, 0, legendImageWidth, legendImageHeight);
+                    // TODO: harmonize barchart and timeseries width-calculation
+                    (cbScope.type === 'component-d3barchart') ? chartImageWidth : (chartImageWidth + 10 - legendImageWidth), 0, legendImageWidth, legendImageHeight);
                 var dataUri = canvas.toDataURL(outputFormat);
                 downloadIcons.style('display', 'block');
                 deleteIcons.style('display', 'block');

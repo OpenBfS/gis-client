@@ -43,6 +43,44 @@ Ext.define('Koala.view.form.TimeseriesFilterControlController', {
         } else {
             Ext.toast(viewModel.get('invalidInputErrMsg'));
         }
+
+        var chart = timeseriesPanel.down('d3-chart');
+        var toggleField = view.down('[name=data-below-threshold-button]');
+        chart.setShowIdentificationThresholdData(toggleField.getValue());
+        var toggleScale = view.down('[name=toggle-scale-button]').getValue();
+        var leftAxis = chart.getAxes().left;
+        if (toggleScale && (leftAxis.scale === 'linear' || leftAxis.scale === undefined)) {
+            leftAxis.scale = 'log';
+        } else if (!toggleScale && leftAxis.scale === 'log') {
+            leftAxis.scale = 'linear';
+        }
+        var ctrl = chart.getController();
+
+        ctrl.getChartData();
+    },
+
+    toggleScaleButtonClicked: function() {
+        var me = this;
+        var view = me.getView();
+        var viewModel = me.getViewModel();
+        var timeseriesPanel = view.up('k-panel-timeserieschart');
+        var chart = timeseriesPanel.down('d3-chart');
+        var attachedSeries = chart.getController().shapes[0].config.attachedSeries;
+        var leftAxis = chart.getAxes().left;
+
+        if (attachedSeries) {
+            Koala.util.ChartAxes.showToggleScaleMenu(
+                attachedSeries,
+                chart,
+                undefined,
+                viewModel.get('axisText')
+            );
+        } else {
+            Koala.util.ChartAxes.toggleScaleForAxis(
+                leftAxis,
+                chart.getController()
+            );
+        }
     },
 
     /**

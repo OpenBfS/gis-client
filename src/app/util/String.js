@@ -72,9 +72,9 @@ Ext.define('Koala.util.String', {
                     // it is already a Moment/date
                     if (moment.isMoment(replacement)) {
                         replacement = Koala.util.Date.getFormattedDate(replacement);
-                    } else if ((typeof replacement !== 'number') && moment(replacement, moment.ISO_8601, true).isValid()) {
-                        // keep in mind that it transforms big integers defined as string into moment objects.
-                        // it can be formed into a Moment/date
+                    } else if (isNaN(Number(replacement)) && moment(replacement, moment.ISO_8601, true).isValid()) {
+                        // keep in mind, numbers are NOT parsed to a date-object
+                        // this includes unix timestamps (time in milliseconds since Jan 01 1970)
                         var momentDate = Koala.util.Date.getUtcMoment(replacement);
                         replacement = Koala.util.Date.getFormattedDate(momentDate);
                     }
@@ -85,13 +85,13 @@ Ext.define('Koala.util.String', {
         },
 
         /**
-         * Same as #replaceTemplateStrings, but resolves featureurl: prefixed
+         * Same as #replaceTemplateStrings, but resolves url: or featureurl: prefixed
          * templates and returns an Ext.Promise instead of the value. Resolves
          * url values after applying #replaceTemplateStrings to the url template.
          */
         replaceTemplateStringsWithPromise: function(tpl, gettable, showWarnings, prefix) {
             var val = Koala.util.String.replaceTemplateStrings(tpl, gettable, showWarnings, prefix);
-            if (Ext.String.startsWith(val, 'featureurl:')) {
+            if (Ext.String.startsWith(val, 'featureurl:') || Ext.String.startsWith(val, 'url:')) {
                 var defaultHeaders;
                 var authHeader = Koala.util.Authentication.getAuthenticationHeader();
                 if (authHeader) {
@@ -99,10 +99,16 @@ Ext.define('Koala.util.String', {
                         Authorization: authHeader
                     };
                 }
+                var url;
+                if (Ext.String.startsWith(val, 'featureurl:')) {
+                    url = val.substring('featureurl:'.length);
+                } else {
+                    url = val.substring('url:'.length);
+                }
 
                 return new Ext.Promise(function(resolve, reject) {
                     Ext.Ajax.request({
-                        url: val.substring('featureurl:'.length),
+                        url: url,
                         defaultHeaders: defaultHeaders,
                         method: 'GET',
                         success: function(response) {
@@ -194,6 +200,25 @@ Ext.define('Koala.util.String', {
             } else {
                 return string;
             }
+        },
+
+
+        /**
+        * replaces special Characters
+        * mainly used for sorting of strings with 'UMLAUT'
+        * @param {string} string - the string containing special character
+        * @returns {string} - the string where special characters have been replaced
+        */
+        replaceSpecialChar: function(string) {
+            var value = string;
+            value = value.replace(/Ä/g, 'Ae');
+            value = value.replace(/ä/g, 'ae');
+            value = value.replace(/Ö/g, 'Oe');
+            value = value.replace(/ö/g, 'oe');
+            value = value.replace(/Ü/g, 'Ue');
+            value = value.replace(/ü/g, 'ue');
+            value = value.replace(/ß/g, 'ss');
+            return value;
         },
 
         /**

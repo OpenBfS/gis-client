@@ -57,7 +57,8 @@ Ext.define('Koala.view.form.PrintModel', {
         downloadOngoingMiddleText: '',
         warnPrintTimedOutTitle: '',
         warnPrintTimedOutText: '',
-        updateLegendtext: ''
+        updateLegendtext: '',
+        unlinkTooltip: ''
     }
 
 });

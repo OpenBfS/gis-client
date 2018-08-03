@@ -21,68 +21,14 @@ Ext.define('Koala.view.form.LayerFilterController', {
     alias: 'controller.k-form-layerfilter',
 
     requires: [
+        'Koala.util.Autorefresh',
         'Koala.util.Date',
         'Koala.util.Filter',
-        'Koala.util.Layer',
-        'Ext.util.DelayedTask'
+        'Koala.util.Layer'
     ],
 
-    /**
-     * Maps layer uuids to the autorefresh time in minutes.
-     * @type {Object}
-     */
-    autorefreshMap: {},
-
     constructor: function() {
-        // functions seem sometimes to be called on the prototype itself
-        this.__proto__.layerUpdater = new Ext.util.DelayedTask(this.refreshLayers.bind(this));
-        this.__proto__.layerUpdater.delay(60000);
-    },
-
-    /**
-     * Refreshes the layers where the user activated auto refresh.
-     */
-    refreshLayers: function() {
-        this.__proto__.layerUpdater.delay(60000);
-
-        var mapComponent = BasiGX.util.Map.getMapComponent('gx_map');
-        var map = mapComponent.getMap();
-        var allLayers = BasiGX.util.Layer.getAllLayers(map);
-        var layersById = {};
-        Ext.Array.each(allLayers, function(lay) {
-            if (lay.metadata) {
-                layersById[lay.metadata.id] = lay;
-            }
-        });
-
-        var me = this;
-        Ext.Object.each(this.__proto__.autorefreshMap, function(id, time) {
-            var date = Koala.util.Date.getTimeReferenceAwareMomentDate(new moment());
-            if ((date.minutes() % time) === 0) {
-                Koala.util.Layer.getMetadataFromUuid(id).then(function(metadata) {
-                    var existingLayer = layersById[id];
-                    if (!existingLayer) {
-                        // layer was removed from map
-                        delete me.__proto__.autorefreshMap[id];
-                        return;
-                    }
-
-                    var currentFilters = existingLayer.metadata.filters;
-
-                    me.overwriteValueFilters(currentFilters, metadata.filters);
-
-                    me.updateFiltersForAutorefresh(metadata.filters);
-                    var LayerUtil = Koala.util.Layer;
-
-                    var layer = LayerUtil.layerFromMetadata(metadata);
-                    existingLayer.setSource(layer.getSource());
-
-                    me.updateMetadataLegendTree(existingLayer, metadata);
-                    me.deselectThemeTreeItems();
-                    LayerUtil.repaintLayerFilterIndication();
-                });
-            }
-        });
+        Koala.util.Autorefresh.initialize();
     },
 
     /**
@@ -113,7 +59,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var filters = view.getFilters();
         filters = me.updateFiltersFromForm(filters);
         metadata.filters = filters;
-        this.updateAutorefresh(view, metadata);
+        Koala.util.Autorefresh.updateAutorefresh(view, metadata);
 
         // Create a complete new layer to get its source…
         var newLayer = LayerUtil.layerFromMetadata(metadata);
@@ -121,28 +67,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
         // utility logic.
         existingLayer.setSource(newLayer.getSource());
 
-        me.updateMetadataLegendTree(existingLayer, metadata);
-        me.deselectThemeTreeItems();
+        Koala.util.Autorefresh.updateMetadataLegendTree(existingLayer, metadata);
+        Koala.util.Autorefresh.deselectThemeTreeItems();
         LayerUtil.repaintLayerFilterIndication();
         view.up('window').close();
-    },
-
-    /**
-     * Updates the auto refresh flag from the view.
-     * @param  {Koala.view.form.LayerFilter} view     must be set
-     * @param  {Object} metadata layer metadata, must be set
-     */
-    updateAutorefresh: function(view, metadata) {
-        var box = view.down('checkbox[name=autorefreshcheckbox]');
-        if (!box) {
-            return;
-        }
-        var autorefresh = box.checked;
-        if (!autorefresh) {
-            delete this.__proto__.autorefreshMap[metadata.id];
-        } else {
-            this.__proto__.autorefreshMap[metadata.id] = view.query('combobox[name=autorefresh]')[0].value;
-        }
     },
 
     /**
@@ -158,43 +86,15 @@ Ext.define('Koala.view.form.LayerFilterController', {
 
         var metadata = view.getMetadata();
         var metadataClone = Ext.clone(metadata);
-        var filters = view.getFilters();
+        var filters = Ext.clone(view.getFilters());
         filters = me.updateFiltersFromForm(filters);
         metadata.filters = filters;
-        this.updateAutorefresh(view, metadata);
+        Koala.util.Autorefresh.updateAutorefresh(view, metadata);
         var layer = LayerUtil.layerFromMetadata(metadata);
         LayerUtil.setOriginalMetadata(layer, metadataClone);
         LayerUtil.addOlLayerToMap(layer);
-        me.deselectThemeTreeItems();
+        Koala.util.Autorefresh.deselectThemeTreeItems();
         view.up('window').close();
-    },
-
-    /**
-     * Updates layer time filters based on current date and the configured
-     * min/max times, also considers maximum duration for time ranges.
-     * @param  {Array} filters the filter metadata
-     * @return {Array}         the updated filters
-     */
-    updateFiltersForAutorefresh: function(filters) {
-        var KD = Koala.util.Date;
-        Ext.each(filters, function(filter) {
-            var now = KD.getTimeReferenceAwareMomentDate(new moment()).toISOString();
-            if (filter.type === 'pointintime') {
-                if (now > filter.maxdatetimeinstant) {
-                    now = KD.getTimeReferenceAwareMomentDate(KD.getUtcMoment(filter.maxdatetimeinstant));
-                }
-                filter.effectivedatetime = moment(now);
-            }
-
-            if (filter.type === 'timerange') {
-                if (now > filter.maxdatetimeinstant) {
-                    now = KD.getTimeReferenceAwareMomentDate(KD.getUtcMoment(filter.maxdatetimeinstant));
-                }
-                filter.effectivemaxdatetime = moment(now);
-                filter.effectivemindatetime = KD.getUtcMoment(filter.effectivemaxdatetime).subtract(filter.maxduration, 'minutes');
-            }
-        });
-        return filters;
     },
 
     /**
@@ -241,51 +141,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
-     * Called during the update of a filter of an existing layer, this
-     * method will update the metadata of the layer everywhere it might
-     * be used.
-     *
-     * @param {ol.layer.Layer} layer The layer whose metadata (filter)
-     *     has changed.
-     * @param {Object} metadata The new metadata of the layer.
-     */
-    updateMetadataLegendTree: function(layer, metadata) {
-        layer.metadata = metadata;
-        // find all legendpanels:
-        var legends = Ext.ComponentQuery.query('k-panel-routing-legendtree');
-        Ext.each(legends, function(legend) {
-            // find the correct record for the given layer
-            legend.getStore().each(function(rec) {
-                var layerInTree = rec.getOlLayer && rec.getOlLayer();
-                if (layerInTree && layerInTree === layer) {
-                    rec.set('metadata', metadata);
-                    layerInTree.metadata = metadata;
-                    // update the legend image
-                    var view = legend.getView();
-                    var node = view.getNode(rec);
-                    if (node && node.querySelector &&
-                        node.querySelector('img')) {
-                        var selector = node.querySelector('img').id;
-                        var img = Ext.ComponentQuery.query(
-                            '[id=' + selector + ']')[0];
-                        if (img && img.el && img.el.dom) {
-                            img.setLoading(true);
-                            img.el.dom.onload = function(evt) {
-                                var extImg = Ext.ComponentQuery.query(
-                                    '[id=' + evt.target.id + ']')[0];
-                                if (extImg) {
-                                    extImg.setLoading(false);
-                                }
-                            };
-                            img.el.dom.src = Koala.util.Layer.getCurrentLegendUrl(layer);
-                        }
-                    }
-                }
-            });
-        });
-    },
-
-    /**
      * This method handles the adding of layers without any filters. It is bound
      * as handler for a button that is only visible when the filter form was
      * created for a layer without filters.
@@ -298,20 +153,8 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var layer = LayerUtil.layerFromMetadata(metadata);
         LayerUtil.setOriginalMetadata(layer, metadataClone);
         LayerUtil.addOlLayerToMap(layer);
-        this.deselectThemeTreeItems();
+        Koala.util.Autorefresh.deselectThemeTreeItems();
         view.up('window').close();
-    },
-
-    /**
-     * Unselects all items after a layer was added to the map.
-     */
-    deselectThemeTreeItems: function() {
-        var tree = Ext.ComponentQuery.query('k-panel-themetree')[0];
-        var treeSelModel = tree && tree.getSelectionModel();
-        var selection = treeSelModel && treeSelModel.getSelection();
-        if (!Ext.isEmpty(selection)) {
-            treeSelModel.deselectAll();
-        }
     },
 
     /**
@@ -359,14 +202,13 @@ Ext.define('Koala.view.form.LayerFilterController', {
      * listener to react on any UTC-button changes.
      */
     onBeforeDestroyLayerFilterForm: function() {
-        var me = this;
         var utcBtns = Ext.ComponentQuery.query('k-button-timereference');
         Ext.each(utcBtns, function(utcBtn) {
             utcBtn.enable();
         });
 
         //deselect ThemeTreeItems
-        me.deselectThemeTreeItems();
+        Koala.util.Autorefresh.deselectThemeTreeItems();
     },
 
     /**

@@ -32,6 +32,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     zoomInteraction: null,
     initialPlotTransform: null,
     data: {},
+    rawData: null,
     gridFeatures: null,
     /**
      * Contains the DateValues of the charts current zoom extent.
@@ -90,6 +91,8 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @event chartdataprepared
      */
 
+    featuresByStation: {},
+
     /**
      * Called on initialize event. Only used in modern toolkit.
      *
@@ -100,11 +103,34 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.onBoxReady();
     },
 
+    extractAttachedSeriesAxisConfig: function() {
+        var me = this;
+        var view = this.getView();
+        var metadata = view.getConfig().targetLayer.metadata;
+        me.attachedSeriesAxisConfig = [];
+
+        var series = Koala.util.Object.getPathStrOr(
+            metadata,
+            'layerConfig/timeSeriesChartProperties/attachedSeries',
+            '[]'
+        );
+        try {
+            series = JSON.parse(series);
+        } catch (e) {/*silently catch*/}
+        Ext.each(series, function(config) {
+            var label = config.dspUnit || '';
+            var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
+            me.attachedSeriesAxisConfig.push(axisConfig);
+        });
+    },
+
     /**
      *
      */
     drawChart: function() {
         var me = this;
+
+        this.extractAttachedSeriesAxisConfig();
 
         me.currentDateRange = {
             min: null,
@@ -542,7 +568,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             d3.select(shapePathSelector)
                                 .attr('d', shape.shape.y(function(d) {
                                     var val = d[shape.config.yField];
-                                    if (!val) {
+                                    if (!(typeof(val) === 'number')) {
                                         return null;
                                     }
                                     if (d.drawAsZero) {
@@ -554,7 +580,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                             d3.selectAll(shapePointsSelector)
                                 .attr('cy', function(d) {
                                     var val = d[shape.config.yField];
-                                    if (!val) {
+                                    if (!(typeof(val) === 'number')) {
                                         return null;
                                     }
                                     if (d.drawAsZero) {
@@ -568,7 +594,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 })
                                 .attr('y', function(d) {
                                     var val = d[shape.config.yField];
-                                    if (!val) {
+                                    if (!(typeof(val) === 'number')) {
                                         return null;
                                     }
                                     if (d.drawAsZero) {
@@ -588,7 +614,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 })
                                 .attr('y', function(d) {
                                     var val = d[shape.config.yField];
-                                    if (!val) {
+                                    if (!(typeof(val) === 'number')) {
                                         return null;
                                     }
                                     if (d.drawAsZero) {
@@ -1251,16 +1277,16 @@ Ext.define('Koala.view.component.D3ChartController', {
      * Register keyboard handler to detect keypress
      */
     registerKeyboardHandler: function(me) {
-
-        d3.select(window).on('keydown', function() {
-            if (d3.event.shiftKey) {
-                d3.event.preventDefault();
-                d3.event.stopPropagation();
+        Ext.getBody().on('keydown', function(event) {
+            if (event.shiftKey) {
+                // removed stopping of event propagation for now, if there was
+                // a reason for this, we'd probably need further checks on the
+                // event target
                 me.zoomYAxisBtnPressed = true;
             }
         });
-        d3.select(window).on('keyup', function() {
-            me.zoomYAxisBtnPressed = d3.event.shiftKey;
+        Ext.getBody().on('keyup', function(event) {
+            me.zoomYAxisBtnPressed = event.shiftKey;
         });
     },
 
@@ -1567,25 +1593,55 @@ Ext.define('Koala.view.component.D3ChartController', {
             items: [{
                 xtype: 'container',
                 items: [{
-                    padding: '10px 0',
+                    padding: '5 0 0 0',
                     html: viewModel.get('downloadChartDataMsgMessage')
-                },{
+                }, {
+                    xtype: 'checkboxfield',
+                    fieldLabel: viewModel.get('downloadAllText'),
+                    value: true
+                }, {
                     xtype: 'combo',
+                    id: 'formatCombo',
                     width: '100%',
                     fieldLabel: viewModel.get('outputFormatText'),
-                    value: 'application/json',
+                    value: 'csv',
                     forceSelection: true,
                     store: [
                         ['gml3','gml'],
                         ['csv','csv'],
                         ['application/json','json']
+                    ],
+                    listeners: {
+                        'select': me.onDownloadFormatSelected
+                    }
+                }, {
+                    xtype: 'combo',
+                    id: 'delimiterCombo',
+                    width: '100%',
+                    hidden: false, //initially visible because default value of formatCombo === 'csv'
+                    fieldLabel: viewModel.get('delimiterText'),
+                    labelWidth: 120,
+                    value: ',',
+                    forceSelection: true,
+                    store: [
+                        [',', ','],
+                        [';', ';'],
+                        ['|', '|'],
+                        ['\t', 'tab']
                     ]
+                }, {
+                    xtype: 'checkbox',
+                    id: 'quoteCheckbox',
+                    hidden: false, //initially visible because default value of formatCombo === 'csv'
+                    fieldLabel: viewModel.get('quoteText'),
+                    labelWidth: 120,
+                    value: true
                 }]
             }],
             bbar: [{
                 text: viewModel.get('downloadChartDataMsgButtonYes'),
                 name: 'confirm-timeseries-download',
-                handler: me.doWfsDownload.bind(me, dataObj)
+                handler: me.downloadChartData.bind(me, dataObj)
             }, {
                 text: viewModel.get('downloadChartDataMsgButtonNo'),
                 name: 'abort-timeseries-download',
@@ -1598,48 +1654,96 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * Executes the WFS-Request and starts the real download on success.
+     * toggles visibility of delimiterCombo & quoteCheckbox
+     * depending on selected download format
+     */
+    onDownloadFormatSelected: function(combo, record) {
+        var me = this;
+        var delimiterCombo = me.up().down('combo[id="delimiterCombo"]');
+        var quoteCheckbox = me.up().down('checkbox[id="quoteCheckbox"]');
+
+        if (record.get('field2') === 'csv') {
+            delimiterCombo.setHidden(false);
+            quoteCheckbox.setHidden(false);
+        } else {
+            delimiterCombo.setHidden(true);
+            quoteCheckbox.setHidden(true);
+        }
+    },
+
+    /**
+     * Converts the download features to GeoJSON and downloads via data uri.
      *
      * @param {Object} dataObj The config object of the selected Series.
      * @param {Ext.button.Button} btn The button we clicked on.
      */
-    doWfsDownload: function(dataObj, btn) {
-        var me = this;
+    downloadChartData: function(dataObj, btn) {
         var stationId = dataObj.config.id;
         var win = btn.up('window');
-        var combo = win.down('combo');
-        var view = this.getView();
-        var allSelectedStations = view.getSelectedStations();
-        var requestUrl = me.getChartDataRequestUrl();
-        var chartProps = view.getTargetLayer()
-            .get('timeSeriesChartProperties');
-        var feat = Ext.Array.findBy(allSelectedStations, function(station) {
-            return station.get(chartProps.featureIdentifyField || 'id') === stationId;
-        });
-        var requestParams = me.getChartDataRequestParams(feat, true);
+        var formatCombo = win.down('combo[id="formatCombo"]');
+        var checkbox = win.down('checkboxfield');
+        var delimiterCombo = win.down('combo[id="delimiterCombo"]');
+        var quoteCheckbox = win.down('checkbox[id="quoteCheckbox"]');
 
-        var format = combo.getValue();
-        var layerName = this.getView().config.name.replace(' ','_');
-        var fileEnding = combo.getSelectedRecord().get('field2');
-        requestParams.outputFormat = format;
+        var format = formatCombo.getValue();
+        var all = checkbox.getValue();
+        var features = [];
+        if (all) {
+            Ext.iterate(this.featuresByStation, function(id, feats) {
+                features = features.concat(feats);
+            });
+        } else {
+            features = this.featuresByStation[stationId];
+        }
+        var fmt;
 
-        Ext.Ajax.request({
-            method: 'GET',
-            url: requestUrl,
-            params: requestParams,
-            success: function(response) {
-                var fileName = stationId + '_' + layerName + '.' + fileEnding;
-
-                // Use the download library to enforce a browser download.
-                download(response.responseText, fileName, format);
-                win.close();
-            },
-            failure: function(response) {
-                Ext.log.warn('Download Error: ', response);
+        switch (format) {
+            case 'gml3': {
+                fmt = new ol.format.GeoJSON();
+                features = fmt.readFeatures({
+                    type: 'FeatureCollection',
+                    features: features
+                });
+                fmt = new ol.format.GML3({
+                    featureNS: 'http://www.bfs.de/namespace',
+                    featureType: 'Measure'
+                });
+                features = fmt.writeFeatures(features);
+                break;
             }
-        });
-    },
+            case 'application/json': {
+                features = JSON.stringify({
+                    type: 'FeatureCollection',
+                    features: features
+                });
+                break;
+            }
+            case 'csv': {
+                features = features.map(function(feature) {
+                    return feature.properties;
+                });
+                var delimiter = delimiterCombo.getSelectedRecord().get('field1');
+                var quoteStrings = quoteCheckbox.getValue();
+                var config = {
+                    delimiter: delimiter,
+                    quotes: quoteStrings,
+                    quoteChar: '"',
+                    fastMode: false
+                };
+                features = Papa.unparse(features, config);
+                break;
+            }
+            default: {
+                Ext.log('Unhandled format: ' + format);
+            }
+        }
 
+        var layerName = this.getView().config.name.replace(' ','_');
+        var fileEnding = formatCombo.getSelectedRecord().get('field2');
+
+        download(features, layerName + '.' + fileEnding, format);
+        win.close();
+    },
 
     /**
      *
@@ -1746,6 +1850,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
 
         me.data = {};
+        me.featuresByStation = {};
         me.chartDataAvailable = false;
         me.abortPendingRequests();
 
@@ -1973,6 +2078,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 return false;
             }
         }
+        me.rawData = response.responseText;
 
         //used for grid table in CartoWindowController
         me.gridFeatures = Ext.clone(data.features);
@@ -1993,6 +2099,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         //TODO: response shouldnt be restricted on id
         var stationId = station.get(chartConfig.featureIdentifyField || 'id');
 
+        me.featuresByStation[stationId] = data.features;
         me.data[stationId] = seriesData;
 
         me.ajaxCounter++;

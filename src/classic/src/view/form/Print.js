@@ -193,6 +193,7 @@ Ext.define('Koala.view.form.Print', {
      * container as the editbutton.
      */
     onTextFieldEditButtonClicked: function() {
+        var me = this.up('k-form-print');
         var textfield = this.up('container').down('textfield');
         Ext.create('Ext.window.Window', {
             title: textfield.getFieldLabel() + ' HTML',
@@ -206,7 +207,20 @@ Ext.define('Koala.view.form.Print', {
                 // TODO Remove if fonts are configured to
                 // match the server fonts,
                 enableFont: false,
-                enableAlignments: false
+                enableAlignments: false,
+                listeners: {
+                    render: function() {
+                        this.getToolbar().add([{
+                            xtype: 'button',
+                            iconCls: 'x-fa fa-unlink',
+                            handler: function() {
+                                this.relayCmd('unlink');
+                            },
+                            scope: this,
+                            tooltip: me.getViewModel().get('unlinkTooltip')
+                        }]);
+                    }
+                }
             }],
             bbar: ['->',
                 {
@@ -588,7 +602,8 @@ Ext.define('Koala.view.form.Print', {
         var view = this;
         var spec = {};
         var mapComponent = view.getMapComponent();
-        var mapView = mapComponent.getMap().getView();
+        var map = mapComponent.getMap();
+        var mapView = map.getView();
         var viewRes = mapView.getResolution();
         var layoutCombo = view.down('combo[name="layout"]');
         var layout = layoutCombo.getValue();
@@ -608,22 +623,67 @@ Ext.define('Koala.view.form.Print', {
 
         var promises = [];
 
+        var boxFeature = this.transformInteraction.layers_[0].getSource().getFeatures()[0];
+        var extent = boxFeature.getGeometry().getExtent();
+        var resolution = mapView.getResolution();
+        var extentPixelWidth = (extent[2] - extent[0]) / resolution;
+        var extentPixelHeight = (extent[3] - extent[1]) / resolution;
+        var mapWidth, mapHeight;
+        var layouts = this.provider.capabilityRec.layouts().data.items;
+
+        Ext.each(layouts, function(lay) {
+            var atts = lay.attributes();
+            Ext.each(atts, function(attribute) {
+                Ext.each(attribute.data.items, function(att) {
+                    if (att.data.name === 'map') {
+                        mapWidth = att.data.clientInfo.width;
+                        mapHeight = att.data.clientInfo.height;
+                    }
+                });
+            });
+        });
+        var ratioX = mapWidth / extentPixelWidth;
+        var ratioY = mapHeight / extentPixelHeight;
+
         overlays.forEach(function(overlay) {
             var coords = overlay.centerCoords;
             var containerEl = overlay.getElement();
             if (!containerEl || !containerEl.parentNode) {
                 return;
             }
+            var width = containerEl.offsetWidth;
+            var height = containerEl.offsetHeight;
+            view.hideHiddenTabs();
+            // workaround to get object tags to render properly with html2canvas
+            var htmlNode = d3.select(containerEl).select('.html-tab > input').node();
+            if (htmlNode && htmlNode.checked) {
+                try {
+                    var node = d3.select('.html-tab object').node().contentDocument.documentElement;
+                    if (node) {
+                        containerEl = node;
+                    }
+                } catch (e) {
+                    // no object tag found, go ahead with the original container
+                }
+            }
             d3.selectAll('.k-d3-hidden').style('display', 'none');
+            d3.selectAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
+                .style('display', 'none');
             var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
+                width *= ratioX;
+                height *= ratioY;
+
+                view.showHiddenTabs();
+                d3.selectAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
+                    .style('display', 'block');
                 printLayers.push({
                     type: 'chart',
                     coordinates: coords,
                     popup: canvas.toDataURL('image/png'),
-                    width: containerEl.offsetWidth,
-                    height: containerEl.offsetHeight,
+                    width: width,
+                    height: height,
                     getSource: function() {
                         return this;
                     }
@@ -856,6 +916,31 @@ Ext.define('Koala.view.form.Print', {
     },
 
     /**
+     * Explicitly hides the carto window tabs that are currently not visible.
+     */
+    hideHiddenTabs: function() {
+        d3.selectAll('.cartowindow > div').each(function() {
+            if (this.clientWidth === 0 || this.clientHeight === 0) {
+                d3.select(this).style('display', 'none');
+            }
+        });
+        d3.selectAll('.cartowindow > div > input[type=radio]').each(function() {
+            d3.select(this).style('display', 'none');
+        });
+    },
+
+    /**
+     * Shows the carto window tabs with zero width or height.
+     */
+    showHiddenTabs: function() {
+        d3.selectAll('.cartowindow > div').each(function() {
+            if (this.clientWidth === 0 || this.clientHeight === 0) {
+                d3.select(this).style('display', 'block');
+            }
+        });
+    },
+
+    /**
      * Returns and modifies the given MapFish Print 3 attribute `scalebar`
      * (http://mapfish.github.io/mapfish-print-doc/attributes.html#!scalebar)
      * to be invisible. This is done by setting various colors to a transparent
@@ -992,7 +1077,7 @@ Ext.define('Koala.view.form.Print', {
         me.setLoading(loadMsg);
 
         if (elapsedMs > me.getTimeoutMilliseconds()) {
-            Ext.log.warn('Download aborted after ' + dspElapsedMs);
+            Ext.log.warn('Print aborted after ' + dspElapsedMs);
             me.setLoading(false);
             Ext.Msg.show({
                 buttons: Ext.MessageBox.OK,
@@ -1026,6 +1111,8 @@ Ext.define('Koala.view.form.Print', {
                     failure: function(response) {
                         Ext.log.warn('server-side failure with status code '
                             + response.status);
+                        //proceed until being successfull or reaching print-timeout
+                        me.downloadWhenReady(startTime, data);
                     },
                     timeout: 500
                 });

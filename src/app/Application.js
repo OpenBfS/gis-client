@@ -34,8 +34,8 @@ Ext.define('Koala.Application', {
     statics: {
 
         timereferenceNotFound: '',
-        applicationUpdateTitle: '',
-        applicationUpdateText: '',
+        applicationUpdateTitle: 'Anwendungsupdate',
+        applicationUpdateText: 'Für diese Anwendung steht ein Update zur Verfügung. Jetzt neu laden?',
         reloadMessage: '',
 
         /**
@@ -136,6 +136,7 @@ Ext.define('Koala.Application', {
      * dialog which reloads the page on confirmation.
      */
     onAppUpdate: function() {
+        //FIXME i18n does not work on Firefox on early load of appUpdate uses statics
         Ext.Msg.confirm(Koala.Application.applicationUpdateTitle,
             Koala.Application.applicationUpdateText,
             function(choice) {

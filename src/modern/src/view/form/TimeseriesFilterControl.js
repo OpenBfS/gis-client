@@ -58,11 +58,51 @@ Ext.define('Koala.view.form.TimeseriesFilterControl', {
             label: '{labelEndDate}'
         }
     }, {
+        xtype: 'togglefield',
+        margin: '5 0 0 0',
+        name: 'data-below-threshold-button',
+        bind: {
+            label: '{dataBelowThresholdButton}'
+        }
+    }, {
         xtype: 'button',
         margin: '5 0 0 0',
+        name: 'toggle-scale-button',
+        bind: {
+            text: '{toggleScaleButton}'
+        },
+        handler: 'toggleScaleButtonClicked'
+    }, {
+        xtype: 'checkboxfield',
+        margin: '5 0 0 0',
+        name: 'autorefreshcheckbox',
+        bind: {
+            label: '{enableAutorefreshLabel}'
+        }
+    }, {
+        xtype: 'button',
+        margin: '5 0 0 0',
+        name: 'set-filter-button',
         bind: {
             text: '{setFilterButtonText}'
         },
         handler: 'onSetFilterButtonClick'
-    }]
+    }],
+
+    comboAdded: false,
+
+    listeners: {
+        painted: function() {
+            var me = this.component;
+            if (!me.comboAdded) {
+                Koala.util.Autorefresh.initialize();
+                var layer = me.up().down('d3-chart').getTargetLayer();
+                var combo = Koala.util.Filter.createAutorefreshDropdown(layer,
+                    me.getViewModel());
+                me.insertBefore(combo, me.down('[name=set-filter-button]'));
+                me.comboAdded = true;
+            }
+        }
+    }
+
 });
