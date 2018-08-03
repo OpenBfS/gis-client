@@ -51,6 +51,7 @@ Ext.define('Koala.store.SpatialSearch', {
             });
             var displayInLayerSwitcherKey = BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
             this.layer.set(displayInLayerSwitcherKey, false);
+            this.layer.setZIndex(999);
             this.map.addLayer(this.layer);
         }
 
