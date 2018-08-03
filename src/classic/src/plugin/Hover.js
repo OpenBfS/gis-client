@@ -146,6 +146,9 @@ Ext.define('Koala.plugin.Hover', {
                             me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
                         });
                     } else if (source instanceof ol.source.Vector) {
+                        if (layer.get('name') === 'hoverLayer') {
+                            return;
+                        }
                         // VECTOR!
                         map.forEachFeatureAtPixel(pixel, function(feat) {
                             if (layer.get('type') === 'WFS' ||
@@ -156,6 +159,9 @@ Ext.define('Koala.plugin.Hover', {
                                 hvl.setStyle(me.highlightStyleFunction);
                             }
                             var featureClone = feat.clone();
+                            if (featureClone.get('layer')) {
+                                return;
+                            }
                             featureClone.set('layer', layer);
                             if (!Ext.Array.contains(hoverLayers, layer)) {
                                 hoverLayers.push(layer);

@@ -164,10 +164,13 @@
                 "colorMsgButtonYes": "Ok",
                 "colorMsgButtonNo": "Abbrechen",
                 "downloadChartDataMsgTitle": "Info",
-                "downloadChartDataMsgMessage": "Aktuelle Chartdaten herunterladen?",
+                "downloadChartDataMsgMessage": "Aktuelle Daten herunterladen",
                 "downloadChartDataMsgButtonYes": "Ja",
                 "downloadChartDataMsgButtonNo": "Nein",
-                "downloadAllText": "Alle Chartdaten herunterladen"
+                "downloadAllText": "Alle Stationen?",
+                "outputFormatText": "Format",
+                "delimiterText": "Trennzeichen",
+                "quoteText": "Anführungszeichen (\" \") verwenden"
             }
         }
     },
