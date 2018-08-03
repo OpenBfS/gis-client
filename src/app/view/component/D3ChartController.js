@@ -1690,7 +1690,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         win.close();
     },
 
-
     /**
      *
      */
