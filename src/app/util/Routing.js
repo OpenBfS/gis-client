@@ -98,6 +98,12 @@ Ext.define('Koala.util.Routing', {
             var expectedLayers = 0;
             var gotLayers = 0;
             var routeCreatedLayers = {};
+            var backgroundLayers = Koala.util.AppContext.getAppContext().data.merge.backgroundLayers;
+
+            var backgroundUuids = [];
+            Ext.each(backgroundLayers, function(layer) {
+                backgroundUuids.push(layer.uuid);
+            });
 
             if (Ext.isEmpty(layers)) {
                 return false;
@@ -112,6 +118,9 @@ Ext.define('Koala.util.Routing', {
                         .then(me.checkForRodosFilters)
                         .then(function(md) {
                             gotLayers++;
+                            if (backgroundUuids.indexOf(uuid) !== -1) {
+                                return;
+                            }
                             var metadataClone = Ext.clone(md);
                             me.applyPermalinkFiltersToMetadata(md, config.filters);
 
