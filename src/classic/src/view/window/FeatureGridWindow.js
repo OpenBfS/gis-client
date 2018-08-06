@@ -22,6 +22,7 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
 
     requires: [
         'BasiGX.view.grid.FeatureGrid',
+        'BasiGX.util.Download',
         'Koala.util.Import'
     ],
 
@@ -34,7 +35,7 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
     originalLayer: null,
     layer: null,
     layout: 'fit',
-    width: 650,
+    width: 750,
     height: 300,
     scrollable: true,
     wfstInserts: [],
@@ -111,6 +112,10 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
         var header = Ext.ComponentQuery.query('k-panel-header')[0];
         var y = header.getHeight() + 5;
 
+        var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
+        var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
+        var extendedRights = Ext.Array.contains(imisRoles, 'ruf');
+
         me.x = x;
         me.y = y;
         me.setTitle(me.layer.get('name'));
@@ -175,19 +180,23 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                     targetVectorLayer: me.layer,
                     selectionVectorLayer: this.getViewModel().get(
                         'selectedFeaturesLayer'),
-                    glyph: 'xf10c@FontAwesome'
+                    glyph: 'xf10c@FontAwesome',
+                    fullSplit: true,
+                    maxAllowedFeaturesForOperation: 10,
+                    tolerance: 10
                 }, {
                     xtype: 'button',
                     enableToggle: true,
                     bind: {
                         text: viewModel.get('wfstLockButton')
                     },
-                    hidden: me.layer.get('persisted') === false,
+                    hidden: me.layer.get('persisted') === false || !extendedRights,
                     handler: function(btn) {
                         me.getController().getFeatureLock(btn, me.layer);
                     }
                 }, {
                     xtype: 'button',
+                    hidden: !extendedRights,
                     bind: {
                         text: viewModel.get('saveLayerText')
                     },
@@ -201,6 +210,13 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                             wfstFailureCallback
                         );
                     }
+                }, {
+                    xtype: 'button',
+                    id: 'feature-grid-download-button',
+                    bind: {
+                        text: viewModel.get('downloadLayerText')
+                    },
+                    handler: 'downloadLayer'
                 }]
             }, {
                 xtype: 'basigx-grid-featuregrid',

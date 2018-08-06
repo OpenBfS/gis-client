@@ -393,6 +393,15 @@
             }
         }
     },
+    "Koala.view.grid.StationSearch": {
+        "config": {
+            "data": {
+                "stationSearchTitle": "ODL Sondenstandorte",
+                "searchInProgressText": "Suche läuft…",
+                "noRecordsFoundText": "Keine Stationen gefunden"
+            }
+        }
+    },
     "Koala.view.main.Main": {
         "config": {
             "data": {
@@ -523,6 +532,9 @@
     "Koala.view.window.FeatureGridWindow": {
         "config": {
             "data": {
+                "downloadLayerText": "Daten herunterladen",
+                "geoJsonText": "GeoJSON",
+                "shapefileText": "Shape-Datei",
                 "saveLayerText": "Layer speichern",
                 "wfstSuccess": "Die Änderungen wurden erfolgreich gespeichert.<br>Objekte hinzugefügt: {0}<br>Objekte aktualisiert: {1}<br>Objekte gelöscht: {2}",
                 "wfstFailure": "Die Änderungen konnten nicht gespeichert werden, bitte probieren Sie es später erneut.",

@@ -170,7 +170,10 @@ Ext.define('Koala.util.Import', {
                 .then(this.prepareTask.bind(this, importMetadata))
                 .then(this.performImport.bind(this, importMetadata))
                 .then(this.getLayerName.bind(this, importMetadata))
-                .then(Koala.util.Metadata.prepareMetadata.bind(Koala.util.Metadata, layer.metadata))
+                .then(Koala.util.Metadata.prepareMetadata.bind(
+                    Koala.util.Metadata,
+                    layer.metadata
+                ))
                 .then(this.setPersistedFlag.bind(this, layer))
                 .then(this.closeFeatureGrid.bind(this));
         },

@@ -12995,7 +12995,7 @@ function justProps(t) {
 }
 
 function isType(t) {
-    return function(f) { return f.geometry.type === t; };
+    return function(f) { return f.geometry.type.replace('Multi', '') === t; };
 }
 
 },{}],58:[function(require,module,exports){

@@ -8,6 +8,7 @@
         "document": true,
         "FileReader": true,
         "XMLSerializer": false,
+        "DOMParser": true,
         "Image": false,
         "Koala": true,
         "BasiGX": true,

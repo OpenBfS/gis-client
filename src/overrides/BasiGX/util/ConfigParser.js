@@ -57,8 +57,8 @@ Ext.define('Koala.override.basigx.ConfigParser', {
             var authHeader = Koala.util.Authentication.getAuthenticationHeader(context);
             if (authHeader) {
                 defaultHeaders = {
-                    Authorization: authHeader//,
-                    // Accept: 'application/json'
+                    Authorization: authHeader,
+                    Accept: 'application/json'
                 };
             }
             var layerConfig = context.data.merge.mapLayers.slice();
@@ -75,17 +75,15 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                 var visibility = layer.visible;
                 var uuid = layer.uuid || layer;
                 Ext.Ajax.request({
-                    // url: context.data.merge.urls['metadata-xml2json'] + uuid,
-                    url: context.data.merge.urls['metadata-xml2json'],
-                    params: {
-                        uuid: uuid
-                    },
+                    url: context.data.merge.urls['metadata-xml2json'] + uuid,
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
                     async: false,
                     success: function(response) {
                         var obj;
                         try {
+                            var txt = response.responseText;
+
                             // replace any occurencies of \{\{ (as it may still be
                             // stored in db) with the new delimiters [[
                             //
@@ -96,12 +94,11 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                             // expressions, we need to escape them again with a \
                             var escapedCurlyOpen = /\\\\\{\\\\\{/g;
                             var escapedCurlyClose = /\\\\\}\\\\\}/g;
-                            var txt = response.responseText;
 
                             txt = txt.replace(escapedCurlyOpen, '[[');
                             txt = txt.replace(escapedCurlyClose, ']]');
                             obj = Ext.decode(txt);
-                            // obj = Koala.util.MetadataParser.parseMetadata(obj);
+                            obj = Koala.util.MetadataParser.parseMetadata(obj);
                         } catch (ex) {
                             // TODO i18n
                             Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');

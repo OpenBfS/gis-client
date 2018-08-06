@@ -118,6 +118,8 @@ Ext.define('Koala.view.window.CloneWindow', {
                 inputValue: 'selectionLayer',
                 name: 'layer'
             }]
+        }, {
+            xtype: 'k-form-field-vectortemplatecombo'
         }]
     }]
 

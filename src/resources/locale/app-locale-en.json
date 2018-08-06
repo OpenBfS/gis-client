@@ -392,6 +392,15 @@
             }
         }
     },
+    "Koala.view.grid.StationSearch": {
+        "config": {
+            "data": {
+                "stationSearchTitle": "Gamma Dose Rate Stations",
+                "searchInProgressText": "searching…",
+                "noRecordsFoundText": "No stations found"
+            }
+        }
+    },
     "Koala.view.main.Main": {
         "config": {
             "data": {
@@ -522,6 +531,9 @@
     "Koala.view.window.FeatureGridWindow": {
         "config": {
             "data": {
+                "downloadLayerText": "Download",
+                "geoJsonText": "GeoJSON",
+                "shapefileText": "Shapefile",
                 "saveLayerText": "Save layer",
                 "wfstSuccess": "Changes successfully saved.<br>Objects inserted: {0}<br>Objects updated: {1}<br>Objects deleted: {2}",
                 "wfstFailure": "Changes could not be saved. Please try again later.",

@@ -231,9 +231,18 @@ Ext.define('Koala.util.SelectFeatures', {
 
                 if (cqlFilter) {
                     var ogcCqlFilter = BasiGX.util.WFS.getOgcFromCqlFilter(cqlFilter);
+                    var parser = new DOMParser();
+                    var xml = parser.parseFromString(filter, 'application/xml');
+                    if (xml.documentElement.localName === 'Filter') {
+                        var serializer = new XMLSerializer();
+                        filter = serializer.serializeToString(xml.documentElement.firstChild);
+                    }
                     filter = BasiGX.util.WFS.combineFilters([ogcCqlFilter, filter]);
                 }
-
+                var parms = sourceLayer.getSource().getParams();
+                if (parms['viewparams']) {
+                    wfsUrl += 'viewparams=' + parms['viewparams'];
+                }
                 BasiGX.util.WFS.executeWfsGetFeature(
                     wfsUrl,
                     sourceLayer,

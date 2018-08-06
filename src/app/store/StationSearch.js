@@ -14,21 +14,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.store.SpatialSearch
+ * @class Koala.store.StationSearch
  */
-Ext.define('Koala.store.SpatialSearch', {
+Ext.define('Koala.store.StationSearch', {
     extend: 'Ext.data.Store',
 
-    alias: 'store.k-spatialsearch',
+    alias: 'store.k-stationsearch',
 
     requires: [
-        'Koala.model.SpatialRecord',
-        'BasiGX.util.Layer'
+        'Koala.model.StationRecord',
+        'Koala.util.Layer'
     ],
 
-    storeID: 'spatialsearch',
+    storeID: 'stationsearch',
 
-    model: 'Koala.model.SpatialRecord',
+    model: 'Koala.model.StationRecord',
 
     layer: null,
 
@@ -47,7 +47,20 @@ Ext.define('Koala.store.SpatialSearch', {
         }
         if (!this.layer) {
             this.layer = new ol.layer.Vector({
-                source: new ol.source.Vector()
+                source: new ol.source.Vector(),
+                style: new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 10,
+                        fill: new ol.style.Fill({
+                            color: '#ff9900',
+                            opacity: 0.6
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: '#ffcc00',
+                            opacity: 0.4
+                        })
+                    })
+                })
             });
             var displayInLayerSwitcherKey = BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
             this.layer.set(displayInLayerSwitcherKey, false);
@@ -59,15 +72,14 @@ Ext.define('Koala.store.SpatialSearch', {
 
         var appContext = BasiGX.view.component.Map.guess().appContext;
         var urls = appContext.data.merge.urls;
-        var spatialsearchtypename = appContext.data.merge['spatialSearchTypeName'];
-        this.proxy.url = urls['spatial-search'];
-        this.proxy.extraParams.typeName = spatialsearchtypename;
+        var stationsearchtypename = appContext.data.merge['stationSearchTypeName'];
+        this.proxy.url = urls['station-search'];
+        this.proxy.extraParams.typeName = stationsearchtypename;
 
-        var fields = Koala.model.SpatialRecord.getFields();
+        var fields = Koala.model.StationRecord.getFields();
         Ext.each(fields, function(field) {
             field.initConfig({
-                searchColumn: appContext.data.merge.spatialSearchFields.searchColumn,
-                geomColumn: appContext.data.merge.spatialSearchFields.geomColumn
+                searchColumns: appContext.data.merge.stationSearchFields
             });
         });
     },
@@ -81,7 +93,7 @@ Ext.define('Koala.store.SpatialSearch', {
             version: '1.0.0',
             request: 'GetFeature',
             outputFormat: 'application/json',
-            typeName: 'BFS:verwaltung_4326_geozg_sort' // set in the constructor but left as default for compatibility reasons
+            typeName: 'opendata:odl_sondenstandorte' // set in the constructor but left as default for compatibility reasons
         },
         limitParam: 'maxFeatures',
         reader: {
