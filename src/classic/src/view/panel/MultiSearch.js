@@ -68,7 +68,7 @@ Ext.define('Koala.view.panel.MultiSearch', {
     }],
 
     listeners: {
-        beforerender: function(config) {
+        beforerender: function() {
             var stationSearchGrid = {
                 xtype: 'k-grid-stationsearch',
                 closable: true,
@@ -78,7 +78,7 @@ Ext.define('Koala.view.panel.MultiSearch', {
             };
             var appContext = BasiGX.view.component.Map.guess().appContext;
             var stationsearchtypename = appContext.data.merge['stationSearchTypeName'];
-            if (stationsearchtypename && stationsearchtypename !== "") {
+            if (stationsearchtypename && stationsearchtypename !== '') {
                 this.insert(1, stationSearchGrid);
             }
         }

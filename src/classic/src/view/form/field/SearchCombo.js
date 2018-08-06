@@ -60,7 +60,7 @@ Ext.define('Koala.view.form.field.SearchCombo', {
                     multiPanel.show(combo);
                 }
                 this.doSpatialSearch(newValue);
-                if (multiPanel.down("k-grid-stationsearch")) {
+                if (multiPanel.down('k-grid-stationsearch')) {
                     this.doStationSearch(newValue);
                 }
                 this.doMetadataSearch(newValue);
