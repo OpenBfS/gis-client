@@ -60,6 +60,9 @@ Ext.define('Koala.view.form.field.SearchCombo', {
                     multiPanel.show(combo);
                 }
                 this.doSpatialSearch(newValue);
+                if (multiPanel.down("k-grid-stationsearch")) {
+                    this.doStationSearch(newValue);
+                }
                 this.doMetadataSearch(newValue);
             } else {
                 if (multiPanel) {
@@ -106,6 +109,22 @@ Ext.define('Koala.view.form.field.SearchCombo', {
 
     },
 
+    doStationSearch: function(value) {
+        var stationGrid = Ext.ComponentQuery.query('k-grid-stationsearch')[0];
+        var stationStore = stationGrid.getStore();
+
+        stationGrid.show();
+        Ext.Ajax.abort(stationStore._lastRequest);
+
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+        var fields = appContext.data.merge.stationSearchFields;
+        var cql = this.getStationCql(fields, value);
+
+        stationStore.getProxy().setExtraParam('cql_filter', cql);
+        stationStore.load();
+        stationStore._lastRequest = Ext.Ajax.getLatest();
+    },
+
     doMetadataSearch: function(value) {
 
         var metadataGrid = Ext.ComponentQuery.query('k-grid-metadatasearch')[0];
@@ -121,6 +140,21 @@ Ext.define('Koala.view.form.field.SearchCombo', {
         metadataStore.getProxy().setExtraParam('constraint', cql);
         metadataStore.load();
         metadataStore._lastRequest = Ext.Ajax.getLatest();
+    },
+
+    /**
+     *
+     */
+    getStationCql: function(fields, value) {
+        var cql = '';
+        Ext.each(fields, function(field, idx, fieldsArray) {
+
+            cql += field + ' ilike \'%' + value + '%\'';
+            if (idx < fieldsArray.length-1) {
+                cql += ' OR ';
+            }
+        });
+        return cql;
     },
 
     /**

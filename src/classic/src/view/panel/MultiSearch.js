@@ -65,5 +65,22 @@ Ext.define('Koala.view.panel.MultiSearch', {
         closeAction: 'hide',
         maxHeight: 200,
         width: 600
-    }]
+    }],
+
+    listeners: {
+        beforerender: function(config) {
+            var stationSearchGrid = {
+                xtype: 'k-grid-stationsearch',
+                closable: true,
+                closeAction: 'hide',
+                maxHeight: 200,
+                width: 600
+            };
+            var appContext = BasiGX.view.component.Map.guess().appContext;
+            var stationsearchtypename = appContext.data.merge['stationSearchTypeName'];
+            if (stationsearchtypename && stationsearchtypename !== "") {
+                this.insert(1, stationSearchGrid);
+            }
+        }
+    }
 });

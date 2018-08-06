@@ -392,6 +392,15 @@
             }
         }
     },
+    "Koala.view.grid.StationSearch": {
+        "config": {
+            "data": {
+                "stationSearchTitle": "Gamma Dose Rate Stations",
+                "searchInProgressText": "searching…",
+                "noRecordsFoundText": "No stations found"
+            }
+        }
+    },
     "Koala.view.main.Main": {
         "config": {
             "data": {

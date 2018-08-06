@@ -393,6 +393,15 @@
             }
         }
     },
+    "Koala.view.grid.StationSearch": {
+        "config": {
+            "data": {
+                "stationSearchTitle": "ODL Sondenstandorte",
+                "searchInProgressText": "Suche läuft…",
+                "noRecordsFoundText": "Keine Stationen gefunden"
+            }
+        }
+    },
     "Koala.view.main.Main": {
         "config": {
             "data": {
