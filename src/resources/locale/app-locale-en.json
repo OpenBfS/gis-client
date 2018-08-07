@@ -491,9 +491,12 @@
                 "btnTextFullscreen": "Full Screen",
                 "btnTextHelp": "Help",
                 "btnTextImprint": "Imprint",
+                "btnTextPrivacy": "Privacy policy",
                 "btnTooltipFullscreen": "Switch between full screen and standard view.",
                 "btnTooltipHelp": "Show help",
-                "btnTooltipImprint": "Show imprint"
+                "btnTooltipImprint": "Show imprint",
+                "btnTooltipPrivacy": "Show privacy statement",
+                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html"
             }
         }
     },
@@ -1458,6 +1461,8 @@
                 "searchFieldPlaceHolderText": "Search within data and services",
                 "helpButtonText": "Help",
                 "imprintButtonText": "Imprint",
+                "privacyButtonText": "Privacy policy",
+                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html",
                 "settingsButtonText": "Settings",
                 "moreLayersButtonText": "Selection",
                 "addLayerButtonText": "Add external WMS",

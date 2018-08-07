@@ -492,9 +492,12 @@
                 "btnTextFullscreen": "Vollbild",
                 "btnTextHelp": "Hilfe",
                 "btnTextImprint": "Impressum",
+                "btnTextPrivacy": "Datenschutz",
                 "btnTooltipFullscreen": "Zwischen Vollbildanzeige und Normalansicht wechseln",
                 "btnTooltipHelp": "Hilfe anzeigen",
-                "btnTooltipImprint": "Impressum anzeigen"
+                "btnTooltipImprint": "Impressum anzeigen",
+                "btnTooltipPrivacy": "Datenschutzerklärung anzeigen",
+                "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html"
             }
         }
     },
@@ -1214,9 +1217,6 @@
                 },
                 "sitePolicy": {
                     "title": "Nutzungsbedingungen"
-                },
-                "dataProtection": {
-                    "title": "Datenschutz"
                 }
             }
         }
@@ -1477,6 +1477,8 @@
                 "searchFieldPlaceHolderText": "Suche in Daten und Diensten",
                 "helpButtonText": "Hilfe",
                 "imprintButtonText": "Impressum",
+                "privacyButtonText": "Datenschutz",
+                "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html",
                 "settingsButtonText": "Einstellungen",
                 "moreLayersButtonText": "Auswahl",
                 "addLayerButtonText": "Externen WMS hinzufügen",

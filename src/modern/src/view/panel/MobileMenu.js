@@ -145,5 +145,14 @@ Ext.define('Koala.view.panel.MobileMenu',{
         handler: function(btn) {
             btn.up('app-main').down('k-panel-mobileimprint').show();
         }
+    }, {
+        xtype: 'button',
+        bind: {
+            text: '{privacyButtonText}'
+        },
+        handler: function(btn) {
+            var mobileMenu = this.up('k-panel-mobilemenu');
+            window.open(mobileMenu.config.data.privacyUrl);
+        }
     }]
 });
