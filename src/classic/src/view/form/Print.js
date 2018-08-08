@@ -210,7 +210,7 @@ Ext.define('Koala.view.form.Print', {
                 enableAlignments: false,
                 listeners: {
                     render: function() {
-                        this.getToolbar().add([{
+                        var unlinkBtn = {
                             xtype: 'button',
                             iconCls: 'x-fa fa-unlink',
                             handler: function() {
@@ -218,7 +218,12 @@ Ext.define('Koala.view.form.Print', {
                             },
                             scope: this,
                             tooltip: me.getViewModel().get('unlinkTooltip')
-                        }]);
+                        };
+                        var createlinkIdx = this.getToolbar().items.keys.indexOf('createlink');
+
+                        if (createlinkIdx) {
+                            this.getToolbar().insert(createlinkIdx + 1, unlinkBtn);
+                        }
                     }
                 }
             }],
