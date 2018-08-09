@@ -1468,6 +1468,7 @@
                 "addLayerButtonText": "Add external WMS",
                 "permalinkButtonText": "Permalink",
                 "spatialSearchTitle": "Spatial search",
+                "stationSearchTitle": "Gamma Dose Rate Stations",
                 "metadataSearchTitle": "BfS data and services"
             }
         }

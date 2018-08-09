@@ -21,42 +21,68 @@ Ext.define('Koala.view.panel.MobileMenuController', {
     alias: 'controller.k-panel-mobilemenu',
 
     requires: [
-        'Koala.store.SpatialSearch'
+        'Koala.store.SpatialSearch',
+        'Koala.store.StationSearch'
     ],
 
     fetchNewData: function(field) {
-        var list = field.up().down('[name=spatialsearchlist]');
-        list.setHidden(false);
-        var store = list.getStore();
         var newVal = field.getValue();
-        store.getProxy().setExtraParam('cql_filter', 'NAME ilike \'%' + newVal + '%\'');
-        store.load();
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+
+        var spatialList = field.up().down('[name=spatialsearchlist]');
+        var spatialStore = spatialList.getStore();
+
+        var stationList = field.up().down('[name=stationsearchlist]');
+        var stationFields = appContext.data.merge.stationSearchFields;
+        var stationStore, stationCql;
 
         var metadataList = field.up().down('[name=metadatasearchlist]');
-        metadataList.setHidden(false);
         var mdStore = metadataList.getStore();
         //Ext.Ajax.abort(spatialStore._lastRequest);
-        var appContext = BasiGX.view.component.Map.guess().appContext;
-        var fields = appContext.data.merge.metadataSearchFields;
-        var cql = this.getMetadataCql(fields, newVal);
-        mdStore.getProxy().setExtraParam('constraint', cql);
-        mdStore.load();
+        var mdFields = appContext.data.merge.metadataSearchFields;
+        var mdCql = this.getMetadataCql(mdFields, newVal);
 
         var spatialSearchTitle = field.up().down('[name=spatialsearchtitle]');
-        spatialSearchTitle.setHidden(false);
+        var stationSearchTitle = field.up().down('[name=stationsearchtitle]');
         var metadataSearchTitle = field.up().down('[name=metadatasearchtitle]');
-        metadataSearchTitle.setHidden(false);
 
+        spatialStore.getProxy().setExtraParam('cql_filter', 'NAME ilike \'%' + newVal + '%\'');
+        spatialStore.load();
+        spatialSearchTitle.setHidden(false);
+        spatialList.setHidden(false);
+
+        mdStore.getProxy().setExtraParam('constraint', mdCql);
+        mdStore.load();
+        metadataSearchTitle.setHidden(false);
+        metadataList.setHidden(false);
+
+        if (stationList) {
+            stationStore = stationList.getStore();
+            Ext.Ajax.abort(stationStore._lastRequest);
+            stationCql = this.getStationCql(stationFields, newVal);
+            stationStore.getProxy().setExtraParam('cql_filter', stationCql);
+            stationStore.load();
+            stationStore._lastRequest = Ext.Ajax.getLatest();
+            stationSearchTitle.setHidden(false);
+            stationList.setHidden(false);
+        }
     },
 
     onClearIconTap: function(field) {
         var list = field.up().down('[name=spatialsearchlist]');
+        var spatialSearchTitle = field.up().down('[name=spatialsearchtitle]');
         var metadataList = field.up().down('[name=metadatasearchlist]');
+        var metadataSearchTitle = field.up().down('[name=metadatasearchtitle]');
+        var stationList = field.up().down('[name=stationsearchlist]');
+        var stationSearchTitle = field.up().down('[name=stationsearchtitle]');
+
         list.getStore().removeAll();
         metadataList.getStore().removeAll();
-        var spatialSearchTitle = field.up().down('[name=spatialsearchtitle]');
+        if (stationList) {
+            stationList.getStore().removeAll();
+            stationSearchTitle.setHidden(true);
+        }
         spatialSearchTitle.setHidden(true);
-        var metadataSearchTitle = field.up().down('[name=metadatasearchtitle]');
         metadataSearchTitle.setHidden(true);
     },
 
@@ -74,6 +100,18 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var extent = feature.getGeometry().getExtent();
         view.fit(extent, map.getSize());
         var menuPanel = this.getView('k-panel-mobilemenu');
+        menuPanel.hide();
+    },
+
+    zoomToStation: function(list, index, target, station) {
+        var store = list.getStore();
+        var map = store.map;
+        var view = map.getView();
+        var feature = this.getFeatureFromRecord(station);
+        var extent = feature.getGeometry().getExtent();
+        var menuPanel = this.getView('k-panel-mobilemenu');
+
+        view.fit(extent, {size: map.getSize(), maxZoom: 11});
         menuPanel.hide();
     },
 
@@ -106,6 +144,51 @@ Ext.define('Koala.view.panel.MobileMenuController', {
                 metadataInfoPanel.show();
             }
         }
+    },
+
+    /**
+     * Find a wkt or geometry inside of an grid record and returns a corresponding
+     * feature;
+     * @param {Koala.model.StationRecord} record A record of the stationsearch
+     *                                           grid.
+     * @return {ol.Feature} The feature contained in this record.
+     */
+    getFeatureFromRecord: function(record) {
+        var store = record.store;
+        var map = store.map;
+        var view = map.getView();
+        var wkt = record.get('wkt');
+        var geom = record.get('geometry');
+        var format;
+        var feature;
+
+        if (wkt) {
+            format = new ol.format.WKT();
+            feature = format.readFeature(wkt, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: map.getView().getProjection()
+            });
+        } else if (geom) {
+            format = new ol.format.GeoJSON({
+                geometryName: record.get('geometry_name') || 'the_geom',
+                featureProjection: view.getProjection()
+            });
+            feature = format.readFeature(record.getData());
+        }
+
+        return feature;
+    },
+
+    getStationCql: function(fields, value) {
+        var cql = '';
+        Ext.each(fields, function(field, idx, fieldsArray) {
+
+            cql += field + ' ilike \'%' + value + '%\'';
+            if (idx < fieldsArray.length-1) {
+                cql += ' OR ';
+            }
+        });
+        return cql;
     },
 
     getMetadataCql: function(fields, value) {

@@ -1484,6 +1484,7 @@
                 "addLayerButtonText": "Externen WMS hinzufügen",
                 "permalinkButtonText": "Permalink",
                 "spatialSearchTitle": "Räumliche Suche",
+                "stationSearchTitle": "ODL Sondenstandorte",
                 "metadataSearchTitle": "Daten und Dienste des Bfs"
             }
         }
