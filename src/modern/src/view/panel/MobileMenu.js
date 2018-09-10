@@ -94,7 +94,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
             }
         }],
         listeners: {
-            initialize: function(config) {
+            initialize: function() {
                 var stationSearchTileBar = {
                     xtype: 'titlebar',
                     name: 'stationsearchtitle',
@@ -119,7 +119,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
                 };
                 var appContext = BasiGX.view.component.Map.guess().appContext;
                 var stationsearchtypename = appContext.data.merge['stationSearchTypeName'];
-                if (stationsearchtypename && stationsearchtypename !== "") {
+                if (stationsearchtypename && stationsearchtypename !== '') {
                     this.insert(3, stationSearchTileBar);
                     this.insert(4, stationSearchDataView);
                 }
@@ -181,7 +181,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
         bind: {
             text: '{privacyButtonText}'
         },
-        handler: function(btn) {
+        handler: function() {
             var mobileMenu = this.up('k-panel-mobilemenu');
             window.open(mobileMenu.config.data.privacyUrl);
         }
