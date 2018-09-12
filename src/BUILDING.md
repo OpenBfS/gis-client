@@ -2,102 +2,60 @@
 
 ## Prerequisites
 
-* Sencha Cmd v6.0.0.154 (from the first ExtJS 6 beta release)
+* Sencha Cmd v6.2 (works at least with 6.2.2.36)
+* does NOT work with at least Sencha Cmd 6.6
 * git
-* wget (or an alternative)
-* unzip
+* node, npm
+* Ext 6.2
 
-## Create a local sencha workspace
+## Install Ext 6.2
 
-    sencha -sdk /path/to/ext-n.n.n generate workspace /path/to/workspace
+* just extract an ext package into `src/ext`
 
-/path/to/ext-n.n.n should be the path to the ExtJS 6 (beta) release, e.g. 
-/path/to/ext-6.0.0.415.
+## Initialize the submodules, install dev packages
 
-## Initialize the local "GeoExt Contributors" repository
+* `git submodule update --init --recursive`
+* `cd src`
+* `npm install`
 
-    sencha package repo init -name "GeoExt Contributors" -email "dev@geoext.org"
+## Initialize the Sencha setup
 
-## Get recent versions of base packages
+* `cd src`
+* `sencha app install`
 
-Inside of the workspace build the packages of the dependencies GeoExt and 
-basepackage. We recommend building from the folder 
+## Development
 
-    /path/to/workspace/packages
+* `cd src`
+* sencha app watch
 
-### GeoExt
+The application now runs at http://localhost:1841
 
-Please do NOT use the 'official' repository at 
+In order to get (almost) everything to work locally, it is advised to reverse
+proxy everything into a single host and adapt the `appContext.json` accordingly.
+For nginx the following snippets might be useful:
 
-    http://geoext.github.io/geoext3/cmd/pkgs
+```
+location / {
+  proxy_pass http://127.0.0.1:1841;
+}
 
-…it is only updated every now and then, and sometimes out of date.
+location /ogc {
+  proxy_set_header Authorization "Basic base64encodedcredentialshere";
+  proxy_set_header Origin "";
+  proxy_pass http://local-geoserver-installation/ogc;
+}
+location /geonetwork {
+  proxy_set_header Authorization "Basic base64encodedcredentialshere";
+  proxy_pass http://local-gnos-installation/geonetwork;
+}
+```
 
-Instead install the package from the git repository of GeoExt:
+This is necessary because:
 
-    cd /path/to/workspace/packages
-    git clone https://github.com/geoext/geoext3.git GeoExt
-    cd GeoExt
-    sencha package build
-    sencha package add /path/to/workspace/build/GeoExt/GeoExt.pkg
+* authorization works different in production (Shibboleth) and the client does not have the credentials
+* access to certain resources (Geoserver REST API, GNOS REST API) needs everything on the same domain
+* extracting the CSRF token for GNOS needs access to iframe cookies
 
-### basepackage
+## Production
 
-The basepackage is a development of terrestris, which must be downloaded from a
-remote resource as zip-file:
-
-    cd /path/to/workspace/packages 
-    wget http://www.webmapcenter.de/bfs/basepackage.zip
-    unzip basepackage.zip
-    cd basepackage
-    sencha package build
-    sencha package add /path/to/workspace/build/basepackage/basepackage.pkg
-
-If you have access to the related git repository you can do it like:
-
-    cd /path/to/workspace/packages/
-    git clone http://gitlab.intranet.terrestris.de/myUserName/basepackage.git
-    cd basepackage
-    sencha package build
-    sencha package add /path/to/workspace/build/basepackage/basepackage.pkg
-
-## Refresh the application
-
-If existing from a previous build, remove the folders 
- 
-* packages/remote/GeoExt
-* packages/remote/basepackage
-
-These represent the resolved dependencies of the application. If you know that
-the packages have changed, you'll need to manually remove these so that new
-build commands need to fetch the latest versions.
-
-Once we have fixed versions for our dependencies, this step will become
-obsolete, as we'll simply require the updated / newly tagged versions.
-
-Next, issue
-
-    sencha app refresh
-
-This will grab the dependencies from the repository and put them into the
-packages/remote folder.
-
-Stripped example output:
-
-    [INF] Package is already local: GeoExt/3.0.0
-    [INF] Extracting  : ....................
-    [INF] Package is already local: basepackage/1.0.0.001
-    [INF] Extracting  : ....................
-
-
-## Building the application
-
-The application can then be build, e.g. by running
-
-    sencha app build
-
-or
- 
-    sencha app watch
-
-
+* have a look at the `.gitlab-ci.yml` on how to produce a production build
