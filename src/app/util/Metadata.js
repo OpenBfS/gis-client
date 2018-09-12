@@ -83,6 +83,7 @@ Ext.define('Koala.util.Metadata', {
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:printTitle/gco:CharacterString', context.newLayerName) +
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:host/gco:CharacterString', host) +
                 this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:path/gco:CharacterString', path) +
+                this.getPropertyUpdate('/bfs:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/gco:CharacterString', 'importLayer') +
                 this.getCswFilter(context.newUuid) +
                 '</csw:Update>' +
                 '</csw:Transaction>';
