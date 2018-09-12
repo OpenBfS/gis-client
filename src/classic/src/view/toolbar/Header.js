@@ -88,6 +88,14 @@ Ext.define('Koala.view.toolbar.Header', {
             }
         },
         {
+            xtype: 'button',
+            bind: {
+                text: '{btnTextPrivacy}',
+                tooltip: '{btnTooltipPrivacy}',
+                href: '{privacyUrl}'
+            }
+        },
+        {
             xtype: 'k-form-field-languagecombo'
         }
     ]
