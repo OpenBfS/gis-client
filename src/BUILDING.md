@@ -28,6 +28,8 @@
 * `cd src`
 * sencha app watch
 
+Adapt the `index.html` and toggle lines 44/45 (`appContext.json` location).
+
 The application now runs at http://localhost:1841
 
 In order to get (almost) everything to work locally, it is advised to reverse
