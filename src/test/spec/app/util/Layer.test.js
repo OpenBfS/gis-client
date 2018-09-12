@@ -592,15 +592,13 @@ describe('Koala.util.Layer', function() {
                     var backgroundLayerUUID = '88415902-4ca7-4d1c-b714-64cc917fc2ab';
                     var promise = Koala.util.Layer.getMetadataFromUuid(backgroundLayerUUID);
                     expect(promise).to.be.a(Ext.Promise);
-                    // TODO comment in once GNOS 3.4.0 is used on master
-                    // promise.then(function(metadata) {
-                    //     expect(metadata).to.be.an('object');
-                    //     done();
-                    // });
+                    promise.then(function(metadata) {
+                        expect(metadata).to.be.an('object');
+                        done();
+                    });
 
                     // Teardown
                     TestUtil.teardownTestObjects(testObjs);
-                    done();
                 } else {
                     done();
                 }
@@ -814,39 +812,38 @@ describe('Koala.util.Layer', function() {
             it('is a function', function() {
                 expect(Koala.util.Layer.addLayerByUuid).to.be.a(Function);
             });
-            // TODO comment in once GNOS 3.4.0 is used on master
-            // it('adds a layer from his uuid to the map', function(done) {
-            //     if (Ext.browser.userAgent.indexOf('PhantomJS') === -1) {
-            //         //Setup
-            //         var testObjs = TestUtil.setupTestObjects({
-            //             mapComponentOpts: {
-            //                 appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
-            //             }
-            //         });
-            //         var backgroundLayerUUID = '88415902-4ca7-4d1c-b714-64cc917fc2ab';
-            //
-            //         var map = BasiGX.util.Map.getMapComponent().getMap();
-            //         var oldLength = BasiGX.util.Layer.getAllLayers(map).length;
-            //
-            //         var promise = Koala.util.Layer.addLayerByUuid(backgroundLayerUUID);
-            //
-            //         promise.then(function() {
-            //             var newLength = BasiGX.util.Layer.getAllLayers(map).length;
-            //             expect(newLength).to.be(oldLength + 1);
-            //             done();
-            //             // Teardown
-            //             TestUtil.teardownTestObjects(testObjs);
-            //         })
-            //         .catch(function() {
-            //             expect().fail();
-            //             done();
-            //             // Teardown
-            //             TestUtil.teardownTestObjects(testObjs);
-            //         });
-            //     } else {
-            //         done();
-            //     }
-            // });
+            it('adds a layer from his uuid to the map', function(done) {
+                if (Ext.browser.userAgent.indexOf('PhantomJS') === -1) {
+                    //Setup
+                    var testObjs = TestUtil.setupTestObjects({
+                        mapComponentOpts: {
+                            appContextPath: 'http://localhost:9876/base/resources/appContextTest.json'
+                        }
+                    });
+                    var backgroundLayerUUID = '88415902-4ca7-4d1c-b714-64cc917fc2ab';
+
+                    var map = BasiGX.util.Map.getMapComponent().getMap();
+                    var oldLength = BasiGX.util.Layer.getAllLayers(map).length;
+
+                    var promise = Koala.util.Layer.addLayerByUuid(backgroundLayerUUID);
+
+                    promise.then(function() {
+                        var newLength = BasiGX.util.Layer.getAllLayers(map).length;
+                        expect(newLength).to.be(oldLength + 1);
+                        done();
+                        // Teardown
+                        TestUtil.teardownTestObjects(testObjs);
+                    })
+                    .catch(function() {
+                        expect().fail();
+                        done();
+                        // Teardown
+                        TestUtil.teardownTestObjects(testObjs);
+                    });
+                } else {
+                    done();
+                }
+            });
         });
 
         describe('#showChangeFilterSettingsWin', function() {

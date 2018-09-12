@@ -45,7 +45,7 @@ describe('Koala.view.panel.MobileLegendController', function() {
         });
 
         it('returns false if maxVisibleLayers', function() {
-            // var allowed;
+            var allowed;
             view.destroy();
             view = Ext.create('Koala.view.panel.MobileLegend', {
                 maxVisibleLayers: 1
@@ -56,14 +56,13 @@ describe('Koala.view.panel.MobileLegendController', function() {
             mapLayers.forEach(function(lyr) {
                 lyr.setVisible(false);
             });
-            // TODO comment in once GNOS 3.4.0 is used on master
-            // var firstLayer = mapComponent.getLayers().item(0);
-            //
-            // allowed = controller.isLayerAllowedToSetVisible(firstLayer);
-            // if (allowed) {
-            //     firstLayer.setVisible(true);
-            // }
-            // expect(allowed).to.be(true);
+            var firstLayer = mapComponent.getLayers().item(0);
+
+            allowed = controller.isLayerAllowedToSetVisible(firstLayer);
+            if (allowed) {
+                firstLayer.setVisible(true);
+            }
+            expect(allowed).to.be(true);
         });
     });
 
@@ -71,22 +70,21 @@ describe('Koala.view.panel.MobileLegendController', function() {
         it('is a function', function() {
             expect(controller.removeLayer).to.be.a('function');
         });
-        // TODO comment in once GNOS 3.4.0 is used on master
-        // it('asks for confirmation', function() {
-        //     var firstLayer = mapComponent.getLayers().item(0);
-        //     // Msg is undefined when running mobile only tests
-        //     Ext.Msg = Ext.Msg || {show: function() {}};
-        //     // setup
-        //     var spy = sinon.spy(Ext.Msg, 'show');
-        //
-        //     controller.removeLayer(firstLayer);
-        //     expect(spy.called).to.be(true);
-        //     expect(spy.calledOnce).to.be.ok();
-        //     expect(spy.callCount).to.be(1);
-        //
-        //     // teardown
-        //     Ext.Msg.show.restore();
-        //  });
+        it('asks for confirmation', function() {
+            var firstLayer = mapComponent.getLayers().item(0);
+            // Msg is undefined when running mobile only tests
+            Ext.Msg = Ext.Msg || {show: function() {}};
+            // setup
+            var spy = sinon.spy(Ext.Msg, 'show');
+
+            controller.removeLayer(firstLayer);
+            expect(spy.called).to.be(true);
+            expect(spy.calledOnce).to.be.ok();
+            expect(spy.callCount).to.be(1);
+
+            // teardown
+            Ext.Msg.show.restore();
+         });
     });
 
     describe('changeLayerOrder', function() {
