@@ -19,74 +19,56 @@
 Ext.define('Koala.util.Metadata', {
 
     requires: [
-        'Koala.util.AppContext'
+        'Koala.util.AppContext',
+        'Koala.util.XML'
     ],
 
     statics: {
 
         /**
-         * Get a CSW filter filtering by uuid.
-         * @param  {String} uuid the uuid to filter on
-         * @return {String}      a CSW/filter encoding snippet
-         */
-        getCswFilter: function(uuid) {
-            return '<csw:Constraint version="1.1.0">' +
-                '<ogc:Filter>' +
-                '<ogc:PropertyIsEqualTo>' +
-                '<ogc:PropertyName>Identifier</ogc:PropertyName>' +
-                '<ogc:Literal>' + uuid + '</ogc:Literal>' +
-                '</ogc:PropertyIsEqualTo>' +
-                '</ogc:Filter>' +
-                '</csw:Constraint>';
-        },
-
-        /**
-         * Get a CSW property update snippet.
-         * @param  {String} property property path to update
-         * @param  {String} value    the new values
-         * @param  {Boolean} add whether to create an 'add' node
-         * @return {String}          the CSW property snippet
-         */
-        getPropertyUpdate: function(property, value, add) {
-            return '<csw:RecordProperty>' +
-                '<csw:Name>' + property + '</csw:Name>' +
-                '<csw:Value>' + (add ? '<gn_add>' : '' + value) +
-                (add ? '</gn_add>' : '') + '</csw:Value>' +
-                '</csw:RecordProperty>';
-        },
-
-        /**
-         * Constructs a CSW update transaction to prepare the new metadata.
+         * Rewrites/updates the metadata document to prepare the new metadata.
          * @param  {Object} context a context object containing config
-         * @return {String}         an XML transaction request
          */
         getCswUpdate: function(context) {
+            var XML = Koala.util.XML;
+
             var ms = /(^http[s]?:\/\/[^/]+)(.+)/g.exec(context.config['base-url']);
             var host = ms[1];
             var path = ms[2] + 'ows';
-
-            return '<?xml version="1.0" encoding="UTF-8"?>' +
-                '<csw:Transaction service="CSW" version="2.0.2" ' +
-                'xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" ' +
-                'xmlns:ogc="http://www.opengis.net/ogc" ' +
-                'xmlns:gmd="http://www.isotc211.org/2005/gmd" ' +
-                'xmlns:bfs="http://geonetwork.org/bfs" ' +
-                'xmlns:gco="http://www.isotc211.org/2005/gco">' +
-                '<csw:Update>' +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation' +
-                    '/bfs:MD_WMSLayerType/bfs:layerType/bfs:MD_WMSLayerType/' +
-                    'bfs:layer/gco:CharacterString', context.newLayerName) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:timeSeriesChartProperty', '') +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:barChartProperty', '') +
-                this.getPropertyUpdate('/bfs:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', context.newLayerName) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:legendTitle/gco:CharacterString', context.newLayerName) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:printTitle/gco:CharacterString', context.newLayerName) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:host/gco:CharacterString', host) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:path/gco:CharacterString', path) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/gco:CharacterString', 'importLayer') +
-                this.getCswFilter(context.newUuid) +
-                '</csw:Update>' +
-                '</csw:Transaction>';
+            var bfs = XML.defaultNamespaces.bfs;
+            var gmd = XML.defaultNamespaces.gmd;
+            var workspace = context.config['target-workspace'];
+            var name = context.metadata.newLayerName;
+            var doc = context.metadataDocument;
+            var ns = XML.namespaceResolver();
+            var xpath = 'bfs:layerInformation/bfs:MD_Layer';
+            var node = doc.evaluate(xpath, doc.documentElement, ns).iterateNext();
+            XML.addOlProperty(node, 'workspace', workspace);
+            xpath = 'bfs:timeSeriesChartProperty';
+            XML.removeNodes(doc, xpath, node);
+            xpath = 'bfs:barChartProperty';
+            XML.removeNodes(doc, xpath, node);
+            xpath = 'bfs:legendTitle';
+            XML.removeNodes(doc, xpath, node);
+            xpath = 'bfs:printTitle';
+            XML.removeNodes(doc, xpath, node);
+            XML.addCharacterString(doc, node, bfs, 'bfs:printTitle', name);
+            XML.addCharacterString(doc, node, bfs, 'bfs:legendTitle', name);
+            xpath = 'bfs:wfs/bfs:URL';
+            node = doc.evaluate(xpath, node, ns).iterateNext();
+            xpath = 'bfs:host';
+            XML.removeNodes(doc, xpath, node);
+            xpath = 'bfs:path';
+            XML.removeNodes(doc, xpath, node);
+            XML.addCharacterString(doc, node, bfs, 'bfs:host', host);
+            XML.addCharacterString(doc, node, bfs, 'bfs:path', path);
+            xpath = 'gmd:identificationInfo/gmd:MD_DataIdentification';
+            node = doc.evaluate(xpath, doc.documentElement, ns).iterateNext();
+            xpath = 'gmd:citation/gmd:CI_Citation/gmd:title';
+            XML.updateText(doc, xpath, node, name);
+            node = XML.addOrGet(doc, node, gmd, 'gmd:descriptiveKeywords');
+            node = XML.addOrGet(doc, node, gmd, 'gmd:MD_Keywords');
+            XML.addCharacterString(doc, node, gmd, 'gmd:keyword', 'importLayer');
         },
 
         /**
@@ -206,16 +188,56 @@ Ext.define('Koala.util.Metadata', {
                 method: 'GET',
                 headers: {
                     'X-XSRF-TOKEN': context.csrfToken,
-                    'Accept': 'application/json'
+                    'Accept': 'application/xml'
                 },
                 success: function(xhr) {
-                    var metadata = JSON.parse(xhr.responseText);
-                    context.newUuid = metadata['gmd:fileIdentifier']['gco:CharacterString']['#text'];
+                    var doc = xhr.responseXML;
+                    var xpath = 'gmd:fileIdentifier/gco:CharacterString/text()';
+                    var uuid = Koala.util.XML.getText(doc, xpath, doc.documentElement);
+                    context.newUuid = uuid;
+                    context.metadataDocument = doc;
                     resolveFunc();
                 }
             });
 
             return promise;
+        },
+
+        /**
+         * Wraps the metadata document in an update transaction with a filter on
+         * the uuid.
+         * @param  {Object} context the context with the metadata document
+         */
+        prepareTransaction: function(context) {
+            var XML = Koala.util.XML;
+            var csw = XML.defaultNamespaces.csw;
+            var ogc = XML.defaultNamespaces.ogc;
+            var doc = context.metadataDocument;
+            var root = doc.documentElement;
+            root.remove();
+            var node = doc.createElementNS(csw, 'csw:Transaction');
+            node.setAttribute('service', 'CSW');
+            node.setAttribute('version', '2.0.2');
+            doc.appendChild(node);
+            node = doc.createElementNS(csw, 'csw:Update');
+            doc.documentElement.appendChild(node);
+            node.appendChild(root);
+            root = node;
+            node = doc.createElementNS(csw, 'csw:Constraint');
+            node.setAttribute('version', '1.1.0');
+            root.appendChild(node);
+            root = node;
+            node = doc.createElementNS(ogc, 'ogc:Filter');
+            root.appendChild(node);
+            root = node;
+            node = doc.createElementNS(ogc, 'ogc:PropertyIsEqualTo');
+            root.appendChild(node);
+            root = node;
+            node = doc.createElementNS(ogc, 'ogc:PropertyName');
+            node.textContent = 'Identifier';
+            root.appendChild(node);
+            node = doc.createElementNS(ogc, 'ogc:Literal');
+            node.textContent = context.newUuid;
         },
 
         /**
@@ -225,13 +247,20 @@ Ext.define('Koala.util.Metadata', {
          */
         updateMetadata: function(context) {
             var url = context.config['metadata-base-url'];
-            var xml = this.getCswUpdate(context);
+
+            this.getCswUpdate(context);
+            this.prepareTransaction(context);
 
             return Ext.Ajax.request({
                 url: url + 'srv/eng/csw-publication',
                 method: 'POST',
-                xmlData: xml
+                headers: {
+                    'X-XSRF-TOKEN': context.csrfToken,
+                    'Content-Type': 'application/xml'
+                },
+                xmlData: context.metadataDocument
             });
+
         },
 
         /**
@@ -272,7 +301,6 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise} the promise resolving once the privileges have been set
          */
         setMetadataGroups: function(context) {
-            // TODO need to preprocess with user and group objects
             var url = context.config['metadata-base-url'];
             var imis = Koala.util.AppContext.getAppContext().data.merge.imis_user;
 
@@ -329,7 +357,7 @@ Ext.define('Koala.util.Metadata', {
             var context = {
                 config: config,
                 uuid: metadata.id,
-                newLayerName: metadata.legendTitle + ' (' + metadata.newLayerName + ')'
+                metadata: metadata
             };
             return this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))

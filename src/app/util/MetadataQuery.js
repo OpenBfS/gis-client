@@ -19,7 +19,8 @@
 Ext.define('Koala.util.MetadataQuery', {
 
     requires: [
-        'Koala.util.AppContext'
+        'Koala.util.AppContext',
+        'Koala.util.XML'
     ],
 
     statics: {
@@ -51,34 +52,6 @@ Ext.define('Koala.util.MetadataQuery', {
             '</GetRecords>',
 
         /**
-         * Namespace resolver function to use in xpath evaluations.
-         * @param  {String} prefix the prefix to resolve
-         * @return {String} the namespace it resolves to or undefined if unknown
-         */
-        namespaceResolver: function(prefix) {
-            switch (prefix) {
-                case 'gmd':
-                    return 'http://www.isotc211.org/2005/gmd';
-                case 'gco':
-                    return 'http://www.isotc211.org/2005/gco';
-                case 'bfs':
-                    return 'http://geonetwork.org/bfs';
-            }
-        },
-
-        /**
-         * Extract a piece of text from XML via xpath.
-         * @param  {Document} doc   the document
-         * @param  {String} xpath the xpath to query
-         * @param  {Node} node  the context node from where to query
-         * @return {String}       the extracted text
-         */
-        getText: function(doc, xpath, node) {
-            var ns = Koala.util.MetadataQuery.namespaceResolver;
-            return doc.evaluate(xpath, node, ns).iterateNext().textContent;
-        },
-
-        /**
          * Extracts layer tree info from metadata.
          * @param  {Document} doc    the document
          * @param  {Node} node   the metadata root node
@@ -86,7 +59,7 @@ Ext.define('Koala.util.MetadataQuery', {
          * info to
          */
         extractLayerInfo: function(doc, node, config) {
-            var getText = Koala.util.MetadataQuery.getText;
+            var getText = Koala.util.XML.getText;
             var xpath = 'bfs:layerInformation/bfs:MD_Layer/bfs:legendTitle/gco:CharacterString/text()';
             config.text = getText(doc, xpath, node);
             xpath = 'gmd:fileIdentifier/gco:CharacterString/text()';
@@ -104,7 +77,7 @@ Ext.define('Koala.util.MetadataQuery', {
          */
         postProcessMetadata: function(docs) {
             var filtered = [];
-            var ns = Koala.util.MetadataQuery.namespaceResolver;
+            var ns = Koala.util.XML.namespaceResolver();
             Ext.each(docs, function(doc) {
                 var node = doc;
                 doc = node.ownerDocument;
@@ -118,7 +91,7 @@ Ext.define('Koala.util.MetadataQuery', {
                     Koala.util.MetadataQuery.extractLayerInfo(doc, node, layer);
                 }
             });
-            return docs;
+            return filtered;
         },
 
         /**
