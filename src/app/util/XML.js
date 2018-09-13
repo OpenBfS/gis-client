@@ -49,11 +49,12 @@ Ext.define('Koala.util.XML', {
          * @param  {Document} doc   the document
          * @param  {String} xpath the xpath to query
          * @param  {Node} node  the context node from where to query
-         * @return {String}       the extracted text
+         * @return {String}       the extracted text or undefined, if not found
          */
         getText: function(doc, xpath, node) {
             var ns = Koala.util.XML.namespaceResolver();
-            return doc.evaluate(xpath, node, ns).iterateNext().textContent;
+            var textNode = doc.evaluate(xpath, node, ns).iterateNext();
+            return textNode ? textNode.textContent : undefined;
         },
 
         /**

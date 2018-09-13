@@ -69,6 +69,12 @@ Ext.define('Koala.util.Metadata', {
             node = XML.addOrGet(doc, node, gmd, 'gmd:descriptiveKeywords');
             node = XML.addOrGet(doc, node, gmd, 'gmd:MD_Keywords');
             XML.addCharacterString(doc, node, gmd, 'gmd:keyword', 'importLayer');
+            var type = doc.createElementNS(gmd, 'gmd:type');
+            var code = doc.createElementNS(gmd, 'gmd:MD_KeywordTypeCode');
+            code.setAttribute('codeList', '');
+            code.setAttribute('codeListValue', '');
+            node.appendChild(type);
+            type.appendChild(code);
         },
 
         /**
