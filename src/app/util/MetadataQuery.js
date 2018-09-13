@@ -65,7 +65,9 @@ Ext.define('Koala.util.MetadataQuery', {
             xpath = 'gmd:fileIdentifier/gco:CharacterString/text()';
             config.uuid = getText(doc, xpath, node);
             config.leaf = true;
-            xpath = 'bfs:layerInformation/bfs:MD_Layer/bfs:olProperty[bfs:propertyName/gco:CharacterString/text()="workspace"]/bfs:propertyValue/gco:CharacterString/text()';
+            xpath = 'bfs:layerInformation/bfs:MD_Layer/bfs:olProperty' +
+                '[bfs:propertyName/gco:CharacterString/text()="workspace"]' +
+                '/bfs:propertyValue/gco:CharacterString/text()';
             config.workspace = getText(doc, xpath, node);
         },
 
