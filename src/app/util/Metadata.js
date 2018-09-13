@@ -235,6 +235,91 @@ Ext.define('Koala.util.Metadata', {
         },
 
         /**
+         * Fetch groups.
+         * @param  {Object} context the context object
+         * @return {Promise}  the promise resolving once the groups have been
+         * fetched
+         */
+        fetchGroups: function(context) {
+            var url = context.config['metadata-base-url'];
+
+            var resolveFunc;
+
+            var promise = new Ext.Promise(function(resolve) {
+                resolveFunc = resolve;
+            });
+
+            Ext.Ajax.request({
+                url: url + 'srv/api/0.1/groups',
+                method: 'GET',
+                headers: {
+                    'X-XSRF-TOKEN': context.csrfToken,
+                    'Accept': 'application/json'
+                },
+                success: function(xhr) {
+                    var groups = JSON.parse(xhr.responseText);
+                    context.groups = groups;
+                    resolveFunc();
+                }
+            });
+
+            return promise;
+        },
+
+        /**
+         * Share the metadata set with the users' groups.
+         * @param  {Object} context the context object with the id and the groups
+         * @return {Promise} the promise resolving once the privileges have been set
+         */
+        setMetadataGroups: function(context) {
+            // TODO need to preprocess with user and group objects
+            var url = context.config['metadata-base-url'];
+            var imis = Koala.util.AppContext.getAppContext().data.merge.imis_user;
+
+            var userroles = imis.userroles;
+            var body = {
+                clear: true,
+                privileges: []
+            };
+
+            Ext.each(userroles, function(role) {
+                Ext.each(context.groups, function(group) {
+                    if (group.name === role) {
+                        body.privileges.push({
+                            group: group.id,
+                            operations: {
+                                download: true,
+                                view: true,
+                                dynamic: true
+                            }
+                        });
+                    }
+                });
+            });
+
+            var resolveFunc;
+            var promise = new Ext.Promise(function(resolve) {
+                resolveFunc = resolve;
+            });
+
+            Ext.Ajax.request({
+                url: url + 'srv/api/0.1/records/' + context.newId + '/sharing',
+                method: 'PUT',
+                headers: {
+                    'X-XSRF-TOKEN': context.csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                jsonData: body,
+                success: function() {
+                    resolveFunc();
+                }
+            });
+
+            return promise;
+        },
+
+        /**
          * Prepares the metadata for a cloned layer.
          * @param  {Object} metadata the original metadata Object
          */
@@ -249,7 +334,9 @@ Ext.define('Koala.util.Metadata', {
             return this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))
                 .then(this.determineNewUuid.bind(this, context))
-                .then(this.updateMetadata.bind(this, context));
+                .then(this.updateMetadata.bind(this, context))
+                .then(this.fetchGroups.bind(this, context))
+                .then(this.setMetadataGroups.bind(this, context));
         }
 
     }
