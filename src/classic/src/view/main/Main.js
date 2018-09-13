@@ -44,6 +44,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.button.BackgroundLayers',
         'Koala.view.button.ToggleFullscreen',
         'Koala.view.button.SelectFeatures',
+        'Koala.view.list.TreeMenu',
         'Koala.view.main.MainController',
         'Koala.view.main.MainModel',
         'Koala.view.panel.LayerSetChooser',
@@ -136,20 +137,13 @@ Ext.define('Koala.view.main.Main', {
             }, {
                 xtype: 'basigx-button-zoomtoextent'
             }, {
-                xtype: 'k-button-showredliningtoolscontainer'
-            }, {
-                xtype: 'k-button-togglefullscreen'
-            },{
-                xtype: 'k-button-permalink'
-            }, {
                 xtype: 'k-button-selectfeatures',
                 listeners: {
                     boxready: Koala.util.AppContext.generateCheckToolVisibility('selectFeaturesBtn')
                 }
             },{
                 xtype: 'k-button-backgroundlayers'
-            }
-            ]
+            }]
         },
         listeners: {
             afterrender: function() {
@@ -207,123 +201,6 @@ Ext.define('Koala.view.main.Main', {
             header: {
                 overCls: 'k-over-clickable'
             },
-            dockedItems: [{
-                xtype: 'buttongroup',
-                columns: 3,
-                bind: {
-                    title: '{buttonGroupTopTitle}'
-                },
-                dock: 'top',
-                defaults: {
-                    scale: 'small'
-                },
-                items: [{
-                    xtype: 'button',
-                    glyph: 'xf0ac@FontAwesome',
-                    bind: {
-                        text: '{addWmsButtonText}',
-                        tooltip: '{addWmsButtonTooltip}'
-                    },
-                    listeners: {
-                        boxready: Koala.util.AppContext.generateCheckToolVisibility('addWmsBtn')
-                    },
-                    handler: function() {
-                        var win = Ext.ComponentQuery.query(
-                            '[name=add-wms-window]')[0];
-                        if (!win) {
-                            Ext.create('Ext.window.Window', {
-                                name: 'add-wms-window',
-                                title: 'WMS hinzufügen',
-                                width: 500,
-                                height: 450,
-                                layout: 'fit',
-                                tools: [{
-                                    type: 'help',
-                                    bind: {
-                                        tooltip: '{helpTooltip}'
-                                    },
-                                    callback: function() {
-                                        Koala.util.Help.showHelpWindow('toolsWms', 'tools');
-                                    }
-                                }],
-                                items: [{
-                                    xtype: 'basigx-form-addwms',
-                                    hasCheckAllBtn: true,
-                                    hasUncheckAllBtn: true,
-                                    includeSubLayer: true,
-                                    versionsWmsAutomatically: true,
-                                    defaultUrl: BasiGX.util.Application.getAppContext().wmsUrls[0],
-                                    wmsBaseUrls: BasiGX.util.Application.getAppContext().wmsUrls,
-                                    listeners: {
-                                        beforewmsadd: function(olLayer) {
-                                            olLayer.set('nameWithSuffix', olLayer.get('name'));
-                                            olLayer.set('allowRemoval', true);
-                                        }
-                                    }
-                                }]
-                            }).show();
-                        } else {
-                            BasiGX.util.Animate.shake(win);
-                        }
-                    }
-                }, {
-                    xtype: 'button',
-                    glyph: 'xf02f@FontAwesome',
-                    bind: {
-                        text: '{printButtonText}',
-                        tooltip: '{printButtonTooltip}'
-                    },
-                    listeners: {
-                        boxready: Koala.util.AppContext.generateCheckToolVisibility('printBtn')
-                    },
-                    handler: function(btn) {
-                        var win = Ext.ComponentQuery.query('k-window-print')[0];
-                        if (!win) {
-                            Ext.create('Koala.view.window.Print')
-                                .showBy(btn.up('basigx-panel-menu'), 'tr');
-                        } else {
-                            BasiGX.util.Animate.shake(win);
-                        }
-                    }
-                }, {
-                    xtype: 'button',
-                    glyph: 'xf093@FontAwesome',
-                    bind: {
-                        text: '{importLocalDataButtonText}',
-                        tooltip: '{importLocalDataButtonTooltip}'
-                    },
-                    listeners: {
-                        boxready: Koala.util.AppContext.generateCheckToolVisibility('importLocalDataBtn')
-                    },
-                    handler: function() {
-                        var win = Ext.ComponentQuery.query(
-                            '[name=add-wms-window]')[0];
-                        if (!win) {
-                            Ext.create('Ext.window.Window', {
-                                name: 'add-wms-window',
-                                bind: {
-                                    title: '{importLocalDataButtonText}'
-                                },
-                                layout: 'fit',
-                                tools: [{
-                                    type: 'help',
-                                    bind: {
-                                        tooltip: '{helpTooltip}'
-                                    },
-                                    callback: function() {
-                                        Koala.util.Help.showHelpWindow('toolsImport', 'tools');
-                                    }
-                                }],
-                                items: [{
-                                    xtype: 'k-form-importLocalData'
-                                }]
-                            }).show();
-                        } else {
-                            BasiGX.util.Animate.shake(win);
-                        }
-                    }
-                }]
-            }],
             items: [
                 // Add an empty hidden panel to be able to collapse the last
                 // accordion item
@@ -364,6 +241,9 @@ Ext.define('Koala.view.main.Main', {
             floating: true,
             resizable: true
         }]
+    }, {
+        region: 'west',
+        xtype: 'k-treemenu'
     }],
 
     /**

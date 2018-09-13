@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-present terrestris GmbH & Co. KG
+/* Copyright (c) 2017-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,38 +14,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.toolbar.Header
+ * @class Koala.view.window.PermalinkWindow
  */
-Ext.define('Koala.view.toolbar.Header', {
-    extend: 'Ext.toolbar.Toolbar',
-    xtype: 'k-toolbar-header',
+Ext.define('Koala.view.window.PermalinkWindow', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-permalink',
+    cls: 'k-window-permalink',
 
     requires: [
-        'BasiGX.util.Animate',
-        'Koala.util.Fullscreen',
-
-        'Koala.view.toolbar.HeaderController',
-        'Koala.view.toolbar.HeaderModel',
-        'Koala.view.button.TimeReference',
-        'Koala.view.window.HelpWindow'
+        'Koala.util.Help'
     ],
 
-    controller: 'k-toolbar-header',
-    viewModel: {
-        type: 'k-toolbar-header'
+    name: 'permalink-window',
+
+    bind: {
+        title: '{windowTitle}'
     },
 
-    defaults: {
-        scale: 'small'
-    },
+    layout: 'fit',
 
-    items: [
-        '->',
-        {
-            xtype: 'k-button-timereference'
+    constrain: true,
+
+    tools: [{
+        type: 'help',
+        bind: {
+            tooltip: '{helpTooltip}'
         },
-        {
-            xtype: 'k-form-field-languagecombo'
+        callback: function() {
+            Koala.util.Help.showHelpWindow('mapNavigationPermalink', 'mapNavigation');
         }
-    ]
+    }],
+
+    items: [{
+        xtype: 'k-form-permalink'
+    }]
+
 });

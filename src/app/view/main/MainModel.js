@@ -33,6 +33,7 @@ Ext.define('Koala.view.main.MainModel', {
         importLocalDataButtonTooltip: 'Import local data',
         importLocalDataWindowText: 'Import',
         headerTitle: '',
+        treeMenuTitle: 'Menu',
         selectedFeaturesLayer: null,
         noFeaturesSelected: true
     },
@@ -49,6 +50,10 @@ Ext.define('Koala.view.main.MainModel', {
                 return false;
             }
             return true;
+        },
+        treeMenuIconCls: function(get){
+            var isMicro = get('treeMenuMicro');
+            return isMicro ? 'x-fa fa-chevron-right' : 'x-fa fa-chevron-left';
         }
     }
 });

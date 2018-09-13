@@ -14,38 +14,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.toolbar.Header
+ * @class Koala.view.list.TreeMenu
  */
-Ext.define('Koala.view.toolbar.Header', {
-    extend: 'Ext.toolbar.Toolbar',
-    xtype: 'k-toolbar-header',
+Ext.define('Koala.view.list.TreeMenu', {
+    extend: 'Ext.list.Tree',
+    xtype: 'k-treemenu',
 
     requires: [
-        'BasiGX.util.Animate',
-        'Koala.util.Fullscreen',
-
-        'Koala.view.toolbar.HeaderController',
-        'Koala.view.toolbar.HeaderModel',
-        'Koala.view.button.TimeReference',
-        'Koala.view.window.HelpWindow'
+        'Koala.view.list.TreeMenuModel',
+        'Koala.view.list.TreeMenuController'
     ],
 
-    controller: 'k-toolbar-header',
+    ui: 'tree-menu',
+
+    controller: 'k-list-treemenu',
     viewModel: {
-        type: 'k-toolbar-header'
+        type: 'k-list-treemenu'
     },
 
-    defaults: {
-        scale: 'small'
+    expanderFirst: false,
+    expanderOnly: false,
+
+    store: {
+        type: 'k-treemenu'
     },
 
-    items: [
-        '->',
-        {
-            xtype: 'k-button-timereference'
-        },
-        {
-            xtype: 'k-form-field-languagecombo'
-        }
-    ]
+    bind: {
+        micro: '{micro}'
+    },
+
+    listeners: {
+        itemclick: 'onItemClick'
+    }
+
 });
