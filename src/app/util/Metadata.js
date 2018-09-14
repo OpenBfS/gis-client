@@ -32,7 +32,7 @@ Ext.define('Koala.util.Metadata', {
         getCswUpdate: function(context) {
             var XML = Koala.util.XML;
 
-            var ms = /(^http[s]?:\/\/[^/]+)(.+)/g.exec(context.baseUrl);
+            var ms = /(^http[s]?:\/\/[^/]+)(.+)/g.exec(context.config.baseUrl);
             var host = ms[1];
             var path = ms[2] + 'ows';
             var bfs = XML.defaultNamespaces.bfs;
@@ -118,7 +118,7 @@ Ext.define('Koala.util.Metadata', {
          */
         loginToGnos: function(context) {
             return new Ext.Promise(function(resolve) {
-                var url = context.metadataBaseUrl;
+                var url = context.config.metadataBaseUrl;
 
                 var iframe = document.createElement('iframe');
                 document.querySelector('body').appendChild(iframe);
@@ -148,7 +148,7 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise} a promise resolving once duplication has been done
          */
         cloneOldMetadata: function(context) {
-            var url = context.metadataBaseUrl;
+            var url = context.config.metadataBaseUrl;
 
             var resolveFunc;
 
@@ -181,7 +181,7 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise}  the promise resolving once the uuid has been found
          */
         determineNewUuid: function(context) {
-            var url = context.metadataBaseUrl;
+            var url = context.config.metadataBaseUrl;
 
             var resolveFunc;
 
@@ -252,7 +252,7 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise}         the xhr promise
          */
         updateMetadata: function(context) {
-            var url = context.metadataBaseUrl;
+            var url = context.config.metadataBaseUrl;
 
             this.getCswUpdate(context);
             this.prepareTransaction(context);
@@ -276,7 +276,7 @@ Ext.define('Koala.util.Metadata', {
          * fetched
          */
         fetchGroups: function(context) {
-            var url = context.metadataBaseUrl;
+            var url = context.config.metadataBaseUrl;
 
             var resolveFunc;
 
@@ -307,7 +307,7 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise} the promise resolving once the privileges have been set
          */
         setMetadataGroups: function(context) {
-            var url = context.metadataBaseUrl;
+            var url = context.config.metadataBaseUrl;
             var imis = Koala.util.AppContext.getAppContext().data.merge.imis_user;
 
             var userroles = imis.userroles;
@@ -364,9 +364,7 @@ Ext.define('Koala.util.Metadata', {
             var context = {
                 config: config[role],
                 uuid: metadata.id,
-                metadata: metadata,
-                metadataBaseUrl: config.metadataBaseUrl,
-                baseUrl: config.baseUrl
+                metadata: metadata
             };
             return this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))

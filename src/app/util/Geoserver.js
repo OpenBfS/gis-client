@@ -47,9 +47,10 @@ Ext.define('Koala.util.Geoserver', {
                         .then(function(xhr) {
                             var data = JSON.parse(xhr.responseText);
                             Ext.each(candidates, function(candidate) {
-                                if (candidate.datastore !== datastore || candidate.workspace !== workspace) {
+                                if (candidate.workspace !== workspace) {
                                     return;
                                 }
+                                candidate.datastore = datastore;
                                 Ext.each(data.featureTypes.featureType, function(featureType) {
                                     if (featureType.name === candidate.text) {
                                         resultList.push(candidate);
@@ -92,7 +93,6 @@ Ext.define('Koala.util.Geoserver', {
                         if (data.workspace === candidate.workspace) {
                             datastores.push(data.datastore);
                             baseUrls.push(data.baseUrl);
-                            candidate.datastore = data.datastore;
                             found = true;
                         }
                     });

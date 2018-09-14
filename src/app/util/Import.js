@@ -49,11 +49,10 @@ Ext.define('Koala.util.Import', {
         /**
          * Prepares the initial empty import.
          * @param  {Object} config config object
-         * @param  {String} baseUrl the geoserver base url
          * @return {Promise} the promise resolving once the import is created
          */
-        prepareImport: function(config, baseUrl) {
-            var url = baseUrl + 'rest/imports';
+        prepareImport: function(config) {
+            var url = config.baseUrl + 'rest/imports';
 
             return Ext.Ajax.request({
                 url: url,
@@ -87,7 +86,7 @@ Ext.define('Koala.util.Import', {
             var importId = response.import.id;
             importMetadata.importId = importId;
             var name = importMetadata.layer.get('name');
-            var url = importMetadata.baseUrl + 'rest/imports/' + importId + '/tasks';
+            var url = importMetadata.config.baseUrl + 'rest/imports/' + importId + '/tasks';
             var data = new FormData();
             var bytes = Uint8Array.from(atob(importMetadata.bytes), function(c) {
                 return c.charCodeAt(0);
@@ -117,7 +116,7 @@ Ext.define('Koala.util.Import', {
          * @return {Promise} promise resolving once the import is done
          */
         performImport: function(importMetadata) {
-            var url = importMetadata.baseUrl + 'rest/imports/' + importMetadata.importId;
+            var url = importMetadata.config.baseUrl + 'rest/imports/' + importMetadata.importId;
             return Ext.Ajax.request({
                 url: url,
                 method: 'POST'
@@ -131,7 +130,7 @@ Ext.define('Koala.util.Import', {
          * set on the layer object
          */
         getLayerName: function(context) {
-            var url = context.baseUrl + 'rest/imports/' + context.importId + '/tasks/0';
+            var url = context.config.baseUrl + 'rest/imports/' + context.importId + '/tasks/0';
             return Ext.Ajax.request({
                 url: url,
                 method: 'GET',
@@ -150,7 +149,6 @@ Ext.define('Koala.util.Import', {
          */
         importData: function(layer, role) {
             var config = Koala.util.AppContext.getAppContext();
-            var baseUrl = config.data.merge.import.baseUrl;
             config = config.data.merge.import[role];
             var features = layer.getSource().getFeatures();
             var fmt = new ol.format.GeoJSON();
@@ -168,10 +166,9 @@ Ext.define('Koala.util.Import', {
             var importMetadata = {
                 config: config,
                 bytes: bytes,
-                layer: layer,
-                baseUrl: baseUrl
+                layer: layer
             };
-            this.prepareImport(config, baseUrl)
+            this.prepareImport(config)
                 .then(this.prepareTask.bind(this, importMetadata))
                 .then(this.performImport.bind(this, importMetadata))
                 .then(this.getLayerName.bind(this, importMetadata))
