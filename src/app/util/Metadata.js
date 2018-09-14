@@ -32,12 +32,12 @@ Ext.define('Koala.util.Metadata', {
         getCswUpdate: function(context) {
             var XML = Koala.util.XML;
 
-            var ms = /(^http[s]?:\/\/[^/]+)(.+)/g.exec(context.config['base-url']);
+            var ms = /(^http[s]?:\/\/[^/]+)(.+)/g.exec(context.baseUrl);
             var host = ms[1];
             var path = ms[2] + 'ows';
             var bfs = XML.defaultNamespaces.bfs;
             var gmd = XML.defaultNamespaces.gmd;
-            var workspace = context.config['target-workspace'];
+            var workspace = context.config.workspace;
             var name = context.metadata.newLayerName;
             var doc = context.metadataDocument;
             var ns = XML.namespaceResolver();
@@ -86,7 +86,7 @@ Ext.define('Koala.util.Metadata', {
          */
         prepareClonedMetadata: function(metadata) {
             var config = Koala.util.AppContext.getAppContext();
-            config = config.data.merge['import'];
+            config = config.data.merge.import;
 
             if (!metadata) {
                 return metadata;
@@ -99,7 +99,7 @@ Ext.define('Koala.util.Metadata', {
             delete metadata.timeSeriesChartProperties;
             // always allow cloned layers to be editable afterwards
             metadata.layerConfig.olProperties.allowEdit = true;
-            metadata.layerConfig.wfs.url = config['base-url'] + 'ows';
+            metadata.layerConfig.wfs.url = config.baseUrl + 'ows';
 
             return metadata;
         },
@@ -118,7 +118,7 @@ Ext.define('Koala.util.Metadata', {
          */
         loginToGnos: function(context) {
             return new Ext.Promise(function(resolve) {
-                var url = context.config['metadata-base-url'];
+                var url = context.metadataBaseUrl;
 
                 var iframe = document.createElement('iframe');
                 document.querySelector('body').appendChild(iframe);
@@ -148,7 +148,7 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise} a promise resolving once duplication has been done
          */
         cloneOldMetadata: function(context) {
-            var url = context.config['metadata-base-url'];
+            var url = context.metadataBaseUrl;
 
             var resolveFunc;
 
@@ -181,7 +181,7 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise}  the promise resolving once the uuid has been found
          */
         determineNewUuid: function(context) {
-            var url = context.config['metadata-base-url'];
+            var url = context.metadataBaseUrl;
 
             var resolveFunc;
 
@@ -252,10 +252,13 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise}         the xhr promise
          */
         updateMetadata: function(context) {
-            var url = context.config['metadata-base-url'];
+            var url = context.metadataBaseUrl;
 
+            console.log('update')
             this.getCswUpdate(context);
+            console.log('updated')
             this.prepareTransaction(context);
+            console.log('transaction')
 
             return Ext.Ajax.request({
                 url: url + 'srv/eng/csw-publication',
@@ -276,7 +279,7 @@ Ext.define('Koala.util.Metadata', {
          * fetched
          */
         fetchGroups: function(context) {
-            var url = context.config['metadata-base-url'];
+            var url = context.metadataBaseUrl;
 
             var resolveFunc;
 
@@ -307,7 +310,7 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise} the promise resolving once the privileges have been set
          */
         setMetadataGroups: function(context) {
-            var url = context.config['metadata-base-url'];
+            var url = context.metadataBaseUrl;
             var imis = Koala.util.AppContext.getAppContext().data.merge.imis_user;
 
             var userroles = imis.userroles;
@@ -356,14 +359,17 @@ Ext.define('Koala.util.Metadata', {
         /**
          * Prepares the metadata for a cloned layer.
          * @param  {Object} metadata the original metadata Object
+         * @param  {String} role the role with which to create metadata
          */
-        prepareMetadata: function(metadata) {
+        prepareMetadata: function(metadata, role) {
             var config = Koala.util.AppContext.getAppContext();
-            config = config.data.merge['import'];
+            config = config.data.merge.import;
             var context = {
-                config: config,
+                config: config[role],
                 uuid: metadata.id,
-                metadata: metadata
+                metadata: metadata,
+                metadataBaseUrl: config.metadataBaseUrl,
+                baseUrl: config.baseUrl
             };
             return this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))

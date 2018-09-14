@@ -31,11 +31,11 @@ Ext.define('Koala.util.Import', {
          * @param  {ol.layer.Vector} layer the vector layer to import
          */
         importOrUpdateLayer: function(layer, wfstInserts, wfstUpdates,
-            wfstDeletes, wfstSuccessCallback, wfstFailureCallback) {
+            wfstDeletes, wfstSuccessCallback, wfstFailureCallback, role) {
             // persisted flag gets set explicitly to false on layer clone
             var persisted = layer.get('persisted');
             if (persisted === false) {
-                this.importData(layer);
+                this.importData(layer, role);
             } else {
                 var count = wfstDeletes.length + wfstInserts.length +
                     wfstUpdates.length;
@@ -49,10 +49,12 @@ Ext.define('Koala.util.Import', {
         /**
          * Prepares the initial empty import.
          * @param  {Object} config config object
+         * @param  {String} baseUrl the geoserver base url
          * @return {Promise} the promise resolving once the import is created
          */
-        prepareImport: function(config) {
-            var url = config['base-url'] + 'rest/imports';
+        prepareImport: function(config, baseUrl) {
+            var url = baseUrl + 'rest/imports';
+
             return Ext.Ajax.request({
                 url: url,
                 method: 'POST',
@@ -61,12 +63,12 @@ Ext.define('Koala.util.Import', {
                     import: {
                         targetWorkspace: {
                             workspace: {
-                                name: config['target-workspace']
+                                name: config.workspace
                             }
                         },
                         targetStore: {
                             dataStore: {
-                                name: config['target-store']
+                                name: config.datastore
                             }
                         }
                     }
@@ -85,7 +87,7 @@ Ext.define('Koala.util.Import', {
             var importId = response.import.id;
             importMetadata.importId = importId;
             var name = importMetadata.layer.get('name');
-            var url = importMetadata.config['base-url'] + 'rest/imports/' + importId + '/tasks';
+            var url = importMetadata.baseUrl + 'rest/imports/' + importId + '/tasks';
             var data = new FormData();
             var bytes = Uint8Array.from(atob(importMetadata.bytes), function(c) {
                 return c.charCodeAt(0);
@@ -115,7 +117,7 @@ Ext.define('Koala.util.Import', {
          * @return {Promise} promise resolving once the import is done
          */
         performImport: function(importMetadata) {
-            var url = importMetadata.config['base-url'] + 'rest/imports/' + importMetadata.importId;
+            var url = importMetadata.baseUrl + 'rest/imports/' + importMetadata.importId;
             return Ext.Ajax.request({
                 url: url,
                 method: 'POST'
@@ -129,7 +131,7 @@ Ext.define('Koala.util.Import', {
          * set on the layer object
          */
         getLayerName: function(context) {
-            var url = context.config['base-url'] + 'rest/imports/' + context.importId + '/tasks/0';
+            var url = context.baseUrl + 'rest/imports/' + context.importId + '/tasks/0';
             return Ext.Ajax.request({
                 url: url,
                 method: 'GET',
@@ -144,10 +146,12 @@ Ext.define('Koala.util.Import', {
          * Imports the given layer. Generates a blob in shape file format and
          * uses the Geoserver importer extension to import it into the db.
          * @param  {ol.layer.Vector} layer the layer to imports
+         * @param  {String} role the role with which to perform the import
          */
-        importData: function(layer) {
+        importData: function(layer, role) {
             var config = Koala.util.AppContext.getAppContext();
-            config = config.data.merge['import'];
+            var baseUrl = config.data.merge.import.baseUrl;
+            config = config.data.merge.import[role];
             var features = layer.getSource().getFeatures();
             var fmt = new ol.format.GeoJSON();
             var geojson = fmt.writeFeaturesObject(features, {
@@ -164,15 +168,17 @@ Ext.define('Koala.util.Import', {
             var importMetadata = {
                 config: config,
                 bytes: bytes,
-                layer: layer
+                layer: layer,
+                baseUrl: baseUrl
             };
-            this.prepareImport(config)
+            this.prepareImport(config, baseUrl)
                 .then(this.prepareTask.bind(this, importMetadata))
                 .then(this.performImport.bind(this, importMetadata))
                 .then(this.getLayerName.bind(this, importMetadata))
                 .then(Koala.util.Metadata.prepareMetadata.bind(
                     Koala.util.Metadata,
-                    layer.metadata
+                    layer.metadata,
+                    role
                 ))
                 .then(this.setPersistedFlag.bind(this, layer))
                 .then(this.closeFeatureGrid.bind(this));

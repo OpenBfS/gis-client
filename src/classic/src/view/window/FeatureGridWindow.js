@@ -204,13 +204,16 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                         text: viewModel.get('saveLayerText')
                     },
                     handler: function() {
+                        // TODO allow selection of role to store the data in
+                        var role = imisRoles[0];
                         Koala.util.Import.importOrUpdateLayer(
                             me.layer,
                             me.wfstInserts,
                             me.wfstUpdates,
                             me.wfstDeletes,
                             wfstSuccessCallback,
-                            wfstFailureCallback
+                            wfstFailureCallback,
+                            role
                         );
                     }
                 }, {
