@@ -73,6 +73,17 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         me.currentTask.delay(500);
     },
 
+    /**
+     * Dispatch between rodos window and refreshing the tree.
+     */
+    handleActionColumn: function(view, rowIndex, colIndex, item) {
+        if (rowIndex === 0) {
+            this.showRodosFilter(view, rowIndex, colIndex, item);
+        } else {
+            this.getView().rebuildTree();
+        }
+    },
+
     showRodosFilter: function(view, rowIndex, colIndex, item) {
         var viewModel = this.getViewModel();
         var win = Ext.ComponentQuery.query('window[name=rodos-window]')[0];

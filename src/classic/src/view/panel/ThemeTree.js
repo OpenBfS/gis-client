@@ -103,11 +103,13 @@ Ext.define('Koala.view.panel.ThemeTree', {
         getClass: function(v, meta, rec) {
             if (rec.get('text').indexOf('RODOS-Prognosen') > -1) {
                 return 'x-fa fa-filter';
+            } else if (rec.data.isImportNode) {
+                return 'x-fa fa-refresh';
             } else {
                 return 'hide-action-column';
             }
         },
-        handler: 'showRodosFilter'
+        handler: 'handleActionColumn'
     }],
 
     listeners: {
@@ -153,7 +155,8 @@ Ext.define('Koala.view.panel.ThemeTree', {
                                 data.push({
                                     text: me.getViewModel().get('importedLayersTitle'),
                                     isLayerProfile: false,
-                                    children: config
+                                    children: config,
+                                    isImportNode: true
                                 });
                                 me.getStore().setData(data);
                                 me.getViewModel().bind({
