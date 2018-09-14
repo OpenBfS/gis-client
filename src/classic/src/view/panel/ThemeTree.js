@@ -21,6 +21,8 @@ Ext.define('Koala.view.panel.ThemeTree', {
     xtype: 'k-panel-themetree',
 
     requires: [
+        'Koala.util.MetadataQuery',
+        'Koala.util.Geoserver',
         'Koala.util.Help',
         'Koala.view.component.TextTool',
         'Koala.view.panel.ThemeTreeController',
@@ -119,9 +121,9 @@ Ext.define('Koala.view.panel.ThemeTree', {
     },
 
     initComponent: function() {
-
         // try to load layerset from appContext
         var appContext = BasiGX.view.component.Map.guess().appContext;
+        var me = this;
         var path = [
             'data',
             'merge',
@@ -129,6 +131,35 @@ Ext.define('Koala.view.panel.ThemeTree', {
             'layerset'
         ];
         var layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerset.json');
+        var data;
+
+        Ext.Ajax.request({
+            url: layerSetUrl
+        })
+            .then(function(xhr) {
+                data = JSON.parse(xhr.responseText);
+                Koala.util.MetadataQuery.getImportedLayers()
+                    .then(function(layers) {
+                        Koala.util.Geoserver.filterDeletedLayers(layers)
+                            .then(function(config) {
+                                data.push({
+                                    text: me.getViewModel().get('importedLayersTitle'),
+                                    isLayerProfile: false,
+                                    children: config
+                                });
+                                me.getStore().setData(data);
+                                me.getViewModel().bind({
+                                    bindTo: '{importedLayersTitle}'
+                                }, function(title) {
+                                    if (!data) {
+                                        return;
+                                    }
+                                    data[data.length - 1].text = title;
+                                    me.getStore().setData(data);
+                                });
+                            });
+                    });
+            });
 
         var store = Ext.create('Ext.data.TreeStore', {
             proxy: {
