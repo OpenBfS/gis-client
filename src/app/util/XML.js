@@ -83,8 +83,10 @@ Ext.define('Koala.util.XML', {
             var bfs = Koala.util.XML.defaultNamespaces.bfs;
             var prop = doc.createElementNS(bfs, 'bfs:olProperty');
             node.appendChild(prop);
-            Koala.util.XML.addCharacterString(doc, prop, bfs, 'bfs:propertyName', key);
-            Koala.util.XML.addCharacterString(doc, prop, bfs, 'bfs:propertyValue', value);
+            var mdprop = doc.createElementNS(bfs, 'bfs:MD_Property');
+            prop.appendChild(mdprop);
+            Koala.util.XML.addCharacterString(doc, mdprop, bfs, 'bfs:propertyName', key);
+            Koala.util.XML.addCharacterString(doc, mdprop, bfs, 'bfs:propertyValue', value);
         },
 
         /**

@@ -44,6 +44,7 @@ Ext.define('Koala.util.Metadata', {
             var xpath = 'bfs:layerInformation/bfs:MD_Layer';
             var node = doc.evaluate(xpath, doc.documentElement, ns).iterateNext();
             XML.addOlProperty(node, 'workspace', workspace);
+            XML.addOlProperty(node, 'param_typename', workspace + ':' + name);
             xpath = 'bfs:timeSeriesChartProperty';
             XML.removeNodes(doc, xpath, node);
             xpath = 'bfs:barChartProperty';
@@ -54,6 +55,12 @@ Ext.define('Koala.util.Metadata', {
             XML.removeNodes(doc, xpath, node);
             XML.addCharacterString(doc, node, bfs, 'bfs:printTitle', name);
             XML.addCharacterString(doc, node, bfs, 'bfs:legendTitle', name);
+            xpath = 'bfs:layerType/bfs:MD_VectorLayerType/bfs:URL';
+            var layerNode = doc.evaluate(xpath, node, ns).iterateNext();
+            XML.removeNodes(doc, 'bfs:host', layerNode);
+            XML.removeNodes(doc, 'bfs:path', layerNode);
+            XML.addCharacterString(doc, layerNode, bfs, 'bfs:host', host);
+            XML.addCharacterString(doc, layerNode, bfs, 'bfs:path', path);
             xpath = 'bfs:wfs/bfs:URL';
             node = doc.evaluate(xpath, node, ns).iterateNext();
             xpath = 'bfs:host';
