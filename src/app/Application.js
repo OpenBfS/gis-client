@@ -28,7 +28,8 @@ Ext.define('Koala.Application', {
     name: 'Koala',
 
     requires: [
-        'Koala.util.Routing'
+        'Koala.util.Routing',
+        'Koala.util.AppContext'
     ],
 
     statics: {
@@ -167,6 +168,10 @@ Ext.define('Koala.Application', {
         // ask before closing/refreshing the window.
         // Not all browsers will respect this, depending on settings
         window.addEventListener('beforeunload', function(evt) {
+            var context = Koala.util.AppContext.getAppContext();
+            if (context.debug) {
+                return;
+            }
             // match different handling from different browsers
             var confirmMessage = me.leavePageText;
             evt.returnValue = confirmMessage;
