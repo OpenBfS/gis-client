@@ -121,9 +121,18 @@ Ext.define('Koala.view.panel.ThemeTree', {
     },
 
     initComponent: function() {
+        this.rebuildTree();
+
+        var store = Ext.create('Ext.data.TreeStore', {
+        });
+        this.store = store;
+        this.callParent();
+    },
+
+    rebuildTree: function() {
+        var me = this;
         // try to load layerset from appContext
         var appContext = BasiGX.view.component.Map.guess().appContext;
-        var me = this;
         var path = [
             'data',
             'merge',
@@ -131,13 +140,12 @@ Ext.define('Koala.view.panel.ThemeTree', {
             'layerset'
         ];
         var layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerset.json');
-        var data;
 
         Ext.Ajax.request({
             url: layerSetUrl
         })
             .then(function(xhr) {
-                data = JSON.parse(xhr.responseText);
+                var data = JSON.parse(xhr.responseText);
                 Koala.util.MetadataQuery.getImportedLayers()
                     .then(function(layers) {
                         Koala.util.Geoserver.filterDeletedLayers(layers)
@@ -160,17 +168,6 @@ Ext.define('Koala.view.panel.ThemeTree', {
                             });
                     });
             });
-
-        var store = Ext.create('Ext.data.TreeStore', {
-            proxy: {
-                type: 'ajax',
-                url: layerSetUrl,
-                reader: {
-                    type: 'json'
-                }
-            }
-        });
-        this.store = store;
-        this.callParent();
     }
+
 });

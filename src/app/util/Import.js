@@ -199,6 +199,8 @@ Ext.define('Koala.util.Import', {
                     win.destroy();
                 });
             }
+            var tree = Ext.ComponentQuery.query('k-panel-themetree')[0];
+            tree.rebuildTree();
         }
     }
 
