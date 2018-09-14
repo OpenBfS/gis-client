@@ -254,11 +254,8 @@ Ext.define('Koala.util.Metadata', {
         updateMetadata: function(context) {
             var url = context.metadataBaseUrl;
 
-            console.log('update')
             this.getCswUpdate(context);
-            console.log('updated')
             this.prepareTransaction(context);
-            console.log('transaction')
 
             return Ext.Ajax.request({
                 url: url + 'srv/eng/csw-publication',
