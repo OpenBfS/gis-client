@@ -31,7 +31,7 @@ Ext.define('Koala.util.MetadataQuery', {
         importedLayersRequest: '<GetRecords ' +
             'xmlns="http://www.opengis.net/cat/csw/2.0.2" ' +
             'xmlns:bfs="http://geonetwork.org/bfs" ' +
-            'service="CSW" version="2.0.2" ' +
+            'service="CSW" version="2.0.2" maxRecords="1000" ' + // TODO max value? default is 10
             'resultType="results" outputFormat="application/xml" ' +
             'outputSchema="http://www.isotc211.org/2005/gmd">' +
             '<Query typeNames="gmd:MD_Metadata">' +
