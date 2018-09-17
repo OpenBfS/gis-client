@@ -84,7 +84,11 @@ Ext.define('Koala.view.list.TreeMenuController', {
                 case 'permalink':
                     this.showWindow('k-window-permalink', 'Koala.view.window.PermalinkWindow');
                     break;
-                case 'timezone':
+                case 'timereference':
+                    var timereferenceButton = Ext.ComponentQuery
+                        .query('k-button-timereference')[0];
+                    timereferenceButton.toggle();
+                    this.viewModel.set('timeReference', timereferenceButton.getCurrent());
                     break;
                 case 'language':
                     break;

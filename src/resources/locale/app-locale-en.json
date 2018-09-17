@@ -401,6 +401,29 @@
             }
         }
     },
+    "Koala.view.list.TreeMenu": {
+        "config": {
+            "data": {
+                "menu": "Menu",
+                "themes": "Topics",
+                "loading": "Load",
+                "wmsimport": "Add external WMS",
+                "vectorimport": "Import local files",
+                "print": "Print",
+                "drawandmeasure": "Draw & Measure",
+                "draw": "Draw",
+                "measure": "Measure",
+                "share": "Share",
+                "permalink": "Permalink",
+                "settings": "Settings",
+                "timereference": "Time Reference",
+                "fullscreen": "Toggle Fullscreen",
+                "imprint": "Imprint",
+                "privacy": "Privacy",
+                "help": "Help"
+            }
+        }
+    },
     "Koala.view.main.Main": {
         "config": {
             "data": {

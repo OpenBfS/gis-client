@@ -20,6 +20,12 @@ Ext.define('Koala.view.list.TreeMenu', {
     extend: 'Ext.list.Tree',
     xtype: 'k-treemenu',
 
+    statics: {
+        /* i18n */
+        txtUntil: ''
+        /* i18n */
+    },
+
     requires: [
         'Koala.view.list.TreeMenuModel',
         'Koala.view.list.TreeMenuController'
@@ -35,12 +41,9 @@ Ext.define('Koala.view.list.TreeMenu', {
     expanderFirst: false,
     expanderOnly: false,
 
-    store: {
-        type: 'k-treemenu'
-    },
-
     bind: {
-        micro: '{micro}'
+        micro: '{micro}',
+        store: '{menuStore}'
     },
 
     listeners: {

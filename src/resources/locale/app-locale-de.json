@@ -91,7 +91,7 @@
     "Koala.view.button.ShowRedliningToolsContainer": {
         "config": {
             "data":{
-                "tooltip": "Messen",
+                "tooltip": "Messen"
             }
         }
     },
@@ -135,7 +135,7 @@
                 "delimiterText": "Trennzeichen",
                 "quoteText": "Anführungszeichen (\" \") verwenden",
                 "downloadAllChartDataMsgButtonYes": "Herunterladen",
-                "downloadAllChartDataMsgButtonNo": "Abbrechen",
+                "downloadAllChartDataMsgButtonNo": "Abbrechen"
             }
         }
     },
@@ -358,14 +358,14 @@
                 "northArrow": "Nordpfeil",
                 "scalebar": "Massstabsleiste",
                 "unlinkTooltip": "Link entfernen"
-            },
+            }
         }
     },
     "Koala.view.form.RodosFilter": {
         "config": {
             "data": {
-                "projectComboLabel": "Projekt",
-            },
+                "projectComboLabel": "Projekt"
+            }
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -399,6 +399,29 @@
                 "stationSearchTitle": "ODL Sondenstandorte",
                 "searchInProgressText": "Suche läuft…",
                 "noRecordsFoundText": "Keine Stationen gefunden"
+            }
+        }
+    },
+    "Koala.view.list.TreeMenu": {
+        "config": {
+            "data": {
+                "menu": "Menu",
+                "themes": "Themen",
+                "loading": "Laden",
+                "wmsimport": "WMS hinzuladen",
+                "vectorimport": "Vektordaten laden",
+                "print": "Drucken",
+                "drawandmeasure": "Zeichnen",
+                "draw": "Zeichnen",
+                "measure": "Messen",
+                "share": "Teilen",
+                "permalink": "Permalink",
+                "settings": "Einstellungen",
+                "timereference": "Zeitbezug",
+                "fullscreen": "Vollbild",
+                "imprint": "Impressum",
+                "privacy": "Datenschutz",
+                "help": "Hilfe"
             }
         }
     },
@@ -553,7 +576,7 @@
         "config": {
             "data": {
                 "title": "Layer Profilwahl",
-                "helpHtml": "<div>Dieses Auswahlfenster ermöglicht es, thematisch zusammengehörige Datensätze mit einem Klick in die Karte zu laden. Es ist nicht zwingend erforderlich eine Profilwahl zu treffen um die Anwendung zu starten.</div>"+
+                "helpHtml": "<div>Dieses Auswahlfenster ermöglicht es, thematisch zusammengehörige Datensätze mit einem Klick in die Karte zu laden. Es ist nicht zwingend erforderlich eine Profilwahl zu treffen um die Anwendung zu starten.</div>" +
                             "<div>Wird das Fenster ohne Profilwahl geschlossen (mit \"x\" rechts oben), werden lediglich die Hintergrundkarte, Ortsnamen und Höhenlinien geladen. Anschließend können einzelne Fachlayer mit individuellen Filtereinstellungen hinzugeladen werden.</div>",
                 "hideLayersetChooserWindowOnStartupMsg": "Dieses Fenster nicht mehr anzeigen."
             }

@@ -22,7 +22,119 @@ Ext.define('Koala.view.list.TreeMenuModel', {
     alias: 'viewmodel.k-list-treemenu',
 
     data: {
-        micro: false
+        micro: false,
+        timereferenceValue: 'local',
+        // i18n
+        menu: '',
+        themes: '',
+        loading: '',
+        wmsimport: '',
+        vectorimport: '',
+        print: '',
+        drawandmeasure: '',
+        draw: '',
+        measure: '',
+        share: '',
+        permalink: '',
+        settings: '',
+        timereference: '',
+        fullscreen: '',
+        imprint: '',
+        privacy: '',
+        help: ''
+    },
+
+    stores: {
+        menuStore: {
+            type: 'tree',
+            root: {
+                expanded: true,
+                children: [{
+                    text: '{menu}',
+                    key: 'menu',
+                    leaf: true,
+                    iconCls: 'x-fa fa-bars'
+                }, {
+                    text: '{themes}',
+                    key: 'layers',
+                    leaf: true,
+                    iconCls: 'x-fa fa-folder-open-o'
+                }, {
+                    text: '{loading}',
+                    iconCls: 'x-fa fa-globe',
+                    children: [{
+                        text: '{wmsimport}',
+                        key: 'wmsimport',
+                        leaf: true,
+                        iconCls: 'x-fa fa-circle'
+                    }, {
+                        text: '{vectorimport}',
+                        key: 'vectorimport',
+                        leaf: true,
+                        iconCls: 'x-fa fa-circle-o'
+                    }]
+                }, {
+                    text: '{print}',
+                    key: 'print',
+                    leaf: true,
+                    iconCls: 'x-fa fa-print'
+                }, {
+                    text: '{drawandmeasure}',
+                    iconCls: 'x-fa fa-pencil-square-o',
+                    children: [{
+                        text: '{measure}',
+                        key: 'measure',
+                        leaf: true,
+                        iconCls: 'x-fa fa-pencil-square'
+                    }, {
+                        text: '{draw}',
+                        key: 'draw',
+                        leaf: true,
+                        iconCls: 'x-fa fa-pencil'
+                    }]
+                }, {
+                    text: '{share}',
+                    iconCls: 'x-fa fa-share-alt',
+                    children: [{
+                        text: '{permalink}',
+                        key: 'permalink',
+                        leaf: true,
+                        iconCls: 'x-fa fa-chain'
+                    }]
+                }, {
+                    text: '{settings}',
+                    iconCls: 'x-fa fa-gear',
+                    children: [{
+                        text: '{timereference}',
+                        key: 'timereference',
+                        leaf: true,
+                        iconCls: 'x-fa fa-clock-o'
+                    },
+                    {
+                        text: '{fullscreen}',
+                        key: 'fullscreen',
+                        leaf: true,
+                        iconCls: 'x-fa fa-expand',
+                        hidden: !Koala.util.Fullscreen.isFullscreenSupported()
+                    }]
+                }, {
+                    text: '{imprint}',
+                    leaf: true,
+                    key: 'imprint',
+                    iconCls: 'x-fa fa-copyright'
+                }, {
+                    text: '{privacy}',
+                    leaf: true,
+                    key: 'privacy',
+                    iconCls: 'x-fa fa-shield'
+                }, {
+                    text: '{help}',
+                    leaf: true,
+                    key: 'help',
+                    iconCls: 'x-fa fa-question'
+                }]
+            }
+        }
     }
 
 });
