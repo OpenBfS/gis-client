@@ -14,11 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * This class is the controller for the main view for the application. It is
- * specified as the "controller" of the Main view class.
+ * This class is the controller for the TreeMenu view class.
  *
- * TODO - Replace this content of this view to suite the needs of your
- *        application.
  *
  * @class Koala.view.list.TreeMenuController
  */
