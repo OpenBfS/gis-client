@@ -50,7 +50,16 @@ Ext.define('Koala.view.list.TreeMenuController', {
                         view.up('app-main').updateLayout();
                     }, 100);
                     break;
-                case 'layers':
+                case 'themes':
+                    var themeTree = Ext.ComponentQuery.query('k-panel-themetree')[0];
+                    var layersetchooser = Ext.ComponentQuery.query('k-panel-layersetchooser')[0];
+                    if (themeTree.isVisible()) {
+                        themeTree.hide();
+                        layersetchooser.hide();
+                    } else {
+                        themeTree.show();
+                    }
+
                     break;
                 case 'wmsimport':
                     this.showWindow('k-window-addwms', 'Koala.view.window.AddWMSWindow');

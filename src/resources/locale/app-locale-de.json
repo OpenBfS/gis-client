@@ -500,7 +500,7 @@
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {
-                "title": "Auswahl",
+                "title": "Themen",
                 "tooltip": "LayerSet wechseln",
                 "tooltext": "Thema wechseln",
                 "btnTextResetThemeTreeFiltering": "Alle Layer",

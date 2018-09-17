@@ -499,7 +499,7 @@
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {
-                "title": "Selection",
+                "title": "Topics",
                 "tooltip": "Change Layer Set",
                 "tooltext": "Change Topic",
                 "btnTextResetThemeTreeFiltering": "All Layers",

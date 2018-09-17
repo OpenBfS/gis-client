@@ -192,25 +192,6 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
     /**
      *
      */
-    registerMenuBehaviour: function(layersetchooser) {
-        var view = this.getView();
-        if (!view.showLayerProfiles) {
-            var mapContainer = layersetchooser.up('basigx-panel-mapcontainer');
-            var menu = mapContainer.down('basigx-panel-menu');
-            menu.on('collapse', function() {
-                if (!layersetchooser.isHidden()) {
-                    layersetchooser.hide(menu);
-                    menu.on('expand', layersetchooser.show, layersetchooser, {
-                        single: true
-                    });
-                }
-            }, layersetchooser);
-        }
-    },
-
-    /**
-     *
-     */
     filterLayerSetsByText: function(filterField, newVal) {
         var layerSetChooser = filterField.up('k-panel-layersetchooser');
         var layerProfileView = layerSetChooser.down('basigx-view-layerset');

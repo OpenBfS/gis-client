@@ -138,7 +138,7 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'basigx-button-zoomtoextent'
             }, {
                 xtype: 'k-button-selectfeatures',
-                hidden: true // UI moved to TreeMenu logic kept in hidden button
+                hidden: true // UI moved to TreeMenu. Logic kept in hidden button
             },{
                 xtype: 'k-button-backgroundlayers'
             }]
@@ -188,29 +188,7 @@ Ext.define('Koala.view.main.Main', {
         },
         // define menu items
         menuConfig: {
-            bodyPadding: 0,
-            resizable: true,
-            resizeHandles: 's se e',
-            constrain: true,
-            minWidth: 220,
-            maxWidth: 700,
-            hideCollapseTool: false,
-            collapseDirection: 'top',
-            header: {
-                overCls: 'k-over-clickable'
-            },
-            items: [
-                // Add an empty hidden panel to be able to collapse the last
-                // accordion item
-                {
-                    xtype: 'panel',
-                    hidden: true
-                },
-                {
-                    xtype: 'k-panel-themetree',
-                    collapsed: false
-                }
-            ]
+            xtype: 'k-panel-themetree'
         },
         legendPanelConfig: {
             xtype: 'k-panel-routing-legendtree',
@@ -262,16 +240,12 @@ Ext.define('Koala.view.main.Main', {
         var title = {
             xtype: 'title',
             textAlign: 'center',
+            width: 300,
             autoEl: {
                 tag: 'a',
                 href: null
             },
-            cls: 'k-application-title',
-            initComponent: function() {
-                var menuPanel = Ext.ComponentQuery.query('basigx-panel-menu')[0],
-                    titleWidth = menuPanel.width || 300;
-                this.setWidth(titleWidth);
-            }
+            cls: 'k-application-title'
         };
 
         var searchFieldCombo = {
