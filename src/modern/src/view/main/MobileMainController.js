@@ -296,6 +296,11 @@ Ext.define('Koala.view.main.MobileMainController', {
             });
             var template = Koala.util.Object.getPathStrOr(me.chartingLayer,
                 'metadata/layerConfig/olProperties/hoverTpl');
+            // evaluate possible template functions with the current feature
+            if (Ext.String.startsWith(template, 'eval:')) {
+                template = eval(template.substr(5)); // eslint-disable-line no-eval
+                template = template(feature);
+            }
             var hover = Koala.util.String.replaceTemplateStrings(template,
                 feature);
             panel.setHtml(hover);
