@@ -461,29 +461,35 @@ Layer erhält initial alwaysOnTop Verhalten.
 **hoverTpl**
 
 Template-String der beim Hovern über Features angezeigt wird. Werte in doppelten
-eckigen Klammern werden durch Attribute des Features ersetzt.
+eckigen Klammern werden durch Attribute des Features ersetzt. Alternativ kann eine
+Funktion verwendet werden, die als Parameter das aktuelle Feature erhält und
+einen Template String zurückgibt
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
-| Erlaubt Wertemenge   | Template-String |
+| Erlaubt Wertemenge   | Template-String, eval:(anyValidFunction) returning Template-String |
 | Obligatorisch        | Wenn allowHover = true |
 | Default-Wert         |  |
-| Beispiel             | [[locality_name]]<br>[[end_measure]] <br>Messwert (µSv/h):[[value]]<br>|
+| Beispiel             | `[[locality_name]]<br>[[end_measure]] <br>Messwert (µSv/h):[[value]]<br>` <br>oder<br> `eval:(function(feature){if (feature.get('value') && feature.get('value') < 0.05) {return 'ALARM';} else {return '[[locality_name]]<br>[[end_measure]]<br>Messwert (µSv/h): [[value]]';}})`|
 
 **hoverstyle**
 
-Es kann ein String mit drei Komma separierten Werten angegebene werden: z.B.:
+Stil, der für gehoverte Objekte verwendet werden soll.
+Es kann ein String mit drei Komma separierten Werten angegeben werden: z.B.:
 
 * “#ff00aa,circle,8”  → Farbwert der Füllung, Form, Radius
 * “#ff00aa,rect,8,8”  → Farbwert der Füllung, Form, Breite, Höhe
 * “#ff00aa,polygon,3” → Farbwert der Füllung, Form, Breite der Außenlinie
 
+Alternativ kann eine Funktion angegeben werden, die diesen String auf Basis
+des jeweiligen Features zurückgibt
+
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
-| Erlaubt Wertemenge   | siehe Beschreibung |
+| Erlaubt Wertemenge   | String, eval:(anyValidFunction) returning valid style-string|
 | Obligatorisch        | &#10799; |
 | Default-Wert         |  |
-| Beispiel             | #ff00aa,circle,8 |
+| Beispiel             | `#ff00aa,circle,8` <br>oder<br> `eval:(function(feature){if(feature.get('value') < 0.005) {return '#0000ee,circle,45';} else {return '#ff00aa,circle,10';}})` |
 
 **hasLegend**
 
@@ -563,6 +569,25 @@ Beispiel: layer_opacity, layer_visible, layer_extent, layer_zIndex, ...
 | Obligatorisch        | &#10799; |
 | Default-Wert         |  |
 | Beispiel             | Siehe http://openlayers.org/en/latest/apidoc/ol.layer.html  |
+
+**selectStyle**
+
+Stil, der für selektierte Objekte verwendet werden soll.
+Es kann ein String mit drei Komma separierten Werten angegeben werden: z.B.:
+
+* “#ff00aa,circle,8”  → Farbwert der Füllung, Form, Radius
+* “#ff00aa,rect,8,8”  → Farbwert der Füllung, Form, Breite, Höhe
+* “#ff00aa,polygon,3” → Farbwert der Füllung, Form, Breite der Außenlinie
+
+Alternativ kann eine Funktion angegeben werden, die diesen String auf Basis
+des jeweiligen Features zurückgibt
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | String, eval:(anyValidFunction) returning valid style-string|
+| Obligatorisch        | &#10799; |
+| Default-Wert         |  |
+| Beispiel             | `#ff00aa,circle,8` <br>oder<br> `eval:(function(feature){if(feature.get('value') < 0.005) {return '#0000ee,circle,45';} else {return '#ff00aa,circle,10';}})` |
 
 **source_xyz**
 
