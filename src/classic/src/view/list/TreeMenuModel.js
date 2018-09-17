@@ -34,6 +34,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         drawandmeasure: '',
         draw: '',
         measure: '',
+        selectfeatures: '',
         share: '',
         permalink: '',
         settings: '',
@@ -102,6 +103,11 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         iconCls: 'x-fa fa-chain'
                     }]
                 }, {
+                    text: '{selectfeatures}',
+                    key: 'selectfeatures',
+                    leaf: true,
+                    iconCls: 'x-fa fa-crop'
+                },{
                     text: '{settings}',
                     iconCls: 'x-fa fa-gear',
                     children: [{

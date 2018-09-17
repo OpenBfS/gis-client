@@ -21,7 +21,11 @@ Ext.define('Koala.view.button.SelectFeaturesModel', {
     alias: 'viewmodel.k-button-selectfeatures',
 
     data: {
-        tooltip: ''
+        /** i18n */
+        tooltip: '',
+        error: '',
+        noSingleActiveLayerFound: ''
+        /** i18n end */
     }
 
 });

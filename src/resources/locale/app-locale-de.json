@@ -78,13 +78,12 @@
             }
         }
     },
-    "Koala.view.button.SelectFeaturesController": {
-        "noSingleActiveLayerFound": "Bitte selektieren Sie einen aktiven Layer"
-    },
     "Koala.view.button.SelectFeatures": {
         "config": {
             "data": {
-                "tooltip": "Objekte des aktiven Layers selektieren"
+                "tooltip": "Objekte des aktiven Layers selektieren",
+                "noSingleActiveLayerFound": "Bitte selektieren Sie einen aktiven Layer",
+                "error": "Fehler"
             }
         }
     },
@@ -417,6 +416,7 @@
                 "share": "Teilen",
                 "permalink": "Permalink",
                 "settings": "Einstellungen",
+                "selectfeatures": "Objekte selektieren",
                 "timereference": "Zeitbezug",
                 "fullscreen": "Vollbild",
                 "imprint": "Impressum",

@@ -138,9 +138,7 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'basigx-button-zoomtoextent'
             }, {
                 xtype: 'k-button-selectfeatures',
-                listeners: {
-                    boxready: Koala.util.AppContext.generateCheckToolVisibility('selectFeaturesBtn')
-                }
+                hidden: true // UI moved to TreeMenu logic kept in hidden button
             },{
                 xtype: 'k-button-backgroundlayers'
             }]

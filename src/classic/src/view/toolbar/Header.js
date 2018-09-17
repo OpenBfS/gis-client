@@ -42,7 +42,8 @@ Ext.define('Koala.view.toolbar.Header', {
     items: [
         '->',
         {
-            xtype: 'k-button-timereference'
+            xtype: 'k-button-timereference',
+            hidden: true // UI moved to TreeMenu logic kept in hidden button
         },
         {
             xtype: 'k-form-field-languagecombo'

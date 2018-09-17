@@ -78,13 +78,12 @@
             }
         }
     },
-    "Koala.view.button.SelectFeaturesController": {
-        "noSingleActiveLayerFound": "Please select a single active Layer"
-    },
     "Koala.view.button.SelectFeaturesModel": {
         "config": {
             "data":{
-                "tooltip": "Select features of the active Layer"
+                "tooltip": "Select features of the active Layer",
+                "noSingleActiveLayerFound": "Please select a single active Layer",
+                "error": "Error"
             }
         }
     },
@@ -417,6 +416,7 @@
                 "permalink": "Permalink",
                 "settings": "Settings",
                 "timereference": "Time Reference",
+                "selectfeatures": "Select objects",
                 "fullscreen": "Toggle Fullscreen",
                 "imprint": "Imprint",
                 "privacy": "Privacy",

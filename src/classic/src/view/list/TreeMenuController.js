@@ -81,6 +81,11 @@ Ext.define('Koala.view.list.TreeMenuController', {
                         mapContainer.add(drawTools);
                     }
                     break;
+                case 'selectfeatures':
+                    var selectFeaturesButton = Ext.ComponentQuery
+                        .query('k-button-selectfeatures')[0];
+                    selectFeaturesButton.toggle();
+                    break;
                 case 'permalink':
                     this.showWindow('k-window-permalink', 'Koala.view.window.PermalinkWindow');
                     break;
@@ -88,7 +93,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     var timereferenceButton = Ext.ComponentQuery
                         .query('k-button-timereference')[0];
                     timereferenceButton.toggle();
-                    this.viewModel.set('timeReference', timereferenceButton.getCurrent());
+                    viewModel.set('timeReference', timereferenceButton.getCurrent());
                     break;
                 case 'language':
                     break;
