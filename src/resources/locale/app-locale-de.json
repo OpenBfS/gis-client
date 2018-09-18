@@ -421,7 +421,8 @@
                 "fullscreen": "Vollbild",
                 "imprint": "Impressum",
                 "privacy": "Datenschutz",
-                "help": "Hilfe"
+                "help": "Hilfe",
+                "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html"
             }
         }
     },
@@ -519,8 +520,7 @@
                 "btnTooltipFullscreen": "Zwischen Vollbildanzeige und Normalansicht wechseln",
                 "btnTooltipHelp": "Hilfe anzeigen",
                 "btnTooltipImprint": "Impressum anzeigen",
-                "btnTooltipPrivacy": "Datenschutzerklärung anzeigen",
-                "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html"
+                "btnTooltipPrivacy": "Datenschutzerklärung anzeigen"
             }
         }
     },

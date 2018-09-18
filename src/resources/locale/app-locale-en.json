@@ -420,7 +420,8 @@
                 "fullscreen": "Toggle Fullscreen",
                 "imprint": "Imprint",
                 "privacy": "Privacy",
-                "help": "Help"
+                "help": "Help",
+                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html"
             }
         }
     },
@@ -518,8 +519,7 @@
                 "btnTooltipFullscreen": "Switch between full screen and standard view.",
                 "btnTooltipHelp": "Show help",
                 "btnTooltipImprint": "Show imprint",
-                "btnTooltipPrivacy": "Show privacy statement",
-                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html"
+                "btnTooltipPrivacy": "Show privacy statement"
             }
         }
     },

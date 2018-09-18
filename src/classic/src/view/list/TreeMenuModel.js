@@ -42,7 +42,8 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         fullscreen: '',
         imprint: '',
         privacy: '',
-        help: ''
+        help: '',
+        privacyUrl: ''
     },
 
     stores: {

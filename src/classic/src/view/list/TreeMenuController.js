@@ -104,8 +104,6 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     timereferenceButton.toggle();
                     viewModel.set('timeReference', timereferenceButton.getCurrent());
                     break;
-                case 'language':
-                    break;
                 case 'fullscreen':
                     Koala.util.Fullscreen.toggleFullscreen();
                     break;
@@ -113,8 +111,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     this.showWindow('k-window-imprint', 'Koala.view.window.ImprintWindow');
                     break;
                 case 'privacy':
-                    // Get link by language
-                    window.open('http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html', '_blank').focus();
+                    window.open(viewModel.get('privacyUrl'), '_blank').focus();
                     break;
                 case 'help':
                     this.showWindow('k-window-help', 'Koala.view.window.HelpWindow');
