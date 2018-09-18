@@ -43,7 +43,8 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         imprint: '',
         privacy: '',
         help: '',
-        privacyUrl: ''
+        privacyUrl: '',
+        settingsExpanded: false
     },
 
     stores: {
@@ -111,8 +112,9 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                 },{
                     text: '{settings}',
                     iconCls: 'x-fa fa-gear',
+                    expanded: '{settingsExpanded}',
                     children: [{
-                        text: '{timereference}',
+                        text: '{timereference} ({timereferenceValue})',
                         key: 'timereference',
                         leaf: true,
                         iconCls: 'x-fa fa-clock-o'
