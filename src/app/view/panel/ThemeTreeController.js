@@ -28,14 +28,13 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
 
     toggleLayerSetView: function() {
         var view = this.getView();
-        var menu = view.up('basigx-panel-menu');
         var mapContainer = view.up('basigx-panel-mapcontainer');
         var layersetchooser = mapContainer.down('k-panel-layersetchooser');
 
         if (layersetchooser.isVisible()) {
             layersetchooser.hide();
         } else {
-            layersetchooser.showAt(menu.getWidth(), view.getLocalY());
+            layersetchooser.showAt(view.getWidth(), view.getLocalY());
         }
     },
 
