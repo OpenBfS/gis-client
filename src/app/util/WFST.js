@@ -91,10 +91,8 @@ Ext.define('Koala.util.WFST', {
 
             // override the geometryname, as its hardcoded through OpenLayers
             // to `geometry`
-            var gname = layer.get('geometryFieldName');
-            if (!gname) {
-                gname = 'the_geom';
-            }
+            // After importing the field name will always be `the_geom`
+            var gname = 'the_geom';
             xml = xml.replace(
                 /<Property><Name>geometry<\/Name>/g,
                 '<Property><Name>' + gname + '</Name>');

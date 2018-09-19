@@ -357,7 +357,7 @@ Ext.define('Koala.util.Metadata', {
                 },
                 jsonData: body,
                 success: function() {
-                    resolveFunc();
+                    resolveFunc(context);
                 }
             });
 

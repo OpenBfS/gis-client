@@ -177,8 +177,16 @@ Ext.define('Koala.util.Import', {
                     layer.metadata,
                     role
                 ))
+                .then(this.readdLayer.bind(this, layer))
                 .then(this.setPersistedFlag.bind(this, layer))
                 .then(this.closeFeatureGrid.bind(this));
+        },
+
+        readdLayer: function(layer, context) {
+            var map = Ext.ComponentQuery.query('basigx-component-map')[0]
+                .getMap();
+            map.removeLayer(layer);
+            Koala.util.Layer.addLayerByUuid(context.newUuid);
         },
 
         /**
