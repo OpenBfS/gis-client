@@ -22,6 +22,7 @@ Ext.define('Koala.view.window.ShareWindow', {
     cls: 'k-window-share',
 
     requires: [
+        'Koala.util.AppContext'
     ],
 
     controller: 'k-window-share',
@@ -53,7 +54,8 @@ Ext.define('Koala.view.window.ShareWindow', {
          * The layer to possibly clone.
          * @type {ol.layer.Layer}
          */
-        sourceLayer: null
+        sourceLayer: null,
+        roles: []
     },
 
     items: [{
@@ -81,7 +83,25 @@ Ext.define('Koala.view.window.ShareWindow', {
             }
         }, {
             xtype: 'k-form-field-vectortemplatecombo'
+        }, {
+            xtype: 'combo',
+            name: 'rolescombo',
+            displayField: 'role',
+            bind: {
+                fieldLabel: '{roleComboLabel}'
+            }
         }]
-    }]
+    }],
+
+    /**
+     * Sets the roles combo values as they're only available after the app
+     * context is loaded.
+     */
+    initComponent: function() {
+        this.callParent();
+        var store = Koala.util.AppContext.getRolesStore();
+        var combo = this.down('[name=rolescombo]');
+        combo.setStore(store);
+    }
 
 });

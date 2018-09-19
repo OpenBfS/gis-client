@@ -21,6 +21,7 @@ Ext.define('Koala.view.window.ShareWindowController', {
     alias: 'controller.k-window-share',
 
     requires: [
+        'Koala.view.form.field.VectorTemplateCombo'
     ],
 
     /**
@@ -49,9 +50,7 @@ Ext.define('Koala.view.window.ShareWindowController', {
         );
 
         promise.then(function(newLayer) {
-            var context = Koala.util.AppContext.getAppContext().data.merge;
-            var imisRoles = context.imis_user.userroles;
-            var role = imisRoles[0];
+            var role = view.down('[name=rolescombo]').getValue();
             Koala.util.Import.importOrUpdateLayer(
                 newLayer,
                 undefined,

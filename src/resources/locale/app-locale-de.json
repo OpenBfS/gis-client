@@ -587,7 +587,8 @@
                 "title": "Layer freigeben",
                 "layerNameLabel": "Name des neuen Layers",
                 "okButtonLabel": "Freigeben",
-                "cancelButtonLabel": "Abbrechen"
+                "cancelButtonLabel": "Abbrechen",
+                "roleComboLabel": "Rolle auswählen"
             }
         }
     },

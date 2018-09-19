@@ -203,18 +203,31 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                     bind: {
                         text: viewModel.get('saveLayerText')
                     },
-                    handler: function() {
-                        // TODO allow selection of role to store the data in
-                        var role = imisRoles[0];
-                        Koala.util.Import.importOrUpdateLayer(
-                            me.layer,
-                            me.wfstInserts,
-                            me.wfstUpdates,
-                            me.wfstDeletes,
-                            wfstSuccessCallback,
-                            wfstFailureCallback,
-                            role
-                        );
+                    handler: function(btn) {
+                        var performSave = function(role) {
+                            Koala.util.Import.importOrUpdateLayer(
+                                me.layer,
+                                me.wfstInserts,
+                                me.wfstUpdates,
+                                me.wfstDeletes,
+                                wfstSuccessCallback,
+                                wfstFailureCallback,
+                                role
+                            );
+                        };
+                        var roles = Koala.util.AppContext.getAppContext()
+                            .data.merge.imis_user.userroles;
+                        var menu = Ext.create('Ext.menu.Menu', {
+                            items: Ext.Array.map(roles, function(role) {
+                                return {
+                                    text: role,
+                                    handler: function() {
+                                        performSave(role);
+                                    }
+                                };
+                            })
+                        });
+                        menu.showBy(btn);
                     }
                 }, {
                     xtype: 'button',

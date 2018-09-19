@@ -586,7 +586,8 @@
                 "title": "Share layer",
                 "layerNameLabel": "Name of the new layer",
                 "okButtonLabel": "Share",
-                "cancelButtonLabel": "Cancel"
+                "cancelButtonLabel": "Cancel",
+                "roleComboLabel": "Select role"
             }
         }
     },
