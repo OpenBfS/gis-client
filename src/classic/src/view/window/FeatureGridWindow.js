@@ -215,6 +215,12 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                                 role
                             );
                         };
+
+                        if (me.layer.get('persisted') ||
+                            me.layer.metadata.layerConfig.olProperties.persisted) {
+                            performSave();
+                            return;
+                        }
                         var roles = Koala.util.AppContext.getAppContext()
                             .data.merge.imis_user.userroles;
                         var menu = Ext.create('Ext.menu.Menu', {
