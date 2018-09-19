@@ -92,8 +92,39 @@ Ext.define('Koala.view.panel.MobileMenu',{
             listeners: {
                 itemtap: 'onItemTap'
             }
+        }],
+        listeners: {
+            initialize: function() {
+                var stationSearchTileBar = {
+                    xtype: 'titlebar',
+                    name: 'stationsearchtitle',
+                    hidden: true,
+                    bind: {
+                        title: '{stationSearchTitle}'
+                    }
+                };
+                var stationSearchDataView = {
+                    xtype: 'dataview',
+                    scrollable: false,
+                    itemCls: 'koala-list-item koala-list-item-station',
+                    itemTpl: '<i class="fa fa-circle-o" aria-hidden="true"></i> {name}',
+                    name: 'stationsearchlist',
+                    hidden: true,
+                    store: {
+                        type: 'k-stationsearch'
+                    },
+                    listeners: {
+                        itemtap: 'zoomToStation'
+                    }
+                };
+                var appContext = BasiGX.view.component.Map.guess().appContext;
+                var stationsearchtypename = appContext.data.merge['stationSearchTypeName'];
+                if (stationsearchtypename && stationsearchtypename !== '') {
+                    this.insert(3, stationSearchTileBar);
+                    this.insert(4, stationSearchDataView);
+                }
+            }
         }
-        ]
     }, {
         xtype: 'button',
         bind: {
@@ -144,6 +175,15 @@ Ext.define('Koala.view.panel.MobileMenu',{
         },
         handler: function(btn) {
             btn.up('app-main').down('k-panel-mobileimprint').show();
+        }
+    }, {
+        xtype: 'button',
+        bind: {
+            text: '{privacyButtonText}'
+        },
+        handler: function() {
+            var mobileMenu = this.up('k-panel-mobilemenu');
+            window.open(mobileMenu.config.data.privacyUrl);
         }
     }]
 });

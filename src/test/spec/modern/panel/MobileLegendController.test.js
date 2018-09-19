@@ -56,7 +56,6 @@ describe('Koala.view.panel.MobileLegendController', function() {
             mapLayers.forEach(function(lyr) {
                 lyr.setVisible(false);
             });
-
             var firstLayer = mapComponent.getLayers().item(0);
 
             allowed = controller.isLayerAllowedToSetVisible(firstLayer);
