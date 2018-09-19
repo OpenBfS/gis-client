@@ -190,24 +190,10 @@ Ext.define('Koala.view.main.Main', {
         menuConfig: {
             xtype: 'k-panel-themetree'
         },
+        // If removed BasiGX adds a panel automaticaly
         legendPanelConfig: {
-            xtype: 'k-panel-routing-legendtree',
-            hideCollapseTool: false,
-            resizable: true,
-            constrain: true,
-            resizeHandles: 'w nw n',
-            collapsed: false,
-            width: 300,
-            minWidth: 250,
-            maxWidth: 700,
-            listeners: {
-                afterrender: {
-                    fn: 'resizeAndRepositionLegendTree',
-                    single: true,
-                    delay: 100
-                },
-                resize: 'repositionAttribution'
-            }
+            xtype: 'panel',
+            hidden: true
         },
         additionalItems: [{
             xtype: 'k-panel-layersetchooser',
@@ -217,6 +203,12 @@ Ext.define('Koala.view.main.Main', {
             floating: true,
             resizable: true
         }]
+    }, {
+        region: 'east',
+        xtype: 'k-panel-routing-legendtree',
+        hideCollapseTool: false,
+        resizable: true,
+        collapsed: false
     }, {
         region: 'west',
         xtype: 'k-treemenu'

@@ -493,7 +493,8 @@
                 "downloadMessage": "Download Layerdaten?",
                 "downloadButtonYes": "Yes",
                 "downloadButtonNo": "No",
-                "outputFormatText": "Output Format"
+                "outputFormatText": "Output Format",
+                "title": "Legend"
             }
         }
     },

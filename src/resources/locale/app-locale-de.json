@@ -494,7 +494,8 @@
                 "downloadMessage": "Layerdaten herunterladen?",
                 "downloadButtonYes": "Ja",
                 "downloadButtonNo": "Nein",
-                "outputFormatText": "Ausgabeformat"
+                "outputFormatText": "Ausgabeformat",
+                "title": "Legende"
             }
         }
     },
