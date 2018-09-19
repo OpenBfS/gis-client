@@ -510,6 +510,40 @@
             }
         }
     },
+    "Koala.view.panel.TimeSeries": {
+        "config": {
+            "data": {
+                "autorefresh": "Auto refresh",
+                "autorefreshExpand": "Extend time interval",
+                "autorefreshMove": "Shift time interval",
+                "autorefreshOptions": "Auto refresh options",
+                "chartPrint": "Dokpool ",
+                "title": "Time Series",
+                "dateFieldStartLabel": "Start",
+                "dateFieldEndLabel": "End",
+                "setFilterBtnText": "OK",
+                "resetFilterBtnText": "Reset",
+                "selectChartLayerComboLabel": "",
+                "selectChartLayerComboEmptyText": "Add chart",
+                "selectSeriesComboEmptyText": "Add series",
+                "undoBtnText": "…zoom back",
+                "exportAsImageBtnText": "Export as image",
+                "downloadChartDataMsgTitle": "Info",
+                "downloadChartDataMsgMessage": "Download current chart?",
+                "downloadChartDataMsgButtonYes": "Yes",
+                "downloadChartDataMsgButtonNo": "No",
+                "outputFormatText": "Output Format",
+                "removeSeriesBtnText": "Remove Series",
+                "removeSeriesQuestionTitle": "Request",
+                "removeSeriesQuestionTpl": "Remove series '{0}'?",
+                "startLabel": "Start",
+                "toggleDataBelowIdentificationThreshold": "Show data below < Id. Thresh.",
+                "toggleScaleBtnText": "linear/logarithmic",
+                "endLabel": "End",
+                "axisText": "Axis"
+            }
+        }
+    },
     "Koala.view.toolbar.Header": {
         "config": {
             "data": {
