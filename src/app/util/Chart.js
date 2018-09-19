@@ -22,7 +22,7 @@ Ext.define('Koala.util.Chart', {
 
     requires: [
         'Koala.util.String',
-        'Koala.view.window.TimeSeriesWindow'
+        'Koala.view.panel.TimeSeries'
     ],
 
     statics: {
@@ -32,36 +32,48 @@ Ext.define('Koala.util.Chart', {
          * to an existing one.
          * @param {ol.Feature} olFeat the station to add
          */
-        openTimeseriesWindow: function(olFeat) {
-            var win = Ext.ComponentQuery.query('window[name=timeserieswin]')[0];
+        openTimeseries: function(olFeat) {
+            var northContainer = Ext.ComponentQuery.query('container[name=north-container]')[0];
+            var timeseriesContainer = Ext.ComponentQuery.query('panel[name=timeseriespanel]')[0];
             var olLayer = olFeat.get('layer');
 
-            // create the window if it doesn't exist already
-            if (!win) {
-                win = Koala.util.Chart.createTimeSeriesChartWindow(olLayer);
+            // create the timeseriescontainer if it doesn't exist already
+            if (!timeseriesContainer) {
+                timeseriesContainer = Koala.util.Chart.createTimeSeriesChartPanel(olLayer);
             }
-            win.getController().createOrUpdateChart(olLayer, olFeat);
+            var isInNorth = !!Ext.Array.findBy(northContainer.items.items, function(item) {
+                return item.xtype === 'k-panel-timeseriespanel';
+            });
+            if (!isInNorth) {
+                northContainer.add(timeseriesContainer);
+            }
+            timeseriesContainer.getController().createOrUpdateChart(olLayer, olFeat);
 
-            // show the window itself
-            win.show();
-
-            return win;
+            if (!northContainer.isVisible()) {
+                northContainer.show();
+            }
+            return timeseriesContainer;
         },
 
         /**
          * Creates a new timeseries window for the given layer.
          * @param {object} an openlayers layer object with chart config
          */
-        createTimeSeriesChartWindow: function(olLayer) {
+        createTimeSeriesChartPanel: function(olLayer) {
             var chartConfig = olLayer.get('timeSeriesChartProperties');
             var addFilterForm = !Ext.isEmpty(chartConfig.allowFilterForm) ?
                 Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
 
-            var win = Ext.create('Koala.view.window.TimeSeriesWindow', {
+            var timeserieContainer = Ext.create('Koala.view.panel.TimeSeries', {
                 addFilterForm: addFilterForm,
-                initOlLayer: olLayer
+                initOlLayer: olLayer,
+                listeners: {
+                    close: function() {
+                        this.up('container[name=north-container]').hide();
+                    }
+                }
             });
-            return win;
+            return timeserieContainer;
         },
 
         /**

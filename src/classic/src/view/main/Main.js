@@ -115,6 +115,15 @@ Ext.define('Koala.view.main.Main', {
     },
 
     items: [{
+        xtype: 'container',
+        region: 'north',
+        layout: 'fit',
+        border: 5,
+        resizable: true,
+        resizeHandles: 's',
+        name: 'north-container',
+        hidden: true
+    }, {
         xtype: 'basigx-panel-mapcontainer',
         title: 'K-MapPanel',
         region: 'center',
