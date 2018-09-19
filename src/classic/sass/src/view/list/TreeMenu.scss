@@ -47,6 +47,7 @@
             background-color: $base-color;
         }
         .x-treelist-container {
+            margin-left: 0;
             .x-treelist-row {
                 background-color: lighten($base-color, 20);
                 &:hover {
