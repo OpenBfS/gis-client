@@ -581,6 +581,16 @@
             }
         }
     },
+    "Koala.view.window.ShareWindow": {
+        "config": {
+            "data": {
+                "title": "Layer freigeben",
+                "layerNameLabel": "Name des neuen Layers",
+                "okButtonLabel": "Freigeben",
+                "cancelButtonLabel": "Abbrechen"
+            }
+        }
+    },
     "Koala.view.window.TimeSeriesWindow": {
         "config": {
             "data": {

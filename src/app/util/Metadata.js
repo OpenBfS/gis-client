@@ -45,6 +45,8 @@ Ext.define('Koala.util.Metadata', {
             var node = doc.evaluate(xpath, doc.documentElement, ns).iterateNext();
             XML.addOlProperty(node, 'workspace', workspace);
             XML.addOlProperty(node, 'param_typename', workspace + ':' + name);
+            XML.addOlProperty(node, 'persisted', 'true');
+            XML.addOlProperty(node, 'allowEdit', 'true');
             xpath = 'bfs:timeSeriesChartProperty';
             XML.removeNodes(doc, xpath, node);
             xpath = 'bfs:barChartProperty';
@@ -92,8 +94,10 @@ Ext.define('Koala.util.Metadata', {
          * @return {Object}          the cloned metadata
          */
         prepareClonedMetadata: function(metadata) {
-            var config = Koala.util.AppContext.getAppContext();
-            config = config.data.merge.import;
+            var config = Koala.util.AppContext.getAppContext().data.merge;
+            var imisRoles = config.imis_user.userroles;
+            var role = imisRoles[0];
+            config = config.import[role];
 
             if (!metadata) {
                 return metadata;

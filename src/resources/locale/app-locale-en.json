@@ -580,6 +580,16 @@
             }
         }
     },
+    "Koala.view.window.CloneWindow": {
+        "config": {
+            "data": {
+                "title": "Share layer",
+                "layerNameLabel": "Name of the new layer",
+                "okButtonLabel": "Share",
+                "cancelButtonLabel": "Cancel"
+            }
+        }
+    },
     "Koala.view.window.TimeSeriesWindow": {
         "config": {
             "data": {

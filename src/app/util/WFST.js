@@ -52,7 +52,9 @@ Ext.define('Koala.util.WFST', {
             var map = BasiGX.util.Map.getMapComponent().map;
             var projection = map.getView().getProjection().getCode();
             var config = Koala.util.AppContext.getAppContext();
-            config = config.data.merge['import'];
+            var imisRoles = config.data.merge.imis_user.userroles;
+            var role = imisRoles[0];
+            config = config.data.merge.import[role];
             var url = Koala.util.Object.getPathStrOr(layer.metadata,
                 'layerConfig/wfs/url');
             var layerName = Koala.util.Object.getPathStrOr(layer.metadata,
@@ -60,14 +62,21 @@ Ext.define('Koala.util.WFST', {
             if (!layerName) {
                 layerName = Koala.util.Object.getPathStrOr(
                     layer.metadata, 'layerConfig/wms/layers');
+                if (layerName) {
+                    layerName = layerName.split(':')[1];
+                }
+            }
+            if (!layerName) {
+                layerName = Koala.util.Object.getPathStrOr(
+                    layer.metadata, 'layerConfig/olProperties/param_typename');
                 layerName = layerName.split(':')[1];
             }
 
-            var nsUri = config['target-workspace-uri'];
+            var nsUri = config.namespace;
 
             var opts = {
                 featureNS: nsUri,
-                featurePrefix: config['target-workspace'],
+                featurePrefix: config.workspace,
                 featureType: layerName,
                 srsName: projection
             };
@@ -83,6 +92,9 @@ Ext.define('Koala.util.WFST', {
             // override the geometryname, as its hardcoded through OpenLayers
             // to `geometry`
             var gname = layer.get('geometryFieldName');
+            if (!gname) {
+                gname = 'the_geom';
+            }
             xml = xml.replace(
                 /<Property><Name>geometry<\/Name>/g,
                 '<Property><Name>' + gname + '</Name>');
