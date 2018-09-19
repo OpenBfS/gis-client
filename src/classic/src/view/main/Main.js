@@ -115,6 +115,15 @@ Ext.define('Koala.view.main.Main', {
     },
 
     items: [{
+        xtype: 'container',
+        region: 'north',
+        layout: 'fit',
+        resizable: true,
+        resizeHandles: 's',
+        name: 'north-container',
+        cls: 'north-container',
+        hidden: true
+    }, {
         xtype: 'basigx-panel-mapcontainer',
         title: 'K-MapPanel',
         region: 'center',
@@ -205,6 +214,7 @@ Ext.define('Koala.view.main.Main', {
         }]
     }, {
         region: 'east',
+        cls: 'east-container',
         xtype: 'k-panel-routing-legendtree',
         hideCollapseTool: false,
         resizable: true,

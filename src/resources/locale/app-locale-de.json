@@ -511,6 +511,40 @@
             }
         }
     },
+    "Koala.view.panel.TimeSeries": {
+        "config": {
+            "data": {
+                "autorefresh": "Autorefresh",
+                "autorefreshExpand": "Zeitausschnitt erweitern",
+                "autorefreshMove": "Zeitausschnitt verschieben",
+                "autorefreshOptions": "Autorefresh Optionen",
+                "chartPrint": "Dokpool ",
+                "title": "Zeitreihe",
+                "dateFieldStartLabel": "Start",
+                "dateFieldEndLabel": "Ende",
+                "setFilterBtnText": "OK",
+                "resetFilterBtnText": "Reset",
+                "selectChartLayerComboLabel": "",
+                "selectChartLayerComboEmptyText": "Chart hinzufügen",
+                "selectSeriesComboEmptyText": "Serie hinzufügen",
+                "undoBtnText": "…zurückzoomen",
+                "exportAsImageBtnText": "Als Bild exportieren",
+                "downloadChartDataMsgTitle": "Info",
+                "downloadChartDataMsgMessage": "Aktuelle Chartdaten herunterladen?",
+                "downloadChartDataMsgButtonYes": "Ja",
+                "downloadChartDataMsgButtonNo": "Nein",
+                "outputFormatText": "Ausgabeformat",
+                "removeSeriesBtnText": "Serie entfernen",
+                "removeSeriesQuestionTitle": "Rückfrage",
+                "removeSeriesQuestionTpl": "Serie '{0}' entfernen?",
+                "startLabel": "Start",
+                "toggleDataBelowIdentificationThreshold": "Daten < NWG anzeigen",
+                "toggleScaleBtnText": "linear/logarithmisch",
+                "endLabel": "Ende",
+                "axisText": "Achse"
+            }
+        }
+    },
     "Koala.view.toolbar.Header": {
         "config": {
             "data": {

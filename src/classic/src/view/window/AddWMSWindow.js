@@ -23,6 +23,7 @@ Ext.define('Koala.view.window.AddWMSWindow', {
 
     requires: [
         'Koala.util.Help',
+        'BasiGX.view.form.AddWms',
         'BasiGX.util.Application'
     ],
 

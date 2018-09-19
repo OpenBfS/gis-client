@@ -56,26 +56,10 @@
     overflow: auto;
 }
 
-.west-container {
-    .west-top-toolbar {
-        background-color: $base-color;
-        color: white;
+.north-container {
+    border-bottom: 1px solid $base-color;
+}
 
-        .x-btn{
-            background: none;
-            border: none;
-
-            &.x-btn-focus {
-                border: none;
-            };
-
-            .x-btn-icon-el {
-                color: white;
-            }
-        }
-    }
-
-    .x-k-treemenu {
-        border-top: 3px solid whitesmoke;
-    }
+.east-container {
+    border-left: 1px solid $base-color;
 }
