@@ -102,7 +102,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     var timereferenceButton = Ext.ComponentQuery
                         .query('k-button-timereference')[0];
                     timereferenceButton.toggle();
-                    viewModel.set('timeReference', timereferenceButton.getCurrent());
+                    // Currently throws errors due to hover issues with ExtJS
+                    viewModel.set('timereferenceValue', timereferenceButton.getCurrent());
+                    viewModel.set('settingsExpanded', true);
                     break;
                 case 'fullscreen':
                     Koala.util.Fullscreen.toggleFullscreen();

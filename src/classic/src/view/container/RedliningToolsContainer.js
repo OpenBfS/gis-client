@@ -156,10 +156,10 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         me.createHelpTooltip();
         me.createMeasureTooltip();
 
-        var languageCombo = Ext.ComponentQuery.query(
-            'k-form-field-languagecombo')[0];
-        var locale = languageCombo.getValue();
-        languageCombo.getController().requestLanguageFile(locale);
+        // var languageCombo = Ext.ComponentQuery.query(
+        //     'k-form-field-languagecombo')[0];
+        // var locale = languageCombo.getValue();
+        // languageCombo.getController().requestLanguageFile(locale);
     },
 
     /**

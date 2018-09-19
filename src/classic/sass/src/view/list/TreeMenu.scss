@@ -27,7 +27,18 @@
         cursor: pointer;
         .x-treelist-item-leaf {
             cursor: pointer;
-            background-color: lighten($base-color, 20);
+        }
+        .x-treelist-row-over {
+            background-color: darken($base-color, 10);
+        }
+    }
+
+    .x-treelist-item-selected {
+        >.x-treelist-row {
+            background-color: $base-color;
+            &.x-treelist-row-over {
+                background-color: darken($base-color, 10);
+            }
         }
     }
 
@@ -36,8 +47,12 @@
             background-color: $base-color;
         }
         .x-treelist-container {
+            margin-left: 0;
             .x-treelist-row {
                 background-color: lighten($base-color, 20);
+                &:hover {
+                    background-color: darken($base-color, 10);
+                }
             }
         }
     }
@@ -62,6 +77,9 @@
 
     .x-treelist-item-tool {
         width: 64px;
+        &:hover {
+            background-color: darken($base-color, 10);
+        }
     }
 
     .x-treelist-item-text {
