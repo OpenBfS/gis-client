@@ -38,13 +38,14 @@ Ext.define('Koala.util.Metadata', {
             var bfs = XML.defaultNamespaces.bfs;
             var gmd = XML.defaultNamespaces.gmd;
             var workspace = context.config.workspace;
+            var datastore = context.config.datastore;
             var name = context.metadata.newLayerName;
             var doc = context.metadataDocument;
             var ns = XML.namespaceResolver();
             var xpath = 'bfs:layerInformation/bfs:MD_Layer';
             var node = doc.evaluate(xpath, doc.documentElement, ns).iterateNext();
             XML.addOlProperty(node, 'workspace', workspace);
-            XML.addOlProperty(node, 'param_typename', workspace + ':' + name);
+            XML.addOlProperty(node, 'param_typename', datastore + ':' + name);
             XML.addOlProperty(node, 'persisted', 'true');
             XML.addOlProperty(node, 'allowEdit', 'true');
             xpath = 'bfs:timeSeriesChartProperty';

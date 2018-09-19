@@ -21,7 +21,8 @@ Ext.define('Koala.view.window.ShareWindowController', {
     alias: 'controller.k-window-share',
 
     requires: [
-        'Koala.view.form.field.VectorTemplateCombo'
+        'Koala.view.form.field.VectorTemplateCombo',
+        'Koala.util.Geoserver'
     ],
 
     /**
@@ -60,6 +61,7 @@ Ext.define('Koala.view.window.ShareWindowController', {
                 undefined,
                 role
             );
+            Koala.util.Geoserver.deleteLayer(view.getSourceLayer());
             view.close();
         });
     }
