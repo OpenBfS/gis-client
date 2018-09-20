@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-present terrestris GmbH & Co. KG
+/* Copyright (c) 2017-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,35 +14,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.SelectFeatures
+ * @class Koala.view.window.PermalinkWindow
  */
-Ext.define('Koala.view.button.SelectFeatures', {
-    extend: 'Ext.button.Button',
-    xtype: 'k-button-selectfeatures',
+Ext.define('Koala.view.window.PermalinkWindow', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-permalink',
+    cls: 'k-window-permalink',
+
     requires: [
-        'Koala.view.button.SelectFeaturesController',
-        'Koala.view.button.SelectFeaturesModel'
+        'Koala.util.Help'
     ],
 
-    controller: 'k-button-selectfeatures',
-    viewModel: {
-        type: 'k-button-selectfeatures'
-    },
-
-    glyph: 'xf125@FontAwesome',
+    name: 'permalink-window',
 
     bind: {
-        text: null,
-        tooltip: '{tooltip}'
+        title: '{windowTitle}'
     },
 
-    listeners: {
-        toggle: 'onToggle'
-    },
+    layout: 'fit',
 
-    toggleGroup: 'draw',
+    constrain: true,
 
-    enableToggle: true,
+    tools: [{
+        type: 'help',
+        bind: {
+            tooltip: '{helpTooltip}'
+        },
+        callback: function() {
+            Koala.util.Help.showHelpWindow('mapNavigationPermalink', 'mapNavigation');
+        }
+    }],
 
-    buttonPressed: false
+    items: [{
+        xtype: 'k-form-permalink'
+    }]
+
 });

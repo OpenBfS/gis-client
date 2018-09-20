@@ -1,4 +1,10 @@
-.hide-action-column {
-    display: none;
-    cursor: pointer;
+.k-panel-themetree {
+    .x-panel-header {
+        color: white;
+    }
+
+    .hide-action-column {
+        display: none;
+        cursor: pointer;
+    }
 }

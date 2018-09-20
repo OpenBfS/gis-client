@@ -40,6 +40,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         type: 'k-panel-routing-legendtree'
     },
 
+    title: '',
+
     config: {
         routingEnabled: false,
         selModel: {
@@ -51,6 +53,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         hasToggleAllBtn: false,
         hasRemoveAllLayersBtn: true,
         textProperty: 'nameWithSuffix'
+    },
+
+    bind: {
+        title: '{title}'
     },
 
     hasRoutingListeners: false,
@@ -561,6 +567,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         // call parent
         me.callParent();
 
+        me.setTreeStore();
         me.checkAddCollapseExpandButtons();
 
         // configure rowexpanderwithcomponents-plugin
@@ -568,6 +575,24 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         me.bindUpdateHandlers();
         me.bindLoadIndicationHandlers();
+    },
+
+    setTreeStore: function() {
+        var map = BasiGX.util.Map.getMapComponent().getMap();
+        // set the store if not configured
+        var treeStore = Ext.create('GeoExt.data.store.LayersTree', {
+            layerGroup: map.getLayerGroup()
+        });
+        treeStore.addFilter(function(rec) {
+            var layer = rec.getOlLayer();
+            var util = BasiGX.util.Layer;
+            var showKey = util.KEY_DISPLAY_IN_LAYERSWITCHER;
+            if (layer && layer.get(showKey) === false) {
+                return false;
+            }
+            return true;
+        });
+        this.setStore(treeStore);
     },
 
     /**

@@ -157,16 +157,52 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         }
     },
 
+    onAdded: function() {
+        var view = this.getView();
+        view.map.on('pointermove', view.pointerMoveHandler, view);
+    },
+
+    onRemoved: function() {
+        var view = this.getView();
+        view.map.un('pointermove', view.pointerMoveHandler, view);
+        if (this.snapInteraction) {
+            this.snapInteraction.setActive(false);
+        }
+        if (this.drawPointInteraction) {
+            this.drawPointInteraction.setActive(false);
+        }
+        if (this.drawLineInteraction) {
+            this.drawLineInteraction.setActive(false);
+        }
+        if (this.drawPolygonInteraction) {
+            this.drawPolygonInteraction.setActive(false);
+        }
+        if (this.modifyInteraction) {
+            this.modifyInteraction.setActive(false);
+        }
+        if (this.modifySelectInteraction) {
+            this.modifySelectInteraction.setActive(false);
+        }
+        if (this.deleteSelectInteraction) {
+            this.deleteSelectInteraction.setActive(false);
+        }
+        if (this.deleteSnapInteraction) {
+            this.deleteSnapInteraction.setActive(false);
+        }
+    },
+
     createAndAddRedliningLayerIfRemoved: function() {
         var me = this;
         var view = me.getView();
         var map = view.map;
-        if (map.getLayers().getArray().indexOf(me.redliningVectorLayer) !== -1) {
+        var appContext = Koala.util.AppContext.getAppContext();
+        var redLineLayerName = appContext.data.merge.redLineLayerName;
+        var redLineLayer = BasiGX.util.Layer.getLayerByName(redLineLayerName);
+        if (redLineLayer) {
+            me.redliningVectorLayer = redLineLayer;
             return;
         }
         me.redlineFeatures.clear();
-        var appContext = Koala.util.AppContext.getAppContext();
-        var redLineLayerName = appContext.data.merge.redLineLayerName;
         me.redliningVectorLayer = new ol.layer.Vector({
             name: redLineLayerName || view.getViewModel().get('layerLegendName'),
             source: new ol.source.Vector({

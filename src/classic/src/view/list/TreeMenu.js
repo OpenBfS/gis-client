@@ -14,18 +14,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.SelectFeaturesModel
+ * @class Koala.view.list.TreeMenu
  */
-Ext.define('Koala.view.button.SelectFeaturesModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-button-selectfeatures',
+Ext.define('Koala.view.list.TreeMenu', {
+    extend: 'Ext.list.Tree',
+    xtype: 'k-treemenu',
 
-    data: {
-        /** i18n */
-        tooltip: '',
-        error: '',
-        noSingleActiveLayerFound: ''
-        /** i18n end */
+    statics: {
+        /* i18n */
+        txtUntil: ''
+        /* i18n */
+    },
+
+    requires: [
+        'Koala.view.list.TreeMenuModel',
+        'Koala.view.list.TreeMenuController'
+    ],
+
+    ui: 'tree-menu',
+
+    controller: 'k-list-treemenu',
+    viewModel: {
+        type: 'k-list-treemenu'
+    },
+
+    expanderFirst: false,
+    expanderOnly: false,
+
+    bind: {
+        micro: '{micro}',
+        store: '{menuStore}'
+    },
+
+    listeners: {
+        itemclick: 'onItemClick'
     }
 
 });

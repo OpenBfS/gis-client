@@ -103,5 +103,6 @@
             "rodosFolderName": "RODOS-Prognosen"
         }
     },
-    "success": true
+    "success": true,
+    "debug": true
 }

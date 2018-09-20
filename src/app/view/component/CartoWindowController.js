@@ -1551,7 +1551,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         });
         var win;
         Ext.each(newStations, function(station) {
-            win = Koala.util.Chart.openTimeseriesWindow(station);
+            win = Koala.util.Chart.openTimeseries(station);
         });
         var chart = win.down('d3-chart');
         if (zoom.min) {
