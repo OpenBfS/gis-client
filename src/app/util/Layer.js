@@ -571,21 +571,17 @@ Ext.define('Koala.util.Layer', {
             var authHeader = Koala.util.Authentication.getAuthenticationHeader();
             if (authHeader) {
                 defaultHeaders = {
-                    Authorization: authHeader//,
-                    // Accept: 'application/json'
+                    Authorization: authHeader,
+                    Accept: 'application/json'
                 };
             }
 
             return new Ext.Promise(function(resolve, reject) {
                 Ext.Ajax.request({
-                    // url: urls['metadata-xml2json'] + uuid,
-                    url: urls['metadata-xml2json'],
-                    params: {
-                        uuid: uuid
-                    },
+                    url: urls['metadata-xml2json'] + uuid,
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
-                    // binary: true,
+                    binary: true,
                     success: function(response) {
                         var obj;
                         try {
@@ -596,18 +592,18 @@ Ext.define('Koala.util.Layer', {
                             // encoded, so we're trying to fix it here.
                             // For IE browsers a polyfill is used.
                             var txt;
-                            // if (window.TextDecoder) {
-                            //     try {
-                            //         var decoder = new TextDecoder('ISO-8859-1');
-                            //         txt = decoder.decode(response.responseBytes);
-                            //     } catch (e) {
-                            //         // fallback to utf-8
-                            //         decoder = new TextDecoder('UTF-8');
-                            //         txt = decoder.decode(response.responseBytes);
-                            //     }
-                            // } else {
-                            txt = response.responseText;
-                            // }
+                            if (window.TextDecoder) {
+                                try {
+                                    var decoder = new TextDecoder('ISO-8859-1');
+                                    txt = decoder.decode(response.responseBytes);
+                                } catch (e) {
+                                    // fallback to utf-8
+                                    decoder = new TextDecoder('UTF-8');
+                                    txt = decoder.decode(response.responseBytes);
+                                }
+                            } else {
+                                txt = response.responseText;
+                            }
 
                             // replace any occurencies of \{\{ (as it may still be
                             // stored in db) with the new delimiters [[
@@ -623,7 +619,7 @@ Ext.define('Koala.util.Layer', {
                             txt = txt.replace(escapedCurlyOpen, '[[');
                             txt = txt.replace(escapedCurlyClose, ']]');
                             obj = Ext.decode(txt);
-                            // obj = Koala.util.MetadataParser.parseMetadata(obj);
+                            obj = Koala.util.MetadataParser.parseMetadata(obj);
                         } catch (ex) {
                             Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
                         } finally {

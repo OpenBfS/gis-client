@@ -19,73 +19,69 @@
 Ext.define('Koala.util.Metadata', {
 
     requires: [
-        'Koala.util.AppContext'
+        'Koala.util.AppContext',
+        'Koala.util.XML'
     ],
 
     statics: {
 
         /**
-         * Get a CSW filter filtering by uuid.
-         * @param  {String} uuid the uuid to filter on
-         * @return {String}      a CSW/filter encoding snippet
-         */
-        getCswFilter: function(uuid) {
-            return '<csw:Constraint version="1.1.0">' +
-                '<ogc:Filter>' +
-                '<ogc:PropertyIsEqualTo>' +
-                '<ogc:PropertyName>Identifier</ogc:PropertyName>' +
-                '<ogc:Literal>' + uuid + '</ogc:Literal>' +
-                '</ogc:PropertyIsEqualTo>' +
-                '</ogc:Filter>' +
-                '</csw:Constraint>';
-        },
-
-        /**
-         * Get a CSW property update snippet.
-         * @param  {String} property property path to update
-         * @param  {String} value    the new values
-         * @param  {Boolean} add whether to create an 'add' node
-         * @return {String}          the CSW property snippet
-         */
-        getPropertyUpdate: function(property, value, add) {
-            return '<csw:RecordProperty>' +
-                '<csw:Name>' + property + '</csw:Name>' +
-                '<csw:Value>' + (add ? '<gn_add>' : '' + value) +
-                (add ? '</gn_add>' : '') + '</csw:Value>' +
-                '</csw:RecordProperty>';
-        },
-
-        /**
-         * Constructs a CSW update transaction to prepare the new metadata.
+         * Rewrites/updates the metadata document to prepare the new metadata.
          * @param  {Object} context a context object containing config
-         * @return {String}         an XML transaction request
          */
         getCswUpdate: function(context) {
-            var ms = /(^http[s]?:\/\/[^/]+)(.+)/g.exec(context.config['base-url']);
+            var XML = Koala.util.XML;
+
+            var ms = /(^http[s]?:\/\/[^/]+)(.+)/g.exec(context.config.baseUrl);
             var host = ms[1];
             var path = ms[2] + 'ows';
-
-            return '<?xml version="1.0" encoding="UTF-8"?>' +
-                '<csw:Transaction service="CSW" version="2.0.2" ' +
-                'xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" ' +
-                'xmlns:ogc="http://www.opengis.net/ogc" ' +
-                'xmlns:gmd="http://www.isotc211.org/2005/gmd" ' +
-                'xmlns:bfs="http://geonetwork.org/bfs" ' +
-                'xmlns:gco="http://www.isotc211.org/2005/gco">' +
-                '<csw:Update>' +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation' +
-                    '/bfs:MD_WMSLayerType/bfs:layerType/bfs:MD_WMSLayerType/' +
-                    'bfs:layer/gco:CharacterString', context.newLayerName) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:timeSeriesChartProperty', '') +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:barChartProperty', '') +
-                this.getPropertyUpdate('/bfs:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString', context.newLayerName) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:legendTitle/gco:CharacterString', context.newLayerName) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:printTitle/gco:CharacterString', context.newLayerName) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:host/gco:CharacterString', host) +
-                this.getPropertyUpdate('/bfs:MD_Metadata/bfs:layerInformation/bfs:MD_Layer/bfs:wfs/bfs:URL/bfs:path/gco:CharacterString', path) +
-                this.getCswFilter(context.newUuid) +
-                '</csw:Update>' +
-                '</csw:Transaction>';
+            var bfs = XML.defaultNamespaces.bfs;
+            var gmd = XML.defaultNamespaces.gmd;
+            var workspace = context.config.workspace;
+            var name = context.metadata.newLayerName;
+            var doc = context.metadataDocument;
+            var ns = XML.namespaceResolver();
+            var xpath = 'bfs:layerInformation/bfs:MD_Layer';
+            var node = doc.evaluate(xpath, doc.documentElement, ns).iterateNext();
+            XML.addOlProperty(node, 'workspace', workspace);
+            XML.addOlProperty(node, 'param_typename', workspace + ':' + name);
+            xpath = 'bfs:timeSeriesChartProperty';
+            XML.removeNodes(doc, xpath, node);
+            xpath = 'bfs:barChartProperty';
+            XML.removeNodes(doc, xpath, node);
+            xpath = 'bfs:legendTitle';
+            XML.removeNodes(doc, xpath, node);
+            xpath = 'bfs:printTitle';
+            XML.removeNodes(doc, xpath, node);
+            XML.addCharacterString(doc, node, bfs, 'bfs:printTitle', name);
+            XML.addCharacterString(doc, node, bfs, 'bfs:legendTitle', name);
+            xpath = 'bfs:layerType/bfs:MD_VectorLayerType/bfs:URL';
+            var layerNode = doc.evaluate(xpath, node, ns).iterateNext();
+            XML.removeNodes(doc, 'bfs:host', layerNode);
+            XML.removeNodes(doc, 'bfs:path', layerNode);
+            XML.addCharacterString(doc, layerNode, bfs, 'bfs:host', host);
+            XML.addCharacterString(doc, layerNode, bfs, 'bfs:path', path);
+            xpath = 'bfs:wfs/bfs:URL';
+            node = doc.evaluate(xpath, node, ns).iterateNext();
+            xpath = 'bfs:host';
+            XML.removeNodes(doc, xpath, node);
+            xpath = 'bfs:path';
+            XML.removeNodes(doc, xpath, node);
+            XML.addCharacterString(doc, node, bfs, 'bfs:host', host);
+            XML.addCharacterString(doc, node, bfs, 'bfs:path', path);
+            xpath = 'gmd:identificationInfo/gmd:MD_DataIdentification';
+            node = doc.evaluate(xpath, doc.documentElement, ns).iterateNext();
+            xpath = 'gmd:citation/gmd:CI_Citation/gmd:title';
+            XML.updateText(doc, xpath, node, name);
+            node = XML.addOrGet(doc, node, gmd, 'gmd:descriptiveKeywords');
+            node = XML.addOrGet(doc, node, gmd, 'gmd:MD_Keywords');
+            XML.addCharacterString(doc, node, gmd, 'gmd:keyword', 'importLayer');
+            var type = doc.createElementNS(gmd, 'gmd:type');
+            var code = doc.createElementNS(gmd, 'gmd:MD_KeywordTypeCode');
+            code.setAttribute('codeList', '');
+            code.setAttribute('codeListValue', '');
+            node.appendChild(type);
+            type.appendChild(code);
         },
 
         /**
@@ -97,7 +93,7 @@ Ext.define('Koala.util.Metadata', {
          */
         prepareClonedMetadata: function(metadata) {
             var config = Koala.util.AppContext.getAppContext();
-            config = config.data.merge['import'];
+            config = config.data.merge.import;
 
             if (!metadata) {
                 return metadata;
@@ -110,7 +106,7 @@ Ext.define('Koala.util.Metadata', {
             delete metadata.timeSeriesChartProperties;
             // always allow cloned layers to be editable afterwards
             metadata.layerConfig.olProperties.allowEdit = true;
-            metadata.layerConfig.wfs.url = config['base-url'] + 'ows';
+            metadata.layerConfig.wfs.url = config.baseUrl + 'ows';
 
             return metadata;
         },
@@ -129,7 +125,7 @@ Ext.define('Koala.util.Metadata', {
          */
         loginToGnos: function(context) {
             return new Ext.Promise(function(resolve) {
-                var url = context.config['metadata-base-url'];
+                var url = context.config.metadataBaseUrl;
 
                 var iframe = document.createElement('iframe');
                 document.querySelector('body').appendChild(iframe);
@@ -159,7 +155,7 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise} a promise resolving once duplication has been done
          */
         cloneOldMetadata: function(context) {
-            var url = context.config['metadata-base-url'];
+            var url = context.config.metadataBaseUrl;
 
             var resolveFunc;
 
@@ -192,7 +188,7 @@ Ext.define('Koala.util.Metadata', {
          * @return {Promise}  the promise resolving once the uuid has been found
          */
         determineNewUuid: function(context) {
-            var url = context.config['metadata-base-url'];
+            var url = context.config.metadataBaseUrl;
 
             var resolveFunc;
 
@@ -205,11 +201,14 @@ Ext.define('Koala.util.Metadata', {
                 method: 'GET',
                 headers: {
                     'X-XSRF-TOKEN': context.csrfToken,
-                    'Accept': 'application/json'
+                    'Accept': 'application/xml'
                 },
                 success: function(xhr) {
-                    var metadata = JSON.parse(xhr.responseText);
-                    context.newUuid = metadata['gmd:fileIdentifier']['gco:CharacterString']['#text'];
+                    var doc = xhr.responseXML;
+                    var xpath = 'gmd:fileIdentifier/gco:CharacterString/text()';
+                    var uuid = Koala.util.XML.getText(doc, xpath, doc.documentElement);
+                    context.newUuid = uuid;
+                    context.metadataDocument = doc;
                     resolveFunc();
                 }
             });
@@ -218,37 +217,168 @@ Ext.define('Koala.util.Metadata', {
         },
 
         /**
+         * Wraps the metadata document in an update transaction with a filter on
+         * the uuid.
+         * @param  {Object} context the context with the metadata document
+         */
+        prepareTransaction: function(context) {
+            var XML = Koala.util.XML;
+            var csw = XML.defaultNamespaces.csw;
+            var ogc = XML.defaultNamespaces.ogc;
+            var doc = context.metadataDocument;
+            var root = doc.documentElement;
+            root.remove();
+            var node = doc.createElementNS(csw, 'csw:Transaction');
+            node.setAttribute('service', 'CSW');
+            node.setAttribute('version', '2.0.2');
+            doc.appendChild(node);
+            node = doc.createElementNS(csw, 'csw:Update');
+            doc.documentElement.appendChild(node);
+            node.appendChild(root);
+            root = node;
+            node = doc.createElementNS(csw, 'csw:Constraint');
+            node.setAttribute('version', '1.1.0');
+            root.appendChild(node);
+            root = node;
+            node = doc.createElementNS(ogc, 'ogc:Filter');
+            root.appendChild(node);
+            root = node;
+            node = doc.createElementNS(ogc, 'ogc:PropertyIsEqualTo');
+            root.appendChild(node);
+            root = node;
+            node = doc.createElementNS(ogc, 'ogc:PropertyName');
+            node.textContent = 'Identifier';
+            root.appendChild(node);
+            node = doc.createElementNS(ogc, 'ogc:Literal');
+            node.textContent = context.newUuid;
+        },
+
+        /**
          * Updates the metadata in the GNOS via CSW-T.
          * @param  {Object} context the context object with config and uuid.
          * @return {Promise}         the xhr promise
          */
         updateMetadata: function(context) {
-            var url = context.config['metadata-base-url'];
-            var xml = this.getCswUpdate(context);
+            var url = context.config.metadataBaseUrl;
+
+            this.getCswUpdate(context);
+            this.prepareTransaction(context);
 
             return Ext.Ajax.request({
                 url: url + 'srv/eng/csw-publication',
                 method: 'POST',
-                xmlData: xml
+                headers: {
+                    'X-XSRF-TOKEN': context.csrfToken,
+                    'Content-Type': 'application/xml'
+                },
+                xmlData: context.metadataDocument
             });
+
+        },
+
+        /**
+         * Fetch groups.
+         * @param  {Object} context the context object
+         * @return {Promise}  the promise resolving once the groups have been
+         * fetched
+         */
+        fetchGroups: function(context) {
+            var url = context.config.metadataBaseUrl;
+
+            var resolveFunc;
+
+            var promise = new Ext.Promise(function(resolve) {
+                resolveFunc = resolve;
+            });
+
+            Ext.Ajax.request({
+                url: url + 'srv/api/0.1/groups',
+                method: 'GET',
+                headers: {
+                    'X-XSRF-TOKEN': context.csrfToken,
+                    'Accept': 'application/json'
+                },
+                success: function(xhr) {
+                    var groups = JSON.parse(xhr.responseText);
+                    context.groups = groups;
+                    resolveFunc();
+                }
+            });
+
+            return promise;
+        },
+
+        /**
+         * Share the metadata set with the users' groups.
+         * @param  {Object} context the context object with the id and the groups
+         * @return {Promise} the promise resolving once the privileges have been set
+         */
+        setMetadataGroups: function(context) {
+            var url = context.config.metadataBaseUrl;
+            var imis = Koala.util.AppContext.getAppContext().data.merge.imis_user;
+
+            var userroles = imis.userroles;
+            var body = {
+                clear: true,
+                privileges: []
+            };
+
+            Ext.each(userroles, function(role) {
+                Ext.each(context.groups, function(group) {
+                    if (group.name === role) {
+                        body.privileges.push({
+                            group: group.id,
+                            operations: {
+                                download: true,
+                                view: true,
+                                dynamic: true
+                            }
+                        });
+                    }
+                });
+            });
+
+            var resolveFunc;
+            var promise = new Ext.Promise(function(resolve) {
+                resolveFunc = resolve;
+            });
+
+            Ext.Ajax.request({
+                url: url + 'srv/api/0.1/records/' + context.newId + '/sharing',
+                method: 'PUT',
+                headers: {
+                    'X-XSRF-TOKEN': context.csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                jsonData: body,
+                success: function() {
+                    resolveFunc();
+                }
+            });
+
+            return promise;
         },
 
         /**
          * Prepares the metadata for a cloned layer.
          * @param  {Object} metadata the original metadata Object
+         * @param  {String} role the role with which to create metadata
          */
-        prepareMetadata: function(metadata) {
+        prepareMetadata: function(metadata, role) {
             var config = Koala.util.AppContext.getAppContext();
-            config = config.data.merge['import'];
+            config = config.data.merge.import;
             var context = {
-                config: config,
+                config: config[role],
                 uuid: metadata.id,
-                newLayerName: metadata.legendTitle + ' (' + metadata.newLayerName + ')'
+                metadata: metadata
             };
             return this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))
                 .then(this.determineNewUuid.bind(this, context))
-                .then(this.updateMetadata.bind(this, context));
+                .then(this.updateMetadata.bind(this, context))
+                .then(this.fetchGroups.bind(this, context))
+                .then(this.setMetadataGroups.bind(this, context));
         }
 
     }

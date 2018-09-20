@@ -507,7 +507,8 @@
                 "tooltext": "Thema wechseln",
                 "btnTextResetThemeTreeFiltering": "Alle Layer",
                 "btnTooltipResetThemeTreeFiltering": "Hebt eine etwaige Filterung der verfügbaren Themen auf.",
-                "rodosWindowTitle": "RODOS Prognosen Filter"
+                "rodosWindowTitle": "RODOS Prognosen Filter",
+                "importedLayersTitle": "Importierte Layer"
             }
         }
     },

@@ -107,13 +107,15 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                 '<br>' + msg);
         };
 
-        var tree = Ext.ComponentQuery.query('basigx-panel-menu')[0];
+        var tree = Ext.ComponentQuery.query('k-treemenu')[0];
         var x = tree.getWidth() + 5;
         var header = Ext.ComponentQuery.query('k-panel-header')[0];
         var y = header.getHeight() + 5;
 
         var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
-        var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
+        var context = mapComp.appContext.data.merge;
+        var imisRoles = context.imis_user.userroles;
+        var allowCreate = context.import.allowCreateLayer;
         var extendedRights = Ext.Array.contains(imisRoles, 'ruf');
 
         me.x = x;
@@ -190,24 +192,28 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                     bind: {
                         text: viewModel.get('wfstLockButton')
                     },
-                    hidden: me.layer.get('persisted') === false || !extendedRights,
+                    hidden: me.layer.get('persisted') === false ||
+                        !extendedRights || !allowCreate,
                     handler: function(btn) {
                         me.getController().getFeatureLock(btn, me.layer);
                     }
                 }, {
                     xtype: 'button',
-                    hidden: !extendedRights,
+                    hidden: (!extendedRights || !allowCreate),
                     bind: {
                         text: viewModel.get('saveLayerText')
                     },
                     handler: function() {
+                        // TODO allow selection of role to store the data in
+                        var role = imisRoles[0];
                         Koala.util.Import.importOrUpdateLayer(
                             me.layer,
                             me.wfstInserts,
                             me.wfstUpdates,
                             me.wfstDeletes,
                             wfstSuccessCallback,
-                            wfstFailureCallback
+                            wfstFailureCallback,
+                            role
                         );
                     }
                 }, {

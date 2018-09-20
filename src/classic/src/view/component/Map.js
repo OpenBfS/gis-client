@@ -116,10 +116,6 @@ Ext.define('Koala.view.component.Map', {
                     styleCfg = styleCfg(feature);
                 }
 
-                if (Ext.isFunction(styleCfg)) {
-                    styleCfg = styleCfg(feature);
-                }
-
                 if (styleCfg) {
                     var sArray = styleCfg.split(',');
                     var color = sArray[0];

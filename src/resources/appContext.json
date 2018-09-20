@@ -21,11 +21,21 @@
                 "password": "admin"
             },
             "import": {
-                "base-url": "http://bfs-docker/ogc/",
-                "target-workspace": "bfs",
-                "target-workspace-uri": "www.imis.bfs.de/bfs",
-                "target-store": "bfs_geodata",
-                "metadata-base-url": "http://bfs-docker/geonetwork/"
+              "allowCreateLayer": true,
+              "ruf": {
+                "workspace": "ruf-import",
+                "namespace": "www.imis.bfs.de/ruf",
+                "datastore": "ruf",
+                "baseUrl": "http://bfs-docker/ogc/",
+                "metadataBaseUrl": "http://bfs-docker/geonetwork/"
+              },
+              "imis": {
+                "workspace": "imis-import",
+                "namespace": "www.imis.bfs.de/imis",
+                "datastore": "imis",
+                "baseUrl": "http://bfs-docker/ogc/",
+                "metadataBaseUrl": "http://bfs-docker/geonetwork/"
+              }
             },
             "imis_user": {
               "imisroles": [
