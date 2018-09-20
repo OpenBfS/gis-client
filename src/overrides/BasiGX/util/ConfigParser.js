@@ -62,13 +62,17 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                 };
             }
             var layerConfig = context.data.merge.mapLayers.slice();
-            //insert first backgroundLayer (if defined in appContext)
-            var initialBackground = {
-                uuid: context.data.merge.backgroundLayers[0].uuid,
-                visible: true
-            };
-            if (initialBackground) {
-                layerConfig.splice(0, 0, initialBackground);
+
+            // If we have a route the Routing util will take care of this
+            if (window.location.href.indexOf('|layers') === -1) {
+                // insert first backgroundLayer (if defined in appContext)
+                var initialBackground = {
+                    uuid: context.data.merge.backgroundLayers[0].uuid,
+                    visible: true
+                };
+                if (initialBackground) {
+                    layerConfig.splice(0, 0, initialBackground);
+                }
             }
 
             Ext.each(layerConfig, function(layer, index) {

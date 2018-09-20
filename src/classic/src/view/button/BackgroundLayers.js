@@ -21,7 +21,7 @@ Ext.define('Koala.view.button.BackgroundLayers', {
     xtype: 'k-button-backgroundlayers',
 
     requires: [
-        'Koala.view.button.BackgroundLayersModelController',
+        'Koala.view.button.BackgroundLayersController',
         'Koala.view.button.BackgroundLayersModel'
     ],
 
