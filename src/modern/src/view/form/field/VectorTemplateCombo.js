@@ -16,4 +16,4 @@
 /**
  * @class Koala.view.form.field.VectorTemplateCombo
  */
-Ext.define('Koala.view.form.field.VectorTemplateCombo');
+Ext.define('Koala.view.form.field.VectorTemplateCombo', {});
