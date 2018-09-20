@@ -99,7 +99,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                                 xtype: 'image',
                                 height: 58,
                                 width: 110,
-                                src: layerThumb//,
+                                src: layerThumb
                             }, {
                                 style: 'text-align: center;',
                                 padding: 5,

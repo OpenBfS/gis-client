@@ -14,9 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.BackgroundLayersModelController
+ * @class Koala.view.button.BackgroundLayersController
  */
-Ext.define('Koala.view.button.BackgroundLayersModelController', {
+Ext.define('Koala.view.button.BackgroundLayersController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-button-backgroundlayers',
 
@@ -56,8 +56,7 @@ Ext.define('Koala.view.button.BackgroundLayersModelController', {
                 }],
                 items: [{
                     xtype: 'k-panel-backgroundLayers'
-                }
-                ]
+                }]
             }).showBy(this.getView(), 'tr-tl');
         } else {
             win.close();
