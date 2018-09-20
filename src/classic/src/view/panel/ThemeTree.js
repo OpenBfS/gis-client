@@ -21,6 +21,8 @@ Ext.define('Koala.view.panel.ThemeTree', {
     xtype: 'k-panel-themetree',
 
     requires: [
+        'Koala.util.MetadataQuery',
+        'Koala.util.Geoserver',
         'Koala.util.Help',
         'Koala.view.component.TextTool',
         'Koala.view.panel.ThemeTreeController',
@@ -103,11 +105,13 @@ Ext.define('Koala.view.panel.ThemeTree', {
         getClass: function(v, meta, rec) {
             if (rec.get('text').indexOf('RODOS-Prognosen') > -1) {
                 return 'x-fa fa-filter';
+            } else if (rec.data.isImportNode) {
+                return 'x-fa fa-refresh';
             } else {
                 return 'hide-action-column';
             }
         },
-        handler: 'showRodosFilter'
+        handler: 'handleActionColumn'
     }],
 
     listeners: {
@@ -121,7 +125,16 @@ Ext.define('Koala.view.panel.ThemeTree', {
     },
 
     initComponent: function() {
+        this.rebuildTree();
 
+        var store = Ext.create('Ext.data.TreeStore', {
+        });
+        this.store = store;
+        this.callParent();
+    },
+
+    rebuildTree: function() {
+        var me = this;
         // try to load layerset from appContext
         var appContext = BasiGX.view.component.Map.guess().appContext;
         var path = [
@@ -132,16 +145,34 @@ Ext.define('Koala.view.panel.ThemeTree', {
         ];
         var layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerset.json');
 
-        var store = Ext.create('Ext.data.TreeStore', {
-            proxy: {
-                type: 'ajax',
-                url: layerSetUrl,
-                reader: {
-                    type: 'json'
-                }
-            }
-        });
-        this.store = store;
-        this.callParent();
+        Ext.Ajax.request({
+            url: layerSetUrl
+        })
+            .then(function(xhr) {
+                var data = JSON.parse(xhr.responseText);
+                Koala.util.MetadataQuery.getImportedLayers()
+                    .then(function(layers) {
+                        Koala.util.Geoserver.filterDeletedLayers(layers)
+                            .then(function(config) {
+                                data.push({
+                                    text: me.getViewModel().get('importedLayersTitle'),
+                                    isLayerProfile: false,
+                                    children: config,
+                                    isImportNode: true
+                                });
+                                me.getStore().setData(data);
+                                me.getViewModel().bind({
+                                    bindTo: '{importedLayersTitle}'
+                                }, function(title) {
+                                    if (!data) {
+                                        return;
+                                    }
+                                    data[data.length - 1].text = title;
+                                    me.getStore().setData(data);
+                                });
+                            });
+                    });
+            });
     }
+
 });

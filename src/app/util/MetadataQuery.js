@@ -31,7 +31,7 @@ Ext.define('Koala.util.MetadataQuery', {
         importedLayersRequest: '<GetRecords ' +
             'xmlns="http://www.opengis.net/cat/csw/2.0.2" ' +
             'xmlns:bfs="http://geonetwork.org/bfs" ' +
-            'service="CSW" version="2.0.2" ' +
+            'service="CSW" version="2.0.2" maxRecords="1000" ' + // TODO max value? default is 10
             'resultType="results" outputFormat="application/xml" ' +
             'outputSchema="http://www.isotc211.org/2005/gmd">' +
             '<Query typeNames="gmd:MD_Metadata">' +
@@ -65,7 +65,7 @@ Ext.define('Koala.util.MetadataQuery', {
             xpath = 'gmd:fileIdentifier/gco:CharacterString/text()';
             config.uuid = getText(doc, xpath, node);
             config.leaf = true;
-            xpath = 'bfs:layerInformation/bfs:MD_Layer/bfs:olProperty' +
+            xpath = 'bfs:layerInformation/bfs:MD_Layer/bfs:olProperty/bfs:MD_Property' +
                 '[bfs:propertyName/gco:CharacterString/text()="workspace"]' +
                 '/bfs:propertyValue/gco:CharacterString/text()';
             config.workspace = getText(doc, xpath, node);

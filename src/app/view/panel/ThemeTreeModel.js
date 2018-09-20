@@ -26,6 +26,7 @@ Ext.define('Koala.view.panel.ThemeTreeModel', {
         btnTextResetThemeTreeFiltering: '',
         btnTooltipResetThemeTreeFiltering: '',
         rodosWindowTitle: '',
+        importedLayersTitle: '',
 
         selectedRodosProject: ''
     }
