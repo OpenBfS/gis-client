@@ -182,6 +182,59 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
         });
         var btn = view.down('#feature-grid-download-button');
         menu.showBy(btn);
+    },
+
+    /**
+     * Returns a newly created store with the grid's current attributes.
+     * @return {Ext.data.Store} the new store
+     */
+    getAttributeStore: function() {
+        var grid = this.getView().down('basigx-grid-featuregrid');
+        var cols = grid.extractSchema(this.getView().down('grid').getStore());
+        return Ext.create('Ext.data.Store', {
+            fields: ['text', 'dataIndex', 'editor'],
+            data: cols
+        });
+    },
+
+    /**
+     * Opens a menu to quickly set an attribute in multiple rows to a new value.
+     * @param  {Ext.button.Button} btn the button on which to open the menu
+     */
+    multiEdit: function(btn) {
+        var grid = this.getView().down('basigx-grid-featuregrid').down('grid');
+        var selection = grid.getSelection();
+        var menu = Ext.create('Ext.menu.Menu', {
+            items: [{
+                xtype: 'panel',
+                layout: 'hbox',
+                padding: '5px',
+                items: [{
+                    xtype: 'combo',
+                    store: this.getAttributeStore(),
+                    displayField: 'text'
+                }, {
+                    xtype: 'label',
+                    text: '=',
+                    padding: '5px'
+                }, {
+                    xtype: 'textfield',
+                    name: 'value-field'
+                }, {
+                    xtype: 'button',
+                    glyph: 'xf00c@FontAwesome',
+                    handler: function() {
+                        var text = menu.down('[name=value-field]').getValue();
+                        var attribute = menu.down('combo').getValue();
+                        Ext.each(selection, function(rec) {
+                            rec.set(attribute, text);
+                        });
+                        menu.close();
+                    }
+                }]
+            }]
+        });
+        menu.showBy(btn);
     }
 
 });
