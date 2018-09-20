@@ -39,6 +39,10 @@ Ext.define('Koala.plugin.Hover', {
                 // situations (e.g. when zooming while hovering)
                 // where feat is undefined and feat.get would throw an error
                 if (feature && feature.get('layer') === layer) {
+                    // evaluate possible template functions with the current feature
+                    if (Ext.isFunction(hoverTpl)) {
+                        hoverTpl = hoverTpl(feature);
+                    }
                     var tooltipFeature = hoverTpl;
                     tooltipFeature = replaceTemplateStrings(
                         tooltipFeature, layer, false);

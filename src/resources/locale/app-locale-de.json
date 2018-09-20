@@ -78,20 +78,19 @@
             }
         }
     },
-    "Koala.view.button.SelectFeaturesController": {
-        "noSingleActiveLayerFound": "Bitte selektieren Sie einen aktiven Layer"
-    },
     "Koala.view.button.SelectFeatures": {
         "config": {
             "data": {
-                "tooltip": "Objekte des aktiven Layers selektieren"
+                "tooltip": "Objekte des aktiven Layers selektieren",
+                "noSingleActiveLayerFound": "Bitte selektieren Sie einen aktiven Layer",
+                "error": "Fehler"
             }
         }
     },
     "Koala.view.button.ShowRedliningToolsContainer": {
         "config": {
             "data":{
-                "tooltip": "Messen",
+                "tooltip": "Messen"
             }
         }
     },
@@ -135,7 +134,7 @@
                 "delimiterText": "Trennzeichen",
                 "quoteText": "Anführungszeichen (\" \") verwenden",
                 "downloadAllChartDataMsgButtonYes": "Herunterladen",
-                "downloadAllChartDataMsgButtonNo": "Abbrechen",
+                "downloadAllChartDataMsgButtonNo": "Abbrechen"
             }
         }
     },
@@ -358,14 +357,14 @@
                 "northArrow": "Nordpfeil",
                 "scalebar": "Massstabsleiste",
                 "unlinkTooltip": "Link entfernen"
-            },
+            }
         }
     },
     "Koala.view.form.RodosFilter": {
         "config": {
             "data": {
-                "projectComboLabel": "Projekt",
-            },
+                "projectComboLabel": "Projekt"
+            }
         }
     },
     "Koala.view.grid.MetadataSearch": {
@@ -399,6 +398,31 @@
                 "stationSearchTitle": "ODL Sondenstandorte",
                 "searchInProgressText": "Suche läuft…",
                 "noRecordsFoundText": "Keine Stationen gefunden"
+            }
+        }
+    },
+    "Koala.view.list.TreeMenu": {
+        "config": {
+            "data": {
+                "menu": "Menu",
+                "themes": "Themen",
+                "loading": "Laden",
+                "wmsimport": "WMS hinzuladen",
+                "vectorimport": "Vektordaten laden",
+                "print": "Drucken",
+                "drawandmeasure": "Zeichnen",
+                "draw": "Zeichnen",
+                "measure": "Messen",
+                "share": "Teilen",
+                "permalink": "Permalink",
+                "settings": "Einstellungen",
+                "selectfeatures": "Objekte selektieren",
+                "timereference": "Zeitbezug",
+                "fullscreen": "Vollbild",
+                "imprint": "Impressum",
+                "privacy": "Datenschutz",
+                "help": "Hilfe",
+                "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html"
             }
         }
     },
@@ -470,19 +494,54 @@
                 "downloadMessage": "Layerdaten herunterladen?",
                 "downloadButtonYes": "Ja",
                 "downloadButtonNo": "Nein",
-                "outputFormatText": "Ausgabeformat"
+                "outputFormatText": "Ausgabeformat",
+                "title": "Legende"
             }
         }
     },
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {
-                "title": "Auswahl",
+                "title": "Themen",
                 "tooltip": "LayerSet wechseln",
                 "tooltext": "Thema wechseln",
                 "btnTextResetThemeTreeFiltering": "Alle Layer",
                 "btnTooltipResetThemeTreeFiltering": "Hebt eine etwaige Filterung der verfügbaren Themen auf.",
                 "rodosWindowTitle": "RODOS Prognosen Filter"
+            }
+        }
+    },
+    "Koala.view.panel.TimeSeries": {
+        "config": {
+            "data": {
+                "autorefresh": "Autorefresh",
+                "autorefreshExpand": "Zeitausschnitt erweitern",
+                "autorefreshMove": "Zeitausschnitt verschieben",
+                "autorefreshOptions": "Autorefresh Optionen",
+                "chartPrint": "Dokpool ",
+                "title": "Zeitreihe",
+                "dateFieldStartLabel": "Start",
+                "dateFieldEndLabel": "Ende",
+                "setFilterBtnText": "OK",
+                "resetFilterBtnText": "Reset",
+                "selectChartLayerComboLabel": "",
+                "selectChartLayerComboEmptyText": "Chart hinzufügen",
+                "selectSeriesComboEmptyText": "Serie hinzufügen",
+                "undoBtnText": "…zurückzoomen",
+                "exportAsImageBtnText": "Als Bild exportieren",
+                "downloadChartDataMsgTitle": "Info",
+                "downloadChartDataMsgMessage": "Aktuelle Chartdaten herunterladen?",
+                "downloadChartDataMsgButtonYes": "Ja",
+                "downloadChartDataMsgButtonNo": "Nein",
+                "outputFormatText": "Ausgabeformat",
+                "removeSeriesBtnText": "Serie entfernen",
+                "removeSeriesQuestionTitle": "Rückfrage",
+                "removeSeriesQuestionTpl": "Serie '{0}' entfernen?",
+                "startLabel": "Start",
+                "toggleDataBelowIdentificationThreshold": "Daten < NWG anzeigen",
+                "toggleScaleBtnText": "linear/logarithmisch",
+                "endLabel": "Ende",
+                "axisText": "Achse"
             }
         }
     },
@@ -496,8 +555,7 @@
                 "btnTooltipFullscreen": "Zwischen Vollbildanzeige und Normalansicht wechseln",
                 "btnTooltipHelp": "Hilfe anzeigen",
                 "btnTooltipImprint": "Impressum anzeigen",
-                "btnTooltipPrivacy": "Datenschutzerklärung anzeigen",
-                "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html"
+                "btnTooltipPrivacy": "Datenschutzerklärung anzeigen"
             }
         }
     },
@@ -553,7 +611,7 @@
         "config": {
             "data": {
                 "title": "Layer Profilwahl",
-                "helpHtml": "<div>Dieses Auswahlfenster ermöglicht es, thematisch zusammengehörige Datensätze mit einem Klick in die Karte zu laden. Es ist nicht zwingend erforderlich eine Profilwahl zu treffen um die Anwendung zu starten.</div>"+
+                "helpHtml": "<div>Dieses Auswahlfenster ermöglicht es, thematisch zusammengehörige Datensätze mit einem Klick in die Karte zu laden. Es ist nicht zwingend erforderlich eine Profilwahl zu treffen um die Anwendung zu starten.</div>" +
                             "<div>Wird das Fenster ohne Profilwahl geschlossen (mit \"x\" rechts oben), werden lediglich die Hintergrundkarte, Ortsnamen und Höhenlinien geladen. Anschließend können einzelne Fachlayer mit individuellen Filtereinstellungen hinzugeladen werden.</div>",
                 "hideLayersetChooserWindowOnStartupMsg": "Dieses Fenster nicht mehr anzeigen."
             }

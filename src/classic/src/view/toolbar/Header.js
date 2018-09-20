@@ -41,59 +41,9 @@ Ext.define('Koala.view.toolbar.Header', {
 
     items: [
         '->',
-        /*
         {
-            bind: {
-                text: '{btnTextFullscreen}',
-                tooltip: '{btnTooltipFullscreen}'
-            },
-            hidden: !Koala.util.Fullscreen.isFullscreenSupported(),
-            enableToggle: true,
-            listeners: {
-                toggle: 'toggleFullscreen'
-            }
-        },
-*/
-        {
-            xtype: 'k-button-timereference'
-        },
-        {
-            xtype: 'button',
-            bind: {
-                text: '{btnTextHelp}',
-                tooltip: '{btnTooltipHelp}'
-            },
-            handler: function() {
-                var win = Ext.ComponentQuery.query('k-window-help')[0];
-                if (!win) {
-                    Ext.create('Koala.view.window.HelpWindow').show();
-                } else {
-                    BasiGX.util.Animate.shake(win);
-                }
-            }
-        },
-        {
-            xtype: 'button',
-            bind: {
-                text: '{btnTextImprint}',
-                tooltip: '{btnTooltipImprint}'
-            },
-            handler: function() {
-                var win = Ext.ComponentQuery.query('k-window-imprint')[0];
-                if (!win) {
-                    Ext.create('Koala.view.window.ImprintWindow').show();
-                } else {
-                    BasiGX.util.Animate.shake(win);
-                }
-            }
-        },
-        {
-            xtype: 'button',
-            bind: {
-                text: '{btnTextPrivacy}',
-                tooltip: '{btnTooltipPrivacy}',
-                href: '{privacyUrl}'
-            }
+            xtype: 'k-button-timereference',
+            hidden: true // UI moved to TreeMenu logic kept in hidden button
         },
         {
             xtype: 'k-form-field-languagecombo'

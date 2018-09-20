@@ -56,6 +56,14 @@ Ext.define('Koala.view.component.Map', {
             var interval = me.getPointerRestInterval();
             hoverPlugin.setPointerRestInterval(interval);
             hoverPlugin.selectStyleFunction = selStyleFunction;
+            // overriding the selectstylefunction aint enough,
+            // so we register to hoverfeatureclick handler to
+            // apply the selectStyleFunction
+            me.on('hoverfeaturesclick', function(features) {
+                Ext.each(features, function(f) {
+                    f.setStyle(selStyleFunction(f));
+                });
+            });
             hoverPlugin.highlightStyleFunction = highlightStyleFunction;
         }
 
@@ -103,6 +111,14 @@ Ext.define('Koala.view.component.Map', {
         styleFromGnos: function(styleKey) {
             var fn = function(feature) {
                 var styleCfg = feature.get('layer').get(styleKey);
+                // evaluate possible template functions with the current feature
+                if (Ext.isFunction(styleCfg)) {
+                    styleCfg = styleCfg(feature);
+                }
+
+                if (Ext.isFunction(styleCfg)) {
+                    styleCfg = styleCfg(feature);
+                }
 
                 if (styleCfg) {
                     var sArray = styleCfg.split(',');

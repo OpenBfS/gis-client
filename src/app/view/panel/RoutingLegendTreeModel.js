@@ -33,7 +33,8 @@ Ext.define('Koala.view.panel.RoutingLegendTreeModel', {
         downloadTitle: '',
         downloadMessage: '',
         downloadButtonYes: '',
-        downloadButtonNo: ''
+        downloadButtonNo: '',
+        title: ''
     }
 
 });

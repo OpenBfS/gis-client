@@ -78,13 +78,12 @@
             }
         }
     },
-    "Koala.view.button.SelectFeaturesController": {
-        "noSingleActiveLayerFound": "Please select a single active Layer"
-    },
     "Koala.view.button.SelectFeaturesModel": {
         "config": {
             "data":{
-                "tooltip": "Select features of the active Layer"
+                "tooltip": "Select features of the active Layer",
+                "noSingleActiveLayerFound": "Please select a single active Layer",
+                "error": "Error"
             }
         }
     },
@@ -401,6 +400,31 @@
             }
         }
     },
+    "Koala.view.list.TreeMenu": {
+        "config": {
+            "data": {
+                "menu": "Menu",
+                "themes": "Topics",
+                "loading": "Load",
+                "wmsimport": "Add external WMS",
+                "vectorimport": "Import local files",
+                "print": "Print",
+                "drawandmeasure": "Draw & Measure",
+                "draw": "Draw",
+                "measure": "Measure",
+                "share": "Share",
+                "permalink": "Permalink",
+                "settings": "Settings",
+                "timereference": "Time Reference",
+                "selectfeatures": "Select objects",
+                "fullscreen": "Toggle Fullscreen",
+                "imprint": "Imprint",
+                "privacy": "Privacy",
+                "help": "Help",
+                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html"
+            }
+        }
+    },
     "Koala.view.main.Main": {
         "config": {
             "data": {
@@ -469,19 +493,54 @@
                 "downloadMessage": "Download Layerdaten?",
                 "downloadButtonYes": "Yes",
                 "downloadButtonNo": "No",
-                "outputFormatText": "Output Format"
+                "outputFormatText": "Output Format",
+                "title": "Legend"
             }
         }
     },
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {
-                "title": "Selection",
+                "title": "Topics",
                 "tooltip": "Change Layer Set",
                 "tooltext": "Change Topic",
                 "btnTextResetThemeTreeFiltering": "All Layers",
                 "btnTooltipResetThemeTreeFiltering": "Resets filtering of available topics.",
                 "rodosWindowTitle": "en:RODOS Prognosen Filter"
+            }
+        }
+    },
+    "Koala.view.panel.TimeSeries": {
+        "config": {
+            "data": {
+                "autorefresh": "Auto refresh",
+                "autorefreshExpand": "Extend time interval",
+                "autorefreshMove": "Shift time interval",
+                "autorefreshOptions": "Auto refresh options",
+                "chartPrint": "Dokpool ",
+                "title": "Time Series",
+                "dateFieldStartLabel": "Start",
+                "dateFieldEndLabel": "End",
+                "setFilterBtnText": "OK",
+                "resetFilterBtnText": "Reset",
+                "selectChartLayerComboLabel": "",
+                "selectChartLayerComboEmptyText": "Add chart",
+                "selectSeriesComboEmptyText": "Add series",
+                "undoBtnText": "…zoom back",
+                "exportAsImageBtnText": "Export as image",
+                "downloadChartDataMsgTitle": "Info",
+                "downloadChartDataMsgMessage": "Download current chart?",
+                "downloadChartDataMsgButtonYes": "Yes",
+                "downloadChartDataMsgButtonNo": "No",
+                "outputFormatText": "Output Format",
+                "removeSeriesBtnText": "Remove Series",
+                "removeSeriesQuestionTitle": "Request",
+                "removeSeriesQuestionTpl": "Remove series '{0}'?",
+                "startLabel": "Start",
+                "toggleDataBelowIdentificationThreshold": "Show data below < Id. Thresh.",
+                "toggleScaleBtnText": "linear/logarithmic",
+                "endLabel": "End",
+                "axisText": "Axis"
             }
         }
     },
@@ -495,8 +554,7 @@
                 "btnTooltipFullscreen": "Switch between full screen and standard view.",
                 "btnTooltipHelp": "Show help",
                 "btnTooltipImprint": "Show imprint",
-                "btnTooltipPrivacy": "Show privacy statement",
-                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html"
+                "btnTooltipPrivacy": "Show privacy statement"
             }
         }
     },

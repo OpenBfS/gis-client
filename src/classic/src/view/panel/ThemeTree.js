@@ -32,6 +32,8 @@ Ext.define('Koala.view.panel.ThemeTree', {
         type: 'k-panel-themetree'
     },
 
+    cls: 'k-panel-themetree',
+
     bind: {
         title: '{title}'
     },

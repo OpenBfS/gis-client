@@ -36,7 +36,7 @@ Ext.define('Koala.view.component.MapController', {
      */
     onHoverFeatureClick: function(olFeats) {
         var me = this;
-        var timeSeriesWin;
+        var timeSeriesPanel;
         var map = me.getView().getMap();
         var barChartWin;
 
@@ -107,16 +107,15 @@ Ext.define('Koala.view.component.MapController', {
                 }
             } else if (isTimeSeries || isBarChart) {
                 if (isTimeSeries) {
-                    if (!timeSeriesWin) {
+                    if (!timeSeriesPanel) {
                         // if no timeseries window exist, create one
-                        timeSeriesWin = Koala.util.Chart.openTimeseriesWindow(olFeat);
+                        timeSeriesPanel = Koala.util.Chart.openTimeseries(olFeat);
                     } else {
                         // just add any further series to the existing window
-                        timeSeriesWin.getController().updateTimeSeriesChart(layer, olFeat);
+                        timeSeriesPanel.getController().updateTimeSeriesChart(layer, olFeat);
                     }
-                    Ext.WindowManager.bringToFront(timeSeriesWin);
-                    // Open new BarchartWindow for each feature. Move if overlapping.
                 }
+                // Open new BarchartWindow for each feature. Move if overlapping.
                 if (isBarChart) {
                     barChartWin = me.openBarChartWindow(olFeat);
                     me.offsetBarChartWin(barChartWin);

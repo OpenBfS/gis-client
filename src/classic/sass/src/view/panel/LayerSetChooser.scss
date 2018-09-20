@@ -1,13 +1,22 @@
-.k-panel-layersetchooser .x-panel-body {
-    background-color: white !important;
-}
+.k-panel-layersetchooser {
 
-.k-panel-layersetchooser .img-chooser-view {
-    height: auto !important;
-}
+    .x-panel-header {
+        color: white;
+    }
 
-.k-panel-layersetchooser .img-chooser-view .x-item-focused,
-.k-panel-layersetchooser .img-chooser-view .x-view-item-focused,
-.k-panel-layersetchooser .img-chooser-view .x-item-selected {
-    outline: none !important;
+    .x-panel-body {
+        background-color: white;
+    }
+
+    .k-panel-layersetchooser {
+        .img-chooser-view {
+            height: auto;
+            .x-item-focused,
+            .x-view-item-focused,
+            .x-item-selected {
+                outline: none;
+            }
+        }
+    }
+
 }

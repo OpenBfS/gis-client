@@ -26,10 +26,6 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
         'Koala.util.SelectFeatures'
     ],
 
-    /** i18n */
-    noSingleActiveLayerFound: '',
-    /** i18n end */
-
     isActive: false,
     mapComponent: null,
     dragBoxInteraction: null,
@@ -46,8 +42,9 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
      * Handler when the select features button is toggled
      * @param {object} btn The button that has been pressed
      */
-    onClick: function(btn) {
-        this.isActive = btn.pressed;
+    onToggle: function(btn, pressed) {
+        this.setupSelectionLayer();
+        this.isActive = pressed;
         if (this.isActive) {
             this.enableSelectControl();
         } else {
@@ -95,6 +92,7 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
      * Handles the activation of interactions to select features
      */
     enableSelectControl: function() {
+        var viewModel = this.getViewModel();
         if (!this.legendTree) {
             this.legendTree = Ext.ComponentQuery.query(
                 'k-panel-routing-legendtree, k-panel-mobilelegend > treelist')[0];
@@ -102,7 +100,10 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
 
         var selection = this.legendTree.getSelection();
         if (selection.length !== 1) {
-            Ext.Msg.alert(this.error, this.noSingleActiveLayerFound);
+            Ext.Msg.alert(
+                viewModel.get('error'),
+                viewModel.get('noSingleActiveLayerFound')
+            );
             this.getView().setPressed(false);
             return;
         }
@@ -276,9 +277,13 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
      * on which selection shall happen
      */
     determineLayerToSelectOn: function() {
+        var viewModel = this.getViewModel();
         var selection = this.legendTree.getSelection();
         if (selection.length !== 1) {
-            Ext.Msg.alert(this.error, this.noSingleActiveLayerFound);
+            Ext.Msg.alert(
+                viewModel.get('error'),
+                viewModel.get('noSingleActiveLayerFound')
+            );
             this.getView().setPressed(false);
             this.mapComponent.setLoading(false);
             return;

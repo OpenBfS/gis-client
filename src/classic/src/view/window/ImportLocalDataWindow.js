@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-present terrestris GmbH & Co. KG
+/* Copyright (c) 2017-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,35 +14,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.button.SelectFeatures
+ * @class Koala.view.window.ImportLocalDataWindow
  */
-Ext.define('Koala.view.button.SelectFeatures', {
-    extend: 'Ext.button.Button',
-    xtype: 'k-button-selectfeatures',
+Ext.define('Koala.view.window.ImportLocalDataWindow', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-importlocaldata',
+    cls: 'k-window-importlocaldata',
+
     requires: [
-        'Koala.view.button.SelectFeaturesController',
-        'Koala.view.button.SelectFeaturesModel'
+        'Koala.util.Help'
     ],
 
-    controller: 'k-button-selectfeatures',
-    viewModel: {
-        type: 'k-button-selectfeatures'
-    },
-
-    glyph: 'xf125@FontAwesome',
-
     bind: {
-        text: null,
-        tooltip: '{tooltip}'
+        title: '{importLocalDataButtonText}'
     },
 
-    listeners: {
-        toggle: 'onToggle'
-    },
+    layout: 'fit',
+    tools: [{
+        type: 'help',
+        bind: {
+            tooltip: '{helpTooltip}'
+        },
+        callback: function() {
+            Koala.util.Help.showHelpWindow('toolsImport', 'tools');
+        }
+    }],
+    items: [{
+        xtype: 'k-form-importLocalData'
+    }]
 
-    toggleGroup: 'draw',
-
-    enableToggle: true,
-
-    buttonPressed: false
 });

@@ -1,0 +1,89 @@
+.x-k-treemenu, .x-treelist-tree-menu {
+    background-color: $base-color;
+    color: white;
+
+    ul.x-treelist-root-container {
+        >.x-treelist-item {
+            &:first-child {
+                border-bottom: 3px solid whitesmoke;
+            }
+        }
+    }
+
+    .x-treelist-toolstrip {
+        >.x-treelist-item-tool {
+            &:first-child {
+                border-bottom: 3px solid whitesmoke;
+            }
+        }
+    }
+
+    &.x-treelist-floater {
+        max-width: 300px;
+        min-width: 300px;
+    }
+
+    .x-treelist-item {
+        cursor: pointer;
+        .x-treelist-item-leaf {
+            cursor: pointer;
+        }
+        .x-treelist-row-over {
+            background-color: darken($base-color, 10);
+        }
+    }
+
+    .x-treelist-item-selected {
+        >.x-treelist-row {
+            background-color: $base-color;
+            &.x-treelist-row-over {
+                background-color: darken($base-color, 10);
+            }
+        }
+    }
+
+    .x-treelist-item-floated{
+        .x-treelist-row {
+            background-color: $base-color;
+        }
+        .x-treelist-container {
+            margin-left: 0;
+            .x-treelist-row {
+                background-color: lighten($base-color, 20);
+                &:hover {
+                    background-color: darken($base-color, 10);
+                }
+            }
+        }
+    }
+
+    .x-treelist-item-icon,
+    .x-treelist-item-text,
+    .x-treelist-item-expander {
+        cursor: pointer;
+        font-size: 18px;
+        color: white;
+        line-height: 64px;
+    }
+
+    .x-treelist-item-tool,
+    .x-treelist-item-leaf {
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 64px;
+        background-color: $base-color;
+        color: white;
+    }
+
+    .x-treelist-item-tool {
+        width: 64px;
+        &:hover {
+            background-color: darken($base-color, 10);
+        }
+    }
+
+    .x-treelist-item-text {
+        font-size: 14px;
+    }
+
+}
