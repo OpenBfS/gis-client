@@ -110,7 +110,7 @@ Ext.define('Koala.util.AppContext', {
             var ctx = context || BasiGX.view.component.Map.guess().appContext;
             var staticMe = Koala.util.AppContext;
             var imisUser = staticMe.getMergedDataByKey('imis_user', ctx);
-            var imisRoles = (imisUser) ? imisUser.imisroles : undefined;
+            var imisRoles = (imisUser) ? imisUser.userroles : undefined;
             var roleIntersects = false;
             if (debitRoles && imisRoles && Ext.Array.intersect(debitRoles, imisRoles).length > 0) {
                 roleIntersects = true;

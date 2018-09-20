@@ -25,7 +25,8 @@
                 "target-workspace": "bfs",
                 "target-workspace-uri": "www.imis.bfs.de/bfs",
                 "target-store": "bfs_geodata",
-                "metadata-base-url": "http://bfs-docker/geonetwork/"
+                "metadata-base-url": "http://bfs-docker/geonetwork/",
+                "allowCreateLayer": true
             },
             "imis_user": {
               "imisroles": [
