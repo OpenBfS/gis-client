@@ -580,7 +580,7 @@
             }
         }
     },
-    "Koala.view.window.CloneWindow": {
+    "Koala.view.window.ShareWindow": {
         "config": {
             "data": {
                 "title": "Share layer",
