@@ -31,7 +31,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.view.panel.RoutingLegendTreeModel',
         'Koala.view.window.MetadataInfo',
         'Koala.view.window.CloneWindow',
-        'Koala.view.window.FeatureGridWindow'
+        'Koala.view.window.FeatureGridWindow',
+        'Koala.view.window.ShareWindow'
     ],
 
     controller: 'k-panel-routing-legendtree',
@@ -165,6 +166,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var allowRemoval = olLayer.get('allowRemoval') || false;
             var allowClone = olLayer.get('allowClone') || false;
             var allowEdit = olLayer.get('allowEdit') || false;
+            var allowShare = olLayer.get('persisted') ||
+                olLayer.metadata.layerConfig.olProperties.persisted;
             var allowStyle = olLayer instanceof ol.layer.Vector &&
                     !olLayer.get('disableStyling');
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
@@ -177,6 +180,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var cloneBtn = comp.down('button[name="clone"]');
             var editBtn = comp.down('button[name="edit"]');
             var styleBtn = comp.down('button[name="style"]');
+            var share = comp.down('button[name=share]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
 
@@ -210,6 +214,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             }
             if (legend) {
                 legend.setVisible(hasLegend);
+            }
+            if (share) {
+                share.setVisible(allowShare);
             }
         },
 
@@ -269,6 +276,17 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     adjustedMetadata, layer
                 );
             }
+        },
+
+        /**
+         * Handle clicks on share buttons.
+         * @param  {Ext.button.Button} btn the share button
+         */
+        shareHandler: function(btn) {
+            var layer = btn.layerRec.data;
+            Ext.create('Koala.view.window.ShareWindow', {
+                sourceLayer: layer
+            });
         },
 
         shortInfoHandler: function(btn) {
@@ -504,6 +522,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 name: 'style',
                 glyph: 'xf1fc@FontAwesome',
                 tooltip: 'Layerstil anpassen'
+                // We'll assign a handler to handle clicks here once the
+                // class is defined and we can access the static methods
+            }, {
+                xtype: 'button',
+                name: 'share',
+                glyph: 'xf064@FontAwesome',
+                tooltip: 'Freigeben'
                 // We'll assign a handler to handle clicks here once the
                 // class is defined and we can access the static methods
             }, {
@@ -1126,6 +1151,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var editBtnCfg = cls.findByProp(menuItems, 'name', 'edit');
     var styleBtnCfg = cls.findByProp(menuItems, 'name', 'style');
     var opacitySliderCfg = cls.findByProp(menuItems, 'name', 'opacityChange');
+    var shareCfg = cls.findByProp(menuItems, 'name', 'share');
 
     if (layerMenuCfg) {
         layerMenuCfg.listeners.beforerender = cls.reorganizeMenu;
@@ -1150,6 +1176,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     }
     if (styleBtnCfg) {
         styleBtnCfg.handler = cls.styleHandler;
+    }
+    if (shareCfg) {
+        shareCfg.handler = cls.shareHandler;
     }
     if (opacitySliderCfg) {
         opacitySliderCfg.listeners.change = cls.sliderChangeHandler;

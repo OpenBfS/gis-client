@@ -133,6 +133,21 @@ Ext.define('Koala.util.AppContext', {
                 val = ctx.data.merge[key];
             }
             return val;
+        },
+
+        /**
+         * Returns a store from the app context's user roles.
+         * @return {Ext.data.Store} the store with the roles
+         */
+        getRolesStore: function() {
+            var context = Koala.util.AppContext.getAppContext().data.merge;
+            var roles = Ext.Array.map(context.imis_user.userroles, function(role) {
+                return {role: role};
+            });
+            return Ext.create('Ext.data.Store', {
+                fields: ['role'],
+                data: roles
+            });
         }
     }
 });

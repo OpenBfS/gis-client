@@ -108,6 +108,29 @@ Ext.define('Koala.util.Geoserver', {
                 candidates,
                 baseUrls
             );
+        },
+
+        /**
+         * Deletes a layer from the geoserver.
+         * @param  {ol.layer.Vector} layer a layer to delete
+         * @return {Ext.Promise} a promise that resolves once the layer has
+         * been deleted
+         */
+        deleteLayer: function(layer) {
+            var config = Koala.util.AppContext.getAppContext().data.merge.import;
+            var props = layer.metadata.layerConfig.olProperties;
+            var baseUrl;
+            Ext.iterate(config, function(idx, item) {
+                if (item.workspace === props.workspace) {
+                    baseUrl = item.baseUrl;
+                    return false;
+                }
+            });
+            var name = props.param_typename;
+            return Ext.Ajax.request({
+                url: baseUrl + 'rest/layers/' + name,
+                method: 'DELETE'
+            });
         }
 
     }

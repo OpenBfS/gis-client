@@ -64,6 +64,7 @@ Ext.define('Koala.util.Clone', {
                     );
                 }
             });
+            return targetLayerPromise;
         },
 
         /**

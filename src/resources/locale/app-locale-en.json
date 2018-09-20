@@ -638,6 +638,17 @@
             }
         }
     },
+    "Koala.view.window.ShareWindow": {
+        "config": {
+            "data": {
+                "title": "Share layer",
+                "layerNameLabel": "Name of the new layer",
+                "okButtonLabel": "Share",
+                "cancelButtonLabel": "Cancel",
+                "roleComboLabel": "Select role"
+            }
+        }
+    },
     "Koala.view.window.TimeSeriesWindow": {
         "config": {
             "data": {
