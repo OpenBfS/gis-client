@@ -136,6 +136,10 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                         sourceLayer: '{selectedFeaturesLayer}'
                     }
                 }, {
+                    xtype: 'button',
+                    glyph: 'xf160@FontAwesome',
+                    handler: 'multiEdit'
+                }, {
                     xtype: 'basigx-button-digitize-point',
                     map: map.map,
                     layer: me.layer,
