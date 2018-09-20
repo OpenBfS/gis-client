@@ -107,7 +107,7 @@ Ext.define('Koala.view.window.FeatureGridWindow', {
                 '<br>' + msg);
         };
 
-        var tree = Ext.ComponentQuery.query('basigx-panel-menu')[0];
+        var tree = Ext.ComponentQuery.query('k-treemenu')[0];
         var x = tree.getWidth() + 5;
         var header = Ext.ComponentQuery.query('k-panel-header')[0];
         var y = header.getHeight() + 5;
