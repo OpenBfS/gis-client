@@ -356,7 +356,8 @@
                 "labelUse": "…verwenden?",
                 "northArrow": "Nordpfeil",
                 "scalebar": "Massstabsleiste",
-                "unlinkTooltip": "Link entfernen"
+                "unlinkTooltip": "Link entfernen",
+                "templateBrokenMessage": "Das Template enthält Fehler und kann nicht verwendet werden."
             }
         }
     },
