@@ -37,9 +37,19 @@ Ext.define('Koala.view.window.ShareWindowController', {
      */
     shareHandler: function() {
         var view = this.getView();
+        var oldLayer = view.getSourceLayer();
         var name = view.down('textfield').getValue();
         var templateCombo = view.down('k-form-field-vectortemplatecombo');
         var uuid = templateCombo.getViewModel().get('templateUuid');
+        var oldRole;
+        var config = Koala.util.AppContext.getAppContext();
+        var oldWorkspace = oldLayer.metadata.layerConfig.olProperties.workspace;
+        config = config.data.merge.import;
+        Ext.iterate(config, function(key, item) {
+            if (oldWorkspace === item.workspace) {
+                oldRole = key;
+            }
+        });
 
         var promise = Koala.util.Clone.cloneLayer(
             view.getSourceLayer(),
@@ -61,8 +71,11 @@ Ext.define('Koala.view.window.ShareWindowController', {
                 undefined,
                 role
             );
-            Koala.util.Geoserver.deleteLayer(view.getSourceLayer());
+            Koala.util.Geoserver.deleteLayer(oldLayer);
+            Koala.util.Metadata.deleteMetadata(oldLayer.metadata.id, oldRole);
             view.close();
+            var map = BasiGX.view.component.Map.guess().getMap();
+            map.removeLayer(oldLayer);
         });
     }
 
