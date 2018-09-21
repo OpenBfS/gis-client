@@ -103,6 +103,8 @@ Ext.define('Koala.view.list.TreeMenuController', {
                         .query('k-button-timereference')[0];
                     timereferenceButton.toggle();
                     // Currently throws errors due to hover issues with ExtJS
+                    // if an over item is set, so we deselect it here
+                    sender.setOverItem(null);
                     viewModel.set('timereferenceValue', timereferenceButton.getCurrent());
                     viewModel.set('settingsExpanded', true);
                     break;
