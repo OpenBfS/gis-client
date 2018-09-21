@@ -29,9 +29,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.util.Layer',
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
+        'Koala.view.panel.FeatureGrid',
         'Koala.view.window.MetadataInfo',
         'Koala.view.window.CloneWindow',
-        'Koala.view.window.FeatureGridWindow',
         'Koala.view.window.ShareWindow'
     ],
 
@@ -359,16 +359,16 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
          */
         editHandler: function(btn) {
             var layer = btn.up().layerRec.data;
-            var wins = Ext.ComponentQuery.query('k-window-featuregrid');
-            if (wins.length > 0) {
-                Ext.each(wins, function(win) {
-                    win.destroy();
-                });
-            }
-            var gridWin = Ext.create('Koala.view.window.FeatureGridWindow', {
+            var northContainer = Ext.ComponentQuery.query('container[name=north-container]')[0];
+            var panel = Ext.create('Koala.view.panel.FeatureGrid', {
+                height: 400,
+                closable: true,
                 layer: layer
             });
-            gridWin.show();
+            northContainer.removeAll();
+            northContainer.add(panel);
+
+            northContainer.show();
         },
 
         styleHandler: function(btn) {

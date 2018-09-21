@@ -49,9 +49,7 @@ Ext.define('Koala.util.Chart', {
             }
             timeseriesContainer.getController().createOrUpdateChart(olLayer, olFeat);
 
-            if (!northContainer.isVisible()) {
-                northContainer.show();
-            }
+            northContainer.show();
             return timeseriesContainer;
         },
 

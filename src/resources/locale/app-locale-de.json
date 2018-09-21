@@ -456,6 +456,23 @@
             }
         }
     },
+    "Koala.view.panel.FeatureGrid": {
+        "config": {
+            "data": {
+                "downloadLayerText": "Daten herunterladen",
+                "geoJsonText": "GeoJSON",
+                "shapefileText": "Shape-Datei",
+                "saveLayerText": "Layer speichern",
+                "wfstSuccess": "Die Änderungen wurden erfolgreich gespeichert.<br>Objekte hinzugefügt: {0}<br>Objekte aktualisiert: {1}<br>Objekte gelöscht: {2}",
+                "wfstFailure": "Die Änderungen konnten nicht gespeichert werden, bitte probieren Sie es später erneut.",
+                "wfstLockFail": "Die WFS-T Lock Anfrage wurde abgelehnt",
+                "wfstLockSuccess": "Die WFS-T Lock Anfrage war erfolgreich. Der Lock läuft in {0} Minute(n) ab",
+                "wfstLockExpired": "Der WFS-T Lock ist abgelaufen",
+                "wfstLockButton": "WFS-T Lock",
+                "layerNotSavedYet": "Der Layer wurde noch nicht gespeichert"
+            }
+        }
+    },
     "Koala.view.panel.Header": {
         "config": {
             "data": {
