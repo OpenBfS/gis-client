@@ -384,6 +384,75 @@ Ext.define('Koala.util.Metadata', {
                 .then(this.updateMetadata.bind(this, context))
                 .then(this.fetchGroups.bind(this, context))
                 .then(this.setMetadataGroups.bind(this, context));
+        },
+
+        /**
+         * Returns a CSW constraint XML snippet filtering by uuid
+         * @param  {String} uuid the uuid to filter for
+         * @return {String}      the XML snippet
+         */
+        getCswFilter: function(uuid) {
+            return '<csw:Constraint version="1.1.0">' +
+                '<ogc:Filter>' +
+                '<ogc:PropertyIsEqualTo>' +
+                '<ogc:PropertyName>Identifier</ogc:PropertyName>' +
+                '<ogc:Literal>' + uuid + '</ogc:Literal>' +
+                '</ogc:PropertyIsEqualTo>' +
+                '</ogc:Filter>' +
+                '</csw:Constraint>';
+        },
+
+        /**
+         * Returns an XML string with a delete transaction request.
+         * @param  {String} uuid the uuid of the record to delete
+         * @return {String}      the request
+         */
+        getDeleteRequest: function(uuid) {
+            return '<csw:Transaction service="CSW" ' +
+               'version="2.0.2" ' +
+               'xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" ' +
+               'xmlns:gmd="http://www.isotc211.org/2005/gmd" ' +
+               'xmlns:gco="http://www.isotc211.org/2005/gco" ' +
+               'xmlns:ogc="http://www.opengis.net/ogc">' +
+               '<csw:Delete typeName="gmd:MD_Metadata">' +
+               this.getCswFilter(uuid) +
+               '</csw:Delete>' +
+               '</csw:Transaction>';
+        },
+
+        /**
+         * Performs the actual request to delete a metadata record.
+         * @param  {Object} context the context containing url, uuid etc.
+         * @return {Ext.Promise} the promise resolving once deleting is done
+         */
+        deleteRecord: function(context) {
+            var url = context.config.metadataBaseUrl;
+
+            return Ext.Ajax.request({
+                url: url + 'srv/eng/csw-publication',
+                method: 'POST',
+                xmlData: this.getDeleteRequest(context.uuid),
+                headers: {
+                    'Content-Type': 'application/xml'
+                }
+            });
+        },
+
+        /**
+         * Deletes a metadata record by uuid.
+         * @param  {String} uuid the uuid
+         * @param  {String} role the role the layer belongs to
+         * @return {Ext.Promise} the promise resolving once the record is
+         * deleted
+         */
+        deleteMetadata: function(uuid, role) {
+            var config = Koala.util.AppContext.getAppContext();
+            config = config.data.merge.import;
+            var context = {
+                config: config[role],
+                uuid: uuid
+            };
+            return this.deleteRecord(context);
         }
 
     }
