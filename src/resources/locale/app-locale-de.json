@@ -587,7 +587,8 @@
                 "maxFeaturesLabel": "Maximale Anzahl an Objekten",
                 "layerNameLabel": "Name des neuen Layers",
                 "okButtonLabel": "Klonen",
-                "cancelButtonLabel": "Abbrechen"
+                "cancelButtonLabel": "Abbrechen",
+                "emptyTemplateMessage": "Bitte wählen Sie eine Vorlage aus."
             }
         }
     },

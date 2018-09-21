@@ -586,7 +586,8 @@
                 "maxFeaturesLabel": "Maximum number of objects",
                 "layerNameLabel": "Name of the new layer",
                 "okButtonLabel": "Clone",
-                "cancelButtonLabel": "Cancel"
+                "cancelButtonLabel": "Cancel",
+                "emptyTemplateMessage": "Please select a template."
             }
         }
     },

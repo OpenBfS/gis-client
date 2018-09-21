@@ -26,6 +26,7 @@ Ext.define('Koala.view.window.CloneWindowModel', {
         maxFeaturesLabel: '',
         layerNameLabel: '',
         okButtonLabel: '',
-        cancelButtonLabel: ''
+        cancelButtonLabel: '',
+        emptyTemplateMessage: ''
     }
 });
