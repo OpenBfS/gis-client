@@ -179,9 +179,39 @@ Ext.define('Koala.plugin.Hover', {
                     }
                 }
             }, this, me.hoverLayerFilter, this);
+            me.highlightFeaturesInGrid(hoverFeatures);
             me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
         } else {
             return;
+        }
+    },
+
+    /**
+     * In case the feature grid is open, highlight hover features in the table.
+     * @param  {ol.Feature[]} features the highlighted features
+     */
+    highlightFeaturesInGrid: function(features) {
+        var grid = Ext.ComponentQuery.query('basigx-grid-featuregrid');
+        if (grid.length > 0) {
+            var gridView = grid[0].down('grid').getView();
+            var layer = grid[0].getLayer();
+            var layerFeatures = layer.getSource().getFeatures();
+            Ext.each(features, function(feature) {
+                var idx = -1;
+                // suboptimal: find features' index in grid by id
+                Ext.each(layerFeatures, function(layerFeature, index) {
+                    if (layerFeature.get('id') === feature.get('id')) {
+                        idx = index;
+                    }
+                });
+
+                if (idx >= 0) {
+                    var row = Ext.get(gridView.getRow(idx));
+                    if (row) {
+                        row.highlight();
+                    }
+                }
+            });
         }
     }
 
