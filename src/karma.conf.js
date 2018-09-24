@@ -22,6 +22,7 @@ module.exports = function(config) {
         'overrides/**/*js',
         'test/test-helper-functions.js',
         'test/turn-off-ext-logger.js',
+        'lib/d3-util/dist/main.js',
         // GeoExt
         {
             pattern: 'lib/GeoExt/src/**/*.js',

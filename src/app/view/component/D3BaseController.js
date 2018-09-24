@@ -501,44 +501,6 @@ Ext.define('Koala.view.component.D3BaseController', {
         this.tooltipCmp = Ext.create('Ext.tip.ToolTip');
     },
 
-    /**
-     * Draws the root <svg>-element into the <div>-element rendered by the
-     * Ext component.
-     */
-    drawSvgContainer: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BaseController;
-        var makeTranslate = staticMe.makeTranslate;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-
-        return;
-        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
-        var marginLeft = parseInt(chartMargin.left, 10);
-        var translate = makeTranslate(chartMargin.left, chartMargin.top);
-        var chartSize = me.getChartSize();
-        var scrollbarHeight = Ext.getScrollbarSize().height;
-
-        // Get the container view by its ID and append the SVG including an
-        // additional group element to it.
-        var container = d3.select(viewId);
-        if (this.type === 'component-d3barchart') {
-            container = container
-                .append('div')
-                .attr('style', 'overflow-x: auto; width: ' + chartSize[0] + 'px');
-        }
-        container
-            .append('svg')
-            .attr('viewBox', '0 0 ' + (chartSize[2] + marginLeft) + ' ' + (chartSize[1] - scrollbarHeight))
-            .attr('width', (chartSize[2] + marginLeft))
-            .attr('height', chartSize[1] - scrollbarHeight)
-            .append('g')
-            .attr('transform', translate);
-
-        var containerSvg = d3.select(viewId + ' svg');
-        me.containerSvg = containerSvg;
-    },
-
     appendBackground: function(node) {
         var view = this.getView();
         var chartSize = this.getChartSize();
@@ -592,67 +554,6 @@ Ext.define('Koala.view.component.D3BaseController', {
         var legSvg = d3.select(viewId + ' .' + CSS.LEGEND_CONTAINER + ' svg');
 
         me.legendSvg = legSvg;
-    },
-
-    /**
-     * Updates the size of the root SVG container to the current view size.
-     */
-    updateSvgContainerSize: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BaseController;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var chartSize = me.getChartSize();
-        var makeTranslate = staticMe.makeTranslate;
-        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
-        var marginLeft = parseInt(chartMargin.left, 10);
-        var translate = makeTranslate(chartMargin.left, chartMargin.top);
-        var scrollbarHeight = Ext.getScrollbarSize().height;
-
-        var svgContainer = d3.select(viewId + ' svg');
-        var svgGroup = d3.select(viewId + ' svg g');
-        var svgRect = d3.select(viewId + ' svg rect');
-        var viewSize = me.getViewSize();
-        var legWidth = me.calculateLegendWidth();
-        var barChartParent;
-        var svgContainerWidth = (chartSize[2] < chartSize[0]) ? chartSize[0] : chartSize[2];
-
-        svgContainer
-            .attr('viewBox', '0 0 ' + viewSize[0] + ' ' + viewSize[1])
-            .attr('width', viewSize[0])
-            .attr('height', viewSize[1]);
-
-        svgRect
-            .attr('width', chartSize[0])
-            .attr('height', chartSize[1]);
-
-        if (this.type === 'component-d3barchart') {
-            barChartParent = svgContainer.select(function() {
-                return this.parentNode;
-            });
-            barChartParent
-                .style('width', (viewSize[0] - legWidth) + 'px');
-
-            svgRect
-                .attr('height', chartSize[1] - scrollbarHeight)
-                .attr('width', chartSize[2] + marginLeft);
-            svgContainer
-                .attr('height', viewSize[1] - scrollbarHeight)
-                .attr('viewBox', '0 0 ' + (marginLeft + chartSize[2]) + ' ' + (viewSize[1] - scrollbarHeight))
-                .attr('width', (svgContainerWidth + marginLeft));
-        }
-
-        svgGroup
-            .attr('transform', translate);
-
-
-        // Re-register the zoom interaction if requested as the charts sizes
-        // may have changed.
-        if (view.getZoomEnabled()) {
-            me.createInteractions();
-            d3.select(viewId + ' svg > g > g.k-d3-shape-container')
-                .call(me.zoomInteraction);
-        }
     },
 
     /**

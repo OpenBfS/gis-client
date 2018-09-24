@@ -40,8 +40,6 @@ describe('Koala.view.component.D3ChartController', function() {
             expect(true).to.be(true);
             ctrl.redrawChart();
             expect(true).to.be(true);
-            ctrl.resetZoom();
-            expect(true).to.be(true);
             ctrl.deleteShapeContainerSvg();
             expect(true).to.be(true);
         });

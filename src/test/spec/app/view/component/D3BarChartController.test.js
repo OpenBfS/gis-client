@@ -48,16 +48,6 @@ describe('Koala.view.component.D3BarChartController', function() {
             expect(cmp.getId()).to.not.be(undefined);
         });
 
-        it('should not fail to draw a chart', function() {
-            sinon.stub(ctrl, 'createTooltip');
-            ctrl.data = [
-                [{
-                    a: 1
-                }]
-            ];
-            expect(ctrl.drawChart.bind(ctrl)).to.not.throwException();
-        });
-
         it('should not fail to redraw a chart', function() {
             expect(ctrl.redrawChart.bind(ctrl)).to.not.throwException();
         });

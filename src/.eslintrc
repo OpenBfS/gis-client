@@ -27,7 +27,8 @@
         "Uint8Array": true,
         "TextDecoder": true,
         "Papa": true,
-        "jsts": true
+        "jsts": true,
+        "D3Util": true
     },
     "rules": {
         "comma-dangle": 2,

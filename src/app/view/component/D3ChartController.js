@@ -145,6 +145,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             series.push({data: chartData, drawAxis: true, yAxisLabel: 'Zeitstempel'});
         });
 
+        var chartSize = this.getChartSize();
+
         this.chartRenderer = new D3Util.ChartRenderer({
             components: [
                 new D3Util.TimeseriesComponent({
@@ -153,57 +155,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                     zoomMode: 'transform'
                 })
             ],
-            size: [500, 500]
+            size: chartSize
         });
         this.chartRenderer.render(d3.select('#' + this.getView().getId()).node());
-        return;
-
-        me.createInteractions();
-        me.drawSvgContainer();
-        me.drawLegendContainer();
-
-        me.createScales();
-        me.createAxes();
-        me.createGridAxes();
-        me.createShapes();
-        me.createTooltip();
-        me.createAttachedSeriesAxes();
-        me.createAttachedSeriesShapes();
-
-        me.setDomainForScales();
-
-        me.drawTitle();
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-
-        function continueDrawing() {
-            me.drawLegend();
-            me.updateSvgContainerSize();
-            me.updateLegendContainerPosition();
-            me.drawAxes();
-            me.drawAttachedSeriesAxis();
-            me.drawGridAxes();
-            me.drawShapes();
-            me.registerKeyboardHandler(me);
-            Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
-            me.chartRendered = true;
-            // register zoom interaction if requested
-            if (view.getZoomEnabled()) {
-                var plot = d3.select(viewId + ' svg > g > g > svg');
-                plot.call(me.zoomInteraction);
-            }
-            // force redraw once to fix initial rendering problems for now.
-            // The whole rendering process should be streamlined/refactored
-            // so that there's no difference in 'drawing' and 'redrawing'!
-            me.redrawChart();
-        }
-
-        var promise = this.resolveDynamicTemplateUrls()
-            .then(continueDrawing);
-
-        if (promise.catch) {
-            promise.catch(continueDrawing);
-        }
     },
 
     /**
@@ -211,53 +165,6 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     redrawChart: function() {
         this.drawChart();
-        return;
-        var view = this.getView();
-        var viewId = '#' + view.getId();
-
-        var me = this;
-
-        if (me.chartRendered && (me.chartDataAvailable ||
-            view.getConfig().alwaysRenderChart)) {
-            // Reset the shapes and scales
-            me.shapes = [];
-            me.scales = {};
-
-            me.deleteShapeContainerSvg();
-
-            me.createScales();
-            me.createAxes();
-            // dirty hack to prevent jumping axis:
-            d3.select(viewId + ' .k-d3-axis-x').style('display', 'none');
-            me.createGridAxes();
-            me.createShapes();
-            me.createAttachedSeriesAxes();
-            me.createAttachedSeriesShapes();
-
-            me.updateLegendContainerPosition();
-            me.redrawLegend();
-
-            me.updateSvgContainerSize();
-
-            me.setDomainForScales();
-
-            me.redrawTitle();
-            me.redrawAxes();
-            me.redrawGridAxes();
-            me.drawShapes();
-
-            // Reset the zoom to the initial extent
-            if (view.getZoomEnabled()) {
-                me.createInteractions();
-                d3.select(viewId + ' svg > g > g.k-d3-shape-container')
-                    .call(me.zoomInteraction);
-            }
-            me.resetZoom();
-            window.setTimeout(function() {
-                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
-                d3.select(viewId + ' .k-d3-axis-x').style('display', 'block');
-            }, 300);
-        }
     },
 
     /**
@@ -295,14 +202,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
 
         return added;
-    },
-
-    /**
-     * [createInteractions description]
-     * @return {[type]} [description]
-     */
-    createInteractions: function() {
-        this.zoomInteraction = this.createZoomInteraction();
     },
 
     setDomainForScale: function(axis, scale, orient, config) {
@@ -415,302 +314,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             var scale = me.scales[orient];
             me.setDomainForScale(axis, scale, orient, config);
         });
-    },
-
-    /**
-     * Draws the root <svg>-element into the <div>-element rendered by the Ext
-     * component.
-     */
-    drawSvgContainer: function() {
-        var me = this;
-
-        me.callParent();
-    },
-
-    /**
-     * [createZoomInteraction description]
-     * @return {[type]} [description]
-     */
-    createZoomInteraction: function() {
-        var me = this;
-        var Const = Koala.util.ChartConstants;
-        var CSS = Const.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var gridConfig = view.getGrid();
-        var chartSize = me.getChartSize();
-
-        return d3.zoom()
-            .scaleExtent([1, 200])
-            .translateExtent([[0, 0], [chartSize[0], chartSize[1]]])
-            .extent([[0, 0], [chartSize[0], chartSize[1]]])
-            .on('zoom', function() {
-                var transform = d3.event.transform;
-                var shapeGroupSelectorTpl = viewId + ' .' + CSS.SHAPE_GROUP +
-                        '[idx=' + CSS.PREFIX_IDX_SHAPE_GROUP + '{0}]';
-
-                var allAxes = [];
-                Ext.iterate(me.axes, function(orient, axis) {
-                    allAxes.push({
-                        axis: axis,
-                        scale: me.scales[orient],
-                        orient: orient
-                    });
-                });
-                Ext.iterate(me.attachedSeriesAxes, function(axis, idx) {
-                    allAxes.push({
-                        axis: axis,
-                        scale: me.attachedSeriesScales[idx],
-                        orient: 'left',
-                        attachedSeriesIndex: idx + 1
-                    });
-                });
-
-                Ext.each(allAxes, function(axisConf) {
-                    var axis;
-                    var axisSelector = viewId + ' svg g.' + CSS.AXIS;
-                    var axisGenerator = axisConf.axis;
-                    var scaleGenerator = axisConf.scale;
-                    var orient = axisConf.orient;
-
-                    if (orient === 'top' || orient === 'bottom') {
-                        axis = d3.select(axisSelector + '.' + CSS.AXIS_X);
-                        var scaleX = transform.rescaleX(scaleGenerator);
-                        var all = me.shapes.slice();
-                        all = all.concat(me.attachedSeriesShapes);
-
-                        Ext.each(all, function(shape) {
-                            var shapeId = shape.config.id;
-                            var attachedSeriesNumber = shape.config.attachedSeriesNumber;
-                            if (attachedSeriesNumber) {
-                                shapeId = shapeId + '_' + attachedSeriesNumber;
-                            }
-                            var shapePathSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
-                                    ' .' + CSS.SHAPE_PATH;
-                            var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
-                                    ' .' + CSS.SHAPE_POINT_GROUP + ' circle';
-                            var shapeRectsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
-                                    ' .' + CSS.SHAPE_POINT_GROUP + ' rect';
-                            var shapePolygonsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
-                                    ' .' + CSS.SHAPE_POINT_GROUP + ' svg';
-
-                            d3.select(shapePathSelector)
-                                .attr('d', shape.shape.x(function(d) {
-                                    var val = d[shape.config.xField];
-                                    if (!val) {
-                                        return null;
-                                    }
-                                    return scaleX(d[shape.config.xField]);
-                                }));
-
-                            d3.selectAll(shapePointsSelector)
-                                .attr('cx', function(d) {
-                                    var val = d[shape.config.xField];
-                                    if (!val) {
-                                        return null;
-                                    }
-                                    return scaleX(val);
-                                });
-                            d3.selectAll(shapeRectsSelector)
-                                .filter(function(d) {
-                                    return Ext.isDefined(d.style) && d.style.type === 'rect';
-                                })
-                                .attr('x', function(d) {
-                                    var val = d[shape.config.xField];
-                                    if (!val) {
-                                        return null;
-                                    }
-                                    if (d.style && d.style.width) {
-                                        var w = Koala.util.String.coerce(d.style.width);
-                                        if (Ext.isNumber(w)) {
-                                            return scaleX(val) - w / 2;
-                                        }
-                                    }
-                                    return scaleX(val);
-                                });
-                            d3.selectAll(shapePolygonsSelector)
-                                .filter(function(d) {
-                                    return Ext.isDefined(d.style) && d.style.type === 'star';
-                                })
-                                .attr('x', function(d) {
-                                    var val = d[shape.config.xField];
-                                    if (!val) {
-                                        return null;
-                                    }
-                                    if (d.style && d.style.radius) {
-                                        var w = Koala.util.String.coerce(d.style.radius);
-                                        if (Ext.isNumber(w)) {
-                                            return scaleX(val) - w;
-                                        }
-                                    }
-                                    return scaleX(val);
-                                });
-                        });
-
-                        axis.call(axisGenerator.scale(scaleX));
-
-                        me.currentDateRange.min = scaleX.invert(0);
-                        var chartWidth = me.getChartSize()[0];
-                        me.currentDateRange.max = scaleX.invert(chartWidth);
-
-                        if (view.getAxes()[orient].rotateXAxisLabel) {
-                            d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_X + ' > g > text')
-                                .attr('transform', 'rotate(-55)')
-                                .attr('dx', '-10px')
-                                .attr('dy', '1px')
-                                .style('text-anchor', 'end');
-                        }
-
-                    } else if (me.zoomYAxisBtnPressed && (orient === 'left' || orient === 'right')) {
-                        var curSelector = axisSelector + '.' + CSS.AXIS_Y;
-                        if (axisConf.attachedSeriesIndex !== undefined) {
-                            curSelector += '_' + axisConf.attachedSeriesIndex;
-                        }
-                        axis = d3.select(curSelector);
-                        var scaleY = transform.rescaleY(scaleGenerator);
-
-                        if (axisConf.attachedSeriesIndex === undefined) {
-                            all = me.shapes.slice();
-                        } else {
-                            all = me.attachedSeriesShapes[axisConf.attachedSeriesIndex];
-                        }
-
-                        Ext.each(all, function(shape) {
-                            var shapeId = shape.config.id;
-                            var attachedSeriesNumber = shape.config.attachedSeriesNumber;
-                            if (attachedSeriesNumber) {
-                                shapeId = shapeId + '_' + attachedSeriesNumber;
-                            }
-                            var shapePathSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
-                                    ' .' + CSS.SHAPE_PATH;
-                            var shapePointsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
-                                    ' .' + CSS.SHAPE_POINT_GROUP + ' circle';
-                            var shapeRectsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
-                                    ' .' + CSS.SHAPE_POINT_GROUP + ' rect';
-                            var shapePolygonsSelector = Ext.String.format(shapeGroupSelectorTpl, shapeId) +
-                                    ' .' + CSS.SHAPE_POINT_GROUP + ' svg';
-
-                            d3.select(shapePathSelector)
-                                .attr('d', shape.shape.y(function(d) {
-                                    var val = d[shape.config.yField];
-                                    if (!(typeof(val) === 'number')) {
-                                        return null;
-                                    }
-                                    if (d.drawAsZero) {
-                                        val = d.minValue;
-                                    }
-                                    return scaleY(val);
-                                }));
-
-                            d3.selectAll(shapePointsSelector)
-                                .attr('cy', function(d) {
-                                    var val = d[shape.config.yField];
-                                    if (!(typeof(val) === 'number')) {
-                                        return null;
-                                    }
-                                    if (d.drawAsZero) {
-                                        val = d.minValue;
-                                    }
-                                    return scaleY(val);
-                                });
-                            d3.selectAll(shapeRectsSelector)
-                                .filter(function(d) {
-                                    return Ext.isDefined(d.style) && d.style.type === 'rect';
-                                })
-                                .attr('y', function(d) {
-                                    var val = d[shape.config.yField];
-                                    if (!(typeof(val) === 'number')) {
-                                        return null;
-                                    }
-                                    if (d.drawAsZero) {
-                                        val = d.minValue;
-                                    }
-                                    if (d.style && d.style.height) {
-                                        var h = Koala.util.String.coerce(d.style.height);
-                                        if (Ext.isNumber(h)) {
-                                            return scaleY(val) - h / 2;
-                                        }
-                                    }
-                                    return scaleY(val);
-                                });
-                            d3.selectAll(shapePolygonsSelector)
-                                .filter(function(d) {
-                                    return Ext.isDefined(d.style) && d.style.type === 'star';
-                                })
-                                .attr('y', function(d) {
-                                    var val = d[shape.config.yField];
-                                    if (!(typeof(val) === 'number')) {
-                                        return null;
-                                    }
-                                    if (d.drawAsZero) {
-                                        val = d.minValue;
-                                    }
-                                    if (d.style && d.style.radius) {
-                                        var w = Koala.util.String.coerce(d.style.radius);
-                                        if (Ext.isNumber(w)) {
-                                            return scaleY(val) - w;
-                                        }
-                                    }
-                                    return scaleY(val);
-                                });
-                        });
-
-                        axis.call(axisGenerator.scale(scaleY));
-
-                        if (view.getAxes()[orient].rotateYAxisLabel) {
-                            d3.selectAll(viewId + ' .' + CSS.AXIS + '.' + CSS.AXIS_Y + ' > g > text')
-                                .attr('transform', 'rotate(-55)')
-                                .attr('dx', '-10px')
-                                .attr('dy', '1px')
-                                .style('text-anchor', 'end');
-                        }
-                    }
-                });
-
-                if (gridConfig.show) {
-                    Ext.iterate(me.gridAxes, function(orient) {
-                        var axis;
-                        var axisSelector = viewId + ' svg g.' + CSS.GRID;
-                        var axisGenerator = me.gridAxes[orient];
-                        var scaleGenerator = me.scales[orient];
-
-                        if (orient === 'top' || orient === 'bottom') {
-                            axis = d3.select(axisSelector + '.' + CSS.GRID_X);
-                            axis.call(axisGenerator.scale(
-                                d3.event.transform.rescaleX(scaleGenerator)));
-                        } else if (me.zoomYAxisBtnPressed &&
-                          (orient === 'left' || orient === 'right')) {
-                            axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
-                            axis.call(axisGenerator.scale(
-                                d3.event.transform.rescaleY(scaleGenerator)));
-                        }
-                    });
-
-                    d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
-                        .style('stroke-width', gridConfig.width || 1)
-                        .style('stroke', gridConfig.color || '#d3d3d3')
-                        .style('stroke-opacity', gridConfig.opacity || 0.7);
-                }
-                Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
-            });
-    },
-
-    /**
-     * Zoom to another time interval on the x axis.
-     * @param  {moment} d0 left boundary
-     * @param  {moment} d1 right boundary
-     */
-    zoomToInterval: function(d0, d1) {
-        var me = this;
-        var chartId = '#' + me.getView().getId() + ' svg';
-        var svg = d3.select(chartId);
-        var width = me.getChartSize()[0];
-        var x = me.scales['bottom'];
-        svg.call(me.zoomInteraction)
-            .call(me.zoomInteraction.transform, d3.zoomIdentity
-                .scale(width / (x(d1) - x(d0)))
-                .translate(-x(d0), 0)
-            );
     },
 
     /**
@@ -1349,19 +952,6 @@ Ext.define('Koala.view.component.D3ChartController', {
                         .scale(transform.k)
                 );
         }
-    },
-
-    /**
-     * Reset the zoom status to the initial zoom (after changing the data).
-     */
-    resetZoom: function() {
-        var me = this;
-        var viewId = '#' + me.getView().getId();
-        var plot = d3.select(viewId + ' svg');
-        var bak = this.zoomYAxisBtnPressed;
-        this.zoomYAxisBtnPressed = true;
-        this.zoomInteraction.scaleTo(plot, 1);
-        this.zoomYAxisBtnPressed = bak;
     },
 
     resolveDynamicTemplateUrls: function() {
