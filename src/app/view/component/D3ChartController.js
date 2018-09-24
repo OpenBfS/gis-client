@@ -136,6 +136,28 @@ Ext.define('Koala.view.component.D3ChartController', {
             min: null,
             max: null
         };
+
+        var series = [];
+        Ext.iterate(this.data, function(id, data) {
+            var chartData = Ext.Array.map(data, function(item) {
+                return [item.end_measure.unix() * 1000, item.value];
+            });
+            series.push({data: chartData, drawAxis: true, yAxisLabel: 'Zeitstempel'});
+        });
+
+        this.chartRenderer = new D3Util.ChartRenderer({
+            components: [
+                new D3Util.TimeseriesComponent({
+                    series: series,
+                    scaleX: 'time',
+                    zoomMode: 'transform'
+                })
+            ],
+            size: [500, 500]
+        });
+        this.chartRenderer.render(d3.select('#' + this.getView().getId()).node());
+        return;
+
         me.createInteractions();
         me.drawSvgContainer();
         me.drawLegendContainer();
@@ -188,9 +210,12 @@ Ext.define('Koala.view.component.D3ChartController', {
      *
      */
     redrawChart: function() {
-        var me = this;
-        var view = me.getView();
+        this.drawChart();
+        return;
+        var view = this.getView();
         var viewId = '#' + view.getId();
+
+        var me = this;
 
         if (me.chartRendered && (me.chartDataAvailable ||
             view.getConfig().alwaysRenderChart)) {
@@ -2064,6 +2089,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (!view) {
             return;
         }
+
         var targetLayer = view.getTargetLayer();
         var startDate = view.getStartDate().clone();
         var endDate = view.getEndDate().clone();
@@ -2109,7 +2135,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 view.setLoading(false);
             }
             me.fireEvent('chartdataprepared');
-            me.redrawAxes();
+            // me.redrawAxes();
+            this.drawChart();
         }
     },
 

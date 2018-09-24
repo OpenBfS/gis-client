@@ -511,6 +511,8 @@ Ext.define('Koala.view.component.D3BaseController', {
         var makeTranslate = staticMe.makeTranslate;
         var view = me.getView();
         var viewId = '#' + view.getId();
+
+        return;
         var chartMargin = view.getChartMargin() || me.defaultChartMargin;
         var marginLeft = parseInt(chartMargin.left, 10);
         var translate = makeTranslate(chartMargin.left, chartMargin.top);

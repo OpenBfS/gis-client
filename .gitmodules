@@ -4,3 +4,6 @@
 [submodule "src/lib/GeoExt"]
 	path = src/lib/GeoExt
 	url = https://github.com/geoext/geoext3.git
+[submodule "src/lib/d3-util"]
+	path = src/lib/d3-util
+	url = git@github.com:terrestris/d3-util.git

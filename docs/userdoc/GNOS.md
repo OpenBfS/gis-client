@@ -1214,7 +1214,7 @@ Sollen die Label an der X-Achse um 45 Grad rotiert werden?
 | Default-Wert         | false |
 | Beispiel             | true |
 
-**chartWidth
+**chartWidth**
 
 Breite des Charts in Pixel
 
@@ -1225,7 +1225,7 @@ Breite des Charts in Pixel
 | Default-Wert         |  |
 | Beispiel             | 500 |
 
-**chartHeight
+**chartHeight**
 
 Höhe des Charts in Pixel
 
@@ -1295,17 +1295,6 @@ Das Darstellungsformat der Kurve.
 | Default-Wert         | line |
 | Beispiel             | area |
 
-**drawPointCondition**
-
-JavaScript-Funktion, die entscheidet, ob ein Punkt in der Zeitreihe gezeichnet wird oder nicht
-
-| Typ | gco:CharacterString  |
-|---------------------:|:----|
-| Erlaubt Wertemenge   | eval:(anyValidFunction) returning boolean|
-| Obligatorisch        | &#10799; |
-| Default-Wert         |  |
-| Beispiel             | eval:(function(){return function(obj){ if (obj.detection_limit==='<') { return false; } else { return true; } } }()) |
-
 **showTimeseriesGrid**
 
 Falls true, wird ein Tab mit den Messdaten in einem Ext.grid angezeigt.
@@ -1352,39 +1341,6 @@ Initiale Breite der Säulen in Pixel.
 | Obligatorisch        | &#10799; |
 | Default-Wert         | 10 |
 | Beispiel             | 20 |
-
-**chartFieldSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
-
-Liste der Attributspalten mit Werten für das Chart
-
-| Typ | gco:CharacterString  |
-|---------------------:|:----|
-| Erlaubt Wertemenge   | Komma separierte Liste von Attributname |
-| Obligatorisch        | &#10003; |
-| Default-Wert         |  |
-| Beispiel             |  |
-
-**chartFieldDefaultsSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
-
-Der Wert der verwendet werden soll, wenn kein Wert für das Attribut existiert.
-
-| Typ | gco:CharacterString  |
-|---------------------:|:----|
-| Erlaubt Wertemenge   | Komma separierte Liste von Defaultwerten |
-| Obligatorisch        | &#10003; |
-| Default-Wert         |  |
-| Beispiel             |  |
-
-**chartFieldTitleSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
-
-Lesbare Variante, statt technischem Attributwert.
-
-| Typ | gco:CharacterString  |
-|---------------------:|:----|
-| Erlaubt Wertemenge   | Komma separierte Liste von Attributname  |
-| Obligatorisch        | &#10799; |
-| Default-Wert         | chartFieldSequence |
-| Beispiel             |  |
 
 **colorMapping**
 
