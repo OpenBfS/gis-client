@@ -40,14 +40,14 @@ test:
   only:
     - branches
   script:
-    - npm install
-    - npm test
-    - npm run combine-coverages
-    - npm run coverage-summary
     - cd lib/d3-util
     - npm install
     - npm run build:dist
     - cd ../..
+    - npm install
+    - npm test
+    - npm run combine-coverages
+    - npm run coverage-summary
 
 deploy:
   stage: deploy
