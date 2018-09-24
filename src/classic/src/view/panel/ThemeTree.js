@@ -125,12 +125,8 @@ Ext.define('Koala.view.panel.ThemeTree', {
     },
 
     initComponent: function() {
-        this.rebuildTree();
-
-        var store = Ext.create('Ext.data.TreeStore', {
-        });
-        this.store = store;
         this.callParent();
+        this.rebuildTree();
     },
 
     rebuildTree: function() {
@@ -160,7 +156,13 @@ Ext.define('Koala.view.panel.ThemeTree', {
                                     children: config,
                                     isImportNode: true
                                 });
-                                me.getStore().setData(data);
+                                var store = Ext.create('Ext.data.TreeStore', {
+                                    root: {
+                                        expanded: true,
+                                        children: data
+                                    }
+                                });
+                                me.reconfigure(store);
                                 me.getViewModel().bind({
                                     bindTo: '{importedLayersTitle}'
                                 }, function(title) {
@@ -168,7 +170,13 @@ Ext.define('Koala.view.panel.ThemeTree', {
                                         return;
                                     }
                                     data[data.length - 1].text = title;
-                                    me.getStore().setData(data);
+                                    store = Ext.create('Ext.data.TreeStore', {
+                                        root: {
+                                            expanded: true,
+                                            children: data
+                                        }
+                                    });
+                                    me.reconfigure(store);
                                 });
                             });
                     });
