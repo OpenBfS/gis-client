@@ -35,11 +35,16 @@ Ext.define('Koala.view.window.CloneWindowController', {
      */
     cloneHandler: function() {
         var view = this.getView();
+        var viewModel = view.getViewModel();
         var name = view.down('textfield').getValue();
         var maxFeatures = view.down('numberfield').getValue();
         var useBbox = view.down('checkbox').getValue();
         var templateCombo = view.down('k-form-field-vectortemplatecombo');
         var uuid = templateCombo.getViewModel().get('templateUuid');
+        if (!uuid) {
+            Ext.Msg.alert(viewModel.get('emptyTemplateMessage'));
+            return;
+        }
         var bbox;
         if (useBbox) {
             var map = BasiGX.util.Map.getMapComponent().map;

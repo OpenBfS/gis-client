@@ -51,7 +51,7 @@ Ext.define('Koala.view.main.MainModel', {
             }
             return true;
         },
-        treeMenuIconCls: function(get){
+        treeMenuIconCls: function(get) {
             var isMicro = get('treeMenuMicro');
             return isMicro ? 'x-fa fa-chevron-right' : 'x-fa fa-chevron-left';
         }
