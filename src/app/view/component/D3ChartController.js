@@ -131,18 +131,36 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
 
         this.extractAttachedSeriesAxisConfig();
+        var config = this.getView().getConfig();
 
         me.currentDateRange = {
             min: null,
             max: null
         };
 
+        var colors = config.targetLayer.metadata.layerConfig
+            .timeSeriesChartProperties.colorSequence.split(',');
         var series = [];
+        var legends = [];
+        var index = 0;
         Ext.iterate(this.data, function(id, data) {
             var chartData = Ext.Array.map(data, function(item) {
-                return [item.end_measure.unix() * 1000, item.value];
+                if (!item[config.axes.bottom.dataIndex]) {
+                    return undefined;
+                }
+                return [item[config.axes.bottom.dataIndex].unix() * 1000, item[config.axes.left.dataIndex]];
             });
-            series.push({data: chartData, drawAxis: true, yAxisLabel: 'Zeitstempel'});
+            var seriesConfig = {
+                data: chartData,
+                drawAxis: true,
+                yAxisLabel: config.axes.left.label
+            };
+            if (colors[index]) {
+                seriesConfig.color = colors[index];
+                ++index;
+            }
+            series.push(seriesConfig);
+            legends.push({type: 'line', color: seriesConfig.color});
         });
 
         var chartSize = this.getChartSize();
@@ -153,6 +171,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                     series: series,
                     scaleX: 'time',
                     zoomMode: 'transform'
+                }),
+                new D3Util.LegendComponent({
+                    items: legends
                 })
             ],
             size: chartSize
