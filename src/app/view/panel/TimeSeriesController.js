@@ -433,33 +433,39 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
     onExportAsImageClicked: function(btn) {
         var chart = btn.up('[name="chart-composition"]').down('d3-chart');
         var chartCtrl = chart.getController();
-        var cb = function(dataUri) {
-            download(dataUri, 'chart.png', 'image/png');
-        };
-        var cbScope = this;
-        chartCtrl.chartToDataUriAndThen(cb, cbScope);
+        chartCtrl
+            .showScaleWindow()
+            .then(function(scale) {
+                return chartCtrl.chartToDataUri(scale, false);
+            })
+            .then(function(dataUri) {
+                download(dataUri, 'chart.png', 'image/png');
+            });
     },
 
     onPrintChartClicked: function(btn) {
         var chart = btn.up('[name="chart-composition"]').down('d3-chart');
         var chartCtrl = chart.getController();
-        var cb = function(dataUri) {
-            var printWin = Ext.create({
-                xtype: 'k-panel-print',
-                chartPrint: true,
-                chart: dataUri,
-                irixPrint: true,
-                autoShow: false
-            });
-            printWin.down('k-form-print').irixFieldsetLoaded.then(function() {
-                var fieldset = printWin.down('k-form-irixfieldset');
-                fieldset.irixFieldsetLoaded.then(function() {
-                    printWin.show();
+        chartCtrl
+            .showScaleWindow()
+            .then(function(scale) {
+                return chartCtrl.chartToDataUri(scale, false);
+            })
+            .then(function(dataUri) {
+                var printWin = Ext.create({
+                    xtype: 'k-panel-print',
+                    chartPrint: true,
+                    chart: dataUri,
+                    irixPrint: true,
+                    autoShow: false
+                });
+                printWin.down('k-form-print').irixFieldsetLoaded.then(function() {
+                    var fieldset = printWin.down('k-form-irixfieldset');
+                    fieldset.irixFieldsetLoaded.then(function() {
+                        printWin.show();
+                    });
                 });
             });
-        };
-        var cbScope = this;
-        chartCtrl.chartToDataUriAndThen(cb, cbScope);
     },
 
     /**

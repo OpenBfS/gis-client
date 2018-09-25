@@ -457,22 +457,26 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
     showIrixPrintDialog: function(chart) {
         var chartCtrl = chart.getController();
-        var cb = function(dataUri) {
-            var printWin = Ext.create({
-                xtype: 'k-window-print',
-                chartPrint: true,
-                chart: dataUri,
-                irixPrint: true
-            });
-            printWin.down('k-form-print').irixFieldsetLoaded.then(function() {
-                var fieldset = printWin.down('k-form-irixfieldset');
-                fieldset.irixFieldsetLoaded.then(function() {
-                    printWin.show();
+
+        chartCtrl
+            .showScaleWindow()
+            .then(function(scale) {
+                return chartCtrl.chartToDataUri(scale, false);
+            })
+            .then(function(dataUri) {
+                var printWin = Ext.create({
+                    xtype: 'k-window-print',
+                    chartPrint: true,
+                    chart: dataUri,
+                    irixPrint: true
+                });
+                printWin.down('k-form-print').irixFieldsetLoaded.then(function() {
+                    var fieldset = printWin.down('k-form-irixfieldset');
+                    fieldset.irixFieldsetLoaded.then(function() {
+                        printWin.show();
+                    });
                 });
             });
-        };
-        var cbScope = this;
-        chartCtrl.chartToDataUriAndThen(cb, cbScope);
     },
 
     /**
@@ -760,11 +764,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
      *          The associated chartion]
      */
     exportToPng: function(chart) {
-        var cb = function(dataUri) {
-            download(dataUri, 'chart.png', 'image/png');
-        };
         var chartCtrl = chart.getController();
-        chartCtrl.chartToDataUriAndThen(cb);
+        chartCtrl
+            .showScaleWindow()
+            .then(function(scale) {
+                return chartCtrl.chartToDataUri(scale, false);
+            })
+            .then(function(dataUri) {
+                download(dataUri, 'chart.png', 'image/png');
+            });
     },
 
     /**
