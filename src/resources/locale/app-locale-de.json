@@ -172,7 +172,7 @@
                 "quoteText": "Anführungszeichen (\" \") verwenden",
                 "okText": "Ok",
                 "cancelText": "Abbrechen",
-                "magnificationFactor": "Vergrößerungsfaktor"
+                "magnification": "Vergrößerung"
             }
         }
     },

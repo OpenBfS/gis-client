@@ -972,24 +972,28 @@ Ext.define('Koala.view.component.D3BaseController', {
      */
     showScaleWindow: function() {
         var viewModel = this.getViewModel();
-        var magnificationFactor = viewModel.get('magnificationFactor');
+        var magnification = viewModel.get('magnification');
         var okText = viewModel.get('okText');
         var cancelText = viewModel.get('cancelText');
         return new Ext.Promise(function(resolve) {
             Ext.create('Ext.window.Window', {
-                title: magnificationFactor,
+                title: magnification,
                 autoShow: true,
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'combobox',
                     value: 1,
-                    minValue: 1,
-                    maxValue: 10
+                    store: [
+                        [1, 'original'],
+                        [2, '2 fach'],
+                        [3, '3 fach'],
+                        [4, '4 fach']
+                    ]
                 }],
                 buttons: [{
                     text: okText,
                     handler: function() {
                         var win = this.up('window');
-                        var scale = win.down('numberfield').getValue();
+                        var scale = win.down('combobox').getValue();
                         win.close();
                         resolve(scale);
                     }
