@@ -161,15 +161,18 @@ Ext.define('Koala.view.window.BarChartController', {
     onPrintChartClicked: function(button) {
         var chart = button.up('[name="chart-composition"]').down('d3-barchart');
         var chartCtrl = chart.getController();
-        var cb = function(dataUri) {
-            Ext.create({
-                xtype: 'k-window-print',
-                chartPrint: true,
-                chart: dataUri
-            }).show();
-        };
-        var cbScope = this;
-        chartCtrl.chartToDataUriAndThen(cb, cbScope);
+        chartCtrl
+            .showScaleWindow()
+            .then(function(scale) {
+                return chartCtrl.chartToDataUri(scale, true);
+            })
+            .then(function(dataUri) {
+                Ext.create({
+                    xtype: 'k-window-print',
+                    chartPrint: true,
+                    chart: dataUri
+                }).show();
+            });
     },
 
     onUncertaintyCheckChange: function(checkbox, checked) {
@@ -186,11 +189,14 @@ Ext.define('Koala.view.window.BarChartController', {
     onExportAsImageClicked: function(btn) {
         var chart = btn.up('[name="chart-composition"]').down('d3-barchart');
         var chartCtrl = chart.getController();
-        var cb = function(dataUri) {
-            download(dataUri, 'chart.png', 'image/png');
-        };
-        var cbScope = this;
-        chartCtrl.chartToDataUriAndThen(cb, cbScope);
+        chartCtrl
+            .showScaleWindow()
+            .then(function(scale) {
+                return chartCtrl.chartToDataUri(scale, true);
+            })
+            .then(function(dataUri) {
+                download(dataUri, 'chart.png', 'image/png');
+            });
     },
 
     /**

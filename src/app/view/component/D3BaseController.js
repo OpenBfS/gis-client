@@ -968,72 +968,120 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
+     *
+     */
+    showScaleWindow: function() {
+        var viewModel = this.getViewModel();
+        var magnification = viewModel.get('magnification');
+        var okText = viewModel.get('okText');
+        var cancelText = viewModel.get('cancelText');
+        var original = viewModel.get('original');
+        var twofold = viewModel.get('twofold');
+        var threefold = viewModel.get('threefold');
+        var fourfold = viewModel.get('fourfold');
+        return new Ext.Promise(function(resolve) {
+            Ext.create('Ext.window.Window', {
+                title: magnification,
+                autoShow: true,
+                items: [{
+                    xtype: 'combobox',
+                    value: 1,
+                    store: [
+                        [1, original],
+                        [2, twofold],
+                        [3, threefold],
+                        [4, fourfold]
+                    ]
+                }],
+                buttons: [{
+                    text: okText,
+                    handler: function() {
+                        var win = this.up('window');
+                        var scale = win.down('combobox').getValue();
+                        win.close();
+                        resolve(scale);
+                    }
+                }, {
+                    text: cancelText,
+                    handler: function() {
+                        var win = this.up('window');
+                        win.close();
+                    }
+                }]
+            });
+        });
+    },
+
+    /**
      * Exports the chart to a dataUri and calls the specified callback
      * function. The first argument of the callback function is the dataUri.
      *
-     * @param {Function} cb The callbackfunction. Receives the dataUri. required
-     * @param {Object} cbScope The scope for the callback function.
+     * @param {number} scale The scale of the resulting image.
+     * @param {boolean} isBarChart Wiehter it is a barchart or not
      * @param {DOMString} outputFormat An image outputFormat like 'image/bmp'
      *                                 default is 'image/png'.
      */
-    chartToDataUriAndThen: function(cb, cbScope, outputFormat) {
-        if (!cb) {
-            Ext.logger.warn('Please pass a callback function as first argument.');
-            return false;
-        }
-        outputFormat = outputFormat || 'image/png';
-        cbScope = cbScope || this;
+    chartToDataUri: function(scale, isBarChart, outputFormat) {
         var chartNode = this.containerSvg.node();
-        d3.selectAll('.k-d3-hidden').style('display', 'none');
-        var chartSource = (new XMLSerializer()).serializeToString(chartNode);
-        var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
-            unescape(encodeURIComponent(chartSource)));
-
-        var chartImageWidth = chartNode.getBoundingClientRect().width;
-        var chartImageHeight = chartNode.getBoundingClientRect().height;
-        var chartImageObject = new Image(chartImageWidth, chartImageHeight);
-        chartImageObject.src = chartDataUri;
-
         var legendD3 = this.legendSvg;
-        var legendNode = legendD3.node();
-        var downloadIcons = legendD3.selectAll('.k-d3-download-icon');
-        var deleteIcons = legendD3.selectAll('.k-d3-delete-icon');
-        var colorIcons = legendD3.selectAll('.k-d3-color-icon');
-        downloadIcons.style('display', 'none');
-        deleteIcons.style('display', 'none');
-        colorIcons.style('display', 'none');
-        var legendSource = (new XMLSerializer()).serializeToString(legendNode);
-        var legendDataUri = 'data:image/svg+xml;base64,'+ btoa(
-            unescape(encodeURIComponent(legendSource)));
-        var legendImageWidth = legendNode.getBoundingClientRect().width;
-        var legendImageHeight = legendNode.getBoundingClientRect().height;
-        var legendImageObject = new Image(legendImageWidth, legendImageHeight);
-        legendImageObject.src = legendDataUri;
 
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        // TODO: harmonize barchart and timeseries width-calculation
-        canvas.width = (cbScope.type === 'component-d3barchart') ? chartImageWidth + legendImageWidth : chartImageWidth;
-        canvas.height = legendImageHeight > chartImageHeight ?
-            legendImageHeight : chartImageHeight;
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0,0,canvas.width,canvas.height);
+        return new Ext.Promise(function(resolve) {
+            outputFormat = outputFormat || 'image/png';
+            scale = scale || 1;
 
-        chartImageObject.onload = function() {
-            ctx.drawImage(chartImageObject, 0, 0, chartImageWidth,
-                chartImageHeight);
-            d3.selectAll('.k-d3-hidden').style('display', 'block');
-            legendImageObject.onload = function() {
-                ctx.drawImage(legendImageObject,
-                    // TODO: harmonize barchart and timeseries width-calculation
-                    (cbScope.type === 'component-d3barchart') ? chartImageWidth : (chartImageWidth + 10 - legendImageWidth), 0, legendImageWidth, legendImageHeight);
-                var dataUri = canvas.toDataURL(outputFormat);
-                downloadIcons.style('display', 'block');
-                deleteIcons.style('display', 'block');
-                colorIcons.style('display', 'block');
-                cb.call(cbScope, dataUri);
+            d3.selectAll('.k-d3-hidden').style('display', 'none');
+            var chartSource = (new XMLSerializer()).serializeToString(chartNode);
+            var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
+                unescape(encodeURIComponent(chartSource)));
+
+            var chartImageWidth = chartNode.getBoundingClientRect().width * scale;
+            var chartImageHeight = chartNode.getBoundingClientRect().height * scale;
+            var chartImageObject = new Image(chartImageWidth, chartImageHeight);
+            chartImageObject.src = chartDataUri;
+
+            var legendNode = legendD3.node();
+            var downloadIcons = legendD3.selectAll('.k-d3-download-icon');
+            var deleteIcons = legendD3.selectAll('.k-d3-delete-icon');
+            var colorIcons = legendD3.selectAll('.k-d3-color-icon');
+            downloadIcons.style('display', 'none');
+            deleteIcons.style('display', 'none');
+            colorIcons.style('display', 'none');
+            var legendSource = (new XMLSerializer()).serializeToString(legendNode);
+            var legendDataUri = 'data:image/svg+xml;base64,'+ btoa(
+                unescape(encodeURIComponent(legendSource)));
+            var legendImageWidth = legendNode.getBoundingClientRect().width * scale;
+            var legendImageHeight = legendNode.getBoundingClientRect().height * scale;
+            var legendImageObject = new Image(legendImageWidth, legendImageHeight);
+            legendImageObject.src = legendDataUri;
+
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            // TODO: harmonize barchart and timeseries width-calculation
+            canvas.width = isBarChart ? chartImageWidth + legendImageWidth : chartImageWidth;
+            canvas.height = legendImageHeight > chartImageHeight ? legendImageHeight : chartImageHeight;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+
+            chartImageObject.onload = function() {
+                ctx.drawImage(chartImageObject, 0, 0, chartImageWidth, chartImageHeight);
+                d3.selectAll('.k-d3-hidden').style('display', 'block');
+                legendImageObject.onload = function() {
+                    ctx.drawImage(
+                        legendImageObject,
+                        // TODO: harmonize barchart and timeseries width-calculation
+                        isBarChart ? chartImageWidth : (chartImageWidth + 10 - legendImageWidth),
+                        0,
+                        legendImageWidth,
+                        legendImageHeight
+                    );
+                    var dataUri = canvas.toDataURL(outputFormat);
+                    downloadIcons.style('display', 'block');
+                    deleteIcons.style('display', 'block');
+                    colorIcons.style('display', 'block');
+                    resolve(dataUri);
+                };
             };
-        };
+        });
     },
 
     /**

@@ -169,7 +169,14 @@
                 "downloadAllText": "Alle Stationen?",
                 "outputFormatText": "Format",
                 "delimiterText": "Trennzeichen",
-                "quoteText": "Anführungszeichen (\" \") verwenden"
+                "quoteText": "Anführungszeichen (\" \") verwenden",
+                "okText": "Ok",
+                "cancelText": "Abbrechen",
+                "magnification": "Vergrößerung",
+                "original": "Original",
+                "twofold": "2-fach",
+                "threefold": "3-fach",
+                "fourfold": "4-fach"
             }
         }
     },
