@@ -189,9 +189,9 @@
     "Koala.view.container.RedliningToolsContainer": {
         "config": {
             "data": {
-                "drawPointBtnTooltip": "Draw point",
-                "drawLinesBtnTooltip": "Draw line",
-                "drawPolygonsBtnTooltip": "Draw area",
+                "drawPointBtnTooltip": "Show coordinate",
+                "drawLinesBtnTooltip": "Measure line",
+                "drawPolygonsBtnTooltip": "Measure area",
                 "modifyObjectBtnTooltip": "Modify objects",
                 "deleteObjectBtnTooltip": "Delete objects",
                 "clearObjectsBtnTooltip": "Delete all",

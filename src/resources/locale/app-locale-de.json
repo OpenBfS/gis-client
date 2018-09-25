@@ -190,12 +190,12 @@
     "Koala.view.container.RedliningToolsContainer": {
         "config": {
             "data": {
-                "drawPointBtnTooltip": "Punkt zeichnen",
-                "drawLinesBtnTooltip": "Strecke zeichnen",
-                "drawPolygonsBtnTooltip": "Fläche zeichnen",
-                "modifyObjectBtnTooltip": "Zeichenobjekt modifzieren",
-                "deleteObjectBtnTooltip": "Zeichenobjekt löschen",
-                "clearObjectsBtnTooltip": "Alle Zeichenobjekte löschen",
+                "drawPointBtnTooltip": "Koordinate anzeigen",
+                "drawLinesBtnTooltip": "Strecke messen",
+                "drawPolygonsBtnTooltip": "Fläche messen",
+                "modifyObjectBtnTooltip": "Objekt modifzieren",
+                "deleteObjectBtnTooltip": "Objekt löschen",
+                "clearObjectsBtnTooltip": "Alle Objekte löschen",
                 "layerLegendName": "Bemaßungen"
             }
         }
