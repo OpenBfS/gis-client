@@ -971,9 +971,13 @@ Ext.define('Koala.view.component.D3BaseController', {
      *
      */
     showScaleWindow: function() {
+        var viewModel = this.getViewModel();
+        var magnificationFactor = viewModel.get('magnificationFactor');
+        var okText = viewModel.get('okText');
+        var cancelText = viewModel.get('cancelText');
         return new Ext.Promise(function(resolve) {
             Ext.create('Ext.window.Window', {
-                title: 'Vergrößerungsfaktor',
+                title: magnificationFactor,
                 autoShow: true,
                 items: [{
                     xtype: 'numberfield',
@@ -982,7 +986,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                     maxValue: 10
                 }],
                 buttons: [{
-                    text: 'Ok',
+                    text: okText,
                     handler: function() {
                         var win = this.up('window');
                         var scale = win.down('numberfield').getValue();
@@ -990,7 +994,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                         resolve(scale);
                     }
                 }, {
-                    text: 'Cancel',
+                    text: cancelText,
                     handler: function() {
                         var win = this.up('window');
                         win.close();

@@ -168,7 +168,10 @@
                 "downloadAllText": "all stations?",
                 "outputFormatText": "Format",
                 "delimiterText": "Delimiter",
-                "quoteText": "use double quotes (\" \")"
+                "quoteText": "use double quotes (\" \")",
+                "okText": "Ok",
+                "cancelText": "Cancel",
+                "magnificationFactor": "Magnification Factor"
             }
         }
     },
