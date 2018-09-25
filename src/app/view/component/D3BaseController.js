@@ -975,6 +975,10 @@ Ext.define('Koala.view.component.D3BaseController', {
         var magnification = viewModel.get('magnification');
         var okText = viewModel.get('okText');
         var cancelText = viewModel.get('cancelText');
+        var original = viewModel.get('original');
+        var twofold = viewModel.get('twofold');
+        var threefold = viewModel.get('threefold');
+        var fourfold = viewModel.get('fourfold');
         return new Ext.Promise(function(resolve) {
             Ext.create('Ext.window.Window', {
                 title: magnification,
@@ -983,10 +987,10 @@ Ext.define('Koala.view.component.D3BaseController', {
                     xtype: 'combobox',
                     value: 1,
                     store: [
-                        [1, 'original'],
-                        [2, '2 fach'],
-                        [3, '3 fach'],
-                        [4, '4 fach']
+                        [1, original],
+                        [2, twofold],
+                        [3, threefold],
+                        [4, fourfold]
                     ]
                 }],
                 buttons: [{

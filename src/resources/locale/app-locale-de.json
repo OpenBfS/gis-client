@@ -172,7 +172,11 @@
                 "quoteText": "Anführungszeichen (\" \") verwenden",
                 "okText": "Ok",
                 "cancelText": "Abbrechen",
-                "magnification": "Vergrößerung"
+                "magnification": "Vergrößerung",
+                "original": "Original",
+                "twofold": "2-fach",
+                "threefold": "3-fach",
+                "fourfold": "4-fach"
             }
         }
     },

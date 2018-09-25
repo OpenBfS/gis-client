@@ -171,7 +171,11 @@
                 "quoteText": "use double quotes (\" \")",
                 "okText": "Ok",
                 "cancelText": "Cancel",
-                "magnification": "Magnification"
+                "magnification": "Magnification",
+                "original": "Original",
+                "twofold": "2-fold",
+                "threefold": "3-fold",
+                "fourfold": "4-fold"
             }
         }
     },
