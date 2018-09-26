@@ -193,6 +193,20 @@
             }
         }
     },
+    "Koala.view.container.DrawToolsContainer": {
+        "config": {
+            "data": {
+                "pointTooltip": "Draw Point",
+                "lineTooltip": "Draw Line",
+                "polygonTooltip": "Draw Polygon",
+                "postItTooltip": "Add Note",
+                "postItWindowTitle": "Note",
+                "postItInputTooLongText": "The text you have entered is too long. Do you want to continue anyway?",
+                "modifyTooltip": "Modify Drawobject",
+                "deleteTooltip": "Delete Drawobject"
+            }
+        }
+    },
     "Koala.view.container.RedliningToolsContainer": {
         "config": {
             "data": {
