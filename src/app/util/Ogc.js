@@ -86,10 +86,12 @@ Ext.define('Koala.util.Ogc', {
          */
         getWfsFilter: function(station, startString, endString, timeField, layer) {
             var me = this;
+            var allFilters = [];
             var chartingMetadata = layer.get('timeSeriesChartProperties');
             var identifyField = chartingMetadata.featureIdentifyField || 'id';
             var timeRangeFilter = me.getPropertyIsBetweenFilter(
                 startString, endString, timeField);
+            allFilters.push(timeRangeFilter);
             var propertyFilter;
             var rodosProperty = Koala.util.Object.getPathStrOr(layer.metadata,
                 'layerConfig/olProperties/rodosLayer', false);
@@ -97,18 +99,22 @@ Ext.define('Koala.util.Ogc', {
             if (isRodosLayer) {
                 propertyFilter = me.getPropertyIsEqualToFilter(identifyField,
                     station.get(identifyField));
+                allFilters.push(propertyFilter);
             }
+            Ext.each(layer.metadata.filters, function(filter) {
+                if ((!filter.encodeInViewParams || filter.encodeInViewParams === 'false') &&
+                    filter.type === 'value' ) {
+                    allFilters.push(me.getPropertyIsEqualToFilter(filter.param, filter.effectivevalue));
+                }
+            });
 
             var filter = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">';
-            if (Ext.isString(timeRangeFilter) && Ext.isString(propertyFilter)) {
+            if (allFilters.length > 0) {
                 filter += '<And>';
-                filter += timeRangeFilter;
-                filter += propertyFilter;
+                filter += allFilters.join('');
                 filter += '</And>';
-            } else if (timeRangeFilter) {
-                filter += timeRangeFilter;
-            } else if (propertyFilter) {
-                filter += propertyFilter;
+            } else {
+                filter += allFilters.join('');
             }
             filter += '</Filter>';
             return filter;
