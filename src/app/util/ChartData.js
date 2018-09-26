@@ -244,6 +244,124 @@ Ext.define('Koala.util.ChartData', {
                 }
             }, this);
             return newRawData;
+        },
+
+        /**
+         * Converts the GNOS chart configuration to be used by the d3-util
+         * @param {Object} layerConfig The layerConfig of the layer which contains the chart config.
+         * @return {Object} The chart configuration object to be used with the d3-util components
+         */
+        getChartConfiguration: function(layerConfig) {
+        /* timeseries props         
+        {
+            "dataFeatureType": "imis:odl_brutto_10min_timeseries_9",
+            "param_viewparams": "locality_code:[[id]]",
+            "shapeType": "line",
+            "curveType": "curveStepBefore",
+            "xAxisAttribute": "end_measure",
+            "yAxisAttribute": "value",
+            "xAxisScale": "time",
+            "end_timestamp": "2018-01-22T12:00:00",
+            "end_timestamp_format": "Y-m-d H:i:s",
+            "duration": "PT4H",
+            "yAxisMax": "0.4",
+            "colorSequence": "#312783,#e4003a,#65b32e,#f39200,#6b4796,#009dd1,#b0348b,#00823f,#564a44,#312783,#e4003a,#65b32e,#f39200,#6b4796,#009dd1,#b0348b,#00823f,#564a44",
+            "seriesTitleTpl": "[[locality_name]]",
+            "tooltipTpl": "<b>[[locality_name]]</b><br>Datum: [[end_measure]]<br>Messwert in µSv/h: [[value]]",
+            "yAxis_grid": "\\{\\\"odd\\\":\\{\\\"opacity\\\":1,\\\"fill\\\":\\\"#ddd\\\",\\\"stroke\\\":\\\"#bbb\\\",\\\"lineWidth\\\":1]]",
+            "featureIdentifyField": "id",
+            "featureIdentifyFieldDataType": "string",
+            "featureShortDspField": "locality_name",
+            "allowAddSeries": "true",
+            "allowZoom": "true",
+            "allowFilterForm": "true",
+            "showGrid": "true",
+            "backgroundColor": "#EEEBEB",
+            "gridStrokeColor": "#d3d3d3",
+            "gridStrokeWidth": "1",
+            "gridStrokeOpacity": "0.5",
+            "labelColor": "#294d71",
+            "labelPadding": "50",
+            "yAxisFormat": ",.3f",
+            "chartMargin": "30,200,60,80",
+            "labelSize": "13",
+            "legendEntryMaxLength": "20",
+            "tickPadding": "0",
+            "tickSize": "3",
+            "strokeWidth": "2",
+            "strokeOpacity": "1",
+            "titlePadding": "10",
+            "titleSize": "12",
+            "rotateXAxisLabel": "true",
+            "yAxisLabel": "µSv/h",
+            "xAxisMax": "2018-01-22 12:00:00",
+            "xAxisMin": "2012-01-01 00:00:00",
+            "showTimeseriesGrid": "true",
+            "thresholds_off": [
+                {
+                    "value": 0.4,
+                    "tooltip": "Tooltip 1",
+                    "stroke": "#ff0000",
+                    "lineWidth": 1,
+                    "dasharray": "3, 3",
+                    "label": "Schwellenwert 1"
+                },
+                {
+                    "value": 0.05,
+                    "stroke": "#00ff00",
+                    "lineWidth": 1,
+                    "dasharray": "3, 3",
+                    "label": "Schwellenwert 2",
+                    "tooltip": "Tooltip 2"
+                }
+            ],
+            "attachedSeries": "[{\"yAxisAttribute\":\"value_oberergw\",\"showYAxis\":\"true\",\"yAxisMin\":\"0\",\"yAxisMax\":\"0.4\",\"yAxisFormat\":\",.3f\",\"axisWidth\":60,\"labelPadding\":40,\"dspUnit\":\"Ob. Grenzwert (mSv/h)\"},{\"yAxisAttribute\":\"value_unterergw\",\"showYAxis\":\"true\",\"yAxisMin\":\"0\",\"yAxisMax\":\"0.4\",\"yAxisFormat\":\",.3f\",\"axisWidth\":60,\"labelPadding\":40,\"dspUnit\":\"Unt. Grenzwert (mSv/h)\",\"color\":\"#00ff00\"}]",
+            "featureStyle_off": [
+                {
+                    "attribute": "value",
+                    "operator": "lt",
+                    "value": 0.085,
+                    "style": {
+                        "type": "circle",
+                        "radius": "10"
+                    }
+                },
+                {
+                    "attribute": "value",
+                    "operator": "eq",
+                    "value": 0.085,
+                    "style": {
+                        "type": "star",
+                        "sides": 5,
+                        "radius": 10
+                    }
+                },
+                {
+                    "attribute": "value",
+                    "operator": "gt",
+                    "value": 0.085,
+                    "style": {
+                        "type": "rect",
+                        "width": 15,
+                        "height": 20
+                    }
+                }
+            ]
+        }
+        */
+
+            var chartConfig = {};
+            var barConfig = layerConfig.barChartProperties;
+            var timeConfig = layerConfig.timeSeriesChartProperties;
+            if (barConfig && !Ext.Object.isEmpty(barConfig)) {
+                chartConfig.barChartConfig = {};
+                
+            }
+            if (timeConfig && !Ext.isEmpty(timeConfig)) {
+                var conf = chartConfig.timeSeriesConfig = {};
+                conf.backgroundColor = timeConfig.backgroundColor;
+            }
+            return chartConfig;
         }
 
     }
