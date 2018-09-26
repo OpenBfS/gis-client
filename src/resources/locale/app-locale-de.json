@@ -204,7 +204,8 @@
                 "postItWindowTitle": "Notiz",
                 "postItInputTooLongText": "Der Text ist für eine korrekte Darstellung zu lang. Trotzdem hinzüfgen?",
                 "modifyTooltip": "Zeichenobjekt bearbeiten",
-                "deleteTooltip": "Zeichenobjekt löschen"
+                "deleteTooltip": "Zeichenobjekt löschen",
+                "clearTooltip": "Alle Zeichenobjekte löschen"
             }
         }
     },

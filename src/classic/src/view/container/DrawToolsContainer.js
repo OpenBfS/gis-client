@@ -32,7 +32,7 @@ Ext.define('Koala.view.container.DrawToolsContainer', {
 
     viewModel: 'k-container-drawtoolscontainer',
 
-    width: 300,
+    width: 350,
 
     map: null,
 
@@ -131,6 +131,13 @@ Ext.define('Koala.view.container.DrawToolsContainer', {
                 data: {
                     tooltip: viewModel.get('deleteTooltip')
                 }
+            }
+        }, {
+            xtype: 'button',
+            glyph: 'f014@FontAwesome',
+            tooltip: viewModel.get('clearTooltip'),
+            handler: function() {
+                me.drawVectorLayer.getSource().clear();
             }
         }];
         me.callParent(arguments);

@@ -202,8 +202,9 @@
                 "postItTooltip": "Add Note",
                 "postItWindowTitle": "Note",
                 "postItInputTooLongText": "The text you have entered is too long. Do you want to continue anyway?",
-                "modifyTooltip": "Modify Drawobject",
-                "deleteTooltip": "Delete Drawobject"
+                "modifyTooltip": "Modify draw object",
+                "deleteTooltip": "Delete draw object",
+                "clearTooltip": "Delete all draw objects"
             }
         }
     },
