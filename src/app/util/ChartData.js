@@ -368,7 +368,7 @@ Ext.define('Koala.util.ChartData', {
                 },
                 legendComponentConfig: {
                     legendEntryMaxLength: 20,
-                    position: undefined,
+                    position: chartSize[0] - 80,
                     margin: undefined,
                     offset: undefined,
                     items: [{
@@ -401,6 +401,7 @@ Ext.define('Koala.util.ChartData', {
                 return config;
             }
 
+            // apply values from config
             gnosConfig = Koala.util.Object.coerceAll(gnosConfig);
 
             config.chartRendererConfig.zoomType = gnosConfig.allowZoom ? 'transform' : 'none';
@@ -417,13 +418,39 @@ Ext.define('Koala.util.ChartData', {
 
             config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 300;
 
-            // try to convert the x and y axis min and max values to a moment object, if they
-            var xMin = !gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' && gnosConfig.xAxisMin && !Ext.isNumeric(gnosConfig.xAxisMin) ? moment(gnosConfig.xAxisMin).unix() * 1000 : gnosConfig.xAxisMin;
-            var xMax = !gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' && gnosConfig.xAxisMax && !Ext.isNumeric(gnosConfig.xAxisMax) ? moment(gnosConfig.xAxisMax).unix() * 1000 : gnosConfig.xAxisMax;
-            var yMin = !gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' && gnosConfig.yAxisMin && !Ext.isNumeric(gnosConfig.yAxisMin) ? moment(gnosConfig.yAxisMin).unix() * 1000 : gnosConfig.yAxisMin;
-            var yMax = !gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' && gnosConfig.yAxisMax && !Ext.isNumeric(gnosConfig.yAxisMax) ? moment(gnosConfig.yAxisMax).unix() * 1000 : gnosConfig.yAxisMax;
+            // try to convert the x and y axis min and max values to a moment object, if they are no number
+            var xMin;
+            var xMax;
+            var yMin;
+            var yMax;
+            if (!gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' &&
+                gnosConfig.xAxisMin && !Ext.isNumeric(gnosConfig.xAxisMin)) {
+                xMin = moment(gnosConfig.xAxisMin).unix() * 1000;
+            } else {
+                xMin = gnosConfig.xAxisMin;
+            }
+            if (!gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' &&
+                gnosConfig.xAxisMax && !Ext.isNumeric(gnosConfig.xAxisMax)) {
+                xMax = moment(gnosConfig.xAxisMax).unix() * 1000;
+            } else {
+                xMax = gnosConfig.xAxisMax;
+            }
+            if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
+                gnosConfig.yAxisMin && !Ext.isNumeric(gnosConfig.yAxisMin)) {
+                yMin = moment(gnosConfig.yAxisMin).unix() * 1000;
+            } else {
+                yMin = gnosConfig.yAxisMin;
+            }
+            if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
+                gnosConfig.yAxisMax && !Ext.isNumeric(gnosConfig.yAxisMax)) {
+                yMax = moment(gnosConfig.yAxisMax).unix() * 1000;
+            } else {
+                yMax = gnosConfig.yAxisMax;
+            }
 
             if (type === 'timeSeries') {
+                // set the size
+                componentConfig.size = [chartSize[0] - 80, chartSize[1] - 20];
                 var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig);
                 // append series
                 componentConfig.series = seriesAndLegends.series;
@@ -448,7 +475,7 @@ Ext.define('Koala.util.ChartData', {
                     },
                     y: {
                         orientation: 'y',
-                        display: true, // TODO: was is mit attachedseries (showYAxis)?
+                        display: true,
                         labelColor: gnosConfig.labelColor || '#000',
                         labelPadding: gnosConfig.labelPadding || 25,
                         labelSize: gnosConfig.labelSize || 12,
@@ -462,11 +489,57 @@ Ext.define('Koala.util.ChartData', {
                         max: yMax || undefined
                     }
                 };
+                // handle attachedSeries axes
+                if (gnosConfig.attachedSeries) {
+                    var series = gnosConfig.attachedSeries;
+                    if (Ext.isString(series)) {
+                        try {
+                            series = JSON.parse(series);
+                        } catch (e) {
+                            return;
+                        }
+                    }
+                    Ext.each(series, function(serie, index) {
+                        if (!serie.showYAxis) {
+                            return;
+                        }
+                        var additionalYMin;
+                        var additionalYMax;
+                        if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
+                            gnosConfig.yAxisMin && !Ext.isNumeric(gnosConfig.yAxisMin)) {
+                            additionalYMin = moment(gnosConfig.yAxisMin).unix() * 1000;
+                        } else {
+                            additionalYMin = gnosConfig.yAxisMin;
+                        }
+                        if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
+                            gnosConfig.yAxisMax && !Ext.isNumeric(gnosConfig.yAxisMax)) {
+                            additionalYMax = moment(gnosConfig.yAxisMax).unix() * 1000;
+                        } else {
+                            additionalYMax = gnosConfig.yAxisMax;
+                        }
+                        componentConfig.axes['y' + index] = {
+                            // TODO: axisWidth prop should get used?!
+                            orientation: 'y',
+                            display: true,
+                            labelColor: serie.labelColor || '#000',
+                            labelPadding: serie.labelPadding || 25,
+                            labelSize: serie.labelSize || 12,
+                            tickPadding: serie.tickPadding || 3,
+                            tickSize: serie.tickSize || 6,
+                            format: serie.yAxisFormat || ',.0f',
+                            label: serie.dspUnit || serie.yAxisLabel || '',
+                            labelRotation: serie.rotateYAxisLabel === true ? 45 : 0,
+                            scale: serie.yAxisScale || 'linear',
+                            min: additionalYMin || undefined,
+                            max: additionalYMax || undefined
+                        };
+                    });
+                }
             } else { // type is barchart
+                // TODO: finish this...
                 componentConfig.axes = {};
                 componentConfig.bars = {};
             }
-
             return config;
         },
 
@@ -483,10 +556,10 @@ Ext.define('Koala.util.ChartData', {
             var index = 0;
             Ext.iterate(data, function(id, elementData) {
                 var chartData = Ext.Array.map(elementData, function(item) {
-                    if (!item[layerConfig.axes.bottom.dataIndex]) {
+                    if (!item[gnosConfig.xAxisAttribute]) {
                         return undefined;
                     }
-                    return [item[layerConfig.axes.bottom.dataIndex].unix() * 1000, item[layerConfig.axes.left.dataIndex]];
+                    return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[gnosConfig.yAxisAttribute]];
                 });
                 var seriesConfig = {
                     data: chartData,
@@ -510,12 +583,47 @@ Ext.define('Koala.util.ChartData', {
                     }
                 });
             });
+            // handle attached series
+            if (gnosConfig.attachedSeries) {
+                var attachedSeries = gnosConfig.attachedSeries;
+                if (Ext.isString(attachedSeries)) {
+                    try {
+                        attachedSeries = JSON.parse(attachedSeries);
+                    } catch (e) {
+                        return;
+                    }
+                }
+                Ext.each(attachedSeries, function(serie, idx) {
+                    if (!serie.showYAxis) {
+                        return;
+                    }
+                    Ext.iterate(data, function(id, elementData) {
+                        var chartData = Ext.Array.map(elementData, function(item) {
+                            if (!item[gnosConfig.xAxisAttribute]) {
+                                return undefined;
+                            }
+                            return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[serie.yAxisAttribute]];
+                        });
+                        var seriesConfig = {
+                            data: chartData,
+                            style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
+                            tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
+                            curveType: serie.curveType || 'linear',
+                            shapeType: serie.shapeType || 'line',
+                            axes: ['x', 'y' + idx]
+                        };
+                        if (colors[index]) {
+                            seriesConfig.color = colors[index];
+                            ++index;
+                        }
+                        series.push(seriesConfig);
+                    });
+                });
+            }
             return {
                 series: series,
                 legends: legends
             };
         }
-
     }
-
 });

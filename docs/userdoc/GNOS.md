@@ -976,8 +976,8 @@ Wenn 'between' verwendet werden soll, muss der 'value' als kommasperarierter Str
   |---------------------:|:----|
   | Erlaubt Wertemenge   | Zahl (> 0)  |
   | Obligatorisch        | &#10799; |
-  | Default-Wert         |  |
-  | Beispiel             |  |
+  | Default-Wert         | 300 |
+  | Beispiel             | 20 |
 
 **seriesTitleTpl**
 
@@ -1045,6 +1045,17 @@ eckigen Klammern werden durch Attribute des Features ersetzt.
   | Obligatorisch        | &#10799; |
   | Default-Wert         | 6 |
   | Beispiel             | 10  |
+
+**title**
+
+    Der Titel des Charts.
+
+    | Typ | gco:CharacterString  |
+    |---------------------:|:----|
+    | Erlaubt Wertemenge   | String |
+    | Obligatorisch        | &#10799; |
+    | Default-Wert         |   |
+    | Beispiel             | Toller Chart  |
 
 **titleColor**
 
@@ -1142,9 +1153,9 @@ Min/Max-Wert der Y-Achse. Wenn angegeben, müssen min und max beide konfiguriert
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
-| Erlaubt Wertemenge   | Zahl |
+| Erlaubt Wertemenge   | Zahl oder undefined |
 | Obligatorisch        | &#10799; |
-| Default-Wert         | berechnet aus Daten |
+| Default-Wert         | berechnet aus Daten wenn undefined|
 | Beispiel             | 0.1 |
 
 **yAxisFormat**
@@ -1180,6 +1191,17 @@ https://github.com/d3/d3/blob/master/API.md#scales-d3-scale
 | Obligatorisch        | &#10799; |
 | Default-Wert         | linear |
 | Beispiel             | log |
+
+**xAxisMin/Max**
+
+Min/Max-Wert der X-Achse. Wenn angegeben, müssen min und max beide konfiguriert werden.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Zahl oder undefined |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | berechnet aus Daten wenn undefined|
+| Beispiel             | 0.1 |
 
 **xAxisAttribute**
 

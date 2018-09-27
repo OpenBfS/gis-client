@@ -97,36 +97,36 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         me.onBoxReady();
     },
-    extractAttachedSeriesAxisConfig: function() {
-        var me = this;
-        var view = this.getView();
-        var metadata = view.getConfig().targetLayer.metadata;
-        me.attachedSeriesAxisConfig = [];
-        var series = Koala.util.Object.getPathStrOr(
-            metadata,
-            'layerConfig/timeSeriesChartProperties/attachedSeries',
-            '[]'
-        );
-        try {
-            series = JSON.parse(series);
-        } catch (e) {/*silently catch*/}
-        Ext.each(series, function(config) {
-            var label = config.dspUnit || '';
-            var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
-            me.attachedSeriesAxisConfig.push(axisConfig);
-        });
-    },
+    // extractAttachedSeriesAxisConfig: function() {
+    //     var me = this;
+    //     var view = this.getView();
+    //     var metadata = view.getConfig().targetLayer.metadata;
+    //     me.attachedSeriesAxisConfig = [];
+    //     var series = Koala.util.Object.getPathStrOr(
+    //         metadata,
+    //         'layerConfig/timeSeriesChartProperties/attachedSeries',
+    //         '[]'
+    //     );
+    //     try {
+    //         series = JSON.parse(series);
+    //     } catch (e) {/*silently catch*/}
+    //     Ext.each(series, function(config) {
+    //         var label = config.dspUnit || '';
+    //         var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
+    //         me.attachedSeriesAxisConfig.push(axisConfig);
+    //     });
+    // },
     /**
      *
      */
     drawChart: function() {
         var me = this;
-        this.extractAttachedSeriesAxisConfig();
+        // this.extractAttachedSeriesAxisConfig();
         me.currentDateRange = {
             min: null,
             max: null
         };
- 
+
         var config = me.getView().getConfig();
         var chartSize = this.getChartSize();
         var chartConfig = Koala.util.ChartData.getChartConfiguration(
@@ -135,53 +135,15 @@ Ext.define('Koala.view.component.D3ChartController', {
             'timeSeries',
             this.data
         );
-        chartConfig.timeseriesComponentConfig.size = [chartSize[0] - 80, chartSize[1] - 20]; // TODO
-        this.chartRenderer = new D3Util.ChartRenderer({
-            size: chartSize,
-            zoomType: 'transform',
-            components: [
-            //     new D3Util.LegendComponent(chartConfig.legendComponentConfig
-            //         /*{
-            //         legendEntryMaxLength: 20,
-            //         items: legends,
-            //         position: chartSize[0] - 80
-            //     }
-            // */),
-                new D3Util.TimeseriesComponent(
-                    chartConfig.timeseriesComponentConfig
-                    /*{
-                    axes: {
-                        xaxis: {
-                            orientation: 'x',
-                            scale: 'time',
-                            display: true
-                        },
-                        yaxis: {
-                            orientation: 'y',
-                            scale: 'linear',
-                            display: true
-                        }
-                    },
-                    series: series,
-                    size: [chartSize[0] - 80, chartSize[1] - 20]
-                }
-            */)
-            ]});
-
+        chartConfig.chartRendererConfig.components = [
+            new D3Util.LegendComponent(chartConfig.legendComponentConfig),
+            new D3Util.TimeseriesComponent(chartConfig.timeseriesComponentConfig)
+        ];
+        this.chartRenderer = new D3Util.ChartRenderer(chartConfig.chartRendererConfig);
         var svg = d3.select('#' + this.getView().getId()).node();
         this.chartRenderer.render(svg);
-        // conf.components = [
-        //     new D3Util.TimeseriesComponent(chartConfig.timeseriesComponentConfig || {})
-        // ];
-        // this.chartRenderer = new D3Util.ChartRenderer(conf);
-        // var svg = d3.select('#' + this.getView().getId()).node();
-        // this.chartRenderer.render(svg);
-        // var bgColor = chartConfig.chartRendererConfig.backgroundColor;
-        // if (bgColor) {
-        //     var css = Koala.util.ChartConstants.CSS_CLASS.PLOT_BACKGROUND;
-        //     this.chartRenderer.appendBackground(svg, chartSize, bgColor, css);
-        // }
     },
+
     /**
      *
      */
