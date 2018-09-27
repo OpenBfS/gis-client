@@ -22,7 +22,8 @@ Ext.define('Koala.util.ChartData', {
 
     requires: [
         'Koala.util.Date',
-        'Koala.util.Filter'
+        'Koala.util.Filter',
+        'Koala.util.Object'
     ],
 
     statics: {
@@ -251,7 +252,7 @@ Ext.define('Koala.util.ChartData', {
          * @param {Object} layerConfig The layerConfig of the layer which contains the chart config.
          * @return {Object} The chart configuration object to be used with the d3-util components
          */
-        getChartConfiguration: function(layerConfig) {
+        getChartConfiguration: function(layerConfig, chartSize, type) {
         /* timeseries props         
         {
             "dataFeatureType": "imis:odl_brutto_10min_timeseries_9",
@@ -350,18 +351,138 @@ Ext.define('Koala.util.ChartData', {
         }
         */
 
-            var chartConfig = {};
-            var barConfig = layerConfig.barChartProperties;
-            var timeConfig = layerConfig.timeSeriesChartProperties;
-            if (barConfig && !Ext.Object.isEmpty(barConfig)) {
-                chartConfig.barChartConfig = {};
-                
+            var config = {
+                chartRendererConfig: {
+                    size: chartSize || [200,200],
+                    zoomType: 'none',
+                    backgroundColor: '#EEE',
+                    chartMargin: [],
+                    gridStrokeColor: '#d3d3d3',
+                    gridStrokeOpacity: 0.7,
+                    gridStrokeWidth: 1,
+                    title: '',
+                    titleColor: '#000',
+                    titlePadding: 18,
+                    titleSize: 20,
+                    showGrid: false
+                },
+                legendComponentConfig: {
+                    legendEntryMaxLength: 20,
+                    position: undefined,
+                    margin: undefined,
+                    offset: undefined,
+                    items: [{
+                        type: 'line',
+                        title: 'Legende',
+                        customRenderer: function() {},
+                        style: {
+                            color: 'cyan'
+                        }
+                    }]
+                },
+                barComponentConfig: {},
+                timeseriesComponentConfig: {}
+            };
+            var gnosConfig;
+            var componentConfig;
+            if (type === 'timeSeries') {
+                gnosConfig = layerConfig.timeSeriesChartProperties;
+                if (gnosConfig && !Ext.Object.isEmpty(gnosConfig)) {
+                    componentConfig = config.timeseriesComponentConfig;
+                }
+            } else {
+                gnosConfig = layerConfig.barChartProperties;
+                if (gnosConfig && !Ext.Object.isEmpty(gnosConfig)) {
+                    componentConfig = config.barComponentConfig;
+                }
             }
-            if (timeConfig && !Ext.isEmpty(timeConfig)) {
-                var conf = chartConfig.timeSeriesConfig = {};
-                conf.backgroundColor = timeConfig.backgroundColor;
+
+            if (!componentConfig) {
+                return config;
             }
-            return chartConfig;
+
+            gnosConfig = Koala.util.Object.coerceAll(gnosConfig);
+
+            config.chartRendererConfig.zoomType = gnosConfig.allowZoom ? 'transform' : 'none';
+            config.chartRendererConfig.backgroundColor = gnosConfig.backgroundColor;
+            config.chartRendererConfig.chartMargin = gnosConfig.chartMargin ? gnosConfig.chartMargin.split(',') : [];
+            config.chartRendererConfig.gridStrokeColor = gnosConfig.gridStrokeColor || '#d3d3d3';
+            config.chartRendererConfig.gridStrokeOpacity = gnosConfig.gridStrokeOpacity || 0.7;
+            config.chartRendererConfig.gridStrokeWidth = gnosConfig.gridStrokeWidth || 1;
+            config.chartRendererConfig.title = gnosConfig.title || '';
+            config.chartRendererConfig.titleColor = gnosConfig.titleColor || '#000';
+            config.chartRendererConfig.titlePadding = gnosConfig.titlePadding || 18;
+            config.chartRendererConfig.titleSize = gnosConfig.titleSize || 20;
+            config.chartRendererConfig.showGrid = gnosConfig.showGrid === true ? true : false;
+
+            config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 300;
+            // TODO:
+            /*
+            position: undefined,
+            margin: undefined,
+            offset: undefined,
+            items: [{
+                type: 'line',
+                title: 'Legende',
+                customRenderer: function(){},
+                style: {
+                    color: 'cyan'
+                }
+            }]
+            */
+
+            // try to convert the x and y axis min and max values to a moment object, if they
+            var xMin = !gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' && gnosConfig.xAxisMin && !Ext.isNumeric(gnosConfig.xAxisMin) ? moment(gnosConfig.xAxisMin).unix() * 1000 : gnosConfig.xAxisMin;
+            var xMax = !gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' && gnosConfig.xAxisMax && !Ext.isNumeric(gnosConfig.xAxisMax) ? moment(gnosConfig.xAxisMax).unix() * 1000 : gnosConfig.xAxisMax;
+            var yMin = !gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' && gnosConfig.yAxisMin && !Ext.isNumeric(gnosConfig.yAxisMin) ? moment(gnosConfig.yAxisMin).unix() * 1000 : gnosConfig.yAxisMin;
+            var yMax = !gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' && gnosConfig.yAxisMax && !Ext.isNumeric(gnosConfig.yAxisMax) ? moment(gnosConfig.yAxisMax).unix() * 1000 : gnosConfig.yAxisMax;
+
+            if (type === 'timeSeries') {
+                componentConfig.series = [{
+                    style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
+                    tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
+                    curveType: gnosConfig.curveType || 'linear',
+                    shapeType: gnosConfig.shapeType || 'line',
+                    axes: ['x', 'y'] // TODO
+                }];
+                componentConfig.axes = {
+                    x: {
+                        orientation: 'x', // TODO?
+                        display: true,
+                        labelColor: gnosConfig.labelColor || '#000',
+                        labelPadding: gnosConfig.labelPadding || 25,
+                        labelSize: gnosConfig.labelSize || 12,
+                        tickPadding: gnosConfig.tickPadding || 3,
+                        tickSize: gnosConfig.tickSize || 6,
+                        format: gnosConfig.xAxisFormat || ',.0f',
+                        label: gnosConfig.xAxisLabel || '',
+                        labelRotation: gnosConfig.rotateXAxisLabel === true ? 45 : 0,
+                        scale: gnosConfig.xAxisScale || 'time',
+                        min: xMin || undefined,
+                        max: xMax || undefined
+                    },
+                    y: {
+                        orientation: 'y', // TODO?
+                        display: true, // TODO: was is mit attachedseries (showYAxis)?
+                        labelColor: gnosConfig.labelColor || '#000',
+                        labelPadding: gnosConfig.labelPadding || 25,
+                        labelSize: gnosConfig.labelSize || 12,
+                        tickPadding: gnosConfig.tickPadding || 3,
+                        tickSize: gnosConfig.tickSize || 6,
+                        format: gnosConfig.yAxisFormat || ',.0f',
+                        label: gnosConfig.yAxisLabel || '',
+                        labelRotation: gnosConfig.rotateYAxisLabel === true ? 45 : 0,
+                        scale: gnosConfig.yAxisScale || 'linear',
+                        min: yMin || undefined,
+                        max: yMax || undefined
+                    }
+                };
+            } else { // type is barchart
+                componentConfig.axes = {};
+                componentConfig.bars = {};
+            }
+
+            return config;
         }
 
     }

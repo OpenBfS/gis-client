@@ -104,7 +104,12 @@ Ext.define('Koala.util.Ogc', {
             Ext.each(layer.metadata.filters, function(filter) {
                 if ((!filter.encodeInViewParams || filter.encodeInViewParams === 'false') &&
                     filter.type === 'value' ) {
-                    allFilters.push(me.getPropertyIsEqualToFilter(filter.param, filter.effectivevalue));
+                    // allFilters.push(me.getPropertyIsEqualToFilter(filter.param, filter.effectivevalue));
+                    var val = filter.effectivevalue;
+                    if (val instanceof Array) {
+                        val = val[0].replace(/'/g, '');
+                    }
+                    allFilters.push(me.getPropertyIsEqualToFilter(filter.param, val));
                 }
             });
 

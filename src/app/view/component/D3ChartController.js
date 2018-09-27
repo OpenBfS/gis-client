@@ -141,17 +141,15 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
             var seriesConfig = {
                 data: chartData,
-                drawAxis: true,
-                yAxisLabel: config.axes.left.label
+                axes: ['x', 'y']
             };
             if (colors[index]) {
                 seriesConfig.color = colors[index];
                 ++index;
             }
             series.push(seriesConfig);
-            legends.push({type: 'line', color: seriesConfig.color});
+            legends.push({type: 'line', style: {color: seriesConfig.color}});
         });
-        var chartSize = this.getChartSize();
         /*
         new D3Util.ChartRenderer({//generic stuff, including layout, backgroundColor
             size: [250, 500],
@@ -236,21 +234,61 @@ Ext.define('Koala.view.component.D3ChartController', {
         
         */
         var metadata = me.getView().getConfig().targetLayer.metadata;
-        var chartConfig = Koala.util.ChartData.getChartConfiguration(metadata.layerConfig);
-        
-        chartConfig.series = series;
-        chartConfig.scaleX = 'time';
-        chartConfig.zoomMode = 'transform';
+        var chartSize = this.getChartSize();
+        var chartConfig = Koala.util.ChartData.getChartConfiguration(
+            metadata.layerConfig,
+            chartSize,
+            'timeSeries'
+        );
+
+        // var conf = chartConfig.chartRendererConfig;
+        chartConfig.timeseriesComponentConfig.size = [chartSize[0] - 80, chartSize[1] - 20]; // TODO
+        chartConfig.timeseriesComponentConfig.series = series; // TODO util
         this.chartRenderer = new D3Util.ChartRenderer({
+            size: chartSize,
+            zoomType: 'transform',
             components: [
-                new D3Util.TimeseriesComponent(chartConfig.timeSeriesConfig || {})
-            ],
-            size: chartSize
-        });
+            //     new D3Util.LegendComponent(chartConfig.legendComponentConfig
+            //         /*{
+            //         legendEntryMaxLength: 20,
+            //         items: legends,
+            //         position: chartSize[0] - 80
+            //     }
+            // */),
+                new D3Util.TimeseriesComponent(
+                    chartConfig.timeseriesComponentConfig
+                    /*{
+                    axes: {
+                        xaxis: {
+                            orientation: 'x',
+                            scale: 'time',
+                            display: true
+                        },
+                        yaxis: {
+                            orientation: 'y',
+                            scale: 'linear',
+                            display: true
+                        }
+                    },
+                    series: series,
+                    size: [chartSize[0] - 80, chartSize[1] - 20]
+                }
+            */)
+            ]});
+
         var svg = d3.select('#' + this.getView().getId()).node();
         this.chartRenderer.render(svg);
-        // var css = Koala.util.ChartConstants.CSS_CLASS.PLOT_BACKGROUND;
-        // this.chartRenderer.appendBackground(svg, chartSize, chartConfig.timeSeriesConfig.backgroundColor, css);
+        // conf.components = [
+        //     new D3Util.TimeseriesComponent(chartConfig.timeseriesComponentConfig || {})
+        // ];
+        // this.chartRenderer = new D3Util.ChartRenderer(conf);
+        // var svg = d3.select('#' + this.getView().getId()).node();
+        // this.chartRenderer.render(svg);
+        // var bgColor = chartConfig.chartRendererConfig.backgroundColor;
+        // if (bgColor) {
+        //     var css = Koala.util.ChartConstants.CSS_CLASS.PLOT_BACKGROUND;
+        //     this.chartRenderer.appendBackground(svg, chartSize, bgColor, css);
+        // }
     },
     /**
      *
