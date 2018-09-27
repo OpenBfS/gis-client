@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-present terrestris GmbH & Co. KG
+/* Copyright (c) 2018-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.CloneWindowModel
+ * @class Koala.view.panel.FeatureGrid
  */
-Ext.define('Koala.view.window.CloneWindowModel', {
+Ext.define('Koala.view.panel.FeatureGridModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-window-clone',
+    alias: 'viewmodel.k-panel-featuregrid',
 
     data: {
-        title: '',
-        boundingBoxLabel: '',
-        maxFeaturesLabel: '',
-        layerNameLabel: '',
-        okButtonLabel: '',
-        cancelButtonLabel: '',
-        emptyTemplateMessage: ''
+        saveLayerText: '',
+        wfstSuccess: '',
+        wfstFailure: '',
+        wfstLockFail: '',
+        wfstLockSuccess: '',
+        wfstLockExpired: '',
+        wfstLockButton: '',
+        layerNotSavedYet: ''
     }
 });

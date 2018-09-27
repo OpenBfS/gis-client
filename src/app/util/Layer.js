@@ -794,11 +794,11 @@ Ext.define('Koala.util.Layer', {
          *     additional layer information.
          */
         getLayerNameSuffix: function(suffixId) {
-            return '' +
+            return '<p>' +
                 '<span' +
                 ' class=\'layer-name-suffix\'' +
                 ' id=\'' + suffixId + '\'>' +
-                '</span>';
+                '</span></p>';
         },
 
         /**

@@ -59,7 +59,6 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     } else {
                         themeTree.show();
                     }
-
                     break;
                 case 'wmsimport':
                     this.showWindow('k-window-addwms', 'Koala.view.window.AddWMSWindow');
@@ -71,8 +70,6 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     this.showWindow('k-window-print', 'Koala.view.window.Print');
                     break;
                 case 'measure':
-                    break;
-                case 'draw':
                     var mapContainer = Ext.ComponentQuery
                         .query('basigx-panel-mapcontainer')[0];
                     var top = '6px';
@@ -103,6 +100,8 @@ Ext.define('Koala.view.list.TreeMenuController', {
                         .query('k-button-timereference')[0];
                     timereferenceButton.toggle();
                     // Currently throws errors due to hover issues with ExtJS
+                    // if an over item is set, so we deselect it here
+                    sender.setOverItem(null);
                     viewModel.set('timereferenceValue', timereferenceButton.getCurrent());
                     viewModel.set('settingsExpanded', true);
                     break;

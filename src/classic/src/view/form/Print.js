@@ -628,27 +628,32 @@ Ext.define('Koala.view.form.Print', {
 
         var promises = [];
 
-        var boxFeature = this.transformInteraction.layers_[0].getSource().getFeatures()[0];
-        var extent = boxFeature.getGeometry().getExtent();
-        var resolution = mapView.getResolution();
-        var extentPixelWidth = (extent[2] - extent[0]) / resolution;
-        var extentPixelHeight = (extent[3] - extent[1]) / resolution;
-        var mapWidth, mapHeight;
-        var layouts = this.provider.capabilityRec.layouts().data.items;
+        var ratioX = 1;
+        var ratioY = 1;
 
-        Ext.each(layouts, function(lay) {
-            var atts = lay.attributes();
-            Ext.each(atts, function(attribute) {
-                Ext.each(attribute.data.items, function(att) {
-                    if (att.data.name === 'map') {
-                        mapWidth = att.data.clientInfo.width;
-                        mapHeight = att.data.clientInfo.height;
-                    }
+        if (this.transformInteraction) {
+            var boxFeature = this.transformInteraction.layers_[0].getSource().getFeatures()[0];
+            var extent = boxFeature.getGeometry().getExtent();
+            var resolution = mapView.getResolution();
+            var extentPixelWidth = (extent[2] - extent[0]) / resolution;
+            var extentPixelHeight = (extent[3] - extent[1]) / resolution;
+            var mapWidth, mapHeight;
+            var layouts = this.provider.capabilityRec.layouts().data.items;
+
+            Ext.each(layouts, function(lay) {
+                var atts = lay.attributes();
+                Ext.each(atts, function(attribute) {
+                    Ext.each(attribute.data.items, function(att) {
+                        if (att.data.name === 'map') {
+                            mapWidth = att.data.clientInfo.width;
+                            mapHeight = att.data.clientInfo.height;
+                        }
+                    });
                 });
             });
-        });
-        var ratioX = mapWidth / extentPixelWidth;
-        var ratioY = mapHeight / extentPixelHeight;
+            ratioX = mapWidth / extentPixelWidth;
+            ratioY = mapHeight / extentPixelHeight;
+        }
 
         overlays.forEach(function(overlay) {
             var coords = overlay.centerCoords;

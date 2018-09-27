@@ -1,6 +1,7 @@
 .x-k-treemenu, .x-treelist-tree-menu {
     background-color: $base-color;
     color: white;
+    overflow-y: auto;
 
     ul.x-treelist-root-container {
         >.x-treelist-item {

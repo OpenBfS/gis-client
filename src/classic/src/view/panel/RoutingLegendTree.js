@@ -29,9 +29,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.util.Layer',
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
+        'Koala.view.panel.FeatureGrid',
         'Koala.view.window.MetadataInfo',
         'Koala.view.window.CloneWindow',
-        'Koala.view.window.FeatureGridWindow',
         'Koala.view.window.ShareWindow'
     ],
 
@@ -82,6 +82,24 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         beforedestroy: 'unbindUtcBtnToggleHandler',
         checkchange: 'checkLayerAndLegendVisibility',
         itemmove: 'removeAlwaysOnTopProperty',
+        beforecellmousedown: function(table, td, cellIdx, record, tr, rowIdx, event) {
+            event.preventDefault();
+            return false;
+        },
+        beforecellclick: function(table, td, cellIdx, record, tr, rowIdx, event) {
+            event.preventDefault();
+            if (Ext.get(event.target).hasCls('x-tree-checkbox')) {
+                var checked = !record.get('checked');
+                record.set('checked', checked);
+                var tree = table.up('k-panel-routing-legendtree');
+                tree.getController().checkLayerAndLegendVisibility(record, checked);
+                tree.layerDropped(); // restores collapsed/expanded state
+            }
+            if (record) {
+                this.setSelection(record);
+            }
+            return false;
+        },
         // Ensure the layer filter text indicator will be drawn
         expand: {
             fn: 'onFirstExpand',
@@ -359,16 +377,16 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
          */
         editHandler: function(btn) {
             var layer = btn.up().layerRec.data;
-            var wins = Ext.ComponentQuery.query('k-window-featuregrid');
-            if (wins.length > 0) {
-                Ext.each(wins, function(win) {
-                    win.destroy();
-                });
-            }
-            var gridWin = Ext.create('Koala.view.window.FeatureGridWindow', {
+            var northContainer = Ext.ComponentQuery.query('container[name=north-container]')[0];
+            var panel = Ext.create('Koala.view.panel.FeatureGrid', {
+                height: 400,
+                closable: true,
                 layer: layer
             });
-            gridWin.show();
+            northContainer.removeAll();
+            northContainer.add(panel);
+
+            northContainer.show();
         },
 
         styleHandler: function(btn) {
@@ -971,11 +989,16 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             if (row) {
                 row.removeCls('k-loading-failed');
             }
-            me.layerDropped(); // restores collapsed/expanded state
         };
         var loadEndFunc = function() {
             rec.set(fieldnameLoadIndicationLoading, false);
-            me.layerDropped(); // restores collapsed/expanded state
+            // TODO Setting the above loading flag causes expanded bodies
+            // with the legends to be removed. This is 'fixed' here by toggling
+            // the rows twice so they get recreated. Doing this to begin with
+            // is bad enough, but doing it on every loadend event is even worse
+            // and should be analysed further. Also the bodies should not be
+            // recreated on every expand.
+            me.layerDropped();
         };
         var loadErrorFunc = function() {
             loadEndFunc();
@@ -1055,7 +1078,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     /**
      * Restore the complete collapsed / expanded state of all rowbodies of the
      * panel by cascading down the tree and double toggling all candidates. If
-     * someone finds a better and API-conformant way, that'd be great.
+     * someone finds a better and API-conformant way, that'd be great. See the
+     * above comment/TODO mark for more details.
      */
     layerDropped: function() {
         var me = this;
@@ -1063,16 +1087,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         var rowExpanderPlugin = me.getPlugin('rowexpanderwithcomponents');
         var rootNode = me.getRootNode();
         var itemExpandedKey = me.itemExpandedKey;
-        rootNode.cascadeBy({
-            before: function(child) {
-                var idx = view.indexOfRow(child);
-                var targetState = child.get(itemExpandedKey);
-                if (idx !== -1 && Ext.isDefined(targetState)) {
-                    rowExpanderPlugin.toggleRow(idx, child);
-                    rowExpanderPlugin.toggleRow(idx, child);
-                }
-            },
-            scope: me
+        rootNode.cascadeBy(function(child) {
+            var idx = view.indexOfRow(child);
+            var targetState = child.get(itemExpandedKey);
+            if (idx !== -1 && Ext.isDefined(targetState)) {
+                rowExpanderPlugin.toggleRow(idx, child);
+                rowExpanderPlugin.toggleRow(idx, child);
+            }
         });
         Koala.util.Layer.repaintLayerFilterIndication();
     },

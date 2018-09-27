@@ -168,7 +168,14 @@
                 "downloadAllText": "all stations?",
                 "outputFormatText": "Format",
                 "delimiterText": "Delimiter",
-                "quoteText": "use double quotes (\" \")"
+                "quoteText": "use double quotes (\" \")",
+                "okText": "Ok",
+                "cancelText": "Cancel",
+                "magnification": "Magnification",
+                "original": "Original",
+                "twofold": "2-fold",
+                "threefold": "3-fold",
+                "fourfold": "4-fold"
             }
         }
     },
@@ -189,9 +196,9 @@
     "Koala.view.container.RedliningToolsContainer": {
         "config": {
             "data": {
-                "drawPointBtnTooltip": "Draw point",
-                "drawLinesBtnTooltip": "Draw line",
-                "drawPolygonsBtnTooltip": "Draw area",
+                "drawPointBtnTooltip": "Show coordinate",
+                "drawLinesBtnTooltip": "Measure line",
+                "drawPolygonsBtnTooltip": "Measure area",
                 "modifyObjectBtnTooltip": "Modify objects",
                 "deleteObjectBtnTooltip": "Delete objects",
                 "clearObjectsBtnTooltip": "Delete all",
@@ -355,7 +362,8 @@
                 "labelUse": "…use?",
                 "northArrow": "North arrow",
                 "scalebar": "Scale bar",
-                "unlinkTooltip": "Remove link"
+                "unlinkTooltip": "Remove link",
+                "templateBrokenMessage": "The template is broken and cannot be used."
             }
         }
     },
@@ -452,6 +460,23 @@
                 "gridTabTitle": "Table view",
                 "htmlTabTitle": "Information",
                 "hoverinfoTabTitle": "Information"
+            }
+        }
+    },
+    "Koala.view.panel.FeatureGrid": {
+        "config": {
+            "data": {
+                "downloadLayerText": "Download",
+                "geoJsonText": "GeoJSON",
+                "shapefileText": "Shapefile",
+                "saveLayerText": "Save layer",
+                "wfstSuccess": "Changes successfully saved.<br>Objects inserted: {0}<br>Objects updated: {1}<br>Objects deleted: {2}",
+                "wfstFailure": "Changes could not be saved. Please try again later.",
+                "wfstLockFail": "The WFS-T Lock request was rejeceted",
+                "wfstLockSuccess": "The WFS-T Lock request was successful. The lock will timeout in {0} minute(s)",
+                "wfstLockExpired": "The WFS-T Lock has expired",
+                "wfstLockButton": "WFS-T Lock",
+                "layerNotSavedYet": "The layer has not been saved yet"
             }
         }
     },
@@ -586,7 +611,8 @@
                 "maxFeaturesLabel": "Maximum number of objects",
                 "layerNameLabel": "Name of the new layer",
                 "okButtonLabel": "Clone",
-                "cancelButtonLabel": "Cancel"
+                "cancelButtonLabel": "Cancel",
+                "emptyTemplateMessage": "Please select a template."
             }
         }
     },

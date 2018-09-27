@@ -1548,7 +1548,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             typeName: chartConfig.dataFeatureType,
             outputFormat: 'application/json',
             filter: filter,
-            sortBy: timeField
+            sortBy: timeField,
+            viewParams: targetLayer.getSource().getParams().viewparams
         };
         Ext.apply(requestParams, paramConfig);
         return requestParams;
