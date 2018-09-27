@@ -122,128 +122,20 @@ Ext.define('Koala.view.component.D3ChartController', {
     drawChart: function() {
         var me = this;
         this.extractAttachedSeriesAxisConfig();
-        var config = this.getView().getConfig();
         me.currentDateRange = {
             min: null,
             max: null
         };
-        var colors = config.targetLayer.metadata.layerConfig
-            .timeSeriesChartProperties.colorSequence.split(',');
-        var series = [];
-        var legends = [];
-        var index = 0;
-        Ext.iterate(this.data, function(id, data) {
-            var chartData = Ext.Array.map(data, function(item) {
-                if (!item[config.axes.bottom.dataIndex]) {
-                    return undefined;
-                }
-                return [item[config.axes.bottom.dataIndex].unix() * 1000, item[config.axes.left.dataIndex]];
-            });
-            var seriesConfig = {
-                data: chartData,
-                axes: ['x', 'y']
-            };
-            if (colors[index]) {
-                seriesConfig.color = colors[index];
-                ++index;
-            }
-            series.push(seriesConfig);
-            legends.push({type: 'line', style: {color: seriesConfig.color}});
-        });
-        /*
-        new D3Util.ChartRenderer({//generic stuff, including layout, backgroundColor
-            size: [250, 500],
-            zoomType: 'none', // 'transform', 'bla' // ersetzt allowZoom
-            backgroundColor: #EEE,
-            chartMargin: [50,100,200,100] // (top, right, bottom, left),
-            gridStrokeColor: '#d3d3d3',
-            gridStrokeOpacity: 0.6,
-            gridStrokeWidth: 3,
-            title: 'Nice chart',
-            titleColor: '#d3d3d3',
-            titlePadding: 12,
-            titleSize: 12,
-            showGrid: true,
-            
-        },
-        components: [
-            new D3Util.LegendComponent({
-                legendEntryMaxLength: 20,
-                position / margin / offset?,
-                items: [{
-                    type: 'line',
-                    title: '',
-                    customRenderer: fn,
-                    style: {
-                        color: 'cyan'
-                    }
-                }]
-            }),
-            new D3Util.TimeseriesComponent({
-                axes: {
-                    axes1: {
-                        orientation: 'x', // neues Flag!
-                        labelColor: '#d3d3d3',
-                        labelPadding: 50
-                        labelSize: 12,
-                        tickPadding: 8
-                        tickSize: 6,
-                        format: ',.0f'
-                        label: 'Auf Achse',
-                        labelRotation: 45, //ersetzt rotateXAxisLabel, ab jetzt dynamisch
-                        scale: 'linear',
-                        min: 0,
-                        max: 1100, 
-                        display: true, // ersetzt showYAxis
-                    },
-                    axes2: {
-                        orientation: 'y'
-                    }
-                },
-                series: [{
-                    colorSequence / colorMapping: ?! -> am besten nicht hier sondern in koala
-                    style: customFunction?!,
-                        strokeOpacity: 0.5
-                        strokeWidth: 5,
-                        color: svg-fill etc.
-                        
-                    tooltipConfig: function || {} ?! // ersetzt tooltipTpl
-                    curveType: 'curveStepAfter',
-                    shapeType: 'area',
-                    axes: ['axes1', 'axes2']
-                }]
-            }),
-            new D3Util.BarComponent({
-                axes: {
-                    axes1: {
-                        TBD
-                    },
-                    axes2: {
-                        orientation: 'y'
-                    }
-                },
-                bars: {
-                    TBD,
-                    style: {
-                        width: 10,
-                        colorMapping: ?!
-                    }
-                }
-            });
-        ]);
-        
-        */
-        var metadata = me.getView().getConfig().targetLayer.metadata;
+ 
+        var config = me.getView().getConfig();
         var chartSize = this.getChartSize();
         var chartConfig = Koala.util.ChartData.getChartConfiguration(
-            metadata.layerConfig,
+            config,
             chartSize,
-            'timeSeries'
+            'timeSeries',
+            this.data
         );
-
-        // var conf = chartConfig.chartRendererConfig;
         chartConfig.timeseriesComponentConfig.size = [chartSize[0] - 80, chartSize[1] - 20]; // TODO
-        chartConfig.timeseriesComponentConfig.series = series; // TODO util
         this.chartRenderer = new D3Util.ChartRenderer({
             size: chartSize,
             zoomType: 'transform',

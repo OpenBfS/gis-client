@@ -252,7 +252,7 @@ Ext.define('Koala.util.ChartData', {
          * @param {Object} layerConfig The layerConfig of the layer which contains the chart config.
          * @return {Object} The chart configuration object to be used with the d3-util components
          */
-        getChartConfiguration: function(layerConfig, chartSize, type) {
+        getChartConfiguration: function(layerConfig, chartSize, type, data) {
         /* timeseries props         
         {
             "dataFeatureType": "imis:odl_brutto_10min_timeseries_9",
@@ -350,7 +350,7 @@ Ext.define('Koala.util.ChartData', {
             ]
         }
         */
-
+            // create a default config object
             var config = {
                 chartRendererConfig: {
                     size: chartSize || [200,200],
@@ -386,12 +386,12 @@ Ext.define('Koala.util.ChartData', {
             var gnosConfig;
             var componentConfig;
             if (type === 'timeSeries') {
-                gnosConfig = layerConfig.timeSeriesChartProperties;
+                gnosConfig = layerConfig.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
                 if (gnosConfig && !Ext.Object.isEmpty(gnosConfig)) {
                     componentConfig = config.timeseriesComponentConfig;
                 }
             } else {
-                gnosConfig = layerConfig.barChartProperties;
+                gnosConfig = layerConfig.targetLayer.metadata.layerConfig.barChartProperties;
                 if (gnosConfig && !Ext.Object.isEmpty(gnosConfig)) {
                     componentConfig = config.barComponentConfig;
                 }
@@ -416,20 +416,6 @@ Ext.define('Koala.util.ChartData', {
             config.chartRendererConfig.showGrid = gnosConfig.showGrid === true ? true : false;
 
             config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 300;
-            // TODO:
-            /*
-            position: undefined,
-            margin: undefined,
-            offset: undefined,
-            items: [{
-                type: 'line',
-                title: 'Legende',
-                customRenderer: function(){},
-                style: {
-                    color: 'cyan'
-                }
-            }]
-            */
 
             // try to convert the x and y axis min and max values to a moment object, if they
             var xMin = !gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' && gnosConfig.xAxisMin && !Ext.isNumeric(gnosConfig.xAxisMin) ? moment(gnosConfig.xAxisMin).unix() * 1000 : gnosConfig.xAxisMin;
@@ -438,16 +424,15 @@ Ext.define('Koala.util.ChartData', {
             var yMax = !gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' && gnosConfig.yAxisMax && !Ext.isNumeric(gnosConfig.yAxisMax) ? moment(gnosConfig.yAxisMax).unix() * 1000 : gnosConfig.yAxisMax;
 
             if (type === 'timeSeries') {
-                componentConfig.series = [{
-                    style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
-                    tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
-                    curveType: gnosConfig.curveType || 'linear',
-                    shapeType: gnosConfig.shapeType || 'line',
-                    axes: ['x', 'y'] // TODO
-                }];
+                var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig);
+                // append series
+                componentConfig.series = seriesAndLegends.series;
+                // append legends
+                config.legendComponentConfig.items.push(seriesAndLegends.legends);
+                // append axes
                 componentConfig.axes = {
                     x: {
-                        orientation: 'x', // TODO?
+                        orientation: 'x',
                         display: true,
                         labelColor: gnosConfig.labelColor || '#000',
                         labelPadding: gnosConfig.labelPadding || 25,
@@ -462,7 +447,7 @@ Ext.define('Koala.util.ChartData', {
                         max: xMax || undefined
                     },
                     y: {
-                        orientation: 'y', // TODO?
+                        orientation: 'y',
                         display: true, // TODO: was is mit attachedseries (showYAxis)?
                         labelColor: gnosConfig.labelColor || '#000',
                         labelPadding: gnosConfig.labelPadding || 25,
@@ -483,6 +468,52 @@ Ext.define('Koala.util.ChartData', {
             }
 
             return config;
+        },
+
+        /**
+         * Generates series and legends for a timeseries
+         * @param {Object} data The input data
+         * @param {Object} layerConfig the config for the layer
+         */
+        generateTimeSeriesAndLegends: function(data, layerConfig) {
+            var gnosConfig = layerConfig.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
+            var colors = gnosConfig.colorSequence ? gnosConfig.colorSequence.split(',') : [];
+            var series = [];
+            var legends = [];
+            var index = 0;
+            Ext.iterate(data, function(id, elementData) {
+                var chartData = Ext.Array.map(elementData, function(item) {
+                    if (!item[layerConfig.axes.bottom.dataIndex]) {
+                        return undefined;
+                    }
+                    return [item[layerConfig.axes.bottom.dataIndex].unix() * 1000, item[layerConfig.axes.left.dataIndex]];
+                });
+                var seriesConfig = {
+                    data: chartData,
+                    style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
+                    tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
+                    curveType: gnosConfig.curveType || 'linear',
+                    shapeType: gnosConfig.shapeType || 'line',
+                    axes: ['x', 'y']
+                };
+                if (colors[index]) {
+                    seriesConfig.color = colors[index];
+                    ++index;
+                }
+                series.push(seriesConfig);
+                legends.push({
+                    type: 'line',
+                    title: 'Legende', // TODO
+                    customRenderer: function() {}, // TODO
+                    style: {
+                        color: seriesConfig.color
+                    }
+                });
+            });
+            return {
+                series: series,
+                legends: legends
+            };
         }
 
     }
