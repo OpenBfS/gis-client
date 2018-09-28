@@ -355,16 +355,11 @@ Ext.define('Koala.util.ChartData', {
                 chartRendererConfig: {
                     size: chartSize || [200,200],
                     zoomType: 'none',
-                    backgroundColor: '#EEE',
                     chartMargin: [],
-                    gridStrokeColor: '#d3d3d3',
-                    gridStrokeOpacity: 0.7,
-                    gridStrokeWidth: 1,
                     title: '',
                     titleColor: '#000',
                     titlePadding: 18,
-                    titleSize: 20,
-                    showGrid: false
+                    titleSize: 20
                 },
                 legendComponentConfig: {
                     legendEntryMaxLength: 20,
@@ -381,7 +376,9 @@ Ext.define('Koala.util.ChartData', {
                     }]
                 },
                 barComponentConfig: {},
-                timeseriesComponentConfig: {}
+                timeseriesComponentConfig: {
+                    backgroundColor: '#EEE'
+                }
             };
             var gnosConfig;
             var componentConfig;
@@ -405,16 +402,11 @@ Ext.define('Koala.util.ChartData', {
             gnosConfig = Koala.util.Object.coerceAll(gnosConfig);
 
             config.chartRendererConfig.zoomType = gnosConfig.allowZoom ? 'transform' : 'none';
-            config.chartRendererConfig.backgroundColor = gnosConfig.backgroundColor;
             config.chartRendererConfig.chartMargin = gnosConfig.chartMargin ? gnosConfig.chartMargin.split(',') : [];
-            config.chartRendererConfig.gridStrokeColor = gnosConfig.gridStrokeColor || '#d3d3d3';
-            config.chartRendererConfig.gridStrokeOpacity = gnosConfig.gridStrokeOpacity || 0.7;
-            config.chartRendererConfig.gridStrokeWidth = gnosConfig.gridStrokeWidth || 1;
             config.chartRendererConfig.title = gnosConfig.title || '';
             config.chartRendererConfig.titleColor = gnosConfig.titleColor || '#000';
             config.chartRendererConfig.titlePadding = gnosConfig.titlePadding || 18;
             config.chartRendererConfig.titleSize = gnosConfig.titleSize || 20;
-            config.chartRendererConfig.showGrid = gnosConfig.showGrid === true ? true : false;
 
             config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 300;
 
@@ -451,6 +443,7 @@ Ext.define('Koala.util.ChartData', {
             if (type === 'timeSeries') {
                 // set the size
                 componentConfig.size = [chartSize[0] - 80, chartSize[1] - 20];
+                componentConfig.backgroundColor = gnosConfig.backgroundColor;
                 var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig);
                 // append series
                 componentConfig.series = seriesAndLegends.series;
