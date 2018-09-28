@@ -461,7 +461,7 @@ Ext.define('Koala.util.ChartData', {
                         tickSize: gnosConfig.tickSize || 6,
                         format: gnosConfig.xAxisFormat || ',.0f',
                         label: gnosConfig.xAxisLabel || '',
-                        labelRotation: gnosConfig.rotateXAxisLabel === true ? 45 : 0,
+                        labelRotation: gnosConfig.rotateXAxisLabel === true ? -55 : 0,
                         scale: gnosConfig.xAxisScale || 'time',
                         min: xMin || undefined,
                         max: xMax || undefined,

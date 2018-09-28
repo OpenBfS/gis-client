@@ -1227,7 +1227,7 @@ Das Attribut, dessen Wert auf der Y-Achse abgezeichnet wird.
 
 **rotateXAxisLabel**
 
-Sollen die Label an der X-Achse um 45 Grad rotiert werden?
+Sollen die Label an der X-Achse um -55 Grad rotiert werden?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
