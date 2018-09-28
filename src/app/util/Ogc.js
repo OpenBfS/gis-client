@@ -101,17 +101,6 @@ Ext.define('Koala.util.Ogc', {
                     station.get(identifyField));
                 allFilters.push(propertyFilter);
             }
-            Ext.each(layer.metadata.filters, function(filter) {
-                if ((!filter.encodeInViewParams || filter.encodeInViewParams === 'false') &&
-                    filter.type === 'value' ) {
-                    // allFilters.push(me.getPropertyIsEqualToFilter(filter.param, filter.effectivevalue));
-                    var val = filter.effectivevalue;
-                    if (val instanceof Array) {
-                        val = val[0].replace(/'/g, '');
-                    }
-                    allFilters.push(me.getPropertyIsEqualToFilter(filter.param, val));
-                }
-            });
 
             var filter = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">';
             if (allFilters.length > 0) {

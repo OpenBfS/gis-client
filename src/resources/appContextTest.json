@@ -107,6 +107,7 @@
             }],
             "wmsUrls": ["http://ows.terrestris.de/osm/service",
                 "http://ows.mundialis.de/services/service" ],
+            "drawLayerName": "Zeichnungen",
             "redLineLayerName": "Messungen",
             "rodosFolderName": "RODOS-Prognosen"
         }

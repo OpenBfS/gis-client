@@ -38,6 +38,12 @@ Ext.define('Koala.view.list.TreeMenuController', {
         var viewModel = this.getViewModel();
         var node = info.node;
         var isLeaf = node.isLeaf();
+        var mapContainer = Ext.ComponentQuery
+            .query('basigx-panel-mapcontainer')[0];
+        var measureTools = Ext.ComponentQuery.query('k-container-redliningtoolscontainer')[0];
+        var drawTools = Ext.ComponentQuery.query('k-container-drawtoolscontainer')[0];
+        var top = '6px';
+        var right = ((mapContainer.getWidth()/2) - 150) + 'px';
 
         if (isLeaf) {
             var key = node.get('key');
@@ -70,15 +76,29 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     this.showWindow('k-window-print', 'Koala.view.window.Print');
                     break;
                 case 'measure':
-                    var mapContainer = Ext.ComponentQuery
-                        .query('basigx-panel-mapcontainer')[0];
-                    var top = '6px';
-                    var right = ((mapContainer.getWidth()/2) - 150) + 'px';
-                    var drawTools = Ext.ComponentQuery.query('k-container-redliningtoolscontainer')[0];
+                    if (drawTools) {
+                        mapContainer.remove(drawTools);
+                    }
+                    if (measureTools) {
+                        mapContainer.remove(measureTools);
+                    } else {
+                        measureTools = Ext.create('Koala.view.container.RedliningToolsContainer', {
+                            style: {
+                                top: top,
+                                right: right
+                            }
+                        });
+                        mapContainer.add(measureTools);
+                    }
+                    break;
+                case 'draw':
+                    if (measureTools) {
+                        mapContainer.remove(measureTools);
+                    }
                     if (drawTools) {
                         mapContainer.remove(drawTools);
                     } else {
-                        drawTools = Ext.create('Koala.view.container.RedliningToolsContainer', {
+                        drawTools = Ext.create('Koala.view.container.DrawToolsContainer', {
                             style: {
                                 top: top,
                                 right: right

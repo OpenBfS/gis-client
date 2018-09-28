@@ -194,6 +194,21 @@
             }
         }
     },
+    "Koala.view.container.DrawToolsContainer": {
+        "config": {
+            "data": {
+                "pointTooltip": "Punkt zeichnen",
+                "lineTooltip": "Linie zeichnen",
+                "polygonTooltip": "Polygon zeichnen",
+                "postItTooltip": "Notiz hinzufügen",
+                "postItWindowTitle": "Notiz",
+                "postItInputTooLongText": "Der Text ist für eine korrekte Darstellung zu lang. Trotzdem hinzüfgen?",
+                "modifyTooltip": "Zeichenobjekt bearbeiten",
+                "deleteTooltip": "Zeichenobjekt löschen",
+                "clearTooltip": "Alle Zeichenobjekte löschen"
+            }
+        }
+    },
     "Koala.view.container.RedliningToolsContainer": {
         "config": {
             "data": {
