@@ -437,8 +437,13 @@ Ext.define('Koala.util.ChartData', {
             }
 
             if (type === 'timeSeries') {
+                var margin = gnosConfig.chartMargin.split(',');
+                margin = Ext.Array.map(margin, function(w) {
+                    return parseInt(w, 10);
+                });
                 // set the size
-                componentConfig.size = [chartSize[0] - 80, chartSize[1] - 20];
+                componentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
+                componentConfig.position = [margin[3], margin[0]];
                 componentConfig.backgroundColor = gnosConfig.backgroundColor;
                 componentConfig.title = layerConfig.title.label || '';
                 componentConfig.titleColor = layerConfig.title.labelColor || '#000';

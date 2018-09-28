@@ -128,7 +128,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         };
 
         var config = me.getView().getConfig();
-        var chartSize = this.getChartSize();
+        var chartSize = me.getViewSize();
         var chartConfig = Koala.util.ChartData.getChartConfiguration(
             config,
             chartSize,
