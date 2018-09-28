@@ -253,7 +253,7 @@ Ext.define('Koala.util.ChartData', {
          * @return {Object} The chart configuration object to be used with the d3-util components
          */
         getChartConfiguration: function(layerConfig, chartSize, type, data) {
-        /* timeseries props         
+        /* timeseries props
         {
             "dataFeatureType": "imis:odl_brutto_10min_timeseries_9",
             "param_viewparams": "locality_code:[[id]]",
@@ -471,7 +471,11 @@ Ext.define('Koala.util.ChartData', {
                         labelRotation: gnosConfig.rotateXAxisLabel === true ? 45 : 0,
                         scale: gnosConfig.xAxisScale || 'time',
                         min: xMin || undefined,
-                        max: xMax || undefined
+                        max: xMax || undefined,
+                        showGrid: gnosConfig.showGrid || false,
+                        gridColor: gnosConfig.gridStrokeColor,
+                        gridWidth: gnosConfig.gridStrokeWidth,
+                        gridOpacity: gnosConfig.gridStrokeOpacity
                     },
                     y: {
                         orientation: 'y',
@@ -486,7 +490,11 @@ Ext.define('Koala.util.ChartData', {
                         labelRotation: gnosConfig.rotateYAxisLabel === true ? 45 : 0,
                         scale: gnosConfig.yAxisScale || 'linear',
                         min: yMin || undefined,
-                        max: yMax || undefined
+                        max: yMax || undefined,
+                        showGrid: gnosConfig.showGrid || false,
+                        gridColor: gnosConfig.gridStrokeColor,
+                        gridWidth: gnosConfig.gridStrokeWidth,
+                        gridOpacity: gnosConfig.gridStrokeOpacity
                     }
                 };
                 // handle attachedSeries axes
