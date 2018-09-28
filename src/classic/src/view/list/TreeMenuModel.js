@@ -85,6 +85,11 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     text: '{drawandmeasure}',
                     iconCls: 'x-fa fa-pencil-square-o',
                     children: [{
+                        text: '{draw}',
+                        key: 'draw',
+                        leaf: true,
+                        iconCls: 'x-fa fa-pencil'
+                    }, {
                         text: '{measure}',
                         key: 'measure',
                         leaf: true,
