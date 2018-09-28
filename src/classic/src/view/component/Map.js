@@ -22,7 +22,8 @@ Ext.define('Koala.view.component.Map', {
     xtype: 'k-component-map',
 
     requires: [
-        'Koala.view.component.MapController'
+        'Koala.view.component.MapController',
+        'Koala.view.component.MapModel'
     ],
 
     config: {
@@ -35,6 +36,8 @@ Ext.define('Koala.view.component.Map', {
      *
      */
     controller: 'k-component-map',
+
+    viewModel: 'k-component-map',
 
     initComponent: function() {
         var me = this;

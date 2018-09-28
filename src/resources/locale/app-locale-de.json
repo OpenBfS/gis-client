@@ -180,6 +180,14 @@
             }
         }
     },
+    "Koala.view.component.Map": {
+        "config": {
+            "data": {
+                "warning": "Warnung",
+                "toManyFeatures": "Sie haben mehr als 3 Features selektiert, bitte schränken Sie zuvor Ihre Auswahl ein (z.B. durch vergrößern der Zoomstufe)."
+            }
+        }
+    },
     "Koala.view.chart.Bar": {
         "config": {
             "data": {
