@@ -355,11 +355,7 @@ Ext.define('Koala.util.ChartData', {
                 chartRendererConfig: {
                     size: chartSize || [200,200],
                     zoomType: 'none',
-                    chartMargin: [],
-                    title: '',
-                    titleColor: '#000',
-                    titlePadding: 18,
-                    titleSize: 20
+                    chartMargin: []
                 },
                 legendComponentConfig: {
                     legendEntryMaxLength: 20,
@@ -377,7 +373,11 @@ Ext.define('Koala.util.ChartData', {
                 },
                 barComponentConfig: {},
                 timeseriesComponentConfig: {
-                    backgroundColor: '#EEE'
+                    backgroundColor: '#EEE',
+                    title: '',
+                    titleColor: '#000',
+                    titlePadding: 18,
+                    titleSize: 20
                 }
             };
             var gnosConfig;
@@ -403,10 +403,6 @@ Ext.define('Koala.util.ChartData', {
 
             config.chartRendererConfig.zoomType = gnosConfig.allowZoom ? 'transform' : 'none';
             config.chartRendererConfig.chartMargin = gnosConfig.chartMargin ? gnosConfig.chartMargin.split(',') : [];
-            config.chartRendererConfig.title = gnosConfig.title || '';
-            config.chartRendererConfig.titleColor = gnosConfig.titleColor || '#000';
-            config.chartRendererConfig.titlePadding = gnosConfig.titlePadding || 18;
-            config.chartRendererConfig.titleSize = gnosConfig.titleSize || 20;
 
             config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 300;
 
@@ -444,6 +440,10 @@ Ext.define('Koala.util.ChartData', {
                 // set the size
                 componentConfig.size = [chartSize[0] - 80, chartSize[1] - 20];
                 componentConfig.backgroundColor = gnosConfig.backgroundColor;
+                componentConfig.title = layerConfig.title.label || '';
+                componentConfig.titleColor = layerConfig.title.labelColor || '#000';
+                componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
+                componentConfig.titleSize = layerConfig.title.labelSize || 20;
                 var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig);
                 // append series
                 componentConfig.series = seriesAndLegends.series;
