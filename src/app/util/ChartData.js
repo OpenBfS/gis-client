@@ -406,6 +406,22 @@ Ext.define('Koala.util.ChartData', {
 
             config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 300;
 
+            if (type === 'timeSeries') {
+                this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data);
+            } else { // type is barchart
+                // TODO: finish this...
+                componentConfig.axes = {};
+                componentConfig.bars = {};
+            }
+            return config;
+        },
+
+        /**
+         * Extract and coerce the min/max values from the config.
+         * @param  {Object} gnosConfig the metadata
+         * @return {Number[]} [xmin, xmax, ymin, ymax]
+         */
+        extractMinMax: function(gnosConfig) {
             // try to convert the x and y axis min and max values to a moment object, if they are no number
             var xMin;
             var xMax;
@@ -435,116 +451,116 @@ Ext.define('Koala.util.ChartData', {
             } else {
                 yMax = gnosConfig.yAxisMax;
             }
+            return [xMin, xMax, yMin, yMax];
+        },
 
-            if (type === 'timeSeries') {
-                var margin = gnosConfig.chartMargin.split(',');
-                margin = Ext.Array.map(margin, function(w) {
-                    return parseInt(w, 10);
-                });
-                // set the size
-                componentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
-                componentConfig.position = [margin[3], margin[0]];
-                componentConfig.backgroundColor = gnosConfig.backgroundColor;
-                componentConfig.title = layerConfig.title.label || '';
-                componentConfig.titleColor = layerConfig.title.labelColor || '#000';
-                componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
-                componentConfig.titleSize = layerConfig.title.labelSize || 20;
-                var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig);
-                // append series
-                componentConfig.series = seriesAndLegends.series;
-                // append legends
-                config.legendComponentConfig.items.push(seriesAndLegends.legends);
-                // append axes
-                componentConfig.axes = {
-                    x: {
-                        orientation: 'x',
-                        display: true,
-                        labelColor: gnosConfig.labelColor || '#000',
-                        labelPadding: gnosConfig.labelPadding || 25,
-                        labelSize: gnosConfig.labelSize || 12,
-                        tickPadding: gnosConfig.tickPadding || 3,
-                        tickSize: gnosConfig.tickSize || 6,
-                        format: gnosConfig.xAxisFormat || ',.0f',
-                        label: gnosConfig.xAxisLabel || '',
-                        labelRotation: gnosConfig.rotateXAxisLabel === true ? -55 : 0,
-                        scale: gnosConfig.xAxisScale || 'time',
-                        min: xMin || undefined,
-                        max: xMax || undefined,
-                        showGrid: gnosConfig.showGrid || false,
-                        gridColor: gnosConfig.gridStrokeColor,
-                        gridWidth: gnosConfig.gridStrokeWidth,
-                        gridOpacity: gnosConfig.gridStrokeOpacity
-                    },
-                    y: {
-                        orientation: 'y',
-                        display: true,
-                        labelColor: gnosConfig.labelColor || '#000',
-                        labelPadding: gnosConfig.labelPadding || 25,
-                        labelSize: gnosConfig.labelSize || 12,
-                        tickPadding: gnosConfig.tickPadding || 3,
-                        tickSize: gnosConfig.tickSize || 6,
-                        format: gnosConfig.yAxisFormat || ',.0f',
-                        label: gnosConfig.yAxisLabel || '',
-                        labelRotation: gnosConfig.rotateYAxisLabel === true ? 45 : 0,
-                        scale: gnosConfig.yAxisScale || 'linear',
-                        min: yMin || undefined,
-                        max: yMax || undefined,
-                        showGrid: gnosConfig.showGrid || false,
-                        gridColor: gnosConfig.gridStrokeColor,
-                        gridWidth: gnosConfig.gridStrokeWidth,
-                        gridOpacity: gnosConfig.gridStrokeOpacity
-                    }
-                };
-                // handle attachedSeries axes
-                if (gnosConfig.attachedSeries) {
-                    var series = gnosConfig.attachedSeries;
-                    if (Ext.isString(series)) {
-                        try {
-                            series = JSON.parse(series);
-                        } catch (e) {
-                            return;
-                        }
-                    }
-                    Ext.each(series, function(serie, index) {
-                        if (!serie.showYAxis) {
-                            return;
-                        }
-                        var additionalYMin;
-                        var additionalYMax;
-                        if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
-                            gnosConfig.yAxisMin && !Ext.isNumeric(gnosConfig.yAxisMin)) {
-                            additionalYMin = moment(gnosConfig.yAxisMin).unix() * 1000;
-                        } else {
-                            additionalYMin = gnosConfig.yAxisMin;
-                        }
-                        if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
-                            gnosConfig.yAxisMax && !Ext.isNumeric(gnosConfig.yAxisMax)) {
-                            additionalYMax = moment(gnosConfig.yAxisMax).unix() * 1000;
-                        } else {
-                            additionalYMax = gnosConfig.yAxisMax;
-                        }
-                        componentConfig.axes['y' + index] = {
-                            // TODO: axisWidth prop should get used?!
-                            orientation: 'y',
-                            display: true,
-                            labelColor: serie.labelColor || '#000',
-                            labelPadding: serie.labelPadding || 25,
-                            labelSize: serie.labelSize || 12,
-                            tickPadding: serie.tickPadding || 3,
-                            tickSize: serie.tickSize || 6,
-                            format: serie.yAxisFormat || ',.0f',
-                            label: serie.dspUnit || serie.yAxisLabel || '',
-                            labelRotation: serie.rotateYAxisLabel === true ? 45 : 0,
-                            scale: serie.yAxisScale || 'linear',
-                            min: additionalYMin || undefined,
-                            max: additionalYMax || undefined
-                        };
-                    });
+        /**
+         * Creates the timeseries component config.
+         * @param  {Object} componentConfig the timeseries component config to
+         * manipulate
+         * @param  {Object} gnosConfig the metadata
+         * @param  {Object} layerConfig the layer configuration
+         * @param  {Object} config the chart configuration
+         * @param  {Number[]} chartSize the chart size
+         * @param  {Object} data the chart data
+         */
+        createTimeseriesConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data) {
+            var minMax = this.extractMinMax(gnosConfig);
+            var margin = gnosConfig.chartMargin.split(',');
+            margin = Ext.Array.map(margin, function(w) {
+                return parseInt(w, 10);
+            });
+            // set the size
+            componentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
+            componentConfig.position = [margin[3], margin[0]];
+            componentConfig.backgroundColor = gnosConfig.backgroundColor;
+            componentConfig.title = layerConfig.title.label || '';
+            componentConfig.titleColor = layerConfig.title.labelColor || '#000';
+            componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
+            componentConfig.titleSize = layerConfig.title.labelSize || 20;
+            var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig);
+            // append series
+            componentConfig.series = seriesAndLegends.series;
+            // append legends
+            config.legendComponentConfig.items.push(seriesAndLegends.legends);
+            // append axes
+            componentConfig.axes = {
+                x: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true),
+                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true)
+            };
+            // handle attachedSeries axes
+            if (gnosConfig.attachedSeries) {
+                this.parseAttachedSeries(gnosConfig, componentConfig);
+            }
+        },
+
+        /**
+         * Parses the attached series axis config.
+         * @param  {Object} gnosConfig the metadata
+         * @param  {Object} componentConfig the d3-util config to manipulate
+         */
+        parseAttachedSeries: function(gnosConfig, componentConfig) {
+            var me = this;
+            var series = gnosConfig.attachedSeries;
+            if (Ext.isString(series)) {
+                try {
+                    series = JSON.parse(series);
+                } catch (e) {
+                    return;
                 }
-            } else { // type is barchart
-                // TODO: finish this...
-                componentConfig.axes = {};
-                componentConfig.bars = {};
+            }
+            Ext.each(series, function(serie, index) {
+                if (!serie.showYAxis) {
+                    return;
+                }
+                var additionalYMin;
+                var additionalYMax;
+                if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
+                    gnosConfig.yAxisMin && !Ext.isNumeric(gnosConfig.yAxisMin)) {
+                    additionalYMin = moment(gnosConfig.yAxisMin).unix() * 1000;
+                } else {
+                    additionalYMin = gnosConfig.yAxisMin;
+                }
+                if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
+                    gnosConfig.yAxisMax && !Ext.isNumeric(gnosConfig.yAxisMax)) {
+                    additionalYMax = moment(gnosConfig.yAxisMax).unix() * 1000;
+                } else {
+                    additionalYMax = gnosConfig.yAxisMax;
+                }
+                componentConfig.axes['y' + index] = me.createAxisConfig(gnosConfig, 'y', additionalYMin, additionalYMax, false);
+            });
+        },
+
+        /**
+         * Creates an axis configuration.
+         * @param  {Object} gnosConfig the metadata config
+         * @param  {String} orient 'x' or 'y'
+         * @param  {String|Number} min the min value
+         * @param  {String|NUmber} max the max value
+         * @param  {Boolean} withGrid whether to consider the grid config
+         * @return {Object} the axis configuration for d3-util
+         */
+        createAxisConfig: function(gnosConfig, orient, min, max, withGrid) {
+            var config = {
+                orientation: orient,
+                display: true,
+                labelColor: gnosConfig.labelColor || '#000',
+                labelPadding: gnosConfig.labelPadding || 25,
+                labelSize: gnosConfig.labelSize || 12,
+                tickPadding: gnosConfig.tickPadding || 3,
+                tickSize: gnosConfig.tickSize || 6,
+                format: gnosConfig[orient + 'AxisFormat'] || ',.0f',
+                label: gnosConfig[orient + 'AxisLabel'] || '',
+                labelRotation: gnosConfig['rotate' + orient.toUpperCase() + 'AxisLabel'] === true ? -55 : 0,
+                scale: gnosConfig[orient + 'AxisScale'] || (orient === 'x' ? 'time' : 'linear'),
+                min: min || undefined,
+                max: max || undefined
+            };
+            if (withGrid) {
+                config.showGrid = gnosConfig.showGrid || false;
+                config.gridColor = gnosConfig.gridStrokeColor;
+                config.gridWidth = gnosConfig.gridStrokeWidth;
+                config.gridOpacity = gnosConfig.gridStrokeOpacity;
             }
             return config;
         },
