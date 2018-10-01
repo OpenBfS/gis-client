@@ -44,6 +44,9 @@
     }
 
     .x-treelist-item-floated{
+        .menu-button {
+            display: none;
+        }
         .x-treelist-row {
             background-color: $base-color;
         }

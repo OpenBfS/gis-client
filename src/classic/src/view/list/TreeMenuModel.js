@@ -56,7 +56,8 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     text: '{menu}',
                     key: 'menu',
                     leaf: true,
-                    iconCls: 'x-fa fa-bars'
+                    iconCls: 'x-fa fa-bars',
+                    rowCls: 'menu-button'
                 }, {
                     text: '{themes}',
                     key: 'themes',
