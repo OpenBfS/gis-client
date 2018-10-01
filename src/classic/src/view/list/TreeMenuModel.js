@@ -31,7 +31,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         wmsimport: '',
         vectorimport: '',
         print: '',
-        drawandmeasure: '',
+        tools: '',
         draw: '',
         measure: '',
         selectfeatures: '',
@@ -82,7 +82,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     leaf: true,
                     iconCls: 'x-fa fa-print'
                 }, {
-                    text: '{drawandmeasure}',
+                    text: '{tools}',
                     iconCls: 'x-fa fa-pencil-square-o',
                     children: [{
                         text: '{draw}',
@@ -94,6 +94,11 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         key: 'measure',
                         leaf: true,
                         iconCls: 'x-fa fa-pencil-square'
+                    }, {
+                        text: '{selectfeatures}',
+                        key: 'selectfeatures',
+                        leaf: true,
+                        iconCls: 'x-fa fa-crop'
                     }]
                 }, {
                     text: '{share}',
@@ -105,11 +110,6 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         iconCls: 'x-fa fa-chain'
                     }]
                 }, {
-                    text: '{selectfeatures}',
-                    key: 'selectfeatures',
-                    leaf: true,
-                    iconCls: 'x-fa fa-crop'
-                },{
                     text: '{settings}',
                     iconCls: 'x-fa fa-gear',
                     expanded: '{settingsExpanded}',
