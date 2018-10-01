@@ -108,13 +108,7 @@ Ext.define('Koala.view.main.Main', {
     items: [{
         xtype: 'k-panel-header',
         region: 'north',
-        logoUrl: 'classic/resources/img/bfs-logo-75pct.png',
-        height: 64,
-        logoHeight: 58,
-        logoWidth: 150,
-        logoMargin: '5 10 5 10',
-        logoAltText: 'Logo Bundesamt für Strahlenschutz',
-        additionalItems: [],
+        height: 67,
         weight: 100
     }, {
         xtype: 'basigx-panel-mapcontainer',
