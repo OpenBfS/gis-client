@@ -409,9 +409,7 @@ Ext.define('Koala.util.ChartData', {
             if (type === 'timeSeries') {
                 this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data);
             } else { // type is barchart
-                // TODO: finish this...
-                componentConfig.axes = {};
-                componentConfig.bars = {};
+                this.createBarConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data);
             }
             return config;
         },
@@ -452,6 +450,81 @@ Ext.define('Koala.util.ChartData', {
                 yMax = gnosConfig.yAxisMax;
             }
             return [xMin, xMax, yMin, yMax];
+        },
+
+        /**
+         * Creates the bar chart component config.
+         * @param  {Object} componentConfig the bar chart component config to
+         * manipulate
+         * @param  {Object} gnosConfig the metadata
+         * @param  {Object} layerConfig the layer configuration
+         * @param  {Object} config the chart configuration
+         * @param  {Number[]} chartSize the chart size
+         * @param  {Object} data the chart data
+         */
+        createBarConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data) {
+            var minMax = this.extractMinMax(gnosConfig);
+            var margin = gnosConfig.chartMargin.split(',');
+            margin = Ext.Array.map(margin, function(w) {
+                return parseInt(w, 10);
+            });
+            // set the size
+            componentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
+            componentConfig.position = [margin[3], margin[0]];
+            componentConfig.backgroundColor = gnosConfig.backgroundColor;
+            componentConfig.title = layerConfig.title.label || '';
+            componentConfig.titleColor = layerConfig.title.labelColor || '#000';
+            componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
+            componentConfig.titleSize = layerConfig.title.labelSize || 20;
+            componentConfig.rotateBarLabel = gnosConfig.rotateBarLabel;
+            // append axes
+            componentConfig.axes = {
+                groupx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true),
+                groupedx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], false),
+                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true)
+            };
+            componentConfig.axes.groupx.scale = 'band';
+            componentConfig.axes.groupedx.scale = 'band';
+            componentConfig.data = this.extractBarData(data);
+        },
+
+        /**
+         * Converts the bar chart data to a compliant format.
+         * @param  {Object} data the chart data
+         * @return {Object} the d3-util compliant data
+         */
+        extractBarData: function(data) {
+            var result = [];
+            var grouped = [];
+
+            Ext.each(data, function(group) {
+                var item = {
+                    value: group.key,
+                    values: []
+                };
+                Ext.iterate(group, function(idx, value) {
+                    if (idx === 'key') {
+                        return;
+                    }
+                    if (grouped.indexOf(idx) < 0) {
+                        grouped.push(idx);
+                    }
+                    item.values.push({
+                        index: idx,
+                        value: value.value,
+                        uncertainty: value.uncertainty,
+                        color: value.color,
+                        label: value.label,
+                        belowThreshold: value.detection_limit === '<'
+                    });
+                });
+                result.push(item);
+            });
+
+            return {
+                data: result,
+                grouped: grouped
+            };
         },
 
         /**

@@ -631,7 +631,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                     }
                     me.thresholdState[idx].visibility = !me.thresholdState[idx].visibility;
                     me.redrawChart();
-                    me.redrawLegend();
+                    // me.redrawLegend();
                 })
                 .attr('transform', staticMe.makeTranslate(0, curTranslateY));
 
@@ -679,7 +679,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                 .on('click', function() {
                     me.thresholdState[idx].deleted = true;
                     me.redrawChart();
-                    me.redrawLegend();
+                    // me.redrawLegend();
                 });
 
             var disabledClsName = Const.CSS_CLASS.DISABLED_CLASS;
@@ -1189,7 +1189,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var me = this;
         var deleteCallback = function() {
             me.deleteEverything(dataObj);
-            me.redrawLegend();
+            // me.redrawLegend();
         };
         return deleteCallback;
     },
@@ -1304,7 +1304,7 @@ Ext.define('Koala.view.component.D3BaseController', {
             this.thresholdState[idx].color = '#' + cmp.getValue();
         }
         this.redrawChart();
-        this.redrawLegend();
+        // this.redrawLegend();
         cmp.up('window').close();
     },
 

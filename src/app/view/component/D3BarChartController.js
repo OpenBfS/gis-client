@@ -68,6 +68,99 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.onBoxReady();
     },
 
+    // OBSOLETE
+    drawSvgContainer: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3BaseController;
+        var makeTranslate = staticMe.makeTranslate;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+
+        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
+        var marginLeft = parseInt(chartMargin.left, 10);
+        var translate = makeTranslate(chartMargin.left, chartMargin.top);
+        var chartSize = me.getChartSize();
+        var scrollbarHeight = Ext.getScrollbarSize().height;
+
+        // Get the container view by its ID and append the SVG including an
+        // additional group element to it.
+        var container = d3.select(viewId);
+        if (this.type === 'component-d3barchart') {
+            container = container
+                .append('div')
+                .attr('style', 'overflow-x: auto; width: ' + chartSize[0] + 'px');
+        }
+        container
+            .append('svg')
+            .attr('viewBox', '0 0 ' + (chartSize[2] + marginLeft) + ' ' + (chartSize[1] - scrollbarHeight))
+            .attr('width', (chartSize[2] + marginLeft))
+            .attr('height', chartSize[1] - scrollbarHeight)
+            .append('g')
+            .attr('transform', translate);
+
+        var containerSvg = d3.select(viewId + ' svg');
+        me.containerSvg = containerSvg;
+    },
+
+    // OBSOLETE
+    updateSvgContainerSize: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3BaseController;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var chartSize = me.getChartSize();
+        var makeTranslate = staticMe.makeTranslate;
+        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
+        var marginLeft = parseInt(chartMargin.left, 10);
+        var translate = makeTranslate(chartMargin.left, chartMargin.top);
+        var scrollbarHeight = Ext.getScrollbarSize().height;
+
+        var svgContainer = d3.select(viewId + ' svg');
+        var svgGroup = d3.select(viewId + ' svg g');
+        var svgRect = d3.select(viewId + ' svg rect');
+        var viewSize = me.getViewSize();
+        var legWidth = me.calculateLegendWidth();
+        var barChartParent;
+        var svgContainerWidth = (chartSize[2] < chartSize[0]) ? chartSize[0] : chartSize[2];
+
+        svgContainer
+            .attr('viewBox', '0 0 ' + viewSize[0] + ' ' + viewSize[1])
+            .attr('width', viewSize[0])
+            .attr('height', viewSize[1]);
+
+        svgRect
+            .attr('width', chartSize[0])
+            .attr('height', chartSize[1]);
+
+        if (this.type === 'component-d3barchart') {
+            barChartParent = svgContainer.select(function() {
+                return this.parentNode;
+            });
+            barChartParent
+                .style('width', (viewSize[0] - legWidth) + 'px');
+
+            svgRect
+                .attr('height', chartSize[1] - scrollbarHeight)
+                .attr('width', chartSize[2] + marginLeft);
+            svgContainer
+                .attr('height', viewSize[1] - scrollbarHeight)
+                .attr('viewBox', '0 0 ' + (marginLeft + chartSize[2]) + ' ' + (viewSize[1] - scrollbarHeight))
+                .attr('width', (svgContainerWidth + marginLeft));
+        }
+
+        svgGroup
+            .attr('transform', translate);
+
+
+        // Re-register the zoom interaction if requested as the charts sizes
+        // may have changed.
+        if (view.getZoomEnabled()) {
+            me.createInteractions();
+            d3.select(viewId + ' svg > g > g.k-d3-shape-container')
+                .call(me.zoomInteraction);
+        }
+    },
+
     /**
      * Returns the request params for a given station.
      *
@@ -188,6 +281,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         if (!view) {
             return;
         }
+        var labelFunc = view.getLabelFunc() || me.getFallBackIdentity();
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
         var groupProp = barChartProperties.groupAttribute || 'end_measure';
         var labelProp = barChartProperties.groupLabelAttribute || groupProp;
@@ -282,6 +376,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             pushObj[groupKey].detection_limit = feature.properties[detectionLimitProp];
             pushObj[groupKey].uncertainty = feature.properties[uncertaintyProp];
             pushObj[groupKey].group = feature.properties[keyProp];
+            pushObj[groupKey].label = labelFunc(pushObj[groupKey].value, pushObj[groupKey], groupProp, keyProp);
 
             if (createSeries) {
                 seriesData.push(pushObj);
@@ -306,59 +401,38 @@ Ext.define('Koala.view.component.D3BarChartController', {
     drawChart: function() {
         var me = this;
 
-        me.drawSvgContainer();
-        me.drawLegendContainer();
+        me.currentDateRange = {
+            min: null,
+            max: null
+        };
 
-        me.createScales();
-        me.createAxes();
-        me.createGridAxes();
-        me.createTooltip();
-
-        me.setDomainForScales();
-
-        me.drawTitle();
-        me.drawAxes();
-        me.drawGridAxes();
-        me.drawShapes();
-
-        me.drawLegend();
-
-        me.chartRendered = true;
-        me.redrawChart();
-        me.updateLegendContainerPosition();
+        var config = me.getView().getConfig();
+        var chartSize = me.getViewSize();
+        var chartConfig = Koala.util.ChartData.getChartConfiguration(
+            config,
+            chartSize,
+            'bar',
+            this.data
+        );
+        chartConfig.chartRendererConfig.components = [
+            new D3Util.LegendComponent(chartConfig.legendComponentConfig),
+            new D3Util.BarComponent(chartConfig.barComponentConfig)
+        ];
+        this.chartRenderer = new D3Util.ChartRenderer(chartConfig.chartRendererConfig);
+        var svg = d3.select('#' + this.getView().getId()).node();
+        this.chartRenderer.render(svg);
     },
 
-    /**
-     *
-     */
+    // OBSOLETE
     redrawChart: function() {
-        var me = this;
-
-        if (me.chartRendered && me.data) {
-
-            me.updateSvgContainerSize();
-
-            me.deleteShapeContainerSvg();
-
-            me.createScales();
-            me.createAxes();
-            me.createGridAxes();
-
-            me.setDomainForScales();
-
-            me.redrawTitle();
-            me.redrawAxes();
-            me.redrawGridAxes();
-            me.redrawShapes();
-
-            me.updateLegendContainerPosition();
-        }
+        this.drawChart();
     },
 
     /**
      * Sets the domain for each scale in the chart by the use of the extent
      * of the given input data values.
      */
+    // OBSOLETE
     setDomainForScales: function() {
         var me = this;
         var Const = Koala.util.ChartConstants;
@@ -447,6 +521,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     /**
      * Redraws the shapeGroup containg all shapes (bars in this case).
      */
+    // OBSOLETE
     redrawShapes: function() {
         var me = this;
         var Const = Koala.util.ChartConstants;
@@ -464,6 +539,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     /**
      *
      */
+    // OBSOLETE
     drawShapes: function() {
         var me = this;
         var Const = Koala.util.ChartConstants;
@@ -985,7 +1061,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.deleteLegendEntry(subCategory);
 
         this.redrawChart();
-        this.redrawLegend();
+        // this.redrawLegend();
     },
 
     /**
@@ -1001,7 +1077,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         // Legend
         me.deleteLegendEntry(dataObj.key);
         me.redrawChart();
-        me.redrawLegend();
+        // me.redrawLegend();
     },
 
     /**

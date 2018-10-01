@@ -121,7 +121,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     drawChart: function() {
         var me = this;
-        // this.extractAttachedSeriesAxisConfig();
+
         me.currentDateRange = {
             min: null,
             max: null
