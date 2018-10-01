@@ -209,12 +209,11 @@ Ext.define('Koala.view.component.D3ChartController', {
             me.createAttachedSeriesAxes();
             me.createAttachedSeriesShapes();
 
-            me.updateLegendContainerPosition();
+            me.setDomainForScales();
             me.redrawLegend();
 
             me.updateSvgContainerSize();
-
-            me.setDomainForScales();
+            me.updateLegendContainerPosition();
 
             me.redrawTitle();
             me.redrawAxes();
