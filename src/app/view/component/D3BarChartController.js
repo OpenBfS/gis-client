@@ -415,7 +415,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             this.data
         );
         chartConfig.chartRendererConfig.components = [
-            new D3Util.LegendComponent(chartConfig.legendComponentConfig),
             new D3Util.BarComponent(chartConfig.barComponentConfig)
         ];
         this.chartRenderer = new D3Util.ChartRenderer(chartConfig.chartRendererConfig);

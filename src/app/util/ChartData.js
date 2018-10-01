@@ -555,7 +555,8 @@ Ext.define('Koala.util.ChartData', {
             // append series
             componentConfig.series = seriesAndLegends.series;
             // append legends
-            config.legendComponentConfig.items.push(seriesAndLegends.legends);
+            config.legendComponentConfig.items = seriesAndLegends.legends;
+            config.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
             // append axes
             componentConfig.axes = {
                 x: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true),
@@ -674,7 +675,8 @@ Ext.define('Koala.util.ChartData', {
                     title: 'Legende', // TODO
                     customRenderer: function() {}, // TODO
                     style: {
-                        color: seriesConfig.color
+                        stroke: seriesConfig.color,
+                        'stroke-width': 2
                     }
                 });
             });
