@@ -185,7 +185,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var allowClone = olLayer.get('allowClone') || false;
             var allowEdit = olLayer.get('allowEdit') || false;
             var allowShare = olLayer.get('persisted') ||
-                olLayer.metadata.layerConfig.olProperties.persisted;
+                olLayer.metadata ? olLayer.metadata.layerConfig.olProperties.persisted : false;
             var allowStyle = olLayer instanceof ol.layer.Vector &&
                     !olLayer.get('disableStyling');
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;

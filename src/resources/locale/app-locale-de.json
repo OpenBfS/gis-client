@@ -551,7 +551,8 @@
         "config": {
             "data": {
                 "title": "Themen",
-                "tooltip": "LayerSet wechseln",
+                "toggleLayerSetTooltip": "LayerSet wechseln",
+                "closeTooltip": "Schließen",
                 "tooltext": "Thema wechseln",
                 "btnTextResetThemeTreeFiltering": "Alle Layer",
                 "btnTooltipResetThemeTreeFiltering": "Hebt eine etwaige Filterung der verfügbaren Themen auf.",
