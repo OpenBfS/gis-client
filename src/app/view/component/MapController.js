@@ -36,6 +36,7 @@ Ext.define('Koala.view.component.MapController', {
      */
     onHoverFeatureClick: function(olFeats) {
         var me = this;
+        var viewModel = this.getViewModel();
         var timeSeriesPanel;
         var map = me.getView().getMap();
         var barChartWin;
@@ -43,20 +44,11 @@ Ext.define('Koala.view.component.MapController', {
         if (Ext.isEmpty(olFeats)) {
             return;
         }
+        if (olFeats.length > 3) {
+            Ext.Msg.alert(viewModel.get('warning'), viewModel.get('toManyFeatures'));
+            return;
+        }
 
-        /*        var realFeats = [];
-        var knownIds = [];
-
-        Ext.each(olFeats, function(feat) {
-            if (Ext.Array.contains(knownIds, feat.get('id'))) {
-                return;
-            }
-            knownIds.push(feat.get('id'));
-            realFeats.push(feat);
-        });
-
-        Ext.each(realFeats, function(olFeat) {
-*/
         me.distinctGeoms = [];
         var groups = {};
         Ext.each(olFeats, function(olFeat) {
