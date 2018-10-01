@@ -33,7 +33,7 @@ Ext.define('Koala.util.Chart', {
          * @param {ol.Feature} olFeat the station to add
          */
         openTimeseries: function(olFeat) {
-            var northContainer = Ext.ComponentQuery.query('container[name=north-container]')[0];
+            var northContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
             var timeseriesContainer = Ext.ComponentQuery.query('panel[name=timeseriespanel]')[0];
             var olLayer = olFeat.get('layer');
 
@@ -67,7 +67,7 @@ Ext.define('Koala.util.Chart', {
                 initOlLayer: olLayer,
                 listeners: {
                     close: function() {
-                        this.up('container[name=north-container]').hide();
+                        this.up('container[name=south-container]').hide();
                     }
                 }
             });

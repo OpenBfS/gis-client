@@ -31,7 +31,7 @@ Ext.define('Koala.view.panel.FeatureGridController', {
         if (view.originalLayer !== view.layer) {
             map.removeLayer(view.layer);
         }
-        var northContainer = Ext.ComponentQuery.query('container[name=north-container]')[0];
+        var northContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
         northContainer.hide();
     },
 
