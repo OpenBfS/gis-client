@@ -57,8 +57,60 @@ Ext.define('Koala.view.panel.Header', {
 
     cls: 'basigx-header',
 
-
-    items: [],
+    items: [{
+        xtype: 'title',
+        textAlign: 'center',
+        width: 300,
+        autoEl: {
+            tag: 'a',
+            href: null
+        },
+        cls: 'k-application-title'
+    }, {
+        xtype: 'container',
+        flex: 1,
+        layout: {
+            type: 'hbox',
+            align: 'center',
+            pack: 'left'
+        },
+        items: [{
+            xtype: 'k-form-field-searchcombo',
+            flex: 1
+        }, {
+            xtype: 'button',
+            glyph: 'xf057@FontAwesome',
+            style: {
+                borderRadius: 0
+            },
+            handler: function(btn) {
+                btn.up().down('k-form-field-searchcombo').clearValue();
+                var multiSearchPanel = this.up('k-panel-header')
+                    .down('k-panel-multisearch');
+                if (multiSearchPanel) {
+                    multiSearchPanel.hide();
+                }
+            }
+        }, {
+            xtype: 'k-panel-multisearch',
+            width: 600,
+            x: 0,
+            y: 60,
+            hidden: true,
+            border: true,
+            floating: true
+        }]
+    }, {
+        xtype: 'container',
+        layout: {
+            type: 'hbox',
+            align: 'center',
+            pack: 'right'
+        },
+        items: {
+            xtype: 'k-toolbar-header'
+        }
+    }],
 
     /**
      * Initializes this header panel.

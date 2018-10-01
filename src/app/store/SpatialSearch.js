@@ -40,36 +40,36 @@ Ext.define('Koala.store.SpatialSearch', {
      */
     _lastRequest: null,
 
-    constructor: function(config) {
-        //TODO: this won't work if more than one map
-        if (!this.map) {
-            this.map = BasiGX.view.component.Map.guess().getMap();
-        }
-        if (!this.layer) {
-            this.layer = new ol.layer.Vector({
-                source: new ol.source.Vector()
+    listeners: {
+        beforeload: function() {
+            //TODO: this won't work if more than one map
+            if (!this.map) {
+                this.map = BasiGX.view.component.Map.guess().getMap();
+            }
+            if (!this.layer) {
+                this.layer = new ol.layer.Vector({
+                    source: new ol.source.Vector()
+                });
+                var displayInLayerSwitcherKey = BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
+                this.layer.set(displayInLayerSwitcherKey, false);
+                this.layer.setZIndex(999);
+                this.map.addLayer(this.layer);
+            }
+
+            var appContext = BasiGX.view.component.Map.guess().appContext;
+            var urls = appContext.data.merge.urls;
+            var spatialsearchtypename = appContext.data.merge['spatialSearchTypeName'];
+            this.proxy.url = urls['spatial-search'];
+            this.proxy.extraParams.typeName = spatialsearchtypename;
+
+            var fields = Koala.model.SpatialRecord.getFields();
+            Ext.each(fields, function(field) {
+                field.initConfig({
+                    searchColumn: appContext.data.merge.spatialSearchFields.searchColumn,
+                    geomColumn: appContext.data.merge.spatialSearchFields.geomColumn
+                });
             });
-            var displayInLayerSwitcherKey = BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
-            this.layer.set(displayInLayerSwitcherKey, false);
-            this.layer.setZIndex(999);
-            this.map.addLayer(this.layer);
         }
-
-        this.callParent([config]);
-
-        var appContext = BasiGX.view.component.Map.guess().appContext;
-        var urls = appContext.data.merge.urls;
-        var spatialsearchtypename = appContext.data.merge['spatialSearchTypeName'];
-        this.proxy.url = urls['spatial-search'];
-        this.proxy.extraParams.typeName = spatialsearchtypename;
-
-        var fields = Koala.model.SpatialRecord.getFields();
-        Ext.each(fields, function(field) {
-            field.initConfig({
-                searchColumn: appContext.data.merge.spatialSearchFields.searchColumn,
-                geomColumn: appContext.data.merge.spatialSearchFields.geomColumn
-            });
-        });
     },
 
     proxy: {
