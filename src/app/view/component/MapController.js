@@ -44,10 +44,6 @@ Ext.define('Koala.view.component.MapController', {
         if (Ext.isEmpty(olFeats)) {
             return;
         }
-        if (olFeats.length > 3) {
-            Ext.Msg.alert(viewModel.get('warning'), viewModel.get('toManyFeatures'));
-            return;
-        }
 
         me.distinctGeoms = [];
         var groups = {};
@@ -70,6 +66,11 @@ Ext.define('Koala.view.component.MapController', {
                 });
             }
         }, me);
+
+        if (me.distinctGeoms.length > 3) {
+            Ext.Msg.alert(viewModel.get('warning'), viewModel.get('toManyFeatures'));
+            return;
+        }
 
         Ext.each(me.distinctGeoms, function(olFeat) {
             var layer = olFeat.get('layer');
