@@ -120,6 +120,9 @@ Ext.define('Koala.view.component.D3ChartController', {
      *
      */
     drawChart: function() {
+        if (!this.chartConfig) {
+            return;
+        }
         var me = this;
 
         me.currentDateRange = {
@@ -128,24 +131,61 @@ Ext.define('Koala.view.component.D3ChartController', {
         };
 
         var config = me.getView().getConfig();
-        var chartSize = me.getViewSize();
-        var chartConfig = Koala.util.ChartData.getChartConfiguration(
-            config,
-            chartSize,
-            'timeSeries',
-            this.data
-        );
-        var series = new D3Util.TimeseriesComponent(chartConfig.timeseriesComponentConfig);
-        Ext.each(chartConfig.legendComponentConfig.items, function(legend) {
-            legend.onClick = function() {
+        var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
+        Ext.each(this.chartConfig.legendComponentConfig.items, function(legend, idx) {
+            legend.onClick = function(event) {
+                var list = event.target.classList;
+                if (list.contains(CSS.DOWNLOAD_ICON) ||
+                    list.contains(CSS.COLOR_ICON) ||
+                    list.contains(CSS.DELETE_ICON)) {
+                    return;
+                }
                 series.toggleSeries(legend.seriesIndex);
             };
+            legend.customRenderer = function(node) {
+                var allowDownload = Koala.util.Object.getPathStrOr(
+                    config.targetLayer,
+                    'metadata/layerConfig/olProperties/allowDownload',
+                    true
+                );
+                allowDownload = Koala.util.String.coerce(allowDownload);
+                if (!Ext.isModern && allowDownload) {
+                    node.append('text')
+                    // fa-save from FontAwesome, see http://fontawesome.io/cheatsheet/
+                        .text('')
+                        .attr('class', CSS.DOWNLOAD_ICON)
+                        .attr('text-anchor', 'start')
+                        .attr('dy', '1')
+                        .attr('dx', '130') // TODO Discuss, do we need this dynamically?
+                        .on('click', me.generateDownloadCallback(legend.seriesId));
+                }
+                if (!Ext.isModern) {
+                    node.append('text')
+                        // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                        .text('\uf1fc')
+                        .attr('class', CSS.COLOR_ICON)
+                        .attr('text-anchor', 'start')
+                        .attr('dy', '1')
+                        .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                        .on('click', me.generateColorCallback(legend.seriesIndex));
+                }
+                node.append('text')
+                    // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
+                    .text('')
+                    .attr('class', CSS.DELETE_ICON)
+                    .attr('text-anchor', 'start')
+                    .attr('dy', '1')
+                    .attr('dx', '170') // TODO Discuss, do we need this dynamically?
+                    .on('click', me.generateDeleteCallback(legend.seriesIndex, idx));
+            };
         });
-        chartConfig.chartRendererConfig.components = [
-            new D3Util.LegendComponent(chartConfig.legendComponentConfig),
+        this.chartConfig.chartRendererConfig.components = [
+            new D3Util.LegendComponent(this.chartConfig.legendComponentConfig),
             series
         ];
-        this.chartRenderer = new D3Util.ChartRenderer(chartConfig.chartRendererConfig);
+        this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
         var svg = d3.select('#' + this.getView().getId()).node();
         this.chartRenderer.render(svg);
     },
@@ -1186,11 +1226,10 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      * Converts the download features to GeoJSON and downloads via data uri.
      *
-     * @param {Object} dataObj The config object of the selected Series.
+     * @param {String} stationId The config object of the selected Series.
      * @param {Ext.button.Button} btn The button we clicked on.
      */
-    downloadChartData: function(dataObj, btn) {
-        var stationId = dataObj.config.id;
+    downloadChartData: function(stationId, btn) {
         var win = btn.up('window');
         var formatCombo = win.down('combo[id="formatCombo"]');
         var checkbox = win.down('checkboxfield');
@@ -1255,73 +1294,22 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    deleteEverything: function(dataObj) {
-        var id = dataObj.config.id;
-        var me = this;
-        // ShapeConfig
-        me.deleteShapeConfig(id);
-        // Data
-        me.deleteData(id);
-        // selectedStation
-        me.deleteSelectedStation(id);
-        // Shape
-        me.deleteShapeSeriesById(id);
-        // Legend
-        me.deleteLegendEntry(id);
-        // …now redraw the chart
-        me.redrawChart();
-    },
-    /**
-     *
-     */
-    deleteShapeConfig: function(shapeId) {
-        var shapeConfigs = this.getView().getShapes();
-        var shapeConfigToRemove = Ext.Array.findBy(shapeConfigs, function(shapeConfig) {
-            return shapeConfig.id === shapeId;
-        });
-        Ext.Array.remove(shapeConfigs, shapeConfigToRemove);
-        var attachedShapeConfigsToRemove = [];
-        Ext.each(this.attachedSeriesShapes, function(shape) {
-            if (shape.config.id === shapeId) {
-                attachedShapeConfigsToRemove.push(shape);
+    deleteEverything: function(index, legendIndex) {
+        var attached = [];
+        Ext.each(this.chartConfig.timeseriesComponentConfig.series, function(config, idx) {
+            if (config.belongsTo === index) {
+                attached.push(idx);
             }
         });
-        Ext.Array.remove(this.attachedSeriesShapes, attachedShapeConfigsToRemove);
-    },
-    /**
-     *
-     */
-    deleteData: function(shapeId) {
-        delete this.data[shapeId];
-    },
-    /**
-     *
-     */
-    deleteSelectedStation: function(shapeId) {
-        var view = this.getView();
-        var stations = view.getSelectedStations();
-        var chartProps = view.getTargetLayer().get('timeSeriesChartProperties');
-        var stationToRemove = Ext.Array.findBy(stations, function(station) {
-            return station.get(chartProps.featureIdentifyField || 'id') === shapeId;
-        });
-        Ext.Array.remove(stations, stationToRemove);
-    },
-    /**
-     * Removes the shape series specified by the given `idx`. Will remove the
-     * SVG node and the entry in our internal dataset.
-     *
-     * @param {Number} id The id of the shape config.
-     */
-    deleteShapeSeriesById: function(id) {
-        var me = this;
-        var shapeToRemove = Ext.Array.findBy(me.shapes, function(shape) {
-            return shape.config.id === id;
-        });
-        Ext.Array.remove(me.shapes, shapeToRemove);
-        var shapeGroupNode = me.shapeGroupById(id).node();
-        if (shapeGroupNode && shapeGroupNode.parentNode) {
-            shapeGroupNode.parentNode.removeChild(shapeGroupNode);
-        }
+        this.chartConfig.timeseriesComponentConfig.series =
+            this.chartConfig.timeseriesComponentConfig.series.filter(function(config, idx) {
+                if (attached.indexOf(idx) !== -1) {
+                    return false;
+                }
+                return true;
+            });
+        this.chartConfig.legendComponentConfig.items.splice(legendIndex, 1);
+        this.drawChart();
     },
     /**
      *
@@ -1576,9 +1564,15 @@ Ext.define('Koala.view.component.D3ChartController', {
             if (view.getShowLoadMask()) {
                 view.setLoading(false);
             }
+            var config = me.getView().getConfig();
+            var chartSize = me.getViewSize();
+            me.chartConfig = Koala.util.ChartData.getChartConfiguration(
+                config,
+                chartSize,
+                'timeSeries',
+                this.data
+            );
             me.fireEvent('chartdataprepared');
-            // me.redrawAxes();
-            this.drawChart();
         }
     },
     /**

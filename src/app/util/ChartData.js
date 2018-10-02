@@ -536,6 +536,7 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} config the chart configuration
          * @param  {Number[]} chartSize the chart size
          * @param  {Object} data the chart data
+         * chart controller
          */
         createTimeseriesConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data) {
             var minMax = this.extractMinMax(gnosConfig);
@@ -551,12 +552,14 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.titleColor = layerConfig.title.labelColor || '#000';
             componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
             componentConfig.titleSize = layerConfig.title.labelSize || 20;
+            componentConfig.extraClasses = 'k-d3-shape-group';
             var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig);
             // append series
             componentConfig.series = seriesAndLegends.series;
             // append legends
             config.legendComponentConfig.items = seriesAndLegends.legends;
             config.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
+            config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
                 x: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true),
@@ -643,6 +646,7 @@ Ext.define('Koala.util.ChartData', {
          * Generates series and legends for a timeseries
          * @param {Object} data The input data
          * @param {Object} layerConfig the config for the layer
+         * chart controller
          */
         generateTimeSeriesAndLegends: function(data, layerConfig) {
             var gnosConfig = layerConfig.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
@@ -671,14 +675,15 @@ Ext.define('Koala.util.ChartData', {
                     tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
                     curveType: gnosConfig.curveType || 'linear',
                     shapeType: gnosConfig.shapeType || 'line',
-                    axes: ['x', 'y']
+                    axes: ['x', 'y'],
+                    belongsTo: series.length
                 };
                 if (colors[index]) {
                     seriesConfig.color = colors[index];
                     ++index;
                 }
                 series.push(seriesConfig);
-
+                var seriesIndex = series.length - 1;
                 // handle attached series
                 if (gnosConfig.attachedSeries) {
                     Ext.each(attachedSeries, function(serie, idx) {
@@ -697,7 +702,8 @@ Ext.define('Koala.util.ChartData', {
                             tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
                             curveType: serie.curveType || 'linear',
                             shapeType: serie.shapeType || 'line',
-                            axes: ['x', 'y' + idx]
+                            axes: ['x', 'y' + idx],
+                            belongsTo: seriesIndex
                         };
                         attachedSeriesConfig.color = serie.color;
                         if (!attachedSeriesConfig.color) {
@@ -712,12 +718,12 @@ Ext.define('Koala.util.ChartData', {
                 legends.push({
                     type: 'line',
                     title: 'Legende', // TODO
-                    customRenderer: function() {}, // TODO
                     style: {
                         stroke: seriesConfig.color,
                         'stroke-width': 2
                     },
-                    seriesIndex: index - 1
+                    seriesIndex: seriesIndex,
+                    seriesId: id
                 });
             });
             return {

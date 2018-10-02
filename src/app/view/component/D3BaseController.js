@@ -1185,11 +1185,10 @@ Ext.define('Koala.view.component.D3BaseController', {
      * @return {Function} The callback to be used as click handler on the delete
      *     icon.
      */
-    generateDeleteCallback: function(dataObj) {
+    generateDeleteCallback: function(index, legendIndex) {
         var me = this;
         var deleteCallback = function() {
-            me.deleteEverything(dataObj);
-            // me.redrawLegend();
+            me.deleteEverything(index, legendIndex);
         };
         return deleteCallback;
     },
@@ -1214,22 +1213,14 @@ Ext.define('Koala.view.component.D3BaseController', {
     /**
      * Generates a callback that can be used for the click event on the color
      * icon.
-     * @param  {Object} shape The shape to handle. If undefined, the threshold
-     *                        with index idx will be updated.
+     * @param  {Number} index the index of the series to change color for
      * @return {Function}       The generated callback function
      */
-    generateColorCallback: function(shape, idx) {
+    generateColorCallback: function(idx) {
         var me = this;
         var viewModel = this.getViewModel();
         return function() {
-            var color;
-            if (shape) {
-                color = me.customColors[idx] || shape.config.color;
-            } else {
-                var lay = me.getView().getTargetLayer();
-                var config = JSON.parse(lay.get('timeSeriesChartProperties').thresholds)[idx];
-                color = me.thresholdState[idx].color || config.stroke;
-            }
+            var color = me.chartConfig.timeseriesComponentConfig.series[idx].color;
             var win = Ext.create('Ext.window.Window', {
                 title: viewModel.get('colorWindowTitle'),
                 width: 300,
@@ -1257,7 +1248,13 @@ Ext.define('Koala.view.component.D3BaseController', {
                 }],
                 bbar: [{
                     text: viewModel.get('colorMsgButtonYes'),
-                    handler: me.colorPicked.bind(me, shape, idx)
+                    handler: function() {
+                        var cmp = win.down('[name=chart-color-picker]');
+                        me.chartConfig.timeseriesComponentConfig
+                            .series[idx].color = '#' + cmp.getValue();
+                        me.drawChart();
+                        win.close();
+                    }
                 }, {
                     text: viewModel.get('colorMsgButtonNo'),
                     handler: function() {
@@ -1267,45 +1264,6 @@ Ext.define('Koala.view.component.D3BaseController', {
             });
             win.show();
         };
-    },
-
-    /**
-     * Callback to update the color of a chart item.
-     * @param  {Object} shape the shape to update. If undefined, the threshold
-     *                        with index idx will be updated.
-     * @param  {Number} idx   index of the shape
-     */
-    colorPicked: function(shape, idx) {
-        var cmp = Ext.ComponentQuery.query('[name=chart-color-picker]')[0];
-        if (shape) {
-            var oldColor = shape.config.color;
-            shape.config.color = '#' + cmp.getValue();
-            this.customColors[idx] = shape.config.color;
-            // also apply the color to the same member of the other groups
-            Ext.each(this.data, function(group) {
-                if (group[shape.config.key]) {
-                    group[shape.config.key].color = shape.config.color;
-                }
-            });
-            // if we have attachedSeries and it has the same color as the parent
-            // we will also apply the new color to the attached series
-            if (shape.config.attachedSeries) {
-                var as = Koala.util.String.coerce(shape.config.attachedSeries);
-                if (Ext.isArray(as)) {
-                    Ext.each(as, function(series) {
-                        if (!series.color || series.color === oldColor) {
-                            series.color = shape.config.color;
-                        }
-                    });
-                    shape.config.attachedSeries = JSON.stringify(as);
-                }
-            }
-        } else {
-            this.thresholdState[idx].color = '#' + cmp.getValue();
-        }
-        this.redrawChart();
-        // this.redrawLegend();
-        cmp.up('window').close();
     },
 
     /**
