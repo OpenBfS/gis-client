@@ -43,6 +43,57 @@ Ext.define('Koala.view.panel.FeatureGrid', {
         beforedestroy: 'onBeforeDestroy'
     },
 
+    collapsible: true,
+    closable: false,
+
+    tools: [{
+        type: 'unpin',
+        bind: {
+            tooltip: '{unpinTooltip}',
+            hidden: '{!pinned}'
+        },
+        callback: function() {
+            var view = this.up('k-panel-featuregrid');
+            var viewModel = view.getViewModel();
+            var container = view.up('[name=south-container]');
+            Ext.create('Ext.window.Window', {
+                height: 350,
+                width: 900,
+                layout: 'fit',
+                items: view
+            }).show();
+            viewModel.set('pinned', false);
+            container.remove(view);
+            container.hide();
+        }
+    }, {
+        type: 'pin',
+        bind: {
+            tooltip: '{pinTooltip}',
+            hidden: '{pinned}'
+        },
+        callback: function() {
+            var view = this.up('k-panel-featuregrid');
+            var window = view.up('window');
+            var viewModel = view.getViewModel();
+            var container = Ext.ComponentQuery.query('[name=south-container]')[0];
+            container.add(view);
+            container.show();
+            viewModel.set('pinned', true);
+            window.close();
+        }
+    }, {
+        type: 'close',
+        bind: {
+            tooltip: '{closeTooltip}',
+            hidden: '{!pinned}'
+        },
+        callback: function() {
+            var view = this.up('k-panel-featuregrid');
+            view.close();
+        }
+    }],
+
     initComponent: function() {
         var me = this;
         // save original layer

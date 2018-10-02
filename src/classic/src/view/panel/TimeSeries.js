@@ -73,7 +73,7 @@ Ext.define('Koala.view.panel.TimeSeries', {
             }).show();
             viewModel.set('pinned', false);
             container.remove(view);
-            container.setHeight(0);
+            container.close();
         }
     }, {
         type: 'pin',
@@ -87,7 +87,7 @@ Ext.define('Koala.view.panel.TimeSeries', {
             var viewModel = view.getViewModel();
             var container = Ext.ComponentQuery.query('[name=south-container]')[0];
             container.add(view);
-            container.setHeight(350);
+            container.show();
             viewModel.set('pinned', true);
             window.close();
         }
