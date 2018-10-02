@@ -85,6 +85,11 @@
         font-size: 18px;
         color: white;
         line-height: 64px;
+
+        &.fa-map-o,
+        &.fa-map {
+            font-size: 16px;
+        }
     }
 
     .x-treelist-item-tool,

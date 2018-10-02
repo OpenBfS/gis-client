@@ -75,12 +75,12 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         text: '{wmsimport}',
                         key: 'wmsimport',
                         leaf: true,
-                        iconCls: 'x-fa fa-circle'
+                        iconCls: 'x-fa fa-map'
                     }, {
                         text: '{vectorimport}',
                         key: 'vectorimport',
                         leaf: true,
-                        iconCls: 'x-fa fa-circle-o'
+                        iconCls: 'x-fa fa-map-o'
                     }]
                 }, {
                     text: '{print}',
