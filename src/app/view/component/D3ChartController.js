@@ -131,6 +131,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         };
 
         var config = me.getView().getConfig();
+        var gnosConfig = config.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
         var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
         var Const = Koala.util.ChartConstants;
         var CSS = Const.CSS_CLASS;
@@ -144,6 +145,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                 }
                 series.toggleSeries(legend.seriesIndex);
             };
+            var station = Ext.Array.findBy(me.getView().getSelectedStations(), function(feature) {
+                return feature.get('id') === legend.seriesId;
+            });
+            legend.title = Koala.util.String.replaceTemplateStrings(gnosConfig.seriesTitleTpl, station);
             legend.customRenderer = function(node) {
                 var allowDownload = Koala.util.Object.getPathStrOr(
                     config.targetLayer,
@@ -1080,6 +1085,30 @@ Ext.define('Koala.view.component.D3ChartController', {
         this.drawThresholdLegends(config, legend, curTranslateY);
         me.wrapAndResizeLegend();
     },
+
+    /**
+     * Update the chart configuration with the new size and redraw.
+     */
+    handleResize: function() {
+        if (!this.chartConfig) {
+            return;
+        }
+        var config = this.getView().getConfig();
+        var gnosConfig = config.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
+        var margin = gnosConfig.chartMargin.split(',');
+        margin = Ext.Array.map(margin, function(w) {
+            return parseInt(w, 10);
+        });
+        var chartSize = this.getViewSize();
+        // set the size
+        this.chartConfig.timeseriesComponentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
+        this.chartConfig.timeseriesComponentConfig.position = [margin[3], margin[0]];
+        this.chartConfig.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
+        this.chartConfig.chartRendererConfig.size = chartSize;
+
+        this.drawChart();
+    },
+
     /**
      * Get the legend entry contextmenu callback function.
      * @param  {Object} shape the shape the contextmenu callback is for.

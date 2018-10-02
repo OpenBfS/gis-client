@@ -714,17 +714,17 @@ Ext.define('Koala.util.ChartData', {
                         series.push(attachedSeriesConfig);
                     });
                 }
-
-                legends.push({
+                var legendConfig = {
                     type: 'line',
-                    title: 'Legende', // TODO
+                    title: '',
                     style: {
                         stroke: seriesConfig.color,
                         'stroke-width': 2
                     },
                     seriesIndex: seriesIndex,
                     seriesId: id
-                });
+                };
+                legends.push(legendConfig);
             });
             return {
                 series: series,

@@ -33,7 +33,7 @@ Ext.define('Koala.view.component.D3Chart',{
     },
 
     listeners: {
-        resize: 'drawChart',
+        resize: 'handleResize',
         boxready: 'onBoxReady',
         initialize: 'onInitialize'
     },
