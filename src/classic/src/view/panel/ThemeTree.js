@@ -81,18 +81,34 @@ Ext.define('Koala.view.panel.ThemeTree', {
         }
     }],
 
-    fbar: [
-        {
-            type: 'button',
-            name: 'resetThemeTree',
-            bind: {
-                text: '{btnTextResetThemeTreeFiltering}',
-                tooltip: '{btnTooltipResetThemeTreeFiltering}'
-            },
-            handler: 'resetThemeTreeFiltering',
-            disabled: true
+    fbar: [{
+        type: 'button',
+        name: 'collapseAll',
+        handler: 'collapseAll',
+        minWidth: 20,
+        glyph: 'xf147@FontAwesome',
+        bind: {
+            tooltip: '{tooltipCollapseAll}'
         }
-    ],
+    }, {
+        type: 'button',
+        name: 'expandAll',
+        handler: 'expandAll',
+        glyph: 'xf196@FontAwesome',
+        minWidth: 20,
+        bind: {
+            tooltip: '{tooltipExpandAll}'
+        }
+    }, {
+        type: 'button',
+        name: 'resetThemeTree',
+        bind: {
+            text: '{btnTextResetThemeTreeFiltering}',
+            tooltip: '{btnTooltipResetThemeTreeFiltering}'
+        },
+        handler: 'resetThemeTreeFiltering',
+        disabled: true
+    }],
 
     columns: [{
         xtype: 'treecolumn',
