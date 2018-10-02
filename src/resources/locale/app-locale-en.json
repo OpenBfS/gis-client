@@ -179,6 +179,14 @@
             }
         }
     },
+    "Koala.view.component.Map": {
+        "config": {
+            "data": {
+                "warning": "Warning",
+                "toManyFeatures": "You selected more then 3 Features, please limit your selection (e.g. by increasing the zoom level)."
+            }
+        }
+    },
     "Koala.view.chart.Bar": {
         "config": {
             "data": {

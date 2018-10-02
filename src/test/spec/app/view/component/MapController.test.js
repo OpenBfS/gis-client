@@ -1,5 +1,6 @@
 Ext.Loader.syncRequire([
     'Koala.view.component.MapController',
+    'Koala.view.component.MapModel',
     'Koala.view.component.CartoWindow',
     'Koala.view.component.CartoWindowController',
     'BasiGX.view.component.Map',
@@ -30,8 +31,12 @@ describe('Koala.view.component.MapController', function() {
 
         it('can be called', function() {
             var controller = new Koala.view.component.MapController();
+            var viewModel = new Koala.view.component.MapModel();
             var view = {};
             view.getMap = sinon.stub();
+            controller.getViewModel = function() {
+                return viewModel;
+            };
 
             controller.setView(view);
             expect(controller.onHoverFeatureClick.bind(controller))
@@ -40,6 +45,10 @@ describe('Koala.view.component.MapController', function() {
 
         it('can be called with feature', function() {
             var controller = new Koala.view.component.MapController();
+            var viewModel = new Koala.view.component.MapModel();
+            controller.getViewModel = function() {
+                return viewModel;
+            };
             var view = {};
             view.getMap = sinon.stub().returns({});
             var feat = TestUtil.getMockedGetter({});
