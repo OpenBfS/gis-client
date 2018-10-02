@@ -44,7 +44,11 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         privacy: '',
         help: '',
         privacyUrl: '',
-        settingsExpanded: false
+        settingsExpanded: false,
+        themeTreeVisible: true,
+        drawToolsActive: false,
+        measureToolsActive: false,
+        selectFeaturesActive: false
     },
 
     stores: {
@@ -62,7 +66,8 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     text: '{themes}',
                     key: 'themes',
                     leaf: true,
-                    iconCls: 'x-fa fa-folder-open-o'
+                    iconCls: 'x-fa fa-folder-open-o',
+                    rowCls: '{themeTreeVisible ? "active" : ""}'
                 }, {
                     text: '{loading}',
                     iconCls: 'x-fa fa-globe',
@@ -89,17 +94,20 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         text: '{draw}',
                         key: 'draw',
                         leaf: true,
-                        iconCls: 'x-fa fa-pencil'
+                        iconCls: 'x-fa fa-pencil',
+                        rowCls: '{drawToolsActive ? "active" : ""}'
                     }, {
                         text: '{measure}',
                         key: 'measure',
                         leaf: true,
-                        iconCls: 'x-fa fa-pencil-square'
+                        iconCls: 'x-fa fa-pencil-square',
+                        rowCls: '{measureToolsActive ? "active" : ""}'
                     }, {
                         text: '{selectfeatures}',
                         key: 'selectfeatures',
                         leaf: true,
-                        iconCls: 'x-fa fa-crop'
+                        iconCls: 'x-fa fa-crop',
+                        rowCls: '{selectFeaturesActive ? "active" : ""}'
                     }]
                 }, {
                     text: '{share}',
