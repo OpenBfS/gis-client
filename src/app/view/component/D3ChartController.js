@@ -135,9 +135,15 @@ Ext.define('Koala.view.component.D3ChartController', {
             'timeSeries',
             this.data
         );
+        var series = new D3Util.TimeseriesComponent(chartConfig.timeseriesComponentConfig);
+        Ext.each(chartConfig.legendComponentConfig.items, function(legend) {
+            legend.onClick = function() {
+                series.toggleSeries(legend.seriesIndex);
+            };
+        });
         chartConfig.chartRendererConfig.components = [
             new D3Util.LegendComponent(chartConfig.legendComponentConfig),
-            new D3Util.TimeseriesComponent(chartConfig.timeseriesComponentConfig)
+            series
         ];
         this.chartRenderer = new D3Util.ChartRenderer(chartConfig.chartRendererConfig);
         var svg = d3.select('#' + this.getView().getId()).node();

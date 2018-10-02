@@ -716,7 +716,8 @@ Ext.define('Koala.util.ChartData', {
                     style: {
                         stroke: seriesConfig.color,
                         'stroke-width': 2
-                    }
+                    },
+                    seriesIndex: index - 1
                 });
             });
             return {
