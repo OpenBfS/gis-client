@@ -377,16 +377,15 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
          */
         editHandler: function(btn) {
             var layer = btn.up().layerRec.data;
-            var northContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
+            var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
             var panel = Ext.create('Koala.view.panel.FeatureGrid', {
                 height: 400,
                 closable: true,
                 layer: layer
             });
-            northContainer.removeAll();
-            northContainer.add(panel);
-
-            northContainer.show();
+            southContainer.removeAll();
+            southContainer.add(panel);
+            southContainer.show();
         },
 
         styleHandler: function(btn) {

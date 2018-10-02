@@ -50,12 +50,48 @@ Ext.define('Koala.view.panel.TimeSeries', {
     collapsible: true,
     maxHeight: 800,
     height: 350,
+    closable: false,
     width: 900,
     layout: {
         type: 'vbox'
     },
-    closable: true,
     tools: [{
+        type: 'unpin',
+        bind: {
+            tooltip: '{unpinTooltip}',
+            hidden: '{!pinned}'
+        },
+        callback: function() {
+            var view = this.up('k-panel-timeseries');
+            var viewModel = view.getViewModel();
+            var container = view.up('[name=south-container]');
+            Ext.create('Ext.window.Window', {
+                height: 350,
+                width: 900,
+                layout: 'fit',
+                items: view
+            }).show();
+            viewModel.set('pinned', false);
+            container.remove(view);
+            container.setHeight(0);
+        }
+    }, {
+        type: 'pin',
+        bind: {
+            tooltip: '{pinTooltip}',
+            hidden: '{pinned}'
+        },
+        callback: function() {
+            var view = this.up('k-panel-timeseries');
+            var window = view.up('window');
+            var viewModel = view.getViewModel();
+            var container = Ext.ComponentQuery.query('[name=south-container]')[0];
+            container.add(view);
+            container.setHeight(350);
+            viewModel.set('pinned', true);
+            window.close();
+        }
+    }, {
         type: 'help',
         bind: {
             tooltip: '{helpTooltip}'
@@ -63,7 +99,18 @@ Ext.define('Koala.view.panel.TimeSeries', {
         callback: function() {
             Koala.util.Help.showHelpWindow('mapTimeSeries', 'map');
         }
+    }, {
+        type: 'close',
+        bind: {
+            tooltip: '{closeTooltip}',
+            hidden: '{!pinned}'
+        },
+        callback: function() {
+            var view = this.up('k-panel-timeseries');
+            view.close();
+        }
     }],
+
     defaults: {
         flex: 1,
         width: '100%'
