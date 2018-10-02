@@ -47,9 +47,5 @@ describe('Koala.view.component.D3BarChartController', function() {
             expect(cmp).to.not.be(undefined);
             expect(cmp.getId()).to.not.be(undefined);
         });
-
-        it('should not fail to redraw a chart', function() {
-            expect(ctrl.redrawChart.bind(ctrl)).to.not.throwException();
-        });
     });
 });
