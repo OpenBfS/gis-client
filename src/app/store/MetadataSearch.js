@@ -38,20 +38,20 @@ Ext.define('Koala.store.MetadataSearch', {
      */
     _lastRequest: null,
 
-    constructor: function() {
-        this.callParent(arguments);
+    listeners: {
+        beforeload: function() {
+            var appContext = BasiGX.view.component.Map.guess().appContext;
+            var merge = appContext.data.merge;
+            var urls = merge.urls;
 
-        var appContext = BasiGX.view.component.Map.guess().appContext;
-        var merge = appContext.data.merge;
-        var urls = merge.urls;
+            this.proxy.url = urls['metadata-search'];
+            this.proxy.username = merge.application_user.username || null;
+            this.proxy.password = merge.application_user.password || null;
 
-        this.proxy.url = urls['metadata-search'];
-        this.proxy.username = merge.application_user.username || null;
-        this.proxy.password = merge.application_user.password || null;
-
-        var authHeader = Koala.util.Authentication.getAuthenticationHeader();
-        this.proxy.headers = {};
-        this.proxy.headers.Authorization = authHeader;
+            var authHeader = Koala.util.Authentication.getAuthenticationHeader();
+            this.proxy.headers = {};
+            this.proxy.headers.Authorization = authHeader;
+        }
     },
 
     proxy: {

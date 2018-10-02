@@ -440,7 +440,7 @@
                 "wmsimport": "Add external WMS",
                 "vectorimport": "Import local files",
                 "print": "Print",
-                "drawandmeasure": "Draw & Measure",
+                "tools": "Tools",
                 "draw": "Draw",
                 "measure": "Measure",
                 "share": "Share",
@@ -479,6 +479,9 @@
                 "chartSlctnBarChartBtn": "Bar Chart",
                 "rodosPanelTitle": "RODOS-Filter",
                 "helpTooltip": "Help",
+                "pinTooltip": "Pin",
+                "unpinTooltip": "Unpin",
+                "closeTooltip": "Close",
                 "headerTitle": "GEOPORTAL",
                 "gridTabTitle": "Table view",
                 "htmlTabTitle": "Information",
@@ -550,7 +553,8 @@
         "config": {
             "data": {
                 "title": "Topics",
-                "tooltip": "Change Layer Set",
+                "toggleLayerSetTooltip": "Change Layer Set",
+                "closeTooltip": "Close",
                 "tooltext": "Change Topic",
                 "btnTextResetThemeTreeFiltering": "All Layers",
                 "btnTooltipResetThemeTreeFiltering": "Resets filtering of available topics.",

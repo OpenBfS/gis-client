@@ -185,7 +185,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var allowClone = olLayer.get('allowClone') || false;
             var allowEdit = olLayer.get('allowEdit') || false;
             var allowShare = olLayer.get('persisted') ||
-                olLayer.metadata.layerConfig.olProperties.persisted;
+                olLayer.metadata ? olLayer.metadata.layerConfig.olProperties.persisted : false;
             var allowStyle = olLayer instanceof ol.layer.Vector &&
                     !olLayer.get('disableStyling');
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
@@ -377,16 +377,21 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
          */
         editHandler: function(btn) {
             var layer = btn.up().layerRec.data;
-            var northContainer = Ext.ComponentQuery.query('container[name=north-container]')[0];
+            var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
+            var featureGrids = Ext.ComponentQuery.query('k-panel-featuregrid');
+            Ext.each(featureGrids, function(featureGrid) {
+                var window = featureGrid.up('window');
+                featureGrid.destroy();
+                if (window) {
+                    window.close();
+                }
+            });
             var panel = Ext.create('Koala.view.panel.FeatureGrid', {
-                height: 400,
-                closable: true,
+                height: 350,
                 layer: layer
             });
-            northContainer.removeAll();
-            northContainer.add(panel);
-
-            northContainer.show();
+            southContainer.add(panel);
+            southContainer.show();
         },
 
         styleHandler: function(btn) {

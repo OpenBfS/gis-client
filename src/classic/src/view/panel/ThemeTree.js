@@ -48,23 +48,29 @@ Ext.define('Koala.view.panel.ThemeTree', {
 
     header: {
         overCls: 'k-over-clickable',
-        items: [
-            {
-                xtype: 'k-component-texttool',
-                connectedToolType: 'collapse',
-                bind: {
-                    html: '{tooltext}'
-                }
+        items: [{
+            xtype: 'k-component-texttool',
+            connectedToolType: 'collapse',
+            bind: {
+                html: '{tooltext}'
             }
-        ]
+        }]
     },
 
     tools: [{
         type: 'collapse',
         bind: {
-            tooltip: '{tooltip}'
+            tooltip: '{toggleLayerSetTooltip}'
         },
         handler: 'toggleLayerSetView'
+    }, {
+        type: 'close',
+        bind: {
+            tooltip: '{closeTooltip}'
+        },
+        handler: function() {
+            this.up('k-panel-themetree').hide();
+        }
     }, {
         type: 'help',
         bind: {
@@ -75,18 +81,34 @@ Ext.define('Koala.view.panel.ThemeTree', {
         }
     }],
 
-    fbar: [
-        {
-            type: 'button',
-            name: 'resetThemeTree',
-            bind: {
-                text: '{btnTextResetThemeTreeFiltering}',
-                tooltip: '{btnTooltipResetThemeTreeFiltering}'
-            },
-            handler: 'resetThemeTreeFiltering',
-            disabled: true
+    fbar: [{
+        type: 'button',
+        name: 'collapseAll',
+        handler: 'collapseAll',
+        minWidth: 20,
+        glyph: 'xf147@FontAwesome',
+        bind: {
+            tooltip: '{tooltipCollapseAll}'
         }
-    ],
+    }, {
+        type: 'button',
+        name: 'expandAll',
+        handler: 'expandAll',
+        glyph: 'xf196@FontAwesome',
+        minWidth: 20,
+        bind: {
+            tooltip: '{tooltipExpandAll}'
+        }
+    }, {
+        type: 'button',
+        name: 'resetThemeTree',
+        bind: {
+            text: '{btnTextResetThemeTreeFiltering}',
+            tooltip: '{btnTooltipResetThemeTreeFiltering}'
+        },
+        handler: 'resetThemeTreeFiltering',
+        disabled: true
+    }],
 
     columns: [{
         xtype: 'treecolumn',
@@ -117,11 +139,6 @@ Ext.define('Koala.view.panel.ThemeTree', {
     listeners: {
         select: 'setupShowFilterWinCheck',
         itemdblclick: 'addLayerWithDefaultFilters'
-        //enable text selection
-        // afterlayout: function() {
-        //     this.el.selectable();
-        //     this.el.select('.x-unselectable').selectable();
-        // }
     },
 
     initComponent: function() {

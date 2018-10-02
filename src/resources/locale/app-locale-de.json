@@ -441,7 +441,7 @@
                 "wmsimport": "WMS hinzuladen",
                 "vectorimport": "Vektordaten laden",
                 "print": "Drucken",
-                "drawandmeasure": "Zeichnen",
+                "tools": "Werkzeuge",
                 "draw": "Zeichnen",
                 "measure": "Messen",
                 "share": "Teilen",
@@ -480,6 +480,9 @@
                 "chartSlctnBarChartBtn": "Säulendiagramm",
                 "rodosPanelTitle": "RODOS-Filter",
                 "helpTooltip": "Hilfe",
+                "pinTooltip": "Anheften",
+                "unpinTooltip": "Lösen",
+                "closeTooltip": "Schließen",
                 "headerTitle": "GEOPORTAL",
                 "gridTabTitle": "Tabellarische Ansicht",
                 "htmlTabTitle": "Information",
@@ -551,7 +554,8 @@
         "config": {
             "data": {
                 "title": "Themen",
-                "tooltip": "LayerSet wechseln",
+                "toggleLayerSetTooltip": "LayerSet wechseln",
+                "closeTooltip": "Schließen",
                 "tooltext": "Thema wechseln",
                 "btnTextResetThemeTreeFiltering": "Alle Layer",
                 "btnTooltipResetThemeTreeFiltering": "Hebt eine etwaige Filterung der verfügbaren Themen auf.",

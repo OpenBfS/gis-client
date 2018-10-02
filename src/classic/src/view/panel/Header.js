@@ -37,87 +37,78 @@ Ext.define('Koala.view.panel.Header', {
         type: 'k-panel-header'
     },
 
-    config: {
-        addLogo: true,
-        logoUrl: 'resources/images/logo.png',
-        link: 'http://www.bfs.de/DE/home/home_node.html',
-        logoAltText: 'Logo',
-        logoHeight: 80,
-        logoWidth: 200,
-        logoMargin: '0 50px',
-        additionalItems: []
-    },
-
     layout: {
         type: 'hbox',
         align: 'stretch'
     },
 
-    padding: 5,
+    padding: '0 5px',
 
     cls: 'basigx-header',
 
-
-    items: [],
-
-    /**
-     * Initializes this header panel.
-     */
-    initComponent: function() {
-        var me = this;
-
-        var additionalItems = me.getAdditionalItems();
-        // add additional items
-        if (!Ext.isEmpty(additionalItems) &&
-                Ext.isArray(additionalItems)) {
-            Ext.each(additionalItems, function(item) {
-                me.items.push(item);
-            });
-        }
-
-        // add logo
-        if (me.getAddLogo() === true) {
-            me.addLogoItem();
-        }
-
-        me.callParent();
-    },
-
-    /**
-     * Adds a `Ext.Img` to the list of items in this panel.
-     */
-    addLogoItem: function() {
-        var me = this;
-        var logo = {
-            xtype: 'image',
-            margin: me.getLogoMargin(),
-            alt: me.getLogoAltText(),
-            src: me.getLogoUrl(),
-            height: me.getLogoHeight(),
-            width: me.getLogoWidth(),
-            bind: {
-                title: '{logoTooltip}'
+    items: [{
+        xtype: 'title',
+        textAlign: 'center',
+        width: 300,
+        autoEl: {
+            tag: 'a',
+            href: null
+        },
+        cls: 'k-application-title'
+    }, {
+        xtype: 'container',
+        flex: 1,
+        layout: {
+            type: 'hbox',
+            align: 'center',
+            pack: 'left'
+        },
+        items: [{
+            xtype: 'k-form-field-searchcombo',
+            flex: 1
+        }, {
+            xtype: 'button',
+            glyph: 'xf057@FontAwesome',
+            style: {
+                borderRadius: 0
             },
-            autoEl: {
-                tag: 'a',
-                href: me.getLink(),
-                target: '_blank'
+            handler: function(btn) {
+                btn.up().down('k-form-field-searchcombo').clearValue();
+                var multiSearchPanel = this.up('k-panel-header')
+                    .down('k-panel-multisearch');
+                if (multiSearchPanel) {
+                    multiSearchPanel.hide();
+                }
             }
-        };
-
-        me.items.push(logo);
-    },
-
-    /**
-     * Adds a background gradient from white to the passed color, with a full
-     * opaque variant as fallback for IE 9.
-     *
-     * @param {String} color A CSS color.
-     */
-    setBackgroundColor: function(color) {
-        this.setStyle({
-            'background-color': color, //fallback for ie9 and lower
-            'background': 'linear-gradient(to right, white, ' + color + ')'
-        });
-    }
+        }, {
+            xtype: 'k-panel-multisearch',
+            width: 600,
+            x: 0,
+            y: 60,
+            hidden: true,
+            border: true,
+            floating: true
+        }]
+    }, {
+        xtype: 'container',
+        layout: {
+            type: 'hbox',
+            align: 'center',
+            pack: 'right'
+        },
+        items: {
+            xtype: 'k-toolbar-header'
+        }
+    }, {
+        xtype: 'image',
+        bind: {
+            title: '{logoTooltip}'
+        },
+        src: 'classic/resources/img/bfs-logo-75pct.png',
+        autoEl: {
+            tag: 'a',
+            href: 'http://www.bfs.de/DE/home/home_node.html',
+            target: '_blank'
+        }
+    }]
 });
