@@ -650,6 +650,14 @@ Ext.define('Koala.util.ChartData', {
             var series = [];
             var legends = [];
             var index = 0;
+            var attachedSeries = gnosConfig.attachedSeries;
+            if (Ext.isString(attachedSeries)) {
+                try {
+                    attachedSeries = JSON.parse(attachedSeries);
+                } catch (e) {
+                    return;
+                }
+            }
             Ext.iterate(data, function(id, elementData) {
                 var chartData = Ext.Array.map(elementData, function(item) {
                     if (!item[gnosConfig.xAxisAttribute]) {
@@ -670,6 +678,37 @@ Ext.define('Koala.util.ChartData', {
                     ++index;
                 }
                 series.push(seriesConfig);
+
+                // handle attached series
+                if (gnosConfig.attachedSeries) {
+                    Ext.each(attachedSeries, function(serie, idx) {
+                        if (!serie.showYAxis) {
+                            return;
+                        }
+                        chartData = Ext.Array.map(elementData, function(item) {
+                            if (!item[gnosConfig.xAxisAttribute]) {
+                                return undefined;
+                            }
+                            return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[serie.yAxisAttribute]];
+                        });
+                        var attachedSeriesConfig = {
+                            data: chartData,
+                            style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
+                            tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
+                            curveType: serie.curveType || 'linear',
+                            shapeType: serie.shapeType || 'line',
+                            axes: ['x', 'y' + idx]
+                        };
+                        attachedSeriesConfig.color = serie.color;
+                        if (!attachedSeriesConfig.color) {
+                            var c = Ext.util.Color.fromString(seriesConfig.color);
+                            c.darken(0.1 * (idx + 1));
+                            attachedSeriesConfig.color = c.toString();
+                        }
+                        series.push(attachedSeriesConfig);
+                    });
+                }
+
                 legends.push({
                     type: 'line',
                     title: 'Legende', // TODO
@@ -680,43 +719,6 @@ Ext.define('Koala.util.ChartData', {
                     }
                 });
             });
-            // handle attached series
-            if (gnosConfig.attachedSeries) {
-                var attachedSeries = gnosConfig.attachedSeries;
-                if (Ext.isString(attachedSeries)) {
-                    try {
-                        attachedSeries = JSON.parse(attachedSeries);
-                    } catch (e) {
-                        return;
-                    }
-                }
-                Ext.each(attachedSeries, function(serie, idx) {
-                    if (!serie.showYAxis) {
-                        return;
-                    }
-                    Ext.iterate(data, function(id, elementData) {
-                        var chartData = Ext.Array.map(elementData, function(item) {
-                            if (!item[gnosConfig.xAxisAttribute]) {
-                                return undefined;
-                            }
-                            return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[serie.yAxisAttribute]];
-                        });
-                        var seriesConfig = {
-                            data: chartData,
-                            style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
-                            tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
-                            curveType: serie.curveType || 'linear',
-                            shapeType: serie.shapeType || 'line',
-                            axes: ['x', 'y' + idx]
-                        };
-                        if (colors[index]) {
-                            seriesConfig.color = colors[index];
-                            ++index;
-                        }
-                        series.push(seriesConfig);
-                    });
-                });
-            }
             return {
                 series: series,
                 legends: legends
