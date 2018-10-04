@@ -258,11 +258,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                     errorDiv[0].remove();
                 }
 
-                if (me.chartRendered) {
-                    me.redrawChart();
-                } else {
-                    me.drawChart();
-                }
+                me.drawChart();
             }
         });
 
@@ -416,13 +412,6 @@ Ext.define('Koala.view.component.D3BaseController', {
         if (!response.aborted) {
             Ext.log.error('Failure on chartdata load');
         }
-    },
-
-    /**
-     * Interface method to be overrriden in child classes.
-     */
-    redrawChart: function() {
-        Ext.Logger.warn('Empty interface method.');
     },
 
     /**
@@ -630,8 +619,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                         return;
                     }
                     me.thresholdState[idx].visibility = !me.thresholdState[idx].visibility;
-                    me.redrawChart();
-                    // me.redrawLegend();
+                    me.drawChart();
                 })
                 .attr('transform', staticMe.makeTranslate(0, curTranslateY));
 
@@ -678,8 +666,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                 .attr('dx', '170')
                 .on('click', function() {
                     me.thresholdState[idx].deleted = true;
-                    me.redrawChart();
-                    // me.redrawLegend();
+                    me.drawChart();
                 });
 
             var disabledClsName = Const.CSS_CLASS.DISABLED_CLASS;

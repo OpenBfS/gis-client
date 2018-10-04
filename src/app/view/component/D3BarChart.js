@@ -34,7 +34,7 @@ Ext.define('Koala.view.component.D3BarChart',{
     listeners: {
         boxready: 'onBoxReady',
         painted: 'onPainted',
-        resize: 'redrawChart'
+        resize: 'drawChart'
     },
 
     name: null,

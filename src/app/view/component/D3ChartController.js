@@ -97,25 +97,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         me.onBoxReady();
     },
-    // extractAttachedSeriesAxisConfig: function() {
-    //     var me = this;
-    //     var view = this.getView();
-    //     var metadata = view.getConfig().targetLayer.metadata;
-    //     me.attachedSeriesAxisConfig = [];
-    //     var series = Koala.util.Object.getPathStrOr(
-    //         metadata,
-    //         'layerConfig/timeSeriesChartProperties/attachedSeries',
-    //         '[]'
-    //     );
-    //     try {
-    //         series = JSON.parse(series);
-    //     } catch (e) {/*silently catch*/}
-    //     Ext.each(series, function(config) {
-    //         var label = config.dspUnit || '';
-    //         var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
-    //         me.attachedSeriesAxisConfig.push(axisConfig);
-    //     });
-    // },
+
     /**
      *
      */
@@ -138,8 +120,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             this.chartConfig.chartRendererConfig.components.push(legend);
         }
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
-        var svg = d3.select('#' + this.getView().getId()).node();
-        this.chartRenderer.render(svg);
+        var div = this.getView().getEl().dom;
+        this.chartRenderer.render(div);
     },
 
     /**
@@ -213,12 +195,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         return new D3Util.LegendComponent(this.chartConfig.legendComponentConfig);
     },
 
-    /**
-     *
-     */
-    redrawChart: function() {
-        this.drawChart();
-    },
     /**
      * Add a station to the list of managed stations for this chart. Please note
      * that this does not actually render a new series for the station, callers
@@ -904,39 +880,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             me.zoomYAxisBtnPressed = event.shiftKey;
         });
     },
-    /**
-     * [transformPlot description]
-     * @return {[type]} [description]
-     */
-    transformPlot: function(transform, duration) {
-        var me = this;
-        var Const = Koala.util.ChartConstants;
-        var CSS = Const.CSS_CLASS;
-        var viewId = '#' + me.getView().getId();
-        var plot = d3.select(viewId + ' svg rect.' + CSS.PLOT_BACKGROUND);
-        if (!me.zoomInteraction) {
-            return;
-        }
-        if (duration && duration > 0) {
-            plot
-                .transition()
-                .duration(duration)
-                .call(
-                    me.zoomInteraction.transform,
-                    d3.zoomIdentity
-                        .translate(transform.x, transform.y)
-                        .scale(transform.k)
-                );
-        } else {
-            plot
-                .call(
-                    me.zoomInteraction.transform,
-                    d3.zoomIdentity
-                        .translate(transform.x, transform.y)
-                        .scale(transform.k)
-                );
-        }
-    },
+
     resolveDynamicTemplateUrls: function() {
         var view = this.getView();
         var StringUtil = Koala.util.String;
@@ -958,151 +902,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
         });
         return Ext.Promise.all(promises);
-    },
-    /**
-     *
-     */
-    // OBSOLETE
-    drawLegend: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3ChartController;
-        var Const = Koala.util.ChartConstants;
-        var makeTranslate = staticMe.makeTranslate;
-        var CSS = Const.CSS_CLASS;
-        var SVG_DEFS = Const.SVG_DEFS;
-        var view = me.getView();
-        var legendConfig = view.getLegend();
-        var legendMargin = legendConfig.legendMargin;
-        var legendEntryHeight = me.legendEntryTargetHeight;
-        var legendParent = me.legendSvg;
-        var curTranslateY;
-        var legend = legendParent
-            .append('g')
-            .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
-            .attr('transform', makeTranslate(legendMargin.left || 10, 0));
-        Ext.each(me.shapes, function(shape, idx) {
-            var shapeId = shape.config.id;
-            var toggleVisibilityFunc = (function() {
-                return function() {
-                    var target = d3.select(d3.event.target);
-                    if (target && (target.classed(CSS.DELETE_ICON) ||
-                            target.classed(CSS.DOWNLOAD_ICON) ||
-                            target.classed(CSS.COLOR_ICON))) {
-                        // click happened on the delete icon, no visibility
-                        // toggling. The deletion is handled in an own event
-                        // handler
-                        return;
-                    }
-                    var shapeGroup = me.shapeGroupById(shapeId);
-                    me.toggleGroupVisibility(
-                        shapeGroup, // the real group, containig shapepath & points
-                        d3.select(this) // legend entry
-                    );
-                };
-            }());
-            curTranslateY = (idx + 1) * legendEntryHeight;
-            var legendEntry = legend
-                .append('g')
-                .on('click', toggleVisibilityFunc)
-                .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + shapeId);
-            if (Ext.isModern) {
-                // looks like there's no longtouch event? new Ext.Element won't
-                // help either (svg not supported?)
-                var timer;
-                legendEntry.on('touchstart', function() {
-                    timer = window.setTimeout(me.getContextmenuFunction(shape), 500);
-                });
-                legendEntry.on('touchend', function() {
-                    if (timer) {
-                        window.clearTimeout(timer);
-                    }
-                });
-            } else {
-                legendEntry.on('contextmenu', me.getContextmenuFunction(shape));
-            }
-            // background for the concrete legend icon, to widen clickable area.
-            legendEntry.append('path')
-                .attr('d', SVG_DEFS.LEGEND_ICON_BACKGROUND)
-                .style('stroke', 'none')
-                // invisible, but still triggering events
-                .style('fill', 'rgba(0,0,0,0)');
-            legendEntry.append('path')
-                .attr('d', function() {
-                    var typeUppercase = shape.config.type.toUpperCase();
-                    return SVG_DEFS['LEGEND_ICON_' + typeUppercase];
-                })
-                .style('stroke', function() {
-                    switch (shape.config.type) {
-                        case 'line':
-                            return me.customColors[idx] || shape.config.color;
-                        default:
-                            return 'none';
-                    }
-                })
-                .style('stroke-width', function() {
-                    switch (shape.config.type) {
-                        case 'line':
-                            return shape.config.width;
-                        default:
-                            return 0;
-                    }
-                })
-                .style('fill', function() {
-                    switch (shape.config.type) {
-                        case 'line':
-                            return 'none';
-                        default:
-                            return me.customColors[idx] || shape.config.color;
-                    }
-                });
-            var nameAsTooltip = shape.config.name;
-            legendEntry.append('text')
-                .text(nameAsTooltip)
-                .attr('text-anchor', 'start')
-                .attr('dy', '0')
-                .attr('dx', '25');
-            legendEntry.append('title')
-                .text(nameAsTooltip);
-            var targetLayer = view.getTargetLayer();
-            var allowDownload = Koala.util.Object.getPathStrOr(
-                targetLayer,
-                'metadata/layerConfig/olProperties/allowDownload',
-                true
-            );
-            allowDownload = Koala.util.String.coerce(allowDownload);
-            if (!Ext.isModern && allowDownload) {
-                legendEntry.append('text')
-                // fa-save from FontAwesome, see http://fontawesome.io/cheatsheet/
-                    .text('')
-                    .attr('class', CSS.DOWNLOAD_ICON)
-                    .attr('text-anchor', 'start')
-                    .attr('dy', '1')
-                    .attr('dx', '130') // TODO Discuss, do we need this dynamically?
-                    .on('click', me.generateDownloadCallback(shape));
-            }
-            if (!Ext.isModern) {
-                legendEntry.append('text')
-                    // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
-                    .text('\uf1fc')
-                    .attr('class', CSS.COLOR_ICON)
-                    .attr('text-anchor', 'start')
-                    .attr('dy', '1')
-                    .attr('dx', '150') // TODO Discuss, do we need this dynamically?
-                    .on('click', me.generateColorCallback(shape, idx));
-            }
-            legendEntry.append('text')
-                // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
-                .text('')
-                .attr('class', CSS.DELETE_ICON)
-                .attr('text-anchor', 'start')
-                .attr('dy', '1')
-                .attr('dx', '170') // TODO Discuss, do we need this dynamically?
-                .on('click', me.generateDeleteCallback(shape));
-        });
-        var config = this.view.getTargetLayer().get('timeSeriesChartProperties');
-        this.drawThresholdLegends(config, legend, curTranslateY);
-        me.wrapAndResizeLegend();
     },
 
     /**

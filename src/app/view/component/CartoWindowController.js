@@ -1578,7 +1578,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             // the zoom frequently in the first few hundred ms after
             // creation
             window.setTimeout(function() {
-                chart.getController().redrawChart();
+                chart.getController().drawChart();
             }, 10);
         });
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');

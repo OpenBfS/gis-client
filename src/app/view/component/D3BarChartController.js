@@ -424,11 +424,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         this.chartRenderer.render(svg);
     },
 
-    // OBSOLETE
-    redrawChart: function() {
-        this.drawChart();
-    },
-
     /**
      * Sets the domain for each scale in the chart by the use of the extent
      * of the given input data values.
@@ -883,7 +878,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     var disabledClsName = CSS.DISABLED_CLASS;
                     d3.select(this).classed(disabledClsName, !dataObj.hidden);
                     dataObj.hidden = !dataObj.hidden;
-                    me.redrawChart();
+                    me.drawChart();
                 };
             }());
 
@@ -963,7 +958,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     } else {
                         me.disabledSubCategories.push(subCategory);
                     }
-                    me.redrawChart();
+                    me.drawChart();
                 };
             }());
 
@@ -1061,8 +1056,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         // Legend
         me.deleteLegendEntry(subCategory);
 
-        this.redrawChart();
-        // this.redrawLegend();
+        this.drawChart();
     },
 
     /**
@@ -1077,8 +1071,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         Ext.Array.remove(me.data, dataObj);
         // Legend
         me.deleteLegendEntry(dataObj.key);
-        me.redrawChart();
-        // me.redrawLegend();
+        me.drawChart();
     },
 
     /**
@@ -1130,7 +1123,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         if (group) {
             group.classed(hideClsName, !visible);
             me.showUncertainty = visible;
-            me.redrawChart();
+            me.drawChart();
         }
     },
 
