@@ -40,6 +40,7 @@ Ext.define('Koala.util.ChartAxes', {
          * @param  {Date} date The current Date object.
          * @return {function} The multi-scale time format function.
          */
+        // OBSOLETE
         getMultiScaleTimeFormatter: function(date) {
             date = moment(date);
             if (Koala.Application.isUtc()) {
@@ -64,6 +65,7 @@ Ext.define('Koala.util.ChartAxes', {
                                     : formatYear)(date);
         },
 
+        // OBSOLETE
         toggleScaleForAxis: function(axis, controller) {
             if (axis.scale === 'linear' || axis.scale === undefined) {
                 axis.scale = 'log';
@@ -119,6 +121,7 @@ Ext.define('Koala.util.ChartAxes', {
          * @param  {Function}  scale      the d3 axis scale function
          * @return {Function}             the newly created d3 axis
          */
+        // OBSOLETE
         createAxis: function(axisConfig, orient, scale) {
             var Const = Koala.util.ChartConstants;
             var axis = Const.ORIENTATION[orient];
@@ -163,6 +166,7 @@ Ext.define('Koala.util.ChartAxes', {
          * @param  {Number} index the index, if an index should be set
          * @param  {Object} metadata the layer metadata
          */
+        // OBSOLETE
         drawAxis: function(orient, axisConfig, chartSize, viewId, axis, offsetX, index, metadata) {
             var staticMe = Koala.view.component.D3BaseController;
             var Const = Koala.util.ChartConstants;
@@ -248,6 +252,7 @@ Ext.define('Koala.util.ChartAxes', {
          * @param  {String}  viewId        the id of the chart viewId
          * @param  {Object} axisConfig axis configuration object
          */
+        // OBSOLETE
         redrawAxis: function(axisGenerator, orient, metadata, chartSize, viewId, axisConfig) {
             var staticMe = Koala.view.component.D3BaseController;
             var Const = Koala.util.ChartConstants;
@@ -324,6 +329,7 @@ Ext.define('Koala.util.ChartAxes', {
         /**
          * Creates the grid axis.
          */
+        // OBSOLETE
         createGridAxes: function(gridConfig, chartSize, scales, gridAxes) {
             if (!gridConfig.show) {
                 return false;

@@ -142,6 +142,13 @@ Ext.define('Koala.view.component.D3ChartController', {
         this.chartRenderer.render(svg);
     },
 
+    /**
+     * Constructs a new legend component based on current config, or undefined,
+     * if we have no legend config.
+     * @param  {D3Util.TimeseriesComponent} series the corresponding time series
+     * component
+     * @return {D3Util.LegendComponent} the new legend component, or undefined
+     */
     getLegendComponent: function(series) {
         if (!this.chartConfig.legendComponentConfig) {
             return;
@@ -165,6 +172,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 return feature.get('id') === legend.seriesId;
             });
             legend.title = Koala.util.String.replaceTemplateStrings(gnosConfig.seriesTitleTpl, station);
+            legend.contextmenuHandler = me.getContextmenuFunction(legend.seriesIndex, series).bind(me);
             legend.customRenderer = function(node) {
                 var allowDownload = Koala.util.Object.getPathStrOr(
                     config.targetLayer,
@@ -1133,30 +1141,33 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @return {function}       the callback that might show the attached series
      * contextmenu if attached series are configured.
      */
-    getContextmenuFunction: function(shape) {
+    getContextmenuFunction: function(seriesIndex, component) {
         var me = this;
-        return function() {
+        return function(event) {
             // we only have a d3 event in classic
-            if (d3.event) {
-                d3.event.preventDefault();
+            if (event) {
+                event.preventDefault();
             }
-            if (shape.config.attachedSeries) {
-                var series = JSON.parse(shape.config.attachedSeries);
+            var attached = [];
+            Ext.each(this.chartConfig.timeseriesComponentConfig.series, function(config, idx) {
+                if (config.belongsTo === seriesIndex) {
+                    attached.push(idx);
+                }
+            });
+            var attachedConfig = me.getView().getConfig().targetLayer.metadata.layerConfig.timeSeriesChartProperties.attachedSeries;
+            if (attachedConfig) {
+                var series = JSON.parse(attachedConfig);
                 var items = [];
                 Ext.each(series, function(config, index) {
-                    var visible = me.attachedSeriesVisibleById[shape.config.id][index];
+                    var visible = component.visible(attached[index + 1]);
                     items.push({
                         xtype: 'checkboxfield',
                         fieldLabel: config.dspUnit,
                         label: config.dspUnit,
                         checked: visible,
                         listeners: {
-                            change: function(_, checked) {
-                                me.attachedSeriesVisibleById[shape.config.id][index] = checked;
-                                var sel = '[idx=shape-group-' + shape.config.id +
-                                    '_' + (index + 1) + ']';
-                                d3.select(sel).classed('k-d3-hidden', !checked);
-                                me.redrawChart();
+                            change: function() {
+                                component.toggleSeries(attached[index + 1]);
                             }
                         }
                     });
@@ -1170,7 +1181,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         items: items
                     });
                     if (Ext.isClassic) {
-                        menu.showAt(d3.event.clientX, d3.event.clientY);
+                        menu.showAt(event.clientX, event.clientY);
                     } else {
                         menu.show();
                     }

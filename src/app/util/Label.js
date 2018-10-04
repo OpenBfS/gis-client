@@ -37,6 +37,7 @@ Ext.define('Koala.util.Label', {
          * @param {Boolean} ignoreNeighbors Flag indicating if neighbors should
          *     be respected. Should be false e.g. when used on an x-axis.
          */
+        // OBSOLETE
         handleLabelWrap: function(selector, subSelector, leftPadding, lineHeight, ignoreNeighbors) {
             var node = d3.select(selector).node();
             if (!node) {
@@ -62,6 +63,7 @@ Ext.define('Koala.util.Label', {
          * @param  {Integer} leftPadding The amount of padding to the left
          * @param  {Integer} lineHeight The lineHeight in em to use
          */
+        // OBSOLETE
         wordWrap: function(textEl, width, leftPadding, lineHeight) {
             textEl.each(function() {
                 var text = d3.select(this),
