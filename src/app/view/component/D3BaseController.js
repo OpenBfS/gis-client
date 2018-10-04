@@ -925,14 +925,19 @@ Ext.define('Koala.view.component.D3BaseController', {
      *                                 default is 'image/png'.
      */
     chartToDataUri: function(scale, isBarChart, outputFormat) {
-        var chartNode = this.containerSvg.node();
-        var legendD3 = this.legendSvg;
+        var chartNode = this.getView().getEl().dom.querySelector('svg');
+        var legend = chartNode.querySelector('.legend');
 
         return new Ext.Promise(function(resolve) {
             outputFormat = outputFormat || 'image/png';
             scale = scale || 1;
+            var downloadIcons = legend.querySelector('.k-d3-download-icon');
+            var deleteIcons = legend.querySelector('.k-d3-delete-icon');
+            var colorIcons = legend.querySelector('.k-d3-color-icon');
+            downloadIcons.style.display = 'none';
+            deleteIcons.style.display = 'none';
+            colorIcons.style.display = 'none';
 
-            d3.selectAll('.k-d3-hidden').style('display', 'none');
             var chartSource = (new XMLSerializer()).serializeToString(chartNode);
             var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
                 unescape(encodeURIComponent(chartSource)));
@@ -942,47 +947,20 @@ Ext.define('Koala.view.component.D3BaseController', {
             var chartImageObject = new Image(chartImageWidth, chartImageHeight);
             chartImageObject.src = chartDataUri;
 
-            var legendNode = legendD3.node();
-            var downloadIcons = legendD3.selectAll('.k-d3-download-icon');
-            var deleteIcons = legendD3.selectAll('.k-d3-delete-icon');
-            var colorIcons = legendD3.selectAll('.k-d3-color-icon');
-            downloadIcons.style('display', 'none');
-            deleteIcons.style('display', 'none');
-            colorIcons.style('display', 'none');
-            var legendSource = (new XMLSerializer()).serializeToString(legendNode);
-            var legendDataUri = 'data:image/svg+xml;base64,'+ btoa(
-                unescape(encodeURIComponent(legendSource)));
-            var legendImageWidth = legendNode.getBoundingClientRect().width * scale;
-            var legendImageHeight = legendNode.getBoundingClientRect().height * scale;
-            var legendImageObject = new Image(legendImageWidth, legendImageHeight);
-            legendImageObject.src = legendDataUri;
-
             var canvas = document.createElement('canvas');
             var ctx = canvas.getContext('2d');
-            // TODO: harmonize barchart and timeseries width-calculation
-            canvas.width = isBarChart ? chartImageWidth + legendImageWidth : chartImageWidth;
-            canvas.height = legendImageHeight > chartImageHeight ? legendImageHeight : chartImageHeight;
+            canvas.width = chartImageWidth;
+            canvas.height = chartImageHeight;
             ctx.fillStyle = 'white';
             ctx.fillRect(0,0,canvas.width,canvas.height);
 
             chartImageObject.onload = function() {
                 ctx.drawImage(chartImageObject, 0, 0, chartImageWidth, chartImageHeight);
-                d3.selectAll('.k-d3-hidden').style('display', 'block');
-                legendImageObject.onload = function() {
-                    ctx.drawImage(
-                        legendImageObject,
-                        // TODO: harmonize barchart and timeseries width-calculation
-                        isBarChart ? chartImageWidth : (chartImageWidth + 10 - legendImageWidth),
-                        0,
-                        legendImageWidth,
-                        legendImageHeight
-                    );
-                    var dataUri = canvas.toDataURL(outputFormat);
-                    downloadIcons.style('display', 'block');
-                    deleteIcons.style('display', 'block');
-                    colorIcons.style('display', 'block');
-                    resolve(dataUri);
-                };
+                var dataUri = canvas.toDataURL(outputFormat);
+                downloadIcons.style.display = 'block';
+                deleteIcons.style.display = 'block';
+                colorIcons.style.display = 'block';
+                resolve(dataUri);
             };
         });
     },
