@@ -130,9 +130,25 @@ Ext.define('Koala.view.component.D3ChartController', {
             max: null
         };
 
+        var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
+        var legend = this.getLegendComponent(series);
+
+        this.chartConfig.chartRendererConfig.components = [series];
+        if (legend) {
+            this.chartConfig.chartRendererConfig.components.push(legend);
+        }
+        this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
+        var svg = d3.select('#' + this.getView().getId()).node();
+        this.chartRenderer.render(svg);
+    },
+
+    getLegendComponent: function(series) {
+        if (!this.chartConfig.legendComponentConfig) {
+            return;
+        }
+        var me = this;
         var config = me.getView().getConfig();
         var gnosConfig = config.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
-        var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
         var Const = Koala.util.ChartConstants;
         var CSS = Const.CSS_CLASS;
         Ext.each(this.chartConfig.legendComponentConfig.items, function(legend, idx) {
@@ -186,13 +202,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                     .on('click', me.generateDeleteCallback(legend.seriesIndex, idx));
             };
         });
-        this.chartConfig.chartRendererConfig.components = [
-            new D3Util.LegendComponent(this.chartConfig.legendComponentConfig),
-            series
-        ];
-        this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
-        var svg = d3.select('#' + this.getView().getId()).node();
-        this.chartRenderer.render(svg);
+        return new D3Util.LegendComponent(this.chartConfig.legendComponentConfig);
     },
 
     /**
@@ -1103,7 +1113,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         // set the size
         this.chartConfig.timeseriesComponentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
         this.chartConfig.timeseriesComponentConfig.position = [margin[3], margin[0]];
-        this.chartConfig.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
+        if (this.chartConfig.legendComponentConfig) {
+            this.chartConfig.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
+        } else {
+            this.chartConfig.timeseriesComponentConfig.size[0] += margin[3];
+        }
         this.chartConfig.chartRendererConfig.size = chartSize;
 
         this.drawChart();

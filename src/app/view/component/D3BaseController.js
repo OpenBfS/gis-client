@@ -1330,31 +1330,14 @@ Ext.define('Koala.view.component.D3BaseController', {
      * Toggles the legend's visibility.
      */
     toggleLegendVisibility: function() {
-        var me = this;
-        var view = me.getView();
-        // var chart = view.down('d3-chart');
-        // var chartCtrl = chart.getController();
-        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
-        var chartMarginRight = me.legendTargetWidth;
-
-        if (me.legendSvg && me.legendSvg.node() &&
-                me.legendSvg.node().parentNode) {
-
-            me.legendVisible = !me.legendVisible;
-
-            var legendContainer = me.legendSvg.node().parentNode;
-            d3.select(legendContainer).style('display', me.legendVisible ?
-                'unset' : 'none');
-
-            view.setChartMargin({
-                top: chartMargin.top,
-                right: me.legendVisible ? chartMarginRight : 25,
-                bottom: chartMargin.bottom,
-                left: chartMargin.left
-            });
-
-            me.redrawChart();
+        if (this.legendConfig) {
+            this.chartConfig.legendComponentConfig = this.legendConfig;
+            delete this.legendConfig;
+        } else {
+            this.legendConfig = this.chartConfig.legendComponentConfig;
+            delete this.chartConfig.legendComponentConfig;
         }
+        this.handleResize();
     },
 
     /**
