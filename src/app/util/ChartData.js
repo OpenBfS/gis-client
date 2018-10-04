@@ -252,7 +252,7 @@ Ext.define('Koala.util.ChartData', {
          * @param {Object} layerConfig The layerConfig of the layer which contains the chart config.
          * @return {Object} The chart configuration object to be used with the d3-util components
          */
-        getChartConfiguration: function(layerConfig, chartSize, type, data) {
+        getChartConfiguration: function(layerConfig, chartSize, type, data, labels) {
         /* timeseries props
         {
             "dataFeatureType": "imis:odl_brutto_10min_timeseries_9",
@@ -362,14 +362,7 @@ Ext.define('Koala.util.ChartData', {
                     position: chartSize[0] - 80,
                     margin: undefined,
                     offset: undefined,
-                    items: [{
-                        type: 'line',
-                        title: 'Legende',
-                        customRenderer: function() {},
-                        style: {
-                            color: 'cyan'
-                        }
-                    }]
+                    items: []
                 },
                 barComponentConfig: {},
                 timeseriesComponentConfig: {
@@ -409,7 +402,7 @@ Ext.define('Koala.util.ChartData', {
             if (type === 'timeSeries') {
                 this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data);
             } else { // type is barchart
-                this.createBarConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data);
+                this.createBarConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels);
             }
             return config;
         },
@@ -461,8 +454,9 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} config the chart configuration
          * @param  {Number[]} chartSize the chart size
          * @param  {Object} data the chart data
+         * @param  {Array} labels the group labels
          */
-        createBarConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data) {
+        createBarConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels) {
             var minMax = this.extractMinMax(gnosConfig);
             var margin = gnosConfig.chartMargin.split(',');
             margin = Ext.Array.map(margin, function(w) {
@@ -471,12 +465,15 @@ Ext.define('Koala.util.ChartData', {
             // set the size
             componentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
             componentConfig.position = [margin[3], margin[0]];
+            componentConfig.extraClasses = 'k-d3-shape-group';
             componentConfig.backgroundColor = gnosConfig.backgroundColor;
             componentConfig.title = layerConfig.title.label || '';
             componentConfig.titleColor = layerConfig.title.labelColor || '#000';
             componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
             componentConfig.titleSize = layerConfig.title.labelSize || 20;
             componentConfig.rotateBarLabel = gnosConfig.rotateBarLabel;
+            config.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
+            config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
                 groupx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true),
@@ -485,29 +482,46 @@ Ext.define('Koala.util.ChartData', {
             };
             componentConfig.axes.groupx.scale = 'band';
             componentConfig.axes.groupedx.scale = 'band';
-            componentConfig.data = this.extractBarData(data);
+            componentConfig.data = this.extractBarData(data, config.legendComponentConfig.items, labels);
         },
 
         /**
          * Converts the bar chart data to a compliant format.
          * @param  {Object} data the chart data
+         * @param  {Array} legends an array to store legend entries in
+         * @param  {Array} labels the group labels
          * @return {Object} the d3-util compliant data
          */
-        extractBarData: function(data) {
+        extractBarData: function(data, legends, labels) {
             var result = [];
             var grouped = [];
+            var extraLegends = {};
 
-            Ext.each(data, function(group) {
+            Ext.each(data, function(group, groupIndex) {
                 var item = {
                     value: group.key,
                     values: []
                 };
+                legends.push({
+                    type: 'bar',
+                    title: labels[groupIndex],
+                    style: {
+                        fill: 'black'
+                    }
+                });
                 Ext.iterate(group, function(idx, value) {
                     if (idx === 'key') {
                         return;
                     }
                     if (grouped.indexOf(idx) < 0) {
                         grouped.push(idx);
+                        extraLegends[idx] = {
+                            type: 'background',
+                            style: {
+                                fill: value.color
+                            },
+                            title: idx
+                        };
                     }
                     item.values.push({
                         index: idx,
@@ -519,6 +533,10 @@ Ext.define('Koala.util.ChartData', {
                     });
                 });
                 result.push(item);
+            });
+
+            Ext.each(grouped, function(item) {
+                legends.push(extraLegends[item]);
             });
 
             return {

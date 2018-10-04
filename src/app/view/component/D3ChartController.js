@@ -962,6 +962,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
+    // OBSOLETE
     drawLegend: function() {
         var me = this;
         var staticMe = Koala.view.component.D3ChartController;

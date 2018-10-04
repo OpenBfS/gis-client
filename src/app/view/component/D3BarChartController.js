@@ -412,10 +412,12 @@ Ext.define('Koala.view.component.D3BarChartController', {
             config,
             chartSize,
             'bar',
-            this.data
+            this.data,
+            this.labels
         );
         chartConfig.chartRendererConfig.components = [
-            new D3Util.BarComponent(chartConfig.barComponentConfig)
+            new D3Util.BarComponent(chartConfig.barComponentConfig),
+            new D3Util.LegendComponent(chartConfig.legendComponentConfig)
         ];
         this.chartRenderer = new D3Util.ChartRenderer(chartConfig.chartRendererConfig);
         var svg = d3.select('#' + this.getView().getId()).node();
