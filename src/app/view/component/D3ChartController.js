@@ -1123,6 +1123,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         this.drawChart();
     },
 
+    resetZoom: function() {
+        this.chartRenderer.resetZoom();
+    },
+
     /**
      * Get the legend entry contextmenu callback function.
      * @param  {Object} shape the shape the contextmenu callback is for.
