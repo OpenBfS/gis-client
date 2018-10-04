@@ -79,7 +79,6 @@ Ext.define('Koala.util.ChartAxes', {
             items = items.concat(attachedSeries);
             var menuItems = [];
             var i = 0;
-            var me = this;
             var controller = chart.getController();
 
             Ext.each(items, function(axis, idx) {
@@ -91,15 +90,9 @@ Ext.define('Koala.util.ChartAxes', {
                     text: text,
                     handler: function() {
                         if (idx === 0) {
-                            me.toggleScaleForAxis(
-                                chart.getAxes().left,
-                                controller
-                            );
+                            controller.toggleScale();
                         } else {
-                            me.toggleScaleForAxis(
-                                controller.attachedSeriesAxisConfig[idx-1],
-                                controller
-                            );
+                            controller.toggleScale('y' + (idx - 1));
                         }
                     }
                 });

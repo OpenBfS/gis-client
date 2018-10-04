@@ -1654,5 +1654,15 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
         return doesContainSeries;
+    },
+
+    toggleScale: function(axis) {
+        if (!axis) {
+            axis = 'y';
+        }
+        var scale = this.chartConfig.timeseriesComponentConfig.axes[axis].scale;
+        scale = scale === 'linear' ? 'log' : 'linear';
+        this.chartConfig.timeseriesComponentConfig.axes[axis].scale = scale;
+        this.drawChart();
     }
 });

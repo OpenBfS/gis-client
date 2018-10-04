@@ -364,11 +364,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 this.getViewModel().get('axisText')
             );
         } else {
-            var leftAxis = this.timeserieschart.getAxes().left;
-            Koala.util.ChartAxes.toggleScaleForAxis(
-                leftAxis,
-                this.timeserieschart.getController()
-            );
+            this.timeserieschart.getController().toggleScale();
         }
     },
 
