@@ -466,7 +466,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
                         .attr('text-anchor', 'start')
                         .attr('dy', '1')
                         .attr('dx', '150') // TODO Discuss, do we need this dynamically?
-                        .on('click', me.generateColorCallback(legend.seriesIndex));
+                        .on('click', function() {
+                            me.handleColorChange(legend);
+                        });
                 }
                 node.append('text')
                     // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
@@ -483,6 +485,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
         return new D3Util.LegendComponent(this.chartConfig.legendComponentConfig);
     },
 
+    /**
+     * Handle deletion of bars/groups from the legend.
+     * @param  {Object} legend the legend configuration containing info about
+     * what to delete
+     */
     handleDelete: function(legend) {
         var me = this;
         if (legend.groupIndex) {
@@ -521,6 +528,36 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     });
         }
         me.drawChart();
+    },
+
+    /**
+     * Handle the color change button.
+     * @param  {Object} legend the corresponding legend config
+     */
+    handleColorChange: function(legend) {
+        var me = this;
+        var color;
+        if (legend.groupedIndex) {
+            Ext.each(me.chartConfig.barComponentConfig.data.data,
+                function(group) {
+                    Ext.each(group.values, function(value) {
+                        if (value.index === legend.groupedIndex) {
+                            color = value.color;
+                        }
+                    });
+                });
+            this.showColorPicker(color, function(newColor) {
+                Ext.each(me.chartConfig.barComponentConfig.data.data,
+                    function(group) {
+                        Ext.each(group.values, function(value) {
+                            if (value.index === legend.groupedIndex) {
+                                value.color = newColor;
+                            }
+                        });
+                    });
+                legend.style.fill = newColor;
+            });
+        }
     },
 
     /**
@@ -1226,16 +1263,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
      * @param {boolean} visible Wheather to show the uncertainty or not.
      */
     setUncertaintyVisibility: function(visible) {
-        var me = this;
-        var Const = Koala.util.ChartConstants;
-        var CSS = Const.CSS_CLASS;
-        var group = me.containerSvg.selectAll('.' + CSS.UNCERTAINTY);
-        var hideClsName = CSS.HIDDEN_CLASS;
-        if (group) {
-            group.classed(hideClsName, !visible);
-            me.showUncertainty = visible;
-            me.drawChart();
-        }
+        var barComponent = this.chartConfig.chartRendererConfig.components[0];
+        barComponent.setUncertaintyVisible(visible);
+        this.showUncertainty = visible;
     },
 
     toggleUncertainty: function() {

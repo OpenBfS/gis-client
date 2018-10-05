@@ -1232,6 +1232,58 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
+     * Shows a color picker window.
+     * @param  {String} oldColor    the initial color
+     * @param  {Function} updateColor will be called with the new value in case
+     * the user chose
+     */
+    showColorPicker: function(oldColor, updateColor) {
+        var me = this;
+        var viewModel = this.getView().getViewModel();
+        var win = Ext.create('Ext.window.Window', {
+            title: viewModel.get('colorWindowTitle'),
+            width: 300,
+            layout: 'fit',
+            bodyPadding: 10,
+            items: [{
+                xtype: 'container',
+                items: [{
+                    padding: '10px 0',
+                    html: viewModel.get('colorWindowMessage')
+                },{
+                    xtype: 'colorfield',
+                    width: '100%',
+                    name: 'chart-color-picker',
+                    value: oldColor,
+                    listeners: {
+                        change: function(field, value) {
+                            field.setFieldStyle({
+                                fontSize: 0,
+                                backgroundColor: '#' + value
+                            });
+                        }
+                    }
+                }]
+            }],
+            bbar: [{
+                text: viewModel.get('colorMsgButtonYes'),
+                handler: function() {
+                    var cmp = win.down('[name=chart-color-picker]');
+                    updateColor('#' + cmp.getValue());
+                    me.drawChart();
+                    win.close();
+                }
+            }, {
+                text: viewModel.get('colorMsgButtonNo'),
+                handler: function() {
+                    this.up('window').close();
+                }
+            }]
+        });
+        win.show();
+    },
+
+    /**
      * A placeholder method to be implemented by subclasses.
      *
      * @param {Object} dataObj The data object, either a 'bar' or a 'series'.
