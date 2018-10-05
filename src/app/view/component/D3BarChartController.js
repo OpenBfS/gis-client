@@ -420,10 +420,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
         };
 
         var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
-        this.chartConfig.chartRendererConfig.components = [
-            barComponent,
-            this.getLegendComponent(barComponent)
-        ];
+        this.chartConfig.chartRendererConfig.components = [barComponent];
+        var legend = this.getLegendComponent(barComponent);
+        if (legend) {
+            this.chartConfig.chartRendererConfig.components.push(legend);
+        }
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
         var svg = d3.select('#' + this.getView().getId()).node();
         this.chartRenderer.render(svg);
@@ -1176,7 +1177,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         if (this.chartConfig.legendComponentConfig) {
             this.chartConfig.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
         } else {
-            this.chartConfig.timeseriesComponentConfig.size[0] += margin[3];
+            this.chartConfig.barComponentConfig.size[0] += margin[3];
         }
         this.chartConfig.chartRendererConfig.size = chartSize;
 
