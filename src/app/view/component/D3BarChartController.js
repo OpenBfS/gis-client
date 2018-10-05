@@ -391,6 +391,16 @@ Ext.define('Koala.view.component.D3BarChartController', {
             if (view.getShowLoadMask() && view.setLoading) {
                 view.setLoading(false);
             }
+            var config = me.getView().getConfig();
+            var chartSize = me.getViewSize();
+            this.chartConfig = Koala.util.ChartData.getChartConfiguration(
+                config,
+                chartSize,
+                'bar',
+                this.data,
+                this.labels,
+                this.getView().getSelectedStations()
+            );
             me.fireEvent('chartdataprepared');
         }
     },
@@ -399,6 +409,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
      *
      */
     drawChart: function() {
+        if (!this.chartConfig) {
+            return;
+        }
         var me = this;
 
         me.currentDateRange = {
@@ -406,23 +419,66 @@ Ext.define('Koala.view.component.D3BarChartController', {
             max: null
         };
 
-        var config = me.getView().getConfig();
-        var chartSize = me.getViewSize();
-        var chartConfig = Koala.util.ChartData.getChartConfiguration(
-            config,
-            chartSize,
-            'bar',
-            this.data,
-            this.labels,
-            this.getView().getSelectedStations()
-        );
-        chartConfig.chartRendererConfig.components = [
-            new D3Util.BarComponent(chartConfig.barComponentConfig),
-            new D3Util.LegendComponent(chartConfig.legendComponentConfig)
+        var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
+        this.chartConfig.chartRendererConfig.components = [
+            barComponent,
+            this.getLegendComponent(barComponent)
         ];
-        this.chartRenderer = new D3Util.ChartRenderer(chartConfig.chartRendererConfig);
+        this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
         var svg = d3.select('#' + this.getView().getId()).node();
         this.chartRenderer.render(svg);
+    },
+
+    /**
+     * Constructs a new legend component based on current config, or undefined,
+     * if we have no legend config.
+     * @param  {D3Util.BarComponent} series the corresponding bar chart
+     * component
+     * @return {D3Util.LegendComponent} the new legend component, or undefined
+     */
+    getLegendComponent: function(barComponent) {
+        if (!this.chartConfig.legendComponentConfig) {
+            return;
+        }
+        var me = this;
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
+        Ext.each(this.chartConfig.legendComponentConfig.items, function(legend, idx) {
+            legend.onClick = function(event) {
+                var list = event.target.classList;
+                if (list.contains(CSS.COLOR_ICON) ||
+                    list.contains(CSS.DELETE_ICON)) {
+                    return;
+                }
+                if (legend.groupIndex) {
+                    barComponent.toggleGroup(legend.groupIndex);
+                }
+                if (legend.groupedIndex) {
+                    barComponent.toggleGrouped(legend.groupedIndex);
+                }
+            };
+            legend.customRenderer = function(node) {
+                if (!Ext.isModern && legend.type === 'background') {
+                    node.append('text')
+                        // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                        .text('\uf1fc')
+                        .attr('class', CSS.COLOR_ICON)
+                        .attr('text-anchor', 'start')
+                        .attr('dy', '1')
+                        .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                        .on('click', me.generateColorCallback(legend.seriesIndex));
+                }
+                node.append('text')
+                    // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
+                    .text('')
+                    .attr('class', CSS.DELETE_ICON)
+                    .attr('text-anchor', 'start')
+                    .attr('dy', '1')
+                    .attr('dx', '170') // TODO Discuss, do we need this dynamically?
+                    .on('click', me.generateDeleteCallback(legend.seriesIndex, idx));
+            };
+        });
+        return new D3Util.LegendComponent(this.chartConfig.legendComponentConfig);
     },
 
     /**
@@ -1019,6 +1075,33 @@ Ext.define('Koala.view.component.D3BarChartController', {
             }
         });
         me.wrapAndResizeLegend();
+    },
+
+    /**
+     * Update the chart configuration with the new size and redraw.
+     */
+    handleResize: function() {
+        if (!this.chartConfig) {
+            return;
+        }
+        var config = this.getView().getConfig();
+        var gnosConfig = config.targetLayer.metadata.layerConfig.barChartProperties;
+        var margin = gnosConfig.chartMargin.split(',');
+        margin = Ext.Array.map(margin, function(w) {
+            return parseInt(w, 10);
+        });
+        var chartSize = this.getViewSize();
+        // set the size
+        this.chartConfig.barComponentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
+        this.chartConfig.barComponentConfig.position = [margin[3], margin[0]];
+        if (this.chartConfig.legendComponentConfig) {
+            this.chartConfig.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
+        } else {
+            this.chartConfig.timeseriesComponentConfig.size[0] += margin[3];
+        }
+        this.chartConfig.chartRendererConfig.size = chartSize;
+
+        this.drawChart();
     },
 
     /**

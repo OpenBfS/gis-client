@@ -507,6 +507,7 @@ Ext.define('Koala.util.ChartData', {
                 legends.push({
                     type: 'bar',
                     title: labels[groupIndex],
+                    groupIndex: item.value,
                     style: {
                         fill: 'black'
                     }
@@ -522,7 +523,8 @@ Ext.define('Koala.util.ChartData', {
                             style: {
                                 fill: value.color
                             },
-                            title: idx
+                            title: idx,
+                            groupedIndex: idx
                         };
                     }
                     item.values.push({
