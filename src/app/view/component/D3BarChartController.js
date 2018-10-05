@@ -443,7 +443,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var Const = Koala.util.ChartConstants;
         var CSS = Const.CSS_CLASS;
-        Ext.each(this.chartConfig.legendComponentConfig.items, function(legend, idx) {
+        Ext.each(this.chartConfig.legendComponentConfig.items, function(legend) {
             legend.onClick = function(event) {
                 var list = event.target.classList;
                 if (list.contains(CSS.COLOR_ICON) ||
@@ -475,10 +475,52 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     .attr('text-anchor', 'start')
                     .attr('dy', '1')
                     .attr('dx', '170') // TODO Discuss, do we need this dynamically?
-                    .on('click', me.generateDeleteCallback(legend.seriesIndex, idx));
+                    .on('click', function() {
+                        me.handleDelete(legend);
+                    });
             };
         });
         return new D3Util.LegendComponent(this.chartConfig.legendComponentConfig);
+    },
+
+    handleDelete: function(legend) {
+        var me = this;
+        if (legend.groupIndex) {
+            me.chartConfig.barComponentConfig.data.data =
+                me.chartConfig.barComponentConfig.data.data
+                    .filter(function(group) {
+                        return group.value !== legend.groupIndex;
+                    });
+            me.chartConfig.legendComponentConfig.items =
+                me.chartConfig.legendComponentConfig.items
+                    .filter(function(item) {
+                        return item.groupIndex !== legend.groupIndex;
+                    });
+        }
+        if (legend.groupedIndex) {
+            me.chartConfig.barComponentConfig.data.grouped =
+                me.chartConfig.barComponentConfig.data.grouped
+                    .filter(function(value) {
+                        return value !== legend.groupedIndex;
+                    });
+            Ext.each(me.chartConfig.barComponentConfig.data.data
+                ,function(group) {
+                    group.values = group.values.filter(function(value) {
+                        return value.index !== legend.groupedIndex;
+                    });
+                });
+            me.chartConfig.barComponentConfig.data.data =
+                me.chartConfig.barComponentConfig.data.data
+                    .filter(function(group) {
+                        return group.value !== legend.groupIndex;
+                    });
+            me.chartConfig.legendComponentConfig.items =
+                me.chartConfig.legendComponentConfig.items
+                    .filter(function(item) {
+                        return item.groupedIndex !== legend.groupedIndex;
+                    });
+        }
+        me.drawChart();
     },
 
     /**
@@ -1141,21 +1183,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         me.deleteLegendEntry(subCategory);
 
         this.drawChart();
-    },
-
-    /**
-     *
-     */
-    deleteEverything: function(dataObj) {
-        var me = this;
-        // Shape
-        me.deleteBarGroup(dataObj.key);
-        // Data
-        me.deleteData(dataObj.key);
-        Ext.Array.remove(me.data, dataObj);
-        // Legend
-        me.deleteLegendEntry(dataObj.key);
-        me.drawChart();
     },
 
     /**
