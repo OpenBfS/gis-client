@@ -476,9 +476,9 @@ Ext.define('Koala.util.ChartData', {
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
-                groupx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true),
-                groupedx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], false),
-                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true)
+                groupx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true, stations[0]),
+                groupedx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], false, stations[0]),
+                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true, stations[0])
             };
             componentConfig.axes.groupx.scale = 'band';
             componentConfig.axes.groupedx.scale = 'band';
@@ -602,12 +602,12 @@ Ext.define('Koala.util.ChartData', {
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
-                x: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true),
-                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true)
+                x: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true, stations[0]),
+                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true, stations[0])
             };
             // handle attachedSeries axes
             if (gnosConfig.attachedSeries) {
-                this.parseAttachedSeries(gnosConfig, componentConfig);
+                this.parseAttachedSeries(gnosConfig, componentConfig, stations);
             }
         },
 
@@ -615,8 +615,9 @@ Ext.define('Koala.util.ChartData', {
          * Parses the attached series axis config.
          * @param  {Object} gnosConfig the metadata
          * @param  {Object} componentConfig the d3-util config to manipulate
+         * @param  {ol.Feature[]} stations the selected stations
          */
-        parseAttachedSeries: function(gnosConfig, componentConfig) {
+        parseAttachedSeries: function(gnosConfig, componentConfig, stations) {
             var me = this;
             var series = gnosConfig.attachedSeries;
             if (Ext.isString(series)) {
@@ -644,7 +645,7 @@ Ext.define('Koala.util.ChartData', {
                 } else {
                     additionalYMax = gnosConfig.yAxisMax;
                 }
-                componentConfig.axes['y' + index] = me.createAxisConfig(gnosConfig, 'y', additionalYMin, additionalYMax, false);
+                componentConfig.axes['y' + index] = me.createAxisConfig(gnosConfig, 'y', additionalYMin, additionalYMax, false, stations[0]);
             });
         },
 
@@ -655,9 +656,11 @@ Ext.define('Koala.util.ChartData', {
          * @param  {String|Number} min the min value
          * @param  {String|NUmber} max the max value
          * @param  {Boolean} withGrid whether to consider the grid config
+         * @param  {ol.Feature} station the station feature for context
          * @return {Object} the axis configuration for d3-util
          */
-        createAxisConfig: function(gnosConfig, orient, min, max, withGrid) {
+        createAxisConfig: function(gnosConfig, orient, min, max, withGrid, station) {
+            var label = Koala.util.String.replaceTemplateStrings(gnosConfig[orient + 'AxisLabel'] || '', station);
             var config = {
                 orientation: orient,
                 display: true,
@@ -667,7 +670,7 @@ Ext.define('Koala.util.ChartData', {
                 tickPadding: gnosConfig.tickPadding || 3,
                 tickSize: gnosConfig.tickSize || 6,
                 format: gnosConfig[orient + 'AxisFormat'] || ',.0f',
-                label: gnosConfig[orient + 'AxisLabel'] || '',
+                label: label,
                 labelRotation: gnosConfig['rotate' + orient.toUpperCase() + 'AxisLabel'] === true ? -55 : 0,
                 scale: gnosConfig[orient + 'AxisScale'] || (orient === 'x' ? 'time' : 'linear'),
                 min: min || undefined,
