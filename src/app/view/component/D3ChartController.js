@@ -328,76 +328,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             me.setDomainForScale(axis, scale, orient, config);
         });
     },
-    /**
-     *
-     */
-    createShapes: function() {
-        var me = this;
-        var Const = Koala.util.ChartConstants;
-        var Chart = Koala.util.Chart;
-        var view = me.getView();
-        var chartSize = me.getChartSize();
-        // Start from scratch, we'll assign new shapes below.
-        // Alternatively we could reuse the `shape`, if we detect that
-        // it already exists in the `shapes` array.
-        me.shapes = [];
-        me.attachedSeriesShapes = [];
-        Ext.each(view.getShapes(), function(shapeConfig) {
-            var shapeType = Const.TYPE[shapeConfig.type || 'line'];
-            var curveType = Const.CURVE[shapeConfig.curve || 'linear'];
-            var xField = shapeConfig.xField;
-            var yField = shapeConfig.yField;
-            var orientX = me.getAxisByField(xField);
-            var orientY = me.getAxisByField(yField);
-            var normalizeX = me.scales[orientX];
-            var normalizeY = me.scales[orientY];
-            var shape;
-            if (shapeType) {
-                shape = Chart.createShape(shapeType, curveType, xField, yField, normalizeX, normalizeY, chartSize);
-            }
-            var shapeObj = {
-                config: shapeConfig,
-                shape: shape
-            };
-            me.shapes.push(shapeObj);
-            if (!me.attachedSeriesVisibleById[shapeConfig.id]) {
-                me.attachedSeriesVisibleById[shapeConfig.id] = [];
-            }
-        });
-    },
-    createAttachedSeriesShapes: function() {
-        var Const = Koala.util.ChartConstants;
-        var Chart = Koala.util.Chart;
-        var chartSize = this.getChartSize();
-        var me = this;
-        me.attachedSeriesShapes = [];
-        Ext.each(this.getView().getShapes(), function(shapeConfig) {
-            var shapeType = Const.TYPE[shapeConfig.type || 'line'];
-            var curveType = Const.CURVE[shapeConfig.curve || 'linear'];
-            var xField = shapeConfig.xField;
-            var orientX = me.getAxisByField(xField);
-            var normalizeX = me.scales[orientX];
-            var attachedSeries = shapeConfig.attachedSeries ?
-                JSON.parse(shapeConfig.attachedSeries) : [];
-            if (!me.attachedSeriesVisibleById[shapeConfig.id]) {
-                me.attachedSeriesVisibleById[shapeConfig.id] = [];
-            }
-            var idx = 0;
-            Ext.each(attachedSeries, function(config) {
-                shapeConfig = Ext.clone(shapeConfig);
-                shapeConfig.color = config.color || shapeConfig.color;
-                shapeConfig.yField = config.yAxisAttribute;
-                shapeConfig.orientY = 'left';
-                var scale = me.attachedSeriesScales[idx];
-                shapeConfig.attachedSeriesNumber = ++idx;
-                var shape = Chart.createShape(shapeType, curveType, xField, config.yAxisAttribute, normalizeX, scale, chartSize);
-                me.attachedSeriesShapes.push({
-                    config: shapeConfig,
-                    shape: shape
-                });
-            });
-        });
-    },
+
     /**
      *
      */
@@ -1424,11 +1355,14 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
             var config = me.getView().getConfig();
             var chartSize = me.getViewSize();
+            var stations = me.getView().getSelectedStations();
             me.chartConfig = Koala.util.ChartData.getChartConfiguration(
                 config,
                 chartSize,
                 'timeSeries',
-                this.data
+                this.data,
+                undefined,
+                stations
             );
             me.fireEvent('chartdataprepared');
         }

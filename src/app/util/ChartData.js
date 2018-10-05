@@ -252,7 +252,7 @@ Ext.define('Koala.util.ChartData', {
          * @param {Object} layerConfig The layerConfig of the layer which contains the chart config.
          * @return {Object} The chart configuration object to be used with the d3-util components
          */
-        getChartConfiguration: function(layerConfig, chartSize, type, data, labels) {
+        getChartConfiguration: function(layerConfig, chartSize, type, data, labels, stations) {
         /* timeseries props
         {
             "dataFeatureType": "imis:odl_brutto_10min_timeseries_9",
@@ -400,7 +400,7 @@ Ext.define('Koala.util.ChartData', {
             config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 300;
 
             if (type === 'timeSeries') {
-                this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data);
+                this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations);
             } else { // type is barchart
                 this.createBarConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels);
             }
@@ -556,7 +556,7 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} data the chart data
          * chart controller
          */
-        createTimeseriesConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data) {
+        createTimeseriesConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations) {
             var minMax = this.extractMinMax(gnosConfig);
             var margin = gnosConfig.chartMargin.split(',');
             margin = Ext.Array.map(margin, function(w) {
@@ -571,7 +571,7 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
             componentConfig.titleSize = layerConfig.title.labelSize || 20;
             componentConfig.extraClasses = 'k-d3-shape-group';
-            var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig);
+            var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig, stations);
             // append series
             componentConfig.series = seriesAndLegends.series;
             // append legends
@@ -665,13 +665,15 @@ Ext.define('Koala.util.ChartData', {
          * @param {Object} data The input data
          * @param {Object} layerConfig the config for the layer
          * chart controller
+         * @param {Object[]} stations the selected stations
          */
-        generateTimeSeriesAndLegends: function(data, layerConfig) {
+        generateTimeSeriesAndLegends: function(data, layerConfig, stations) {
             var gnosConfig = layerConfig.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
             var colors = gnosConfig.colorSequence ? gnosConfig.colorSequence.split(',') : [];
             var series = [];
             var legends = [];
             var index = 0;
+            var tooltipCmp = Ext.create('Ext.tip.ToolTip');
             var attachedSeries = gnosConfig.attachedSeries;
             if (Ext.isString(attachedSeries)) {
                 try {
@@ -685,12 +687,21 @@ Ext.define('Koala.util.ChartData', {
                     if (!item[gnosConfig.xAxisAttribute]) {
                         return undefined;
                     }
-                    return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[gnosConfig.yAxisAttribute]];
+                    return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[gnosConfig.yAxisAttribute], function(target) {
+                        var tooltipTpl = gnosConfig.tooltipTpl;
+                        var selectedStation = Ext.Array.findBy(stations, function(station) {
+                            return station.get(gnosConfig.featureIdentifyField || 'id') === id;
+                        });
+                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                        tooltipCmp.setHtml(html);
+                        tooltipCmp.setTarget(target);
+                        tooltipCmp.show();
+                    }];
                 });
                 var seriesConfig = {
                     data: chartData,
                     style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
-                    tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
+                    useTooltipFunc: true,
                     curveType: gnosConfig.curveType || 'linear',
                     shapeType: gnosConfig.shapeType || 'line',
                     axes: ['x', 'y'],
@@ -712,12 +723,21 @@ Ext.define('Koala.util.ChartData', {
                             if (!item[gnosConfig.xAxisAttribute]) {
                                 return undefined;
                             }
-                            return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[serie.yAxisAttribute]];
+                            return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[serie.yAxisAttribute], function(target) {
+                                var tooltipTpl = gnosConfig.tooltipTpl;
+                                var selectedStation = Ext.Array.findBy(stations, function(station) {
+                                    return station.get(gnosConfig.featureIdentifyField || 'id') === id;
+                                });
+                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                                tooltipCmp.setHtml(html);
+                                tooltipCmp.setTarget(target);
+                                tooltipCmp.show();
+                            }];
                         });
                         var attachedSeriesConfig = {
                             data: chartData,
                             style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
-                            tooltipConfig: function() {} || {}, // TODO ?! ersetzt tooltipTpl
+                            useTooltipFunc: true,
                             curveType: serie.curveType || 'linear',
                             shapeType: serie.shapeType || 'line',
                             axes: ['x', 'y' + idx],
