@@ -402,7 +402,7 @@ Ext.define('Koala.util.ChartData', {
             if (type === 'timeSeries') {
                 this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations);
             } else { // type is barchart
-                this.createBarConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels);
+                this.createBarConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels, stations);
             }
             return config;
         },
@@ -456,7 +456,7 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} data the chart data
          * @param  {Array} labels the group labels
          */
-        createBarConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels) {
+        createBarConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels, stations) {
             var minMax = this.extractMinMax(gnosConfig);
             var margin = gnosConfig.chartMargin.split(',');
             margin = Ext.Array.map(margin, function(w) {
@@ -482,7 +482,7 @@ Ext.define('Koala.util.ChartData', {
             };
             componentConfig.axes.groupx.scale = 'band';
             componentConfig.axes.groupedx.scale = 'band';
-            componentConfig.data = this.extractBarData(data, config.legendComponentConfig.items, labels);
+            componentConfig.data = this.extractBarData(data, config.legendComponentConfig.items, labels, gnosConfig, stations[0]);
         },
 
         /**
@@ -490,12 +490,14 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} data the chart data
          * @param  {Array} legends an array to store legend entries in
          * @param  {Array} labels the group labels
+         * @param  {Object} gnosConfig the GNOS configuration
          * @return {Object} the d3-util compliant data
          */
-        extractBarData: function(data, legends, labels) {
+        extractBarData: function(data, legends, labels, gnosConfig, station) {
             var result = [];
             var grouped = [];
             var extraLegends = {};
+            var tooltipCmp = Ext.create('Ext.tip.ToolTip');
 
             Ext.each(data, function(group, groupIndex) {
                 var item = {
@@ -529,7 +531,25 @@ Ext.define('Koala.util.ChartData', {
                         uncertainty: value.uncertainty,
                         color: value.color,
                         label: value.label,
-                        belowThreshold: value.detection_limit === '<'
+                        belowThreshold: value.detection_limit === '<',
+                        tooltipFunc: function(target) {
+                            var tooltipTpl = gnosConfig.tooltipTpl;
+                            // Only proceed and show tooltip if a tooltipTpl is
+                            // given in the chartConfig.
+                            if (tooltipTpl) {
+                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, {
+                                    xAxisAttribute: idx,
+                                    yAxisAttribute: value.value,
+                                    key: labels[groupIndex],
+                                    group: idx
+                                });
+                                html = Koala.util.String.replaceTemplateStrings(html, data);
+                                html = Koala.util.String.replaceTemplateStrings(html, station);
+                                tooltipCmp.setHtml(html);
+                                tooltipCmp.setTarget(target);
+                                tooltipCmp.show();
+                            }
+                        }
                     });
                 });
                 result.push(item);

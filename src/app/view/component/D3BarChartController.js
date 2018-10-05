@@ -413,7 +413,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             chartSize,
             'bar',
             this.data,
-            this.labels
+            this.labels,
+            this.getView().getSelectedStations()
         );
         chartConfig.chartRendererConfig.components = [
             new D3Util.BarComponent(chartConfig.barComponentConfig),
