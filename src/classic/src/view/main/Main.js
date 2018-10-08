@@ -196,6 +196,7 @@ Ext.define('Koala.view.main.Main', {
         },
         // define menu items
         menuConfig: {
+            cls:'basigx-panel-menu',
             bodyPadding: 0,
             resizable: true,
             resizeHandles: 's se e',
