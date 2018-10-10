@@ -553,7 +553,7 @@
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {
-                "title": "Themen",
+                "title": "",
                 "toggleLayerSetTooltip": "LayerSet wechseln",
                 "closeTooltip": "Schließen",
                 "tooltext": "Thema wechseln",
@@ -641,6 +641,14 @@
                 "okButtonLabel": "Klonen",
                 "cancelButtonLabel": "Abbrechen",
                 "emptyTemplateMessage": "Bitte wählen Sie eine Vorlage aus."
+            }
+        }
+    },
+    "Koala.view.window.PermalinkWindow": {
+        "config": {
+            "data": {
+                "title": "Permalink",
+                "helpTooltip": "Hilfe",
             }
         }
     },
