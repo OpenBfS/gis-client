@@ -18,10 +18,6 @@
  */
 Ext.define('Koala.view.window.PermalinkWindowController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.k-window-permalink',
-
-    requires: [
-        'Koala.view.window.PermalinkWindow'
-    ]
+    alias: 'controller.k-window-permalink'
 
 });
