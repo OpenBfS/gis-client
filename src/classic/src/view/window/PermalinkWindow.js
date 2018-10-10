@@ -23,7 +23,7 @@ Ext.define('Koala.view.window.PermalinkWindow', {
 
     requires: [
         'Koala.util.Help',
-        'Koala.view.window.PermalinkWindow',
+        'Koala.view.window.PermalinkWindowController',
         'Koala.view.window.PermalinkWindowModel'
     ],
 
