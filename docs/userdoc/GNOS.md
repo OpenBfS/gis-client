@@ -843,16 +843,16 @@ Beispiel:
 ```
 [{
       "attribute": "validated",
-      "operator": "eq",`
-      "value": true,`
-      "style": {`
-          "type": "circle",`
-          "radius": "5"`
+      "operator": "eq",
+      "value": true,
+      "style": {
+          "type": "circle",
+          "radius": "5"
       }`
   }, {`
-      "attribute": "value",`
+      "attribute": "value",
       "operator": "eq",
-      "value": 0.09,
+      "value": 0.08,
       "style": {
           "type": "circle",
           "radius": "10"
@@ -860,7 +860,7 @@ Beispiel:
   }, {
       "attribute": "value",
       "operator": "between",
-      "value": "0.09,0.1",
+      "value": "0.09,0.01",
       "style": {
           "type": "star",
           "sides": 5,
@@ -869,7 +869,7 @@ Beispiel:
   }, {
       "attribute": "value",
       "operator": "gt",
-      "value": 0.1,
+      "value": 0.02,
       "style": {
           "type": "rect",
           "width": 15,

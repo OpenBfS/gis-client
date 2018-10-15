@@ -144,11 +144,7 @@ Ext.define('Koala.util.ChartData', {
             var featureStyle;
 
             if (chartConfig.featureStyle) {
-                try {
-                    featureStyle = JSON.parse(chartConfig.featureStyle);
-                } catch (e) {
-                    Ext.log.error('Error on parsing the featureStyle');
-                }
+                featureStyle = chartConfig.featureStyle;
             }
 
             var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
@@ -608,6 +604,39 @@ Ext.define('Koala.util.ChartData', {
             // handle attachedSeries axes
             if (gnosConfig.attachedSeries) {
                 this.parseAttachedSeries(gnosConfig, componentConfig, stations);
+            }
+            if (gnosConfig.thresholds) {
+                var min = componentConfig.series[0].data.reduce(function(acc, val) {
+                    return Math.min(acc, val[0]);
+                }, Number.MAX_VALUE);
+                var max = componentConfig.series[0].data.reduce(function(acc, val) {
+                    return Math.max(acc, val[0]);
+                }, Number.MIN_VALUE);
+                Ext.each(gnosConfig.thresholds, function(threshold) {
+                    componentConfig.series.push({
+                        data: [[min, threshold.value], [max, threshold.value]],
+                        axes: ['x', 'y'],
+                        color: threshold.stroke,
+                        style: {
+                            stroke: threshold.stroke,
+                            'stroke-dasharray': threshold.dasharray,
+                            'stroke-width': threshold.lineWidth
+                        },
+                        skipDots: true,
+                        belongsTo: componentConfig.series.length
+                    });
+                    config.legendComponentConfig.items.push({
+                        type: 'line',
+                        style: {
+                            stroke: threshold.stroke,
+                            'stroke-dasharray': threshold.dasharray,
+                            'stroke-width': threshold.lineWidth
+                        },
+                        title: threshold.label,
+                        tooltip: threshold.tooltip,
+                        seriesIndex: componentConfig.series.length - 1
+                    });
+                });
             }
         },
 
