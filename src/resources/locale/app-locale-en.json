@@ -435,7 +435,7 @@
         "config": {
             "data": {
                 "menu": "Menu",
-                "themes": "Topics",
+                "themes": "",
                 "loading": "Load",
                 "wmsimport": "Add external WMS",
                 "vectorimport": "Import local files",
@@ -640,6 +640,14 @@
                 "okButtonLabel": "Clone",
                 "cancelButtonLabel": "Cancel",
                 "emptyTemplateMessage": "Please select a template."
+            }
+        }
+    },
+    "Koala.view.window.PermalinkWindow": {
+        "config": {
+            "data": {
+                "title": "Permalink",
+                "helpTooltip": "Help"
             }
         }
     },

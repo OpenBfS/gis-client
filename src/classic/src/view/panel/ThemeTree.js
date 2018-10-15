@@ -64,20 +64,20 @@ Ext.define('Koala.view.panel.ThemeTree', {
         },
         handler: 'toggleLayerSetView'
     }, {
-        type: 'close',
-        bind: {
-            tooltip: '{closeTooltip}'
-        },
-        handler: function() {
-            this.up('k-panel-themetree').hide();
-        }
-    }, {
         type: 'help',
         bind: {
             tooltip: '{helpTooltip}'
         },
         callback: function() {
             Koala.util.Help.showHelpWindow('layerSelection');
+        }
+    }, {
+        type: 'close',
+        bind: {
+            tooltip: '{closeTooltip}'
+        },
+        handler: function() {
+            this.up('k-panel-themetree').hide();
         }
     }],
 

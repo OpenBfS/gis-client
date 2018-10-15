@@ -1015,8 +1015,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                         if (Koala.Application.isUtc()) {
                             tooltipData[xField] = Koala.util.Date.addUtcOffset(tooltipData[xField]);
                         }
+                        // evaluate possible template functions with the current feature
+                        if (Ext.String.startsWith(tooltipTpl, 'eval:')) {
+                            tooltipTpl = eval(tooltipTpl.substr(5)); // eslint-disable-line no-eval
+                            tooltipTpl = tooltipTpl(data);
+                        }
 
+                        //replace Strings with attributes from tooltipData object
                         var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, tooltipData);
+                        //replace Strings with attributes from selectedStation object
                         html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
                         tooltipCmp.setHtml(html);
                         tooltipCmp.setTarget(this);
@@ -1212,8 +1219,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                         if (Koala.Application.isUtc()) {
                             tooltipData[xField] = Koala.util.Date.addUtcOffset(tooltipData[xField]);
                         }
+                        // evaluate possible template functions with the current feature
+                        if (Ext.String.startsWith(tooltipTpl, 'eval:')) {
+                            tooltipTpl = eval(tooltipTpl.substr(5)); // eslint-disable-line no-eval
+                            tooltipTpl = tooltipTpl(data);
+                        }
 
+                        //replace Strings with attributes from tooltipData object
                         var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, tooltipData);
+                        //replace Strings with attributes from selectedStation object
                         html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
                         tooltipCmp.setHtml(html);
                         tooltipCmp.setTarget(this);

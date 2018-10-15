@@ -22,13 +22,20 @@ Ext.define('Koala.view.window.PermalinkWindow', {
     cls: 'k-window-permalink',
 
     requires: [
-        'Koala.util.Help'
+        'Koala.util.Help',
+        'Koala.view.window.PermalinkWindowController',
+        'Koala.view.window.PermalinkWindowModel'
     ],
+
+    controller: 'k-window-permalink',
+    viewModel: {
+        type: 'k-window-permalink'
+    },
 
     name: 'permalink-window',
 
     bind: {
-        title: '{windowTitle}'
+        title: '{title}'
     },
 
     layout: 'fit',
