@@ -708,10 +708,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var me = this;
         var Const = Koala.util.ChartConstants;
         var staticMe = Koala.view.component.D3BaseController;
-        var thresholds;
-        if (config.thresholds) {
-            thresholds = JSON.parse(config.thresholds);
-        }
+        var thresholds = config.thresholds;
 
         Ext.each(thresholds, function(threshold, idx) {
             if (me.thresholdState[idx].deleted) {
@@ -802,7 +799,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                 from = me.getView().getStartDate();
                 to = me.getView().getEndDate();
             }
-            var thresholds = JSON.parse(config.thresholds);
+            var thresholds = config.thresholds;
             Ext.each(thresholds, function(threshold, idx) {
                 if (!me.thresholdState[idx]) {
                     me.thresholdState[idx] = {visibility: true};
@@ -1197,7 +1194,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var view = me.getView();
         var xtype = view.getXType ? view.getXType() : view.xtype;
         var config = view.getTargetLayer().get('timeSeriesChartProperties');
-        var thresholds = config.thresholds ? JSON.parse(config.thresholds) : [];
+        var thresholds = config.thresholds ? config.thresholds : [];
         var targetLayer = view.getTargetLayer();
         var allowDownload = Koala.util.Object.getPathStrOr(
             targetLayer,
@@ -1324,7 +1321,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                 color = me.customColors[idx] || shape.config.color;
             } else {
                 var lay = me.getView().getTargetLayer();
-                var config = JSON.parse(lay.get('timeSeriesChartProperties').thresholds)[idx];
+                var config = lay.get('timeSeriesChartProperties').thresholds[idx];
                 color = me.thresholdState[idx].color || config.stroke;
             }
             var win = Ext.create('Ext.window.Window', {
