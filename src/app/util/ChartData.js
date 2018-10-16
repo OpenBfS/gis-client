@@ -708,8 +708,8 @@ Ext.define('Koala.util.ChartData', {
                 label: label,
                 labelRotation: gnosConfig['rotate' + orient.toUpperCase() + 'AxisLabel'] === true ? -55 : 0,
                 scale: gnosConfig[orient + 'AxisScale'] || (orient === 'x' ? 'time' : 'linear'),
-                min: min || undefined,
-                max: max || undefined
+                min: min,
+                max: max
             };
             if (withGrid) {
                 config.showGrid = gnosConfig.showGrid || false;
@@ -747,7 +747,12 @@ Ext.define('Koala.util.ChartData', {
                     if (!item[gnosConfig.xAxisAttribute]) {
                         return undefined;
                     }
-                    return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[gnosConfig.yAxisAttribute], function(target) {
+                    var value = item[gnosConfig.yAxisAttribute];
+                    if (item.drawAsZero) {
+                        value = 0;
+                    }
+
+                    return [item[gnosConfig.xAxisAttribute].unix() * 1000, value, function(target) {
                         var tooltipTpl = gnosConfig.tooltipTpl;
                         var selectedStation = Ext.Array.findBy(stations, function(station) {
                             return station.get(gnosConfig.featureIdentifyField || 'id') === id;
