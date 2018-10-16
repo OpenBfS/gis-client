@@ -668,13 +668,13 @@ Ext.define('Koala.util.ChartData', {
                 }
                 var additionalYMin;
                 var additionalYMax;
-                if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
+                if (gnosConfig.yAxisScale === 'time' &&
                     gnosConfig.yAxisMin && !Ext.isNumeric(gnosConfig.yAxisMin)) {
                     additionalYMin = moment(gnosConfig.yAxisMin).unix() * 1000;
                 } else {
                     additionalYMin = gnosConfig.yAxisMin;
                 }
-                if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
+                if (gnosConfig.yAxisScale === 'time' &&
                     gnosConfig.yAxisMax && !Ext.isNumeric(gnosConfig.yAxisMax)) {
                     additionalYMax = moment(gnosConfig.yAxisMax).unix() * 1000;
                 } else {
