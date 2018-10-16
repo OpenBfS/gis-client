@@ -749,9 +749,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var ctrl = chart.getController();
         ctrl.groupPropToggled = !ctrl.groupPropToggled;
         ctrl.getChartData();
-        ctrl.on('chartdataprepared', function() {
-            ctrl.redrawLegend();
-        });
     },
 
     /**
