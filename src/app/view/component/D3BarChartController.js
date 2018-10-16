@@ -333,7 +333,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             this.chartConfig.chartRendererConfig.components.push(legend);
         }
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
-        var svg = d3.select('#' + this.getView().getId()).node();
+        var svg = document.querySelector('#' + this.getView().getId());
         this.chartRenderer.render(svg);
     },
 

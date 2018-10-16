@@ -197,8 +197,12 @@ Ext.define('Koala.util.Chart', {
                 }
 
                 var rangeStep = Math.abs(rangeMax - rangeMin) / (tickCnt + 1);
-                yAxisTickValues = d3.range(rangeMin, rangeMax + rangeStep,
-                    rangeStep);
+                var acc = rangeMin;
+                yAxisTickValues = [];
+                while (acc < rangeMax + rangeStep) {
+                    yAxisTickValues.push(acc);
+                    acc += rangeStep;
+                }
             }
 
             if (chartConfig.yTickValues) {
