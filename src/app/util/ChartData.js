@@ -607,9 +607,15 @@ Ext.define('Koala.util.ChartData', {
             }
             if (gnosConfig.thresholds) {
                 var min = componentConfig.series[0].data.reduce(function(acc, val) {
+                    if (!val) {
+                        return acc;
+                    }
                     return Math.min(acc, val[0]);
                 }, Number.MAX_VALUE);
                 var max = componentConfig.series[0].data.reduce(function(acc, val) {
+                    if (!val) {
+                        return acc;
+                    }
                     return Math.max(acc, val[0]);
                 }, Number.MIN_VALUE);
                 Ext.each(gnosConfig.thresholds, function(threshold) {
