@@ -746,11 +746,12 @@ Ext.define('Koala.util.ChartData', {
                         var selectedStation = Ext.Array.findBy(stations, function(station) {
                             return station.get(gnosConfig.featureIdentifyField || 'id') === id;
                         });
-                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                        var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, item);
+                        html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
                         tooltipCmp.setHtml(html);
                         tooltipCmp.setTarget(target);
                         tooltipCmp.show();
-                    }];
+                    }, item.style];
                 });
                 var seriesConfig = {
                     data: chartData,
