@@ -315,7 +315,7 @@
                 "cancelButtonText": "Abort",
                 "importButtonText": "Import",
                 "layerNameLabel": "Layer Name",
-                "templateLabel": "Template",
+                "templateLabel": "Metadata template",
                 "projectionLabel": "Projection",
                 "fileFieldLabel": "File",
                 "fileFieldButtonText": "Browse"
@@ -452,7 +452,8 @@
                 "imprint": "Imprint",
                 "privacy": "Privacy",
                 "help": "Help",
-                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html"
+                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html",
+                "createvectorlayer": "Create vector layer"
             }
         }
     },
@@ -633,13 +634,14 @@
     "Koala.view.window.CloneWindow": {
         "config": {
             "data": {
-                "title": "Clone layer",
+                "title": "Create vector layer",
                 "boundingBoxLabel": "Restrict to visible area",
                 "maxFeaturesLabel": "Maximum number of objects",
                 "layerNameLabel": "Name of the new layer",
-                "okButtonLabel": "Clone",
+                "okButtonLabel": "Ok",
                 "cancelButtonLabel": "Cancel",
-                "emptyTemplateMessage": "Please select a template."
+                "emptyTemplateMessage": "Please select a template.",
+                "selectionEnabled": "(Selection tool is activated!)"
             }
         }
     },

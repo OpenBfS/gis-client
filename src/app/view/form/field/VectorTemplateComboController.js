@@ -30,7 +30,19 @@ Ext.define('Koala.view.form.field.VectorTemplateComboController', {
         var viewModel = this.getViewModel();
         var store = combo.getStore();
         var appContext = Ext.ComponentQuery.query('k-component-map')[0].appContext;
-        store.setData(appContext.data.merge.vectorTemplates);
+        var map = Ext.ComponentQuery.query('k-component-map')[0].map;
+        var templates = appContext.data.merge.vectorTemplates.slice();
+        if (this.getView().getIncludeCloneLayers()) {
+            Ext.each(map.getLayers().getArray(), function(layer) {
+                if (layer.metadata && layer.metadata.layerConfig.olProperties.allowClone) {
+                    templates.push({
+                        uuid: layer.metadata.id,
+                        label: layer.metadata.treeTitle
+                    });
+                }
+            });
+        }
+        store.setData(templates);
         viewModel.set('templateUuid', store.first().get('uuid'));
     }
 

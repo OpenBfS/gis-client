@@ -39,7 +39,7 @@ Ext.define('Koala.view.window.CloneWindow', {
     constrainHeader: true,
     collapsible: true,
     maxHeight: 800,
-    height: 300,
+    height: 310,
     width: 500,
     layout: 'vbox',
 
@@ -108,18 +108,29 @@ Ext.define('Koala.view.window.CloneWindow', {
                 boxLabel: 'Daten des ausgewählten Layers verwenden',
                 inputValue: 'useLayer',
                 name: 'layer',
-                checked: true
+                checked: true,
+                handler: 'handleDatasourceChange'
             }, {
                 boxLabel: 'keine Daten übernehmen',
                 inputValue: 'emptyLayer',
-                name: 'layer'
+                name: 'layer',
+                handler: 'handleDatasourceChange'
             }, {
                 boxLabel: 'Daten aus Selektion übernehmen',
                 inputValue: 'selectionLayer',
-                name: 'layer'
+                name: 'layer',
+                handler: 'handleDatasourceChange'
             }]
         }, {
-            xtype: 'k-form-field-vectortemplatecombo'
+            xtype: 'label',
+            name: 'selection-enabled',
+            hidden: true,
+            bind: {
+                text: '{selectionEnabled}'
+            }
+        }, {
+            xtype: 'k-form-field-vectortemplatecombo',
+            includeCloneLayers: true
         }]
     }]
 

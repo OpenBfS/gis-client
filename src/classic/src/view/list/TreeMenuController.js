@@ -130,6 +130,21 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     selectFeaturesButton.toggle();
                     viewModel.set('selectFeaturesActive', selectFeaturesButton.pressed);
                     break;
+                case 'createvectorlayer':
+                    var selected = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].getSelection();
+                    var layer;
+                    if (selected.length > 0) {
+                        layer = selected[0];
+                        var allowClone = layer.get('allowClone') || false;
+                        if (!allowClone) {
+                            layer = undefined;
+                        }
+                    }
+                    Ext.create({
+                        xtype: 'k-window-clone',
+                        sourceLayer: layer
+                    });
+                    break;
                 case 'permalink':
                     this.showWindow('k-window-permalink', 'Koala.view.window.PermalinkWindow');
                     break;
