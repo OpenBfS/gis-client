@@ -788,9 +788,12 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (!axis) {
             axis = 'y';
         }
-        var scale = this.chartConfig.timeseriesComponentConfig.axes[axis].scale;
+        var cfg = this.chartConfig.timeseriesComponentConfig.axes[axis];
+        var scale = cfg.scale;
         scale = scale === 'linear' ? 'log' : 'linear';
-        this.chartConfig.timeseriesComponentConfig.axes[axis].scale = scale;
+        cfg.scale = scale;
+        cfg.harmonize = scale === 'log';
+        cfg.autoTicks = scale === 'log';
         this.drawChart();
     }
 });

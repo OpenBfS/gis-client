@@ -390,7 +390,7 @@ Ext.define('Koala.util.ChartData', {
             // apply values from config
             gnosConfig = Koala.util.Object.coerceAll(gnosConfig);
 
-            config.chartRendererConfig.zoomType = gnosConfig.allowZoom ? 'transform' : 'none';
+            config.chartRendererConfig.zoomType = gnosConfig.allowZoom ? 'rerender' : 'none';
             config.chartRendererConfig.chartMargin = gnosConfig.chartMargin ? gnosConfig.chartMargin.split(',') : [];
 
             config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 300;
@@ -709,7 +709,8 @@ Ext.define('Koala.util.ChartData', {
                 labelRotation: gnosConfig['rotate' + orient.toUpperCase() + 'AxisLabel'] === true ? -55 : 0,
                 scale: gnosConfig[orient + 'AxisScale'] || (orient === 'x' ? 'time' : 'linear'),
                 min: min,
-                max: max
+                max: max,
+                sanitizeLabels: true
             };
             if (withGrid) {
                 config.showGrid = gnosConfig.showGrid || false;
