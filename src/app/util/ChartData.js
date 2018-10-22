@@ -140,15 +140,7 @@ Ext.define('Koala.util.ChartData', {
             var valueField = chartConfig.yAxisAttribute;
             var attachedSeries = chartConfig.attachedSeries ?
                 JSON.parse(chartConfig.attachedSeries) : [];
-            var featureStyle;
-
-            if (chartConfig.featureStyle) {
-                try {
-                    featureStyle = JSON.parse(chartConfig.featureStyle);
-                } catch (e) {
-                    Ext.log.error('Error on parsing the featureStyle');
-                }
-            }
+            var featureStyle = chartConfig.featureStyle;
 
             var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
                 targetLayer.metadata);

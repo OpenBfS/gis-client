@@ -155,13 +155,13 @@ Ext.define('Koala.view.component.D3ChartController', {
         var viewId = '#' + view.getId();
 
         function continueDrawing() {
+            me.drawShapes();
             me.drawLegend();
             me.updateSvgContainerSize();
             me.updateLegendContainerPosition();
             me.drawAxes();
             me.drawAttachedSeriesAxis();
             me.drawGridAxes();
-            me.drawShapes();
             me.registerKeyboardHandler(me);
             Koala.util.Chart.recalculatePositionsAndVisibility(me.attachedSeriesShapes, me.attachedSeriesVisibleById, viewId);
             me.chartRendered = true;
