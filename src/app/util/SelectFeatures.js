@@ -240,9 +240,6 @@ Ext.define('Koala.util.SelectFeatures', {
                     filter = BasiGX.util.WFS.combineFilters([ogcCqlFilter, filter]);
                 }
                 var parms = sourceLayer.getSource().getParams();
-                if (parms['viewparams']) {
-                    wfsUrl += 'viewparams=' + parms['viewparams'];
-                }
                 BasiGX.util.WFS.executeWfsGetFeature(
                     wfsUrl,
                     sourceLayer,
@@ -254,7 +251,10 @@ Ext.define('Koala.util.SelectFeatures', {
                     function(res) {
                         Koala.util.SelectFeatures.getFeatureSuccess(
                             sourceLayer, targetLayer, res);
-                    }
+                    },
+                    undefined,
+                    undefined,
+                    parms.viewparams
                 );
             };
 
