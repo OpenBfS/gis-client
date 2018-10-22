@@ -240,43 +240,22 @@ Ext.define('Koala.util.SelectFeatures', {
                     filter = BasiGX.util.WFS.combineFilters([ogcCqlFilter, filter]);
                 }
                 var parms = sourceLayer.getSource().getParams();
-                // TODO fix POST viewparams in geoserver/geotools, then remove
-                // workaround once merged
-                if (parms['viewparams']) {
-                    wfsUrl += 'viewparams=' + parms['viewparams'];
-                    var featureType = parms.LAYERS;
-                    var requestParams = {
-                        service: 'WFS',
-                        version: '1.1.0',
-                        request: 'GetFeature',
-                        typeName: featureType,
-                        outputFormat: 'application/json',
-                        filter: filter,
-                        viewParams: parms.viewparams
-                    };
-                    Ext.Ajax.request({
-                        url: wfsUrl,
-                        params: requestParams,
-                        success: function(res) {
-                            Koala.util.SelectFeatures.getFeatureSuccess(
-                                sourceLayer, targetLayer, res);
-                        }
-                    });
-                } else {
-                    BasiGX.util.WFS.executeWfsGetFeature(
-                        wfsUrl,
-                        sourceLayer,
-                        srs,
-                        [],
-                        geometryField,
-                        filter,
-                        maxFeatures,
-                        function(res) {
-                            Koala.util.SelectFeatures.getFeatureSuccess(
-                                sourceLayer, targetLayer, res);
-                        }
-                    );
-                }
+                BasiGX.util.WFS.executeWfsGetFeature(
+                    wfsUrl,
+                    sourceLayer,
+                    srs,
+                    [],
+                    geometryField,
+                    filter,
+                    maxFeatures,
+                    function(res) {
+                        Koala.util.SelectFeatures.getFeatureSuccess(
+                            sourceLayer, targetLayer, res);
+                    },
+                    undefined,
+                    undefined,
+                    parms.viewparams
+                );
             };
 
             var errorCb = function() {
