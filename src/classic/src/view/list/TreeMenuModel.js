@@ -48,7 +48,8 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         themeTreeVisible: true,
         drawToolsActive: false,
         measureToolsActive: false,
-        selectFeaturesActive: false
+        selectFeaturesActive: false,
+        createvectorlayer: ''
     },
 
     stores: {
@@ -108,6 +109,11 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         leaf: true,
                         iconCls: 'x-fa fa-crop',
                         rowCls: '{selectFeaturesActive ? "active" : ""}'
+                    }, {
+                        text: '{createvectorlayer}',
+                        key: 'createvectorlayer',
+                        leaf: true,
+                        iconCls: 'x-fa fa-files-o'
                     }]
                 }, {
                     text: '{share}',

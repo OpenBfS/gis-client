@@ -49,6 +49,9 @@ Ext.define('Koala.view.form.field.VectorTemplateCombo',{
         autoLoad: true,
         type: 'k-vectortemplates'
     },
+    config: {
+        includeCloneLayers: false
+    },
     listeners: {
         beforerender: 'beforeVectorTemplateComboRendered'
     }
