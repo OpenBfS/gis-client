@@ -40,7 +40,7 @@
  * tab panel widget
  */
 .cartowindow {
-  @include box-shadow(10px,15px,5px,0, rgba(0,0,0,0.6));
+  @include box-shadow(5px,10px,15px,0, rgba(0,0,0,0.6));
   position: relative;  /* containing block for headings (top:0) */
   background: #999;
   z-index: 0;

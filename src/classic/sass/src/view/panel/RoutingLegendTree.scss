@@ -2,8 +2,8 @@
 .x-window-body .layer-name-suffix {
     display: none;
 }
-.basigx-legend-panel {
-    @include box-shadow(-10px,-15px,10px,0, rgba(0,0,0,0.6));
+.east-container {
+    @include box-shadow(-5px,-5px,15px,0, rgba(0,0,0,0.6));
 }
 /** … except when they are shown inside of the RoutingLegendTree **/
 .basigx-legend-panel .layer-name-suffix {

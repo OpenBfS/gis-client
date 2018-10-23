@@ -4,11 +4,11 @@
    box-shadow: $top $left $blur $size $color;
 }
 
-.basigx-panel-menu {
-    @include box-shadow(10px,15px,5px,0, rgba(0,0,0,0.6));
+.k-panel-themetree {
+    @include box-shadow(5px,10px,15px,0, rgba(0,0,0,0.6));
 }
 .x-window {
-    @include box-shadow(10px,15px,5px,0, rgba(0,0,0,0.6));
+    @include box-shadow(5px,10px,15px,0, rgba(0,0,0,0.6));
 }
 
 .x-title-icon-navigation {

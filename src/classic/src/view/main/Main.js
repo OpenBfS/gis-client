@@ -185,7 +185,7 @@ Ext.define('Koala.view.main.Main', {
         // define menu items
         menuConfig: {
             xtype: 'k-panel-themetree',
-            cls:'basigx-panel-menu',
+            cls:'k-panel-themetree',
             bodyPadding: 0,
             resizable: true,
             resizeHandles: 's e se'

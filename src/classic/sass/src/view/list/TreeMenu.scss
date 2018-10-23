@@ -1,4 +1,6 @@
 .x-k-treemenu, .x-treelist-tree-menu {
+    @include box-shadow(5px,10px,15px,0, rgba(0,0,0,0.6));
+    z-index: 0;
     background-color: $base-color;
     color: white;
     overflow-y: auto;
