@@ -82,6 +82,11 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         key: 'vectorimport',
                         leaf: true,
                         iconCls: 'x-fa fa-map-o'
+                    }, {
+                        text: '{createvectorlayer}',
+                        key: 'createvectorlayer',
+                        leaf: true,
+                        iconCls: 'x-fa fa-files-o'
                     }]
                 }, {
                     text: '{print}',
@@ -109,11 +114,6 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         leaf: true,
                         iconCls: 'x-fa fa-crop',
                         rowCls: '{selectFeaturesActive ? "active" : ""}'
-                    }, {
-                        text: '{createvectorlayer}',
-                        key: 'createvectorlayer',
-                        leaf: true,
-                        iconCls: 'x-fa fa-files-o'
                     }]
                 }, {
                     text: '{share}',
