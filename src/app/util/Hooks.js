@@ -285,12 +285,12 @@ Ext.define('Koala.util.Hooks', {
                     change: function() {
                         var me = this;
                         var dokpoolMetaFieldset = Ext.ComponentQuery.query('[name=DokpoolMeta]')[0];
-                        if (me.checked === true){
-                            console.log('checked IsDoksys');
-                            dokpoolMetaFieldset.show()
+                        if (me.checked === true) {
+                            Ext.log('checked IsDoksys');
+                            dokpoolMetaFieldset.show();
                         } else {
-                            console.log('unchecked IsDoksys');
-                            dokpoolMetaFieldset.hide();;
+                            Ext.log('unchecked IsDoksys');
+                            dokpoolMetaFieldset.hide();
                         }
                     }
                 });
@@ -359,12 +359,10 @@ Ext.define('Koala.util.Hooks', {
         * of form fields
         * @param {Object} obj The print form
         */
-        beforeRender: function(printForm){
+        beforeRender: function(printForm) {
             // debugger;
-            var me = this,
-            DokpoolContentType = printForm.down('[name=DokpoolContentType]'),
-            dokpoolMetaFieldset = printForm.down('[name=DokpoolMeta]'),
-            isElan = printForm.down('[name=IsElan]');
+            var DokpoolContentType = printForm.down('[name=DokpoolContentType]'),
+                isElan = printForm.down('[name=IsElan]');
 
             DokpoolContentType.fireEvent('change');
             isElan.fireEvent('change');
@@ -435,75 +433,73 @@ Ext.define('Koala.util.Hooks', {
         * @param {object} {Object} attributeFields The config object of the formular
         *        fields that will be created.
         */
-        onChangeDokpoolContentType: function(value, dokpoolMetaFieldset){
-            console.log('onChangeDokpoolContentType '+ value);
+        onChangeDokpoolContentType: function(value, dokpoolMetaFieldset) {
+            Ext.log('onChangeDokpoolContentType '+ value);
             var fields = dokpoolMetaFieldset.items.items;
             var visibleFields = [];
 
-                if(value.match(/^rodos/)){
-                    console.log("Matched a string that starts with 'rodos'");
-                    //var fields = dokpoolMetaFieldset.items.items;
-                    visibleFields = [
-                        'CalculationDate',
-                        'Model',
-                        'NumericWeatherPredictionDate',
-                        'PrognosisBegin',
-                        'PrognosisEnd',
-                        'PrognosisForm',
-                        'PrognosisType',
-                        'ProjectName',
-                        'ProjectUser',
-                        'ReleaseSite',
-                        'ReleaseStart',
-                        'ReleaseStop',
-                        'ReportId'
-                    ];
-                }
-                else if(value.match(/^gammadoserate/)){
-                    console.log("Matched a string that starts with 'gammadoserate'");
-                    visibleFields = [
-                        'Area',
-                        'DataType',
-                        'Dom',
-                        'Duration',
-                        'LegalBase',
-                        'MeasurementCategory',
-                        'MeasuringProgram',
-                        'NetworkOperator',
-                        'OperationMode',
-                        'Purpose',
-                        'SampleType',
-                        'SampleTypeId',
-                        'SamplingBegin',
-                        'SamplingEnd',
-                        'Status',
-                        'Type'
-                    ];
-                }
-                else if(value.match(/^trajectory/)){
-                    console.log("Matched a string that starts with 'trajectory'");
-                    visibleFields = [
-                        'Area',
-                        'NetworkOperator',
-                        'OperationMode',
-                        'Purpose',
-                        'TrajectoryEndLocation',
-                        'TrajectoryEndTime',
-                        'TrajectoryStartLocation',
-                        'TrajectoryStartTime',
-                        'Type'
-                    ];
-                }
+            if (value.match(/^rodos/)) {
+                Ext.log('Matched a string that starts with \'rodos\'');
+                //var fields = dokpoolMetaFieldset.items.items;
+                visibleFields = [
+                    'CalculationDate',
+                    'Model',
+                    'NumericWeatherPredictionDate',
+                    'PrognosisBegin',
+                    'PrognosisEnd',
+                    'PrognosisForm',
+                    'PrognosisType',
+                    'ProjectName',
+                    'ProjectUser',
+                    'ReleaseSite',
+                    'ReleaseStart',
+                    'ReleaseStop',
+                    'ReportId'
+                ];
+            } else if (value.match(/^gammadoserate/)) {
+                Ext.log('Matched a string that starts with \'gammadoserate\'');
+                visibleFields = [
+                    'Area',
+                    'DataType',
+                    'Dom',
+                    'Duration',
+                    'LegalBase',
+                    'MeasurementCategory',
+                    'MeasuringProgram',
+                    'NetworkOperator',
+                    'OperationMode',
+                    'Purpose',
+                    'SampleType',
+                    'SampleTypeId',
+                    'SamplingBegin',
+                    'SamplingEnd',
+                    'Status',
+                    'Type'
+                ];
+            } else if (value.match(/^trajectory/)) {
+                Ext.log('Matched a string that starts with \'trajectory\'');
+                visibleFields = [
+                    'Area',
+                    'NetworkOperator',
+                    'OperationMode',
+                    'Purpose',
+                    'TrajectoryEndLocation',
+                    'TrajectoryEndTime',
+                    'TrajectoryStartLocation',
+                    'TrajectoryStartTime',
+                    'Type'
+                ];
+            }
 
-                for (var i = 0, l = fields.length; i < l; i++) {
-                    console.log(fields[i].name);
-                    var field = fields[i];
-                    field.setVisible(false);
-                    if(Ext.Array.contains(visibleFields,fields[i].name)){
-                        console.log('set visible: ' + fields[i].name);
-                        field.setVisible(true);
-                    }
+            for (var i = 0, l = fields.length; i < l; i++) {
+                Ext.log(fields[i].name);
+                var field = fields[i];
+                field.setVisible(false);
+                if (Ext.Array.contains(visibleFields,fields[i].name)) {
+                    Ext.log('set visible: ' + fields[i].name);
+                    field.setVisible(true);
                 }
+            }
         }
     }
 });
