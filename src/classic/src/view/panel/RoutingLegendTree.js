@@ -82,10 +82,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         beforedestroy: 'unbindUtcBtnToggleHandler',
         checkchange: 'checkLayerAndLegendVisibility',
         itemmove: 'removeAlwaysOnTopProperty',
-        beforecellmousedown: function(table, td, cellIdx, record, tr, rowIdx, event) {
-            event.preventDefault();
-            return false;
-        },
+        // TODO this fixes jumping around, but breaks drag & drop
+        // This should be analyzed further
+        // beforecellmousedown: function(table, td, cellIdx, record, tr, rowIdx, event) {
+        //     event.preventDefault();
+        //     return false;
+        // },
         beforecellclick: function(table, td, cellIdx, record, tr, rowIdx, event) {
             event.preventDefault();
             if (Ext.get(event.target).hasCls('x-tree-checkbox')) {
