@@ -23,7 +23,8 @@ Ext.define('Koala.view.form.IrixFieldSet',{
 
     requires: [
         'Koala.util.Filter',
-        'Koala.view.form.IrixFieldSetModel'
+        'Koala.view.form.IrixFieldSetModel',
+        'Koala.util.Hooks'
     ],
 
     /**
@@ -45,6 +46,14 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         // can be overriden via appContext.json: urls/irixcontext
         irixContextUrl: 'resources/irixContext.json'
     },
+
+    // listeners: {
+    //     beforerender: function(){
+    //         var DokpoolContentType = Ext.ComponentQuery.query('[name=DokpoolContentType]')[0];
+    //         var dokpoolMetaFieldset = Ext.ComponentQuery.query('[name=DokpoolMeta]')[0];
+    //         Koala.util.Hooks.onChangeDokpoolContentType(DokpoolContentType.value,dokpoolMetaFieldset);
+    //     }
+    // },
 
     initComponent: function() {
         var me = this;
@@ -74,6 +83,8 @@ Ext.define('Koala.view.form.IrixFieldSet',{
                     me.raw = json;
                     me.add(me.createFields(json.data.fields));
                     resolve();
+
+                    Koala.util.Hooks.beforeRender(me);
                 },
 
                 failure: function(response) {
