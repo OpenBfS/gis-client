@@ -29,6 +29,7 @@ Ext.define('Koala.view.panel.FeatureGridModel', {
         wfstLockExpired: '',
         wfstLockButton: '',
         layerNotSavedYet: '',
+        toggleSortSelectedText: '',
         pinned: true
     }
 });
