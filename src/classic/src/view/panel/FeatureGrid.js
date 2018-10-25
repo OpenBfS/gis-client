@@ -301,6 +301,7 @@ Ext.define('Koala.view.panel.FeatureGrid', {
             bind: {
                 selectionLayer: '{selectedFeaturesLayer}'
             },
+            addZoomButton: true,
             map: map
         }];
         me.callParent();
