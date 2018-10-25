@@ -120,14 +120,14 @@ Ext.define('Koala.view.window.CloneWindow', {
                 inputValue: 'selectionLayer',
                 name: 'layer',
                 handler: 'handleDatasourceChange'
+            }, {
+                xtype: 'label',
+                name: 'selection-enabled',
+                hidden: true,
+                bind: {
+                    text: '{selectionEnabled}'
+                }
             }]
-        }, {
-            xtype: 'label',
-            name: 'selection-enabled',
-            hidden: true,
-            bind: {
-                text: '{selectionEnabled}'
-            }
         }, {
             xtype: 'k-form-field-vectortemplatecombo',
             includeCloneLayers: true
