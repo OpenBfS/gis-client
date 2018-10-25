@@ -177,7 +177,10 @@ Ext.define('Koala.view.panel.FeatureGrid', {
             }, {
                 xtype: 'button',
                 glyph: 'xf160@FontAwesome',
-                handler: 'multiEdit'
+                handler: 'multiEdit',
+                bind: {
+                    tooltip: '{multiEditTooltip}'
+                }
             }, {
                 xtype: 'basigx-button-digitize-point',
                 map: map.map,
