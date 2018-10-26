@@ -110,18 +110,26 @@ Ext.define('Koala.view.component.D3ChartController', {
 
         var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
         series.enableYAxisZoom(false);
-        // TODO think about how to unregister these events properly to avoid
-        // memory leakage
-        Ext.getBody().on('keydown', function(event) {
+
+        if (this.keydownDestroy) {
+            this.keydownDestroy.destroy();
+            this.keyupDestroy.destroy();
+        }
+
+        this.keydownDestroy = Ext.getBody().on('keydown', function(event) {
             if (event.shiftKey) {
                 // removed stopping of event propagation for now, if there was
                 // a reason for this, we'd probably need further checks on the
                 // event target
                 series.enableYAxisZoom(true);
             }
+        }, this, {
+            destroyable: true
         });
-        Ext.getBody().on('keyup', function(event) {
+        this.keyupDestroy = Ext.getBody().on('keyup', function(event) {
             series.enableYAxisZoom(event.shiftKey);
+        }, this, {
+            destroyable: true
         });
         var legend = this.getLegendComponent(series);
 
