@@ -5,8 +5,9 @@
 svg .k-d3-shape-group-legend g {
     cursor: pointer;
 }
-svg .k-d3-shape-group rect,
-svg .k-d3-shape-group circle {
+svg .k-d3-shape-group .timeseries-chart .timeseries-data rect,
+svg .k-d3-shape-group .timeseries-chart .timeseries-data circle,
+svg .k-d3-shape-group .timeseries-chart .timeseries-data polygon {
     cursor: help;
 }
 
