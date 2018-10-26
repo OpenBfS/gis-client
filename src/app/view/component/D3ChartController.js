@@ -77,11 +77,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @type {Boolean}
      */
     chartDataAvailable: false,
-    /**
-     * Boolean flag that indicates if the key that should zoom the y-axis
-     * is currently pressed.
-     */
-    zoomYAxisBtnPressed: false,
+
     /**
      * Fired once all chart data is available from the data requests.
      *
@@ -113,6 +109,20 @@ Ext.define('Koala.view.component.D3ChartController', {
         };
 
         var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
+        series.enableYAxisZoom(false);
+        // TODO think about how to unregister these events properly to avoid
+        // memory leakage
+        Ext.getBody().on('keydown', function(event) {
+            if (event.shiftKey) {
+                // removed stopping of event propagation for now, if there was
+                // a reason for this, we'd probably need further checks on the
+                // event target
+                series.enableYAxisZoom(true);
+            }
+        });
+        Ext.getBody().on('keyup', function(event) {
+            series.enableYAxisZoom(event.shiftKey);
+        });
         var legend = this.getLegendComponent(series);
 
         this.chartConfig.chartRendererConfig.components = [series];
