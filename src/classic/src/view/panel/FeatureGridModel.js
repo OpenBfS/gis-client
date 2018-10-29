@@ -29,6 +29,8 @@ Ext.define('Koala.view.panel.FeatureGridModel', {
         wfstLockExpired: '',
         wfstLockButton: '',
         layerNotSavedYet: '',
+        deleteTitle: '',
+        deleteMessage: '',
         pinned: true
     }
 });

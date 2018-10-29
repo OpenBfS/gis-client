@@ -504,7 +504,9 @@
                 "wfstLockExpired": "The WFS-T Lock has expired",
                 "wfstLockButton": "WFS-T Lock",
                 "layerNotSavedYet": "The layer has not been saved yet",
-                "multiEditTooltip": "Update all selected rows"
+                "multiEditTooltip": "Update all selected rows",
+                "deleteTitle": "Delete",
+                "deleteMessage": "Do you want to delete the {0} selected objects?"
             }
         }
     },

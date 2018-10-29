@@ -52,6 +52,30 @@ Ext.define('Koala.view.panel.FeatureGridController', {
     },
 
     /**
+     * Handle click on delete button. This enables removal of features selected
+     * in the grid/map if desired.
+     * @param  {Ext.button.Button} btn the delete button
+     */
+    handleDelete: function(btn) {
+        this.disableHover(btn);
+        var viewModel = this.getViewModel();
+        var source = this.getView().layer.getSource();
+        var grid = this.getView().down('basigx-grid-featuregrid').down('grid');
+        var selection = grid.getSelection();
+        if (selection.length > 0) {
+            var text = Ext.String.format(viewModel.get(
+                'deleteMessage'), selection.length);
+            Ext.Msg.confirm(viewModel.get('deleteTitle'), text, function(button) {
+                if (button === 'yes') {
+                    Ext.each(selection, function(rec) {
+                        source.removeFeature(rec.olObject);
+                    });
+                }
+            });
+        }
+    },
+
+    /**
      * Issues a WFS-T LockFeature
      *
      * @param {Ext.button.Button} btn The button itself
