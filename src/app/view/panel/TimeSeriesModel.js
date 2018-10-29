@@ -52,6 +52,7 @@ Ext.define('Koala.view.panel.TimeSeriesModel', {
         startLabel: '',
         toggleDataBelowIdentificationThreshold: '',
         toggleScaleBtnText: '',
-        endLabel: ''
+        endLabel: '',
+        pinned: true
     }
 });

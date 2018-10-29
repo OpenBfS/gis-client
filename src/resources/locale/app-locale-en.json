@@ -171,7 +171,7 @@
                 "quoteText": "use double quotes (\" \")",
                 "okText": "Ok",
                 "cancelText": "Cancel",
-                "magnification": "Magnification",
+                "magnification": "Resolution",
                 "original": "Original",
                 "twofold": "2-fold",
                 "threefold": "3-fold",
@@ -315,7 +315,7 @@
                 "cancelButtonText": "Abort",
                 "importButtonText": "Import",
                 "layerNameLabel": "Layer Name",
-                "templateLabel": "Template",
+                "templateLabel": "Metadata template",
                 "projectionLabel": "Projection",
                 "fileFieldLabel": "File",
                 "fileFieldButtonText": "Browse"
@@ -435,12 +435,12 @@
         "config": {
             "data": {
                 "menu": "Menu",
-                "themes": "Topics",
+                "themes": "",
                 "loading": "Load",
                 "wmsimport": "Add external WMS",
                 "vectorimport": "Import local files",
                 "print": "Print",
-                "drawandmeasure": "Draw & Measure",
+                "tools": "Tools",
                 "draw": "Draw",
                 "measure": "Measure",
                 "share": "Share",
@@ -452,7 +452,8 @@
                 "imprint": "Imprint",
                 "privacy": "Privacy",
                 "help": "Help",
-                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html"
+                "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html",
+                "createvectorlayer": "Create vector layer"
             }
         }
     },
@@ -479,6 +480,9 @@
                 "chartSlctnBarChartBtn": "Bar Chart",
                 "rodosPanelTitle": "RODOS-Filter",
                 "helpTooltip": "Help",
+                "pinTooltip": "Pin",
+                "unpinTooltip": "Unpin",
+                "closeTooltip": "Close",
                 "headerTitle": "GEOPORTAL",
                 "gridTabTitle": "Table view",
                 "htmlTabTitle": "Information",
@@ -499,7 +503,11 @@
                 "wfstLockSuccess": "The WFS-T Lock request was successful. The lock will timeout in {0} minute(s)",
                 "wfstLockExpired": "The WFS-T Lock has expired",
                 "wfstLockButton": "WFS-T Lock",
-                "layerNotSavedYet": "The layer has not been saved yet"
+                "layerNotSavedYet": "The layer has not been saved yet",
+                "multiEditTooltip": "Update all selected rows",
+                "deleteTitle": "Delete",
+                "deleteMessage": "Do you want to delete the {0} selected objects?",
+                "toggleSortSelectedText": "Selected to top"
             }
         }
     },
@@ -550,7 +558,8 @@
         "config": {
             "data": {
                 "title": "Topics",
-                "tooltip": "Change Layer Set",
+                "toggleLayerSetTooltip": "Change Layer Set",
+                "closeTooltip": "Close",
                 "tooltext": "Change Topic",
                 "btnTextResetThemeTreeFiltering": "All Layers",
                 "btnTooltipResetThemeTreeFiltering": "Resets filtering of available topics.",
@@ -629,30 +638,22 @@
     "Koala.view.window.CloneWindow": {
         "config": {
             "data": {
-                "title": "Clone layer",
+                "title": "Create vector layer",
                 "boundingBoxLabel": "Restrict to visible area",
                 "maxFeaturesLabel": "Maximum number of objects",
                 "layerNameLabel": "Name of the new layer",
-                "okButtonLabel": "Clone",
+                "okButtonLabel": "Ok",
                 "cancelButtonLabel": "Cancel",
-                "emptyTemplateMessage": "Please select a template."
+                "emptyTemplateMessage": "Please select a template.",
+                "selectionEnabled": "(Selection tool is activated!)"
             }
         }
     },
-    "Koala.view.window.FeatureGridWindow": {
+    "Koala.view.window.PermalinkWindow": {
         "config": {
             "data": {
-                "downloadLayerText": "Download",
-                "geoJsonText": "GeoJSON",
-                "shapefileText": "Shapefile",
-                "saveLayerText": "Save layer",
-                "wfstSuccess": "Changes successfully saved.<br>Objects inserted: {0}<br>Objects updated: {1}<br>Objects deleted: {2}",
-                "wfstFailure": "Changes could not be saved. Please try again later.",
-                "wfstLockFail": "The WFS-T Lock request was rejeceted",
-                "wfstLockSuccess": "The WFS-T Lock request was successful. The lock will timeout in {0} minute(s)",
-                "wfstLockExpired": "The WFS-T Lock has expired",
-                "wfstLockButton": "WFS-T Lock",
-                "layerNotSavedYet": "The layer has not been saved yet"
+                "title": "Permalink",
+                "helpTooltip": "Help"
             }
         }
     },

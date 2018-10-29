@@ -358,6 +358,532 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
+<<<<<<< HEAD
+=======
+     * Returns the chart size as array of width at index 0 & height at index 1.
+     * @return {Array<Number>} An array of width (index 0) and height (index 1).
+     */
+    getChartSize: function() {
+        var me = this;
+        var view = me.getView();
+        var viewSize = me.getViewSize();
+        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
+
+        var extraWidth = 110;
+        if (Ext.isModern) {
+            extraWidth -= 40;
+        }
+        var legWidth = Koala.util.Label.getMinimumLegendWidth('#' + view.getId()) + extraWidth;
+
+        var series = this.attachedSeriesShapes;
+        var offset = 0;
+        if (series && series.length > 0) {
+            var configs = JSON.parse(series[0].config.attachedSeries);
+            var visibility = [];
+            Ext.each(series, function(shape) {
+                var id = shape.config.id;
+                Ext.each(configs, function(config, idx) {
+                    var visible = me.attachedSeriesVisibleById[id][idx];
+                    visibility[idx] = visibility[idx] || visible;
+                });
+            });
+            Ext.each(configs, function(config, idx) {
+                var width = config.axisWidth || 40;
+                if (visibility[idx]) {
+                    offset += width;
+                }
+            });
+        }
+        var chartWidth = viewSize[0] - chartMargin.left - offset - legWidth;
+        if (this.type === 'component-d3barchart') {
+            var maxCount = 0;
+            Ext.each(this.data, function(group) {
+                maxCount = Math.max(maxCount, Ext.Object.getKeys(group).length);
+            });
+            chartWidth = view.getBarWidth() * maxCount * this.data.length + parseInt(chartMargin.left, 10);
+        }
+
+        return [
+            viewSize[0] - chartMargin.left - offset - legWidth,
+            viewSize[1] - chartMargin.top - chartMargin.bottom,
+            chartWidth
+        ];
+    },
+
+    /**
+     * Creates a simple ExtJS tooltip, see the
+     * {@link http://docs.sencha.com/extjs/6.0.0/classic/Ext.tip.ToolTip.html|ExtJS API documentation}
+     * for further details and config options.
+     */
+    createTooltip: function() {
+        this.tooltipCmp = Ext.create('Ext.tip.ToolTip');
+    },
+
+    /**
+     * Draws the root <svg>-element into the <div>-element rendered by the
+     * Ext component.
+     */
+    drawSvgContainer: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3BaseController;
+        var makeTranslate = staticMe.makeTranslate;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
+        var marginLeft = parseInt(chartMargin.left, 10);
+        var translate = makeTranslate(chartMargin.left, chartMargin.top);
+        var chartSize = me.getChartSize();
+        var scrollbarHeight = Ext.getScrollbarSize().height;
+
+        // Get the container view by its ID and append the SVG including an
+        // additional group element to it.
+        var container = d3.select(viewId);
+        if (this.type === 'component-d3barchart') {
+            container = container
+                .append('div')
+                .attr('style', 'overflow-x: auto; width: ' + chartSize[0] + 'px');
+        }
+        container
+            .append('svg')
+            .attr('viewBox', '0 0 ' + (chartSize[2] + marginLeft) + ' ' + (chartSize[1] - scrollbarHeight))
+            .attr('width', (chartSize[2] + marginLeft))
+            .attr('height', chartSize[1] - scrollbarHeight)
+            .append('g')
+            .attr('transform', translate);
+
+        var containerSvg = d3.select(viewId + ' svg');
+        me.containerSvg = containerSvg;
+    },
+
+    appendBackground: function(node) {
+        var view = this.getView();
+        var chartSize = this.getChartSize();
+        var CSS = Koala.util.ChartConstants.CSS_CLASS;
+        node.append('rect')
+            .style('fill', view.getBackgroundColor() || '#EEE')
+            .attr('class', CSS.PLOT_BACKGROUND)
+            .attr('width', chartSize[2])
+            .attr('height', chartSize[1])
+            // to make y axis line visible
+            .attr('transform', 'translate(1, 0)')
+            .attr('pointer-events', 'all');
+    },
+
+    /**
+     *
+     */
+    deleteShapeContainerSvg: function() {
+        var view = this.getView();
+        var svg = d3.select('#' + view.getId() + ' svg g.k-d3-shape-container');
+        if (svg && !svg.empty()) {
+            svg.node().remove();
+        }
+    },
+
+    /**
+     * Draws the legend container <div>.
+     */
+    drawLegendContainer: function() {
+        var me = this;
+        var CSS = Koala.util.ChartConstants.CSS_CLASS;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var viewSize = me.getViewSize();
+        var viewHeight = viewSize[1];
+
+        var legWidth = me.legendTargetWidth;
+        var legHeight = viewHeight;
+
+        d3.select(viewId)
+            .append('div')
+            .attr('class', CSS.LEGEND_CONTAINER)
+            .style('width', legWidth + 'px')
+            .style('height', legHeight + 'px')
+            .style('right', '0px' )
+            // values below will be updated in #updateLegendContainerDimensions
+            .append('svg')
+            .attr('viewBox', '0 0 ' + legWidth + ' 100')
+            .attr('width', legWidth)
+            .attr('height', '100');
+        var legSvg = d3.select(viewId + ' .' + CSS.LEGEND_CONTAINER + ' svg');
+
+        me.legendSvg = legSvg;
+    },
+
+    /**
+     * Updates the size of the root SVG container to the current view size.
+     */
+    updateSvgContainerSize: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3BaseController;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var chartSize = me.getChartSize();
+        var makeTranslate = staticMe.makeTranslate;
+        var chartMargin = view.getChartMargin() || me.defaultChartMargin;
+        var marginLeft = parseInt(chartMargin.left, 10);
+        var translate = makeTranslate(chartMargin.left, chartMargin.top);
+        var scrollbarHeight = Ext.getScrollbarSize().height;
+
+        var svgContainer = d3.select(viewId + ' svg');
+        var svgGroup = d3.select(viewId + ' svg g');
+        var svgRect = d3.select(viewId + ' svg rect');
+        var viewSize = me.getViewSize();
+        var legWidth = me.calculateLegendWidth();
+        var barChartParent;
+        var svgContainerWidth = (chartSize[2] < chartSize[0]) ? chartSize[0] : chartSize[2];
+
+        svgContainer
+            .attr('viewBox', '0 0 ' + viewSize[0] + ' ' + viewSize[1])
+            .attr('width', viewSize[0])
+            .attr('height', viewSize[1]);
+
+        svgRect
+            .attr('width', chartSize[0])
+            .attr('height', chartSize[1]);
+
+        if (this.type === 'component-d3barchart') {
+            barChartParent = svgContainer.select(function() {
+                return this.parentNode;
+            });
+            barChartParent
+                .style('width', (viewSize[0] - legWidth) + 'px');
+
+            svgRect
+                .attr('height', chartSize[1] - scrollbarHeight)
+                .attr('width', chartSize[2] + marginLeft);
+            svgContainer
+                .attr('height', viewSize[1] - scrollbarHeight)
+                .attr('viewBox', '0 0 ' + (marginLeft + chartSize[2]) + ' ' + (viewSize[1] - scrollbarHeight))
+                .attr('width', (svgContainerWidth + marginLeft));
+        }
+
+        svgGroup
+            .attr('transform', translate);
+
+
+        // Re-register the zoom interaction if requested as the charts sizes
+        // may have changed.
+        if (view.getZoomEnabled()) {
+            me.createInteractions();
+            d3.select(viewId + ' svg > g > g.k-d3-shape-container')
+                .call(me.zoomInteraction);
+        }
+    },
+
+    /**
+     * Updates the position of the legend container <div>.
+     */
+    updateLegendContainerPosition: function() {
+        var me = this;
+        var viewSize = me.getViewSize();
+        var viewHeight = viewSize[1];
+        var legWidth = me.calculateLegendWidth();
+        var legHeight = viewHeight;
+        var legendNode = me.legendSvg.node();
+
+        if (legendNode && legendNode.parentNode) {
+            d3.select(legendNode.parentNode)
+                .style('right', '0px')
+                .style('width', legWidth + 'px')
+                .style('height', legHeight + 'px');
+        }
+    },
+
+    createScale: function(orient, axisConfig, chartSize) {
+        var scaleType = Koala.util.ChartConstants.SCALE[axisConfig.scale || 'linear'];
+        var range;
+
+        if (orient === 'top' || orient === 'bottom') {
+            range = [0, chartSize[2]];
+        } else if (orient === 'left' || orient === 'right') {
+            range = [chartSize[1], 0];
+        }
+
+        return scaleType().range(range);
+    },
+
+    /**
+     *
+     */
+    createScales: function() {
+        var me = this;
+        var view = me.getView();
+        var chartSize = me.getChartSize();
+
+        Ext.iterate(view.getAxes(), function(orient, axisConfig) {
+            me.scales[orient] = me.createScale(orient, axisConfig, chartSize);
+        });
+    },
+
+    /**
+     * Creates legends for any configured thresholds.
+     * @param  {Object} config          the chart configuration
+     * @param  {Object} legendContainer the legend container
+     * @param  {Number} curTranslateY current y legend position
+     */
+    drawThresholdLegends: function(config, legendContainer, curTranslateY) {
+        var me = this;
+        var Const = Koala.util.ChartConstants;
+        var staticMe = Koala.view.component.D3BaseController;
+        var thresholds = config.thresholds;
+
+        Ext.each(thresholds, function(threshold, idx) {
+            if (me.thresholdState[idx].deleted) {
+                return;
+            }
+            curTranslateY += me.legendEntryTargetHeight;
+            var legendEntry = legendContainer
+                .append('g')
+                .on('click', function() {
+                    var target = d3.select(d3.event.target);
+                    if (target && (target.classed(Const.CSS_CLASS.DELETE_ICON) ||
+                            target.classed(Const.CSS_CLASS.COLOR_ICON))) {
+                        return;
+                    }
+                    me.thresholdState[idx].visibility = !me.thresholdState[idx].visibility;
+                    me.redrawChart();
+                    me.redrawLegend();
+                })
+                .attr('transform', staticMe.makeTranslate(0, curTranslateY));
+
+            // background for the concrete legend icon, to widen clickable area.
+            legendEntry.append('path')
+                .attr('d', Const.SVG_DEFS.LEGEND_ICON_BACKGROUND)
+                .style('stroke', 'none')
+                // invisible, but still triggering events
+                .style('fill', 'rgba(0,0,0,0)');
+
+            var line = legendEntry.append('path')
+                .attr('d', Const.SVG_DEFS.LEGEND_ICON_LINE)
+                .style('stroke', me.thresholdState[idx].color || threshold.stroke)
+                .style('stroke-width', threshold.lineWidth)
+                .style('fill', 'none');
+            if (threshold.dasharray) {
+                line.style('stroke-dasharray', threshold.dasharray);
+            }
+
+            legendEntry.append('text')
+                .text(threshold.label)
+                .attr('text-anchor', 'start')
+                .attr('dy', '0')
+                .attr('dx', '25');
+
+            legendEntry.append('title')
+                .text(threshold.tooltip);
+
+            legendEntry.append('text')
+                // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('\uf1fc')
+                .attr('class', Const.CSS_CLASS.COLOR_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '150')
+                .on('click', me.generateColorCallback(undefined, idx));
+
+            legendEntry.append('text')
+                // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
+                .text('')
+                .attr('class', Const.CSS_CLASS.DELETE_ICON)
+                .attr('text-anchor', 'start')
+                .attr('dy', '1')
+                .attr('dx', '170')
+                .on('click', function() {
+                    me.thresholdState[idx].deleted = true;
+                    me.redrawChart();
+                    me.redrawLegend();
+                });
+
+            var disabledClsName = Const.CSS_CLASS.DISABLED_CLASS;
+
+            legendEntry.classed(disabledClsName, !me.thresholdState[idx].visibility);
+        });
+    },
+
+    /**
+     * Draws configured thresholds, if any.
+     * @param  {Object} config the chart configuration object
+     * @param  {Object} svg    the chart
+     * @param  {Number} from   the minimum x value
+     * @param  {Number} to     the maximum x value
+     * @param  {Function} x      x axis mapping function
+     * @param  {Function} y      y axis mapping function
+     */
+    drawThresholds: function(config, svg, from, to, x, y) {
+        var me = this;
+        if (config.thresholds) {
+            var exactInterval = me.getView().getConfig().useExactInterval;
+            if (exactInterval) {
+                from = me.getView().getStartDate();
+                to = me.getView().getEndDate();
+            }
+            var thresholds = config.thresholds;
+            Ext.each(thresholds, function(threshold, idx) {
+                if (!me.thresholdState[idx]) {
+                    me.thresholdState[idx] = {visibility: true};
+                }
+                if (me.thresholdState[idx].deleted) {
+                    return;
+                }
+                if (me.thresholdState[idx].visibility) {
+                    var yval = y(threshold.value);
+                    var line = svg.append('line')
+                        .attr('x1', x(from))
+                        .attr('x2', x(to))
+                        .attr('y1', yval)
+                        .attr('y2', yval)
+                        .style('stroke', me.thresholdState[idx].color || threshold.stroke)
+                        .style('stroke-width', threshold.lineWidth);
+                    if (threshold.dasharray) {
+                        line.style('stroke-dasharray', threshold.dasharray);
+                    }
+                }
+            });
+        }
+    },
+
+    createAttachedSeriesAxes: function() {
+        var me = this;
+        var Axes = Koala.util.ChartAxes;
+        var chartSize = this.getChartSize();
+        me.attachedSeriesAxes = [];
+        me.attachedSeriesScales = [];
+        Ext.each(this.attachedSeriesAxisConfig, function(config) {
+            var scale = me.createScale('left', config, chartSize);
+            var axis = Axes.createAxis(config, 'left', scale);
+
+            me.setDomainForScale(config, scale, 'left', config);
+
+            me.attachedSeriesAxes.push(axis);
+            me.attachedSeriesScales.push(scale);
+        });
+    },
+
+    drawAttachedSeriesAxis: function() {
+        var me = this;
+        var view = this.getView();
+        var metadata = view.getConfig().targetLayer.metadata;
+        var chartSize = this.getChartSize();
+        var viewId = '#' + view.getId();
+        var Axes = Koala.util.ChartAxes;
+        var series = Koala.util.Object.getPathStrOr(
+            metadata,
+            'layerConfig/timeSeriesChartProperties/attachedSeries',
+            '[]'
+        );
+        series = JSON.parse(series);
+        var drawOffset = 0;
+        Ext.each(series, function(config, idx) {
+            var label = config.dspUnit || '';
+            var axisConfig = Koala.view.component.D3Chart.extractLeftAxisConfig(config, label);
+            var axis = me.attachedSeriesAxes[idx];
+            var axisWidth = (config.axisWidth || 40) + drawOffset;
+            drawOffset += axisWidth;
+            Axes.drawAxis('left', axisConfig, chartSize, viewId, axis, axisWidth, idx + 1, metadata);
+        });
+    },
+
+    /**
+     * Creates the axes.
+     */
+    createAxes: function() {
+        var me = this;
+        var Axes = Koala.util.ChartAxes;
+        var view = me.getView();
+        var axesConfig = view.getAxes();
+
+        Ext.iterate(axesConfig, function(orient, axisConfig) {
+            var scale = me.scales[orient];
+            var axis = Axes.createAxis(axisConfig, orient, scale);
+            me.axes[orient] = axis;
+        });
+    },
+
+    /**
+     * Draws the axes.
+     */
+    drawAxes: function() {
+        var me = this;
+        var view = this.getView();
+        var viewId = '#' + view.getId();
+        var axesConfig = view.getAxes();
+        var chartSize = this.getChartSize();
+        var metadata = view.getConfig().targetLayer.metadata;
+        var Axes = Koala.util.ChartAxes;
+
+        Ext.iterate(axesConfig, function(orient, axisConfig) {
+            Axes.drawAxis(orient, axisConfig, chartSize, viewId, me.axes[orient], undefined, undefined, metadata);
+        });
+    },
+
+    /**
+     * Redraws all axes.
+     */
+    redrawAxes: function() {
+        var me = this;
+        var view = me.getView();
+        var axesConfig = view.getAxes();
+        var metadata = view.getConfig().targetLayer.metadata;
+        var Axes = Koala.util.ChartAxes;
+        var chartSize = this.getChartSize();
+        var viewId = view.getId();
+
+        Ext.iterate(axesConfig, function(orient, config) {
+            var axisGenerator = me.axes[orient];
+            Axes.redrawAxis(axisGenerator, orient, metadata, chartSize, viewId, config);
+        });
+    },
+
+    /**
+     * Creates the grid axis.
+     */
+    createGridAxes: function() {
+        var Axes = Koala.util.ChartAxes;
+        var gridConfig = this.getView().getGrid();
+        var chartSize = this.getChartSize();
+        Axes.createGridAxes(gridConfig, chartSize, this.scales, this.gridAxes);
+    },
+
+    /**
+     * Redraws the grid axis.
+     */
+    redrawGridAxes: function() {
+        var me = this;
+        var view = me.getView();
+        var gridConfig = view.getGrid();
+
+        if (!gridConfig.show) {
+            return false;
+        }
+
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
+        var viewId = '#' + view.getId();
+        var axisSelector = viewId + ' svg g.' + CSS.GRID;
+        var orientations = ['bottom', 'left'];
+
+        Ext.each(orientations, function(orient) {
+            var axisGenerator = me.gridAxes[orient];
+            var axis;
+
+            if (orient === 'top' || orient === 'bottom') {
+                axis = d3.select(axisSelector + '.' + CSS.GRID_X);
+            } else if (orient === 'left' || orient === 'right') {
+                axis = d3.select(axisSelector + '.' + CSS.GRID_Y);
+            }
+
+            if (!axis) {
+                return;
+            }
+
+            axis
+                .transition()
+                .call(axisGenerator);
+        });
+    },
+
+    /**
+>>>>>>> upstream/master
      *
      */
     showScaleWindow: function() {
@@ -453,6 +979,195 @@ Ext.define('Koala.view.component.D3BaseController', {
     },
 
     /**
+<<<<<<< HEAD
+=======
+     * Draws the axis.
+     */
+    drawGridAxes: function() {
+        var me = this;
+        var view = me.getView();
+        var gridConfig = view.getGrid();
+
+        if (!gridConfig.show) {
+            return false;
+        }
+
+        var Const = Koala.util.ChartConstants;
+        var CSS = Const.CSS_CLASS;
+        var viewId = '#' + view.getId();
+        var orientations = ['bottom', 'left'];
+
+        Ext.each(orientations, function(orient) {
+            var cssClass;
+
+            if (orient === 'bottom') {
+                cssClass = CSS.GRID + ' ' + CSS.GRID_X;
+            } else if (orient === 'left') {
+                cssClass = CSS.GRID + ' ' + CSS.GRID_Y;
+            }
+
+            d3.select(viewId + ' svg > g')
+                .append('g')
+                .attr('class', cssClass)
+                .call(me.gridAxes[orient]);
+
+            d3.selectAll(viewId + ' svg g.' + CSS.GRID + ' line')
+                .style('stroke-width', gridConfig.width || 1)
+                .style('stroke', gridConfig.color || '#d3d3d3')
+                .style('stroke-opacity', gridConfig.opacity || 0.7);
+        });
+    },
+
+    /**
+     *
+     */
+    drawTitle: function() {
+        var me = this;
+        var staticMe = Koala.view.component.D3BaseController;
+        var view = me.getView();
+        var viewId = '#' + view.getId();
+        var titleConfig = view.getTitle();
+        var chartSize = me.getChartSize();
+        var translate = staticMe.makeTranslate(chartSize[0] / 2, 0);
+
+        d3.select(viewId + ' svg > g')
+            .append('text')
+            .attr('transform', translate)
+            .attr('dy', (titleConfig.labelPadding || 18) * -1)
+            .attr('fill', titleConfig.labelColor || '#000')
+            .style('text-anchor', 'middle')
+            .style('font-weight', 'bold')
+            .style('font-size', titleConfig.labelSize || 20)
+            .text(titleConfig.label || '');
+    },
+
+    /**
+     * Redraws the chart title completely.
+     */
+    redrawTitle: function() {
+        var me = this;
+
+        me.deleteTitle();
+        me.drawTitle();
+    },
+
+    wrapAndResizeLegend: function() {
+        var me = this;
+        var id = '#' + this.getView().getId();
+        // raise the buffer to reflect special cases with legend and delete icons
+        Koala.util.Label.distanceBuffer = 70;
+        Koala.util.Label.handleLabelWrap(
+            id + ' .k-d3-scrollable-legend-container',
+            ' g > text:not(.k-d3-color-icon):not(.k-d3-delete-icon):not(.k-d3-download-icon)',
+            25,
+            1.2,
+            true
+        );
+        // reset buffer back to default
+        Koala.util.Label.distanceBuffer = 20;
+        var selector = id + ' .k-d3-scrollable-legend-container g > text' +
+            ':not(.k-d3-color-icon):not(.k-d3-delete-icon):not(.k-d3-download-icon)';
+        var y = me.legendEntryTargetHeight;
+        d3.selectAll(selector).each(function() {
+            var count = d3.select(this).selectAll('tspan').size();
+            var parent = d3.select(this).node().parentNode;
+            d3.select(parent)
+                .attr('transform', 'translate(0,' + y + ')');
+            // every additional tspan will lead to an extra height on the parent
+            y += 14 * (count -1) + me.legendEntryTargetHeight;
+        });
+        // resize the container
+        me.updateLegendContainerDimensions();
+    },
+
+    /**
+     * The legend entries for all elements is in its own svg, which itself lives
+     * in a scrollable div. For the SVG to be actually scrollable, we have to
+     * give it the real dimensions of all the legend element it contains. This
+     * way the svg is (sometimes) bigger in height than the containg div, and
+     * the browser shows the scrollbar.
+     */
+    updateLegendContainerDimensions: function() {
+        var me = this;
+        var legendParent = me.legendSvg;
+        var view = me.getView();
+        var xtype = view.getXType ? view.getXType() : view.xtype;
+        var config = view.getTargetLayer().get('timeSeriesChartProperties');
+        var thresholds = config.thresholds ? config.thresholds : [];
+        var targetLayer = view.getTargetLayer();
+        var allowDownload = Koala.util.Object.getPathStrOr(
+            targetLayer,
+            'metadata/layerConfig/olProperties/allowDownload',
+            true
+        );
+        allowDownload = Koala.util.String.coerce(allowDownload);
+        allowDownload = allowDownload && !(this instanceof Koala.view.component.D3BarChartController);
+
+        var numLegends;
+        if (xtype === 'd3-barchart') { // for barcharts
+            numLegends = me.data.length;
+            numLegends += Ext.Object.getValues(me.colorsByKey).length;
+        } else if (xtype === 'd3-chart') { // for timeseries
+            numLegends = Object.keys(me.data).length;
+        } else {
+            // Ouch, shouldn't happen.
+            numLegends = 0;
+        }
+        numLegends += thresholds.length;
+
+        var selector = '.k-d3-scrollable-legend-container g > text tspan';
+        var lineCount = d3.selectAll(selector).size();
+        lineCount = Math.max(lineCount - numLegends, 0);
+
+        var heightEach = me.legendEntryTargetHeight;
+        var legWidth = this.calculateLegendWidth();
+        var legHeight = heightEach + heightEach * numLegends + lineCount * 14;
+        legendParent
+            .attr('viewBox', '0 0 ' + legWidth + ' ' + legHeight)
+            .attr('width', legWidth)
+            .attr('height', legHeight);
+        d3.select('#' + view.getId() + ' .k-d3-scrollable-legend-container')
+            .style('width', legWidth + 'px');
+
+        var curx = legWidth - 40;
+        d3.selectAll('#' + view.getId() + ' text.k-d3-delete-icon')
+            .attr('dx', curx);
+        if (!Ext.isModern) {
+            var off = 20;
+            if (allowDownload) {
+                d3.selectAll('#' + view.getId() + ' text.k-d3-download-icon')
+                    .attr('dx', curx - off);
+                off += 20;
+            }
+            d3.selectAll('#' + view.getId() + ' text.k-d3-color-icon')
+                .attr('dx', curx - off);
+        }
+    },
+
+    calculateLegendWidth: function() {
+        var view = this.getView();
+        var targetLayer = view.getTargetLayer();
+        var allowDownload = Koala.util.Object.getPathStrOr(
+            targetLayer,
+            'metadata/layerConfig/olProperties/allowDownload',
+            true
+        );
+        allowDownload = Koala.util.String.coerce(allowDownload);
+        allowDownload = allowDownload && !(this instanceof Koala.view.component.D3BarChartController);
+
+        var extraWidth = 110;
+        if (Ext.isModern) {
+            extraWidth -= 40;
+        } else {
+            if (!allowDownload) {
+                extraWidth -= 20;
+            }
+        }
+        return Koala.util.Label.getMinimumLegendWidth('#' + view.getId()) + extraWidth;
+    },
+
+    /**
+>>>>>>> upstream/master
      * Generates a callback that can be used for the click event on the delete
      * icon. Inside this callback all relevant parts of the series/bar are
      * removed by eventually calling into the concrete #deleteEverything

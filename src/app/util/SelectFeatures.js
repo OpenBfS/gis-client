@@ -38,8 +38,8 @@ Ext.define('Koala.util.SelectFeatures', {
          * Adds the given features to the vectorlayer, if they do not exist in its
          * source already. Features that do already exist will get removed.
          * Feature removal will only work if the key `featureIdentifyField` has been
-         * set on the layer in GNOS to a unique and existing field. Please note
-         * that this will remove all features in the target layer if the
+         * set on the layer in GNOS to a unique and existing field, default is 'id'.
+         * Please note that this will remove all features in the target layer if the
          * shift key was not pressed when selecting features!
          * @param {ol.layer.Base} sourceLayer The layer holding the source features
          * @param {ol.layer.Base} targetLayer The layer receiving the features
@@ -48,7 +48,7 @@ Ext.define('Koala.util.SelectFeatures', {
         addOrRemoveSelectedFeatures: function(sourceLayer, targetLayer, features) {
             var exisitingFeatures = targetLayer.getSource().getFeatures();
             var featureIdentifyField = Koala.util.Object.getPathStrOr(
-                sourceLayer.metadata, 'layerConfig/olProperties/featureIdentifyField');
+                sourceLayer.metadata, 'layerConfig/olProperties/featureIdentifyField', 'id');
             var layerIdentifier = Koala.util.Object.getPathStrOr(
                 sourceLayer.metadata, 'layerConfig/wms/layers');
             if (!layerIdentifier) {
@@ -240,9 +240,6 @@ Ext.define('Koala.util.SelectFeatures', {
                     filter = BasiGX.util.WFS.combineFilters([ogcCqlFilter, filter]);
                 }
                 var parms = sourceLayer.getSource().getParams();
-                if (parms['viewparams']) {
-                    wfsUrl += 'viewparams=' + parms['viewparams'];
-                }
                 BasiGX.util.WFS.executeWfsGetFeature(
                     wfsUrl,
                     sourceLayer,
@@ -254,7 +251,10 @@ Ext.define('Koala.util.SelectFeatures', {
                     function(res) {
                         Koala.util.SelectFeatures.getFeatureSuccess(
                             sourceLayer, targetLayer, res);
-                    }
+                    },
+                    undefined,
+                    undefined,
+                    parms.viewparams
                 );
             };
 

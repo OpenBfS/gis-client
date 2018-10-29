@@ -33,24 +33,23 @@ Ext.define('Koala.util.Chart', {
          * @param {ol.Feature} olFeat the station to add
          */
         openTimeseries: function(olFeat) {
-            var northContainer = Ext.ComponentQuery.query('container[name=north-container]')[0];
-            var timeseriesContainer = Ext.ComponentQuery.query('panel[name=timeseriespanel]')[0];
+            var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
+            var timeseriesPanel = Ext.ComponentQuery.query('k-panel-timeseries')[0];
             var olLayer = olFeat.get('layer');
 
             // create the timeseriescontainer if it doesn't exist already
-            if (!timeseriesContainer) {
-                timeseriesContainer = Koala.util.Chart.createTimeSeriesChartPanel(olLayer);
+            if (!timeseriesPanel) {
+                timeseriesPanel = Koala.util.Chart.createTimeSeriesChartPanel(olLayer);
             }
-            var isInNorth = !!Ext.Array.findBy(northContainer.items.items, function(item) {
-                return item.xtype === 'k-panel-timeseriespanel';
-            });
-            if (!isInNorth) {
-                northContainer.add(timeseriesContainer);
-            }
-            timeseriesContainer.getController().createOrUpdateChart(olLayer, olFeat);
 
-            northContainer.show();
-            return timeseriesContainer;
+            if (!timeseriesPanel.rendered) {
+                southContainer.add(timeseriesPanel);
+                southContainer.show();
+            }
+
+            timeseriesPanel.getController().createOrUpdateChart(olLayer, olFeat);
+
+            return timeseriesPanel;
         },
 
         /**
@@ -67,7 +66,7 @@ Ext.define('Koala.util.Chart', {
                 initOlLayer: olLayer,
                 listeners: {
                     close: function() {
-                        this.up('container[name=north-container]').hide();
+                        this.up('container[name=south-container]').hide();
                     }
                 }
             });

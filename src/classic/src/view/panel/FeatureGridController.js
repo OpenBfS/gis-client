@@ -14,17 +14,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.FeatureGridWindowController
+ * @class Koala.view.panel.FeatureGridController
  */
-Ext.define('Koala.view.window.FeatureGridWindowController', {
+Ext.define('Koala.view.panel.FeatureGridController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.k-window-featuregrid',
+    alias: 'controller.k-panel-featuregrid',
 
     require: [
         'Koala.util.WFST'
     ],
 
-    onDestroy: function() {
+    onBeforeDestroy: function() {
         var view = this.getView();
         this.unregisterListeners();
         var map = BasiGX.util.Map.getMapComponent().map;
@@ -48,6 +48,30 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
             } else {
                 hoverPlugin.getCmp().setPointerRest(true);
             }
+        }
+    },
+
+    /**
+     * Handle click on delete button. This enables removal of features selected
+     * in the grid/map if desired.
+     * @param  {Ext.button.Button} btn the delete button
+     */
+    handleDelete: function(btn) {
+        this.disableHover(btn);
+        var viewModel = this.getViewModel();
+        var source = this.getView().layer.getSource();
+        var grid = this.getView().down('basigx-grid-featuregrid').down('grid');
+        var selection = grid.getSelection();
+        if (selection.length > 0) {
+            var text = Ext.String.format(viewModel.get(
+                'deleteMessage'), selection.length);
+            Ext.Msg.confirm(viewModel.get('deleteTitle'), text, function(button) {
+                if (button === 'yes') {
+                    Ext.each(selection, function(rec) {
+                        source.removeFeature(rec.olObject);
+                    });
+                }
+            });
         }
     },
 
@@ -235,6 +259,21 @@ Ext.define('Koala.view.window.FeatureGridWindowController', {
             }]
         });
         menu.showBy(btn);
+    },
+
+    /**
+     * Toggles sorting selected rows on top.
+     * @param  {Ext.button.Button} btn the button
+     * @param  {boolean} toggled whether the button is currently toggled
+     */
+    toggleSortSelected: function(btn, toggled) {
+        var grid = this.getView().down('grid');
+        var sorters = grid.getStore().getSorters();
+        if (toggled) {
+            sorters.insert(0, grid.getColumns()[1].getSorter());
+        } else {
+            sorters.removeAt(0);
+        }
     }
 
 });

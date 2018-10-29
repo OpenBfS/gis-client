@@ -64,16 +64,6 @@ Ext.define('Koala.view.main.Main', {
 
     layout: 'border',
 
-    header: {
-        xtype: 'k-panel-header',
-        logoUrl: 'classic/resources/img/bfs-logo-75pct.png',
-        logoHeight: 58,
-        logoWidth: 150,
-        logoMargin: '5 10 5 10',
-        logoAltText: 'Logo Bundesamt für Strahlenschutz',
-        additionalItems: []
-    },
-
     responsiveConfig: {
         wide: {
             headerPosition: 'top'
@@ -88,13 +78,14 @@ Ext.define('Koala.view.main.Main', {
         beforerender: {
             fn: function() {
                 var headerTitle = Koala.util.AppContext.getMergedDataByKey('headerTitle');
+                var header = this.down('k-panel-header');
                 if (headerTitle) {
                     if (Koala.util.AppContext.getMergedDataByKey('imis_user').uid === 'hoe-fr') {
                         headerTitle = 'Höbler-GIS';
                     }
-                    this.header.down('title').setText(headerTitle);
+                    header.down('title').setText(headerTitle);
                 } else {
-                    this.header.down('title').setBind({text: '{headerTitle}'});
+                    header.down('title').setBind({text: '{headerTitle}'});
                 }
             },
             delay: 500
@@ -115,14 +106,10 @@ Ext.define('Koala.view.main.Main', {
     },
 
     items: [{
-        xtype: 'container',
+        xtype: 'k-panel-header',
         region: 'north',
-        layout: 'fit',
-        resizable: true,
-        resizeHandles: 's',
-        name: 'north-container',
-        cls: 'north-container',
-        hidden: true
+        height: 67,
+        weight: 100
     }, {
         xtype: 'basigx-panel-mapcontainer',
         title: 'K-MapPanel',
@@ -197,7 +184,11 @@ Ext.define('Koala.view.main.Main', {
         },
         // define menu items
         menuConfig: {
-            xtype: 'k-panel-themetree'
+            xtype: 'k-panel-themetree',
+            cls: 'k-panel-themetree',
+            bodyPadding: 0,
+            resizable: true,
+            resizeHandles: 's e se'
         },
         // If removed BasiGX adds a panel automaticaly
         legendPanelConfig: {
@@ -218,92 +209,22 @@ Ext.define('Koala.view.main.Main', {
         xtype: 'k-panel-routing-legendtree',
         hideCollapseTool: false,
         resizable: true,
-        collapsed: false
+        collapsed: false,
+        weight: 0
     }, {
         region: 'west',
-        xtype: 'k-treemenu'
-    }],
+        xtype: 'k-treemenu',
+        weight: 200
+    }, {
+        xtype: 'container',
+        region: 'south',
+        layout: 'fit',
+        resizable: true,
+        resizeHandles: 'n',
+        name: 'south-container',
+        cls: 'south-container',
+        weight: -100,
+        hidden: true
+    }]
 
-    /**
-     *
-     */
-    constructor: function(config) {
-        var me = this;
-
-        me.header.additionalItems = me.getAdditionalHeaderItems();
-
-        me.callParent([config]);
-    },
-
-    /**
-     *
-     */
-    getAdditionalHeaderItems: function() {
-        var title = {
-            xtype: 'title',
-            textAlign: 'center',
-            width: 300,
-            autoEl: {
-                tag: 'a',
-                href: null
-            },
-            cls: 'k-application-title'
-        };
-
-        var searchFieldCombo = {
-            xtype: 'k-form-field-searchcombo',
-            flex: 1
-        };
-
-        var clearSearchButton = {
-            xtype: 'button',
-            glyph: 'xf057@FontAwesome',
-            style: {
-                borderRadius: 0
-            },
-            handler: function(btn) {
-                btn.up().down('k-form-field-searchcombo').clearValue();
-                var multiSearchPanel = this.up('k-panel-header')
-                    .down('k-panel-multisearch');
-                if (multiSearchPanel) {
-                    multiSearchPanel.hide();
-                }
-            }
-        };
-
-        var multiSearchPanel = {
-            xtype: 'k-panel-multisearch',
-            width: 600,
-            x: 0,
-            y: 60,
-            hidden: true,
-            border: true,
-            floating: true
-        };
-
-        var searchContainer = {
-            xtype: 'container',
-            flex: 1,
-            layout: {
-                type: 'hbox',
-                align: 'center',
-                pack: 'left'
-            },
-            items: [searchFieldCombo, clearSearchButton, multiSearchPanel]
-        };
-
-        var headerToolbar = {
-            xtype: 'container',
-            layout: {
-                type: 'hbox',
-                align: 'center',
-                pack: 'right'
-            },
-            items: {
-                xtype: 'k-toolbar-header'
-            }
-        };
-
-        return [title, searchContainer, headerToolbar];
-    }
 });

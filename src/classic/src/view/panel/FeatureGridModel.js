@@ -14,11 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.HelpModel
+ * @class Koala.view.panel.FeatureGrid
  */
-Ext.define('Koala.view.window.FeatureGridWindowModel', {
+Ext.define('Koala.view.panel.FeatureGridModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-window-featuregrid',
+    alias: 'viewmodel.k-panel-featuregrid',
 
     data: {
         saveLayerText: '',
@@ -28,6 +28,10 @@ Ext.define('Koala.view.window.FeatureGridWindowModel', {
         wfstLockSuccess: '',
         wfstLockExpired: '',
         wfstLockButton: '',
-        layerNotSavedYet: ''
+        layerNotSavedYet: '',
+        deleteTitle: '',
+        deleteMessage: '',
+        toggleSortSelectedText: '',
+        pinned: true
     }
 });

@@ -172,7 +172,7 @@
                 "quoteText": "Anführungszeichen (\" \") verwenden",
                 "okText": "Ok",
                 "cancelText": "Abbrechen",
-                "magnification": "Vergrößerung",
+                "magnification": "Auflösung",
                 "original": "Original",
                 "twofold": "2-fach",
                 "threefold": "3-fach",
@@ -316,7 +316,7 @@
                 "cancelButtonText": "Abbrechen",
                 "importButtonText": "Import",
                 "layerNameLabel": "Layername",
-                "templateLabel": "Template",
+                "templateLabel": "Metadaten-Template",
                 "projectionLabel": "Projektion",
                 "fileFieldLabel": "Datei",
                 "fileFieldButtonText": "Durchsuchen"
@@ -441,7 +441,7 @@
                 "wmsimport": "WMS hinzuladen",
                 "vectorimport": "Vektordaten laden",
                 "print": "Drucken",
-                "drawandmeasure": "Zeichnen",
+                "tools": "Werkzeuge",
                 "draw": "Zeichnen",
                 "measure": "Messen",
                 "share": "Teilen",
@@ -453,7 +453,8 @@
                 "imprint": "Impressum",
                 "privacy": "Datenschutz",
                 "help": "Hilfe",
-                "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html"
+                "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html",
+                "createvectorlayer": "Vektorlayer erzeugen"
             }
         }
     },
@@ -480,6 +481,9 @@
                 "chartSlctnBarChartBtn": "Säulendiagramm",
                 "rodosPanelTitle": "RODOS-Filter",
                 "helpTooltip": "Hilfe",
+                "pinTooltip": "Anheften",
+                "unpinTooltip": "Lösen",
+                "closeTooltip": "Schließen",
                 "headerTitle": "GEOPORTAL",
                 "gridTabTitle": "Tabellarische Ansicht",
                 "htmlTabTitle": "Information",
@@ -500,7 +504,11 @@
                 "wfstLockSuccess": "Die WFS-T Lock Anfrage war erfolgreich. Der Lock läuft in {0} Minute(n) ab",
                 "wfstLockExpired": "Der WFS-T Lock ist abgelaufen",
                 "wfstLockButton": "WFS-T Lock",
-                "layerNotSavedYet": "Der Layer wurde noch nicht gespeichert"
+                "layerNotSavedYet": "Der Layer wurde noch nicht gespeichert",
+                "multiEditTooltip": "Alle selektierten Zeilen ändern",
+                "deleteTitle": "Löschen",
+                "deleteMessage": "Wollen Sie die {0} selektierten Objekte löschen?",
+                "toggleSortSelectedText": "Selektierte nach oben"
             }
         }
     },
@@ -550,8 +558,9 @@
     "Koala.view.panel.ThemeTree": {
         "config": {
             "data": {
-                "title": "Themen",
-                "tooltip": "LayerSet wechseln",
+                "title": "",
+                "toggleLayerSetTooltip": "LayerSet wechseln",
+                "closeTooltip": "Schließen",
                 "tooltext": "Thema wechseln",
                 "btnTextResetThemeTreeFiltering": "Alle Layer",
                 "btnTooltipResetThemeTreeFiltering": "Hebt eine etwaige Filterung der verfügbaren Themen auf.",
@@ -630,30 +639,22 @@
     "Koala.view.window.CloneWindow": {
         "config": {
             "data": {
-                "title": "Layer klonen",
+                "title": "Vektorlayer erzeugen",
                 "boundingBoxLabel": "Auf sichtbaren Bereich einschränken",
                 "maxFeaturesLabel": "Maximale Anzahl an Objekten",
                 "layerNameLabel": "Name des neuen Layers",
-                "okButtonLabel": "Klonen",
+                "okButtonLabel": "Ok",
                 "cancelButtonLabel": "Abbrechen",
-                "emptyTemplateMessage": "Bitte wählen Sie eine Vorlage aus."
+                "emptyTemplateMessage": "Bitte wählen Sie eine Vorlage aus.",
+                "selectionEnabled": "(Selektionswerkzeug ist aktiviert!)"
             }
         }
     },
-    "Koala.view.window.FeatureGridWindow": {
+    "Koala.view.window.PermalinkWindow": {
         "config": {
             "data": {
-                "downloadLayerText": "Daten herunterladen",
-                "geoJsonText": "GeoJSON",
-                "shapefileText": "Shape-Datei",
-                "saveLayerText": "Layer speichern",
-                "wfstSuccess": "Die Änderungen wurden erfolgreich gespeichert.<br>Objekte hinzugefügt: {0}<br>Objekte aktualisiert: {1}<br>Objekte gelöscht: {2}",
-                "wfstFailure": "Die Änderungen konnten nicht gespeichert werden, bitte probieren Sie es später erneut.",
-                "wfstLockFail": "Die WFS-T Lock Anfrage wurde abgelehnt",
-                "wfstLockSuccess": "Die WFS-T Lock Anfrage war erfolgreich. Der Lock läuft in {0} Minute(n) ab",
-                "wfstLockExpired": "Der WFS-T Lock ist abgelaufen",
-                "wfstLockButton": "WFS-T Lock",
-                "layerNotSavedYet": "Der Layer wurde noch nicht gespeichert"
+                "title": "Permalink",
+                "helpTooltip": "Hilfe",
             }
         }
     },

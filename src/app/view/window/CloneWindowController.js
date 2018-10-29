@@ -28,6 +28,7 @@ Ext.define('Koala.view.window.CloneWindowController', {
      */
     cancelHandler: function() {
         this.getView().close();
+        Ext.ComponentQuery.query('k-button-selectfeatures')[0].setPressed(false);
     },
 
     /**
@@ -73,6 +74,22 @@ Ext.define('Koala.view.window.CloneWindowController', {
             uuid
         );
         view.close();
+        Ext.ComponentQuery.query('k-button-selectfeatures')[0].setPressed(false);
+    },
+
+    /**
+     * Handles activation of the selection tool in case the 'from selection'
+     * radio is pressed.
+     * @param  {Ext.form.field.Radio} radio the radio button
+     * @param  {Boolean} on true, if the radio is checked
+     */
+    handleDatasourceChange: function(radio, on) {
+        if (radio.inputValue === 'selectionLayer' && on) {
+            Ext.ComponentQuery.query('k-button-selectfeatures')[0].setPressed(true);
+            this.getView().down('[name=selection-enabled]').setHidden(false);
+        } else if (on) {
+            this.getView().down('[name=selection-enabled]').setHidden(true);
+        }
     }
 
 });

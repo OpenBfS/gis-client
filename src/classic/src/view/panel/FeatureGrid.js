@@ -43,6 +43,57 @@ Ext.define('Koala.view.panel.FeatureGrid', {
         beforedestroy: 'onBeforeDestroy'
     },
 
+    collapsible: true,
+    closable: false,
+
+    tools: [{
+        type: 'unpin',
+        bind: {
+            tooltip: '{unpinTooltip}',
+            hidden: '{!pinned}'
+        },
+        callback: function() {
+            var view = this.up('k-panel-featuregrid');
+            var viewModel = view.getViewModel();
+            var container = view.up('[name=south-container]');
+            Ext.create('Ext.window.Window', {
+                height: 350,
+                width: 900,
+                layout: 'fit',
+                items: view
+            }).show();
+            viewModel.set('pinned', false);
+            container.remove(view);
+            container.hide();
+        }
+    }, {
+        type: 'pin',
+        bind: {
+            tooltip: '{pinTooltip}',
+            hidden: '{pinned}'
+        },
+        callback: function() {
+            var view = this.up('k-panel-featuregrid');
+            var window = view.up('window');
+            var viewModel = view.getViewModel();
+            var container = Ext.ComponentQuery.query('[name=south-container]')[0];
+            container.add(view);
+            container.show();
+            viewModel.set('pinned', true);
+            window.close();
+        }
+    }, {
+        type: 'close',
+        bind: {
+            tooltip: '{closeTooltip}',
+            hidden: '{!pinned}'
+        },
+        callback: function() {
+            var view = this.up('k-panel-featuregrid');
+            view.close();
+        }
+    }],
+
     initComponent: function() {
         var me = this;
         // save original layer
@@ -122,11 +173,17 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                 bind: {
                     disabled: '{noFeaturesSelected}',
                     sourceLayer: '{selectedFeaturesLayer}'
+                },
+                featureGridSelectorFn: function() {
+                    return this.up('panel').up('panel').down('basigx-grid-featuregrid');
                 }
             }, {
                 xtype: 'button',
                 glyph: 'xf160@FontAwesome',
-                handler: 'multiEdit'
+                handler: 'multiEdit',
+                bind: {
+                    tooltip: '{multiEditTooltip}'
+                }
             }, {
                 xtype: 'basigx-button-digitize-point',
                 map: map.map,
@@ -162,7 +219,7 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                 map: map.map,
                 collection: me.layer.getSource().getFeaturesCollection(),
                 glyph: 'xf12d@FontAwesome',
-                handler: 'disableHover'
+                handler: 'handleDelete'
             }, {
                 xtype: 'basigx-button-spatial-operator-union',
                 targetVectorLayer: me.layer,
@@ -234,6 +291,14 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                     text: '{downloadLayerText}'
                 },
                 handler: 'downloadLayer'
+            }, {
+                xtype: 'button',
+                id: 'feature-grid-toggle-sort-selected-button',
+                bind: {
+                    text: '{toggleSortSelectedText}'
+                },
+                toggleHandler: 'toggleSortSelected',
+                enableToggle: true
             }]
         }, {
             xtype: 'basigx-grid-featuregrid',
@@ -244,6 +309,7 @@ Ext.define('Koala.view.panel.FeatureGrid', {
             bind: {
                 selectionLayer: '{selectedFeaturesLayer}'
             },
+            addZoomButton: true,
             map: map
         }];
         me.callParent();

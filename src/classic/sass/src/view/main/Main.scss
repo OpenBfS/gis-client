@@ -1,3 +1,16 @@
+@mixin box-shadow($top, $left, $blur, $size, $color) {
+   -webkit-box-shadow: $top $left $blur $size $color;
+   -moz-box-shadow: $top $left $blur $size $color;
+   box-shadow: $top $left $blur $size $color;
+}
+
+.k-panel-themetree {
+    @include box-shadow(5px,10px,15px,0, rgba(0,0,0,0.6));
+}
+.x-window {
+    @include box-shadow(5px,10px,15px,0, rgba(0,0,0,0.6));
+}
+
 .x-title-icon-navigation {
     font-family: FontAwesome;
     color: #fff;
@@ -54,12 +67,4 @@
 .ol-overlay-container.ol-selectable.k-feature-hover {
     max-height: 500px;
     overflow: auto;
-}
-
-.north-container {
-    border-bottom: 1px solid $base-color;
-}
-
-.east-container {
-    border-left: 1px solid $base-color;
 }

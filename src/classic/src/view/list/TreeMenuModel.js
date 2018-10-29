@@ -31,7 +31,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         wmsimport: '',
         vectorimport: '',
         print: '',
-        drawandmeasure: '',
+        tools: '',
         draw: '',
         measure: '',
         selectfeatures: '',
@@ -44,7 +44,12 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         privacy: '',
         help: '',
         privacyUrl: '',
-        settingsExpanded: false
+        settingsExpanded: false,
+        themeTreeVisible: true,
+        drawToolsActive: false,
+        measureToolsActive: false,
+        selectFeaturesActive: false,
+        createvectorlayer: ''
     },
 
     stores: {
@@ -56,12 +61,14 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     text: '{menu}',
                     key: 'menu',
                     leaf: true,
-                    iconCls: 'x-fa fa-bars'
+                    iconCls: 'x-fa fa-bars',
+                    rowCls: 'menu-button'
                 }, {
                     text: '{themes}',
                     key: 'themes',
                     leaf: true,
-                    iconCls: 'x-fa fa-folder-open-o'
+                    iconCls: 'x-fa fa-folder-open-o',
+                    rowCls: '{themeTreeVisible ? "active" : ""}'
                 }, {
                     text: '{loading}',
                     iconCls: 'x-fa fa-globe',
@@ -69,12 +76,17 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         text: '{wmsimport}',
                         key: 'wmsimport',
                         leaf: true,
-                        iconCls: 'x-fa fa-circle'
+                        iconCls: 'x-fa fa-map'
                     }, {
                         text: '{vectorimport}',
                         key: 'vectorimport',
                         leaf: true,
-                        iconCls: 'x-fa fa-circle-o'
+                        iconCls: 'x-fa fa-map-o'
+                    }, {
+                        text: '{createvectorlayer}',
+                        key: 'createvectorlayer',
+                        leaf: true,
+                        iconCls: 'x-fa fa-files-o'
                     }]
                 }, {
                     text: '{print}',
@@ -82,18 +94,26 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     leaf: true,
                     iconCls: 'x-fa fa-print'
                 }, {
-                    text: '{drawandmeasure}',
+                    text: '{tools}',
                     iconCls: 'x-fa fa-pencil-square-o',
                     children: [{
                         text: '{draw}',
                         key: 'draw',
                         leaf: true,
-                        iconCls: 'x-fa fa-pencil'
+                        iconCls: 'x-fa fa-pencil',
+                        rowCls: '{drawToolsActive ? "active" : ""}'
                     }, {
                         text: '{measure}',
                         key: 'measure',
                         leaf: true,
-                        iconCls: 'x-fa fa-pencil-square'
+                        iconCls: 'x-fa fa-pencil-square',
+                        rowCls: '{measureToolsActive ? "active" : ""}'
+                    }, {
+                        text: '{selectfeatures}',
+                        key: 'selectfeatures',
+                        leaf: true,
+                        iconCls: 'x-fa fa-crop',
+                        rowCls: '{selectFeaturesActive ? "active" : ""}'
                     }]
                 }, {
                     text: '{share}',
@@ -105,11 +125,6 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         iconCls: 'x-fa fa-chain'
                     }]
                 }, {
-                    text: '{selectfeatures}',
-                    key: 'selectfeatures',
-                    leaf: true,
-                    iconCls: 'x-fa fa-crop'
-                },{
                     text: '{settings}',
                     iconCls: 'x-fa fa-gear',
                     expanded: '{settingsExpanded}',

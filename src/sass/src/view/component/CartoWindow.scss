@@ -1,8 +1,34 @@
-.cartowindow.classic > div.cartowindow-tab > h2,
-.cartowindow.classic > div.cartowindow-tab > input,
-.cartowindow.classic > div.cartowindow-tab > label, {
+@keyframes initialPopupHeader {
+    to {
+        visibility: visible;
+        opacity: 0;
+        transition: visibility 0s 3s, opacity 3s linear;
+    }
+}
+@-webkit-keyframes initialPopupHeader {
+    to {
+        visibility: visible;
+        opacity: 0;
+        transition: visibility 0s 3s, opacity 3s linear;
+    }
+}
+
+@mixin box-shadow($top, $left, $blur, $size, $color) {
+   -webkit-box-shadow: $top $left $blur $size $color;
+   -moz-box-shadow: $top $left $blur $size $color;
+   box-shadow: $top $left $blur $size $color;
+}
+
+.cartowindow.classic > div.cartowindow-tab > input {
     visibility: hidden;
-    transition: visibility .5s;
+}
+.cartowindow.classic > div.cartowindow-tab > h2,
+.cartowindow.classic > div.cartowindow-tab > label {
+    visibility: hidden;
+    opacity: 1;
+    animation-name: initialPopupHeader;
+    animation-duration: 3s;
+    animation-timing-function: ease-in;
 }
 
 .cartowindow.classic:hover > div.cartowindow-tab > h2,
@@ -14,6 +40,7 @@
  * tab panel widget
  */
 .cartowindow {
+  @include box-shadow(5px,10px,15px,0, rgba(0,0,0,0.6));
   position: relative;  /* containing block for headings (top:0) */
   background: #999;
   z-index: 0;
@@ -22,7 +49,6 @@
 .cartowindow > .closeElement {
     cursor: pointer;
     visibility: hidden;
-    transition: visibility .5s;
     position: absolute;
     height: 2.2em;
     top: -2.2em;
@@ -31,6 +57,10 @@
     color: #fff;
     padding: 0.1em 0.2em;
     width: 2.1em;
+
+    animation-name: initialPopupHeader;
+    animation-duration: 3s;
+    animation-timing-function: ease-in;
 }
 
 .cartowindow:hover > .closeElement {

@@ -42,6 +42,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
             .query('basigx-panel-mapcontainer')[0];
         var measureTools = Ext.ComponentQuery.query('k-container-redliningtoolscontainer')[0];
         var drawTools = Ext.ComponentQuery.query('k-container-drawtoolscontainer')[0];
+        var selectFeaturesButton = Ext.ComponentQuery.query('k-button-selectfeatures')[0];
         var top = '6px';
         var right = ((mapContainer.getWidth()/2) - 150) + 'px';
 
@@ -62,8 +63,10 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     if (themeTree.isVisible()) {
                         themeTree.hide();
                         layersetchooser.hide();
+                        viewModel.set('themeTreeVisible', false);
                     } else {
                         themeTree.show();
+                        viewModel.set('themeTreeVisible', true);
                     }
                     break;
                 case 'wmsimport':
@@ -76,6 +79,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     this.showWindow('k-window-print', 'Koala.view.window.Print');
                     break;
                 case 'measure':
+                    viewModel.set('drawToolsActive', false);
+                    viewModel.set('selectFeaturesActive', false);
+                    selectFeaturesButton.setPressed(false);
                     if (drawTools) {
                         mapContainer.remove(drawTools);
                     }
@@ -89,9 +95,13 @@ Ext.define('Koala.view.list.TreeMenuController', {
                             }
                         });
                         mapContainer.add(measureTools);
+                        viewModel.set('measureToolsActive', true);
                     }
                     break;
                 case 'draw':
+                    viewModel.set('measureToolsActive', false);
+                    viewModel.set('selectFeaturesActive', false);
+                    selectFeaturesButton.setPressed(false);
                     if (measureTools) {
                         mapContainer.remove(measureTools);
                     }
@@ -105,12 +115,35 @@ Ext.define('Koala.view.list.TreeMenuController', {
                             }
                         });
                         mapContainer.add(drawTools);
+                        viewModel.set('drawToolsActive', true);
                     }
                     break;
                 case 'selectfeatures':
-                    var selectFeaturesButton = Ext.ComponentQuery
-                        .query('k-button-selectfeatures')[0];
+                    viewModel.set('drawToolsActive', false);
+                    viewModel.set('measureToolsActive', false);
+                    if (measureTools) {
+                        mapContainer.remove(measureTools);
+                    }
+                    if (drawTools) {
+                        mapContainer.remove(drawTools);
+                    }
                     selectFeaturesButton.toggle();
+                    viewModel.set('selectFeaturesActive', selectFeaturesButton.pressed);
+                    break;
+                case 'createvectorlayer':
+                    var selected = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].getSelection();
+                    var layer;
+                    if (selected.length > 0) {
+                        layer = selected[0];
+                        var allowClone = layer.get('allowClone') || false;
+                        if (!allowClone) {
+                            layer = undefined;
+                        }
+                    }
+                    Ext.create({
+                        xtype: 'k-window-clone',
+                        sourceLayer: layer
+                    });
                     break;
                 case 'permalink':
                     this.showWindow('k-window-permalink', 'Koala.view.window.PermalinkWindow');

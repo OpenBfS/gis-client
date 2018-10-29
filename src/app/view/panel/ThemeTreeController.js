@@ -26,6 +26,16 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
 
     currentTask: null,
 
+    collapseAll: function() {
+        var view = this.getView();
+        view.collapseAll();
+    },
+
+    expandAll: function() {
+        var view = this.getView();
+        view.expandAll();
+    },
+
     toggleLayerSetView: function() {
         var view = this.getView();
         var mapContainer = view.up('basigx-panel-mapcontainer');

@@ -1,4 +1,4 @@
-/* Copyright (c) 2018-present terrestris GmbH & Co. KG
+/* Copyright (c) 2015-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,20 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.FeatureGrid
+ * @class Koala.view.form.PermalinkWindowController
  */
-Ext.define('Koala.view.panel.FeatureGridModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-panel-featuregrid',
+Ext.define('Koala.view.window.PermalinkWindowController', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.k-window-permalink'
 
-    data: {
-        saveLayerText: '',
-        wfstSuccess: '',
-        wfstFailure: '',
-        wfstLockFail: '',
-        wfstLockSuccess: '',
-        wfstLockExpired: '',
-        wfstLockButton: '',
-        layerNotSavedYet: ''
-    }
 });
