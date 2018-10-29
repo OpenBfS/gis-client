@@ -219,7 +219,7 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                 map: map.map,
                 collection: me.layer.getSource().getFeaturesCollection(),
                 glyph: 'xf12d@FontAwesome',
-                handler: 'disableHover'
+                handler: 'handleDelete'
             }, {
                 xtype: 'basigx-button-spatial-operator-union',
                 targetVectorLayer: me.layer,

@@ -506,6 +506,8 @@
                 "wfstLockButton": "WFS-T Lock",
                 "layerNotSavedYet": "Der Layer wurde noch nicht gespeichert",
                 "multiEditTooltip": "Alle selektierten Zeilen ändern",
+                "deleteTitle": "Löschen",
+                "deleteMessage": "Wollen Sie die {0} selektierten Objekte löschen?",
                 "toggleSortSelectedText": "Selektierte nach oben"
             }
         }
