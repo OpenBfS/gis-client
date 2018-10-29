@@ -505,7 +505,8 @@
                 "wfstLockExpired": "Der WFS-T Lock ist abgelaufen",
                 "wfstLockButton": "WFS-T Lock",
                 "layerNotSavedYet": "Der Layer wurde noch nicht gespeichert",
-                "multiEditTooltip": "Alle selektierten Zeilen ändern"
+                "multiEditTooltip": "Alle selektierten Zeilen ändern",
+                "toggleSortSelectedText": "Selektierte nach oben"
             }
         }
     },

@@ -1293,6 +1293,7 @@ Ext.define('Koala.util.Layer', {
                         });
 
                     },
+                    features: new ol.Collection(),
                     strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
                         maxZoom: 28
                     }))
