@@ -259,6 +259,21 @@ Ext.define('Koala.view.panel.FeatureGridController', {
             }]
         });
         menu.showBy(btn);
+    },
+
+    /**
+     * Toggles sorting selected rows on top.
+     * @param  {Ext.button.Button} btn the button
+     * @param  {boolean} toggled whether the button is currently toggled
+     */
+    toggleSortSelected: function(btn, toggled) {
+        var grid = this.getView().down('grid');
+        var sorters = grid.getStore().getSorters();
+        if (toggled) {
+            sorters.insert(0, grid.getColumns()[1].getSorter());
+        } else {
+            sorters.removeAt(0);
+        }
     }
 
 });

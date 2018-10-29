@@ -291,6 +291,14 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                     text: '{downloadLayerText}'
                 },
                 handler: 'downloadLayer'
+            }, {
+                xtype: 'button',
+                id: 'feature-grid-toggle-sort-selected-button',
+                bind: {
+                    text: '{toggleSortSelectedText}'
+                },
+                toggleHandler: 'toggleSortSelected',
+                enableToggle: true
             }]
         }, {
             xtype: 'basigx-grid-featuregrid',
@@ -301,6 +309,7 @@ Ext.define('Koala.view.panel.FeatureGrid', {
             bind: {
                 selectionLayer: '{selectedFeaturesLayer}'
             },
+            addZoomButton: true,
             map: map
         }];
         me.callParent();
