@@ -29,7 +29,6 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
     isActive: false,
     mapComponent: null,
     dragBoxInteraction: null,
-    singleClickListener: null,
     selectionLayer: null,
     legendTree: null,
     layerToSelectOn: null,
@@ -120,10 +119,8 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
             });
             this.mapComponent.map.addInteraction(this.dragBoxInteraction);
         }
-        if (!this.singleClickListener) {
-            this.singleClickListener = this.mapComponent.map.on(
-                'click', this.singleSelect.bind(this));
-        }
+        this.mapComponent.map.on(
+            'click', this.boundSingleSelect = this.singleSelect.bind(this));
         this.dragBoxInteraction.setActive(true);
         this.dragBoxInteraction.on('boxend', this.boxEnd, this);
         this.dragBoxInteraction.on('boxstart', this.boxStart, this);
@@ -155,9 +152,7 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
         if (this.dragBoxInteraction) {
             this.dragBoxInteraction.setActive(false);
         }
-        if (this.singleClickListener) {
-            this.mapComponent.map.un('click', this.singleSelect);
-        }
+        this.mapComponent.map.un('click', this.boundSingleSelect);
         if (this.selectionLayer) {
             this.selectionLayer.getSource().clear();
         }
