@@ -82,12 +82,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         beforedestroy: 'unbindUtcBtnToggleHandler',
         checkchange: 'checkLayerAndLegendVisibility',
         itemmove: 'removeAlwaysOnTopProperty',
-        // TODO this fixes jumping around, but breaks drag & drop
-        // This should be analyzed further
-        // beforecellmousedown: function(table, td, cellIdx, record, tr, rowIdx, event) {
-        //     event.preventDefault();
-        //     return false;
-        // },
         beforecellclick: function(table, td, cellIdx, record, tr, rowIdx, event) {
             event.preventDefault();
             if (Ext.get(event.target).hasCls('x-tree-checkbox')) {
@@ -605,7 +599,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         },
         listeners: {
             drop: 'onLegendItemDrop'
-        }
+        },
+        // this magic prevents jumping of the grid
+        // See https://stackoverflow.com/questions/44011406/extjs6-how-to-prevent-grid-rows-from-scrolling-into-focus-when-clicking#44077381
+        navigationModel: {}
     },
 
     /**
