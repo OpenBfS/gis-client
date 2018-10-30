@@ -500,6 +500,10 @@ Ext.define('Koala.util.ChartData', {
                     value: group.key,
                     values: []
                 };
+                var possibleDate = moment(labels[groupIndex]);
+                if (possibleDate._isAMomentObject) {
+                    labels[groupIndex] = Koala.util.Date.getFormattedDate(possibleDate);
+                }
                 legends.push({
                     type: 'bar',
                     title: labels[groupIndex],

@@ -228,7 +228,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         me.colorsByKey = {};
         me.labels = [];
-        me.legendLabels = [];
         me.customColors = [];
         me.disabledSubCategories = [];
 
@@ -339,7 +338,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         }
         var viewSize = this.getViewSize();
         var width = viewSize[0] - parseInt(margin.right, 10);
-        // this.chartConfig.chartRendererConfig.size[1] = height;
         legendContainer.style.width = margin.right + 'px';
         legendContainer.style.height = this.chartConfig.chartRendererConfig.size[1] + 'px';
         legendContainer.style['overflow-y'] = 'auto';
@@ -348,7 +346,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         legendContainer.style.right = '0px';
         barContainer.style.overflow = 'auto';
         barContainer.style.width = width + 'px';
-        // barContainer.style.height = height + 'px';
         barContainer.style.position = 'absolute';
 
         me.currentDateRange = {
@@ -506,6 +503,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
         }
     },
 
+    /**
+     * Recalculates the size of the chart components and sets them in the config.
+     */
     updateSize: function() {
         var config = this.getView().getConfig();
         var gnosConfig = config.targetLayer.metadata.layerConfig.barChartProperties;
