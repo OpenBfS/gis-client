@@ -336,8 +336,13 @@ Ext.define('Koala.view.component.D3BarChartController', {
             legendContainer.classList.add('k-barchart-legend-container');
             barContainer.classList.add('k-barchart-chart-container');
         }
+        var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
+        var legend = this.getLegendComponent(barComponent);
         var viewSize = this.getViewSize();
-        var width = viewSize[0] - parseInt(margin.right, 10);
+        var width = viewSize[0];
+        if (legend) {
+            width -= parseInt(margin.right, 10);
+        }
         legendContainer.style.width = margin.right + 'px';
         legendContainer.style.height = this.chartConfig.chartRendererConfig.size[1] + 'px';
         legendContainer.style['overflow-y'] = 'auto';
@@ -353,14 +358,12 @@ Ext.define('Koala.view.component.D3BarChartController', {
             max: null
         };
 
-        var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
         this.chartConfig.chartRendererConfig.components = [];
         var legendChartConfig = Ext.clone(this.chartConfig.chartRendererConfig);
         this.chartConfig.chartRendererConfig.components = [barComponent];
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
         this.chartRenderer.render(barContainer);
 
-        var legend = this.getLegendComponent(barComponent);
         if (legend) {
             // uses dynamic height
             legendChartConfig.size[0] = parseInt(margin.right, 10);
@@ -529,8 +532,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         barConfig.position = [margin[3], margin[0]];
         if (this.chartConfig.legendComponentConfig) {
             this.chartConfig.legendComponentConfig.position = [0, margin[0]];
-        } else {
-            barConfig.size[0] += margin[1];
         }
         // extra 15 for the horizontal scroll bar
         this.chartConfig.chartRendererConfig.size = [barConfig.size[0] + margin[3], chartSize[1] - 15];

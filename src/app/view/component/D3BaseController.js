@@ -1332,6 +1332,11 @@ Ext.define('Koala.view.component.D3BaseController', {
         } else {
             this.legendConfig = this.chartConfig.legendComponentConfig;
             delete this.chartConfig.legendComponentConfig;
+            var svg = document.querySelector('#' + this.getView().getId());
+            var legendContainer = svg.querySelector('.k-barchart-legend-container svg');
+            if (legendContainer) {
+                legendContainer.remove();
+            }
         }
         this.handleResize();
     }
