@@ -509,6 +509,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
     updateSize: function() {
         var config = this.getView().getConfig();
         var gnosConfig = config.targetLayer.metadata.layerConfig.barChartProperties;
+        var barConfig = this.chartConfig.barComponentConfig;
         var margin = gnosConfig.chartMargin.split(',');
         margin = Ext.Array.map(margin, function(w) {
             return parseInt(w, 10);
@@ -516,24 +517,23 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var chartSize = this.getViewSize();
 
         // calculate the size
-        var maxCount = this.chartConfig.barComponentConfig.data.grouped.length;
+        var maxCount = barConfig.data.grouped.length;
         this.chartConfig.chartRendererConfig.size[0] =
-            this.getView().getBarWidth() * maxCount *
-            this.chartConfig.barComponentConfig.data.data.length + margin[3];
+            this.getView().getBarWidth() * maxCount * barConfig.data.data.length + margin[3];
 
-        this.chartConfig.barComponentConfig.size[0] = this.chartConfig.chartRendererConfig.size[0] - margin[3];
+        barConfig.size[0] = this.chartConfig.chartRendererConfig.size[0] - margin[3];
 
         // set the size
         // extra 15 for the horizontal scroll bar
-        this.chartConfig.barComponentConfig.size[1] = chartSize[1] - margin[0] - margin[2] - 15;
-        this.chartConfig.barComponentConfig.position = [margin[3], margin[0]];
+        barConfig.size[1] = chartSize[1] - margin[0] - margin[2] - 15;
+        barConfig.position = [margin[3], margin[0]];
         if (this.chartConfig.legendComponentConfig) {
             this.chartConfig.legendComponentConfig.position = [0, margin[0]];
         } else {
-            this.chartConfig.barComponentConfig.size[0] += margin[1];
+            barConfig.size[0] += margin[1];
         }
         // extra 15 for the horizontal scroll bar
-        this.chartConfig.chartRendererConfig.size = [this.chartConfig.barComponentConfig.size[0] + margin[3], chartSize[1] - 15];
+        this.chartConfig.chartRendererConfig.size = [barConfig.size[0] + margin[3], chartSize[1] - 15];
     },
 
     /**
