@@ -1846,6 +1846,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         return doesContainSeries;
     },
 
+    /**
+     * Toggles an axis scale back and forth between linear and logarithmic.
+     * @param  {String|undefined} axis if not given, the 'y' scale is toggled
+     */
     toggleScale: function(axis) {
         if (!axis) {
             axis = 'y';
