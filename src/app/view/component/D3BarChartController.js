@@ -320,6 +320,36 @@ Ext.define('Koala.view.component.D3BarChartController', {
             return;
         }
         var me = this;
+        var margin = this.getView().getChartMargin();
+        var svg = document.querySelector('#' + this.getView().getId());
+        var container = svg.querySelector('.k-barchart-container');
+        var legendContainer = svg.querySelector('.k-barchart-legend-container');
+        var barContainer = svg.querySelector('.k-barchart-chart-container');
+        this.updateSize();
+        if (!container) {
+            container = document.createElement('div');
+            container.classList.add('k-barchart-container');
+            svg.append(container);
+            legendContainer = document.createElement('div');
+            barContainer = document.createElement('div');
+            container.append(barContainer);
+            container.append(legendContainer);
+            legendContainer.classList.add('k-barchart-legend-container');
+            barContainer.classList.add('k-barchart-chart-container');
+        }
+        var viewSize = this.getViewSize();
+        var width = viewSize[0] - parseInt(margin.right, 10);
+        // this.chartConfig.chartRendererConfig.size[1] = height;
+        legendContainer.style.width = margin.right + 'px';
+        legendContainer.style.height = this.chartConfig.chartRendererConfig.size[1] + 'px';
+        legendContainer.style['overflow-y'] = 'auto';
+        legendContainer.style['overflow-x'] = 'hidden';
+        legendContainer.style.position = 'absolute';
+        legendContainer.style.right = '0px';
+        barContainer.style.overflow = 'auto';
+        barContainer.style.width = width + 'px';
+        // barContainer.style.height = height + 'px';
+        barContainer.style.position = 'absolute';
 
         me.currentDateRange = {
             min: null,
@@ -327,14 +357,21 @@ Ext.define('Koala.view.component.D3BarChartController', {
         };
 
         var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
+        this.chartConfig.chartRendererConfig.components = [];
+        var legendChartConfig = Ext.clone(this.chartConfig.chartRendererConfig);
         this.chartConfig.chartRendererConfig.components = [barComponent];
+        this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
+        this.chartRenderer.render(barContainer);
+
         var legend = this.getLegendComponent(barComponent);
         if (legend) {
-            this.chartConfig.chartRendererConfig.components.push(legend);
+            // uses dynamic height
+            legendChartConfig.size[0] = parseInt(margin.right, 10);
+            legendChartConfig.components = [legend];
+            legendChartConfig.dynamicSize = true;
+            this.legendChartRenderer = new D3Util.ChartRenderer(legendChartConfig);
+            this.legendChartRenderer.render(legendContainer);
         }
-        this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
-        var svg = document.querySelector('#' + this.getView().getId());
-        this.chartRenderer.render(svg);
     },
 
     /**
@@ -351,6 +388,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var Const = Koala.util.ChartConstants;
         var CSS = Const.CSS_CLASS;
+        this.chartConfig.legendComponentConfig.position[0] = 0;
         Ext.each(this.chartConfig.legendComponentConfig.items, function(legend) {
             legend.onClick = function(event) {
                 var list = event.target.classList;
@@ -468,13 +506,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         }
     },
 
-    /**
-     * Update the chart configuration with the new size and redraw.
-     */
-    handleResize: function() {
-        if (!this.chartConfig) {
-            return;
-        }
+    updateSize: function() {
         var config = this.getView().getConfig();
         var gnosConfig = config.targetLayer.metadata.layerConfig.barChartProperties;
         var margin = gnosConfig.chartMargin.split(',');
@@ -482,16 +514,35 @@ Ext.define('Koala.view.component.D3BarChartController', {
             return parseInt(w, 10);
         });
         var chartSize = this.getViewSize();
+
+        // calculate the size
+        var maxCount = this.chartConfig.barComponentConfig.data.grouped.length;
+        this.chartConfig.chartRendererConfig.size[0] =
+            this.getView().getBarWidth() * maxCount *
+            this.chartConfig.barComponentConfig.data.data.length + margin[3];
+
+        this.chartConfig.barComponentConfig.size[0] = this.chartConfig.chartRendererConfig.size[0];
+
         // set the size
-        this.chartConfig.barComponentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
+        // extra 15 for the horizontal scroll bar
+        this.chartConfig.barComponentConfig.size[1] = chartSize[1] - margin[0] - margin[2] - 15;
         this.chartConfig.barComponentConfig.position = [margin[3], margin[0]];
         if (this.chartConfig.legendComponentConfig) {
-            this.chartConfig.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
+            this.chartConfig.legendComponentConfig.position = [0, margin[0]];
         } else {
-            this.chartConfig.barComponentConfig.size[0] += margin[3];
+            this.chartConfig.barComponentConfig.size[0] += margin[1];
         }
-        this.chartConfig.chartRendererConfig.size = chartSize;
+        // extra 15 for the horizontal scroll bar
+        this.chartConfig.chartRendererConfig.size = [this.chartConfig.barComponentConfig.size[0], chartSize[1] - 15];
+    },
 
+    /**
+     * Update the chart configuration with the new size and redraw.
+     */
+    handleResize: function() {
+        if (!this.chartConfig) {
+            return;
+        }
         this.drawChart();
     },
 
