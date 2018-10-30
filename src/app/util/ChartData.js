@@ -809,6 +809,7 @@ Ext.define('Koala.util.ChartData', {
                             data: chartData,
                             style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
                             useTooltipFunc: true,
+                            initiallyVisible: false,
                             curveType: serie.curveType || 'linear',
                             shapeType: serie.shapeType || 'line',
                             axes: ['x', 'y' + idx],
