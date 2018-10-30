@@ -393,7 +393,7 @@ Ext.define('Koala.util.ChartData', {
             config.chartRendererConfig.zoomType = gnosConfig.allowZoom ? 'rerender' : 'none';
             config.chartRendererConfig.chartMargin = gnosConfig.chartMargin ? gnosConfig.chartMargin.split(',') : [];
 
-            config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 300;
+            config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 20;
 
             if (type === 'timeSeries') {
                 this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations);

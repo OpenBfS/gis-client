@@ -976,7 +976,7 @@ Wenn 'between' verwendet werden soll, muss der 'value' als kommasperarierter Str
   |---------------------:|:----|
   | Erlaubt Wertemenge   | Zahl (> 0)  |
   | Obligatorisch        | &#10799; |
-  | Default-Wert         | 300 |
+  | Default-Wert         | 20 |
   | Beispiel             | 20 |
 
 **seriesTitleTpl**
