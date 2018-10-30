@@ -1331,7 +1331,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 event.preventDefault();
             }
             var attached = [];
-            Ext.each(this.chartConfig.timeseriesComponentConfig.series, function(config, idx) {
+            var timeConfig = this.chartConfig.timeseriesComponentConfig;
+            Ext.each(timeConfig.series, function(config, idx) {
                 if (config.belongsTo === seriesIndex) {
                     attached.push(idx);
                 }
@@ -1349,7 +1350,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                         checked: visible,
                         listeners: {
                             change: function() {
-                                component.toggleSeries(attached[index + 1]);
+                                var zoom = component.getCurrentZoom();
+                                timeConfig.initialZoom = {
+                                    x: zoom.x,
+                                    y: zoom.y,
+                                    k: zoom.k
+                                };
+                                var cur = timeConfig.series[attached[index + 1]].initiallyVisible;
+                                timeConfig.series[attached[index + 1]].initiallyVisible = !cur;
+                                me.drawChart();
                             }
                         }
                     });
