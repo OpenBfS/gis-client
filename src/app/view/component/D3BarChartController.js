@@ -521,7 +521,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             this.getView().getBarWidth() * maxCount *
             this.chartConfig.barComponentConfig.data.data.length + margin[3];
 
-        this.chartConfig.barComponentConfig.size[0] = this.chartConfig.chartRendererConfig.size[0];
+        this.chartConfig.barComponentConfig.size[0] = this.chartConfig.chartRendererConfig.size[0] - margin[3];
 
         // set the size
         // extra 15 for the horizontal scroll bar
@@ -533,7 +533,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             this.chartConfig.barComponentConfig.size[0] += margin[1];
         }
         // extra 15 for the horizontal scroll bar
-        this.chartConfig.chartRendererConfig.size = [this.chartConfig.barComponentConfig.size[0], chartSize[1] - 15];
+        this.chartConfig.chartRendererConfig.size = [this.chartConfig.barComponentConfig.size[0] + margin[3], chartSize[1] - 15];
     },
 
     /**
