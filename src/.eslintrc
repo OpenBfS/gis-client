@@ -27,7 +27,12 @@
         "Uint8Array": true,
         "TextDecoder": true,
         "Papa": true,
-        "jsts": true
+        "jsts": true,
+        "GeoStyler": false,
+        "GeoStylerGeoJsonParser": false,
+        "GeoStylerOpenlayersParser": false,
+        "React": false,
+        "ReactDOM": false
     },
     "rules": {
         "comma-dangle": 2,

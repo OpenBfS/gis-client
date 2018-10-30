@@ -398,10 +398,11 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     name: 'style-layer',
                     title: 'Layer Style',
                     width: 800,
-                    height: 450,
+                    height: 650,
                     layout: 'fit',
+                    constrainHeader: true,
                     items: [{
-                        xtype: 'k_container_styler_styler',
+                        xtype: 'k_container_styler_geostyler',
                         viewModel: {
                             data: {
                                 layer: layer
