@@ -25,14 +25,14 @@
               "ruf": {
                 "workspace": "ruf-import",
                 "namespace": "www.imis.bfs.de/ruf",
-                "datastore": "ruf",
+                "datastore": "ruf-import",
                 "baseUrl": "http://10.133.7.82/ogc/",
                 "metadataBaseUrl": "http://10.133.7.82/geonetwork/"
               },
               "imis": {
                 "workspace": "imis-import",
                 "namespace": "www.imis.bfs.de/imis",
-                "datastore": "imis",
+                "datastore": "imis-import",
                 "baseUrl": "http://10.133.7.82/ogc/",
                 "metadataBaseUrl": "http://10.133.7.82/geonetwork/"
               }
@@ -60,7 +60,6 @@
             "startCenter": [1234075.4566814213, 6706481.04685707],
             "startZoom": 6,
             "mapLayers": [
-                "2a0f1aa4-3f5e-41a4-90e5-91eb97036da3"
             ],
             "backgroundLayers": [{
               "uuid":  "2f30477a-ca0a-43cb-a34b-fcee53e6bce7",
@@ -68,13 +67,16 @@
             }, {
               "uuid": "1c964894-c960-4eb2-a4f3-dd7c120d69ee",
               "thumb": "layer_sets/gewaesser_thumb.png"
-            }],
+            }]
+            ,
             "mapConfig": {
                 "projection": "EPSG:3857"
             },
             "tools": [
                 "addWmsBtn",
-                "printBtn"
+                "printBtn",
+                "cloneBtn",
+                "selectFeaturesBtn"
             ],
             "vectorIcons": [
                 {
@@ -96,13 +98,13 @@
                 "label": "EPSG:25832"
             }],
             "vectorTemplates": [{
-                "uuid": "241ae25f-c180-475b-9734-4947f75137e1",
+                "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
                 "label": "Local Vector Data Template (drinkwater)"
             }, {
-                "uuid": "5fdc824d-dc67-46cc-a87e-1c99f13557cf",
+                "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
                 "label": "Local Vector Data Template (buildings)"
             }, {
-                "uuid": "0613135b-8a4a-496d-b4a2-bf67831c620d",
+                "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
                 "label": "Local Vector Data Template (bundeslaender)"
             }],
             "wmsUrls": ["http://ows.terrestris.de/osm/service",
@@ -112,5 +114,6 @@
             "rodosFolderName": "RODOS-Prognosen"
         }
     },
-    "success": true
+    "success": true,
+    "debug": true
 }
