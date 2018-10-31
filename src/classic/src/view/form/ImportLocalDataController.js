@@ -24,11 +24,6 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         'Koala.util.Layer',
         'Koala.util.Object',
         'Koala.util.String',
-        'Koala.util.Style',
-
-        'Koala.model.Style',
-        'Koala.model.StyleRule',
-        'Koala.model.StyleSymbolizer',
 
         'Koala.view.form.field.VectorTemplateCombo'
     ],
@@ -215,23 +210,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
 
             var layer = new ol.layer.Vector(cfg);
 
-            // If we were configured with a style, we can set up a matching
-            // Koala.model.StyleRule so that the style editor window can be used
-            // directly:
             if (style) {
-                var rule = Ext.create('Koala.model.StyleRule');
-                var symbolizer = Ext.create('Koala.model.StyleSymbolizer');
-                var koalaStyle = Ext.create('Koala.model.Style');
-                var rules = koalaStyle.rules();
-                symbolizer.set('olStyle', style);
-                if (style.getText()) {
-                    symbolizer.set('textPattern', style.getText().getText());
-                }
-                rule.setSymbolizer(symbolizer);
-                rules.add(rule);
-                layer.set('koalaStyle', koalaStyle);
-
-                Koala.util.Style.applyKoalaStyleToLayer(koalaStyle, layer);
+                // TODO
+                // create GeoStyler-Style
             }
 
             // Finally add the layer to the map.

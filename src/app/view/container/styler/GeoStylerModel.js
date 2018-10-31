@@ -1,15 +1,29 @@
-Ext.define('Koala.view.container.styler.StylerModel', {
+Ext.define('Koala.view.container.styler.GeoStylerModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.container.styler.styler',
+    alias: 'viewmodel.container.styler.geostyler',
     data: {
         /**
          * An ol.layer.Layer
          */
         layer: null,
         /**
-         * An Koala.model.Style
+         * A GeoStyler-Style
          */
-        style: null,
+        style: {
+            name: 'Default Style',
+            rules: [
+                {
+                    name: 'Rule 1',
+                    symbolizers: [
+                        {
+                            kind: 'Mark',
+                            wellKnownName: 'Circle'
+                        }
+                    ]
+                }
+
+            ]
+        },
         /**
          * The geometryType 'point', 'polygon' or 'line'
          */

@@ -7,6 +7,13 @@
     -->
     <import file="${basedir}/.sencha/app/build-impl.xml"/>
 
+    <target name="-before-build">
+        <exec executable="node">
+            <!-- <arg value="node"/> -->
+            <arg value="${basedir}/npm-pack-libs.js"/>
+        </exec>
+    </target>
+
     <!--
     The following targets can be provided to inject logic before and/or after key steps
     of the build process:

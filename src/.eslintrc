@@ -28,7 +28,12 @@
         "TextDecoder": true,
         "Papa": true,
         "jsts": true,
-        "D3Util": true
+        "D3Util": true,
+        "GeoStyler": false,
+        "GeoStylerGeoJsonParser": false,
+        "GeoStylerOpenlayersParser": false,
+        "React": false,
+        "ReactDOM": false
     },
     "rules": {
         "comma-dangle": 2,

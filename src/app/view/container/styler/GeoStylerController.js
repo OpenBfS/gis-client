@@ -1,11 +1,6 @@
-Ext.define('Koala.view.container.styler.StylerController', {
+Ext.define('Koala.view.container.styler.GeoStylerController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.container.styler.styler',
-
-    requires: [
-        'Koala.view.container.styler.Rules',
-        'Koala.util.Style'
-    ],
+    alias: 'controller.container.styler.geostyler',
 
     /**
      * Holds the delayed task since we can possibly be called while the view is
@@ -22,27 +17,6 @@ Ext.define('Koala.view.container.styler.StylerController', {
      * @private
      */
     rebuildCheckInterval: 25,
-
-    /**
-     *
-     */
-    onBoxReady: function() {
-        var view = this.getView();
-        var viewModel = this.getViewModel();
-        var layer = viewModel.get('layer');
-        var style = layer.get('koalaStyle') || Ext.create('Koala.model.Style');
-
-        viewModel.set('layer', layer);
-        viewModel.set('style', style);
-
-        if (!layer.get('originalStyle')) {
-            layer.set('originalStyle', layer.getStyle());
-        }
-
-        view.add({
-            xtype: 'k_container_styler_rules'
-        });
-    },
 
     /**
      *
@@ -77,18 +51,10 @@ Ext.define('Koala.view.container.styler.StylerController', {
         var layer = viewModel.get('layer');
         var style = viewModel.get('style');
         layer.set('koalaStyle', style);
-
-        Koala.util.Style.applyKoalaStyleToLayer(style, layer);
-    },
-
-    /**
-     * Marks the main styler container as currently being incorrectly
-     * configured, usually from an unexpected layerName configuration or after a
-     * request for getting styles failed.
-     */
-    markErrored: function(msgKey) {
-        var me = this;
-        var msg = me.getViewModel().get(msgKey || 'genericError');
-        me.getView().setHtml(msg);
+        var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
+        olParser.writeStyle(style)
+            .then(function(olStyle) {
+                layer.setStyle(olStyle);
+            });
     }
 });
