@@ -41,7 +41,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         type: 'k-panel-routing-legendtree'
     },
 
-    title: '',
+    title: 'title',
 
     config: {
         routingEnabled: false,
