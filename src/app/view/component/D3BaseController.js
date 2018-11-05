@@ -944,12 +944,18 @@ Ext.define('Koala.view.component.D3BaseController', {
         return new Ext.Promise(function(resolve) {
             outputFormat = outputFormat || 'image/png';
             scale = scale || 1;
-            var downloadIcons = legend.querySelector('.k-d3-download-icon');
-            var deleteIcons = legend.querySelector('.k-d3-delete-icon');
-            var colorIcons = legend.querySelector('.k-d3-color-icon');
-            downloadIcons.style.display = 'none';
-            deleteIcons.style.display = 'none';
-            colorIcons.style.display = 'none';
+            var downloadIcons = legend.querySelectorAll('.k-d3-download-icon');
+            var deleteIcons = legend.querySelectorAll('.k-d3-delete-icon');
+            var colorIcons = legend.querySelectorAll('.k-d3-color-icon');
+            downloadIcons.forEach(function(icon) {
+                icon.style.display = 'none';
+            });
+            deleteIcons.forEach(function(icon) {
+                icon.style.display = 'none';
+            });
+            colorIcons.forEach(function(icon) {
+                icon.style.display = 'none';
+            });
 
             var chartSource = (new XMLSerializer()).serializeToString(chartNode);
             var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
@@ -970,9 +976,16 @@ Ext.define('Koala.view.component.D3BaseController', {
             chartImageObject.onload = function() {
                 ctx.drawImage(chartImageObject, 0, 0, chartImageWidth, chartImageHeight);
                 var dataUri = canvas.toDataURL(outputFormat);
-                downloadIcons.style.display = 'block';
-                deleteIcons.style.display = 'block';
-                colorIcons.style.display = 'block';
+
+                downloadIcons.forEach(function(icon) {
+                    icon.style.display = 'block';
+                });
+                deleteIcons.forEach(function(icon) {
+                    icon.style.display = 'block';
+                });
+                colorIcons.forEach(function(icon) {
+                    icon.style.display = 'block';
+                });
                 resolve(dataUri);
             };
         });
