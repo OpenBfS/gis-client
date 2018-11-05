@@ -109,6 +109,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         };
 
         var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
+        this.timeseriesComponent = series;
         series.enableYAxisZoom(false);
 
         if (this.keydownDestroy) {
@@ -1314,7 +1315,18 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     resetZoom: function() {
+        var me = this;
+        var prevented = this.timeseriesComponent.preventYAxisZoom;
+        if (prevented) {
+            this.timeseriesComponent.enableYAxisZoom(true);
+        }
         this.chartRenderer.resetZoom();
+        if (prevented) {
+            // need a timeout here because the zoom reset is animated
+            window.setTimeout(function() {
+                me.timeseriesComponent.enableYAxisZoom(false);
+            }, 800);
+        }
     },
 
     /**
