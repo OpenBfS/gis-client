@@ -138,7 +138,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             this.chartConfig.chartRendererConfig.components.push(legend);
         }
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
-        var div = this.getView().getEl().dom;
+        var div = this.getView().el.dom;
         this.chartRenderer.render(div);
     },
 
