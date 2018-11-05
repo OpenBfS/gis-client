@@ -938,7 +938,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      *                                 default is 'image/png'.
      */
     chartToDataUri: function(scale, isBarChart, outputFormat) {
-        var chartNode = this.getView().getEl().dom.querySelector('svg');
+        var chartNode = this.getView().el.dom.querySelector('svg');
         var legend = chartNode.querySelector('.legend');
 
         return new Ext.Promise(function(resolve) {
