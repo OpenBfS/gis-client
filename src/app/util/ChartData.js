@@ -415,16 +415,20 @@ Ext.define('Koala.util.ChartData', {
             var yMin;
             var yMax;
             if (!gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' &&
-                gnosConfig.xAxisMin && !Ext.isNumeric(gnosConfig.xAxisMin)) {
-                xMin = moment(gnosConfig.xAxisMin).unix() * 1000;
-            } else {
-                xMin = gnosConfig.xAxisMin;
-            }
-            if (!gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' &&
                 gnosConfig.xAxisMax && !Ext.isNumeric(gnosConfig.xAxisMax)) {
                 xMax = moment(gnosConfig.xAxisMax).unix() * 1000;
             } else {
                 xMax = gnosConfig.xAxisMax;
+            }
+            if (!gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' &&
+                gnosConfig.xAxisMin && !Ext.isNumeric(gnosConfig.xAxisMin)) {
+                if (gnosConfig.duration) {
+                    xMin = moment(xMax).subtract(moment.duration(gnosConfig.duration)).unix() * 1000;
+                } else {
+                    xMin = moment(gnosConfig.xAxisMin).unix() * 1000;
+                }
+            } else {
+                xMin = gnosConfig.xAxisMin;
             }
             if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
                 gnosConfig.yAxisMin && !Ext.isNumeric(gnosConfig.yAxisMin)) {
@@ -602,7 +606,7 @@ Ext.define('Koala.util.ChartData', {
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
-                x: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true, stations[0]),
+                x: this.createAxisConfig(gnosConfig, 'x', layerConfig.startDate.unix() * 1000, layerConfig.endDate.unix() * 1000, true, stations[0]),
                 y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true, stations[0])
             };
             // handle attachedSeries axes
