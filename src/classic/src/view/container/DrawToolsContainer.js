@@ -145,8 +145,8 @@ Ext.define('Koala.view.container.DrawToolsContainer', {
 
     setupLayerAndCollection: function(map) {
         var me = this;
-        var appContext = Koala.util.AppContext.getAppContext();
-        var drawLayerName = appContext.data.merge.drawLayerName || me.getViewModel().get('layerLegendName');
+        var viewModel = me.getViewModel();
+        var drawLayerName = viewModel.get('drawLayerName');
 
         me.drawVectorLayer = BasiGX.util.Layer.getLayerByName(drawLayerName);
 

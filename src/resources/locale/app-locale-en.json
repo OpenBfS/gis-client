@@ -204,6 +204,7 @@
     "Koala.view.container.DrawToolsContainer": {
         "config": {
             "data": {
+                "drawLayerName": "drawing layer",
                 "pointTooltip": "Draw Point",
                 "lineTooltip": "Draw Line",
                 "polygonTooltip": "Draw Polygon",
