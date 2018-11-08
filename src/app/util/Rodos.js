@@ -91,6 +91,7 @@ Ext.define('Koala.util.Rodos', {
                     rodosFolder.appendChild(treeNodeObj);
                 }
             });
+            rodosFolder.expand();
         }
     }
 });
