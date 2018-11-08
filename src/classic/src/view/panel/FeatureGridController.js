@@ -271,6 +271,7 @@ Ext.define('Koala.view.panel.FeatureGridController', {
         var sorters = grid.getStore().getSorters();
         if (toggled) {
             sorters.insert(0, grid.getColumns()[1].getSorter());
+            grid.scrollTo(0, 0, true);
         } else {
             sorters.removeAt(0);
         }
