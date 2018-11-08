@@ -528,8 +528,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         // set the size
         // extra 15 for the horizontal scroll bar
-        barConfig.size[1] = chartSize[1] - margin[0] - margin[2] - 15;
-        barConfig.position = [margin[3], margin[0]];
+        barConfig.size[1] = chartSize[1] - 15;
+        barConfig.position = [0, 0];
         if (this.chartConfig.legendComponentConfig) {
             this.chartConfig.legendComponentConfig.position = [0, margin[0]];
         }
