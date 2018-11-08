@@ -791,7 +791,21 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         // Bind/Unbind delayedRepaintLayerFilterIndication() on layer add/remove.
         treeStore.on({
-            add: function(store, recs) {
+            add: function(store, recs, index) {
+                var context = Koala.util.AppContext.getAppContext().data.merge;
+                var uuid = recs[0].data.metadata.id;
+                var blacklistLayers = context.backgroundLayers.concat(context.mapLayers);
+                var found = false;
+                Ext.each(blacklistLayers, function(item) {
+                    if (item.uuid === uuid) {
+                        found = true;
+                        return false;
+                    }
+                });
+                // initially show legend if not a background or map layer
+                if (!found) {
+                    me.getPlugins()[0].onItemClick(null, recs[0], null, index);
+                }
                 me.bindOnLayerVisibilityChange(recs[0]);
             },
             remove: function(store, recs) {
