@@ -215,7 +215,7 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
         this.mapComponent.setLoading(true);
         this.determineLayerToSelectOn();
         // mockup a bbox with a resolution dependent buffer
-        var buffer = this.mapComponent.map.getView().getResolution() * 10;
+        var buffer = this.mapComponent.map.getView().getResolution() * 5;
         var extent = [];
         extent.push(
             e.coordinate[0],

@@ -22,6 +22,7 @@ Ext.define('Koala.view.container.DrawToolsContainerModel', {
     alias: 'viewmodel.k-container-drawtoolscontainer',
 
     data: {
+        drawLayerName: '',
         pointTooltip: '',
         lineTooltip: '',
         polygonTooltip: '',
