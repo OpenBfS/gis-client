@@ -602,7 +602,7 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.series = seriesAndLegends.series;
             // append legends
             config.legendComponentConfig.items = seriesAndLegends.legends;
-            config.legendComponentConfig.position = [chartSize[0] - margin[1] - gnosConfig.legendEntryMaxLength, margin[0]];
+            config.legendComponentConfig.position = [chartSize[0] + margin[1] - gnosConfig.legendEntryMaxLength, margin[0]];
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
