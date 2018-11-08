@@ -399,10 +399,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         });
         var chartSize = this.getViewSize();
         // set the size
-        this.chartConfig.timeseriesComponentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
+        this.chartConfig.timeseriesComponentConfig.size = [chartSize[0] - margin[1] - margin[3] - gnosConfig.legendEntryMaxLength, chartSize[1] - margin[0] - margin[2]];
         this.chartConfig.timeseriesComponentConfig.position = [margin[3], margin[0]];
         if (this.chartConfig.legendComponentConfig) {
-            this.chartConfig.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
+            this.chartConfig.legendComponentConfig.position = [chartSize[0] - margin[1] - gnosConfig.legendEntryMaxLength, margin[0]];
         } else {
             this.chartConfig.timeseriesComponentConfig.size[0] += margin[1];
         }
