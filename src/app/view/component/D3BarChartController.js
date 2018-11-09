@@ -343,6 +343,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
         if (legend) {
             width -= parseInt(margin.right, 10);
         }
+        if (width > this.chartConfig.barComponentConfig.size[0]) {
+            this.chartConfig.barComponentConfig.size[0] = width - margin.left;
+            this.chartConfig.chartRendererConfig.size[0] = width;
+        }
+
         legendContainer.style.width = margin.right + 'px';
         legendContainer.style.height = this.chartConfig.chartRendererConfig.size[1] + 'px';
         legendContainer.style['overflow-y'] = 'auto';
