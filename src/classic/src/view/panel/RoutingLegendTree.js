@@ -793,7 +793,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         treeStore.on({
             add: function(store, recs, index) {
                 var context = Koala.util.AppContext.getAppContext().data.merge;
-                var uuid = recs[0].data.metadata.id;
+                var uuid = recs[0].data.metadata ? recs[0].data.metadata.id : undefined;
                 var blacklistLayers = context.backgroundLayers.concat(context.mapLayers);
                 var found = false;
                 Ext.each(blacklistLayers, function(item) {

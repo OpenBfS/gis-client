@@ -47,6 +47,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
         var right = ((mapContainer.getWidth()/2) - 150) + 'px';
 
         if (isLeaf) {
+            // Currently throws errors due to hover issues with ExtJS
+            // if an over item is set, so we deselect it here
+            sender.setOverItem(null);
             var key = node.get('key');
             switch (key) {
                 case 'menu':
@@ -152,9 +155,6 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     var timereferenceButton = Ext.ComponentQuery
                         .query('k-button-timereference')[0];
                     timereferenceButton.toggle();
-                    // Currently throws errors due to hover issues with ExtJS
-                    // if an over item is set, so we deselect it here
-                    sender.setOverItem(null);
                     viewModel.set('timereferenceValue', timereferenceButton.getCurrent());
                     viewModel.set('settingsExpanded', true);
                     break;
