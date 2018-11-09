@@ -472,7 +472,7 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
             componentConfig.titleSize = layerConfig.title.labelSize || 20;
             componentConfig.rotateBarLabel = gnosConfig.rotateBarLabel;
-            config.legendComponentConfig.position = [chartSize[0] - margin[1], margin[0]];
+            config.legendComponentConfig.position = [chartSize[0] - margin[1], 0];
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
