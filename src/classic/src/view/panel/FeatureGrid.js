@@ -177,6 +177,12 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                 },
                 featureGridSelectorFn: function() {
                     return this.up('panel').up('panel').down('basigx-grid-featuregrid');
+                },
+                mergedFeaturesFn: function() {
+                    var btn = me.down('#feature-grid-toggle-sort-selected-button');
+                    if (!btn.pressed) {
+                        btn.click();
+                    }
                 }
             }, {
                 xtype: 'button',
