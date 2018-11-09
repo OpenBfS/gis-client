@@ -172,7 +172,8 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                 padding: 5,
                 bind: {
                     disabled: '{noFeaturesSelected}',
-                    sourceLayer: '{selectedFeaturesLayer}'
+                    sourceLayer: '{selectedFeaturesLayer}',
+                    extraTargetLayers: ['{selectedFeaturesLayer}']
                 },
                 featureGridSelectorFn: function() {
                     return this.up('panel').up('panel').down('basigx-grid-featuregrid');
