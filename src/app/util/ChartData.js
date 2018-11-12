@@ -718,7 +718,8 @@ Ext.define('Koala.util.ChartData', {
                 scale: gnosConfig[orient + 'AxisScale'] || (orient === 'x' ? 'time' : 'linear'),
                 min: min,
                 max: max,
-                sanitizeLabels: true
+                sanitizeLabels: true,
+                factor: orient === 'y' ? 0.8 : undefined
             };
             if (withGrid) {
                 config.showGrid = gnosConfig.showGrid || false;

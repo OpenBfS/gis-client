@@ -339,6 +339,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
         var legend = this.getLegendComponent(barComponent);
         var viewSize = this.getViewSize();
+        viewSize[0] = viewSize[0] - margin.left - margin.right;
+        viewSize[1] = viewSize[1] - margin.top - margin.bottom;
         var width = viewSize[0];
         if (legend) {
             width -= parseInt(margin.right, 10);
@@ -357,6 +359,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         barContainer.style.overflow = 'auto';
         barContainer.style.width = width + 'px';
         barContainer.style.position = 'absolute';
+        barContainer.style.padding = margin.top + 'px ' + margin.left + 'px ' + margin.bottom + 'px ' + margin.left + 'px';
 
         me.currentDateRange = {
             min: null,
@@ -523,6 +526,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
             return parseInt(w, 10);
         });
         var chartSize = this.getViewSize();
+        var mrgn = this.getView().getChartMargin();
+        chartSize[0] = chartSize[0] - mrgn.left - mrgn.right;
+        chartSize[1] = chartSize[1] - mrgn.top - mrgn.bottom;
 
         // calculate the size
         var maxCount = barConfig.data.grouped.length;
