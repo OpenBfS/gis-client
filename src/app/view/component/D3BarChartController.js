@@ -318,6 +318,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         if (!this.chartConfig) {
             return;
         }
+        var config = this.getView().getConfig();
+        var gnosConfig = config.targetLayer.metadata.layerConfig.barChartProperties;
         var me = this;
         var margin = this.getView().getChartMargin();
         var svg = document.querySelector('#' + this.getView().getId());
@@ -339,27 +341,29 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
         var legend = this.getLegendComponent(barComponent);
         var viewSize = this.getViewSize();
-        viewSize[0] = viewSize[0] - margin.left - margin.right;
-        viewSize[1] = viewSize[1] - margin.top - margin.bottom;
+        viewSize[0] = viewSize[0] - parseInt(margin.left, 10) - parseInt(margin.right, 10) - 15;
+        viewSize[1] = viewSize[1] - parseInt(margin.top, 10) - parseInt(margin.bottom, 10);
         var width = viewSize[0];
         if (legend) {
-            width -= parseInt(margin.right, 10);
+            width = width - parseInt(gnosConfig.legendEntryMaxLength, 10);
         }
         if (width > this.chartConfig.barComponentConfig.size[0]) {
-            this.chartConfig.barComponentConfig.size[0] = width - margin.left;
+            this.chartConfig.barComponentConfig.size[0] = width - parseInt(margin.left, 10) - parseInt(margin.right, 10);
             this.chartConfig.chartRendererConfig.size[0] = width;
         }
 
-        legendContainer.style.width = margin.right + 'px';
-        legendContainer.style.height = this.chartConfig.chartRendererConfig.size[1] + 'px';
+        legendContainer.style.width = gnosConfig.legendEntryMaxLength + 'px';
+        legendContainer.style.height = viewSize[1] + 'px';
         legendContainer.style['overflow-y'] = 'auto';
         legendContainer.style['overflow-x'] = 'hidden';
         legendContainer.style.position = 'absolute';
         legendContainer.style.right = '0px';
+        legendContainer.style['margin-top'] = margin.top + 'px';
+        legendContainer.style['margin-bottom'] = margin.bottom + 'px';
         barContainer.style.overflow = 'auto';
         barContainer.style.width = width + 'px';
         barContainer.style.position = 'absolute';
-        barContainer.style.padding = margin.top + 'px ' + margin.left + 'px ' + margin.bottom + 'px ' + margin.left + 'px';
+        barContainer.style.margin = margin.top + 'px ' + margin.left + 'px ' + margin.bottom + 'px ' + margin.left + 'px';
 
         me.currentDateRange = {
             min: null,
@@ -374,7 +378,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         if (legend) {
             // uses dynamic height
-            legendChartConfig.size[0] = parseInt(margin.right, 10);
+            legendChartConfig.size[0] = gnosConfig.legendEntryMaxLength;
             legendChartConfig.components = [legend];
             legendChartConfig.dynamicSize = true;
             this.legendChartRenderer = new D3Util.ChartRenderer(legendChartConfig);
@@ -527,8 +531,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         });
         var chartSize = this.getViewSize();
         var mrgn = this.getView().getChartMargin();
-        chartSize[0] = chartSize[0] - mrgn.left - mrgn.right;
-        chartSize[1] = chartSize[1] - mrgn.top - mrgn.bottom;
+        chartSize[0] = chartSize[0] - parseInt(mrgn.left, 10) - parseInt(mrgn.right, 10) - parseInt(gnosConfig.legendEntryMaxLength, 10);
+        chartSize[1] = chartSize[1] - parseInt(mrgn.top, 10) - parseInt(mrgn.bottom, 10);
 
         // calculate the size
         var maxCount = barConfig.data.grouped.length;
