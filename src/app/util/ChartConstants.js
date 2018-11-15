@@ -20,12 +20,6 @@ Ext.define('Koala.util.ChartConstants', {
 
     statics: {
 
-        SVG_DEFS: {
-            LEGEND_ICON_BACKGROUND: 'M-3 -14 h 25 v 16 h -25 Z',
-            LEGEND_ICON_AREA: 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6 M20 -6 v 6 h -20 v -6 Z',
-            LEGEND_ICON_BAR: 'M0 -10 h 6 v 12 h -6 Z M7 -6 h 6 v 8 h -6 Z M14 -10 h 6 v 12 h -6 Z',
-            LEGEND_ICON_LINE: 'M0 -6 C 3 0, 7 0, 10 -6 S 15 -12, 20 -6'
-        },
         /**
          * An object containing CSS classes and parts (suffixes, prefixes) to
          * generate CSS classes.
@@ -83,94 +77,7 @@ Ext.define('Koala.util.ChartConstants', {
          *
          * @type {Number}
          */
-        ADDITIONAL_BAR_MARGIN: 5,
-
-        /**
-         * Static mapping of supported D3 axis generators. See the
-         * {@link https://github.com/d3/d3-axis/blob/master/README.md#axisTop|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} top - Return a top-oriented axis generator.
-         * @type {function} right - Return a right-oriented axis generator.
-         * @type {function} bottom - Return a bottom-oriented axis generator.
-         * @type {function} left - Return a left-oriented axis generator.
-         */
-        ORIENTATION: {
-            top: d3.axisTop,
-            right: d3.axisRight,
-            bottom: d3.axisBottom,
-            left: d3.axisLeft
-        },
-
-        /**
-         * Static mapping of supported d3 scales. In D3 Scales are functions that
-         * map from an input domain to an output range. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#scales-d3-scale|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - Return a quantitative linear scale.
-         * @type {function} pow - Return a quantitative power scale.
-         * @type {function} sqrt - Return a quantitative power scale with exponent 0.5.
-         * @type {function} log - Return a quantitative logarithmic scale.
-         * @type {function} ident - Return a quantitative identity scale.
-         * @type {function} time - Return a linear scale for time.
-         * @type {function} utc - Return a linear scale for UTC.
-         */
-        SCALE: {
-            linear: d3.scaleLinear,
-            pow: d3.scalePow,
-            sqrt: d3.scaleSqrt,
-            log: d3.scaleLog,
-            ident: d3.scaleIdentity,
-            time: d3.scaleTime,
-            ordinal: d3.scaleBand
-        },
-
-        /**
-         * Static mapping of supported d3 shape types. See the
-         * {@link https://github.com/d3/d3/blob/master/API.md#shapes-d3-shape|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} line - Return a line generator.
-         * @type {function} area - Return an area generator.
-         * @type {function} bar - TODO
-         */
-        TYPE: {
-            line: d3.line,
-            area: d3.area,
-            // TODO: set another type?!
-            bar: d3.line
-        },
-
-        /**
-         * Static mapping of supported d3 curve types. In D3 the curve type
-         * represents the interpolation between points in a continous shape. See
-         * the {@link https://github.com/d3/d3/blob/master/API.md#curves|D3 API documentation}
-         * for further details.
-         *
-         * @type {function} linear - A polyline through specified points.
-         * @type {function} cubicBasisSpline - A cubic basis spline using the
-         *       specified control points.
-         * @type {function} curveMonotoneX - A cubic spline that preserves
-         *       monotonicity in y, assuming monotonicity in x.
-         * @type {function} naturalCubicSpline - A natural cubic spline with the
-         *       second derivative of the spline set to zero at the endpoints.
-         * @type {function} curveStep - A piecewise constant function. The y-value
-         *       changes at the midpoint of each pair of adjacent x-values.
-         * @type {function} curveStepAfter - A piecewise constant function. The
-         *       y-value changes after the x-value.
-         * @type {function} curveStepBefore - A piecewise constant function. The
-         *       y-value changes before the x-value.
-         */
-        CURVE: {
-            linear: d3.curveLinear,
-            cubicBasisSpline: d3.curveBasis,
-            curveMonotoneX: d3.curveMonotoneX,
-            naturalCubicSpline: d3.curveNatural,
-            curveStep: d3.curveStep,
-            curveStepAfter: d3.curveStepAfter,
-            curveStepBefore: d3.curveStepBefore
-        }
+        ADDITIONAL_BAR_MARGIN: 5
 
     }
 

@@ -35,21 +35,6 @@ describe('Koala.view.component.D3ChartController', function() {
             expect(cmp.getId()).to.not.be(undefined);
         });
 
-        it('should not fail to draw and redraw a chart', function() {
-            ctrl.drawChart();
-            expect(true).to.be(true);
-            ctrl.redrawChart();
-            expect(true).to.be(true);
-            ctrl.resetZoom();
-            expect(true).to.be(true);
-            ctrl.deleteShapeContainerSvg();
-            expect(true).to.be(true);
-        });
-
-        it('can delete everything', function() {
-            expect(ctrl.deleteEverything.bind(ctrl)).withArgs({config: {id: 1}}).to.not.throwException();
-        });
-
         it('does not draw chart without data', function() {
             ctrl.onBoxReady();
             ctrl.fireEvent('chartdataprepared');

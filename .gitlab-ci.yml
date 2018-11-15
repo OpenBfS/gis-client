@@ -40,6 +40,10 @@ test:
   only:
     - branches
   script:
+    - cd lib/d3-util
+    - npm install
+    - npm run build:dist
+    - cd ../..
     - npm install
     - npm test
     - npm run combine-coverages

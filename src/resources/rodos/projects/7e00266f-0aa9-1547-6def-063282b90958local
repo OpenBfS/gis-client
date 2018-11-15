@@ -531,7 +531,7 @@
                 "type": "value",
                 "operator": "="
             }],
-            "gnos_uid": "to be added landkreise"
+            "gnos_uid": "c955db73-ed7b-4849-b10e-dc50fbd72b17"
         }, {
             "name": "Maßnahmen auf Katastrophenschutzzonenebene",
             "filters": [{

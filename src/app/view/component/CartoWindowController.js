@@ -364,11 +364,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 this.getViewModel().get('axisText')
             );
         } else {
-            var leftAxis = this.timeserieschart.getAxes().left;
-            Koala.util.ChartAxes.toggleScaleForAxis(
-                leftAxis,
-                this.timeserieschart.getController()
-            );
+            this.timeserieschart.getController().toggleScale();
         }
     },
 
@@ -753,9 +749,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var ctrl = chart.getController();
         ctrl.groupPropToggled = !ctrl.groupPropToggled;
         ctrl.getChartData();
-        ctrl.on('chartdataprepared', function() {
-            ctrl.redrawLegend();
-        });
     },
 
     /**
@@ -1582,7 +1575,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             // the zoom frequently in the first few hundred ms after
             // creation
             window.setTimeout(function() {
-                chart.getController().redrawChart();
+                chart.getController().drawChart();
             }, 10);
         });
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');

@@ -188,6 +188,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         if (!view) {
             return;
         }
+        var labelFunc = view.getLabelFunc() || me.getFallBackIdentity();
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
         var groupProp = barChartProperties.groupAttribute || 'end_measure';
         var labelProp = barChartProperties.groupLabelAttribute || groupProp;
@@ -227,7 +228,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
         me.colorsByKey = {};
         me.labels = [];
-        me.legendLabels = [];
         me.customColors = [];
         me.disabledSubCategories = [];
 
@@ -282,6 +282,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             pushObj[groupKey].detection_limit = feature.properties[detectionLimitProp];
             pushObj[groupKey].uncertainty = feature.properties[uncertaintyProp];
             pushObj[groupKey].group = feature.properties[keyProp];
+            pushObj[groupKey].label = labelFunc(pushObj[groupKey].value, pushObj[groupKey], groupProp, keyProp);
 
             if (createSeries) {
                 seriesData.push(pushObj);
@@ -296,6 +297,16 @@ Ext.define('Koala.view.component.D3BarChartController', {
             if (view.getShowLoadMask() && view.setLoading) {
                 view.setLoading(false);
             }
+            var config = me.getView().getConfig();
+            var chartSize = me.getViewSize();
+            this.chartConfig = Koala.util.ChartData.getChartConfiguration(
+                config,
+                chartSize,
+                'bar',
+                this.data,
+                this.labels,
+                this.getView().getSelectedStations()
+            );
             me.fireEvent('chartdataprepared');
         }
     },
@@ -304,740 +315,251 @@ Ext.define('Koala.view.component.D3BarChartController', {
      *
      */
     drawChart: function() {
+        if (!this.chartConfig) {
+            return;
+        }
+        var config = this.getView().getConfig();
+        var gnosConfig = config.targetLayer.metadata.layerConfig.barChartProperties;
         var me = this;
+        var margin = this.getView().getChartMargin();
+        var svg = document.querySelector('#' + this.getView().getId());
+        var container = svg.querySelector('.k-barchart-container');
+        var legendContainer = svg.querySelector('.k-barchart-legend-container');
+        var barContainer = svg.querySelector('.k-barchart-chart-container');
+        this.updateSize();
+        if (!container) {
+            container = document.createElement('div');
+            container.classList.add('k-barchart-container');
+            svg.append(container);
+            legendContainer = document.createElement('div');
+            barContainer = document.createElement('div');
+            container.append(barContainer);
+            container.append(legendContainer);
+            legendContainer.classList.add('k-barchart-legend-container');
+            barContainer.classList.add('k-barchart-chart-container');
+        }
+        var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
+        var legend = this.getLegendComponent(barComponent);
+        var viewSize = this.getViewSize();
+        viewSize[0] = viewSize[0] - parseInt(margin.left, 10) - parseInt(margin.right, 10) - 15;
+        viewSize[1] = viewSize[1] - parseInt(margin.top, 10) - parseInt(margin.bottom, 10);
+        var width = viewSize[0];
+        if (legend) {
+            width = width - parseInt(gnosConfig.legendEntryMaxLength, 10);
+        }
+        if (width > this.chartConfig.barComponentConfig.size[0]) {
+            this.chartConfig.barComponentConfig.size[0] = width - parseInt(margin.left, 10) - parseInt(margin.right, 10);
+            this.chartConfig.chartRendererConfig.size[0] = width;
+        }
 
-        me.drawSvgContainer();
-        me.drawLegendContainer();
+        legendContainer.style.width = gnosConfig.legendEntryMaxLength + 'px';
+        legendContainer.style.height = viewSize[1] + 'px';
+        legendContainer.style['overflow-y'] = 'auto';
+        legendContainer.style['overflow-x'] = 'hidden';
+        legendContainer.style.position = 'absolute';
+        legendContainer.style.right = '0px';
+        legendContainer.style['margin-top'] = margin.top + 'px';
+        legendContainer.style['margin-bottom'] = margin.bottom + 'px';
+        barContainer.style.overflow = 'auto';
+        barContainer.style.width = width + 'px';
+        barContainer.style.position = 'absolute';
+        barContainer.style.margin = margin.top + 'px ' + margin.left + 'px ' + margin.bottom + 'px ' + margin.left + 'px';
 
-        me.createScales();
-        me.createAxes();
-        me.createGridAxes();
-        me.createTooltip();
+        me.currentDateRange = {
+            min: null,
+            max: null
+        };
 
-        me.setDomainForScales();
+        this.chartConfig.chartRendererConfig.components = [];
+        var legendChartConfig = Ext.clone(this.chartConfig.chartRendererConfig);
+        this.chartConfig.chartRendererConfig.components = [barComponent];
+        this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
+        this.chartRenderer.render(barContainer);
 
-        me.drawTitle();
-        me.drawAxes();
-        me.drawGridAxes();
-        me.drawShapes();
-
-        me.drawLegend();
-
-        me.chartRendered = true;
-        me.redrawChart();
-        me.updateLegendContainerPosition();
-    },
-
-    /**
-     *
-     */
-    redrawChart: function() {
-        var me = this;
-
-        if (me.chartRendered && me.data) {
-
-            me.updateSvgContainerSize();
-
-            me.deleteShapeContainerSvg();
-
-            me.createScales();
-            me.createAxes();
-            me.createGridAxes();
-
-            me.setDomainForScales();
-
-            me.redrawTitle();
-            me.redrawAxes();
-            me.redrawGridAxes();
-            me.redrawShapes();
-
-            me.updateLegendContainerPosition();
+        if (legend) {
+            // uses dynamic height
+            legendChartConfig.size[0] = gnosConfig.legendEntryMaxLength;
+            legendChartConfig.components = [legend];
+            legendChartConfig.dynamicSize = true;
+            this.legendChartRenderer = new D3Util.ChartRenderer(legendChartConfig);
+            this.legendChartRenderer.render(legendContainer);
         }
     },
 
     /**
-     * Sets the domain for each scale in the chart by the use of the extent
-     * of the given input data values.
+     * Constructs a new legend component based on current config, or undefined,
+     * if we have no legend config.
+     * @param  {D3Util.BarComponent} series the corresponding bar chart
+     * component
+     * @return {D3Util.LegendComponent} the new legend component, or undefined
      */
-    setDomainForScales: function() {
+    getLegendComponent: function(barComponent) {
+        if (!this.chartConfig.legendComponentConfig) {
+            return;
+        }
         var me = this;
         var Const = Koala.util.ChartConstants;
-        var view = me.getView();
+        var CSS = Const.CSS_CLASS;
+        this.chartConfig.legendComponentConfig.position[0] = 0;
+        Ext.each(this.chartConfig.legendComponentConfig.items, function(legend) {
+            legend.onClick = function(event) {
+                var list = event.target.classList;
+                if (list.contains(CSS.COLOR_ICON) ||
+                    list.contains(CSS.DELETE_ICON)) {
+                    return;
+                }
+                if (legend.groupIndex) {
+                    barComponent.toggleGroup(legend.groupIndex);
+                }
+                if (legend.groupedIndex) {
+                    barComponent.toggleGrouped(legend.groupedIndex);
+                }
+            };
+            legend.customRenderer = function(node) {
+                if (!Ext.isModern && legend.type === 'background') {
+                    node.append('text')
+                        // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
+                        .text('\uf1fc')
+                        .attr('class', CSS.COLOR_ICON)
+                        .attr('text-anchor', 'start')
+                        .attr('dy', '1')
+                        .attr('dx', '150') // TODO Discuss, do we need this dynamically?
+                        .on('click', function() {
+                            me.handleColorChange(legend);
+                        });
+                }
+                node.append('text')
+                    // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
+                    .text('')
+                    .attr('class', CSS.DELETE_ICON)
+                    .attr('text-anchor', 'start')
+                    .attr('dy', '1')
+                    .attr('dx', '170') // TODO Discuss, do we need this dynamically?
+                    .on('click', function() {
+                        me.handleDelete(legend);
+                    });
+            };
+        });
+        return new D3Util.LegendComponent(this.chartConfig.legendComponentConfig);
+    },
 
-        // Iterate over all scales/axis orientations and all shapes to find the
-        // corresponding data index for each scale. Set the extent (max/min range
-        // in this data index) for each scale.
-        Ext.iterate(me.scales, function(orient) {
-            var axis = view.getAxes()[orient];
-            var axisDomain;
-            var makeDomainNice = true;
-            var min;
-            var max;
-            var firstStationData = Ext.Object.getValues(me.data);
-
-            if (axis && axis.scale === 'ordinal') {
-                axisDomain = firstStationData.map(function(d) {
-                    return d.key;
+    /**
+     * Handle deletion of bars/groups from the legend.
+     * @param  {Object} legend the legend configuration containing info about
+     * what to delete
+     */
+    handleDelete: function(legend) {
+        var me = this;
+        if (legend.groupIndex) {
+            me.chartConfig.barComponentConfig.data.data =
+                me.chartConfig.barComponentConfig.data.data
+                    .filter(function(group) {
+                        return group.value !== legend.groupIndex;
+                    });
+            me.chartConfig.legendComponentConfig.items =
+                me.chartConfig.legendComponentConfig.items
+                    .filter(function(item) {
+                        return item.groupIndex !== legend.groupIndex;
+                    });
+        }
+        if (legend.groupedIndex) {
+            me.chartConfig.barComponentConfig.data.grouped =
+                me.chartConfig.barComponentConfig.data.grouped
+                    .filter(function(value) {
+                        return value !== legend.groupedIndex;
+                    });
+            Ext.each(me.chartConfig.barComponentConfig.data.data
+                ,function(group) {
+                    group.values = group.values.filter(function(value) {
+                        return value.index !== legend.groupedIndex;
+                    });
                 });
-                me.scales[orient].domain(axisDomain);
-            } else if (axis) {
-                var vals = [];
-                Ext.each(firstStationData, function(a) {
-                    if (a.hidden) {
-                        return;
-                    }
-                    Ext.iterate(a, function(k, v) {
-                        if (k !== 'key' && !Ext.Array.contains(me.disabledSubCategories, k)) {
-                            var val = v.value;
-                            if (me.showUncertainty && v.uncertainty) {
-                                val += v.uncertainty;
-                            }
-                            vals.push(val);
+            me.chartConfig.barComponentConfig.data.data =
+                me.chartConfig.barComponentConfig.data.data
+                    .filter(function(group) {
+                        return group.value !== legend.groupIndex;
+                    });
+            me.chartConfig.legendComponentConfig.items =
+                me.chartConfig.legendComponentConfig.items
+                    .filter(function(item) {
+                        return item.groupedIndex !== legend.groupedIndex;
+                    });
+        }
+        me.drawChart();
+    },
+
+    /**
+     * Handle the color change button.
+     * @param  {Object} legend the corresponding legend config
+     */
+    handleColorChange: function(legend) {
+        var me = this;
+        var color;
+        if (legend.groupedIndex) {
+            Ext.each(me.chartConfig.barComponentConfig.data.data,
+                function(group) {
+                    Ext.each(group.values, function(value) {
+                        if (value.index === legend.groupedIndex) {
+                            color = value.color;
                         }
                     });
                 });
-                var dataRange = d3.extent(vals);
-
-                if (Ext.isDefined(axis.min)) {
-                    min = Koala.util.String.coerce(axis.min);
-                    makeDomainNice = false; // if one was given, don't auto-enhance
-                } else {
-                    min = 0;
-                }
-                if (Ext.isDefined(axis.max)) {
-                    max = Koala.util.String.coerce(axis.max);
-                    makeDomainNice = false; // if one was given, don't auto-enhance
-                } else {
-                    var additionalSpace = dataRange[1]/100*Const.ADDITIONAL_DOMAIN_SPACE;
-                    max = dataRange[1] + additionalSpace;
-                }
-
-                if (Ext.isDefined(min) && Ext.isDefined(max)) {
-                    // We're basically done for this axis, both min and max were
-                    // given. We need to iterate over the data nonetheless, so as to
-                    // extend the minimim and maximum in case of outliers.
-                    axisDomain = [min, max];
-                } else {
-                    axisDomain = [dataRange[0], dataRange[1]];
-                }
-
-                // We have to check if min and max make sense in relation to
-                // the scale; 0 doesn't make sense if scale is logarithmic.
-                if (axis.scale === 'log' &&
-                        (axisDomain[0] === 0 || axisDomain[1] === 0)) {
-                    Ext.log.warn('Correcting min/max value for y-axis as ' +
-                        'logarithmic scales don\'t work with 0');
-                    if (axisDomain[0] === 0) {
-                        axisDomain[0] = 0.00000001;
-                    }
-                    if (axisDomain[1] === 0) {
-                        axisDomain[1] = 0.00000001;
-                    }
-                }
-
-                // Actually set the domain
-                var domain = me.scales[orient].domain(axisDomain);
-                if (makeDomainNice) {
-                    domain.nice();
-                }
-            }
-        });
-    },
-
-    /**
-     * Redraws the shapeGroup containg all shapes (bars in this case).
-     */
-    redrawShapes: function() {
-        var me = this;
-        var Const = Koala.util.ChartConstants;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var shapeGroup = d3.select(viewId + ' .' + Const.CSS_CLASS.SHAPE_GROUP);
-
-        if (shapeGroup.node()) {
-            shapeGroup.node().remove();
-        }
-
-        me.drawShapes();
-    },
-
-    /**
-     *
-     */
-    drawShapes: function() {
-        var me = this;
-        var Const = Koala.util.ChartConstants;
-        var view = me.getView();
-        var selectedStation = view.getSelectedStations()[0];
-        var viewId = '#' + view.getId();
-        var chartSize = me.getChartSize();
-        var labelFunc = view.getLabelFunc() || me.getFallBackIdentity();
-        var barChartProperties = view.getTargetLayer().get('barChartProperties');
-        var groupProp = barChartProperties.groupAttribute || 'end_measure';
-        var keyProp = barChartProperties.xAxisAttribute;
-        if (this.groupPropToggled) {
-            var h = groupProp;
-            groupProp = keyProp;
-            keyProp = h;
-        }
-        var shapeConfig = view.getShape();
-        var xField = 'key';
-        var yField = 'value';
-        var orientX = 'bottom';
-        var orientXGroup = 'bottom_group';
-        var orientY = 'left';
-        var firstStationData = Ext.Object.getValues(me.data);
-
-        var allShapes = d3.select(viewId + ' svg > g')
-            .append('g')
-            .attr('class', Const.CSS_CLASS.SHAPE_GROUP);
-        this.appendBackground(allShapes);
-
-        var groupedShapes = allShapes.selectAll(Const.CSS_CLASS.BAR_GROUP)
-            .data(firstStationData);
-
-        me.scales.bottom = me.scales.bottom.paddingInner(0.1);
-
-        var shapes = groupedShapes.enter().append('g')
-            .filter(function(d) {
-                return !d.hidden;
-            })
-            .attr('transform', function(d) {
-                return 'translate(' + me.scales[orientX](d[xField]) + ',0)';
-            })
-            .attr('class', Const.CSS_CLASS.BAR_GROUP)
-            .attr('id', function(d) {
-                return d[xField];
-            });
-
-        var x1 = d3.scaleBand().padding(0.1);
-        var keys = [];
-        Ext.each(me.data, function(data) {
-            Ext.iterate(data, function(key, val) {
-                if (Ext.isObject(val) && keys.indexOf(key) === -1) {
-                    keys.push(key);
-                }
-            });
-        });
-        x1.domain(keys).rangeRound([0, me.scales[orientX].bandwidth()]);
-        me.scales[orientXGroup] = x1;
-
-        var bars = shapes.selectAll('rect')
-            .data(function(d) {
-                var values = Ext.Object.getValues(d);
-                return Ext.Array.filter(values, function(a) {
-                    return Ext.isObject(a);
-                });
-            })
-            .enter()
-            .append('g')
-            .filter(function(d) {
-                return !Ext.Array.contains(me.disabledSubCategories, d.key);
-            })
-            .attr('class', function(d) {
-                var subCategories = Ext.Object.getKeys(me.colorsByKey);
-                var categoryIndex = subCategories.indexOf(d.key);
-                return Const.CSS_CLASS.BAR + ' subcategory-' + categoryIndex;
-            });
-            // .attr('class', staticMe.CSS_CLASS.BAR);
-
-        bars
-            .append('rect')
-            .filter(function(d) {
-                return me.shapeFilter(d, orientY, yField);
-            })
-            .filter(function(d) {
-                return me.drawBar(d);
-            })
-            .style('fill', function(d) {
-                return d.color;
-            })
-        // .style('opacity', shapeConfig.opacity)
-            .attr('x', function(d) {
-                return x1(d[xField]);
-            })
-            .attr('y', function(d) {
-                return me.scales[orientY](d[yField]);
-            })
-            .attr('width', x1.bandwidth())
-            .attr('height', function(d) {
-                return chartSize[1] - me.scales[orientY](d[yField]);
-            })
-            .on('mouseover', function(data) {
-                var tooltipCmp = me.tooltipCmp;
-                var tooltipTpl = shapeConfig.tooltipTpl;
-                // Only proceed and show tooltip if a tooltipTpl is
-                // given in the chartConfig.
-                if (tooltipTpl) {
-                    var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, {
-                        xAxisAttribute: data[xField],
-                        yAxisAttribute: data[yField]
+            this.showColorPicker(color, function(newColor) {
+                Ext.each(me.chartConfig.barComponentConfig.data.data,
+                    function(group) {
+                        Ext.each(group.values, function(value) {
+                            if (value.index === legend.groupedIndex) {
+                                value.color = newColor;
+                            }
+                        });
                     });
-                    html = Koala.util.String.replaceTemplateStrings(html, data);
-                    html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
-                    tooltipCmp.setHtml(html);
-                    tooltipCmp.setTarget(this);
-                    tooltipCmp.show();
-                }
+                legend.style.fill = newColor;
             });
-
-        // Uncertainty
-        bars
-            .append('path')
-            .attr('class', Const.CSS_CLASS.UNCERTAINTY)
-            .filter(function() {
-                if (me.drawBar) {
-                    return me.showUncertainty;
-                } else {
-                    return false;
-                }
-            })
-            .attr('d', function(d) {
-                if (d.uncertainty && d.uncertainty > 0) {
-                    var lineWidth = x1.bandwidth() / 3;
-                    var xCenter = x1(d.key) + x1.bandwidth() / 2;
-                    var topVal = d[yField] + (d[yField]/100 * d.uncertainty);
-                    var bottomVal = d[yField] - (d[yField]/100 * d.uncertainty);
-
-                    if (bottomVal < 0) {
-                        bottomVal = 0;
-                    }
-
-                    var yTop = me.scales[orientY](topVal);
-                    var yBottom = me.scales[orientY](bottomVal);
-
-                    return 'M' + (xCenter - lineWidth) + ',' + yBottom + 'L' + (xCenter + lineWidth) + ',' + yBottom + 'M' + xCenter + ',' + yBottom +
-                    'L' + xCenter + ',' + yTop + 'M' + (xCenter - lineWidth) + ',' + yTop + 'L' + (xCenter + lineWidth) + ',' + yTop;
-                }
-            })
-            .attr('stroke', function(d, idx) {
-                var extColor = Ext.util.Color.create(me.customColors[idx] || d.color);
-                extColor.darken(0.4);
-                return extColor.toHex();
-            })
-            .attr('stroke-opacity', 0.5)
-            .attr('stroke-width', 2);
-
-        bars.append('text')
-            .filter(function(d) {
-                return me.shapeFilter(d, orientY, yField);
-            })
-            .text(function(d) {
-                return labelFunc(d[yField], d, groupProp, keyProp);
-            })
-            .attr('transform', function(d) {
-                return me.getBarLabelTransform(d, orientXGroup, orientY, xField,
-                    yField, x1.bandwidth(), me.drawBar(d));
-            })
-            .attr('text-anchor', 'middle')
-            // TODO make configurable. Generic from css config
-            .style('font-family', 'sans-serif')
-            .style('font-size', '11px')
-            .style('fill', '#000')
-            .style('font-weight', 'bold')
-            .style('unselectable', 'on');
-
-        if (shapeConfig.rotateBarLabel) {
-            bars.selectAll('text')
-                .filter(function(d) {
-                    return me.shapeFilter(d, orientY, yField);
-                })
-                .attr('transform', function(d) {
-                    var labelTransform = me.getBarLabelTransform(d, orientXGroup,
-                        orientY, xField, yField, x1.bandwidth(), me.drawBar(d));
-                    return labelTransform + ' rotate(-90)';
-                })
-                .attr('dy', function(d, idx, el) {
-                    var textElHeight = el[0].clientHeight;
-                    return textElHeight / 4;
-                })
-                .attr('dx', function(d, idx, el) {
-                    if (shapeConfig.showLabelInsideBar) {
-                        var textElWidth = el[0].clientWidth;
-                        return (textElWidth + 5) * -1;
-                    } else {
-                        return 0;
-                    }
-                })
-                .style('text-anchor', 'start');
         }
     },
 
     /**
-    * checks if drawBarCondition is fulfilled
-    * (this usually means if detectionLimits shall be visualized
-    * returns TRUE / FALSE
-    */
-    drawBar: function(d) {
-        var me = this;
-        var view = me.getView();
-        var drawBarCondition = view.getDrawBarCondition() || function() {
-            return true;
-        };
-        //ToDo implement ToggleButton to show/hide
-        //detectionLimits
-        //check users rights before
-        var userRigths = false;
-        var showDetectionLimitsBtnState = true;
-        if (userRigths && showDetectionLimitsBtnState) {
-            return true;
-        } else {
-            return drawBarCondition(d);
-        }
-    },
-
-    /**
-     * Returns the translate string for a single bar label.
-     *
-     * @param  {Object} d        The current data object to create the label
-     *                           for.
-     * @param  {String} orientX  The x axis orientation.
-     * @param  {String} orientY  The y axis orientation.
-     * @param  {String} xField   The data index field (inside the given data
-     *                           object) for the x axis.
-     * @param  {String} yField   The data index field (inside the given data
-     *                           object) for the y axis.
-     * @param  {Number} barWidth The bar width.
-     * @return {String}          The translate sting.
+     * Recalculates the size of the chart components and sets them in the config.
      */
-    getBarLabelTransform: function(d, orientX, orientY, xField, yField, barWidth, drawBar) {
-        var me = this;
-        var chartSize = me.getChartSize();
-        var translateX = me.scales[orientX](d[xField]) + (barWidth / 2);
-        var translateY;
-        if (drawBar) {
-            translateY = me.scales[orientY](d[yField]) - 5 || chartSize[1];
-        } else {
-            translateY = chartSize[1] -5;
-        }
-
-        return 'translate(' + translateX + ', ' + translateY + ')';
-    },
-
-    /**
-     * Checks if the given chart data object has to be drawn in the chart or not.
-     *
-     * @param  {Object} d The current data object to filter against.
-     * @param  {String} orientY The identifier for the y orientation,
-     *                          typically 'left'.
-     * @param  {String} yField The identifier for the value field, typically
-     *                         'value'.
-     * @return {Boolean} Wheather to filter the data object or not.
-     */
-    shapeFilter: function(d, orientY, yField) {
-        var me = this;
-        var view = me.getView();
-        var axisScale = view.getAxes()[orientY].scale;
-
-        // Skip, if the value is not defined.
-        if (!(Ext.isDefined(d[yField]))) {
-            return false;
-        }
-
-        // Skip, if we have a logarithmic axis scale and a value
-        // of 0.
-        if (axisScale === 'log' && d[yField] === 0) {
-            return false;
-        }
-
-        // If the current value is negative (considering the
-        // current minimum axis value), we must also skip.
-        if ((d[yField] - view.getAxes()[orientY].min) < 0) {
-            return false;
-        }
-
-        // And also skip, if the data object is set to hidden.
-        if (d.hidden) {
-            return false;
-        }
-
-        // All others may pass.
-        return true;
-    },
-
-    /**
-     *
-     */
-    drawLegend: function() {
-        var me = this;
-        var staticMe = Koala.view.component.D3BarChartController;
-        var Const = Koala.util.ChartConstants;
-        var makeTranslate = staticMe.makeTranslate;
-        var CSS = Const.CSS_CLASS;
-        var SVG_DEFS = Const.SVG_DEFS;
-        var view = me.getView();
-        var legendConfig = view.getLegend();
-        var legendMargin = legendConfig.legendMargin;
-
-        var legendEntryHeight = me.legendEntryTargetHeight;
-
-        var legendParent = me.legendSvg;
-        var legend = legendParent
-            .append('g')
-            .attr('class', CSS.SHAPE_GROUP + CSS.SUFFIX_LEGEND)
-            .attr('transform', makeTranslate(legendMargin.left || 10, 0));
-
-        var firstStationData = Ext.Object.getValues(me.data);
-        var curTranslateY;
-
-        var labels = me.scales.bottom.domain();
-        if (!me.groupPropToggled) {
-            labels = me.labels;
-        }
-
-        Ext.each(firstStationData, function(dataObj, idx) {
-            if (!dataObj.key) {
-                return;
-            }
-            var toggleVisibilityFunc = (function() {
-                return function() {
-                    var target = d3.select(d3.event.target);
-                    if (target && target.classed(CSS.DELETE_ICON)) {
-                        // click happened on the delete icon, no visibility
-                        // toggling. The deletion is handled in an own event
-                        // handler
-                        return;
-                    }
-                    var barGroup = me.getBarGroupByKey(dataObj['key']);
-                    me.toggleGroupVisibility(
-                        barGroup, // the real group, containig shapepath & points
-                        d3.select(this) // legend entry
-                    );
-                    var disabledClsName = CSS.DISABLED_CLASS;
-                    d3.select(this).classed(disabledClsName, !dataObj.hidden);
-                    dataObj.hidden = !dataObj.hidden;
-                    me.redrawChart();
-                };
-            }());
-
-            curTranslateY = (idx + 1) * legendEntryHeight;
-            var legendEntry = legend
-                .append('g')
-                .on('click', toggleVisibilityFunc)
-                .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + dataObj.key)
-                .attr('class', function() {
-                    if (dataObj.hidden) {
-                        return CSS.DISABLED_CLASS;
-                    }
-                });
-
-            // background for the concrete legend icon, to widen clickable area.
-            legendEntry.append('path')
-                .attr('d', SVG_DEFS.LEGEND_ICON_BACKGROUND)
-                .style('stroke', 'none')
-                // invisible, but still triggering events
-                .style('fill', 'rgba(0,0,0,0)');
-
-            legendEntry.append('path')
-                .attr('d', SVG_DEFS.LEGEND_ICON_BAR)
-                .style('fill', dataObj.color);
-
-            var nameAsTooltip = labels[idx];
-            // TODO This check doesn't seem to be ideal as it throws a warning
-            // if a none datestring is the subCategory
-            var isTime = (new moment(nameAsTooltip, moment.ISO_8601, true)).isValid();
-
-            nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
-                new moment(nameAsTooltip)) : nameAsTooltip;
-
-            legendEntry.append('text')
-                .text(nameAsTooltip)
-                .attr('text-anchor', 'start')
-                .attr('dy', '0')
-                .attr('dx', '25');
-
-            legendEntry.append('title')
-                .text(nameAsTooltip);
-
-            legendEntry.append('text')
-                // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
-                .text('')
-                .attr('class', CSS.DELETE_ICON)
-                .attr('text-anchor', 'start')
-                .attr('dy', '1')
-                .attr('dx', '160') // TODO Discuss, do we need this dynamically?
-                .on('click', me.generateDeleteCallback(dataObj));
+    updateSize: function() {
+        var config = this.getView().getConfig();
+        var gnosConfig = config.targetLayer.metadata.layerConfig.barChartProperties;
+        var barConfig = this.chartConfig.barComponentConfig;
+        var margin = gnosConfig.chartMargin.split(',');
+        margin = Ext.Array.map(margin, function(w) {
+            return parseInt(w, 10);
         });
+        var chartSize = this.getViewSize();
+        var mrgn = this.getView().getChartMargin();
+        chartSize[0] = chartSize[0] - parseInt(mrgn.left, 10) - parseInt(mrgn.right, 10) - parseInt(gnosConfig.legendEntryMaxLength, 10);
+        chartSize[1] = chartSize[1] - parseInt(mrgn.top, 10) - parseInt(mrgn.bottom, 10);
 
-        var subCategories = me.scales.bottom_group.domain();
-        Ext.each(subCategories, function(subCategory, idx) {
-            var shape = {};
-            shape.config = firstStationData[0][subCategory];
-            var toggleVisibilityFunc = (function() {
-                return function() {
-                    var target = d3.select(d3.event.target);
-                    if (target && (target.classed(CSS.DELETE_ICON) ||
-                        target.classed(CSS.COLOR_ICON))) {
-                        // click happened on the delete icon, no visibility
-                        // toggling. The deletion is handled in an own event
-                        // handler
-                        return;
-                    }
-                    var selector = me.getSubCategorySelector(subCategory);
-                    var group = me.containerSvg.selectAll(selector);
-                    me.toggleGroupVisibility(
-                        group, // the real group, containig shapepath & points
-                        d3.select(this) // legend entry
-                    );
+        // calculate the size
+        var maxCount = barConfig.data.grouped.length;
+        this.chartConfig.chartRendererConfig.size[0] =
+            this.getView().getBarWidth() * maxCount * barConfig.data.data.length + margin[3];
 
-                    if (Ext.Array.contains(me.disabledSubCategories, subCategory)) {
-                        Ext.Array.remove(me.disabledSubCategories, subCategory);
-                    } else {
-                        me.disabledSubCategories.push(subCategory);
-                    }
-                    me.redrawChart();
-                };
-            }());
+        barConfig.size[0] = this.chartConfig.chartRendererConfig.size[0] - margin[3];
 
-            curTranslateY = (firstStationData.length * legendEntryHeight) + (idx + 1) * legendEntryHeight;
-            var legendEntry = legend
-                .append('g')
-                .on('click', toggleVisibilityFunc)
-                .attr('transform', staticMe.makeTranslate(0, curTranslateY))
-                .attr('idx', CSS.PREFIX_IDX_LEGEND_GROUP + subCategory)
-                .attr('class', function() {
-                    if (Ext.Array.contains(me.disabledSubCategories, subCategory) ) {
-                        return CSS.DISABLED_CLASS;
-                    }
-                });
-
-            // background for the concrete legend icon, to widen clickable area.
-            legendEntry.append('path')
-                .attr('d', SVG_DEFS.LEGEND_ICON_BACKGROUND)
-                .style('stroke', 'none')
-                .style('fill', me.customColors[idx] || me.colorsByKey[subCategory]);
-
-            // TODO This check doesn't seem to be ideal as it throws a warning
-            // if a none datestring is the subCategory
-            var label = me.groupPropToggled ? me.labels[idx] : subCategory;
-            var isTime = (new moment(label, moment.ISO_8601, true)).isValid();
-
-            var nameAsTooltip = isTime ? Koala.util.Date.getFormattedDate(
-                new moment(label)) : label;
-
-            legendEntry.append('text')
-                .text(nameAsTooltip)
-                .attr('text-anchor', 'start')
-                .attr('dy', '0')
-                .attr('dx', '25');
-
-            legendEntry.append('title')
-                .text(nameAsTooltip);
-
-            legendEntry.append('text')
-                // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
-                .text('')
-                .attr('class', CSS.DELETE_ICON)
-                .attr('text-anchor', 'start')
-                .attr('dy', '1')
-                .attr('dx', '160')
-                .on('click', me.deleteSubCategory.bind(me, subCategory));
-
-            if (Ext.isClassic) {
-                legendEntry.append('text')
-                    // fa-paint-brush from FontAwesome, see http://fontawesome.io/cheatsheet/
-                    .text('\uf1fc')
-                    .attr('class', CSS.COLOR_ICON)
-                    .attr('text-anchor', 'start')
-                    .attr('dy', '1')
-                    .attr('dx', '140') // TODO Discuss, do we need this dynamically?
-                    .on('click', me.generateColorCallback(shape, idx));
-            }
-        });
-        me.wrapAndResizeLegend();
-    },
-
-    /**
-     * This returns the selector for a subcategory as it is needed for d3-select.
-     *
-     * @param {String} subCategory The real subcategory.
-     * @return {String} The selector.
-     */
-    getSubCategorySelector: function(subCategory) {
-        var me = this;
-        var subCategories = me.scales.bottom_group.domain();
-        var categoryIndex = subCategories.indexOf(subCategory);
-        return '.subcategory-' + categoryIndex;
-    },
-
-    /**
-     * Removes a subCategory from the chart, dataObj and Legend.
-     *
-     * @param {String} subCategory The real subcategory.
-     */
-    deleteSubCategory: function(subCategory) {
-        var me = this;
-        // Data
-        var firstStationData = Ext.Object.getValues(me.data);
-        Ext.each(firstStationData, function(category) {
-            if (category[subCategory]) {
-                delete category[subCategory];
-            }
-        });
-
-        // Shape
-        var selector = me.getSubCategorySelector(subCategory);
-        var elements = me.containerSvg.selectAll(selector);
-        elements.remove();
-
-        // Legend
-        me.deleteLegendEntry(subCategory);
-
-        this.redrawChart();
-        this.redrawLegend();
-    },
-
-    /**
-     *
-     */
-    deleteEverything: function(dataObj) {
-        var me = this;
-        // Shape
-        me.deleteBarGroup(dataObj.key);
-        // Data
-        me.deleteData(dataObj.key);
-        Ext.Array.remove(me.data, dataObj);
-        // Legend
-        me.deleteLegendEntry(dataObj.key);
-        me.redrawChart();
-        me.redrawLegend();
-    },
-
-    /**
-     *
-     */
-    deleteData: function(dataKey) {
-        var me = this;
-        var firstStationData = Ext.Object.getValues(me.data);
-        var dataObjToDelete = Ext.Array.findBy(firstStationData, function(dataObj) {
-            return dataObj.key === dataKey;
-        });
-        Ext.Array.remove(firstStationData, dataObjToDelete);
-    },
-
-    /**
-     * Removes the barGroup series specified by the given dataKey.
-     */
-    deleteBarGroup: function(dataKey) {
-        var barGroup = this.getBarGroupByKey(dataKey);
-        if (barGroup.node()) {
-            barGroup.node().remove();
+        // set the size
+        // extra 15 for the horizontal scroll bar
+        barConfig.size[1] = chartSize[1] - 15;
+        barConfig.position = [0, 0];
+        if (this.chartConfig.legendComponentConfig) {
+            this.chartConfig.legendComponentConfig.position = [0, 0];
         }
+        // extra 15 for the horizontal scroll bar
+        this.chartConfig.chartRendererConfig.size = [barConfig.size[0] + margin[3], chartSize[1] - 15];
     },
 
     /**
-     *
+     * Update the chart configuration with the new size and redraw.
      */
-    getBarGroupByKey: function(key) {
-        var me = this;
-        var Const = Koala.util.ChartConstants;
-        var CSS = Const.CSS_CLASS;
-        var view = me.getView();
-        var viewId = '#' + view.getId();
-        var selector = viewId + ' svg g.' + CSS.SHAPE_GROUP +
-            ' g[id="' + key + '"]';
-        return d3.select(selector);
+    handleResize: function() {
+        if (!this.chartConfig) {
+            return;
+        }
+        this.drawChart();
     },
 
     /**
@@ -1045,16 +567,9 @@ Ext.define('Koala.view.component.D3BarChartController', {
      * @param {boolean} visible Wheather to show the uncertainty or not.
      */
     setUncertaintyVisibility: function(visible) {
-        var me = this;
-        var Const = Koala.util.ChartConstants;
-        var CSS = Const.CSS_CLASS;
-        var group = me.containerSvg.selectAll('.' + CSS.UNCERTAINTY);
-        var hideClsName = CSS.HIDDEN_CLASS;
-        if (group) {
-            group.classed(hideClsName, !visible);
-            me.showUncertainty = visible;
-            me.redrawChart();
-        }
+        var barComponent = this.chartConfig.chartRendererConfig.components[0];
+        barComponent.setUncertaintyVisible(visible);
+        this.showUncertainty = visible;
     },
 
     toggleUncertainty: function() {
