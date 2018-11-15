@@ -43,6 +43,51 @@ Ext.define('Koala.util.Import', {
                     Koala.util.WFST.transact(layer, wfstInserts, wfstUpdates,
                         wfstDeletes, wfstSuccessCallback, wfstFailureCallback);
                 }
+                var sld = layer.get('SLD');
+                var uuid = layer.metadata.id;
+                var config = Koala.util.AppContext.getAppContext();
+                config = config.data.merge.import[role];
+                this.updateStyle(uuid, sld, config);
+            }
+        },
+
+        /**
+         * Insert or update the style for a layer.
+         * @param {String} uuid the layer uuid
+         * @param {String} sld the sld string
+         * @param {Object} config context object with urls
+         */
+        updateStyle: function(uuid, sld, config) {
+            if (sld) {
+                var url = config.baseUrl + 'rest/styles';
+
+                var update = function() {
+                    Ext.Ajax.request({
+                        url: url + '/' + uuid,
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/vnd.ogc.sld+xml'
+                        },
+                        xmlData: sld
+                    });
+                };
+
+                var insert = function() {
+                    Ext.Ajax.request({
+                        url: url,
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/xml'
+                        },
+                        xmlData: '<style><name>' + uuid + '</name><filename>' + uuid + '.sld</filename></style>'
+                    }).then(update);
+                };
+
+                Ext.Ajax.request({
+                    url: url + '/' + uuid + '.sld',
+                    method: 'GET'
+                })
+                    .then(update, insert);
             }
         },
 
@@ -178,15 +223,31 @@ Ext.define('Koala.util.Import', {
                     role
                 ))
                 .then(this.readdLayer.bind(this, layer))
+                .then(this.importStyle.bind(this, layer))
                 .then(this.setPersistedFlag.bind(this, layer))
                 .then(this.closeFeatureGrid.bind(this));
         },
 
+        /**
+         * Import the sld style for the layer.
+         * @param {ol.layer.Vector} layer the layer containing the sld to save
+         * @param {Object} context the context object with the new uuid
+         */
+        importStyle: function(layer, context) {
+            this.updateStyle(context.newUuid, layer.get('SLD'), context.config);
+        },
+
+        /**
+         * Remove the old cloned layer and add its persisted pendant.
+         * @param {ol.layer.Vector} layer the old layer whose persisted replacement to add
+         * @param {Object} context the context object with the new uuid
+         */
         readdLayer: function(layer, context) {
             var map = Ext.ComponentQuery.query('basigx-component-map')[0]
                 .getMap();
             map.removeLayer(layer);
             Koala.util.Layer.addLayerByUuid(context.newUuid);
+            return context;
         },
 
         /**
