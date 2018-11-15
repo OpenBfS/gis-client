@@ -135,7 +135,8 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             style: style,
             data: data,
             previewProps: { showOsmBackground: false },
-            onStyleChange: this.onStyleChange.bind(this)
+            onStyleChange: this.onStyleChange.bind(this),
+            compact: true
         });
         var localeProvider = React.createElement(GeoStyler.LocaleProvider,
             { locale: GeoStyler.locale.de_DE },

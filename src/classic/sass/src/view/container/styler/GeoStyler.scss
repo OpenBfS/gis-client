@@ -2,10 +2,18 @@
     padding: 8px;
 }
 
-.editor-window {
+.symbolizer-editor-window,
+.filter-editor-window,
+.gs-modal-color,
+.gs-modal-size,
+.gs-modal-opacity {
     z-index: 19010;
 }
 
 .ant-select-dropdown {
     z-index: 19015;
+}
+
+.ant-menu-submenu.ant-menu-submenu-popup {
+    z-index: 19020;
 }
