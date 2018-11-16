@@ -1092,6 +1092,7 @@ Ext.define('Koala.util.Layer', {
 
             var layer = new LayerClass(layerConfig);
             layer.metadata = metadata;
+            Koala.util.Layer.getVectorLayerStyle(layer);
 
             if (metadata.layerConfig.olProperties.printLayer) {
                 var printUuid = metadata.layerConfig.olProperties.printLayer;
@@ -1105,6 +1106,36 @@ Ext.define('Koala.util.Layer', {
                 });
             }
             return layer;
+        },
+
+        getVectorLayerStyle: function(layer) {
+            if (layer.get('persisted') ||
+                layer.metadata.layerConfig.olProperties.persisted) {
+                var configs = Koala.util.AppContext.getAppContext().data.merge.import;
+                var url;
+                Ext.iterate(configs, function(key, value) {
+                    if (value.workspace === layer.metadata.layerConfig.olProperties.workspace) {
+                        url = value.baseUrl;
+                    }
+                });
+                var uuid = layer.metadata.id;
+
+                Ext.Ajax.request({
+                    url: url + 'rest/styles/' + uuid + '.sld',
+                    method: 'GET'
+                })
+                    .then(function(response) {
+                        var parser = new GeoStylerSLDParser.SldStyleParser();
+                        var style = parser.readStyle(response.responseText);
+                        var olParser = new GeoStylerOpenlayersParser.OlStyleParser();
+                        style.then(function(parsed) {
+                            var olStyle = olParser.writeStyle(parsed);
+                            olStyle.then(function(converted) {
+                                layer.setStyle(converted);
+                            });
+                        });
+                    });
+            }
         },
 
         /**
