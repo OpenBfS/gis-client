@@ -34,7 +34,7 @@ Ext.define('Koala.view.component.D3BarChart',{
     listeners: {
         boxready: 'onBoxReady',
         painted: 'onPainted',
-        resize: 'redrawChart'
+        resize: 'handleResize'
     },
 
     name: null,
@@ -47,9 +47,6 @@ Ext.define('Koala.view.component.D3BarChart',{
         labelFunc: null,
         drawBarCondition: null,
         barWidth: null,
-        chartFieldSequence: null,
-        chartFieldTitleSequence: null,
-        chartFieldDefaultsSequence: null,
         grid: {
             show: false,
             color: null,
@@ -141,9 +138,6 @@ Ext.define('Koala.view.component.D3BarChart',{
                 labelFunc: Koala.util.String.coerce(chartConfig.labelFunc),
                 drawBarCondition: Koala.util.String.coerce(chartConfig.drawBarCondition),
                 barWidth: Koala.util.String.coerce(chartConfig.barWidth) || 10,
-                chartFieldSequence: chartConfig.chartFieldSequence,
-                chartFieldTitleSequence: chartConfig.chartFieldTitleSequence,
-                chartFieldDefaultsSequence: chartConfig.chartFieldDefaultsSequence,
                 shape: {
                     type: DEFAULTS.LEFT_AXIS_TYPE,
                     curve: DEFAULTS.LEFT_AXIS_CURVE,

@@ -28,6 +28,7 @@
         "TextDecoder": true,
         "Papa": true,
         "jsts": true,
+        "D3Util": true,
         "GeoStyler": false,
         "GeoStylerGeoJsonParser": false,
         "GeoStylerOpenlayersParser": false,

@@ -843,16 +843,16 @@ Beispiel:
 ```
 [{
       "attribute": "validated",
-      "operator": "eq",`
-      "value": true,`
-      "style": {`
-          "type": "circle",`
-          "radius": "5"`
+      "operator": "eq",
+      "value": true,
+      "style": {
+          "type": "circle",
+          "radius": "5"
       }`
   }, {`
-      "attribute": "value",`
+      "attribute": "value",
       "operator": "eq",
-      "value": 0.09,
+      "value": 0.08,
       "style": {
           "type": "circle",
           "radius": "10"
@@ -860,7 +860,7 @@ Beispiel:
   }, {
       "attribute": "value",
       "operator": "between",
-      "value": "0.09,0.1",
+      "value": "0.09,0.01",
       "style": {
           "type": "star",
           "sides": 5,
@@ -869,7 +869,7 @@ Beispiel:
   }, {
       "attribute": "value",
       "operator": "gt",
-      "value": 0.1,
+      "value": 0.02,
       "style": {
           "type": "rect",
           "width": 15,
@@ -976,8 +976,8 @@ Wenn 'between' verwendet werden soll, muss der 'value' als kommasperarierter Str
   |---------------------:|:----|
   | Erlaubt Wertemenge   | Zahl (> 0)  |
   | Obligatorisch        | &#10799; |
-  | Default-Wert         |  |
-  | Beispiel             |  |
+  | Default-Wert         | 20 |
+  | Beispiel             | 20 |
 
 **seriesTitleTpl**
 
@@ -1045,6 +1045,17 @@ eckigen Klammern werden durch Attribute des Features ersetzt.
   | Obligatorisch        | &#10799; |
   | Default-Wert         | 6 |
   | Beispiel             | 10  |
+
+**title**
+
+    Der Titel des Charts.
+
+    | Typ | gco:CharacterString  |
+    |---------------------:|:----|
+    | Erlaubt Wertemenge   | String |
+    | Obligatorisch        | &#10799; |
+    | Default-Wert         |   |
+    | Beispiel             | Toller Chart  |
 
 **titleColor**
 
@@ -1142,9 +1153,9 @@ Min/Max-Wert der Y-Achse. Wenn angegeben, müssen min und max beide konfiguriert
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
-| Erlaubt Wertemenge   | Zahl |
+| Erlaubt Wertemenge   | Zahl oder undefined |
 | Obligatorisch        | &#10799; |
-| Default-Wert         | berechnet aus Daten |
+| Default-Wert         | berechnet aus Daten wenn undefined|
 | Beispiel             | 0.1 |
 
 **yAxisFormat**
@@ -1181,6 +1192,17 @@ https://github.com/d3/d3/blob/master/API.md#scales-d3-scale
 | Default-Wert         | linear |
 | Beispiel             | log |
 
+**xAxisMin/Max**
+
+Min/Max-Wert der X-Achse. Wenn angegeben, müssen min und max beide konfiguriert werden.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Zahl oder undefined |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | berechnet aus Daten wenn undefined|
+| Beispiel             | 0.1 |
+
 **xAxisAttribute**
 
 Das Attribut, dessen Wert auf der X-Achse abgezeichnet wird.
@@ -1205,7 +1227,7 @@ Das Attribut, dessen Wert auf der Y-Achse abgezeichnet wird.
 
 **rotateXAxisLabel**
 
-Sollen die Label an der X-Achse um 45 Grad rotiert werden?
+Sollen die Label an der X-Achse um -55 Grad rotiert werden?
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
@@ -1214,7 +1236,7 @@ Sollen die Label an der X-Achse um 45 Grad rotiert werden?
 | Default-Wert         | false |
 | Beispiel             | true |
 
-**chartWidth
+**chartWidth**
 
 Breite des Charts in Pixel
 
@@ -1225,7 +1247,7 @@ Breite des Charts in Pixel
 | Default-Wert         |  |
 | Beispiel             | 500 |
 
-**chartHeight
+**chartHeight**
 
 Höhe des Charts in Pixel
 
@@ -1295,17 +1317,6 @@ Das Darstellungsformat der Kurve.
 | Default-Wert         | line |
 | Beispiel             | area |
 
-**drawPointCondition**
-
-JavaScript-Funktion, die entscheidet, ob ein Punkt in der Zeitreihe gezeichnet wird oder nicht
-
-| Typ | gco:CharacterString  |
-|---------------------:|:----|
-| Erlaubt Wertemenge   | eval:(anyValidFunction) returning boolean|
-| Obligatorisch        | &#10799; |
-| Default-Wert         |  |
-| Beispiel             | eval:(function(){return function(obj){ if (obj.detection_limit==='<') { return false; } else { return true; } } }()) |
-
 **showTimeseriesGrid**
 
 Falls true, wird ein Tab mit den Messdaten in einem Ext.grid angezeigt.
@@ -1352,39 +1363,6 @@ Initiale Breite der Säulen in Pixel.
 | Obligatorisch        | &#10799; |
 | Default-Wert         | 10 |
 | Beispiel             | 20 |
-
-**chartFieldSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
-
-Liste der Attributspalten mit Werten für das Chart
-
-| Typ | gco:CharacterString  |
-|---------------------:|:----|
-| Erlaubt Wertemenge   | Komma separierte Liste von Attributname |
-| Obligatorisch        | &#10003; |
-| Default-Wert         |  |
-| Beispiel             |  |
-
-**chartFieldDefaultsSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
-
-Der Wert der verwendet werden soll, wenn kein Wert für das Attribut existiert.
-
-| Typ | gco:CharacterString  |
-|---------------------:|:----|
-| Erlaubt Wertemenge   | Komma separierte Liste von Defaultwerten |
-| Obligatorisch        | &#10003; |
-| Default-Wert         |  |
-| Beispiel             |  |
-
-**chartFieldTitleSequence** // TODO Fällt nach Änderung der Datenstruktur vermutlich weg.
-
-Lesbare Variante, statt technischem Attributwert.
-
-| Typ | gco:CharacterString  |
-|---------------------:|:----|
-| Erlaubt Wertemenge   | Komma separierte Liste von Attributname  |
-| Obligatorisch        | &#10799; |
-| Default-Wert         | chartFieldSequence |
-| Beispiel             |  |
 
 **colorMapping**
 
