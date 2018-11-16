@@ -89,7 +89,7 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             if (koalaStyle) {
                 resolve(koalaStyle);
             } else {
-                var olParser = new GeoStylerOpenlayersParser.OlStyleParser();
+                var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
                 olParser.readStyle(style)
                     .then(function(geostylerStyle) {
                         resolve(geostylerStyle);

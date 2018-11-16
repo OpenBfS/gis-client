@@ -1127,7 +1127,7 @@ Ext.define('Koala.util.Layer', {
                     .then(function(response) {
                         var parser = new GeoStylerSLDParser.SldStyleParser();
                         var style = parser.readStyle(response.responseText);
-                        var olParser = new GeoStylerOpenlayersParser.OlStyleParser();
+                        var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
                         style.then(function(parsed) {
                             var olStyle = olParser.writeStyle(parsed);
                             olStyle.then(function(converted) {
