@@ -78,7 +78,6 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
      */
     toggleScale: function() {
         var chart = this.getView().down('d3-chart');
-        var leftAxis = chart.getAxes().left;
 
         var attachedSeries = chart.shapes[0].attachedSeries;
         if (attachedSeries) {
@@ -89,10 +88,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
                 this.getViewModel().get('axisText')
             );
         } else {
-            Koala.util.ChartAxes.toggleScaleForAxis(
-                leftAxis,
-                chart.getController()
-            );
+            chart.getController().toggleScale();
         }
     },
 
