@@ -408,7 +408,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
 
         if (addSeriesCombo) {
             var idx = rightColumnWrapper.items.length - 2;
-            rightColumnWrapper.items.splice(idx, 0, addSeriesCombo)
+            rightColumnWrapper.items.splice(idx, 0, addSeriesCombo);
         }
 
         var panel = {
