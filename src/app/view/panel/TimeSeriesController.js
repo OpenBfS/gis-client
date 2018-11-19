@@ -204,6 +204,9 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
         });
         var combo = {
             xtype: 'combo',
+            cls: 'timeseries-menu-item',
+            width: '100%',
+            margin: '0 5px 0 0',
             name: 'add-series-combo-' + olLayer.get('name'),
             store: store,
             displayField: 'dspName',
@@ -311,7 +314,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
 
         var rightColumnWrapper = {
             xtype: 'panel',
-            header: false,
+            cls: 'TimeseriesrightColumnWrapper',
             layout: {
                 type: 'vbox',
                 align: 'middle',
@@ -319,12 +322,15 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
             },
             bodyPadding: 5,
             height: '100%',
+            scrollable: true,
             width: 180,
             items: [{
                 xtype: 'button',
+                cls: 'timeseries-menu-item',
                 bind: {
                     text: '{chartPrint}'
                 },
+                width: '100%',
                 glyph: 'xf039@FontAwesome',
                 iconAlign: 'right',
                 handler: me.onPrintChartClicked,
@@ -332,64 +338,77 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
                     boxready: Koala.util.AppContext.generateCheckToolVisibility('irixPrintBtn')
                 },
                 scope: me,
-                margin: '0 0 10px 0'
+                margin: '0 5px 10px 0'
+            }, {
+                xtype: 'button',
+                cls: 'timeseries-menu-item',
+                bind: {
+                    text: '{exportAsImageBtnText}'
+                },
+                width: '100%',
+                handler: me.onExportAsImageClicked,
+                scope: me,
+                margin: '0 5px 10px 0'
+            }, {
+                xtype: 'button',
+                cls: 'timeseries-menu-item',
+                bind: {
+                    text: '{toggleDataBelowIdentificationThreshold}'
+                },
+                width: '100%',
+                handler: me.toggleDataBelowIdentificationThreshold,
+                enableToggle: true,
+                hidden: !maySeeIdThresholdButton,
+                scope: me,
+                margin: '0 5px 10px 0'
+            }, {
+                xtype: 'button',
+                cls: 'timeseries-menu-item',
+                name: 'btn-toggle-scale',
+                enableToggle: true,
+                bind: {
+                    text: '{toggleScaleBtnText}'
+                },
+                width: '100%',
+                handler: this.toggleScale.bind(this),
+                margin: '0 5px 10px 0'
+            }, {
+                xtype: 'button',
+                cls: 'timeseries-menu-item',
+                bind: {
+                    text: '{undoBtnText}'
+                },
+                width: '100%',
+                hidden: !Koala.util.String.coerce(chartConfig.allowZoom),
+                handler: me.onUndoButtonClicked,
+                scope: me,
+                margin: '0 5px 10px 0'
             }, {
                 xtype: 'checkbox',
+                cls: 'timeseries-menu-item',
                 name: 'autorefresh-checkbox',
                 checked: false,
                 bind: {
                     boxLabel: '{autorefresh}'
-                }
+                },
+                width: '100%'
             }, {
                 xtype: 'combo',
+                cls: 'timeseries-menu-item',
                 name: 'autorefresh-combo',
                 displayField: 'title',
                 valueField: 'value',
                 store: autorefreshStore,
                 bind: {
                     emptyText: '{autorefreshOptions}'
-                }
-            }, {
-                xtype: 'button',
-                bind: {
-                    text: '{exportAsImageBtnText}'
                 },
-                handler: me.onExportAsImageClicked,
-                scope: me,
-                margin: '0 0 10px 0'
-            }, {
-                xtype: 'button',
-                bind: {
-                    text: '{toggleDataBelowIdentificationThreshold}'
-                },
-                handler: me.toggleDataBelowIdentificationThreshold,
-                enableToggle: true,
-                hidden: !maySeeIdThresholdButton,
-                scope: me,
-                margin: '0 0 10px 0'
-            }, {
-                xtype: 'button',
-                name: 'btn-toggle-scale',
-                enableToggle: true,
-                bind: {
-                    text: '{toggleScaleBtnText}'
-                },
-                handler: this.toggleScale.bind(this),
-                margin: '0 10px 10px 0'
-            }, {
-                xtype: 'button',
-                bind: {
-                    text: '{undoBtnText}'
-                },
-                hidden: !Koala.util.String.coerce(chartConfig.allowZoom),
-                handler: me.onUndoButtonClicked,
-                scope: me,
-                margin: '0 0 10px 0'
+                width: '100%'
             }]
         };
 
         if (addSeriesCombo) {
-            rightColumnWrapper.items.push(addSeriesCombo);
+            var idx = rightColumnWrapper.items.length - 2;
+            rightColumnWrapper.items.splice(idx, 0, addSeriesCombo);
         }
 
         var panel = {

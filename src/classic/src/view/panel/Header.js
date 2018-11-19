@@ -45,7 +45,6 @@ Ext.define('Koala.view.panel.Header', {
     padding: '0 5px',
 
     cls: 'basigx-header',
-    title: 'title',
 
     items: [{
         xtype: 'title',
