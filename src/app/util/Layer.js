@@ -1625,6 +1625,8 @@ Ext.define('Koala.util.Layer', {
 
         adjustMetadataFiltersToStandardLocations: function(metadata, filters) {
             var staticMe = Koala.util.Layer;
+            // reset cql filter before combining them below
+            metadata.layerConfig.olProperties.param_cql_filter = '';
             Ext.each(filters, function(filter) {
                 if (!filter || !staticMe.isStandardLocationFilter(filter)) {
                     // any non-standard, e.g. viewparam filters, are ignored.
@@ -1959,15 +1961,12 @@ Ext.define('Koala.util.Layer', {
             var olProps = metadata.layerConfig.olProperties;
             var cqlKey = 'param_cql_filter';
             var stringified = staticMe.stringifyValueFilter(filter);
-            if (cqlKey in olProps) {
-                Ext.log.info('Overwriting existing CQL Filter in URL.' +
-                    ' Is this intentional? If you changed a filter, the' +
-                    ' answer is likely yes, else it might lead to ' +
-                    ' misbehaviour of this layer.');
-                Ext.log.info('Existing value is ' + olProps[cqlKey]);
-                Ext.log.info('New value is ' + stringified);
+            // combine multiple filters with AND
+            if (olProps[cqlKey] !== '') {
+                olProps[cqlKey] = stringified + ' AND ' + olProps[cqlKey];
+            } else {
+                olProps[cqlKey] = stringified;
             }
-            olProps[cqlKey] = stringified;
 
             metadata.layerConfig.olProperties = olProps;
             return metadata;
