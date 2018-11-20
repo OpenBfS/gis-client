@@ -52,7 +52,6 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var style = viewModel.get('style');
         layer.set('koalaStyle', style);
         var sldParser = new GeoStylerSLDParser.SldStyleParser();
-        style = null;
         sldParser.writeStyle(style)
             .then(function(sld) {
                 layer.set('SLD', sld);
