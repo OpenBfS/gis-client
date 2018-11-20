@@ -202,6 +202,14 @@
             }
         }
     },
+    "Koala.view.container.styler.GeoStyler": {
+        "config": {
+            "data": {
+                "saveStyle": "Stil speichern",
+                "styleNotConvertedMsg": "Der Stil konnte nicht konvertiert werden."
+            }
+        }
+    },
     "Koala.view.container.DrawToolsContainer": {
         "config": {
             "data": {
