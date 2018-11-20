@@ -274,7 +274,14 @@ Ext.define('Koala.view.panel.FeatureGrid', {
 
                     if (me.layer.get('persisted') ||
                             me.layer.metadata.layerConfig.olProperties.persisted) {
-                        performSave();
+                        var configs = Koala.util.AppContext.getAppContext().data.merge.import;
+                        var roleToSave;
+                        Ext.iterate(configs, function(key, value) {
+                            if (value.workspace === me.layer.metadata.layerConfig.olProperties.workspace) {
+                                roleToSave = key;
+                            }
+                        });
+                        performSave(roleToSave);
                         return;
                     }
                     var roles = Koala.util.AppContext.getAppContext()

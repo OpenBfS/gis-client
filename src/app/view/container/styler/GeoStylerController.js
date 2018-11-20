@@ -51,10 +51,22 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var layer = viewModel.get('layer');
         var style = viewModel.get('style');
         layer.set('koalaStyle', style);
+        var sldParser = new GeoStylerSLDParser.SldStyleParser();
+        style = null;
+        sldParser.writeStyle(style)
+            .then(function(sld) {
+                layer.set('SLD', sld);
+            })
+            .catch(function() {
+                Ext.Msg.alert(viewModel.get('saveStyle'), viewModel.get('styleNotConvertedMsg'));
+            });
         var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
         olParser.writeStyle(style)
             .then(function(olStyle) {
                 layer.setStyle(olStyle);
+            })
+            .catch(function() {
+                Ext.Msg.alert(viewModel.get('saveStyle'), viewModel.get('styleNotConvertedMsg'));
             });
     }
 });

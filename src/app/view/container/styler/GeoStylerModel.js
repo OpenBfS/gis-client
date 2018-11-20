@@ -35,7 +35,9 @@ Ext.define('Koala.view.container.styler.GeoStylerModel', {
         titlePrefix: 'Styling ',
         btnTextReloadCurrentStyle: 'Reset to original style',
         btnTextApplyAndSave: 'Save style',
-        dspLayerName: ''
+        dspLayerName: '',
+        saveStyle: '',
+        styleNotConvertedMsg: ''
     }
 
 });

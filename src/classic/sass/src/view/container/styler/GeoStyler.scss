@@ -6,6 +6,7 @@
 .filter-editor-window,
 .gs-modal-color,
 .gs-modal-size,
+.rule-generator-window,
 .gs-modal-opacity {
     z-index: 19010;
 }
@@ -16,4 +17,8 @@
 
 .ant-menu-submenu.ant-menu-submenu-popup {
     z-index: 19020;
+}
+
+.rule-generator-window {
+    background: white;
 }

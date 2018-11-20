@@ -27,19 +27,19 @@
   "author": "terrestris GmbH & Co. KG <info@terrestris.de>",
   "license": "GPL-3.0",
   "devDependencies": {
-    "eslint": "4.16.0",
+    "eslint": "5.9.0",
     "expect.js": "0.3.1",
-    "express": "4.16.2",
+    "express": "4.16.4",
     "istanbul": "0.4.5",
     "istanbul-middleware": "0.2.2",
     "jsdoc": "3.5.5",
     "jsduck": "1.1.2",
     "karma": "2.0.0",
     "karma-chrome-launcher": "2.2.0",
-    "karma-coverage": "1.1.1",
+    "karma-coverage": "1.1.2",
     "karma-coverage-istanbul-reporter": "1.3.0",
     "karma-expect": "1.1.3",
-    "karma-firefox-launcher": "1.0.1",
+    "karma-firefox-launcher": "1.1.0",
     "karma-mocha": "1.3.0",
     "karma-mocha-reporter": "2.2.5",
     "karma-phantomjs-launcher": "1.0.4",
@@ -48,7 +48,7 @@
     "mocha-phantomjs": "4.1.0",
     "npm-run-all": "4.1.2",
     "rimraf": "2.6.2",
-    "serve-static": "1.13.1",
+    "serve-static": "1.13.2",
     "sinon": "4.1.2"
   },
   "bugs": {
@@ -60,11 +60,12 @@
     "test": "test"
   },
   "dependencies": {
-    "antd": "3.9.3",
-    "geostyler": "0.17.1",
-    "geostyler-geojson-parser": "0.4.3",
-    "geostyler-openlayers-parser": "0.18.1",
-    "react": "16.5.2",
-    "react-dom": "16.5.2"
+    "antd": "3.10.7",
+    "geostyler": "0.20.0",
+    "geostyler-geojson-parser": "0.4.6",
+    "geostyler-openlayers-parser": "0.19.0",
+    "geostyler-sld-parser": "0.17.3",
+    "react": "16.6.3",
+    "react-dom": "16.6.3"
   }
 }
