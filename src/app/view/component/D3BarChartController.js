@@ -525,21 +525,17 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var config = this.getView().getConfig();
         var gnosConfig = config.targetLayer.metadata.layerConfig.barChartProperties;
         var barConfig = this.chartConfig.barComponentConfig;
-        var margin = gnosConfig.chartMargin.split(',');
-        margin = Ext.Array.map(margin, function(w) {
-            return parseInt(w, 10);
-        });
         var chartSize = this.getViewSize();
-        var mrgn = this.getView().getChartMargin();
-        chartSize[0] = chartSize[0] - parseInt(mrgn.left, 10) - parseInt(mrgn.right, 10) - parseInt(gnosConfig.legendEntryMaxLength, 10);
-        chartSize[1] = chartSize[1] - parseInt(mrgn.top, 10) - parseInt(mrgn.bottom, 10);
+        var margin = this.getView().getChartMargin();
+        chartSize[0] = chartSize[0] - parseInt(gnosConfig.legendEntryMaxLength, 10) - parseInt(margin.left, 10) - parseInt(margin.right, 10);
+        chartSize[1] = chartSize[1] - parseInt(margin.top, 10) - parseInt(margin.bottom, 10);
 
         // calculate the size
         var maxCount = barConfig.data.grouped.length;
         this.chartConfig.chartRendererConfig.size[0] =
-            this.getView().getBarWidth() * maxCount * barConfig.data.data.length + margin[3];
+            this.getView().getBarWidth() * maxCount * barConfig.data.data.length;
 
-        barConfig.size[0] = this.chartConfig.chartRendererConfig.size[0] - margin[3];
+        barConfig.size[0] = this.chartConfig.chartRendererConfig.size[0];
 
         // set the size
         // extra 15 for the horizontal scroll bar
@@ -549,7 +545,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             this.chartConfig.legendComponentConfig.position = [0, 0];
         }
         // extra 15 for the horizontal scroll bar
-        this.chartConfig.chartRendererConfig.size = [barConfig.size[0] + margin[3], chartSize[1] - 15];
+        this.chartConfig.chartRendererConfig.size = [barConfig.size[0], chartSize[1] - 15];
     },
 
     /**
