@@ -171,6 +171,16 @@ Ext.define('Koala.view.component.D3ChartController', {
                     list.contains(CSS.DELETE_ICON)) {
                     return;
                 }
+                var item = event.target;
+                while (item.nodeName !== 'g') {
+                    item = item.parentNode;
+                }
+                list = item.classList;
+                if (list.contains('k-d3-disabled')) {
+                    list.remove('k-d3-disabled');
+                } else {
+                    list.add('k-d3-disabled');
+                }
                 series.toggleSeries(legend.seriesIndex);
             };
             if (station) {
