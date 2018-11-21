@@ -394,6 +394,7 @@ Ext.define('Koala.util.ChartData', {
             config.chartRendererConfig.chartMargin = gnosConfig.chartMargin ? gnosConfig.chartMargin.split(',') : [];
 
             config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 20;
+            config.legendComponentConfig.legendEntryMaxLength -= 60;
 
             if (type === 'timeSeries') {
                 this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations);
