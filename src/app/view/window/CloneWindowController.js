@@ -54,6 +54,8 @@ Ext.define('Koala.view.window.CloneWindowController', {
 
         var dataSourceType = view.down('[name=datasource-radios]')
             .down('[checked=true]').inputValue;
+        var copyStyle = view.down('[name=copystyle]').getValue();
+        copyStyle = copyStyle && dataSourceType === 'useLayer';
         var dataSourceLayer;
 
         switch (dataSourceType) {
@@ -71,7 +73,8 @@ Ext.define('Koala.view.window.CloneWindowController', {
             maxFeatures,
             bbox,
             dataSourceLayer,
-            uuid
+            uuid,
+            copyStyle
         );
         view.close();
         Ext.ComponentQuery.query('k-button-selectfeatures')[0].setPressed(false);
@@ -84,6 +87,11 @@ Ext.define('Koala.view.window.CloneWindowController', {
      * @param  {Boolean} on true, if the radio is checked
      */
     handleDatasourceChange: function(radio, on) {
+        if (radio.inputValue !== 'useLayer' && on) {
+            this.getViewModel().set('noLayerSelected', true);
+        } else if (on) {
+            this.getViewModel().set('noLayerSelected', false);
+        }
         if (radio.inputValue === 'selectionLayer' && on) {
             Ext.ComponentQuery.query('k-button-selectfeatures')[0].setPressed(true);
             this.getView().down('[name=selection-enabled]').setHidden(false);

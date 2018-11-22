@@ -27,6 +27,32 @@ Ext.define('Koala.util.Clone', {
     statics: {
 
         /**
+         * Load and apply a style for a vector layer.
+         * @param {String} baseUrl the GeoServer base url
+         * @param {String} styleName the style name to load
+         * @param {ol.layer.Vector} targetLayer the layer to apply the style to
+         */
+        loadStyle: function(baseUrl, styleName, targetLayer) {
+            var url = baseUrl + '/rest/styles/' + styleName + '.sld';
+            Ext.Ajax.request({
+                url: url,
+                method: 'GET'
+            })
+                .then(function(response) {
+                    var sldParser = new GeoStylerSLDParser.SldStyleParser();
+                    targetLayer.set('SLD', response.responseText);
+                    sldParser.readStyle(response.responseText)
+                        .then(function(gsStyle) {
+                            var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
+                            olParser.writeStyle(gsStyle)
+                                .then(function(olStyle) {
+                                    targetLayer.setStyle(olStyle);
+                                });
+                        });
+                });
+        },
+
+        /**
          * Creates a clone of the given layer.
          * @param  {ol.layer.Layer} sourceLayer the layer to clone the metadata
          * from
@@ -36,12 +62,36 @@ Ext.define('Koala.util.Clone', {
          * @param  {ol.layer.Layer} dataSourceLayer the layer to clone the
          * @param  {String} uuid the uuid of the template to clone metadata from
          * data from, or undefined
+         * @param  {Boolean} copyStyle whether to copy the source layer's style
          */
-        cloneLayer: function(sourceLayer, name, maxFeatures, bbox, dataSourceLayer, uuid) {
+        cloneLayer: function(sourceLayer, name, maxFeatures, bbox, dataSourceLayer, uuid, copyStyle) {
             var targetLayerPromise = this.createLayer(sourceLayer, name, uuid);
             var SelectFeatures = Koala.util.SelectFeatures;
 
             targetLayerPromise.then(function(targetLayer) {
+                if (copyStyle) {
+                    if (sourceLayer.get('SLD')) {
+                        targetLayer.set('SLD', sourceLayer.get('SLD'));
+                        targetLayer.setStyle(sourceLayer.getStyle());
+                    } else {
+                        var wmsConfig = sourceLayer.metadata.layerConfig.wms;
+                        var ms = /^(.+ogc).+$/g.exec(wmsConfig.url);
+                        var styleName = wmsConfig.styles;
+                        if (!styleName) {
+                            Ext.Ajax.request({
+                                url: ms[1] + '/rest/layers/' + wmsConfig.layers + '.json',
+                                method: 'GET'
+                            })
+                                .then(function(response) {
+                                    styleName = JSON.parse(response.responseText);
+                                    styleName = styleName.layer.defaultStyle.name;
+                                    Koala.util.Clone.loadStyle(ms[1], styleName, targetLayer);
+                                });
+                        } else {
+                            Koala.util.Clone.loadStyle(ms[1], styleName, targetLayer);
+                        }
+                    }
+                }
                 if (dataSourceLayer instanceof ol.layer.Vector) {
                     if (bbox) {
                         SelectFeatures.getFeaturesFromVectorLayerByBbox(

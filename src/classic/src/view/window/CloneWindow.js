@@ -39,7 +39,7 @@ Ext.define('Koala.view.window.CloneWindow', {
     constrainHeader: true,
     collapsible: true,
     maxHeight: 800,
-    height: 310,
+    height: 320,
     width: 500,
     layout: 'vbox',
 
@@ -131,6 +131,14 @@ Ext.define('Koala.view.window.CloneWindow', {
         }, {
             xtype: 'k-form-field-vectortemplatecombo',
             includeCloneLayers: true
+        }, {
+            xtype: 'checkbox',
+            name: 'copystyle',
+            checked: true,
+            bind: {
+                boxLabel: '{copyStyleLabel}',
+                hidden: '{noLayerSelected}'
+            }
         }]
     }]
 
