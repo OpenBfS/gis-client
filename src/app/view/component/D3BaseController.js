@@ -553,6 +553,8 @@ Ext.define('Koala.view.component.D3BaseController', {
                         var cmp = win.down('[name=chart-color-picker]');
                         me.chartConfig.timeseriesComponentConfig
                             .series[idx].color = '#' + cmp.getValue();
+                        me.chartConfig.legendComponentConfig.items[idx]
+                            .style.stroke = '#' + cmp.getValue();
                         me.drawChart();
                         win.close();
                     }
