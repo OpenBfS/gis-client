@@ -286,7 +286,7 @@
                 "failedToFetch": "The current style could not be read",
                 "titlePrefix": "Styling ",
                 "btnTextReloadCurrentStyle": "Reset to original style",
-                "btnTextApplyAndSave": "Save Style",
+                "btnTextApplyAndSave": "Apply Style",
                 "dspLayerName": ""
             }
         }
