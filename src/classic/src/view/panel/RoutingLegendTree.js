@@ -1039,6 +1039,11 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         var startKey = source.on(evtPrefix + 'loadstart', loadStartFunc);
         var endKey = source.on(evtPrefix + 'loadend', bufferedLoadEndFunc);
         var errorKey = source.on(evtPrefix + 'loaderror', loadErrorFunc);
+        // TODO see above note, we additionally need to trigger this in case
+        // the source is already ready upon layer add
+        if (source.getState() === 'ready') {
+            bufferedLoadEndFunc();
+        }
 
         // Set the internal flags that loading indication is bound and the
         // associated event keys.
