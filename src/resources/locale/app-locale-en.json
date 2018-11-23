@@ -205,6 +205,10 @@
         "config": {
             "data": {
                 "saveStyle": "Save style",
+                "btnTextImport": "Import",
+                "btnTextExport": "Export",
+                "btnTextReloadCurrentStyle": "Reset to original style",
+                "btnTextApplyAndSave": "Apply style",
                 "styleNotConvertedMsg": "The style could not be converted."
             }
         }
@@ -1334,6 +1338,16 @@
         "config": {
             "data": {
                 "imprintWinTitle": "Imprint"
+            }
+        }
+    },
+    "BasiGX.view.window.FileUploadWindow": {
+        "config": {
+            "data": {
+                "title": "Upload file",
+                "description": "Please select a file to upload:",
+                "okButtonLabel": "Ok",
+                "cancelButtonLabel": "Cancel"
             }
         }
     },
