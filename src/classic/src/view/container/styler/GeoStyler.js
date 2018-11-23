@@ -45,11 +45,15 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
     },
 
     items: [{
-        title: 'Grafischer Editor',
+        bind: {
+            title: '{graphicalEditorTitle}'
+        },
         bodyCls: 'geostyler-root',
         scrollable: true
     }, {
-        title: 'Codeeditor',
+        bind: {
+            title: '{codeEditorTitle}'
+        },
         bodyCls: 'codeeditor-root'
     }],
 

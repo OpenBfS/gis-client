@@ -206,7 +206,9 @@
         "config": {
             "data": {
                 "saveStyle": "Stil speichern",
-                "styleNotConvertedMsg": "Der Stil konnte nicht konvertiert werden."
+                "styleNotConvertedMsg": "Der Stil konnte nicht konvertiert werden.",
+                "graphicalEditorTitle": "Grafischer Editor",
+                "codeEditorTitle": "Codeeditor"
             }
         }
     },
