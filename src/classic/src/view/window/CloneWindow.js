@@ -111,6 +111,15 @@ Ext.define('Koala.view.window.CloneWindow', {
                 checked: true,
                 handler: 'handleDatasourceChange'
             }, {
+                xtype: 'checkbox',
+                name: 'copystyle',
+                checked: true,
+                margin: '0 0 0 20',
+                bind: {
+                    boxLabel: '{copyStyleLabel}',
+                    hidden: '{noLayerSelected}'
+                }
+            }, {
                 boxLabel: 'keine Daten übernehmen',
                 inputValue: 'emptyLayer',
                 name: 'layer',
@@ -124,6 +133,7 @@ Ext.define('Koala.view.window.CloneWindow', {
                 xtype: 'label',
                 name: 'selection-enabled',
                 hidden: true,
+                margin: '0 0 0 20',
                 bind: {
                     text: '{selectionEnabled}'
                 }
@@ -131,14 +141,6 @@ Ext.define('Koala.view.window.CloneWindow', {
         }, {
             xtype: 'k-form-field-vectortemplatecombo',
             includeCloneLayers: true
-        }, {
-            xtype: 'checkbox',
-            name: 'copystyle',
-            checked: true,
-            bind: {
-                boxLabel: '{copyStyleLabel}',
-                hidden: '{noLayerSelected}'
-            }
         }]
     }]
 
