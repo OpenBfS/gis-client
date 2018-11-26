@@ -557,6 +557,17 @@ Id für den RoutingLegendTree. //TODO wird das noch benötigt?
 | Default-Wert         | inspireId |
 | Beispiel             | 83cb1604-3d8c-490b-b807-5e7cb17f3b22 |
 
+**styleReference**
+
+GeoServer Style-Dateiname der als Vector-Style verwendet werden soll.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | String |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | uuid des Layers |
+| Beispiel             | odl_brutto.sld |
+
 **layer_xyz**
 
 'xyz' ist ein Platzhalter für eine opt_option eines ol.layer.Layer:
@@ -881,13 +892,13 @@ Beispiel:
 * attribute -> Das Attribut das ausgewertet werden soll
 
 * operator -> Der Operator für die Regel. Kann einen der folgenden Werte annehmen:
-'eq' (equals),  
-'ne' (not equals),  
-'gt' (greater than),  
-'lt' (lower than),  
-'lte' (lower than equals),  
-'gte' (greater than equals),  
-'between' (Gültigkeitsbereich).  
+'eq' (equals),
+'ne' (not equals),
+'gt' (greater than),
+'lt' (lower than),
+'lte' (lower than equals),
+'gte' (greater than equals),
+'between' (Gültigkeitsbereich).
 Wenn 'between' verwendet werden soll, muss der 'value' als kommasperarierter String definiert werden mit genau 2 Werten: "1.06,5"
 
 * value -> Der Wert für die Bedingung

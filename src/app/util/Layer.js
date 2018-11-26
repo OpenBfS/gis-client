@@ -1118,10 +1118,16 @@ Ext.define('Koala.util.Layer', {
                         url = value.baseUrl;
                     }
                 });
-                var uuid = layer.metadata.id;
+                var styleName = layer.metadata.id;
+                if (layer.metadata.layerConfig.olProperties.styleReference) {
+                    styleName = layer.metadata.layerConfig.olProperties.styleReference;
+                }
+                if (!styleName.endsWith('.sld')) {
+                    styleName += '.sld';
+                }
 
                 Ext.Ajax.request({
-                    url: url + 'rest/styles/' + uuid + '.sld',
+                    url: url + 'rest/styles/' + styleName,
                     method: 'GET'
                 })
                     .then(function(response) {
