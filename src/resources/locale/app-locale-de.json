@@ -206,6 +206,10 @@
         "config": {
             "data": {
                 "saveStyle": "Stil speichern",
+                "btnTextImport": "Importieren",
+                "btnTextExport": "Exportieren",
+                "btnTextReloadCurrentStyle": "Auf original Style zurücksetzen",
+                "btnTextApplyAndSave": "Style übernehmen",
                 "styleNotConvertedMsg": "Der Stil konnte nicht konvertiert werden."
             }
         }
@@ -1348,6 +1352,16 @@
                 "sitePolicy": {
                     "title": "Nutzungsbedingungen"
                 }
+            }
+        }
+    },
+    "BasiGX.view.window.FileUploadWindow": {
+        "config": {
+            "data": {
+                "title": "Datei hochladen",
+                "description": "Bitte wählen Sie eine Datei:",
+                "okButtonLabel": "Ok",
+                "cancelButtonLabel": "Abbrechen"
             }
         }
     },

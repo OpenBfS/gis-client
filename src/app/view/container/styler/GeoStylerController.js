@@ -67,5 +67,35 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
             .catch(function() {
                 Ext.Msg.alert(viewModel.get('saveStyle'), viewModel.get('styleNotConvertedMsg'));
             });
+    },
+
+    /**
+     * Exports (downloads) the current style as SLD.
+     */
+    exportStyle: function() {
+        var viewModel = this.getViewModel();
+        var style = viewModel.get('style');
+        var sldParser = new GeoStylerSLDParser.SldStyleParser();
+        sldParser.writeStyle(style)
+            .then(function(sld) {
+                download(sld, 'style.xml', 'application/xml');
+            });
+    },
+
+    /**
+     * Imports an SLD file and updates the styler with its content.
+     */
+    importStyle: function() {
+        var view = this.getView();
+        Ext.create('BasiGX.view.window.FileUploadWindow', {
+            importHandler: function(result) {
+                var sldParser = new GeoStylerSLDParser.SldStyleParser();
+                sldParser.readStyle(result)
+                    .then(function(style) {
+                        view.onStyleChange(style);
+                    });
+            }
+        }).show();
     }
+
 });
