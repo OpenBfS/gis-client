@@ -22,6 +22,10 @@
 Ext.define('Koala.view.container.styler.GeoStyler', {
     extend: 'Ext.tab.Panel',
 
+    requires: [
+        'BasiGX.view.window.FileUploadWindow'
+    ],
+
     xtype: 'k_container_styler_geostyler',
 
     routeId: 'geostyler',
@@ -188,6 +192,20 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
                 text: '{btnTextReloadCurrentStyle}'
             },
             handler: 'reloadCurrentStyle'
+        },
+        {
+            xtype: 'button',
+            bind: {
+                text: '{btnTextImport}'
+            },
+            handler: 'importStyle'
+        },
+        {
+            xtype: 'button',
+            bind: {
+                text: '{btnTextExport}'
+            },
+            handler: 'exportStyle'
         },
         '->',
         {

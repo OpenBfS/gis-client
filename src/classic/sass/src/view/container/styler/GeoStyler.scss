@@ -8,15 +8,16 @@
 .gs-modal-size,
 .rule-generator-window,
 .gs-modal-opacity {
-    z-index: 19010;
+    z-index: 24998;
 }
 
-.ant-select-dropdown {
-    z-index: 19015;
+.ant-select-dropdown,
+.ant-dropdown {
+    z-index: 24999;
 }
 
 .ant-menu-submenu.ant-menu-submenu-popup {
-    z-index: 19020;
+    z-index: 25000;
 }
 
 .rule-generator-window {

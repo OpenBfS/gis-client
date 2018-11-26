@@ -207,7 +207,11 @@
                 "saveStyle": "Save style",
                 "styleNotConvertedMsg": "The style could not be converted.",
                 "graphicalEditorTitle": "Graphical editor",
-                "codeEditorTitle": "Code editor"
+                "codeEditorTitle": "Code editor",
+                "btnTextImport": "Import",
+                "btnTextExport": "Export",
+                "btnTextReloadCurrentStyle": "Reset to original style",
+                "btnTextApplyAndSave": "Apply style"
             }
         }
     },
@@ -288,7 +292,7 @@
                 "failedToFetch": "The current style could not be read",
                 "titlePrefix": "Styling ",
                 "btnTextReloadCurrentStyle": "Reset to original style",
-                "btnTextApplyAndSave": "Save Style",
+                "btnTextApplyAndSave": "Apply Style",
                 "dspLayerName": ""
             }
         }
@@ -656,7 +660,8 @@
                 "okButtonLabel": "Ok",
                 "cancelButtonLabel": "Cancel",
                 "emptyTemplateMessage": "Please select a template.",
-                "selectionEnabled": "(Selection tool is activated!)"
+                "selectionEnabled": "(Selection tool is activated!)",
+                "copyStyleLabel": "Copy style"
             }
         }
     },
@@ -1336,6 +1341,16 @@
         "config": {
             "data": {
                 "imprintWinTitle": "Imprint"
+            }
+        }
+    },
+    "BasiGX.view.window.FileUploadWindow": {
+        "config": {
+            "data": {
+                "title": "Upload file",
+                "description": "Please select a file to upload:",
+                "okButtonLabel": "Ok",
+                "cancelButtonLabel": "Cancel"
             }
         }
     },

@@ -208,7 +208,11 @@
                 "saveStyle": "Stil speichern",
                 "styleNotConvertedMsg": "Der Stil konnte nicht konvertiert werden.",
                 "graphicalEditorTitle": "Grafischer Editor",
-                "codeEditorTitle": "Codeeditor"
+                "codeEditorTitle": "Codeeditor",
+                "btnTextImport": "Importieren",
+                "btnTextExport": "Exportieren",
+                "btnTextReloadCurrentStyle": "Auf original Style zurücksetzen",
+                "btnTextApplyAndSave": "Style übernehmen"
             }
         }
     },
@@ -289,7 +293,7 @@
                 "failedToFetch": "Der aktuelle Style konnte nicht gelesen werden",
                 "titlePrefix": "Styling ",
                 "btnTextReloadCurrentStyle": "Auf original Style zurücksetzen",
-                "btnTextApplyAndSave": "Style speichern",
+                "btnTextApplyAndSave": "Style übernehmen",
                 "dspLayerName": ""
             }
         }
@@ -657,7 +661,8 @@
                 "okButtonLabel": "Ok",
                 "cancelButtonLabel": "Abbrechen",
                 "emptyTemplateMessage": "Bitte wählen Sie eine Vorlage aus.",
-                "selectionEnabled": "(Selektionswerkzeug ist aktiviert!)"
+                "selectionEnabled": "(Selektionswerkzeug ist aktiviert!)",
+                "copyStyleLabel": "Stil kopieren"
             }
         }
     },
@@ -1349,6 +1354,16 @@
                 "sitePolicy": {
                     "title": "Nutzungsbedingungen"
                 }
+            }
+        }
+    },
+    "BasiGX.view.window.FileUploadWindow": {
+        "config": {
+            "data": {
+                "title": "Datei hochladen",
+                "description": "Bitte wählen Sie eine Datei:",
+                "okButtonLabel": "Ok",
+                "cancelButtonLabel": "Abbrechen"
             }
         }
     },
