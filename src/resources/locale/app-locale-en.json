@@ -205,11 +205,13 @@
         "config": {
             "data": {
                 "saveStyle": "Save style",
+                "styleNotConvertedMsg": "The style could not be converted.",
+                "graphicalEditorTitle": "Graphical editor",
+                "codeEditorTitle": "Code editor",
                 "btnTextImport": "Import",
                 "btnTextExport": "Export",
                 "btnTextReloadCurrentStyle": "Reset to original style",
-                "btnTextApplyAndSave": "Apply style",
-                "styleNotConvertedMsg": "The style could not be converted."
+                "btnTextApplyAndSave": "Apply style"
             }
         }
     },

@@ -20,7 +20,7 @@
  * @class BISMap.admin.view.panel.layer.Style
  */
 Ext.define('Koala.view.container.styler.GeoStyler', {
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.tab.Panel',
 
     requires: [
         'BasiGX.view.window.FileUploadWindow'
@@ -34,15 +34,32 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
 
     controller: 'container.styler.geostyler',
 
+    layout: 'fit',
+
     viewModel: {
         type: 'container.styler.geostyler'
     },
 
-    bodyCls: 'geostyler-root',
+    // else the tab bodies will not be available to render
+    // the react content!
+    deferredRender: false,
 
     bind: {
         title: '{title}'
     },
+
+    items: [{
+        bind: {
+            title: '{graphicalEditorTitle}'
+        },
+        bodyCls: 'geostyler-root',
+        scrollable: true
+    }, {
+        bind: {
+            title: '{codeEditorTitle}'
+        },
+        bodyCls: 'codeeditor-root'
+    }],
 
     constructor: function(config) {
         this.callParent(arguments);
@@ -134,7 +151,7 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
 
     renderReactGeoStyler: function(style, data) {
         var domElement = this.getEl().dom;
-        var root = domElement.getElementsByClassName('geostyler-root')[0];
+        var root = domElement.querySelector('.geostyler-root');
         var geostylerStyle = React.createElement(GeoStyler.Style, {
             style: style,
             data: data,
@@ -147,6 +164,22 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             geostylerStyle
         );
         this._GeoStyler = ReactDOM.render(localeProvider, root);
+        this.renderCodeEditor(style);
+    },
+
+    renderCodeEditor: function(style) {
+        var domElement = this.getEl().dom;
+        var root = domElement.querySelector('.codeeditor-root');
+        var codeEditor = React.createElement(GeoStyler.CodeEditor, {
+            style: style,
+            parsers: [GeoStylerSLDParser.SldStyleParser],
+            onStyleChange: this.onStyleChange.bind(this)
+        });
+        var localeProvider = React.createElement(GeoStyler.LocaleProvider,
+            { locale: GeoStyler.locale.de_DE },
+            codeEditor
+        );
+        this._CodeEditor = ReactDOM.render(localeProvider, root);
     },
 
     scrollable: 'vertical',

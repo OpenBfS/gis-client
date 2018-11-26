@@ -206,11 +206,13 @@
         "config": {
             "data": {
                 "saveStyle": "Stil speichern",
+                "styleNotConvertedMsg": "Der Stil konnte nicht konvertiert werden.",
+                "graphicalEditorTitle": "Grafischer Editor",
+                "codeEditorTitle": "Codeeditor",
                 "btnTextImport": "Importieren",
                 "btnTextExport": "Exportieren",
                 "btnTextReloadCurrentStyle": "Auf original Style zurücksetzen",
-                "btnTextApplyAndSave": "Style übernehmen",
-                "styleNotConvertedMsg": "Der Stil konnte nicht konvertiert werden."
+                "btnTextApplyAndSave": "Style übernehmen"
             }
         }
     },
