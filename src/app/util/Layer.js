@@ -1679,6 +1679,9 @@ Ext.define('Koala.util.Layer', {
                         break;
                 }
             });
+            if (metadata.layerConfig.olProperties.param_cql_filter === '') {
+                delete metadata.layerConfig.olProperties.param_cql_filter;
+            }
 
             return metadata;
         },
