@@ -654,7 +654,8 @@
                 "okButtonLabel": "Ok",
                 "cancelButtonLabel": "Cancel",
                 "emptyTemplateMessage": "Please select a template.",
-                "selectionEnabled": "(Selection tool is activated!)"
+                "selectionEnabled": "(Selection tool is activated!)",
+                "copyStyleLabel": "Copy style"
             }
         }
     },
