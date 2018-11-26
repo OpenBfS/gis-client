@@ -54,6 +54,17 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var sldParser = new GeoStylerSLDParser.SldStyleParser();
         sldParser.writeStyle(style)
             .then(function(sld) {
+                var ctx = Koala.util.AppContext.getAppContext().data.merge;
+                var url = ctx.urls['spatial-search'];
+                var parms = {
+                    request: 'GetLegendGraphic',
+                    version: '1.1.1',
+                    service: 'WMS',
+                    sld_body: sld,
+                    layer: 'bfs:planungsradien',
+                    format: 'image/png'
+                };
+                layer.set('legendUrl', url + '?' + Ext.Object.toQueryString(parms));
                 layer.set('SLD', sld);
             })
             .catch(function() {

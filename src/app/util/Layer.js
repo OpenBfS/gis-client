@@ -1127,6 +1127,17 @@ Ext.define('Koala.util.Layer', {
                     .then(function(response) {
                         var parser = new GeoStylerSLDParser.SldStyleParser();
                         var style = parser.readStyle(response.responseText);
+                        var parms = {
+                            request: 'GetLegendGraphic',
+                            version: '1.1.1',
+                            service: 'WMS',
+                            sld_body: response.responseText,
+                            layer: 'bfs:planungsradien',
+                            format: 'image/png'
+                        };
+                        layer.set('legendUrl', url + '/ows?' + Ext.Object.toQueryString(parms));
+                        // force redrawing the legend
+                        Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].delayedRepaintLayerFilterIndication();
                         var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
                         style.then(function(parsed) {
                             var olStyle = olParser.writeStyle(parsed);
