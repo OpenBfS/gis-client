@@ -173,7 +173,8 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         var codeEditor = React.createElement(GeoStyler.CodeEditor, {
             style: style,
             parsers: [GeoStylerSLDParser.SldStyleParser],
-            onStyleChange: this.onStyleChange.bind(this)
+            onStyleChange: this.onStyleChange.bind(this),
+            showSaveButton: false
         });
         var localeProvider = React.createElement(GeoStyler.LocaleProvider,
             { locale: GeoStyler.locale.de_DE },
