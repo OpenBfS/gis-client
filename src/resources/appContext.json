@@ -72,6 +72,7 @@
             "mapConfig": {
                 "projection": "EPSG:3857"
             },
+            "createLegendGraphicLayer": "bfs:planungsradien",
             "tools": [
                 "addWmsBtn",
                 "printBtn",

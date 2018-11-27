@@ -1111,7 +1111,8 @@ Ext.define('Koala.util.Layer', {
         getVectorLayerStyle: function(layer) {
             if (layer.get('persisted') ||
                 layer.metadata.layerConfig.olProperties.persisted) {
-                var configs = Koala.util.AppContext.getAppContext().data.merge.import;
+                var context = Koala.util.AppContext.getAppContext().data.merge;
+                var configs = context.import;
                 var url;
                 Ext.iterate(configs, function(key, value) {
                     if (value.workspace === layer.metadata.layerConfig.olProperties.workspace) {
@@ -1138,7 +1139,7 @@ Ext.define('Koala.util.Layer', {
                             version: '1.1.1',
                             service: 'WMS',
                             sld_body: response.responseText,
-                            layer: 'bfs:planungsradien',
+                            layer: context.createLegendGraphicLayer,
                             format: 'image/png'
                         };
                         layer.set('legendUrl', url + '/ows?' + Ext.Object.toQueryString(parms));
