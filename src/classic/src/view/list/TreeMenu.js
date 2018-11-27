@@ -27,6 +27,8 @@ Ext.define('Koala.view.list.TreeMenu', {
     },
 
     requires: [
+        'Koala.util.AppContext',
+        'Koala.util.LocalStorage',
         'Koala.view.list.TreeMenuModel',
         'Koala.view.list.TreeMenuController'
     ],
@@ -48,6 +50,20 @@ Ext.define('Koala.view.list.TreeMenu', {
 
     listeners: {
         itemclick: 'onItemClick'
+    },
+
+    /**
+     * Sets some flags in the viewModel based on localStorage and appContext contents.
+     */
+    constructor: function() {
+        this.callParent(arguments);
+        var viewModel = this.getViewModel();
+        viewModel.set('showLayersetChooser', Koala.util.LocalStorage.showLayersetChooserWindowOnStartup());
+        viewModel.set('showHelp', Koala.util.LocalStorage.showHelpWindowOnStartup());
+        var ctx = Koala.util.AppContext.getAppContext().data.merge;
+        var roles = ctx.imis_user.userroles;
+        var isPublic = roles.indexOf('public') !== -1;
+        viewModel.set('publicRole', isPublic);
     }
 
 });

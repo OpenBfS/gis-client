@@ -19,6 +19,8 @@
 Ext.define('Koala.view.list.TreeMenuModel', {
     extend: 'Ext.app.ViewModel',
 
+    requires: ['Koala.util.LocalStorage'],
+
     alias: 'viewmodel.k-list-treemenu',
 
     data: {
@@ -49,7 +51,12 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         drawToolsActive: false,
         measureToolsActive: false,
         selectFeaturesActive: false,
-        createvectorlayer: ''
+        createvectorlayer: '',
+        showHelp: true,
+        showLayersetChooser: true,
+        showHelpText: '',
+        showLayersetChooserText: '',
+        publicRole: true
     },
 
     stores: {
@@ -141,6 +148,16 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         leaf: true,
                         iconCls: 'x-fa fa-expand',
                         hidden: !Koala.util.Fullscreen.isFullscreenSupported()
+                    }, {
+                        text: '{showLayersetChooserText}',
+                        key: 'showlayersetchooser',
+                        leaf: true,
+                        rowCls: '{showLayersetChooser ? "active" : ""}'
+                    }, {
+                        text: '{showHelpText}',
+                        key: 'showhelp',
+                        leaf: true,
+                        rowCls: '{showHelp ? "active" : ""} {publicRole ? "" : "hidden"}'
                     }]
                 }, {
                     text: '{imprint}',

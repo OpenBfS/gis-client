@@ -468,7 +468,9 @@
                 "privacy": "Privacy",
                 "help": "Help",
                 "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html",
-                "createvectorlayer": "Create vector layer"
+                "createvectorlayer": "Create vector layer",
+                "showHelpText": "Hilfe anzeigen",
+                "showLayersetChooserText": "Themenauswahl anzeigen"
             }
         }
     },
