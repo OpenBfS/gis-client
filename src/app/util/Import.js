@@ -211,12 +211,14 @@ Ext.define('Koala.util.Import', {
             var importMetadata = {
                 config: config,
                 bytes: bytes,
-                layer: layer
+                layer: layer,
+                geojson: geojson
             };
             this.prepareImport(config)
                 .then(this.prepareTask.bind(this, importMetadata))
                 .then(this.performImport.bind(this, importMetadata))
                 .then(this.getLayerName.bind(this, importMetadata))
+                .then(this.persistToRodosService.bind(this, importMetadata))
                 .then(Koala.util.Metadata.prepareMetadata.bind(
                     Koala.util.Metadata,
                     layer.metadata,
@@ -226,6 +228,28 @@ Ext.define('Koala.util.Import', {
                 .then(this.importStyle.bind(this, layer))
                 .then(this.setPersistedFlag.bind(this, layer))
                 .then(this.closeFeatureGrid.bind(this));
+        },
+
+        /**
+         * Persist the features to the rodos service.
+         * @param {Object} context the context object
+         */
+        persistToRodosService: function(context) {
+            if (context.layer.metadata.wasRodosLayer) {
+                var config = Koala.util.AppContext.getAppContext().data.merge;
+                var tablename = context.layer.metadata.rodosTablename;
+                return Ext.Ajax.request({
+                    url: config.urls['rodos-upload-service'] + tablename,
+                    method: 'POST',
+                    jsonData: context.geojson,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+            return new Ext.Promise(function(resolve) {
+                resolve();
+            });
         },
 
         /**
