@@ -579,7 +579,7 @@
                 "btnTextResetThemeTreeFiltering": "All Layers",
                 "btnTooltipResetThemeTreeFiltering": "Resets filtering of available topics.",
                 "rodosWindowTitle": "en:RODOS Prognosen Filter",
-                "importedLayersTitle": "Imported layers"
+                "importedLayersTitle": "User generated"
             }
         }
     },
