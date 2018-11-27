@@ -96,6 +96,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                 }, {
                     text: '{tools}',
                     iconCls: 'x-fa fa-pencil-square-o',
+                    rowCls: '{selectFeaturesActive || drawToolsActive || measureToolsActive ? "active" : ""}',
                     children: [{
                         text: '{draw}',
                         key: 'draw',
