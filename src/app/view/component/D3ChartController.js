@@ -161,7 +161,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var CSS = Const.CSS_CLASS;
         Ext.each(this.chartConfig.legendComponentConfig.items, function(legend, idx) {
             var station = Ext.Array.findBy(me.getView().getSelectedStations(), function(feature) {
-                return feature.get('id') === legend.seriesId;
+                return feature.get(gnosConfig.featureIdentifyField || 'id') === legend.seriesId;
             });
 
             legend.onClick = function(event) {
