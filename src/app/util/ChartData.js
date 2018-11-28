@@ -550,6 +550,12 @@ Ext.define('Koala.util.ChartData', {
                                     key: labels[groupIndex],
                                     group: idx
                                 });
+
+                                if (Ext.String.startsWith(html, 'eval:')) {
+                                    html = eval(html.substr(5)); // eslint-disable-line no-eval
+                                    html = html(station);
+                                }
+
                                 html = Koala.util.String.replaceTemplateStrings(html, data);
                                 html = Koala.util.String.replaceTemplateStrings(html, station);
                                 tooltipCmp.setHtml(html);
@@ -768,6 +774,12 @@ Ext.define('Koala.util.ChartData', {
                         var selectedStation = Ext.Array.findBy(stations, function(station) {
                             return station.get(gnosConfig.featureIdentifyField || 'id') === id;
                         });
+
+                        if (Ext.String.startsWith(tooltipTpl, 'eval:')) {
+                            tooltipTpl = eval(tooltipTpl.substr(5)); // eslint-disable-line no-eval
+                            tooltipTpl = tooltipTpl(selectedStation);
+                        }
+
                         var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, item);
                         html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
                         tooltipCmp.setHtml(html);
@@ -805,6 +817,12 @@ Ext.define('Koala.util.ChartData', {
                                 var selectedStation = Ext.Array.findBy(stations, function(station) {
                                     return station.get(gnosConfig.featureIdentifyField || 'id') === id;
                                 });
+
+                                if (Ext.String.startsWith(tooltipTpl, 'eval:')) {
+                                    tooltipTpl = eval(tooltipTpl.substr(5)); // eslint-disable-line no-eval
+                                    tooltipTpl = tooltipTpl(selectedStation);
+                                }
+
                                 var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
                                 tooltipCmp.setHtml(html);
                                 tooltipCmp.setTarget(target);
