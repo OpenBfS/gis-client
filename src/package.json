@@ -61,9 +61,9 @@
   },
   "dependencies": {
     "antd": "3.10.9",
-    "geostyler": "0.21.0",
+    "geostyler": "0.22.1",
     "geostyler-geojson-parser": "0.4.6",
-    "geostyler-openlayers-parser": "0.19.1",
+    "geostyler-openlayers-parser": "0.19.2",
     "geostyler-sld-parser": "0.18.0",
     "react": "16.6.3",
     "react-dom": "16.6.3"
