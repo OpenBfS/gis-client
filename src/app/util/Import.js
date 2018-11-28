@@ -247,9 +247,7 @@ Ext.define('Koala.util.Import', {
                     }
                 });
             }
-            return new Ext.Promise(function(resolve) {
-                resolve();
-            });
+            return new Ext.Promise.resolve();
         },
 
         /**
