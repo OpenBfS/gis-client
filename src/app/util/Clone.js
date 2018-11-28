@@ -75,7 +75,14 @@ Ext.define('Koala.util.Clone', {
                         targetLayer.setStyle(sourceLayer.getStyle());
                     } else {
                         var wmsConfig = sourceLayer.metadata.layerConfig.wms;
-                        var ms = /^(.+ogc).+$/g.exec(wmsConfig.url);
+                        // TODO think about a better way of doing this
+                        // The RODOS WMS is a separate GeoServer instance
+                        // living under /ogc/rodos, ie. a sub path of the
+                        // standard WMS
+                        var ms = /^(.+ogc\/rodos).+$/g.exec(wmsConfig.url);
+                        if (!ms || !ms[1]) {
+                            ms = /^(.+ogc).+$/g.exec(wmsConfig.url);
+                        }
                         var styleName = wmsConfig.styles;
                         if (!styleName) {
                             Ext.Ajax.request({
