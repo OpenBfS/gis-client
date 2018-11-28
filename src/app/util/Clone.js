@@ -139,6 +139,11 @@ Ext.define('Koala.util.Clone', {
                         var result = new ol.layer.Vector(config);
                         result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
                         result.metadata = Ext.clone(metadata);
+                        if (layer.metadata.isRodosLayer) {
+                            result.metadata.wasRodosLayer = true;
+                            var ms = /^tablename:(.+);$/.exec(layer.metadata.layerConfig.olProperties.param_viewparams);
+                            result.metadata.rodosTablename = ms[1];
+                        }
                         Koala.util.Layer.addOlLayerToMap(result);
                         resolve(result);
                     })

@@ -170,6 +170,16 @@ Ext.define('Koala.view.list.TreeMenuController', {
                 case 'help':
                     this.showWindow('k-window-help', 'Koala.view.window.HelpWindow');
                     break;
+                case 'showhelp':
+                    var showHelp = viewModel.get('showHelp');
+                    Koala.util.LocalStorage.updateHideHelpWindowOnStartup(!showHelp);
+                    viewModel.set('showHelp', !showHelp);
+                    break;
+                case 'showlayersetchooser':
+                    var showChooser = viewModel.get('showLayersetChooser');
+                    Koala.util.LocalStorage.updateHideLayersetChooserWindowOnStartup(!showChooser);
+                    viewModel.set('showLayersetChooser', !showChooser);
+                    break;
                 default:
                     break;
             }

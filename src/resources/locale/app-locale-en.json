@@ -468,7 +468,9 @@
                 "privacy": "Privacy",
                 "help": "Help",
                 "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html",
-                "createvectorlayer": "Create vector layer"
+                "createvectorlayer": "Create vector layer",
+                "showHelpText": "Hilfe anzeigen",
+                "showLayersetChooserText": "Themenauswahl anzeigen"
             }
         }
     },
@@ -579,7 +581,7 @@
                 "btnTextResetThemeTreeFiltering": "All Layers",
                 "btnTooltipResetThemeTreeFiltering": "Resets filtering of available topics.",
                 "rodosWindowTitle": "en:RODOS Prognosen Filter",
-                "importedLayersTitle": "Imported layers"
+                "importedLayersTitle": "User generated"
             }
         }
     },

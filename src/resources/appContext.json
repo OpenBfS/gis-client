@@ -10,6 +10,7 @@
                 "irix-context": "resources/irixContext.json",
                 "rodos-projects": "resources/rodos/projects.json",
                 "rodos-results": "resources/rodos/projects/",
+                "rodos-upload-service": "http://bfs-docker.intranet.terrestris.de/examples/servlets/servlet/RequestParamExample?",
 
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
@@ -72,6 +73,7 @@
             "mapConfig": {
                 "projection": "EPSG:3857"
             },
+            "createLegendGraphicLayer": "bfs:planungsradien",
             "tools": [
                 "addWmsBtn",
                 "printBtn",

@@ -61,7 +61,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     version: '1.1.1',
                     service: 'WMS',
                     sld_body: sld,
-                    layer: 'bfs:planungsradien',
+                    layer: ctx.createLegendGraphicLayer,
                     format: 'image/png'
                 };
                 layer.set('legendUrl', url + '?' + Ext.Object.toQueryString(parms));
