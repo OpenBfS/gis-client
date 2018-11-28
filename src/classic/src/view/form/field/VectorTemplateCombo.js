@@ -33,14 +33,10 @@ Ext.define('Koala.view.form.field.VectorTemplateCombo',{
     },
 
     name: 'template',
-    // TODO change this to false as soon as we fixed the
-    // metadatatemplates uuids!
-    allowBlank: true,
+    allowBlank: false,
     bind: {
-        fieldLabel: '{templateLabel}'
-        // TODO get this back in as soon as we fixed the
-        // metadatatemplates uuids!
-        // value: '{templateUuid}'
+        fieldLabel: '{templateLabel}',
+        value: '{templateUuid}'
     },
     valueField: 'uuid',
     displayField: 'label',
