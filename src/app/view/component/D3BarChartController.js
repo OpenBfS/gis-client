@@ -538,7 +538,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var chartSize = this.getViewSize();
         var margin = this.getView().getChartMargin();
         chartSize[0] = chartSize[0] - parseInt(gnosConfig.legendEntryMaxLength, 10) - parseInt(margin.left, 10) - parseInt(margin.right, 10);
-        chartSize[1] = chartSize[1] - parseInt(margin.top, 10) - parseInt(margin.bottom, 10);
+        chartSize[1] = chartSize[1] - parseInt(margin.top, 10) * 2 - parseInt(margin.bottom, 10);
 
         // calculate the size
         var maxCount = barConfig.data.grouped.length;
