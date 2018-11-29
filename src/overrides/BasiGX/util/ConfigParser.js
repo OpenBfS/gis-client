@@ -82,6 +82,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                 req.setRequestHeader('Accept', 'application/json');
                 // NOTE: this makes sure the browser doesn't try to utf8-decode our
                 // precious iso-8859-1 string thus losing the umlauts
+                // see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
                 req.overrideMimeType('text/plain; charset=x-user-defined');
                 req.addEventListener('loadend', function() {
                     var response = req;
