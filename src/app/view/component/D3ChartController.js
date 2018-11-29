@@ -184,7 +184,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 series.toggleSeries(legend.seriesIndex);
             };
             if (station) {
-                legend.title = Koala.util.String.replaceTemplateStrings(gnosConfig.seriesTitleTpl, station);
+                legend.title = Koala.util.String.replaceTemplateStrings(gnosConfig.seriesTitleTpl, station).replace(/(\w)([-_/,.])(\w)/g, '$1 $2 $3');
                 legend.contextmenuHandler = me.getContextmenuFunction(legend.seriesIndex, series).bind(me);
             }
             legend.customRenderer = function(node) {
