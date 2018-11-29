@@ -586,8 +586,6 @@ Ext.define('Koala.util.Layer', {
                         var obj;
                         try {
                             // ATTENTION
-                            // metadata parsing is commented out for now until
-                            // migration to GNOS 3.4 is completed
                             // GNOS seems to send json via REST API ISO-8859-1
                             // encoded, so we're trying to fix it here.
                             // For IE browsers a polyfill is used.

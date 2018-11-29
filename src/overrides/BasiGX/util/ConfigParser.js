@@ -53,14 +53,7 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                 return;
             }
             var me = this;
-            var defaultHeaders;
             var authHeader = Koala.util.Authentication.getAuthenticationHeader(context);
-            if (authHeader) {
-                defaultHeaders = {
-                    Authorization: authHeader,
-                    Accept: 'application/json'
-                };
-            }
             var layerConfig = context.data.merge.mapLayers.slice();
 
             // If we have a route the Routing util will take care of this
@@ -78,67 +71,99 @@ Ext.define('Koala.override.basigx.ConfigParser', {
             Ext.each(layerConfig, function(layer, index) {
                 var visibility = layer.visible;
                 var uuid = layer.uuid || layer;
-                Ext.Ajax.request({
-                    url: context.data.merge.urls['metadata-xml2json'] + uuid,
-                    defaultHeaders: defaultHeaders,
-                    method: 'GET',
-                    async: false,
-                    success: function(response) {
-                        var obj;
-                        try {
-                            var txt = response.responseText;
+                // ATTENTION
+                // This is somewhat fragile code, see the notes
+                // NOTE: need to use xhr and not Ext.Ajax, else we can't override below
+                // We also cannot use Ext.Ajax with the binary option (as in Layer.js)
+                // because that flag cannot be used in synchronous requests...
+                var req = new XMLHttpRequest();
+                req.open('GET', context.data.merge.urls['metadata-xml2json'] + uuid, false);
+                req.setRequestHeader('Authorization', authHeader);
+                req.setRequestHeader('Accept', 'application/json');
+                // NOTE: this makes sure the browser doesn't try to utf8-decode our
+                // precious iso-8859-1 string thus losing the umlauts
+                // see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
+                req.overrideMimeType('text/plain; charset=x-user-defined');
+                req.addEventListener('loadend', function() {
+                    var response = req;
+                    var obj;
+                    // NOTE: we cannot use a FileReader here, else we fall back to async
+                    // so we just copy the bytes manually
+                    var responseBytes = new Uint8Array(response.responseText.length);
+                    for (var i = 0; i < response.responseText.length; ++i) {
+                        responseBytes[i] = response.responseText[i].charCodeAt(0) & 0xff;
+                    }
+                    try {
+                        var txt;
 
-                            // replace any occurencies of \{\{ (as it may still be
-                            // stored in db) with the new delimiters [[
-                            //
-                            // These arrive here as \\{\\{ (the backslash has been
-                            // escaped for the JSON format)
-                            //
-                            // Since both { and \ have a special meaning in regular
-                            // expressions, we need to escape them again with a \
-                            var escapedCurlyOpen = /\\\\\{\\\\\{/g;
-                            var escapedCurlyClose = /\\\\\}\\\\\}/g;
-
-                            txt = txt.replace(escapedCurlyOpen, '[[');
-                            txt = txt.replace(escapedCurlyClose, ']]');
-                            obj = Ext.decode(txt);
-                            obj = Koala.util.MetadataParser.parseMetadata(obj);
-                        } catch (ex) {
-                            // TODO i18n
-                            Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
-                        } finally {
-                            if (Koala.util.Layer.minimumValidMetadata(obj)) {
-                                var isVisible = visibility;
-                                layer = Koala.util.Layer.layerFromMetadata(obj);
-                                if (initialBackground && (obj.id === initialBackground.uuid)) {
-                                    layer.isBackground = true;
-                                }
-
-                                //set ol.Attribution
-                                var olProps = layer.getProperties();
-                                var attributions = olProps.attribution ? [new ol.Attribution({html: olProps.attribution})] : undefined;
-                                var source = layer.getSource();
-                                source.setAttributions(attributions);
-
-                                //set visibility according to appContext
-                                layer.set('visible',isVisible);
-
-                                //layer.set('treeId', 'bkg'); // Do we need this?
-                                var layers = me.map.getLayers();
-                                layers.insertAt(index, layer);
-                            } else {
-                                // TODO i18n
-                                Ext.toast('Für den Datensatz scheinen nicht' +
-                                      'ausreichend Metadaten vorzuliegen.');
+                        // ATTENTION
+                        // GNOS seems to send json via REST API ISO-8859-1
+                        // encoded, so we're trying to fix it here.
+                        // For IE browsers a polyfill is used.
+                        if (window.TextDecoder) {
+                            try {
+                                var decoder = new TextDecoder('ISO-8859-1');
+                                txt = decoder.decode(responseBytes);
+                            } catch (e) {
+                                // fallback to utf-8
+                                decoder = new TextDecoder('UTF-8');
+                                txt = decoder.decode(responseBytes);
                             }
+                        } else {
+                            txt = response.responseText;
                         }
-                    },
-                    failure: function(response) {
-                        var msg = 'server-side failure with status code ' +
-                        response.status;
-                        Ext.log.error(msg);
+
+                        // replace any occurencies of \{\{ (as it may still be
+                        // stored in db) with the new delimiters [[
+                        //
+                        // These arrive here as \\{\\{ (the backslash has been
+                        // escaped for the JSON format)
+                        //
+                        // Since both { and \ have a special meaning in regular
+                        // expressions, we need to escape them again with a \
+                        var escapedCurlyOpen = /\\\\\{\\\\\{/g;
+                        var escapedCurlyClose = /\\\\\}\\\\\}/g;
+
+                        txt = txt.replace(escapedCurlyOpen, '[[');
+                        txt = txt.replace(escapedCurlyClose, ']]');
+                        obj = Ext.decode(txt);
+                        obj = Koala.util.MetadataParser.parseMetadata(obj);
+                    } catch (ex) {
+                        // TODO i18n
+                        Ext.toast('Metadaten JSON konnte nicht dekodiert werden.');
+                    } finally {
+                        if (Koala.util.Layer.minimumValidMetadata(obj)) {
+                            var isVisible = visibility;
+                            layer = Koala.util.Layer.layerFromMetadata(obj);
+                            if (initialBackground && (obj.id === initialBackground.uuid)) {
+                                layer.isBackground = true;
+                            }
+
+                            //set ol.Attribution
+                            var olProps = layer.getProperties();
+                            var attributions = olProps.attribution ? [new ol.Attribution({html: olProps.attribution})] : undefined;
+                            var source = layer.getSource();
+                            source.setAttributions(attributions);
+
+                            //set visibility according to appContext
+                            layer.set('visible',isVisible);
+
+                            //layer.set('treeId', 'bkg'); // Do we need this?
+                            var layers = me.map.getLayers();
+                            layers.insertAt(index, layer);
+                        } else {
+                            // TODO i18n
+                            Ext.toast('Für den Datensatz scheinen nicht' +
+                                  'ausreichend Metadaten vorzuliegen.');
+                        }
                     }
                 });
+                req.addEventListener('error', function() {
+                    var msg = 'server-side failure with status code ' +
+                    req.status;
+                    Ext.log.error(msg);
+                });
+                req.send();
             });
         }
     }
