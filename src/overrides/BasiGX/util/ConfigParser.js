@@ -82,11 +82,28 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                     url: context.data.merge.urls['metadata-xml2json'] + uuid,
                     defaultHeaders: defaultHeaders,
                     method: 'GET',
-                    async: false,
+                    binary: true,
                     success: function(response) {
                         var obj;
                         try {
-                            var txt = response.responseText;
+                            var txt;
+
+                            // ATTENTION
+                            // GNOS seems to send json via REST API ISO-8859-1
+                            // encoded, so we're trying to fix it here.
+                            // For IE browsers a polyfill is used.
+                            if (window.TextDecoder) {
+                                try {
+                                    var decoder = new TextDecoder('ISO-8859-1');
+                                    txt = decoder.decode(response.responseBytes);
+                                } catch (e) {
+                                    // fallback to utf-8
+                                    decoder = new TextDecoder('UTF-8');
+                                    txt = decoder.decode(response.responseBytes);
+                                }
+                            } else {
+                                txt = response.responseText;
+                            }
 
                             // replace any occurencies of \{\{ (as it may still be
                             // stored in db) with the new delimiters [[
