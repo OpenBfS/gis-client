@@ -464,15 +464,16 @@ Ext.define('Koala.util.ChartData', {
                 return parseInt(w, 10);
             });
             // set the size
-            componentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] - margin[2]];
-            componentConfig.position = [margin[3], margin[0]];
+            componentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] * 2 - margin[2]];
+            componentConfig.position = [margin[3], 0];
             componentConfig.extraClasses = 'k-d3-shape-group';
             componentConfig.backgroundColor = gnosConfig.backgroundColor;
             componentConfig.title = layerConfig.title.label || '';
             componentConfig.titleColor = layerConfig.title.labelColor || '#000';
-            componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
+            componentConfig.titlePadding = (layerConfig.title.labelPadding || 18) - margin[0];
             componentConfig.titleSize = layerConfig.title.labelSize || 20;
             componentConfig.rotateBarLabel = gnosConfig.rotateBarLabel;
+            componentConfig.yOffset = margin[0];
             config.legendComponentConfig.position = [chartSize[0] - margin[1], 0];
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
