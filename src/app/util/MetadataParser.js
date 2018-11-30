@@ -192,10 +192,12 @@ Ext.define('Koala.util.MetadataParser', {
          * @return {Object} filter config
          */
         parsePointInTimeFilter: function(json) {
+            var getVal = Koala.util.Object.getPathStrOr;
             var config = {
                 type: 'pointintime',
                 defaulttimeformat: this.getStr(json, 'bfs:defaultValue/bfs:TimeFormat/'),
-                defaulttimeinstant: this.getStr(json, 'bfs:defaultValue/bfs:TimeInstant/')
+                defaulttimeinstant: this.getStr(json, 'bfs:defaultValue/bfs:TimeInstant/'),
+                encodeInViewParams: getVal(json, 'bfs:encodeInViewParams/gco:Boolean/#text')
             };
             this.parseCommonTimeFilter(json, config);
             return config;
@@ -221,13 +223,15 @@ Ext.define('Koala.util.MetadataParser', {
          * @return {Object} filter config
          */
         parseTimeRangeFilter: function(json) {
+            var getVal = Koala.util.Object.getPathStrOr;
             var config = {
                 type: 'timerange',
                 maxduration: this.getStr(json, 'bfs:maxDuration/'),
                 defaultstarttimeformat: this.getStr(json, 'bfs:defaultStartValue/bfs:TimeFormat/'),
                 defaultstarttimeinstant: this.getStr(json, 'bfs:defaultStartValue/bfs:TimeInstant/'),
                 defaultendtimeformat: this.getStr(json, 'bfs:defaultEndValue/bfs:TimeFormat/'),
-                defaultendtimeinstant: this.getStr(json, 'bfs:defaultEndValue/bfs:TimeInstant/')
+                defaultendtimeinstant: this.getStr(json, 'bfs:defaultEndValue/bfs:TimeInstant/'),
+                encodeInViewParams: getVal(json, 'bfs:encodeInViewParams/gco:Boolean/#text')
             };
             this.parseCommonTimeFilter(json, config);
             return config;
