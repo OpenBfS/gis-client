@@ -93,10 +93,13 @@ Ext.define('Koala.util.Import', {
 
         /**
          * Prepares the initial empty import.
-         * @param  {Object} config config object
+         * @param  {Object} context the context object
+         * @param  {Blob} bytes the zip file blob
          * @return {Promise} the promise resolving once the import is created
          */
-        prepareImport: function(config) {
+        prepareImport: function(context, bytes) {
+            context.bytes = bytes;
+            var config = context.config;
             var url = config.baseUrl + 'rest/imports';
 
             return Ext.Ajax.request({
@@ -133,10 +136,7 @@ Ext.define('Koala.util.Import', {
             var name = importMetadata.layer.get('name');
             var url = importMetadata.config.baseUrl + 'rest/imports/' + importId + '/tasks';
             var data = new FormData();
-            var bytes = Uint8Array.from(atob(importMetadata.bytes), function(c) {
-                return c.charCodeAt(0);
-            });
-            data.set(name + '.zip', new Blob([bytes]), name + '.zip');
+            data.set(name + '.zip', importMetadata.bytes, name + '.zip');
             var request = new XMLHttpRequest();
 
             request.open('POST', url);
@@ -187,6 +187,28 @@ Ext.define('Koala.util.Import', {
         },
 
         /**
+         * Extracts the data from the layer and converts it to a shape file zip.
+         * @param {ol.layer.Vector} layer the layer to extract the data from
+         * @param {Object} context the context object
+         */
+        prepareData: function(layer, context) {
+            var features = layer.getSource().getFeatures();
+            var fmt = new ol.format.GeoJSON();
+            var geojson = fmt.writeFeaturesObject(features, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: 'EPSG:3857'
+            });
+            context.geojson = geojson;
+            return shpwrite.zip(geojson, {
+                types: {
+                    polygon: layer.get('name') + '_polygons',
+                    line: layer.get('name') + '_lines',
+                    point: layer.get('name') + '_points'
+                }
+            });
+        },
+
+        /**
          * Imports the given layer. Generates a blob in shape file format and
          * uses the Geoserver importer extension to import it into the db.
          * @param  {ol.layer.Vector} layer the layer to imports
@@ -195,26 +217,12 @@ Ext.define('Koala.util.Import', {
         importData: function(layer, role) {
             var config = Koala.util.AppContext.getAppContext();
             config = config.data.merge.import[role];
-            var features = layer.getSource().getFeatures();
-            var fmt = new ol.format.GeoJSON();
-            var geojson = fmt.writeFeaturesObject(features, {
-                dataProjection: 'EPSG:4326',
-                featureProjection: 'EPSG:3857'
-            });
-            var bytes = shpwrite.zip(geojson, {
-                types: {
-                    polygon: layer.get('name') + '_polygons',
-                    line: layer.get('name') + '_lines',
-                    point: layer.get('name') + '_points'
-                }
-            });
             var importMetadata = {
                 config: config,
-                bytes: bytes,
-                layer: layer,
-                geojson: geojson
+                layer: layer
             };
-            this.prepareImport(config)
+            this.prepareData(layer, importMetadata)
+                .then(this.prepareImport.bind(this, importMetadata))
                 .then(this.prepareTask.bind(this, importMetadata))
                 .then(this.performImport.bind(this, importMetadata))
                 .then(this.getLayerName.bind(this, importMetadata))
