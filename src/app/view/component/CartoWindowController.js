@@ -1208,7 +1208,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
     getFeatureAnchorPoint: function(feature) {
         var coords;
         if (feature.getGeometry().getType() === 'MultiPolygon' || feature.getGeometry().getType() === 'Polygon') {
-            feature = turf.polygon([feature.getGeometry().getCoordinates()[0]]);
+            feature = turf.polygon(feature.getGeometry().getCoordinates()[0]);
             coords = turf.centroid(feature).geometry.coordinates;
         } else if (feature.getGeometry().getType() === 'Point') {
             coords = feature.getGeometry().getCoordinates();

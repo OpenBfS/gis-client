@@ -278,11 +278,11 @@ Ext.define('Koala.util.ChartData', {
             "gridStrokeWidth": "1",
             "gridStrokeOpacity": "0.5",
             "labelColor": "#294d71",
-            "labelPadding": "50",
+            "labelPadding": "10",
             "yAxisFormat": ",.3f",
-            "chartMargin": "30,200,60,80",
+            "chartMargin": "30,15,15,15",
             "labelSize": "13",
-            "legendEntryMaxLength": "20",
+            "legendEntryMaxLength": "200",
             "tickPadding": "0",
             "tickSize": "3",
             "strokeWidth": "2",
@@ -354,7 +354,7 @@ Ext.define('Koala.util.ChartData', {
                     chartMargin: []
                 },
                 legendComponentConfig: {
-                    legendEntryMaxLength: 20,
+                    legendEntryMaxLength: 200,
                     position: chartSize[0] - 80,
                     margin: undefined,
                     offset: undefined,
@@ -393,7 +393,7 @@ Ext.define('Koala.util.ChartData', {
             config.chartRendererConfig.zoomType = gnosConfig.allowZoom ? 'rerender' : 'none';
             config.chartRendererConfig.chartMargin = gnosConfig.chartMargin ? gnosConfig.chartMargin.split(',') : [];
 
-            config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 20;
+            config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 200;
             config.legendComponentConfig.legendEntryMaxLength -= 60;
 
             if (type === 'timeSeries') {
