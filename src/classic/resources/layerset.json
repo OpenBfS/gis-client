@@ -75,6 +75,11 @@
                   "uuid" : "83cb1604-3d8c-490b-b807-5e7cb17f3b22",
                   "leaf" : true,
                   "text" : "ODL brutto 24h"
+               },
+               {
+                  "uuid" : "de5cd0df-721a-4b54-8b3b-beb70404505f",
+                  "leaf" : true,
+                  "text" : "ODL brutto 10min Landkreis(max)"
                }
             ],
             "thumb" : "layer_sets/odl_thumb.png"
