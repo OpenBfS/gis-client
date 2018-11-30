@@ -513,7 +513,7 @@
                 "downloadLayerText": "Download",
                 "geoJsonText": "GeoJSON",
                 "shapefileText": "Shapefile",
-                "saveLayerText": "Save layer",
+                "saveLayerText": "Publish layer",
                 "wfstSuccess": "Changes successfully saved.<br>Objects inserted: {0}<br>Objects updated: {1}<br>Objects deleted: {2}",
                 "wfstFailure": "Changes could not be saved. Please try again later.",
                 "wfstLockFail": "The WFS-T Lock request was rejeceted",

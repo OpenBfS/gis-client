@@ -514,7 +514,7 @@
                 "downloadLayerText": "Daten herunterladen",
                 "geoJsonText": "GeoJSON",
                 "shapefileText": "Shape-Datei",
-                "saveLayerText": "Layer speichern",
+                "saveLayerText": "Layer publizieren",
                 "wfstSuccess": "Die Änderungen wurden erfolgreich gespeichert.<br>Objekte hinzugefügt: {0}<br>Objekte aktualisiert: {1}<br>Objekte gelöscht: {2}",
                 "wfstFailure": "Die Änderungen konnten nicht gespeichert werden, bitte probieren Sie es später erneut.",
                 "wfstLockFail": "Die WFS-T Lock Anfrage wurde abgelehnt",
