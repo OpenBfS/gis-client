@@ -149,15 +149,18 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         iconCls: 'x-fa fa-expand',
                         hidden: !Koala.util.Fullscreen.isFullscreenSupported()
                     }, {
-                        text: '{showLayersetChooserText}',
-                        key: 'showlayersetchooser',
-                        leaf: true,
-                        rowCls: '{showLayersetChooser ? "active" : ""}'
-                    }, {
-                        text: '{showHelpText}',
-                        key: 'showhelp',
-                        leaf: true,
-                        rowCls: '{showHelp ? "active" : ""} {publicRole ? "" : "hidden"}'
+                        text: '{onRestartText}',
+                        children: [{
+                            text: '{showLayersetChooserText}',
+                            key: 'showlayersetchooser',
+                            leaf: true,
+                            rowCls: '{showLayersetChooser ? "active" : ""}'
+                        }, {
+                            text: '{showHelpText}',
+                            key: 'showhelp',
+                            leaf: true,
+                            rowCls: '{showHelp ? "active" : ""} {publicRole ? "" : "hidden"}'
+                        }]
                     }]
                 }, {
                     text: '{imprint}',

@@ -470,8 +470,9 @@
                 "help": "Hilfe",
                 "privacyUrl": "http://www.bfs.de/DE/service/datenschutz/datenschutz_node.html",
                 "createvectorlayer": "Vektorlayer erzeugen",
-                "showHelpText": "Hilfe anzeigen",
-                "showLayersetChooserText": "Themenauswahl anzeigen"
+                "showHelpText": "Begrüßungsfenster anzeihen",
+                "showLayersetChooserText": "Layerprofilfenster anzeigen",
+                "onRestartText": "Bei Neustart"
             }
         }
     },
