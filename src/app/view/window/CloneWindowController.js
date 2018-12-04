@@ -53,7 +53,7 @@ Ext.define('Koala.view.window.CloneWindowController', {
         }
 
         var dataSourceType = view.down('[name=datasource-radios]')
-            .down('[checked=true]').inputValue;
+            .down('radio[checked=true]').inputValue;
         var copyStyle = view.down('[name=copystyle]').getValue();
         copyStyle = copyStyle && dataSourceType === 'useLayer';
         var dataSourceLayer;
@@ -75,9 +75,11 @@ Ext.define('Koala.view.window.CloneWindowController', {
             dataSourceLayer,
             uuid,
             copyStyle
-        );
-        view.close();
-        Ext.ComponentQuery.query('k-button-selectfeatures')[0].setPressed(false);
+        )
+            .then(function() {
+                view.close();
+                Ext.ComponentQuery.query('k-button-selectfeatures')[0].setPressed(false);
+            });
     },
 
     /**
