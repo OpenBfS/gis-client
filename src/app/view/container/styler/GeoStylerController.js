@@ -89,7 +89,15 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var sldParser = new GeoStylerSLDParser.SldStyleParser();
         sldParser.writeStyle(style)
             .then(function(sld) {
-                download(sld, 'style.xml', 'application/xml');
+                var name = style.name;
+                if (!name) {
+                    name = 'style.xml';
+                }
+                if (!name.endsWith('.xml')) {
+                    name += '.xml';
+                }
+                var arr = new TextEncoder().encode(sld);
+                download(arr, name, 'application/xml');
             });
     },
 
