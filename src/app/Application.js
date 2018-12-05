@@ -103,7 +103,7 @@ Ext.define('Koala.Application', {
      * @type {function}
      */
     onMapRoute: function() {
-        Koala.util.Routing.onMapRoute.apply(arguments);
+        Koala.util.Routing.onMapRoute.apply(null, arguments);
     },
 
     /**
@@ -112,7 +112,7 @@ Ext.define('Koala.Application', {
      * @type {function}
      */
     beforeLayerTreeRoute: function() {
-        Koala.util.Routing.beforeLayerTreeRoute.apply(arguments);
+        Koala.util.Routing.beforeLayerTreeRoute.apply(null, arguments);
     },
 
     /**
@@ -121,7 +121,7 @@ Ext.define('Koala.Application', {
      * @type {function}
      */
     onLayerTreeRoute: function() {
-        Koala.util.Routing.onLayerTreeRoute.apply(arguments);
+        Koala.util.Routing.onLayerTreeRoute.apply(null, arguments);
     },
 
     /**
@@ -130,7 +130,7 @@ Ext.define('Koala.Application', {
      * @type {function}
      */
     onRodosProjectRoute: function() {
-        Koala.util.Routing.onRodosProjectRoute.apply(arguments);
+        Koala.util.Routing.onRodosProjectRoute.apply(null, arguments);
     },
 
     /**
@@ -139,7 +139,7 @@ Ext.define('Koala.Application', {
      * @type {function}
      */
     onUnmatchedRoute: function() {
-        Koala.util.Routing.onUnmatchedRoute.apply(arguments);
+        Koala.util.Routing.onUnmatchedRoute.apply(null, arguments);
     },
 
     /**

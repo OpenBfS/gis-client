@@ -69,7 +69,7 @@ Ext.define('Koala.util.Routing', {
             var mapView = map.getView();
 
             mapView.setCenter([parseInt(lon, 10), parseInt(lat, 10)]);
-            mapView.setZoom(zoom);
+            mapView.setZoom(parseInt(zoom, 10));
         },
 
         /**
