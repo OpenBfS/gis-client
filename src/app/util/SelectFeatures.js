@@ -138,7 +138,7 @@ Ext.define('Koala.util.SelectFeatures', {
          */
         getAllFeaturesFromWmsLayer: function(sourceLayer, targetLayer, maxFeatures) {
             if (!maxFeatures) {
-                maxFeatures = 1000;
+                maxFeatures = 2000;
             }
             Koala.util.Layer.getGeometryFieldNameForLayer(
                 sourceLayer,
@@ -162,7 +162,7 @@ Ext.define('Koala.util.SelectFeatures', {
         getFeaturesFromWmsLayerByBbox: function(sourceLayer, targetLayer,
             extent, maxFeatures) {
             if (!maxFeatures) {
-                maxFeatures = 1000;
+                maxFeatures = 2000;
             }
             Koala.util.Layer.getGeometryFieldNameForLayer(
                 sourceLayer,
