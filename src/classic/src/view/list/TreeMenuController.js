@@ -90,6 +90,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     }
                     if (measureTools) {
                         mapContainer.remove(measureTools);
+                        viewModel.set('measureToolsActive', false);
                     } else {
                         measureTools = Ext.create('Koala.view.container.RedliningToolsContainer', {
                             style: {
@@ -110,6 +111,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     }
                     if (drawTools) {
                         mapContainer.remove(drawTools);
+                        viewModel.set('drawToolsActive', false);
                     } else {
                         drawTools = Ext.create('Koala.view.container.DrawToolsContainer', {
                             style: {
