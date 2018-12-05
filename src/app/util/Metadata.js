@@ -58,8 +58,18 @@ Ext.define('Koala.util.Metadata', {
             XML.removeNodes(doc, xpath, node);
             XML.addCharacterString(doc, node, bfs, 'bfs:printTitle', name);
             XML.addCharacterString(doc, node, bfs, 'bfs:legendTitle', name);
-            xpath = 'bfs:layerType/bfs:MD_VectorLayerType/bfs:URL';
+            xpath = 'bfs:layerType/bfs:MD_WMSLayerType';
             var layerNode = doc.evaluate(xpath, node, ns).iterateNext();
+            if (layerNode) {
+                layerNode.remove();
+            }
+            xpath = 'bfs:layerType/bfs:MD_VectorLayerType/bfs:URL';
+            layerNode = doc.evaluate(xpath, node, ns).iterateNext();
+            if (!layerNode) {
+                layerNode = XML.addOrGet(doc, node, gmd, 'bfs:layerType');
+                layerNode = XML.addOrGet(doc, layerNode, gmd, 'bfs:MD_VectorLayerType');
+                layerNode = XML.addOrGet(doc, layerNode, gmd, 'bfs:URL');
+            }
             XML.removeNodes(doc, 'bfs:host', layerNode);
             XML.removeNodes(doc, 'bfs:path', layerNode);
             XML.addCharacterString(doc, layerNode, bfs, 'bfs:host', host);
