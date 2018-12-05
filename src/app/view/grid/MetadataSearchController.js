@@ -21,12 +21,16 @@ Ext.define('Koala.view.grid.MetadataSearchController', {
     alias: 'controller.k-grid-metadatasearch',
 
     requires: [
-        'Koala.view.window.MetadataInfo'
+        'Koala.view.window.MetadataInfo',
+        'Koala.util.Object'
     ],
 
     addToMap: function(grid, rowIndex, colIndex, btn, evt, record) {
         // TODO, get better
-        Koala.util.Layer.addLayerByUuid(record.get('fileIdentifier'));
+        var getVal = Koala.util.Object.getPathStrOr;
+        var recordData = record.getData();
+        var uuid = getVal(recordData, 'gmd:fileIdentifier/gco:CharacterString');
+        Koala.util.Layer.addLayerByUuid(uuid);
     },
 
     getInfo: function(grid, rowIndex, colIndex, btn, evt, record) {
