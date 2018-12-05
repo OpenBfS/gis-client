@@ -64,7 +64,7 @@
     "antd": "3.11.0",
     "geostyler": "0.25.0",
     "geostyler-geojson-parser": "0.4.6",
-    "geostyler-openlayers-parser": "0.19.2",
+    "geostyler-openlayers-parser": "0.20.0",
     "geostyler-sld-parser": "0.18.0",
     "react": "16.6.3",
     "react-dom": "16.6.3"
