@@ -82,8 +82,6 @@ Ext.define('Koala.view.window.ShareWindow', {
                 fieldLabel: '{layerNameLabel}'
             }
         }, {
-            xtype: 'k-form-field-vectortemplatecombo'
-        }, {
             xtype: 'combo',
             name: 'rolescombo',
             displayField: 'role',
@@ -102,6 +100,7 @@ Ext.define('Koala.view.window.ShareWindow', {
         var store = Koala.util.AppContext.getRolesStore();
         var combo = this.down('[name=rolescombo]');
         combo.setStore(store);
+        this.down('textfield').setValue(this.getSourceLayer().get('name'));
     }
 
 });
