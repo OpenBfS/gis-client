@@ -24,7 +24,8 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
         'Koala.util.String',
         'Koala.model.Station',
         'Koala.view.component.D3Chart',
-        'Koala.view.window.Print'
+        'Koala.view.window.Print',
+        'Koala.util.Print'
     ],
 
     /**
@@ -460,27 +461,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
 
     onPrintChartClicked: function(btn) {
         var chart = btn.up('[name="chart-composition"]').down('d3-chart');
-        var chartCtrl = chart.getController();
-        chartCtrl
-            .showScaleWindow()
-            .then(function(scale) {
-                return chartCtrl.chartToDataUri(scale, false);
-            })
-            .then(function(dataUri) {
-                var printWin = Ext.create({
-                    xtype: 'k-panel-print',
-                    chartPrint: true,
-                    chart: dataUri,
-                    irixPrint: true,
-                    autoShow: false
-                });
-                printWin.down('k-form-print').irixFieldsetLoaded.then(function() {
-                    var fieldset = printWin.down('k-form-irixfieldset');
-                    fieldset.irixFieldsetLoaded.then(function() {
-                        printWin.show();
-                    });
-                });
-            });
+        Koala.util.Print.doChartPrint(chart);
     },
 
     /**
