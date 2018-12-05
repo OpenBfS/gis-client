@@ -78,7 +78,8 @@
                 "addWmsBtn",
                 "printBtn",
                 "cloneBtn",
-                "selectFeaturesBtn"
+                "selectFeaturesBtn",
+                "irixPrintBtn"
             ],
             "vectorIcons": [
                 {

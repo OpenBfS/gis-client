@@ -35,6 +35,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Koala.util.Object',
         'Koala.util.Date',
         'Koala.util.Filter',
+        'Koala.util.Print',
         'Koala.view.window.Print'
     ],
 
@@ -448,31 +449,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.IrixPrintButton = Ext.create(btn);
         this.IrixPrintButton.on('beforerender', Koala.util.AppContext.generateCheckToolVisibility('irixPrintBtn'));
         this.IrixPrintButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3);
-        this.IrixPrintButton.el.dom.addEventListener('click', this.showIrixPrintDialog.bind(this, chart));
-    },
-
-    showIrixPrintDialog: function(chart) {
-        var chartCtrl = chart.getController();
-
-        chartCtrl
-            .showScaleWindow()
-            .then(function(scale) {
-                return chartCtrl.chartToDataUri(scale, false);
-            })
-            .then(function(dataUri) {
-                var printWin = Ext.create({
-                    xtype: 'k-window-print',
-                    chartPrint: true,
-                    chart: dataUri,
-                    irixPrint: true
-                });
-                printWin.down('k-form-print').irixFieldsetLoaded.then(function() {
-                    var fieldset = printWin.down('k-form-irixfieldset');
-                    fieldset.irixFieldsetLoaded.then(function() {
-                        printWin.show();
-                    });
-                });
-            });
+        this.IrixPrintButton.el.dom.addEventListener('click', Koala.util.Print.doChartPrint.bind(this, chart));
     },
 
     /**
