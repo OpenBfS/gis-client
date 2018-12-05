@@ -22,7 +22,7 @@ Ext.define('Koala.util.DokpoolContext', {
     extend: 'Ext.Component',
 
     requires: [
-        BasiGX.view.component.Map
+        'BasiGX.view.component.Map'
     ],
 
     config: {
