@@ -19,7 +19,10 @@
 Ext.define('Koala.view.list.TreeMenuModel', {
     extend: 'Ext.app.ViewModel',
 
-    requires: ['Koala.util.LocalStorage'],
+    requires: [
+        'Koala.util.LocalStorage',
+        'Koala.util.Fullscreen'
+    ],
 
     alias: 'viewmodel.k-list-treemenu',
 
