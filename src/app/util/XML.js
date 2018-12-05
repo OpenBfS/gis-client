@@ -65,6 +65,9 @@ Ext.define('Koala.util.XML', {
          */
         removeNodes: function(doc, xpath, node) {
             var ns = Koala.util.XML.namespaceResolver();
+            if (!node) {
+                return;
+            }
             node = doc.evaluate(xpath, node, ns).iterateNext();
             while (node) {
                 node.parentNode.removeChild(node);
