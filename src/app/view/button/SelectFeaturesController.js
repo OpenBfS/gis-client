@@ -81,6 +81,7 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
                 })
             });
             this.selectionLayer.set(displayInLayerSwitcherKey, false);
+            this.selectionLayer.set('isSelectionLayer', true);
             this.mapComponent.map.addLayer(this.selectionLayer);
             var mainVm = Ext.ComponentQuery.query('app-main')[0].getViewModel();
             mainVm.set('selectedFeaturesLayer', this.selectionLayer);

@@ -26,6 +26,7 @@
         "atob": true,
         "Uint8Array": true,
         "TextDecoder": true,
+        "TextEncoder": true,
         "Papa": true,
         "jsts": true,
         "D3Util": true,

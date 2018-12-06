@@ -827,7 +827,7 @@ Ext.define('Koala.util.Layer', {
             Ext.each(map.getLayers().getArray(), function(layer) {
                 var path = 'metadata/layerConfig/olProperties/alwaysOnTop';
                 var alwaysOnTop = Koala.util.Object.getPathStrOr(layer, path, false);
-                if (alwaysOnTop) {
+                if (alwaysOnTop || layer.get('isSelectionLayer')) {
                     onTopLayers.push(layer);
                 }
             });
@@ -1143,6 +1143,9 @@ Ext.define('Koala.util.Layer', {
                         layer.set('legendUrl', url + '/ows?' + Ext.Object.toQueryString(parms));
                         // force redrawing the legend
                         Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].delayedRepaintLayerFilterIndication();
+                        if (!layer.setStyle) {
+                            return;
+                        }
                         var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
                         style.then(function(parsed) {
                             var olStyle = olParser.writeStyle(parsed);

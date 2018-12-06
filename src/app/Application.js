@@ -102,35 +102,45 @@ Ext.define('Koala.Application', {
      * detailed implementation docs.
      * @type {function}
      */
-    onMapRoute: Koala.util.Routing.onMapRoute,
+    onMapRoute: function() {
+        Koala.util.Routing.onMapRoute.apply(null, arguments);
+    },
 
     /**
      * Listens to the layers route and does some prechecks. See
      * Koala.util.Routing.beforeLayerTreeRoute for detailed implementation docs.
      * @type {function}
      */
-    beforeLayerTreeRoute: Koala.util.Routing.beforeLayerTreeRoute,
+    beforeLayerTreeRoute: function() {
+        Koala.util.Routing.beforeLayerTreeRoute.apply(null, arguments);
+    },
 
     /**
      * Listens to the layers route after beforeLayerTreeRoute. See
      * Koala.util.Routing.onLayerTreeRoute for detailed implementation docs.
      * @type {function}
      */
-    onLayerTreeRoute: Koala.util.Routing.onLayerTreeRoute,
+    onLayerTreeRoute: function() {
+        Koala.util.Routing.onLayerTreeRoute.apply(null, arguments);
+    },
 
     /**
      * Listens to the rodosproject route. See
      * Koala.util.Routing.onRodosProjectRoute for detailed implementation docs.
      * @type {function}
      */
-    onRodosProjectRoute: Koala.util.Routing.onRodosProjectRoute,
+    onRodosProjectRoute: function() {
+        Koala.util.Routing.onRodosProjectRoute.apply(null, arguments);
+    },
 
     /**
      * Gets called on an unmatched route. See Koala.util.Routing.onMapRoute
      * for detailed implementation docs.
      * @type {function}
      */
-    onUnmatchedRoute: Koala.util.Routing.onUnmatchedRoute,
+    onUnmatchedRoute: function() {
+        Koala.util.Routing.onUnmatchedRoute.apply(null, arguments);
+    },
 
     /**
      * Gets called if the appCache signals an app update. It shows a confirm
