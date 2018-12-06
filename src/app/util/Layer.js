@@ -1135,6 +1135,9 @@ Ext.define('Koala.util.Layer', {
                     method: 'GET'
                 })
                     .then(function(response) {
+                        if (!response.responseText) {
+                            return;
+                        }
                         var parser = new GeoStylerSLDParser.SldStyleParser();
                         var style = parser.readStyle(response.responseText);
                         var parms = {
