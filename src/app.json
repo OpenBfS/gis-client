@@ -449,6 +449,10 @@
             "output": "resources"
         },
         {
+            "path": "lib/BasiGX/resources",
+            "output": "resources"
+        },
+        {
             "path": "sass/etc/fonts",
             "path": "sass/stylesheets/fonts" // flaticon font
         },
