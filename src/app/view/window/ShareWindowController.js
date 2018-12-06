@@ -39,8 +39,7 @@ Ext.define('Koala.view.window.ShareWindowController', {
         var view = this.getView();
         var oldLayer = view.getSourceLayer();
         var name = view.down('textfield').getValue();
-        var templateCombo = view.down('k-form-field-vectortemplatecombo');
-        var uuid = templateCombo.getViewModel().get('templateUuid');
+        var uuid = oldLayer.metadata.id;
         var oldRole;
         var config = Koala.util.AppContext.getAppContext();
         var oldWorkspace = oldLayer.metadata.layerConfig.olProperties.workspace;
