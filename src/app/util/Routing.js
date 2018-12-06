@@ -408,7 +408,9 @@ Ext.define('Koala.util.Routing', {
                 }
 
                 // Skip baselayers configured in appContext
-                if (Ext.Array.contains(mapLayers, layer.metadata.id)) {
+                if (Ext.Array.findBy(mapLayers, function(item) {
+                    return item.uuid === layer.metadata.id;
+                })) {
                     return false;
                 }
 
