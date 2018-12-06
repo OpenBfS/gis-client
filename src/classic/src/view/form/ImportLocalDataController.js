@@ -209,11 +209,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             });
 
             var layer = new ol.layer.Vector(cfg);
+            layer.metadata = metadata;
 
-            if (style) {
-                // TODO
-                // create GeoStyler-Style
-            }
+            layerUtil.getVectorLayerStyle(layer, true);
 
             // Finally add the layer to the map.
             layerUtil.addOlLayerToMap(layer);

@@ -1106,17 +1106,22 @@ Ext.define('Koala.util.Layer', {
             return layer;
         },
 
-        getVectorLayerStyle: function(layer) {
-            if (layer.get('persisted') ||
+        getVectorLayerStyle: function(layer, force) {
+            if (layer.get('persisted') || force ||
                 layer.metadata.layerConfig.olProperties.persisted) {
                 var context = Koala.util.AppContext.getAppContext().data.merge;
                 var configs = context.import;
                 var url;
                 Ext.iterate(configs, function(key, value) {
-                    if (value.workspace === layer.metadata.layerConfig.olProperties.workspace) {
+                    if (layer.metadata && value.workspace === layer.metadata.layerConfig.olProperties.workspace) {
                         url = value.baseUrl;
                     }
                 });
+                // fall back to generic GeoServer URL
+                if (!url) {
+                    var ms = /(^http[s]?:\/\/[^/]+[/][^/]+)/g.exec(context.urls['spatial-search']);
+                    url = ms[1] + '/';
+                }
                 var styleName = layer.metadata.id;
                 if (layer.metadata.layerConfig.olProperties.styleReference) {
                     styleName = layer.metadata.layerConfig.olProperties.styleReference;
