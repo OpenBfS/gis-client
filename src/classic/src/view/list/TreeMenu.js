@@ -30,7 +30,8 @@ Ext.define('Koala.view.list.TreeMenu', {
         'Koala.util.AppContext',
         'Koala.util.LocalStorage',
         'Koala.view.list.TreeMenuModel',
-        'Koala.view.list.TreeMenuController'
+        'Koala.view.list.TreeMenuController',
+        'Koala.util.Fullscreen'
     ],
 
     ui: 'tree-menu',
@@ -64,6 +65,7 @@ Ext.define('Koala.view.list.TreeMenu', {
         var roles = ctx.imis_user.userroles;
         var isPublic = roles.indexOf('public') !== -1;
         viewModel.set('publicRole', isPublic);
+        viewModel.set('fullscreenSupported', Koala.util.Fullscreen.isFullscreenSupported());
     }
 
 });
