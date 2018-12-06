@@ -94,6 +94,7 @@ Ext.define('Koala.view.panel.FeatureGrid', {
         }
     }],
 
+
     initComponent: function() {
         var me = this;
         // save original layer
@@ -255,6 +256,21 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                 }
             }, {
                 xtype: 'button',
+                id: 'feature-grid-download-button',
+                bind: {
+                    text: '{downloadLayerText}'
+                },
+                handler: 'downloadLayer'
+            }, {
+                xtype: 'button',
+                id: 'feature-grid-toggle-sort-selected-button',
+                bind: {
+                    text: '{toggleSortSelectedText}'
+                },
+                toggleHandler: 'toggleSortSelected',
+                enableToggle: true
+            }, {
+                xtype: 'button',
                 hidden: (!extendedRights || !allowCreate),
                 bind: {
                     text: '{saveLayerText}'
@@ -298,21 +314,6 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                     });
                     menu.showBy(btn);
                 }
-            }, {
-                xtype: 'button',
-                id: 'feature-grid-download-button',
-                bind: {
-                    text: '{downloadLayerText}'
-                },
-                handler: 'downloadLayer'
-            }, {
-                xtype: 'button',
-                id: 'feature-grid-toggle-sort-selected-button',
-                bind: {
-                    text: '{toggleSortSelectedText}'
-                },
-                toggleHandler: 'toggleSortSelected',
-                enableToggle: true
             }]
         }, {
             xtype: 'basigx-grid-featuregrid',
