@@ -59,7 +59,8 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         showLayersetChooser: true,
         showHelpText: '',
         showLayersetChooserText: '',
-        publicRole: true
+        publicRole: true,
+        fullscreenSupported: true
     },
 
     stores: {
@@ -150,7 +151,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         key: 'fullscreen',
                         leaf: true,
                         iconCls: 'x-fa fa-expand',
-                        hidden: !Koala.util.Fullscreen.isFullscreenSupported()
+                        hidden: '{!fullscreenSupported}'
                     }, {
                         text: '{onRestartText}',
                         children: [{
