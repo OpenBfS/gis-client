@@ -293,10 +293,10 @@ Ext.define('Koala.util.Import', {
          * Close all open featuregrid windows.
          */
         closeFeatureGrid: function() {
-            var wins = Ext.ComponentQuery.query('k-window-featuregrid');
+            var wins = Ext.ComponentQuery.query('k-panel-featuregrid');
             if (wins.length > 0) {
                 Ext.each(wins, function(win) {
-                    win.destroy();
+                    win.close();
                 });
             }
             var tree = Ext.ComponentQuery.query('k-panel-themetree')[0];
