@@ -232,8 +232,8 @@ Ext.define('Koala.util.Import', {
                     layer.metadata,
                     role
                 ))
-                .then(this.readdLayer.bind(this, layer))
                 .then(this.importStyle.bind(this, layer))
+                .then(this.readdLayer.bind(this, layer))
                 .then(this.setPersistedFlag.bind(this, layer))
                 .then(this.closeFeatureGrid.bind(this));
         },
@@ -265,6 +265,7 @@ Ext.define('Koala.util.Import', {
          */
         importStyle: function(layer, context) {
             this.updateStyle(context.newUuid, layer.get('SLD'), context.config);
+            return context;
         },
 
         /**

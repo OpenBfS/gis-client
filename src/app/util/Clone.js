@@ -43,6 +43,17 @@ Ext.define('Koala.util.Clone', {
                     targetLayer.set('SLD', response.responseText);
                     sldParser.readStyle(response.responseText)
                         .then(function(gsStyle) {
+                            // You're reading this correctly, we're reexporting to SLD again
+                            // because even if GeoServer understands SLD/SE 1.1.0 when configuring
+                            // with it it seems uploading SLD/SE 1.1.0 leads to GeoServer dropping
+                            // all occuring SvgParameter elements presumably by parsing them as
+                            // SLD/SE 1.0.0.
+                            // Since GeoStyler supports reading SLD/SE in both versions and
+                            // exports as SLD/SE 1.0.0 this fixes things.
+                            var reexport = sldParser.writeStyle(gsStyle);
+                            reexport.then(function(reexportedStyle) {
+                                targetLayer.set('SLD', reexportedStyle);
+                            });
                             var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
                             olParser.writeStyle(gsStyle)
                                 .then(function(olStyle) {
