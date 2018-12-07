@@ -300,8 +300,15 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                         performSave(roleToSave);
                         return;
                     }
-                    var roles = Koala.util.AppContext.getAppContext()
-                        .data.merge.imis_user.userroles;
+                    var userRoles = Koala.util.AppContext.getAppContext().data.merge.imis_user.userroles;
+                    var importRoles = Koala.util.AppContext.getAppContext().data.merge.import;
+                    var roles = [];
+                    userRoles.forEach(function(role){
+                        if(importRoles[role]){
+                            roles.push(role);
+                        }
+                    });
+
                     var menu = Ext.create('Ext.menu.Menu', {
                         items: Ext.Array.map(roles, function(role) {
                             return {
