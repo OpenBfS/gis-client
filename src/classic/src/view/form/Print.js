@@ -665,10 +665,10 @@ Ext.define('Koala.view.form.Print', {
             var height = containerEl.offsetHeight;
             view.hideHiddenTabs();
             // workaround to get object tags to render properly with html2canvas
-            var htmlNode = d3.select(containerEl).select('.html-tab > input').node();
+            var htmlNode = containerEl.querySelector('.html-tab > input');
             if (htmlNode && htmlNode.checked) {
                 try {
-                    var node = d3.select('.html-tab object').node().contentDocument.documentElement;
+                    var node = document.querySelector('.html-tab object').contentDocument.documentElement;
                     if (node) {
                         containerEl = node;
                     }
@@ -676,9 +676,13 @@ Ext.define('Koala.view.form.Print', {
                     // no object tag found, go ahead with the original container
                 }
             }
-            d3.selectAll('.k-d3-hidden').style('display', 'none');
-            d3.selectAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
-                .style('display', 'none');
+            document.querySelectorAll('.k-d3-hidden').forEach(function(item) {
+                item.style.display = 'none';
+            });
+            document.querySelectorAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
+                .forEach(function(item) {
+                    item.style.display = 'none';
+                });
             var promise = html2canvas(containerEl);
             promises.push(promise);
             promise.then(function(canvas) {
@@ -686,8 +690,10 @@ Ext.define('Koala.view.form.Print', {
                 height *= ratioY;
 
                 view.showHiddenTabs();
-                d3.selectAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
-                    .style('display', 'block');
+                document.querySelectorAll('.k-d3-download-icon,.k-d3-color-icon,.k-d3-delete-icon')
+                    .forEach(function(item) {
+                        item.style.display = 'block';
+                    });
                 printLayers.push({
                     type: 'chart',
                     coordinates: coords,
@@ -698,7 +704,10 @@ Ext.define('Koala.view.form.Print', {
                         return this;
                     }
                 });
-                d3.selectAll('.k-d3-hidden').style('display', 'block');
+                document.querySelectorAll('.k-d3-hidden')
+                    .forEach(function(item) {
+                        item.style.display = 'block';
+                    });
             });
         });
 
@@ -929,13 +938,13 @@ Ext.define('Koala.view.form.Print', {
      * Explicitly hides the carto window tabs that are currently not visible.
      */
     hideHiddenTabs: function() {
-        d3.selectAll('.cartowindow > div').each(function() {
-            if (this.clientWidth === 0 || this.clientHeight === 0) {
-                d3.select(this).style('display', 'none');
+        document.querySelectorAll('.cartowindow > div').forEach(function(item) {
+            if (item.clientWidth === 0 || item.clientHeight === 0) {
+                item.style.display = 'none';
             }
         });
-        d3.selectAll('.cartowindow > div > input[type=radio]').each(function() {
-            d3.select(this).style('display', 'none');
+        document.querySelectorAll('.cartowindow > div > input[type=radio]').forEach(function(item) {
+            item.style.display = 'none';
         });
     },
 
@@ -943,9 +952,9 @@ Ext.define('Koala.view.form.Print', {
      * Shows the carto window tabs with zero width or height.
      */
     showHiddenTabs: function() {
-        d3.selectAll('.cartowindow > div').each(function() {
-            if (this.clientWidth === 0 || this.clientHeight === 0) {
-                d3.select(this).style('display', 'block');
+        document.querySelectorAll('.cartowindow > div').forEach(function(item) {
+            if (item.clientWidth === 0 || item.clientHeight === 0) {
+                item.style.display = 'block';
             }
         });
     },
