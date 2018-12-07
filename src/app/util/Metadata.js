@@ -32,8 +32,8 @@ Ext.define('Koala.util.Metadata', {
         getCswUpdate: function(context) {
             var XML = Koala.util.XML;
 
-            var ms = /(^http[s]?:\/\/[^/]+)(.+)/g.exec(context.config.baseUrl);
-            var host = ms[1];
+            var ms = /(^http[s]?:\/\/[^/]+)?(.+)/g.exec(context.config.baseUrl);
+            var host = window.location.origin;
             var path = ms[2] + 'ows';
             var bfs = XML.defaultNamespaces.bfs;
             var gmd = XML.defaultNamespaces.gmd;
