@@ -66,6 +66,12 @@ Ext.define('Koala.view.list.TreeMenu', {
         var isPublic = roles.indexOf('public') !== -1;
         viewModel.set('publicRole', isPublic);
         viewModel.set('fullscreenSupported', Koala.util.Fullscreen.isFullscreenSupported());
+        viewModel.set('showDrawBtn', ctx.tools.indexOf('drawBtn') !== -1);
+        viewModel.set('showMeasureBtn', ctx.tools.indexOf('measureBtn') !== -1);
+        viewModel.set('showCreateVectorLayerBtn', ctx.tools.indexOf('createVectorLayerBtn') !== -1);
+        viewModel.set('showPrintBtn', ctx.tools.indexOf('printBtn') !== -1);
+        viewModel.set('showWmsImportBtn', ctx.tools.indexOf('addWmsBtn') !== -1);
+        viewModel.set('showVectorImportBtn', ctx.tools.indexOf('importVectorLayerBtn') !== -1);
     }
 
 });

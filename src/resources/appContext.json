@@ -79,7 +79,11 @@
                 "printBtn",
                 "cloneBtn",
                 "selectFeaturesBtn",
-                "irixPrintBtn"
+                "irixPrintBtn",
+                "measureBtn",
+                "drawBtn",
+                "createVectorLayerBtn",
+                "importVectorLayerBtn"
             ],
             "vectorIcons": [
                 {

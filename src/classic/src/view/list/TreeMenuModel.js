@@ -87,23 +87,27 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         text: '{wmsimport}',
                         key: 'wmsimport',
                         leaf: true,
-                        iconCls: 'x-fa fa-map'
+                        iconCls: 'x-fa fa-map',
+                        rowCls: '{showWmsImportBtn ? "" : "hidden"}'
                     }, {
                         text: '{vectorimport}',
                         key: 'vectorimport',
                         leaf: true,
-                        iconCls: 'x-fa fa-map-o'
+                        iconCls: 'x-fa fa-map-o',
+                        rowCls: '{showVectorImportBtn ? "" : "hidden"}'
                     }, {
                         text: '{createvectorlayer}',
                         key: 'createvectorlayer',
                         leaf: true,
-                        iconCls: 'x-fa fa-files-o'
+                        iconCls: 'x-fa fa-files-o',
+                        rowCls: '{showCreateVectorLayerBtn ? "" : "hidden"}'
                     }]
                 }, {
                     text: '{print}',
                     key: 'print',
                     leaf: true,
-                    iconCls: 'x-fa fa-print'
+                    iconCls: 'x-fa fa-print',
+                    rowCls: '{showPrintBtn ? "" : "hidden"}'
                 }, {
                     text: '{tools}',
                     iconCls: 'x-fa fa-pencil-square-o',
@@ -113,13 +117,13 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         key: 'draw',
                         leaf: true,
                         iconCls: 'x-fa fa-pencil',
-                        rowCls: '{drawToolsActive ? "active" : ""}'
+                        rowCls: '{showDrawBtn ? "" : "hidden"} {drawToolsActive ? "active" : ""}'
                     }, {
                         text: '{measure}',
                         key: 'measure',
                         leaf: true,
                         iconCls: 'x-fa fa-pencil-square',
-                        rowCls: '{measureToolsActive ? "active" : ""}'
+                        rowCls: '{showMeasureBtn ? "" : "hidden"} {measureToolsActive ? "active" : ""}'
                     }, {
                         text: '{selectfeatures}',
                         key: 'selectfeatures',
