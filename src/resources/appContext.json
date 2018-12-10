@@ -83,7 +83,7 @@
                 "measureBtn",
                 "drawBtn",
                 "createVectorLayerBtn",
-                "vectorImportBtn"
+                "importVectorLayerBtn"
             ],
             "vectorIcons": [
                 {
