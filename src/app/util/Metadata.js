@@ -330,27 +330,23 @@ Ext.define('Koala.util.Metadata', {
          */
         setMetadataGroups: function(context) {
             var url = context.config.metadataBaseUrl;
-            var imis = Koala.util.AppContext.getAppContext().data.merge.imis_user;
 
-            var userroles = imis.userroles;
             var body = {
                 clear: true,
                 privileges: []
             };
 
-            Ext.each(userroles, function(role) {
-                Ext.each(context.groups, function(group) {
-                    if (group.name === role) {
-                        body.privileges.push({
-                            group: group.id,
-                            operations: {
-                                download: true,
-                                view: true,
-                                dynamic: true
-                            }
-                        });
-                    }
-                });
+            Ext.each(context.groups, function(group) {
+                if (group.name === context.role) {
+                    body.privileges.push({
+                        group: group.id,
+                        operations: {
+                            download: true,
+                            view: true,
+                            dynamic: true
+                        }
+                    });
+                }
             });
 
             var resolveFunc;
@@ -386,7 +382,8 @@ Ext.define('Koala.util.Metadata', {
             var context = {
                 config: config[role],
                 uuid: metadata.id,
-                metadata: metadata
+                metadata: metadata,
+                role: role
             };
             return this.loginToGnos(context)
                 .then(this.cloneOldMetadata.bind(this, context))
