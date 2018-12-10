@@ -195,8 +195,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var me = this;
         var view = me.getView();
         var map = view.map;
-        var appContext = Koala.util.AppContext.getAppContext();
-        var redLineLayerName = appContext.data.merge.redLineLayerName;
+        var redLineLayerName = view.getViewModel().get('layerLegendName');
         var redLineLayer = BasiGX.util.Layer.getLayerByName(redLineLayerName);
         if (redLineLayer) {
             me.redliningVectorLayer = redLineLayer;
@@ -204,7 +203,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         }
         me.redlineFeatures.clear();
         me.redliningVectorLayer = new ol.layer.Vector({
-            name: redLineLayerName || view.getViewModel().get('layerLegendName'),
+            name: redLineLayerName,
             source: new ol.source.Vector({
                 features: me.redlineFeatures
             }),

@@ -37,7 +37,8 @@ Ext.define('Koala.view.button.SelectFeatures', {
     },
 
     listeners: {
-        toggle: 'onToggle'
+        toggle: 'onToggle',
+        afterrender: 'setupSelectionLayer'
     },
 
     toggleGroup: 'draw',
@@ -45,4 +46,5 @@ Ext.define('Koala.view.button.SelectFeatures', {
     enableToggle: true,
 
     buttonPressed: false
+
 });

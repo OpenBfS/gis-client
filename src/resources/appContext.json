@@ -89,6 +89,66 @@
                 {
                     "src": "resources/vectorIcons/atomicon.png",
                     "caption": "Atom"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/drop.png",
+                    "caption": "drop"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/glass.png",
+                    "caption": "glass"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/grass.png",
+                    "caption": "grass"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/lettuce.png",
+                    "caption": "lettuce"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/milk.png",
+                    "caption": "milk"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/mushroom.png",
+                    "caption": "mushroom"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant_02.png",
+                    "caption": "02"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant_03.png",
+                    "caption": "03"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant_04.png",
+                    "caption": "04"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant.png",
+                    "caption": "plant"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/plastic-bottle.png",
+                    "caption": "bottle"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/radiation.png",
+                    "caption": "radiation"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/radioactive_waste_02.png",
+                    "caption": "02"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/radioactive_waste.png",
+                    "caption": "waste"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/sea.png",
+                    "caption": "sea"
                 }
             ],
             "vectorProjections": [{
