@@ -35,19 +35,21 @@ Ext.define('Koala.util.Import', {
             // persisted flag gets set explicitly to false on layer clone
             var persisted = layer.get('persisted');
             if (persisted === false) {
-                this.importData(layer, role);
+                return this.importData(layer, role);
             } else {
                 var count = wfstDeletes.length + wfstInserts.length +
-                    wfstUpdates.length;
-                if (count > 0) {
-                    Koala.util.WFST.transact(layer, wfstInserts, wfstUpdates,
-                        wfstDeletes, wfstSuccessCallback, wfstFailureCallback);
-                }
+                wfstUpdates.length;
                 var sld = layer.get('SLD');
                 var uuid = layer.metadata.id;
                 var config = Koala.util.AppContext.getAppContext();
                 config = config.data.merge.import[role];
                 this.updateStyle(uuid, sld, config);
+                if (count > 0) {
+                    return Koala.util.WFST.transact(layer, wfstInserts, wfstUpdates,
+                        wfstDeletes, wfstSuccessCallback, wfstFailureCallback);
+                } else {
+                    return Ext.Promise.resolve();
+                }
             }
         },
 
@@ -221,7 +223,7 @@ Ext.define('Koala.util.Import', {
                 config: config,
                 layer: layer
             };
-            this.prepareData(layer, importMetadata)
+            return this.prepareData(layer, importMetadata)
                 .then(this.prepareImport.bind(this, importMetadata))
                 .then(this.prepareTask.bind(this, importMetadata))
                 .then(this.performImport.bind(this, importMetadata))

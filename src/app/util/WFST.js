@@ -110,7 +110,7 @@ Ext.define('Koala.util.WFST', {
                 Koala.util.WFST.lockId + '</LockId>');
             }
 
-            Ext.Ajax.request({
+            return Ext.Ajax.request({
                 url: url,
                 xmlData: xml,
                 method: 'POST',

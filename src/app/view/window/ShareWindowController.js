@@ -69,12 +69,13 @@ Ext.define('Koala.view.window.ShareWindowController', {
                 undefined,
                 undefined,
                 role
-            );
-            Koala.util.Geoserver.deleteLayer(oldLayer);
-            Koala.util.Metadata.deleteMetadata(oldLayer.metadata.id, oldRole);
-            view.close();
-            var map = BasiGX.view.component.Map.guess().getMap();
-            map.removeLayer(oldLayer);
+            ).then(function() {
+                Koala.util.Geoserver.deleteLayer(oldLayer);
+                Koala.util.Metadata.deleteMetadata(oldLayer.metadata.id, oldRole);
+                view.close();
+                var map = BasiGX.view.component.Map.guess().getMap();
+                map.removeLayer(oldLayer);
+            });
         });
     }
 
