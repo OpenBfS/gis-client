@@ -303,8 +303,8 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                     var userRoles = Koala.util.AppContext.getAppContext().data.merge.imis_user.userroles;
                     var importRoles = Koala.util.AppContext.getAppContext().data.merge.import;
                     var roles = [];
-                    userRoles.forEach(function(role){
-                        if(importRoles[role]){
+                    userRoles.forEach(function(role) {
+                        if (importRoles[role]) {
                             roles.push(role);
                         }
                     });
