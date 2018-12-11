@@ -129,7 +129,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         key: 'selectfeatures',
                         leaf: true,
                         iconCls: 'x-fa fa-crop',
-                        rowCls: '{selectFeaturesActive ? "active" : ""}'
+                        rowCls: '{showSelectFeaturesBtn ? "" : "hidden"}{selectFeaturesActive ? "active" : ""}'
                     }]
                 }, {
                     text: '{share}',
