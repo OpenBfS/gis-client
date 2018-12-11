@@ -193,7 +193,8 @@ Ext.define('Koala.util.Hooks', {
             * Hooks for IRIX part
             */
             Text: function(form, attributeRec) {
-                var route = Koala.util.Routing.getRoute();
+                //getRoute (skipLayers=false, skipFilters=false)
+                var route = Koala.util.Routing.getRoute(false,false);
                 var hrefWithoutHash = window.location.origin +
                     window.location.pathname +
                     window.location.search;
