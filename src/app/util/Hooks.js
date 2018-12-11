@@ -398,6 +398,12 @@ Ext.define('Koala.util.Hooks', {
                 //     console.log('DokpoolContentType OR Confidentiality missing');
                 }
             },
+            'DokpoolMeta.ElanScenarios': function(form, key, postAttributes) {
+                postAttributes.DokpoolMeta.Elan = {};
+                postAttributes.DokpoolMeta.Elan.ElanScenarios = postAttributes.DokpoolMeta.ElanScenarios;
+                delete postAttributes.DokpoolMeta.ElanScenarios;
+            },
+
             //Permalink gets updated before post
             'Text': function(form, key, postAttributes) {
                 var route = Koala.util.Routing.getRoute();
