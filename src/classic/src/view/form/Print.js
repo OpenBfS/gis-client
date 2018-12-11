@@ -140,7 +140,13 @@ Ext.define('Koala.view.form.Print', {
         genericfieldsetadded: function() {
             var me = this;
             // only show irix checkbox if irix-urls are configured
-            if (me.getIrixUrl() && me.getIrixContext()) {
+            // && printIrix is allowed
+            var allowIrixPrint = false;
+            var tools = Koala.util.AppContext.getAppContext().data.merge.tools;
+            if (tools.indexOf('irixPrintBtn') !== -1) {
+                allowIrixPrint = true;
+            }
+            if (allowIrixPrint && me.getIrixUrl() && me.getIrixContext()) {
                 this.addIrixCheckbox();
             }
             this.addBboxFieldset();

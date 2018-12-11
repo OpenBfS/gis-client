@@ -68,6 +68,7 @@ Ext.define('Koala.view.list.TreeMenu', {
         viewModel.set('fullscreenSupported', Koala.util.Fullscreen.isFullscreenSupported());
         viewModel.set('showDrawBtn', ctx.tools.indexOf('drawBtn') !== -1);
         viewModel.set('showMeasureBtn', ctx.tools.indexOf('measureBtn') !== -1);
+        viewModel.set('showSelectFeaturesBtn', ctx.tools.indexOf('selectFeaturesBtn') !== -1);
         viewModel.set('showCreateVectorLayerBtn', ctx.tools.indexOf('createVectorLayerBtn') !== -1);
         viewModel.set('showPrintBtn', ctx.tools.indexOf('printBtn') !== -1);
         viewModel.set('showWmsImportBtn', ctx.tools.indexOf('addWmsBtn') !== -1);
