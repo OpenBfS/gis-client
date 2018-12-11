@@ -235,8 +235,8 @@ Ext.define('Koala.util.Hooks', {
             DokpoolContentType: function(form, attributeFields) {
                 attributeFields.on({
                     change: function() {
-                        var dokpoolMetaFieldset = form.down('[name=DokpoolMeta]');
-                        Koala.util.Hooks.onChangeDokpoolContentType(this.value,dokpoolMetaFieldset);
+                        var doksysMetaFieldset = form.down('[name=Doksys]');
+                        Koala.util.Hooks.onChangeDokpoolContentType(this.value,doksysMetaFieldset);
                     }
                 });
             },
@@ -284,13 +284,16 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.on({
                     change: function() {
                         var me = this;
-                        var dokpoolMetaFieldset = Ext.ComponentQuery.query('[name=DokpoolMeta]')[0];
+                        //var dokpoolMetaFieldset = Ext.ComponentQuery.query('[name=DokpoolMeta]')[0];
+                        var doksysFieldset = Ext.ComponentQuery.query('[name=Doksys]')[0];
                         if (me.checked === true) {
                             Ext.log('checked IsDoksys');
-                            dokpoolMetaFieldset.show();
+                            //dokpoolMetaFieldset.show();
+                            doksysFieldset.show();
                         } else {
                             Ext.log('unchecked IsDoksys');
-                            dokpoolMetaFieldset.hide();
+                            //dokpoolMetaFieldset.hide();
+                            doksysFieldset.hide();
                         }
                     }
                 });
@@ -310,6 +313,15 @@ Ext.define('Koala.util.Hooks', {
             DokpoolMeta: function(form, attributeFields) {
                 attributeFields.setBind({
                     title: '{DokpoolMeta_label}'
+                });
+                //for time being always hide!
+                // the one and only remaining field (others are shown elsewhere)
+                // is "DokpoolName" which has only one allowed value: 'Bund'
+                attributeFields.setVisible(false);
+            },
+            Doksys: function(form, attributeFields) {
+                attributeFields.setBind({
+                    title: '{Doksys_label}'
                 });
             },
             ElanScenarios: function(form, attributeFields) {
@@ -403,6 +415,10 @@ Ext.define('Koala.util.Hooks', {
                 postAttributes.DokpoolMeta.Elan.ElanScenarios = postAttributes.DokpoolMeta.ElanScenarios;
                 delete postAttributes.DokpoolMeta.ElanScenarios;
             },
+            'Doksys': function(form, key, postAttributes) {
+                postAttributes.DokpoolMeta.Doksys = postAttributes.Doksys;
+                delete postAttributes.Doksys;
+            },
 
             //Permalink gets updated before post
             'Text': function(form, key, postAttributes) {
@@ -439,9 +455,9 @@ Ext.define('Koala.util.Hooks', {
         * @param {object} {Object} attributeFields The config object of the formular
         *        fields that will be created.
         */
-        onChangeDokpoolContentType: function(value, dokpoolMetaFieldset) {
+        onChangeDokpoolContentType: function(value, doksysMetaFieldset) {
             Ext.log('onChangeDokpoolContentType '+ value);
-            var fields = dokpoolMetaFieldset.items.items;
+            var fields = doksysMetaFieldset.items.items;
             var visibleFields = [];
 
             if (value.match(/^rodos/)) {
