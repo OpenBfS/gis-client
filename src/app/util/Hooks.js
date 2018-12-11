@@ -460,10 +460,10 @@ Ext.define('Koala.util.Hooks', {
             var fields = doksysMetaFieldset.items.items;
             var visibleFields = [];
 
-            if (value.match(/^rodos/)) {
-                Ext.log('Matched a string that starts with \'rodos\'');
-                //var fields = dokpoolMetaFieldset.items.items;
+            if (value.match(/projection$/) || value.match(/^instructions/) || value.match(/^protectiveactions/)) {
+                //console.log('Matched a string that ends with \'projection\'');
                 visibleFields = [
+                    /*
                     'CalculationDate',
                     'Model',
                     'NumericWeatherPredictionDate',
@@ -477,9 +477,23 @@ Ext.define('Koala.util.Hooks', {
                     'ReleaseStart',
                     'ReleaseStop',
                     'ReportId'
+                    */
                 ];
-            } else if (value.match(/^gammadoserate/)) {
-                Ext.log('Matched a string that starts with \'gammadoserate\'');
+            } else if (value.match(/^trajectory/)) {
+                //console.log('Matched a string that starts with \'trajectory\'');
+                visibleFields = [
+                    'Area',
+                    'NetworkOperator',
+                    'OperationMode',
+                    'Purpose',
+                    'TrajectoryEndLocation',
+                    'TrajectoryEndTime',
+                    'TrajectoryStartLocation',
+                    'TrajectoryStartTime',
+                    'Type'
+                ];
+            } else {
+                //console.log('Any other string. Most probably: \'gammadoserate\'');
                 visibleFields = [
                     'Area',
                     'DataType',
@@ -498,27 +512,14 @@ Ext.define('Koala.util.Hooks', {
                     'Status',
                     'Type'
                 ];
-            } else if (value.match(/^trajectory/)) {
-                Ext.log('Matched a string that starts with \'trajectory\'');
-                visibleFields = [
-                    'Area',
-                    'NetworkOperator',
-                    'OperationMode',
-                    'Purpose',
-                    'TrajectoryEndLocation',
-                    'TrajectoryEndTime',
-                    'TrajectoryStartLocation',
-                    'TrajectoryStartTime',
-                    'Type'
-                ];
             }
 
             for (var i = 0, l = fields.length; i < l; i++) {
-                Ext.log(fields[i].name);
+                //console.log(fields[i].name);
                 var field = fields[i];
                 field.setVisible(false);
                 if (Ext.Array.contains(visibleFields,fields[i].name)) {
-                    Ext.log('set visible: ' + fields[i].name);
+                    //console.log('set visible: ' + fields[i].name);
                     field.setVisible(true);
                 }
             }
