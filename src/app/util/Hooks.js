@@ -193,7 +193,8 @@ Ext.define('Koala.util.Hooks', {
             * Hooks for IRIX part
             */
             Text: function(form, attributeRec) {
-                var route = Koala.util.Routing.getRoute();
+                //getRoute (skipLayers=false, skipFilters=false)
+                var route = Koala.util.Routing.getRoute(false,false);
                 var hrefWithoutHash = window.location.origin +
                     window.location.pathname +
                     window.location.search;
@@ -235,8 +236,8 @@ Ext.define('Koala.util.Hooks', {
             DokpoolContentType: function(form, attributeFields) {
                 attributeFields.on({
                     change: function() {
-                        var dokpoolMetaFieldset = form.down('[name=DokpoolMeta]');
-                        Koala.util.Hooks.onChangeDokpoolContentType(this.value,dokpoolMetaFieldset);
+                        var doksysMetaFieldset = form.down('[name=Doksys]');
+                        Koala.util.Hooks.onChangeDokpoolContentType(this.value,doksysMetaFieldset);
                     }
                 });
             },
@@ -284,13 +285,16 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.on({
                     change: function() {
                         var me = this;
-                        var dokpoolMetaFieldset = Ext.ComponentQuery.query('[name=DokpoolMeta]')[0];
+                        //var dokpoolMetaFieldset = Ext.ComponentQuery.query('[name=DokpoolMeta]')[0];
+                        var doksysFieldset = Ext.ComponentQuery.query('[name=Doksys]')[0];
                         if (me.checked === true) {
                             Ext.log('checked IsDoksys');
-                            dokpoolMetaFieldset.show();
+                            //dokpoolMetaFieldset.show();
+                            doksysFieldset.show();
                         } else {
                             Ext.log('unchecked IsDoksys');
-                            dokpoolMetaFieldset.hide();
+                            //dokpoolMetaFieldset.hide();
+                            doksysFieldset.hide();
                         }
                     }
                 });
@@ -310,6 +314,15 @@ Ext.define('Koala.util.Hooks', {
             DokpoolMeta: function(form, attributeFields) {
                 attributeFields.setBind({
                     title: '{DokpoolMeta_label}'
+                });
+                //for time being always hide!
+                // the one and only remaining field (others are shown elsewhere)
+                // is "DokpoolName" which has only one allowed value: 'Bund'
+                attributeFields.setVisible(false);
+            },
+            Doksys: function(form, attributeFields) {
+                attributeFields.setBind({
+                    title: '{Doksys_label}'
                 });
             },
             ElanScenarios: function(form, attributeFields) {
@@ -403,6 +416,10 @@ Ext.define('Koala.util.Hooks', {
                 postAttributes.DokpoolMeta.Elan.ElanScenarios = postAttributes.DokpoolMeta.ElanScenarios;
                 delete postAttributes.DokpoolMeta.ElanScenarios;
             },
+            'Doksys': function(form, key, postAttributes) {
+                postAttributes.DokpoolMeta.Doksys = postAttributes.Doksys;
+                delete postAttributes.Doksys;
+            },
 
             //Permalink gets updated before post
             'Text': function(form, key, postAttributes) {
@@ -439,15 +456,15 @@ Ext.define('Koala.util.Hooks', {
         * @param {object} {Object} attributeFields The config object of the formular
         *        fields that will be created.
         */
-        onChangeDokpoolContentType: function(value, dokpoolMetaFieldset) {
+        onChangeDokpoolContentType: function(value, doksysMetaFieldset) {
             Ext.log('onChangeDokpoolContentType '+ value);
-            var fields = dokpoolMetaFieldset.items.items;
+            var fields = doksysMetaFieldset.items.items;
             var visibleFields = [];
 
-            if (value.match(/^rodos/)) {
-                Ext.log('Matched a string that starts with \'rodos\'');
-                //var fields = dokpoolMetaFieldset.items.items;
+            if (value.match(/projection$/) || value.match(/^instructions/) || value.match(/^protectiveactions/)) {
+                //console.log('Matched a string that ends with \'projection\'');
                 visibleFields = [
+                    /*
                     'CalculationDate',
                     'Model',
                     'NumericWeatherPredictionDate',
@@ -461,9 +478,23 @@ Ext.define('Koala.util.Hooks', {
                     'ReleaseStart',
                     'ReleaseStop',
                     'ReportId'
+                    */
                 ];
-            } else if (value.match(/^gammadoserate/)) {
-                Ext.log('Matched a string that starts with \'gammadoserate\'');
+            } else if (value.match(/^trajectory/)) {
+                //console.log('Matched a string that starts with \'trajectory\'');
+                visibleFields = [
+                    'Area',
+                    'NetworkOperator',
+                    'OperationMode',
+                    'Purpose',
+                    'TrajectoryEndLocation',
+                    'TrajectoryEndTime',
+                    'TrajectoryStartLocation',
+                    'TrajectoryStartTime',
+                    'Type'
+                ];
+            } else {
+                //console.log('Any other string. Most probably: \'gammadoserate\'');
                 visibleFields = [
                     'Area',
                     'DataType',
@@ -482,27 +513,14 @@ Ext.define('Koala.util.Hooks', {
                     'Status',
                     'Type'
                 ];
-            } else if (value.match(/^trajectory/)) {
-                Ext.log('Matched a string that starts with \'trajectory\'');
-                visibleFields = [
-                    'Area',
-                    'NetworkOperator',
-                    'OperationMode',
-                    'Purpose',
-                    'TrajectoryEndLocation',
-                    'TrajectoryEndTime',
-                    'TrajectoryStartLocation',
-                    'TrajectoryStartTime',
-                    'Type'
-                ];
             }
 
             for (var i = 0, l = fields.length; i < l; i++) {
-                Ext.log(fields[i].name);
+                //console.log(fields[i].name);
                 var field = fields[i];
                 field.setVisible(false);
                 if (Ext.Array.contains(visibleFields,fields[i].name)) {
-                    Ext.log('set visible: ' + fields[i].name);
+                    //console.log('set visible: ' + fields[i].name);
                     field.setVisible(true);
                 }
             }

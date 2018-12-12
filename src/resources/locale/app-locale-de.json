@@ -1546,6 +1546,7 @@
             "data": {
                 "DokpoolBehaviour_label": "Dokpool Verhalten",
                 "DokpoolMeta_label": "Dokpool Metadaten",
+                "Doksys_label": "Doksys Metadaten",
                 "Identification_label": "allg. Informationen",
                 "ElanScenarios_label": "Elan Ereignisse",
                 "DokpoolBehaviour_Elan_label": "Elan",
