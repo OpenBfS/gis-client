@@ -18,7 +18,8 @@
     z-index: 24999;
 }
 
-.ant-menu-submenu.ant-menu-submenu-popup {
+.ant-menu-submenu.ant-menu-submenu-popup,
+.ant-popover {
     z-index: 25000;
 }
 
