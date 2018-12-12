@@ -45,7 +45,7 @@ Ext.define('Koala.view.window.Print', {
         expand: function() {
             this.down('k-form-print').addExtentInteractions();
         },
-        resize: function(win, width, height, eOpts) {
+        resize: function(win) {
             win.center();
         }
     },
