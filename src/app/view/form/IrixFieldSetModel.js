@@ -22,6 +22,7 @@ Ext.define('Koala.view.form.IrixFieldSetModel', {
     data: {
         DokpoolBehaviour_label: 'DokpoolBehaviour',
         DokpoolMeta_label: 'DokpoolMeta',
+        Doksys_label: 'Doksys',
         Identification_label: 'Identification',
         ElanScenarios_label: 'Elan Incidences',
         DokpoolBehaviour_Elan_label: 'is Elan',

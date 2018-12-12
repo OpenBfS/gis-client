@@ -62,67 +62,31 @@
                         "Free for Public Use": "bund_bfs-messungen/von-gis"
                     }
                 },
-                "rodos_affectedareas": {
+                "rodosprojection": {
                     "Confidentiality": {
                         "For Addressees Use Only": "bund_bfs-rodos/von-gis",
                         "Free for Public Use": "bund_bfs-rodos/von-gis"
                     }
                 },
-                "rodos_plumearrival": {
+                "stateprojection": {
                     "Confidentiality": {
                         "For Addressees Use Only": "bund_bfs-rodos/von-gis",
                         "Free for Public Use": "bund_bfs-rodos/von-gis"
                     }
                 },
-                "rodos_plumedeparture": {
+                "otherprojection": {
                     "Confidentiality": {
                         "For Addressees Use Only": "bund_bfs-rodos/von-gis",
                         "Free for Public Use": "bund_bfs-rodos/von-gis"
                     }
                 },
-                "rodos_leafyvegetables_caesium": {
+                "instructions": {
                     "Confidentiality": {
                         "For Addressees Use Only": "bund_bfs-rodos/von-gis",
                         "Free for Public Use": "bund_bfs-rodos/von-gis"
                     }
                 },
-                "rodos_leafyvegetables_iodine": {
-                    "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
-                    }
-                },
-                "rodos_cowmilk_caesium": {
-                    "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
-                    }
-                },
-                "rodos_cowmilk_iodine": {
-                    "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
-                    }
-                },
-                "rodos_effectivedose_7d_adults": {
-                    "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
-                    }
-                },
-                "rodos_effectivedose_7d_children": {
-                    "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
-                    }
-                },
-                "rodos_thyroiddose_adults": {
-                    "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
-                    }
-                },
-                "rodos_thyroiddose_children": {
+                "protectiveactions": {
                     "Confidentiality": {
                         "For Addressees Use Only": "bund_bfs-rodos/von-gis",
                         "Free for Public Use": "bund_bfs-rodos/von-gis"
