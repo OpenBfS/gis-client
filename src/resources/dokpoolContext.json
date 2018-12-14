@@ -4,92 +4,104 @@
             "DokpoolContentType": {
                 "trajectory": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-lage/von-gis",
-                        "Free for Public Use": "bund_bfs-lage/von-gis"
+                        "For Addressees Use Only": "bund_e-lagebild-bfs/prognosen/automatisch",
+                        "Free for Public Use": "bund_e-lagebild-bfs/prognosen/automatisch"
                     }
                 },
                 "gammadoserate": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-messungen/von-gis",
-                        "Free for Public Use": "bund_bfs-messungen/von-gis"
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/messungen/automatisch"
                     }
                 },
                 "gammadoserate_timeseries": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-messungen/von-gis",
-                        "Free for Public Use": "bund_bfs-messungen/von-gis"
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/messungen/automatisch"
                     }
                 },
                 "airactivity": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-messungen/von-gis",
-                        "Free for Public Use": "bund_bfs-messungen/von-gis"
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/messungen/automatisch"
                     }
                 },
                 "groundcontamination": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-messungen/von-gis",
-                        "Free for Public Use": "bund_bfs-messungen/von-gis"
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/messungen/automatisch"
                     }
                 },
                 "mresult_feed": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-messungen/von-gis",
-                        "Free for Public Use": "bund_bfs-messungen/von-gis"
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/messungen/automatisch"
                     }
                 },
                 "mresult_food": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-messungen/von-gis",
-                        "Free for Public Use": "bund_bfs-messungen/von-gis"
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/messungen/automatisch"
                     }
                 },
                 "mresult_insitu": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-messungen/von-gis",
-                        "Free for Public Use": "bund_bfs-messungen/von-gis"
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/mobile-messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/mobile-messungen/automatisch"
+                    }
+                },
+                "gammadoserate_mobile": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/mobile-messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/mobile-messungen/automatisch"
+                    }
+                },
+                "mresult_flight": {
+                    "Confidentiality": {
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/mobile-messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/mobile-messungen/automatisch"
                     }
                 },
                 "mresult_water": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-messungen/von-gis",
-                        "Free for Public Use": "bund_bfs-messungen/von-gis"
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/messungen/automatisch"
                     }
                 },
                 "mresult_other": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-messungen/von-gis",
-                        "Free for Public Use": "bund_bfs-messungen/von-gis"
+                        "For Addressees Use Only": "bund_e-messzentrale-bfs/messungen/automatisch",
+                        "Free for Public Use": "bund_e-messzentrale-bfs/messungen/automatisch"
                     }
                 },
                 "rodosprojection": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
+                        "For Addressees Use Only": "bund_e-lagebild-bfs/rodos/automatisch",
+                        "Free for Public Use": "bund_e-lagebild-bfs/rodos/automatisch"
                     }
                 },
                 "stateprojection": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
+                        "For Addressees Use Only": "bund_e-lagebild-bfs/prognosen/automatisch",
+                        "Free for Public Use": "bund_e-lagebild-bfs/prognosen/automatisch"
                     }
                 },
                 "otherprojection": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
+                        "For Addressees Use Only": "bund_e-lagebild-bfs/prognosen/automatisch",
+                        "Free for Public Use": "bund_e-lagebild-bfs/prognosen/automatisch"
                     }
                 },
                 "instructions": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
+                        "For Addressees Use Only": "bund_e-rlz/automatisch",
+                        "Free for Public Use": "bund_e-rlz/automatisch"
                     }
                 },
                 "protectiveactions": {
                     "Confidentiality": {
-                        "For Addressees Use Only": "bund_bfs-rodos/von-gis",
-                        "Free for Public Use": "bund_bfs-rodos/von-gis"
+                        "For Addressees Use Only": "bund_e-rlz/automatisch",
+                        "Free for Public Use": "bund_e-rlz/automatisch"
                     }
                 }
             }
