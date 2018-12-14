@@ -1774,9 +1774,14 @@
                     "label": "Typ",
                     "type": "combo",
                     "values": [
-                        ["???", "Werte???"]
+                        ["nass", "nass"],
+                        ["trocken", "trocken"],
+                        ["vorwaerts", "vorwärts"],
+                        ["rueckwaerts", "rückwärts"],
+                        ["Ueberblick", "Überblick"],
+                        ["Soll-Ist-Vergleich", "Soll-Ist-Vergleich"]
                     ],
-                    "defaultValue": "???",
+                    "defaultValue": "",
                     "allowBlank": true
                 },{
                     "name": "TrajectoryStartLocation",
