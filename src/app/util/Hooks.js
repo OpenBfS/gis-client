@@ -264,7 +264,7 @@ Ext.define('Koala.util.Hooks', {
                     change: function() {
                         var me = this,
                             isChecked = me.getValue(),
-                            tagfieldScenario = me.up('fieldset[name="irix"]').down('tagfield[name="ElanScenarios"]');
+                            tagfieldScenario = me.up('fieldset[name="irix"]').down('tagfield[name="Scenarios"]');
 
                         if (tagfieldScenario) {
                             if (isChecked) {
@@ -325,7 +325,7 @@ Ext.define('Koala.util.Hooks', {
                     title: '{Doksys_label}'
                 });
             },
-            ElanScenarios: function(form, attributeFields) {
+            Scenarios: function(form, attributeFields) {
                 attributeFields.setBind({
                     fieldLabel: '{ElanScenarios_label}'
                 });
@@ -410,11 +410,6 @@ Ext.define('Koala.util.Hooks', {
                 // } else {
                 //     console.log('DokpoolContentType OR Confidentiality missing');
                 }
-            },
-            'DokpoolMeta.ElanScenarios': function(form, key, postAttributes) {
-                postAttributes.DokpoolMeta.Elan = {};
-                postAttributes.DokpoolMeta.Elan.ElanScenarios = postAttributes.DokpoolMeta.ElanScenarios;
-                delete postAttributes.DokpoolMeta.ElanScenarios;
             },
             'Doksys': function(form, key, postAttributes) {
                 postAttributes.DokpoolMeta.Doksys = postAttributes.Doksys;
