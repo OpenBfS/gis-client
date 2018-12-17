@@ -217,6 +217,14 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.rawValue = userName;
                 attributeFields['hidden'] = true;
             },
+            DokpoolDocumentOwner:function(form, attributeFields) {
+                var appContext = Koala.util.AppContext.getAppContext();
+                var userName = Koala.util.Object.getPathStrOr(appContext,
+                    'data/merge/imis_user/username', '');
+                attributeFields.value = userName;
+                attributeFields.rawValue = userName;
+                attributeFields['hidden'] = true;
+            },
             requestType: function(form, attributeFields) {
                 attributeFields.on({
                     change: function() {
@@ -411,9 +419,16 @@ Ext.define('Koala.util.Hooks', {
                 //     console.log('DokpoolContentType OR Confidentiality missing');
                 }
             },
+            //move Doksys to DokpoolMeta
             'Doksys': function(form, key, postAttributes) {
                 postAttributes.DokpoolMeta.Doksys = postAttributes.Doksys;
                 delete postAttributes.Doksys;
+            },
+
+            //move DokpoolDocumentOwner to DokpoolMeta
+            'DokpoolDocumentOwner': function(form, key, postAttributes) {
+                postAttributes.DokpoolMeta.DokpoolDocumentOwner = postAttributes.DokpoolDocumentOwner;
+                delete postAttributes.DokpoolDocumentOwner;
             },
 
             //Permalink gets updated before post
@@ -442,6 +457,7 @@ Ext.define('Koala.util.Hooks', {
                 }
             }
         },
+
 
         /*
         * handles visibility of dokpool metadata fields
