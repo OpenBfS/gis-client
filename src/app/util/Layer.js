@@ -1311,16 +1311,40 @@ Ext.define('Koala.util.Layer', {
             if (SourceClass === ol.source.Vector) {
                 mdLayerCfg = md.layerConfig.vector;
                 cfg = {
-                    loader: function(extent/*, resolution, projection */) {
+                    loader: function() {
                         var vectorSource = this;
+
+                        var cql = '';
+                        if (extraParams && extraParams.cql_filter) {
+                            cql = extraParams.cql_filter;
+                        }
+                        if (extraParams && extraParams.TIME) {
+                            // handle TIME
+                            var filters = md.filters;
+                            Ext.each(filters, function(filter) {
+                                switch (filter.type) {
+                                    case 'pointintime':
+                                        if (cql.indexOf(filter.param) !== -1) {
+                                            return;
+                                        }
+                                        if (cql.length > 0) {
+                                            cql += ' AND ';
+                                        }
+                                        cql += filter.param + '=\'' + extraParams.TIME + '\'';
+                                        break;
+                                }
+                            });
+                        }
+                        if (cql !== '') {
+                            extraParams.cql_filter = cql;
+                        }
 
                         var finalParams = Ext.apply({
                             service: 'WFS',
                             version: '1.1.0',
                             request: 'GetFeature',
                             outputFormat: 'application/json',
-                            srsname: projCode,
-                            bbox: extent.join(',') + ',' + projCode
+                            srsname: projCode
                         }, extraParams || {});
 
                         // Fire an event that indicates loading has started.
@@ -1352,10 +1376,7 @@ Ext.define('Koala.util.Layer', {
                         });
 
                     },
-                    features: new ol.Collection(),
-                    strategy: ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
-                        maxZoom: 28
-                    }))
+                    features: new ol.Collection()
                 };
             } else if (SourceClass === ol.source.TileWMS || SourceClass === ol.source.ImageWMS) {
 
