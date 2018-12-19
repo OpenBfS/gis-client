@@ -217,6 +217,14 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.rawValue = userName;
                 attributeFields['hidden'] = true;
             },
+            DokpoolDocumentOwner: function(form, attributeFields) {
+                var appContext = Koala.util.AppContext.getAppContext();
+                var userName = Koala.util.Object.getPathStrOr(appContext,
+                    'data/merge/imis_user/username', '');
+                attributeFields.value = userName;
+                attributeFields.rawValue = userName;
+                attributeFields['hidden'] = true;
+            },
             requestType: function(form, attributeFields) {
                 attributeFields.on({
                     change: function() {
@@ -264,7 +272,7 @@ Ext.define('Koala.util.Hooks', {
                     change: function() {
                         var me = this,
                             isChecked = me.getValue(),
-                            tagfieldScenario = me.up('fieldset[name="irix"]').down('tagfield[name="ElanScenarios"]');
+                            tagfieldScenario = me.up('fieldset[name="irix"]').down('tagfield[name="Scenarios"]');
 
                         if (tagfieldScenario) {
                             if (isChecked) {
@@ -325,7 +333,7 @@ Ext.define('Koala.util.Hooks', {
                     title: '{Doksys_label}'
                 });
             },
-            ElanScenarios: function(form, attributeFields) {
+            Scenarios: function(form, attributeFields) {
                 attributeFields.setBind({
                     fieldLabel: '{ElanScenarios_label}'
                 });
@@ -411,14 +419,16 @@ Ext.define('Koala.util.Hooks', {
                 //     console.log('DokpoolContentType OR Confidentiality missing');
                 }
             },
-            'DokpoolMeta.ElanScenarios': function(form, key, postAttributes) {
-                postAttributes.DokpoolMeta.Elan = {};
-                postAttributes.DokpoolMeta.Elan.ElanScenarios = postAttributes.DokpoolMeta.ElanScenarios;
-                delete postAttributes.DokpoolMeta.ElanScenarios;
-            },
+            //move Doksys to DokpoolMeta
             'Doksys': function(form, key, postAttributes) {
                 postAttributes.DokpoolMeta.Doksys = postAttributes.Doksys;
                 delete postAttributes.Doksys;
+            },
+
+            //move DokpoolDocumentOwner to DokpoolMeta
+            'DokpoolDocumentOwner': function(form, key, postAttributes) {
+                postAttributes.DokpoolMeta.DokpoolDocumentOwner = postAttributes.DokpoolDocumentOwner;
+                delete postAttributes.DokpoolDocumentOwner;
             },
 
             //Permalink gets updated before post
@@ -447,6 +457,7 @@ Ext.define('Koala.util.Hooks', {
                 }
             }
         },
+
 
         /*
         * handles visibility of dokpool metadata fields

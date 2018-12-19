@@ -1318,9 +1318,9 @@ Ext.define('Koala.view.form.Print', {
             irixJson.irix.DokpoolMeta.IsRei = irixJson.irix.DokpoolBehaviour.IsRei;
             delete irixJson.irix.DokpoolBehaviour;
 
-            irixJson.irix.DokpoolMeta.ElanScenarios = {};
-            irixJson.irix.DokpoolMeta.ElanScenarios.ElanScenario = irixJson.irix.ElanScenarios;
-            delete irixJson.irix.ElanScenarios;
+            irixJson.irix.DokpoolMeta.Elan = {};
+            irixJson.irix.DokpoolMeta.Elan.Scenarios = irixJson.irix.Scenarios;
+            delete irixJson.irix.Scenarios;
         }
         if (this.config.chartPrint) {
             irixJson['mapfish-print'] = undefined;
