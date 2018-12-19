@@ -217,7 +217,7 @@ Ext.define('Koala.util.Hooks', {
                 attributeFields.rawValue = userName;
                 attributeFields['hidden'] = true;
             },
-            DokpoolDocumentOwner:function(form, attributeFields) {
+            DokpoolDocumentOwner: function(form, attributeFields) {
                 var appContext = Koala.util.AppContext.getAppContext();
                 var userName = Koala.util.Object.getPathStrOr(appContext,
                     'data/merge/imis_user/username', '');
