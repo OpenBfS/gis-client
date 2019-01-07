@@ -148,6 +148,9 @@ Ext.define('Koala.util.Clone', {
                 Layer.getMetadataFromUuid(uuid)
                     .then(function(metadata) {
                         metadata = Koala.util.Metadata.prepareClonedMetadata(metadata);
+                        if (layer.get('SLD')) {
+                            delete metadata.layerConfig.olProperties.styleReference;
+                        }
                         var source = new ol.source.Vector({features: new ol.Collection()});
                         var config = Layer.getInternalLayerConfig(metadata);
                         config.source = source;
