@@ -11,7 +11,7 @@
                 "rodos-projects": "resources/rodos/projects.json",
                 "rodos-results": "resources/rodos/projects/",
                 "rodos-upload-service": "http://bfs-docker.intranet.terrestris.de/examples/servlets/servlet/RequestParamExample?",
-
+                "geoserver-base-url": "http://bfs-docker/ogc",
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
 

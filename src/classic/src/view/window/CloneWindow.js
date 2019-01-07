@@ -39,14 +39,8 @@ Ext.define('Koala.view.window.CloneWindow', {
     constrainHeader: true,
     collapsible: true,
     maxHeight: 800,
-    height: 320,
     width: 500,
-    layout: 'vbox',
-
-    defaults: {
-        flex: 1,
-        width: '100%'
-    },
+    scrollable: true,
 
     config: {
         /**
@@ -58,7 +52,7 @@ Ext.define('Koala.view.window.CloneWindow', {
 
     items: [{
         xtype: 'form',
-        width: 495,
+        layout: 'form',
         bbar: [{
             xtype: 'button',
             bind: {
@@ -75,7 +69,6 @@ Ext.define('Koala.view.window.CloneWindow', {
         items: [{
             xtype: 'textfield',
             labelWidth: 200,
-            width: '95%',
             bind: {
                 fieldLabel: '{layerNameLabel}'
             }
@@ -86,11 +79,8 @@ Ext.define('Koala.view.window.CloneWindow', {
                 boxLabel: '{boundingBoxLabel}'
             }
         }, {
-
-        }, {
             xtype: 'numberfield',
             labelWidth: 200,
-            width: '95%',
             value: 1000,
             bind: {
                 fieldLabel: '{maxFeaturesLabel}'
@@ -113,9 +103,9 @@ Ext.define('Koala.view.window.CloneWindow', {
             }, {
                 xtype: 'checkbox',
                 name: 'copystyle',
-                checked: true,
                 margin: '0 0 0 20',
                 bind: {
+                    value: '{copyStyle}',
                     boxLabel: '{copyStyleLabel}',
                     hidden: '{noLayerSelected}'
                 }
@@ -140,7 +130,18 @@ Ext.define('Koala.view.window.CloneWindow', {
             }]
         }, {
             xtype: 'k-form-field-vectortemplatecombo',
-            includeCloneLayers: true
+            includeCloneLayers: true,
+            listeners: {
+                change: 'onVectorTemplateChange'
+            }
+        }, {
+            xtype: 'combo',
+            bind: {
+                disabled: '{copyStyle}',
+                fieldLabel: '{templateStyleLabel}',
+                store: '{templateStyles}',
+                value: '{selectedTemplateStyle}'
+            }
         }]
     }]
 

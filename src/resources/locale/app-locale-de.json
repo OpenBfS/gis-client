@@ -665,7 +665,8 @@
                 "cancelButtonLabel": "Abbrechen",
                 "emptyTemplateMessage": "Bitte wählen Sie eine Vorlage aus.",
                 "selectionEnabled": "(Selektionswerkzeug ist aktiviert!)",
-                "copyStyleLabel": "Stil kopieren"
+                "copyStyleLabel": "Stil kopieren",
+                "templateStyleLabel": "Stil aus Template"
             }
         }
     },
