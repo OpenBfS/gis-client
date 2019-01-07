@@ -262,7 +262,18 @@ Ext.define('Koala.util.SelectFeatures', {
                 Ext.log.error('Could not get the SLD for layer');
                 mapComponent.setLoading(false);
             };
-            BasiGX.util.SLD.getSldFromGeoserver(wmsUrl, name, successCb, errorCb);
+            var style = sourceLayer.getSource().getParams().STYLES;
+            if (!style || style === '') {
+                BasiGX.util.SLD.getSldFromGeoserver(wmsUrl, name, successCb, errorCb);
+            } else {
+                var url = /(^http[s]?:\/\/[^/]+[/][^/]+)/g.exec(wmsUrl)[0];
+                url += '/rest/styles/' + style + '.sld';
+                Ext.Ajax.request({
+                    url: url,
+                    success: successCb,
+                    failure: errorCb
+                });
+            }
         },
 
         /**

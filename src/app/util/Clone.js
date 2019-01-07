@@ -96,6 +96,9 @@ Ext.define('Koala.util.Clone', {
                         }
                         var styleName = wmsConfig.styles;
                         if (!styleName) {
+                            styleName = sourceLayer.getSource().getParams().STYLES;
+                        }
+                        if (!styleName) {
                             Ext.Ajax.request({
                                 url: ms[1] + '/rest/layers/' + wmsConfig.layers + '.json',
                                 method: 'GET'
