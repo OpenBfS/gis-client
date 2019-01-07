@@ -211,7 +211,11 @@
                 "btnTextImport": "Import",
                 "btnTextExport": "Export",
                 "btnTextReloadCurrentStyle": "Reset to original style",
-                "btnTextApplyAndSave": "Apply style"
+                "btnTextApplyAndSave": "Apply style",
+                "chooseFromVectorTemplate": "Style from list",
+                "templateStyleLabel": "Style",
+                "okButtonLabel": "Ok",
+                "cancelButtonLabel": "Cancel"
             }
         }
     },
