@@ -30,7 +30,7 @@ Ext.define('Koala.view.main.MobileMainModel', {
         chartSlctnTimeSeriesBtn: '',
         chartSlctnBarChartBtn: '',
         rodosPanelTitle: '',
-        gridTabTitle: ''
-
+        gridTabTitle: '',
+        fullscreenSupported: true
     }
 });
