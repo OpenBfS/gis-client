@@ -111,12 +111,14 @@ Ext.define('Koala.view.window.CloneWindowController', {
         Koala.util.Layer.getMetadataFromUuid(value).then(function(metadata) {
             var styles = Koala.util.Object.getPathStrOr(metadata,
                 'layerConfig/olProperties/styleReference');
-            styles = styles.split(',')
-                .map(function(style) {
-                    return style.trim();
-                });
-            viewModel.set('templateStyles', styles);
-            viewModel.set('selectedTemplateStyle', styles[0]);
+            if (styles) {
+                styles = styles.split(',')
+                    .map(function(style) {
+                        return style.trim();
+                    });
+                viewModel.set('templateStyles', styles);
+                viewModel.set('selectedTemplateStyle', styles[0]);
+            }
         });
     }
 
