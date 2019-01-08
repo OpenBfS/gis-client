@@ -22,11 +22,16 @@ Ext.define('Koala.view.window.CloneWindowModel', {
 
     data: {
         title: '',
+        copyStyle: true,
+        templateStyles: [],
+        selectedTemplateStyle: '',
+        /** i18n */
         boundingBoxLabel: '',
         maxFeaturesLabel: '',
         layerNameLabel: '',
         okButtonLabel: '',
         cancelButtonLabel: '',
+        templateStyleLabel: '',
         emptyTemplateMessage: ''
     }
 });

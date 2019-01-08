@@ -212,7 +212,11 @@
                 "btnTextImport": "Importieren",
                 "btnTextExport": "Exportieren",
                 "btnTextReloadCurrentStyle": "Auf original Style zurücksetzen",
-                "btnTextApplyAndSave": "Style übernehmen"
+                "btnTextApplyAndSave": "Style übernehmen",
+                "chooseFromVectorTemplate": "Style aus Liste",
+                "templateStyleLabel": "Style",
+                "okButtonLabel": "Ok",
+                "cancelButtonLabel": "Abbrechen"
             }
         }
     },
@@ -665,7 +669,8 @@
                 "cancelButtonLabel": "Abbrechen",
                 "emptyTemplateMessage": "Bitte wählen Sie eine Vorlage aus.",
                 "selectionEnabled": "(Selektionswerkzeug ist aktiviert!)",
-                "copyStyleLabel": "Stil kopieren"
+                "copyStyleLabel": "Stil kopieren",
+                "templateStyleLabel": "Stil aus Template"
             }
         }
     },
