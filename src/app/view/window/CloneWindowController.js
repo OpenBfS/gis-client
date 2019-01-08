@@ -74,7 +74,8 @@ Ext.define('Koala.view.window.CloneWindowController', {
             bbox,
             dataSourceLayer,
             uuid,
-            copyStyle
+            copyStyle,
+            viewModel.get('selectedTemplateStyle')
         )
             .then(function() {
                 view.close();
@@ -100,6 +101,23 @@ Ext.define('Koala.view.window.CloneWindowController', {
         } else if (on) {
             this.getView().down('[name=selection-enabled]').setHidden(true);
         }
+    },
+
+    /**
+     * Reloads the configured 'styleReference' from the selecte vectorTemplate.
+     */
+    onVectorTemplateChange: function(field, value) {
+        var viewModel = this.getViewModel();
+        Koala.util.Layer.getMetadataFromUuid(value).then(function(metadata) {
+            var styles = Koala.util.Object.getPathStrOr(metadata,
+                'layerConfig/olProperties/styleReference');
+            styles = styles.split(',')
+                .map(function(style) {
+                    return style.trim();
+                });
+            viewModel.set('templateStyles', styles);
+            viewModel.set('selectedTemplateStyle', styles[0]);
+        });
     }
 
 });

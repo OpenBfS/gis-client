@@ -207,6 +207,13 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         {
             xtype: 'button',
             bind: {
+                text: '{chooseFromVectorTemplate}'
+            },
+            handler: 'chooseFromVectorTemplate'
+        },
+        {
+            xtype: 'button',
+            bind: {
                 text: '{btnTextExport}'
             },
             handler: 'exportStyle'

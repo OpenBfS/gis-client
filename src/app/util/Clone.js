@@ -74,10 +74,13 @@ Ext.define('Koala.util.Clone', {
          * @param  {String} uuid the uuid of the template to clone metadata from
          * data from, or undefined
          * @param  {Boolean} copyStyle whether to copy the source layer's style
+         * @param  {String} templateStyle The templateStyle to choose if copyStyle is false
          */
-        cloneLayer: function(sourceLayer, name, maxFeatures, bbox, dataSourceLayer, uuid, copyStyle) {
+        cloneLayer: function(sourceLayer, name, maxFeatures, bbox, dataSourceLayer, uuid, copyStyle, templateStyle) {
+            var appContext = Koala.util.AppContext.getAppContext();
             var targetLayerPromise = this.createLayer(sourceLayer, name, uuid);
             var SelectFeatures = Koala.util.SelectFeatures;
+            var geoserverBaseUrl = Koala.util.Object.getPathStrOr(appContext, 'data/merge/urls/geoserver-base-url');
 
             targetLayerPromise.then(function(targetLayer) {
                 if (copyStyle) {
@@ -112,6 +115,8 @@ Ext.define('Koala.util.Clone', {
                             Koala.util.Clone.loadStyle(ms[1], styleName, targetLayer);
                         }
                     }
+                } else {
+                    Koala.util.Clone.loadStyle(geoserverBaseUrl, templateStyle, targetLayer);
                 }
                 if (dataSourceLayer instanceof ol.layer.Vector) {
                     if (bbox) {
