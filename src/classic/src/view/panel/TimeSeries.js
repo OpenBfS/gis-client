@@ -73,7 +73,7 @@ Ext.define('Koala.view.panel.TimeSeries', {
             }).show();
             viewModel.set('pinned', false);
             container.remove(view);
-            container.destroy();
+            container.hide();
         }
     }, {
         type: 'pin',
