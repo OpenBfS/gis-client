@@ -53,12 +53,13 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             title: '{graphicalEditorTitle}'
         },
         bodyCls: 'geostyler-root',
-        scrollable: true
+        scrollable: 'y'
     }, {
         bind: {
             title: '{codeEditorTitle}'
         },
-        bodyCls: 'codeeditor-root'
+        bodyCls: 'codeeditor-root',
+        scrollable: 'y'
     }],
 
     constructor: function(config) {

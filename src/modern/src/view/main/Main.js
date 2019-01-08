@@ -136,7 +136,7 @@ Ext.define('Koala.view.main.Main', {
                 xtype: 'basigx-button-zoomtoextent'
             }, {
                 xtype: 'button',
-                hidden: !Koala.util.Fullscreen.isFullscreenSupported(),
+                hidden: '{!fullscreenSupported}',
                 html: '<i class="fa fa-expand fa-2x"></i>',
                 handler: 'toggleFullscreen'
             }]
@@ -250,5 +250,11 @@ Ext.define('Koala.view.main.Main', {
         hidden: true,
         scrollable: 'vertical',
         closeToolAlign: 'left'
-    }]
+    }],
+
+    constructor: function() {
+        this.callParent(arguments);
+        var viewModel = this.getViewModel();
+        viewModel.set('fullscreenSupported', Koala.util.Fullscreen.isFullscreenSupported());
+    }
 });

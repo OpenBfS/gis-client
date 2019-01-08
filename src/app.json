@@ -559,7 +559,10 @@
             "classpath": [
                 "app",
                 "${toolkit.name}/src",
-                "lib/GeoExt/src",
+                "lib/GeoExt/src/component",
+                "lib/GeoExt/src/data",
+                "lib/GeoExt/src/mixin",
+                "lib/GeoExt/src/util",
                 "lib/BasiGX/src/util/Animate.js",
                 "lib/BasiGX/src/util/Application.js",
                 "lib/BasiGX/src/util/Color.js",
