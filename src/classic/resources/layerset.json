@@ -6,6 +6,12 @@
             "text" : "RODOS-Prognosen"
          },
          {
+            "thumb" : "layer_sets/rodos_thumb.png",
+            "children" : [],
+            "isLayerProfile" : false,
+            "text" : "Videos"
+         },
+         {
             "isLayerProfile" : false,
             "text" : "Kerntechnische Anlagen",
             "thumb" : "layer_sets/kerntechnik_thumb.png",

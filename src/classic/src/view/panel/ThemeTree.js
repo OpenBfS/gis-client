@@ -125,7 +125,7 @@ Ext.define('Koala.view.panel.ThemeTree', {
             }
         },
         getClass: function(v, meta, rec) {
-            if (rec.get('text').indexOf('RODOS-Prognosen') > -1) {
+            if (rec.get('text').indexOf('RODOS-Prognosen') > -1 || rec.get('text').indexOf('Videos') > -1) {
                 return 'x-fa fa-filter';
             } else if (rec.data.isImportNode) {
                 return 'x-fa fa-refresh';
@@ -158,6 +158,8 @@ Ext.define('Koala.view.panel.ThemeTree', {
             'layerset'
         ];
         var layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerset.json');
+        path[3] = 'videos';
+        var videosUrl = Koala.util.Object.getPathOr(appContext, path, '/resources/videos');
 
         Ext.Ajax.request({
             url: layerSetUrl

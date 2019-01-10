@@ -1,0 +1,6 @@
+{
+    "videos": [{
+        "name": "Testvideo",
+        "urls": ["http://bfs-docker/aerial.mp4"]
+    }]
+}

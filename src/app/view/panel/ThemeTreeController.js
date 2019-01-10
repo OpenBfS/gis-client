@@ -88,9 +88,29 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
     handleActionColumn: function(view, rowIndex, colIndex, item) {
         if (rowIndex === 0) {
             this.showRodosFilter(view, rowIndex, colIndex, item);
+        } else if (rowIndex === 1) {
+            this.showVideoSelection(view, rowIndex, colIndex, item);
         } else {
             this.getView().rebuildTree();
         }
+    },
+
+    showVideoSelection: function() {
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+        var path = [
+            'data',
+            'merge',
+            'urls',
+            'videos'
+        ];
+        var videosUrl = Koala.util.Object.getPathOr(appContext, path, '/resources/videos');
+        Ext.Ajax.request({
+            url: videosUrl
+        })
+            .then(function(xhr) {
+                var list = JSON.parse(xhr.responseText);
+                console.log(xhr.responseText)
+            });
     },
 
     showRodosFilter: function(view, rowIndex, colIndex, item) {
