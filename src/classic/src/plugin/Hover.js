@@ -162,6 +162,9 @@ Ext.define('Koala.plugin.Hover', {
                                 // from the clusterStyle
                                 hvl.setStyle(me.highlightStyleFunction);
                             }
+                            if (layer.getSource().getFeatures().indexOf(feat) === -1) {
+                                return;
+                            }
                             var featureClone = feat.clone();
                             if (featureClone.get('layer')) {
                                 return;
