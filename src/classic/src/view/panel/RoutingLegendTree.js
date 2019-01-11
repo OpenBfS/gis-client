@@ -196,7 +196,14 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var styleBtn = comp.down('button[name="style"]');
             var share = comp.down('button[name=share]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
+            var videoSlider = comp.down('slider[name="videoSlider"]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
+
+            if (olLayer.get('isVideoLayer')) {
+                allowStyle = false;
+                allowRemoval = true;
+            }
+            videoSlider.setVisible(olLayer.get('isVideoLayer'));
 
             if (shortInfoBtn) {
                 shortInfoBtn.setVisible(allowShortInfo);
@@ -558,6 +565,24 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 value: 100,
                 tipText: function(thumb) {
                     return String(thumb.value) + '% Sichtbarkeit';
+                },
+                listeners: {
+                    // We'll assign a handler to initialize and handle drags
+                    // here once the class is defined and we can access the
+                    // static methods
+                }
+            }, {
+                xtype: 'slider',
+                name: 'videoSlider',
+                width: 80,
+                value: 100,
+                tipText: function(thumb) {
+                    var minutes = Math.floor(thumb.value / 60);
+                    var secs = thumb.value % 60;
+                    if (secs < 10) {
+                        secs = '0' + secs;
+                    }
+                    return minutes + ':' + secs;
                 },
                 listeners: {
                     // We'll assign a handler to initialize and handle drags

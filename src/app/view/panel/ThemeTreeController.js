@@ -89,7 +89,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         if (rowIndex === 0) {
             this.showRodosFilter(view, rowIndex, colIndex, item);
         } else if (rowIndex === 1) {
-            this.showVideoSelection(view, rowIndex, colIndex, item);
+            this.showVideoSelection();
         } else {
             this.getView().rebuildTree();
         }
@@ -143,7 +143,9 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
 
     addVideoLayer: function(combo, rec) {
         var imagery = new ol.layer.Vector({
-            source: new ol.source.Vector()
+            source: new ol.source.Vector(),
+            name: 'Video',
+            isVideoLayer: true
         });
         var urls = combo.getValue();
         var map = BasiGX.view.component.Map.guess().map;
@@ -164,6 +166,11 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             }, false);
         }
         video.play();
+        var tree = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+        var slider = tree.down('[name=videoSlider');
+        // TODO filter on layer
+        slider.setMinValue(0);
+        slider.setMaxValue(video.duration);
 
         var width = bbox[2] - bbox[0];
         var height = bbox[3] - bbox[1];
@@ -185,6 +192,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         video.play();
         window.setInterval(function() {
             map.render();
+            slider.setValue(video.currentTime);
         }, 1000 / 30);
         var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
         win.close();
