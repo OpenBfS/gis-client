@@ -96,6 +96,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
     },
 
     showVideoSelection: function() {
+        var me = this;
         var viewModel = this.getViewModel();
         var appContext = BasiGX.view.component.Map.guess().appContext;
         var path = [
@@ -105,15 +106,24 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             'videos'
         ];
         var videosUrl = Koala.util.Object.getPathOr(appContext, path, '/resources/videos');
+        if (!videosUrl) {
+            return;
+        }
         Ext.Ajax.request({
             url: videosUrl
         })
             .then(function(xhr) {
                 var list = JSON.parse(xhr.responseText);
+                var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
+                if (win) {
+                    BasiGX.util.Animate.shake(win);
+                    return;
+                }
                 Ext.create('Ext.window.Window', {
                     title: viewModel.get('videoWindowTitle'),
                     name: 'video-window',
                     layout: 'fit',
+                    bodyPadding: 5,
                     items: [{
                         xtype: 'combo',
                         displayField: 'name',
@@ -122,10 +132,62 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
                         store: Ext.create('Ext.data.Store', {
                             fields: ['name', 'urls'],
                             data: list.videos
-                        })
+                        }),
+                        listeners: {
+                            select: me.addVideoLayer.bind(me)
+                        }
                     }]
                 }).show();
             });
+    },
+
+    addVideoLayer: function(combo, rec) {
+        var imagery = new ol.layer.Vector({
+            source: new ol.source.Vector()
+        });
+        var urls = combo.getValue();
+        var map = BasiGX.view.component.Map.guess().map;
+        var bbox = rec.data.bbox;
+        var video = document.createElement('video');
+        video.crossOrigin = 'Anonymous';
+        for (var i = 0; i < urls.length; i++) {
+            var source = document.createElement('source');
+            source.src = urls[i];
+            video.appendChild(source);
+        }
+        if (typeof video.loop === 'boolean') {
+            video.loop = true;
+        } else {
+            video.addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            }, false);
+        }
+        video.play();
+
+        var width = bbox[2] - bbox[0];
+        var height = bbox[3] - bbox[1];
+        imagery.on('postcompose', function(event) {
+            var frameState = event.frameState;
+            var resolution = frameState.viewState.resolution;
+            var origin = map.getPixelFromCoordinate([bbox[0], bbox[1]]);
+
+            var context = event.context;
+            context.save();
+
+            context.scale(frameState.pixelRatio, frameState.pixelRatio);
+            context.translate(origin[0], origin[1]);
+            context.drawImage(video, 0, 0, width / resolution, height / resolution);
+
+            context.restore();
+        });
+        map.addLayer(imagery);
+        video.play();
+        window.setInterval(function() {
+            map.render();
+        }, 1000 / 30);
+        var win = Ext.ComponentQuery.query('window[name=rodos-window]')[0];
+        win.close();
     },
 
     showRodosFilter: function(view, rowIndex, colIndex, item) {
