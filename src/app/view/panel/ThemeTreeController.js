@@ -186,7 +186,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         window.setInterval(function() {
             map.render();
         }, 1000 / 30);
-        var win = Ext.ComponentQuery.query('window[name=rodos-window]')[0];
+        var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
         win.close();
     },
 
