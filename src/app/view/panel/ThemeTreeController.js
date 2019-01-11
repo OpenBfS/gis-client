@@ -96,6 +96,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
     },
 
     showVideoSelection: function() {
+        var viewModel = this.getViewModel();
         var appContext = BasiGX.view.component.Map.guess().appContext;
         var path = [
             'data',
@@ -109,7 +110,21 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         })
             .then(function(xhr) {
                 var list = JSON.parse(xhr.responseText);
-                console.log(xhr.responseText)
+                Ext.create('Ext.window.Window', {
+                    title: viewModel.get('videoWindowTitle'),
+                    name: 'video-window',
+                    layout: 'fit',
+                    items: [{
+                        xtype: 'combo',
+                        displayField: 'name',
+                        valueField: 'urls',
+                        fieldLabel: viewModel.get('videoComboText'),
+                        store: Ext.create('Ext.data.Store', {
+                            fields: ['name', 'urls'],
+                            data: list.videos
+                        })
+                    }]
+                }).show();
             });
     },
 

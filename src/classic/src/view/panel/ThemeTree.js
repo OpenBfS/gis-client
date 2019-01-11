@@ -158,8 +158,6 @@ Ext.define('Koala.view.panel.ThemeTree', {
             'layerset'
         ];
         var layerSetUrl = Koala.util.Object.getPathOr(appContext, path, 'classic/resources/layerset.json');
-        path[3] = 'videos';
-        var videosUrl = Koala.util.Object.getPathOr(appContext, path, '/resources/videos');
 
         Ext.Ajax.request({
             url: layerSetUrl
