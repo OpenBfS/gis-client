@@ -34,6 +34,9 @@ Ext.define('Koala.util.Clone', {
          */
         loadStyle: function(baseUrl, styleName, targetLayer) {
             var url = baseUrl + '/rest/styles/' + styleName + '.sld';
+            if (styleName.indexOf('url:') === 0) {
+                url = styleName;
+            }
             Ext.Ajax.request({
                 url: url,
                 method: 'GET'
