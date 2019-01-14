@@ -182,10 +182,17 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
 
             context.restore();
         });
+        imagery.set('videoPlaying', true);
         map.addLayer(imagery);
         video.play();
 
         window.setInterval(function() {
+            var playing = imagery.get('videoPlaying');
+            if (!playing) {
+                video.pause();
+                return;
+            }
+            video.play();
             map.render();
             var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
             var slider;

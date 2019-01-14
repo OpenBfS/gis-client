@@ -197,6 +197,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var share = comp.down('button[name=share]');
             var opacitySlider = comp.down('slider[name="opacityChange"]');
             var videoSlider = comp.down('slider[name="videoSlider"]');
+            var stopBtn = comp.down('button[name=video-stop]');
+            var playBtn = comp.down('button[name=video-play]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
 
             if (olLayer.get('isVideoLayer')) {
@@ -204,6 +206,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 allowRemoval = true;
             }
             videoSlider.setVisible(olLayer.get('isVideoLayer'));
+            stopBtn.setVisible(olLayer.get('isVideoLayer'));
+            playBtn.setVisible(olLayer.get('isVideoLayer'));
 
             if (shortInfoBtn) {
                 shortInfoBtn.setVisible(allowShortInfo);
@@ -239,6 +243,16 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             if (share) {
                 share.setVisible(allowShare);
             }
+        },
+
+        startVideoPlay: function(btn) {
+            var layer = btn.layerRec.getOlLayer();
+            layer.set('videoPlaying', true);
+        },
+
+        stopVideoPlay: function(btn) {
+            var layer = btn.layerRec.getOlLayer();
+            layer.set('videoPlaying', false);
         },
 
         changeFilterHandler: function(btn) {
@@ -556,6 +570,20 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 name: 'share',
                 glyph: 'xf064@FontAwesome',
                 tooltip: 'Freigeben'
+                // We'll assign a handler to handle clicks here once the
+                // class is defined and we can access the static methods
+            }, {
+                xtype: 'button',
+                name: 'video-play',
+                glyph: 'xf04b@FontAwesome',
+                tooltip: 'Abspielen'
+                // We'll assign a handler to handle clicks here once the
+                // class is defined and we can access the static methods
+            }, {
+                xtype: 'button',
+                name: 'video-stop',
+                glyph: 'xf04d@FontAwesome',
+                tooltip: 'Stoppen'
                 // We'll assign a handler to handle clicks here once the
                 // class is defined and we can access the static methods
             }, {
@@ -1222,6 +1250,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var styleBtnCfg = cls.findByProp(menuItems, 'name', 'style');
     var opacitySliderCfg = cls.findByProp(menuItems, 'name', 'opacityChange');
     var shareCfg = cls.findByProp(menuItems, 'name', 'share');
+    var playCfg = cls.findByProp(menuItems, 'name', 'video-play');
+    var stopCfg = cls.findByProp(menuItems, 'name', 'video-stop');
 
     if (layerMenuCfg) {
         layerMenuCfg.listeners.beforerender = cls.reorganizeMenu;
@@ -1249,6 +1279,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     }
     if (shareCfg) {
         shareCfg.handler = cls.shareHandler;
+    }
+    if (playCfg) {
+        playCfg.handler = cls.startVideoPlay;
+    }
+    if (stopCfg) {
+        stopCfg.handler = cls.stopVideoPlay;
     }
     if (opacitySliderCfg) {
         opacitySliderCfg.listeners.change = cls.sliderChangeHandler;
