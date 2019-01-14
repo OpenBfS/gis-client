@@ -20,7 +20,12 @@
                    "text" : "Planungsradien des Katastrophenschutzes",
                    "leaf" : true
                 },
-               {
+                {
+                  "uuid" : "2957e659-adc1-4884-8aa1-eb397a175516",
+                  "text" : "katzonen",
+                  "leaf" : true
+               },
+              {
                   "leaf" : true,
                   "text" : "Kernkraftwerk",
                   "uuid" : "2c7b7cf7-d72c-4048-8f9e-3399f7ff4e16"
