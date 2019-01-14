@@ -727,7 +727,8 @@ Ext.define('Koala.util.ChartData', {
                 min: min,
                 max: max,
                 sanitizeLabels: true,
-                factor: orient === 'y' ? 0.8 : undefined
+                factor: orient === 'y' ? 0.8 : undefined,
+                locale: Ext.ComponentQuery.query('k-form-field-languagecombo')[0].getValue()
             };
             if (withGrid) {
                 config.showGrid = gnosConfig.showGrid || false;
