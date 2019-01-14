@@ -488,6 +488,11 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             win.show();
         },
 
+        videoSliderHandler: function(slider, newValue) {
+            var layer = slider.layerRec.getOlLayer();
+            layer.set('videoPosition', newValue);
+        },
+
         sliderChangeHandler: function(slider, newValue) {
             var layer = slider.layerRec.getOlLayer();
             layer.setOpacity(newValue / 100);
@@ -1249,6 +1254,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var editBtnCfg = cls.findByProp(menuItems, 'name', 'edit');
     var styleBtnCfg = cls.findByProp(menuItems, 'name', 'style');
     var opacitySliderCfg = cls.findByProp(menuItems, 'name', 'opacityChange');
+    var videoSliderCfg = cls.findByProp(menuItems, 'name', 'videoSlider');
     var shareCfg = cls.findByProp(menuItems, 'name', 'share');
     var playCfg = cls.findByProp(menuItems, 'name', 'video-play');
     var stopCfg = cls.findByProp(menuItems, 'name', 'video-stop');
@@ -1289,6 +1295,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     if (opacitySliderCfg) {
         opacitySliderCfg.listeners.change = cls.sliderChangeHandler;
         opacitySliderCfg.listeners.afterrender = cls.initializeOpacityVal;
+    }
+    if (videoSliderCfg) {
+        videoSliderCfg.listeners.change = cls.videoSliderHandler;
     }
 
 });

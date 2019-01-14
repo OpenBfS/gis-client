@@ -194,6 +194,10 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             }
             video.play();
             map.render();
+            if (imagery.get('videoPosition')) {
+                video.currentTime = imagery.get('videoPosition');
+                imagery.set('videoPosition', null);
+            }
             var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
             var slider;
             sliders.forEach(function(item) {
@@ -203,10 +207,12 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             });
             slider.setMinValue(0);
             slider.setMaxValue(video.duration);
+            slider.suspendEvents();
             if (slider.getValue() !== video.currentTime) {
                 slider.reset();
                 slider.setValue(video.currentTime);
             }
+            slider.resumeEvents();
         }, 1000 / 30);
         var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
         win.close();
