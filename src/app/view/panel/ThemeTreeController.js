@@ -165,12 +165,6 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
                 this.play();
             }, false);
         }
-        video.play();
-        var tree = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
-        var slider = tree.down('[name=videoSlider');
-        // TODO filter on layer
-        slider.setMinValue(0);
-        slider.setMaxValue(video.duration);
 
         var width = bbox[2] - bbox[0];
         var height = bbox[3] - bbox[1];
@@ -190,9 +184,22 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         });
         map.addLayer(imagery);
         video.play();
+
         window.setInterval(function() {
             map.render();
-            slider.setValue(video.currentTime);
+            var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
+            var slider;
+            sliders.forEach(function(item) {
+                if (item.el.dom) {
+                    slider = item;
+                }
+            });
+            slider.setMinValue(0);
+            slider.setMaxValue(video.duration);
+            if (slider.getValue() !== video.currentTime) {
+                slider.reset();
+                slider.setValue(video.currentTime);
+            }
         }, 1000 / 30);
         var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
         win.close();

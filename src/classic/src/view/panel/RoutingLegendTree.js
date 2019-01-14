@@ -575,7 +575,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 xtype: 'slider',
                 name: 'videoSlider',
                 width: 80,
-                value: 100,
+                animate: false,
                 tipText: function(thumb) {
                     var minutes = Math.floor(thumb.value / 60);
                     var secs = thumb.value % 60;
