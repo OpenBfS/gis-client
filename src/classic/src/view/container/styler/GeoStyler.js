@@ -152,6 +152,11 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         };
     },
 
+    getColorRamps: function() {
+        var context = Koala.util.AppContext.getAppContext().data.merge;
+        return context.colorRamps;
+    },
+
     renderReactGeoStyler: function(style) {
         var domElement = this.getEl().dom;
         var root = domElement.querySelector('.geostyler-root');
@@ -161,7 +166,8 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             previewProps: { showOsmBackground: false },
             onStyleChange: this.onStyleChange.bind(this),
             compact: true,
-            iconLibraries: [this.getIconLibrary()]
+            iconLibraries: [this.getIconLibrary()],
+            colorRamps: this.getColorRamps()
         });
         var localeProvider = React.createElement(GeoStyler.LocaleProvider,
             { locale: GeoStyler.locale.de_DE },
