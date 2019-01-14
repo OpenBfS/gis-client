@@ -86,9 +86,17 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
      * Dispatch between rodos window and refreshing the tree.
      */
     handleActionColumn: function(view, rowIndex, colIndex, item) {
+        var appContext = BasiGX.view.component.Map.guess().appContext;
+        var path = [
+            'data',
+            'merge',
+            'urls',
+            'videos'
+        ];
+        var videosUrl = Koala.util.Object.getPathOr(appContext, path);
         if (rowIndex === 0) {
             this.showRodosFilter(view, rowIndex, colIndex, item);
-        } else if (rowIndex === 1) {
+        } else if (rowIndex === 1 && videosUrl) {
             this.showVideoSelection();
         } else {
             this.getView().rebuildTree();
