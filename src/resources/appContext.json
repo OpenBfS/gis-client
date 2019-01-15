@@ -14,7 +14,7 @@
                 "geoserver-base-url": "http://bfs-docker/ogc",
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
-
+                "videos": "resources/videos.json",
                 "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
             },
             "application_user": {
@@ -27,15 +27,15 @@
                 "workspace": "ruf-import",
                 "namespace": "www.imis.bfs.de/ruf",
                 "datastore": "ruf-import",
-                "baseUrl": "http://bfs-docker/ogc/",
-                "metadataBaseUrl": "http://bfs-docker/geonetwork/"
+                "baseUrl": "/ogc/",
+                "metadataBaseUrl": "/geonetwork/"
               },
               "imis": {
                 "workspace": "imis-import",
                 "namespace": "www.imis.bfs.de/imis",
                 "datastore": "imis-import",
-                "baseUrl": "http://bfs-docker/ogc/",
-                "metadataBaseUrl": "http://bfs-docker/geonetwork/"
+                "baseUrl": "/ogc/",
+                "metadataBaseUrl": "/geonetwork/"
               }
             },
             "imis_user": {

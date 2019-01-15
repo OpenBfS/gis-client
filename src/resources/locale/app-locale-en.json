@@ -586,7 +586,9 @@
                 "btnTextResetThemeTreeFiltering": "All Layers",
                 "btnTooltipResetThemeTreeFiltering": "Resets filtering of available topics.",
                 "rodosWindowTitle": "en:RODOS Prognosen Filter",
-                "importedLayersTitle": "User generated"
+                "importedLayersTitle": "User generated",
+                "videoComboText": "Select video",
+                "videoWindowTitle": "Video layer"
             }
         }
     },
