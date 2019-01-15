@@ -279,6 +279,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
     setTranslatedAutorefreshData: function() {
         var combo = this.autorefreshCombo;
+        if (!combo) {
+            // destroyed already
+            return;
+        }
         var value = combo.getValue();
         var store = combo.getStore();
         var data = this.getTranslatedAutorefreshData();
