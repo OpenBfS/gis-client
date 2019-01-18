@@ -508,89 +508,93 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         xtype: 'container',
         name: 'legend-tree-row-component',
         scrollable: true,
-        items: [ {
+        items: [{
             xtype: 'container',
-            layout: 'hbox',
-            defaults: {
-                margin: '0 5px 0 0'
-            },
+            layout: 'vbox',
             listeners: {
                 // We'll assign a handler to reorganize the menu once the
                 // class is defined.
             },
             items: [{
-                xtype: 'button',
-                name: 'shortInfo',
-                glyph: 'xf05a@FontAwesome',
-                tooltip: 'Layerinformationen anzeigen'
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
-            }, {
-                xtype: 'button',
-                name: 'filter',
-                glyph: 'xf0b0@FontAwesome',
-                tooltip: 'Layerfilter ändern'
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
-            }, {
-                xtype: 'button',
-                name: 'download',
-                glyph: 'xf0c7@FontAwesome',
-                tooltip: 'Daten speichern'
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
-            }, {
-                xtype: 'button',
-                name: 'removal',
-                glyph: 'xf00d@FontAwesome',
-                tooltip: 'Layer entfernen'
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
-            }, {
-                xtype: 'button',
-                name: 'clone',
-                glyph: 'xf0c5@FontAwesome',
-                tooltip: 'Objekte klonen',
-                listeners: {
-                    boxready: Koala.util.AppContext.generateCheckToolVisibility('cloneBtn')
-                }
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
-            }, {
-                xtype: 'button',
-                name: 'edit',
-                glyph: 'xf040@FontAwesome',
-                tooltip: 'Layerobjekte editieren'
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
-            }, {
-                xtype: 'button',
-                name: 'style',
-                glyph: 'xf1fc@FontAwesome',
-                tooltip: 'Layerstil anpassen'
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
-            }, {
-                xtype: 'button',
-                name: 'share',
-                glyph: 'xf064@FontAwesome',
-                tooltip: 'Freigeben'
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
-            }, {
-                xtype: 'button',
-                name: 'video-play',
-                glyph: 'xf04b@FontAwesome',
-                tooltip: 'Abspielen'
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
-            }, {
-                xtype: 'button',
-                name: 'video-stop',
-                glyph: 'xf04d@FontAwesome',
-                tooltip: 'Stoppen'
-                // We'll assign a handler to handle clicks here once the
-                // class is defined and we can access the static methods
+                xtype: 'container',
+                layout: 'hbox',
+                defaults: {
+                    margin: '0 5px 0 0'
+                },
+                items: [{
+                    xtype: 'button',
+                    name: 'shortInfo',
+                    glyph: 'xf05a@FontAwesome',
+                    tooltip: 'Layerinformationen anzeigen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'filter',
+                    glyph: 'xf0b0@FontAwesome',
+                    tooltip: 'Layerfilter ändern'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'download',
+                    glyph: 'xf0c7@FontAwesome',
+                    tooltip: 'Daten speichern'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'removal',
+                    glyph: 'xf00d@FontAwesome',
+                    tooltip: 'Layer entfernen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'clone',
+                    glyph: 'xf0c5@FontAwesome',
+                    tooltip: 'Objekte klonen',
+                    listeners: {
+                        boxready: Koala.util.AppContext.generateCheckToolVisibility('cloneBtn')
+                    }
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'edit',
+                    glyph: 'xf040@FontAwesome',
+                    tooltip: 'Layerobjekte editieren'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'style',
+                    glyph: 'xf1fc@FontAwesome',
+                    tooltip: 'Layerstil anpassen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'share',
+                    glyph: 'xf064@FontAwesome',
+                    tooltip: 'Freigeben'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'video-play',
+                    glyph: 'xf04b@FontAwesome',
+                    tooltip: 'Abspielen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'video-stop',
+                    glyph: 'xf04d@FontAwesome',
+                    tooltip: 'Stoppen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }]
             }, {
                 xtype: 'slider',
                 name: 'opacityChange',
@@ -1243,7 +1247,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
 }, function(cls) {
     // bind the various handlers now that we have access to the static methods
-    var layerMenuCfg = cls.prototype.rowBodyCompTemplate.items[0];
+    var sliderContainer = cls.prototype.rowBodyCompTemplate.items[0].items;
+    var layerMenuCfg = cls.prototype.rowBodyCompTemplate.items[0].items[0];
     var menuItems = layerMenuCfg.items;
 
     var filterBtnCfg = cls.findByProp(menuItems, 'name', 'filter');
@@ -1253,14 +1258,14 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var cloneBtnCfg = cls.findByProp(menuItems, 'name', 'clone');
     var editBtnCfg = cls.findByProp(menuItems, 'name', 'edit');
     var styleBtnCfg = cls.findByProp(menuItems, 'name', 'style');
-    var opacitySliderCfg = cls.findByProp(menuItems, 'name', 'opacityChange');
-    var videoSliderCfg = cls.findByProp(menuItems, 'name', 'videoSlider');
+    var opacitySliderCfg = cls.findByProp(sliderContainer, 'name', 'opacityChange');
+    var videoSliderCfg = cls.findByProp(sliderContainer, 'name', 'videoSlider');
     var shareCfg = cls.findByProp(menuItems, 'name', 'share');
     var playCfg = cls.findByProp(menuItems, 'name', 'video-play');
     var stopCfg = cls.findByProp(menuItems, 'name', 'video-stop');
 
-    if (layerMenuCfg) {
-        layerMenuCfg.listeners.beforerender = cls.reorganizeMenu;
+    if (cls.prototype.rowBodyCompTemplate.items[0]) {
+        cls.prototype.rowBodyCompTemplate.items[0].listeners.beforerender = cls.reorganizeMenu;
     }
     if (filterBtnCfg) {
         filterBtnCfg.handler = cls.changeFilterHandler;
