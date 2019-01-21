@@ -125,6 +125,9 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var layer = view.lookupViewModel().get('layer');
         var styles = Koala.util.Object.getPathStrOr(layer,
             'metadata/layerConfig/olProperties/styleReference');
+        if (!styles) {
+            styles = '';
+        }
         styles = styles.split(',')
             .map(function(style) {
                 return style.trim();
