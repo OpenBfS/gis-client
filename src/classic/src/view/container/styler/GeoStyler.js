@@ -82,6 +82,11 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         if (config.viewModel.data) {
             this.getViewModel().setData(config.viewModel.data);
         }
+        var layer = this.getViewModel().get('layer');
+        var styles = Koala.util.Object.getPathStrOr(layer,
+            'metadata/layerConfig/olProperties/styleReference');
+        this.down('[name=choose-vector-style]').setHidden(!styles);
+
     },
 
     listeners: {
@@ -213,6 +218,7 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         },
         {
             xtype: 'button',
+            name: 'choose-vector-style',
             bind: {
                 text: '{chooseFromVectorTemplate}'
             },
