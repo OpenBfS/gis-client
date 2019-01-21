@@ -537,7 +537,8 @@
     "Koala.view.panel.Header": {
         "config": {
             "data": {
-                "logoTooltip": "Link zur BfS-Homepage"
+                "logoTooltip": "Link zur BfS-Homepage",
+                "headerTitle": "GEOPORTAL"
             }
         }
     },

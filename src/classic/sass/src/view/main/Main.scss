@@ -4,6 +4,10 @@
    box-shadow: $top $left $blur $size $color;
 }
 
+.k-navigation-button .x-btn-button.x-btn-center {
+    flex: inherit;
+}
+
 .k-panel-themetree {
     @include box-shadow(5px,10px,15px,0, rgba(0,0,0,0.6));
 }
