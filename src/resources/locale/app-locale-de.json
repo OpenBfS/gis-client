@@ -338,7 +338,8 @@
                 "templateLabel": "Metadaten-Template",
                 "projectionLabel": "Projektion",
                 "fileFieldLabel": "Datei",
-                "fileFieldButtonText": "Durchsuchen"
+                "fileFieldButtonText": "Durchsuchen",
+                "templateStyleLabel": "Stil aus Template"
             }
         }
     },

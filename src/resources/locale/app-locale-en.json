@@ -337,7 +337,8 @@
                 "templateLabel": "Metadata template",
                 "projectionLabel": "Projection",
                 "fileFieldLabel": "File",
-                "fileFieldButtonText": "Browse"
+                "fileFieldButtonText": "Browse",
+                "templateStyleLabel": "Style from template"
             }
         }
     },

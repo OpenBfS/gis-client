@@ -149,13 +149,13 @@ Ext.define('Koala.util.MetadataParser', {
          */
         parseLayerConfig: function(json) {
             var config = {};
-            if (json['bfs:layerType']['bfs:MD_WMSLayerType']) {
+            if (json['bfs:layerType'] && json['bfs:layerType']['bfs:MD_WMSLayerType']) {
                 config.wms = this.parseWmsLayer(json['bfs:layerType']['bfs:MD_WMSLayerType']);
             }
-            if (json['bfs:layerType']['bfs:MD_VectorLayerType']) {
+            if (json['bfs:layerType'] && json['bfs:layerType']['bfs:MD_VectorLayerType']) {
                 config.vector = this.parseVectorLayer(json['bfs:layerType']['bfs:MD_VectorLayerType']);
             }
-            if (json['bfs:layerType']['bfs:MD_WMTSLayerType']) {
+            if (json['bfs:layerType'] && json['bfs:layerType']['bfs:MD_WMTSLayerType']) {
                 config.wmts = this.parseWmtsLayer(json['bfs:layerType']['bfs:MD_WMTSLayerType']);
             }
             if (json['bfs:wfs']) {
