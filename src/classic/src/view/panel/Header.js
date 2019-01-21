@@ -50,6 +50,9 @@ Ext.define('Koala.view.panel.Header', {
         xtype: 'title',
         textAlign: 'center',
         width: 300,
+        bind: {
+            text: '{headerTitle}'
+        },
         autoEl: {
             tag: 'a',
             href: null
@@ -104,6 +107,7 @@ Ext.define('Koala.view.panel.Header', {
         bind: {
             title: '{logoTooltip}'
         },
+        flex: 0.12,
         src: 'classic/resources/img/bfs-logo-75pct.png',
         alt: 'BfS',
         autoEl: {

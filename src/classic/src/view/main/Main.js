@@ -83,7 +83,7 @@ Ext.define('Koala.view.main.Main', {
                     if (Koala.util.AppContext.getMergedDataByKey('imis_user').uid === 'hoe-fr') {
                         headerTitle = 'Höbler-GIS';
                     }
-                    header.down('title').setText(headerTitle);
+                    header.getViewModel().set('headerTitle', headerTitle);
                 } else {
                     header.down('title').setBind({text: '{headerTitle}'});
                 }
@@ -127,11 +127,14 @@ Ext.define('Koala.view.main.Main', {
         },
         toolbarConfig: {
             items: [{
-                xtype: 'basigx-button-zoomin'
+                xtype: 'basigx-button-zoomin',
+                componentCls: 'k-navigation-button'
             }, {
-                xtype: 'basigx-button-zoomout'
+                xtype: 'basigx-button-zoomout',
+                componentCls: 'k-navigation-button'
             }, {
-                xtype: 'basigx-button-zoomtoextent'
+                xtype: 'basigx-button-zoomtoextent',
+                componentCls: 'k-navigation-button'
             }, {
                 xtype: 'k-button-selectfeatures',
                 hidden: true // UI moved to TreeMenu. Logic kept in hidden button
