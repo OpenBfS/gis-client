@@ -33,7 +33,10 @@ Ext.define('Koala.util.Clone', {
          * @param {ol.layer.Vector} targetLayer the layer to apply the style to
          */
         loadStyle: function(baseUrl, styleName, targetLayer) {
-            var url = baseUrl + '/rest/styles/' + styleName + '.sld';
+            var url = baseUrl + '/rest/styles/' + styleName;
+            if (!styleName.endsWith('.sld')) {
+                url += '.sld';
+            }
             if (styleName.indexOf('url:') === 0) {
                 url = styleName;
             }
