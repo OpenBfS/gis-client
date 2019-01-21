@@ -52,13 +52,17 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         bind: {
             title: '{graphicalEditorTitle}'
         },
-        bodyCls: 'geostyler-root',
+        // need to use html here and not bodyCls or similar, this would
+        // intervene with the extjs rendering process
+        html: '<div class="geostyler-root"></div>',
         scrollable: 'y'
     }, {
         bind: {
             title: '{codeEditorTitle}'
         },
-        bodyCls: 'codeeditor-root',
+        // need to use html here and not bodyCls or similar, this would
+        // intervene with the extjs rendering process
+        html: '<div class="codeeditor-root"></div>',
         scrollable: 'y'
     }],
 
