@@ -30,6 +30,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
         'Koala.view.panel.FeatureGrid',
+        'Koala.view.slider.AlwaysVisibleTimeTip',
         'Koala.view.window.MetadataInfo',
         'Koala.view.window.CloneWindow',
         'Koala.view.window.ShareWindow'
@@ -611,16 +612,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             }, {
                 xtype: 'slider',
                 name: 'videoSlider',
-                width: 80,
+                width: '100%',
                 animate: false,
-                tipText: function(thumb) {
-                    var minutes = Math.floor(thumb.value / 60);
-                    var secs = thumb.value % 60;
-                    if (secs < 10) {
-                        secs = '0' + secs;
-                    }
-                    return minutes + ':' + secs;
-                },
                 listeners: {
                     // We'll assign a handler to initialize and handle drags
                     // here once the class is defined and we can access the
@@ -1303,6 +1296,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     }
     if (videoSliderCfg) {
         videoSliderCfg.listeners.change = cls.videoSliderHandler;
+        videoSliderCfg.plugins = ['k-time-tip'];
     }
 
 });
