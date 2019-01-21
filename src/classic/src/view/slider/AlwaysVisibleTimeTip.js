@@ -29,6 +29,17 @@ Ext.define('Koala.view.slider.AlwaysVisibleTimeTip', {
             change: me.onSlide,
             afterrender: function() {
                 me.intervalHandle = window.setInterval(function() {
+                    if (!slider.isVisible()) {
+                        window.clearInterval(me.intervalHandle);
+                        try {
+                            slider.destroy();
+                        } catch (e) {
+                            // ignore broken sliders
+                        }
+                    }
+                    if (slider.destroyed || slider.destroying) {
+                        return;
+                    }
                     me.onSlide(slider, null, slider.thumbs[0]);
                 }, 500);
             }
