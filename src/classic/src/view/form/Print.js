@@ -738,7 +738,7 @@ Ext.define('Koala.view.form.Print', {
                             return false;
                         }
                         printLayers.push(layer);
-                    } else if (layer.get('printSpecial')) {
+                    } else if (layer.get('printSpecial') || layer.get('isSelectionLayer')) {
                         printLayers.push(layer);
                     } else {
                         return false;
