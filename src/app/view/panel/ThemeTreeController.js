@@ -153,7 +153,8 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         var imagery = new ol.layer.Vector({
             source: new ol.source.Vector(),
             name: 'Video',
-            isVideoLayer: true
+            isVideoLayer: true,
+            videoTimestamp: rec.data.timestamp
         });
         var urls = combo.getValue();
         var map = BasiGX.view.component.Map.guess().map;
@@ -202,25 +203,46 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             }
             video.play();
             map.render();
+            var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(rec.data.timestamp)).unix();
             if (imagery.get('videoPosition')) {
-                video.currentTime = imagery.get('videoPosition');
+                video.currentTime = imagery.get('videoPosition') - time;
                 imagery.set('videoPosition', null);
             }
+            // HERE BE DRAGONS:
+            // We call the garbage collector to clean out the old items
+            // in the legend tree in order to avoid getting the broken
+            // ones. This will just clear out the DOM nodes of the broken
+            // elements, they're manually destroyed below.
+            // It is unknown if that causes any side effects and
+            // the legend tree / its row expander plugin should be fixed /
+            // refactored instead.
+            Ext.dom.GarbageCollector.collect();
             var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
             var slider;
             sliders.forEach(function(item) {
-                if (item.el.dom) {
+                if (item.el.dom && item.isVisible()) {
                     slider = item;
+                } else {
+                    try {
+                        item.destroy();
+                    } catch (e) {
+                        // the extra sliders may sometimes be in a weird state
+                        // and destruction will throw errors (doDestroy on the
+                        // tip plugin will still be called, properly cancelling the
+                        // setInterval)
+                    }
                 }
             });
-            slider.setMinValue(0);
-            slider.setMaxValue(video.duration);
-            slider.suspendEvents();
-            if (slider.getValue() !== video.currentTime) {
-                slider.reset();
-                slider.setValue(video.currentTime);
+            if (slider) {
+                slider.setMinValue(time);
+                slider.setMaxValue(video.duration + time);
+                slider.suspendEvents();
+                if (slider.getValue() !== (video.currentTime + time)) {
+                    slider.reset();
+                    slider.setValue(video.currentTime + time);
+                }
+                slider.resumeEvents();
             }
-            slider.resumeEvents();
         }, 1000 / 30);
         var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
         win.close();
