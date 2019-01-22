@@ -196,9 +196,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         map.addLayer(imagery);
         video.play()
             .then(function() {
-                var stream = video.captureStream();
-                var track = stream.getVideoTracks()[0];
-                var frameRate = track.getCapabilities().frameRate.max;
+                var frameRate = 30;
                 if (rec.data.fps) {
                     frameRate = rec.data.fps;
                 }
