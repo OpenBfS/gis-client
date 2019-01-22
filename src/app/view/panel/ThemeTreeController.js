@@ -199,6 +199,9 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
                 var stream = video.captureStream();
                 var track = stream.getVideoTracks()[0];
                 var frameRate = track.getCapabilities().frameRate.max;
+                if (rec.data.fps) {
+                    frameRate = rec.data.fps;
+                }
                 if (timeFrames.length === 0) {
                     for (var k = 0; k <= video.duration * frameRate; ++k) {
                         timeFrames.push(1 / frameRate);
