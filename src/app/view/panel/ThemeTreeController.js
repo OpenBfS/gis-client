@@ -160,6 +160,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         var map = BasiGX.view.component.Map.guess().map;
         var bbox = rec.data.bbox;
         var video = document.createElement('video');
+        var timeFrames = rec.data.timeFrames;
         video.crossOrigin = 'Anonymous';
         for (var i = 0; i < urls.length; i++) {
             var source = document.createElement('source');
@@ -193,59 +194,78 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         });
         imagery.set('videoPlaying', true);
         map.addLayer(imagery);
-        video.play();
-
-        window.setInterval(function() {
-            var playing = imagery.get('videoPlaying');
-            if (!playing) {
-                video.pause();
-                return;
-            }
-            video.play();
-            map.render();
-            var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(rec.data.timestamp)).unix();
-            if (imagery.get('videoPosition')) {
-                video.currentTime = imagery.get('videoPosition') - time;
-                imagery.set('videoPosition', null);
-            }
-            // HERE BE DRAGONS:
-            // We call the garbage collector to clean out the old items
-            // in the legend tree in order to avoid getting the broken
-            // ones. This will just clear out the DOM nodes of the broken
-            // elements, they're manually destroyed below.
-            // It is unknown if that causes any side effects and
-            // the legend tree / its row expander plugin should be fixed /
-            // refactored instead.
-            Ext.dom.GarbageCollector.collect();
-            var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
-            var slider;
-            sliders.forEach(function(item) {
-                if (item.el.dom && item.isVisible()) {
-                    slider = item;
-                } else {
-                    try {
-                        item.destroy();
-                    } catch (e) {
-                        // the extra sliders may sometimes be in a weird state
-                        // and destruction will throw errors (doDestroy on the
-                        // tip plugin will still be called, properly cancelling the
-                        // setInterval)
+        video.play()
+            .then(function() {
+                var stream = video.captureStream();
+                var track = stream.getVideoTracks()[0];
+                var frameRate = track.getCapabilities().frameRate.max;
+                if (timeFrames.length === 0) {
+                    for (var k = 0; k <= video.duration * frameRate; ++k) {
+                        timeFrames.push(1 / frameRate);
                     }
                 }
+
+                window.setInterval(function() {
+                    var playing = imagery.get('videoPlaying');
+                    if (!playing) {
+                        video.pause();
+                        return;
+                    }
+                    video.play();
+                    map.render();
+                    var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(rec.data.timestamp)).unix();
+                    if (imagery.get('videoPosition')) {
+                        video.currentTime = imagery.get('videoPosition') - time;
+                        imagery.set('videoPosition', null);
+                    }
+                    var curTime = video.currentTime;
+                    var idx = Math.round(curTime * frameRate);
+                    var offsets = timeFrames.slice(0, idx);
+                    curTime = offsets.reduce(function(a, b) {
+                        return a + b;
+                    }, 0);
+                    var duration = timeFrames.reduce(function(a, b) {
+                        return a + b;
+                    }, 0);
+                    // HERE BE DRAGONS:
+                    // We call the garbage collector to clean out the old items
+                    // in the legend tree in order to avoid getting the broken
+                    // ones. This will just clear out the DOM nodes of the broken
+                    // elements, they're manually destroyed below.
+                    // It is unknown if that causes any side effects and
+                    // the legend tree / its row expander plugin should be fixed /
+                    // refactored instead.
+                    Ext.dom.GarbageCollector.collect();
+                    var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
+                    var slider;
+                    sliders.forEach(function(item) {
+                        if (item.el.dom && item.isVisible()) {
+                            slider = item;
+                        } else {
+                            try {
+                                item.destroy();
+                            } catch (e) {
+                                // the extra sliders may sometimes be in a weird state
+                                // and destruction will throw errors (doDestroy on the
+                                // tip plugin will still be called, properly cancelling the
+                                // setInterval)
+                            }
+                        }
+                    });
+                    if (slider) {
+                        slider.setMinValue(time);
+                        slider.setMaxValue(duration + time);
+                        slider.suspendEvents();
+                        if (slider.getValue() !== (curTime + time)) {
+                            slider.reset();
+                            slider.setValue(curTime + time);
+                        }
+                        slider.resumeEvents();
+                    }
+                }, 1000 / frameRate);
+                var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
+                win.close();
             });
-            if (slider) {
-                slider.setMinValue(time);
-                slider.setMaxValue(video.duration + time);
-                slider.suspendEvents();
-                if (slider.getValue() !== (video.currentTime + time)) {
-                    slider.reset();
-                    slider.setValue(video.currentTime + time);
-                }
-                slider.resumeEvents();
-            }
-        }, 1000 / 30);
-        var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
-        win.close();
     },
 
     showRodosFilter: function(view, rowIndex, colIndex, item) {

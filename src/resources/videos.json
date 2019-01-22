@@ -3,6 +3,7 @@
         "name": "Testvideo",
         "urls": ["http://bfs-docker/gis_client_configs/aerial.mp4"],
         "bbox": [650000,6500000,1000000,6800000],
-        "timestamp": "20180405T131232Z"
+        "timestamp": "20180405T131232Z",
+        "timeFrames": []
     }]
 }
