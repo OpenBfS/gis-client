@@ -84,7 +84,18 @@ Ext.define('Koala.view.form.ImportLocalData',{
                 beforerender: 'beforeProjectionComboRendered'
             }
         }, {
-            xtype: 'k-form-field-vectortemplatecombo'
+            xtype: 'k-form-field-vectortemplatecombo',
+            listeners: {
+                change: 'onVectorTemplateChange'
+            }
+        }, {
+            xtype: 'combo',
+            bind: {
+                disabled: '{!stylesAvailable}',
+                fieldLabel: '{templateStyleLabel}',
+                store: '{templateStyles}',
+                value: '{selectedTemplateStyle}'
+            }
         }]
     }],
 

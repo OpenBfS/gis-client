@@ -1106,7 +1106,7 @@ Ext.define('Koala.util.Layer', {
             return layer;
         },
 
-        getVectorLayerStyle: function(layer, force) {
+        getVectorLayerStyle: function(layer, force, styleName) {
             if (layer.get('persisted') || force ||
                 layer.metadata.layerConfig.olProperties.persisted) {
                 var context = Koala.util.AppContext.getAppContext().data.merge;
@@ -1122,9 +1122,11 @@ Ext.define('Koala.util.Layer', {
                     var ms = /(^http[s]?:\/\/[^/]+[/][^/]+)/g.exec(context.urls['spatial-search']);
                     url = ms[1] + '/';
                 }
-                var styleName = layer.metadata.id;
-                if (layer.metadata.layerConfig.olProperties.styleReference) {
-                    styleName = layer.metadata.layerConfig.olProperties.styleReference;
+                if (!styleName) {
+                    styleName = layer.metadata.id;
+                    if (layer.metadata.layerConfig.olProperties.styleReference) {
+                        styleName = layer.metadata.layerConfig.olProperties.styleReference;
+                    }
                 }
                 if (!styleName.endsWith('.sld')) {
                     styleName += '.sld';

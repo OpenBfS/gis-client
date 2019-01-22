@@ -118,6 +118,9 @@ Ext.define('Koala.view.window.CloneWindowController', {
                     });
                 viewModel.set('templateStyles', styles);
                 viewModel.set('selectedTemplateStyle', styles[0]);
+            } else {
+                viewModel.set('templateStyles', []);
+                viewModel.set('selectedTemplateStyle', undefined);
             }
         });
     }

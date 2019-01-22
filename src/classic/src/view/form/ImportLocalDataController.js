@@ -190,15 +190,6 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             // Make some specific settings for local data:
             var cfg = me.getInternalLayerConfig(metadata);
 
-            // handle style information for the layer:
-            var mdStyle = Koala.util.Object.getPathStrOr(
-                metadata,
-                'layerConfig/olProperties/vectorStyle',
-                null
-            );
-            var style = mdStyle ? Koala.util.String.coerce(mdStyle) : undefined;
-            cfg.style = style; // This handles styling on OpenLayers side…
-
             cfg.name = layerName;
             cfg.metadata = metadata;
             cfg.routeId = 'localData_' + layerName;
@@ -211,7 +202,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             var layer = new ol.layer.Vector(cfg);
             layer.metadata = metadata;
 
-            layerUtil.getVectorLayerStyle(layer, true);
+            layerUtil.getVectorLayerStyle(layer, true, viewModel.get('selectedTemplateStyle'));
 
             // Finally add the layer to the map.
             layerUtil.addOlLayerToMap(layer);
@@ -284,6 +275,31 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             timeSeriesChartProperties: timeSeriesChartProperties,
             barChartProperties: barChartProperties
         };
+    },
+
+    loadStyles: function(uuid) {
+        var viewModel = this.getViewModel();
+        Koala.util.Layer.getMetadataFromUuid(uuid).then(function(metadata) {
+            var styles = Koala.util.Object.getPathStrOr(metadata,
+                'layerConfig/olProperties/styleReference');
+            if (styles) {
+                styles = styles.split(',')
+                    .map(function(style) {
+                        return style.trim();
+                    });
+                viewModel.set('stylesAvailable', true);
+                viewModel.set('templateStyles', styles);
+                viewModel.set('selectedTemplateStyle', styles[0]);
+            } else {
+                viewModel.set('stylesAvailable', false);
+                viewModel.set('templateStyles', []);
+                viewModel.set('selectedTemplateStyle', undefined);
+            }
+        });
+    },
+
+    onVectorTemplateChange: function(field, value) {
+        this.loadStyles(value);
     }
 
 });

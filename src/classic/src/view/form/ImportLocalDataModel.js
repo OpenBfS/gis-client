@@ -33,7 +33,11 @@ Ext.define('Koala.view.form.ImportLocalDataModel', {
         templateLabel: 'Template',
         projectionLabel: 'Projection',
         fileFieldLabel: 'Datei',
-        fileFieldButtonText: 'Durchsuchen'
+        fileFieldButtonText: 'Durchsuchen',
+        templateStyles: [],
+        selectedTemplateStyle: '',
+        templateStyleLabel: '',
+        stylesAvailable: true
     },
 
     formulas: {
