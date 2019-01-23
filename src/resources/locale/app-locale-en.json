@@ -150,7 +150,14 @@
                 "downloadChartDataMsgTitle": "Info",
                 "downloadChartDataMsgMessage": "download current chart data?",
                 "downloadChartDataMsgButtonYes": "Ok",
-                "downloadChartDataMsgButtonNo": "Cancel"
+                "downloadChartDataMsgButtonNo": "Cancel",
+                "okText": "Ok",
+                "cancelText": "Abbrechen",
+                "magnification": "Auflösung",
+                "original": "Original",
+                "twofold": "2-fach",
+                "threefold": "3-fach",
+                "fourfold": "4-fach"
             }
         }
     },

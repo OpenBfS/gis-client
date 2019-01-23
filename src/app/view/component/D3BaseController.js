@@ -416,61 +416,80 @@ Ext.define('Koala.view.component.D3BaseController', {
      * function. The first argument of the callback function is the dataUri.
      *
      * @param {number} scale The scale of the resulting image.
-     * @param {boolean} isBarChart Wiehter it is a barchart or not
-     * @param {DOMString} outputFormat An image outputFormat like 'image/bmp'
-     *                                 default is 'image/png'.
      */
-    chartToDataUri: function(scale, isBarChart, outputFormat) {
+    chartToDataUri: function(scale) {
+        var me = this;
         var chartNode = this.getView().el.dom.querySelector('svg');
-        var legend = chartNode.querySelector('.legend');
+        var isBarChart = this.getView().xtype === 'd3-barchart';
+        var outputFormat = 'image/png';
+        scale = scale || 1;
+        var downloadIcons = this.getView().el.dom.querySelectorAll('.k-d3-download-icon');
+        var deleteIcons = this.getView().el.dom.querySelectorAll('.k-d3-delete-icon');
+        var colorIcons = this.getView().el.dom.querySelectorAll('.k-d3-color-icon');
+        downloadIcons.forEach(function(icon) {
+            icon.style.display = 'none';
+        });
+        deleteIcons.forEach(function(icon) {
+            icon.style.display = 'none';
+        });
+        colorIcons.forEach(function(icon) {
+            icon.style.display = 'none';
+        });
+        var chartImageWidth = chartNode.getBoundingClientRect().width * scale;
+        var chartImageHeight = chartNode.getBoundingClientRect().height * scale;
+        if (isBarChart) {
+            chartImageWidth = 0;
+            chartImageHeight = 0;
+            me.getView().el.dom.querySelectorAll('svg')
+                .forEach(function(svg) {
+                    chartImageWidth += svg.getBoundingClientRect().width * scale;
+                    chartImageHeight = Math.max(chartImageHeight, svg.getBoundingClientRect().height * scale);
+                });
+        }
+        var promises = [];
+
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = chartImageWidth;
+        canvas.height = chartImageHeight;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        var curX = 0;
+
+        this.getView().el.dom.querySelectorAll('svg').forEach(function(svg) {
+            promises.push(new Ext.Promise(function(resolve) {
+                var chartSource = (new XMLSerializer()).serializeToString(svg);
+                var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
+                    unescape(encodeURIComponent(chartSource)));
+                var mypos = curX;
+                var width = svg.getBoundingClientRect().width * scale;
+                var height = svg.getBoundingClientRect().height * scale;
+                curX += width;
+                var chartImageObject = new Image(width, height);
+                chartImageObject.src = chartDataUri;
+                chartImageObject.onload = function() {
+                    ctx.drawImage(chartImageObject, mypos, 0, width, height);
+                    resolve();
+                };
+            }));
+        });
 
         return new Ext.Promise(function(resolve) {
-            outputFormat = outputFormat || 'image/png';
-            scale = scale || 1;
-            var downloadIcons = legend.querySelectorAll('.k-d3-download-icon');
-            var deleteIcons = legend.querySelectorAll('.k-d3-delete-icon');
-            var colorIcons = legend.querySelectorAll('.k-d3-color-icon');
-            downloadIcons.forEach(function(icon) {
-                icon.style.display = 'none';
-            });
-            deleteIcons.forEach(function(icon) {
-                icon.style.display = 'none';
-            });
-            colorIcons.forEach(function(icon) {
-                icon.style.display = 'none';
-            });
-
-            var chartSource = (new XMLSerializer()).serializeToString(chartNode);
-            var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
-                unescape(encodeURIComponent(chartSource)));
-
-            var chartImageWidth = chartNode.getBoundingClientRect().width * scale;
-            var chartImageHeight = chartNode.getBoundingClientRect().height * scale;
-            var chartImageObject = new Image(chartImageWidth, chartImageHeight);
-            chartImageObject.src = chartDataUri;
-
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            canvas.width = chartImageWidth;
-            canvas.height = chartImageHeight;
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0,0,canvas.width,canvas.height);
-
-            chartImageObject.onload = function() {
-                ctx.drawImage(chartImageObject, 0, 0, chartImageWidth, chartImageHeight);
-                var dataUri = canvas.toDataURL(outputFormat);
-
-                downloadIcons.forEach(function(icon) {
-                    icon.style.display = 'block';
+            Ext.Promise.all(promises)
+                .then(function() {
+                    var dataUri = canvas.toDataURL(outputFormat);
+                    downloadIcons.forEach(function(icon) {
+                        icon.style.display = 'block';
+                    });
+                    deleteIcons.forEach(function(icon) {
+                        icon.style.display = 'block';
+                    });
+                    colorIcons.forEach(function(icon) {
+                        icon.style.display = 'block';
+                    });
+                    debugger;
+                    resolve(dataUri);
                 });
-                deleteIcons.forEach(function(icon) {
-                    icon.style.display = 'block';
-                });
-                colorIcons.forEach(function(icon) {
-                    icon.style.display = 'block';
-                });
-                resolve(dataUri);
-            };
         });
     },
 
