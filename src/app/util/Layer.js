@@ -1119,7 +1119,7 @@ Ext.define('Koala.util.Layer', {
                 });
                 // fall back to generic GeoServer URL
                 if (!url) {
-                    var ms = /(^http[s]?:\/\/[^/]+[/][^/]+)/g.exec(context.urls['spatial-search']);
+                    var ms = /(^(http[s]?:\/\/[^/]+)?[/][^/]+)/g.exec(context.urls['spatial-search']);
                     url = ms[1] + '/';
                 }
                 if (!styleName) {
