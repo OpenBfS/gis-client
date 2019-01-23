@@ -487,7 +487,6 @@ Ext.define('Koala.view.component.D3BaseController', {
                     colorIcons.forEach(function(icon) {
                         icon.style.display = 'block';
                     });
-                    debugger;
                     resolve(dataUri);
                 });
         });
