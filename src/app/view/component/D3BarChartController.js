@@ -191,7 +191,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var labelFunc = view.getLabelFunc() || me.getFallBackIdentity();
         var barChartProperties = view.getTargetLayer().get('barChartProperties');
         var groupProp = barChartProperties.groupAttribute || 'end_measure';
-        var labelProp = barChartProperties.groupLabelAttribute || groupProp;
         var keyProp = barChartProperties.xAxisAttribute;
         // looks strange to toggle if !toggled, but that's actually the desired
         // behaviour
@@ -237,9 +236,6 @@ Ext.define('Koala.view.component.D3BarChartController', {
             var id = feature.properties.id;
             if (ids.indexOf(id) === -1) {
                 ids.push(id);
-                if (labelProp) {
-                    me.labels.push(feature.properties[labelProp]);
-                }
             }
         });
 
@@ -286,6 +282,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             if (createSeries) {
                 seriesData.push(pushObj);
+                me.labels.push(pushObj.key);
             }
         });
 
