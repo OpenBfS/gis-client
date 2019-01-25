@@ -32,7 +32,7 @@ Ext.define('Koala.view.form.IrixFieldSet',{
      */
     raw: null,
 
-    title: 'IRIX',
+    title: 'ELAN',
     hidden: true,
     margin: '0 0 0 5px',
     name: 'irix',
