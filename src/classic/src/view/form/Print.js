@@ -1220,7 +1220,7 @@ Ext.define('Koala.view.form.Print', {
         var genericFieldset = me.down('fieldset[name=generic-fieldset]');
         var irixCheckbox = Ext.create('Ext.form.field.Checkbox', {
             name: 'irix-fieldset-checkbox',
-            boxLabel: 'ELAN',
+            boxLabel: 'DokPool',
             checked: this.config.chartPrint,
             handler: function(checkbox, checked) {
                 var irixFieldset = me.down('k-form-irixfieldset');
