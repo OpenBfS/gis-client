@@ -81,7 +81,7 @@ Ext.define('Koala.view.window.CloneWindow', {
         }, {
             xtype: 'numberfield',
             labelWidth: 200,
-            value: 1000,
+            value: 2000,
             bind: {
                 fieldLabel: '{maxFeaturesLabel}'
             }

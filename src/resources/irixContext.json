@@ -136,7 +136,7 @@
                         ["For Addressees Use Only", "Gruppenintern"],
                         ["Free for Public Use", "Alle"]
                     ],
-                    "defaultValue": "Free for Public Use",
+                    "defaultValue": "For Addressees Use Only",
                     "allowBlank": false
                 },{
                 "type": "fieldset",
