@@ -36,7 +36,13 @@ Ext.define('Koala.util.Clone', {
             if (!styleName) {
                 return;
             }
-            var url = baseUrl + '/rest/styles/' + styleName;
+            var url = baseUrl;
+            var ms = /(.+):(.+)/g.exec(styleName);
+            if (ms) {
+                url += '/rest/workspaces/' + ms[1] + '/styles/' + ms[2];
+            } else {
+                url += '/rest/styles/' + styleName;
+            }
             if (!styleName.endsWith('.sld')) {
                 url += '.sld';
             }

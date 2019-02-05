@@ -265,6 +265,12 @@ Ext.define('Koala.util.SelectFeatures', {
                 Ext.log.error('Could not get the SLD for layer');
                 mapComponent.setLoading(false);
             };
+            if (targetLayer.get('SLD')) {
+                successCb({
+                    responseText: targetLayer.get('SLD')
+                });
+                return;
+            }
             var style = sourceLayer.getSource().getParams().STYLES;
             if (!style || style === '') {
                 BasiGX.util.SLD.getSldFromGeoserver(wmsUrl, name, successCb, errorCb);
