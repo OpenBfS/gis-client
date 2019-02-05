@@ -107,13 +107,20 @@ Ext.define('Koala.view.panel.Header', {
         bind: {
             title: '{logoTooltip}'
         },
-        flex: 0.12,
         src: 'classic/resources/img/bfs-logo-75pct.png',
         alt: 'BfS',
         autoEl: {
             tag: 'a',
             href: 'http://www.bfs.de/DE/home/home_node.html',
             target: '_blank'
+        },
+        listeners: {
+            afterrender: function() {
+                var me = this;
+                window.setTimeout(function() {
+                    me.updateLayout();
+                }, 1);
+            }
         }
     }]
 });
