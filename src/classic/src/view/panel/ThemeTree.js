@@ -21,6 +21,7 @@ Ext.define('Koala.view.panel.ThemeTree', {
     xtype: 'k-panel-themetree',
 
     requires: [
+        'Koala.util.AppContext',
         'Koala.util.MetadataQuery',
         'Koala.util.Geoserver',
         'Koala.util.Help',
@@ -163,7 +164,19 @@ Ext.define('Koala.view.panel.ThemeTree', {
             url: layerSetUrl
         })
             .then(function(xhr) {
+                var context = Koala.util.AppContext.getAppContext();
                 var data = JSON.parse(xhr.responseText);
+                var store;
+                if (!context.data.merge.import) {
+                    store = Ext.create('Ext.data.TreeStore', {
+                        root: {
+                            expanded: true,
+                            children: data
+                        }
+                    });
+                    me.reconfigure(store);
+                    return;
+                }
                 Koala.util.MetadataQuery.getImportedLayers()
                     .then(function(layers) {
                         Koala.util.Geoserver.filterDeletedLayers(layers)
@@ -174,7 +187,7 @@ Ext.define('Koala.view.panel.ThemeTree', {
                                     children: config,
                                     isImportNode: true
                                 });
-                                var store = Ext.create('Ext.data.TreeStore', {
+                                store = Ext.create('Ext.data.TreeStore', {
                                     root: {
                                         expanded: true,
                                         children: data
