@@ -441,6 +441,16 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var view = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
             var viewModel = view.lookupViewModel();
             var layer = btn.layerRec.getOlLayer();
+            var map = Ext.ComponentQuery.query('basigx-component-map')[0]
+                .getMap();
+            var comboValues = [['gml3','gml'],
+                ['csv','csv'],
+                ['application/json','json']];
+            var comboDefault = 'application/json';
+            if (layer instanceof ol.layer.Vector) {
+                comboValues = [['json', 'json'], ['zip', 'Shape']];
+                comboDefault = 'json';
+            }
 
             var win = Ext.create('Ext.window.Window', {
                 title: viewModel.get('downloadTitle'),
@@ -457,13 +467,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                         xtype: 'combo',
                         width: '100%',
                         fieldLabel: viewModel.get('outputFormatText'),
-                        value: 'application/json',
+                        value: comboDefault,
                         forceSelection: true,
-                        store: [
-                            ['gml3','gml'],
-                            ['csv','csv'],
-                            ['application/json','json']
-                        ]
+                        store: comboValues
                     }]
                 }],
                 bbar: [{
@@ -472,6 +478,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     handler: function(button) {
                         var combo = button.up('window').down('combo');
                         var outputFormat = combo.getSelectedRecord().get('field1');
+                        if (layer instanceof ol.layer.Vector) {
+                            BasiGX.util.Download.downloadLayer(layer, map, outputFormat);
+                            return;
+                        }
                         var url = Koala.util.Layer.getDownloadUrlWithFilter(
                             layer
                         );

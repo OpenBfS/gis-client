@@ -115,7 +115,6 @@ Ext.define('Koala.util.Metadata', {
             }
             metadata = Ext.clone(metadata);
 
-            // delete metadata.id;//id will get overriden after GNOS insert...
             delete metadata.layerConfig.wms;
             delete metadata.barChartProperties;
             delete metadata.timeSeriesChartProperties;
