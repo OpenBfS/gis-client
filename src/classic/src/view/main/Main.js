@@ -87,6 +87,7 @@ Ext.define('Koala.view.main.Main', {
                 } else {
                     header.down('title').setBind({text: '{headerTitle}'});
                 }
+                document.title = headerTitle + ' | Bundesamt für Strahlenschutz';
             },
             delay: 500
         },
