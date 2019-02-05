@@ -102,7 +102,25 @@ Ext.define('Koala.util.Ogc', {
                 allFilters.push(propertyFilter);
             }
 
-            var filter = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">';
+            if (layer.metadata.filters) {
+                Ext.each(layer.metadata.filters, function(filter) {
+                    // TODO This filtering mess should definitely be refactored.
+                    // Currently we have a combination here of:
+                    // * a made up time range filter because we're requesting timeseries data
+                    // * viewparam filters of the original layer
+                    // * viewparam filters with the selected station
+                    // * all the filters defined in the metadata which may or may not apply here
+                    // So for now we're just adding all the value filters if they're not encoded in
+                    // the viewparams.
+                    if (filter.type === 'value' && (!filter.encodeInViewParams || filter.encodeInViewParams === 'false')) {
+                        var ogcFilter = BasiGX.util.WFS.getOgcFromCqlFilter(filter.param + ' ' +
+                            filter.operator + ' ' + filter.effectivevalue);
+                        allFilters.push(ogcFilter);
+                    }
+                });
+            }
+
+            var filter = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">';
             if (allFilters.length > 0) {
                 filter += '<And>';
                 filter += allFilters.join('');
