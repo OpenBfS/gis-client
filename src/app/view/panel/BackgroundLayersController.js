@@ -87,6 +87,9 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                     if (metadata) {
                         var layer = me.layerInMap(layerObj.uuid);
                         var layerAlreadyInMap = layer && layer.getVisible() ? true : false;
+                        if (layer) {
+                            layer.isBackground = true;
+                        }
                         var layerThumb = 'classic/resources/img/themes/' + layerObj.thumb;
                         var ele = [{
                             xtype: 'container',
