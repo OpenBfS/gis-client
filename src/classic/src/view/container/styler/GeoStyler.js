@@ -177,6 +177,7 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             compact: true,
             iconLibraries: [this.getIconLibrary()],
             colorRamps: this.getColorRamps(),
+            useBrewerColorRamps: true,
             colorSpaces: this.getColorRamps() ? [] : undefined
         });
         var localeProvider = React.createElement(GeoStyler.LocaleProvider,
