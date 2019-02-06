@@ -163,6 +163,9 @@ Ext.define('Koala.Application', {
     },
 
     launch: function() {
+        if (window.location.hash === '') {
+            this.routedAlready = true;
+        }
         var me = this;
         var loadmask = Ext.get('loadmask');
         if (loadmask) {
