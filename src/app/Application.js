@@ -103,6 +103,10 @@ Ext.define('Koala.Application', {
      * @type {function}
      */
     onMapRoute: function() {
+        if (this.routedAlready) {
+            window.location.reload();
+        }
+        this.routedAlready = true;
         Koala.util.Routing.onMapRoute.apply(null, arguments);
     },
 
@@ -159,6 +163,9 @@ Ext.define('Koala.Application', {
     },
 
     launch: function() {
+        if (window.location.hash === '') {
+            this.routedAlready = true;
+        }
         var me = this;
         var loadmask = Ext.get('loadmask');
         if (loadmask) {

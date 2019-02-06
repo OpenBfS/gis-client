@@ -308,11 +308,6 @@ Ext.define('Koala.util.Routing', {
          * @private
          */
         onLayerTreeRoute: function(layersString) {
-            if (this.routedAlready) {
-                window.location.reload();
-                return;
-            }
-            this.routedAlready = true;
             var me = Koala.util.Routing;
             var permaObj = JSON.parse(decodeURIComponent(layersString));
 
