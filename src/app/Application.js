@@ -103,6 +103,10 @@ Ext.define('Koala.Application', {
      * @type {function}
      */
     onMapRoute: function() {
+        if (this.routedAlready) {
+            window.location.reload();
+        }
+        this.routedAlready = true;
         Koala.util.Routing.onMapRoute.apply(null, arguments);
     },
 

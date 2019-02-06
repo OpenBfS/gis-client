@@ -308,11 +308,6 @@ Ext.define('Koala.util.Routing', {
          * @private
          */
         onLayerTreeRoute: function(layersString) {
-            if (this.routedAlready) {
-                window.location.reload();
-                return;
-            }
-            this.routedAlready = true;
             var me = Koala.util.Routing;
             var permaObj = JSON.parse(decodeURIComponent(layersString));
 
@@ -402,8 +397,10 @@ Ext.define('Koala.util.Routing', {
             var allLayers = BasiGX.util.Layer.getAllLayers(map);
             var appContext = Koala.util.AppContext.getAppContext(mapComponent);
             var mapLayers = [];
+            var backgroundLayers = [];
             if (appContext && appContext.data && appContext.data.merge) {
                 mapLayers = appContext.data.merge.mapLayers;
+                backgroundLayers = appContext.data.merge.backgroundLayers;
             }
 
             var filteredLayers = Ext.Array.filter(allLayers, function(layer) {
@@ -414,6 +411,11 @@ Ext.define('Koala.util.Routing', {
 
                 // Skip baselayers configured in appContext
                 if (Ext.Array.findBy(mapLayers, function(item) {
+                    return item.uuid === layer.metadata.id;
+                })) {
+                    return false;
+                }
+                if (Ext.Array.findBy(backgroundLayers, function(item) {
                     return item.uuid === layer.metadata.id;
                 })) {
                     return false;
