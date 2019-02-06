@@ -174,7 +174,7 @@
                 "label": "Local Vector Data Template (bundeslaender)"
             }],
             "colorRamps": {
-                "GeoStyler": ["#E7000E", "#F48E00", "#FFED00", "#00943D", "#272C82", "#611E82"]
+                "BfS": ["#E7000E", "#F48E00", "#FFED00", "#00943D", "#272C82", "#611E82"]
             },
             "wmsUrls": ["http://ows.terrestris.de/osm/service",
                 "http://ows.mundialis.de/services/service" ],
