@@ -19,7 +19,8 @@
 Ext.define('Koala.util.Geoserver', {
 
     requires: [
-        'Koala.util.AppContext'
+        'Koala.util.AppContext',
+        'Ext.Deferred'
     ],
 
     statics: {
@@ -36,6 +37,7 @@ Ext.define('Koala.util.Geoserver', {
         checkAgainstGeoserver: function(workspaces, datastores, candidates, baseUrls) {
             var resultList = [];
             var promises = [];
+            var deferred = new Ext.Deferred();
 
             Ext.each(datastores, function(datastore, index) {
                 var workspace = workspaces[index];
@@ -63,12 +65,12 @@ Ext.define('Koala.util.Geoserver', {
                 promises.push(promise);
             });
 
-            return new Ext.Promise(function(resolve) {
-                Ext.Promise.all(promises)
-                    .then(function() {
-                        resolve(resultList);
-                    });
-            });
+            Ext.Promise.all(promises)
+                .then(function() {
+                    deferred.resolve(resultList);
+                });
+
+            return deferred.promise;
         },
 
         /**

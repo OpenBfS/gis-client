@@ -166,49 +166,45 @@ Ext.define('Koala.view.panel.ThemeTree', {
             .then(function(xhr) {
                 var context = Koala.util.AppContext.getAppContext();
                 var data = JSON.parse(xhr.responseText);
-                var store;
-                if (!context.data.merge.import) {
-                    store = Ext.create('Ext.data.TreeStore', {
-                        root: {
-                            expanded: true,
-                            children: data
-                        }
-                    });
-                    me.reconfigure(store);
-                    return;
-                }
+                var showImportFolder = !!context.data.merge.import;
                 Koala.util.MetadataQuery.getImportedLayers()
                     .then(function(layers) {
                         Koala.util.Geoserver.filterDeletedLayers(layers)
                             .then(function(config) {
-                                data.push({
-                                    text: me.getViewModel().get('importedLayersTitle'),
-                                    isLayerProfile: false,
-                                    children: config,
-                                    isImportNode: true
-                                });
-                                store = Ext.create('Ext.data.TreeStore', {
+                                if (showImportFolder) {
+                                    data.push({
+                                        text: me.getViewModel().get('importedLayersTitle'),
+                                        isLayerProfile: false,
+                                        children: config,
+                                        isImportNode: true
+                                    });
+                                }
+                            })
+                            .always(function() {
+                                var store = Ext.create('Ext.data.TreeStore', {
                                     root: {
                                         expanded: true,
                                         children: data
                                     }
                                 });
                                 me.reconfigure(store);
-                                me.getViewModel().bind({
-                                    bindTo: '{importedLayersTitle}'
-                                }, function(title) {
-                                    if (!data) {
-                                        return;
-                                    }
-                                    data[data.length - 1].text = title;
-                                    store = Ext.create('Ext.data.TreeStore', {
-                                        root: {
-                                            expanded: true,
-                                            children: data
+                                if (showImportFolder) {
+                                    me.getViewModel().bind({
+                                        bindTo: '{importedLayersTitle}'
+                                    }, function(title) {
+                                        if (!data) {
+                                            return;
                                         }
+                                        data[data.length - 1].text = title;
+                                        store = Ext.create('Ext.data.TreeStore', {
+                                            root: {
+                                                expanded: true,
+                                                children: data
+                                            }
+                                        });
+                                        me.reconfigure(store);
                                     });
-                                    me.reconfigure(store);
-                                });
+                                }
                             });
                     });
             });

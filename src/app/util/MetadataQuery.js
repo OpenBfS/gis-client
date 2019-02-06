@@ -20,7 +20,8 @@ Ext.define('Koala.util.MetadataQuery', {
 
     requires: [
         'Koala.util.AppContext',
-        'Koala.util.XML'
+        'Koala.util.XML',
+        'Ext.Deferred'
     ],
 
     statics: {
@@ -108,11 +109,7 @@ Ext.define('Koala.util.MetadataQuery', {
             var config = Koala.util.AppContext.getAppContext();
             var url = config.data.merge.urls['metadata-search'];
 
-            var resolveFunc;
-
-            var promise = new Ext.Promise(function(resolve) {
-                resolveFunc = resolve;
-            });
+            var deferred = new Ext.Deferred();
 
             Ext.Ajax.request({
                 url: url,
@@ -122,11 +119,14 @@ Ext.define('Koala.util.MetadataQuery', {
                     var xml = xhr.responseXML;
                     var docs = xml.documentElement.querySelectorAll('MD_Metadata');
                     var layers = Koala.util.MetadataQuery.postProcessMetadata(docs);
-                    resolveFunc(layers);
+                    deferred.resolve(layers);
+                },
+                failure: function(response) {
+                    deferred.reject(response);
                 }
             });
 
-            return promise;
+            return deferred.promise;
         }
 
     }
