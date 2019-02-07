@@ -418,9 +418,10 @@ Ext.define('Koala.view.component.D3BaseController', {
      * @param {number} scale The scale of the resulting image.
      */
     chartToDataUri: function(scale) {
-        var me = this;
-        var chartNode = this.getView().el.dom.querySelector('svg');
-        var isBarChart = this.getView().xtype === 'd3-barchart';
+        var chartNode = this.getView().el.dom.querySelector('.k-barchart-container');
+        if (!chartNode) {
+            chartNode = this.getView().el.dom;
+        }
         var outputFormat = 'image/png';
         scale = scale || 1;
         var downloadIcons = this.getView().el.dom.querySelectorAll('.k-d3-download-icon');
@@ -435,49 +436,11 @@ Ext.define('Koala.view.component.D3BaseController', {
         colorIcons.forEach(function(icon) {
             icon.style.display = 'none';
         });
-        var chartImageWidth = chartNode.getBoundingClientRect().width * scale;
-        var chartImageHeight = chartNode.getBoundingClientRect().height * scale;
-        if (isBarChart) {
-            chartImageWidth = 0;
-            chartImageHeight = 0;
-            me.getView().el.dom.querySelectorAll('svg')
-                .forEach(function(svg) {
-                    chartImageWidth += svg.getBoundingClientRect().width * scale;
-                    chartImageHeight = Math.max(chartImageHeight, svg.getBoundingClientRect().height * scale);
-                });
-        }
-        var promises = [];
-
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        canvas.width = chartImageWidth;
-        canvas.height = chartImageHeight;
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        var curX = 0;
-
-        this.getView().el.dom.querySelectorAll('svg').forEach(function(svg) {
-            promises.push(new Ext.Promise(function(resolve) {
-                var chartSource = (new XMLSerializer()).serializeToString(svg);
-                var chartDataUri = 'data:image/svg+xml;base64,'+ btoa(
-                    unescape(encodeURIComponent(chartSource)));
-                var mypos = curX;
-                var width = svg.getBoundingClientRect().width * scale;
-                var height = svg.getBoundingClientRect().height * scale;
-                curX += width;
-                var chartImageObject = new Image(width, height);
-                chartImageObject.src = chartDataUri;
-                chartImageObject.onload = function() {
-                    ctx.drawImage(chartImageObject, mypos, 0, width, height);
-                    resolve();
-                };
-            }));
-        });
-
         return new Ext.Promise(function(resolve) {
-            Ext.Promise.all(promises)
-                .then(function() {
-                    var dataUri = canvas.toDataURL(outputFormat);
+            html2canvas(chartNode, {
+                scale: scale
+            })
+                .then(function(canvas) {
                     downloadIcons.forEach(function(icon) {
                         icon.style.display = 'block';
                     });
@@ -487,7 +450,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                     colorIcons.forEach(function(icon) {
                         icon.style.display = 'block';
                     });
-                    resolve(dataUri);
+                    resolve(canvas.toDataURL(outputFormat));
                 });
         });
     },

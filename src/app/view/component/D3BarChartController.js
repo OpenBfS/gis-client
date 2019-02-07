@@ -327,6 +327,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         if (!container) {
             container = document.createElement('div');
             container.classList.add('k-barchart-container');
+            container.style.width = '100%';
+            container.style.height = '100%';
             svg.append(container);
             legendContainer = document.createElement('div');
             barContainer = document.createElement('div');
