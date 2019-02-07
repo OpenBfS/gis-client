@@ -182,7 +182,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         imagery.on('postcompose', function(event) {
             var frameState = event.frameState;
             var resolution = frameState.viewState.resolution;
-            var origin = map.getPixelFromCoordinate([bbox[0], bbox[1]]);
+            var origin = map.getPixelFromCoordinate([bbox[0], bbox[3]]);
 
             var context = event.context;
             context.save();
