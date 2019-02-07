@@ -241,7 +241,9 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
                     var slider;
                     sliders.forEach(function(item) {
                         if (item.el.dom && item.isVisible()) {
-                            slider = item;
+                            if (imagery.get('slider') === item) {
+                                slider = item;
+                            }
                         } else {
                             try {
                                 item.destroy();

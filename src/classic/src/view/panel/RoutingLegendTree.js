@@ -205,6 +205,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             if (olLayer.get('isVideoLayer')) {
                 allowStyle = false;
                 allowRemoval = true;
+                var container = comp.up().down('[name=k-slider-container]');
+                container.setStyle('padding-bottom', '20px');
+                olLayer.set('slider', videoSlider);
             }
             videoSlider.setVisible(olLayer.get('isVideoLayer'));
             stopBtn.setVisible(olLayer.get('isVideoLayer'));
@@ -522,6 +525,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         items: [{
             xtype: 'container',
             layout: 'vbox',
+            name: 'k-slider-container',
             listeners: {
                 // We'll assign a handler to reorganize the menu once the
                 // class is defined.
