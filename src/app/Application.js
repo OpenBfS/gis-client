@@ -1,4 +1,4 @@
-/* global window, location */
+/* global window */
 /* Copyright (c) 2015-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
