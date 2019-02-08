@@ -154,7 +154,8 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             source: new ol.source.Vector(),
             name: 'Video',
             isVideoLayer: true,
-            videoTimestamp: rec.data.timestamp
+            videoTimestamp: rec.data.timestamp,
+            allowRemoval: true
         });
         var urls = combo.getValue();
         var map = BasiGX.view.component.Map.guess().map;
@@ -181,7 +182,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         imagery.on('postcompose', function(event) {
             var frameState = event.frameState;
             var resolution = frameState.viewState.resolution;
-            var origin = map.getPixelFromCoordinate([bbox[0], bbox[1]]);
+            var origin = map.getPixelFromCoordinate([bbox[0], bbox[3]]);
 
             var context = event.context;
             context.save();
@@ -241,7 +242,9 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
                     var slider;
                     sliders.forEach(function(item) {
                         if (item.el.dom && item.isVisible()) {
-                            slider = item;
+                            if (imagery.get('slider') === item) {
+                                slider = item;
+                            }
                         } else {
                             try {
                                 item.destroy();
