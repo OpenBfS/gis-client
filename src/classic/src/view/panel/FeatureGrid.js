@@ -184,6 +184,8 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                     if (!btn.pressed) {
                         btn.click();
                     }
+                    var grid = me.down('basigx-grid-featuregrid');
+                    grid.reconfigureStore(grid.down('grid').getStore());
                 }
             }, {
                 xtype: 'button',
