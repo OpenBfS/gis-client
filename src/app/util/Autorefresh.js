@@ -153,7 +153,6 @@ Ext.define('Koala.util.Autorefresh', {
                         now = KD.getTimeReferenceAwareMomentDate(KD.getUtcMoment(filter.maxdatetimeinstant));
                     }
                     filter.effectivemaxdatetime = moment(now);
-                    //filter.effectivemindatetime = KD.getUtcMoment(filter.effectivemaxdatetime).subtract(filter.maxduration, 'minutes');
                     filter.effectivemindatetime = KD.getUtcMoment(filter.effectivemaxdatetime).subtract(datediffMilliseconds, 'milliseconds');
                 }
             });
