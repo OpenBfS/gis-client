@@ -142,8 +142,8 @@ Ext.define('Koala.util.Autorefresh', {
                     var datediffMilliseconds = moment.duration(filter.maxduration).asMilliseconds();
                     Ext.each(currentFilters, function(currentFilter) {
                         if (currentFilter.type === 'timerange') {
-                            currentEffectivemaxdatetime = currentFilter.effectivemaxdatetime;
-                            currentEffectivemindatetime = currentFilter.effectivemindatetime;
+                            var currentEffectivemaxdatetime = currentFilter.effectivemaxdatetime;
+                            var currentEffectivemindatetime = currentFilter.effectivemindatetime;
                             if (currentEffectivemaxdatetime && currentEffectivemindatetime) {
                                 datediffMilliseconds = currentEffectivemaxdatetime.diff(currentEffectivemindatetime);
                             }
