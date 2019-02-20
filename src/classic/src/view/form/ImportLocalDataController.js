@@ -263,6 +263,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             allowFeatureInfo: getBool(olProps.allowFeatureInfo, true),
             allowDownload: getBool(olProps.allowDownload, false),
             allowRemoval: getBool(olProps.allowRemoval, true),
+            //allowClone: getBool(olProps.allowClone, false), //ToDo clone vector layers
+            allowEdit: getBool(olProps.allowEdit, false),
             allowShortInfo: getBool(olProps.allowShortInfo, false),
             allowPrint: getBool(olProps.allowPrint, true),
             allowOpacityChange: getBool(olProps.allowOpacityChange, true),
