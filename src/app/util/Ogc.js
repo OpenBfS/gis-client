@@ -113,9 +113,19 @@ Ext.define('Koala.util.Ogc', {
                     // So for now we're just adding all the value filters if they're not encoded in
                     // the viewparams.
                     if (filter.type === 'value' && (!filter.encodeInViewParams || filter.encodeInViewParams === 'false')) {
-                        var ogcFilter = BasiGX.util.WFS.getOgcFromCqlFilter(filter.param + ' ' +
+                        if (filter.effectivevalue.length && filter.effectivevalue.length > 1) {
+                            var ors = [];
+                            Ext.each(filter.effectivevalue, function(value) {
+                                var ogcFilter = BasiGX.util.WFS.getOgcFromCqlFilter(filter.param + ' ' +
+                                filter.operator + ' ' + value);
+                                ors.push(ogcFilter);
+                            });
+                            allFilters.push('<Or>' + ors.join('') + '</Or>');
+                        } else {
+                            var ogcFilter = BasiGX.util.WFS.getOgcFromCqlFilter(filter.param + ' ' +
                             filter.operator + ' ' + filter.effectivevalue);
-                        allFilters.push(ogcFilter);
+                            allFilters.push(ogcFilter);
+                        }
                     }
                 });
             }
