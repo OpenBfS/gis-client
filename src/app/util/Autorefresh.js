@@ -73,7 +73,7 @@ Ext.define('Koala.util.Autorefresh', {
 
                         me.overwriteValueFilters(currentFilters, metadata.filters);
 
-                        me.updateFiltersForAutorefresh(metadata.filters);
+                        me.updateFiltersForAutorefresh(metadata.filters,currentFilters);
                         var LayerUtil = Koala.util.Layer;
 
                         var layer = LayerUtil.layerFromMetadata(metadata);
@@ -127,7 +127,7 @@ Ext.define('Koala.util.Autorefresh', {
          * @param  {Array} filters the filter metadata
          * @return {Array}         the updated filters
          */
-        updateFiltersForAutorefresh: function(filters) {
+        updateFiltersForAutorefresh: function(filters, currentFilters) {
             var KD = Koala.util.Date;
             Ext.each(filters, function(filter) {
                 var now = KD.getTimeReferenceAwareMomentDate(new moment()).toISOString();
@@ -139,11 +139,21 @@ Ext.define('Koala.util.Autorefresh', {
                 }
 
                 if (filter.type === 'timerange') {
+                    var datediffMilliseconds = moment.duration(filter.maxduration).asMilliseconds();
+                    Ext.each(currentFilters, function(currentFilter) {
+                        if (currentFilter.type === 'timerange') {
+                            currentEffectivemaxdatetime = currentFilter.effectivemaxdatetime;
+                            currentEffectivemindatetime = currentFilter.effectivemindatetime;
+                            if (currentEffectivemaxdatetime && currentEffectivemindatetime) {
+                                datediffMilliseconds = currentEffectivemaxdatetime.diff(currentEffectivemindatetime);
+                            }
+                        }
+                    });
                     if (now > filter.maxdatetimeinstant) {
                         now = KD.getTimeReferenceAwareMomentDate(KD.getUtcMoment(filter.maxdatetimeinstant));
                     }
                     filter.effectivemaxdatetime = moment(now);
-                    filter.effectivemindatetime = KD.getUtcMoment(filter.effectivemaxdatetime).subtract(filter.maxduration, 'minutes');
+                    filter.effectivemindatetime = KD.getUtcMoment(filter.effectivemaxdatetime).subtract(datediffMilliseconds, 'milliseconds');
                 }
             });
             return filters;
