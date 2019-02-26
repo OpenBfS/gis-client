@@ -116,19 +116,25 @@ Ext.define('Koala.util.Clone', {
                         if (!styleName) {
                             styleName = sourceLayer.getSource().getParams().STYLES;
                         }
-                        if (!styleName) {
-                            Ext.Ajax.request({
-                                url: ms[1] + '/rest/layers/' + wmsConfig.layers + '.json',
-                                method: 'GET'
-                            })
-                                .then(function(response) {
-                                    styleName = JSON.parse(response.responseText);
+                        Ext.Ajax.request({
+                            url: ms[1] + '/rest/layers/' + wmsConfig.layers + '.json',
+                            method: 'GET'
+                        })
+                            .then(function(response) {
+                                var config = JSON.parse(response.responseText);
+                                if (styleName) {
+                                    config = config.layer.styles.style;
+                                    Ext.each(config, function(style) {
+                                        if (style.name.endsWith(styleName) && style.workspace) {
+                                            styleName = style.workspace + ':' + styleName;
+                                            return false;
+                                        }
+                                    });
+                                } else {
                                     styleName = styleName.layer.defaultStyle.name;
-                                    Koala.util.Clone.loadStyle(ms[1], styleName, targetLayer);
-                                });
-                        } else {
-                            Koala.util.Clone.loadStyle(ms[1], styleName, targetLayer);
-                        }
+                                }
+                                Koala.util.Clone.loadStyle(ms[1], styleName, targetLayer);
+                            });
                     }
                 } else {
                     Koala.util.Clone.loadStyle(geoserverBaseUrl, templateStyle, targetLayer);
