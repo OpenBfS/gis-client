@@ -1047,7 +1047,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         var fieldNames = staticMe.FIELDAMES_LOAD_INDICATION;
         var fieldnameLoadIndicationBound = fieldNames.IS_BOUND;
         var fieldnameLoadIndicationKeys = fieldNames.LISTENER_KEYS;
-        var fieldnameLoadIndicationLoading = fieldNames.IS_LOADING;
         if (rec.get(fieldnameLoadIndicationBound) === true) {
             // already bound for this record, exiting…
             return;
@@ -1072,21 +1071,18 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         // These are the plain handlers that will work on both the layer record
         // and on the layer itself.
         var loadStartFunc = function() {
-            rec.set(fieldnameLoadIndicationLoading, true);
             var row = Ext.get(me.getView().getRowByRecord(rec));
             if (row) {
                 row.removeCls('k-loading-failed');
+                row.addCls('x-grid-tree-loading');
             }
         };
         var loadEndFunc = function() {
-            rec.set(fieldnameLoadIndicationLoading, false);
-            // TODO Setting the above loading flag causes expanded bodies
-            // with the legends to be removed. This is 'fixed' here by toggling
-            // the rows twice so they get recreated. Doing this to begin with
-            // is bad enough, but doing it on every loadend event is even worse
-            // and should be analysed further. Also the bodies should not be
-            // recreated on every expand.
-            me.layerDropped();
+            var row = Ext.get(me.getView().getRowByRecord(rec));
+            if (row) {
+                row.removeCls('k-loading-failed');
+                row.removeCls('x-grid-tree-loading');
+            }
         };
         var loadErrorFunc = function() {
             loadEndFunc();
@@ -1183,7 +1179,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         rootNode.cascadeBy(function(child) {
             var idx = view.indexOfRow(child);
             var targetState = child.get(itemExpandedKey);
-            if (idx !== -1 && Ext.isDefined(targetState)) {
+            if (idx !== -1 && targetState) {
                 rowExpanderPlugin.toggleRow(idx, child);
                 rowExpanderPlugin.toggleRow(idx, child);
             }
