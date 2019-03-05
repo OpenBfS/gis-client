@@ -25,7 +25,8 @@ Ext.define('Koala.view.form.LayerFilterModel', {
         timestampLabel: '',
         buttonText: '',
         buttonTextNoFilter: '',
-        buttonTextChangeFilter: ''
+        buttonTextChangeFilter: '',
+        numberfieldValidationText: 'timeValidationText'
     }
 
 });

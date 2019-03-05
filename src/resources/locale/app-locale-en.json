@@ -1701,7 +1701,8 @@
                 "refreshAutomatically": "Refresh automatically",
                 "refreshInterval": "Refresh interval",
                 "minute": "1 minute",
-                "minutes": "{0} minutes"
+                "minutes": "{0} minutes",
+                "numberfieldValidationText": "Value must be a multiple from {0}!"
             }
         }
     },

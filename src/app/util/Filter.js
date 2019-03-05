@@ -429,7 +429,23 @@ Ext.define('Koala.util.Filter', {
                     disabled: !enableSpinner,
                     visible: true,
                     width: 50,
-                    editable: false,
+                    editable: (spinnerType === MINUTES || spinnerType === HOURS) ? true : false,
+                    validator: function(val) {
+                        if (!Ext.isEmpty(val)) {
+                            if (Math.floor(val % this.step) === 0) {
+                                return true;
+                            } else {
+                                return Ext.String.format(Ext.ComponentQuery.query('k-form-layerfilter')[0].getViewModel().getData().numberfieldValidationText, this.step);
+                            }
+                        } else {
+                            if (startValue) {
+                                this.value = startValue;
+                            } else {
+                                this.value = 0;
+                            }
+                            return true;
+                        }
+                    },
                     valueToRaw: staticMe.leadingZeroValueToRaw,
                     rawToValue: staticMe.leadingZeroRawToValue,
                     listeners: {
