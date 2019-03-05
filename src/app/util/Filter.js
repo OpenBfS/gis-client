@@ -431,7 +431,7 @@ Ext.define('Koala.util.Filter', {
                     width: 50,
                     editable: (spinnerType === MINUTES || spinnerType === HOURS) ? true : false,
                     validator: function(val) {
-                        if (!Ext.isEmpty(val)){
+                        if (!Ext.isEmpty(val)) {
                             if (Math.floor(val % this.step) === 0) {
                                 return true;
                             } else {
