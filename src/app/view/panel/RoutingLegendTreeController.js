@@ -117,9 +117,10 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
         var me = this;
         var view = me.getView();
         var treeView = view.getView();
+        var layer = node.getOlLayer();
         var rowExpanderPlugin = view.getPlugin('rowexpanderwithcomponents');
         var idx = treeView.indexOfRow(node);
-        var legendVisible = node.get(view.itemExpandedKey);
+        var legendVisible = layer[view.itemExpandedKey];
         // collapse the legend when node is set to invisible
         if (!visible && legendVisible) {
             rowExpanderPlugin.toggleRow(idx, node);
@@ -128,6 +129,30 @@ Ext.define('Koala.view.panel.RoutingLegendTreeController', {
         if (visible && !legendVisible) {
             rowExpanderPlugin.toggleRow(idx, node);
         }
+        // go over all nodes and check if the visibility must be updated
+        var recs = treeView.getStore().getUpdatedRecords();
+        Ext.each(recs, function(rec) {
+            var row = treeView.getRowByRecord(rec);
+            if (!row || rec === node) {
+                return;
+            }
+            var el = Ext.get(row).dom;
+            var body = el.nextElementSibling;
+            if (body.classList.contains('x-grid-row-body-hidden')) {
+                return;
+            }
+            idx = treeView.indexOfRow(rec);
+            // Looks like the rows all get recreated if anything on the
+            // records changes. Unfortunately, record changes are not to
+            // be avoided in case the checkbox is clicked, so we're back
+            // to the old workaround in this case. Perhaps this can be
+            // avoided somehow by capturing the appropriate event, but
+            // since this works and doesn't seem to have ill side effects,
+            // this is the workaround for now (this only happens when
+            // toggling layers anyway).
+            rowExpanderPlugin.toggleRow(idx, rec);
+            rowExpanderPlugin.toggleRow(idx, rec);
+        });
     },
 
     /**

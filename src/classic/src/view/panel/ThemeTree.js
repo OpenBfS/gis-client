@@ -143,9 +143,12 @@ Ext.define('Koala.view.panel.ThemeTree', {
     },
 
     initComponent: function() {
+        var me = this;
         this.callParent();
         this.rebuildTree();
-        window.setInterval(this.rebuildTree.bind(this), 300000);
+        window.setInterval(function() {
+            me.getController().refreshUserLayers();
+        }, 300000);
     },
 
     rebuildTree: function() {

@@ -58,6 +58,27 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         btn.disable();
     },
 
+    /**
+     * Refresh the user layers without completely rebuilding the tree.
+     */
+    refreshUserLayers: function() {
+        var context = Koala.util.AppContext.getAppContext();
+        var store = this.getView().getStore();
+        var showImportFolder = !!context.data.merge.import;
+        var importFolder = store.find('text', this.getViewModel().get('importedLayersTitle'));
+        importFolder = store.getAt(importFolder);
+        Koala.util.MetadataQuery.getImportedLayers()
+            .then(function(layers) {
+                Koala.util.Geoserver.filterDeletedLayers(layers)
+                    .then(function(config) {
+                        if (showImportFolder) {
+                            importFolder.removeAll();
+                            importFolder.appendChild(config);
+                        }
+                    });
+            });
+    },
+
     setupShowFilterWinCheck: function(treepanel, item) {
         var me = this;
         if (me.currentTask) {
@@ -99,7 +120,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         } else if (rowIndex === 1 && videosUrl) {
             this.showVideoSelection();
         } else {
-            this.getView().rebuildTree();
+            this.refreshUserLayers();
         }
     },
 
