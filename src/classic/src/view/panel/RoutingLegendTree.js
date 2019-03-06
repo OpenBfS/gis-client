@@ -90,7 +90,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 record.set('checked', checked);
                 var tree = table.up('k-panel-routing-legendtree');
                 tree.getController().checkLayerAndLegendVisibility(record, checked);
-                tree.layerDropped(); // restores collapsed/expanded state
+                tree.layerDropped();
             }
             if (record) {
                 this.setSelection(record);
@@ -1014,11 +1014,18 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     handleLayerStoreAdd: function(store, recs) {
         // Replace the text of the treerecords with the configured textProperty
         // to enable the filter logic
+        var me = this;
         var textProperty = this.getTextProperty();
         if (textProperty) {
             Ext.each(recs, function(layerRec) {
                 var layer = layerRec.getOlLayer();
-                layerRec.set('text', layer.get(textProperty));
+                // We need to replace the dom manually here in order not to pseudo
+                // collapse the tree nodes
+                var row = Ext.get(me.getView().getRowByRecord(layerRec));
+                if (row) {
+                    row.dom.querySelector('.x-tree-node-text').innerHTML = layer.get(textProperty);
+                }
+                layerRec.set('text', layer.get(textProperty), {silent: true});
             });
         }
         Ext.each(recs, this.bindLoadIndicationToRecord, this);
@@ -1054,11 +1061,11 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         var fieldNames = staticMe.FIELDAMES_LOAD_INDICATION;
         var fieldnameLoadIndicationBound = fieldNames.IS_BOUND;
         var fieldnameLoadIndicationKeys = fieldNames.LISTENER_KEYS;
-        if (rec.get(fieldnameLoadIndicationBound) === true) {
+        var layer = rec.getOlLayer();
+        if (layer[fieldnameLoadIndicationBound] === true) {
             // already bound for this record, exiting…
             return;
         }
-        var layer = rec.getOlLayer();
         var source = layer && layer.getSource();
 
         if (!source) {
@@ -1119,8 +1126,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         // Set the internal flags that loading indication is bound and the
         // associated event keys.
-        rec.set(fieldnameLoadIndicationBound, true);
-        rec.set(fieldnameLoadIndicationKeys, [startKey, endKey, errorKey]);
+        layer[fieldnameLoadIndicationBound] = true;
+        layer[fieldnameLoadIndicationKeys] = [startKey, endKey, errorKey];
     },
 
     /**
@@ -1136,7 +1143,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         var fieldNames = staticMe.FIELDAMES_LOAD_INDICATION;
         var fieldnameLoadIndicationBound = fieldNames.IS_BOUND;
         var fieldnameLoadIndicationKeys = fieldNames.LISTENER_KEYS;
-        if (rec.get(fieldnameLoadIndicationBound) !== true) {
+        var layer = rec.getOlLayer();
+        if (layer[fieldnameLoadIndicationBound] !== true) {
             return;
         }
         var listenerKeys = rec.get(fieldnameLoadIndicationKeys);
@@ -1145,8 +1153,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 ol.Observable.unByKey(listenerKey);
             });
         }
-        rec.set(fieldnameLoadIndicationBound, false);
-        rec.set(fieldnameLoadIndicationKeys, []);
+        layer[fieldnameLoadIndicationBound] = false;
+        layer[fieldnameLoadIndicationKeys] = [];
     },
 
     /**
@@ -1157,7 +1165,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
      */
     onCollapseBody: function(rowNode, record) {
         // Called silently to prevent redrawing of the associated layertree node.
-        record.set(this.itemExpandedKey, false, {silent: true});
+        record.getOlLayer()[this.itemExpandedKey] = false;
     },
 
     /**
@@ -1168,7 +1176,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
      */
     onExpandBody: function(rowNode, record) {
         // Called silently to prevent redrawing of the associated layertree node.
-        record.set(this.itemExpandedKey, true, {silent: true});
+        record.getOlLayer()[this.itemExpandedKey] = true;
     },
 
     /**
