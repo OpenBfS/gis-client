@@ -873,7 +873,14 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 });
                 // initially show legend if not a background or map layer
                 if (!found) {
-                    me.getPlugins()[0].onItemClick(null, recs[0], null, index);
+                    // make sure the event chain is done before expanding the node
+                    // Should probably better be done in another event, but
+                    // this works fine for now
+                    window.setTimeout(function() {
+                        var plugin = me.getPlugin('rowexpanderwithcomponents');
+                        plugin.toggleRow(index, recs[0]);
+                        Koala.util.Layer.repaintLayerFilterIndication();
+                    }, 1);
                 }
                 me.bindOnLayerVisibilityChange(recs[0]);
             },
@@ -1171,19 +1178,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
      * above comment/TODO mark for more details.
      */
     layerDropped: function() {
-        var me = this;
-        var view = me.getView();
-        var rowExpanderPlugin = me.getPlugin('rowexpanderwithcomponents');
-        var rootNode = me.getRootNode();
-        var itemExpandedKey = me.itemExpandedKey;
-        rootNode.cascadeBy(function(child) {
-            var idx = view.indexOfRow(child);
-            var targetState = child.get(itemExpandedKey);
-            if (idx !== -1 && targetState) {
-                rowExpanderPlugin.toggleRow(idx, child);
-                rowExpanderPlugin.toggleRow(idx, child);
-            }
-        });
         Koala.util.Layer.repaintLayerFilterIndication();
     },
 
