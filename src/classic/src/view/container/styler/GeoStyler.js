@@ -193,7 +193,7 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         var root = domElement.querySelector('.codeeditor-root');
         var codeEditor = React.createElement(GeoStyler.CodeEditor, {
             style: style,
-            parsers: [GeoStylerSLDParser.SldStyleParser],
+            parsers: [GeoStylerSLDParser.SldStyleParser, GeoStylerQGISParser.QGISStyleParser],
             onStyleChange: this.onStyleChange.bind(this),
             showSaveButton: false
         });
