@@ -26,6 +26,19 @@ Ext.define('Koala.util.Clone', {
 
     statics: {
 
+        defaultStyle: (function() {
+            var layer = new ol.layer.Vector();
+            var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
+            olParser.readStyle(layer.getStyle()())
+                .then(function(gsStyle) {
+                    var sldParser = new GeoStylerSLDParser.SldStyleParser();
+                    sldParser.writeStyle(gsStyle)
+                        .then(function(sld) {
+                            Koala.util.Clone.defaultStyle = sld;
+                        });
+                });
+        }()),
+
         /**
          * Load and apply a style for a vector layer.
          * @param {String} baseUrl the GeoServer base url
@@ -187,6 +200,7 @@ Ext.define('Koala.util.Clone', {
                         config.name = name;
                         config.persisted = false;
                         var result = new ol.layer.Vector(config);
+                        Koala.util.Layer.updateVectorStyle(result, Koala.util.Clone.defaultStyle);
                         result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
                         result.metadata = Ext.clone(metadata);
                         if (layer && layer.metadata.isRodosLayer) {
