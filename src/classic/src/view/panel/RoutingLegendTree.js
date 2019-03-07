@@ -860,7 +860,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         // Bind/Unbind delayedRepaintLayerFilterIndication() on layer add/remove.
         treeStore.on({
-            add: function(store, recs, index) {
+            add: function(store, recs) {
                 var context = Koala.util.AppContext.getAppContext().data.merge;
                 var uuid = recs[0].data.metadata ? recs[0].data.metadata.id : undefined;
                 var blacklistLayers = context.backgroundLayers.concat(context.mapLayers);
@@ -878,7 +878,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     // this works fine for now
                     window.setTimeout(function() {
                         var plugin = me.getPlugin('rowexpanderwithcomponents');
-                        plugin.toggleRow(index, recs[0]);
+                        plugin.toggleRow(store.indexOf(recs[0]), recs[0]);
                         Koala.util.Layer.repaintLayerFilterIndication();
                     }, 1);
                 }
