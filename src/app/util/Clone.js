@@ -55,7 +55,7 @@ Ext.define('Koala.util.Clone', {
             })
                 .then(function(response) {
                     var sldParser = new GeoStylerSLDParser.SldStyleParser();
-                    targetLayer.set('SLD', response.responseText);
+                    Koala.util.Layer.updateVectorStyle(targetLayer, response.responseText);
                     sldParser.readStyle(response.responseText)
                         .then(function(gsStyle) {
                             // You're reading this correctly, we're reexporting to SLD again
@@ -67,7 +67,7 @@ Ext.define('Koala.util.Clone', {
                             // exports as SLD/SE 1.0.0 this fixes things.
                             var reexport = sldParser.writeStyle(gsStyle);
                             reexport.then(function(reexportedStyle) {
-                                targetLayer.set('SLD', reexportedStyle);
+                                Koala.util.Layer.updateVectorStyle(targetLayer, reexportedStyle);
                             });
                             var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
                             olParser.writeStyle(gsStyle)
@@ -100,7 +100,7 @@ Ext.define('Koala.util.Clone', {
             targetLayerPromise.then(function(targetLayer) {
                 if (copyStyle) {
                     if (sourceLayer.get('SLD')) {
-                        targetLayer.set('SLD', sourceLayer.get('SLD'));
+                        Koala.util.Layer.updateVectorStyle(targetLayer, sourceLayer.get('SLD'));
                         targetLayer.setStyle(sourceLayer.getStyle());
                     } else {
                         var wmsConfig = sourceLayer.metadata.layerConfig.wms;
