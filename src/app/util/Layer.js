@@ -1126,6 +1126,9 @@ Ext.define('Koala.util.Layer', {
                     styleName = layer.metadata.id;
                     if (layer.metadata.layerConfig.olProperties.styleReference) {
                         styleName = layer.metadata.layerConfig.olProperties.styleReference;
+                        if (styleName.split(',').length > 1) {
+                            styleName = styleName.split(',')[0];
+                        }
                     }
                 }
                 if (!styleName.endsWith('.sld')) {
@@ -2218,6 +2221,29 @@ Ext.define('Koala.util.Layer', {
                 }
             });
             return flatList;
+        },
+
+        /**
+         * Updates a layer with a new SLD style. Also updates the legend in the
+         * legend tree.
+         * @param {ol.layer.Vector} layer a vector layer
+         * @param {string} sld the new SLD style
+         */
+        updateVectorStyle: function(layer, sld) {
+            var ctx = Koala.util.AppContext.getAppContext().data.merge;
+            var url = ctx.urls['spatial-search'];
+            var parms = {
+                request: 'GetLegendGraphic',
+                version: '1.1.1',
+                service: 'WMS',
+                sld_body: sld,
+                layer: ctx.createLegendGraphicLayer,
+                format: 'image/png'
+            };
+            layer.set('legendUrl', url + '?' + Ext.Object.toQueryString(parms));
+            layer.set('SLD', sld);
+            var legend = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+            legend.updateLegendsWithScale();
         }
 
     }
