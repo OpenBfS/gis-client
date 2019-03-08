@@ -116,6 +116,15 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             var koalaStyle = layer.get('koalaStyle');
             if (koalaStyle) {
                 resolve(koalaStyle);
+            } else if (layer.get('SLD')) {
+                var sldParser = new GeoStylerSLDParser.SldStyleParser();
+                sldParser.readStyle(layer.get('SLD'))
+                    .then(function(geostylerStyle) {
+                        resolve(geostylerStyle);
+                    })
+                    .catch(function(err) {
+                        reject(err);
+                    });
             } else {
                 var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
                 olParser.readStyle(style)
