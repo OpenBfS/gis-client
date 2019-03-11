@@ -1396,17 +1396,17 @@ Ext.define('Koala.view.component.CartoWindowController', {
             } catch (e) {
                 // silently ignore, view was probably destroyed somewhere else
             }
+            // clean up hover artifacts and carto window lines, if any
+            var layers = ['hoverVectorLayer'];
+            Ext.each(layers, function(name) {
+                layer = BasiGX.util.Layer.getLayerByName(name);
+                if (layer) {
+                    layer.getSource().clear();
+                }
+            });
+            var hover = BasiGX.view.component.Map.guess().getPlugin('hoverBfS');
+            hover.hoverVectorLayerInteraction.getFeatures().clear();
         }
-        // clean up hover artifacts and carto window lines, if any
-        var layers = ['carto-window-lines', 'hoverVectorLayer'];
-        Ext.each(layers, function(name) {
-            layer = BasiGX.util.Layer.getLayerByName(name);
-            if (layer) {
-                layer.getSource().clear();
-            }
-        });
-        var hover = BasiGX.view.component.Map.guess().getPlugin('hoverBfS');
-        hover.hoverVectorLayerInteraction.getFeatures().clear();
     },
 
     /**
