@@ -112,7 +112,7 @@ Ext.define('Koala.util.Clone', {
 
             targetLayerPromise.then(function(targetLayer) {
                 if (copyStyle) {
-                    if (sourceLayer.get('SLD')) {
+                    if (sourceLayer.get('SLD') && !sourceLayer.get('isDefaultStyle')) {
                         Koala.util.Layer.updateVectorStyle(targetLayer, sourceLayer.get('SLD'));
                         targetLayer.setStyle(sourceLayer.getStyle());
                     } else {
@@ -144,7 +144,7 @@ Ext.define('Koala.util.Clone', {
                                         }
                                     });
                                 } else {
-                                    styleName = styleName.layer.defaultStyle.name;
+                                    styleName = config.layer.defaultStyle.name;
                                 }
                                 Koala.util.Clone.loadStyle(ms[1], styleName, targetLayer);
                             });
@@ -201,6 +201,7 @@ Ext.define('Koala.util.Clone', {
                         config.persisted = false;
                         var result = new ol.layer.Vector(config);
                         Koala.util.Layer.updateVectorStyle(result, Koala.util.Clone.defaultStyle);
+                        result.set('isDefaultStyle', true);
                         result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
                         result.metadata = Ext.clone(metadata);
                         if (layer && layer.metadata.isRodosLayer) {
