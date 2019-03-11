@@ -414,7 +414,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (this.chartConfig.legendComponentConfig) {
             this.chartConfig.legendComponentConfig.position = [chartSize[0] - gnosConfig.legendEntryMaxLength + margin[1], margin[0]];
         } else {
-            this.chartConfig.timeseriesComponentConfig.size[0] += margin[1] + gnosConfig.legendEntryMaxLength;
+            this.chartConfig.timeseriesComponentConfig.size[0] += margin[1] + parseInt(gnosConfig.legendEntryMaxLength, 10);
         }
         this.chartConfig.chartRendererConfig.size = chartSize;
 
