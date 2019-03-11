@@ -35,6 +35,7 @@
         "GeoStylerOpenlayersParser": false,
         "GeoStylerSLDParser": false,
         "GeoStylerQGISParser": false,
+        "GeoStylerMapboxParser": false,
         "React": false,
         "ReactDOM": false
     },
