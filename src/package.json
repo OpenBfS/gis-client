@@ -66,9 +66,9 @@
     "geostyler": "3.1.1",
     "geostyler-geojson-parser": "0.4.6",
     "geostyler-mapbox-parser": "0.0.3",
-    "geostyler-openlayers-parser": "1.1.0",
-    "geostyler-qgis-parser": "0.1.1",
-    "geostyler-sld-parser": "0.18.0",
+    "geostyler-openlayers-parser": "1.1.1",
+    "geostyler-qgis-parser": "0.2.0",
+    "geostyler-sld-parser": "0.18.1",
     "react": "16.8.4",
     "react-dom": "16.8.4"
   }
