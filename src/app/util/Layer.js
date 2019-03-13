@@ -2245,6 +2245,7 @@ Ext.define('Koala.util.Layer', {
             };
             layer.set('legendUrl', url + '?' + Ext.Object.toQueryString(parms));
             layer.set('SLD', sld);
+            layer.set('isDefaultStyle', false);
             var legend = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
             legend.updateLegendsWithScale();
         }

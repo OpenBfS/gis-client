@@ -1023,7 +1023,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 // collapse the tree nodes
                 var row = Ext.get(me.getView().getRowByRecord(layerRec));
                 if (row) {
-                    row.dom.querySelector('.x-tree-node-text').innerHTML = layer.get(textProperty);
+                    var text = layer.get(textProperty);
+                    row.dom.querySelector('.x-tree-node-text').innerHTML = text ? text : layer.get('name');
                 }
                 layerRec.set('text', layer.get(textProperty), {silent: true});
             });

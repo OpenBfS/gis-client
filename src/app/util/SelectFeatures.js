@@ -235,7 +235,7 @@ Ext.define('Koala.util.SelectFeatures', {
                         var ogcCqlFilter = BasiGX.util.WFS.getOgcFromCqlFilter(part);
                         var parser = new DOMParser();
                         var xml = parser.parseFromString(filter, 'application/xml');
-                        if (xml.documentElement.localName === 'Filter') {
+                        if (xml.documentElement.localName === 'Filter' && xml.documentElement.firstChild) {
                             var serializer = new XMLSerializer();
                             filter = serializer.serializeToString(xml.documentElement.firstChild);
                         }
