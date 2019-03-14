@@ -72,6 +72,17 @@
 }
 
 /**
+ * header items shall be always visible when dragging
+ * even on mouseout
+ */
+ .cartowindow.onDragging > .closeElement,
+ .cartowindow.onDragging > div.cartowindow-tab > label,
+ .cartowindow.onDragging > div.cartowindow-tab > h2, {
+     visibility: visible !important;
+ }
+
+
+/**
  * because labels come first in source order - we use z-index to move them in front of the headings
  */
 .cartowindow > div.cartowindow-tab > label {
