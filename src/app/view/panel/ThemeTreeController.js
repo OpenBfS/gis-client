@@ -214,7 +214,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
 
             context.restore();
         });
-        imagery.set('videoPlaying', true);
+        imagery.set('videoPlaying', false);
         map.addLayer(imagery);
         video.play()
             .then(function() {
