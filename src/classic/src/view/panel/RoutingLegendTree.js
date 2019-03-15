@@ -54,7 +54,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         hasExpandAllBtn: true,
         hasToggleAllBtn: false,
         hasRemoveAllLayersBtn: true,
-        textProperty: 'nameWithSuffix'
+        textProperty: 'nameWithSuffix',
+        rafId: null
     },
 
     bind: {
@@ -184,7 +185,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var allowShare = olLayer.get('persisted') ||
                 olLayer.metadata ? olLayer.metadata.layerConfig.olProperties.persisted : false;
             var allowStyle = olLayer instanceof ol.layer.Vector &&
-                    !olLayer.get('disableStyling');
+                !olLayer.get('disableStyling');
             var allowOpacityChange = olLayer.get('allowOpacityChange') || false;
             var hasLegend = olLayer.get('hasLegend') || false;
 
@@ -200,6 +201,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var videoSlider = comp.down('slider[name="videoSlider"]');
             var stopBtn = comp.down('button[name=video-stop]');
             var playBtn = comp.down('button[name=video-play]');
+            var pauseBtn = comp.down('button[name=video-pause]');
+            var speedMenu = comp.down('button[name=video-speed]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
 
             if (olLayer.get('isVideoLayer')) {
@@ -207,11 +210,22 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 allowRemoval = true;
                 var container = comp.up().down('[name=k-slider-container]');
                 container.setStyle('padding-bottom', '20px');
+
+                var rec = olLayer.get('rec');
+                var timeFrames = rec.data.timeFrames;
+                var duration = timeFrames.reduce(function(a, b) {
+                    return a + b;
+                }, 0);
+                var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(olLayer.get('videoTimestamp'))).unix();
+                videoSlider.setMinValue(time);
+                videoSlider.setMaxValue(time + duration);
+                videoSlider.setValue(time);
                 olLayer.set('slider', videoSlider);
             }
             videoSlider.setVisible(olLayer.get('isVideoLayer'));
             stopBtn.setVisible(olLayer.get('isVideoLayer'));
             playBtn.setVisible(olLayer.get('isVideoLayer'));
+            speedMenu.setVisible(olLayer.get('isVideoLayer'));
 
             if (shortInfoBtn) {
                 shortInfoBtn.setVisible(allowShortInfo);
@@ -250,13 +264,55 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         },
 
         startVideoPlay: function(btn) {
-            var layer = btn.layerRec.getOlLayer();
-            layer.set('videoPlaying', true);
+            var me = this;
+            var videoLayer = btn.layerRec.getOlLayer();
+            var rec = videoLayer.get('rec');
+            var videoId = videoLayer.get('id');
+            var rafId = videoLayer.get('rafId');
+            var video = document.getElementById(videoId);
+            var VideoName = 'videoLayer.Source.src';
+            // var timeFrames = rec.data.timeFrames;
+            var frameRate = videoLayer.get('frameRate');
+
+            videoLayer.set('videoPlaying', true);
+            videoLayer.set('videoPaused', false);
+            videoLayer.set('videoStopped', false);
+
+            video.play();
+            Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].videoAnimation(videoLayer);
+        },
+
+        pauseVideoPlay: function(btn) {
+            var me = this;
+            var videoLayer = btn.layerRec.getOlLayer();
+            videoLayer.set('videoPlaying', false);
+            videoLayer.set('videoPaused', true);
+            var videoId = videoLayer.get('id');
+            var video = document.getElementById(videoId);
+            video.pause();
+
+            Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].videoAnimation(videoLayer);
+        },
+
+        //fetch here for ButtonClick handling
+        videoSpeedHandler: function(btn) {
+            // console.log('video-speed button clicked');
         },
 
         stopVideoPlay: function(btn) {
-            var layer = btn.layerRec.getOlLayer();
-            layer.set('videoPlaying', false);
+            var videoLayer = btn.layerRec.getOlLayer();
+            var sliderMin = videoLayer.get('slider').minValue;
+            var videoId = videoLayer.get('id');
+            var video = document.getElementById(videoId);
+            videoLayer.set('videoPlaying', false);
+            videoLayer.set('videoStopped', true);
+            //videoLayer.set('videoPosition', sliderMin);
+            //videoLayer.set('videoPosition', null);
+            videoLayer.get('slider').setValue(sliderMin);
+            video.currentTime = 0;
+            video.pause();
+
+            Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].videoAnimation(videoLayer);
         },
 
         changeFilterHandler: function(btn) {
@@ -285,7 +341,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
             if (hasTimeFilter) {
                 Koala.util.Layer.getMetadataFromUuid(layer.metadata.id)
-                    .then(function(metadata) {//waiting for response an then...
+                    .then(function(metadata) { //waiting for response an then...
                         var newMinDate;
                         var newMaxDate;
                         Ext.each(metadata.filters, function(filter) {
@@ -310,7 +366,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                             adjustedMetadata, layer
                         );
                     });
-            } else {//no request for metadata necessary
+            } else { //no request for metadata necessary
                 Koala.util.Layer.showChangeFilterSettingsWin(
                     adjustedMetadata, layer
                 );
@@ -357,7 +413,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     }).show();
                 }
                 Ext.defer(metadataStore.destroy, 1000, metadataStore);
-            }, this, {single: true});
+            }, this, {
+                single: true
+            });
             metadataStore.load();
         },
 
@@ -446,12 +504,17 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var layer = btn.layerRec.getOlLayer();
             var map = Ext.ComponentQuery.query('basigx-component-map')[0]
                 .getMap();
-            var comboValues = [['gml3','gml'],
-                ['csv','csv'],
-                ['application/json','json']];
+            var comboValues = [
+                ['gml3', 'gml'],
+                ['csv', 'csv'],
+                ['application/json', 'json']
+            ];
             var comboDefault = 'application/json';
             if (layer instanceof ol.layer.Vector) {
-                comboValues = [['json', 'json'], ['zip', 'Shape']];
+                comboValues = [
+                    ['json', 'json'],
+                    ['zip', 'Shape']
+                ];
                 comboDefault = 'json';
             }
 
@@ -466,7 +529,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     items: [{
                         padding: '10px 0',
                         html: viewModel.get('downloadMessage')
-                    },{
+                    }, {
                         xtype: 'combo',
                         width: '100%',
                         fieldLabel: viewModel.get('outputFormatText'),
@@ -523,138 +586,176 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         name: 'legend-tree-row-component',
         scrollable: true,
         items: [{
-            xtype: 'container',
-            layout: 'vbox',
-            name: 'k-slider-container',
-            listeners: {
-                // We'll assign a handler to reorganize the menu once the
-                // class is defined.
-            },
-            items: [{
                 xtype: 'container',
-                layout: 'hbox',
-                defaults: {
-                    margin: '0 5px 0 0'
+                layout: 'vbox',
+                name: 'k-slider-container',
+                listeners: {
+                    // We'll assign a handler to reorganize the menu once the
+                    // class is defined.
                 },
                 items: [{
-                    xtype: 'button',
-                    name: 'shortInfo',
-                    glyph: 'xf05a@FontAwesome',
-                    tooltip: 'Layerinformationen anzeigen'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
+                    xtype: 'container',
+                    layout: 'hbox',
+                    defaults: {
+                        margin: '0 5px 0 0'
+                    },
+                    items: [{
+                        xtype: 'button',
+                        name: 'shortInfo',
+                        glyph: 'xf05a@FontAwesome',
+                        tooltip: 'Layerinformationen anzeigen'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'filter',
+                        glyph: 'xf0b0@FontAwesome',
+                        tooltip: 'Layerfilter ändern'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'download',
+                        glyph: 'xf0c7@FontAwesome',
+                        tooltip: 'Daten speichern'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'removal',
+                        glyph: 'xf00d@FontAwesome',
+                        tooltip: 'Layer entfernen'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'clone',
+                        glyph: 'xf0c5@FontAwesome',
+                        tooltip: 'Objekte klonen',
+                        listeners: {
+                            boxready: Koala.util.AppContext.generateCheckToolVisibility('cloneBtn')
+                        }
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'edit',
+                        glyph: 'xf040@FontAwesome',
+                        tooltip: 'Layerobjekte editieren'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'style',
+                        glyph: 'xf1fc@FontAwesome',
+                        tooltip: 'Layerstil anpassen'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'share',
+                        glyph: 'xf064@FontAwesome',
+                        tooltip: 'Freigeben'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'video-play',
+                        glyph: 'xf04b@FontAwesome',
+                        tooltip: 'Abspielen'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'video-speed',
+                        text: '1x',
+                        arrowVisible: false,
+                        //glyph: 'xf050@FontAwesome',
+
+                        tooltip: 'Speed',
+                        menu: {
+                            xtype: 'menu',
+                            items: [{
+                                text: '0.5x',
+                                value: 0.5
+                            }, {
+                                text: '1x',
+                                value: 1
+                            }, {
+                                text: '2x',
+                                value: 2
+                            }, {
+                                text: '4x',
+                                value: 4
+                            }, {
+                                text: '8x',
+                                value: 8
+                            }],
+                            listeners: {
+                                click: function(menu, item, e, eOpts) {
+                                    console.log('Text = ' + item.text + ' / Wert = ' + item.value);
+                                    var videoLayer = this.up().layerRec.getOlLayer();
+                                    var videoId = videoLayer.get('id');
+                                    var video = document.getElementById(videoId);
+                                    videoLayer.set('playbackRate', item.value);
+                                    video.playbackRate = item.value;
+                                    this.up().setText(item.text);
+                                }
+                            }
+                        }
+                    }, {
+                        xtype: 'button',
+                        name: 'video-pause',
+                        glyph: 'xf04c@FontAwesome',
+                        tooltip: 'Pause'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }, {
+                        xtype: 'button',
+                        name: 'video-stop',
+                        glyph: 'xf04d@FontAwesome',
+                        tooltip: 'Stoppen'
+                        // We'll assign a handler to handle clicks here once the
+                        // class is defined and we can access the static methods
+                    }]
                 }, {
-                    xtype: 'button',
-                    name: 'filter',
-                    glyph: 'xf0b0@FontAwesome',
-                    tooltip: 'Layerfilter ändern'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
-                }, {
-                    xtype: 'button',
-                    name: 'download',
-                    glyph: 'xf0c7@FontAwesome',
-                    tooltip: 'Daten speichern'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
-                }, {
-                    xtype: 'button',
-                    name: 'removal',
-                    glyph: 'xf00d@FontAwesome',
-                    tooltip: 'Layer entfernen'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
-                }, {
-                    xtype: 'button',
-                    name: 'clone',
-                    glyph: 'xf0c5@FontAwesome',
-                    tooltip: 'Objekte klonen',
+                    xtype: 'slider',
+                    name: 'opacityChange',
+                    width: 80,
+                    value: 100,
+                    tipText: function(thumb) {
+                        return String(thumb.value) + '% Sichtbarkeit';
+                    },
                     listeners: {
-                        boxready: Koala.util.AppContext.generateCheckToolVisibility('cloneBtn')
+                        // We'll assign a handler to initialize and handle drags
+                        // here once the class is defined and we can access the
+                        // static methods
                     }
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
                 }, {
-                    xtype: 'button',
-                    name: 'edit',
-                    glyph: 'xf040@FontAwesome',
-                    tooltip: 'Layerobjekte editieren'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
-                }, {
-                    xtype: 'button',
-                    name: 'style',
-                    glyph: 'xf1fc@FontAwesome',
-                    tooltip: 'Layerstil anpassen'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
-                }, {
-                    xtype: 'button',
-                    name: 'share',
-                    glyph: 'xf064@FontAwesome',
-                    tooltip: 'Freigeben'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
-                }, {
-                    xtype: 'button',
-                    name: 'video-play',
-                    glyph: 'xf04b@FontAwesome',
-                    tooltip: 'Abspielen'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
-                }, {
-                    xtype: 'button',
-                    name: 'video-stop',
-                    glyph: 'xf04d@FontAwesome',
-                    tooltip: 'Stoppen'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
+                    xtype: 'slider',
+                    name: 'videoSlider',
+                    width: '100%',
+                    animate: false,
+                    fieldLabel: null,
+                    labelAlign: 'top',
+                    listeners: {
+                        // We'll assign a handler to initialize and handle drags
+                        // here once the class is defined and we can access the
+                        // static methods
+                    }
                 }]
             }, {
-                xtype: 'slider',
-                name: 'opacityChange',
-                width: 80,
-                value: 100,
-                tipText: function(thumb) {
-                    return String(thumb.value) + '% Sichtbarkeit';
-                },
-                listeners: {
-                    // We'll assign a handler to initialize and handle drags
-                    // here once the class is defined and we can access the
-                    // static methods
-                }
-            }, {
-                xtype: 'slider',
-                name: 'videoSlider',
-                width: '100%',
-                animate: false,
-                listeners: {
-                    // We'll assign a handler to initialize and handle drags
-                    // here once the class is defined and we can access the
-                    // static methods
-                }
-            }]
-        },
-        // {
-        //     xtype: 'component',
-        //     name: 'filtertext',
-        //     layout: 'hbox',
-        //     defaults: {
-        //         margin: '0 5px 0 0'
-        //     },
-        //     html: '{{Koala.view.panel.RoutingLegendTree.getFilterText(record)}}'
-        // },
-        {
-            xtype: 'image',
-            name: '{{record.getOlLayer().get("routeId") + "-legendImg"}}',
-            margin: '5px 0 0 0',
-            src: '{{' +
-                'Koala.util.Layer.getCurrentLegendUrl(record.getOlLayer())' +
-                '}}',
-            width: '{{record.getOlLayer().get("legendWidth")}}',
-            height: '{{record.getOlLayer().get("legendHeight")}}',
-            alt: '{{"Legende " + record.getOlLayer().get("name")}}'
-        }]
+                xtype: 'image',
+                name: '{{record.getOlLayer().get("routeId") + "-legendImg"}}',
+                margin: '5px 0 0 0',
+                src: '{{' +
+                    'Koala.util.Layer.getCurrentLegendUrl(record.getOlLayer())' +
+                    '}}',
+                width: '{{record.getOlLayer().get("legendWidth")}}',
+                height: '{{record.getOlLayer().get("legendHeight")}}',
+                alt: '{{"Legende " + record.getOlLayer().get("name")}}'
+            }
+        ]
     },
 
     itemExpandedKey: 'koala-rowbody-expanded',
@@ -905,7 +1006,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         });
 
         // also bind our own unregistering here.
-        me.on('beforedestroy', me.unbindUpdateHandlers, me, {single: true});
+        me.on('beforedestroy', me.unbindUpdateHandlers, me, {
+            single: true
+        });
     },
 
     /**
@@ -1026,7 +1129,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     var text = layer.get(textProperty);
                     row.dom.querySelector('.x-tree-node-text').innerHTML = text ? text : layer.get('name');
                 }
-                layerRec.set('text', layer.get(textProperty), {silent: true});
+                layerRec.set('text', layer.get(textProperty), {
+                    silent: true
+                });
             });
         }
         Ext.each(recs, this.bindLoadIndicationToRecord, this);
@@ -1249,6 +1354,103 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             me.hasRoutingListeners = false;
         }
         return newVal;
+    },
+
+    videoAnimation: function(videoLayer) {
+        var me = this;
+        var paused = videoLayer.get('videoPaused');
+        var stopped = videoLayer.get('videoStopped');
+        var map = BasiGX.view.component.Map.guess().map;
+        var rec = videoLayer.get('rec');
+        var timeFrames = rec.data.timeFrames;
+        var rafId = videoLayer.get('rafId');
+        var videoId = videoLayer.get('id');
+        var frameRate = videoLayer.get('frameRate');
+        var video = document.getElementById(videoId);
+        var slider = videoLayer.get('slider');
+        console.log('videoPaused: ' + paused + ' / videoStopped: ' + stopped);
+
+//always handle time update before stopping!
+            //map.render(); //what's the reason for redering now?
+            var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(rec.data.timestamp)).unix();
+//toDo get duration
+//needed time is "time+duration"
+            var curTime = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(video.currentTime));
+            console.log('video.currentTime = ' + curTime);
+            var curFrame = Math.floor(video.currentTime * frameRate);
+            console.log('current Frame = ' + curFrame);
+
+            if (rec.data.fps) {
+                frameRate = rec.data.fps * videoLayer.playbackRate;
+            }
+            if (timeFrames.length === 0) {
+                for (var k = 0; k <= video.duration * frameRate; ++k) {
+                    timeFrames.push(1 / frameRate);
+                }
+            }
+
+            // video.play();
+            // map.render();
+            var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(rec.data.timestamp)).unix();
+            if (videoLayer.get('videoPosition')) {
+                video.currentTime = videoLayer.get('videoPosition') - time;
+                videoLayer.set('videoPosition', null);
+            }
+            var curTime = video.currentTime;
+            var idx = Math.round(curTime * frameRate);
+            var offsets = timeFrames.slice(0, idx);
+            curTime = offsets.reduce(function(a, b) {
+                return a + b;
+            }, 0);
+            var duration = timeFrames.reduce(function(a, b) {
+                return a + b;
+            }, 0);
+            // HERE BE DRAGONS:
+            // We call the garbage collector to clean out the old items
+            // in the legend tree in order to avoid getting the broken
+            // ones. This will just clear out the DOM nodes of the broken
+            // elements, they're manually destroyed below.
+            // It is unknown if that causes any side effects and
+            // the legend tree / its row expander plugin should be fixed /
+            // refactored instead.
+            Ext.dom.GarbageCollector.collect();
+            var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
+            var slider;
+            sliders.forEach(function(item) {
+                if (item.el.dom && item.isVisible()) {
+                    if (videoLayer.get('slider') === item) {
+                        slider = item;
+                    }
+                } else {
+                    try {
+                        item.destroy();
+                    } catch (e) {
+                        // the extra sliders may sometimes be in a weird state
+                        // and destruction will throw errors (doDestroy on the
+                        // tip plugin will still be called, properly cancelling the
+                        // setInterval)
+                    }
+                }
+            });
+            if (slider) {
+                slider.setMinValue(time);
+                slider.setMaxValue(duration + time);
+                slider.suspendEvents();
+                if (slider.getValue() !== (curTime + time)) {
+                    slider.reset();
+                    slider.setValue(curTime + time);
+                }
+                slider.resumeEvents();
+            }
+
+            if (!paused && !stopped) {
+            rafId = requestAnimationFrame(function() {
+                me.videoAnimation(videoLayer);
+            });
+            videoLayer.set('rafId', rafId);
+        } else {
+            cancelAnimationFrame(rafId);
+        }
     }
 
 }, function(cls) {
@@ -1268,7 +1470,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var videoSliderCfg = cls.findByProp(sliderContainer, 'name', 'videoSlider');
     var shareCfg = cls.findByProp(menuItems, 'name', 'share');
     var playCfg = cls.findByProp(menuItems, 'name', 'video-play');
+    var pauseCfg = cls.findByProp(menuItems, 'name', 'video-pause');
     var stopCfg = cls.findByProp(menuItems, 'name', 'video-stop');
+    var speedCfg = cls.findByProp(menuItems, 'name', 'video-speed');
 
     if (cls.prototype.rowBodyCompTemplate.items[0]) {
         cls.prototype.rowBodyCompTemplate.items[0].listeners.beforerender = cls.reorganizeMenu;
@@ -1299,6 +1503,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     }
     if (playCfg) {
         playCfg.handler = cls.startVideoPlay;
+    }
+    if (pauseCfg) {
+        pauseCfg.handler = cls.pauseVideoPlay;
+    }
+    if (speedCfg) {
+        speedCfg.handler = cls.videoSpeedHandler;
     }
     if (stopCfg) {
         stopCfg.handler = cls.stopVideoPlay;
