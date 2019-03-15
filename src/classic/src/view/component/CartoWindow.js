@@ -70,12 +70,20 @@ Ext.define('Koala.view.component.CartoWindow',{
             }).bind(this);
             var disableInteractions = ctrl.disableMapInteractions.bind(ctrl);
             var enableInteractions = ctrl.enableMapInteractions.bind(ctrl);
+            var handleDragstart = (function() {
+                this.addCls('onDragging');
+            }).bind(this);
+            var handleDragend = (function() {
+                this.removeCls('onDragging');
+            }).bind(this);
 
             el.on({
                 mousedown: handleMouseDown,
                 mouseup: handleMouseUp,
                 mouseenter: disableInteractions,
-                mouseleave: enableInteractions
+                mouseleave: enableInteractions,
+                dragstart: handleDragstart,
+                dragend: handleDragend
             });
 
             // re-enable text-selection
