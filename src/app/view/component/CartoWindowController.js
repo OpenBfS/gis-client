@@ -1375,6 +1375,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             } else {
                 el.classList.add('x-hidden');
                 lineSource.removeFeature(lineFeature);
+                var hover = BasiGX.view.component.Map.guess().getPlugin('hoverBfS');
+                hover.hoverVectorLayerInteraction.getFeatures().clear();
             }
         }
     },
