@@ -44,6 +44,11 @@ Ext.define('Koala.view.window.Print', {
     listeners: {
         expand: function() {
             this.down('k-form-print').addExtentInteractions();
+            // HBD: after collapse/expand extjs thinks the user manually
+            // resized the window and stops automatic window resize if
+            // child component sizes are updated. We can apparently
+            // reset this by setting the sizes to null...
+            this.setSize(null, null);
         },
         resize: function(win) {
             win.center();
