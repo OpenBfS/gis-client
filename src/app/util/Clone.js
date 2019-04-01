@@ -27,9 +27,24 @@ Ext.define('Koala.util.Clone', {
     statics: {
 
         defaultStyle: (function() {
-            var layer = new ol.layer.Vector();
+            var point = new ol.style.Style({
+                image: new ol.style.Circle()
+            });
+            var line = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: '#000000'
+                })
+            });
+            var polygon = new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: 'rgba(0, 0, 255, 0.1)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#000000'
+                })
+            });
             var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
-            olParser.readStyle(layer.getStyle()())
+            olParser.readStyle([point, line, polygon])
                 .then(function(gsStyle) {
                     var sldParser = new GeoStylerSLDParser.SldStyleParser();
                     sldParser.writeStyle(gsStyle)
