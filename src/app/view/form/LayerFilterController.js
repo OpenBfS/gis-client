@@ -73,7 +73,9 @@ Ext.define('Koala.view.form.LayerFilterController', {
         view.up('window').close();
         var charts = Ext.ComponentQuery.query('d3-chart,d3-barchart');
         Ext.each(charts, function(chart) {
-            chart.getController().getChartData();
+            if (chart.getController && chart.getController()) {
+                chart.getController().getChartData();
+            }
         });
     },
 
