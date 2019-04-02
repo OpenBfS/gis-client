@@ -170,7 +170,6 @@ Ext.define('Koala.view.component.D3Chart',{
             }
             var cqlFilterTextHTML = Koala.util.Layer.getFiltersTextFromMetadata(filtersForTimeseriesLabel);
             //transform HTML to text, since it will be added as SVG-'text'
-            //ToDo: introduce wrapping function to handle linebreaks in D3BaseController
             var cqlFilterText = cqlFilterTextHTML.replace(/<br \/>/g, ', ');
 
             var leftAxisLabel = Koala.util.String.replaceTemplateStrings(yLabel, olFeat) + ' ' + (chartConfig.dspUnit || '');
