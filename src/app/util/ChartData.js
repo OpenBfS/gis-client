@@ -248,7 +248,7 @@ Ext.define('Koala.util.ChartData', {
          * @param {Object} layerConfig The layerConfig of the layer which contains the chart config.
          * @return {Object} The chart configuration object to be used with the d3-util components
          */
-        getChartConfiguration: function(layerConfig, chartSize, type, data, labels, stations) {
+        getChartConfiguration: function(layerConfig, chartSize, type, data, labels, stations, chartOverrides) {
         /* timeseries props
         {
             "dataFeatureType": "imis:odl_brutto_10min_timeseries_9",
@@ -397,7 +397,7 @@ Ext.define('Koala.util.ChartData', {
             config.legendComponentConfig.legendEntryMaxLength -= 60;
 
             if (type === 'timeSeries') {
-                this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations);
+                this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations, chartOverrides);
             } else { // type is barchart
                 this.createBarConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels, stations);
             }
@@ -584,9 +584,10 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} config the chart configuration
          * @param  {Number[]} chartSize the chart size
          * @param  {Object} data the chart data
+         * @param  {Object} chartOverrides info about gnos overrides like log axis scales
          * chart controller
          */
-        createTimeseriesConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations) {
+        createTimeseriesConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations, chartOverrides) {
             var minMax = this.extractMinMax(gnosConfig);
             var margin = gnosConfig.chartMargin.split(',');
             margin = Ext.Array.map(margin, function(w) {
@@ -610,12 +611,12 @@ Ext.define('Koala.util.ChartData', {
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
-                x: this.createAxisConfig(gnosConfig, 'x', layerConfig.startDate.unix() * 1000, layerConfig.endDate.unix() * 1000, true, stations[0]),
-                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true, stations[0])
+                x: this.createAxisConfig(gnosConfig, 'x', layerConfig.startDate.unix() * 1000, layerConfig.endDate.unix() * 1000, true, stations[0], chartOverrides && chartOverrides.x || undefined),
+                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true, stations[0], chartOverrides && chartOverrides.y || undefined)
             };
             // handle attachedSeries axes
             if (gnosConfig.attachedSeries) {
-                this.parseAttachedSeries(gnosConfig, componentConfig, stations);
+                this.parseAttachedSeries(gnosConfig, componentConfig, stations, chartOverrides);
             }
             if (gnosConfig.thresholds) {
                 var min = componentConfig.series[0].data.reduce(function(acc, val) {
@@ -663,8 +664,9 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} gnosConfig the metadata
          * @param  {Object} componentConfig the d3-util config to manipulate
          * @param  {ol.Feature[]} stations the selected stations
+         * @param  {Object} chartOverrides gnos overrides like custom axis scales
          */
-        parseAttachedSeries: function(gnosConfig, componentConfig, stations) {
+        parseAttachedSeries: function(gnosConfig, componentConfig, stations, chartOverrides) {
             var me = this;
             var series = gnosConfig.attachedSeries;
             if (Ext.isString(series)) {
@@ -692,7 +694,8 @@ Ext.define('Koala.util.ChartData', {
                 } else {
                     additionalYMax = gnosConfig.yAxisMax;
                 }
-                componentConfig.axes['y' + index] = me.createAxisConfig(gnosConfig, 'y', additionalYMin, additionalYMax, false, stations[0]);
+                var overrides = chartOverrides ? chartOverrides['y' + index] : undefined;
+                componentConfig.axes['y' + index] = me.createAxisConfig(gnosConfig, 'y', additionalYMin, additionalYMax, false, stations[0], overrides);
             });
         },
 
@@ -704,10 +707,15 @@ Ext.define('Koala.util.ChartData', {
          * @param  {String|NUmber} max the max value
          * @param  {Boolean} withGrid whether to consider the grid config
          * @param  {ol.Feature} station the station feature for context
+         * @param  {Object} chartOverrides gnos overrides like custom axis scales
          * @return {Object} the axis configuration for d3-util
          */
-        createAxisConfig: function(gnosConfig, orient, min, max, withGrid, station) {
+        createAxisConfig: function(gnosConfig, orient, min, max, withGrid, station, chartOverrides) {
             var label = Koala.util.String.replaceTemplateStrings(gnosConfig[orient + 'AxisLabel'] || '', station);
+            var scale = gnosConfig[orient + 'AxisScale'] || (orient === 'x' ? 'time' : 'linear');
+            if (chartOverrides && chartOverrides.scale) {
+                scale = chartOverrides.scale;
+            }
             var config = {
                 orientation: orient,
                 display: true,
@@ -719,9 +727,11 @@ Ext.define('Koala.util.ChartData', {
                 format: gnosConfig[orient + 'AxisFormat'] || ',.0f',
                 label: label,
                 labelRotation: gnosConfig['rotate' + orient.toUpperCase() + 'AxisLabel'] === true ? -55 : 0,
-                scale: gnosConfig[orient + 'AxisScale'] || (orient === 'x' ? 'time' : 'linear'),
+                scale: scale,
                 min: min,
                 max: max,
+                harmonize: scale === 'log',
+                autoTicks: scale === 'log',
                 sanitizeLabels: true,
                 factor: orient === 'y' ? 0.8 : undefined,
                 locale: Ext.ComponentQuery.query('k-form-field-languagecombo')[0].getValue()
