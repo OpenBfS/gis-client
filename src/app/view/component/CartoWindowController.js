@@ -222,10 +222,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         this.createTimeSeriesButtons(tabElm);
         this.createCombineTimeseriesButton(tabElm);
-
-        if (layer.metadata.layerConfig.timeSeriesChartProperties.detectionLimitAttribute) {
-            this.createIdentificationThresholdButton(tabElm);
-        }
+        this.createIdentificationThresholdButton(tabElm);
 
         var autorefreshStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'title'],
