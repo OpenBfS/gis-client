@@ -668,8 +668,11 @@ Ext.define('Koala.view.component.D3ChartController', {
      *
      */
     deleteEverything: function(index, legendIndex) {
+        var me = this;
         var selected = this.getView().getSelectedStations();
-        selected.splice(index, 1);
+        selected = selected.filter(function(station) {
+            return station.get('id') !== me.chartConfig.legendComponentConfig.items[legendIndex].seriesId;
+        });
         this.getView().setSelectedStations(selected);
         var attached = [];
         Ext.each(this.chartConfig.timeseriesComponentConfig.series, function(config, idx) {
