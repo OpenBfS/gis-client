@@ -84,6 +84,9 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @event chartdataprepared
      */
     featuresByStation: {},
+
+    chartOverrides: {},
+
     /**
      * Called on initialize event. Only used in modern toolkit.
      *
@@ -827,7 +830,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             station,
             startDate,
             endDate,
-            view.getShowIdentificationThresholdData()
+            view.getShowIdentificationThresholdData(),
+            this.chartOverrides
         );
         me.chartDataAvailable = true;
         // The id of the selected station is also the key in the pending
@@ -853,7 +857,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 'timeSeries',
                 this.data,
                 undefined,
-                stations
+                stations,
+                this.chartOverrides
             );
             me.fireEvent('chartdataprepared');
         }
@@ -906,6 +911,9 @@ Ext.define('Koala.view.component.D3ChartController', {
         cfg.scale = scale;
         cfg.harmonize = scale === 'log';
         cfg.autoTicks = scale === 'log';
+        this.chartOverrides[axis] = {
+            scale: scale
+        };
         this.drawChart();
     }
 });
