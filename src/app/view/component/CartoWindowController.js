@@ -36,7 +36,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Koala.util.Date',
         'Koala.util.Filter',
         'Koala.util.Print',
-        'Koala.view.window.Print'
+        'Koala.view.window.Print',
+        'Koala.view.menu.ChartSettingsMenu'
     ],
 
     /**
@@ -223,10 +224,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.createTimeSeriesButtons(tabElm);
         this.createCombineTimeseriesButton(tabElm);
 
-        if (layer.metadata.layerConfig.timeSeriesChartProperties.detectionLimitAttribute) {
-            this.createIdentificationThresholdButton(tabElm);
-        }
-
         var autorefreshStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'title'],
             data: this.getTranslatedAutorefreshData(),
@@ -266,11 +263,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(timeSeriesTab);
         this.timeserieschart = Ext.create(chartObj);
 
-        this.createLegendVisibilityButton(tabElm, this.timeserieschart);
         //this.createDownloadChartDataButton(tabElm, this.timeserieschart);
         this.createIrixPrintButton(tabElm, this.timeserieschart);
         this.createExportToPngButton(tabElm, this.timeserieschart);
-
+        this.createChartSettingsMenuButton(tabElm);
 
         Koala.util.ChartAutoUpdater.autorefreshTimeseries(
             this.timeserieschart,
@@ -338,42 +334,20 @@ Ext.define('Koala.view.component.CartoWindowController', {
             },
             renderTo: elm
         };
-        this.toggleScaleButton = {
-            cls: 'carto-window-chart-button',
-            xtype: 'button',
-            enableToggle: true,
-            name: 'toggleScale',
-            glyph: 'xf07d@FontAwesome',
-            bind: {
-                tooltip: this.view.getViewModel().get('toggleScale')
-            },
-            renderTo: elm
-        };
         left = Ext.create(left);
         left.el.dom.addEventListener('click', this.scrollTimeseriesLeft.bind(this));
         right = Ext.create(right);
         right.el.dom.addEventListener('click', this.scrollTimeseriesRight.bind(this));
         maxExtent = Ext.create(maxExtent);
         maxExtent.el.dom.addEventListener('click', this.zoomToMaxExtent.bind(this));
-        this.toggleScaleButton = Ext.create(this.toggleScaleButton);
-        this.toggleScaleButton.el.dom.addEventListener('click', this.toggleScale.bind(this));
     },
 
     /**
-     * Toggles the scale of the left axis back and forth between log and linear.
+     * Show the chart settings menu.
+     * @param {Object} btn the button/component to show the menu by
      */
-    toggleScale: function() {
-        var attachedSeries = this.timeserieschart.shapes[0].attachedSeries;
-        if (attachedSeries) {
-            Koala.util.ChartAxes.showToggleScaleMenu(
-                attachedSeries,
-                this.timeserieschart,
-                this.toggleScaleButton.el,
-                this.getViewModel().get('axisText')
-            );
-        } else {
-            this.timeserieschart.getController().toggleScale();
-        }
+    showChartSettingsMenu: function(btn) {
+        this.chartSettingsMenu.showBy(btn);
     },
 
     zoomToMaxExtent: function() {
@@ -398,43 +372,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
         combine = Ext.create(combine);
         combine.el.dom.addEventListener('click', this.combineTimeseries.bind(this));
-    },
-
-    /**
-     * Create the button to toggle identification threshold data display.
-     * @param  {Element} elm the tab element
-     */
-    createIdentificationThresholdButton: function(elm) {
-        var button = {
-            cls: 'carto-window-chart-button',
-            xtype: 'button',
-            name: 'identificationThreshold',
-            enableToggle: true,
-            glyph: 'xf201@FontAwesome',
-            bind: {
-                tooltip: this.view.getViewModel().get('displayIdentificationThreshold')
-            },
-            renderTo: elm,
-            handler: this.toggleIdentificationThreshold.bind(this)
-        };
-        var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
-        var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
-        var maySeeIdThresholdButton = Ext.Array.contains(imisRoles, 'imis') ||
-            Ext.Array.contains(imisRoles, 'ruf');
-
-        if (maySeeIdThresholdButton) {
-            Ext.create(button);
-        }
-    },
-
-    /**
-     * Toggle display of identification threshold data.
-     * @param  {Ext.button.button} btn the toggle buttons
-     */
-    toggleIdentificationThreshold: function(btn) {
-        this.timeserieschart.setShowIdentificationThresholdData(btn.pressed);
-        var ctrl = this.timeserieschart.getController();
-        ctrl.getChartData();
     },
 
     /**
@@ -660,28 +597,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     /**
-     * Create legend visibility toggle button.
-     * @param {Element} elm element to render the button to
-     * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
-     *          The associated chart
-     */
-    createLegendVisibilityButton: function(elm, chart) {
-        var btn = {
-            cls: 'carto-window-chart-button',
-            xtype: 'button',
-            name: 'toggleLegend',
-            glyph: 'xf151@FontAwesome',
-            bind: {
-                tooltip: this.view.getViewModel().get('toggleLegendVisibility')
-            }
-        };
-        this.legendVisibilityButton = Ext.create(btn);
-        this.legendVisibilityButton.render(elm, chart.xtype === 'd3-chart' ? 5 : 3);
-        this.legendVisibilityButton.el.dom.addEventListener('click',
-            this.toggleLegend.bind(this, chart));
-    },
-
-    /**
      * Create export to png button.
      * @param {Element} elm element to render the button to
      * @param {Koala.view.component.D3Chart|Koala.view.component.D3BarChart} chart
@@ -786,11 +701,36 @@ Ext.define('Koala.view.component.CartoWindowController', {
         el.appendChild(barChartTab);
         this.barChart = Ext.create(chartObj);
         this.createBarChartToggleButton(tabElm, this.barChart);
-        this.createLegendVisibilityButton(tabElm, this.barChart);
         this.createIrixPrintButton(tabElm, this.barChart);
         this.createExportToPngButton(tabElm, this.barChart);
         this.createDownloadChartDataButton(tabElm, this.barChart);
         this.createUncertaintyButton(tabElm, this.barChart);
+        this.createChartSettingsMenuButton(tabElm);
+    },
+
+    createChartSettingsMenuButton: function(elm) {
+        var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
+        var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
+        var maySeeIdThresholdButton = Ext.Array.contains(imisRoles, 'imis') ||
+            Ext.Array.contains(imisRoles, 'ruf');
+
+        this.chartSettingsMenu = Ext.create('Koala.view.menu.ChartSettingsMenu', {
+            chart: this.timeserieschart || this.barChart,
+            isTimeseries: !!this.timeserieschart,
+            maySeeIdThresholdButton: maySeeIdThresholdButton
+        });
+        var btn = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'chartSettings',
+            glyph: 'xf013@FontAwesome',
+            bind: {
+                tooltip: this.view.getViewModel().get('chartSettings')
+            },
+            handler: this.showChartSettingsMenu.bind(this)
+        };
+        btn = Ext.create(btn);
+        btn.render(elm, this.timeserieschart ? 5 : 3);
     },
 
     createUncertaintyButton: function(tabElm, chart) {
@@ -1571,18 +1511,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         Ext.each(cartos, function(carto) {
             carto.destroy();
         });
-    },
-
-    toggleLegend: function(chart) {
-        var btn = this.legendVisibilityButton;
-        chart.getController().toggleLegendVisibility();
-        var glyph = btn.getGlyph();
-        if (glyph.glyphConfig === 'xf151@FontAwesome') {
-            glyph = 'xf150@FontAwesome';
-        } else {
-            glyph = 'xf151@FontAwesome';
-        }
-        btn.setGlyph(glyph);
     },
 
     /**
