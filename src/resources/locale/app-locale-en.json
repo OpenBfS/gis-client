@@ -526,7 +526,11 @@
                 "toggleScaleText": "linear/logarithmic",
                 "showIdentificationThresholdText": "Show data below < Id. Thresh.",
                 "toggleLegendText": "Toggle legend",
-                "axisText": "Axis"
+                "axisText": "Axis",
+                "changeMinMaxText": "Change min/max",
+                "minMaxWindowTitle": "Change y axis",
+                "okText": "Ok",
+                "cancelText": "Cancel"
             }
         }
     },

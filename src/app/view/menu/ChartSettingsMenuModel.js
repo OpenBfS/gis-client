@@ -26,7 +26,11 @@ Ext.define('Koala.view.menu.ChartSettingsMenuModel', {
         toggleScaleText: '',
         showIdentificationThresholdText: '',
         toggleLegendText: '',
-        axisText: ''
+        axisText: '',
+        changeMinMaxText: '',
+        minMaxWindowTitle: '',
+        okText: '',
+        cancelText: ''
     }
 
 });

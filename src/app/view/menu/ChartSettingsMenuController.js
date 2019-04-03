@@ -58,6 +58,68 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
     toggleLegend: function() {
         var chart = this.getView().chart;
         chart.getController().toggleLegendVisibility();
+    },
+
+    /**
+     * Change min/max settings.
+     */
+    changeMinMax: function() {
+        var view = this.getView();
+        var vm = view.getViewModel();
+        var ctrl = view.chart.getController();
+        var overrides = ctrl.chartOverrides;
+        var y = overrides.y || {};
+        overrides.y = y;
+        var min = overrides.y.min;
+        var max = overrides.y.max;
+        if (view.isTimeseries) {
+            min = min || ctrl.chartConfig.timeseriesComponentConfig.axes.y.min;
+            max = max || ctrl.chartConfig.timeseriesComponentConfig.axes.y.max;
+        } else {
+            min = min || ctrl.chartConfig.barComponentConfig.axes.y.min;
+            max = max || ctrl.chartConfig.barComponentConfig.axes.y.max;
+        }
+
+        Ext.create('Ext.window.Window', {
+            title: vm.get('minMaxWindowTitle'),
+            bodyPadding: 5,
+            items: [{
+                xtype: 'numberfield',
+                name: 'minField',
+                value: min
+            }, {
+                xtype: 'numberfield',
+                name: 'maxField',
+                value: max
+            }],
+            bbar: [{
+                xtype: 'button',
+                text: vm.get('okText'),
+                handler: this.updateMinMax.bind(this)
+            }, {
+                xtype: 'button',
+                text: vm.get('cancelText'),
+                handler: function() {
+                    this.up('window').hide();
+                }
+            }]
+        }).show();
+    },
+
+    /**
+     * Updates the chart controller overrides for min/max.
+     * @param {Object} btn the ok button
+     */
+    updateMinMax: function(btn) {
+        var win = btn.up('window');
+        var min = win.down('[name=minField]').getValue();
+        var max = win.down('[name=maxField]').getValue();
+        var ctrl = this.getView().chart.getController();
+        var y = ctrl.chartOverrides.y;
+        y.min = min;
+        y.max = max;
+        ctrl.getChartData();
+        win.hide();
     }
 
 });
