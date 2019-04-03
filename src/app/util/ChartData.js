@@ -472,6 +472,7 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.titleColor = layerConfig.title.labelColor || '#000';
             componentConfig.titlePadding = (layerConfig.title.labelPadding || 18) - margin[0];
             componentConfig.titleSize = layerConfig.title.labelSize || 20;
+            componentConfig.maxTitleLength = gnosConfig.maxTitleLength || 100;
             componentConfig.rotateBarLabel = gnosConfig.rotateBarLabel;
             componentConfig.yOffset = margin[0];
             config.legendComponentConfig.position = [chartSize[0] - margin[1], 0];
@@ -600,6 +601,7 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.titleColor = layerConfig.title.labelColor || '#000';
             componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
             componentConfig.titleSize = layerConfig.title.labelSize || 20;
+            componentConfig.maxTitleLength = gnosConfig.maxTitleLength || 100;
             componentConfig.extraClasses = 'k-d3-shape-group';
             var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig, stations);
             // append series
