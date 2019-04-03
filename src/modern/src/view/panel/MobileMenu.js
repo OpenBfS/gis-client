@@ -142,7 +142,9 @@ Ext.define('Koala.view.panel.MobileMenu',{
             btn.up('app-main').down('k-panel-mobileaddlayer').show();
         },
         listeners: {
-            painted: Koala.util.AppContext.generateCheckToolVisibility('addWmsBtn')
+            painted: function() {
+                Koala.util.AppContext.generateCheckToolVisibility('addWmsBtn')();
+            }
         }
     }, {
         xtype: 'button',

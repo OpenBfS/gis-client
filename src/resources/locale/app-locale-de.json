@@ -521,6 +521,16 @@
             }
         }
     },
+    "Koala.view.menu.ChartSettingsMenu": {
+        "config": {
+            "data": {
+                "toggleScaleText": "linear/logarithmisch",
+                "showIdentificationThresholdText": "Daten < NWG anzeigen",
+                "toggleLegendText": "Legende umschalten",
+                "axisText": "Achse"
+            }
+        }
+    },
     "Koala.view.panel.FeatureGrid": {
         "config": {
             "data": {

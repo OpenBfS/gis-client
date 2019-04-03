@@ -520,6 +520,16 @@
             }
         }
     },
+    "Koala.view.menu.ChartSettingsMenu": {
+        "config": {
+            "data": {
+                "toggleScaleText": "linear/logarithmic",
+                "showIdentificationThresholdText": "Show data below < Id. Thresh.",
+                "toggleLegendText": "Toggle legend",
+                "axisText": "Axis"
+            }
+        }
+    },
     "Koala.view.panel.FeatureGrid": {
         "config": {
             "data": {
