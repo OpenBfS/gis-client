@@ -47,6 +47,22 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         irixContextUrl: 'resources/irixContext.json'
     },
 
+    listeners: {
+        show: function() {
+            var print = this.up('k-form-print');
+            var btn = print.down('button[name=createPrint]');
+            btn.setBind();
+            btn.setText('DokPool');
+        },
+        hide: function() {
+            var print = this.up('k-form-print');
+            var btn = print.down('button[name=createPrint]');
+            btn.setBind({
+                text: '{printFormat:uppercase} {printButtonSuffix}'
+            });
+        }
+    },
+
     // listeners: {
     //     beforerender: function(){
     //         var DokpoolContentType = Ext.ComponentQuery.query('[name=DokpoolContentType]')[0];
