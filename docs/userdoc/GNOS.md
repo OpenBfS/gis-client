@@ -1002,6 +1002,17 @@ eckigen Klammern werden durch Attribute des Features ersetzt.
 | Default-Wert         |  |
 | Beispiel             | Standort: [[locality_name]]|
 
+**maxTitleLength**
+
+  Die maximale Breite vom Legendentitel in Pixeln.
+
+  | Typ | gco:CharacterString  |
+  |---------------------:|:----|
+  | Erlaubt Wertemenge   | Zahl (> 0)  |
+  | Obligatorisch        | &#10799; |
+  | Default-Wert         | 100 |
+  | Beispiel             | 20 |
+
 **showGrid**
 
   Soll ein Hintergrundgrid gezeigt werden?

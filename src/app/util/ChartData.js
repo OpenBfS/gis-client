@@ -248,104 +248,7 @@ Ext.define('Koala.util.ChartData', {
          * @param {Object} layerConfig The layerConfig of the layer which contains the chart config.
          * @return {Object} The chart configuration object to be used with the d3-util components
          */
-        getChartConfiguration: function(layerConfig, chartSize, type, data, labels, stations) {
-        /* timeseries props
-        {
-            "dataFeatureType": "imis:odl_brutto_10min_timeseries_9",
-            "param_viewparams": "locality_code:[[id]]",
-            "shapeType": "line",
-            "curveType": "curveStepBefore",
-            "xAxisAttribute": "end_measure",
-            "yAxisAttribute": "value",
-            "xAxisScale": "time",
-            "end_timestamp": "2018-01-22T12:00:00",
-            "end_timestamp_format": "Y-m-d H:i:s",
-            "duration": "PT4H",
-            "yAxisMax": "0.4",
-            "colorSequence": "#312783,#e4003a,#65b32e,#f39200,#6b4796,#009dd1,#b0348b,#00823f,#564a44,#312783,#e4003a,#65b32e,#f39200,#6b4796,#009dd1,#b0348b,#00823f,#564a44",
-            "seriesTitleTpl": "[[locality_name]]",
-            "tooltipTpl": "<b>[[locality_name]]</b><br>Datum: [[end_measure]]<br>Messwert in µSv/h: [[value]]",
-            "yAxis_grid": "\\{\\\"odd\\\":\\{\\\"opacity\\\":1,\\\"fill\\\":\\\"#ddd\\\",\\\"stroke\\\":\\\"#bbb\\\",\\\"lineWidth\\\":1]]",
-            "featureIdentifyField": "id",
-            "featureIdentifyFieldDataType": "string",
-            "featureShortDspField": "locality_name",
-            "allowAddSeries": "true",
-            "allowZoom": "true",
-            "allowFilterForm": "true",
-            "showGrid": "true",
-            "backgroundColor": "#EEEBEB",
-            "gridStrokeColor": "#d3d3d3",
-            "gridStrokeWidth": "1",
-            "gridStrokeOpacity": "0.5",
-            "labelColor": "#294d71",
-            "labelPadding": "10",
-            "yAxisFormat": ",.3f",
-            "chartMargin": "30,15,15,15",
-            "labelSize": "13",
-            "legendEntryMaxLength": "200",
-            "tickPadding": "0",
-            "tickSize": "3",
-            "strokeWidth": "2",
-            "strokeOpacity": "1",
-            "titlePadding": "10",
-            "titleSize": "12",
-            "rotateXAxisLabel": "true",
-            "yAxisLabel": "µSv/h",
-            "xAxisMax": "2018-01-22 12:00:00",
-            "xAxisMin": "2012-01-01 00:00:00",
-            "showTimeseriesGrid": "true",
-            "thresholds_off": [
-                {
-                    "value": 0.4,
-                    "tooltip": "Tooltip 1",
-                    "stroke": "#ff0000",
-                    "lineWidth": 1,
-                    "dasharray": "3, 3",
-                    "label": "Schwellenwert 1"
-                },
-                {
-                    "value": 0.05,
-                    "stroke": "#00ff00",
-                    "lineWidth": 1,
-                    "dasharray": "3, 3",
-                    "label": "Schwellenwert 2",
-                    "tooltip": "Tooltip 2"
-                }
-            ],
-            "attachedSeries": "[{\"yAxisAttribute\":\"value_oberergw\",\"showYAxis\":\"true\",\"yAxisMin\":\"0\",\"yAxisMax\":\"0.4\",\"yAxisFormat\":\",.3f\",\"axisWidth\":60,\"labelPadding\":40,\"dspUnit\":\"Ob. Grenzwert (mSv/h)\"},{\"yAxisAttribute\":\"value_unterergw\",\"showYAxis\":\"true\",\"yAxisMin\":\"0\",\"yAxisMax\":\"0.4\",\"yAxisFormat\":\",.3f\",\"axisWidth\":60,\"labelPadding\":40,\"dspUnit\":\"Unt. Grenzwert (mSv/h)\",\"color\":\"#00ff00\"}]",
-            "featureStyle_off": [
-                {
-                    "attribute": "value",
-                    "operator": "lt",
-                    "value": 0.085,
-                    "style": {
-                        "type": "circle",
-                        "radius": "10"
-                    }
-                },
-                {
-                    "attribute": "value",
-                    "operator": "eq",
-                    "value": 0.085,
-                    "style": {
-                        "type": "star",
-                        "sides": 5,
-                        "radius": 10
-                    }
-                },
-                {
-                    "attribute": "value",
-                    "operator": "gt",
-                    "value": 0.085,
-                    "style": {
-                        "type": "rect",
-                        "width": 15,
-                        "height": 20
-                    }
-                }
-            ]
-        }
-        */
+        getChartConfiguration: function(layerConfig, chartSize, type, data, labels, stations, chartOverrides) {
             // create a default config object
             var config = {
                 chartRendererConfig: {
@@ -397,9 +300,9 @@ Ext.define('Koala.util.ChartData', {
             config.legendComponentConfig.legendEntryMaxLength -= 60;
 
             if (type === 'timeSeries') {
-                this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations);
+                this.createTimeseriesConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations, chartOverrides);
             } else { // type is barchart
-                this.createBarConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels, stations);
+                this.createBarConfig(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels, stations, chartOverrides);
             }
             return config;
         },
@@ -415,13 +318,13 @@ Ext.define('Koala.util.ChartData', {
             var xMax;
             var yMin;
             var yMax;
-            if (!gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' &&
+            if (!gnosConfig.xAxisScale && !gnosConfig.xAxisMax || gnosConfig.xAxisScale === 'time' &&
                 gnosConfig.xAxisMax && !Ext.isNumeric(gnosConfig.xAxisMax)) {
                 xMax = moment(gnosConfig.xAxisMax).unix() * 1000;
             } else {
                 xMax = gnosConfig.xAxisMax;
             }
-            if (!gnosConfig.xAxisScale || gnosConfig.xAxisScale === 'time' &&
+            if (!gnosConfig.xAxisScale && !gnosConfig.xAxisMin|| gnosConfig.xAxisScale === 'time' &&
                 gnosConfig.xAxisMin && !Ext.isNumeric(gnosConfig.xAxisMin)) {
                 if (gnosConfig.duration) {
                     xMin = moment(xMax).subtract(moment.duration(gnosConfig.duration)).unix() * 1000;
@@ -431,18 +334,9 @@ Ext.define('Koala.util.ChartData', {
             } else {
                 xMin = gnosConfig.xAxisMin;
             }
-            if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
-                gnosConfig.yAxisMin && !Ext.isNumeric(gnosConfig.yAxisMin)) {
-                yMin = moment(gnosConfig.yAxisMin).unix() * 1000;
-            } else {
-                yMin = gnosConfig.yAxisMin;
-            }
-            if (!gnosConfig.yAxisScale || gnosConfig.yAxisScale === 'time' &&
-                gnosConfig.yAxisMax && !Ext.isNumeric(gnosConfig.yAxisMax)) {
-                yMax = moment(gnosConfig.yAxisMax).unix() * 1000;
-            } else {
-                yMax = gnosConfig.yAxisMax;
-            }
+            yMin = gnosConfig.yAxisMin;
+            yMax = gnosConfig.yAxisMax;
+
             return [xMin, xMax, yMin, yMax];
         },
 
@@ -457,7 +351,7 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} data the chart data
          * @param  {Array} labels the group labels
          */
-        createBarConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels, stations) {
+        createBarConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels, stations, chartOverrides) {
             var minMax = this.extractMinMax(gnosConfig);
             var margin = gnosConfig.chartMargin.split(',');
             margin = Ext.Array.map(margin, function(w) {
@@ -472,15 +366,16 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.titleColor = layerConfig.title.labelColor || '#000';
             componentConfig.titlePadding = (layerConfig.title.labelPadding || 18) - margin[0];
             componentConfig.titleSize = layerConfig.title.labelSize || 20;
+            componentConfig.maxTitleLength = gnosConfig.maxTitleLength || 100;
             componentConfig.rotateBarLabel = gnosConfig.rotateBarLabel;
             componentConfig.yOffset = margin[0];
             config.legendComponentConfig.position = [chartSize[0] - margin[1], 0];
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
-                groupx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true, stations[0]),
-                groupedx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], false, stations[0]),
-                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true, stations[0])
+                groupx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], true, stations[0], chartOverrides && chartOverrides.groupx),
+                groupedx: this.createAxisConfig(gnosConfig, 'x', minMax[0], minMax[1], false, stations[0], chartOverrides && chartOverrides.groupedx),
+                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true, stations[0], chartOverrides && chartOverrides.y)
             };
             componentConfig.axes.groupx.scale = 'band';
             componentConfig.axes.groupedx.scale = 'band';
@@ -584,9 +479,10 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} config the chart configuration
          * @param  {Number[]} chartSize the chart size
          * @param  {Object} data the chart data
+         * @param  {Object} chartOverrides info about gnos overrides like log axis scales
          * chart controller
          */
-        createTimeseriesConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations) {
+        createTimeseriesConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations, chartOverrides) {
             var minMax = this.extractMinMax(gnosConfig);
             var margin = gnosConfig.chartMargin.split(',');
             margin = Ext.Array.map(margin, function(w) {
@@ -600,6 +496,7 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.titleColor = layerConfig.title.labelColor || '#000';
             componentConfig.titlePadding = layerConfig.title.labelPadding || 18;
             componentConfig.titleSize = layerConfig.title.labelSize || 20;
+            componentConfig.maxTitleLength = gnosConfig.maxTitleLength || 100;
             componentConfig.extraClasses = 'k-d3-shape-group';
             var seriesAndLegends = Koala.util.ChartData.generateTimeSeriesAndLegends(data, layerConfig, stations);
             // append series
@@ -610,12 +507,12 @@ Ext.define('Koala.util.ChartData', {
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
-                x: this.createAxisConfig(gnosConfig, 'x', layerConfig.startDate.unix() * 1000, layerConfig.endDate.unix() * 1000, true, stations[0]),
-                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true, stations[0])
+                x: this.createAxisConfig(gnosConfig, 'x', layerConfig.startDate.unix() * 1000, layerConfig.endDate.unix() * 1000, true, stations[0], chartOverrides && chartOverrides.x || undefined),
+                y: this.createAxisConfig(gnosConfig, 'y', minMax[2], minMax[3], true, stations[0], chartOverrides && chartOverrides.y || undefined)
             };
             // handle attachedSeries axes
             if (gnosConfig.attachedSeries) {
-                this.parseAttachedSeries(gnosConfig, componentConfig, stations);
+                this.parseAttachedSeries(gnosConfig, componentConfig, stations, chartOverrides);
             }
             if (gnosConfig.thresholds) {
                 var min = componentConfig.series[0].data.reduce(function(acc, val) {
@@ -663,8 +560,9 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} gnosConfig the metadata
          * @param  {Object} componentConfig the d3-util config to manipulate
          * @param  {ol.Feature[]} stations the selected stations
+         * @param  {Object} chartOverrides gnos overrides like custom axis scales
          */
-        parseAttachedSeries: function(gnosConfig, componentConfig, stations) {
+        parseAttachedSeries: function(gnosConfig, componentConfig, stations, chartOverrides) {
             var me = this;
             var series = gnosConfig.attachedSeries;
             if (Ext.isString(series)) {
@@ -692,7 +590,8 @@ Ext.define('Koala.util.ChartData', {
                 } else {
                     additionalYMax = gnosConfig.yAxisMax;
                 }
-                componentConfig.axes['y' + index] = me.createAxisConfig(gnosConfig, 'y', additionalYMin, additionalYMax, false, stations[0]);
+                var overrides = chartOverrides ? chartOverrides['y' + index] : undefined;
+                componentConfig.axes['y' + index] = me.createAxisConfig(gnosConfig, 'y', additionalYMin, additionalYMax, false, stations[0], overrides);
             });
         },
 
@@ -704,10 +603,20 @@ Ext.define('Koala.util.ChartData', {
          * @param  {String|NUmber} max the max value
          * @param  {Boolean} withGrid whether to consider the grid config
          * @param  {ol.Feature} station the station feature for context
+         * @param  {Object} chartOverrides gnos overrides like custom axis scales
          * @return {Object} the axis configuration for d3-util
          */
-        createAxisConfig: function(gnosConfig, orient, min, max, withGrid, station) {
+        createAxisConfig: function(gnosConfig, orient, min, max, withGrid, station, chartOverrides) {
             var label = Koala.util.String.replaceTemplateStrings(gnosConfig[orient + 'AxisLabel'] || '', station);
+            var scale = gnosConfig[orient + 'AxisScale'] || (orient === 'x' ? 'time' : 'linear');
+            if (chartOverrides && chartOverrides.scale) {
+                scale = chartOverrides.scale;
+            }
+            if (chartOverrides) {
+                min = chartOverrides.min || min;
+                max = chartOverrides.max || max;
+            }
+
             var config = {
                 orientation: orient,
                 display: true,
@@ -719,9 +628,11 @@ Ext.define('Koala.util.ChartData', {
                 format: gnosConfig[orient + 'AxisFormat'] || ',.0f',
                 label: label,
                 labelRotation: gnosConfig['rotate' + orient.toUpperCase() + 'AxisLabel'] === true ? -55 : 0,
-                scale: gnosConfig[orient + 'AxisScale'] || (orient === 'x' ? 'time' : 'linear'),
+                scale: scale,
                 min: min,
                 max: max,
+                harmonize: scale === 'log',
+                autoTicks: scale === 'log',
                 sanitizeLabels: true,
                 factor: orient === 'y' ? 0.8 : undefined,
                 locale: Ext.ComponentQuery.query('k-form-field-languagecombo')[0].getValue()

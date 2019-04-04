@@ -528,7 +528,11 @@
                 "toggleScaleText": "linear/logarithmisch",
                 "showIdentificationThresholdText": "Daten < NWG anzeigen",
                 "toggleLegendText": "Legende umschalten",
-                "axisText": "Achse"
+                "axisText": "Achse",
+                "changeMinMaxText": "Min/Max ändern",
+                "minMaxWindowTitle": "y-Achse ändern",
+                "okText": "Ok",
+                "cancelText": "Abbrechen"
             }
         }
     },
