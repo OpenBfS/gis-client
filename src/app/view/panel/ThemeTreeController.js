@@ -139,8 +139,8 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             return;
         }
         Ext.Ajax.request({
-                url: videosUrl
-            })
+            url: videosUrl
+        })
             .then(function(xhr) {
                 var list = JSON.parse(xhr.responseText);
                 var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
@@ -172,7 +172,6 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
     },
 
     addVideoLayer: function(combo, rec) {
-        var me = this;
         var videoId = Ext.id();
         var videoLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
@@ -189,23 +188,18 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         var bbox = rec.data.bbox;
         var video = document.createElement('video');
         video.id = videoId;
-        var timeFrames = rec.data.timeFrames;
         video.crossOrigin = 'Anonymous';
         for (var i = 0; i < urls.length; i++) {
             var source = document.createElement('source');
             source.src = urls[i];
             video.appendChild(source);
         }
-        //if (typeof video.loop === 'boolean') {
         video.loop = false;
-        //} else {
         video.addEventListener('ended', function() {
-            console.log('video ended! ...restart');
             this.currentTime = 0;
             this.play();
         }, false);
-        //}
-        document.body.appendChild(video);
+        videoLayer.set('video', video);
 
         var width = bbox[2] - bbox[0];
         var height = bbox[3] - bbox[1];
@@ -229,83 +223,6 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         videoLayer.set('playbackRate', 1);
         videoLayer.set('rafId',null);
         map.addLayer(videoLayer);
-        // video.play()
-        //     .then(function() {
-                // var frameRate = 1;
-                // if (rec.data.fps) {
-                //     frameRate = rec.data.fps * videoLayer.playbackRate;
-                // }
-                // if (timeFrames.length === 0) {
-                //     for (var k = 0; k <= video.duration * frameRate; ++k) {
-                //         timeFrames.push(1 / frameRate);
-                //     }
-                // }
-                //
-                // var intervalId = window.setInterval(function() {
-                //     var paused = videoLayer.get('videoPaused');
-                //     var stopped = videoLayer.get('videoStopped');
-                //     console.log('videoPaused: ' + paused + ' / videoStopped: ' + stopped);
-                //     if (paused || stopped) {
-                //         return;
-                //     }
-                    // video.play();
-                    // map.render();
-                    // var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(rec.data.timestamp)).unix();
-                    // if (videoLayer.get('videoPosition')) {
-                    //     video.currentTime = videoLayer.get('videoPosition') - time;
-                    //     videoLayer.set('videoPosition', null);
-                    // }
-                    // var curTime = video.currentTime;
-                    // var idx = Math.round(curTime * frameRate);
-                    // var offsets = timeFrames.slice(0, idx);
-                    // curTime = offsets.reduce(function(a, b) {
-                    //     return a + b;
-                    // }, 0);
-                    // var duration = timeFrames.reduce(function(a, b) {
-                    //     return a + b;
-                    // }, 0);
-                    // // HERE BE DRAGONS:
-                    // // We call the garbage collector to clean out the old items
-                    // // in the legend tree in order to avoid getting the broken
-                    // // ones. This will just clear out the DOM nodes of the broken
-                    // // elements, they're manually destroyed below.
-                    // // It is unknown if that causes any side effects and
-                    // // the legend tree / its row expander plugin should be fixed /
-                    // // refactored instead.
-                    // Ext.dom.GarbageCollector.collect();
-                    // var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
-                    // var slider;
-                    // sliders.forEach(function(item) {
-                    //     if (item.el.dom && item.isVisible()) {
-                    //         if (videoLayer.get('slider') === item) {
-                    //             slider = item;
-                    //         }
-                    //     } else {
-                    //         try {
-                    //             item.destroy();
-                    //         } catch (e) {
-                    //             // the extra sliders may sometimes be in a weird state
-                    //             // and destruction will throw errors (doDestroy on the
-                    //             // tip plugin will still be called, properly cancelling the
-                    //             // setInterval)
-                    //         }
-                    //     }
-                    // });
-                    // if (slider) {
-                    //     slider.setMinValue(time);
-                    //     slider.setMaxValue(duration + time);
-                    //     slider.suspendEvents();
-                    //     if (slider.getValue() !== (curTime + time)) {
-                    //         slider.reset();
-                    //         slider.setValue(curTime + time);
-                    //     }
-                    //     slider.resumeEvents();
-                    // }
-                // }, 1000 / frameRate);
-        //         videoLayer.set('intervalId', intervalId);
-        //         var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
-        //         win.close();
-        //     });
         var win = Ext.ComponentQuery.query('window[name=video-window]')[0];
         win.close();
     },

@@ -201,7 +201,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var videoSlider = comp.down('slider[name="videoSlider"]');
             var stopBtn = comp.down('button[name=video-stop]');
             var playBtn = comp.down('button[name=video-play]');
-            var pauseBtn = comp.down('button[name=video-pause]');
             var speedMenu = comp.down('button[name=video-speed]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
 
@@ -264,15 +263,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         },
 
         startVideoPlay: function(btn) {
-            var me = this;
             var videoLayer = btn.layerRec.getOlLayer();
-            var rec = videoLayer.get('rec');
-            var videoId = videoLayer.get('id');
-            var rafId = videoLayer.get('rafId');
-            var video = document.getElementById(videoId);
-            var VideoName = 'videoLayer.Source.src';
-            // var timeFrames = rec.data.timeFrames;
-            var frameRate = videoLayer.get('frameRate');
+            var video = videoLayer.get('video');
 
             videoLayer.set('videoPlaying', true);
             videoLayer.set('videoPaused', false);
@@ -283,27 +275,24 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         },
 
         pauseVideoPlay: function(btn) {
-            var me = this;
             var videoLayer = btn.layerRec.getOlLayer();
             videoLayer.set('videoPlaying', false);
             videoLayer.set('videoPaused', true);
-            var videoId = videoLayer.get('id');
-            var video = document.getElementById(videoId);
+            var video = videoLayer.get('video');
             video.pause();
 
             Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].videoAnimation(videoLayer);
         },
 
         //fetch here for ButtonClick handling
-        videoSpeedHandler: function(btn) {
+        videoSpeedHandler: function() {
             // console.log('video-speed button clicked');
         },
 
         stopVideoPlay: function(btn) {
             var videoLayer = btn.layerRec.getOlLayer();
             var sliderMin = videoLayer.get('slider').minValue;
-            var videoId = videoLayer.get('id');
-            var video = document.getElementById(videoId);
+            var video = videoLayer.get('video');
             videoLayer.set('videoPlaying', false);
             videoLayer.set('videoStopped', true);
             //videoLayer.set('videoPosition', sliderMin);
@@ -586,176 +575,173 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         name: 'legend-tree-row-component',
         scrollable: true,
         items: [{
+            xtype: 'container',
+            layout: 'vbox',
+            name: 'k-slider-container',
+            listeners: {
+                // We'll assign a handler to reorganize the menu once the
+                // class is defined.
+            },
+            items: [{
                 xtype: 'container',
-                layout: 'vbox',
-                name: 'k-slider-container',
-                listeners: {
-                    // We'll assign a handler to reorganize the menu once the
-                    // class is defined.
+                layout: 'hbox',
+                defaults: {
+                    margin: '0 5px 0 0'
                 },
                 items: [{
-                    xtype: 'container',
-                    layout: 'hbox',
-                    defaults: {
-                        margin: '0 5px 0 0'
-                    },
-                    items: [{
-                        xtype: 'button',
-                        name: 'shortInfo',
-                        glyph: 'xf05a@FontAwesome',
-                        tooltip: 'Layerinformationen anzeigen'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'filter',
-                        glyph: 'xf0b0@FontAwesome',
-                        tooltip: 'Layerfilter ändern'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'download',
-                        glyph: 'xf0c7@FontAwesome',
-                        tooltip: 'Daten speichern'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'removal',
-                        glyph: 'xf00d@FontAwesome',
-                        tooltip: 'Layer entfernen'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'clone',
-                        glyph: 'xf0c5@FontAwesome',
-                        tooltip: 'Objekte klonen',
-                        listeners: {
-                            boxready: Koala.util.AppContext.generateCheckToolVisibility('cloneBtn')
-                        }
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'edit',
-                        glyph: 'xf040@FontAwesome',
-                        tooltip: 'Layerobjekte editieren'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'style',
-                        glyph: 'xf1fc@FontAwesome',
-                        tooltip: 'Layerstil anpassen'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'share',
-                        glyph: 'xf064@FontAwesome',
-                        tooltip: 'Freigeben'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'video-play',
-                        glyph: 'xf04b@FontAwesome',
-                        tooltip: 'Abspielen'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'video-speed',
-                        text: '1x',
-                        arrowVisible: false,
-                        //glyph: 'xf050@FontAwesome',
+                    xtype: 'button',
+                    name: 'shortInfo',
+                    glyph: 'xf05a@FontAwesome',
+                    tooltip: 'Layerinformationen anzeigen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'filter',
+                    glyph: 'xf0b0@FontAwesome',
+                    tooltip: 'Layerfilter ändern'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'download',
+                    glyph: 'xf0c7@FontAwesome',
+                    tooltip: 'Daten speichern'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'removal',
+                    glyph: 'xf00d@FontAwesome',
+                    tooltip: 'Layer entfernen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'clone',
+                    glyph: 'xf0c5@FontAwesome',
+                    tooltip: 'Objekte klonen',
+                    listeners: {
+                        boxready: Koala.util.AppContext.generateCheckToolVisibility('cloneBtn')
+                    }
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'edit',
+                    glyph: 'xf040@FontAwesome',
+                    tooltip: 'Layerobjekte editieren'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'style',
+                    glyph: 'xf1fc@FontAwesome',
+                    tooltip: 'Layerstil anpassen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'share',
+                    glyph: 'xf064@FontAwesome',
+                    tooltip: 'Freigeben'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'video-play',
+                    glyph: 'xf04b@FontAwesome',
+                    tooltip: 'Abspielen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'video-speed',
+                    text: '1x',
+                    arrowVisible: false,
+                    //glyph: 'xf050@FontAwesome',
 
-                        tooltip: 'Speed',
-                        menu: {
-                            xtype: 'menu',
-                            items: [{
-                                text: '0.5x',
-                                value: 0.5
-                            }, {
-                                text: '1x',
-                                value: 1
-                            }, {
-                                text: '2x',
-                                value: 2
-                            }, {
-                                text: '4x',
-                                value: 4
-                            }, {
-                                text: '8x',
-                                value: 8
-                            }],
-                            listeners: {
-                                click: function(menu, item, e, eOpts) {
-                                    console.log('Text = ' + item.text + ' / Wert = ' + item.value);
-                                    var videoLayer = this.up().layerRec.getOlLayer();
-                                    var videoId = videoLayer.get('id');
-                                    var video = document.getElementById(videoId);
-                                    videoLayer.set('playbackRate', item.value);
-                                    video.playbackRate = item.value;
-                                    this.up().setText(item.text);
-                                }
+                    tooltip: 'Speed',
+                    menu: {
+                        xtype: 'menu',
+                        items: [{
+                            text: '0.5x',
+                            value: 0.5
+                        }, {
+                            text: '1x',
+                            value: 1
+                        }, {
+                            text: '2x',
+                            value: 2
+                        }, {
+                            text: '4x',
+                            value: 4
+                        }, {
+                            text: '8x',
+                            value: 8
+                        }],
+                        listeners: {
+                            click: function(menu, item) {
+                                var videoLayer = this.up().layerRec.getOlLayer();
+                                var video = videoLayer.get('video');
+                                videoLayer.set('playbackRate', item.value);
+                                video.playbackRate = item.value;
+                                this.up().setText(item.text);
                             }
                         }
-                    }, {
-                        xtype: 'button',
-                        name: 'video-pause',
-                        glyph: 'xf04c@FontAwesome',
-                        tooltip: 'Pause'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }, {
-                        xtype: 'button',
-                        name: 'video-stop',
-                        glyph: 'xf04d@FontAwesome',
-                        tooltip: 'Stoppen'
-                        // We'll assign a handler to handle clicks here once the
-                        // class is defined and we can access the static methods
-                    }]
-                }, {
-                    xtype: 'slider',
-                    name: 'opacityChange',
-                    width: 80,
-                    value: 100,
-                    tipText: function(thumb) {
-                        return String(thumb.value) + '% Sichtbarkeit';
-                    },
-                    listeners: {
-                        // We'll assign a handler to initialize and handle drags
-                        // here once the class is defined and we can access the
-                        // static methods
                     }
                 }, {
-                    xtype: 'slider',
-                    name: 'videoSlider',
-                    width: '100%',
-                    animate: false,
-                    fieldLabel: null,
-                    labelAlign: 'top',
-                    listeners: {
-                        // We'll assign a handler to initialize and handle drags
-                        // here once the class is defined and we can access the
-                        // static methods
-                    }
+                    xtype: 'button',
+                    name: 'video-pause',
+                    glyph: 'xf04c@FontAwesome',
+                    tooltip: 'Pause'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'video-stop',
+                    glyph: 'xf04d@FontAwesome',
+                    tooltip: 'Stoppen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
                 }]
             }, {
-                xtype: 'image',
-                name: '{{record.getOlLayer().get("routeId") + "-legendImg"}}',
-                margin: '5px 0 0 0',
-                src: '{{' +
-                    'Koala.util.Layer.getCurrentLegendUrl(record.getOlLayer())' +
-                    '}}',
-                width: '{{record.getOlLayer().get("legendWidth")}}',
-                height: '{{record.getOlLayer().get("legendHeight")}}',
-                alt: '{{"Legende " + record.getOlLayer().get("name")}}'
-            }
-        ]
+                xtype: 'slider',
+                name: 'opacityChange',
+                width: 80,
+                value: 100,
+                tipText: function(thumb) {
+                    return String(thumb.value) + '% Sichtbarkeit';
+                },
+                listeners: {
+                    // We'll assign a handler to initialize and handle drags
+                    // here once the class is defined and we can access the
+                    // static methods
+                }
+            }, {
+                xtype: 'slider',
+                name: 'videoSlider',
+                width: '100%',
+                animate: false,
+                fieldLabel: null,
+                labelAlign: 'top',
+                listeners: {
+                    // We'll assign a handler to initialize and handle drags
+                    // here once the class is defined and we can access the
+                    // static methods
+                }
+            }]
+        }, {
+            xtype: 'image',
+            name: '{{record.getOlLayer().get("routeId") + "-legendImg"}}',
+            margin: '5px 0 0 0',
+            src: '{{' +
+                'Koala.util.Layer.getCurrentLegendUrl(record.getOlLayer())' +
+                '}}',
+            width: '{{record.getOlLayer().get("legendWidth")}}',
+            height: '{{record.getOlLayer().get("legendHeight")}}',
+            alt: '{{"Legende " + record.getOlLayer().get("name")}}'
+        }]
     },
 
     itemExpandedKey: 'koala-rowbody-expanded',
@@ -1360,90 +1346,75 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         var me = this;
         var paused = videoLayer.get('videoPaused');
         var stopped = videoLayer.get('videoStopped');
-        var map = BasiGX.view.component.Map.guess().map;
         var rec = videoLayer.get('rec');
         var timeFrames = rec.data.timeFrames;
         var rafId = videoLayer.get('rafId');
-        var videoId = videoLayer.get('id');
         var frameRate = videoLayer.get('frameRate');
-        var video = document.getElementById(videoId);
+        var video = videoLayer.get('video');
         var slider = videoLayer.get('slider');
-        console.log('videoPaused: ' + paused + ' / videoStopped: ' + stopped);
 
-//always handle time update before stopping!
-            //map.render(); //what's the reason for redering now?
-            var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(rec.data.timestamp)).unix();
-//toDo get duration
-//needed time is "time+duration"
-            var curTime = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(video.currentTime));
-            console.log('video.currentTime = ' + curTime);
-            var curFrame = Math.floor(video.currentTime * frameRate);
-            console.log('current Frame = ' + curFrame);
+        var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(rec.data.timestamp)).unix();
+        var curTime = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(video.currentTime));
 
-            if (rec.data.fps) {
-                frameRate = rec.data.fps * videoLayer.playbackRate;
+        if (rec.data.fps) {
+            frameRate = rec.data.fps * videoLayer.get('playbackRate');
+        }
+        if (timeFrames.length === 0) {
+            for (var k = 0; k <= video.duration * frameRate; ++k) {
+                timeFrames.push(1 / frameRate);
             }
-            if (timeFrames.length === 0) {
-                for (var k = 0; k <= video.duration * frameRate; ++k) {
-                    timeFrames.push(1 / frameRate);
+        }
+
+        if (videoLayer.get('videoPosition')) {
+            video.currentTime = videoLayer.get('videoPosition') - time;
+            videoLayer.set('videoPosition', null);
+        }
+        var idx = Math.round(video.currentTime * rec.data.fps);
+        var offsets = timeFrames.slice(0, idx);
+        curTime = offsets.reduce(function(a, b) {
+            return a + b;
+        }, 0);
+        var duration = timeFrames.reduce(function(a, b) {
+            return a + b;
+        }, 0);
+        // HERE BE DRAGONS:
+        // We call the garbage collector to clean out the old items
+        // in the legend tree in order to avoid getting the broken
+        // ones. This will just clear out the DOM nodes of the broken
+        // elements, they're manually destroyed below.
+        // It is unknown if that causes any side effects and
+        // the legend tree / its row expander plugin should be fixed /
+        // refactored instead.
+        Ext.dom.GarbageCollector.collect();
+        var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
+        sliders.forEach(function(item) {
+            if (item.el.dom && item.isVisible()) {
+                if (videoLayer.get('slider') === item) {
+                    slider = item;
+                }
+            } else {
+                try {
+                    item.destroy();
+                } catch (e) {
+                    // the extra sliders may sometimes be in a weird state
+                    // and destruction will throw errors (doDestroy on the
+                    // tip plugin will still be called, properly cancelling the
+                    // setInterval)
                 }
             }
-
-            // video.play();
-            // map.render();
-            var time = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(rec.data.timestamp)).unix();
-            if (videoLayer.get('videoPosition')) {
-                video.currentTime = videoLayer.get('videoPosition') - time;
-                videoLayer.set('videoPosition', null);
+        });
+        if (slider) {
+            slider.setMinValue(time);
+            slider.setMaxValue(duration + time);
+            slider.suspendEvents();
+            if (slider.getValue() !== (curTime + time)) {
+                slider.reset();
+                slider.setValue(curTime + time);
             }
-            var curTime = video.currentTime;
-            var idx = Math.round(curTime * frameRate);
-            var offsets = timeFrames.slice(0, idx);
-            curTime = offsets.reduce(function(a, b) {
-                return a + b;
-            }, 0);
-            var duration = timeFrames.reduce(function(a, b) {
-                return a + b;
-            }, 0);
-            // HERE BE DRAGONS:
-            // We call the garbage collector to clean out the old items
-            // in the legend tree in order to avoid getting the broken
-            // ones. This will just clear out the DOM nodes of the broken
-            // elements, they're manually destroyed below.
-            // It is unknown if that causes any side effects and
-            // the legend tree / its row expander plugin should be fixed /
-            // refactored instead.
-            Ext.dom.GarbageCollector.collect();
-            var sliders = Ext.ComponentQuery.query('[name=videoSlider]');
-            var slider;
-            sliders.forEach(function(item) {
-                if (item.el.dom && item.isVisible()) {
-                    if (videoLayer.get('slider') === item) {
-                        slider = item;
-                    }
-                } else {
-                    try {
-                        item.destroy();
-                    } catch (e) {
-                        // the extra sliders may sometimes be in a weird state
-                        // and destruction will throw errors (doDestroy on the
-                        // tip plugin will still be called, properly cancelling the
-                        // setInterval)
-                    }
-                }
-            });
-            if (slider) {
-                slider.setMinValue(time);
-                slider.setMaxValue(duration + time);
-                slider.suspendEvents();
-                if (slider.getValue() !== (curTime + time)) {
-                    slider.reset();
-                    slider.setValue(curTime + time);
-                }
-                slider.resumeEvents();
-            }
+            slider.resumeEvents();
+        }
 
-            if (!paused && !stopped) {
+        if (!paused && !stopped) {
             rafId = requestAnimationFrame(function() {
                 me.videoAnimation(videoLayer);
             });

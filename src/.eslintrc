@@ -37,7 +37,9 @@
         "GeoStylerQGISParser": false,
         "GeoStylerMapboxParser": false,
         "React": false,
-        "ReactDOM": false
+        "ReactDOM": false,
+        "requestAnimationFrame": false,
+        "cancelAnimationFrame": false
     },
     "rules": {
         "comma-dangle": 2,
