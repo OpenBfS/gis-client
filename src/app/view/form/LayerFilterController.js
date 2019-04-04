@@ -71,6 +71,12 @@ Ext.define('Koala.view.form.LayerFilterController', {
         Koala.util.Autorefresh.deselectThemeTreeItems();
         LayerUtil.repaintLayerFilterIndication();
         view.up('window').close();
+        var charts = Ext.ComponentQuery.query('d3-chart,d3-barchart');
+        Ext.each(charts, function(chart) {
+            if (chart.getController && chart.getController()) {
+                chart.getController().getChartData();
+            }
+        });
     },
 
     /**

@@ -14,23 +14,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- *
- * @class Koala.view.menu.ChartSettingsMenuModel
+ * @class Koala.view.form.ChartDataFormModel
  */
-Ext.define('Koala.view.menu.ChartSettingsMenuModel', {
+Ext.define('Koala.view.form.ChartDataFormModel', {
     extend: 'Ext.app.ViewModel',
-
-    alias: 'viewmodel.k-menu-chartsettings',
-
+    alias: 'viewmodel.k-form-chartdata',
     data: {
-        toggleScaleText: '',
-        showIdentificationThresholdText: '',
-        toggleLegendText: '',
-        axisText: '',
-        changeMinMaxText: '',
-        minMaxWindowTitle: '',
-        okText: '',
-        cancelText: ''
+        titleText: '',
+        yAxisAttribute: '',
+        yAxisScale: '',
+        groupAttribute: '',
+        detectionLimitAttribute: '',
+        uncertaintyAttribute: '',
+        okButtonText: '',
+        cancelButtonText: ''
     }
 
 });

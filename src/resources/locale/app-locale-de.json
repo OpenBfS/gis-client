@@ -346,7 +346,8 @@
                 "projectionLabel": "Projektion",
                 "fileFieldLabel": "Datei",
                 "fileFieldButtonText": "Durchsuchen",
-                "templateStyleLabel": "Stil aus Template"
+                "templateStyleLabel": "Stil aus Template",
+                "settingsText": "Einstellungen"
             }
         }
     },
@@ -527,7 +528,11 @@
                 "toggleScaleText": "linear/logarithmisch",
                 "showIdentificationThresholdText": "Daten < NWG anzeigen",
                 "toggleLegendText": "Legende umschalten",
-                "axisText": "Achse"
+                "axisText": "Achse",
+                "changeMinMaxText": "Min/Max ändern",
+                "minMaxWindowTitle": "y-Achse ändern",
+                "okText": "Ok",
+                "cancelText": "Abbrechen"
             }
         }
     },
@@ -1547,6 +1552,20 @@
                 "setFilterButtonText": "Anwenden",
                 "toggleUncertaintyLabel": "Messungenauigkeit umschalten",
                 "toggleGroupingLabel": "Gruppierung tauschen"
+            }
+        }
+    },
+    "Koala.view.form.ChartDataForm": {
+        "config": {
+            "data": {
+                "titleText": "Barchart Einstellungen",
+                "yAxisAttribute": "Attribut Y-Achse",
+                "yAxisScale": "Skalierung Y-Achse",
+                "groupAttribute": "Attribut Gruppierung",
+                "detectionLimitAttribute": "Attribut Nachweisgrenze",
+                "uncertaintyAttribute": "Attribut Unsicherheit",
+                "okButtonText": "Ok",
+                "cancelButtonText": "Abbrechen"
             }
         }
     },

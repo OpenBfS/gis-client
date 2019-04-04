@@ -214,6 +214,26 @@ Ext.define('Koala.util.Chart', {
                 });
             }
             return yAxisTickValues;
+        },
+
+        /**
+         * Determine the current chart title for a layer.
+         * @param {ol.Layer} layer the chart layer
+         */
+        getChartTitle: function(layer) {
+            /* use relevant filter text to label chart */
+            var filters = Ext.clone(Koala.util.Layer.getFiltersFromMetadata(layer.metadata));
+            var excludedTypes = ['pointintime', 'timerange'];
+            var excludedParams = ['styles','order'];
+            if (filters !== null) {
+                var filtersForTimeseriesLabel = filters.filter(function(filter) {
+                    return !Ext.Array.contains(excludedTypes, (filter.type || '').toLowerCase()) &&
+                        !Ext.Array.contains(excludedParams, (filter.param || '').toLowerCase());
+                });
+            }
+            var cqlFilterTextHTML = Koala.util.Layer.getFiltersTextFromMetadata(filtersForTimeseriesLabel);
+            //transform HTML to text, since it will be added as SVG-'text'
+            return cqlFilterTextHTML.replace(/<br \/>/g, ', ');
         }
 
     }

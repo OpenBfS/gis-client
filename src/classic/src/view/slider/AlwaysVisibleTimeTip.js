@@ -41,7 +41,7 @@ Ext.define('Koala.view.slider.AlwaysVisibleTimeTip', {
                         return;
                     }
                     me.onSlide(slider, null, slider.thumbs[0]);
-                }, 500);
+                }, 100);
             }
         });
     },

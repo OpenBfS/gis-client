@@ -345,7 +345,8 @@
                 "projectionLabel": "Projection",
                 "fileFieldLabel": "File",
                 "fileFieldButtonText": "Browse",
-                "templateStyleLabel": "Style from template"
+                "templateStyleLabel": "Style from template",
+                "settingsText": "Settings"
             }
         }
     },
@@ -526,7 +527,11 @@
                 "toggleScaleText": "linear/logarithmic",
                 "showIdentificationThresholdText": "Show data below < Id. Thresh.",
                 "toggleLegendText": "Toggle legend",
-                "axisText": "Axis"
+                "axisText": "Axis",
+                "changeMinMaxText": "Change min/max",
+                "minMaxWindowTitle": "Change y axis",
+                "okText": "Ok",
+                "cancelText": "Cancel"
             }
         }
     },
@@ -1531,6 +1536,20 @@
                 "setFilterButtonText": "Apply",
                 "toggleUncertaintyLabel": "Toggle uncertainty",
                 "toggleGroupingLabel": "Toggle grouping"
+            }
+        }
+    },
+    "Koala.view.form.ChartDataForm": {
+        "config": {
+            "data": {
+                "titleText": "Bar chart settings",
+                "yAxisAttribute": "Y axis attribute",
+                "yAxisScale": "Y axis scale",
+                "groupAttribute": "Grouping attribute",
+                "detectionLimitAttribute": "Detection limit attribute",
+                "uncertaintyAttribute": "Uncertainty attribute",
+                "okButtonText": "Ok",
+                "cancelButtonText": "Cancel"
             }
         }
     },

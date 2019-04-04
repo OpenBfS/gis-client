@@ -102,7 +102,8 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     .then(function(style) {
                         view.onStyleChange(style);
                     });
-            }
+            },
+            hideFakepath: true
         }).show();
     },
 

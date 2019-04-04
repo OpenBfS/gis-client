@@ -52,6 +52,12 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
         },
         handler: 'toggleLegend',
         glyph: 'xf151@FontAwesome'
+    }, {
+        bind: {
+            text: '{changeMinMaxText}'
+        },
+        handler: 'changeMinMax',
+        glyph: 'xf065@FontAwesome'
     }],
 
     config: {

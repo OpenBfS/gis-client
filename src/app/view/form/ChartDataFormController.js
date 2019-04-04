@@ -14,23 +14,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- *
- * @class Koala.view.menu.ChartSettingsMenuModel
+ * @class Koala.view.form.ChartDataFormController
  */
-Ext.define('Koala.view.menu.ChartSettingsMenuModel', {
-    extend: 'Ext.app.ViewModel',
+Ext.define('Koala.view.form.ChartDataFormController', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.k-form-chartdata',
 
-    alias: 'viewmodel.k-menu-chartsettings',
+    requires: [
+    ],
 
-    data: {
-        toggleScaleText: '',
-        showIdentificationThresholdText: '',
-        toggleLegendText: '',
-        axisText: '',
-        changeMinMaxText: '',
-        minMaxWindowTitle: '',
-        okText: '',
-        cancelText: ''
+    onOk: function() {
+        var view = this.getView();
+        var bar = view.metadata.layerConfig.barChartProperties;
+        Ext.each(view.fields, function(field) {
+            bar[field] = view.down('[name=' + field + ']').getValue();
+        });
+        view.done(view.metadata);
+    },
+
+    onCancel: function() {
+        this.getView().cancel();
     }
 
 });
