@@ -25,7 +25,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         'Koala.util.Object',
         'Koala.util.String',
 
-        'Koala.view.form.field.VectorTemplateCombo'
+        'Koala.view.form.field.VectorTemplateCombo',
+        'Koala.view.form.ChartDataForm'
     ],
 
     /**
@@ -172,40 +173,62 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         this.readFile();
     },
 
+    createLayerWithMetadata: function(metadata) {
+        var layerUtil = Koala.util.Layer;
+        var viewModel = this.getViewModel();
+        var layerName = viewModel.get('layerName');
+        var features = viewModel.get('features');
+        // Make some specific settings for local data:
+        var cfg = this.getInternalLayerConfig(metadata);
+
+        cfg.name = layerName;
+        cfg.metadata = metadata;
+        cfg.routeId = 'localData_' + layerName;
+
+        // Create a source for the features from the uploaded / dragged file
+        cfg.source = new ol.source.Vector({
+            features: features
+        });
+
+        var layer = new ol.layer.Vector(cfg);
+        layer.metadata = metadata;
+
+        layerUtil.getVectorLayerStyle(layer, true, viewModel.get('selectedTemplateStyle'));
+        layerUtil.setOriginalMetadata(layer, metadata);
+
+        // Finally add the layer to the map.
+        layerUtil.addOlLayerToMap(layer);
+    },
+
     /**
      *
      */
     createLayer: function() {
-        var viewModel = this.getViewModel();
         var layerUtil = Koala.util.Layer;
         var templateCombo = this.getView().down('k-form-field-vectortemplatecombo');
         var uuid = templateCombo.getViewModel().get('templateUuid');
-        var layerName = viewModel.get('layerName');
-        var features = viewModel.get('features');
         var me = this;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
 
         var gotMetadataCallback = function(metadata) {
-
-            // Make some specific settings for local data:
-            var cfg = me.getInternalLayerConfig(metadata);
-
-            cfg.name = layerName;
-            cfg.metadata = metadata;
-            cfg.routeId = 'localData_' + layerName;
-
-            // Create a source for the features from the uploaded / dragged file
-            cfg.source = new ol.source.Vector({
-                features: features
-            });
-
-            var layer = new ol.layer.Vector(cfg);
-            layer.metadata = metadata;
-
-            layerUtil.getVectorLayerStyle(layer, true, viewModel.get('selectedTemplateStyle'));
-
-            // Finally add the layer to the map.
-            layerUtil.addOlLayerToMap(layer);
+            if (metadata.layerConfig.barChartProperties) {
+                Ext.create('Ext.window.Window', {
+                    title: me.getViewModel().get('settingsText'),
+                    items: [{
+                        xtype: 'k-form-chartdata',
+                        metadata: metadata,
+                        done: function(md) {
+                            me.createLayerWithMetadata(md);
+                            this.up('window').hide();
+                        },
+                        cancel: function() {
+                            this.up('window').hide();
+                        }
+                    }]
+                }).show();
+            } else {
+                me.createLayerWithMetadata(metadata);
+            }
         };
 
         layerUtil.getMetadataFromUuid(uuid)
