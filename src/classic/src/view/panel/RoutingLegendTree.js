@@ -200,6 +200,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var opacitySlider = comp.down('slider[name="opacityChange"]');
             var videoSlider = comp.down('slider[name="videoSlider"]');
             var stopBtn = comp.down('button[name=video-stop]');
+            var pauseBtn = comp.down('button[name=video-pause]');
             var playBtn = comp.down('button[name=video-play]');
             var speedMenu = comp.down('button[name=video-speed]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
@@ -223,6 +224,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             }
             videoSlider.setVisible(olLayer.get('isVideoLayer'));
             stopBtn.setVisible(olLayer.get('isVideoLayer'));
+            pauseBtn.setVisible(olLayer.get('isVideoLayer'));
             playBtn.setVisible(olLayer.get('isVideoLayer'));
             speedMenu.setVisible(olLayer.get('isVideoLayer'));
 
