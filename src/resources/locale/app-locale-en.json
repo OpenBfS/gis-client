@@ -527,6 +527,7 @@
                 "toggleScaleText": "linear/logarithmic",
                 "showIdentificationThresholdText": "Show data below < Id. Thresh.",
                 "toggleLegendText": "Toggle legend",
+                "toggleUncertaintyText": "Toggle uncertainty",
                 "axisText": "Axis",
                 "changeMinMaxText": "Change min/max",
                 "minMaxWindowTitle": "Change y axis",

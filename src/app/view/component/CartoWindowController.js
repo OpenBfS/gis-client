@@ -704,7 +704,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.createIrixPrintButton(tabElm, this.barChart);
         this.createExportToPngButton(tabElm, this.barChart);
         this.createDownloadChartDataButton(tabElm, this.barChart);
-        this.createUncertaintyButton(tabElm, this.barChart);
         this.createChartSettingsMenuButton(tabElm);
     },
 
@@ -719,6 +718,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             isTimeseries: !!this.timeserieschart,
             maySeeIdThresholdButton: maySeeIdThresholdButton
         });
+        this.chartSettingsMenu.getViewModel().set('isTimeseries', !!this.timeserieschart);
+        this.chartSettingsMenu.getViewModel().set('maySeeIdThresholdButton', maySeeIdThresholdButton);
         var btn = {
             cls: 'carto-window-chart-button',
             xtype: 'button',
@@ -731,25 +732,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
         btn = Ext.create(btn);
         btn.render(elm, this.timeserieschart ? 5 : 3);
-    },
-
-    createUncertaintyButton: function(tabElm, chart) {
-        var button = {
-            cls: 'carto-window-chart-button',
-            xtype: 'button',
-            name: 'toggleUncertainty',
-            enableToggle: true,
-            bind: {
-                text: this.view.getViewModel().get('toggleUncertainty')
-            }
-        };
-        button = Ext.create(button);
-        button.render(tabElm, 3);
-        button.el.dom.addEventListener('click', function() {
-            var chartCtrl = chart.getController();
-            chartCtrl.toggleUncertainty();
-        });
-        return button;
     },
 
     /**
