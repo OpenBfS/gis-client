@@ -124,10 +124,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                                 suffix: '.json'
                             }
                         ]
-                    },
-                    // listeners: {
-                    //     'select': me.onDownloadStyleFormatSelected
-                    // }
+                    }
                 }]
             }],
             bbar: [{
@@ -160,7 +157,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var suffix = styleFormatCombo.getSelectedRecord().get('suffix');
         console.log('DownloadStyleFormatSelected');
 
-        if (styleFormat == 'sld'){
+        if (styleFormat == 'sld') {
             var sldParser = new GeoStylerSLDParser.SldStyleParser();
             sldParser.writeStyle(style)
                 .then(function(sld) {
@@ -174,7 +171,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     var arr = new TextEncoder().encode(sld);
                     download(arr, name, 'application/xml');
                 });
-        } else if (styleFormat == 'QGIS-Style'){
+        } else if (styleFormat == 'QGIS-Style') {
             var QGISParser = new GeoStylerQGISParser.QGISStyleParser();
             QGISParser.writeStyle(style)
                 .then(function(QGISStyle) {
@@ -188,8 +185,10 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     var arr = new TextEncoder().encode(QGISStyle);
                     download(arr, name, 'application/xml');
                 });
-        } else if (styleFormat == 'MapBox-Style'){
-            var MapboxParser = new GeoStylerMapboxParser.MapboxStyleParser({ignoreConversionErrors: true});
+        } else if (styleFormat == 'MapBox-Style') {
+            var MapboxParser = new GeoStylerMapboxParser.MapboxStyleParser({
+                ignoreConversionErrors: true
+            });
             MapboxParser.writeStyle(style)
                 .then(function(MapboxStyle) {
                     var name = style.name;
