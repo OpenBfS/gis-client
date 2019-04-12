@@ -73,30 +73,147 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
      * Exports (downloads) the current style as SLD.
      */
     exportStyle: function() {
+        var me = this;
         var viewModel = this.getViewModel();
         var style = viewModel.get('style');
-        var sldParser = new GeoStylerSLDParser.SldStyleParser();
-        sldParser.writeStyle(style)
-            .then(function(sld) {
-                var name = style.name;
-                if (!name) {
-                    name = 'style.xml';
+        var fileName = style.name.replace(/,/g, '').replace(/ /g, '_');
+        var win = Ext.create('Ext.window.Window', {
+            title: viewModel.get('downloadStyleMsgTitle'),
+            name: 'downloadstylewin',
+            width: 300,
+            layout: 'fit',
+            bodyPadding: 10,
+            items: [{
+                xtype: 'container',
+                items: [{
+                    xtype: 'textfield',
+                    name: 'filenameField',
+                    width: '100%',
+                    fieldLabel: viewModel.get('downloadFilenameText'),
+                    labelWidth: 120,
+                    value: fileName,
+                    allowBlank: false,
+                    minLength: 3,
+                    validator: function(val) {
+                        errMsg = viewModel.get('filenameNotValidText');
+                        return ((val.length > 3) && (val.search(/ /) === -1)) ? true : errMsg;
+                    }
+                }, {
+                    xtype: 'combo',
+                    id: 'styleFormatCombo',
+                    width: '100%',
+                    fieldLabel: viewModel.get('outputFormatText'),
+                    valueField: 'style',
+                    displayField: 'style',
+                    value: 'sld',
+                    forceSelection: true,
+                    store: {
+                        data: [{
+                                mimetype: 'application/xml',
+                                style: 'sld',
+                                suffix: '.xml'
+                            },
+                            {
+                                mimetype: 'application/xml',
+                                style: 'QGIS-Style',
+                                suffix: '.qml'
+                            },
+                            {
+                                mimetype: 'application/json',
+                                style: 'MapBox-Style',
+                                suffix: '.json'
+                            }
+                        ]
+                    },
+                    // listeners: {
+                    //     'select': me.onDownloadStyleFormatSelected
+                    // }
+                }]
+            }],
+            bbar: [{
+                text: viewModel.get('downloadStyleMsgButtonYes'),
+                name: 'confirm-style-download',
+                handler: me.downloadStyle.bind(me, style)
+            }, {
+                text: viewModel.get('downloadStyleMsgButtonNo'),
+                name: 'abort-style-download',
+                handler: function() {
+                    this.up('window').close();
                 }
-                if (!name.endsWith('.xml')) {
-                    name += '.xml';
-                }
-                var arr = new TextEncoder().encode(sld);
-                download(arr, name, 'application/xml');
-            });
+            }]
+        });
+        win.show();
+
+    },
+
+    /** Actually do the downloads
+     */
+    downloadStyle: function(style) {
+        var win = Ext.ComponentQuery.query('[name=downloadstylewin]');
+        var viewModel = this.getViewModel();
+        //var style = viewModel.get('style');
+        var styleFormatCombo = Ext.ComponentQuery.query('combo[id="styleFormatCombo"]')[0];
+        debugger;
+        var filename = Ext.ComponentQuery.query('textfield[name=filenameField]');
+        var mimetype = styleFormatCombo.getSelectedRecord().get('mimetype');
+        var styleFormat = styleFormatCombo.getSelectedRecord().get('style');
+        var suffix = styleFormatCombo.getSelectedRecord().get('suffix');
+        console.log('DownloadStyleFormatSelected');
+
+        if (styleFormat == 'sld'){
+            var sldParser = new GeoStylerSLDParser.SldStyleParser();
+            sldParser.writeStyle(style)
+                .then(function(sld) {
+                    var name = style.name;
+                    if (!name) {
+                        name = 'style.xml';
+                    }
+                    if (!name.endsWith('.xml')) {
+                        name += '.xml';
+                    }
+                    var arr = new TextEncoder().encode(sld);
+                    download(arr, name, 'application/xml');
+                });
+        } else if (styleFormat == 'QGIS-Style'){
+            var QGISParser = new GeoStylerQGISParser.QGISStyleParser();
+            QGISParser.writeStyle(style)
+                .then(function(QGISStyle) {
+                    var name = style.name;
+                    if (!name) {
+                        name = 'style.qml';
+                    }
+                    if (!name.endsWith('.qml')) {
+                        name += '.qml';
+                    }
+                    var arr = new TextEncoder().encode(QGISStyle);
+                    download(arr, name, 'application/xml');
+                });
+        } else if (styleFormat == 'MapBox-Style'){
+            var MapboxParser = new GeoStylerMapboxParser.MapboxStyleParser({ignoreConversionErrors: true});
+            MapboxParser.writeStyle(style)
+                .then(function(MapboxStyle) {
+                    var name = style.name;
+                    if (!name) {
+                        name = 'style.json';
+                    }
+                    if (!name.endsWith('.json')) {
+                        name += '.json';
+                    }
+                    var arr = new TextEncoder().encode(MapboxStyle);
+                    download(arr, name, 'application/json');
+                });
+        }
+
     },
 
     /**
-     * Imports an SLD file and updates the styler with its content.
+     * Imports an style file and updates the styler with its content.
      */
     importStyle: function() {
         var view = this.getView();
         Ext.create('BasiGX.view.window.FileUploadWindow', {
             importHandler: function(result) {
+                //toDo: check Format of loaded style
                 var sldParser = new GeoStylerSLDParser.SldStyleParser();
                 sldParser.readStyle(result)
                     .then(function(style) {
@@ -169,9 +286,9 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var geoserverBaseUrl = Koala.util.Object.getPathStrOr(appContext, 'data/merge/urls/geoserver-base-url');
         var url = geoserverBaseUrl + '/rest/styles/' + sldName + '.sld';
         Ext.Ajax.request({
-            url: url,
-            method: 'GET'
-        })
+                url: url,
+                method: 'GET'
+            })
             .then(function(response) {
                 var sld = response.responseText;
                 var sldParser = new GeoStylerSLDParser.SldStyleParser();

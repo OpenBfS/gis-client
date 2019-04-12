@@ -223,7 +223,13 @@
                 "chooseFromVectorTemplate": "Style aus Liste",
                 "templateStyleLabel": "Style",
                 "okButtonLabel": "Ok",
-                "cancelButtonLabel": "Abbrechen"
+                "cancelButtonLabel": "Abbrechen",
+                "downloadStyleMsgTitle": "Style herunterladen",
+                "downloadFilenameText": "Dateiname",
+                "filenameNotValidText": "ungültiger Dateiname",
+                "outputFormatText": "Format",
+                "downloadStyleMsgButtonYes": "OK",
+                "downloadStyleMsgButtonNo": "Abbrechen"
             }
         }
     },

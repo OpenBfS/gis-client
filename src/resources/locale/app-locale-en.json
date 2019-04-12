@@ -222,8 +222,13 @@
                 "chooseFromVectorTemplate": "Style from list",
                 "templateStyleLabel": "Style",
                 "okButtonLabel": "Ok",
-                "cancelButtonLabel": "Cancel"
-            }
+                "cancelButtonLabel": "Cancel",
+                "downloadStyleMsgTitle": "Download Style",
+                "downloadFilenameText": "Filename",
+                "filenameNotValidText": "Invalid Filename",
+                "outputFormatText": "Format",
+                "downloadStyleMsgButtonYes": "OK",
+                "downloadStyleMsgButtonNo": "Cancel"            }
         }
     },
     "Koala.view.container.DrawToolsContainer": {

@@ -37,7 +37,13 @@ Ext.define('Koala.view.container.styler.GeoStylerModel', {
         btnTextApplyAndSave: 'Save style',
         dspLayerName: '',
         saveStyle: '',
-        styleNotConvertedMsg: ''
+        styleNotConvertedMsg: '',
+        downloadStyleMsgTitle: '',
+        downloadFilenameText: '',
+        filenameNotValidText: '',
+        outputFormatText: '',
+        downloadStyleMsgButtonYes: '',
+        downloadStyleMsgButtonNo: ''
     }
 
 });
