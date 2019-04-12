@@ -150,7 +150,6 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var viewModel = this.getViewModel();
         //var style = viewModel.get('style');
         var styleFormatCombo = Ext.ComponentQuery.query('combo[id="styleFormatCombo"]')[0];
-        debugger;
         var filename = Ext.ComponentQuery.query('textfield[name=filenameField]');
         var mimetype = styleFormatCombo.getSelectedRecord().get('mimetype');
         var styleFormat = styleFormatCombo.getSelectedRecord().get('style');
