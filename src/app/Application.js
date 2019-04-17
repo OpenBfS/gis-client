@@ -36,7 +36,7 @@ Ext.define('Koala.Application', {
 
         timereferenceNotFound: '',
         applicationUpdateTitle: 'Anwendungsupdate',
-        applicationUpdateText: 'Für diese Anwendung steht ein Update zur Verfügung. Jetzt neu laden?',
+        applicationUpdateText: 'Für diese Anwendung steht ein Update zur Verfügung!',
         reloadMessage: '',
 
         /**
