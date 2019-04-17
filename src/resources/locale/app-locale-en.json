@@ -484,6 +484,7 @@
                 "fullscreen": "Toggle Fullscreen",
                 "imprint": "Imprint",
                 "privacy": "Privacy",
+                "about": "Login",
                 "help": "Help",
                 "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html",
                 "createvectorlayer": "Create vector layer",
@@ -785,6 +786,16 @@
                 "toggleScaleBtnText": "linear/logarithmic",
                 "endLabel": "End",
                 "axisText": "Axis"
+            }
+        }
+    },
+    "Koala.view.window.AboutWindow": {
+        "config": {
+            "data": {
+                "aboutWinTitle": "Login Information",
+                "loginText": "You are logged with identification code:",
+                "rolesText": "In IMIS-GIS you are member of the following groups:",
+                "softwareVersionText": "Software Version"
             }
         }
     },

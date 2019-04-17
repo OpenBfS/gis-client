@@ -73,6 +73,7 @@ Ext.define('Koala.view.list.TreeMenu', {
         viewModel.set('showPrintBtn', ctx.tools.indexOf('printBtn') !== -1);
         viewModel.set('showWmsImportBtn', ctx.tools.indexOf('addWmsBtn') !== -1);
         viewModel.set('showVectorImportBtn', ctx.tools.indexOf('importVectorLayerBtn') !== -1);
+        viewModel.set('showAboutBtn', ctx.tools.indexOf('aboutBtn') !== -1);
     }
 
 });
