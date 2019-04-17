@@ -18,6 +18,6 @@
  */
 Ext.define('Koala.view.window.AboutController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.k-window-about',
+    alias: 'controller.k-window-about'
 
 });

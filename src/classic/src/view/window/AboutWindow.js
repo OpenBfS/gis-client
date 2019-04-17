@@ -23,7 +23,7 @@ Ext.define('Koala.view.window.AboutWindow', {
     requires: [
         'Koala.view.window.AboutController',
         'Koala.view.window.AboutModel',
-        'Koala.util.AppContext',
+        'Koala.util.AppContext'
     ],
 
     controller: 'k-window-about',
