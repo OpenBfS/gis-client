@@ -102,16 +102,21 @@ Ext.define('Koala.util.ChartData', {
                 }
             });
 
-            if (!timeFilter) {
-                Ext.log.warn('Failed to determine a time filter');
+            if (timeFilter) {
+                intervalInSeconds = this.getIntervalInSeconds(
+                    timeFilter.interval, timeFilter.unit
+                );
+            } else { //some layers may not have timefilter but the ability to show timeseries
+                var interval = targetLayer.metadata.layerConfig.timeSeriesChartProperties.interval;
+                var unit = targetLayer.metadata.layerConfig.timeSeriesChartProperties.unit;
+                if (!interval || !unit) {
+                    Ext.log.warn('insufficient metadata for interval calulation');
+                } else {
+                    intervalInSeconds = this.getIntervalInSeconds(
+                        interval, unit
+                    );
+                }
             }
-
-            // don't accidently overwrite the configured filter…
-            timeFilter = Ext.clone(timeFilter);
-
-            intervalInSeconds = this.getIntervalInSeconds(
-                timeFilter.interval, timeFilter.unit
-            );
 
             return intervalInSeconds;
         },
@@ -324,7 +329,7 @@ Ext.define('Koala.util.ChartData', {
             } else {
                 xMax = gnosConfig.xAxisMax;
             }
-            if (!gnosConfig.xAxisScale && !gnosConfig.xAxisMin|| gnosConfig.xAxisScale === 'time' &&
+            if (!gnosConfig.xAxisScale && !gnosConfig.xAxisMin || gnosConfig.xAxisScale === 'time' &&
                 gnosConfig.xAxisMin && !Ext.isNumeric(gnosConfig.xAxisMin)) {
                 if (gnosConfig.duration) {
                     xMin = moment(xMax).subtract(moment.duration(gnosConfig.duration)).unix() * 1000;
@@ -529,7 +534,10 @@ Ext.define('Koala.util.ChartData', {
                 }, Number.MIN_VALUE);
                 Ext.each(gnosConfig.thresholds, function(threshold) {
                     componentConfig.series.push({
-                        data: [[min, threshold.value], [max, threshold.value]],
+                        data: [
+                            [min, threshold.value],
+                            [max, threshold.value]
+                        ],
                         axes: ['x', 'y'],
                         color: threshold.stroke,
                         style: {
