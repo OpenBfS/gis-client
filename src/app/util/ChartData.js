@@ -186,6 +186,13 @@ Ext.define('Koala.util.ChartData', {
                 matchingFeature = snapObject[compareableDate];
 
                 if (matchingFeature) {
+                    //add all available properties in order
+                    //to use them for timeseriesTooltip
+                    // ToDo: check if this has any side effects for "download", "timeseriesChart" ...
+                    Object.keys(matchingFeature.properties).forEach(function(key) {
+                        newRawData[key] = matchingFeature.properties[key];
+                    });
+
                     newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
 
                     if (matchingFeature.properties.value_constraint === '<' &&
@@ -193,7 +200,9 @@ Ext.define('Koala.util.ChartData', {
                         newRawData.drawAsZero = true;
                         newRawData.minValue = chartConfig.yAxisMin || 0;
                     }
-                    newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+                    //replaced by adding all properties
+                    //newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+
                     Ext.each(attachedSeries, valueExtractor(newRawData, matchingFeature));
 
                     if (featureStyle) {
@@ -207,6 +216,7 @@ Ext.define('Koala.util.ChartData', {
                 }
                 startDate.add(intervalInSeconds, 'seconds');
             }
+
             return seriesData;
         },
 
@@ -257,7 +267,7 @@ Ext.define('Koala.util.ChartData', {
             // create a default config object
             var config = {
                 chartRendererConfig: {
-                    size: chartSize || [200,200],
+                    size: chartSize || [200, 200],
                     zoomType: 'none',
                     chartMargin: []
                 },
