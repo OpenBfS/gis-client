@@ -169,8 +169,32 @@ Ext.define('Koala.view.panel.FeatureGrid', {
             height: 50,
             region: 'north',
             items: [{
+                xtype: 'button',
+                id: 'add-column-button',
+                glyph: 'xf067@FontAwesome',
+                bind: {
+                    tooltip: '{addColumnTooltip}'
+                },
+                handler: function(btn) {
+                    var features = me.layer.getSource().getFeatures();
+                    var featureGrid = me.down('basigx-grid-featuregrid');
+                    var store = featureGrid.down('grid').getStore();
+                    var colCnt = featureGrid.down('grid').getColumns().length
+                    var columnName = me.getViewModel().get('columnPrefix') + colCnt;
+                    Ext.each(features, function(feature) {
+                        feature.set(columnName, '');
+                    });
+                    featureGrid.reconfigureStore(store);
+                }
+            }, {
+                xtype: 'button',
+                glyph: 'xf160@FontAwesome',
+                handler: 'multiEdit',
+                bind: {
+                    tooltip: '{multiEditTooltip}'
+                }
+            }, {
                 xtype: 'basigx-button-mergeselection',
-                padding: 5,
                 bind: {
                     disabled: '{noFeaturesSelected}',
                     sourceLayer: '{selectedFeaturesLayer}',
@@ -186,13 +210,6 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                     }
                     var grid = me.down('basigx-grid-featuregrid');
                     grid.reconfigureStore(grid.down('grid').getStore());
-                }
-            }, {
-                xtype: 'button',
-                glyph: 'xf160@FontAwesome',
-                handler: 'multiEdit',
-                bind: {
-                    tooltip: '{multiEditTooltip}'
                 }
             }, {
                 xtype: 'basigx-button-digitize-point',
