@@ -117,7 +117,10 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             if (koalaStyle) {
                 resolve(koalaStyle);
             } else if (layer.get('SLD')) {
-                var sldParser = new GeoStylerSLDParser.SldStyleParser();
+                var sldParser = new GeoStylerSLDParser.SldStyleParser({
+                    forceCasting: true
+                });
+                // sldParser.forceCasting = true;
                 sldParser.readStyle(layer.get('SLD'))
                     .then(function(geostylerStyle) {
                         resolve(geostylerStyle);
@@ -202,7 +205,10 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
         var root = domElement.querySelector('.codeeditor-root');
         var codeEditor = React.createElement(GeoStyler.CodeEditor, {
             style: style,
-            parsers: [GeoStylerSLDParser.SldStyleParser, GeoStylerQGISParser.QGISStyleParser, new GeoStylerMapboxParser.MapboxStyleParser({ignoreConversionErrors: true})],
+            parsers: [
+                new GeoStylerSLDParser.SldStyleParser(),
+                new GeoStylerQGISParser.QGISStyleParser(),
+                new GeoStylerMapboxParser.MapboxStyleParser({ignoreConversionErrors: true})],
             onStyleChange: this.onStyleChange.bind(this),
             showSaveButton: false
         });
