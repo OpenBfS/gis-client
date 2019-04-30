@@ -175,11 +175,11 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                 bind: {
                     tooltip: '{addColumnTooltip}'
                 },
-                handler: function(btn) {
+                handler: function() {
                     var features = me.layer.getSource().getFeatures();
                     var featureGrid = me.down('basigx-grid-featuregrid');
                     var store = featureGrid.down('grid').getStore();
-                    var colCnt = featureGrid.down('grid').getColumns().length
+                    var colCnt = featureGrid.down('grid').getColumns().length;
                     var columnName = me.getViewModel().get('columnPrefix') + colCnt;
                     Ext.each(features, function(feature) {
                         feature.set(columnName, '');

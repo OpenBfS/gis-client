@@ -95,7 +95,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     allowBlank: false,
                     minLength: 3,
                     validator: function(val) {
-                        errMsg = viewModel.get('filenameNotValidText');
+                        var errMsg = viewModel.get('filenameNotValidText');
                         return ((val.length > 3) && (val.search(/ /) === -1)) ? true : errMsg;
                     }
                 }, {
@@ -109,20 +109,20 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     forceSelection: true,
                     store: {
                         data: [{
-                                mimetype: 'application/xml',
-                                style: 'sld',
-                                suffix: '.xml'
-                            },
-                            {
-                                mimetype: 'application/xml',
-                                style: 'QGIS-Style',
-                                suffix: '.qml'
-                            },
-                            {
-                                mimetype: 'application/json',
-                                style: 'MapBox-Style',
-                                suffix: '.json'
-                            }
+                            mimetype: 'application/xml',
+                            style: 'sld',
+                            suffix: '.xml'
+                        },
+                        {
+                            mimetype: 'application/xml',
+                            style: 'QGIS-Style',
+                            suffix: '.qml'
+                        },
+                        {
+                            mimetype: 'application/json',
+                            style: 'MapBox-Style',
+                            suffix: '.json'
+                        }
                         ]
                     }
                 }]
@@ -146,17 +146,10 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
     /** Actually do the downloads
      */
     downloadStyle: function(style) {
-        var win = Ext.ComponentQuery.query('[name=downloadstylewin]');
-        var viewModel = this.getViewModel();
-        //var style = viewModel.get('style');
         var styleFormatCombo = Ext.ComponentQuery.query('combo[id="styleFormatCombo"]')[0];
-        var filename = Ext.ComponentQuery.query('textfield[name=filenameField]');
-        var mimetype = styleFormatCombo.getSelectedRecord().get('mimetype');
         var styleFormat = styleFormatCombo.getSelectedRecord().get('style');
-        var suffix = styleFormatCombo.getSelectedRecord().get('suffix');
-        console.log('DownloadStyleFormatSelected');
 
-        if (styleFormat == 'sld') {
+        if (styleFormat === 'sld') {
             var sldParser = new GeoStylerSLDParser.SldStyleParser();
             sldParser.writeStyle(style)
                 .then(function(sld) {
@@ -170,7 +163,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     var arr = new TextEncoder().encode(sld);
                     download(arr, name, 'application/xml');
                 });
-        } else if (styleFormat == 'QGIS-Style') {
+        } else if (styleFormat === 'QGIS-Style') {
             var QGISParser = new GeoStylerQGISParser.QGISStyleParser();
             QGISParser.writeStyle(style)
                 .then(function(QGISStyle) {
@@ -184,7 +177,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     var arr = new TextEncoder().encode(QGISStyle);
                     download(arr, name, 'application/xml');
                 });
-        } else if (styleFormat == 'MapBox-Style') {
+        } else if (styleFormat === 'MapBox-Style') {
             var MapboxParser = new GeoStylerMapboxParser.MapboxStyleParser({
                 ignoreConversionErrors: true
             });
@@ -284,9 +277,9 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var geoserverBaseUrl = Koala.util.Object.getPathStrOr(appContext, 'data/merge/urls/geoserver-base-url');
         var url = geoserverBaseUrl + '/rest/styles/' + sldName + '.sld';
         Ext.Ajax.request({
-                url: url,
-                method: 'GET'
-            })
+            url: url,
+            method: 'GET'
+        })
             .then(function(response) {
                 var sld = response.responseText;
                 var sldParser = new GeoStylerSLDParser.SldStyleParser();
