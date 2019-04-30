@@ -46,19 +46,14 @@ Ext.define('Koala.view.window.AboutWindow', {
 
     initComponent: function() {
         var me = this;
-        var currentViewSize = Ext.getBody().getViewSize();
-        //var username = Koala.util.AppContext.getAppContext().data.merge.imis_user.username || '';
         var softwareversion = (Ext.manifest) ? Ext.manifest.version : '???';
         me.items = [{
             xtype: 'panel',
             border: false,
             layout: 'fit',
-            //width: '100%',
-            //height: '100%',
             bodyPadding: 20,
             bind: {
                 html: '<p><b>' +
-                    //username +
                     '</b><br />' +
                     '{loginText}' +
                     '<br /><b>' +
@@ -77,11 +72,7 @@ Ext.define('Koala.view.window.AboutWindow', {
             }
         }];
 
-
         me.callParent();
-
-        // me.setHeight(currentViewSize.height - 400);
-        // me.setWidth(currentViewSize.width - 400);
     },
 
     /**

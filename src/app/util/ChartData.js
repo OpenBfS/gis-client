@@ -142,8 +142,6 @@ Ext.define('Koala.util.ChartData', {
             showIdentificationThresholdData
         ) {
             var xAxisAttr = chartConfig.xAxisAttribute;
-            var yAxisAttr = chartConfig.yAxisAttribute;
-            var valueField = chartConfig.yAxisAttribute;
             var attachedSeries = chartConfig.attachedSeries ?
                 JSON.parse(chartConfig.attachedSeries) : [];
             var featureStyle;
@@ -186,9 +184,10 @@ Ext.define('Koala.util.ChartData', {
                 matchingFeature = snapObject[compareableDate];
 
                 if (matchingFeature) {
-                    //add all available properties in order
-                    //to use them for timeseriesTooltip
+                    // add all available properties in order
+                    // to use them for timeseriesTooltip
                     // ToDo: check if this has any side effects for "download", "timeseriesChart" ...
+                    // eslint-disable-next-line no-loop-func
                     Object.keys(matchingFeature.properties).forEach(function(key) {
                         newRawData[key] = matchingFeature.properties[key];
                     });

@@ -155,7 +155,7 @@ Ext.define('Koala.Application', {
         Ext.Msg.alert(Koala.Application.applicationUpdateTitle,
             Koala.Application.applicationUpdateText,
             function() {
-                    window.location.reload();
+                window.location.reload();
             }
         );
     },
