@@ -102,16 +102,21 @@ Ext.define('Koala.util.ChartData', {
                 }
             });
 
-            if (!timeFilter) {
-                Ext.log.warn('Failed to determine a time filter');
+            if (timeFilter) {
+                intervalInSeconds = this.getIntervalInSeconds(
+                    timeFilter.interval, timeFilter.unit
+                );
+            } else { //some layers may not have timefilter but the ability to show timeseries
+                var interval = targetLayer.metadata.layerConfig.timeSeriesChartProperties.interval;
+                var unit = targetLayer.metadata.layerConfig.timeSeriesChartProperties.unit;
+                if (!interval || !unit) {
+                    Ext.log.warn('insufficient metadata for interval calulation');
+                } else {
+                    intervalInSeconds = this.getIntervalInSeconds(
+                        interval, unit
+                    );
+                }
             }
-
-            // don't accidently overwrite the configured filter…
-            timeFilter = Ext.clone(timeFilter);
-
-            intervalInSeconds = this.getIntervalInSeconds(
-                timeFilter.interval, timeFilter.unit
-            );
 
             return intervalInSeconds;
         },
@@ -181,6 +186,13 @@ Ext.define('Koala.util.ChartData', {
                 matchingFeature = snapObject[compareableDate];
 
                 if (matchingFeature) {
+                    //add all available properties in order
+                    //to use them for timeseriesTooltip
+                    // ToDo: check if this has any side effects for "download", "timeseriesChart" ...
+                    Object.keys(matchingFeature.properties).forEach(function(key) {
+                        newRawData[key] = matchingFeature.properties[key];
+                    });
+
                     newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(matchingFeature.properties[xAxisAttr]);
 
                     if (matchingFeature.properties.value_constraint === '<' &&
@@ -188,7 +200,9 @@ Ext.define('Koala.util.ChartData', {
                         newRawData.drawAsZero = true;
                         newRawData.minValue = chartConfig.yAxisMin || 0;
                     }
-                    newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+                    //replaced by adding all properties
+                    //newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+
                     Ext.each(attachedSeries, valueExtractor(newRawData, matchingFeature));
 
                     if (featureStyle) {
@@ -202,6 +216,7 @@ Ext.define('Koala.util.ChartData', {
                 }
                 startDate.add(intervalInSeconds, 'seconds');
             }
+
             return seriesData;
         },
 
@@ -252,7 +267,7 @@ Ext.define('Koala.util.ChartData', {
             // create a default config object
             var config = {
                 chartRendererConfig: {
-                    size: chartSize || [200,200],
+                    size: chartSize || [200, 200],
                     zoomType: 'none',
                     chartMargin: []
                 },
@@ -324,7 +339,7 @@ Ext.define('Koala.util.ChartData', {
             } else {
                 xMax = gnosConfig.xAxisMax;
             }
-            if (!gnosConfig.xAxisScale && !gnosConfig.xAxisMin|| gnosConfig.xAxisScale === 'time' &&
+            if (!gnosConfig.xAxisScale && !gnosConfig.xAxisMin || gnosConfig.xAxisScale === 'time' &&
                 gnosConfig.xAxisMin && !Ext.isNumeric(gnosConfig.xAxisMin)) {
                 if (gnosConfig.duration) {
                     xMin = moment(xMax).subtract(moment.duration(gnosConfig.duration)).unix() * 1000;
@@ -529,7 +544,10 @@ Ext.define('Koala.util.ChartData', {
                 }, Number.MIN_VALUE);
                 Ext.each(gnosConfig.thresholds, function(threshold) {
                     componentConfig.series.push({
-                        data: [[min, threshold.value], [max, threshold.value]],
+                        data: [
+                            [min, threshold.value],
+                            [max, threshold.value]
+                        ],
                         axes: ['x', 'y'],
                         color: threshold.stroke,
                         style: {

@@ -47,6 +47,8 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         fullscreen: '',
         imprint: '',
         privacy: '',
+        about: '',
+        showAboutBtn: 'false',
         help: '',
         privacyUrl: '',
         settingsExpanded: false,
@@ -180,6 +182,11 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     leaf: true,
                     key: 'privacy',
                     iconCls: 'x-fa fa-shield'
+                }, {
+                    text: '{about}',
+                    leaf: true,
+                    key: 'about',
+                    iconCls: 'x-fa fa-info'
                 }, {
                     text: '{help}',
                     leaf: true,

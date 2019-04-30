@@ -222,8 +222,13 @@
                 "chooseFromVectorTemplate": "Style from list",
                 "templateStyleLabel": "Style",
                 "okButtonLabel": "Ok",
-                "cancelButtonLabel": "Cancel"
-            }
+                "cancelButtonLabel": "Cancel",
+                "downloadStyleMsgTitle": "Download Style",
+                "downloadFilenameText": "Filename",
+                "filenameNotValidText": "Invalid Filename",
+                "outputFormatText": "Format",
+                "downloadStyleMsgButtonYes": "OK",
+                "downloadStyleMsgButtonNo": "Cancel"            }
         }
     },
     "Koala.view.container.DrawToolsContainer": {
@@ -479,6 +484,7 @@
                 "fullscreen": "Toggle Fullscreen",
                 "imprint": "Imprint",
                 "privacy": "Privacy",
+                "about": "Login",
                 "help": "Help",
                 "privacyUrl": "http://www.bfs.de/EN/service/privacy-policy/privacypolicy_node.html",
                 "createvectorlayer": "Create vector layer",
@@ -552,7 +558,9 @@
                 "multiEditTooltip": "Update all selected rows",
                 "deleteTitle": "Delete",
                 "deleteMessage": "Do you want to delete the {0} selected objects?",
-                "toggleSortSelectedText": "Selected to top"
+                "toggleSortSelectedText": "Selected to top",
+                "addColumnTooltip": "Add column",
+                "columnPrefix": "column_"
             }
         }
     },
@@ -780,6 +788,16 @@
                 "toggleScaleBtnText": "linear/logarithmic",
                 "endLabel": "End",
                 "axisText": "Axis"
+            }
+        }
+    },
+    "Koala.view.window.AboutWindow": {
+        "config": {
+            "data": {
+                "aboutWinTitle": "Login Information",
+                "loginText": "You are logged with identification code:",
+                "rolesText": "In IMIS-GIS you are member of the following groups:",
+                "softwareVersionText": "Software Version"
             }
         }
     },

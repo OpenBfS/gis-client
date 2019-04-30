@@ -28,7 +28,8 @@ Ext.define('Koala.view.list.TreeMenuController', {
         'Koala.view.window.Print',
         'Koala.view.window.PermalinkWindow',
         'Koala.view.window.ImprintWindow',
-        'Koala.view.window.HelpWindow'
+        'Koala.view.window.HelpWindow',
+        'Koala.view.window.AboutWindow'
     ],
 
     alias: 'controller.k-list-treemenu',
@@ -168,6 +169,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     break;
                 case 'privacy':
                     window.open(viewModel.get('privacyUrl'), '_blank').focus();
+                    break;
+                case 'about':
+                    this.showWindow('k-window-about', 'Koala.view.window.AboutWindow');
                     break;
                 case 'help':
                     this.showWindow('k-window-help', 'Koala.view.window.HelpWindow');

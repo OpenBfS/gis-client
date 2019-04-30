@@ -1,4 +1,4 @@
-/* Copyright (c) 2018-present terrestris GmbH & Co. KG
+/* Copyright (c) 2017 Bundesamt fuer Strahlenschutz
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.FeatureGrid
+ * @class Koala.view.window.ImprintModel
  */
-Ext.define('Koala.view.panel.FeatureGridModel', {
+Ext.define('Koala.view.window.AboutModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-panel-featuregrid',
+    alias: 'viewmodel.k-window-about',
 
     data: {
-        saveLayerText: '',
-        wfstSuccess: '',
-        wfstFailure: '',
-        wfstLockFail: '',
-        wfstLockSuccess: '',
-        wfstLockExpired: '',
-        wfstLockButton: '',
-        layerNotSavedYet: '',
-        deleteTitle: '',
-        deleteMessage: '',
-        toggleSortSelectedText: '',
-        addColumnTooltip: '',
-        columnPrefix: '',
-        pinned: true
+        aboutWinTitle: '',
+        loginText: '',
+        rolesText: '',
+        softwareVersionText: ''
     }
 });
