@@ -226,6 +226,7 @@
                 "cancelButtonLabel": "Abbrechen",
                 "downloadStyleMsgTitle": "Style herunterladen",
                 "downloadFilenameText": "Dateiname",
+                "uploadStyleMsgTitle": "Style importieren",
                 "filenameNotValidText": "ungültiger Dateiname",
                 "outputFormatText": "Format",
                 "downloadStyleMsgButtonYes": "OK",

@@ -201,15 +201,100 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
      * Imports an style file and updates the styler with its content.
      */
     importStyle: function() {
+        var me = this;
+        var viewModel = this.getViewModel();
+        var win = Ext.create('Ext.window.Window', {
+            title: viewModel.get('uploadStyleMsgTitle'),
+            name: 'importstylewin',
+            id: 'importStyleFormatWindow',
+            width: 300,
+            layout: 'fit',
+            bodyPadding: 10,
+            items: [{
+                xtype: 'container',
+                items: [{
+                    xtype: 'combo',
+                    id: 'importStyleFormatCombo',
+                    width: '100%',
+                    fieldLabel: viewModel.get('outputFormatText'),
+                    valueField: 'style',
+                    displayField: 'style',
+                    value: 'sld',
+                    forceSelection: true,
+                    store: {
+                        data: [{
+                            mimetype: 'application/xml',
+                            style: 'sld',
+                            suffix: '.xml'
+                        },
+                        {
+                            mimetype: 'application/xml',
+                            style: 'QGIS-Style',
+                            suffix: '.qml'
+                        },
+                        {
+                            mimetype: 'application/json',
+                            style: 'MapBox-Style',
+                            suffix: '.json'
+                        }
+                        ]
+                    }
+                }]
+            }],
+            bbar: [{
+                text: viewModel.get('downloadStyleMsgButtonYes'),
+                name: 'confirm-style-download',
+                handler: me.readStyle.bind(me)
+            }, {
+                text: viewModel.get('downloadStyleMsgButtonNo'),
+                name: 'abort-style-download',
+                handler: function() {
+                    this.up('window').close();
+                }
+            }]
+        });
+        win.show();
+    },
+
+    /**
+     * Actually read the imported style
+     */
+    readStyle: function() {
+        var styleFormatCombo = Ext.ComponentQuery.query('combo[id="importStyleFormatCombo"]')[0];
+        var styleFormat = styleFormatCombo.getSelectedRecord().get('style');
+        var styleFormatWindow = Ext.ComponentQuery.query('window[id="importStyleFormatWindow"]')[0];
+        styleFormatWindow.close();
         var view = this.getView();
         Ext.create('BasiGX.view.window.FileUploadWindow', {
             importHandler: function(result) {
-                //toDo: check Format of loaded style
-                var sldParser = new GeoStylerSLDParser.SldStyleParser();
-                sldParser.readStyle(result)
-                    .then(function(style) {
-                        view.onStyleChange(style);
-                    });
+                switch (styleFormat) {
+                    case 'sld':
+                        var sldParser = new GeoStylerSLDParser.SldStyleParser();
+                        sldParser.readStyle(result)
+                            .then(function(style) {
+                                view.onStyleChange(style);
+                            }).catch(function() {});
+                        break;
+                    case 'QGIS-Style':
+                        var qgisParser = new GeoStylerQGISParser.QGISStyleParser();
+                        qgisParser.readStyle(result)
+                            .then(function(style) {
+                                view.onStyleChange(style);
+                            }).catch(function() {});
+                        break;
+                    case 'MapBox-Style':
+                        var mapboxParser = new GeoStylerMapboxParser.MapboxStyleParser({
+                            ignoreConversionErrors: true
+                        });
+                        mapboxParser.readStyle(result)
+                            .then(function(style) {
+                                view.onStyleChange(style);
+                            })
+                            .catch(function() {});
+                        break;
+                    default:
+                        break;
+                }
             },
             hideFakepath: true
         }).show();
