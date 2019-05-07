@@ -975,14 +975,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var el = view.el.dom;
         Koala.util.Carto.getHtmlData(view.layer, view.feature).then(function(data) {
-            var timeSeriesTab = me.createTabElement({
-                //title: 'Html',
+            var htmlTab = me.createTabElement({
                 title: '<i class="fa fa-leanpub  fa-2x" aria-hidden="true"></i>',
                 innerHTML: data,
                 className: 'html-tab'
             });
 
-            el.appendChild(timeSeriesTab);
+            el.appendChild(htmlTab);
             me.updateCloseElementPosition();
         });
     },
@@ -1081,6 +1080,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     grid.setSize(newWidth - 20, newHeight - 20);
                     grid = grid.component.down('grid');
                     grid.setSize(newWidth - 20, newHeight - 20);
+                }
+                var htmlObject = self.el.down('object');
+                if (htmlObject) {
+                    htmlObject.setSize(newWidth - 20, newHeight - 20);
                 }
                 me.updateLineFeature();
             });
