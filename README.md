@@ -52,6 +52,11 @@ Entwicklung
 Für die Entwicklung ist es notwendig in dem Wurzelordner die ExtJS-Bibliothek
 in der Version >=6.2.0 unter dem Namen "ext" zur Verfügung zu stellen.
 
+```
+sencha-6.2.2.36 app install --framework=/home/kvolland/workspace/ext-6.2.0/
+```
+
+
 Build
 -----
 Die Anwendung wird mit Hilfe des von Sencha bereitgestellten Tools 'Sencha Cmd'
