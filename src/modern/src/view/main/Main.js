@@ -82,8 +82,6 @@ Ext.define('Koala.view.main.Main', {
             listeners: {
                 painted: function() {
                     var me = this;
-                    var viewCtrl = me.lookupController();
-                    var view = viewCtrl.getView();
                     var map = me.getMap();
 
                     map.getControls().clear();
