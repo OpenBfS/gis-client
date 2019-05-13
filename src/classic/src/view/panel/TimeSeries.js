@@ -22,8 +22,6 @@ Ext.define('Koala.view.panel.TimeSeries', {
     cls: 'k-panel-timeseries',
 
     requires: [
-        'Koala.view.panel.TimeSeriesController',
-        'Koala.view.panel.TimeSeriesModel',
         'Koala.util.ChartAxes',
         'Koala.util.ChartConstants',
         'Koala.util.ChartData',
