@@ -635,7 +635,7 @@ Ext.define('Koala.util.ChartData', {
             }
 
             var languageSelect = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
-            if (!languageSelect) {
+            if (!languageSelect && Ext.isModern) {
                 // modern
                 languageSelect = Ext.ComponentQuery.query('k-field-languageselect')[0];
             }
