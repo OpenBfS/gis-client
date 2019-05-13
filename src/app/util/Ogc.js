@@ -20,7 +20,8 @@ Ext.define('Koala.util.Ogc', {
 
     requires: [
         'Koala.util.String',
-        'Koala.util.Object'
+        'Koala.util.Object',
+        'BasiGX.util.WFS'
     ],
 
     statics: {

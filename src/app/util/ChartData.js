@@ -634,6 +634,12 @@ Ext.define('Koala.util.ChartData', {
                 max = chartOverrides.max || max;
             }
 
+            var languageSelect = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+            if (!languageSelect) {
+                // modern
+                languageSelect = Ext.ComponentQuery.query('k-field-languageselect')[0];
+            }
+
             var config = {
                 orientation: orient,
                 display: true,
@@ -652,7 +658,7 @@ Ext.define('Koala.util.ChartData', {
                 autoTicks: scale === 'log',
                 sanitizeLabels: true,
                 factor: orient === 'y' ? 0.8 : undefined,
-                locale: Ext.ComponentQuery.query('k-form-field-languagecombo')[0].getValue()
+                locale: languageSelect.getValue()
             };
             if (withGrid) {
                 config.showGrid = gnosConfig.showGrid || false;
