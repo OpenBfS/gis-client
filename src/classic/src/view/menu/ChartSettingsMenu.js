@@ -58,6 +58,14 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
         },
         handler: 'changeMinMax',
         glyph: 'xf065@FontAwesome'
+    }, {
+        xtype: 'menucheckitem',
+        checked: true,
+        bind: {
+            text: '{toggleUncertaintyText}',
+            hidden: '{isTimeseries}'
+        },
+        handler: 'toggleUncertainty'
     }],
 
     config: {

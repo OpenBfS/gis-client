@@ -120,6 +120,14 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
         y.max = max;
         ctrl.getChartData();
         win.hide();
+    },
+
+    /**
+     * Toggle visibility of uncertainty bars.
+     */
+    toggleUncertainty: function() {
+        var chartCtrl = this.getView().chart.getController();
+        chartCtrl.toggleUncertainty();
     }
 
 });
