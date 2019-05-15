@@ -704,7 +704,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.createIrixPrintButton(tabElm, this.barChart);
         this.createExportToPngButton(tabElm, this.barChart);
         this.createDownloadChartDataButton(tabElm, this.barChart);
-        this.createUncertaintyButton(tabElm, this.barChart);
         this.createChartSettingsMenuButton(tabElm);
     },
 
@@ -719,6 +718,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             isTimeseries: !!this.timeserieschart,
             maySeeIdThresholdButton: maySeeIdThresholdButton
         });
+        this.chartSettingsMenu.getViewModel().set('isTimeseries', !!this.timeserieschart);
+        this.chartSettingsMenu.getViewModel().set('maySeeIdThresholdButton', maySeeIdThresholdButton);
         var btn = {
             cls: 'carto-window-chart-button',
             xtype: 'button',
@@ -731,25 +732,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         };
         btn = Ext.create(btn);
         btn.render(elm, this.timeserieschart ? 5 : 3);
-    },
-
-    createUncertaintyButton: function(tabElm, chart) {
-        var button = {
-            cls: 'carto-window-chart-button',
-            xtype: 'button',
-            name: 'toggleUncertainty',
-            enableToggle: true,
-            bind: {
-                text: this.view.getViewModel().get('toggleUncertainty')
-            }
-        };
-        button = Ext.create(button);
-        button.render(tabElm, 3);
-        button.el.dom.addEventListener('click', function() {
-            var chartCtrl = chart.getController();
-            chartCtrl.toggleUncertainty();
-        });
-        return button;
     },
 
     /**
@@ -975,14 +957,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var el = view.el.dom;
         Koala.util.Carto.getHtmlData(view.layer, view.feature).then(function(data) {
-            var timeSeriesTab = me.createTabElement({
-                //title: 'Html',
+            var htmlTab = me.createTabElement({
                 title: '<i class="fa fa-leanpub  fa-2x" aria-hidden="true"></i>',
                 innerHTML: data,
                 className: 'html-tab'
             });
 
-            el.appendChild(timeSeriesTab);
+            el.appendChild(htmlTab);
             me.updateCloseElementPosition();
         });
     },
@@ -1081,6 +1062,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     grid.setSize(newWidth - 20, newHeight - 20);
                     grid = grid.component.down('grid');
                     grid.setSize(newWidth - 20, newHeight - 20);
+                }
+                var htmlObject = self.el.down('object');
+                if (htmlObject) {
+                    htmlObject.setSize(newWidth - 20, newHeight - 20);
                 }
                 me.updateLineFeature();
             });

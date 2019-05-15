@@ -536,6 +536,7 @@
                 "toggleScaleText": "linear/logarithmisch",
                 "showIdentificationThresholdText": "Daten < NWG anzeigen",
                 "toggleLegendText": "Legende umschalten",
+                "toggleUncertaintyText": "Messungenauigkeit umschalten",
                 "axisText": "Achse",
                 "changeMinMaxText": "Min/Max ändern",
                 "minMaxWindowTitle": "y-Achse ändern",

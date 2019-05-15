@@ -115,12 +115,13 @@ Ext.define('Koala.util.Metadata', {
             }
             metadata = Ext.clone(metadata);
 
+            metadata.filters = [];
             delete metadata.layerConfig.wms;
+            delete metadata.layerConfig.wfs;
             delete metadata.barChartProperties;
             delete metadata.timeSeriesChartProperties;
             // always allow cloned layers to be editable afterwards
             metadata.layerConfig.olProperties.allowEdit = true;
-            metadata.layerConfig.wfs.url = config.baseUrl + 'ows';
 
             return metadata;
         },

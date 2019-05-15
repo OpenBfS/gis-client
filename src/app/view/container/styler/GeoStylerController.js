@@ -148,12 +148,14 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
     downloadStyle: function(style) {
         var styleFormatCombo = Ext.ComponentQuery.query('combo[id="styleFormatCombo"]')[0];
         var styleFormat = styleFormatCombo.getSelectedRecord().get('style');
+        var filenameField = Ext.ComponentQuery.query('textfield[name="filenameField"]')[0];
+        var filename = filenameField.getValue();
 
         if (styleFormat === 'sld') {
             var sldParser = new GeoStylerSLDParser.SldStyleParser();
             sldParser.writeStyle(style)
                 .then(function(sld) {
-                    var name = style.name;
+                    var name = filename;
                     if (!name) {
                         name = 'style.xml';
                     }
@@ -167,7 +169,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
             var QGISParser = new GeoStylerQGISParser.QGISStyleParser();
             QGISParser.writeStyle(style)
                 .then(function(QGISStyle) {
-                    var name = style.name;
+                    var name = filename;
                     if (!name) {
                         name = 'style.qml';
                     }
@@ -183,7 +185,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
             });
             MapboxParser.writeStyle(style)
                 .then(function(MapboxStyle) {
-                    var name = style.name;
+                    var name = filename;
                     if (!name) {
                         name = 'style.json';
                     }

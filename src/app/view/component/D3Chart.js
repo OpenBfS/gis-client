@@ -24,7 +24,8 @@ Ext.define('Koala.view.component.D3Chart',{
         'Koala.util.String',
 
         'Koala.view.component.D3ChartController',
-        'Koala.view.component.D3ChartModel'
+        'Koala.view.component.D3ChartModel',
+        'Koala.util.Chart'
     ],
 
     controller: 'component-d3chart',
