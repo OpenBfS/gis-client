@@ -21,7 +21,8 @@ Ext.define('Koala.view.window.FilterGridWindow', {
     xtype: 'k-window-filtergrid',
 
     requires: [
-        'Koala.view.grid.FilterGrid'
+        'Koala.view.grid.FilterGrid',
+        'BasiGX.util.Geometry'
     ],
 
     controller: 'k-window-filtergrid',
@@ -47,7 +48,17 @@ Ext.define('Koala.view.window.FilterGridWindow', {
         layer: null
     },
 
-    items: [],
+    items: [{
+        xtype: 'button',
+        bind: {
+            text: '{duplicateButton}'
+        },
+        handler: 'checkDuplicates'
+    }, {
+        xtype: 'label',
+        text: '',
+        name: 'duplicateText'
+    }],
 
     initComponent: function() {
         this.callParent();

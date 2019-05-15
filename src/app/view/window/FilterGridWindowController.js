@@ -21,6 +21,22 @@ Ext.define('Koala.view.window.FilterGridWindowController', {
     alias: 'controller.k-window-filtergrid',
 
     requires: [
-    ]
+    ],
+
+    checkDuplicates: function() {
+        var view = this.getView();
+        var viewModel = this.getViewModel();
+        var features = view.getLayer().getSource().getFeatures();
+        var duplicates = BasiGX.util.Geometry.getGeometryDuplicates(features);
+        var text;
+        if (duplicates.length > 0) {
+            text = '<br>' + viewModel.get('duplicateFeaturesText');
+            view.setHeight(255);
+        } else {
+            text = '<br>' + viewModel.get('noDuplicateFeaturesText');
+            view.setHeight(220);
+        }
+        view.down('[name=duplicateText]').setHtml(text);
+    }
 
 });

@@ -21,6 +21,9 @@ Ext.define('Koala.view.window.FilterGridWindowModel', {
     alias: 'viewmodel.k-window-filtergrid',
 
     data: {
-        title: ''
+        title: '',
+        duplicateButton: '',
+        duplicateFeaturesText: '',
+        noDuplicateFeaturesText: ''
     }
 });
