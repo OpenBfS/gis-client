@@ -59,7 +59,9 @@
     },
     "Koala.util.String": {
         "statics": {
-            "defaultDateFormat": "Y/m/d H:i:s"
+            "defaultDateFormat": "Y/m/d H:i:s",
+            "bool2StringFormatTrue": "YES",
+            "bool2StringFormatFalse": "NO"
         }
     },
     "Koala.view.button.Permalink": {
@@ -570,7 +572,18 @@
         "config": {
             "data": {
                 "logoTooltip": "Link to the BfS homepage",
-                "headerTitle": "GEOPORTAL"
+                "headerTitle": "GEOPORTAL",
+                "alertBtnTooltip": "Event information",
+                "routineMessageHeader": "No Changes",
+                "alertMessageHeader": "Event modified!",
+                "htmlMessageBody": "<div>" +
+                    "modified on: [[modified]]<br>" +
+                    "modified by: [[modified_by]]<br>" +
+                    "Exercise? [[Exercise]]<br>" +
+                    "Time of Event: [[TimeOfEvent]]<br>" +
+                    "Scenarion phase: [[ScenarioPhase.title]]<br>" +
+                    "Scenario location: [[ScenarioLocation.title]]<br>" +
+                    "</div>"
             }
         }
     },

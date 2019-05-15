@@ -22,6 +22,7 @@ Ext.define('Koala.util.LocalStorage', {
 
         HIDE_LAYERSET_ON_STARTUP_KEY: 'koala-layerset-chooser-hide',
         HIDE_HELP_ON_STARTUP_KEY: 'koala-help-hide',
+        DOKPOOL_EVENT_KEY: 'koala-dokpool-events',
 
         /**
          * Sets value (JSON encoded) in LocalStorage under given key
@@ -90,6 +91,25 @@ Ext.define('Koala.util.LocalStorage', {
          */
         showHelpWindowOnStartup: function() {
             return this.getProperty(this.HIDE_HELP_ON_STARTUP_KEY);
+        },
+
+        /**
+         * Updates koala-dokpool-scenario in LocalStorage
+         *
+         * @param {Object} the current state of scenario
+         *                 used to check for changes later on
+         */
+        updateDokpoolEvents: function(scenarios) {
+            this.setProperty(this.DOKPOOL_EVENT_KEY, scenarios);
+        },
+
+        /**
+         * Returns the value of koala-dokpool-scenario from LocalStorage
+         * @param {Object} the current state of scenario
+         *                 used to check for changes later on
+         */
+        getDokpoolEvents: function() {
+            return this.getProperty(this.DOKPOOL_EVENT_KEY);
         }
     }
 });

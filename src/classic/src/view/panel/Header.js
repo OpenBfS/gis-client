@@ -99,9 +99,95 @@ Ext.define('Koala.view.panel.Header', {
             align: 'center',
             pack: 'right'
         },
-        items: {
+        items: [{
+            xtype: 'button',
+            name: 'ScenarioAlertBtn',
+            glyph: 'xf00c@FontAwesome',
+            cls: 'button-routine',
+            hidden: false,
+            margin: '0 0 0 10',
+            handler: function() {
+                var me = this,
+                    viewmodel = Ext.ComponentQuery.query('k-panel-header')[0].getViewModel();
+
+
+                me.events = Koala.util.LocalStorage.getDokpoolEvents();
+                // if (buttonStatus === 'alert') {
+                //     messageHeader = 'alertMessageHeader';
+                //     me.status = 'routine';
+                // } else {
+                //     messageHeader = 'routineMessageHeader';
+                // }
+
+                var htmlMessage = '';
+                var eventNames = Object.keys(me.events);
+                eventNames.forEach(function(key, index) {
+                    var messageHeader = '';
+
+                    var replaceObject = Object.defineProperties({}, {
+                        'id': {
+                            value: Koala.util.Object.getPathStrOr(this.events[key], 'id', ''),
+                            enumerable: true
+                        },
+                        'modified': {
+                            value: Koala.util.Object.getPathStrOr(this.events[key], 'modified', ''),
+                            enumerable: true
+                        },
+                        'modified_by': {
+                            value: Koala.util.Object.getPathStrOr(this.events[key], 'modified_by', ''),
+                            enumerable: true
+                        },
+                        'Exercise': {
+                            value: Koala.util.String.getStringFromBool(Koala.util.Object.getPathStrOr(this.events[key], 'Exercise', '')),
+                            enumerable: true
+                        },
+                        'description': {
+                            value: Koala.util.Object.getPathStrOr(this.events[key], 'description', ''),
+                            enumerable: true
+                        },
+                        'TimeOfEvent': {
+                            value: Koala.util.Object.getPathStrOr(this.events[key], 'TimeOfEvent', ''),
+                            enumerable: true
+                        },
+                        'ScenarioPhase.title': {
+                            value: Koala.util.Object.getPathStrOr(this.events[key], 'ScenarioPhase/title', ''),
+                            enumerable: true
+                        },
+                        'ScenarioLocation.title': {
+                            value: Koala.util.Object.getPathStrOr(this.events[key], 'ScenarioLocation/title', ''),
+                            enumerable: true
+                        }
+                    });
+                    //debugger;
+
+                    if (me.triggerEvent && me.triggerEvent === this.events[key].id) {
+                        messageHeader = 'alertMessageHeader';
+                        me.triggerEvent = null;
+                    } else {
+                        messageHeader = 'routineMessageHeader';
+                    }
+                    //debugger;
+                    messageHeader = Koala.util.String.replaceTemplateStrings(messageHeader, replaceObject);
+                    htmlMessage = htmlMessage +
+                        viewmodel.get(messageHeader) +
+                        viewmodel.get('htmlMessageBody') +
+                        '<br><br>';
+                    htmlMessage = Koala.util.String.replaceTemplateStrings(htmlMessage, replaceObject);
+                }, me);
+                me.events = null;
+                Ext.Msg.show({
+                    title: 'Dokpool - Messenger',
+                    message: htmlMessage,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.Msg.INFO
+                });
+                me.setGlyph('xf00c@FontAwesome');
+                me.removeCls('button-alert');
+                me.addCls('button-routine');
+            }
+        }, {
             xtype: 'k-toolbar-header'
-        }
+        }]
     }, {
         xtype: 'image',
         bind: {
@@ -120,6 +206,13 @@ Ext.define('Koala.view.panel.Header', {
                 window.setTimeout(function() {
                     me.updateLayout();
                 }, 1);
+            },
+            boxready: function() {
+                //run once to get immediate information
+                Koala.util.DokpoolRequest.updateActiveElanScenarios();
+                window.setInterval(function() {
+                    Koala.util.DokpoolRequest.updateActiveElanScenarios();
+                }, 30000);
             }
         }
     }]
