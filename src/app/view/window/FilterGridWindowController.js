@@ -34,7 +34,7 @@ Ext.define('Koala.view.window.FilterGridWindowController', {
             view.setHeight(255);
         } else {
             text = '<br>' + viewModel.get('noDuplicateFeaturesText');
-            view.setHeight(220);
+            view.setHeight(235);
         }
         view.down('[name=duplicateText]').setHtml(text);
     }
