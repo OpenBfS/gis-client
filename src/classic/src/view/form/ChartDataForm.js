@@ -71,6 +71,7 @@ Ext.define('Koala.view.form.ChartDataForm',{
     },
 
     initComponent: function() {
+        var metadata = this.getMetadata().layerConfig.barChartProperties;
         var context = Koala.util.AppContext.getAppContext().data.merge;
         var attributeFields = context.paramIsAttributeName;
         this.callParent();
@@ -96,6 +97,9 @@ Ext.define('Koala.view.form.ChartDataForm',{
                 });
                 config.displayField = 'value';
                 config.valueField = 'value';
+                if (metadata[field] && attributes.indexOf(metadata[field] !== -1)) {
+                    config.value = metadata[field];
+                }
             }
             fs.add(config);
         });
