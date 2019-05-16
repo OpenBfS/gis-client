@@ -381,7 +381,6 @@ Ext.define('Koala.util.Hooks', {
         * @param {Object} obj The print form
         */
         beforeRender: function(printForm) {
-            // debugger;
             var DokpoolContentType = printForm.down('[name=DokpoolContentType]'),
                 isElan = printForm.down('[name=IsElan]');
 
