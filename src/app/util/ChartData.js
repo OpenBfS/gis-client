@@ -107,10 +107,26 @@ Ext.define('Koala.util.ChartData', {
                     timeFilter.interval, timeFilter.unit
                 );
             } else { //some layers may not have timefilter but the ability to show timeseries
-                var interval = targetLayer.metadata.layerConfig.timeSeriesChartProperties.interval;
-                var unit = targetLayer.metadata.layerConfig.timeSeriesChartProperties.unit;
+                var chartProps = targetLayer.metadata.layerConfig.timeSeriesChartProperties;
+                var interval = chartProps.interval;
+                var unit = chartProps.unit;
                 if (!interval || !unit) {
-                    Ext.log.warn('insufficient metadata for interval calulation');
+                    if (!targetLayer instanceof ol.layer.Vector) {
+                        return;
+                    }
+                    // try to extract min/max values from the data
+                    var min = moment(chartProps.xAxisMax);
+                    var max = moment(chartProps.xAxisMin);
+                    Ext.each(targetLayer.getSource().getFeatures(), function(feat) {
+                        var val = moment(feat.get(chartProps.xAxisAttribute));
+                        if (val.isBefore(min)) {
+                            min = val;
+                        }
+                        if (val.isAfter(max)) {
+                            max = val;
+                        }
+                    });
+                    return min.diff(max, 'seconds') || 1; // return 1 to avoid endless loop
                 } else {
                     intervalInSeconds = this.getIntervalInSeconds(
                         interval, unit
@@ -177,7 +193,7 @@ Ext.define('Koala.util.ChartData', {
             }
 
             // Iterate until startDate <= endDate
-            while (startDate.diff(endDate) <= 0) {
+            while (startDate.diff(endDate) < 0) {
                 var newRawData = {};
 
                 compareableDate = startDate.unix() + firstDiffSeconds;

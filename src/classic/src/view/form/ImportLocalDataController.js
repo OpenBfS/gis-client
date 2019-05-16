@@ -286,7 +286,6 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             legendHeight: olProps.legendHeight,
             legendWidth: olProps.legendWidth,
             allowHover: shallHover,
-            allowFeatureInfo: getBool(olProps.allowFeatureInfo, true),
             allowDownload: getBool(olProps.allowDownload, false),
             allowRemoval: getBool(olProps.allowRemoval, true),
             //allowClone: getBool(olProps.allowClone, false), //ToDo clone vector layers

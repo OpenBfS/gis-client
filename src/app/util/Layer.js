@@ -1266,7 +1266,6 @@ Ext.define('Koala.util.Layer', {
                 legendUrl: olProps.legendUrl || '',
                 legendHeight: olProps.legendHeight,
                 legendWidth: olProps.legendWidth,
-                allowFeatureInfo: getBool(olProps.allowFeatureInfo, true),
                 allowDownload: getBool(olProps.allowDownload, true),
                 allowRemoval: getBool(olProps.allowRemoval, true),
                 allowClone: getBool(olProps.allowClone, false),

@@ -99,6 +99,7 @@ Ext.define('Koala.view.grid.FilterGridController', {
         var src = this.layer.getSource();
         src.clear();
         src.addFeatures(newFeatures);
+        this.layer.originalFeatures = this.features;
     }
 
 });
