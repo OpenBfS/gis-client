@@ -174,6 +174,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     },
 
     createLayerWithMetadata: function(metadata) {
+        metadata = Koala.util.Metadata.prepareClonedMetadata(metadata);
         var layerUtil = Koala.util.Layer;
         var viewModel = this.getViewModel();
         var layerName = viewModel.get('layerName');
