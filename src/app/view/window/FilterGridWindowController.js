@@ -23,6 +23,10 @@ Ext.define('Koala.view.window.FilterGridWindowController', {
     requires: [
     ],
 
+    /**
+     * Check the layer for geometry duplicates and add the appropriate text
+     * to the window.
+     */
     checkDuplicates: function() {
         var view = this.getView();
         var viewModel = this.getViewModel();

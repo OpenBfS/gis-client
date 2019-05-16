@@ -42,12 +42,23 @@ Ext.define('Koala.view.grid.FilterGrid', {
         sortchange: 'sortChanged'
     },
 
+    bbar: {
+        xtype: 'pagingtoolbar',
+        hidden: true
+    },
+
+    /**
+     * Initialize the store with the layer's contents.
+     */
     initComponent: function() {
         this.callParent();
         var colDefs = this.extractSchema();
         this.setupStore(colDefs);
     },
 
+    /**
+     * Extract the column definitions from the layer's contents.
+     */
     extractSchema: function() {
         var layer = this.getLayer();
         var feats = layer.getSource().getFeatures();
@@ -71,6 +82,12 @@ Ext.define('Koala.view.grid.FilterGrid', {
         return colDefs;
     },
 
+    /**
+     * Setup the store with the given column definitions. Adds only the
+     * first four features to the store.
+     *
+     * @param {Object[]} columns
+     */
     setupStore: function(columns) {
         this.setColumns(columns);
         var features = this.getLayer().getSource().getFeatures().slice(0, 4);

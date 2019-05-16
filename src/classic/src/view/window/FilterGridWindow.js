@@ -60,6 +60,9 @@ Ext.define('Koala.view.window.FilterGridWindow', {
         name: 'duplicateText'
     }],
 
+    /**
+     * Adds the filter grid.
+     */
     initComponent: function() {
         this.callParent();
         this.add({

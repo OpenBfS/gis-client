@@ -23,12 +23,82 @@ Ext.define('Koala.view.grid.FilterGridController', {
     requires: [
     ],
 
-    filterChanged: function() {
-        // TODO figure out what needs to be updated
+    featureStore: null,
+    features: null,
+    layer: null,
+    storeData: null,
+
+    /**
+     * Initialize the controller by preparing an internal store to
+     * manage filtering.
+     */
+    init: function() {
+        var me = this;
+        this.callParent();
+        this.layer = this.getView().getLayer();
+        this.features = this.layer.getSource().getFeatures().slice();
+        var features = this.features.map(function(feat) {
+            return feat.getProperties();
+        });
+        this.featureStore = Ext.create('Ext.data.Store', {
+            data: features
+        });
+        this.storeData = [];
+        this.featureStore.getData().each(function(item) {
+            me.storeData.push(item);
+        });
     },
 
-    sortChanged: function() {
-        // TODO figure out what needs to be updated
+    /**
+     * Update the internal store and the layer with the new filters.
+     *
+     * @param {Ext.data.Store} store the view's store
+     * @param {Object} filters the new filters
+     */
+    filterChanged: function(store, filters) {
+        this.featureStore.clearFilter();
+        this.featureStore.setFilters(filters);
+        this.updateLayer();
+    },
+
+    /**
+     * Update the layer's rendering order.
+     *
+     * @param {Ext.grid.header.Container} ct the grid's header container
+     * @param {Ext.grid.column.Column} column the sort column
+     * @param {String} direction the sort direction
+     */
+    sortChanged: function(ct, column, direction) {
+        var sorters = this.featureStore.getSorters();
+        sorters.clear();
+        sorters.add({
+            property: column.dataIndex,
+            direction: direction
+        });
+        this.layer.set('renderOrder', function(feat1, feat2) {
+            var v1 = feat1.get(column.dataIndex);
+            var v2 = feat2.get(column.dataIndex);
+            if (direction === 'DESC') {
+                return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
+            }
+            return v1 < v2 ? 1 : v1 > v2 ? -1 : 0;
+        });
+    },
+
+    /**
+     * Update the layer's features in accordance with the internal store's
+     * contents.
+     */
+    updateLayer: function() {
+        var me = this;
+        var data = this.featureStore.getData();
+        var newFeatures = [];
+        data.each(function(item) {
+            newFeatures.push(me.features[me.storeData.indexOf(item)]);
+        });
+        var src = this.layer.getSource();
+        src.clear();
+        src.addFeatures(newFeatures);
     }
 
 });
