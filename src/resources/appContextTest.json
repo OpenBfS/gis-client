@@ -52,6 +52,12 @@
             },
             "print-timeout": 60000,
             "metadataSearchFields": ["title", "abstract"],
+            "paramIsAttributeName": [
+                "yAxisAttribute",
+                "groupAttribute",
+                "detectionLimitAttribute",
+                "uncertaintyAttribute"
+            ],
             "spatialSearchTypeName": "bfs:verwaltung_4326_geozg_sort",
             "spatialSearchFields": {
                 "searchColumn": "NAME",
