@@ -15,7 +15,8 @@
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
                 "videos": "resources/videos.json",
-                "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
+                "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif",
+                "style-service": "resources/styles.json"
             },
             "application_user": {
                 "username": "admin",

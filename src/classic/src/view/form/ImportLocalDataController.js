@@ -26,7 +26,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         'Koala.util.String',
 
         'Koala.view.form.field.VectorTemplateCombo',
-        'Koala.view.form.ChartDataForm'
+        'Koala.view.form.ChartDataForm',
+        'Koala.view.window.StyleSelectWindow'
     ],
 
     /**
@@ -98,18 +99,18 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     /**
      *
      */
-    readFile: function() {
+    readFile: function(justParseCallback) {
         var me = this;
         var file = this.getViewModel().get('file');
         var reader = new FileReader();
-        reader.addEventListener('load', me.parseFeatures.bind(this));
+        reader.addEventListener('load', me.parseFeatures.bind(this, justParseCallback));
         reader.readAsText(file);
     },
 
     /**
     * Copy of https://github.com/openlayers/ol3/blob/v3.18.2/src/ol/interaction/draganddrop.js#L97
     */
-    parseFeatures: function(event) {
+    parseFeatures: function(justParseCallback, event) {
         var me = this;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
         var viewModel = me.getViewModel();
@@ -152,7 +153,11 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         }
 
         viewModel.set('features', features);
-        this.createLayer();
+        if (!justParseCallback) {
+            this.createLayer();
+        } else {
+            justParseCallback(features);
+        }
     },
 
     /**
@@ -193,8 +198,13 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
 
         var layer = new ol.layer.Vector(cfg);
         layer.metadata = metadata;
+        if (this.style) {
+            layer.set('SLD', this.style);
+        }
 
-        layerUtil.getVectorLayerStyle(layer, true, viewModel.get('selectedTemplateStyle'));
+        if (this.selectedTemplateStyle) {
+            layerUtil.getVectorLayerStyle(layer, true, viewModel.get('selectedTemplateStyle'));
+        }
         layerUtil.setOriginalMetadata(layer, metadata);
 
         // Finally add the layer to the map.
@@ -304,29 +314,25 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         };
     },
 
-    loadStyles: function(uuid) {
-        var viewModel = this.getViewModel();
-        Koala.util.Layer.getMetadataFromUuid(uuid).then(function(metadata) {
-            var styles = Koala.util.Object.getPathStrOr(metadata,
-                'layerConfig/olProperties/styleReference');
-            if (styles) {
-                styles = styles.split(',')
-                    .map(function(style) {
-                        return style.trim();
-                    });
-                viewModel.set('stylesAvailable', true);
-                viewModel.set('templateStyles', styles);
-                viewModel.set('selectedTemplateStyle', styles[0]);
-            } else {
-                viewModel.set('stylesAvailable', false);
-                viewModel.set('templateStyles', []);
-                viewModel.set('selectedTemplateStyle', undefined);
-            }
+    /**
+     * Shows the style selection window.
+     */
+    selectStyle: function() {
+        var me = this;
+        var view = this.getView();
+        this.readFile(function(features) {
+            var win = Ext.create('Koala.view.window.StyleSelectWindow', {
+                features: features,
+                setStyleCallback: function(sld) {
+                    me.style = sld;
+                },
+                setSelectedTemplateStyle: function(templateStyle) {
+                    me.selectedTemplateStyle = templateStyle;
+                }
+            });
+            var viewModel = win.down('k-form-field-vectortemplatecombo').getViewModel();
+            viewModel.set('selectedTemplate', view.down('k-form-field-vectortemplatecombo').getValue());
         });
-    },
-
-    onVectorTemplateChange: function(field, value) {
-        this.loadStyles(value);
     }
 
 });
