@@ -90,7 +90,8 @@
                 "measureBtn",
                 "drawBtn",
                 "createVectorLayerBtn",
-                "importVectorLayerBtn"
+                "importVectorLayerBtn",
+                "detectionLimitBtn"
             ],
             "vectorIcons": [
                 {

@@ -39,9 +39,10 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
         glyph: 'xf07d@FontAwesome'
     }, {
         xtype: 'menucheckitem',
+        name: 'identificationThreshold',
         bind: {
             text: '{showIdentificationThresholdText}',
-            hidden: '{!isTimeseries || !maySeeIdThresholdButton}'
+            hidden: '{!maySeeIdThresholdButton}'
         },
         handler: 'showIdentificationThreshold',
         glyph: 'xf201@FontAwesome'

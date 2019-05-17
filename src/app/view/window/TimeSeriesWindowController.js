@@ -293,6 +293,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
         var maySeeIdThresholdButton = Ext.Array.contains(imisRoles, 'imis') ||
             Ext.Array.contains(imisRoles, 'ruf');
+        if (mapComp.appContext.data.merge.tools.indexOf('detectionLimitBtn') === -1) {
+            maySeeIdThresholdButton = false;
+        }
         var chart = me.createTimeSeriesChart(olLayer, olFeat);
         var chartConfig = olLayer.get('timeSeriesChartProperties');
         var addSeriesCombo;
