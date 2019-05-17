@@ -370,17 +370,6 @@ Soll HoverInfo erlaubt werden?
 | Default-Wert         | true |
 | Beispiel             | true |
 
-**allowFeatureInfo** // TODO Brauchen wir das noch?
-
-Soll FeatureInfo erlaubt werden?
-
-| Typ | gco:CharacterString  |
-|---------------------:|:----|
-| Erlaubt Wertemenge   | true, false |
-| Obligatorisch        | &#10799; |
-| Default-Wert         | true |
-| Beispiel             | true |
-
 **allowDownload**
 
 Soll ein Download erlaubt werden?

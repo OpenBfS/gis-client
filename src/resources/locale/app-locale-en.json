@@ -709,6 +709,16 @@
             }
         }
     },
+    "Koala.view.window.FilterGridWindow": {
+        "config": {
+            "data": {
+                "title": "Filter",
+                "duplicateButton": "Check duplicates",
+                "duplicateFeaturesText": "Your data is overlapping! In order to get a sensible cartographic portrayal you should filter and/or sort the data.",
+                "noDuplicateFeatures": "No overlapping data."
+            }
+        }
+    },
     "Koala.view.window.PermalinkWindow": {
         "config": {
             "data": {

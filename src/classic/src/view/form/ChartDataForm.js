@@ -22,6 +22,7 @@ Ext.define('Koala.view.form.ChartDataForm',{
     xtype: 'k-form-chartdata',
 
     requires: [
+        'Koala.util.Data'
     ],
 
     controller: 'k-form-chartdata',
@@ -65,20 +66,42 @@ Ext.define('Koala.view.form.ChartDataForm',{
         ],
         metadata: null,
         done: function() {},
-        cancel: function() {}
+        cancel: function() {},
+        features: null
     },
 
     initComponent: function() {
+        var metadata = this.getMetadata().layerConfig.barChartProperties;
+        var context = Koala.util.AppContext.getAppContext().data.merge;
+        var attributeFields = context.paramIsAttributeName;
         this.callParent();
         var fs = this.down('fieldset');
+        var attributes = Koala.util.Data.extractProperties(this.getFeatures());
         Ext.each(this.fields, function(field) {
-            fs.add({
+            var config = {
                 xtype: 'textfield',
                 name: field,
                 bind: {
                     fieldLabel: '{' + field + '}'
                 }
-            });
+            };
+            if (attributeFields.indexOf(field) !== -1) {
+                config.xtype = 'combo';
+                config.store = Ext.create('Ext.data.Store', {
+                    fields: ['value'],
+                    data: attributes.map(function(value) {
+                        return {
+                            value: value
+                        };
+                    })
+                });
+                config.displayField = 'value';
+                config.valueField = 'value';
+                if (metadata[field] && attributes.indexOf(metadata[field] !== -1)) {
+                    config.value = metadata[field];
+                }
+            }
+            fs.add(config);
         });
     }
 

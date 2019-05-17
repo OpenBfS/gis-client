@@ -711,6 +711,16 @@
             }
         }
     },
+    "Koala.view.window.FilterGridWindow": {
+        "config": {
+            "data": {
+                "title": "Filter",
+                "duplicateButton": "Duplikate prüfen",
+                "duplicateFeaturesText": "Ihre Daten überlagern sich! Für eine sinnvolle kartographische Darstellung sollten Sie die Daten filtern und/oder sortieren.",
+                "noDuplicateFeaturesText": "Keine überlagernden Daten."
+            }
+        }
+    },
     "Koala.view.window.PermalinkWindow": {
         "config": {
             "data": {

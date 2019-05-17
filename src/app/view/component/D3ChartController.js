@@ -667,7 +667,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             me.onChartDataRequestCallback,
             me.onChartDataRequestSuccess,
             me.onChartDataRequestFailure,
-            me
+            me,
+            layer
         );
         // Put the current request into our storage for possible abortion.
         me.ajaxRequests[stationId] = ajaxRequest;
@@ -748,14 +749,30 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @param {Function} cbFailure The function to be called on failure. Optional.
      * @param {Function} cbScope The callback function to be called on
      *                           success and failure. Optional.
+     * @param {ol.layer.Layer} layer The charting layer.
      * @return {Ext.Ajax.request} The request function.
      */
-    getChartDataRequest: function(station, cbFn, cbSuccess, cbFailure, cbScope) {
+    getChartDataRequest: function(station, cbFn, cbSuccess, cbFailure, cbScope, layer) {
         var me = this;
         if (!(station instanceof ol.Feature)) {
             Ext.log.warn('No valid ol.Feature given.');
             return;
         }
+
+        if (layer instanceof ol.layer.Vector) {
+            var fmt = new ol.format.GeoJSON();
+            var data = layer.originalFeatures || layer.getSource().getFeatures();
+            if (Ext.isFunction(cbFn)) {
+                cbFn.call(cbScope, station);
+            }
+            if (Ext.isFunction(cbSuccess)) {
+                cbSuccess.call(cbScope, {
+                    responseText: fmt.writeFeatures(data)
+                }, station);
+            }
+            return;
+        }
+
         var ajaxRequest = Ext.Ajax.request({
             method: 'GET',
             url: me.getChartDataRequestUrl(),

@@ -174,6 +174,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     },
 
     createLayerWithMetadata: function(metadata) {
+        metadata = Koala.util.Metadata.prepareClonedMetadata(metadata);
         var layerUtil = Koala.util.Layer;
         var viewModel = this.getViewModel();
         var layerName = viewModel.get('layerName');
@@ -209,6 +210,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var uuid = templateCombo.getViewModel().get('templateUuid');
         var me = this;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
+        var features = this.getViewModel().get('features');
 
         var gotMetadataCallback = function(metadata) {
             if (metadata.layerConfig.barChartProperties) {
@@ -223,7 +225,8 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
                         },
                         cancel: function() {
                             this.up('window').hide();
-                        }
+                        },
+                        features: features
                     }]
                 }).show();
             } else {
@@ -283,7 +286,6 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             legendHeight: olProps.legendHeight,
             legendWidth: olProps.legendWidth,
             allowHover: shallHover,
-            allowFeatureInfo: getBool(olProps.allowFeatureInfo, true),
             allowDownload: getBool(olProps.allowDownload, false),
             allowRemoval: getBool(olProps.allowRemoval, true),
             //allowClone: getBool(olProps.allowClone, false), //ToDo clone vector layers

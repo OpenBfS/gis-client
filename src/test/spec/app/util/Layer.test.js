@@ -678,8 +678,7 @@ describe('Koala.util.Layer', function() {
                         'olProperties': {
                             'allowShortInfo': 'true',
                             'allowDownload': 'false',
-                            'allowRemoval': 'false',
-                            'allowFeatureInfo': 'false'
+                            'allowRemoval': 'false'
                         },
                         'timeSeriesChartProperties': {
                         },
