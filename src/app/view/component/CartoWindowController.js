@@ -712,6 +712,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
         var maySeeIdThresholdButton = Ext.Array.contains(imisRoles, 'imis') ||
             Ext.Array.contains(imisRoles, 'ruf');
+        if (mapComp.appContext.data.merge.tools.indexOf('detectionLimitBtn') === -1) {
+            maySeeIdThresholdButton = false;
+        }
 
         this.chartSettingsMenu = Ext.create('Koala.view.menu.ChartSettingsMenu', {
             chart: this.timeserieschart || this.barChart,

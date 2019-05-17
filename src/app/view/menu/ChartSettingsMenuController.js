@@ -45,11 +45,23 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
      * Toggle the showing of data below the identification threshold.
      */
     showIdentificationThreshold: function() {
+        var me = this;
         this.showingIdentificationThreshold = !this.showingIdentificationThreshold;
         var chart = this.getView().chart;
-        chart.setShowIdentificationThresholdData(this.showingIdentificationThreshold);
-        var ctrl = chart.getController();
-        ctrl.getChartData();
+        if (chart.xtype === 'd3-chart') {
+            chart.setShowIdentificationThresholdData(this.showingIdentificationThreshold);
+            var ctrl = chart.getController();
+            ctrl.getChartData();
+        } else {
+            var els = chart.el.dom.querySelectorAll('text.below-threshold');
+            els.forEach(function(el) {
+                el.style.display = me.showingIdentificationThreshold ? 'none' : 'block';
+            });
+            els = chart.el.dom.querySelectorAll('rect.below-threshold');
+            els.forEach(function(el) {
+                el.style.display = me.showingIdentificationThreshold ? 'block' : 'none';
+            });
+        }
     },
 
     /**
