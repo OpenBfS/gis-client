@@ -85,12 +85,14 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
             bodyPadding: 5,
             items: [{
                 xtype: 'numberfield',
-                name: 'minField',
-                value: min
-            }, {
-                xtype: 'numberfield',
+                fieldLabel: 'Max',
                 name: 'maxField',
                 value: max
+            }, {
+                xtype: 'numberfield',
+                fieldLabel: 'Min',
+                name: 'minField',
+                value: min
             }],
             bbar: [{
                 xtype: 'button',
