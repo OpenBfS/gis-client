@@ -248,10 +248,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
 
             if (!me.colorsByKey[groupKey]) {
                 me.colorsByKey[groupKey] =
-                  me.customColors[groupKey] ||
-                  (colorMap && colorMap[groupKey] ? colorMap[groupKey].color : null) ||
-                  colors[0] ||
-                  staticMe.getRandomColor();
+                    me.customColors[groupKey] ||
+                    (colorMap && colorMap[groupKey] ? colorMap[groupKey].color : null) ||
+                    colors[0] ||
+                    staticMe.getRandomColor();
                 Ext.Array.removeAt(colors, 0);
             }
 
