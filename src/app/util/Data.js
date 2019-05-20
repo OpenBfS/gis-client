@@ -26,6 +26,7 @@ Ext.define('Koala.util.Data', {
          * Extract the property names from the features.
          *
          * @param {ol.Feature[]} features the features
+         * @return {String[]} the list of attributes
          */
         extractProperties: function(features) {
             var attributes = [];
@@ -37,6 +38,25 @@ Ext.define('Koala.util.Data', {
                 });
             });
             return attributes;
+        },
+
+        /**
+         * Extract the dictinct values of the given property in the given
+         * feature list.
+         *
+         * @param {ol.Feature[]} features the features
+         * @param {String} name the attribute name
+         * @return {String[]} the list of distinct values
+         */
+        extractDistinctValues: function(features, name) {
+            var values = [];
+            Ext.each(features, function(feature) {
+                var value = feature.get(name);
+                if (values.indexOf(value) === -1) {
+                    values.push(value);
+                }
+            });
+            return values;
         }
 
     }

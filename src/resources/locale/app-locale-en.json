@@ -351,8 +351,8 @@
                 "projectionLabel": "Projection",
                 "fileFieldLabel": "File",
                 "fileFieldButtonText": "Browse",
-                "templateStyleLabel": "Style from template",
-                "settingsText": "Settings"
+                "settingsText": "Settings",
+                "selectStyle": "Select style"
             }
         }
     },
@@ -755,6 +755,24 @@
         "config": {
             "data": {
                 "title": "Print"
+            }
+        }
+    },
+    "Koala.view.window.StyleSelectWindow": {
+        "config": {
+            "data": {
+                "title": "Select style",
+                "fileFieldTab": "From File",
+                "getFromEnvironmentFieldTab": "From environment field",
+                "templateTab": "From template",
+                "geoStylerText": "GeoStyler-Default",
+                "fileFieldText": "Select local SLD",
+                "selectEnvironmentFieldFieldText": "Select environment field field",
+                "selectEnvironmentFieldText": "Select environment field",
+                "selectTemplateText": "Select template",
+                "selectStyleText": "Select style",
+                "applyText": "Apply",
+                "cancelText": "Cancel"
             }
         }
     },
