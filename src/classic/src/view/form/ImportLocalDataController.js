@@ -222,6 +222,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var features = this.getViewModel().get('features');
 
         var gotMetadataCallback = function(metadata) {
+            if (!metadata.layerConfig) {
+                metadata.layerConfig = {};
+            }
             if (metadata.layerConfig.barChartProperties) {
                 Ext.create('Ext.window.Window', {
                     title: me.getViewModel().get('settingsText'),
