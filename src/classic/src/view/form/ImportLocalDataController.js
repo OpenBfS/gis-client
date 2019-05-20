@@ -201,7 +201,6 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         if (this.style) {
             layer.set('SLD', this.style);
         }
-
         if (this.selectedTemplateStyle) {
             layerUtil.getVectorLayerStyle(layer, true, viewModel.get('selectedTemplateStyle'));
         }

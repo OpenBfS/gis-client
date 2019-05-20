@@ -82,7 +82,8 @@ Ext.define('Koala.view.window.StyleSelectWindow', {
                 xtype: 'combo',
                 name: 'environmentFieldStyles',
                 bind: {
-                    fieldLabel: '{selectStyleText}'
+                    fieldLabel: '{selectStyleText}',
+                    value: '{selectedEnvironmentFieldStyle}'
                 },
                 valueField: 'val',
                 displayField: 'dsp'

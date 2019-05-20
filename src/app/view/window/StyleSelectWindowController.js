@@ -123,7 +123,17 @@ Ext.define('Koala.view.window.StyleSelectWindowController', {
      */
     applyTemplateStyle: function() {
         var view = this.getView();
-        view.getSetSelectedTemplateStyle(this.getViewModel().get('selectedTemplateStyle'));
+        view.getSetSelectedTemplateStyle()(this.getViewModel().get('selectedTemplateStyle'));
+        view.close();
+    },
+
+    /**
+     * Calls the setSelectedTemplateStyle callback with the selected
+     * environment field style.
+     */
+    applyEnvironmentFieldStyle: function() {
+        var view = this.getView();
+        view.getSetSelectedTemplateStyle()(this.getViewModel().get('selectedEnvironmentFieldStyle'));
         view.close();
     },
 
