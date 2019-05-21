@@ -347,7 +347,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * @param {Object} btn the button/component to show the menu by
      */
     showChartSettingsMenu: function(btn) {
-        this.chartSettingsMenu.showBy(btn);
+        var timeDiff = new Date().getTime() - this.chartSettingsMenu.lastHidden;
+        // make sure to keep the menu closed if it was just shown
+        // (e.g. when clicking on the button again)
+        if (timeDiff > 150 || isNaN(timeDiff)) {
+            this.chartSettingsMenu.showBy(btn);
+        }
     },
 
     zoomToMaxExtent: function() {

@@ -142,6 +142,15 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
     toggleUncertainty: function() {
         var chartCtrl = this.getView().chart.getController();
         chartCtrl.toggleUncertainty();
+    },
+
+    /**
+     * This event handler keeps track of the current time to be able
+     * to keep the menu closed when clicking on the menu button while
+     * the menu is open.
+     */
+    onBeforeHide: function() {
+        this.getView().lastHidden = new Date().getTime();
     }
 
 });

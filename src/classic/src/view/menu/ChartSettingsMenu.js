@@ -71,6 +71,10 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
 
     config: {
         isTimeseries: true
+    },
+
+    listeners: {
+        beforehide: 'onBeforeHide'
     }
 
 });
