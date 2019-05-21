@@ -249,7 +249,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         layerUtil.getMetadataFromUuid(uuid)
             .then(gotMetadataCallback)
             .catch(function() {
-                gotMetadataCallback(null);
+                gotMetadataCallback({});
             });
 
         map.getLayers().once('add', function(evt) {
