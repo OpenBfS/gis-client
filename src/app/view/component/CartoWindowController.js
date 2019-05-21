@@ -775,10 +775,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (!chart) {
             return;
         }
-        var cls = (chart === me.timeserieschart) ? 'fa-line-chart' : 'fa-bar-chart';
+        var cls = (chart === me.timeserieschart) ? 'fa-chart-line' : 'fa-chart-bar';
         title = '<span class="fa-stack">' +
-            '<i class="fa fa-stack-2x ' + cls + '"></i>' +
-            '<i class="fa fa-grip-lines fa-stack-2x"></i></span>';
+            '<i class="fa fa-th fa-stack-2x"></i></span>' +
+            '<i class="fa fa-stack-1x ' + cls + '"style="color:grey"></i>';
 
         gridTableTab = me.createTabElement({
             title: title,
