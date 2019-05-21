@@ -539,7 +539,10 @@
                 "changeMinMaxText": "Change min/max",
                 "minMaxWindowTitle": "Change y axis",
                 "okText": "Ok",
-                "cancelText": "Cancel"
+                "cancelText": "Cancel",
+                "editTemplates": "Edit templates",
+                "title": "Title",
+                "tooltip": "Tooltip"
             }
         }
     },

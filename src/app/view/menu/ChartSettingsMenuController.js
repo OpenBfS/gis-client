@@ -142,6 +142,35 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
     toggleUncertainty: function() {
         var chartCtrl = this.getView().chart.getController();
         chartCtrl.toggleUncertainty();
+    },
+
+    /**
+     * Edit the appropriate chart templates.
+     */
+    editTemplates: function() {
+        var chart = this.getView().chart;
+        var fullMetadata = chart.getTargetLayer().metadata;
+        var viewModel = this.getViewModel();
+        var templates = [viewModel.get('tooltip'), viewModel.get('title')];
+        var properties = ['tooltipTpl'];
+        var metadata;
+        if (chart.xtype === 'd3-chart') {
+            properties.push('seriesTitleTpl');
+            metadata = metadata.layerConfig.timeSeriesChartProperties;
+        } else {
+            properties.push('titleTpl');
+            metadata = metadata.layerConfig.barChartProperties;
+        }
+
+        Ext.create('Ext.window.Window', {
+            autoShow: true,
+            items: [{
+                xtype: 'k-form-field-templateeditor',
+                templates: templates,
+                metadata: metadata,
+                properties: properties
+            }]// TODO on close/hide update fullMetadata
+        });
     }
 
 });
