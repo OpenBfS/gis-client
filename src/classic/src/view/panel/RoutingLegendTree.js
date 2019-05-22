@@ -223,6 +223,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 videoSlider.setMinValue(time);
                 videoSlider.setMaxValue(time + duration);
                 videoSlider.setValue(time);
+                videoSlider.setDisabled(true);
                 olLayer.set('slider', videoSlider);
             }
             videoSlider.setVisible(olLayer.get('isVideoLayer'));
