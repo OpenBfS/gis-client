@@ -778,7 +778,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var cls = (chart === me.timeserieschart) ? 'fa-chart-line' : 'fa-chart-bar';
         title = '<span class="fa-stack">' +
             '<i class="fa fa-th fa-stack-2x"></i></span>' +
-            '<i class="fa fa-stack-1x ' + cls + '"style="color:grey"></i>';
+            '<i class="fa fa-stack-2x ' + cls + '"style="color: grey; font-size: 1.5em"></i>';
 
         gridTableTab = me.createTabElement({
             title: title,
