@@ -648,7 +648,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 }, {
                     xtype: 'button',
                     name: 'edit',
-                    glyph: 'xf040@FontAwesome',
+                    glyph: 'xf303@FontAwesome',
                     tooltip: 'Layerobjekte editieren'
                     // We'll assign a handler to handle clicks here once the
                     // class is defined and we can access the static methods
@@ -873,7 +873,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         };
         switch (mode) {
             case 'collapse':
-                cfg.glyph = 'xf147@FontAwesome';
+                cfg.glyph = 'xf146@FontAwesome';
                 cfg.bind = {
                     text: '{btnTxtCollapseAll}',
                     tooltip: '{btnTooltipCollapseAll}'
@@ -889,7 +889,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 cfg.handler = me.toggleAllBodies;
                 break;
             case 'expand':
-                cfg.glyph = 'xf196@FontAwesome';
+                cfg.glyph = 'xf0fe@FontAwesome';
                 cfg.bind = {
                     text: '{btnTxtExpandAll}',
                     tooltip: '{btnTooltipExpandAll}'

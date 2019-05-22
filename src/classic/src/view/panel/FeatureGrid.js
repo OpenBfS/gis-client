@@ -258,7 +258,7 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                 targetVectorLayer: me.layer,
                 selectionVectorLayer: this.getViewModel().get(
                     'selectedFeaturesLayer'),
-                glyph: 'xf10c@FontAwesome',
+                glyph: 'xf1ce@FontAwesome',
                 fullSplit: true,
                 maxAllowedFeaturesForOperation: 10,
                 tolerance: 10
