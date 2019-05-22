@@ -178,7 +178,8 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                 xtype: 'k-form-field-templateeditor',
                 templates: templates,
                 metadata: metadata,
-                properties: properties
+                properties: properties,
+                layer: chart.getTargetLayer()
             }],
             listeners: {
                 close: function() {

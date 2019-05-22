@@ -21,6 +21,8 @@ Ext.define('Koala.view.form.field.TemplateEditor', {
     xtype: 'k-form-field-templateeditor',
 
     requires: [
+        'Ext.form.field.HtmlEditor',
+        'Koala.util.Layer'
     ],
 
     controller: 'k-form-field-templateeditor',
@@ -31,7 +33,8 @@ Ext.define('Koala.view.form.field.TemplateEditor', {
     config: {
         templates: [],
         properties: [],
-        metadata: null
+        metadata: null,
+        layer: null
     },
 
     items: [{
@@ -45,7 +48,16 @@ Ext.define('Koala.view.form.field.TemplateEditor', {
             change: 'templateSelected'
         }
     }, {
-        xtype: 'textfield',
+        xtype: 'combo',
+        bind: {
+            store: '{attributes}',
+            fieldLabel: '{insertAttribute}'
+        },
+        listeners: {
+            change: 'attributeSelected'
+        }
+    }, {
+        xtype: 'htmleditor',
         bind: {
             fieldLabel: '{templateLabel}',
             value: '{templateValue}'
@@ -56,13 +68,23 @@ Ext.define('Koala.view.form.field.TemplateEditor', {
     }],
 
     /**
-     * Updates the view model with the values from the config.
+     * Updates the view model with the values from the config
+     * and gets the layer's attributes.
      */
     initComponent: function() {
         this.callParent();
         var viewModel = this.getViewModel();
         viewModel.set('templates', this.getTemplates());
         viewModel.set('selectedTemplate', this.getTemplates()[0]);
+        var layer = this.getLayer();
+        if (layer instanceof ol.layer.Vector) {
+            var properties = Koala.util.Data.extractProperties(layer.getSource().getFeatures());
+            viewModel.set('attributes', properties);
+            return;
+        }
+        Koala.util.Layer.getSchema(this.getLayer(), function(attributes) {
+            viewModel.set('attributes', attributes);
+        });
     }
 
 });

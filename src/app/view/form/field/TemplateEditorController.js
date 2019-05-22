@@ -48,6 +48,17 @@ Ext.define('Koala.view.form.field.TemplateEditorController', {
         var idx = view.getTemplates().indexOf(tpl);
         var property = view.getProperties()[idx];
         metadata[property] = newValue;
+    },
+
+    /**
+     * Inserts the selected value into the htmleditor.
+     *
+     * @param {Ext.form.field.ComboBox} combo the combo
+     * @param {String} newValue the new value
+     */
+    attributeSelected: function(combo, newValue) {
+        var editor = this.getView().down('htmleditor');
+        editor.insertAtCursor('[[' + newValue + ']]');
     }
 
 });
