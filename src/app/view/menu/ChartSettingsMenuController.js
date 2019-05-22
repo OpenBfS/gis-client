@@ -156,10 +156,10 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
         var metadata;
         if (chart.xtype === 'd3-chart') {
             properties.push('seriesTitleTpl');
-            metadata = metadata.layerConfig.timeSeriesChartProperties;
+            metadata = fullMetadata.layerConfig.timeSeriesChartProperties;
         } else {
             properties.push('titleTpl');
-            metadata = metadata.layerConfig.barChartProperties;
+            metadata = fullMetadata.layerConfig.barChartProperties;
         }
 
         Ext.create('Ext.window.Window', {
@@ -169,7 +169,17 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                 templates: templates,
                 metadata: metadata,
                 properties: properties
-            }]// TODO on close/hide update fullMetadata
+            }],
+            listeners: {
+                close: function() {
+                    var editor = this.down('k-form-field-templateeditor');
+                    var md = editor.getMetadata();
+                    Ext.each(properties, function(property) {
+                        metadata[property] = md[property];
+                    });
+                    chart.getController().getChartData();
+                }
+            }
         });
     }
 

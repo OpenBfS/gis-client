@@ -1062,7 +1062,7 @@ Ext.define('Koala.util.Layer', {
 
             // apply default filter to layer, if needed
             metadata = Koala.util.Layer.adjustMetadataAccordingToFilters(metadata);
-console.log('layer from md')
+
             var internalLayerConfig = staticMe.getInternalLayerConfig(metadata); //TODO arguments?
             var internalSourceConfig = staticMe.getInternalSourceConfig(metadata, SourceClass);
 
@@ -1590,7 +1590,6 @@ console.log('layer from md')
                     filters
                 );
             }
-            console.log('overriding1')
             return metadata;
         },
 
@@ -1735,7 +1734,7 @@ console.log('layer from md')
             if (metadata.layerConfig.olProperties.param_cql_filter === '') {
                 delete metadata.layerConfig.olProperties.param_cql_filter;
             }
-console.log('override 2')
+
             return metadata;
         },
 
