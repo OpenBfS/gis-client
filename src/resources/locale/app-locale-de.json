@@ -541,7 +541,10 @@
                 "changeMinMaxText": "Min/Max ändern",
                 "minMaxWindowTitle": "y-Achse ändern",
                 "okText": "Ok",
-                "cancelText": "Abbrechen"
+                "cancelText": "Abbrechen",
+                "editTemplates": "Templates anpassen",
+                "title": "Titel",
+                "tooltip": "Tooltip"
             }
         }
     },
@@ -608,7 +611,8 @@
                 "downloadButtonYes": "Ja",
                 "downloadButtonNo": "Nein",
                 "outputFormatText": "Ausgabeformat",
-                "title": "Legende"
+                "title": "Legende",
+                "templateEditor": "Templates editieren"
             }
         }
     },

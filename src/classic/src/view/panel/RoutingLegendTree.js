@@ -586,7 +586,36 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         initializeOpacityVal: function(slider) {
             var layer = slider.layerRec.getOlLayer();
             slider.setValue(layer.getOpacity() * 100);
+        },
+
+        /**
+         * Edit the hover template.
+         */
+        editTemplate: function(btn) {
+            var view = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+            var viewModel = view.lookupViewModel();
+            var layer = btn.layerRec.getOlLayer();
+            var olProps = layer.metadata.layerConfig.olProperties;
+            Ext.create('Ext.window.Window', {
+                autoShow: true,
+                title: viewModel.get('templateEditor'),
+                items: [{
+                    xtype: 'k-form-field-templateeditor',
+                    templates: ['Hover-Template'],
+                    metadata: olProps,
+                    properties: ['hoverTpl']
+                }],
+                listeners: {
+                    close: function() {
+                        var editor = this.down('k-form-field-templateeditor');
+                        var md = editor.getMetadata();
+                        olProps.hoverTpl = md.hoverTpl;
+                        layer.set('hoverTpl', md.hoverTpl);
+                    }
+                }
+            });
         }
+
     },
 
     rowBodyCompTemplate: {
@@ -650,6 +679,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     name: 'edit',
                     glyph: 'xf303@FontAwesome',
                     tooltip: 'Layerobjekte editieren'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'templateEditor',
+                    glyph: 'xf013@FontAwesome',
+                    tooltip: 'Hover-Template editieren'
                     // We'll assign a handler to handle clicks here once the
                     // class is defined and we can access the static methods
                 }, {
@@ -1463,6 +1499,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var pauseCfg = cls.findByProp(menuItems, 'name', 'video-pause');
     var stopCfg = cls.findByProp(menuItems, 'name', 'video-stop');
     var speedCfg = cls.findByProp(menuItems, 'name', 'video-speed');
+    var templateEditorCfg = cls.findByProp(menuItems, 'name', 'templateEditor');
 
     if (cls.prototype.rowBodyCompTemplate.items[0]) {
         cls.prototype.rowBodyCompTemplate.items[0].listeners.beforerender = cls.reorganizeMenu;
@@ -1510,6 +1547,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     if (videoSliderCfg) {
         videoSliderCfg.listeners.change = cls.videoSliderHandler;
         videoSliderCfg.plugins = ['k-time-tip'];
+    }
+    if (templateEditorCfg) {
+        templateEditorCfg.handler = cls.editTemplate;
     }
 
 });

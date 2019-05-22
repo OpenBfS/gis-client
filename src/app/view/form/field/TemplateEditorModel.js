@@ -14,25 +14,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- *
- * @class Koala.view.menu.ChartSettingsMenuModel
+ * @class Koala.view.form.field.TemplateEditorModel
  */
-Ext.define('Koala.view.menu.ChartSettingsMenuModel', {
+Ext.define('Koala.view.form.field.TemplateEditorModel', {
     extend: 'Ext.app.ViewModel',
-
-    alias: 'viewmodel.k-menu-chartsettings',
+    alias: 'viewmodel.k-form-field-templateeditor',
 
     data: {
-        toggleScaleText: '',
-        showIdentificationThresholdText: '',
-        toggleLegendText: '',
-        toggleUncertaintyText: '',
-        axisText: '',
-        changeMinMaxText: '',
-        minMaxWindowTitle: '',
-        okText: '',
-        cancelText: '',
-        editTemplates: ''
+        templates: [],
+        selectedTemplate: null,
+        templateValue: null,
+        templateLabel: ''
     }
 
 });
