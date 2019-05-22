@@ -374,6 +374,14 @@
             }
         }
     },
+    "Koala.view.form.field.TemplateEditor": {
+        "config": {
+            "data": {
+                "insertAttribute": "Attribut einfügen",
+                "selectTemplate": "Template auswählen"
+            }
+        }
+    },
     "Koala.view.form.Print": {
         "config": {
             "data": {

@@ -27,6 +27,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.util.Help',
         'Koala.util.Import',
         'Koala.util.Layer',
+        'Koala.view.form.field.TemplateEditor',
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
         'Koala.view.panel.FeatureGrid',
@@ -606,7 +607,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     xtype: 'k-form-field-templateeditor',
                     templates: ['Hover-Template'],
                     metadata: olProps,
-                    properties: ['hoverTpl']
+                    properties: ['hoverTpl'],
+                    layer: layer
                 }],
                 listeners: {
                     close: function() {

@@ -24,7 +24,8 @@ Ext.define('Koala.view.form.field.TemplateEditorModel', {
         templates: [],
         selectedTemplate: null,
         templateValue: null,
-        templateLabel: ''
+        templateLabel: '',
+        attributes: []
     }
 
 });
