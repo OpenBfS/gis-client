@@ -1458,7 +1458,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 }
             }
         });
-        if (slider) {
+        if (slider && !slider.isDestroying && !slider.destroyed) {
             slider.setMinValue(time);
             slider.setMaxValue(duration + time);
             slider.suspendEvents();
