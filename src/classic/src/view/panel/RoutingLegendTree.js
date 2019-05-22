@@ -318,9 +318,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var layer = btn.layerRec.getOlLayer();
 
             if (layer instanceof ol.layer.Vector) {
-                Ext.create('Koala.view.window.FilterGridWindow', {
-                    layer: layer
-                });
+                if (!layer.filterGridWindow) {
+                    layer.filterGridWindow = Ext.create('Koala.view.window.FilterGridWindow', {
+                        layer: layer
+                    });
+                }
+                layer.filterGridWindow.show();
                 return;
             }
 
