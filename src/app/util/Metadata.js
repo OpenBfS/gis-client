@@ -180,7 +180,7 @@ Ext.define('Koala.util.Metadata', {
 
             Ext.Ajax.request({
                 url: url + 'srv/api/0.1/records/duplicate?group=1&sourceUuid=' +
-                    context.uuid + '&metadataType=METADATA&isVisibleByAllGroupMembers=false&isChildOfSource=false',
+                    context.uuid + '&metadataType=METADATA&isVisibleByAllGroupMembers=false&isChildOfSource=false&hasCategoryOfSource=false',
                 method: 'PUT',
                 headers: {
                     'X-XSRF-TOKEN': context.csrfToken,
