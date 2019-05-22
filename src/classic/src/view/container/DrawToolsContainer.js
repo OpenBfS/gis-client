@@ -134,7 +134,7 @@ Ext.define('Koala.view.container.DrawToolsContainer', {
             }
         }, {
             xtype: 'button',
-            glyph: 'f014@FontAwesome',
+            glyph: 'f2ed@FontAwesome',
             tooltip: viewModel.get('clearTooltip'),
             handler: function() {
                 me.drawVectorLayer.getSource().clear();

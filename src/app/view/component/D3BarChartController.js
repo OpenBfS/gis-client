@@ -296,6 +296,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
             }
             var config = me.getView().getConfig();
             var chartSize = me.getViewSize();
+            if (config.title) {
+                config.title.label = Koala.util.Chart.getChartTitle(this.getView().getTargetLayer());
+                var titleTpl = 'titleTpl' in barChartProperties ? barChartProperties.titleTpl : '';
+                config.title.label = Koala.util.String.replaceTemplateStrings(titleTpl, this.getView().getSelectedStations()[0]);
+            }
             this.chartConfig = Koala.util.ChartData.getChartConfiguration(
                 config,
                 chartSize,

@@ -780,8 +780,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (!chart) {
             return;
         }
-        //title = (chart === me.timeserieschart) ? 'TS Table' : (chart === me.barChart) ? 'BC Table' : '';
-        title = (chart === me.timeserieschart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : (chart === me.barChart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : '';
+        var cls = (chart === me.timeserieschart) ? 'fa-chart-line' : 'fa-chart-bar';
+        title = '<span class="fa-stack">' +
+            '<i class="fa fa-th fa-stack-2x"></i></span>' +
+            '<i class="fa fa-stack-2x ' + cls + '"style="color: grey; font-size: 1.5em"></i>';
 
         gridTableTab = me.createTabElement({
             title: title,

@@ -656,7 +656,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var view = me.getView();
             layer = view.getTargetLayer();
         }
-        var chartProperties = layer.get('timeSeriesChartProperties');
+        var chartProperties = layer.metadata.layerConfig.timeSeriesChartProperties;
         // The id of the selected station is also the key in the pending
         // requests object.
         var stationId = selectedStation.get(chartProperties.featureIdentifyField || 'id');
@@ -686,7 +686,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var Ogc = Koala.util.Ogc;
         var view = me.getView();
         var targetLayer = view.getTargetLayer();
-        var chartConfig = targetLayer.get('timeSeriesChartProperties');
+        var chartConfig = targetLayer.metadata.layerConfig.timeSeriesChartProperties;
         var startDate = view.getStartDate();
         var endDate = view.getEndDate();
         var filterConfig = Koala.util.Filter.getStartEndFilterFromMetadata(
@@ -807,7 +807,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (!view) {
             return;
         }
-        var chartProps = view.getTargetLayer().get('timeSeriesChartProperties');
+        var chartProps = view.getTargetLayer().metadata.layerConfig.timeSeriesChartProperties;
         // The id of the selected station is also the key in the pending
         // requests object.
         var stationId = station.get(chartProps.featureIdentifyField || 'id');
@@ -833,7 +833,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         var targetLayer = view.getTargetLayer();
         var startDate = view.getStartDate().clone();
         var endDate = view.getEndDate().clone();
-        var chartConfig = targetLayer.get('timeSeriesChartProperties');
+        var chartConfig = targetLayer.metadata.layerConfig.timeSeriesChartProperties;
         var data;
         if (response && response.responseText) {
             try {
@@ -900,7 +900,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     containsStation: function(candidate) {
         var me = this;
         var view = me.getView();
-        var chartingMetadata = view.getTargetLayer().get('timeSeriesChartProperties');
+        var chartingMetadata = view.getTargetLayer().metadata.layerConfig.timeSeriesChartProperties;
         var identifyField = chartingMetadata.featureIdentifyField || 'id';
         var candidateIdVal = candidate.get(identifyField);
         var doesContainSeries = false;

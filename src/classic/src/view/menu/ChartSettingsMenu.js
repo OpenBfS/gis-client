@@ -22,7 +22,8 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
 
     requires: [
         'Koala.view.menu.ChartSettingsMenuController',
-        'Koala.view.menu.ChartSettingsMenuModel'
+        'Koala.view.menu.ChartSettingsMenuModel',
+        'Koala.view.form.field.TemplateEditor'
     ],
 
     controller: 'k-menu-chartsettings',
@@ -36,7 +37,7 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
             hidden: '{!isTimeseries}'
         },
         handler: 'toggleScale',
-        glyph: 'xf07d@FontAwesome'
+        glyph: 'xf338@FontAwesome'
     }, {
         xtype: 'menucheckitem',
         name: 'identificationThreshold',
@@ -67,6 +68,11 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
             hidden: '{isTimeseries}'
         },
         handler: 'toggleUncertainty'
+    }, {
+        bind: {
+            text: '{editTemplates}'
+        },
+        handler: 'editTemplates'
     }],
 
     config: {

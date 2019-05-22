@@ -74,6 +74,9 @@ Ext.define('Koala.view.form.ChartDataForm',{
         var metadata = this.getMetadata().layerConfig.barChartProperties;
         var context = Koala.util.AppContext.getAppContext().data.merge;
         var attributeFields = context.paramIsAttributeName;
+        if (!attributeFields) {
+            attributeFields = [];
+        }
         this.callParent();
         var fs = this.down('fieldset');
         var attributes = Koala.util.Data.extractProperties(this.getFeatures());
