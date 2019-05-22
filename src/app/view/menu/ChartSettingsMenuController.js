@@ -164,6 +164,7 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
 
         Ext.create('Ext.window.Window', {
             autoShow: true,
+            title: viewModel.get('editTemplates'),
             items: [{
                 xtype: 'k-form-field-templateeditor',
                 templates: templates,

@@ -611,7 +611,8 @@
                 "downloadButtonYes": "Ja",
                 "downloadButtonNo": "Nein",
                 "outputFormatText": "Ausgabeformat",
-                "title": "Legende"
+                "title": "Legende",
+                "templateEditor": "Templates editieren"
             }
         }
     },
