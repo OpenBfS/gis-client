@@ -204,6 +204,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var pauseBtn = comp.down('button[name=video-pause]');
             var playBtn = comp.down('button[name=video-play]');
             var speedMenu = comp.down('button[name=video-speed]');
+            var templateBtn = comp.down('button[name=templateEditor]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
 
             if (olLayer.get('isVideoLayer')) {
@@ -228,6 +229,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             pauseBtn.setVisible(olLayer.get('isVideoLayer'));
             playBtn.setVisible(olLayer.get('isVideoLayer'));
             speedMenu.setVisible(olLayer.get('isVideoLayer'));
+            changeFilterBtn.setVisible(!olLayer.get('isVideoLayer'));
+            templateBtn.setVisible(!olLayer.get('isVideoLayer'));
 
             if (shortInfoBtn) {
                 shortInfoBtn.setVisible(allowShortInfo);
