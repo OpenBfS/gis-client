@@ -1,0 +1,14 @@
+[
+    {
+        "val": "microSv_h_odl_brutto_10min_routine",
+        "dsp": "µSv/h (Routine)"
+    },
+    {
+        "val": "microSv_h_odl_brutto_10min_intensiv",
+        "dsp": "µSv/h (Intensiv)"
+    },
+    {
+        "val": "other",
+        "dsp": "Other"
+    }
+]

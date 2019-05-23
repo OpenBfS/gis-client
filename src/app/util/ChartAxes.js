@@ -60,7 +60,7 @@ Ext.define('Koala.util.ChartAxes', {
                 xtype: 'menu'
             });
             if (elm) {
-                menu.showBy(elm);
+                menu.showBy(elm, 'tl');
             } else {
                 Ext.Viewport.setMenu(menu, {
                     side: 'right'

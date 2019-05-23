@@ -14,24 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- *
- * @class Koala.view.menu.ChartSettingsMenuModel
+ * @class Koala.view.window.FilterGridWindowModel
  */
-Ext.define('Koala.view.menu.ChartSettingsMenuModel', {
+Ext.define('Koala.view.window.FilterGridWindowModel', {
     extend: 'Ext.app.ViewModel',
-
-    alias: 'viewmodel.k-menu-chartsettings',
+    alias: 'viewmodel.k-window-filtergrid',
 
     data: {
-        toggleScaleText: '',
-        showIdentificationThresholdText: '',
-        toggleLegendText: '',
-        toggleUncertaintyText: '',
-        axisText: '',
-        changeMinMaxText: '',
-        minMaxWindowTitle: '',
-        okText: '',
-        cancelText: ''
+        title: '',
+        duplicateButton: '',
+        duplicateFeaturesText: '',
+        noDuplicateFeaturesText: ''
     }
-
 });

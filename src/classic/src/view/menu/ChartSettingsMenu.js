@@ -39,9 +39,10 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
         glyph: 'xf07d@FontAwesome'
     }, {
         xtype: 'menucheckitem',
+        name: 'identificationThreshold',
         bind: {
             text: '{showIdentificationThresholdText}',
-            hidden: '{!isTimeseries || !maySeeIdThresholdButton}'
+            hidden: '{!maySeeIdThresholdButton}'
         },
         handler: 'showIdentificationThreshold',
         glyph: 'xf201@FontAwesome'
@@ -58,6 +59,14 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
         },
         handler: 'changeMinMax',
         glyph: 'xf065@FontAwesome'
+    }, {
+        xtype: 'menucheckitem',
+        checked: true,
+        bind: {
+            text: '{toggleUncertaintyText}',
+            hidden: '{isTimeseries}'
+        },
+        handler: 'toggleUncertainty'
     }],
 
     config: {

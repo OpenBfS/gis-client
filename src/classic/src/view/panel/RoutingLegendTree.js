@@ -31,6 +31,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.view.panel.RoutingLegendTreeModel',
         'Koala.view.panel.FeatureGrid',
         'Koala.view.slider.AlwaysVisibleTimeTip',
+        'Koala.view.window.FilterGridWindow',
         'Koala.view.window.MetadataInfo',
         'Koala.view.window.CloneWindow',
         'Koala.view.window.ShareWindow'
@@ -237,6 +238,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 } else {
                     changeFilterBtn.setVisible(allowChangeFilter);
                 }
+                if (olLayer instanceof ol.layer.Vector) {
+                    changeFilterBtn.setVisible(true);
+                }
             }
             if (downloadBtn) {
                 downloadBtn.setVisible(allowDownload);
@@ -308,6 +312,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         changeFilterHandler: function(btn) {
             var layer = btn.layerRec.getOlLayer();
+
+            if (layer instanceof ol.layer.Vector) {
+                Ext.create('Koala.view.window.FilterGridWindow', {
+                    layer: layer
+                });
+                return;
+            }
 
             //for layers with time filter check metadata once more
             // since available mindate / maxdate might have changed meanwhile

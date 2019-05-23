@@ -353,8 +353,8 @@
                 "projectionLabel": "Projection",
                 "fileFieldLabel": "File",
                 "fileFieldButtonText": "Browse",
-                "templateStyleLabel": "Style from template",
-                "settingsText": "Settings"
+                "settingsText": "Settings",
+                "selectStyle": "Select style"
             }
         }
     },
@@ -536,6 +536,7 @@
                 "toggleScaleText": "linear/logarithmic",
                 "showIdentificationThresholdText": "Show data below < Id. Thresh.",
                 "toggleLegendText": "Toggle legend",
+                "toggleUncertaintyText": "Toggle uncertainty",
                 "axisText": "Axis",
                 "changeMinMaxText": "Change min/max",
                 "minMaxWindowTitle": "Change y axis",
@@ -721,6 +722,16 @@
             }
         }
     },
+    "Koala.view.window.FilterGridWindow": {
+        "config": {
+            "data": {
+                "title": "Filter",
+                "duplicateButton": "Check duplicates",
+                "duplicateFeaturesText": "Your data is overlapping! In order to get a sensible cartographic portrayal you should filter and/or sort the data.",
+                "noDuplicateFeatures": "No overlapping data."
+            }
+        }
+    },
     "Koala.view.window.PermalinkWindow": {
         "config": {
             "data": {
@@ -757,6 +768,24 @@
         "config": {
             "data": {
                 "title": "Print"
+            }
+        }
+    },
+    "Koala.view.window.StyleSelectWindow": {
+        "config": {
+            "data": {
+                "title": "Select style",
+                "fileFieldTab": "From File",
+                "getFromEnvironmentFieldTab": "From environment field",
+                "templateTab": "From template",
+                "geoStylerText": "GeoStyler-Default",
+                "fileFieldText": "Select local SLD",
+                "selectEnvironmentFieldFieldText": "Select environment field field",
+                "selectEnvironmentFieldText": "Select environment field",
+                "selectTemplateText": "Select template",
+                "selectStyleText": "Select style",
+                "applyText": "Apply",
+                "cancelText": "Cancel"
             }
         }
     },

@@ -355,8 +355,8 @@
                 "projectionLabel": "Projektion",
                 "fileFieldLabel": "Datei",
                 "fileFieldButtonText": "Durchsuchen",
-                "templateStyleLabel": "Stil aus Template",
-                "settingsText": "Einstellungen"
+                "settingsText": "Einstellungen",
+                "selectStyle": "Stil wählen"
             }
         }
     },
@@ -538,6 +538,7 @@
                 "toggleScaleText": "linear/logarithmisch",
                 "showIdentificationThresholdText": "Daten < NWG anzeigen",
                 "toggleLegendText": "Legende umschalten",
+                "toggleUncertaintyText": "Messungenauigkeit umschalten",
                 "axisText": "Achse",
                 "changeMinMaxText": "Min/Max ändern",
                 "minMaxWindowTitle": "y-Achse ändern",
@@ -725,6 +726,16 @@
             }
         }
     },
+    "Koala.view.window.FilterGridWindow": {
+        "config": {
+            "data": {
+                "title": "Filter",
+                "duplicateButton": "Duplikate prüfen",
+                "duplicateFeaturesText": "Ihre Daten überlagern sich! Für eine sinnvolle kartographische Darstellung sollten Sie die Daten filtern und/oder sortieren.",
+                "noDuplicateFeaturesText": "Keine überlagernden Daten."
+            }
+        }
+    },
     "Koala.view.window.PermalinkWindow": {
         "config": {
             "data": {
@@ -761,6 +772,24 @@
         "config": {
             "data": {
                 "title": "Drucken"
+            }
+        }
+    },
+    "Koala.view.window.StyleSelectWindow": {
+        "config": {
+            "data": {
+                "title": "Stil auswählen",
+                "fileFieldTab": "Aus Datei",
+                "getFromEnvironmentFieldTab": "Aus Umweltbereich",
+                "templateTab": "Aus Template",
+                "geoStylerText": "GeoStyler-Default",
+                "fileFieldText": "SLD-Datei hochladen",
+                "selectEnvironmentFieldFieldText": "Feld mit Umweltbereich wählen",
+                "selectEnvironmentFieldText": "Umweltbereich wählen",
+                "selectTemplateText": "Template wählen",
+                "selectStyleText": "Stil wählen",
+                "applyText": "Übernehmen",
+                "cancelText": "Abbrechen"
             }
         }
     },

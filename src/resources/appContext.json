@@ -15,7 +15,8 @@
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
                 "videos": "resources/videos.json",
-                "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
+                "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif",
+                "style-service": "resources/styles.json"
             },
             "application_user": {
                 "username": "admin",
@@ -56,6 +57,12 @@
                 "title",
                 "abstract"
             ],
+            "paramIsAttributeName": [
+                "yAxisAttribute",
+                "groupAttribute",
+                "detectionLimitAttribute",
+                "uncertaintyAttribute"
+            ],
             "spatialSearchTypeName": "bfs:verwaltung_4326_geozg_sort",
             "spatialSearchFields": {
                 "searchColumn": "NAME",
@@ -90,7 +97,8 @@
                 "measureBtn",
                 "drawBtn",
                 "createVectorLayerBtn",
-                "importVectorLayerBtn"
+                "importVectorLayerBtn",
+                "detectionLimitBtn"
             ],
             "vectorIcons": [
                 {

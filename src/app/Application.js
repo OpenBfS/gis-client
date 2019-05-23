@@ -28,6 +28,7 @@ Ext.define('Koala.Application', {
     name: 'Koala',
 
     requires: [
+        'BasiGX.util.Namespace',
         'Koala.util.Routing',
         'Koala.util.AppContext'
     ],
@@ -103,7 +104,7 @@ Ext.define('Koala.Application', {
      * @type {function}
      */
     onMapRoute: function() {
-        if (this.routedAlready) {
+        if (this.routedAlready && !Ext.isModern) {
             window.location.reload();
         }
         this.routedAlready = true;
@@ -161,6 +162,10 @@ Ext.define('Koala.Application', {
     },
 
     launch: function() {
+        BasiGX.util.Namespace.namespaces = {
+            bfs: 'www.imis.bfs.de/bfs',
+            imis: 'www.imis.bfs.de/imis'
+        };
         if (window.location.hash === '') {
             this.routedAlready = true;
         }

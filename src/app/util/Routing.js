@@ -54,7 +54,9 @@ Ext.define('Koala.util.Routing', {
          * @param  {String} hash The hashstring.
          */
         onUnmatchedRoute: function(hash) {
-            Ext.log.info('Unmatched route: ', hash);
+            if (hash !== '') {
+                Ext.log.info('Unmatched route: ', hash);
+            }
         },
 
         /**

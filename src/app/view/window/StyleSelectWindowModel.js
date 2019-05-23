@@ -14,24 +14,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- *
- * @class Koala.view.menu.ChartSettingsMenuModel
+ * @class Koala.view.window.StyleSelectWindowModel
  */
-Ext.define('Koala.view.menu.ChartSettingsMenuModel', {
+Ext.define('Koala.view.window.StyleSelectWindowModel', {
     extend: 'Ext.app.ViewModel',
-
-    alias: 'viewmodel.k-menu-chartsettings',
+    alias: 'viewmodel.k-window-styleselect',
 
     data: {
-        toggleScaleText: '',
-        showIdentificationThresholdText: '',
-        toggleLegendText: '',
-        toggleUncertaintyText: '',
-        axisText: '',
-        changeMinMaxText: '',
-        minMaxWindowTitle: '',
-        okText: '',
-        cancelText: ''
+        title: '',
+        fileFieldTab: '',
+        getFromEnvironmentFieldTab: '',
+        templateTab: '',
+        fileFieldText: '',
+        selectEnvironmentFieldFieldText: '',
+        selectEnvironmentFieldText: '',
+        selectTemplateText: '',
+        selectStyleText: '',
+        geoStylerText: '',
+        templateStyles: [],
+        selectedTemplateStyle: '',
+        stylesAvailable: true,
+        applyText: '',
+        cancelText: '',
+        attributes: [],
+        environmentFieldStyles: []
     }
-
 });
