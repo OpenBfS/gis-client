@@ -1157,7 +1157,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var lineLayer = BasiGX.util.Layer.getLayerByName('carto-window-lines');
 
         if (!lineLayer) {
-            var lineStyle = view.getLayer().get('cartoWindowLineStyle');
+            var lineStyle = view.getLayer().get('cartoWindowLineStyle') || '#294d71,4';
             lineLayer = new ol.layer.Vector({
                 source: new ol.source.Vector(),
                 style: new ol.style.Style({

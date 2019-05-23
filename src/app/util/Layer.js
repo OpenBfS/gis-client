@@ -240,7 +240,8 @@ Ext.define('Koala.util.Layer', {
          * @return {boolean} Whether the layer will show a CartoWindow.
          */
         isCartoWindowLayer: function(layer) {
-            return !!layer.get('showCartoWindow');
+            var carto = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/olProperties/showCartoWindow');
+            return !!carto;
         },
 
         /**
