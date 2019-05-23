@@ -241,7 +241,7 @@ Ext.define('Koala.util.Layer', {
          */
         isCartoWindowLayer: function(layer) {
             var carto = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/olProperties/showCartoWindow');
-            return !!carto;
+            return !!carto || !!layer.get('showCartoWindow');
         },
 
         /**
