@@ -125,8 +125,8 @@ Ext.define('Koala.view.panel.Header', {
                     var messageHeader = '';
 
                     var replaceObject = Object.defineProperties({}, {
-                        'id': {
-                            value: Koala.util.Object.getPathStrOr(this.events[key], 'id', ''),
+                        'title': {
+                            value: Koala.util.Object.getPathStrOr(this.events[key], 'title', ''),
                             enumerable: true
                         },
                         'modified': {
@@ -139,6 +139,10 @@ Ext.define('Koala.view.panel.Header', {
                         },
                         'Exercise': {
                             value: Koala.util.String.getStringFromBool(Koala.util.Object.getPathStrOr(this.events[key], 'Exercise', '')),
+                            enumerable: true
+                        },
+                        'id': {
+                            value: Koala.util.Object.getPathStrOr(this.events[key], 'id', ''),
                             enumerable: true
                         },
                         'description': {
