@@ -185,7 +185,7 @@ Ext.define('Koala.util.String', {
          * @returns the i18n String for bool
          */
         getStringFromBool: function(boolValue) {
-            if (boolValue.toLowerCase() === 'true' || boolValue.toLowerCase() === '1' || boolValue.toString() === '1') {
+            if (boolValue.toString().toLowerCase() === 'true' || boolValue.toString() === '1') {
                 return this.bool2StringTrue;
             } else {
                 return this.bool2StringFalse;
