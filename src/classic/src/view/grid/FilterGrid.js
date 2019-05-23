@@ -29,6 +29,8 @@ Ext.define('Koala.view.grid.FilterGrid', {
     viewModel: {
         type: 'k-grid-filter'
     },
+    scrollable: true,
+    height: 150,
     config: {
         /**
          * The layer to filter/sort.
@@ -90,7 +92,7 @@ Ext.define('Koala.view.grid.FilterGrid', {
      */
     setupStore: function(columns) {
         this.setColumns(columns);
-        var features = this.getLayer().getSource().getFeatures().slice(0, 4);
+        var features = this.getLayer().getSource().getFeatures();
         features = features.map(function(feat) {
             return feat.getProperties();
         });

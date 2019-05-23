@@ -40,6 +40,7 @@ Ext.define('Koala.view.window.FilterGridWindow', {
     height: 220,
     width: 500,
     closeAction: 'method-hide',
+    resizable: false,
 
     config: {
         /**
@@ -60,6 +61,10 @@ Ext.define('Koala.view.window.FilterGridWindow', {
         text: '',
         name: 'duplicateText'
     }],
+
+    listeners: {
+        show: 'onShow'
+    },
 
     /**
      * Adds the filter grid.
