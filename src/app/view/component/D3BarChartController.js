@@ -222,6 +222,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
             }
         }
 
+        if (!jsonObj) {
+            return false;
+        }
+
         //used for grid table in CartoWindowController
         me.gridFeatures = jsonObj.features;
 

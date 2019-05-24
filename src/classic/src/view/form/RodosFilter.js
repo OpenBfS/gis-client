@@ -37,13 +37,14 @@ Ext.define('Koala.view.form.RodosFilter', {
 
     initComponent: function() {
         var me = this;
+        var configuredRodosProjects, configuredRodosResults;
         me.callParent();
         var appContext = BasiGX.view.component.Map.guess().appContext;
         if (appContext) {
-            var configuredRodosProjects = Koala.util.Object.getPathStrOr(
+            configuredRodosProjects = Koala.util.Object.getPathStrOr(
                 appContext, 'data/merge/urls/rodos-projects', false
             );
-            var configuredRodosResults = Koala.util.Object.getPathStrOr(
+            configuredRodosResults = Koala.util.Object.getPathStrOr(
                 appContext, 'data/merge/urls/rodos-results', false
             );
         }

@@ -111,7 +111,7 @@ Ext.define('Koala.util.ChartData', {
                 var interval = chartProps.interval;
                 var unit = chartProps.unit;
                 if (!interval || !unit) {
-                    if (!targetLayer instanceof ol.layer.Vector) {
+                    if (!(targetLayer instanceof ol.layer.Vector)) {
                         return;
                     }
                     return false;
@@ -801,7 +801,7 @@ Ext.define('Koala.util.ChartData', {
                 });
                 var seriesConfig = {
                     data: chartData,
-                    style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
+                    style: function() {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
                     useTooltipFunc: true,
                     curveType: gnosConfig.curveType || 'linear',
                     shapeType: gnosConfig.shapeType || 'line',
@@ -843,7 +843,7 @@ Ext.define('Koala.util.ChartData', {
                         });
                         var attachedSeriesConfig = {
                             data: chartData,
-                            style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
+                            style: function() {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
                             useTooltipFunc: true,
                             initiallyVisible: false,
                             curveType: serie.curveType || 'linear',
