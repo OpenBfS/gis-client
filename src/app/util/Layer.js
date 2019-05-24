@@ -1360,16 +1360,14 @@ Ext.define('Koala.util.Layer', {
                             // handle TIME
                             var filters = md.filters;
                             Ext.each(filters, function(filter) {
-                                switch (filter.type) {
-                                    case 'pointintime':
-                                        if (cql.indexOf(filter.param) !== -1) {
-                                            return;
-                                        }
-                                        if (cql.length > 0) {
-                                            cql += ' AND ';
-                                        }
-                                        cql += filter.param + '=\'' + extraParams.TIME + '\'';
-                                        break;
+                                if (filter.type === 'pointintime') {
+                                    if (cql.indexOf(filter.param) !== -1) {
+                                        return;
+                                    }
+                                    if (cql.length > 0) {
+                                        cql += ' AND ';
+                                    }
+                                    cql += filter.param + '=\'' + extraParams.TIME + '\'';
                                 }
                             });
                         }

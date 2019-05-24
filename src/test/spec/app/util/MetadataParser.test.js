@@ -297,11 +297,11 @@ var timeseriesMetadata = {
           '#text': [
                         {
               'val': 'microSv_h_odl_brutto_10min_routine',
-              'dsp': '�Sv/h (Routine)'
+              'dsp': 'µSv/h (Routine)'
             },
                         {
               'val': 'microSv_h_odl_brutto_10min_intensiv',
-              'dsp': '�Sv/h (Intensiv)'
+              'dsp': 'µSv/h (Intensiv)'
             }
           ]
         }},
@@ -337,7 +337,7 @@ var timeseriesMetadata = {
             },
                         {
               'val': '\'KFUE\'',
-              'dsp': 'KF�'
+              'dsp': 'KFü'
             }
           ]
         }},
