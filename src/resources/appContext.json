@@ -58,6 +58,7 @@
                 "abstract"
             ],
             "paramIsAttributeName": [
+                "xAxisAttribute",
                 "yAxisAttribute",
                 "groupAttribute",
                 "detectionLimitAttribute",

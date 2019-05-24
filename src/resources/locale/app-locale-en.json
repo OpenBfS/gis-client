@@ -1603,13 +1603,15 @@
         "config": {
             "data": {
                 "titleText": "Bar chart settings",
+                "xAxisAttribute": "X axis attribute",
                 "yAxisAttribute": "Y axis attribute",
                 "yAxisScale": "Y axis scale",
                 "groupAttribute": "Grouping attribute",
                 "detectionLimitAttribute": "Detection limit attribute",
                 "uncertaintyAttribute": "Uncertainty attribute",
                 "okButtonText": "Ok",
-                "cancelButtonText": "Cancel"
+                "cancelButtonText": "Cancel",
+                "timeseriesTitle": "Timeseries settings"
             }
         }
     },

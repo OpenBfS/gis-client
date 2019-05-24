@@ -69,6 +69,43 @@ Ext.define('Koala.util.Filter', {
         },
 
         /**
+         * Generates a start/end time filter from the given layer's features
+         * using the configured xAxisAttribute.
+         *
+         * @param {ol.layer.Vector} layer the layer
+         * @param {Object} metadata the layer's metadata
+         */
+        getStartEndFilterFromVectorLayer: function(layer, metadata) {
+            var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
+            var x = timeseriesCfg.xAxisAttribute;
+            var startDate, endDate;
+
+            Ext.each(layer.getSource().getFeatures(), function(feat) {
+                var cur = moment(feat.get(x));
+                if (!startDate) {
+                    startDate = cur;
+                }
+                if (!endDate) {
+                    endDate = cur;
+                }
+                if (cur.isBefore(startDate)) {
+                    startDate = cur;
+                }
+                if (endDate.isBefore(cur)) {
+                    endDate = cur;
+                }
+            });
+
+            return {
+                parameter: timeseriesCfg.xAxisAttribute,
+                // start- and enddate are always UTC, but we may have to set
+                // them to local reference.
+                mindatetimeinstant: Koala.util.Date.getTimeReferenceAwareMomentDate(startDate),
+                maxdatetimeinstant: Koala.util.Date.getTimeReferenceAwareMomentDate(endDate)
+            };
+        },
+
+        /**
          * Calculates the start and endvalues for timeseries charts. If a filter
          * is active for the layer it takes the filtervalue as enddate. If not
          * it looks for the configured defaultvalue.
@@ -80,8 +117,12 @@ Ext.define('Koala.util.Filter', {
          *                  the keys `parameter`, `mindatetimeinstant` and
          *                  `maxdatetimeinstant`.
          */
-        // TODO: In the test for the mindatetimeinstant is wrong
         getStartEndFilterFromMetadata: function(metadata) {
+            var layer = Koala.util.Layer.findLayerFromMetadata(metadata);
+            if (layer instanceof ol.layer.Vector) {
+                return Koala.util.Filter.getStartEndFilterFromVectorLayer(layer, metadata);
+            }
+
             var staticMe = Koala.util.Filter;
             var timeseriesCfg = metadata.layerConfig.timeSeriesChartProperties;
             var endDate = Koala.util.String.coerce(timeseriesCfg.end_timestamp);

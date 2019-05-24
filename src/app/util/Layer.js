@@ -2281,6 +2281,25 @@ Ext.define('Koala.util.Layer', {
             layer.set('isDefaultStyle', false);
             var legend = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
             legend.updateLegendsWithScale();
+        },
+
+        /**
+         * Finds the layer the given metadata belongs to.
+         *
+         * @param {Object} metadata the metadata object
+         */
+        findLayerFromMetadata: function(metadata) {
+            var layer;
+            var map = BasiGX.view.component.Map.guess().map;
+
+            Ext.each(map.getLayers().getArray(), function(lay) {
+                if (metadata === lay.metadata) {
+                    layer = lay;
+                    return false;
+                }
+            });
+
+            return layer;
         }
 
     }
