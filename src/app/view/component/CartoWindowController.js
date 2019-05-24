@@ -1498,14 +1498,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
             chart.setConfig('useExactInterval', true);
         }
         chart.getController().getChartData();
-        chart.getController().on('chartdataprepared', function() {
-            // unfortunately, d3 has an internal timer resetting
-            // the zoom frequently in the first few hundred ms after
-            // creation
-            window.setTimeout(function() {
-                chart.getController().drawChart();
-            }, 10);
-        });
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');
         Ext.each(cartos, function(carto) {
             carto.destroy();
