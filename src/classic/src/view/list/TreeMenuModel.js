@@ -95,7 +95,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         text: '{vectorimport}',
                         key: 'vectorimport',
                         leaf: true,
-                        iconCls: 'x-fa fas fa-map-o',
+                        iconCls: 'x-fa fas fa-vector-square',
                         rowCls: '{showVectorImportBtn ? "" : "hidden"}'
                     }, {
                         text: '{createvectorlayer}',

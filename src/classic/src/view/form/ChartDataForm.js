@@ -58,6 +58,7 @@ Ext.define('Koala.view.form.ChartDataForm',{
 
     config: {
         fields: [
+            'xAxisAttribute',
             'yAxisAttribute',
             'yAxisScale',
             'groupAttribute',

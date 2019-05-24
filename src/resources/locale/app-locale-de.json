@@ -1620,6 +1620,7 @@
         "config": {
             "data": {
                 "titleText": "Barchart Einstellungen",
+                "xAxisAttribute": "Attribut X-Achse",
                 "yAxisAttribute": "Attribut Y-Achse",
                 "yAxisScale": "Skalierung Y-Achse",
                 "groupAttribute": "Attribut Gruppierung",
