@@ -27,6 +27,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.util.Help',
         'Koala.util.Import',
         'Koala.util.Layer',
+        'Koala.view.form.field.TemplateEditor',
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
         'Koala.view.panel.FeatureGrid',
@@ -204,6 +205,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var pauseBtn = comp.down('button[name=video-pause]');
             var playBtn = comp.down('button[name=video-play]');
             var speedMenu = comp.down('button[name=video-speed]');
+            var templateBtn = comp.down('button[name=templateEditor]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
 
             if (olLayer.get('isVideoLayer')) {
@@ -221,6 +223,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 videoSlider.setMinValue(time);
                 videoSlider.setMaxValue(time + duration);
                 videoSlider.setValue(time);
+                videoSlider.setDisabled(true);
                 olLayer.set('slider', videoSlider);
             }
             videoSlider.setVisible(olLayer.get('isVideoLayer'));
@@ -228,6 +231,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             pauseBtn.setVisible(olLayer.get('isVideoLayer'));
             playBtn.setVisible(olLayer.get('isVideoLayer'));
             speedMenu.setVisible(olLayer.get('isVideoLayer'));
+            changeFilterBtn.setVisible(!olLayer.get('isVideoLayer'));
+            templateBtn.setVisible(!olLayer.get('isVideoLayer'));
 
             if (shortInfoBtn) {
                 shortInfoBtn.setVisible(allowShortInfo);
@@ -314,9 +319,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var layer = btn.layerRec.getOlLayer();
 
             if (layer instanceof ol.layer.Vector) {
-                Ext.create('Koala.view.window.FilterGridWindow', {
-                    layer: layer
-                });
+                if (!layer.filterGridWindow) {
+                    layer.filterGridWindow = Ext.create('Koala.view.window.FilterGridWindow', {
+                        layer: layer
+                    });
+                }
+                layer.filterGridWindow.show();
                 return;
             }
 
@@ -586,7 +594,37 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         initializeOpacityVal: function(slider) {
             var layer = slider.layerRec.getOlLayer();
             slider.setValue(layer.getOpacity() * 100);
+        },
+
+        /**
+         * Edit the hover template.
+         */
+        editTemplate: function(btn) {
+            var view = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+            var viewModel = view.lookupViewModel();
+            var layer = btn.layerRec.getOlLayer();
+            var olProps = layer.metadata.layerConfig.olProperties;
+            Ext.create('Ext.window.Window', {
+                autoShow: true,
+                title: viewModel.get('templateEditor'),
+                items: [{
+                    xtype: 'k-form-field-templateeditor',
+                    templates: ['Hover-Template'],
+                    metadata: olProps,
+                    properties: ['hoverTpl'],
+                    layer: layer
+                }],
+                listeners: {
+                    close: function() {
+                        var editor = this.down('k-form-field-templateeditor');
+                        var md = editor.getMetadata();
+                        olProps.hoverTpl = md.hoverTpl;
+                        layer.set('hoverTpl', md.hoverTpl);
+                    }
+                }
+            });
         }
+
     },
 
     rowBodyCompTemplate: {
@@ -648,8 +686,15 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 }, {
                     xtype: 'button',
                     name: 'edit',
-                    glyph: 'xf040@FontAwesome',
+                    glyph: 'xf303@FontAwesome',
                     tooltip: 'Layerobjekte editieren'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
+                    xtype: 'button',
+                    name: 'templateEditor',
+                    glyph: 'xf013@FontAwesome',
+                    tooltip: 'Hover-Template editieren'
                     // We'll assign a handler to handle clicks here once the
                     // class is defined and we can access the static methods
                 }, {
@@ -873,7 +918,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         };
         switch (mode) {
             case 'collapse':
-                cfg.glyph = 'xf147@FontAwesome';
+                cfg.glyph = 'xf146@FontAwesome';
                 cfg.bind = {
                     text: '{btnTxtCollapseAll}',
                     tooltip: '{btnTooltipCollapseAll}'
@@ -889,7 +934,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 cfg.handler = me.toggleAllBodies;
                 break;
             case 'expand':
-                cfg.glyph = 'xf196@FontAwesome';
+                cfg.glyph = 'xf0fe@FontAwesome';
                 cfg.bind = {
                     text: '{btnTxtExpandAll}',
                     tooltip: '{btnTooltipExpandAll}'
@@ -1422,7 +1467,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 }
             }
         });
-        if (slider) {
+        if (slider && !slider.isDestroying && !slider.destroyed) {
             slider.setMinValue(time);
             slider.setMaxValue(duration + time);
             slider.suspendEvents();
@@ -1463,6 +1508,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var pauseCfg = cls.findByProp(menuItems, 'name', 'video-pause');
     var stopCfg = cls.findByProp(menuItems, 'name', 'video-stop');
     var speedCfg = cls.findByProp(menuItems, 'name', 'video-speed');
+    var templateEditorCfg = cls.findByProp(menuItems, 'name', 'templateEditor');
 
     if (cls.prototype.rowBodyCompTemplate.items[0]) {
         cls.prototype.rowBodyCompTemplate.items[0].listeners.beforerender = cls.reorganizeMenu;
@@ -1510,6 +1556,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     if (videoSliderCfg) {
         videoSliderCfg.listeners.change = cls.videoSliderHandler;
         videoSliderCfg.plugins = ['k-time-tip'];
+    }
+    if (templateEditorCfg) {
+        templateEditorCfg.handler = cls.editTemplate;
     }
 
 });

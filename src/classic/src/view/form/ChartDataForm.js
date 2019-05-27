@@ -58,6 +58,7 @@ Ext.define('Koala.view.form.ChartDataForm',{
 
     config: {
         fields: [
+            'xAxisAttribute',
             'yAxisAttribute',
             'yAxisScale',
             'groupAttribute',
@@ -72,8 +73,14 @@ Ext.define('Koala.view.form.ChartDataForm',{
 
     initComponent: function() {
         var metadata = this.getMetadata().layerConfig.barChartProperties;
+        if (!metadata.chartMargin) {
+            metadata.chartMargin = '10,200,20,40';
+        }
         var context = Koala.util.AppContext.getAppContext().data.merge;
         var attributeFields = context.paramIsAttributeName;
+        if (!attributeFields) {
+            attributeFields = [];
+        }
         this.callParent();
         var fs = this.down('fieldset');
         var attributes = Koala.util.Data.extractProperties(this.getFeatures());

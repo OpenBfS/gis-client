@@ -347,7 +347,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * @param {Object} btn the button/component to show the menu by
      */
     showChartSettingsMenu: function(btn) {
-        this.chartSettingsMenu.showBy(btn);
+        var timeDiff = new Date().getTime() - this.chartSettingsMenu.lastHidden;
+        // make sure to keep the menu closed if it was just shown
+        // (e.g. when clicking on the button again)
+        if (timeDiff > 150 || isNaN(timeDiff)) {
+            this.chartSettingsMenu.showBy(btn);
+        }
     },
 
     zoomToMaxExtent: function() {
@@ -775,8 +780,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (!chart) {
             return;
         }
-        //title = (chart === me.timeserieschart) ? 'TS Table' : (chart === me.barChart) ? 'BC Table' : '';
-        title = (chart === me.timeserieschart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : (chart === me.barChart) ? '<i class="fa fa-table  fa-2x" aria-hidden="true"></i>' : '';
+        var cls = (chart === me.timeserieschart) ? 'fa-chart-line' : 'fa-chart-bar';
+        title = '<span class="fa-stack">' +
+            '<i class="fa fa-th fa-stack-2x"></i></span>' +
+            '<i class="fa fa-stack-2x ' + cls + '"style="color: grey; font-size: 1.5em"></i>';
 
         gridTableTab = me.createTabElement({
             title: title,
@@ -1118,13 +1125,17 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * e.g. to anchor cartoWindows
      */
     getFeatureAnchorPoint: function(feature) {
-        var coords;
+        var coords, bbox, mid;
         if (feature.getGeometry().getType() === 'Polygon') {
             feature = turf.polygon([feature.getGeometry().getCoordinates()[0]]);
-            coords = turf.centroid(feature).geometry.coordinates;
+            bbox = turf.bbox(feature);
+            mid = bbox[0] + (bbox[2] - bbox[0]) / 2;
+            coords = [mid, bbox[1]];
         } else if (feature.getGeometry().getType() === 'MultiPolygon') {
             feature = turf.polygon(feature.getGeometry().getCoordinates()[0]);
-            coords = turf.centroid(feature).geometry.coordinates;
+            bbox = turf.bbox(feature);
+            mid = bbox[0] + (bbox[2] - bbox[0]) / 2;
+            coords = [mid, bbox[1]];
         } else if (feature.getGeometry().getType() === 'Point') {
             coords = feature.getGeometry().getCoordinates();
         } else if (feature.getGeometry().getType() === 'Line') {

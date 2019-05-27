@@ -142,6 +142,56 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
     toggleUncertainty: function() {
         var chartCtrl = this.getView().chart.getController();
         chartCtrl.toggleUncertainty();
+    },
+
+    /**
+     * This event handler keeps track of the current time to be able
+     * to keep the menu closed when clicking on the menu button while
+     * the menu is open.
+     */
+    onBeforeHide: function() {
+        this.getView().lastHidden = new Date().getTime();
+    },
+
+    /*
+     * Edit the appropriate chart templates.
+     */
+    editTemplates: function() {
+        var chart = this.getView().chart;
+        var fullMetadata = chart.getTargetLayer().metadata;
+        var viewModel = this.getViewModel();
+        var templates = [viewModel.get('tooltip'), viewModel.get('title')];
+        var properties = ['tooltipTpl'];
+        var metadata;
+        if (chart.xtype === 'd3-chart') {
+            properties.push('seriesTitleTpl');
+            metadata = fullMetadata.layerConfig.timeSeriesChartProperties;
+        } else {
+            properties.push('titleTpl');
+            metadata = fullMetadata.layerConfig.barChartProperties;
+        }
+
+        Ext.create('Ext.window.Window', {
+            autoShow: true,
+            title: viewModel.get('editTemplates'),
+            items: [{
+                xtype: 'k-form-field-templateeditor',
+                templates: templates,
+                metadata: metadata,
+                properties: properties,
+                layer: chart.getTargetLayer()
+            }],
+            listeners: {
+                close: function() {
+                    var editor = this.down('k-form-field-templateeditor');
+                    var md = editor.getMetadata();
+                    Ext.each(properties, function(property) {
+                        metadata[property] = md[property];
+                    });
+                    chart.getController().getChartData();
+                }
+            }
+        });
     }
 
 });

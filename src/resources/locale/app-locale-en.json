@@ -374,6 +374,14 @@
             }
         }
     },
+    "Koala.view.form.field.TemplateEditor": {
+        "config": {
+            "data": {
+                "insertAttribute": "Insert attribute",
+                "selectTemplate": "Select template"
+            }
+        }
+    },
     "Koala.view.form.Print": {
         "config": {
             "data": {
@@ -541,7 +549,10 @@
                 "changeMinMaxText": "Change min/max",
                 "minMaxWindowTitle": "Change y axis",
                 "okText": "Ok",
-                "cancelText": "Cancel"
+                "cancelText": "Cancel",
+                "editTemplates": "Edit templates",
+                "title": "Title",
+                "tooltip": "Tooltip"
             }
         }
     },
@@ -619,7 +630,8 @@
                 "downloadButtonYes": "Yes",
                 "downloadButtonNo": "No",
                 "outputFormatText": "Output Format",
-                "title": "Legend"
+                "title": "Legend",
+                "templateEditor": "Edit templates"
             }
         }
     },
@@ -1604,6 +1616,7 @@
         "config": {
             "data": {
                 "titleText": "Bar chart settings",
+                "xAxisAttribute": "X axis attribute",
                 "yAxisAttribute": "Y axis attribute",
                 "yAxisScale": "Y axis scale",
                 "groupAttribute": "Grouping attribute",

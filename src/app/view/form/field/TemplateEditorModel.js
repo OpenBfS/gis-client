@@ -14,21 +14,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.ChartDataFormModel
+ * @class Koala.view.form.field.TemplateEditorModel
  */
-Ext.define('Koala.view.form.ChartDataFormModel', {
+Ext.define('Koala.view.form.field.TemplateEditorModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-form-chartdata',
+    alias: 'viewmodel.k-form-field-templateeditor',
+
     data: {
-        titleText: '',
-        xAxisAttribute: '',
-        yAxisAttribute: '',
-        yAxisScale: '',
-        groupAttribute: '',
-        detectionLimitAttribute: '',
-        uncertaintyAttribute: '',
-        okButtonText: '',
-        cancelButtonText: ''
+        templates: [],
+        selectedTemplate: null,
+        templateValue: null,
+        templateLabel: '',
+        attributes: []
     }
 
 });

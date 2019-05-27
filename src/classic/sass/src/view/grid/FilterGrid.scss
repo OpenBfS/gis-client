@@ -4,3 +4,9 @@
     cursor: pointer;
     background: transparent url(images/grid/hd-pop.png) no-repeat center center;
 }
+
+.k-grid-filter {
+    .x-grid-filters-filtered-column {
+        color: red;
+    }
+}

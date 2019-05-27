@@ -158,6 +158,39 @@ Ext.define('Koala.util.Layer', {
         },
 
         /**
+         * Issues a describe feature type to get a list of
+         * attribute names and calling the successCb with it.
+         * @param {ol.Layer} layer the layer
+         * @param {Function} successCb the callback
+         */
+        getSchema: function(layer, successCb) {
+            var url = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wfs/url');
+            if (!url) {
+                Ext.log.error('No WFS URL for the given layer could be found');
+                return;
+            }
+            var name = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/wms/layers');
+            url = Ext.String.urlAppend(url, 'request=DescribeFeatureType');
+            url = Ext.String.urlAppend(url, 'typename=' + name);
+            url = Ext.String.urlAppend(url, 'service=WFS');
+            url = Ext.String.urlAppend(url, 'version=1.1.0');
+            url = Ext.String.urlAppend(url, 'outputformat=application/json');
+
+            Ext.Ajax.request({
+                url: url,
+                success: function(response) {
+                    var json = JSON.parse(response.responseText);
+                    var attributes = [];
+                    Ext.each(json.featureTypes[0].properties, function(property) {
+                        attributes.push(property.name);
+                    });
+                    successCb(attributes);
+                },
+                timeout: 120000
+            });
+        },
+
+        /**
          * Method tries to detect the name of the geometry field from a
          * DescribeFeatureType response and calls the success callback.
          * @param {Function} successCb The success callback function

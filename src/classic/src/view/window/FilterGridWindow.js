@@ -39,6 +39,7 @@ Ext.define('Koala.view.window.FilterGridWindow', {
     bodyPadding: 5,
     height: 220,
     width: 500,
+    closeAction: 'method-hide',
 
     config: {
         /**
