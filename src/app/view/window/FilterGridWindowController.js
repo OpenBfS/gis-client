@@ -41,6 +41,16 @@ Ext.define('Koala.view.window.FilterGridWindowController', {
             view.setHeight(235);
         }
         view.down('[name=duplicateText]').setHtml(text);
+    },
+
+    /**
+     * Hides the feature grid on show.
+     */
+    onShow: function() {
+        var grid = Ext.ComponentQuery.query('k-panel-featuregrid')[0];
+        if (grid) {
+            grid.close();
+        }
     }
 
 });
