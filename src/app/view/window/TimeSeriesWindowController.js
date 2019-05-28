@@ -568,13 +568,8 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var layerStore = BasiGX.view.component.Map.guess().getStore();
         var comboStore = Ext.clone(layerStore);
         comboStore.filterBy(function(record) {
-            if (record.data.get('timeSeriesChartProperties') &&
-               !Ext.Object.isEmpty(record.data.get('timeSeriesChartProperties'))
-            ) {
-                return true;
-            } else {
-                return false;
-            }
+            return record.data.get('timeSeriesChartProperties') &&
+               !Ext.Object.isEmpty(record.data.get('timeSeriesChartProperties'));
         });
         combo.bindStore(comboStore);
     },

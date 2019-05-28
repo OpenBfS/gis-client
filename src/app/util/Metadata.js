@@ -105,11 +105,6 @@ Ext.define('Koala.util.Metadata', {
          * @return {Object}          the cloned metadata
          */
         prepareClonedMetadata: function(metadata) {
-            var config = Koala.util.AppContext.getAppContext().data.merge;
-            var imisRoles = config.imis_user.userroles;
-            var role = imisRoles[0];
-            config = config.import[role];
-
             if (!metadata) {
                 return metadata;
             }

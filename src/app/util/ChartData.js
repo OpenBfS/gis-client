@@ -111,22 +111,10 @@ Ext.define('Koala.util.ChartData', {
                 var interval = chartProps.interval;
                 var unit = chartProps.unit;
                 if (!interval || !unit) {
-                    if (!targetLayer instanceof ol.layer.Vector) {
+                    if (!(targetLayer instanceof ol.layer.Vector)) {
                         return;
                     }
-                    // try to extract min/max values from the data
-                    var min = moment(chartProps.xAxisMax);
-                    var max = moment(chartProps.xAxisMin);
-                    Ext.each(targetLayer.getSource().getFeatures(), function(feat) {
-                        var val = moment(feat.get(chartProps.xAxisAttribute));
-                        if (val.isBefore(min)) {
-                            min = val;
-                        }
-                        if (val.isAfter(max)) {
-                            max = val;
-                        }
-                    });
-                    return min.diff(max, 'seconds') || 1; // return 1 to avoid endless loop
+                    return false;
                 } else {
                     intervalInSeconds = this.getIntervalInSeconds(
                         interval, unit
@@ -135,6 +123,77 @@ Ext.define('Koala.util.ChartData', {
             }
 
             return intervalInSeconds;
+        },
+
+        /**
+         * Converts a geojson feature collection to non uniform timeseries data.
+         * @param  {Object} chartConfig                     chart config
+         * @param  {Object} data                            the features
+         * @param  {Boolean} showIdentificationThresholdData flag from view showDetectionLimitsBtnState
+         * @return {Array}                                 the converted data
+         */
+        convertToNonUniformTimeseriesData: function(
+            chartConfig,
+            data,
+            showIdentificationThresholdData
+        ) {
+            var xAxisAttr = chartConfig.xAxisAttribute;
+            var attachedSeries = chartConfig.attachedSeries ?
+                JSON.parse(chartConfig.attachedSeries) : [];
+            var featureStyle;
+
+            if (chartConfig.featureStyle) {
+                featureStyle = chartConfig.featureStyle;
+            }
+
+            var seriesData = [];
+            var features = data.features.slice();
+            features.sort(function(a, b) {
+                var first = moment(a.properties[xAxisAttr]).unix();
+                var second = moment(b.properties[xAxisAttr]).unix();
+                return first - second;
+            });
+
+            function valueExtractor(rawData, feature) {
+                return function(config) {
+                    rawData[config.yAxisAttribute] =
+                        feature.properties[config.yAxisAttribute];
+                };
+            }
+
+            // Iterate until startDate <= endDate
+            Ext.each(features, function(feature) {
+                var newRawData = {};
+
+                // add all available properties in order
+                // to use them for timeseriesTooltip
+                // ToDo: check if this has any side effects for "download", "timeseriesChart" ...
+                // eslint-disable-next-line no-loop-func
+                Object.keys(feature.properties).forEach(function(key) {
+                    newRawData[key] = feature.properties[key];
+                });
+
+                newRawData[xAxisAttr] = Koala.util.Date.getUtcMoment(feature.properties[xAxisAttr]);
+
+                if (feature.properties.value_constraint === '<' &&
+                    !showIdentificationThresholdData) {
+                    newRawData.drawAsZero = true;
+                    newRawData.minValue = chartConfig.yAxisMin || 0;
+                }
+                //replaced by adding all properties
+                //newRawData[valueField] = matchingFeature.properties[yAxisAttr];
+
+                Ext.each(attachedSeries, valueExtractor(newRawData, feature));
+
+                if (featureStyle) {
+                    newRawData = this.appendStyleToShape(
+                        featureStyle, feature, newRawData);
+                }
+
+                seriesData.push(newRawData);
+            });
+
+            return seriesData;
         },
 
         /**
@@ -172,7 +231,9 @@ Ext.define('Koala.util.ChartData', {
             var intervalInSeconds = this.getIntervalInSecondsForTargetLayer(targetLayer);
             var snapObject = this.getTimeStampSnapObject(
                 startDate, intervalInSeconds, data.features, timeField);
-
+            if (intervalInSeconds === false) {
+                return Koala.util.ChartData.convertToNonUniformTimeseriesData(chartConfig, data, showIdentificationThresholdData);
+            }
             var compareableDate;
             var matchingFeature;
             var seriesData = [];
@@ -719,6 +780,9 @@ Ext.define('Koala.util.ChartData', {
 
                     return [item[gnosConfig.xAxisAttribute].unix() * 1000, value, function(target) {
                         var tooltipTpl = gnosConfig.tooltipTpl;
+                        if (!tooltipTpl) {
+                            return value;
+                        }
                         var selectedStation = Ext.Array.findBy(stations, function(station) {
                             return station.get(gnosConfig.featureIdentifyField || 'id') === id;
                         });
@@ -737,7 +801,7 @@ Ext.define('Koala.util.ChartData', {
                 });
                 var seriesConfig = {
                     data: chartData,
-                    style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
+                    style: function() {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
                     useTooltipFunc: true,
                     curveType: gnosConfig.curveType || 'linear',
                     shapeType: gnosConfig.shapeType || 'line',
@@ -779,7 +843,7 @@ Ext.define('Koala.util.ChartData', {
                         });
                         var attachedSeriesConfig = {
                             data: chartData,
-                            style: function() {} || {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
+                            style: function() {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
                             useTooltipFunc: true,
                             initiallyVisible: false,
                             curveType: serie.curveType || 'linear',

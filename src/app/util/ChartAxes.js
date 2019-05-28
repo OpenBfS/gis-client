@@ -23,7 +23,6 @@ Ext.define('Koala.util.ChartAxes', {
     requires: [
         'Koala.view.component.D3BaseController',
         'Koala.util.Date',
-        'Koala.util.Label',
         'Koala.util.Object',
         'Koala.util.ChartConstants'
     ],

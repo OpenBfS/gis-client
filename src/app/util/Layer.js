@@ -1360,16 +1360,14 @@ Ext.define('Koala.util.Layer', {
                             // handle TIME
                             var filters = md.filters;
                             Ext.each(filters, function(filter) {
-                                switch (filter.type) {
-                                    case 'pointintime':
-                                        if (cql.indexOf(filter.param) !== -1) {
-                                            return;
-                                        }
-                                        if (cql.length > 0) {
-                                            cql += ' AND ';
-                                        }
-                                        cql += filter.param + '=\'' + extraParams.TIME + '\'';
-                                        break;
+                                if (filter.type === 'pointintime') {
+                                    if (cql.indexOf(filter.param) !== -1) {
+                                        return;
+                                    }
+                                    if (cql.length > 0) {
+                                        cql += ' AND ';
+                                    }
+                                    cql += filter.param + '=\'' + extraParams.TIME + '\'';
                                 }
                             });
                         }
@@ -2281,6 +2279,25 @@ Ext.define('Koala.util.Layer', {
             layer.set('isDefaultStyle', false);
             var legend = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
             legend.updateLegendsWithScale();
+        },
+
+        /**
+         * Finds the layer the given metadata belongs to.
+         *
+         * @param {Object} metadata the metadata object
+         */
+        findLayerFromMetadata: function(metadata) {
+            var layer;
+            var map = BasiGX.view.component.Map.guess().map;
+
+            Ext.each(map.getLayers().getArray(), function(lay) {
+                if (metadata === lay.metadata) {
+                    layer = lay;
+                    return false;
+                }
+            });
+
+            return layer;
         }
 
     }

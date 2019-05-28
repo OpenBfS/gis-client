@@ -63,11 +63,11 @@ var timeseriesMetadata = {
     'gmd:pointOfContact': {'gmd:CI_ResponsibleParty': {
       'gmd:individualName': {'gco:CharacterString': {
         '@xmlns:gco': 'http://www.isotc211.org/2005/gco',
-        '#text': 'Ansprechpartner f�r Geodaten'
+        '#text': 'Ansprechpartner für Geodaten'
       }},
       'gmd:organisationName': {'gco:CharacterString': {
         '@xmlns:gco': 'http://www.isotc211.org/2005/gco',
-        '#text': 'Bundesamt f�r Strahlenschutz'
+        '#text': 'Bundesamt für Strahlenschutz'
       }},
       'gmd:positionName': {'gco:CharacterString': {
         '@xmlns:gco': 'http://www.isotc211.org/2005/gco',
@@ -297,11 +297,11 @@ var timeseriesMetadata = {
           '#text': [
                         {
               'val': 'microSv_h_odl_brutto_10min_routine',
-              'dsp': '�Sv/h (Routine)'
+              'dsp': 'µSv/h (Routine)'
             },
                         {
               'val': 'microSv_h_odl_brutto_10min_intensiv',
-              'dsp': '�Sv/h (Intensiv)'
+              'dsp': 'µSv/h (Intensiv)'
             }
           ]
         }},
@@ -337,7 +337,7 @@ var timeseriesMetadata = {
             },
                         {
               'val': '\'KFUE\'',
-              'dsp': 'KF�'
+              'dsp': 'KFü'
             }
           ]
         }},
@@ -1147,11 +1147,11 @@ var barchartMetadata = {
     'gmd:pointOfContact': {'gmd:CI_ResponsibleParty': {
       'gmd:individualName': {'gco:CharacterString': {
         '@xmlns:gco': 'http://www.isotc211.org/2005/gco',
-        '#text': 'Ansprechpartner f�r Geodaten'
+        '#text': 'Ansprechpartner für Geodaten'
       }},
       'gmd:organisationName': {'gco:CharacterString': {
         '@xmlns:gco': 'http://www.isotc211.org/2005/gco',
-        '#text': 'Bundesamt f�r Strahlenschutz'
+        '#text': 'Bundesamt für Strahlenschutz'
       }},
       'gmd:positionName': {'gco:CharacterString': {
         '@xmlns:gco': 'http://www.isotc211.org/2005/gco',

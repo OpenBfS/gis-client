@@ -10,6 +10,7 @@ describe('Koala.util.Filter', function() {
         Koala.Application.isLocal = function() {
             return false;
         };
+        Koala.util.Layer.findLayerFromMetadata = function() {};
     });
 
     describe('Basics', function() {

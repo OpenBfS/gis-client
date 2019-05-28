@@ -523,7 +523,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                     if (evt.type === 'click') {
                         var selFeatures =
                             me.deleteSelectInteraction.getFeatures();
-                        removeFeatures(selFeatures,evt);
+                        removeFeatures(selFeatures);
                     }
                 }
             });

@@ -843,6 +843,9 @@ Ext.define('Koala.view.component.D3ChartController', {
                 return false;
             }
         }
+        if (!data) {
+            return false;
+        }
         me.rawData = response.responseText;
         //used for grid table in CartoWindowController
         me.gridFeatures = Ext.clone(data.features);

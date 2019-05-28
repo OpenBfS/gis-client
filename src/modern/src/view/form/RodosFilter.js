@@ -48,11 +48,9 @@ Ext.define('Koala.view.form.RodosFilter', {
 
         if (configuredRodosProjects) {
             me.getViewModel().set('rodosProjectsUrl', configuredRodosProjects);
-            me.getViewModel().set('rodosProjectsUrl', configuredRodosProjects);
         }
 
         if (configuredRodosResults) {
-            me.getViewModel().set('rodosResultsUrl', configuredRodosResults);
             me.getViewModel().set('rodosResultsUrl', configuredRodosResults);
         }
     },

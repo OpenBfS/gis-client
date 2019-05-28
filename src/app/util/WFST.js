@@ -118,9 +118,9 @@ Ext.define('Koala.util.WFST', {
                     var res = xhr.responseText;
                     var transactionResponse = format.readTransactionResponse(xhr.responseText);
                     if (Ext.isEmpty(transactionResponse) ||
-                        res.indexOf('<ows:ExceptionText>') > 0) {
+                        res.indexOf('<ows:ExceptionText>') >= 0) {
                         var msg = 'Unspecified error occured.';
-                        if (res.indexOf('<ows:ExceptionText>') > 0) {
+                        if (res.indexOf('<ows:ExceptionText>') >= 0) {
                             msg = res.split('<ows:ExceptionText>')[1].
                                 split('</ows:ExceptionText>')[0];
                         }
@@ -141,7 +141,7 @@ Ext.define('Koala.util.WFST', {
                     var res = xhr.responseText;
                     var transactionResponse = format.readTransactionResponse(res);
                     var msg = 'Unspecified error occured.' + transactionResponse;
-                    if (res.indexOf('<ows:ExceptionText>') > 0) {
+                    if (res.indexOf('<ows:ExceptionText>') >= 0) {
                         msg = res.split('<ows:ExceptionText>')[1].
                             split('</ows:ExceptionText>')[0];
                     }
@@ -196,7 +196,7 @@ Ext.define('Koala.util.WFST', {
         handleLockFeaturesResponse: function(response) {
             var resText = response.responseText;
             var msg;
-            if (resText.indexOf('<wfs:LockId>') > 0) {
+            if (resText.indexOf('<wfs:LockId>') >= 0) {
                 var lockId = resText.split(
                     '<wfs:LockId>')[1].split('</wfs:LockId>')[0];
                 Koala.util.WFST.lockAquired = true;

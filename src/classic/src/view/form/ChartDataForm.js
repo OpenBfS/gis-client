@@ -16,7 +16,7 @@
 /**
  * @class Koala.view.form.ChartDataForm
  */
-Ext.define('Koala.view.form.ChartDataForm',{
+Ext.define('Koala.view.form.ChartDataForm', {
     extend: 'Ext.form.Panel',
 
     xtype: 'k-form-chartdata',
@@ -36,9 +36,18 @@ Ext.define('Koala.view.form.ChartDataForm',{
 
     items: [{
         xtype: 'fieldset',
+        name: 'bar',
         layout: 'form',
         bind: {
             title: '{titleText}'
+        },
+        items: []
+    }, {
+        xtype: 'fieldset',
+        name: 'timeseries',
+        layout: 'form',
+        bind: {
+            title: '{timeseriesTitle}'
         },
         items: []
     }],
@@ -48,7 +57,7 @@ Ext.define('Koala.view.form.ChartDataForm',{
             text: '{cancelButtonText}'
         },
         handler: 'onCancel'
-    },{
+    }, {
         formBind: true,
         bind: {
             text: '{okButtonText}'
@@ -64,26 +73,35 @@ Ext.define('Koala.view.form.ChartDataForm',{
             'detectionLimitAttribute',
             'uncertaintyAttribute'
         ],
+        timeseriesFields: [
+            'xAxisAttribute',
+            'yAxisAttribute'
+        ],
         metadata: null,
         done: function() {},
         cancel: function() {},
         features: null
     },
 
-    initComponent: function() {
-        var metadata = this.getMetadata().layerConfig.barChartProperties;
-        if (!metadata.chartMargin) {
-            metadata.chartMargin = '10,200,20,40';
-        }
+    /**
+     * Adds the attribute fields to their respective fieldset.
+     *
+     * @param {Object} metadata the metadata
+     * @param {String[]} fields the field list
+     * @param {String} type the chart type
+     */
+    initChartComponents: function(metadata, fields, type) {
         var context = Koala.util.AppContext.getAppContext().data.merge;
         var attributeFields = context.paramIsAttributeName;
         if (!attributeFields) {
             attributeFields = [];
         }
-        this.callParent();
-        var fs = this.down('fieldset');
+        var fs = this.down('fieldset[name=' + type + ']');
+        if (Object.keys(metadata).length === 0) {
+            fs.setDisabled(true);
+        }
         var attributes = Koala.util.Data.extractProperties(this.getFeatures());
-        Ext.each(this.fields, function(field) {
+        Ext.each(fields, function(field) {
             var config = {
                 xtype: 'textfield',
                 name: field,
@@ -109,6 +127,22 @@ Ext.define('Koala.view.form.ChartDataForm',{
             }
             fs.add(config);
         });
+        if (!metadata.chartMargin) {
+            metadata.chartMargin = '10,200,20,40';
+        }
+    },
+
+    /**
+     * Adds the fields to the chart fieldsets.
+     */
+    initComponent: function() {
+        this.callParent();
+        var metadata = this.getMetadata().layerConfig.barChartProperties;
+        var fields = this.getFields();
+        this.initChartComponents(metadata, fields, 'bar');
+        metadata = this.getMetadata().layerConfig.timeSeriesChartProperties;
+        fields = this.getTimeseriesFields();
+        this.initChartComponents(metadata, fields, 'timeseries');
     }
 
 });
