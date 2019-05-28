@@ -762,6 +762,11 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (layer instanceof ol.layer.Vector) {
             var fmt = new ol.format.GeoJSON();
             var data = layer.originalFeatures || layer.getSource().getFeatures();
+            data = data.slice();
+            var groupAttribute = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/timeSeriesChartProperties/groupAttribute');
+            data = Ext.Array.filter(data, function(feat) {
+                return feat.get(groupAttribute) === station.get(groupAttribute);
+            });
             if (Ext.isFunction(cbFn)) {
                 cbFn.call(cbScope, station);
             }
