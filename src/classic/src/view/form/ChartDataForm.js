@@ -76,7 +76,8 @@ Ext.define('Koala.view.form.ChartDataForm', {
         ],
         timeseriesFields: [
             'xAxisAttribute',
-            'yAxisAttribute'
+            'yAxisAttribute',
+            'groupAttribute'
         ],
         metadata: null,
         done: function() {},
