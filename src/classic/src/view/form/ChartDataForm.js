@@ -100,6 +100,7 @@ Ext.define('Koala.view.form.ChartDataForm', {
         var fs = this.down('fieldset[name=' + type + ']');
         if (Object.keys(metadata).length === 0) {
             fs.setHidden(true);
+            return;
         }
         var attributes = Koala.util.Data.extractProperties(this.getFeatures());
         Ext.each(fields, function(field) {
