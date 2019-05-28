@@ -21,6 +21,7 @@ Ext.define('Koala.view.form.ChartDataFormModel', {
     alias: 'viewmodel.k-form-chartdata',
     data: {
         titleText: '',
+        xAxisAttribute: '',
         yAxisAttribute: '',
         yAxisScale: '',
         groupAttribute: '',
