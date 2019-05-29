@@ -11,7 +11,8 @@ Ext.define('Koala.view.panel.MobileMenuModel', {
         permalinkButtonText: '',
         spatialSearchTitle: '',
         stationSearchTitle: '',
-        metadataSearchTitle: ''
+        metadataSearchTitle: '',
+        dokpoolEvents: ''
     }
 
 });

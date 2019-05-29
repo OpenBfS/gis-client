@@ -48,7 +48,8 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.panel.LayerSetTree',
         'Koala.view.panel.MobilePermalink',
         'Koala.view.panel.Settings',
-        'Koala.view.panel.TimeseriesChart'
+        'Koala.view.panel.TimeseriesChart',
+        'Koala.view.panel.MobileEvents'
     ],
 
     controller: 'mobile-main',
@@ -194,6 +195,10 @@ Ext.define('Koala.view.main.Main', {
         hidden: true
     }, {
         xtype: 'k-panel-mobileimprint',
+        left: 0,
+        hidden: true
+    }, {
+        xtype: 'k-panel-mobileevents',
         left: 0,
         hidden: true
     }, {

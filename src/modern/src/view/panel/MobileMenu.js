@@ -38,6 +38,14 @@ Ext.define('Koala.view.panel.MobileMenu',{
     },
 
     items: [{
+        xtype: 'button',
+        bind: {
+            text: '{dokpoolEvents}'
+        },
+        handler: function(btn) {
+            btn.up('app-main').down('k-panel-mobileevents').show();
+        }
+    }, {
         xtype: 'container',
         name: 'searchcontainer',
         items: [{
