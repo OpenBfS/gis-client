@@ -72,7 +72,8 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
         bind: {
             text: '{editTemplates}'
         },
-        handler: 'editTemplates'
+        handler: 'editTemplates',
+        glyph: 'xf27a@FontAwesome'
     }],
 
     config: {

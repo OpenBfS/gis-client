@@ -693,7 +693,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 }, {
                     xtype: 'button',
                     name: 'templateEditor',
-                    glyph: 'xf013@FontAwesome',
+                    glyph: 'xf27a@FontAwesome',
                     tooltip: 'Hover-Template editieren'
                     // We'll assign a handler to handle clicks here once the
                     // class is defined and we can access the static methods
