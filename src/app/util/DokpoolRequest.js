@@ -50,14 +50,28 @@ Ext.define('Koala.util.DokpoolRequest', {
 
             me.getActiveElanScenarios().then(function(promise) {
                 var activeElanScenarios = promise.items;
-                if (!(activeElanScenarios.length >=0) || (activeElanScenarios.length === 1) && (activeElanScenarios[0].title === 'Normalfall')) {
+                var localStorageScenarios = Koala.util.LocalStorage.getDokpoolEvents();
+
+                //delete inactive events from localStorage
+                for (var prop in localStorageScenarios) {
+                    //var check = activeElanScenarios.filter(x => x['@id'] === localStorageScenarios[prop]['@id']);
+                    var check = activeElanScenarios.filter(function(scen) {
+                        return scen['@id'] === localStorageScenarios[prop]['@id'];
+                    });
+                    if (check.length === 0) {
+                        console.log('deleted "' + localStorageScenarios[prop].id + '" from localStorage since it is no longer active!');
+                        delete localStorageScenarios[prop];
+                        Koala.util.LocalStorage.updateDokpoolEvents(localStorageScenarios);
+                    }
+                }
+
+                if (!(activeElanScenarios.length >= 0) || (activeElanScenarios.length === 1) && (activeElanScenarios[0].title === 'Normalfall')) {
                     // TODO:
                     // handle routinemode specially?
-                    console.log('only routinemode');
+                    //console.log('only routinemode');
                 } else {
-                    console.log('activeScenarios from ELAN available');
+                    //console.log('activeScenarios from ELAN available');
                     Ext.each(activeElanScenarios, function(scenario, index, array) {
-                        //console.log('scenario_' + index);
                         var url = scenario['@id'];
                         var scenarioDetailed = new Ext.Promise(function(resolve, reject) {
                             Ext.Ajax.request({
@@ -72,16 +86,18 @@ Ext.define('Koala.util.DokpoolRequest', {
                                     if (activeElanScenariosDetail && !Ext.Object.isEmpty(activeElanScenariosDetail)) {
                                         ElanScenariosUpdate = activeElanScenariosDetail;
                                         if (!activeElanScenariosDetail[id] || !(activeElanScenariosDetail[id].modified === responseObj.modified)) {
-                                            //debugger;
-                                            console.log('scenario change detected: ' + new Date());
+                                            //console.log('scenario change detected: ' + new Date());
                                             var ScenarioAlertBtn = Ext.ComponentQuery.query('button[name=ScenarioAlertBtn]')[0];
-                                            // ScenarioAlertBtn.status = 'alert';
                                             ScenarioAlertBtn.triggerEvent = responseObj.id;
-                                            ScenarioAlertBtn.setGlyph('xf071@FontAwesome');
+                                            if (!Ext.isModern) {
+                                                ScenarioAlertBtn.setGlyph('xf071@FontAwesome');
+                                            } else {
+                                                ScenarioAlertBtn.setIconCls('fas fa-exclamation-triangle');
+                                            }
                                             ScenarioAlertBtn.removeCls('button-routine');
                                             ScenarioAlertBtn.addCls('button-alert');
                                         } else {
-                                            console.log('checked, but NO scenario change detected: ' + new Date());
+                                            //console.log('checked, but NO scenario change detected: ' + new Date());
                                         }
                                     } else {
                                         //console.log('no scenario available in LocalStorage yet');
@@ -120,7 +136,8 @@ Ext.define('Koala.util.DokpoolRequest', {
             // appContext = Koala.util.AppContext.getAppContext(),
             // baseUrl = Koala.util.Object.getPathStrOr(appContext,
             //     'data/merge/urls/dokpool-scenarios'),
-            var baseUrl = 'http://dev-pk-fr.lab.bfs.de:8081/dokpool4/bund/contentconfig/scen/';
+            var baseUrl = 'http://test-docker-fr.lab.bfs.de:28081/dokpool/bund/contentconfig/scen/';
+            //var baseUrl = 'http://dev-pk-fr.lab.bfs.de:8081/dokpool4/bund/contentconfig/scen/';
             var url = (dpType) ? baseUrl + me.elanScenarioSearch + dpType : baseUrl + me.elanScenarioSearch;
             //var url = baseUrl;
 

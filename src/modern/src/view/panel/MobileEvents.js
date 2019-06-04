@@ -20,46 +20,6 @@ Ext.define('Koala.view.panel.MobileEvents',{
 
     scrollable: 'y',
 
-    //TODO: clean up redundant listeners
-    items: [
-    //     {
-    //     xtype: 'fieldset',
-    //     padding: 5,
-    //     listeners: {
-    //         initialize: function() {
-    //             var me = this;
-    //
-    //             Ext.Ajax.request({
-    //                 method: 'GET',
-    //                 url: 'resources/imprint.html',
-    //                 success: function(response) {
-    //                     me.setHtml(response.responseText);
-    //                 },
-    //                 failure: function(response) {
-    //                     Ext.log.warn('Loading imprint-HTML failed: ', response);
-    //                 }
-    //             });
-    //         }
-    //     }
-    // }, {
-    //     xtype: 'fieldset',
-    //     padding: 5,
-    //     listeners: {
-    //         initialize: function() {
-    //             var me = this;
-    //
-    //             Ext.Ajax.request({
-    //                 method: 'GET',
-    //                 url: 'resources/sitepolicy.html',
-    //                 success: function(response) {
-    //                     me.setHtml(response.responseText);
-    //                 },
-    //                 failure: function(response) {
-    //                     Ext.log.warn('Loading sitepolicy-HTML failed: ', response);
-    //                 }
-    //             });
-    //         }
-    //     }
-    // }
-    ]
+    padding: '20 10 20 10'
+
 });

@@ -111,7 +111,7 @@ Ext.define('Koala.view.panel.Header', {
                     viewmodel = Ext.ComponentQuery.query('k-panel-header')[0].getViewModel();
 
 
-                me.events = Koala.util.LocalStorage.getDokpoolEvents();
+                me.dokpoolEvents = Koala.util.LocalStorage.getDokpoolEvents();
                 // if (buttonStatus === 'alert') {
                 //     messageHeader = 'alertMessageHeader';
                 //     me.status = 'routine';
@@ -120,57 +120,56 @@ Ext.define('Koala.view.panel.Header', {
                 // }
 
                 var htmlMessage = '';
-                var eventNames = Object.keys(me.events);
+                var eventNames = Object.keys(me.dokpoolEvents);
                 eventNames.forEach(function(key, index) {
                     var messageHeader = '';
 
                     var replaceObject = Object.defineProperties({}, {
                         'title': {
-                            value: Koala.util.Object.getPathStrOr(this.events[key], 'title', ''),
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'title', ''),
                             enumerable: true
                         },
                         'modified': {
-                            value: Koala.util.Object.getPathStrOr(this.events[key], 'modified', ''),
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'modified', ''),
                             enumerable: true
                         },
                         'modified_by': {
-                            value: Koala.util.Object.getPathStrOr(this.events[key], 'modified_by', ''),
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'modified_by', ''),
                             enumerable: true
                         },
                         'Exercise': {
-                            value: Koala.util.String.getStringFromBool(Koala.util.Object.getPathStrOr(this.events[key], 'Exercise', '')),
+                            value: Koala.util.String.getStringFromBool(Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'Exercise', '')),
                             enumerable: true
                         },
                         'id': {
-                            value: Koala.util.Object.getPathStrOr(this.events[key], 'id', ''),
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'id', ''),
                             enumerable: true
                         },
                         'description': {
-                            value: Koala.util.Object.getPathStrOr(this.events[key], 'description', ''),
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'description', ''),
                             enumerable: true
                         },
                         'TimeOfEvent': {
-                            value: Koala.util.Object.getPathStrOr(this.events[key], 'TimeOfEvent', ''),
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'TimeOfEvent', ''),
                             enumerable: true
                         },
                         'ScenarioPhase.title': {
-                            value: Koala.util.Object.getPathStrOr(this.events[key], 'ScenarioPhase/title', ''),
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'ScenarioPhase/title', ''),
                             enumerable: true
                         },
                         'ScenarioLocation.title': {
-                            value: Koala.util.Object.getPathStrOr(this.events[key], 'ScenarioLocation/title', ''),
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'ScenarioLocation/title', ''),
                             enumerable: true
                         }
                     });
-                    //debugger;
 
-                    if (me.triggerEvent && me.triggerEvent === this.events[key].id) {
+                    if (me.triggerEvent && me.triggerEvent === this.dokpoolEvents[key].id) {
                         messageHeader = 'alertMessageHeader';
                         me.triggerEvent = null;
                     } else {
                         messageHeader = 'routineMessageHeader';
                     }
-                    //debugger;
+
                     messageHeader = Koala.util.String.replaceTemplateStrings(messageHeader, replaceObject);
                     htmlMessage = htmlMessage +
                         viewmodel.get(messageHeader) +
@@ -178,7 +177,7 @@ Ext.define('Koala.view.panel.Header', {
                         '<br><br>';
                     htmlMessage = Koala.util.String.replaceTemplateStrings(htmlMessage, replaceObject);
                 }, me);
-                me.events = null;
+                me.dokpoolEvents = null;
                 Ext.Msg.show({
                     title: 'Dokpool - Messenger',
                     message: htmlMessage,

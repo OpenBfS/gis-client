@@ -1,4 +1,4 @@
-Ext.define('Koala.view.panel.MobileMenu',{
+Ext.define('Koala.view.panel.MobileMenu', {
     extend: 'Koala.view.panel.MobilePanel',
     xtype: 'k-panel-mobilemenu',
 
@@ -39,12 +39,106 @@ Ext.define('Koala.view.panel.MobileMenu',{
 
     items: [{
         xtype: 'button',
+        name: 'ScenarioAlertBtn',
+        cls: 'button-routine',
+        iconCls: 'fas fa-check',
+        iconAlign: 'center',
         bind: {
             text: '{dokpoolEvents}'
         },
-        handler: function(btn) {
-            btn.up('app-main').down('k-panel-mobileevents').show();
+        listeners: {
+            tap: function(btn) {
+                var me = this,
+                    viewmodel = Ext.ComponentQuery.query('k-panel-mobileevents')[0].getViewModel();
+
+                me.dokpoolEvents = Koala.util.LocalStorage.getDokpoolEvents();
+                // if (buttonStatus === 'alert') {
+                //     messageHeader = 'alertMessageHeader';
+                //     me.status = 'routine';
+                // } else {
+                //     messageHeader = 'routineMessageHeader';
+                // }
+
+                var htmlMessage = '';
+                var eventNames = Object.keys(me.dokpoolEvents);
+                eventNames.forEach(function(key, index) {
+                    var messageHeader = '';
+
+                    var replaceObject = Object.defineProperties({}, {
+                        'title': {
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'title', ''),
+                            enumerable: true
+                        },
+                        'modified': {
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'modified', ''),
+                            enumerable: true
+                        },
+                        'modified_by': {
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'modified_by', ''),
+                            enumerable: true
+                        },
+                        'Exercise': {
+                            value: Koala.util.String.getStringFromBool(Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'Exercise', '')),
+                            enumerable: true
+                        },
+                        'id': {
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'id', ''),
+                            enumerable: true
+                        },
+                        'description': {
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'description', ''),
+                            enumerable: true
+                        },
+                        'TimeOfEvent': {
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'TimeOfEvent', ''),
+                            enumerable: true
+                        },
+                        'ScenarioPhase.title': {
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'ScenarioPhase/title', ''),
+                            enumerable: true
+                        },
+                        'ScenarioLocation.title': {
+                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'ScenarioLocation/title', ''),
+                            enumerable: true
+                        }
+                    });
+
+                    if (me.triggerEvent && me.triggerEvent === this.dokpoolEvents[key].id) {
+                        messageHeader = 'alertMessageHeader';
+                        me.triggerEvent = null;
+                    } else {
+                        messageHeader = 'routineMessageHeader';
+                    }
+
+                    messageHeader = Koala.util.String.replaceTemplateStrings(messageHeader, replaceObject);
+                    htmlMessage = htmlMessage +
+                        viewmodel.get(messageHeader) +
+                        viewmodel.get('htmlMessageBody') +
+                        '<br><br>';
+                    htmlMessage = Koala.util.String.replaceTemplateStrings(htmlMessage, replaceObject);
+                }, me);
+                me.dokpoolEvents = null;
+
+                var mobileEventPanel = btn.up('app-main').down('k-panel-mobileevents');
+                mobileEventPanel.setHtml(htmlMessage);
+
+                me.setIconCls('fas fa-check');
+                me.removeCls('button-alert');
+                me.addCls('button-routine');
+
+                mobileEventPanel.show();
+            },
+            initialize: function() {
+                //run once to get immediate information
+                Koala.util.DokpoolRequest.updateActiveElanScenarios();
+                window.setInterval(function() {
+                    Koala.util.DokpoolRequest.updateActiveElanScenarios();
+                }, 30000);
+            }
         }
+        // handler: function(btn) {
+        //     btn.up('app-main').down('k-panel-mobileevents').show();
+        // }
     }, {
         xtype: 'container',
         name: 'searchcontainer',
@@ -95,8 +189,7 @@ Ext.define('Koala.view.panel.MobileMenu',{
             hidden: true,
             store: {
                 type: 'k-metadatasearch'
-            }
-            ,
+            },
             listeners: {
                 itemtap: 'onItemTap'
             }
