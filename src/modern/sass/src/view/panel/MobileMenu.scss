@@ -45,3 +45,34 @@
         padding: 3px 0;
     }
 }
+
+
+.button-alert{
+        background-color: red !important;
+        background-image: none;
+        animation: blink-animation 2s steps(115, start) infinite;
+        -webkit-animation: blink-animation 2s steps(115, start) infinite;
+}
+
+.button-alert .x-font-icon{
+        color: yellow !important;
+        cursor: pointer;
+        margin-right: 10px;
+}
+
+.button-routine .x-font-icon{
+        color: #05db05 !important;
+        cursor: pointer;
+        margin-right: 10px;
+}
+
+@keyframes blink-animation {
+  50% {
+    opacity: 0.0;
+  }
+}
+@-webkit-keyframes blink-animation {
+  50% {
+    opacity: 0.0;
+  }
+}

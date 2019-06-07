@@ -59,7 +59,9 @@
     },
     "Koala.util.String": {
         "statics": {
-            "defaultDateFormat": "d.m.Y H:i:s"
+            "defaultDateFormat": "d.m.Y H:i:s",
+            "bool2StringTrue": "JA",
+            "bool2StringFalse": "NEIN"
         }
     },
     "Koala.view.button.Permalink": {
@@ -583,7 +585,21 @@
         "config": {
             "data": {
                 "logoTooltip": "Link zur BfS-Homepage",
-                "headerTitle": "GEOPORTAL"
+                "headerTitle": "GEOPORTAL",
+                "alertBtnText": "Ereignisse",
+                "alertBtnTooltip": "Ereignisinformation",
+                "routineMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> (unverändert)",
+                "alertMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> <div style='color:red; margin: 0;'> (modifiziert!)</div>",
+                "htmlMessageBody": "<div>" +
+                    "<b>geändert am:</b> [[modified]]<br>" +
+                    "<b>geändert von:</b> [[modified_by]]<br>" +
+                    "<b>Ist dies eine Übung?</b> [[Exercise]]<br>" +
+                    "<b>Ereigniszeit:</b> [[TimeOfEvent]]<br>" +
+                    "<b>ID:</b> [[id]]<br>" +
+                    "<b>Beschreibung:</b> [[description]]<br>" +
+                    "<b>Szenariophase:</b> [[ScenarioPhase.title]]<br>" +
+                    "<b>Ereignisort:</b> [[ScenarioLocation.title]]<br>" +
+                    "</div>"
             }
         }
     },
@@ -1743,7 +1759,8 @@
                 "permalinkButtonText": "Permalink",
                 "spatialSearchTitle": "Räumliche Suche",
                 "stationSearchTitle": "ODL Sondenstandorte",
-                "metadataSearchTitle": "Daten und Dienste des Bfs"
+                "metadataSearchTitle": "Daten und Dienste des Bfs",
+                "alertBtnText": "Ereignisse"
             }
         }
     },
@@ -1766,6 +1783,25 @@
             "data": {
                 "title": "Permalink",
                 "applyFilterCheckboxBoxLabel": "Layerfilter in Permalink übernehmen"
+            }
+        }
+    },
+    "Koala.view.panel.MobileEvents": {
+        "config": {
+            "data": {
+                "title": "Ereignisse",
+                "routineMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> (unverändert)",
+                "alertMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> <div style='color:red; margin: 0;'> (modifiziert!)</div>",
+                "htmlMessageBody": "<div>" +
+                    "<b>geändert am:</b> [[modified]]<br>" +
+                    "<b>geändert von:</b> [[modified_by]]<br>" +
+                    "<b>Ist dies eine Übung?</b> [[Exercise]]<br>" +
+                    "<b>Ereigniszeit:</b> [[TimeOfEvent]]<br>" +
+                    "<b>ID:</b> [[id]]<br>" +
+                    "<b>Beschreibung:</b> [[description]]<br>" +
+                    "<b>Szenariophase:</b> [[ScenarioPhase.title]]<br>" +
+                    "<b>Ereignisort:</b> [[ScenarioLocation.title]]<br>" +
+                    "</div>"
             }
         }
     },

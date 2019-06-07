@@ -25,6 +25,12 @@ Ext.define('Koala.util.String', {
         defaultDateFormat: '', // actual value comes from locale
 
         /**
+         * fi18n formatted bool Values
+         */
+        bool2StringTrue: '',
+        bool2StringFalse: '',
+
+        /**
          * Checks whether a passed string is a valid level 1-5 uuid (RFC4122).
          *
          * @param String candidate The string to test
@@ -174,6 +180,17 @@ Ext.define('Koala.util.String', {
             }
         },
 
+        /**
+         * @param {string} value or {number} value- the string or number containing the bool
+         * @returns the i18n String for bool
+         */
+        getStringFromBool: function(boolValue) {
+            if (boolValue.toString().toLowerCase() === 'true' || boolValue.toString() === '1') {
+                return this.bool2StringTrue;
+            } else {
+                return this.bool2StringFalse;
+            }
+        },
         /**
          *
          */

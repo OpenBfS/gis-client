@@ -59,7 +59,9 @@
     },
     "Koala.util.String": {
         "statics": {
-            "defaultDateFormat": "Y/m/d H:i:s"
+            "defaultDateFormat": "Y/m/d H:i:s",
+            "bool2StringFormatTrue": "YES",
+            "bool2StringFormatFalse": "NO"
         }
     },
     "Koala.view.button.Permalink": {
@@ -581,7 +583,19 @@
         "config": {
             "data": {
                 "logoTooltip": "Link to the BfS homepage",
-                "headerTitle": "GEOPORTAL"
+                "headerTitle": "GEOPORTAL",
+                "alertBtnText": "Events",
+                "alertBtnTooltip": "Event information",
+                "routineMessageHeader": "No Changes",
+                "alertMessageHeader": "Event modified!",
+                "htmlMessageBody": "<div>" +
+                    "modified on: [[modified]]<br>" +
+                    "modified by: [[modified_by]]<br>" +
+                    "Exercise? [[Exercise]]<br>" +
+                    "Time of Event: [[TimeOfEvent]]<br>" +
+                    "Scenarion phase: [[ScenarioPhase.title]]<br>" +
+                    "Scenario location: [[ScenarioLocation.title]]<br>" +
+                    "</div>"
             }
         }
     },
@@ -1726,7 +1740,8 @@
                 "permalinkButtonText": "Permalink",
                 "spatialSearchTitle": "Spatial search",
                 "stationSearchTitle": "Gamma Dose Rate Stations",
-                "metadataSearchTitle": "BfS data and services"
+                "metadataSearchTitle": "BfS data and services",
+                "alertBtnText": "Events"
             }
         }
     },
@@ -1749,6 +1764,25 @@
             "data": {
                 "title": "Permalink",
                 "applyFilterCheckboxBoxLabel": "Apply layer filters in permalink"
+            }
+        }
+    },
+    "Koala.view.panel.MobileEvents": {
+        "config": {
+            "data": {
+                "title": "Events",
+                "routineMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> (unverändert)",
+                "alertMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> <div style='color:red; margin: 0;'> (modifiziert!)</div>",
+                "htmlMessageBody": "<div>" +
+                    "<b>geändert am:</b> [[modified]]<br>" +
+                    "<b>geändert von:</b> [[modified_by]]<br>" +
+                    "<b>Ist dies eine Übung?</b> [[Exercise]]<br>" +
+                    "<b>Ereigniszeit:</b> [[TimeOfEvent]]<br>" +
+                    "<b>ID:</b> [[id]]<br>" +
+                    "<b>Beschreibung:</b> [[description]]<br>" +
+                    "<b>Szenariophase:</b> [[ScenarioPhase.title]]<br>" +
+                    "<b>Ereignisort:</b> [[ScenarioLocation.title]]<br>" +
+                    "</div>"
             }
         }
     },
