@@ -22,6 +22,7 @@ Ext.define('Koala.view.panel.HeaderModel', {
     data: {
         name: '',
         logoTooltip: '',
+        alertBtnText: '',
         alertBtnTooltip: '',
         routineMessageHeader: '',
         alertMessageHeader: '',

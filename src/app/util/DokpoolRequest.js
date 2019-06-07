@@ -89,13 +89,12 @@ Ext.define('Koala.util.DokpoolRequest', {
                                             //console.log('scenario change detected: ' + new Date());
                                             var ScenarioAlertBtn = Ext.ComponentQuery.query('button[name=ScenarioAlertBtn]')[0];
                                             ScenarioAlertBtn.triggerEvent = responseObj.id;
-                                            if (!Ext.isModern) {
-                                                ScenarioAlertBtn.setGlyph('xf071@FontAwesome');
-                                            } else {
-                                                ScenarioAlertBtn.setIconCls('fas fa-exclamation-triangle');
-                                            }
                                             ScenarioAlertBtn.removeCls('button-routine');
                                             ScenarioAlertBtn.addCls('button-alert');
+                                            ScenarioAlertBtn.setIconCls('fas fa-exclamation-triangle');
+                                            if (Ext.isModern) {
+                                                ScenarioAlertBtn.up('app-main').down('k-panel-mobilemenu').show();
+                                            }
                                         } else {
                                             //console.log('checked, but NO scenario change detected: ' + new Date());
                                         }

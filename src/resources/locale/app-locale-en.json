@@ -584,6 +584,7 @@
             "data": {
                 "logoTooltip": "Link to the BfS homepage",
                 "headerTitle": "GEOPORTAL",
+                "alertBtnText": "Events",
                 "alertBtnTooltip": "Event information",
                 "routineMessageHeader": "No Changes",
                 "alertMessageHeader": "Event modified!",
@@ -1739,7 +1740,7 @@
                 "spatialSearchTitle": "Spatial search",
                 "stationSearchTitle": "Gamma Dose Rate Stations",
                 "metadataSearchTitle": "BfS data and services",
-                "dokpoolEvents": "Events"
+                "alertBtnText": "Events"
             }
         }
     },

@@ -5,14 +5,16 @@
         -webkit-animation: blink-animation 2s steps(115, start) infinite;
 }
 
-.button-alert .x-btn-glyph{
+.button-alert .x-font-icon{
         color: yellow !important;
         cursor: pointer;
+        margin-right: 10px;
 }
 
-.button-routine .x-btn-glyph{
+.button-routine .x-font-icon{
         color: #05db05 !important;
         cursor: pointer;
+        margin-right: 10px;
 }
 
 @keyframes blink-animation {

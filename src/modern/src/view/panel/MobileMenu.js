@@ -44,7 +44,7 @@ Ext.define('Koala.view.panel.MobileMenu', {
         iconCls: 'fas fa-check',
         iconAlign: 'center',
         bind: {
-            text: '{dokpoolEvents}'
+            text: '{alertBtnText}'
         },
         listeners: {
             tap: function(btn) {

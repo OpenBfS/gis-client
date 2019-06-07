@@ -586,6 +586,7 @@
             "data": {
                 "logoTooltip": "Link zur BfS-Homepage",
                 "headerTitle": "GEOPORTAL",
+                "alertBtnText": "Ereignisse",
                 "alertBtnTooltip": "Ereignisinformation",
                 "routineMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> (unverändert)",
                 "alertMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> <div style='color:red; margin: 0;'> (modifiziert!)</div>",
@@ -1758,7 +1759,7 @@
                 "spatialSearchTitle": "Räumliche Suche",
                 "stationSearchTitle": "ODL Sondenstandorte",
                 "metadataSearchTitle": "Daten und Dienste des Bfs",
-                "dokpoolEvents": "Ereignisse"
+                "alertBtnText": "Ereignisse"
             }
         }
     },
