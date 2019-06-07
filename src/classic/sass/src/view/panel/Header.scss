@@ -5,16 +5,20 @@
         -webkit-animation: blink-animation 2s steps(115, start) infinite;
 }
 
-.button-alert .x-font-icon{
+.button-alert .x-btn-icon > .x-btn-icon-el{
+    &:before{
         color: yellow !important;
         cursor: pointer;
         margin-right: 10px;
+    }
 }
 
-.button-routine .x-font-icon{
+.button-routine .x-btn-icon > .x-btn-icon-el{
+    &:before{
         color: #05db05 !important;
         cursor: pointer;
         margin-right: 10px;
+    }
 }
 
 @keyframes blink-animation {
