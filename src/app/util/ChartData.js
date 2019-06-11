@@ -579,8 +579,9 @@ Ext.define('Koala.util.ChartData', {
             margin = Ext.Array.map(margin, function(w) {
                 return parseInt(w, 10);
             });
+            var legendMaxLength = gnosConfig.legendEntryMaxLength || 0;
             // set the size
-            componentConfig.size = [chartSize[0] - margin[1] - margin[3] - gnosConfig.legendEntryMaxLength, chartSize[1] - margin[0] - margin[2]];
+            componentConfig.size = [chartSize[0] - margin[1] - margin[3] - legendMaxLength, chartSize[1] - margin[0] - margin[2]];
             componentConfig.position = [margin[3], margin[0]];
             componentConfig.backgroundColor = gnosConfig.backgroundColor;
             componentConfig.title = layerConfig.title.label || '';
@@ -594,7 +595,7 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.series = seriesAndLegends.series;
             // append legends
             config.legendComponentConfig.items = seriesAndLegends.legends;
-            config.legendComponentConfig.position = [chartSize[0] + margin[1] - gnosConfig.legendEntryMaxLength, margin[0]];
+            config.legendComponentConfig.position = [chartSize[0] + margin[1] - legendMaxLength, margin[0]];
             config.legendComponentConfig.extraClasses = 'k-d3-shape-group-legend';
             // append axes
             componentConfig.axes = {
