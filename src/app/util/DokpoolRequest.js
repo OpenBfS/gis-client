@@ -59,7 +59,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                         return scen['@id'] === localStorageScenarios[prop]['@id'];
                     });
                     if (check.length === 0) {
-                        console.log('deleted "' + localStorageScenarios[prop].id + '" from localStorage since it is no longer active!');
+                        // console.log('deleted "' + localStorageScenarios[prop].id + '" from localStorage since it is no longer active!');
                         delete localStorageScenarios[prop];
                         Koala.util.LocalStorage.updateDokpoolEvents(localStorageScenarios);
                     }
@@ -71,9 +71,10 @@ Ext.define('Koala.util.DokpoolRequest', {
                     //console.log('only routinemode');
                 } else {
                     //console.log('activeScenarios from ELAN available');
-                    Ext.each(activeElanScenarios, function(scenario, index, array) {
+                    Ext.each(activeElanScenarios, function(scenario) {
                         var url = scenario['@id'];
-                        var scenarioDetailed = new Ext.Promise(function(resolve, reject) {
+                        // var scenarioDetailed =
+                        new Ext.Promise(function(resolve, reject) {
                             Ext.Ajax.request({
                                 url: url,
                                 headers: headers,
