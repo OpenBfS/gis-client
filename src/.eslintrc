@@ -77,7 +77,6 @@
         "no-extend-native": 2,
         "no-floating-decimal": 2,
         "no-implied-eval": 2,
-        "no-loop-func": 2,
         "no-multi-spaces": 1,
         "no-multi-str": 2,
         "no-new-func": 2,

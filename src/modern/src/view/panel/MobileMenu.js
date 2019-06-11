@@ -61,7 +61,7 @@ Ext.define('Koala.view.panel.MobileMenu', {
 
                 var htmlMessage = '';
                 var eventNames = Object.keys(me.dokpoolEvents);
-                eventNames.forEach(function(key, index) {
+                eventNames.forEach(function(key) {
                     var messageHeader = '';
 
                     var replaceObject = Object.defineProperties({}, {
