@@ -136,9 +136,7 @@ Ext.define('Koala.util.DokpoolRequest', {
             // baseUrl = Koala.util.Object.getPathStrOr(appContext,
             //     'data/merge/urls/dokpool-scenarios'),
             var baseUrl = 'http://test-docker-fr.lab.bfs.de:28081/dokpool/bund/contentconfig/scen/';
-            //var baseUrl = 'http://dev-pk-fr.lab.bfs.de:8081/dokpool4/bund/contentconfig/scen/';
             var url = (dpType) ? baseUrl + me.elanScenarioSearch + dpType : baseUrl + me.elanScenarioSearch;
-            //var url = baseUrl;
 
             if (!baseUrl) {
                 return Ext.Promise.resolve({});

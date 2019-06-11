@@ -108,7 +108,7 @@ Ext.define('Koala.view.panel.Header', {
             bind: {
                 text: '{alertBtnText}'
             },
-            //cls: 'button-routine',
+            cls: 'button-routine',
             hidden: false,
             margin: '0 0 0 10',
             handler: function() {
