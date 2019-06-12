@@ -943,9 +943,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         var scale = cfg.scale;
         scale = scale === 'linear' ? 'log' : 'linear';
         cfg.scale = scale;
+        cfg.factor = scale === 'log' ? undefined : 0.8;
         cfg.harmonize = scale === 'log';
         cfg.autoTicks = scale === 'log';
-        cfg.powerOfTen = scale === 'log';
+        cfg.epsilon = scale === 'log' ? 0.01 : undefined;
         this.chartOverrides[axis] = {
             scale: scale
         };

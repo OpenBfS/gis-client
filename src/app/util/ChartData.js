@@ -734,8 +734,9 @@ Ext.define('Koala.util.ChartData', {
                 max: max,
                 harmonize: scale === 'log',
                 autoTicks: scale === 'log',
+                epsilon: scale === 'log' ? 0.01 : undefined,
                 sanitizeLabels: true,
-                factor: orient === 'y' ? 0.8 : undefined,
+                factor: orient === 'y' && scale !== 'log' ? 0.8 : undefined,
                 locale: languageSelect.getValue()
             };
             if (withGrid) {
