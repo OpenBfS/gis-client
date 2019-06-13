@@ -768,14 +768,16 @@ Ext.define('Koala.view.component.D3ChartController', {
             data = Ext.Array.filter(data, function(feat) {
                 return feat.get(groupAttribute) === station.get(groupAttribute);
             });
-            if (Ext.isFunction(cbFn)) {
-                cbFn.call(cbScope, station);
-            }
-            if (Ext.isFunction(cbSuccess)) {
-                cbSuccess.call(cbScope, {
-                    responseText: fmt.writeFeatures(data)
-                }, station);
-            }
+            window.setTimeout(function() {
+                if (Ext.isFunction(cbFn)) {
+                    cbFn.call(cbScope, station);
+                }
+                if (Ext.isFunction(cbSuccess)) {
+                    cbSuccess.call(cbScope, {
+                        responseText: fmt.writeFeatures(data)
+                    }, station);
+                }
+            }, 500);
             return;
         }
 
@@ -894,6 +896,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 stations,
                 this.chartOverrides
             );
+
             me.fireEvent('chartdataprepared');
         }
     },
