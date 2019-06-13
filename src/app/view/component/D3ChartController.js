@@ -187,7 +187,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 series.toggleSeries(legend.seriesIndex);
             };
             if (station) {
-                legend.title = Koala.util.String.replaceTemplateStrings(gnosConfig.seriesTitleTpl, station).replace(/(\w)([-_/,.])(\w)/g, '$1 $2 $3');
+                var titleAttribute = gnosConfig.seriesTitleTpl || '[[' + gnosConfig.groupAttribute + ']]';
+                legend.title = Koala.util.String.replaceTemplateStrings(titleAttribute, station).replace(/(\w)([-_/,.])(\w)/g, '$1 $2 $3');
                 legend.contextmenuHandler = me.getContextmenuFunction(legend.seriesIndex, series).bind(me);
             }
             legend.customRenderer = function(node) {
@@ -883,6 +884,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             if (config.title) {
                 config.title.label = Koala.util.Chart.getChartTitle(this.getView().getTargetLayer());
             }
+
             me.chartConfig = Koala.util.ChartData.getChartConfiguration(
                 config,
                 chartSize,
@@ -941,8 +943,10 @@ Ext.define('Koala.view.component.D3ChartController', {
         var scale = cfg.scale;
         scale = scale === 'linear' ? 'log' : 'linear';
         cfg.scale = scale;
+        cfg.factor = scale === 'log' ? undefined : 0.8;
         cfg.harmonize = scale === 'log';
         cfg.autoTicks = scale === 'log';
+        cfg.epsilon = scale === 'log' ? 0.01 : undefined;
         this.chartOverrides[axis] = {
             scale: scale
         };
