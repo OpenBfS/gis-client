@@ -105,6 +105,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             return;
         }
         var me = this;
+        var div = this.getView().el.dom;
 
         me.currentDateRange = {
             min: null,
@@ -120,17 +121,27 @@ Ext.define('Koala.view.component.D3ChartController', {
             this.keyupDestroy.destroy();
         }
 
+        var preventBrowserzoom = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
+        div.addEventListener('wheel', preventBrowserzoom, { passive: false });
+
         this.keydownDestroy = Ext.getBody().on('keydown', function(event) {
             if (event.shiftKey) {
                 // removed stopping of event propagation for now, if there was
                 // a reason for this, we'd probably need further checks on the
                 // event target
+                series.enableXAxisZoom(event.ctrlKey);
                 series.enableYAxisZoom(true);
             }
+
         }, this, {
             destroyable: true
         });
         this.keyupDestroy = Ext.getBody().on('keyup', function(event) {
+            series.enableXAxisZoom(true);
             series.enableYAxisZoom(event.shiftKey);
         }, this, {
             destroyable: true
@@ -142,7 +153,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             this.chartConfig.chartRendererConfig.components.push(legend);
         }
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
-        var div = this.getView().el.dom;
+
         this.chartRenderer.render(div);
     },
 
