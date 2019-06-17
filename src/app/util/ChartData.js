@@ -733,7 +733,12 @@ Ext.define('Koala.util.ChartData', {
                 min: min,
                 max: max,
                 harmonize: scale === 'log',
-                autoTicks: scale === 'log',
+                tickFormatter: scale === 'log' ? function(val) {
+                    return !this.powerOfTen(val) ? ''
+                        : val > 1000 || val < 0.0001
+                            ? val.toExponential()
+                            : val;
+                } : undefined,
                 epsilon: scale === 'log' ? 0.01 : undefined,
                 sanitizeLabels: true,
                 factor: orient === 'y' && scale !== 'log' ? 0.8 : undefined,
@@ -878,6 +883,15 @@ Ext.define('Koala.util.ChartData', {
                 series: series,
                 legends: legends
             };
+        },
+
+        /**
+         * Checks if a number is a power of ten
+         *
+         * @param {number} d
+         */
+        powerOfTen: function(d) {
+            return d / Math.pow(10, Math.ceil(Math.log(d) / Math.LN10 - 1e-12)) === 1;
         }
     }
 });

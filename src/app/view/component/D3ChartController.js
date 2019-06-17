@@ -950,6 +950,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      * @param  {String|undefined} axis if not given, the 'y' scale is toggled
      */
     toggleScale: function(axis) {
+        var powerOfTen = Koala.util.ChartData.powerOfTen;
         if (!axis) {
             axis = 'y';
         }
@@ -959,8 +960,13 @@ Ext.define('Koala.view.component.D3ChartController', {
         cfg.scale = scale;
         cfg.factor = scale === 'log' ? undefined : 0.8;
         cfg.harmonize = scale === 'log';
-        cfg.autoTicks = scale === 'log';
         cfg.epsilon = scale === 'log' ? 0.01 : undefined;
+        cfg.tickFormatter = scale === 'log' ? function(val) {
+            return !powerOfTen(val) ? ''
+                : val > 1000 || val < 0.0001
+                    ? val.toExponential()
+                    : val;
+        } : undefined;
         this.chartOverrides[axis] = {
             scale: scale
         };
