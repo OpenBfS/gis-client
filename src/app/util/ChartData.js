@@ -46,9 +46,10 @@ Ext.define('Koala.util.ChartData', {
                 // respecting the format
                 var featDate = Koala.util.Date.getUtcMoment(feat.properties[xAxisAttr]);
 
-                var featDateSeconds = featDate.unix();
-
-                obj[featDateSeconds] = feat;
+                if (featDate) {
+                    var featDateSeconds = featDate.unix();
+                    obj[featDateSeconds] = feat;
+                }
             });
 
             return obj;
@@ -62,6 +63,10 @@ Ext.define('Koala.util.ChartData', {
          */
         getIntervalInSeconds: function(interval, unit) {
             var multiplier = 0;
+
+            if (!interval || !unit) {
+                return false;
+            }
 
             switch (unit.toLowerCase()) {
                 case 'seconds':
@@ -718,6 +723,8 @@ Ext.define('Koala.util.ChartData', {
                 languageSelect = Ext.ComponentQuery.query('k-field-languageselect')[0];
             }
 
+            var powerOfTen = this.powerOfTen;
+
             var config = {
                 orientation: orient,
                 display: true,
@@ -734,7 +741,7 @@ Ext.define('Koala.util.ChartData', {
                 max: max,
                 harmonize: scale === 'log',
                 tickFormatter: scale === 'log' ? function(val) {
-                    return !this.powerOfTen(val) ? ''
+                    return !powerOfTen(val) ? ''
                         : val > 1000 || val < 0.0001
                             ? val.toExponential()
                             : val;

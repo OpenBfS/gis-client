@@ -34,7 +34,13 @@ Ext.define('Koala.view.form.ChartDataFormController', {
         var time = view.metadata.layerConfig.timeSeriesChartProperties;
         if (time && Object.keys(time).length !== 0) {
             Ext.each(view.timeseriesFields, function(field) {
-                time[field] = view.down('[name=timeseries]').down('[name=' + field + ']').getValue();
+                var value = view.down('[name=timeseries]').down('[name=' + field + ']').getValue();
+                if (field === 'groupAttribute') {
+                    if (!time.featureIdentifyField) {
+                        time.featureIdentifyField = value;
+                    }
+                }
+                time[field] = value;
             });
         }
         view.done(view.metadata);
