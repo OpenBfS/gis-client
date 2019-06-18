@@ -49,8 +49,21 @@ Ext.define('Koala.util.String', {
          * derived fromn the passed gettable. A gettable is any object that
          * exposes a method `get` to access properties. Both Ext.data.Model
          * instances and o.Objects qualify as gettable.
+         *
+         * @param String tpl The templates string.
+         * @param Object The objet that contains the values to be filled in the tpl.
+         * @param Boolean showWarnings Flag to show warnings if the key to replace
+         *  is not defined in the getable.
+         * @param String prefix An optional prefix that should be stripped.
          */
         replaceTemplateStrings: function(tpl, getable, showWarnings, prefix) {
+            if (!getable) {
+                Ext.log({
+                    level: 'warn',
+                    msg: 'Bad template or getable.'
+                });
+                return tpl;
+            }
             if (getable && !('get' in getable)) {
                 getable = new ol.Object(getable);
             }
