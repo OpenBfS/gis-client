@@ -169,6 +169,11 @@
                 "uuid": "fc967ce2-e132-440f-adc0-fa33c94f5892",
                 "text": "Jod gasförmig (Tagesmittel)",
                 "leaf": true
+            },
+            {
+                "uuid": "6676f4bc-49ef-453f-8db9-c8392c2fca50",
+                "text": "Krypton (OpenData)",
+                "leaf": true
             }
         ],
         "thumb": "layer_sets/luft03_thumb.jpg"
