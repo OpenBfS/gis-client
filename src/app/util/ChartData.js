@@ -46,9 +46,10 @@ Ext.define('Koala.util.ChartData', {
                 // respecting the format
                 var featDate = Koala.util.Date.getUtcMoment(feat.properties[xAxisAttr]);
 
-                var featDateSeconds = featDate.unix();
-
-                obj[featDateSeconds] = feat;
+                if (featDate) {
+                    var featDateSeconds = featDate.unix();
+                    obj[featDateSeconds] = feat;
+                }
             });
 
             return obj;
