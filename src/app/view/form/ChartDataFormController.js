@@ -32,12 +32,16 @@ Ext.define('Koala.view.form.ChartDataFormController', {
             });
         }
         var time = view.metadata.layerConfig.timeSeriesChartProperties;
+        var olProperties = view.metadata.layerConfig.olProperties;
         if (time && Object.keys(time).length !== 0) {
             Ext.each(view.timeseriesFields, function(field) {
                 var value = view.down('[name=timeseries]').down('[name=' + field + ']').getValue();
                 if (field === 'groupAttribute') {
                     if (!time.featureIdentifyField) {
                         time.featureIdentifyField = value;
+                    }
+                    if (!olProperties.featureIdentifyField) {
+                        olProperties.featureIdentifyField = value;
                     }
                 }
                 time[field] = value;
