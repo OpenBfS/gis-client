@@ -32,7 +32,11 @@ Ext.define('Koala.view.menu.ChartSettingsMenuModel', {
         minMaxWindowTitle: '',
         okText: '',
         cancelText: '',
-        editTemplates: ''
+        editTemplates: '',
+        title: '',
+        tooltip: '',
+        xAxisLabel: '',
+        yAxisLabel: ''
     }
 
 });

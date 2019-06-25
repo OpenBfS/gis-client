@@ -551,8 +551,10 @@
                 "okText": "Ok",
                 "cancelText": "Cancel",
                 "editTemplates": "Edit templates",
-                "title": "Title",
-                "tooltip": "Tooltip"
+                "title": "Legend",
+                "tooltip": "Tooltip",
+                "xAxisLabel": "xAxisLabel",
+                "yAxisLabel": "yAxisLabel"
             }
         }
     },

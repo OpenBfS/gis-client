@@ -160,8 +160,8 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
         var chart = this.getView().chart;
         var fullMetadata = chart.getTargetLayer().metadata;
         var viewModel = this.getViewModel();
-        var templates = [viewModel.get('tooltip'), viewModel.get('title')];
-        var properties = ['tooltipTpl'];
+        var templates = [viewModel.get('tooltip'), viewModel.get('xAxisLabel'), viewModel.get('yAxisLabel'), viewModel.get('title')];
+        var properties = ['tooltipTpl','xAxisLabel','yAxisLabel'];
         var metadata;
         if (chart.xtype === 'd3-chart') {
             properties.push('seriesTitleTpl');
@@ -181,16 +181,27 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                 properties: properties,
                 layer: chart.getTargetLayer()
             }],
-            listeners: {
-                close: function() {
-                    var editor = this.down('k-form-field-templateeditor');
+            bbar: [{
+                xtype: 'button',
+                text: viewModel.get('okText'),
+                handler: function() {
+                    var win = this.up('window');
+                    var editor = this.up('window').down('k-form-field-templateeditor');
                     var md = editor.getMetadata();
                     Ext.each(properties, function(property) {
                         metadata[property] = md[property];
                     });
                     chart.getController().getChartData();
+                    win.close();
                 }
-            }
+            }, {
+                xtype: 'button',
+                text: viewModel.get('cancelText'),
+                handler: function() {
+                    var win = this.up('window');
+                    win.close();
+                }
+            }]
         });
     }
 

@@ -553,8 +553,10 @@
                 "okText": "Ok",
                 "cancelText": "Abbrechen",
                 "editTemplates": "Templates anpassen",
-                "title": "Titel",
-                "tooltip": "Tooltip"
+                "title": "Legende",
+                "tooltip": "Tooltip",
+                "xAxisLabel": "xAxisLabel",
+                "yAxisLabel": "yAxisLabel"
             }
         }
     },
