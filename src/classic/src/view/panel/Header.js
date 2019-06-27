@@ -116,7 +116,7 @@ Ext.define('Koala.view.panel.Header', {
                     viewmodel = Ext.ComponentQuery.query('k-panel-header')[0].getViewModel();
 
 
-                me.dokpoolEvents = Koala.util.LocalStorage.getDokpoolEvents();
+                //me.dokpoolEvents = Koala.util.LocalStorage.getDokpoolEvents();
                 // if (buttonStatus === 'alert') {
                 //     messageHeader = 'alertMessageHeader';
                 //     me.status = 'routine';
@@ -125,7 +125,8 @@ Ext.define('Koala.view.panel.Header', {
                 // }
 
                 var htmlMessage = '';
-                var eventNames = Object.keys(me.dokpoolEvents);
+                //var eventNames = Object.keys(me.dokpoolEvents);
+                var eventNames = Object.keys(Koala.util.LocalStorage.getDokpoolEvents());
                 eventNames.forEach(function(key) {
                     var messageHeader = '';
 
@@ -189,7 +190,7 @@ Ext.define('Koala.view.panel.Header', {
                     buttons: Ext.Msg.OK,
                     icon: Ext.Msg.INFO
                 });
-                //me.setGlyph('xf00c@FontAwesome');
+
                 me.setIconCls('fas fa-check');
                 me.removeCls('button-alert');
                 me.addCls('button-routine');

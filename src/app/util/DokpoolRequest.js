@@ -54,7 +54,6 @@ Ext.define('Koala.util.DokpoolRequest', {
 
                 //delete inactive events from localStorage
                 for (var prop in localStorageScenarios) {
-                    //var check = activeElanScenarios.filter(x => x['@id'] === localStorageScenarios[prop]['@id']);
                     var check = activeElanScenarios.filter(function(scen) {
                         return scen['@id'] === localStorageScenarios[prop]['@id'];
                     });
@@ -73,7 +72,6 @@ Ext.define('Koala.util.DokpoolRequest', {
                     //console.log('activeScenarios from ELAN available');
                     Ext.each(activeElanScenarios, function(scenario) {
                         var url = scenario['@id'];
-                        // var scenarioDetailed =
                         new Ext.Promise(function(resolve, reject) {
                             Ext.Ajax.request({
                                 url: url,
@@ -131,13 +129,11 @@ Ext.define('Koala.util.DokpoolRequest', {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': auth
-                };
-            // ,
-            // appContext = Koala.util.AppContext.getAppContext(),
-            // baseUrl = Koala.util.Object.getPathStrOr(appContext,
-            //     'data/merge/urls/dokpool-scenarios'),
-            var baseUrl = 'http://test-docker-fr.lab.bfs.de:28081/dokpool/bund/contentconfig/scen/';
-            var url = (dpType) ? baseUrl + me.elanScenarioSearch + dpType : baseUrl + me.elanScenarioSearch;
+                },
+                appContext = Koala.util.AppContext.getAppContext(),
+                baseUrl = Koala.util.Object.getPathStrOr(appContext,
+                    'data/merge/urls/dokpool-scenarios'),
+                url = (dpType) ? baseUrl + me.elanScenarioSearch + dpType : baseUrl + me.elanScenarioSearch;
 
             if (!baseUrl) {
                 return Ext.Promise.resolve({});
