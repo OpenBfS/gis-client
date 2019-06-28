@@ -80,13 +80,13 @@ Ext.define('Koala.util.DokpoolRequest', {
                                 success: function(response) {
                                     var responseObj = Ext.decode(response.responseText);
                                     var id = responseObj.id;
-                                    console.log('Scenario-ID = ' + id);
+                                    //console.log('Scenario-ID = ' + id);
                                     var ElanScenariosUpdate = Object.create({});
                                     var activeElanScenariosDetail = Koala.util.LocalStorage.getDokpoolEvents();
                                     if (activeElanScenariosDetail && !Ext.Object.isEmpty(activeElanScenariosDetail)) {
                                         ElanScenariosUpdate = activeElanScenariosDetail;
                                         if (!activeElanScenariosDetail[id] || !(activeElanScenariosDetail[id].modified === responseObj.modified)) {
-                                            console.log('scenario change detected: ' + new Date());
+                                            //console.log('scenario change detected: ' + new Date());
                                             var ScenarioAlertBtn = Ext.ComponentQuery.query('button[name=ScenarioAlertBtn]')[0];
                                             ScenarioAlertBtn.triggerEvent = responseObj.id;
                                             ScenarioAlertBtn.removeCls('button-routine');
@@ -96,10 +96,10 @@ Ext.define('Koala.util.DokpoolRequest', {
                                                 ScenarioAlertBtn.up('app-main').down('k-panel-mobilemenu').show();
                                             }
                                         } else {
-                                            console.log('checked, but NO scenario change detected: ' + new Date());
+                                            //console.log('checked, but NO scenario change detected: ' + new Date());
                                         }
                                     } else {
-                                        console.log('no scenario available in LocalStorage yet');
+                                        //console.log('no scenario available in LocalStorage yet');
                                     }
                                     ElanScenariosUpdate[id] = responseObj;
                                     Koala.util.LocalStorage.updateDokpoolEvents(ElanScenariosUpdate);

@@ -116,7 +116,7 @@ Ext.define('Koala.view.panel.Header', {
                     viewmodel = Ext.ComponentQuery.query('k-panel-header')[0].getViewModel();
 
 
-                //me.dokpoolEvents = Koala.util.LocalStorage.getDokpoolEvents();
+                me.dokpoolEvents = Koala.util.LocalStorage.getDokpoolEvents();
                 // if (buttonStatus === 'alert') {
                 //     messageHeader = 'alertMessageHeader';
                 //     me.status = 'routine';

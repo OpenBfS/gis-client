@@ -100,9 +100,7 @@ Ext.define('Koala.util.LocalStorage', {
          *                 used to check for changes later on
          */
         updateDokpoolEvents: function(scenarios) {
-            console.log('LocalStroage_beforeUpdate: ' + this.getProperty(this.DOKPOOL_EVENT_KEY));
             this.setProperty(this.DOKPOOL_EVENT_KEY, scenarios);
-            console.log('LocalStroage_afterUpdate: ' + this.getProperty(this.DOKPOOL_EVENT_KEY));
         },
 
         /**
