@@ -444,7 +444,7 @@ Ext.define('Koala.view.main.MobileMainController', {
             var column = {
                 text: propName,
                 dataIndex: propName,
-                itemId: propName,
+                //itemId: propName, //if needed, remove empty spaces from propName before
                 filter: {
                     type: ''
                 }

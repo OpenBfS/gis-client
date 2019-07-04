@@ -863,7 +863,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                     var column = {
                         text: propName,
                         dataIndex: propName,
-                        itemId: propName,
+                        //itemId: propName, //if needed, remove empty spaces from propName before
                         filter: {
                             type: ''
                         }
