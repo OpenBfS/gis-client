@@ -47,6 +47,7 @@ Ext.define('Koala.view.component.MapController', {
 
         me.distinctGeoms = [];
         var groups = {};
+        var tooManyFeatures = false;
         Ext.each(olFeats, function(olFeat) {
             if (me.distinctGeoms.length === 0) {
                 me.distinctGeoms.push(olFeat);
@@ -60,17 +61,29 @@ Ext.define('Koala.view.component.MapController', {
                     if (WKT_distinctFeat !== WKT_olFeat) {
                         me.distinctGeoms.push(olFeat);
                         groups[olFeat.get('id')] = [olFeat];
+                        if (me.distinctGeoms.length > 3) {
+                            me.distinctGeoms = [];
+                            groups = {};
+                            var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
+                            mapComp.removeAllHoverFeatures();
+                            tooManyFeatures = true;
+                            return false;
+                        }
                     } else {
                         groups[feat.get('id')].push(olFeat);
                     }
                 });
             }
+            if (tooManyFeatures) {
+                Ext.Msg.alert(viewModel.get('warning'), viewModel.get('tooManyFeatures'));
+                return false;
+            }
         }, me);
 
-        if (me.distinctGeoms.length > 3) {
-            Ext.Msg.alert(viewModel.get('warning'), viewModel.get('toManyFeatures'));
-            return;
-        }
+        // if (me.distinctGeoms.length > 3) {
+        //     Ext.Msg.alert(viewModel.get('warning'), viewModel.get('tooManyFeatures'));
+        //     return;
+        // }
 
         Ext.each(me.distinctGeoms, function(olFeat) {
             var layer = olFeat.get('layer');
