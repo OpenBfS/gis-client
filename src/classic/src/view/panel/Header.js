@@ -109,7 +109,7 @@ Ext.define('Koala.view.panel.Header', {
                 text: '{alertBtnText}'
             },
             cls: 'button-routine',
-            hidden: false,
+            hidden: true,
             margin: '0 0 0 10',
             handler: function() {
                 var me = this,
@@ -218,11 +218,14 @@ Ext.define('Koala.view.panel.Header', {
                 }, 1);
             },
             boxready: function() {
-                //run once to get immediate information
-                Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                window.setInterval(function() {
+                var tools = Koala.util.AppContext.getAppContext().data.merge.tools;
+                if (tools.indexOf('ScenarioAlertBtn') !== -1) {
+                    //run once to get immediate information
                     Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                }, 30000);
+                    window.setInterval(function() {
+                        Koala.util.DokpoolRequest.updateActiveElanScenarios();
+                    }, 30000);
+                }
             }
         }
     }]
