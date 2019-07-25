@@ -114,8 +114,8 @@ Ext.define('Koala.util.DokpoolRequest', {
                                         resolve(responseObj);
                                     } catch (err) {
                                         // most likely response isn't JSON
-                                        console.log('ERROR: ' + err);
-                                        console.log('SERVER-RESPONSE: ' + response);
+                                        Ext.log('ERROR: ' + err);
+                                        Ext.log('SERVER-RESPONSE: ' + response);
                                     }
                                 },
                                 failure: function(response) {
@@ -154,7 +154,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                 return Ext.Promise.resolve({});
             }
 
-            return new Ext.Promise(function(resolve, reject) {
+            return new Ext.Promise(function(resolve) {
                 Ext.Ajax.request({
                     url: url,
                     headers: headers,
@@ -167,16 +167,13 @@ Ext.define('Koala.util.DokpoolRequest', {
                             resolve(responseObj);
                         } catch (err) {
                             // most likely response isn't JSON
-                            console.log('ERROR: ' + err);
-                            console.log('SERVER-RESPONSE: ' + response);
+                            Ext.log('ERROR: ' + err);
+                            Ext.log('SERVER-RESPONSE: ' + response);
                             ScenarioAlertBtn.disable();
                         }
                     },
-                    failure: function(response) {
-                        var msg = 'server-side failure with status code ' +
-                            response.status;
+                    failure: function() {
                         ScenarioAlertBtn.disable();
-                        //reject(msg);
                     }
                 });
             });
