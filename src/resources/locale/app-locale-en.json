@@ -192,7 +192,7 @@
         "config": {
             "data": {
                 "warning": "Warning",
-                "toManyFeatures": "You selected more then 3 Features, please limit your selection (e.g. by increasing the zoom level)."
+                "tooManyFeatures": "You selected more then 3 Features, please limit your selection (e.g. by increasing the zoom level)."
             }
         }
     },
@@ -551,8 +551,11 @@
                 "okText": "Ok",
                 "cancelText": "Cancel",
                 "editTemplates": "Edit templates",
-                "title": "Title",
-                "tooltip": "Tooltip"
+                "editSettings": "Edit column settings",
+                "title": "Legend",
+                "tooltip": "Tooltip",
+                "xAxisLabel": "xAxisLabel",
+                "yAxisLabel": "yAxisLabel"
             }
         }
     },

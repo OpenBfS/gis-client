@@ -193,7 +193,7 @@
         "config": {
             "data": {
                 "warning": "Warnung",
-                "toManyFeatures": "Sie haben mehr als 3 Features selektiert, bitte schränken Sie zuvor Ihre Auswahl ein (z.B. durch vergrößern der Zoomstufe)."
+                "tooManyFeatures": "Sie haben mehr als 3 Features selektiert, bitte schränken Sie zuvor Ihre Auswahl ein (z.B. durch vergrößern der Zoomstufe)."
             }
         }
     },
@@ -553,8 +553,11 @@
                 "okText": "Ok",
                 "cancelText": "Abbrechen",
                 "editTemplates": "Templates anpassen",
-                "title": "Titel",
-                "tooltip": "Tooltip"
+                "editSettings": "Spaltenauswahl anpassen",
+                "title": "Legende",
+                "tooltip": "Tooltip",
+                "xAxisLabel": "xAxisLabel",
+                "yAxisLabel": "yAxisLabel"
             }
         }
     },

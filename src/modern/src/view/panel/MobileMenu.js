@@ -7,6 +7,7 @@ Ext.define('Koala.view.panel.MobileMenu', {
         'Koala.store.SpatialSearch',
 
         'Koala.util.AppContext',
+        'Koala.util.DokpoolRequest',
 
         'Koala.view.panel.MobileMenuController',
         'Koala.view.panel.MobileMenuModel'
