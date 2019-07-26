@@ -37,7 +37,7 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
             hidden: '{!isTimeseries}'
         },
         handler: 'toggleScale',
-        glyph: 'xf338@FontAwesome'
+        glyph: 'xf07d@FontAwesome'
     }, {
         xtype: 'menucheckitem',
         name: 'identificationThreshold',

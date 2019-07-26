@@ -8,10 +8,9 @@
     <import file="${basedir}/.sencha/app/build-impl.xml"/>
 
     <target name="-before-build">
-        <exec executable="node">
-            <!-- <arg value="node"/> -->
-            <arg value="${basedir}/npm-pack-libs.js"/>
-        </exec>
+      <exec executable="node">
+        <arg value="${basedir}/npm-pack-libs.js"/>
+      </exec>
     </target>
 
     <!--
@@ -34,7 +33,7 @@
 
             <target name="-before-init"/>
             <target name="-after-init"/>
-        
+
         The "page" target performs the call to Sencha Cmd to build the 'all-classes.js' file.
 
             <target name="-before-page"/>

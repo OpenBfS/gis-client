@@ -87,7 +87,7 @@ Ext.define('Koala.view.panel.ThemeTree', {
         name: 'collapseAll',
         handler: 'collapseAll',
         minWidth: 20,
-        glyph: 'xf146@FontAwesome',
+        glyph: 'xf147@FontAwesome',
         bind: {
             tooltip: '{tooltipCollapseAll}'
         }
@@ -95,7 +95,7 @@ Ext.define('Koala.view.panel.ThemeTree', {
         type: 'button',
         name: 'expandAll',
         handler: 'expandAll',
-        glyph: 'xf0fe@FontAwesome',
+        glyph: 'xf196@FontAwesome',
         minWidth: 20,
         bind: {
             tooltip: '{tooltipExpandAll}'
