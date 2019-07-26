@@ -40,9 +40,7 @@ Ext.define('Koala.view.form.ChartDataFormController', {
                     if (!time.featureIdentifyField) {
                         time.featureIdentifyField = value;
                     }
-                    if (!olProperties.featureIdentifyField) {
-                        olProperties.featureIdentifyField = value;
-                    }
+                    olProperties.featureIdentifyField = value;
                 }
                 time[field] = value;
             });
