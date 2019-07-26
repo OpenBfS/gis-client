@@ -162,8 +162,11 @@ Ext.define('Koala.Application', {
 
     launch: function() {
         BasiGX.util.Namespace.namespaces = {
+            opendata: 'www.imis.bfs.de/opendata',
             bfs: 'www.imis.bfs.de/bfs',
-            imis: 'www.imis.bfs.de/imis'
+            imis: 'www.imis.bfs.de/imis',
+            ruf: 'www.imis.bfs.de/ruf',
+            rlz: 'www.imis.bfs.de/rlz'
         };
         if (window.location.hash === '') {
             this.routedAlready = true;
