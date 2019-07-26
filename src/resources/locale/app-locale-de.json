@@ -736,7 +736,8 @@
                 "selectionEnabled": "(Selektionswerkzeug ist aktiviert!)",
                 "copyStyleLabel": "Stil kopieren",
                 "templateStyleLabel": "Stil aus Template",
-                "noCloneAllowed": "Selektierter Layer erlaubt kein kopieren"
+                "noCloneAllowed": "Selektierter Layer erlaubt kein kopieren",
+                "noLayerSelected": "Kein Layer zum Klonen selektiert"
             }
         }
     },

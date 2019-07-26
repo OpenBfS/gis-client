@@ -65,7 +65,13 @@ Ext.define('Koala.view.window.CloneWindowController', {
             case 'useLayer':
                 dataSourceLayer = view.getSourceLayer();
                 if (!dataSourceLayer) {
-                    dataSourceLayer = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].getSelection()[0].data;
+                    var legend = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+                    var selection = legend.getSelection();
+                    dataSourceLayer = selection[0] ? selection[0].data : null;
+                    if (!dataSourceLayer) {
+                        Ext.Msg.alert(viewModel.get('noLayerSelected'));
+                        return;
+                    }
                     if (!dataSourceLayer.get('allowClone')) {
                         Ext.Msg.alert(viewModel.get('noCloneAllowed'));
                         return;
