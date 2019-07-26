@@ -735,7 +735,8 @@
                 "emptyTemplateMessage": "Bitte wählen Sie eine Vorlage aus.",
                 "selectionEnabled": "(Selektionswerkzeug ist aktiviert!)",
                 "copyStyleLabel": "Stil kopieren",
-                "templateStyleLabel": "Stil aus Template"
+                "templateStyleLabel": "Stil aus Template",
+                "noCloneAllowed": "Selektierter Layer erlaubt kein kopieren"
             }
         }
     },

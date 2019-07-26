@@ -32,6 +32,7 @@ Ext.define('Koala.view.window.CloneWindowModel', {
         okButtonLabel: '',
         cancelButtonLabel: '',
         templateStyleLabel: '',
-        emptyTemplateMessage: ''
+        emptyTemplateMessage: '',
+        noCloneAllowed: ''
     }
 });

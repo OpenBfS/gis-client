@@ -21,7 +21,8 @@
 Ext.define('Koala.util.DokpoolRequest', {
 
     requires: [
-        'Koala.util.Authentication'
+        'Koala.util.Authentication',
+        'Koala.util.AppContext'
     ],
 
     statics: {
@@ -139,8 +140,12 @@ Ext.define('Koala.util.DokpoolRequest', {
             var baseUrl = 'http://test-docker-fr.lab.bfs.de:28081/dokpool/bund/contentconfig/scen/';
             var url = (dpType) ? baseUrl + me.elanScenarioSearch + dpType : baseUrl + me.elanScenarioSearch;
 
+            if (Koala.util.AppContext.getAppContext().debug) {
+                baseUrl = null;
+            }
+
             if (!baseUrl) {
-                return Ext.Promise.resolve({});
+                return Ext.Promise.resolve({items: []});
             }
 
             return new Ext.Promise(function(resolve, reject) {
