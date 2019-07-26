@@ -21,7 +21,8 @@
 Ext.define('Koala.util.DokpoolRequest', {
 
     requires: [
-        'Koala.util.Authentication'
+        'Koala.util.Authentication',
+        'Koala.util.AppContext'
     ],
 
     statics: {
@@ -150,8 +151,12 @@ Ext.define('Koala.util.DokpoolRequest', {
                     'data/merge/urls/dokpool-scenarios'),
                 url = (dpType) ? baseUrl + me.elanScenarioSearch + dpType : baseUrl + me.elanScenarioSearch;
 
+            if (Koala.util.AppContext.getAppContext().debug) {
+                baseUrl = null;
+            }
+
             if (!baseUrl) {
-                return Ext.Promise.resolve({});
+                return Ext.Promise.resolve({items: []});
             }
 
             return new Ext.Promise(function(resolve) {

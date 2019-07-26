@@ -734,7 +734,9 @@
                 "emptyTemplateMessage": "Please select a template.",
                 "selectionEnabled": "(Selection tool is activated!)",
                 "copyStyleLabel": "Copy style",
-                "templateStyleLabel": "Style from template"
+                "templateStyleLabel": "Style from template",
+                "noCloneAllowed": "The selected layer does not allow copying",
+                "noLayerSelected": "No layer selected to clone"
             }
         }
     },
