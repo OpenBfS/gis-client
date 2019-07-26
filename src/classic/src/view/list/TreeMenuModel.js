@@ -74,17 +74,17 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     text: '{menu}',
                     key: 'menu',
                     leaf: true,
-                    iconCls: 'x-fa fas fa-bars',
+                    iconCls: 'x-fa fa-bars',
                     rowCls: 'menu-button'
                 }, {
                     text: '{themes}',
                     key: 'themes',
                     leaf: true,
-                    iconCls: 'x-fa fas fa-folder-open',
+                    iconCls: 'x-fa fa-folder-open-o',
                     rowCls: '{themeTreeVisible ? "active" : ""}'
                 }, {
                     text: '{loading}',
-                    iconCls: 'x-fa fas fa-globe',
+                    iconCls: 'x-fa fa-globe',
                     children: [{
                         text: '{wmsimport}',
                         key: 'wmsimport',
@@ -95,68 +95,68 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         text: '{vectorimport}',
                         key: 'vectorimport',
                         leaf: true,
-                        iconCls: 'x-fa fas fa-vector-square',
+                        iconCls: 'x-fa fa-map-o',
                         rowCls: '{showVectorImportBtn ? "" : "hidden"}'
                     }, {
                         text: '{createvectorlayer}',
                         key: 'createvectorlayer',
                         leaf: true,
-                        iconCls: 'x-fa fas fa-files-o',
+                        iconCls: 'x-fa fa-files-o',
                         rowCls: '{showCreateVectorLayerBtn ? "" : "hidden"}'
                     }]
                 }, {
                     text: '{print}',
                     key: 'print',
                     leaf: true,
-                    iconCls: 'x-fa fas fa-print',
+                    iconCls: 'x-fa fa-print',
                     rowCls: '{showPrintBtn ? "" : "hidden"}'
                 }, {
                     text: '{tools}',
-                    iconCls: 'x-fa fas fa-pencil-square-o',
+                    iconCls: 'x-fa fa-pencil-square-o',
                     rowCls: '{selectFeaturesActive || drawToolsActive || measureToolsActive ? "active" : ""}',
                     children: [{
                         text: '{draw}',
                         key: 'draw',
                         leaf: true,
-                        iconCls: 'x-fa fas fa-pencil-ruler',
+                        iconCls: 'x-fa fa-pencil',
                         rowCls: '{showDrawBtn ? "" : "hidden"} {drawToolsActive ? "active" : ""}'
                     }, {
                         text: '{measure}',
                         key: 'measure',
                         leaf: true,
-                        iconCls: 'x-fa fas fa-pencil-square',
+                        iconCls: 'x-fa fa-pencil-square',
                         rowCls: '{showMeasureBtn ? "" : "hidden"} {measureToolsActive ? "active" : ""}'
                     }, {
                         text: '{selectfeatures}',
                         key: 'selectfeatures',
                         leaf: true,
-                        iconCls: 'x-fa fas fa-crop',
+                        iconCls: 'x-fa fa-crop',
                         rowCls: '{showSelectFeaturesBtn ? "" : "hidden"}{selectFeaturesActive ? "active" : ""}'
                     }]
                 }, {
                     text: '{share}',
-                    iconCls: 'x-fa fas fa-share-alt',
+                    iconCls: 'x-fa fa-share-alt',
                     children: [{
                         text: '{permalink}',
                         key: 'permalink',
                         leaf: true,
-                        iconCls: 'x-fa fas fa-link'
+                        iconCls: 'x-fa fa-chain'
                     }]
                 }, {
                     text: '{settings}',
-                    iconCls: 'x-fa fas fa-cog',
+                    iconCls: 'x-fa fa-gear',
                     expanded: '{settingsExpanded}',
                     children: [{
                         text: '{timereference} ({timereferenceValue})',
                         key: 'timereference',
                         leaf: true,
-                        iconCls: 'x-fa fas fa-clock-o'
+                        iconCls: 'x-fa fa-clock-o'
                     },
                     {
                         text: '{fullscreen}',
                         key: 'fullscreen',
                         leaf: true,
-                        iconCls: 'x-fa fas fa-expand',
+                        iconCls: 'x-fa fa-expand',
                         hidden: '{!fullscreenSupported}'
                     }, {
                         text: '{onRestartText}',
@@ -176,22 +176,22 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     text: '{imprint}',
                     leaf: true,
                     key: 'imprint',
-                    iconCls: 'x-fa fas fa-copyright'
+                    iconCls: 'x-fa fa-copyright'
                 }, {
                     text: '{privacy}',
                     leaf: true,
                     key: 'privacy',
-                    iconCls: 'x-fa fas fa-shield-alt'
+                    iconCls: 'x-fa fa-shield'
                 }, {
                     text: '{about}',
                     leaf: true,
                     key: 'about',
-                    iconCls: 'x-fa fas fa-info'
+                    iconCls: 'x-fa fa-info'
                 }, {
                     text: '{help}',
                     leaf: true,
                     key: 'help',
-                    iconCls: 'x-fa fas fa-question'
+                    iconCls: 'x-fa fa-question'
                 }]
             }
         }

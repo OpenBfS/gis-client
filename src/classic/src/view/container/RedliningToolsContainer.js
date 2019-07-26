@@ -125,7 +125,7 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         bind: {
             tooltip: '{clearObjectsBtnTooltip}'
         },
-        glyph: 'f2ed@FontAwesome',
+        glyph: 'f014@FontAwesome',
         handler: 'onClearObjectsBtn'
     }],
 

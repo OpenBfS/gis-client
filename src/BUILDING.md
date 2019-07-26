@@ -2,8 +2,7 @@
 
 ## Prerequisites
 
-* Sencha Cmd v6.2 (works at least with 6.2.2.36)
-* does NOT work with at least Sencha Cmd 6.6
+* Sencha Cmd v6.7 (works at least with 6.7.0.63)
 * git
 * node, npm
 * Ext 6.2
@@ -18,25 +17,24 @@
 * `cd src`
 * `npm install`
 
-## Initialize the Sencha setup
-
-* `cd src`
-* `sencha app install`
-
 ## Development
 
 * `cd src`
-* sencha app watch
+* `sencha app watch`
+
+Note that the `sencha app install` step is not needed any more. You still
+need an additional `sencha app build` at least once in order to build
+the Geostyler.
 
 Adapt the `index.html` and toggle lines 44/45 (`appContext.json` location).
 
-The application now runs at http://localhost:1841
+The application now runs at [http://localhost:1841](http://localhost:1841)
 
 In order to get (almost) everything to work locally, it is advised to reverse
 proxy everything into a single host and adapt the `appContext.json` accordingly.
 For nginx the following snippets might be useful:
 
-```
+```nginx
 location / {
   proxy_pass http://127.0.0.1:1841;
 }

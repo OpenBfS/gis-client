@@ -94,22 +94,6 @@
         }
     }
 
-    .x-treelist-item-collapsed {
-        .x-treelist-item-expander {
-            &:after {
-                content: '\f0da';
-            }
-        }
-    }
-
-    .x-treelist-item-expanded {
-        .x-treelist-item-expander {
-            &:after {
-                content: '\f0d7';
-            }
-        }
-    }
-
     .x-treelist-item-tool,
     .x-treelist-item-leaf {
         cursor: pointer;
