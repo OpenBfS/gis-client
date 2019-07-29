@@ -611,7 +611,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     templates: ['Hover-Template'],
                     metadata: olProps,
                     properties: ['hoverTpl'],
-                    layer: layer
+                    layer: layer,
+                    callback: function(editor) {
+                        var md = editor.getMetadata();
+                        olProps.hoverTpl = md.hoverTpl;
+                        layer.set('hoverTpl', md.hoverTpl);
+                    }
                 }],
                 listeners: {
                     close: function() {
