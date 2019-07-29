@@ -206,7 +206,6 @@ Ext.define('Koala.util.ChartData', {
          * @param  {Object} chartConfig                     chart config
          * @param  {Object} data                            the features
          * @param  {Object} metadata                        gnos metadata
-         * @param  {Object} station                         original feature
          * @param  {moment} startDate                       chart start date
          * @param  {moment} endDate                         chart end date
          * @param  {Boolean} showIdentificationThresholdData flag from view showDetectionLimitsBtnState
@@ -216,7 +215,6 @@ Ext.define('Koala.util.ChartData', {
             chartConfig,
             data,
             targetLayer,
-            station,
             startDate,
             endDate,
             showIdentificationThresholdData
