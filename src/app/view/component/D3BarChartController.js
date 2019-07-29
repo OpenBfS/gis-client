@@ -177,6 +177,33 @@ Ext.define('Koala.view.component.D3BarChartController', {
     },
 
     /**
+     * Updates the DOM with the current state of the identification threshold
+     * data flag.
+     */
+    updateIdentificationThresholdData: function() {
+        var me = this;
+        var chart = this.getView();
+        var els = chart.el.dom.querySelectorAll('text.below-threshold');
+        els.forEach(function(el) {
+            el.style.display = me.showIdentificationThresholdData ? 'none' : 'block';
+        });
+        els = chart.el.dom.querySelectorAll('rect.below-threshold');
+        els.forEach(function(el) {
+            el.style.display = me.showIdentificationThresholdData ? 'block' : 'none';
+        });
+    },
+
+    /**
+     * Toggle whether to show data below the identification threshold.
+     *
+     * @param {boolean} showData whether to show it or not
+     */
+    setShowIdentificationThresholdData: function(showData) {
+        this.showIdentificationThresholdData = showData;
+        this.updateIdentificationThresholdData();
+    },
+
+    /**
      * Function to be called on request success.
      *
      * @param {Object} reponse The response object.
@@ -392,6 +419,7 @@ Ext.define('Koala.view.component.D3BarChartController', {
             this.legendChartRenderer = new D3Util.ChartRenderer(legendChartConfig);
             this.legendChartRenderer.render(legendContainer);
         }
+        this.updateIdentificationThresholdData();
     },
 
     /**
