@@ -145,15 +145,32 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
         this.getView().lastHidden = new Date().getTime();
     },
 
+    /**
+     * Applies the property changes from the template editor.
+     *
+     * @param {Object} properties the properties to apply
+     * @param {Object} metadata the metadata to apply the properties on
+     * @param {Object} chart the chart
+     * @param {Object} editor the template editor
+     */
+    applyChanges: function(properties, metadata, chart, editor) {
+        var md = editor.getMetadata();
+        Ext.each(properties, function(property) {
+            metadata[property] = md[property];
+        });
+        chart.getController().getChartData();
+    },
+
     /*
      * Edit the appropriate chart templates.
      */
     editTemplates: function() {
+        var me = this;
         var chart = this.getView().chart;
         var fullMetadata = chart.getTargetLayer().metadata;
         var viewModel = this.getViewModel();
         var templates = [viewModel.get('tooltip'), viewModel.get('xAxisLabel'), viewModel.get('yAxisLabel'), viewModel.get('title')];
-        var properties = ['tooltipTpl','xAxisLabel','yAxisLabel'];
+        var properties = ['tooltipTpl', 'xAxisLabel', 'yAxisLabel'];
         var metadata;
         if (chart.xtype === 'd3-chart') {
             properties.push('seriesTitleTpl');
@@ -171,25 +188,17 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                 templates: templates,
                 metadata: metadata,
                 properties: properties,
-                layer: chart.getTargetLayer()
+                layer: chart.getTargetLayer(),
+                callback: function(editor) {
+                    me.applyChanges(properties, metadata, chart, editor);
+                }
             }],
             bbar: [{
                 xtype: 'button',
                 text: viewModel.get('okText'),
                 handler: function() {
-                    var win = this.up('window');
                     var editor = this.up('window').down('k-form-field-templateeditor');
-                    var md = editor.getMetadata();
-                    Ext.each(properties, function(property) {
-                        metadata[property] = md[property];
-                    });
-                    chart.getController().getChartData();
-                    win.close();
-                }
-            }, {
-                xtype: 'button',
-                text: viewModel.get('cancelText'),
-                handler: function() {
+                    me.applyChanges(properties, metadata, chart, editor);
                     var win = this.up('window');
                     win.close();
                 }
