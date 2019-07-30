@@ -1099,13 +1099,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var map = view.getMap();
         var feature = view.getFeature();
         var coords = this.getFeatureAnchorPoint(feature);
+        var mapComponent = Ext.ComponentQuery.query('k-component-map')[0];
+        var hoverPlugin = mapComponent.getPlugin('hoverBfS');
+        var pixel = map.getPixelFromCoordinate(coords);
+        var positioning = hoverPlugin.getPositioningConfig(pixel, view.el.dom, mapComponent);
 
         var cartoWindowId = view.getCartoWindowId();
 
         var overlay = new ol.Overlay({
             id: cartoWindowId,
             position: coords,
-            positioning: 'top-left',
+            positioning: positioning.positioning,
+            offset: positioning.offset,
             element: view.el.dom,
             stopEvent: false,
             dragging: false
