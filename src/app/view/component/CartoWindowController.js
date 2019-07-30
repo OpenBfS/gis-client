@@ -1466,13 +1466,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var newStationIds = [];
         var DateUtil = Koala.util.Date;
         var FilterUtil = Koala.util.Filter;
+        var layer = this.timeserieschart.getTargetLayer();
+        var idField = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/olProperties/featureIdentifyField', 'id');
 
         var allCharts = Ext.ComponentQuery.query('d3-chart');
         Ext.each(allCharts, function(chart) {
             Ext.each(chart.selectedStations, function(station) {
-                if (newStationIds.indexOf(station.get('id')) === -1) {
+                if (newStationIds.indexOf(station.get(idField)) === -1) {
                     newStations.push(station);
-                    newStationIds.push(station.get('id'));
+                    newStationIds.push(station.get(idField));
                 }
             });
         });

@@ -873,7 +873,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             chartConfig,
             data,
             targetLayer,
-            station,
             startDate,
             endDate,
             view.getShowIdentificationThresholdData(),
@@ -887,7 +886,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.featuresByStation[stationId] = data.features;
         me.data[stationId] = seriesData;
         me.ajaxCounter++;
-        if (me.ajaxCounter === view.getSelectedStations().length) {
+        if (me.ajaxCounter >= view.getSelectedStations().length) {
             if (view.getShowLoadMask()) {
                 view.setLoading(false);
             }
