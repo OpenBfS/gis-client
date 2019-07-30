@@ -180,9 +180,9 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
             metadata = fullMetadata.layerConfig.barChartProperties;
         }
 
-        Ext.create('Ext.window.Window', {
-            autoShow: true,
+        var win = Ext.create('Ext.window.Window', {
             title: viewModel.get('editTemplates'),
+            autoShow: true,
             items: [{
                 xtype: 'k-form-field-templateeditor',
                 templates: templates,
@@ -197,9 +197,8 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                 xtype: 'button',
                 text: viewModel.get('okText'),
                 handler: function() {
-                    var editor = this.up('window').down('k-form-field-templateeditor');
+                    var editor = win.down('k-form-field-templateeditor');
                     me.applyChanges(properties, metadata, chart, editor);
-                    var win = this.up('window');
                     win.close();
                 }
             }]

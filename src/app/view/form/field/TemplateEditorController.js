@@ -59,9 +59,13 @@ Ext.define('Koala.view.form.field.TemplateEditorController', {
      */
     attributeSelected: function(combo, newValue) {
         var editor = this.getView().down('htmleditor');
-        editor.insertAtCursor('[[' + newValue + ']]');
-        var value = editor.getValue();
-        editor.setValue(value);
+        var iframe = editor.el.dom.querySelector('iframe');
+        if (iframe.contentWindow.getSelection().rangeCount) {
+            editor.insertAtCursor('[[' + newValue + ']]');
+            editor.setValue(editor.getValue());
+        } else {
+            editor.setValue(editor.getValue() + '[[' + newValue + ']]');
+        }
     }
 
 });
