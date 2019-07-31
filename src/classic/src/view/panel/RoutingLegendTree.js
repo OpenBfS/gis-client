@@ -22,19 +22,17 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
     requires: [
         'Koala.store.MetadataSearch',
-        'Koala.util.Clone',
         'Koala.util.Help',
         'Koala.util.Import',
         'Koala.util.Layer',
-        'Koala.view.form.field.TemplateEditor',
         'Koala.view.panel.RoutingLegendTreeController',
         'Koala.view.panel.RoutingLegendTreeModel',
         'Koala.view.panel.FeatureGrid',
         'Koala.view.slider.AlwaysVisibleTimeTip',
         'Koala.view.window.FilterGridWindow',
         'Koala.view.window.MetadataInfo',
-        'Koala.view.window.CloneWindow',
-        'Koala.view.window.ShareWindow'
+        'Koala.view.window.ShareWindow',
+        'Koala.view.menu.LayerSettingsMenu'
     ],
 
     controller: 'k-panel-routing-legendtree',
@@ -181,7 +179,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var allowChangeFilter = olLayer.metadata || false;
             var allowDownload = olLayer.get('allowDownload') || false;
             var allowRemoval = olLayer.get('allowRemoval') || false;
-            var allowClone = olLayer.get('allowClone') || false;
             var allowEdit = olLayer.get('allowEdit') || false;
             var allowShare = olLayer.get('persisted') ||
                 olLayer.metadata ? olLayer.metadata.layerConfig.olProperties.persisted : false;
@@ -194,7 +191,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var changeFilterBtn = comp.down('button[name="filter"]');
             var downloadBtn = comp.down('button[name="download"]');
             var removalBtn = comp.down('button[name="removal"]');
-            var cloneBtn = comp.down('button[name="clone"]');
             var editBtn = comp.down('button[name="edit"]');
             var styleBtn = comp.down('button[name="style"]');
             var share = comp.down('button[name=share]');
@@ -204,7 +200,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             var pauseBtn = comp.down('button[name=video-pause]');
             var playBtn = comp.down('button[name=video-play]');
             var speedMenu = comp.down('button[name=video-speed]');
-            var templateBtn = comp.down('button[name=templateEditor]');
             var legend = comp.up().down('image[name="' + olLayer.get('routeId') + '-legendImg"]');
 
             if (olLayer.get('isVideoLayer')) {
@@ -231,7 +226,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             playBtn.setVisible(olLayer.get('isVideoLayer'));
             speedMenu.setVisible(olLayer.get('isVideoLayer'));
             changeFilterBtn.setVisible(!olLayer.get('isVideoLayer'));
-            templateBtn.setVisible(!olLayer.get('isVideoLayer'));
 
             if (shortInfoBtn) {
                 shortInfoBtn.setVisible(allowShortInfo);
@@ -251,9 +245,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             }
             if (removalBtn) {
                 removalBtn.setVisible(allowRemoval);
-            }
-            if (cloneBtn) {
-                cloneBtn.setVisible(allowClone);
             }
             if (editBtn) {
                 editBtn.setVisible(allowEdit);
@@ -312,6 +303,16 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             video.pause();
 
             Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].videoAnimation(videoLayer);
+        },
+
+        settingsHandler: function(btn) {
+            if (!this.layerSettingsMenu) {
+                this.layerSettingsMenu = Ext.create('Koala.view.menu.LayerSettingsMenu', {
+                    layer: btn.layerRec.getOlLayer()
+                });
+            }
+            this.layerSettingsMenu.getViewModel().set('allowClone', btn.layerRec.getOlLayer().get('allowClone'));
+            this.layerSettingsMenu.showBy(btn);
         },
 
         changeFilterHandler: function(btn) {
@@ -456,17 +457,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         },
 
         /**
-         * Open the clone window for possible cloning action.
-         * @param  {Ext.button.button} btn the clone button
-         */
-        cloneHandler: function(btn) {
-            Ext.create({
-                xtype: 'k-window-clone',
-                sourceLayer: btn.layerRec.getOlLayer()
-            });
-        },
-
-        /**
          * Open the edit window with featuregrid.
          */
         editHandler: function(btn) {
@@ -593,42 +583,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         initializeOpacityVal: function(slider) {
             var layer = slider.layerRec.getOlLayer();
             slider.setValue(layer.getOpacity() * 100);
-        },
-
-        /**
-         * Edit the hover template.
-         */
-        editTemplate: function(btn) {
-            var view = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
-            var viewModel = view.lookupViewModel();
-            var layer = btn.layerRec.getOlLayer();
-            var olProps = layer.metadata.layerConfig.olProperties;
-            Ext.create('Ext.window.Window', {
-                autoShow: true,
-                title: viewModel.get('templateEditor'),
-                items: [{
-                    xtype: 'k-form-field-templateeditor',
-                    templates: ['Hover-Template'],
-                    metadata: olProps,
-                    properties: ['hoverTpl'],
-                    layer: layer,
-                    callback: function(editor) {
-                        var md = editor.getMetadata();
-                        olProps.hoverTpl = md.hoverTpl;
-                        layer.set('hoverTpl', md.hoverTpl);
-                    }
-                }],
-                listeners: {
-                    close: function() {
-                        var editor = this.down('k-form-field-templateeditor');
-                        var md = editor.getMetadata();
-                        olProps.hoverTpl = md.hoverTpl;
-                        layer.set('hoverTpl', md.hoverTpl);
-                    }
-                }
-            });
         }
-
     },
 
     rowBodyCompTemplate: {
@@ -650,6 +605,13 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     margin: '0 5px 0 0'
                 },
                 items: [{
+                    xtype: 'button',
+                    name: 'settings',
+                    glyph: 'xf013@FontAwesome',
+                    tooltip: 'Layereinstellungen anzeigen'
+                    // We'll assign a handler to handle clicks here once the
+                    // class is defined and we can access the static methods
+                }, {
                     xtype: 'button',
                     name: 'shortInfo',
                     glyph: 'xf05a@FontAwesome',
@@ -679,26 +641,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     // class is defined and we can access the static methods
                 }, {
                     xtype: 'button',
-                    name: 'clone',
-                    glyph: 'xf0c5@FontAwesome',
-                    tooltip: 'Objekte klonen',
-                    listeners: {
-                        boxready: Koala.util.AppContext.generateCheckToolVisibility('cloneBtn')
-                    }
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
-                }, {
-                    xtype: 'button',
                     name: 'edit',
                     glyph: 'xf040@FontAwesome',
                     tooltip: 'Layerobjekte editieren'
-                    // We'll assign a handler to handle clicks here once the
-                    // class is defined and we can access the static methods
-                }, {
-                    xtype: 'button',
-                    name: 'templateEditor',
-                    glyph: 'xf27a@FontAwesome',
-                    tooltip: 'Hover-Template editieren'
                     // We'll assign a handler to handle clicks here once the
                     // class is defined and we can access the static methods
                 }, {
@@ -1499,10 +1444,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var menuItems = layerMenuCfg.items;
 
     var filterBtnCfg = cls.findByProp(menuItems, 'name', 'filter');
+    var settingsBtnCfg = cls.findByProp(menuItems, 'name', 'settings');
     var infoBtnCfg = cls.findByProp(menuItems, 'name', 'shortInfo');
     var downloadBtnCfg = cls.findByProp(menuItems, 'name', 'download');
     var removalBtnCfg = cls.findByProp(menuItems, 'name', 'removal');
-    var cloneBtnCfg = cls.findByProp(menuItems, 'name', 'clone');
     var editBtnCfg = cls.findByProp(menuItems, 'name', 'edit');
     var styleBtnCfg = cls.findByProp(menuItems, 'name', 'style');
     var opacitySliderCfg = cls.findByProp(sliderContainer, 'name', 'opacityChange');
@@ -1512,10 +1457,12 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     var pauseCfg = cls.findByProp(menuItems, 'name', 'video-pause');
     var stopCfg = cls.findByProp(menuItems, 'name', 'video-stop');
     var speedCfg = cls.findByProp(menuItems, 'name', 'video-speed');
-    var templateEditorCfg = cls.findByProp(menuItems, 'name', 'templateEditor');
 
     if (cls.prototype.rowBodyCompTemplate.items[0]) {
         cls.prototype.rowBodyCompTemplate.items[0].listeners.beforerender = cls.reorganizeMenu;
+    }
+    if (settingsBtnCfg) {
+        settingsBtnCfg.handler = cls.settingsHandler;
     }
     if (filterBtnCfg) {
         filterBtnCfg.handler = cls.changeFilterHandler;
@@ -1528,9 +1475,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     }
     if (removalBtnCfg) {
         removalBtnCfg.handler = cls.removalHandler;
-    }
-    if (cloneBtnCfg) {
-        cloneBtnCfg.handler = cls.cloneHandler;
     }
     if (editBtnCfg) {
         editBtnCfg.handler = cls.editHandler;
@@ -1560,9 +1504,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     if (videoSliderCfg) {
         videoSliderCfg.listeners.change = cls.videoSliderHandler;
         videoSliderCfg.plugins = ['k-time-tip'];
-    }
-    if (templateEditorCfg) {
-        templateEditorCfg.handler = cls.editTemplate;
     }
 
 });

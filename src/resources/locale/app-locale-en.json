@@ -558,6 +558,16 @@
             }
         }
     },
+    "Koala.view.menu.LayerSettingsMenu": {
+        "config": {
+            "data": {
+                "minimize": "Minimize carto windows",
+                "cloneLayer": "Clone layer",
+                "editTemplates": "Edit templates",
+                "templateEditor": "Edit templates"
+            }
+        }
+    },
     "Koala.view.panel.FeatureGrid": {
         "config": {
             "data": {
@@ -633,8 +643,7 @@
                 "downloadButtonYes": "Yes",
                 "downloadButtonNo": "No",
                 "outputFormatText": "Output Format",
-                "title": "Legend",
-                "templateEditor": "Edit templates"
+                "title": "Legend"
             }
         }
     },
