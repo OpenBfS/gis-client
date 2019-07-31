@@ -315,8 +315,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     /**
      * [description]
-     * @param {[type]} evt [description]
-     * @return {[type]} [description]
+     * @return {Object} the event
      */
     onDrawStart: function(evt) {
         var me = this;
@@ -326,7 +325,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     /**
      * [description]
-     * @return {[type]} [description]
+     * @return {Object} the event
      */
     onDrawEnd: function(evt) {
         var me = this;
@@ -361,8 +360,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     /**
      * [description]
-     * @param {[type]} evt [description]
-     * @return {[type]} [description]
+     * @return {Object} the event
      */
     onGeometryChange: function(evt) {
         var me = this;

@@ -676,6 +676,28 @@ Flag zum de-/aktivieren des CartoWindow-Modus.
 | Default-Wert         | false |
 | Beispiel             | true |
 
+**cartoXOffset**
+
+Konfiguriert den X-Offset für CartoWindows.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Zahl |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | 15 |
+| Beispiel             | 20 |
+
+**cartoYOffset**
+
+Konfiguriert den Y-Offset für CartoWindows.
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubt Wertemenge   | Zahl |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | 0 |
+| Beispiel             | 20 |
+
 **tableContentProperty**
 
 Wenn gesetzt, wird im CartoWindow-Modus ein Table-Tab angezeigt. Die

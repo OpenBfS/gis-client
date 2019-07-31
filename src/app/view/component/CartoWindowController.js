@@ -69,11 +69,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         me.createTabs();
 
-        me.createOverlay();
+        me.createOverlay(layer);
 
         me.getOrCreateLineLayer();
 
         me.createLineFeature();
+        me.updateLineFeature();
 
         me.createLayerListeners();
     },
@@ -1092,7 +1093,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * Creates the ol.Overlay which contains the tabwindow, adds it to the map
      * and stores it as an attribute of the view.
      */
-    createOverlay: function() {
+    createOverlay: function(layer) {
         var me = this;
         var view = me.getView();
         var viewModel = me.getViewModel();
@@ -1102,9 +1103,19 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var mapComponent = Ext.ComponentQuery.query('k-component-map')[0];
         var hoverPlugin = mapComponent.getPlugin('hoverBfS');
         var pixel = map.getPixelFromCoordinate(coords);
-        var positioning = hoverPlugin.getPositioningConfig(pixel, view.el.dom, mapComponent);
+        var olPropPath = 'metadata/layerConfig/olProperties/';
+        var xOffset = parseInt(Koala.util.Object.getPathStrOr(layer, olPropPath + 'cartoXOffset', 0), 10);
+        var yOffset = parseInt(Koala.util.Object.getPathStrOr(layer, olPropPath + 'cartoYOffset', 0), 10);
+
+        // add the offset to the desired pixel...
+        pixel[0] += parseInt(xOffset, 10);
+        pixel[1] += parseInt(yOffset, 10);
 
         var cartoWindowId = view.getCartoWindowId();
+        var positioning = hoverPlugin.getPositioningConfig(pixel, view.el.dom, mapComponent);
+
+        // ...and to the coordinate of the overlay
+        coords = map.getCoordinateFromPixel(pixel);
 
         var overlay = new ol.Overlay({
             id: cartoWindowId,
@@ -1370,6 +1381,20 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var overlayCoords = overlay.getPosition();
         var overlayWidth = overlay.getElement().clientWidth;
         var overlayHeight = overlay.getElement().clientHeight;
+        var offset = overlay.getOffset();
+        var pixels = map.getPixelFromCoordinate(overlayCoords);
+        var positioning = overlay.getPositioning().split('-');
+        // correct for offset
+        pixels[0] += offset[0];
+        pixels[1] += offset[1];
+        // correct for positioning
+        if (positioning[0] === 'bottom') {
+            pixels[1] -= overlayHeight;
+        }
+        if (positioning[1] === 'right') {
+            pixels[0] -= overlayWidth;
+        }
+        overlayCoords = map.getCoordinateFromPixel(pixels);
 
         var overlayTopLeftPixel = map.getPixelFromCoordinate(overlayCoords);
         var overlayTopRightPixel = [overlayTopLeftPixel[0] + overlayWidth, overlayTopLeftPixel[1]];
@@ -1388,7 +1413,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var overlayRightCoords = map.getCoordinateFromPixel(overlayRightPixel);
         var overlayBottomCoords = map.getCoordinateFromPixel(overlayBottomPixel);
         var overlayLeftCoords = map.getCoordinateFromPixel(overlayLeftPixel);
-
 
         var centerPixel = [overlayWidth/2 + overlayTopLeftPixel[0],
             overlayHeight/2 + overlayTopLeftPixel[1]];
