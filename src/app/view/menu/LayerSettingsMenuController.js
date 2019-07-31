@@ -27,6 +27,8 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
         'Koala.view.window.CloneWindow'
     ],
 
+    cartoWindowsMinimized: false,
+
     /**
      * Open the clone window for possible cloning action.
      */
@@ -65,6 +67,24 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                     olProps.hoverTpl = md.hoverTpl;
                     layer.set('hoverTpl', md.hoverTpl);
                 }
+            }
+        });
+    },
+
+    /**
+     * Toggle minimizing carto windows.
+     */
+    toggleMinimize: function() {
+        var me = this;
+        this.cartoWindowsMinimized = !this.cartoWindowsMinimized;
+        var cartoWindows = Ext.ComponentQuery.query('k-component-cartowindow');
+        Ext.each(cartoWindows, function(cartoWindow) {
+            var el = cartoWindow.el.dom;
+            if (me.cartoWindowsMinimized) {
+                el.style.visibility = 'hidden';
+                el.querySelector('svg').style.visibility = 'visible';
+            } else {
+                el.style.visibility = 'visible';
             }
         });
     }
