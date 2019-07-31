@@ -104,9 +104,8 @@ Ext.define('Koala.view.component.D3Chart',{
             var chartConfig = olLayer.get('timeSeriesChartProperties');
             var StringUtil = Koala.util.String;
             var valFromSeq = StringUtil.getValueFromSequence;
-            // don't evaluate 'titleTpl' here, since it is evaluated on window-level already
-            //var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
-            // var title = Koala.util.String.replaceTemplateStrings(titleTpl, olLayer);
+            var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
+            var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
             var yLabel = chartConfig.yAxisLabel || '';
             var xLabel = chartConfig.xAxisLabel || '';
             var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
@@ -159,20 +158,6 @@ Ext.define('Koala.view.component.D3Chart',{
                 selectedStations = [olFeat];
             }
 
-            /* use relevant filter text to label chart */
-            var filters = Ext.clone(Koala.util.Layer.getFiltersFromMetadata(olLayer.metadata));
-            var excludedTypes = ['pointintime', 'timerange'];
-            var excludedParams = ['styles','order'];
-            if (filters !== null) {
-                var filtersForTimeseriesLabel = filters.filter(function(filter) {
-                    return !Ext.Array.contains(excludedTypes, (filter.type || '').toLowerCase()) &&
-                        !Ext.Array.contains(excludedParams, (filter.param || '').toLowerCase());
-                });
-            }
-            var cqlFilterTextHTML = Koala.util.Layer.getFiltersTextFromMetadata(filtersForTimeseriesLabel);
-            //transform HTML to text, since it will be added as SVG-'text'
-            var cqlFilterText = cqlFilterTextHTML.replace(/<br \/>/g, ', ');
-
             var leftAxisLabel = Koala.util.String.replaceTemplateStrings(yLabel, olFeat) + ' ' + (chartConfig.dspUnit || '');
             var leftAxis = staticMe.extractLeftAxisConfig(chartConfig, leftAxisLabel);
 
@@ -221,8 +206,7 @@ Ext.define('Koala.view.component.D3Chart',{
                     legendEntryMaxLength: StringUtil.coerce(chartConfig.legendEntryMaxLength)
                 },
                 title: {
-                    //label: title,
-                    label: cqlFilterText,
+                    label: title,
                     labelSize: chartConfig.titleSize || 12,
                     labelColor: chartConfig.titleColor || '#294d71',
                     labelPadding: chartConfig.titlePadding || 5
