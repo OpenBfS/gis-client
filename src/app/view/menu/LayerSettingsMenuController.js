@@ -22,11 +22,6 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
 
     alias: 'controller.k-menu-layersettings',
 
-    requires: [
-        'Koala.util.Clone',
-        'Koala.view.window.CloneWindow'
-    ],
-
     cartoWindowsMinimized: false,
 
     /**

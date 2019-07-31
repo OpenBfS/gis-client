@@ -23,7 +23,9 @@ Ext.define('Koala.view.menu.LayerSettingsMenu', {
     requires: [
         'Koala.view.menu.LayerSettingsMenuController',
         'Koala.view.menu.LayerSettingsMenuModel',
-        'Koala.view.form.field.TemplateEditor'
+        'Koala.view.form.field.TemplateEditor',
+        'Koala.util.Clone',
+        'Koala.view.window.CloneWindow'
     ],
 
     controller: 'k-menu-layersettings',
