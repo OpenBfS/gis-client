@@ -894,7 +894,7 @@ Ext.define('Koala.view.component.D3ChartController', {
             var stations = me.getView().getSelectedStations();
             var config = me.getView().getConfig();
             if (config.title) {
-                config.title.label = Koala.util.Chart.getChartTitle(this.getView().getTargetLayer());
+                config.title.label = config.title.label + ' ' + Koala.util.Chart.getChartTitle(this.getView().getTargetLayer());
             }
 
             me.chartConfig = Koala.util.ChartData.getChartConfiguration(
