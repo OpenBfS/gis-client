@@ -58,6 +58,11 @@
                 "uuid": "08e36567-cf9a-4e22-8774-e83a3452da7b"
             },
             {
+                "text": "ODL brutto 10min Vektor",
+                "leaf": true,
+                "uuid": "6059c86a-185d-4832-99fe-46bca77ecb0e"
+            },
+            {
                 "text": "ODL brutto 10min Fläche",
                 "leaf": true,
                 "uuid": "8d76d000-06b2-4295-a6d7-7abf9b644c95"
