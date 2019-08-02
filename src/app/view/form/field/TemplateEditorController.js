@@ -47,6 +47,9 @@ Ext.define('Koala.view.form.field.TemplateEditorController', {
         var tpl = viewModel.get('selectedTemplate');
         var idx = view.getTemplates().indexOf(tpl);
         var property = view.getProperties()[idx];
+        if (property === 'yAxisLabel') {
+            newValue = newValue.replace(/<\/?div>|<br>/g, '');
+        }
         metadata[property] = newValue;
         this.getView().getCallback()(this.getView());
     },
