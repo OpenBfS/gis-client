@@ -115,7 +115,8 @@ Ext.define('Koala.view.panel.TimeSeries', {
     },
 
     config: {
-        addFilterForm: true
+        addFilterForm: true,
+        oldChart: null
     },
 
     listeners: {

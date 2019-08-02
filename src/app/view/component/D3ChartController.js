@@ -104,13 +104,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (!this.chartConfig) {
             return;
         }
-        var me = this;
         var div = this.getView().el.dom;
-
-        me.currentDateRange = {
-            min: null,
-            max: null
-        };
 
         var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
         this.timeseriesComponent = series;
@@ -629,7 +623,8 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    getChartData: function() {
+    getChartData: function(oldCharts) {
+        this.oldCharts = oldCharts;
         var me = this;
         var view = me.getView();
         if (view.getShowLoadMask() && view.getSelectedStations().length > 0) {
@@ -685,15 +680,14 @@ Ext.define('Koala.view.component.D3ChartController', {
         // Put the current request into our storage for possible abortion.
         me.ajaxRequests[stationId] = ajaxRequest;
     },
+
     /**
      * Returns the request params for a given station.
      *
      * @param {ol.Feature} station The station to build the request for.
-     * @param {Boolean} useCurrentZoom Whether to use the currentZoom of the
-     *                                 chart or not. Default is false.
      * @return {Object} The request object.
      */
-    getChartDataRequestParams: function(station, useCurrentZoom) {
+    getChartDataRequestParams: function(station) {
         var me = this;
         var Ogc = Koala.util.Ogc;
         var view = me.getView();
@@ -706,11 +700,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         var timeField = filterConfig.parameter;
         var startString = startDate.toISOString();
         var endString = endDate.toISOString();
-        if (useCurrentZoom === true && me.currentDateRange.min &&
-                me.currentDateRange.max) {
-            startString = moment.utc(me.currentDateRange.min).toISOString();
-            endString = moment.utc(me.currentDateRange.max).toISOString();
-        }
         // Get the viewparams configured for the layer
         var layerViewParams = Koala.util.Object.getPathStrOr(
             targetLayer, 'metadata/layerConfig/olProperties/param_viewparams', '');
@@ -881,7 +870,6 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.chartDataAvailable = true;
         // The id of the selected station is also the key in the pending
         // requests object.
-        //TODO: response shouldnt be restricted on id
         var stationId = station.get(chartConfig.featureIdentifyField || 'id');
         me.featuresByStation[stationId] = data.features;
         me.data[stationId] = seriesData;
@@ -906,6 +894,11 @@ Ext.define('Koala.view.component.D3ChartController', {
                 stations,
                 this.chartOverrides
             );
+            if (this.oldCharts && this.oldCharts[stationId]) {
+                me.chartConfig.timeseriesComponentConfig.series = this.oldCharts[stationId].timeseriesComponentConfig.series;
+                me.chartConfig.timeseriesComponentConfig.initialZoom = this.oldCharts[stationId].initialZoom;
+                me.chartConfig.legendComponentConfig.items = this.oldCharts[stationId].legendComponentConfig.items;
+            }
 
             me.fireEvent('chartdataprepared');
         }

@@ -31,15 +31,16 @@ Ext.define('Koala.util.Chart', {
          * Opens a new timeseries window if none exists, or adds the feature
          * to an existing one.
          * @param {ol.Feature} olFeat the station to add
+         * @param {Object} oldChart the old chart or null, if not available
          */
-        openTimeseries: function(olFeat) {
+        openTimeseries: function(olFeat, oldChart) {
             var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
             var timeseriesPanel = Ext.ComponentQuery.query('k-panel-timeseries')[0];
             var olLayer = olFeat.get('layer');
 
             // create the timeseriescontainer if it doesn't exist already
             if (!timeseriesPanel) {
-                timeseriesPanel = Koala.util.Chart.createTimeSeriesChartPanel(olLayer);
+                timeseriesPanel = Koala.util.Chart.createTimeSeriesChartPanel(olLayer, oldChart);
             }
 
             if (!timeseriesPanel.rendered) {
@@ -47,16 +48,17 @@ Ext.define('Koala.util.Chart', {
                 southContainer.show();
             }
 
-            timeseriesPanel.getController().createOrUpdateChart(olLayer, olFeat);
+            timeseriesPanel.getController().createOrUpdateChart(olLayer, olFeat, oldChart);
 
             return timeseriesPanel;
         },
 
         /**
          * Creates a new timeseries window for the given layer.
-         * @param {object} an openlayers layer object with chart config
+         * @param {object} olLayer an openlayers layer object with chart config
+         * @param {object} oldChart a chart being 'combined'/copied
          */
-        createTimeSeriesChartPanel: function(olLayer) {
+        createTimeSeriesChartPanel: function(olLayer, oldChart) {
             var chartConfig = olLayer.get('timeSeriesChartProperties');
             var addFilterForm = !Ext.isEmpty(chartConfig.allowFilterForm) ?
                 Koala.util.String.getBool(chartConfig.allowFilterForm) : true;
@@ -64,6 +66,7 @@ Ext.define('Koala.util.Chart', {
             var timeserieContainer = Ext.create('Koala.view.panel.TimeSeries', {
                 addFilterForm: addFilterForm,
                 initOlLayer: olLayer,
+                oldChart: oldChart,
                 listeners: {
                     close: function() {
                         this.up('container[name=south-container]').hide();
@@ -78,8 +81,9 @@ Ext.define('Koala.util.Chart', {
          * @param {object} olLayer the layer upon which the chart is based
          * @param {ol.Feature} olFeat the feature to add
          * @param {Koala.view.component.D3Chart} chart the chart
+         * @param {Koala.view.component.D3Chart} oldChart the chart being combined or null
          */
-        addFeatureToTimeseriesChart: function(olLayer, olFeat, chart) {
+        addFeatureToTimeseriesChart: function(olLayer, olFeat, chart, oldChart) {
             if (!olFeat) {
                 return false;
             }
@@ -104,6 +108,9 @@ Ext.define('Koala.util.Chart', {
                 var color = valFromSeq(chartConfig.colorSequence, currentSeqIndex, '');
                 if (!color) {
                     color = Koala.view.component.D3BaseController.getRandomColor();
+                }
+                if (oldChart) {
+                    color = oldChart.color;
                 }
                 Koala.util.Chart.addShapeToChart(chartController, chartConfig, name, olFeat, color);
             })

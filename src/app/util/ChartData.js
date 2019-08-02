@@ -813,7 +813,7 @@ Ext.define('Koala.util.ChartData', {
                 });
                 var seriesConfig = {
                     data: chartData,
-                    style: function() {}, // TODO, enthält u.a. colorSequence, colorMapping, strokeOpacity, strokeWidth, color
+                    style: function() {},
                     useTooltipFunc: true,
                     curveType: gnosConfig.curveType || 'linear',
                     shapeType: gnosConfig.shapeType || 'line',

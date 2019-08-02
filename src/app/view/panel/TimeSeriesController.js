@@ -50,7 +50,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
     /**
      *
      */
-    createTimeSeriesChart: function(olLayer, olFeat) {
+    createTimeSeriesChart: function(olLayer, olFeat, oldChart) {
         var timeFilter = Koala.util.Layer.getEffectiveTimeFilterFromMetadata(
             olLayer.metadata);
         var view = this.getView();
@@ -71,7 +71,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
             height: '100%'
         };
 
-        return Koala.view.component.D3Chart.create(olLayer, olFeat, config);
+        return Koala.view.component.D3Chart.create(olLayer, olFeat, config, oldChart);
     },
 
     /**
@@ -286,13 +286,13 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
     /**
      *
      */
-    createTimeSeriesChartPanel: function(olLayer, olFeat) {
+    createTimeSeriesChartPanel: function(olLayer, olFeat, oldChart) {
         var me = this;
         var mapComp = Ext.ComponentQuery.query('k-component-map')[0];
         var imisRoles = mapComp.appContext.data.merge.imis_user.userroles;
         var maySeeIdThresholdButton = Ext.Array.contains(imisRoles, 'imis') ||
             Ext.Array.contains(imisRoles, 'ruf');
-        var chart = me.createTimeSeriesChart(olLayer, olFeat);
+        var chart = me.createTimeSeriesChart(olLayer, olFeat, oldChart);
         var chartConfig = olLayer.get('timeSeriesChartProperties');
         var addSeriesCombo;
         if (Koala.util.String.getBool(chartConfig.allowAddSeries)) {
@@ -599,7 +599,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
     /**
      *
      */
-    createOrUpdateChart: function(olLayer, olFeat) {
+    createOrUpdateChart: function(olLayer, olFeat, oldChart) {
         var me = this;
         var view = me.getView();
         var layerName = olLayer.get('name');
@@ -609,11 +609,11 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
         // same layer as the given olFeat already, load a new timeseries into
         // the existing chart
         if (layerChartRendered) {
-            me.updateTimeSeriesChart(olLayer, olFeat);
+            me.updateTimeSeriesChart(olLayer, olFeat, oldChart);
         } else {
             // otherwise create a new chart for the olFeat and add it to the
             // panel and update the store
-            view.add(me.createTimeSeriesChartPanel(olLayer, olFeat));
+            view.add(me.createTimeSeriesChartPanel(olLayer, olFeat, oldChart));
         }
         this.setTranslatedAutorefreshData();
         var optionsCombo = view.down('[name=autorefresh-combo]');

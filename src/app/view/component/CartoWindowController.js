@@ -1466,43 +1466,31 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     combineTimeseries: function() {
-        var zoom = this.timeserieschart.getController().currentDateRange;
         var newStations = [];
         var newStationIds = [];
-        var DateUtil = Koala.util.Date;
-        var FilterUtil = Koala.util.Filter;
+        var oldCharts = {};
         var layer = this.timeserieschart.getTargetLayer();
         var idField = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/olProperties/featureIdentifyField', 'id');
 
         var allCharts = Ext.ComponentQuery.query('d3-chart');
         Ext.each(allCharts, function(chart) {
             Ext.each(chart.selectedStations, function(station) {
-                if (newStationIds.indexOf(station.get(idField)) === -1) {
+                var id = station.get(idField);
+                if (newStationIds.indexOf(id) === -1) {
                     newStations.push(station);
-                    newStationIds.push(station.get(idField));
+                    newStationIds.push(id);
+                    oldCharts[id] = chart.getController().chartConfig;
+                    var renderer = chart.getController().chartRenderer;
+                    oldCharts[id].initialZoom = renderer.chartConfig.components[0].getCurrentZoom();
                 }
             });
         });
         var win;
-        Ext.each(newStations, function(station) {
-            win = Koala.util.Chart.openTimeseries(station);
+        Ext.each(newStations, function(station, idx) {
+            win = Koala.util.Chart.openTimeseries(station, oldCharts[idx]);
         });
         var chart = win.down('d3-chart');
-        if (zoom.min) {
-            var startField = win.down('[name=timeseriesStartField]');
-            var endField = win.down('[name=timeseriesEndField]');
-            var start = DateUtil.getTimeReferenceAwareMomentDate(moment.utc(zoom.min));
-            var end = DateUtil.getTimeReferenceAwareMomentDate(moment.utc(zoom.max));
-
-            startField.setValue(start);
-            endField.setValue(end);
-            FilterUtil.replaceHoursAndMinutes(start, startField);
-            FilterUtil.replaceHoursAndMinutes(end, endField);
-            chart.setConfig('startDate', start);
-            chart.setConfig('endDate', end);
-            chart.setConfig('useExactInterval', true);
-        }
-        chart.getController().getChartData();
+        chart.getController().getChartData(oldCharts);
         var cartos = Ext.ComponentQuery.query('k-component-cartowindow');
         Ext.each(cartos, function(carto) {
             carto.destroy();
