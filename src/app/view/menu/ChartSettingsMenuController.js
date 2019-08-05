@@ -169,8 +169,8 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
         var chart = this.getView().chart;
         var fullMetadata = chart.getTargetLayer().metadata;
         var viewModel = this.getViewModel();
-        var templates = [viewModel.get('tooltip'), viewModel.get('xAxisLabel'), viewModel.get('yAxisLabel'), viewModel.get('title')];
-        var properties = ['tooltipTpl', 'xAxisLabel', 'yAxisLabel'];
+        var templates = [viewModel.get('tooltip'), viewModel.get('yAxisLabel'), viewModel.get('title')];
+        var properties = ['tooltipTpl', 'yAxisLabel'];
         var metadata;
         if (chart.xtype === 'd3-chart') {
             properties.push('seriesTitleTpl');
