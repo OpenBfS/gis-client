@@ -455,7 +455,7 @@ Ext.define('Koala.util.ChartData', {
             componentConfig.size = [chartSize[0] - margin[1] - margin[3], chartSize[1] - margin[0] * 2 - margin[2]];
             componentConfig.position = [margin[3], 0];
             componentConfig.extraClasses = 'k-d3-shape-group';
-            componentConfig.backgroundColor = gnosConfig.backgroundColor;
+            componentConfig.backgroundColor = gnosConfig.backgroundColor || '#EEE';
             componentConfig.title = layerConfig.title.label || '';
             componentConfig.titleColor = layerConfig.title.labelColor || '#000';
             componentConfig.titlePadding = (layerConfig.title.labelPadding || 18) - margin[0];
