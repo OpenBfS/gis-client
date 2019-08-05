@@ -317,8 +317,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         changeFilterHandler: function(btn) {
             var layer = btn.layerRec.getOlLayer();
-
-            if (layer instanceof ol.layer.Vector) {
+            var serverBased = Koala.util.Object.getPathStrOr(layer, 'metadata/layerConfig/vector/url', false);
+            if (layer instanceof ol.layer.Vector && !serverBased) {
                 if (!layer.filterGridWindow) {
                     layer.filterGridWindow = Ext.create('Koala.view.window.FilterGridWindow', {
                         layer: layer
