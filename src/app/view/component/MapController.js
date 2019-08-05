@@ -80,11 +80,6 @@ Ext.define('Koala.view.component.MapController', {
             }
         }, me);
 
-        // if (me.distinctGeoms.length > 3) {
-        //     Ext.Msg.alert(viewModel.get('warning'), viewModel.get('tooManyFeatures'));
-        //     return;
-        // }
-
         Ext.each(me.distinctGeoms, function(olFeat) {
             var layer = olFeat.get('layer');
             var idField = Koala.util.Object.getPathStrOr(layer,

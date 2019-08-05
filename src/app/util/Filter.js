@@ -119,7 +119,8 @@ Ext.define('Koala.util.Filter', {
          */
         getStartEndFilterFromMetadata: function(metadata) {
             var layer = Koala.util.Layer.findLayerFromMetadata(metadata);
-            if (layer instanceof ol.layer.Vector) {
+            var serverBased = Koala.util.Object.getPathStrOr(layer, 'metadata/layerConfig/vector/url', false);
+            if (layer instanceof ol.layer.Vector && !serverBased) {
                 return Koala.util.Filter.getStartEndFilterFromVectorLayer(layer, metadata);
             }
 
