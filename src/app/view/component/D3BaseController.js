@@ -477,7 +477,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      * and #redrawLegend implementations of child classes
      *
      * @param {Object} dataObj The current shape object to handle.
-     * @param {[Number]} idx The index of the shape object in the array of all
+     * @param {Number} idx The index of the shape object in the array of all
      *     shapes.
      * @return {Function} The callback to be used as click handler on the delete
      *     icon.

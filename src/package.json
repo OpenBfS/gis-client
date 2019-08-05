@@ -15,7 +15,6 @@
         "test:watch": "karma start karma.conf.js",
         "combine-coverages": "istanbul report --root coverage --dir coverage-combined",
         "coverage-summary": "istanbul report --root coverage text-summary",
-        "jsdoc": "jsdoc -c jsdoc-config.json",
         "userdoc": "gitbook pdf ../docs/userdoc ../docs/userdoc/User-Documentation.pdf",
         "jsduck": "jsduck --config jsduck-config.json",
         "clean": "rimraf apidoc build/* coverage coverage-combined"
@@ -34,7 +33,6 @@
         "express": "4.17.1",
         "istanbul": "0.4.5",
         "istanbul-middleware": "0.2.2",
-        "jsdoc": "3.6.3",
         "jsduck": "1.1.2",
         "karma": "4.2.0",
         "karma-chrome-launcher": "3.0.0",

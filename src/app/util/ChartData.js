@@ -34,7 +34,7 @@ Ext.define('Koala.util.ChartData', {
          *
          * @param startDate {Date}
          * @param intervalInSeconds {Integer}
-         * @param features {Array[ol.Feature]}
+         * @param features {ol.Feature[]}
          * @param xAxisAttr {String}
          */
         getTimeStampSnapObject: function(startDate, intervalInSeconds, features,
@@ -59,7 +59,7 @@ Ext.define('Koala.util.ChartData', {
          * Normalize interval and unit to seconds.
          *
          * @param interval {Integer}
-         * @param unit {String["seconds", "minutes", "hours", "days"]}
+         * @param unit {String} one of ["seconds", "minutes", "hours", "days"]
          */
         getIntervalInSeconds: function(interval, unit) {
             var multiplier = 0;
