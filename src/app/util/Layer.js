@@ -1124,7 +1124,7 @@ Ext.define('Koala.util.Layer', {
 
             var layer = new LayerClass(layerConfig);
             layer.metadata = metadata;
-            Koala.util.Layer.getVectorLayerStyle(layer);
+            Koala.util.Layer.getVectorLayerStyle(layer, true);
 
             if (metadata.layerConfig.olProperties.printLayer) {
                 var printUuid = metadata.layerConfig.olProperties.printLayer;
