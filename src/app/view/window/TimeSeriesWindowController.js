@@ -466,7 +466,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     /**
      *
      */
-    updateTimeSeriesChart: function(olLayer, olFeat) {
+    updateTimeSeriesChart: function(olLayer, olFeat, oldChart) {
         // don't proceed if we don't get a olFeat, e.g. if we were called
         // by the selectChartLayerCombo
         if (!olFeat) {
@@ -478,7 +478,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         var layerName = olLayer.get('name');
         var chart = view.down('d3-chart[name="' + layerName + '"]');
 
-        Koala.util.Chart.addFeatureToTimeseriesChart(olLayer, olFeat, chart);
+        Koala.util.Chart.addFeatureToTimeseriesChart(olLayer, olFeat, chart, oldChart);
     },
 
     /**
@@ -587,7 +587,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     /**
      *
      */
-    createOrUpdateChart: function(olLayer, olFeat) {
+    createOrUpdateChart: function(olLayer, olFeat, oldChart) {
         var me = this;
         var view = me.getView();
         var layerName = olLayer.get('name');
@@ -597,7 +597,7 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
         // same layer as the given olFeat already, load a new timeseries into
         // the existing chart
         if (layerChartRendered) {
-            me.updateTimeSeriesChart(olLayer, olFeat);
+            me.updateTimeSeriesChart(olLayer, olFeat, oldChart);
         } else {
             // otherwise create a new chart for the olFeat and add it to the
             // window and update the store
