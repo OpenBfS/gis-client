@@ -598,6 +598,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
             data = Papa.unparse(featArray, config);
         }
+        var encoder = new TextEncoder();
+        data = encoder.encode(data);
         download(data, fullFilename, mimetype);
         win.close();
     },
