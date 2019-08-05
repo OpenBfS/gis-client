@@ -75,11 +75,35 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
         var cartoWindows = Ext.ComponentQuery.query('k-component-cartowindow');
         Ext.each(cartoWindows, function(cartoWindow) {
             var el = cartoWindow.el.dom;
+            var legend = el.querySelector('.k-d3-shape-group-legend');
+            var chart = cartoWindow.getController().timeserieschart;
+            var isBarchart = false;
+            if (!chart) {
+                chart = cartoWindow.getController().barChart;
+                isBarchart = true;
+            }
             if (me.cartoWindowsMinimized) {
+                if (legend) {
+                    chart.getController().toggleLegendVisibility();
+                    chart.legendToggled = true;
+                } else {
+                    chart.legendToggled = false;
+                }
+                var svg = el.querySelector('svg');
                 el.style.visibility = 'hidden';
-                el.querySelector('svg').style.visibility = 'visible';
+                svg.style.visibility = 'visible';
+                if (isBarchart) {
+                    el.querySelector('.k-barchart-container').style.transform = 'translate(-20px, -50px)';
+                } else {
+                    svg.style.transform = 'translate(-5px, -33px)';
+                }
             } else {
+                if (chart.legendToggled) {
+                    chart.getController().toggleLegendVisibility();
+                }
+                svg = el.querySelector('svg');
                 el.style.visibility = 'visible';
+                svg.style.transform = null;
             }
         });
     }
