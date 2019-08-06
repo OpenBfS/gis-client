@@ -762,7 +762,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             return;
         }
 
-        if (layer instanceof ol.layer.Vector) {
+        var serverBased = Koala.util.Object.getPathStrOr(layer, 'metadata/layerConfig/vector/url', false);
+        if (layer instanceof ol.layer.Vector && !serverBased) {
             var fmt = new ol.format.GeoJSON();
             var data = layer.originalFeatures || layer.getSource().getFeatures();
             data = data.slice();
