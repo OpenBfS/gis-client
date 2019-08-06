@@ -590,6 +590,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
         var layerName = this.getView().config.name.replace(' ','_');
         var fileEnding = formatCombo.getSelectedRecord().get('field2');
+        var encoder = new TextEncoder();
+        features = encoder.encode(features);
         download(features, layerName + '.' + fileEnding, format);
         win.close();
     },
