@@ -84,6 +84,10 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
             }
             if (me.cartoWindowsMinimized) {
                 if (legend) {
+                    var width = parseInt(chart.el.dom.style.width, 10);
+                    chart.fullWidth = width;
+                    width -= legend.getBoundingClientRect().width;
+                    chart.el.dom.style.width = width + 'px';
                     chart.getController().toggleLegendVisibility();
                     chart.legendToggled = true;
                 } else {
@@ -99,6 +103,7 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                 }
             } else {
                 if (chart.legendToggled) {
+                    chart.el.dom.style.width = chart.fullWidth + 'px';
                     chart.getController().toggleLegendVisibility();
                 }
                 svg = el.querySelector('svg');
