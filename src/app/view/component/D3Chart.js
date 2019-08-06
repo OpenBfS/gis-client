@@ -104,7 +104,7 @@ Ext.define('Koala.view.component.D3Chart',{
             var chartConfig = olLayer.get('timeSeriesChartProperties');
             var StringUtil = Koala.util.String;
             var valFromSeq = StringUtil.getValueFromSequence;
-            var titleTpl = 'titleTpl' in chartConfig ? chartConfig.titleTpl : '';
+            var titleTpl = (chartConfig.titleTpl) ? chartConfig.titleTpl : '';
             var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
             var yLabel = chartConfig.yAxisLabel || '';
             var xLabel = chartConfig.xAxisLabel || '';
