@@ -1374,6 +1374,16 @@ Ext.define('Koala.util.Layer', {
                                     }
                                     cql += filter.param + '=\'' + extraParams.TIME + '\'';
                                 }
+                                if (filter.type === 'timerange') {
+                                    var range = extraParams.TIME.split('/');
+                                    if (cql.indexOf(filter.param) !== -1) {
+                                        return;
+                                    }
+                                    if (cql.length > 0) {
+                                        cql += ' AND ';
+                                    }
+                                    cql += filter.param + '>\'' + range[0] + '\' AND ' + filter.param + '<\'' + range[1] + '\'';
+                                }
                             });
                         }
                         if (cql !== '') {
