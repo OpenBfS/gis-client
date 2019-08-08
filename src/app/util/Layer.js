@@ -1157,13 +1157,18 @@ Ext.define('Koala.util.Layer', {
                     url = ms[1] + '/';
                 }
                 if (!styleName) {
-                    styleName = layer.metadata.id;
+                    if (layer instanceof ol.layer.Vector) {
+                        styleName = layer.metadata.id;
+                    }
                     if (layer.metadata.layerConfig.olProperties.styleReference) {
                         styleName = layer.metadata.layerConfig.olProperties.styleReference;
                         if (styleName.split(',').length > 1) {
                             styleName = styleName.split(',')[0];
                         }
                     }
+                }
+                if (!styleName) {
+                    return;
                 }
                 if (!styleName.endsWith('.sld')) {
                     styleName += '.sld';
