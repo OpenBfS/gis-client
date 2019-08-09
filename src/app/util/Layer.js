@@ -1373,6 +1373,7 @@ Ext.define('Koala.util.Layer', {
                                         cql += ' AND ';
                                     }
                                     cql += filter.param + '=\'' + extraParams.TIME + '\'';
+                                    delete extraParams.TIME;
                                 }
                                 if (filter.type === 'timerange') {
                                     var range = extraParams.TIME.split('/');
@@ -1383,6 +1384,7 @@ Ext.define('Koala.util.Layer', {
                                         cql += ' AND ';
                                     }
                                     cql += filter.param + '>\'' + range[0] + '\' AND ' + filter.param + '<\'' + range[1] + '\'';
+                                    delete extraParams.TIME;
                                 }
                             });
                         }
