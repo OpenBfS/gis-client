@@ -1381,8 +1381,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var featureStartCoords = this.getFeatureAnchorPoint(feature);
         var overlay = viewModel.get('overlay');
         var overlayCoords = overlay.getPosition();
-        var overlayWidth = overlay.getElement().clientWidth;
-        var overlayHeight = overlay.getElement().clientHeight;
+        var element = overlay.getElement();
+        var realOverlayWidth = element.clientWidth;
+        var realOverlayHeight = element.clientHeight;
+        if (element.style.visibility === 'hidden') {
+            element = element.querySelector('svg');
+        }
+        var overlayWidth = element.clientWidth;
+        var overlayHeight = element.clientHeight;
         var offset = overlay.getOffset();
         var pixels = map.getPixelFromCoordinate(overlayCoords);
         var positioning = overlay.getPositioning().split('-');
@@ -1391,10 +1397,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         pixels[1] += offset[1];
         // correct for positioning
         if (positioning[0] === 'bottom') {
-            pixels[1] -= overlayHeight;
+            pixels[1] -= realOverlayHeight;
         }
         if (positioning[1] === 'right') {
-            pixels[0] -= overlayWidth;
+            pixels[0] -= realOverlayWidth;
         }
         overlayCoords = map.getCoordinateFromPixel(pixels);
 
