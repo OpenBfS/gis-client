@@ -96,6 +96,7 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                 var svg = el.querySelector('svg');
                 el.style.visibility = 'hidden';
                 svg.style.visibility = 'visible';
+                svg.style.boxShadow = '5px 10px 15px 0 rgba(0, 0, 0, 0.6)';
                 if (isBarchart) {
                     el.querySelector('.k-barchart-container').style.transform = 'translate(-20px, -50px)';
                 } else {
@@ -109,6 +110,7 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                 svg = el.querySelector('svg');
                 el.style.visibility = 'visible';
                 svg.style.transform = null;
+                svg.style.boxShadow = null;
             }
         });
     }
