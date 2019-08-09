@@ -219,7 +219,7 @@ Ext.define('Koala.util.Clone', {
                         result.set('isDefaultStyle', true);
                         result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
                         result.metadata = Ext.clone(metadata);
-                        if (layer && layer.metadata.isRodosLayer) {
+                        if (layer && layer.metadata && layer.metadata.isRodosLayer) {
                             result.metadata.wasRodosLayer = true;
                             var ms = /^tablename:(.+);$/.exec(layer.metadata.layerConfig.olProperties.param_viewparams);
                             result.metadata.rodosTablename = ms[1];
