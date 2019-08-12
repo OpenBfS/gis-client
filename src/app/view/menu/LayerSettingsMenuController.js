@@ -107,6 +107,9 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                     chart.el.dom.style.width = chart.fullWidth + 'px';
                     chart.getController().toggleLegendVisibility();
                 }
+                if (isBarchart) {
+                    el.querySelector('.k-barchart-container').style.transform = null;
+                }
                 svg = el.querySelector('svg');
                 el.style.visibility = 'visible';
                 svg.style.transform = null;
