@@ -166,7 +166,8 @@ Ext.define('Koala.Application', {
             bfs: 'www.imis.bfs.de/bfs',
             imis: 'www.imis.bfs.de/imis',
             ruf: 'www.imis.bfs.de/ruf',
-            rlz: 'www.imis.bfs.de/rlz'
+            rlz: 'www.imis.bfs.de/rlz',
+            jrodos_res: 'www.imis.bfs.de/rodos'
         };
         if (window.location.hash === '') {
             this.routedAlready = true;
