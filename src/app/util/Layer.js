@@ -2305,7 +2305,7 @@ Ext.define('Koala.util.Layer', {
          */
         findLayerFromMetadata: function(metadata) {
             var layer;
-            var map = BasiGX.view.component.Map.guess().map;
+            var map = BasiGX.view.component.Map.guess().getMap();
 
             Ext.each(map.getLayers().getArray(), function(lay) {
                 if (metadata === lay.metadata) {
