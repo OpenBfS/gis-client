@@ -752,6 +752,13 @@
             }
         }
     },
+    "Koala.view.grid.FilterGrid": {
+        "config": {
+            "data": {
+                "filterNullValues": "NULL Werte filtern"
+            }
+        }
+    },
     "Koala.view.window.FilterGridWindow": {
         "config": {
             "data": {

@@ -30,7 +30,7 @@ Ext.define('Koala.view.grid.FilterGrid', {
         type: 'k-grid-filter'
     },
     scrollable: true,
-    height: 150,
+    height: 200,
     config: {
         /**
          * The layer to filter/sort.

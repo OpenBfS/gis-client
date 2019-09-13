@@ -20,5 +20,6 @@ Ext.define('Koala.view.grid.FilterGridModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-grid-filter',
     data: {
+        filterNullValues: ''
     }
 });
