@@ -47,6 +47,25 @@ Ext.define('Koala.view.grid.FilterGridController', {
         this.featureStore.getData().each(function(item) {
             me.storeData.push(item);
         });
+        me.addExtraMenuItems();
+    },
+
+    /**
+     * Adds extra entries to the Column Menu. e.g the check null value filter
+     */
+    addExtraMenuItems: function() {
+        var me = this;
+        var view = this.getView();
+        var viewModel = this.getViewModel();
+        // Add custom entry to grid menu
+        var menu = view.headerCt.getMenu();
+        menu.add([{
+            xtype: 'menucheckitem',
+            text: viewModel.get('filterNullValues'),
+            checkHandler: function(evt) {
+                me.toggleNullValueFilter(evt);
+            }
+        }]);
     },
 
     /**
@@ -59,6 +78,34 @@ Ext.define('Koala.view.grid.FilterGridController', {
         this.featureStore.clearFilter();
         this.featureStore.setFilters(filters);
         this.updateLayer();
+    },
+
+    /**
+     * Toggles the null value filter
+     *
+     * @param {CheckChangeEvent} evt The checkchange event
+     */
+    toggleNullValueFilter: function(evt) {
+        var checked = evt.checked;
+        var column = evt.getQueryRoot().up('gridcolumn');
+        var store = this.getView().getStore();
+        var dataIndex = column.dataIndex;
+        var filterId = dataIndex + '_null_value_filter';
+        var nullValueFilter = store.getFilters().findBy(function(item) {
+            return item.getId() === filterId;
+        });
+        if (!nullValueFilter && checked) {
+            nullValueFilter = new Ext.util.Filter({
+                id: filterId,
+                filterFn: function(item) {
+                    var value = item.getData()[dataIndex];
+                    return !!value;
+                }
+            });
+            store.addFilter(nullValueFilter);
+        } else {
+            store.removeFilter(nullValueFilter);
+        }
     },
 
     /**
