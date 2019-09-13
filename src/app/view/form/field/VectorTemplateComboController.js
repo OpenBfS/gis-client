@@ -39,7 +39,7 @@ Ext.define('Koala.view.form.field.VectorTemplateComboController', {
                 if (layer.metadata && Koala.util.Object.getPathStrOr(layer, path)) {
                     templates.push({
                         uuid: layer.metadata.id,
-                        label: layer.metadata.treeTitle
+                        label: layer.get('name') || layer.metadata.treeTitle
                     });
                 }
             });
