@@ -31,7 +31,7 @@ Ext.define('Koala.view.panel.FeatureGridModel', {
         layerNotSavedYet: '',
         deleteTitle: '',
         deleteMessage: '',
-        toggleSortSelectedText: '',
+        sortSelectedText: '',
         addColumnTooltip: '',
         columnPrefix: '',
         pinned: true

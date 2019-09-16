@@ -585,7 +585,7 @@
                 "multiEditTooltip": "Update all selected rows",
                 "deleteTitle": "Delete",
                 "deleteMessage": "Do you want to delete the {0} selected objects?",
-                "toggleSortSelectedText": "Selected to top",
+                "sortSelectedText": "Selected to top",
                 "addColumnTooltip": "Add column",
                 "columnPrefix": "column_"
             }
