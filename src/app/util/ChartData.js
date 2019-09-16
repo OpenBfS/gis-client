@@ -143,8 +143,11 @@ Ext.define('Koala.util.ChartData', {
             showIdentificationThresholdData
         ) {
             var xAxisAttr = chartConfig.xAxisAttribute;
-            var attachedSeries = chartConfig.attachedSeries ?
-                JSON.parse(chartConfig.attachedSeries) : [];
+            var attachedSeries = chartConfig.attachedSeries
+                ? Ext.isArray(chartConfig.attachedSeries)
+                    ? chartConfig.attachedSeries
+                    : JSON.parse(chartConfig.attachedSeries)
+                : [];
             var featureStyle;
 
             if (chartConfig.featureStyle) {
@@ -219,9 +222,13 @@ Ext.define('Koala.util.ChartData', {
             endDate,
             showIdentificationThresholdData
         ) {
+
             var xAxisAttr = chartConfig.xAxisAttribute;
-            var attachedSeries = chartConfig.attachedSeries ?
-                JSON.parse(chartConfig.attachedSeries) : [];
+            var attachedSeries = chartConfig.attachedSeries
+                ? Ext.isArray(chartConfig.attachedSeries)
+                    ? chartConfig.attachedSeries
+                    : JSON.parse(chartConfig.attachedSeries)
+                : [];
             var featureStyle;
 
             if (chartConfig.featureStyle) {
@@ -388,7 +395,9 @@ Ext.define('Koala.util.ChartData', {
             gnosConfig = Koala.util.Object.coerceAll(gnosConfig);
 
             config.chartRendererConfig.zoomType = gnosConfig.allowZoom ? 'rerender' : 'none';
-            config.chartRendererConfig.chartMargin = gnosConfig.chartMargin ? gnosConfig.chartMargin.split(',') : [];
+            config.chartRendererConfig.chartMargin = gnosConfig.chartMargin
+                ? gnosConfig.chartMargin.split(',')
+                : [5,5,5,5];
 
             config.legendComponentConfig.legendEntryMaxLength = gnosConfig.legendEntryMaxLength || 200;
             config.legendComponentConfig.legendEntryMaxLength -= 60;
@@ -447,7 +456,9 @@ Ext.define('Koala.util.ChartData', {
          */
         createBarConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, labels, stations, chartOverrides) {
             var minMax = this.extractMinMax(gnosConfig);
-            var margin = gnosConfig.chartMargin.split(',');
+            var margin = gnosConfig.chartMargin
+                ? gnosConfig.chartMargin.split(',')
+                : [5,5,5,5];
             margin = Ext.Array.map(margin, function(w) {
                 return parseInt(w, 10);
             });
@@ -578,7 +589,9 @@ Ext.define('Koala.util.ChartData', {
          */
         createTimeseriesConfig: function(componentConfig, gnosConfig, layerConfig, config, chartSize, data, stations, chartOverrides) {
             var minMax = this.extractMinMax(gnosConfig);
-            var margin = gnosConfig.chartMargin.split(',');
+            var margin = gnosConfig.chartMargin
+                ? gnosConfig.chartMargin.split(',')
+                : [5,5,5,5];
             margin = Ext.Array.map(margin, function(w) {
                 return parseInt(w, 10);
             });

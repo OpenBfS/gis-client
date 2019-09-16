@@ -332,7 +332,9 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
         var config = this.getView().getConfig();
         var gnosConfig = config.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
-        var margin = gnosConfig.chartMargin.split(',');
+        var margin = gnosConfig.chartMargin
+            ? gnosConfig.chartMargin.split(',')
+            : [5,5,5,5];
         margin = Ext.Array.map(margin, function(w) {
             return parseInt(w, 10);
         });
