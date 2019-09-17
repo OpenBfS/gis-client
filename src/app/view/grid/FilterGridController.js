@@ -47,7 +47,6 @@ Ext.define('Koala.view.grid.FilterGridController', {
         this.featureStore.getData().each(function(item) {
             me.storeData.push(item);
         });
-        me.addExtraMenuItems();
     },
 
     /**

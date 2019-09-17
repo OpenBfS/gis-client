@@ -41,7 +41,8 @@ Ext.define('Koala.view.grid.FilterGrid', {
 
     listeners: {
         filterchange: 'filterChanged',
-        sortchange: 'sortChanged'
+        sortchange: 'sortChanged',
+        boxready: 'addExtraMenuItems'
     },
 
     bbar: {
