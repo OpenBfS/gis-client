@@ -203,6 +203,40 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                 }
             }]
         });
+    },
+
+    /**
+     * Edit the selected axes and grouping attributes.
+     */
+    editSettings: function() {
+        var me = this;
+        var chart = this.getView().chart;
+        var layer = chart.getTargetLayer();
+        var features = layer.getSource().getFeatures();
+        var metadata = layer.metadata;
+
+        Ext.create('Ext.window.Window', {
+            title: me.getViewModel().get('editSettings'),
+            items: [{
+                xtype: 'k-form-chartdata',
+                metadata: metadata,
+                done: function(newMetadata) {
+                    var layerConf = newMetadata.layerConfig;
+                    var newTimeseriesProps = Ext.clone(layerConf.timeSeriesChartProperties);
+                    var newBarProps = Ext.clone(layerConf.barChartProperties);
+                    // Set new metadata
+                    metadata.layerConfig.barChartProperties = newBarProps;
+                    metadata.layerConfig.timeSeriesChartProperties = newTimeseriesProps;
+                    // Updated Chart
+                    chart.getController().getChartData();
+                    this.up('window').hide();
+                },
+                cancel: function() {
+                    this.up('window').hide();
+                },
+                features: features
+            }]
+        }).show();
     }
 
 });
