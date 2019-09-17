@@ -1038,7 +1038,7 @@ Ext.define('Koala.util.Layer', {
                 return '';
             }
 
-            if (layer.get('enableLegendCount')) {
+            if (!Koala.util.Layer.isVectorLayer(layer) && layer.get('enableLegendCount')) {
                 legendUrl += '&LEGEND_OPTIONS=countMatched:true';
                 if (params && params.viewparams) {
                     legendUrl += '&viewParams=' + params.viewparams;
