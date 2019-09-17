@@ -227,8 +227,11 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                     // Set new metadata
                     metadata.layerConfig.barChartProperties = newBarProps;
                     metadata.layerConfig.timeSeriesChartProperties = newTimeseriesProps;
-                    // Updated Chart
-                    chart.getController().getChartData();
+                    // Update Charts
+                    var charts = Ext.ComponentQuery.query('d3-chart');
+                    Ext.each(charts, function(c) {
+                        c.getController().getChartData();
+                    });
                     this.up('window').hide();
                 },
                 cancel: function() {
