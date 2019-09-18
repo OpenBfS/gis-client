@@ -870,6 +870,9 @@ Ext.define('Koala.view.form.Print', {
                     var currentLegendUrl = Koala.util.Layer.getCurrentLegendUrl(layer);
 
                     if (currentLegendUrl) {
+                        if (currentLegendUrl.indexOf('http') === -1) {
+                            currentLegendUrl = window.location.origin + currentLegendUrl;
+                        }
                         clazz.icons[0] = currentLegendUrl;
                     }
 
