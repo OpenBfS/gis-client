@@ -199,8 +199,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var layer = new ol.layer.Vector(cfg);
         layer.metadata = metadata;
         if (this.style) {
-            layer.set('SLD', this.style);
             Koala.util.Layer.setSLDStyle(layer, this.style);
+            Koala.util.Layer.updateVectorStyle(layer, this.style);
+            layer.set('hasLegend', true);
         }
         if (this.selectedTemplateStyle) {
             layerUtil.getVectorLayerStyle(layer, true, viewModel.get('selectedTemplateStyle'));
