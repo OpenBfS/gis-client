@@ -1182,8 +1182,6 @@ Ext.define('Koala.util.Layer', {
                         if (!response.responseText) {
                             return;
                         }
-                        var parser = new GeoStylerSLDParser.SldStyleParser();
-                        var style = parser.readStyle(response.responseText);
                         var parms = {
                             request: 'GetLegendGraphic',
                             version: '1.1.1',
@@ -1198,15 +1196,31 @@ Ext.define('Koala.util.Layer', {
                         if (!layer.setStyle) {
                             return;
                         }
-                        var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
-                        style.then(function(parsed) {
-                            var olStyle = olParser.writeStyle(parsed);
-                            olStyle.then(function(converted) {
-                                layer.setStyle(converted);
-                            });
-                        });
+                        Koala.util.Layer.setSLDStyle(layer, response.responseText);
                     });
             }
+        },
+
+        /**
+         * Converts an SLD to an OLStyle and applies it to a layer.
+         *
+         * @param {Openlayers.Layer} layer The Layer to set the style to.
+         * @param {string} sld The SLD to set as style.
+         */
+        setSLDStyle: function(layer, sld) {
+            if (!Koala.util.Layer.isVectorLayer(layer)) {
+                Ext.log.warnn('Can\'t apply an style to an none Vector Layer.');
+                return;
+            }
+            var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
+            var sldParser = new GeoStylerSLDParser.SldStyleParser();
+            var style = sldParser.readStyle(sld);
+            style.then(function(parsed) {
+                var olStyle = olParser.writeStyle(parsed);
+                olStyle.then(function(converted) {
+                    layer.setStyle(converted);
+                });
+            });
         },
 
         /**
