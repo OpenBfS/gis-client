@@ -1209,7 +1209,7 @@ Ext.define('Koala.util.Layer', {
          */
         setSLDStyle: function(layer, sld) {
             if (!Koala.util.Layer.isVectorLayer(layer)) {
-                Ext.log.warnn('Can\'t apply an style to an none Vector Layer.');
+                Ext.log.warn('Can\'t apply an style to a non Vector Layer.');
                 return;
             }
             var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
