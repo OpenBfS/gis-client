@@ -1182,23 +1182,51 @@ Ext.define('Koala.util.Layer', {
                         if (!response.responseText) {
                             return;
                         }
-                        var parms = {
-                            request: 'GetLegendGraphic',
-                            version: '1.1.1',
-                            service: 'WMS',
-                            sld_body: response.responseText,
-                            layer: context.createLegendGraphicLayer,
-                            format: 'image/png'
-                        };
-                        layer.set('legendUrl', url + '/ows?' + Ext.Object.toQueryString(parms));
-                        // force redrawing the legend
-                        Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].delayedRepaintLayerFilterIndication();
-                        if (!layer.setStyle) {
-                            return;
-                        }
-                        Koala.util.Layer.setSLDStyle(layer, response.responseText);
+                        Koala.util.Layer.cleanSLD(response.responseText)
+                            .then(function(cleanSld) {
+                                var legendUrl = Koala.util.Layer.createLegendUrlForVectorLayer(cleanSld, url);
+                                layer.set('legendUrl', legendUrl);
+                                // force redrawing the legend
+                                Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].delayedRepaintLayerFilterIndication();
+                                if (!layer.setStyle) {
+                                    return;
+                                }
+                                Koala.util.Layer.setSLDStyle(layer, response.responseText)
+                                    .then(function() {
+                                        var legend = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+                                        legend.updateLegendsWithScale();
+                                    });
+                            });
                     });
             }
+        },
+
+        createLegendUrlForVectorLayer: function(sld, url) {
+            var context = Koala.util.AppContext.getAppContext().data.merge;
+            if (!url) {
+                var ms = /(^(http[s]?:\/\/[^/]+)?[/][^/]+)/g.exec(context.urls['spatial-search']);
+                url = ms[1] + '/';
+            }
+            var parms = {
+                request: 'GetLegendGraphic',
+                version: '1.1.1',
+                service: 'WMS',
+                sld_body: sld,
+                layer: context.createLegendGraphicLayer,
+                format: 'image/png'
+            };
+            return url + '/ows?' + Ext.Object.toQueryString(parms);
+        },
+
+        /**
+         * TODO: WORKAROUND FUNCTION WHICH SHOULD BE REPLACE WITH SMARTER LOGIC
+         */
+        cleanSLD: function(sld) {
+            var sldParser = new GeoStylerSLDParser.SldStyleParser();
+            var style = sldParser.readStyle(sld);
+            return style.then(function(parsed) {
+                return sldParser.writeStyle(parsed);
+            });
         },
 
         /**
@@ -1215,10 +1243,10 @@ Ext.define('Koala.util.Layer', {
             var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
             var sldParser = new GeoStylerSLDParser.SldStyleParser();
             var style = sldParser.readStyle(sld);
-            style.then(function(parsed) {
+            return style.then(function(parsed) {
                 var olStyle = olParser.writeStyle(parsed);
-                olStyle.then(function(converted) {
-                    layer.setStyle(converted);
+                return olStyle.then(function(converted) {
+                    return layer.setStyle(converted);
                 });
             });
         },
