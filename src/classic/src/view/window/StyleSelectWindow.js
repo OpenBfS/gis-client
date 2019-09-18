@@ -60,8 +60,17 @@ Ext.define('Koala.view.window.StyleSelectWindow', {
             },
             items: [{
                 xtype: 'filefield',
+                width: '100%',
                 bind: {
                     fieldLabel: '{fileFieldText}'
+                },
+                listeners: {
+                    change: function(field, path) {
+                        var ms = /[/\\]([^/\\]+)$/.exec(path);
+                        if (ms && ms[1]) {
+                            field.el.dom.querySelector('input').value = ms[1];
+                        }
+                    }
                 }
             }]
         }, {
