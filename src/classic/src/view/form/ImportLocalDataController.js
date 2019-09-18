@@ -200,6 +200,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         layer.metadata = metadata;
         if (this.style) {
             layer.set('SLD', this.style);
+            Koala.util.Layer.setSLDStyle(layer, this.style);
         }
         if (this.selectedTemplateStyle) {
             layerUtil.getVectorLayerStyle(layer, true, viewModel.get('selectedTemplateStyle'));
@@ -208,6 +209,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
 
         // Finally add the layer to the map.
         layerUtil.addOlLayerToMap(layer);
+
     },
 
     /**

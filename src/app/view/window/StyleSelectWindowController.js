@@ -112,7 +112,7 @@ Ext.define('Koala.view.window.StyleSelectWindowController', {
         var reader = new FileReader();
         reader.addEventListener('load', function(event) {
             var sld = event.target.result;
-            view.getSetStyleCallback(sld);
+            view.getSetStyleCallback()(sld);
             view.close();
         });
         reader.readAsText(file);
