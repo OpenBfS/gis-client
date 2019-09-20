@@ -1206,6 +1206,8 @@ Ext.define('Koala.util.Layer', {
             if (!url) {
                 var ms = /(^(http[s]?:\/\/[^/]+)?[/][^/]+)/g.exec(context.urls['spatial-search']);
                 url = ms[1] + '/';
+            } else if (!url.startsWith('http')) {
+                url = window.location.origin + url;
             }
             var parms = {
                 request: 'GetLegendGraphic',
