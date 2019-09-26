@@ -42,7 +42,8 @@ Ext.define('Koala.view.panel.MobileMenu', {
         xtype: 'button',
         name: 'ScenarioAlertBtn',
         cls: 'button-routine',
-        iconCls: 'fas fa-check',
+        hidden: true,
+        iconCls: 'fa fa-check',
         iconAlign: 'center',
         bind: {
             text: '{alertBtnText}'
@@ -123,7 +124,7 @@ Ext.define('Koala.view.panel.MobileMenu', {
                 var mobileEventPanel = btn.up('app-main').down('k-panel-mobileevents');
                 mobileEventPanel.setHtml(htmlMessage);
 
-                me.setIconCls('fas fa-check');
+                me.setIconCls('fa fa-check');
                 me.removeCls('button-alert');
                 me.addCls('button-routine');
 
@@ -131,10 +132,13 @@ Ext.define('Koala.view.panel.MobileMenu', {
             },
             initialize: function() {
                 //run once to get immediate information
-                Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                window.setInterval(function() {
+                var tools = Koala.util.AppContext.getAppContext().data.merge.tools;
+                if (tools.indexOf('ScenarioAlertBtn') !== -1) {
                     Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                }, 30000);
+                    window.setInterval(function() {
+                        Koala.util.DokpoolRequest.updateActiveElanScenarios();
+                    }, 30000);
+                }
             }
         }
         // handler: function(btn) {

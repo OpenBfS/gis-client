@@ -102,8 +102,7 @@ Ext.define('Koala.view.panel.Header', {
         items: [{
             xtype: 'button',
             name: 'ScenarioAlertBtn',
-            //glyph: 'xf00c@FontAwesome',
-            iconCls: 'fas fa-check',
+            iconCls: 'fa fa-check',
             iconAlign: 'center',
             bind: {
                 text: '{alertBtnText}'
@@ -191,7 +190,7 @@ Ext.define('Koala.view.panel.Header', {
                     icon: Ext.Msg.INFO
                 });
 
-                me.setIconCls('fas fa-check');
+                me.setIconCls('fa fa-check');
                 me.removeCls('button-alert');
                 me.addCls('button-routine');
             }

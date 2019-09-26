@@ -100,7 +100,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                                                 ScenarioAlertBtn.triggerEvent = responseObj.id;
                                                 ScenarioAlertBtn.removeCls('button-routine');
                                                 ScenarioAlertBtn.addCls('button-alert');
-                                                ScenarioAlertBtn.setIconCls('fas fa-exclamation-triangle');
+                                                ScenarioAlertBtn.setIconCls('fa fa-exclamation-triangle');
                                                 if (Ext.isModern) {
                                                     mobilePanel.show();
                                                 }
