@@ -41,9 +41,8 @@ Ext.define('Koala.util.DokpoolRequest', {
         },
 
         updateActiveElanScenarios: function() {
-            var me = this;
-            //var auth = 'Basic ' + Koala.util.String.utf8_to_b64('admin:istrator');
-            var headers = {
+            var me = this,
+                headers = {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'//,
                     //'Authorization': auth
@@ -138,10 +137,9 @@ Ext.define('Koala.util.DokpoolRequest', {
 
 
         getElanScenarios: function(dpType) {
-            var me = this;
-            var ScenarioAlertBtn = Ext.ComponentQuery.query('button[name=ScenarioAlertBtn]')[0];
-            //var auth = 'Basic ' + Koala.util.String.utf8_to_b64('admin:istrator');
-            var headers = {
+            var me = this,
+                ScenarioAlertBtn = Ext.ComponentQuery.query('button[name=ScenarioAlertBtn]')[0],
+                headers = {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'//,
                     //'Authorization': auth
