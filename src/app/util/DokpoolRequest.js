@@ -41,12 +41,12 @@ Ext.define('Koala.util.DokpoolRequest', {
         },
 
         updateActiveElanScenarios: function() {
-            var me = this,
-                auth = 'Basic ' + Koala.util.String.utf8_to_b64('admin:istrator'),
-                headers = {
+            var me = this;
+            //var auth = 'Basic ' + Koala.util.String.utf8_to_b64('admin:istrator');
+            var headers = {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': auth
+                    'Content-Type': 'application/json'//,
+                    //'Authorization': auth
                 };
             me.getActiveElanScenarios().then(function(promise) {
                 var activeElanScenarios = promise.items;
@@ -140,11 +140,11 @@ Ext.define('Koala.util.DokpoolRequest', {
         getElanScenarios: function(dpType) {
             var me = this;
             var ScenarioAlertBtn = Ext.ComponentQuery.query('button[name=ScenarioAlertBtn]')[0];
-            var auth = 'Basic ' + Koala.util.String.utf8_to_b64('admin:istrator'),
-                headers = {
+            //var auth = 'Basic ' + Koala.util.String.utf8_to_b64('admin:istrator');
+            var headers = {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': auth
+                    'Content-Type': 'application/json'//,
+                    //'Authorization': auth
                 },
                 appContext = Koala.util.AppContext.getAppContext(),
                 baseUrl = Koala.util.Object.getPathStrOr(appContext,
