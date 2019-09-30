@@ -74,30 +74,32 @@ Ext.define('Koala.view.window.StyleSelectWindow', {
                 }
             }]
         }, {
-            name: 'environmentFieldTab',
-            bind: {
-                title: '{getFromEnvironmentFieldTab}'
-            },
-            items: [{
-                xtype: 'combo',
-                bind: {
-                    fieldLabel: '{selectEnvironmentFieldFieldText}',
-                    store: '{attributes}'
-                },
-                listeners: {
-                    change: 'attributeSelected'
-                }
-            }, {
-                xtype: 'combo',
-                name: 'environmentFieldStyles',
-                bind: {
-                    fieldLabel: '{selectStyleText}',
-                    value: '{selectedEnvironmentFieldStyle}'
-                },
-                valueField: 'val',
-                displayField: 'dsp'
-            }]
-        }, {
+        //     // TODO:
+        //     // setup service
+        //     name: 'environmentFieldTab',
+        //     bind: {
+        //         title: '{getFromEnvironmentFieldTab}'
+        //     },
+        //     items: [{
+        //         xtype: 'combo',
+        //         bind: {
+        //             fieldLabel: '{selectEnvironmentFieldFieldText}',
+        //             store: '{attributes}'
+        //         },
+        //         listeners: {
+        //             change: 'attributeSelected'
+        //         }
+        //     }, {
+        //         xtype: 'combo',
+        //         name: 'environmentFieldStyles',
+        //         bind: {
+        //             fieldLabel: '{selectStyleText}',
+        //             value: '{selectedEnvironmentFieldStyle}'
+        //         },
+        //         valueField: 'val',
+        //         displayField: 'dsp'
+        //     }]
+        // }, {
             name: 'templateTab',
             bind: {
                 title: '{templateTab}'
