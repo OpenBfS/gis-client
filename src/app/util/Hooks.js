@@ -130,6 +130,10 @@ Ext.define('Koala.util.Hooks', {
                         clientInfo.height + ')'
                 };
             },
+            layerdata: function(form, attributeRec, attributeFields) {
+                attributeFields.hidden = true;
+                attributeFields.value = [{}];
+            },
             /*
             northArrow: function(form, attributeRec, attributeFields) {
                 attributeFields.bind = {
