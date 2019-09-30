@@ -186,7 +186,8 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     text: '{about}',
                     leaf: true,
                     key: 'about',
-                    iconCls: 'x-fa fa-info'
+                    iconCls: 'x-fa fa-info',
+                    rowCls: '{showAboutBtn ? "" : "hidden"}'
                 }, {
                     text: '{help}',
                     leaf: true,
