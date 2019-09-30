@@ -132,7 +132,6 @@ Ext.define('Koala.util.Hooks', {
             },
             layerdata: function(form, attributeRec, attributeFields) {
                 attributeFields.hidden = true;
-                attributeFields.value = [{}];
             },
             /*
             northArrow: function(form, attributeRec, attributeFields) {
