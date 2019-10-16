@@ -93,12 +93,8 @@ Ext.define('Koala.view.grid.FilterGrid', {
      */
     setupStore: function(columns) {
         this.setColumns(columns);
-        var features = this.getLayer().getSource().getFeatures();
-        features = features.map(function(feat) {
-            return feat.getProperties();
-        });
-        var store = Ext.create('Ext.data.Store', {
-            data: features
+        var store = Ext.create('GeoExt.data.store.Features', {
+            layer: this.getLayer()
         });
         this.setStore(store);
     }

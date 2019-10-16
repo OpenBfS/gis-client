@@ -21,6 +21,7 @@ Ext.define('Koala.view.grid.FilterGridController', {
     alias: 'controller.k-grid-filter',
 
     requires: [
+        'GeoExt.data.store.Features'
     ],
 
     featureStore: null,
@@ -28,25 +29,10 @@ Ext.define('Koala.view.grid.FilterGridController', {
     layer: null,
     storeData: null,
 
-    /**
-     * Initialize the controller by preparing an internal store to
-     * manage filtering.
-     */
     init: function() {
-        var me = this;
         this.callParent();
         this.layer = this.getView().getLayer();
-        this.features = this.layer.getSource().getFeatures().slice();
-        var features = this.features.map(function(feat) {
-            return feat.getProperties();
-        });
-        this.featureStore = Ext.create('Ext.data.Store', {
-            data: features
-        });
-        this.storeData = [];
-        this.featureStore.getData().each(function(item) {
-            me.storeData.push(item);
-        });
+        this.layer.originalFeatures = this.features;
     },
 
     /**
@@ -68,15 +54,24 @@ Ext.define('Koala.view.grid.FilterGridController', {
     },
 
     /**
-     * Update the internal store and the layer with the new filters.
+     * Update the layer with the new filters manually.
      *
      * @param {Ext.data.Store} store the view's store
      * @param {Object} filters the new filters
      */
-    filterChanged: function(store, filters) {
-        this.featureStore.clearFilter();
-        this.featureStore.setFilters(filters);
-        this.updateLayer();
+    filterChanged: function(store) {
+        var featureGrid = Ext.ComponentQuery.query('k-panel-featuregrid')[0];
+        if (featureGrid) {
+            featureGrid.close();
+        }
+        var source = this.layer.getSource();
+        var newFeatures = [];
+        store.each(function(record) {
+            var feature = record.olObject;
+            newFeatures.push(feature);
+        });
+        source.clear();
+        source.addFeatures(newFeatures);
     },
 
     /**
@@ -129,23 +124,6 @@ Ext.define('Koala.view.grid.FilterGridController', {
             }
             return v1 < v2 ? 1 : v1 > v2 ? -1 : 0;
         });
-    },
-
-    /**
-     * Update the layer's features in accordance with the internal store's
-     * contents.
-     */
-    updateLayer: function() {
-        var me = this;
-        var data = this.featureStore.getData();
-        var newFeatures = [];
-        data.each(function(item) {
-            newFeatures.push(me.features[me.storeData.indexOf(item)]);
-        });
-        var src = this.layer.getSource();
-        src.clear();
-        src.addFeatures(newFeatures);
-        this.layer.originalFeatures = this.features;
     }
 
 });
