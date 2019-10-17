@@ -757,7 +757,7 @@ Ext.define('Koala.view.form.Print', {
                 var serializer = GeoExt.data.MapfishPrintProvider
                     .findSerializerBySource(source);
                 if (serializer) {
-                    serialized = serializer.serialize(layer, source, viewRes);
+                    serialized = serializer.serialize(layer, source, viewRes, mapComponent.map);
                     serializedLayers.push(serialized);
                 }
             }, view);
