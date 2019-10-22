@@ -1664,7 +1664,9 @@
                 "uncertaintyAttribute": "Attribut Unsicherheit",
                 "okButtonText": "Ok",
                 "cancelButtonText": "Abbrechen",
-                "timeseriesTitle": "Zeitreihe Einstellungen"
+                "timeseriesTitle": "Zeitreihe Einstellungen",
+                "olTitleText": "Layer Einstellungen",
+                "featureIdentifyField": "Feature ID"
             }
         }
     },

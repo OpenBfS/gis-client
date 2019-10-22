@@ -25,6 +25,12 @@ Ext.define('Koala.view.form.ChartDataFormController', {
 
     onOk: function() {
         var view = this.getView();
+        var ol = view.metadata.layerConfig.olProperties;
+        if (ol && Object.keys(ol).length !== 0) {
+            Ext.each(view.olFields, function(field) {
+                ol[field] = view.down('[name=ol]').down('[name=' + field + ']').getValue();
+            });
+        }
         var bar = view.metadata.layerConfig.barChartProperties;
         if (bar && Object.keys(bar).length !== 0) {
             Ext.each(view.fields, function(field) {

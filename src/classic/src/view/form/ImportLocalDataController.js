@@ -230,8 +230,10 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             }
             var bar = metadata.layerConfig.barChartProperties;
             var time = metadata.layerConfig.timeSeriesChartProperties;
-            if (bar && Object.keys(bar).length > 0 ||
-                time && Object.keys(time).length > 0) {
+            var ol = metadata.layerConfig.olProperties;
+            if ((ol.showCartoWindow && ol.showCartoWindow === 'true') && (bar && Object.keys(bar).length > 0 ||
+                time && Object.keys(time).length > 0 ||
+                ol && Object.keys(ol).length > 0)) {
                 Ext.create('Ext.window.Window', {
                     title: me.getViewModel().get('settingsText'),
                     items: [{
@@ -311,6 +313,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             allowShortInfo: getBool(olProps.allowShortInfo, false),
             allowPrint: getBool(olProps.allowPrint, true),
             allowOpacityChange: getBool(olProps.allowOpacityChange, true),
+            featureIdentifyField: olProps.featureIdentifyField || 'id',
             hoverable: shallHover,
             hoverTpl: olProps.hoverTpl,
             hoverStyle: olProps.hoverStyle,
