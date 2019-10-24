@@ -288,14 +288,21 @@ Ext.define('Koala.view.component.D3BaseController', {
         if (layer instanceof ol.layer.Vector && !serverBased) {
             var fmt = new ol.format.GeoJSON();
             var data = layer.originalFeatures || layer.getSource().getFeatures();
-            if (Ext.isFunction(cbFn)) {
-                cbFn.call(cbScope, station);
-            }
-            if (Ext.isFunction(cbSuccess)) {
-                cbSuccess.call(cbScope, {
-                    responseText: fmt.writeFeatures(data)
-                }, station);
-            }
+            data = data.slice();
+            var groupAttribute = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/olProperties/featureIdentifyField');
+            data = Ext.Array.filter(data, function(feat) {
+                return feat.get(groupAttribute) === station.get(groupAttribute);
+            });
+            window.setTimeout(function() {
+                if (Ext.isFunction(cbFn)) {
+                    cbFn.call(cbScope, station);
+                }
+                if (Ext.isFunction(cbSuccess)) {
+                    cbSuccess.call(cbScope, {
+                        responseText: fmt.writeFeatures(data)
+                    }, station);
+                }
+            }, 500);
             return;
         }
 
