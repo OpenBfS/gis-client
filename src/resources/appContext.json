@@ -62,7 +62,8 @@
                 "yAxisAttribute",
                 "groupAttribute",
                 "detectionLimitAttribute",
-                "uncertaintyAttribute"
+                "uncertaintyAttribute",
+                "featureIdentifyField"
             ],
             "spatialSearchTypeName": "bfs:verwaltung_4326_geozg_sort",
             "spatialSearchFields": {
@@ -186,6 +187,10 @@
                 }
             ],
             "vectorTemplates": [
+                {
+                    "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                    "label": "bar"
+                },
                 {
                     "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
                     "label": "Local Vector Data Template (drinkwater)"
