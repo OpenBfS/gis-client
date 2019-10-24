@@ -212,6 +212,22 @@ Ext.define('Koala.util.Routing', {
                                 permalinkFilter.effectivemaxdatetime =
                                     effectiveMaxDateTime;
                                 Ext.apply(mdFilter, permalinkFilter);
+                            } else if (effectiveMinDateTime.isBefore(minDate) ||
+                                    effectiveMaxDateTime.isAfter(maxDate)) {
+                                if (effectiveMinDateTime.isBefore(minDate)) {
+                                    permalinkFilter.effectivemindatetime = minDate;
+                                    window.console.log('effectivemindatetime out of range! changed to: ' + mdFilter.mindatetimeinstant);
+                                } else {
+                                    permalinkFilter.effectivemindatetime =
+                                        effectiveMinDateTime;
+                                }
+                                if (effectiveMaxDateTime.isAfter(maxDate)) {
+                                    permalinkFilter.effectivemaxdatetime = maxDate;
+                                    window.console.log('effectivemaxdatetime out of range! changed to: ' + mdFilter.maxdatetimeinstant);
+                                } else {
+                                    permalinkFilter.effectivemaxdatetime =
+                                        effectiveMaxDateTime;
+                                }
                             } else {
                                 Ext.toast(Ext.String.format(me.illegalFilter, mdFilter.type));
                             }

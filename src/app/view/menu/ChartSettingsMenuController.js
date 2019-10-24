@@ -222,9 +222,11 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                 metadata: metadata,
                 done: function(newMetadata) {
                     var layerConf = newMetadata.layerConfig;
+                    var newOlProps = Ext.clone(layerConf.olProperties);
                     var newTimeseriesProps = Ext.clone(layerConf.timeSeriesChartProperties);
                     var newBarProps = Ext.clone(layerConf.barChartProperties);
                     // Set new metadata
+                    metadata.layerConfig.olProperties = newOlProps;
                     metadata.layerConfig.barChartProperties = newBarProps;
                     metadata.layerConfig.timeSeriesChartProperties = newTimeseriesProps;
                     // Update Charts
