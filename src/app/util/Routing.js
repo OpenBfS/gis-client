@@ -228,6 +228,7 @@ Ext.define('Koala.util.Routing', {
                                     permalinkFilter.effectivemaxdatetime =
                                         effectiveMaxDateTime;
                                 }
+                                Ext.apply(mdFilter, permalinkFilter);
                             } else {
                                 Ext.toast(Ext.String.format(me.illegalFilter, mdFilter.type));
                             }
