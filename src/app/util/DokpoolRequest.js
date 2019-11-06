@@ -94,10 +94,6 @@ Ext.define('Koala.util.DokpoolRequest', {
                                         var activeElanScenariosDetail = Koala.util.LocalStorage.getDokpoolEvents();
                                         if (activeElanScenariosDetail && !Ext.Object.isEmpty(activeElanScenariosDetail)) {
                                             ElanScenariosUpdate = activeElanScenariosDetail;
-                                            console.log("DEBUGGING: LocalStorage[id] = " + activeElanScenariosDetail[id]);
-                                            console.log("DEBUGGING: LocalStorage[id].modified = " + activeElanScenariosDetail[id].modified);
-                                            console.log("DEBUGGING: ResponseObject" + response.responseText);
-                                            console.log("DEBUGGING: ResponseObject.modified = " + responseObj.modified);
                                             if (!activeElanScenariosDetail[id] || !(activeElanScenariosDetail[id].modified === responseObj.modified)) {
                                                 // scenario change detected
                                                 ScenarioAlertBtn.triggerEvent = responseObj.id;
