@@ -92,6 +92,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                                         var id = responseObj.id;
                                         var ElanScenariosUpdate = Object.create({});
                                         var activeElanScenariosDetail = Koala.util.LocalStorage.getDokpoolEvents();
+                                        debugger;
                                         if (activeElanScenariosDetail && !Ext.Object.isEmpty(activeElanScenariosDetail)) {
                                             ElanScenariosUpdate = activeElanScenariosDetail;
                                             if (!activeElanScenariosDetail[id] || !(activeElanScenariosDetail[id].modified === responseObj.modified)) {
