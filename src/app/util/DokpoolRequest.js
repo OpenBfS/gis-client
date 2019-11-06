@@ -57,7 +57,9 @@ Ext.define('Koala.util.DokpoolRequest', {
                 //delete inactive events from localStorage
                 for (var prop in localStorageScenarios) {
                     var check = activeElanScenarios.filter(function(scen) {
-                        return scen['@id'] === localStorageScenarios[prop]['@id'];
+                        //return scen['@id'] === localStorageScenarios[prop]['@id'];
+                        //TEST check on 'id' instead of '@id'
+                        return scen['id'] === localStorageScenarios[prop]['id'];
                     });
                     if (check.length === 0) {
                         // console.log('deleted "' + localStorageScenarios[prop].id + '" from localStorage since it is no longer active!');
