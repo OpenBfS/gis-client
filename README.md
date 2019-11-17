@@ -27,6 +27,10 @@ Die Quelldateien lassen sich wie folgt auschecken:
 ```
 git clone https://github.com/OpenBfS/gis-client.git
 ```
+da der IMIS3 GIS-Client von einigen Submodulen abhängt ist es empfohlen diese mit zu klonen
+```
+git clone --recurse-submodules https://github.com/OpenBfS/gis-client.git
+```
 
 Dokumentation
 -------------
