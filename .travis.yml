@@ -1,11 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - "7.10"
-  - "8.5"
-  - "node"
   - "stable"
-  - "unstable"
 cache:
   directories:
     - node_modules
@@ -20,7 +16,6 @@ before_install:
   - "cd src"
   - "ln -s ../ext-6.2.0 ext"
   - "/opt/Sencha/sencha app install --framework=ext"
-  - "/opt/Sencha/sencha app upgrade ../ext-6.2.0"
   - "/opt/Sencha/sencha app build"
   - "npm config set shrinkwrap false"
   - "test ! -d node_modules || npm prune"
