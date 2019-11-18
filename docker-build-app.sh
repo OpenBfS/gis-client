@@ -30,7 +30,7 @@ ${SENCHA_CMD} app install --framework=ext
 
 cd ${WORKSPACE}/src/resources/lib/d3-util
 npm install
-npm run start:dist
+npm run build:dist
 cd ${WORKSPACE}/src/
 
 ${SENCHA_CMD} app clean

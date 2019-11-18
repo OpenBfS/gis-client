@@ -15,7 +15,7 @@ before_install:
   - "unzip -qn ext-6.2.0-gpl.zip"
   - "cd src/resources/lib/d3-util"
   - "npm install"
-  - "npm run start:dist"
+  - "npm run build:dist"
   - "cd ../../.."
   - "ln -s ../ext-6.2.0 ext"
   - "/opt/Sencha/sencha app install --framework=ext"

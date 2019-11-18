@@ -64,7 +64,7 @@ sencha app install --framework=ext
 # d3-utils bauen
 cd resources/lib/d3-util
 npm install
-npm run start:dist
+npm run build:dist
 cd ../../..
 # Client bauen (dev oder prod)
 sencha app clean
