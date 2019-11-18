@@ -54,12 +54,24 @@ Einstellungen bezüglich der Generierung der Dokumentation sind in der Datei
 Entwicklung
 -----------
 Für die Entwicklung ist es notwendig in dem Wurzelordner die ExtJS-Bibliothek
-in der Version >=6.2.0 unter dem Namen "ext" zur Verfügung zu stellen.
+in der Version >=6.2.0 unter dem Namen "ext" (als Symlink per ln -s ... oder
+als Kopie per cp -r ...) zur Verfügung zu stellen.
 
 ```
-sencha-6.2.2.36 app install --framework=/home/kvolland/workspace/ext-6.2.0/
+cd src/
+ln -s <Pfad zu ExtJS>/ext-6.2.0 ext
+sencha app install --framework=ext
+# d3-utils bauen
+cd resources/lib/d3-util
+npm install
+npm run start:dist
+cd ../../..
+# Client bauen (dev oder prod)
+sencha app clean
+sencha app build
+# alternativ starten des Sencha Servers (default localhost:1841)
+sencha app watch
 ```
-
 
 Build
 -----

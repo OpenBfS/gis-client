@@ -2,7 +2,7 @@
 
 CUR_DIR=`pwd`
 WORKSPACE=$CUR_DIR
-SENCHA_CMD_VERSION="6.2.2.36"
+SENCHA_CMD_VERSION="7.0.0.40"
 EXTJS_VERSION="6.2.0"
 
 if [ ! -e SenchaCmd-${SENCHA_CMD_VERSION}-linux-amd64.sh.zip ]
@@ -25,10 +25,14 @@ unzip -nq ext-${EXTJS_VERSION}-gpl.zip
 SENCHA_CMD="/opt/${SENCHA_CMD_VERSION}/sencha"
 
 cd ${WORKSPACE}/src/
-
 ln -s ${WORKSPACE}/ext-${EXTJS_VERSION} ext
 ${SENCHA_CMD} app install --framework=ext
-#${SENCHA_CMD} app upgrade ${WORKSPACE}/ext-${EXTJS_VERSION}
+
+cd ${WORKSPACE}/src/resources/lib/d3-util
+npm install
+npm run start:dist
+cd ${WORKSPACE}/src/
+
 ${SENCHA_CMD} app clean
 ${SENCHA_CMD} app build
 
