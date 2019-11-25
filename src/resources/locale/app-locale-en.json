@@ -4,6 +4,8 @@
             "timereferenceNotFound": "Time reference button could not be found.",
             "applicationUpdateTitle": "Application Update",
             "applicationUpdateText": "This application has an update. Reload now?",
+            "ssoExpiredTitle" : "Login required!",
+            "ssoExpiredBody" : "Your session expired<br/>Restore session?",
             "leavePageText": "Do you want to leave this page? Unsaved data will be lost."
         }
     },

@@ -4,6 +4,8 @@
             "timereferenceNotFound": "Zeitbezug-Button konnte nicht gefunden werden.",
             "applicationUpdateTitle": "Anwendungsupdate",
             "applicationUpdateText": "Für diese Anwendung steht ein Update zur Verfügung. Jetzt neu laden?",
+            "ssoExpiredTitle" : "Erneutes Login erforderlich!",
+            "ssoExpiredBody" : "Ihre Sitzung ist abgelaufen.<br/>Soll die Sitzung erneuert werden?",
             "leavePageText": "Wollen Sie diese Seite verlassen/neu laden? Nicht gespeicherte lokale Änderungen gehen dadurch verloren."
         }
     },

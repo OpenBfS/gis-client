@@ -188,6 +188,22 @@ Ext.define('Koala.Application', {
         moment.updateLocale('fr', {
             longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.fr
         });
+
+        //Set up an event handler to handle session timeouts
+        Ext.Ajax.on('requestexception', function(conn, response, options, e) {
+            if (response.status === 0 && response.responseText === '') {
+                Ext.MessageBox.confirm(
+                    me.ssoExpiredTitle,
+                    me.ssoExpiredBody,
+                    function(btn) {
+                        if (btn === 'yes') {
+                            window.location.reload();
+                        }
+                    }
+                );
+            }
+        });
+
         // ask before closing/refreshing the window.
         // Not all browsers will respect this, depending on settings
         window.addEventListener('beforeunload', function(evt) {
