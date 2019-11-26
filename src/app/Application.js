@@ -194,26 +194,29 @@ Ext.define('Koala.Application', {
         //Set up an event handler to handle session timeouts
         //code with slight adjustements from LADA project:
         //see also: LADA Commit 8dddb5eb9b30894414b62eecf6fca23200756d75
+
         Ext.Ajax.on('requestexception', function(conn, response, options, e) {
             if (response.status === 0 && response.responseText === '') {
                 Ext.MessageBox.confirm(
-                    me.ssoExpiredTitle,
-                    me.ssoExpiredBody,
+                    Koala.Application.ssoExpiredTitle,
+                    Koala.Application.ssoExpiredBody,
                     function(btn) {
-                        // if (btn === 'yes') {
-                        //     window.location.reload();
-                        // }
-                        Ext.Ajax.request({
-                            url: window.location.hostname + 'Shibboleth.sso/Login',
-
-                            success: function(resp) {
-                                window.console.log('new session established');
-                            },
-
-                            failure: function(resp) {
-                                Ext.raise('Sibboleth server-side failure with status code ' + resp.status);
-                            }
-                        });
+                        if (btn === 'yes') {
+                             window.location.reload();
+                        // Ext.Ajax.request({
+                        //     url: window.location.hostname + 'Shibboleth.sso/Login',
+                        //
+                        //     success: function(resp) {
+                        //         window.console.log('new session established');
+                        //         debugger;
+                        //         window.open(resp);
+                        //     },
+                        //
+                        //     failure: function(resp) {
+                        //         Ext.raise('Sibboleth server-side failure with status code ' + resp.status);
+                        //     }
+                        // });
+                        }
                     }
                 );
             }
