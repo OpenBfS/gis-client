@@ -200,9 +200,20 @@ Ext.define('Koala.Application', {
                     me.ssoExpiredTitle,
                     me.ssoExpiredBody,
                     function(btn) {
-                        if (btn === 'yes') {
-                            window.location.reload();
-                        }
+                        // if (btn === 'yes') {
+                        //     window.location.reload();
+                        // }
+                        Ext.Ajax.request({
+                            url: window.location.hostname + 'Shibboleth.sso/Login',
+
+                            success: function(resp) {
+                                window.console.log('new session established');
+                            },
+
+                            failure: function(resp) {
+                                Ext.raise('Sibboleth server-side failure with status code ' + resp.status);
+                            }
+                        });
                     }
                 );
             }
