@@ -38,6 +38,8 @@ Ext.define('Koala.Application', {
         applicationUpdateTitle: 'Anwendungsupdate',
         applicationUpdateText: 'Für diese Anwendung steht ein Update zur Verfügung!',
         reloadMessage: '',
+        ssoExpiredTitle: '',
+        ssoExpiredBody: '',
 
         /**
          * Return the current timereference for the application or null if
