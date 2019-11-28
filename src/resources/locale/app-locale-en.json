@@ -775,6 +775,29 @@
             }
         }
     },
+    "Koala.view.window.ElanScenarioWindow": {
+        "config": {
+            "data": {
+                "title.elanscenarios": "Events",
+                "close": "close",
+                "elan.unchanged": "Event changed",
+                "elan.changed": "Event unchanged",
+                "elan.": "elan.",
+                "true": "true",
+                "false": "false",
+                "window.elanscenario.emptytext": "window.elanscenario.emptytext",
+                "false": "false"
+            }
+        }
+    },
+    "Koala.view.widget.ElanScenarioButton": {
+        "config": {
+            "data": {
+                "elanscenarios": "elanscenarios",
+                "helpTooltip": "Help"
+            }
+        }
+    },
     "Koala.view.window.LayerSetChooserWindow": {
         "config": {
             "data": {

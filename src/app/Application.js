@@ -40,6 +40,10 @@ Ext.define('Koala.Application', {
         reloadMessage: '',
         ssoExpiredTitle: '',
         ssoExpiredBody: '',
+        username: '',
+        userId: '',
+        userroles: '',
+        logintime: '',
 
         /**
          * Return the current timereference for the application or null if
@@ -163,6 +167,14 @@ Ext.define('Koala.Application', {
     },
 
     launch: function() {
+        var staticMe = Koala.util.AppContext;
+        var ctx = staticMe.getAppContext();
+        var imisUser = staticMe.getMergedDataByKey('imis_user', ctx);
+        var imisRoles = (imisUser) ? imisUser.userroles : undefined;
+        this.username = '';
+        this.userId = imisUser;
+        this.userroles = imisRoles;
+        this.logintime = '';
         BasiGX.util.Namespace.namespaces = {
             opendata: 'www.imis.bfs.de/opendata',
             bfs: 'www.imis.bfs.de/bfs',
@@ -203,19 +215,6 @@ Ext.define('Koala.Application', {
                     function(btn) {
                         if (btn === 'yes') {
                              window.location.reload();
-                        // Ext.Ajax.request({
-                        //     url: window.location.hostname + 'Shibboleth.sso/Login',
-                        //
-                        //     success: function(resp) {
-                        //         window.console.log('new session established');
-                        //         debugger;
-                        //         window.open(resp);
-                        //     },
-                        //
-                        //     failure: function(resp) {
-                        //         Ext.raise('Sibboleth server-side failure with status code ' + resp.status);
-                        //     }
-                        // });
                         }
                     }
                 );
@@ -234,6 +233,18 @@ Ext.define('Koala.Application', {
             evt.returnValue = confirmMessage;
             return confirmMessage;
         });
+        this.initElanScenarios();
+    },
+    initElanScenarios: function() {
+        Koala.util.LocalStorage.setCurrentUser(this.username);
+        var dokpool = Koala.util.DokpoolRequest;
+        //Configure dokpool utility
+        dokpool.elanScenarioUrl = '../dokpool/bund/contentconfig/scen/'
+        dokpool.storageModule = Koala.util.LocalStorage;
+        dokpool.updateActiveElanScenarios();
+        window.setInterval(function() {
+            window.console.log('scenario update');
+            dokpool.updateActiveElanScenarios();
+        }, 60000);
     }
-
 });

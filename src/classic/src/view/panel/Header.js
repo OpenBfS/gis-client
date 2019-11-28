@@ -28,7 +28,7 @@ Ext.define('Koala.view.panel.Header', {
     requires: [
         'Koala.view.panel.HeaderController',
         'Koala.view.panel.HeaderModel',
-
+        'Koala.view.widget.ElanScenarioButton',
         'Ext.Img'
     ],
 
@@ -100,100 +100,9 @@ Ext.define('Koala.view.panel.Header', {
             pack: 'right'
         },
         items: [{
-            xtype: 'button',
-            name: 'ScenarioAlertBtn',
-            iconCls: 'fa fa-check',
-            iconAlign: 'center',
-            bind: {
-                text: '{alertBtnText}'
-            },
-            cls: 'button-routine',
-            hidden: true,
-            margin: '0 0 0 10',
-            handler: function() {
-                var me = this,
-                    viewmodel = Ext.ComponentQuery.query('k-panel-header')[0].getViewModel();
-
-
-                me.dokpoolEvents = Koala.util.LocalStorage.getDokpoolEvents();
-                // if (buttonStatus === 'alert') {
-                //     messageHeader = 'alertMessageHeader';
-                //     me.status = 'routine';
-                // } else {
-                //     messageHeader = 'routineMessageHeader';
-                // }
-
-                var htmlMessage = '';
-                //var eventNames = Object.keys(me.dokpoolEvents);
-                var eventNames = Object.keys(Koala.util.LocalStorage.getDokpoolEvents());
-                eventNames.forEach(function(key) {
-                    var messageHeader = '';
-
-                    var replaceObject = Object.defineProperties({}, {
-                        'title': {
-                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'title', ''),
-                            enumerable: true
-                        },
-                        'modified': {
-                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'modified', ''),
-                            enumerable: true
-                        },
-                        'modified_by': {
-                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'modified_by', ''),
-                            enumerable: true
-                        },
-                        'Exercise': {
-                            value: Koala.util.String.getStringFromBool(Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'Exercise', '')),
-                            enumerable: true
-                        },
-                        'id': {
-                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'id', ''),
-                            enumerable: true
-                        },
-                        'description': {
-                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'description', ''),
-                            enumerable: true
-                        },
-                        'TimeOfEvent': {
-                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'TimeOfEvent', ''),
-                            enumerable: true
-                        },
-                        'ScenarioPhase.title': {
-                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'ScenarioPhase/title', ''),
-                            enumerable: true
-                        },
-                        'ScenarioLocation.title': {
-                            value: Koala.util.Object.getPathStrOr(this.dokpoolEvents[key], 'ScenarioLocation/title', ''),
-                            enumerable: true
-                        }
-                    });
-
-                    if (me.triggerEvent && me.triggerEvent === this.dokpoolEvents[key].id) {
-                        messageHeader = 'alertMessageHeader';
-                        me.triggerEvent = null;
-                    } else {
-                        messageHeader = 'routineMessageHeader';
-                    }
-
-                    messageHeader = Koala.util.String.replaceTemplateStrings(messageHeader, replaceObject);
-                    htmlMessage = htmlMessage +
-                        viewmodel.get(messageHeader) +
-                        viewmodel.get('htmlMessageBody') +
-                        '<br><br>';
-                    htmlMessage = Koala.util.String.replaceTemplateStrings(htmlMessage, replaceObject);
-                }, me);
-                me.dokpoolEvents = null;
-                Ext.Msg.show({
-                    title: 'Dokpool - Messenger',
-                    message: htmlMessage,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.Msg.INFO
-                });
-
-                me.setIconCls('fa fa-check');
-                me.removeCls('button-alert');
-                me.addCls('button-routine');
-            }
+            xtype: 'elanscenariobutton',
+            action: 'elanscenarios',
+            hidden: false
         }, {
             xtype: 'k-toolbar-header'
         }]
@@ -217,14 +126,14 @@ Ext.define('Koala.view.panel.Header', {
                 }, 1);
             },
             boxready: function() {
-                var tools = Koala.util.AppContext.getAppContext().data.merge.tools;
-                if (tools.indexOf('ScenarioAlertBtn') !== -1) {
-                    //run once to get immediate information
-                    Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                    window.setInterval(function() {
-                        Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                    }, 30000);
-                }
+                // var tools = Koala.util.AppContext.getAppContext().data.merge.tools;
+                // if (tools.indexOf('ScenarioAlertBtn') !== -1) {
+                //     //run once to get immediate information
+                //     Koala.util.DokpoolRequest.updateActiveElanScenarios();
+                //     window.setInterval(function() {
+                //         Koala.util.DokpoolRequest.updateActiveElanScenarios();
+                //     }, 30000);
+                // }
             }
         }
     }]

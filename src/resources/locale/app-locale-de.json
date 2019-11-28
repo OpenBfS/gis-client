@@ -775,7 +775,30 @@
         "config": {
             "data": {
                 "title": "Permalink",
-                "helpTooltip": "Hilfe",
+                "helpTooltip": "Hilfe"
+            }
+        }
+    },
+    "Koala.view.window.ElanScenarioWindow": {
+        "config": {
+            "data": {
+                "title.elanscenarios": "Ereignisse",
+                "close": "Schließen",
+                "elan.unchanged": "Ereignis unverändert",
+                "elan.changed": "Ereignis geändert",
+                "elan.": "elan.",
+                "true": "true",
+                "false": "false",
+                "window.elanscenario.emptytext": "window.elanscenario.emptytext",
+                "false": "false"
+            }
+        }
+    },
+    "Koala.view.widget.ElanScenarioButton": {
+        "config": {
+            "data": {
+                "elanscenarios": "elanscenarios",
+                "helpTooltip": "Hilfe"
             }
         }
     },
