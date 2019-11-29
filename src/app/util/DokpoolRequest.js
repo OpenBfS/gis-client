@@ -62,6 +62,7 @@ Ext.define('Koala.util.DokpoolRequest', {
          *   success (Boolean): True if request was successfull
          */
         handleElanScenariosReceived: function(success) {
+            window.console.log('new elanEventsReceived');
             Ext.fireEvent('elanEventsReceived', success);
         },
 
@@ -72,6 +73,7 @@ Ext.define('Koala.util.DokpoolRequest', {
          *  routineMode (Boolean): True if update only contains routine scenarios, else false
          */
          handleElanScenariosUpdated: function(scenarioId, routineMode) {
+             window.console.log('new elanEventsReceived');
             Ext.fireEvent('elanEventsUpdated', scenarioId, routineMode);
         },
 
