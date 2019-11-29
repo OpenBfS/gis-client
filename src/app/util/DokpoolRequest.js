@@ -132,15 +132,14 @@ Ext.define('Koala.util.DokpoolRequest', {
                                             if (!activeElanScenariosDetail[id]
                                                     || !(activeElanScenariosDetail[id].modified === responseObj.modified)) {
                                                 // scenario change detected
-                                                window.console.log('scenario change detected');
-                                                debugger;
+                                                //window.console.log('scenario change detected');
                                                 me.handleElanScenariosUpdated(responseObj.id, false);
                                             } else {
                                                 // checked, but NO scenario change detected
                                             }
                                         } else {
                                             // no scenario available in LocalStorage yet
-                                            window.console.log('no scenario available in LocalStorage yet');
+                                            //window.console.log('no scenario available in LocalStorage yet');
                                         }
                                         ElanScenariosUpdate[id] = responseObj;
                                         me.storageModule.updateDokpoolEvents(ElanScenariosUpdate);
