@@ -13,6 +13,11 @@ Ext.define('Koala.view.widget.ElanScenarioButton', {
     extend: 'Ext.button.Button',
     alias: 'widget.elanscenariobutton',
 
+    //controller: 'elanscenario',
+    viewModel: {
+        type: 'elanscenariobutton'
+    },
+
     statics: {
         /**
          * Available states
@@ -54,12 +59,14 @@ Ext.define('Koala.view.widget.ElanScenarioButton', {
      */
     state: null,
 
+    bind: {
+        text: '{elanscenarios}'
+    },
+
     /**
      * Init function
      */
     initComponent: function() {
-        //var i18n = Koala.getApplication().bundle;
-        this.text = '{elanscenarios}';
         this.callParent(arguments);
         if (this.state) {
             this.setState(state);
@@ -85,19 +92,23 @@ Ext.define('Koala.view.widget.ElanScenarioButton', {
         var states = Koala.view.widget.ElanScenarioButton.states;
         switch (state) {
             case states.EVENTS_CHANGED:
+                window.console.log('EVENTS_CHANGED');
                 this.show();
                 this.setIconCls(this.changedIcon);
                 this.addCls(this.changedCls);
                 break;
             case states.EVENTS_OLD:
+                window.console.log('EVENTS_OLD');
                 this.show();
                 this.removeCls(this.changedCls);
                 this.setIconCls(this.oldIcon);
                 break;
             case states.EVENTS_NONE:
+                window.console.log('EVENTS_NONE');
                 this.hide();
                 break;
             default:
+                window.console.log('EVENTS_NONE');
                 console.log('Unknown event state: ' + state);
                 state = states.EVENTS_NONE;
         }

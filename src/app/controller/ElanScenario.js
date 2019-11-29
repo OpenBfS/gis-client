@@ -11,6 +11,7 @@
   */
 Ext.define('Koala.controller.ElanScenario', {
     extend: 'Ext.app.Controller',
+    alias: 'controller.elanscenario',
 
     listen: {
         component: {
