@@ -62,7 +62,7 @@ Ext.define('Koala.util.DokpoolRequest', {
          *   success (Boolean): True if request was successfull
          */
         handleElanScenariosReceived: function(success) {
-            window.console.log('new elanEventsReceived');
+            //window.console.log('new elanEventsReceived');
             Ext.fireEvent('elanEventsReceived', success);
         },
 
@@ -73,7 +73,7 @@ Ext.define('Koala.util.DokpoolRequest', {
          *  routineMode (Boolean): True if update only contains routine scenarios, else false
          */
          handleElanScenariosUpdated: function(scenarioId, routineMode) {
-             window.console.log('new elanEventsReceived');
+            window.console.log('handle new elanEvents');
             Ext.fireEvent('elanEventsUpdated', scenarioId, routineMode);
         },
 
@@ -132,12 +132,15 @@ Ext.define('Koala.util.DokpoolRequest', {
                                             if (!activeElanScenariosDetail[id]
                                                     || !(activeElanScenariosDetail[id].modified === responseObj.modified)) {
                                                 // scenario change detected
+                                                window.console.log('scenario change detected');
+                                                debugger;
                                                 me.handleElanScenariosUpdated(responseObj.id, false);
                                             } else {
                                                 // checked, but NO scenario change detected
                                             }
                                         } else {
                                             // no scenario available in LocalStorage yet
+                                            window.console.log('no scenario available in LocalStorage yet');
                                         }
                                         ElanScenariosUpdate[id] = responseObj;
                                         me.storageModule.updateDokpoolEvents(ElanScenariosUpdate);
@@ -151,6 +154,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                                 failure: function(response) {
                                     var msg = 'server-side failure with status code ' +
                                         response.status;
+                                    window.console.log(msg);
                                     reject(msg);
                                 }
                             });

@@ -76,6 +76,7 @@ Ext.define('Koala.controller.ElanScenario', {
      * Handles update of the local storage
      */
     handleLocalElanStorageUpdated: function() {
+        window.console.log('localElanStorageUpdated');
         var window = Ext.ComponentQuery.query('elanscenariowindow')[0];
         if (window) {
             window.update();
