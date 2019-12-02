@@ -100,7 +100,7 @@ Ext.define('Koala.view.panel.Header', {
             pack: 'right'
         },
         items: [{
-            xtype: 'elanscenariobutton',
+            xtype: 'k-button-elanscenariobutton',
             action: 'elanscenarios',
             hidden: false
         }, {

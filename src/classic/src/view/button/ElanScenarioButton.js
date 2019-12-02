@@ -13,7 +13,7 @@ Ext.define('Koala.view.button.ElanScenarioButton', {
     extend: 'Ext.button.Button',
     xtype: 'k-button-elanscenariobutton',
 
-    controller: 'k-button-elanscenariobutton',
+    //controller: 'k-button-elanscenariobutton',
     viewModel: {
         type: 'k-button-elanscenariobutton'
     },
@@ -109,7 +109,7 @@ Ext.define('Koala.view.button.ElanScenarioButton', {
                 break;
             default:
                 window.console.log('EVENTS_NONE');
-                console.log('Unknown event state: ' + state);
+                window.console.log('Unknown event state: ' + state);
                 state = states.EVENTS_NONE;
         }
         this.state = state;

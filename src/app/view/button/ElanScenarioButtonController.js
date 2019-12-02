@@ -36,7 +36,7 @@ Ext.define('Koala.view.button.ElanScenarioButtonController', {
      * @param {boolean} success True if request was successfull
      */
     handleElanEventsReceived: function(success) {
-        var button = Ext.ComponentQuery.query('elanscenariobutton')[0];
+        var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         if (!success) {
             button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
         } else {
@@ -53,7 +53,7 @@ Ext.define('Koala.view.button.ElanScenarioButtonController', {
      */
     handleElanEventsUpdated: function(elanId, routineMode) {
         window.console.log('listener elanEventsUpdated');
-        var button = Ext.ComponentQuery.query('elanscenariobutton')[0];
+        var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         var window = Ext.getCmp('elanwindowid');
         if (routineMode) {
             button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
