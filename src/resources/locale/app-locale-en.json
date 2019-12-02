@@ -790,7 +790,7 @@
             }
         }
     },
-    "Koala.view.widget.ElanScenarioButton": {
+    "Koala.view.button.ElanScenarioButton": {
         "config": {
             "data": {
                 "elanscenarios": "elanscenarios",

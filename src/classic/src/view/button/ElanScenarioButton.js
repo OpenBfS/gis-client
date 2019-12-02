@@ -7,15 +7,15 @@
  */
 
 /**
- * Button widget which changes its style depending on its current state.
+ * Button which changes its style depending on its current state.
  */
-Ext.define('Koala.view.widget.ElanScenarioButton', {
+Ext.define('Koala.view.button.ElanScenarioButton', {
     extend: 'Ext.button.Button',
-    alias: 'widget.elanscenariobutton',
+    xtype: 'k-button-elanscenariobutton',
 
-    //controller: 'elanscenario',
+    controller: 'k-button-elanscenariobutton',
     viewModel: {
-        type: 'elanscenariobutton'
+        type: 'k-button-elanscenariobutton'
     },
 
     statics: {
@@ -54,7 +54,7 @@ Ext.define('Koala.view.widget.ElanScenarioButton', {
     oldIcon: 'x-fa fa-check',
 
     /**
-     * {Koala.view.widget.ElanScenarioButton.states}
+     * {Koala.view.button.ElanScenarioButton.states}
      * Current state
      */
     state: null,
@@ -71,7 +71,7 @@ Ext.define('Koala.view.widget.ElanScenarioButton', {
         if (this.state) {
             this.setState(state);
         } else {
-            this.setState(Koala.view.widget.ElanScenarioButton.states.EVENTS_NONE);
+            this.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
         }
     },
 
@@ -86,10 +86,10 @@ Ext.define('Koala.view.widget.ElanScenarioButton', {
     /**
      * Set the current state and change style accordingly.
      * If in invalid state is passed, the current state is set to EVENTS_NONE.
-     * @param {Koala.view.widget.ElanScenarioButton.states} state The new state
+     * @param {Koala.view.button.ElanScenarioButton.states} state The new state
      */
     setState: function(state) {
-        var states = Koala.view.widget.ElanScenarioButton.states;
+        var states = Koala.view.button.ElanScenarioButton.states;
         switch (state) {
             case states.EVENTS_CHANGED:
                 window.console.log('EVENTS_CHANGED');

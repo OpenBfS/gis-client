@@ -9,9 +9,9 @@
  /**
   * Controller listening to new ElanScenarios and controlling the scenario button and window
   */
-Ext.define('Koala.controller.ElanScenario', {
+Ext.define('Koala.view.button.ElanScenarioButtonController', {
     extend: 'Ext.app.Controller',
-    alias: 'controller.elanscenario',
+    alias: 'controller.k-button-elanscenariobutton',
 
     listen: {
         component: {
@@ -38,10 +38,10 @@ Ext.define('Koala.controller.ElanScenario', {
     handleElanEventsReceived: function(success) {
         var button = Ext.ComponentQuery.query('elanscenariobutton')[0];
         if (!success) {
-            button.setState(Koala.view.widget.ElanScenarioButton.states.EVENTS_NONE);
+            button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
         } else {
-            if (button.getState() !== Koala.view.widget.ElanScenarioButton.states.EVENTS_CHANGED) {
-                button.setState(Koala.view.widget.ElanScenarioButton.states.EVENTS_OLD);
+            if (button.getState() !== Koala.view.button.ElanScenarioButton.states.EVENTS_CHANGED) {
+                button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
             }
         }
     },
@@ -56,9 +56,9 @@ Ext.define('Koala.controller.ElanScenario', {
         var button = Ext.ComponentQuery.query('elanscenariobutton')[0];
         var window = Ext.getCmp('elanwindowid');
         if (routineMode) {
-            button.setState(Koala.view.widget.ElanScenarioButton.states.EVENTS_NONE);
+            button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
         } else {
-            button.setState(Koala.view.widget.ElanScenarioButton.states.EVENTS_CHANGED);
+            button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_CHANGED);
             //If window is shown
             if (window) {
                 //Mark event as changed
@@ -99,7 +99,7 @@ Ext.define('Koala.controller.ElanScenario', {
             win.update();
             win.isVisible() ? win.focus(): win.show();
         }
-        button.setState(Koala.view.widget.ElanScenarioButton.states.EVENTS_OLD);
+        button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
 
     }
 });

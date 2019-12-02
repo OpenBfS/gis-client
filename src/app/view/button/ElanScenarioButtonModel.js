@@ -14,11 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.widget.ElanScenarioButton
+ * @class Koala.view.button.ElanScenarioButton
  */
-Ext.define('Koala.view.widget.ElanScenarioButtonModel', {
+Ext.define('Koala.view.button.ElanScenarioButtonModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.elanscenariobutton',
+    alias: 'viewmodel.k-button-elanscenariobutton',
 
     data: {
         elanscenarios: '',

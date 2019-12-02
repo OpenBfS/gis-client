@@ -28,7 +28,7 @@ Ext.define('Koala.view.panel.Header', {
     requires: [
         'Koala.view.panel.HeaderController',
         'Koala.view.panel.HeaderModel',
-        'Koala.view.widget.ElanScenarioButton',
+        'Koala.view.button.ElanScenarioButton',
         'Ext.Img'
     ],
 
