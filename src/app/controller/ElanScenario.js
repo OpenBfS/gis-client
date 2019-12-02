@@ -52,6 +52,7 @@ Ext.define('Koala.controller.ElanScenario', {
      * @param {boolean} routineMode True if its a routine event
      */
     handleElanEventsUpdated: function(elanId, routineMode) {
+        window.console.log('listener elanEventsUpdated');
         var button = Ext.ComponentQuery.query('elanscenariobutton')[0];
         var window = Ext.getCmp('elanwindowid');
         if (routineMode) {
@@ -76,7 +77,7 @@ Ext.define('Koala.controller.ElanScenario', {
      * Handles update of the local storage
      */
     handleLocalElanStorageUpdated: function() {
-        window.console.log('localElanStorageUpdated');
+        window.console.log('listener localElanStorageUpdated');
         var window = Ext.ComponentQuery.query('elanscenariowindow')[0];
         if (window) {
             window.update();
