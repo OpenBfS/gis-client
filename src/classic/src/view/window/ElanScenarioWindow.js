@@ -118,7 +118,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         //Add display values
         Ext.Array.each(this.displayValues, function(key) {
             var value = scenario[key];
-            value = value != null ? value: '';
+            value = value !== null ? value: '';
             var keyString = '{elan.}' + key;
             if (typeof value === 'boolean') {
                 value = value? '{true}': '{false}';

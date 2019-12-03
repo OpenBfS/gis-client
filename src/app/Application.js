@@ -32,6 +32,10 @@ Ext.define('Koala.Application', {
         'Koala.util.AppContext'
     ],
 
+    controllers: [
+        'Koala.view.button.ElanScenarioButtonController'
+    ],
+
     statics: {
 
         timereferenceNotFound: '',

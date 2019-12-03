@@ -13,6 +13,11 @@ Ext.define('Koala.view.button.ElanScenarioButtonController', {
     extend: 'Ext.app.Controller',
     alias: 'controller.k-button-elanscenariobutton',
 
+    requires: [
+        'Koala.view.button.ElanScenarioButton',
+        'Koala.util.DokpoolRequest'
+    ],
+
     listen: {
         component: {
             'button[action=elanscenarios]': {
@@ -36,6 +41,7 @@ Ext.define('Koala.view.button.ElanScenarioButtonController', {
      * @param {boolean} success True if request was successfull
      */
     handleElanEventsReceived: function(success) {
+        window.console.log('listener elanEventsReceived');
         var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         if (!success) {
             button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);

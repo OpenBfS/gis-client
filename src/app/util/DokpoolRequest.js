@@ -73,7 +73,7 @@ Ext.define('Koala.util.DokpoolRequest', {
          *  routineMode (Boolean): True if update only contains routine scenarios, else false
          */
          handleElanScenariosUpdated: function(scenarioId, routineMode) {
-            window.console.log('handle new elanEvents');
+            //window.console.log('handle new elanEvents');
             Ext.fireEvent('elanEventsUpdated', scenarioId, routineMode);
         },
 
@@ -153,7 +153,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                                 failure: function(response) {
                                     var msg = 'server-side failure with status code ' +
                                         response.status;
-                                    window.console.log(msg);
+                                    //window.console.log(msg);
                                     reject(msg);
                                 }
                             });
