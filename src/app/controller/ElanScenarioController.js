@@ -9,12 +9,11 @@
  /**
   * Controller listening to new ElanScenarios and controlling the scenario button and window
   */
-Ext.define('Koala.view.button.ElanScenarioButtonController', {
+Ext.define('Koala.view.controller.ElanScenarioController', {
     extend: 'Ext.app.Controller',
-    alias: 'controller.k-button-elanscenariobutton',
+    alias: 'controller.k-controller-elanscenariocontroller',
 
     requires: [
-        'Koala.view.button.ElanScenarioButton',
         'Koala.util.DokpoolRequest'
     ],
 
@@ -41,7 +40,7 @@ Ext.define('Koala.view.button.ElanScenarioButtonController', {
      * @param {boolean} success True if request was successfull
      */
     handleElanEventsReceived: function(success) {
-        window.console.log('listener elanEventsReceived');
+        window.console.log('listener elanEventsReceived' + success);
         var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         if (!success) {
             button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
@@ -58,7 +57,7 @@ Ext.define('Koala.view.button.ElanScenarioButtonController', {
      * @param {boolean} routineMode True if its a routine event
      */
     handleElanEventsUpdated: function(elanId, routineMode) {
-        window.console.log('listener elanEventsUpdated');
+        window.console.log('listener elanEventsUpdated' + elanId);
         var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         var window = Ext.getCmp('elanwindowid');
         if (routineMode) {

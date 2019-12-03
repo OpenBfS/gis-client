@@ -33,7 +33,7 @@ Ext.define('Koala.Application', {
     ],
 
     controllers: [
-        'Koala.view.button.ElanScenarioButtonController'
+        'Koala.view.controller.ElanScenarioController'
     ],
 
     statics: {

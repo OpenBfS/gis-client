@@ -13,7 +13,6 @@ Ext.define('Koala.view.button.ElanScenarioButton', {
     extend: 'Ext.button.Button',
     xtype: 'k-button-elanscenariobutton',
 
-    //controller: 'k-button-elanscenariobutton',
     viewModel: {
         type: 'k-button-elanscenariobutton'
     },
