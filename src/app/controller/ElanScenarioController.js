@@ -14,7 +14,9 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
     alias: 'controller.k-controller-elanscenariocontroller',
 
     requires: [
-        'Koala.util.DokpoolRequest'
+        'Koala.util.DokpoolRequest',
+        'Koala.view.button.ElanScenarioButton',
+        'Koala.view.window.ElanScenarioWindow'
     ],
 
     listen: {
@@ -40,7 +42,7 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
      * @param {boolean} success True if request was successfull
      */
     handleElanEventsReceived: function(success) {
-        window.console.log('listener elanEventsReceived' + success);
+        window.console.log('controller: handleElanEventsReceived');
         var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         if (!success) {
             button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
@@ -53,11 +55,12 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
 
     /**
      * Handles update of elan events
-     * @param {string} elanId Event id
-     * @param {boolean} routineMode True if its a routine event
+     * @param {[string]} elanIds Ids of changed events
+     * @param {boolean} routineMode True if there is only an event
      */
-    handleElanEventsUpdated: function(elanId, routineMode) {
-        window.console.log('listener elanEventsUpdated' + elanId);
+    handleElanEventsUpdated: function(elanIds, routineMode) {
+        window.console.log('controller: handleElanEventsUpdated');
+        var me = this;
         var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         var window = Ext.getCmp('elanwindowid');
         if (routineMode) {
@@ -67,13 +70,17 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
             //If window is shown
             if (window) {
                 //Mark event as changed
-                window.eventChanged(elanId);
+                elanIds.forEach(function(elanId) {
+                    window.eventChanged(elanId);
+                });
                 window.update();
             } else {
                 // Save changes for the next window
-                if (!this.changes[elanId]) {
-                    this.changes.push(elanId);
-                }
+                elanIds.forEach(function(elanId) {
+                    if (!Ext.Array.contains(me.changes, elanId)) {
+                        me.changes.push(elanId);
+                    }
+                });
             }
         }
     },
@@ -82,10 +89,10 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
      * Handles update of the local storage
      */
     handleLocalElanStorageUpdated: function() {
-        window.console.log('listener localElanStorageUpdated');
-        var window = Ext.ComponentQuery.query('elanscenariowindow')[0];
-        if (window) {
-            window.update();
+        window.console.log('controller: handleLocalElanStorageUpdated');
+        var win = Ext.getCmp('elanwindowid');
+        if (win) {
+            win.updateEventList();
         }
     },
 
@@ -101,8 +108,10 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
             });
             win.show();
         } else {
-            win.update();
             win.isVisible() ? win.focus(): win.show();
+            if (win.hasChanges()) {
+                win.update();
+            }
         }
         button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
 

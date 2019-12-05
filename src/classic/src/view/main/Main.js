@@ -101,9 +101,24 @@ Ext.define('Koala.view.main.Main', {
                         helpWinController.setTopic('preface');
                     }, helpWin, {single: true});
                 }
+
+                this.initElanScenarios();
             },
             delay: 500
         }
+    },
+
+    initElanScenarios: function() {
+        Koala.util.LocalStorage.setCurrentUser(this.username);
+        var dokpool = Koala.util.DokpoolRequest;
+        //Configure dokpool utility
+        dokpool.elanScenarioUrl = '../dokpool/bund/contentconfig/scen/'
+        dokpool.storageModule = Koala.util.LocalStorage;
+        dokpool.updateActiveElanScenarios();
+        window.setInterval(function() {
+            window.console.log('scenario update');
+            dokpool.updateActiveElanScenarios();
+        }, 60000);
     },
 
     items: [{

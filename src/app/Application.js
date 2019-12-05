@@ -237,18 +237,5 @@ Ext.define('Koala.Application', {
             evt.returnValue = confirmMessage;
             return confirmMessage;
         });
-        this.initElanScenarios();
-    },
-    initElanScenarios: function() {
-        Koala.util.LocalStorage.setCurrentUser(this.username);
-        var dokpool = Koala.util.DokpoolRequest;
-        //Configure dokpool utility
-        dokpool.elanScenarioUrl = '../dokpool/bund/contentconfig/scen/'
-        dokpool.storageModule = Koala.util.LocalStorage;
-        dokpool.updateActiveElanScenarios();
-        window.setInterval(function() {
-            window.console.log('scenario update');
-            dokpool.updateActiveElanScenarios();
-        }, 60000);
     }
 });

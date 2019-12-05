@@ -11,7 +11,17 @@
  */
 Ext.define('Koala.view.window.ElanScenarioWindow', {
     extend: 'Ext.window.Window',
-    alias: 'window.elanscenariowindow',
+    xtype: 'k-window-elanscenarios',
+    //alias: 'window.k-window-elanscenarios',
+
+    requires: [
+    ],
+
+    controller: 'k-window-elanscenarios',
+
+    viewModel: {
+        type: 'k-window-elanscenarios'
+    },
 
     /**
      * Component id. Should not be changed, as there should only be one event window which
@@ -23,7 +33,10 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
 
     closeAction: 'method-hide',
 
-    events: null,
+    /**
+     * Object containing event html strings
+     */
+    eventStrings: {},
     /**
      * Html templates to be used for various entries.
      * The String $VALUE will be replaced by scenario content
@@ -62,10 +75,14 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
 
     width: 450,
 
+    bind: {
+        title: '{title}'
+    },
+
     initComponent: function() {
-        //var i18n = Koala.getApplication().bundle;
+        //var i18n = Lada.getApplication().bundle;
         var me = this;
-        this.title = '{title.elanscenarios}';
+        //this.title = i18n.getMsg('title.elanscenarios');
         this.items = [{
             xtype: 'panel',
             layout: 'fit',
@@ -75,13 +92,15 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         }];
         this.bbar = ['->', {
             xtype: 'button',
-            text: '{close}',
+            bind: {
+                text: '{close}'
+            },
+            //text: i18n.getMsg('close'),
             handler: function(button) {
                 me.close();
             }
         }];
         this.callParent(arguments);
-        this.update();
     },
 
     /**
@@ -93,13 +112,21 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
     },
 
     /**
+     * Check if this window has pending changes that has not been shown
+     * @return true If changes are pending.
+     */
+    hasChanges: function() {
+        return this.changes.length > 0;
+    },
+
+    /**
      * Parse elan object and create a String representation
      * @param {Object} scenario Scenario object
      * @return String represenation
      */
     parseElanObject: function(scenario) {
         var me = this;
-        //var i18n = Koala.getApplication().bundle;
+        //var i18n = Lada.getApplication().bundle;
         var scenarioString = '';
 
         //Add title
@@ -107,10 +134,12 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         scenarioString += me.displayTemplate.title.replace('$VALUE', title);
 
         //Check if Scenario was changed
-        var changeString = '{elan.unchanged}';
+        //var changeString = i18n.getMsg('elan.unchanged');
+        var changeString = me.getViewModel().get('unchangedText');
         var changeTemplate = me.displayTemplate.change.unchanged;
         if (Ext.Array.contains(me.changes, scenario.id)) {
-            changeString = '{elan.changed}';
+            //changeString = i18n.getMsg('elan.changed');
+            changeString = me.getViewModel().get('changedText');
             changeTemplate = me.displayTemplate.change.changed;
         }
         scenarioString += changeTemplate.replace('$VALUE', changeString);
@@ -118,10 +147,12 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         //Add display values
         Ext.Array.each(this.displayValues, function(key) {
             var value = scenario[key];
-            value = value !== null ? value: '';
-            var keyString = '{elan.}' + key;
+            value = value != null ? value: '';
+            //var keyString = i18n.getMsg('elan.' + key);
+            var keyString = me.getViewModel().get('elan' + key);
             if (typeof value === 'boolean') {
-                value = value? '{true}': '{false}';
+                //value = value? i18n.getMsg('true'): i18n.getMsg('false');
+                value = value? me.getViewModel().get('true'): me.getViewModel().get('false');
             }
             scenarioString += me.displayTemplate.key.replace('$VALUE', keyString);
             scenarioString += me.displayTemplate.value.replace('$VALUE', value);
@@ -138,23 +169,54 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
     },
 
     /**
+     * Updates the event list without updating its content.
+     * Can be used to remove a now inactive event without reseting
+     * change markers.
+     */
+    updateEventList: function() {
+        var me = this;
+        var content = '';
+        var newEvents = Koala.util.LocalStorage.getDokpoolEvents();
+        var newEventStrings = {};
+        if (!newEvents || newEvents === '') {
+            //content = i18n.getMsg('window.elanscenario.emptytext');
+            content = me.getViewModel().get('emptytext');
+        }
+        Ext.Object.each(newEvents, function(key, value, object) {
+            newEventStrings[key] = me.eventStrings[key];
+        });
+        me.eventStrings = newEventStrings;
+        Ext.Object.each(me.eventStrings, function(key, value, object) {
+            content += value + '<br />';
+        });
+        this.down('panel').setHtml(content);
+    },
+
+    /**
      * Update the window content using the localStorage module.
      * Note: The event content itself is not refresh using the remote server
+     * @param {boolean} preserveChanges If true, changes are not cleared
      */
-    update: function() {
+    update: function(preserveChanges) {
         var me = this;
-        //var i18n = Koala.getApplication().bundle;
+        //var i18n = Lada.getApplication().bundle;
         var content = '';
         var newEvents = Koala.util.LocalStorage.getDokpoolEvents();
         if (!newEvents || newEvents === '') {
-            content = '{window.elanscenario.emptytext}';
+            //content = i18n.getMsg('window.elanscenario.emptytext');
+            content = me.getViewModel().get('emptytext');
         }
         Ext.Object.each(newEvents, function(key, value, object) {
             var text = me.parseElanObject(value);
-            content += text + '</br>';
+            me.eventStrings[key] = text;
+        });
+        Ext.Object.each(me.eventStrings, function(key, value, object) {
+            content += value + '<br />';
         });
         this.down('panel').setHtml(content);
-        this.changes = [];
+        if (preserveChanges != true) {
+            this.changes = [];
+        }
     }
 
 });

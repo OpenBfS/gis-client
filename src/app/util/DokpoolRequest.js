@@ -62,19 +62,17 @@ Ext.define('Koala.util.DokpoolRequest', {
          *   success (Boolean): True if request was successfull
          */
         handleElanScenariosReceived: function(success) {
-            //window.console.log('new elanEventsReceived');
             Ext.fireEvent('elanEventsReceived', success);
         },
 
         /**
          * Handler called if elan scenarios were updated.
          * Handler args:
-         *  objectId: Scenario object id
+         *  objectIds: Scenario object ids
          *  routineMode (Boolean): True if update only contains routine scenarios, else false
          */
-         handleElanScenariosUpdated: function(scenarioId, routineMode) {
-            //window.console.log('handle new elanEvents');
-            Ext.fireEvent('elanEventsUpdated', scenarioId, routineMode);
+         handleElanScenariosUpdated: function(scenarioIds, routineMode) {
+            Ext.fireEvent('elanEventsUpdated', scenarioIds, routineMode);
         },
 
         getAllElanScenarios: function() {
@@ -104,60 +102,53 @@ Ext.define('Koala.util.DokpoolRequest', {
                         return scen['@id'] === localStorageScenarios[prop]['@id'];
                     });
                     if (check.length === 0) {
-                        // console.log('deleted "' + localStorageScenarios[prop].id
-                        //      + '" from localStorage since it is no longer active!');
                         delete localStorageScenarios[prop];
-                        me.storageModule.updateDokpoolEvents(localStorageScenarios);
                     }
                 }
+                me.storageModule.updateDokpoolEvents(localStorageScenarios);
+                //Response only contains routinemode
                 if (!(activeElanScenarios.length >= 0) || (activeElanScenarios.length === 1)
                         && (activeElanScenarios[0].title === 'Normalfall')) {
-                    me.handleElanScenariosUpdated(null, true);
+                    me.handleElanScenariosUpdated([], true);
                 } else {
-                    Ext.each(activeElanScenarios, function(scenario) {
-                        var url = scenario['@id'];
-                        new Ext.Promise(function(resolve, reject) {
+                    new Ext.Promise(function(resolve, reject) {
+                        var changedIds = [];
+                        var storedEvents = me.storageModule.getDokpoolEvents();
+                        var eventCount = activeElanScenarios.length;
+                        var resolved = 0;
+                        Ext.each(activeElanScenarios, function(scenario) {
+                            var url = scenario['@id'];
                             Ext.Ajax.request({
                                 url: url,
                                 headers: headers,
                                 method: 'GET',
                                 success: function(response) {
-                                    try {
-                                        var responseObj = Ext.decode(response.responseText);
-                                        var id = responseObj.id;
-                                        var ElanScenariosUpdate = Object.create({});
-                                        var activeElanScenariosDetail = me.storageModule.getDokpoolEvents();
-                                        if (activeElanScenariosDetail && !Ext.Object.isEmpty(activeElanScenariosDetail)) {
-                                            ElanScenariosUpdate = activeElanScenariosDetail;
-                                            if (!activeElanScenariosDetail[id]
-                                                    || !(activeElanScenariosDetail[id].modified === responseObj.modified)) {
-                                                // scenario change detected
-                                                //window.console.log('scenario change detected');
-                                                me.handleElanScenariosUpdated(responseObj.id, false);
-                                            } else {
-                                                // checked, but NO scenario change detected
-                                            }
-                                        } else {
-                                            // no scenario available in LocalStorage yet
-                                            //window.console.log('no scenario available in LocalStorage yet');
-                                        }
-                                        ElanScenariosUpdate[id] = responseObj;
-                                        me.storageModule.updateDokpoolEvents(ElanScenariosUpdate);
-                                        resolve(responseObj);
-                                    } catch (err) {
-                                        // most likely response isn't JSON
-                                        Ext.log('ERROR: ' + err);
-                                        Ext.log('SERVER-RESPONSE: ' + response);
+                                    var eventObj = Ext.decode(response.responseText);
+                                    var eventId = eventObj['id'];
+                                    var storedEvent = storedEvents[eventId];
+                                    //If event is new or modified
+                                    if (!storedEvent
+                                        || storedEvent.modified !== eventObj.modified) {
+                                        //Update stored events and add id to changed list
+                                        storedEvents[eventId] = eventObj;
+                                        changedIds.push(eventId);
+                                    }
+                                    resolved++;
+                                    //Check if all requests were issued
+                                    if (resolved == eventCount) {
+                                        me.storageModule.updateDokpoolEvents(storedEvents);
+                                        resolve(changedIds);
                                     }
                                 },
                                 failure: function(response) {
-                                    var msg = 'server-side failure with status code ' +
-                                        response.status;
-                                    //window.console.log(msg);
-                                    reject(msg);
+                                    reject('Request failed');
                                 }
                             });
-                        });
+                        })
+                    }).then(function(changedIds) {
+                        if (changedIds.length > 0) {
+                            me.handleElanScenariosUpdated(changedIds, false);
+                        }
                     });
                 }
             });
@@ -170,7 +161,6 @@ Ext.define('Koala.util.DokpoolRequest', {
 
 
         getElanScenarios: function(dpType) {
-
             if (!this.elanScenarioUrl) {
                 return Ext.Promise.resolve({items: []});
             }
