@@ -14,9 +14,10 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
     alias: 'controller.k-controller-elanscenariocontroller',
 
     requires: [
-        'Koala.util.DokpoolRequest',
-        'Koala.view.button.ElanScenarioButton',
-        'Koala.view.window.ElanScenarioWindow'
+        'Koala.util.DokpoolRequest'
+        // ,
+        // 'Koala.view.button.ElanScenarioButton',
+        // 'Koala.view.window.ElanScenarioWindow'
     ],
 
     listen: {
