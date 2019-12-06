@@ -88,6 +88,8 @@ Ext.define('Koala.view.main.Main', {
                     header.down('title').setBind({text: '{headerTitle}'});
                 }
                 document.title = headerTitle + ' | Bundesamt für Strahlenschutz';
+
+                Ext.create('Koala.view.window.ElanScenarioWindow');
             },
             delay: 500
         },

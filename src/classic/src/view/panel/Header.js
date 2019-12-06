@@ -102,6 +102,7 @@ Ext.define('Koala.view.panel.Header', {
         items: [{
             xtype: 'k-button-elanscenariobutton',
             action: 'elanscenarios',
+            margin: '0 0 0 10',
             hidden: false
         }, {
             xtype: 'k-toolbar-header'

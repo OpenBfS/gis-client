@@ -63,18 +63,18 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
         window.console.log('controller: handleElanEventsUpdated');
         var me = this;
         var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
-        var window = Ext.getCmp('elanwindowid');
+        var win = Ext.getCmp('elanwindowid');
         if (routineMode) {
             button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
         } else {
             button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_CHANGED);
             //If window is shown
-            if (window) {
+            if (win) {
                 //Mark event as changed
                 elanIds.forEach(function(elanId) {
                     window.eventChanged(elanId);
                 });
-                window.update();
+                win.update();
             } else {
                 // Save changes for the next window
                 elanIds.forEach(function(elanId) {

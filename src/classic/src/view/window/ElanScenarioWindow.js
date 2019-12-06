@@ -78,6 +78,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
     bind: {
         title: '{title}'
     },
+    items: null,
 
     initComponent: function() {
         //var i18n = Lada.getApplication().bundle;
