@@ -12,7 +12,6 @@
 Ext.define('Koala.view.window.ElanScenarioWindow', {
     extend: 'Ext.window.Window',
     xtype: 'k-window-elanscenarios',
-    //alias: 'window.k-window-elanscenarios',
 
     requires: [
     ],
@@ -89,11 +88,8 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
     },
 
     initItems: function() {
-        //var i18n = Lada.getApplication().bundle;
         var me = this;
-        
-        //TODO: Insert proper string
-        //this.title = i18n.getMsg('title.elanscenarios');
+
         this.items = [{
             xtype: 'panel',
             layout: 'fit',
@@ -195,7 +191,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         scenarioString += changeTemplate.replace('$VALUE', changeString);
 
         //Check for changes since last update
-        var changedFields = Ext.Array.contains(me.changes, scenario.id) ? 
+        var changedFields = Ext.Array.contains(me.changes, scenario.id) ?
                 me.getChanges(scenario): [];
 
         //Add display values
