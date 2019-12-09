@@ -96,15 +96,6 @@ Ext.define('Koala.util.DokpoolRequest', {
                 var activeElanScenarios = promise.items;
                 var localStorageScenarios = me.storageModule.getDokpoolEvents();
 
-                //delete inactive events from localStorage
-                for (var prop in localStorageScenarios) {
-                    var check = activeElanScenarios.filter(function(scen) {
-                        return scen['@id'] === localStorageScenarios[prop]['@id'];
-                    });
-                    if (check.length === 0) {
-                        delete localStorageScenarios[prop];
-                    }
-                }
                 me.storageModule.updateDokpoolEvents(localStorageScenarios);
                 //Response only contains routinemode
                 if (!(activeElanScenarios.length >= 0) || (activeElanScenarios.length === 1)
@@ -114,6 +105,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                     new Ext.Promise(function(resolve, reject) {
                         var changedIds = [];
                         var storedEvents = me.storageModule.getDokpoolEvents();
+                        var activeEvents = {};
                         var eventCount = activeElanScenarios.length;
                         var resolved = 0;
                         Ext.each(activeElanScenarios, function(scenario) {
@@ -126,6 +118,8 @@ Ext.define('Koala.util.DokpoolRequest', {
                                     var eventObj = Ext.decode(response.responseText);
                                     var eventId = eventObj['id'];
                                     var storedEvent = storedEvents[eventId];
+                                    //Store active events in seperate for later check
+                                    activeEvents[eventId] = eventObj;
                                     //If event is new or modified
                                     if (!storedEvent
                                         || storedEvent.modified !== eventObj.modified) {
@@ -136,6 +130,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                                     resolved++;
                                     //Check if all requests were issued
                                     if (resolved == eventCount) {
+                                        me.removeInactiveEvents(storedEvents, activeEvents);
                                         me.storageModule.updateDokpoolEvents(storedEvents);
                                         resolve(changedIds);
                                     }
@@ -150,6 +145,23 @@ Ext.define('Koala.util.DokpoolRequest', {
                             me.handleElanScenariosUpdated(changedIds, false);
                         }
                     });
+                }
+            });
+        },
+
+        /**
+         * Checks local events for inactive/removed events and returns
+         * an events object without them
+         * @param {Object} localEvents Object containing locally stored events
+         * @param {Object} serverEvents Object containing events received from the server
+         * @return {Object} Locally stored events without inactive ones
+         */
+        removeInactiveEvents: function(localEvents, serverEvents) {
+            var localKeys = Ext.Object.getKeys(localEvents);
+            var serverKeys = Ext.Object.getKeys(serverEvents);
+            localKeys.forEach(function(el) {
+                if (!Ext.Array.contains(serverKeys, el)) {
+                    delete localEvents[el];
                 }
             });
         },

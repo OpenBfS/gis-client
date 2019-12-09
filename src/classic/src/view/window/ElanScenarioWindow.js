@@ -34,9 +34,10 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
     closeAction: 'method-hide',
 
     /**
-     * Object containing event html strings
+     * Object containing event objects and display html strings
      */
-    eventStrings: {},
+    eventObjs: {},
+
     /**
      * Html templates to be used for various entries.
      * The String $VALUE will be replaced by scenario content
@@ -50,9 +51,17 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
             unchanged: '$VALUE<br>'
         },
         //Used for event keys
-        key: '<b>$VALUE</b>: ',
+        key: {
+            //Field was modified
+            unchanged: '<b>$VALUE</b>: ',
+            //Field is unmodified
+            changed: "<div style='color:red; margin: 0;'><b>$VALUE</b>: "
+        },
         //Used for event values
-        value: '$VALUE <br>'
+        value: {
+            unchanged: '$VALUE <br>',
+            changed: "$VALUE<br></div>"
+        }
     },
 
     /**
@@ -78,11 +87,12 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
     bind: {
         title: '{title}'
     },
-    items: null,
 
-    initComponent: function() {
+    initItems: function() {
         //var i18n = Lada.getApplication().bundle;
         var me = this;
+        
+        //TODO: Insert proper string
         //this.title = i18n.getMsg('title.elanscenarios');
         this.items = [{
             xtype: 'panel',
@@ -96,11 +106,11 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
             bind: {
                 text: '{close}'
             },
-            //text: i18n.getMsg('close'),
             handler: function(button) {
                 me.close();
             }
         }];
+        this.eventObjs = Koala.util.LocalStorage.getDokpoolEvents();
         this.callParent(arguments);
     },
 
@@ -110,6 +120,45 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
      */
     eventChanged: function(eventId) {
         this.changes.push(eventId);
+    },
+    /**
+     * Get fields of an event that changed since last update
+     * @param {Object} event Event object
+     * @return {Array} Array containing the names of the changed fields
+     */
+    getChanges: function(event) {
+        var me = this;
+        var changes = [];
+        var id = event.id;
+        me.displayValues.forEach(function(key) {
+            if (me.eventObjs[id] == null
+                || me.getPropertyByString(me.eventObjs[id], key) == null
+                || me.getPropertyByString(me.eventObjs[id], key) !==me.getPropertyByString(event, key)) {
+                changes.push(key);
+            }
+        });
+        return changes;
+    },
+
+    /**
+     * Get object property by string
+     * @param {Object} o Object to get property from
+     * @param {String} s String path
+     * @return {} Property
+     */
+    getPropertyByString: function(o, s) {
+        s = s.replace(/\[(\w+)\]/g, '.$1');
+        s = s.replace(/^\./, '');
+        var a = s.split('.');
+        for (var i = 0, n = a.length; i < n; ++i) {
+            var k = a[i];
+            if (k in o) {
+                o = o[k];
+            } else {
+                return;
+            }
+        }
+        return o;
     },
 
     /**
@@ -127,7 +176,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
      */
     parseElanObject: function(scenario) {
         var me = this;
-        //var i18n = Lada.getApplication().bundle;
+        // var i18n = Lada.getApplication().bundle;
         var scenarioString = '';
 
         //Add title
@@ -135,28 +184,44 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         scenarioString += me.displayTemplate.title.replace('$VALUE', title);
 
         //Check if Scenario was changed
-        //var changeString = i18n.getMsg('elan.unchanged');
-        var changeString = me.getViewModel().get('unchangedText');
+        //TODO: Insert proper string
+        var changeString = 'unverändert';
         var changeTemplate = me.displayTemplate.change.unchanged;
         if (Ext.Array.contains(me.changes, scenario.id)) {
-            //changeString = i18n.getMsg('elan.changed');
-            changeString = me.getViewModel().get('changedText');
+            //TODO: Insert proper string
+            changeString = 'modifziert';
             changeTemplate = me.displayTemplate.change.changed;
         }
         scenarioString += changeTemplate.replace('$VALUE', changeString);
 
+        //Check for changes since last update
+        var changedFields = Ext.Array.contains(me.changes, scenario.id) ? 
+                me.getChanges(scenario): [];
+
         //Add display values
         Ext.Array.each(this.displayValues, function(key) {
-            var value = scenario[key];
+            var value = me.getPropertyByString(scenario, key);//scenario[key];
             value = value != null ? value: '';
-            //var keyString = i18n.getMsg('elan.' + key);
-            var keyString = me.getViewModel().get('elan' + key);
+            //TODO: Insert proper string
+            var keyString = key;
             if (typeof value === 'boolean') {
-                //value = value? i18n.getMsg('true'): i18n.getMsg('false');
-                value = value? me.getViewModel().get('true'): me.getViewModel().get('false');
+                //TODO: Insert proper string
+                value = value? 'Ja': 'Nein';
             }
-            scenarioString += me.displayTemplate.key.replace('$VALUE', keyString);
-            scenarioString += me.displayTemplate.value.replace('$VALUE', value);
+
+            //Choose template
+            var keyTpl;
+            var valTpl;
+            if (Ext.Array.contains(me.changes, scenario.id)
+                && Ext.Array.contains(changedFields, key)) {
+                keyTpl = me.displayTemplate.key.changed;
+                valTpl = me.displayTemplate.value.changed;
+            } else {
+                keyTpl = me.displayTemplate.key.unchanged;
+                valTpl = me.displayTemplate.value.unchanged;
+            }
+            scenarioString += keyTpl.replace('$VALUE', keyString);
+            scenarioString += valTpl.replace('$VALUE', value);
         });
         return scenarioString;
     },
@@ -165,8 +230,24 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
      * Update window content and call show
      */
     show: function() {
-        this.update();
+        this.updateContent();
         this.callParent(arguments);
+    },
+
+    /**
+     * Sort an object holding events by modified date
+     * @param {Object} newEvents Event object
+     * @return {Array} Array containing object ids, sorted by modified date, asc.
+     */
+    sortEventsByModifiedDate: function(newEvents) {
+        return Ext.Array.sort(Ext.Object.getKeys(newEvents),function(a, b) {
+            if (newEvents[a]['modified'] > newEvents[b]['modified']) {
+                return -1;
+            } else if (newEvents[a]['modified'] < newEvents[b]['modified']) {
+                return 1;
+            }
+            return 0;
+        });
     },
 
     /**
@@ -177,17 +258,25 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
     updateEventList: function() {
         var me = this;
         var content = '';
-        var newEvents = Koala.util.LocalStorage.getDokpoolEvents();
-        var newEventStrings = {};
-        if (!newEvents || newEvents === '') {
-            //content = i18n.getMsg('window.elanscenario.emptytext');
-            content = me.getViewModel().get('emptytext');
-        }
-        Ext.Object.each(newEvents, function(key, value, object) {
-            newEventStrings[key] = me.eventStrings[key];
+        var newEvents = me.eventObjs;
+
+        //Check if an event has been removed
+        var eventKeys = Koala.util.LocalStorage.getDokpoolEventKeys();
+        Ext.Object.each(newEvents, function(key) {
+            if (!Ext.Array.contains(eventKeys, key)) {
+                delete newEvents[key];
+            }
         });
-        me.eventStrings = newEventStrings;
-        Ext.Object.each(me.eventStrings, function(key, value, object) {
+
+        //Sort events by modified date
+        var displayOrder = me.sortEventsByModifiedDate(newEvents);
+
+        if (!newEvents || newEvents === '') {
+            //TODO: Insert proper string
+            content = 'empty'
+        }
+        displayOrder.forEach(function(key, index, array) {
+            var value = me.eventObjs[key].displayText;
             content += value + '<br />';
         });
         this.down('panel').setHtml(content);
@@ -198,23 +287,28 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
      * Note: The event content itself is not refresh using the remote server
      * @param {boolean} preserveChanges If true, changes are not cleared
      */
-    update: function(preserveChanges) {
+    updateContent: function(preserveChanges) {
         var me = this;
-        //var i18n = Lada.getApplication().bundle;
         var content = '';
         var newEvents = Koala.util.LocalStorage.getDokpoolEvents();
+
+        //Sort events by modified date
+        var displayOrder = me.sortEventsByModifiedDate(newEvents);
+
         if (!newEvents || newEvents === '') {
-            //content = i18n.getMsg('window.elanscenario.emptytext');
-            content = me.getViewModel().get('emptytext');
+            //TODO: Insert proper string
+            content = 'empty';
         }
         Ext.Object.each(newEvents, function(key, value, object) {
             var text = me.parseElanObject(value);
-            me.eventStrings[key] = text;
+            newEvents[key].displayText = text;
         });
-        Ext.Object.each(me.eventStrings, function(key, value, object) {
+        displayOrder.forEach(function(key, index, array) {
+            var value = newEvents[key].displayText;
             content += value + '<br />';
         });
         this.down('panel').setHtml(content);
+        me.eventObjs = newEvents;
         if (preserveChanges != true) {
             this.changes = [];
         }

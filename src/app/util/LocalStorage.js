@@ -127,6 +127,15 @@ Ext.define('Koala.util.LocalStorage', {
         getDokpoolEvents: function() {
             var events = this.getProperty(this.DOKPOOL_EVENT_KEY);
             return events? events: {};
+        },
+
+                /**
+         * Return all event keys as array
+         * @return {Array} Keys as array
+         */
+        getDokpoolEventKeys: function() {
+            var events = this.getDokpoolEvents();
+            return Ext.Object.getKeys(events);
         }
     }
 });

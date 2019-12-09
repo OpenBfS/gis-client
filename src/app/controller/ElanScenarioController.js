@@ -72,9 +72,9 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
             if (win) {
                 //Mark event as changed
                 elanIds.forEach(function(elanId) {
-                    window.eventChanged(elanId);
+                    win.eventChanged(elanId);
                 });
-                win.update();
+                win.updateContent();
             } else {
                 // Save changes for the next window
                 elanIds.forEach(function(elanId) {
@@ -111,10 +111,9 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
         } else {
             win.isVisible() ? win.focus(): win.show();
             if (win.hasChanges()) {
-                win.update();
+                win.updateContent();
             }
         }
         button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
-
     }
 });
