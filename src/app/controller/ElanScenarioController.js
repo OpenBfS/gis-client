@@ -40,7 +40,7 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
      * @param {boolean} success True if request was successfull
      */
     handleElanEventsReceived: function(success) {
-        window.console.log('controller: handleElanEventsReceived');
+        //window.console.log('controller: handleElanEventsReceived');
         var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         if (!success) {
             button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
@@ -57,7 +57,7 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
      * @param {boolean} routineMode True if there is only an event
      */
     handleElanEventsUpdated: function(elanIds, routineMode) {
-        window.console.log('controller: handleElanEventsUpdated');
+        //window.console.log('controller: handleElanEventsUpdated');
         var me = this;
         var button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         var win = Ext.getCmp('elanwindowid');
@@ -87,7 +87,7 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
      * Handles update of the local storage
      */
     handleLocalElanStorageUpdated: function() {
-        window.console.log('controller: handleLocalElanStorageUpdated');
+        //window.console.log('controller: handleLocalElanStorageUpdated');
         var win = Ext.getCmp('elanwindowid');
         if (win) {
             win.updateEventList();

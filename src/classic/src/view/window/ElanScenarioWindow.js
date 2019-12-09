@@ -179,10 +179,10 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         scenarioString += me.displayTemplate.title.replace('$VALUE', title);
 
         //Check if Scenario was changed
-        var changeString = '{unchangedText}';
+        var changeString = this.getViewModel.get('unchangedText');
         var changeTemplate = me.displayTemplate.change.unchanged;
         if (Ext.Array.contains(me.changes, scenario.id)) {
-            changeString = '{changedText}';
+            changeString = this.getViewModel.get('changedText');
             changeTemplate = me.displayTemplate.change.changed;
         }
         scenarioString += changeTemplate.replace('$VALUE', changeString);
@@ -197,7 +197,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
             value = value != null ? value: '';
             var keyString = key;
             if (typeof value === 'boolean') {
-                value = value? '{true}': '{false}';
+                value = value? this.getViewModel.get('true'): this.getViewModel.get('false')
             }
 
             //Choose template
@@ -263,7 +263,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         var displayOrder = me.sortEventsByModifiedDate(newEvents);
 
         if (!newEvents || newEvents === '') {
-            content = '{emptyText}'
+            content = this.getViewModel.get('emptyText');
         }
         displayOrder.forEach(function(key, index, array) {
             var value = me.eventObjs[key].displayText;
@@ -286,7 +286,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         var displayOrder = me.sortEventsByModifiedDate(newEvents);
 
         if (!newEvents || newEvents === '') {
-            content = 'emptyText';
+            content = this.getViewModel.get('emptyText');
         }
         Ext.Object.each(newEvents, function(key, value, object) {
             var text = me.parseElanObject(value);
