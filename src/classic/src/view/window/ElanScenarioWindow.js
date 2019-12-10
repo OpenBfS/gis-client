@@ -185,7 +185,8 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         var changeString = me.viewModel.get('unchangedText');
         var changeTemplate = me.displayTemplate.change.unchanged;
         if (Ext.Array.contains(me.changes, scenario.id)) {
-            changeString = me.viewModel.get('changedText');
+            window.console.log(me);
+            changeString = 'changedText';
             changeTemplate = me.displayTemplate.change.changed;
         }
         scenarioString += changeTemplate.replace('$VALUE', changeString);
