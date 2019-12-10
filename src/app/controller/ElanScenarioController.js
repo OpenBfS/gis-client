@@ -6,15 +6,18 @@
  * the documentation coming with IMIS-Labordaten-Application for details.
  */
 
-/**
- * Controller listening to new ElanScenarios and controlling the scenario button and window
- */
+ /**
+  * Controller listening to new ElanScenarios and controlling the scenario button and window
+  */
 Ext.define('Koala.view.controller.ElanScenarioController', {
     extend: 'Ext.app.Controller',
     alias: 'controller.k-controller-elanscenariocontroller',
 
     requires: [
         'Koala.util.DokpoolRequest'
+        // ,
+        // 'Koala.view.button.ElanScenarioButton',
+        // 'Koala.view.window.ElanScenarioWindow'
     ],
 
     listen: {

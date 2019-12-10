@@ -113,4 +113,4 @@ Ext.define('Koala.view.button.ElanScenarioButton', {
         }
         this.state = state;
     }
-});
+})
