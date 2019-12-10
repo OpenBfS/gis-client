@@ -21,6 +21,7 @@ Ext.define('Koala.view.window.ElanScenarioWindowModel', {
     alias: 'viewmodel.k-window-elanscenarios',
 
     data: {
+        windowTitle: '',
         title: '',
         close: '',
         unchangedText: '',
@@ -28,6 +29,6 @@ Ext.define('Koala.view.window.ElanScenarioWindowModel', {
         elanKey: '',
         true: '',
         false: '',
-        emptytext: ''
+        emptyText: ''
     }
 });

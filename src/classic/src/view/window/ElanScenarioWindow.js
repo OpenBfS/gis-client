@@ -67,7 +67,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
      * Keys to be displayed in the event window
      */
     displayValues: ['modified', 'modified_by',
-            'Exercise', 'id', 'description', 'TimeOfEvent',
+            'OperationMode.title', 'id', 'description', 'TimeOfEvent',
             'ScenarioPhase.title', 'ScenarioPhase.Location'],
 
     /**
@@ -79,12 +79,25 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
 
     layout: 'fit',
 
-    title: 'Dokpool-Messenger',
-
     width: 450,
 
     bind: {
-        title: '{title}'
+        title: '{windowTitle}'
+    },
+
+    initComponent: function() {
+        var me = this;
+        this.bbar = ['->', {
+            xtype: 'button',
+            bind: {
+                text: '{close}'
+            },
+            handler: function(button) {
+                me.close();
+            }
+        }];
+        this.eventObjs = Koala.util.LocalStorage.getDokpoolEvents();
+        this.callParent(arguments);
     },
 
     initItems: function() {
@@ -97,16 +110,6 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
             html: 'No events',
             scrollable: true
         }];
-        this.bbar = ['->', {
-            xtype: 'button',
-            bind: {
-                text: '{close}'
-            },
-            handler: function(button) {
-                me.close();
-            }
-        }];
-        this.eventObjs = Koala.util.LocalStorage.getDokpoolEvents();
         this.callParent(arguments);
     },
 
@@ -172,7 +175,6 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
      */
     parseElanObject: function(scenario) {
         var me = this;
-        // var i18n = Lada.getApplication().bundle;
         var scenarioString = '';
 
         //Add title
@@ -180,12 +182,10 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         scenarioString += me.displayTemplate.title.replace('$VALUE', title);
 
         //Check if Scenario was changed
-        //TODO: Insert proper string
-        var changeString = 'unverändert';
+        var changeString = me.viewModel.get('unchangedText');
         var changeTemplate = me.displayTemplate.change.unchanged;
         if (Ext.Array.contains(me.changes, scenario.id)) {
-            //TODO: Insert proper string
-            changeString = 'modifziert';
+            changeString = me.viewModel.get('changedText');
             changeTemplate = me.displayTemplate.change.changed;
         }
         scenarioString += changeTemplate.replace('$VALUE', changeString);
@@ -200,9 +200,10 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
             value = value != null ? value: '';
             //TODO: Insert proper string
             var keyString = key;
+            var boolTRUE = me.viewModel.get('true');
+            var boolFALSE = me.viewModel.get('false');
             if (typeof value === 'boolean') {
-                //TODO: Insert proper string
-                value = value? 'Ja': 'Nein';
+                value = value? boolTRUE: boolFALSE;
             }
 
             //Choose template
@@ -222,13 +223,13 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         return scenarioString;
     },
 
-    /**
-     * Update window content and call show
-     */
-    show: function() {
-        this.updateContent();
-        this.callParent(arguments);
-    },
+    // /**
+    //  * Update window content and call show
+    //  */
+    // show: function() {
+    //     this.updateContent();
+    //     this.callParent(arguments);
+    // },
 
     /**
      * Sort an object holding events by modified date
@@ -268,8 +269,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         var displayOrder = me.sortEventsByModifiedDate(newEvents);
 
         if (!newEvents || newEvents === '') {
-            //TODO: Insert proper string
-            content = 'empty'
+            content = me.viewModel.get('emptyText');
         }
         displayOrder.forEach(function(key, index, array) {
             var value = me.eventObjs[key].displayText;
@@ -292,8 +292,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         var displayOrder = me.sortEventsByModifiedDate(newEvents);
 
         if (!newEvents || newEvents === '') {
-            //TODO: Insert proper string
-            content = 'empty';
+            content = me.viewModel.get('emptyText');
         }
         Ext.Object.each(newEvents, function(key, value, object) {
             var text = me.parseElanObject(value);

@@ -778,15 +778,15 @@
     "Koala.view.window.ElanScenarioWindow": {
         "config": {
             "data": {
-                "title.elanscenarios": "Events",
-                "close": "close",
-                "elan.unchanged": "Event changed",
-                "elan.changed": "Event unchanged",
-                "elan.": "elan.",
-                "true": "true",
-                "false": "false",
-                "window.elanscenario.emptytext": "window.elanscenario.emptytext",
-                "false": "false"
+                "windowTitle": "Dokpool-Messenger",
+                "title": "Events",
+                "close": "Close",
+                "unchangedText": "unchanged",
+                "changedText": "changed",
+                "elanKey": "elan.",
+                "true": "yes",
+                "false": "no",
+                "emptyText": "No information available."
             }
         }
     },
