@@ -237,5 +237,9 @@ Ext.define('Koala.Application', {
             evt.returnValue = confirmMessage;
             return confirmMessage;
         });
+
+        // make sure we don't send the Access-Control-Request-Headers: x-requested-with
+        // as it breaks feature info external WMS
+        Ext.Ajax.setUseDefaultXhrHeader(false);
     }
 });
