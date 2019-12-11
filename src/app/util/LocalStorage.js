@@ -129,7 +129,7 @@ Ext.define('Koala.util.LocalStorage', {
             return events? events: {};
         },
 
-                /**
+        /**
          * Return all event keys as array
          * @return {Array} Keys as array
          */

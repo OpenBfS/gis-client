@@ -43,10 +43,10 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
      */
     displayTemplate: {
         //Used for title string
-        title: "Ereignis:<p style='font-size: 2em; margin: 5px 0 10px 0;'> $VALUE</p>",
+        title: 'Ereignis:<p style=\'font-size: 2em; margin: 5px 0 10px 0;\'> $VALUE</p>',
         //Use for string that marks the event as changed or unchanged
         change: {
-            changed: "<div style='color:red; margin: 0;'>$VALUE<br></div>",
+            changed: '<div style=\'color:red; margin: 0;\'>$VALUE<br></div>',
             unchanged: '$VALUE<br>'
         },
         //Used for event keys
@@ -54,12 +54,12 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
             //Field was modified
             unchanged: '<b>$VALUE</b>: ',
             //Field is unmodified
-            changed: "<div style='color:red; margin: 0;'><b>$VALUE</b>: "
+            changed: '<div style=\'color:red; margin: 0;\'><b>$VALUE</b>: '
         },
         //Used for event values
         value: {
             unchanged: '$VALUE <br>',
-            changed: "$VALUE<br></div>"
+            changed: '$VALUE<br></div>'
         }
     },
 
@@ -67,8 +67,8 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
      * Keys to be displayed in the event window
      */
     displayValues: ['modified', 'modified_by',
-            'OperationMode.title', 'id', 'description', 'TimeOfEvent',
-            'ScenarioPhase.title', 'ScenarioPhase.Location'],
+        'OperationMode.title', 'id', 'description', 'TimeOfEvent',
+        'ScenarioPhase.title', 'ScenarioPhase.Location'],
 
     /**
      * Key that contains the event title
@@ -92,7 +92,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
             bind: {
                 text: '{close}'
             },
-            handler: function(button) {
+            handler: function() {
                 me.close();
             }
         }];
@@ -101,8 +101,6 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
     },
 
     initItems: function() {
-        var me = this;
-
         this.items = [{
             xtype: 'panel',
             layout: 'fit',
@@ -130,8 +128,8 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         var changes = [];
         var id = event.id;
         me.displayValues.forEach(function(key) {
-            if (me.eventObjs[id] == null
-                || me.getPropertyByString(me.eventObjs[id], key) == null
+            if (!me.eventObjs[id]
+                || !me.getPropertyByString(me.eventObjs[id], key)
                 || me.getPropertyByString(me.eventObjs[id], key) !==me.getPropertyByString(event, key)) {
                 changes.push(key);
             }
@@ -198,7 +196,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         //Add display values
         Ext.Array.each(this.displayValues, function(key) {
             var value = me.getPropertyByString(scenario, key);//scenario[key];
-            value = value != null ? value: '';
+            value = value ? value : '';
             //TODO: Insert proper string
             var keyString = key;
             var boolTRUE = me.viewModel.get('true');
@@ -272,7 +270,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         if (!newEvents || newEvents === '') {
             content = me.viewModel.get('emptyText');
         }
-        displayOrder.forEach(function(key, index, array) {
+        displayOrder.forEach(function(key) {
             var value = me.eventObjs[key].displayText;
             content += value + '<br />';
         });
@@ -299,17 +297,17 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         if (!newEvents || newEvents === '') {
             content = me.viewModel.get('emptyText');
         }
-        Ext.Object.each(newEvents, function(key, value, object) {
+        Ext.Object.each(newEvents, function(key, value) {
             var text = me.parseElanObject(value);
             newEvents[key].displayText = text;
         });
-        displayOrder.forEach(function(key, index, array) {
+        displayOrder.forEach(function(key) {
             var value = newEvents[key].displayText;
             content += value + '<br />';
         });
         this.down('panel').setHtml(content);
         me.eventObjs = newEvents;
-        if (preserveChanges != true) {
+        if (!preserveChanges) {
             this.changes = [];
         }
     }

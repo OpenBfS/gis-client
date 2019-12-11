@@ -71,7 +71,7 @@ Ext.define('Koala.util.DokpoolRequest', {
          *  objectIds: Scenario object ids
          *  routineMode (Boolean): True if update only contains routine scenarios, else false
          */
-         handleElanScenariosUpdated: function(scenarioIds, routineMode) {
+        handleElanScenariosUpdated: function(scenarioIds, routineMode) {
             Ext.fireEvent('elanEventsUpdated', scenarioIds, routineMode);
         },
 
@@ -130,17 +130,17 @@ Ext.define('Koala.util.DokpoolRequest', {
                                     }
                                     resolved++;
                                     //Check if all requests were issued
-                                    if (resolved == eventCount) {
+                                    if (resolved === eventCount) {
                                         me.removeInactiveEvents(storedEvents, activeEvents);
                                         me.storageModule.updateDokpoolEvents(storedEvents);
                                         resolve(changedIds);
                                     }
                                 },
-                                failure: function(response) {
+                                failure: function() {
                                     reject('Request failed');
                                 }
                             });
-                        })
+                        });
                     }).then(function(changedIds) {
                         if (changedIds.length > 0) {
                             me.handleElanScenariosUpdated(changedIds, false);
@@ -185,7 +185,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                     //'Authorization': auth
                 },
                 url = (dpType) ? this.elanScenarioUrl + me.elanScenarioSearch + dpType :
-                        this.elanScenarioUrl + me.elanScenarioSearch;
+                    this.elanScenarioUrl + me.elanScenarioSearch;
 
             if (this.appContext && this.appContext.getAppContext().debug) {
                 this.elanScenarioUrl = null;

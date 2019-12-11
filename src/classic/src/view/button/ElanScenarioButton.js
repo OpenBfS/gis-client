@@ -68,7 +68,7 @@ Ext.define('Koala.view.button.ElanScenarioButton', {
     initComponent: function() {
         this.callParent(arguments);
         if (this.state) {
-            this.setState(state);
+            this.setState();
         } else {
             this.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_NONE);
         }
@@ -113,4 +113,4 @@ Ext.define('Koala.view.button.ElanScenarioButton', {
         }
         this.state = state;
     }
-})
+});
