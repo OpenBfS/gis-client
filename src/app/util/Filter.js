@@ -815,8 +815,8 @@ Ext.define('Koala.util.Filter', {
                 return true;
             }
 
-            // moment.diff() returns the difference in milliseconds per default.
-            var withinDuration = Math.abs(startDate.diff(endDate)) <= maxDuration.asMilliseconds();
+            var notBefore = endDate.subtract(maxDuration);
+            var withinDuration = notBefore.isBefore(startDate);
 
             if (!withinDuration) {
                 // Invalid: Outside of allowed duration
