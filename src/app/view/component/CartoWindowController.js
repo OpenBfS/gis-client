@@ -1092,6 +1092,83 @@ Ext.define('Koala.view.component.CartoWindowController', {
     },
 
     /**
+     * Return a positioning configuration object that has appropriate values at
+     * the keys `offset` and `positioning` for the passed pixel, div and
+     * mapComponent. The returned object is ready to be used to configure an
+     * `ol.Overlay` which shall hold the content of `div` and be placed at
+     * `pixel` within the `mapComponent`.
+     *
+     * The passed pixel location can also be outside of the map, i.e. negative
+     * or bigger than the map's pixel bounds.
+     *
+     * Copied from BasiGX to prevent a positioning of 'right' for carto windows.
+     *
+     * @param {Array<Number>} pixel The pixel location where the overlay shall
+     *     eventually be positioned.
+     * @param {HTMLDivElement} div The div which is to be placed inside the
+     *     popup. This is expected to be not already rendered inside the page.
+     * @param {BasiGX.view.component.Map} mapComponent The map component, where
+     *     the overlay will be placed.
+     * @return {Object} An object with `offset` and `positioning` information.
+     */
+    getPositioningConfig: function(pixel, div, mapComponent) {
+        var hoverPlugin = mapComponent.getPlugin('hoverBfS');
+
+        // measure the passed div first:
+        div.style.display = 'table-cell'; // so we can measure it!
+        var divEl = Ext.get(Ext.getBody().dom.appendChild(div));
+        var divDims = [divEl.getWidth(), divEl.getHeight()];
+        div.style.display = ''; // undo styling,
+        div.parentNode.removeChild(div);
+
+        var mapEl = mapComponent.getEl();
+        var mapDims = [mapEl.getWidth(), mapEl.getHeight()];
+
+        // have some padding so that popups might be considered near whatever,
+        // when technically they are not.
+        var threshold = hoverPlugin.getMapPaddingPositioning();
+        var dimLeftRight = divDims[0] + threshold;
+        var dimTopBottom = divDims[1] + threshold;
+
+        // fallback positioning
+        var positioning = ['top', 'left'];
+        var offset = [15, 0];
+
+        if (pixel[0] >= mapDims[0] - dimLeftRight) {
+            // near the right
+            offset[0] = -1 * (offset[0] + divDims[0]);
+            if (pixel[0] > mapDims[0]) {
+                offset[0] += mapDims[0] - pixel[0];
+            }
+        } else if (pixel[0] <= dimLeftRight) {
+            // near the left
+            if (pixel[0] < 0) {
+                offset[0] += Math.abs(pixel[0]);
+            }
+        }
+
+        if (pixel[1] >= mapDims[1] - dimTopBottom) {
+            // near the bottom
+            offset[1] = -1 * (offset[1] + divDims[1]);
+            if (pixel[1] > mapDims[1]) {
+                offset[1] += mapDims[1] - pixel[1];
+            }
+        } else if (pixel[1] <= dimTopBottom) {
+            // near the top
+            positioning[0] = 'bottom';
+            offset[1] = offset[1] + divDims[1];
+            if (pixel[1] < 0) {
+                offset[1] += Math.abs(pixel[1]);
+            }
+        }
+
+        return {
+            positioning: positioning.join('-'),
+            offset: offset
+        };
+    },
+
+    /**
      * Creates the ol.Overlay which contains the tabwindow, adds it to the map
      * and stores it as an attribute of the view.
      */
@@ -1103,7 +1180,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var feature = view.getFeature();
         var coords = this.getFeatureAnchorPoint(feature);
         var mapComponent = Ext.ComponentQuery.query('k-component-map')[0];
-        var hoverPlugin = mapComponent.getPlugin('hoverBfS');
         var pixel = map.getPixelFromCoordinate(coords);
         var olPropPath = 'metadata/layerConfig/olProperties/';
         var xOffset = parseInt(Koala.util.Object.getPathStrOr(layer, olPropPath + 'cartoXOffset', 0), 10);
@@ -1114,7 +1190,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         pixel[1] += parseInt(yOffset, 10);
 
         var cartoWindowId = view.getCartoWindowId();
-        var positioning = hoverPlugin.getPositioningConfig(pixel, view.el.dom, mapComponent);
+        var positioning = this.getPositioningConfig(pixel, view.el.dom, mapComponent);
 
         // ...and to the coordinate of the overlay
         coords = map.getCoordinateFromPixel(pixel);
