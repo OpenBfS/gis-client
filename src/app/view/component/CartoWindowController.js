@@ -1520,7 +1520,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         lineFeature.getGeometry().setCoordinates([featureStartCoords, nearestCornerCoords.geometry.coordinates]);
         overlay.centerCoords = centerCoords;
-        this.disableMapInteractions();
     },
 
     scrollTimeseriesLeft: function() {
