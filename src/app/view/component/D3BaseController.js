@@ -450,6 +450,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var downloadIcons = this.getView().el.dom.querySelectorAll('.k-d3-download-icon');
         var deleteIcons = this.getView().el.dom.querySelectorAll('.k-d3-delete-icon');
         var colorIcons = this.getView().el.dom.querySelectorAll('.k-d3-color-icon');
+        var disabled = this.getView().el.dom.querySelectorAll('.k-d3-disabled');
         downloadIcons.forEach(function(icon) {
             icon.style.display = 'none';
         });
@@ -458,6 +459,10 @@ Ext.define('Koala.view.component.D3BaseController', {
         });
         colorIcons.forEach(function(icon) {
             icon.style.display = 'none';
+        });
+        // should only match legend entries
+        disabled.forEach(function(el) {
+            el.style.opacity = 0.3;
         });
         return new Ext.Promise(function(resolve) {
             html2canvas(chartNode, {
@@ -472,6 +477,10 @@ Ext.define('Koala.view.component.D3BaseController', {
                     });
                     colorIcons.forEach(function(icon) {
                         icon.style.display = 'block';
+                    });
+                    disabled.forEach(function(el) {
+                        // unfortunately, `delete` and setting the opacity to undefined don't work (at least in Chrome)
+                        el.style = 'cursor: pointer';
                     });
                     resolve(canvas.toDataURL(outputFormat));
                 });
