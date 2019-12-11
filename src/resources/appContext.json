@@ -1,6 +1,7 @@
 {
     "data": {
         "merge": {
+            "headerTitle": "IMIS",
             "urls": {
                 "metadata-xml2json": "http://bfs-docker/geonetwork/srv/api/0.1/records/",
                 "metadata-search": "http://bfs-docker/geonetwork/srv/ger/csw?",
