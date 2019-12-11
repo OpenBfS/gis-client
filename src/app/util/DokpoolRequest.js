@@ -97,6 +97,7 @@ Ext.define('Koala.util.DokpoolRequest', {
                 var localStorageScenarios = me.storageModule.getDokpoolEvents();
 
                 me.storageModule.updateDokpoolEvents(localStorageScenarios);
+                window.console.log('localStorageScenarios: ' + localStorageScenarios);
                 //Response only contains routinemode
                 if (!(activeElanScenarios.length >= 0) || (activeElanScenarios.length === 1)
                         && (activeElanScenarios[0].title === 'Normalfall')) {
