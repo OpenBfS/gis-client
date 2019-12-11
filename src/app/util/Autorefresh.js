@@ -77,7 +77,11 @@ Ext.define('Koala.util.Autorefresh', {
                         var LayerUtil = Koala.util.Layer;
 
                         var layer = LayerUtil.layerFromMetadata(metadata);
-                        existingLayer.setSource(layer.getSource());
+                        var source = layer.getSource();
+                        source.updateParams({
+                            _dc: new Date().getTime()
+                        });
+                        existingLayer.setSource(source);
 
                         me.updateMetadataLegendTree(existingLayer, metadata);
                         me.deselectThemeTreeItems();
