@@ -58,6 +58,22 @@ Ext.define('Koala.view.window.AddWMSWindow', {
             beforewmsadd: function(olLayer) {
                 olLayer.set('nameWithSuffix', olLayer.get('name'));
                 olLayer.set('allowRemoval', true);
+                if (olLayer.get('queryable')) {
+                    olLayer.set('allowHover', true);
+                    olLayer.set('hoverTpl', 'Info');
+                    olLayer.set('hoverable', true);
+                    olLayer.set('showCartoWindow', true);
+                    olLayer.metadata = {
+                        layerConfig: {
+                            olProperties: {
+                                allowHover: 'true',
+                                showCartoWindow: 'true'
+                            }
+                        },
+                        filters: {}
+                    };
+                }
+                olLayer.getSource().crossOrigin = 'anonymous';
             }
         }
     }]

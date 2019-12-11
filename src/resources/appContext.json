@@ -216,6 +216,7 @@
                 ]
             },
             "wmsUrls": [
+                "https://ahocevar.com/geoserver/ows",
                 "http://ows.terrestris.de/osm/service",
                 "http://ows.mundialis.de/services/service"
             ],
