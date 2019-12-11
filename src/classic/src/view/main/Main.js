@@ -78,9 +78,10 @@ Ext.define('Koala.view.main.Main', {
         beforerender: {
             fn: function() {
                 var mapComp = BasiGX.view.component.Map.guess();
+                var me = this;
                 mapComp.on('afterrender', function() {
                     var headerTitle = Koala.util.AppContext.getMergedDataByKey('headerTitle');
-                    var header = this.down('k-panel-header');
+                    var header = me.down('k-panel-header');
                     if (headerTitle) {
                         if (Koala.util.AppContext.getMergedDataByKey('imis_user').uid === 'hoe-fr') {
                             headerTitle = 'Höbler-GIS';
@@ -92,13 +93,13 @@ Ext.define('Koala.view.main.Main', {
                     document.title = headerTitle + ' | Bundesamt für Strahlenschutz';
                     Ext.create('Koala.view.window.ElanScenarioWindow');
 
-                    this.initElanScenarios();
+                    me.initElanScenarios();
 
                     var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
                     if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
                         var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
                         helpWin.on('afterlayout', function() {
-                            var helpWinController = this.getController();
+                            var helpWinController = me.getController();
                             helpWinController.setTopic('preface');
                         }, helpWin, {single: true});
                     }
