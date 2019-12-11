@@ -193,7 +193,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
 
         //Check for changes since last update
         var changedFields = Ext.Array.contains(me.changes, scenario.id) ?
-                me.getChanges(scenario): [];
+            me.getChanges(scenario): [];
 
         //Add display values
         Ext.Array.each(this.displayValues, function(key) {
@@ -286,6 +286,10 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
      */
     updateContent: function(preserveChanges) {
         var me = this;
+        //If viewmodel was not created: skip
+        if (!me.viewModel) {
+            return;
+        }
         var content = '';
         var newEvents = Koala.util.LocalStorage.getDokpoolEvents();
 
