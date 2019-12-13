@@ -59,7 +59,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     onBoxReady: function() {
         var viewModel = this.getViewModel();
         var fileName = viewModel.get('file.name');
-        viewModel.set('layerName', fileName);
+        if (fileName) {
+            viewModel.set('layerName', fileName);
+        }
     },
 
     /**
@@ -102,19 +104,23 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     readFile: function(justParseCallback) {
         var me = this;
         var file = this.getViewModel().get('file');
-        var reader = new FileReader();
-        reader.addEventListener('load', me.parseFeatures.bind(this, justParseCallback));
-        reader.readAsText(file);
+        if (file instanceof File) {
+            var reader = new FileReader();
+            reader.addEventListener('load', me.parseFeatures.bind(this, justParseCallback));
+            reader.readAsText(file);
+        } else {
+            this.parseFeatures(undefined, this.getViewModel().get('features'));
+        }
     },
 
     /**
     * Copy of https://github.com/openlayers/ol3/blob/v3.18.2/src/ol/interaction/draganddrop.js#L97
     */
-    parseFeatures: function(justParseCallback, event) {
+    parseFeatures: function(justParseCallback, eventOrData) {
         var me = this;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
         var viewModel = me.getViewModel();
-        var result = event.target.result;
+        var result = eventOrData.target ? eventOrData.target.result : eventOrData;
         var formatConstructors = [
             ol.format.GeoJSON,
             ol.format.KML,
