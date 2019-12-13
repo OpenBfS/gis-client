@@ -79,7 +79,7 @@ Ext.define('Koala.util.Autorefresh', {
                         var layer = LayerUtil.layerFromMetadata(metadata);
                         var source = layer.getSource();
                         source.updateParams({
-                            _dc: new Date().getTime()
+                            _dc2: new Date().getTime()
                         });
                         existingLayer.setSource(source);
 
