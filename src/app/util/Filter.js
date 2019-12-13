@@ -816,7 +816,7 @@ Ext.define('Koala.util.Filter', {
             }
 
             var notBefore = endDate.subtract(maxDuration);
-            var withinDuration = notBefore.isBefore(startDate);
+            var withinDuration = notBefore.isBefore(startDate) || notBefore.isSame(startDate);
 
             if (!withinDuration) {
                 // Invalid: Outside of allowed duration
