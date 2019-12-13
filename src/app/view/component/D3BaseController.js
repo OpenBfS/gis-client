@@ -530,7 +530,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      * @param  {Number} index the index of the series to change color for
      * @return {Function}       The generated callback function
      */
-    generateColorCallback: function(idx) {
+    generateColorCallback: function(idx, legendIdx) {
         var me = this;
         var viewModel = this.getViewModel();
         return function() {
@@ -566,7 +566,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                         var cmp = win.down('[name=chart-color-picker]');
                         me.chartConfig.timeseriesComponentConfig
                             .series[idx].color = '#' + cmp.getValue();
-                        me.chartConfig.legendComponentConfig.items[idx]
+                        me.chartConfig.legendComponentConfig.items[legendIdx]
                             .style.stroke = '#' + cmp.getValue();
                         me.drawChart();
                         win.close();
