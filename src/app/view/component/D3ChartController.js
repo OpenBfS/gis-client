@@ -221,7 +221,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         .attr('text-anchor', 'start')
                         .attr('dy', '1')
                         .attr('dx', '150') // TODO Discuss, do we need this dynamically?
-                        .on('click', me.generateColorCallback(legend.seriesIndex));
+                        .on('click', me.generateColorCallback(legend.seriesIndex, idx));
                 }
                 node.append('text')
                     // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
