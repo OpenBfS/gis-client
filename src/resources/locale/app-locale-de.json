@@ -535,7 +535,6 @@
                 "pinTooltip": "Anheften",
                 "unpinTooltip": "Lösen",
                 "closeTooltip": "Schließen",
-                "headerTitle": "GEOPORTAL",
                 "gridTabTitle": "Tabellarische Ansicht",
                 "htmlTabTitle": "Information",
                 "hoverinfoTabTitle": "Information"
@@ -599,7 +598,6 @@
         "config": {
             "data": {
                 "logoTooltip": "Link zur BfS-Homepage",
-                "headerTitle": "GEOPORTAL",
                 "alertBtnText": "Ereignisse",
                 "alertBtnTooltip": "Ereignisinformation",
                 "routineMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> (unverändert)",
