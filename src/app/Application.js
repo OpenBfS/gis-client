@@ -207,23 +207,23 @@ Ext.define('Koala.Application', {
             longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.fr
         });
 
-        //Set up an event handler to handle session timeouts
-        //code with slight adjustements from LADA project:
-        //see also: LADA Commit 8dddb5eb9b30894414b62eecf6fca23200756d75
-
-        Ext.Ajax.on('requestexception', function(conn, response) {
-            if (response.status === 0 && response.responseText === '') {
-                Ext.MessageBox.confirm(
-                    Koala.Application.ssoExpiredTitle,
-                    Koala.Application.ssoExpiredBody,
-                    function(btn) {
-                        if (btn === 'yes') {
-                            window.location.reload();
-                        }
-                    }
-                );
-            }
-        });
+        // //Set up an event handler to handle session timeouts
+        // //code with slight adjustements from LADA project:
+        // //see also: LADA Commit 8dddb5eb9b30894414b62eecf6fca23200756d75
+        //
+        // Ext.Ajax.on('requestexception', function(conn, response) {
+        //     if (response.status === 0 && response.responseText === '') {
+        //         Ext.MessageBox.confirm(
+        //             Koala.Application.ssoExpiredTitle,
+        //             Koala.Application.ssoExpiredBody,
+        //             function(btn) {
+        //                 if (btn === 'yes') {
+        //                     window.location.reload();
+        //                 }
+        //             }
+        //         );
+        //     }
+        // });
 
         // ask before closing/refreshing the window.
         // Not all browsers will respect this, depending on settings
