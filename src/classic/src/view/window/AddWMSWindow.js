@@ -72,6 +72,28 @@ Ext.define('Koala.view.window.AddWMSWindow', {
                         },
                         filters: {}
                     };
+                    var is111 = olLayer.getSource().getParams().VERSION === '1.1.1';
+                    var x = is111 ? 'x' : 'i';
+                    var y = is111 ? 'y' : 'j';
+                    var layer = olLayer.getSource().getParams().LAYERS;
+                    var url = olLayer.getSource().getUrls()[0] + 'version=' + (is111 ? '1.1.1' : '1.3.0') +
+                        '&request=GetFeatureInfo&bbox=' + olLayer.get('layerExtent') + '&format=image/png&' +
+                        'info_format=application/json&' + x + '=5&' + y + '=5&width=10&height=10&layers=' + layer +
+                        '&query_layers=' + layer;
+                    Ext.Ajax.request({
+                        url: url,
+                        success: function(xhr) {
+                            var collection = JSON.parse(xhr.responseText);
+                            if (collection.numberReturned) {
+                                var attributes = Object.keys(collection.features[0].properties);
+                                var template = '';
+                                for (var i = 0; i < attributes.length; ++i) {
+                                    template += attributes[i] + ': [[' + attributes[i] + ']]<br>';
+                                }
+                                olLayer.set('hoverTpl', template);
+                            }
+                        }
+                    });
                 }
                 olLayer.getSource().crossOrigin = 'anonymous';
             }
