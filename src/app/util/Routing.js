@@ -24,7 +24,7 @@ Ext.define('Koala.util.Routing', {
         'Ext.util.DelayedTask',
         'BasiGX.util.Map',
         'BasiGX.util.Layer',
-        'Koala.view.form.LayerFilterController'
+        'Koala.util.Autorefresh'
     ],
 
     statics: {
@@ -336,16 +336,13 @@ Ext.define('Koala.util.Routing', {
                 var olLayer = me.routeCreatedLayers[uuid];
                 if (Koala.util.String.isUuid(uuid) && Ext.isDefined(olLayer)) {
                     olLayer.set('visible', booleanState);
+                    olLayer.setOpacity(config.opacity);
                     Koala.util.Layer.addOlLayerToMap(olLayer);
-                    if (Ext.isNumeric(autoRefreshInterval) && Koala.view.form.
-                        LayerFilterController.prototype.autorefreshMap) {
-                        Koala.view.form.LayerFilterController.prototype.
+                    if (Ext.isNumeric(autoRefreshInterval) && Koala.util.Autorefresh
+                        .prototype.autorefreshMap) {
+                        Koala.util.Autorefresh.prototype.
                             autorefreshMap[uuid] = autoRefreshInterval;
-                        // need to instantiate the controller for autoupdates
-                        // to trigger
-                        var lfc = Ext.create(
-                            'Koala.view.form.LayerFilterController');
-                        lfc.refreshLayers();
+                        Koala.util.Autorefresh.refreshLayers();
                     }
                 }
             });
@@ -402,7 +399,8 @@ Ext.define('Koala.util.Routing', {
 
         /**
          * Creates the route (hash) for the current map state. Including
-         * mapcenter, mapzoom and layers with all their filters.
+         * mapcenter, mapzoom and layers with all their filters. Also
+         * includes autorefresh, opacity and the selected base layer.
          * @return {String} A route expression representing the applications
          *                  state.
          */
@@ -446,14 +444,14 @@ Ext.define('Koala.util.Routing', {
                     var isVisible = layer.get('visible') ? 1 : 0;
                     var filters = [];
                     var autoRefreshInterval;
-                    if (Koala.view.form.LayerFilterController.
-                        prototype.autorefreshMap) {
-                        autoRefreshInterval = Koala.view.form.
-                            LayerFilterController.prototype.autorefreshMap[uuid];
+                    var opacity = layer.getOpacity();
+                    if (Koala.util.Autorefresh.prototype.autorefreshMap) {
+                        autoRefreshInterval = Koala.util.Autorefresh.prototype.autorefreshMap[uuid];
                     }
 
                     permaObj[uuid] = {};
                     permaObj[uuid].isVisible = isVisible;
+                    permaObj[uuid].opacity = opacity;
 
                     if (!skipLayerFilters) {
                         Ext.each(metadata.filters, function(filter) {

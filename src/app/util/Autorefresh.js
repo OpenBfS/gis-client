@@ -36,15 +36,18 @@ Ext.define('Koala.util.Autorefresh', {
     statics: {
 
         initialize: function() {
-            // functions seem sometimes to be called on the prototype itself
-            this.prototype.layerUpdater = new Ext.util.DelayedTask(this.refreshLayers.bind(this));
-            this.prototype.layerUpdater.delay(60000);
+            if (!this.prototype.layerUpdater) {
+                // functions seem sometimes to be called on the prototype itself
+                this.prototype.layerUpdater = new Ext.util.DelayedTask(this.refreshLayers.bind(this));
+                this.prototype.layerUpdater.delay(60000);
+            }
         },
 
         /**
          * Refreshes the layers where the user activated auto refresh.
          */
         refreshLayers: function() {
+            Koala.util.Autorefresh.initialize();
             this.prototype.layerUpdater.delay(60000);
 
             var mapComponent = BasiGX.util.Map.getMapComponent('gx_map');
