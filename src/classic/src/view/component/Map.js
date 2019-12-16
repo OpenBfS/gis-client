@@ -103,7 +103,7 @@ Ext.define('Koala.view.component.Map', {
             if (event.dataTransfer.files.length === 0) {
                 var items = event.dataTransfer.items;
                 for (var i = 0; i < items.length; ++i) {
-                    if (items[i].type === 'text/plain') {
+                    if (items[i].type === 'text/plain' || items[i].type === 'application/json') {
                         items[i].getAsString(function(text) {
                             Ext.create('Ext.window.Window', {
                                 title: 'Upload local data',
