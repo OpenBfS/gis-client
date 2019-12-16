@@ -170,6 +170,30 @@ Ext.define('Koala.Application', {
         );
     },
 
+    /**
+     * Update the BasiGX namespace map with the namespaces from the GeoServer.
+     *
+     * @param {Object} ctx the application context
+     */
+    updateNamespaces: function(ctx) {
+        var url = ctx.data.merge.urls['geoserver-base-url'] + '/rest/namespaces';
+        Ext.Ajax.request({
+            url: url,
+            success: function(xhr) {
+                var namespaces = JSON.parse(xhr.responseText).namespaces.namespace;
+                Ext.each(namespaces, function(namespace) {
+                    Ext.Ajax.request({
+                        url: namespace.href,
+                        success: function(subXhr) {
+                            var subNamespace = JSON.parse(subXhr.responseText).namespace;
+                            BasiGX.util.Namespace.namespaces[subNamespace.prefix] = subNamespace.uri;
+                        }
+                    });
+                });
+            }
+        });
+    },
+
     launch: function() {
         var staticMe = Koala.util.AppContext;
         var ctx = staticMe.getAppContext();
@@ -187,6 +211,7 @@ Ext.define('Koala.Application', {
             rlz: 'www.imis.bfs.de/rlz',
             jrodos_res: 'www.imis.bfs.de/rodos'
         };
+        this.updateNamespaces(ctx);
         if (window.location.hash === '') {
             this.routedAlready = true;
         }
