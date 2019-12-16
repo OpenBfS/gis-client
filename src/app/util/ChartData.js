@@ -780,6 +780,8 @@ Ext.define('Koala.util.ChartData', {
          */
         generateTimeSeriesAndLegends: function(data, layerConfig, stations) {
             var gnosConfig = layerConfig.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
+            var idField = Koala.util.Object.getPathStrOr(layerConfig.targetLayer.metadata,
+                'layerConfig/olProperties/featureIdentifyField', 'id');
             var colors = gnosConfig.colorSequence ? gnosConfig.colorSequence.split(',') : [];
             var series = [];
             var legends = [];
@@ -809,7 +811,7 @@ Ext.define('Koala.util.ChartData', {
                             return value;
                         }
                         var selectedStation = Ext.Array.findBy(stations, function(station) {
-                            return station.get(gnosConfig.featureIdentifyField || 'id') === id;
+                            return station.get(idField) === id;
                         });
 
                         if (Ext.String.startsWith(tooltipTpl, 'eval:')) {
@@ -852,7 +854,7 @@ Ext.define('Koala.util.ChartData', {
                             return [item[gnosConfig.xAxisAttribute].unix() * 1000, item[serie.yAxisAttribute], function(target) {
                                 var tooltipTpl = gnosConfig.tooltipTpl;
                                 var selectedStation = Ext.Array.findBy(stations, function(station) {
-                                    return station.get(gnosConfig.featureIdentifyField || 'id') === id;
+                                    return station.get(idField) === id;
                                 });
 
                                 if (Ext.String.startsWith(tooltipTpl, 'eval:')) {

@@ -46,7 +46,6 @@ Ext.define('Koala.view.form.ChartDataFormController', {
             Ext.each(view.timeseriesFields, function(field) {
                 var value = view.down('[name=timeseries]').down('[name=' + field + ']').getValue();
                 if (field === 'groupAttribute') {
-                    time.featureIdentifyField = value;
                     olProperties.featureIdentifyField = value;
                 }
                 time[field] = value;
