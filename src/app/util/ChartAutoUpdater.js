@@ -74,6 +74,7 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                             endField.setValue(endDate);
                             filterUtil.replaceHoursAndMinutes(endDate, endField);
                         }
+                        chart.getController().isAutoUpdated = true;
                         chart.getController().getChartData();
                     }
                     if (optionsCombo.getValue() === 'autorefresh-move') {
@@ -97,6 +98,7 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                         ctrl.currentDateRange.min = null;
                         ctrl.currentDateRange.max = null;
                         ctrl.useCurrentZoom = false;
+                        ctrl.isAutoUpdated = true;
                         first = false;
                         ctrl.getChartData();
                         if (startField) {

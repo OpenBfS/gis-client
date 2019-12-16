@@ -37,6 +37,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     data: {},
     rawData: null,
     gridFeatures: null,
+    seriesVisibility: [],
     /**
      * Contains the DateValues of the charts current zoom extent.
      * @type {Object}
@@ -149,6 +150,22 @@ Ext.define('Koala.view.component.D3ChartController', {
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
 
         this.chartRenderer.render(div);
+        if (this.isAutoUpdated) {
+            var legendEntries = div.querySelectorAll('g.legend > g');
+            Ext.each(this.seriesVisibility, function(visible, idx) {
+                var item = legendEntries[idx];
+                while (item.nodeName !== 'g') {
+                    item = item.parentNode;
+                }
+                var list = item.classList;
+                if (visible) {
+                    list.remove('k-d3-disabled');
+                } else {
+                    list.add('k-d3-disabled');
+                    series.toggleSeries(idx);
+                }
+            });
+        }
     },
 
     /**
@@ -186,8 +203,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                 list = item.classList;
                 if (list.contains('k-d3-disabled')) {
                     list.remove('k-d3-disabled');
+                    me.seriesVisibility[legend.seriesIndex] = true;
                 } else {
                     list.add('k-d3-disabled');
+                    me.seriesVisibility[legend.seriesIndex] = false;
                 }
                 series.toggleSeries(legend.seriesIndex);
             };
