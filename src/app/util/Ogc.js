@@ -88,8 +88,8 @@ Ext.define('Koala.util.Ogc', {
         getWfsFilter: function(station, startString, endString, timeField, layer) {
             var me = this;
             var allFilters = [];
-            var chartingMetadata = layer.get('timeSeriesChartProperties');
-            var identifyField = chartingMetadata.featureIdentifyField || 'id';
+            var identifyField = Koala.util.Object.getPathStrOr(layer.metadata,
+                'layerConfig/olProperties/featureIdentifyField', 'id');
             var timeRangeFilter = me.getPropertyIsBetweenFilter(
                 startString, endString, timeField);
             allFilters.push(timeRangeFilter);
