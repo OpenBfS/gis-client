@@ -448,6 +448,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                         if (layer instanceof ol.layer.Vector) {
                             var featuregrid = Ext.ComponentQuery.query('k-panel-featuregrid')[0];
                             if (featuregrid && layer.id === featuregrid.originalLayer.id) {
+                                featuregrid.getViewModel().get('selectedFeaturesLayer').getSource().clear();
                                 featuregrid.close();
                             }
                         }
