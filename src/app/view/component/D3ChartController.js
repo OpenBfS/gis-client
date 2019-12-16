@@ -962,33 +962,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
         return doesContainSeries;
-    },
-
-    /**
-     * Toggles an axis scale back and forth between linear and logarithmic.
-     * @param  {String|undefined} axis if not given, the 'y' scale is toggled
-     */
-    toggleScale: function(axis) {
-        var powerOfTen = Koala.util.ChartData.powerOfTen;
-        if (!axis) {
-            axis = 'y';
-        }
-        var cfg = this.chartConfig.timeseriesComponentConfig.axes[axis];
-        var scale = cfg.scale;
-        scale = scale === 'linear' ? 'log' : 'linear';
-        cfg.scale = scale;
-        cfg.factor = scale === 'log' ? undefined : 0.8;
-        cfg.harmonize = scale === 'log';
-        cfg.epsilon = scale === 'log' ? 0.01 : undefined;
-        cfg.tickFormatter = scale === 'log' ? function(val) {
-            return !powerOfTen(val) ? ''
-                : val > 1000 || val < 0.0001
-                    ? val.toExponential()
-                    : val;
-        } : undefined;
-        this.chartOverrides[axis] = {
-            scale: scale
-        };
-        this.drawChart();
     }
+
 });

@@ -28,10 +28,10 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
      */
     toggleScale: function() {
         var chart = this.getView().chart;
-        var attachedSeries = chart.shapes[0].attachedSeries;
-        if (attachedSeries) {
+        var showMenu = chart.shapes && chart.shapes[0].attachedSeries;
+        if (showMenu) {
             Koala.util.ChartAxes.showToggleScaleMenu(
-                attachedSeries,
+                chart.shapes[0].attachedSeries,
                 chart,
                 this.getView().el,
                 this.getViewModel().get('axisText')
