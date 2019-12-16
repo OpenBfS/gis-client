@@ -273,6 +273,11 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             me.drawLineInteraction.on('drawend', me.onDrawEnd, me);
             me.drawLineInteraction.setActive(true);
         } else {
+            if (view.measureTooltipElement) {
+                view.measureTooltipElement.remove();
+                view.measureTooltipElement = null;
+                view.createMeasureTooltip();
+            }
             view.helpTooltipElement.classList.add('x-hidden');
             me.drawLineInteraction.un('drawstart', me.onDrawStart, me);
             me.drawLineInteraction.un('drawend', me.onDrawEnd, me);
@@ -305,6 +310,11 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             me.drawPolygonInteraction.on('drawend', me.onDrawEnd, me);
             me.drawPolygonInteraction.setActive(true);
         } else {
+            if (view.measureTooltipElement) {
+                view.measureTooltipElement.remove();
+                view.measureTooltipElement = null;
+                view.createMeasureTooltip();
+            }
             view.helpTooltipElement.classList.add('x-hidden');
             me.drawPolygonInteraction.un('drawstart', me.onDrawStart, me);
             me.drawPolygonInteraction.un('drawend', me.onDrawEnd, me);
