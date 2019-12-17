@@ -9,6 +9,7 @@ Ext.application({
     extend: 'Koala.Application',
 
     requires: [
+        'Lada.override.RestProxy',
         'Koala.view.main.Main'
     ],
 
