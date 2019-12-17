@@ -92,6 +92,42 @@ Ext.define('Koala.view.component.Map', {
         });
 
         me.setupDragDropFunctionality();
+        me.registerLocalStorageExtractor();
+    },
+
+    /**
+     * Shows the import window for pre-loaded features.
+     *
+     * @param {ol.Feature[]} features the features to import
+     */
+    addData: function(features) {
+        Ext.create('Ext.window.Window', {
+            title: 'Upload local data',
+            autoShow: true,
+            items: [{
+                xtype: 'k-form-importLocalData',
+                viewModel: {
+                    data: {
+                        features: features,
+                        layerName: 'Layer'
+                    }
+                }
+            }]
+        });
+    },
+
+    /**
+     * Look into the local storage periodically to auto-import GeoJSON data.
+     */
+    registerLocalStorageExtractor: function() {
+        var me = this;
+        window.setInterval(function() {
+            var data = localStorage.getItem('gis-transfer-data');
+            if (data) {
+                me.addData(data);
+                localStorage.removeItem('gis-transfer-data');
+            }
+        }, 1000);
     },
 
     /**
@@ -99,25 +135,14 @@ Ext.define('Koala.view.component.Map', {
      * drop zone in order to handle string based drag'n'drop events.
      */
     registerDropHandler: function() {
+        var me = this;
         this.map.getViewport().addEventListener('drop', function(event) {
             if (event.dataTransfer.files.length === 0) {
                 var items = event.dataTransfer.items;
                 for (var i = 0; i < items.length; ++i) {
-                    if (items[i].type === 'text/plain' || items[i].type === 'application/json') {
+                    if (items[i].type === 'text/plain' || items[i].type === 'application/json' || items[i].type === 'application/xml') {
                         items[i].getAsString(function(text) {
-                            Ext.create('Ext.window.Window', {
-                                title: 'Upload local data',
-                                autoShow: true,
-                                items: [{
-                                    xtype: 'k-form-importLocalData',
-                                    viewModel: {
-                                        data: {
-                                            features: text,
-                                            layerName: true
-                                        }
-                                    }
-                                }]
-                            });
+                            me.addData(text);
                         });
                     }
                 }
