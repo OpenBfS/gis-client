@@ -511,6 +511,19 @@ Ext.define('Koala.view.main.MobileMainController', {
         var btnClass = Koala.util.Fullscreen.isInFullscreen() ?
             'fa-compress' : 'fa-expand';
         btn.setHtml('<i class="fa ' + btnClass + ' fa-2x"></i>');
+    },
+
+    initElanScenarios: function() {
+        Koala.util.LocalStorage.setCurrentUser(this.username);
+        var dokpool = Koala.util.DokpoolRequest;
+        //Configure dokpool utility
+        dokpool.elanScenarioUrl = '../dokpool/bund/contentconfig/scen/';
+        dokpool.storageModule = Koala.util.LocalStorage;
+        dokpool.updateActiveElanScenarios();
+        window.setInterval(function() {
+            window.console.log('scenario update');
+            dokpool.updateActiveElanScenarios();
+        }, 60000);
     }
 
 });
