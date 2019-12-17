@@ -101,7 +101,8 @@
                 "drawBtn",
                 "createVectorLayerBtn",
                 "importVectorLayerBtn",
-                "detectionLimitBtn"
+                "detectionLimitBtn",
+                "ScenarioAlertBtn"
             ],
             "vectorIcons": [
                 {

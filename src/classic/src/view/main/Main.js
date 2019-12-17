@@ -93,7 +93,7 @@ Ext.define('Koala.view.main.Main', {
                     document.title = headerTitle + ' | Bundesamt für Strahlenschutz';
                     Ext.create('Koala.view.window.ElanScenarioWindow');
 
-                    me.initElanScenarios();
+                    me.getController().initElanScenarios();
 
                     var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
                     if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
@@ -106,19 +106,6 @@ Ext.define('Koala.view.main.Main', {
                 });
             }
         }
-    },
-
-    initElanScenarios: function() {
-        Koala.util.LocalStorage.setCurrentUser(this.username);
-        var dokpool = Koala.util.DokpoolRequest;
-        //Configure dokpool utility
-        dokpool.elanScenarioUrl = '../dokpool/bund/contentconfig/scen/';
-        dokpool.storageModule = Koala.util.LocalStorage;
-        dokpool.updateActiveElanScenarios();
-        window.setInterval(function() {
-            window.console.log('scenario update');
-            dokpool.updateActiveElanScenarios();
-        }, 60000);
     },
 
     items: [{

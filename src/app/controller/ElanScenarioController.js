@@ -72,9 +72,9 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
             if (win) {
                 //Mark event as changed
                 elanIds.forEach(function(elanId) {
-                    win.eventChanged(elanId);
+                    win.getController().eventChanged(elanId);
                 });
-                win.updateContent();
+                win.getController().updateContent();
             } else {
                 // Save changes for the next window
                 elanIds.forEach(function(elanId) {
@@ -93,7 +93,7 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
         window.console.log('controller: handleLocalElanStorageUpdated');
         var win = Ext.getCmp('elanwindowid');
         if (win) {
-            win.updateEventList();
+            win.getController().updateEventList();
         }
     },
 
@@ -108,20 +108,21 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
             win = Ext.create('Koala.view.window.ElanScenarioWindow', {
                 changes: this.changes
             });
-            win.updateContent();
+            win.getController().updateContent();
             win.show();
         } else {
             //If window is visible and has changes
             if (win.isVisible()) {
                 if (win.hasChanges()) {
-                    win.updateContent();
+                    win.getController().updateContent();
                 }
             } else {
                 //If windows is hidden
                 win.show();
-                win.updateContent();
+                win.getController().updateContent();
             }
         }
         button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
     }
+
 });

@@ -6,6 +6,7 @@
             "applicationUpdateText": "This application has an update. Reload now?",
             "ssoExpiredTitle" : "Login required!",
             "ssoExpiredBody" : "Your session expired<br/>Restore session?",
+            "ssoExpiredFailed": "The session could not be restored.",
             "leavePageText": "Do you want to leave this page? Unsaved data will be lost."
         }
     },

@@ -3,14 +3,16 @@ Ext.define('Koala.view.panel.MobileEvents',{
     xtype: 'k-panel-mobileevents',
 
     requires: [
-        'Koala.view.panel.MobileEventsController',
+        'Koala.view.window.ElanScenarioWindowController',
         'Koala.view.panel.MobileEventsModel'
     ],
 
-    controller: 'k-panel-mobileevents',
+    controller: 'k-window-elanscenarios',
     viewModel: {
         type: 'k-panel-mobileevents'
     },
+
+    id: 'elanwindowid',
 
     closeToolAlign: 'left',
 
