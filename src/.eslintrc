@@ -26,6 +26,7 @@
         "jsts": true,
         "Koala": true,
         "location": true,
+        "localStorage": true,
         "moment": true,
         "ol": true,
         "Papa": true,
