@@ -5,7 +5,7 @@
     "description": "IMIS3 GIS",
     "scripts": {
         "pretest": "npm run lint",
-        "lint": "eslint -c .eslintrc app/ classic/ modern/ && eslint -c test/.eslintrc test/",
+        "lint": "eslint -c .eslintrc app/ classic/ modern/ overrides/ && eslint -c test/.eslintrc test/",
         "lint-fix": "eslint --fix -c .eslintrc app/ classic/ modern/ && eslint --fix -c test/.eslintrc test/",
         "test": "npm-run-all --parallel --race test:serve test:all",
         "test:all": "npm-run-all test:classic test:modern",

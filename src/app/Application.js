@@ -29,7 +29,8 @@ Ext.define('Koala.Application', {
     requires: [
         'BasiGX.util.Namespace',
         'Koala.util.Routing',
-        'Koala.util.AppContext'
+        'Koala.util.AppContext',
+        'Lada.override.RestProxy'
     ],
 
     controllers: [
@@ -44,6 +45,7 @@ Ext.define('Koala.Application', {
         reloadMessage: '',
         ssoExpiredTitle: '',
         ssoExpiredBody: '',
+        ssoExpiredFailed: '',
         username: '',
         userId: '',
         userroles: '',
@@ -264,7 +266,7 @@ Ext.define('Koala.Application', {
         });
 
         // make sure we don't send the Access-Control-Request-Headers: x-requested-with
-        // as it breaks feature info external WMS
+        // as it breaks feature info for external WMS
         Ext.Ajax.setUseDefaultXhrHeader(false);
     }
 });
