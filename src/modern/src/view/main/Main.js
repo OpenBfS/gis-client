@@ -66,7 +66,10 @@ Ext.define('Koala.view.main.Main', {
     },
 
     listeners: {
-        painted: 'onMainPanelPainted'
+        painted: 'onMainPanelPainted',
+        initialize: function() {
+            this.getController().initElanScenarios();
+        }
     },
 
     items: [{

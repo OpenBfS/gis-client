@@ -8,6 +8,13 @@ Ext.define('Koala.view.panel.MobileMenu', {
 
         'Koala.util.AppContext',
         'Koala.util.DokpoolRequest',
+        'Koala.util.LocalStorage',
+        'Koala.store.RodosProjects',
+        'Koala.view.form.RodosFilterModel',
+        'Koala.view.panel.MobileMetadataInfo',
+        'Koala.view.form.RodosFilter',
+        'Koala.view.form.RodosFilterController',
+        'Koala.view.button.ElanScenarioButton',
 
         'Koala.view.panel.MobileMenuController',
         'Koala.view.panel.MobileMenuModel'
@@ -39,10 +46,9 @@ Ext.define('Koala.view.panel.MobileMenu', {
     },
 
     items: [{
-        xtype: 'button',
+        xtype: 'k-button-elanscenariobutton',
         name: 'ScenarioAlertBtn',
         cls: 'button-routine',
-        hidden: true,
         iconCls: 'fa fa-check',
         iconAlign: 'center',
         bind: {
@@ -129,16 +135,6 @@ Ext.define('Koala.view.panel.MobileMenu', {
                 me.addCls('button-routine');
 
                 mobileEventPanel.show();
-            },
-            initialize: function() {
-                //run once to get immediate information
-                var tools = Koala.util.AppContext.getAppContext().data.merge.tools;
-                if (tools.indexOf('ScenarioAlertBtn') !== -1) {
-                    Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                    window.setInterval(function() {
-                        Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                    }, 30000);
-                }
             }
         }
         // handler: function(btn) {
