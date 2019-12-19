@@ -104,22 +104,15 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
     showElanScenarios: function(button) {
         var win = Ext.getCmp('elanwindowid');
         if (!win) {
-            //If window does not exist: create and update
+            // If window does not exist: create and update
             win = Ext.create('Koala.view.window.ElanScenarioWindow', {
                 changes: this.changes
             });
-            win.getController().updateContent();
             win.show();
         } else {
-            //If window is visible and has changes
-            if (win.isVisible()) {
-                if (win.hasChanges()) {
-                    win.getController().updateContent();
-                }
-            } else {
-                //If windows is hidden
+            if (!win.isVisible()) {
+                // If window is hidden
                 win.show();
-                win.getController().updateContent();
             }
         }
         button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
