@@ -40,6 +40,10 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
         title: '{windowTitle}'
     },
 
+    listeners: {
+        close: 'updateContent'
+    },
+
     initComponent: function() {
         var me = this;
         this.bbar = ['->', {
