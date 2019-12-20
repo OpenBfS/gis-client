@@ -127,7 +127,7 @@ Ext.define('Koala.view.component.Map', {
                 me.addData(data);
                 localStorage.removeItem('gis-transfer-data');
             }
-        }, 1000);
+        }, 2000);
     },
 
     /**
