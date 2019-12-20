@@ -79,7 +79,7 @@ Ext.define('Koala.view.window.AddWMSWindow', {
                     var url = olLayer.getSource().getUrls()[0] + 'version=' + (is111 ? '1.1.1' : '1.3.0') +
                         '&request=GetFeatureInfo&bbox=' + olLayer.get('layerExtent') + '&format=image/png&' +
                         'info_format=application/json&' + x + '=5&' + y + '=5&width=10&height=10&layers=' + layer +
-                        '&query_layers=' + layer;
+                        '&query_layers=' + layer + '&' + (is111 ? 'srs=EPSG%3A4326' : 'crs=CRS%3A84');
                     Ext.Ajax.request({
                         url: url,
                         success: function(xhr) {
