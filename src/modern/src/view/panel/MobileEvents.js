@@ -22,6 +22,10 @@ Ext.define('Koala.view.panel.MobileEvents',{
 
     scrollable: 'y',
 
-    padding: '20 10 20 10'
+    padding: '20 10 20 10',
+
+    listeners: {
+        hide: 'updateContent'
+    }
 
 });
