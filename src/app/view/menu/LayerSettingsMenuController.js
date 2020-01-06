@@ -98,7 +98,10 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                 svg.style.visibility = 'visible';
                 svg.style.boxShadow = '5px 10px 15px 0 rgba(0, 0, 0, 0.6)';
                 if (isBarchart) {
-                    el.querySelector('.k-barchart-container').style.transform = 'translate(-20px, -50px)';
+                    var yOff = -30;
+                    var top = parseInt(chart.getChartMargin().top, 10);
+                    yOff -= top;
+                    el.querySelector('.k-barchart-container').style.transform = 'translate(-20px, ' + yOff + 'px)';
                 } else {
                     svg.style.transform = 'translate(-5px, -33px)';
                 }
