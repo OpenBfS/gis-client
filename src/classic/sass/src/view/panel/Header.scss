@@ -2,37 +2,3 @@
     background-image: -webkit-linear-gradient(top, #FF0d08, #DD0204 50%, #DD0b09 51%, #DD0204) !important;
     border-color: #690000 !important;
 }
-
-.button-alert{
-        background-color: red !important;
-        background-image: none;
-        animation: blink-animation 2s steps(115, start) infinite;
-        -webkit-animation: blink-animation 2s steps(115, start) infinite;
-}
-
-.button-alert .x-btn-icon > .x-btn-icon-el{
-    &:before{
-        color: yellow !important;
-        cursor: pointer;
-        margin-right: 10px;
-    }
-}
-
-.button-routine .x-btn-icon > .x-btn-icon-el{
-    &:before{
-        color: #05db05 !important;
-        cursor: pointer;
-        margin-right: 10px;
-    }
-}
-
-@keyframes blink-animation {
-  50% {
-    opacity: 0.0;
-  }
-}
-@-webkit-keyframes blink-animation {
-  50% {
-    opacity: 0.0;
-  }
-}
