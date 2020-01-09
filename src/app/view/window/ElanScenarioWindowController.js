@@ -36,7 +36,7 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
      */
     displayTemplate: {
         //Used for title string
-        title: 'Ereignis:<p style=\'font-size: 2em; margin: 5px 0 10px 0;\'> $VALUE</p>',
+        title: 'Ereignis:<p style=\'font-size: 2em; margin: 5px 0 10px 0;\'><a href="$LINK" target="_blank"> $VALUE</a></p>',
         //Use for string that marks the event as changed or unchanged
         change: {
             changed: '<div style=\'color:red; margin: 0;\'>$VALUE<br></div>',
@@ -73,6 +73,11 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
     titleProperty: 'title',
 
     /**
+     * Key that contains the link to the event
+     */
+    linkProperty: '@id',
+
+    /**
      * Parse elan object and create a String representation
      * @param {Object} scenario Scenario object
      * @return String represenation
@@ -84,6 +89,9 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
         //Add title
         var title = scenario[me.titleProperty];
         scenarioString += me.displayTemplate.title.replace('$VALUE', title);
+        //Add hyperlink to title
+        var link = scenario[me.linkProperty];
+        scenarioString = scenarioString.replace('$LINK', link);
 
         //Check if Scenario was changed
         var changeString = me.getViewModel().get('unchangedText');
