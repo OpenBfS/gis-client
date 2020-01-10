@@ -227,8 +227,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         var autorefreshStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'title'],
-            data: this.getTranslatedAutorefreshData(),
-            queryMode: 'local'
+            data: this.getTranslatedAutorefreshData()
         });
 
         var autorefreshBox = Ext.create({
@@ -250,13 +249,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
             valueField: 'value',
             style: 'display: inline;',
             store: autorefreshStore,
+            queryMode: 'local',
             renderTo: tabElm,
             bind: {
                 emptyText: view.getViewModel().get('autorefreshOptions')
             }
         });
 
-        this.autorefreshCombo.el.dom.addEventListener('click', this.autorefreshCombo.expand.bind(this.autorefreshCombo));
+        this.autorefreshCombo.bodyEl.addListener('click', this.autorefreshCombo.expand.bind(this.autorefreshCombo));
 
         var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
         langCombo.on('applanguagechanged', me.setTranslatedAutorefreshData.bind(me));
