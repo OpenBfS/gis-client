@@ -802,7 +802,7 @@
         "config": {
             "data": {
                 "elanscenarios": "Ereignisse",
-                "helpTooltip": "Hilfe"
+                "helpTooltip": "Ereignisinformationen anzeigen"
             }
         }
     },

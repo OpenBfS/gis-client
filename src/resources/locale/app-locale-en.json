@@ -797,8 +797,8 @@
     "Koala.view.button.ElanScenarioButton": {
         "config": {
             "data": {
-                "elanscenarios": "elanscenarios",
-                "helpTooltip": "Help"
+                "elanscenarios": "Scenarios",
+                "helpTooltip": "Show scenario information"
             }
         }
     },

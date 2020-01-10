@@ -73,7 +73,7 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
     titleProperty: 'title',
 
     /**
-     * Key that contains the link to the event
+     * Key that contains the hyperlink to the event
      */
     linkProperty: '@id',
 
