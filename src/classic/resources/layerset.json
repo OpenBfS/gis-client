@@ -1,382 +1,286 @@
 [
-    {
-        "thumb": "layer_sets/rodos_thumb.png",
-        "children": [],
-        "isLayerProfile": false,
-        "text": "RODOS-Prognosen"
-    },
-    {
-        "thumb": "layer_sets/rodos_thumb.png",
-        "children": [],
-        "isLayerProfile": false,
-        "text": "Videos"
-    },
-    {
-        "isLayerProfile": false,
-        "text": "Kerntechnische Anlagen",
-        "thumb": "layer_sets/kerntechnik_thumb.png",
-        "children": [
-            {
-                "uuid": "f7912742-9604-43b8-9b35-b625a01fbbd7",
-                "text": "WFS-T Planungsradien",
-                "leaf": true
-            },
-            {
-                "uuid": "88415902-4ca7-4d1c-b714-64cc917fc2ab",
-                "text": "Planungsradien des Katastrophenschutzes",
-                "leaf": true
-            },
-            {
-                "uuid": "2957e659-adc1-4884-8aa1-eb397a175516",
-                "text": "katzonen",
-                "leaf": true
-            },
-            {
-                "leaf": true,
-                "text": "Kernkraftwerk",
-                "uuid": "2c7b7cf7-d72c-4048-8f9e-3399f7ff4e16"
-            },
-            {
-                "uuid": "3f445048-08a5-45bd-ab9e-95801ac6eea0",
-                "leaf": true,
-                "text": "Standorte nukleare Entsorgung"
-            }
-        ]
-    },
-    {
-        "text": "Ortsdosisleistung (ODL)",
-        "isLayerProfile": false,
-        "children": [
-            {
-                "leaf": true,
-                "text": "ODL brutto mobil Fahrzeuge",
-                "uuid": "f0d702e8-4676-49a0-9f1a-bb25804b33e9"
-            },
-            {
-                "text": "ODL brutto 10min",
-                "leaf": true,
-                "uuid": "08e36567-cf9a-4e22-8774-e83a3452da7b"
-            },
-            {
-                "text": "ODL brutto 10min Vektor",
-                "leaf": true,
-                "uuid": "6059c86a-185d-4832-99fe-46bca77ecb0e"
-            },
-            {
-                "text": "ODL brutto 10min Fläche",
-                "leaf": true,
-                "uuid": "8d76d000-06b2-4295-a6d7-7abf9b644c95"
-            },
-            {
-                "uuid": "d7abea23-8227-4004-9abf-2ccb3746b51d",
-                "leaf": true,
-                "text": "ODL netto 10min"
-            },
-            {
-                "leaf": true,
-                "text": "ODL netto 1h",
-                "uuid": "f3af739e-b2ed-49e9-88d6-b76cc6d15a8a"
-            },
-            {
-                "uuid": "0790a4e9-7d76-4c37-9843-6be28f80b916",
-                "text": "ODL 1 h",
-                "leaf": true
-            },
-            {
-                "uuid": "f11e365a-6d80-4942-aa65-7607c637438a",
-                "leaf": true,
-                "text": "ODL 1 h Fläche"
-            },
-            {
-                "uuid": "83cb1604-3d8c-490b-b807-5e7cb17f3b22",
-                "leaf": true,
-                "text": "ODL brutto 24h"
-            },
-            {
-                "uuid": "de5cd0df-721a-4b54-8b3b-beb70404505f",
-                "leaf": true,
-                "text": "ODL brutto 10min Landkreis(max)"
-            }
-        ],
-        "thumb": "layer_sets/odl_thumb.png"
-    },
-    {
-        "isLayerProfile": false,
-        "text": "Luft intensiv",
-        "thumb": "layer_sets/luftueberwachung_thumb.png",
-        "children": [
-            {
-                "uuid": "e4b893b3-6181-4841-8f76-205c5c6e6a7e",
-                "leaf": true,
-                "text": "Nuklide Luft 2h"
-            },
-            {
-                "leaf": true,
-                "text": "Nuklide Luft 1h",
-                "uuid": "12f716c6-1846-4c41-bfa0-ddab71ea1ae5"
-            }
-        ]
-    },
-    {
-        "children": [
-            {
-                "leaf": true,
-                "text": "nuklidspez. Aktivitätskonzentration",
-                "uuid": "bdf004f9-8c09-4ddf-8a70-22ab876d045e"
-            },
-            {
-                "text": "nuklidspez. Dosisleistung",
-                "leaf": true,
-                "uuid": "6d1a2683-6030-4190-ac79-a5b48ece4eaf"
-            }
-        ],
-        "thumb": "layer_sets/boden03_thumb.jpg",
-        "text": "Bodenoberfläche",
-        "isLayerProfile": false
-    },
-    {
-        "thumb": "layer_sets/radioaktivitaet_bfs_thumb.png",
-        "children": [
-            {
-                "text": "Radon-222 in Bodenluft (Prognose)",
-                "leaf": true,
-                "uuid": "2f30477a-ca0a-43cb-a34b-fcee53e6bce7"
-            },
-            {
-                "uuid": "63454a77-db32-4917-b40d-6b46492fcbba",
-                "text": "Radon-222 in Freiluft",
-                "leaf": true
-            },
-            {
-                "leaf": true,
-                "text": "Radon-222 in Freiluft (interpoliert)",
-                "uuid": "0d8d0f79-e5b7-45d2-bec4-9ba4546fdec6"
-            }
-        ],
-        "isLayerProfile": false,
-        "text": "Radon"
-    },
-    {
-        "text": "Luft",
-        "isLayerProfile": false,
-        "children": [
-            {
-                "text": "Partikel/Luftstaub (Gamma) (Tagesmittel)",
-                "leaf": true,
-                "uuid": "ec649cb5-04c7-40d4-bb03-2fb4e31cc896"
-            },
-            {
-                "text": "Partikel/Luftstaub (Alpha/Beta) (Tagesmittel)",
-                "leaf": true,
-                "uuid": "8062ee0b-ada0-4411-8293-85fca764efcd"
-            },
-            {
-                "uuid": "fc967ce2-e132-440f-adc0-fa33c94f5892",
-                "text": "Jod gasförmig (Tagesmittel)",
-                "leaf": true
-            },
-            {
-                "uuid": "6676f4bc-49ef-453f-8db9-c8392c2fca50",
-                "text": "Krypton (OpenData)",
-                "leaf": true
-            }
-        ],
-        "thumb": "layer_sets/luft03_thumb.jpg"
-    },
-    {
-        "text": "Niederschlag",
-        "isLayerProfile": false,
-        "children": [
-            {
-                "leaf": true,
-                "text": "Niederschlagshöhe 24 h",
-                "uuid": "e093c245-a476-4efa-a951-68163b2e0462"
-            },
-            {
-                "leaf": true,
-                "text": "Gesamt-Beta Aktivität im Niederschlag",
-                "uuid": "71bfd6fe-6d65-41ca-949e-659fd6bfc450"
-            }
-        ],
-        "thumb": "layer_sets/regen_thumb.jpg"
-    },
-    {
-        "text": "Boden",
-        "isLayerProfile": false,
-        "children": [
-            {
-                "text": "nuklidspez. Aktivitätskonzentration",
-                "leaf": true,
-                "uuid": "8d55a057-a78e-4a19-a7c5-2b17c0d2b26f"
-            }
-        ],
-        "thumb": "layer_sets/boden03_thumb.jpg"
-    },
-    {
-        "thumb": "layer_sets/wasser_thumb.jpg",
-        "children": [
-            {
-                "text": "Gesamt-Gamma künstl. an BSH-Stationen",
-                "leaf": true,
-                "uuid": "8d64842f-3555-4542-94fb-8d2d9c1d5c4e"
-            },
-            {
-                "uuid": "77593724-d04d-4451-84fc-94dc2cf5187e",
-                "leaf": true,
-                "text": "Gesamt-Gamma/Beta an BfG-Stationen"
-            },
-            {
-                "text": "Nuklide in sonstigen Gewässern",
-                "leaf": true,
-                "uuid": "c17845ff-3349-4f9f-96d0-0b6d7a52023d"
-            },
-            {
-                "text": "Nuklide in Abwasser",
-                "leaf": true,
-                "uuid": "b6e4e24e-bf68-42f4-8124-ee579eeca0a4"
-            },
-            {
-                "uuid": "38803da5-215f-4d9c-9008-869ef6788425",
-                "leaf": true,
-                "text": "Nuklide in Grund- und Rohwasser"
-            },
-            {
-                "text": "Nuklide in Schwebstoffen",
-                "leaf": true,
-                "uuid": "7cdb452b-9b76-4dd3-a7bf-74d4271cd352"
-            },
-            {
-                "uuid": "80633c09-ab40-48b6-98ca-d039c2558f82",
-                "leaf": true,
-                "text": "Nuklide in Sediment"
-            }
-        ],
-        "isLayerProfile": false,
-        "text": "Wasser"
-    },
-    {
-        "children": [
-            {
-                "uuid": "980af90c-ee46-4b0e-bafa-ce5e4eb78bb9",
-                "text": "Nuklide in Fisch",
-                "leaf": true
-            },
-            {
-                "uuid": "b27d27ef-8098-48ac-826a-5dc5d1872564",
-                "text": "Nuklide in Fleisch",
-                "leaf": true
-            },
-            {
-                "uuid": "8eb25892-3f90-4e31-917e-15c9a9fe88b8",
-                "leaf": true,
-                "text": "Nuklide in Gemüse"
-            },
-            {
-                "leaf": true,
-                "text": "Nuklide in Gesamtnahrung",
-                "uuid": "b359a3f5-6401-4b6e-888f-764187c44d9e"
-            },
-            {
-                "uuid": "714c00e4-a4be-4886-a752-814707adb541",
-                "text": "Nuklide in Getreide",
-                "leaf": true
-            },
-            {
-                "uuid": "277ce471-b0d8-4282-97b4-b3e4b2e5c467",
-                "text": "Nuklide in Milch",
-                "leaf": true
-            },
-            {
-                "uuid": "16c4fd14-2987-44d6-91b3-6e980411513c",
-                "text": "Nuklide in Obst",
-                "leaf": true
-            },
-            {
-                "uuid": "552c58bb-dbca-4c97-9c2e-028a71f91246",
-                "text": "Nuklide in Pilze",
-                "leaf": true
-            },
-            {
-                "text": "Nuklide in Trinkwasser",
-                "leaf": true,
-                "uuid": "d31a9207-c8a8-49a0-b974-c388de1f4cab"
-            },
-            {
-                "text": "Vektornuklide in sonstiges Nahrungsmittel",
-                "leaf": true,
-                "uuid": "4a6422e2-f1a9-4585-a838-a0b304b5f67b"
-            },
-            {
-                "text": "Nuklide in sonstiges Nahrungsmittel",
-                "leaf": true,
-                "uuid": "d21141f1-c308-4a2b-8451-565eca33e993"
-            }
-        ],
-        "thumb": "layer_sets/nahrung03_thumb.jpg",
-        "text": "Nahrungsmittel",
-        "isLayerProfile": false
-    },
-    {
-        "thumb": "layer_sets/getreide_thumb.jpg",
-        "children": [
-            {
-                "uuid": "1d5273cd-f242-416f-906c-4505ed68aef7",
-                "text": "Nuklide in Futtermittel",
-                "leaf": true
-            },
-            {
-                "uuid": "3c8c9d90-46fc-4e90-becf-9f2e4b9ba6ac",
-                "text": "Nuklide in Weide- und Wiesenbewuchs",
-                "leaf": true
-            }
-        ],
-        "isLayerProfile": false,
-        "text": "Futtermittel"
-    },
-    {
-        "children": [
-            {
-                "uuid": "c225b50a-272b-4dec-8571-8ed7efd96b01",
-                "leaf": true,
-                "text": "Nuklide in Abfall"
-            },
-            {
-                "uuid": "dc9d9ccb-fcb5-4395-88e3-1779ab427e7f",
-                "leaf": true,
-                "text": "Nuklide in pflanzlichen Indikatoren"
-            }
-        ],
-        "thumb": "layer_sets/ionisierende_strahlung_thumb.png",
-        "text": "Sonst. Medien",
-        "isLayerProfile": false
-    },
-    {
-        "thumb": "layer_sets/uv_thumb.png",
-        "children": [
-            {
-                "uuid": "95050a76-1b87-42e6-8335-5a6522d37973",
-                "leaf": true,
-                "text": "UV-Index"
-            },
-            {
-                "uuid": "138fece1-24a4-43df-8fd1-5c390ac80245",
-                "text": "UV-Index aktueller Tagesverlauf",
-                "leaf": true
-            }
-        ],
-        "isLayerProfile": false,
-        "text": "UV-Strahlung"
-    },
-    {
-        "children": [
-            {
-                "uuid": "699dad1a-7252-426f-9e8f-39e39074142f",
-                "text": "Verwaltungsgrenzen Deutschland",
-                "leaf": true
-            }
-        ],
-        "thumb": "layer_sets/sonstige_thumb.png",
-        "text": "Sonstiges",
-        "isLayerProfile": false
-    }
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "ODL 1h", 
+        "uuid": "0790a4e9-7d76-4c37-9843-6be28f80b916"
+      }, 
+      {
+        "leaf": true, 
+        "text": "ODL 1h Fl\u00e4che", 
+        "uuid": "f11e365a-6d80-4942-aa65-7607c637438a"
+      }, 
+      {
+        "leaf": true, 
+        "text": "ODL Sonden (in Betrieb)", 
+        "uuid": "28a9e30c-3217-4db8-8f7f-58dc457aa08c"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Ortsdosisleistung (ODL)", 
+    "thumb": "layer_sets/odl01_thumb.jpg"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "Partikel/Luftstaub (Gamma) (Tagesmittel)", 
+        "uuid": "ec649cb5-04c7-40d4-bb03-2fb4e31cc896"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Partikel/Luftstaub (Gamma) (Tagesmittel) (Hochvolumensammler)", 
+        "uuid": "d8e3ef01-851e-4505-be4d-c386f16eee16"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Partikel/Luftstaub (Alpha/Beta) (Tagesmittel)", 
+        "uuid": "ab671cd9-277b-49ed-834b-6b7b4e88eed8"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Jod gasf\u00f6rmig (Tagesmittel)", 
+        "uuid": "af0ab05e-b647-46d0-8caa-3988a2d659a6"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Edelgase (Tagesmittel)", 
+        "uuid": "3f6c952f-7bc4-4547-acfa-d78fd1048cfe"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Krypton", 
+        "uuid": "559f1fcd-17b6-4079-a13c-37ed68ed8ebb"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Luft", 
+    "thumb": "layer_sets/luft03_thumb.jpg"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "Niederschlagsh\u00f6he 24 h", 
+        "uuid": "e093c245-a476-4efa-a951-68163b2e0462"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Gesamt-Beta Aktivit\u00e4t im Niederschlag", 
+        "uuid": "71bfd6fe-6d65-41ca-949e-659fd6bfc450"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Niederschlag", 
+    "thumb": "layer_sets/regen_thumb.jpg"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "nuklidspez. Dosisleistung", 
+        "uuid": "6d1a2683-6030-4190-ac79-a5b48ece4eaf"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Bodenoberfl\u00e4che", 
+    "thumb": "layer_sets/boden03_thumb.jpg"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "nuklidspez. Aktivit\u00e4tskonzentration", 
+        "uuid": "8d55a057-a78e-4a19-a7c5-2b17c0d2b26f"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Boden", 
+    "thumb": "layer_sets/boden03_thumb.jpg"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "Gesamt-Gamma k\u00fcnstl. an BSH-Stationen", 
+        "uuid": "8d64842f-3555-4542-94fb-8d2d9c1d5c4e"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Gesamt-Gamma/Beta an BfG-Stationen", 
+        "uuid": "77593724-d04d-4451-84fc-94dc2cf5187e"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in sonstigen Gew\u00e4ssern", 
+        "uuid": "c17845ff-3349-4f9f-96d0-0b6d7a52023d"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Abwasser", 
+        "uuid": "b6e4e24e-bf68-42f4-8124-ee579eeca0a4"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Grund- und Rohwasser", 
+        "uuid": "38803da5-215f-4d9c-9008-869ef6788425"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Schwebstoffen", 
+        "uuid": "7cdb452b-9b76-4dd3-a7bf-74d4271cd352"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Sediment", 
+        "uuid": "80633c09-ab40-48b6-98ca-d039c2558f82"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Wasser", 
+    "thumb": "layer_sets/wasser_thumb.jpg"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "Nuklide in Fisch", 
+        "uuid": "607d17d1-4cc8-4e56-b361-ac6b241c3bd5"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Fleisch", 
+        "uuid": "b27d27ef-8098-48ac-826a-5dc5d1872564"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Gem\u00fcse", 
+        "uuid": "8eb25892-3f90-4e31-917e-15c9a9fe88b8"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Gesamtnahrung", 
+        "uuid": "b359a3f5-6401-4b6e-888f-764187c44d9e"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Getreide", 
+        "uuid": "714c00e4-a4be-4886-a752-814707adb541"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Milch", 
+        "uuid": "277ce471-b0d8-4282-97b4-b3e4b2e5c467"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Obst", 
+        "uuid": "16c4fd14-2987-44d6-91b3-6e980411513c"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Pilze", 
+        "uuid": "552c58bb-dbca-4c97-9c2e-028a71f91246"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Trinkwasser", 
+        "uuid": "d31a9207-c8a8-49a0-b974-c388de1f4cab"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in sonstiges Nahrungsmittel", 
+        "uuid": "d21141f1-c308-4a2b-8451-565eca33e993"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Nahrungsmittel", 
+    "thumb": "layer_sets/nahrung03_thumb.jpg"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "Nuklide in Futtermittel", 
+        "uuid": "1d5273cd-f242-416f-906c-4505ed68aef7"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in Weide- und Wiesenbewuchs", 
+        "uuid": "3c8c9d90-46fc-4e90-becf-9f2e4b9ba6ac"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Futtermittel", 
+    "thumb": "layer_sets/getreide_thumb.jpg"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "Nuklide in Abfall", 
+        "uuid": "c225b50a-272b-4dec-8571-8ed7efd96b01"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Nuklide in pflanzlichen Indikatoren", 
+        "uuid": "dc9d9ccb-fcb5-4395-88e3-1779ab427e7f"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Sonst. Umweltmedien", 
+    "thumb": "layer_sets/ionisierende_strahlung_thumb.png"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "Radon-222 in Bodenluft (Prognose)", 
+        "uuid": "2f30477a-ca0a-43cb-a34b-fcee53e6bce7"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Radon-222 in Freiluft", 
+        "uuid": "63454a77-db32-4917-b40d-6b46492fcbba"
+      }, 
+      {
+        "leaf": true, 
+        "text": "Radon-222 in Freiluft (interpoliert)", 
+        "uuid": "0d8d0f79-e5b7-45d2-bec4-9ba4546fdec6"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Radon", 
+    "thumb": "layer_sets/radioaktivitaet_bfs_thumb.png"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "UV-Index Tagesh\u00f6chstwert", 
+        "uuid": "95050a76-1b87-42e6-8335-5a6522d37973"
+      }, 
+      {
+        "leaf": true, 
+        "text": "UV-Index aktueller Tagesverlauf", 
+        "uuid": "138fece1-24a4-43df-8fd1-5c390ac80245"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "UV-Strahlung", 
+    "thumb": "layer_sets/uv_thumb.png"
+  }, 
+  {
+    "children": [
+      {
+        "leaf": true, 
+        "text": "Verwaltungsgrenzen Deutschland", 
+        "uuid": "699dad1a-7252-426f-9e8f-39e39074142f"
+      }
+    ], 
+    "isLayerProfile": false, 
+    "text": "Sonstiges", 
+    "thumb": "layer_sets/sonstige_thumb.png"
+  }
 ]
