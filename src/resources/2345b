@@ -1,0 +1,363 @@
+{
+  "@xmlns:bfs": "http://geonetwork.org/bfs",
+  "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+  "@xmlns:gmd": "http://www.isotc211.org/2005/gmd",
+  "@xmlns:gml": "http://www.opengis.net/gml",
+  "@xmlns:gts": "http://www.isotc211.org/2005/gts",
+  "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+  "@gco:isoType": "gmd:MD_Metadata",
+  "@xsi:schemaLocation": "http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd",
+  "gmd:fileIdentifier": {
+    "gco:CharacterString": {
+      "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+      "#text": "c87f4f53-9f92-4e4d-9021-c4f9be2a824c"
+    }
+  },
+  "gmd:language": {
+    "gmd:LanguageCode": {
+      "@codeList": "http://www.loc.gov/standards/iso639-2/",
+      "@codeListValue": "eng"
+    }
+  },
+  "gmd:characterSet": {
+    "gmd:MD_CharacterSetCode": {
+      "@codeListValue": "utf8",
+      "@codeList": "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_CharacterSetCode"
+    }
+  },
+  "gmd:hierarchyLevel": {
+    "gmd:MD_ScopeCode": {
+      "@codeList": "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode",
+      "@codeListValue": ""
+    }
+  },
+  "gmd:contact": null,
+  "gmd:dateStamp": {
+    "gco:DateTime": {
+      "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+      "#text": "2019-01-15T08:05:12"
+    }
+  },
+  "gmd:metadataStandardName": {
+    "gco:CharacterString": {
+      "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+      "#text": "ISO 19115:2003/19139"
+    }
+  },
+  "gmd:metadataStandardVersion": {
+    "gco:CharacterString": {
+      "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+      "#text": "1.0"
+    }
+  },
+  "gmd:identificationInfo": {
+    "gmd:MD_DataIdentification": {
+      "gmd:citation": {
+        "gmd:CI_Citation": {
+          "gmd:title": {
+            "gco:CharacterString": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "#text": "Hintergrundkarte - TopPlus"
+            }
+          },
+          "gmd:date": {
+            "gmd:CI_Date": {
+              "gmd:date": {
+                "gco:DateTime": {
+                  "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                  "#text": "2015-01-30T00:00:00"
+                }
+              },
+              "gmd:dateType": {
+                "gmd:CI_DateTypeCode": {
+                  "@codeListValue": "publication",
+                  "@codeList": "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
+                }
+              }
+            }
+          }
+        }
+      },
+      "gmd:abstract": {
+        "gco:CharacterString": {
+          "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+          "#text": "Dieser Dienst basiert auf der Webkarte TopPlusOpen des Bundesamtes f�r Kartographie & Geod�sie.\nDie Webkarte ist in 3 unterschiedliche Darstellungsbereiche unterteilt: Weltweite Darstellung f�r kleine Ma�st�be, Europaweite Darstellung bis hin zu den mittleren Ma�st�ben, Detaildarstellung f�r Deutschland und angrenzendes Ausland. \nIn dem Produkt werden unter anderem freie amtliche Geodaten des Bundes und der Open-Data-L�nder Berlin, Hamburg, Nordrhein-Westfalen und Th�ringen pr�sentiert. Dar�ber hinaus stellen Brandenburg, Mecklenburg-Vorpommern und Rheinland-Pfalz im Rahmen eines Kooperationsvertrages ihre amtlichen Geodaten f�r die TPO zur Verf�gung, sodass auch diese L�nder ausschlie�lich durch amtliche Daten dargestellt werden. Weitere Datenquellen sind u.a. OpenStreetMap sowie OpenData der Deutsch Bahn AG (alle Datenquellen siehe: http://sg.geodatenzentrum.de/web_public/Datenquellen_TopPlus_Open.pdf).\n<br><br>\nLizenz:<br>\nDie Daten sind urheberrechtlich gesch�tzt. Der Datensatz wird entgeltfrei mit der Datenlizenz Deutschland ? Namensnennung ? Version 2.0 (https://www.govdata.de/dl-de/by-2-0) zur Verf�gung gestellt. Der Quellenvermerk ist zu beachten.<br>\n{ \"id\": \"dl-de-by-2.0\", \"name\": \"Datenlizenz Deutschland ? Namensnennung ? Version 2.0\", \"url\": \"https://www.govdata.de/dl-de/by-2-0\", \"quelle\": \"� Bundesamt f�r Kartographie und Geod�sie  2018, Datenquellen: http://sg.geodatenzentrum.de/web_public/Datenquellen_TopPlus_Open.pdf\" }"
+        }
+      },
+      "gmd:status": null,
+      "gmd:language": {
+        "gco:CharacterString": {
+          "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+          "#text": "eng"
+        }
+      }
+    }
+  },
+  "bfs:layerInformation": {
+    "bfs:MD_Layer": {
+      "bfs:legendTitle": {
+        "gco:CharacterString": {
+          "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+          "#text": "Hintergrundkarte - TopPlus"
+        }
+      },
+      "bfs:printTitle": {
+        "gco:CharacterString": {
+          "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+          "#text": "Hintergrundkarte - TopPlus"
+        }
+      },
+      "bfs:layerType": {
+        "bfs:MD_WMTSLayerType": {
+          "bfs:URL": {
+            "bfs:host": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "https://www.imis.bfs.de"
+              }
+            },
+            "bfs:path": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "/ogc/tiles/wmts"
+              }
+            }
+          },
+          "bfs:layer": {
+            "gco:CharacterString": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "#text": "bkg_topplus_web_open_grey"
+            }
+          },
+          "bfs:tilematrixset": {
+            "gco:CharacterString": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "#text": "GoogleMapsCompatible"
+            }
+          },
+          "bfs:transparent": {
+            "gco:Boolean": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "#text": "false"
+            }
+          },
+          "bfs:version": {
+            "gco:CharacterString": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "#text": "1.0.0"
+            }
+          },
+          "bfs:styles": {
+            "gco:CharacterString": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "#text": "default"
+            }
+          },
+          "bfs:format": {
+            "gco:CharacterString": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "#text": "image/png"
+            }
+          }
+        }
+      },
+      "bfs:wfs": {
+        "bfs:URL": {
+          "bfs:host": {
+            "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+            "@gco:nilReason": "missing",
+            "gco:CharacterString": null
+          },
+          "bfs:path": {
+            "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+            "@gco:nilReason": "missing",
+            "gco:CharacterString": null
+          }
+        }
+      },
+      "bfs:download": {
+        "bfs:URL": {
+          "bfs:host": {
+            "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+            "@gco:nilReason": "missing",
+            "gco:CharacterString": null
+          },
+          "bfs:path": {
+            "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+            "@gco:nilReason": "missing",
+            "gco:CharacterString": null
+          }
+        },
+        "bfs:filterFieldStart": {
+          "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+          "@gco:nilReason": "missing",
+          "gco:CharacterString": null
+        },
+        "bfs:filterFieldEnd": {
+          "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+          "@gco:nilReason": "missing",
+          "gco:CharacterString": null
+        }
+      },
+      "bfs:olProperty": [
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "hasLegend"
+              }
+            },
+            "bfs:propertyValue": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "true"
+              }
+            }
+          }
+        },
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "allowOpacityChange"
+              }
+            },
+            "bfs:propertyValue": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "true"
+              }
+            }
+          }
+        },
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "opacity"
+              }
+            },
+            "bfs:propertyValue": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "0.5"
+              }
+            }
+          }
+        },
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "legendUrl"
+              }
+            },
+            "bfs:propertyValue": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "@gco:nilReason": "missing",
+              "gco:CharacterString": null
+            }
+          }
+        },
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "minResolution"
+              }
+            },
+            "bfs:propertyValue": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "@gco:nilReason": "missing",
+              "gco:CharacterString": null
+            }
+          }
+        },
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "maxResolution"
+              }
+            },
+            "bfs:propertyValue": {
+              "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+              "@gco:nilReason": "missing",
+              "gco:CharacterString": null
+            }
+          }
+        },
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "allowRemoval"
+              }
+            },
+            "bfs:propertyValue": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "false"
+              }
+            }
+          }
+        },
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "allowShortInfo"
+              }
+            },
+            "bfs:propertyValue": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "false"
+              }
+            }
+          }
+        },
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "allowDownload"
+              }
+            },
+            "bfs:propertyValue": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "false"
+              }
+            }
+          }
+        },
+        {
+          "bfs:MD_Property": {
+            "bfs:propertyName": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "source_attributions"
+              }
+            },
+            "bfs:propertyValue": {
+              "gco:CharacterString": {
+                "@xmlns:gco": "http://www.isotc211.org/2005/gco",
+                "#text": "<a href=\"https://www.imis.bfs.de/geoportal/resources/sitepolicy.html\" target=\"_blank\">� Bundesamt f�r Strahlenschutz</a>&nbsp;&nbsp;&#x007C;&nbsp;&nbsp;<a href=\"http://www.bkg.bund.de\" target=\"_new\">� Bundesamt f�r Kartographie und Geod�sie</a> 2018, <a href=\"http://sg.geodatenzentrum.de/web_public/Datenquellen_TopPlus_Open.pdf\" target=\"_new\">Datenquellen</a>"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

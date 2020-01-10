@@ -1,0 +1,188 @@
+{
+  "data": {
+    "merge": {
+      "application_user": {
+        "password": "data_reader", 
+        "username": "data_reader"
+      }, 
+      "backgroundLayers": [
+        {
+          "thumb": "osm_thumb.png", 
+          "uuid": "1234a"
+        }, 
+        {
+          "thumb": "topplus_thumb.png", 
+          "uuid": "2345b"
+        }
+      ], 
+      "colorRamps": {
+        "BfS_1": [
+          "#EDF8B1", 
+          "#C7E9B4", 
+          "#7FCDBB", 
+          "#41B6C4", 
+          "#1D91C0", 
+          "#225EA8", 
+          "#0C2C84", 
+          "#5A005A"
+        ], 
+        "BfS_2": [
+          "#3C3DB2", 
+          "#65FF00", 
+          "#FFFF00", 
+          "#FFFF00", 
+          "#ED7D31", 
+          "#FF0000"
+        ]
+      }, 
+      "createLegendGraphicLayer": "opendata:vg_250", 
+      "headerTitle": "GEOPORTAL", 
+      "imis_user": {
+        "imisroles": [
+          ""
+        ], 
+        "uid": "", 
+        "username": "", 
+        "userroles": [
+          "public"
+        ]
+      }, 
+      "mapConfig": {
+        "projection": "EPSG:3857", 
+        "zoom": 0
+      }, 
+      "mapLayers": [], 
+      "metadataSearchFields": [
+        "title", 
+        "abstract"
+      ], 
+      "paramIsAttributeName": [
+        "featureIdentifyField", 
+        "yAxisAttribute", 
+        "xAxisAttribute", 
+        "groupAttribute", 
+        "detectionLimitAttribute", 
+        "uncertaintyAttribute"
+      ], 
+      "print-timeout": 60000, 
+      "spatialSearchFields": {
+        "geomColumn": "BOX_GEO", 
+        "searchColumn": "name_description"
+      }, 
+      "spatialSearchTypeName": "opendata:vg_250", 
+      "startCenter": [
+        1234075.4566814213, 
+        6706481.04685707
+      ], 
+      "startZoom": 6, 
+      "tools": [
+        "addWmsBtn", 
+        "measureBtn"
+      ], 
+      "urls": {
+        "geoserver-base-url": "http://localhost:8082/geoserver/bfs/", 
+        "irix-servlet": "https://www.imis.bfs.de/irix/irix-client/IRIXClient", 
+        "layerprofile": "https://www.imis.bfs.de/gis_client_configs/layerprofile.json", 
+        "layerset": "classic/resources/layerset.json", 
+        "metadata-search": "https://www.imis.bfs.de/ogc/catalog/srv/ger/csw?", 
+        "metadata-xml2json": "/resources/", 
+        "print-servlet": "https://www.imis.bfs.de/print/gis/print/", 
+        "spatial-search": "https://www.imis.bfs.de/ogc/opendata/ows"
+      }, 
+      "vectorIcons": [
+        {
+          "caption": "Kernkraftwerk", 
+          "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant.png"
+        }, 
+        {
+          "caption": "Kernkraftwerk", 
+          "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant_02.png"
+        }, 
+        {
+          "caption": "Kernkraftwerk", 
+          "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant_03.png"
+        }, 
+        {
+          "caption": "Kernkraftwerk", 
+          "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant_04.png"
+        }, 
+        {
+          "caption": "Radioaktiver Abfall", 
+          "src": "resources/vectorIcons/flaticonIcons/radioactive_waste.png"
+        }, 
+        {
+          "caption": "Radioaktiver Abfall", 
+          "src": "resources/vectorIcons/flaticonIcons/radioactive_waste_02.png"
+        }, 
+        {
+          "caption": "Radioaktivit\u00e4t", 
+          "src": "resources/vectorIcons/flaticonIcons/radiation.png"
+        }, 
+        {
+          "caption": "Wasser", 
+          "src": "resources/vectorIcons/flaticonIcons/drop.png"
+        }, 
+        {
+          "caption": "Meerwasser", 
+          "src": "resources/vectorIcons/flaticonIcons/sea.png"
+        }, 
+        {
+          "caption": "Trinkwasser", 
+          "src": "resources/vectorIcons/flaticonIcons/glass.png"
+        }, 
+        {
+          "caption": "Milk", 
+          "src": "resources/vectorIcons/flaticonIcons/milk.png"
+        }, 
+        {
+          "caption": "Milch", 
+          "src": "resources/vectorIcons/flaticonIcons/plastik-bottle.png"
+        }, 
+        {
+          "caption": "Grass", 
+          "src": "resources/vectorIcons/flaticonIcons/grass.png"
+        }, 
+        {
+          "caption": "Salat", 
+          "src": "resources/vectorIcons/flaticonIcons/lettuce.png"
+        }, 
+        {
+          "caption": "Pilze", 
+          "src": "resources/vectorIcons/flaticonIcons/mushroom.png"
+        }
+      ], 
+      "vectorProjections": [
+        {
+          "code": "EPSG:3857", 
+          "label": "EPSG:3857"
+        }, 
+        {
+          "code": "EPSG:4326", 
+          "label": "EPSG:4326 (lon/lat)"
+        }, 
+        {
+          "code": "EPSG:4326-enu", 
+          "label": "EPSG:4326 (lat/lon)"
+        }, 
+        {
+          "code": "EPSG:25832", 
+          "label": "EPSG:25832"
+        }
+      ], 
+      "vectorTemplates": [
+        {
+          "label": " --- ", 
+          "uuid": "a4a3ecdc-42c4-42d2-aad2-f1c612e468f0"
+        }
+      ], 
+      "wmsUrls": [
+        "https://sgx.geodatenzentrum.de/wms_topplus_web_open", 
+        "https://sgx.geodatenzentrum.de/wms_webatlasde.light", 
+        "https://sgx.geodatenzentrum.de/wms_webatlasde.light_grau", 
+        "https://ows.terrestris.de/osm/service", 
+        "https://ows.mundialis.de/services/service"
+      ]
+    }
+  }, 
+  "success": true
+}
