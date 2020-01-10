@@ -183,7 +183,7 @@
       "bfs:legendTitle": {
         "gco:CharacterString": {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "HSKA ODL brutto 1 h"
+          "#text": "ODL brutto 1 h"
         }
       },
       "bfs:printTitle": {
@@ -445,7 +445,7 @@
             "bfs:propertyValue": {
               "gco:CharacterString": {
                 "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-                "#text": "HSKA [[locality_name]]<br>[[end_measure]]<br>Messwert ([[unit]]):[[value]]<br>"
+                "#text": "[[locality_name]]<br>[[end_measure]]<br>Messwert ([[unit]]):[[value]]<br>"
               }
             }
           }
@@ -509,7 +509,7 @@
             "bfs:propertyValue": {
               "gco:CharacterString": {
                 "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-                "#text": "false"
+                "#text": "true"
               }
             }
           }
@@ -925,7 +925,7 @@
             "bfs:propertyValue": {
               "gco:CharacterString": {
                 "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-                "#text": "HSKA [[locality_name]]"
+                "#text": "[[locality_name]]"
               }
             }
           }
@@ -941,7 +941,7 @@
             "bfs:propertyValue": {
               "gco:CharacterString": {
                 "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-                "#text": "HSKA <b>[[locality_name]]</b><br>Datum: [[end_measure]]<br>Messwert in [[unit]]: [[value]]"
+                "#text": "<b>[[locality_name]]</b><br>Datum: [[end_measure]]<br>Messwert in [[unit]]: [[value]]"
               }
             }
           }

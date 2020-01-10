@@ -51,7 +51,11 @@
         "projection": "EPSG:3857", 
         "zoom": 0
       }, 
-      "mapLayers": [], 
+      "mapLayers": [
+	{
+          "uuid": "odl_meta"
+        }
+], 
       "metadataSearchFields": [
         "title", 
         "abstract"
