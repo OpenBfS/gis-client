@@ -30,6 +30,13 @@ Ext.define('Koala.Application', {
         'BasiGX.util.Namespace',
         'Koala.util.Routing',
         'Koala.util.AppContext'
+        // //prepare for Session Timeout Handling
+        // ,
+        // 'Lada.override.RestProxy'
+    ],
+
+    controllers: [
+        'Koala.view.controller.ElanScenarioController'
     ],
 
     statics: {
@@ -38,6 +45,13 @@ Ext.define('Koala.Application', {
         applicationUpdateTitle: 'Anwendungsupdate',
         applicationUpdateText: 'Für diese Anwendung steht ein Update zur Verfügung!',
         reloadMessage: '',
+        ssoExpiredTitle: '',
+        ssoExpiredBody: '',
+        ssoExpiredFailed: '',
+        username: '',
+        userId: '',
+        userroles: '',
+        logintime: '',
 
         /**
          * Return the current timereference for the application or null if
@@ -160,14 +174,48 @@ Ext.define('Koala.Application', {
         );
     },
 
+    /**
+     * Update the BasiGX namespace map with the namespaces from the GeoServer.
+     *
+     * @param {Object} ctx the application context
+     */
+    updateNamespaces: function(ctx) {
+        var url = ctx.data.merge.urls['geoserver-base-url'] + '/rest/namespaces';
+        Ext.Ajax.request({
+            url: url,
+            success: function(xhr) {
+                var namespaces = JSON.parse(xhr.responseText).namespaces.namespace;
+                Ext.each(namespaces, function(namespace) {
+                    Ext.Ajax.request({
+                        url: namespace.href,
+                        success: function(subXhr) {
+                            var subNamespace = JSON.parse(subXhr.responseText).namespace;
+                            BasiGX.util.Namespace.namespaces[subNamespace.prefix] = subNamespace.uri;
+                        }
+                    });
+                });
+            }
+        });
+    },
+
     launch: function() {
+        var staticMe = Koala.util.AppContext;
+        var ctx = staticMe.getAppContext();
+        var imisUser = staticMe.getMergedDataByKey('imis_user', ctx);
+        var imisRoles = (imisUser) ? imisUser.userroles : undefined;
+        this.username = '';
+        this.userId = imisUser;
+        this.userroles = imisRoles;
+        this.logintime = '';
         BasiGX.util.Namespace.namespaces = {
             opendata: 'www.imis.bfs.de/opendata',
             bfs: 'www.imis.bfs.de/bfs',
             imis: 'www.imis.bfs.de/imis',
             ruf: 'www.imis.bfs.de/ruf',
-            rlz: 'www.imis.bfs.de/rlz'
+            rlz: 'www.imis.bfs.de/rlz',
+            jrodos_res: 'www.imis.bfs.de/rodos'
         };
+        this.updateNamespaces(ctx);
         if (window.location.hash === '') {
             this.routedAlready = true;
         }
@@ -187,6 +235,25 @@ Ext.define('Koala.Application', {
         moment.updateLocale('fr', {
             longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.fr
         });
+
+        // //Set up an event handler to handle session timeouts
+        // //code with slight adjustements from LADA project:
+        // //see also: LADA Commit 8dddb5eb9b30894414b62eecf6fca23200756d75
+        //
+        // Ext.Ajax.on('requestexception', function(conn, response) {
+        //     if (response.status === 0 && response.responseText === '') {
+        //         Ext.MessageBox.confirm(
+        //             Koala.Application.ssoExpiredTitle,
+        //             Koala.Application.ssoExpiredBody,
+        //             function(btn) {
+        //                 if (btn === 'yes') {
+        //                     window.location.reload();
+        //                 }
+        //             }
+        //         );
+        //     }
+        // });
+
         // ask before closing/refreshing the window.
         // Not all browsers will respect this, depending on settings
         window.addEventListener('beforeunload', function(evt) {
@@ -199,6 +266,9 @@ Ext.define('Koala.Application', {
             evt.returnValue = confirmMessage;
             return confirmMessage;
         });
-    }
 
+        // make sure we don't send the Access-Control-Request-Headers: x-requested-with
+        // as it breaks feature info for external WMS
+        Ext.Ajax.setUseDefaultXhrHeader(false);
+    }
 });

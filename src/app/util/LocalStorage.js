@@ -22,6 +22,7 @@ Ext.define('Koala.util.LocalStorage', {
 
         HIDE_LAYERSET_ON_STARTUP_KEY: 'koala-layerset-chooser-hide',
         HIDE_HELP_ON_STARTUP_KEY: 'koala-help-hide',
+        CURRENT_USER_KEY: 'koala-current-user',
         DOKPOOL_EVENT_KEY: 'koala-dokpool-events',
 
         /**
@@ -94,6 +95,20 @@ Ext.define('Koala.util.LocalStorage', {
         },
 
         /**
+         * Set the current user
+         * If user has changed the dookpool events are cleared to ensure they
+         * are shown as new to the new user.
+         * @param {String} user New username
+         */
+        setCurrentUser: function(user) {
+            var oldUser = this.getProperty(this.CURRENT_USER_KEY);
+            if (user !== oldUser) {
+                this.updateDokpoolEvents(null);
+                this.setProperty(this.CURRENT_USER_KEY, user);
+            }
+        },
+
+        /**
          * Updates koala-dokpool-scenario in LocalStorage
          *
          * @param {Object} the current state of scenario
@@ -101,6 +116,7 @@ Ext.define('Koala.util.LocalStorage', {
          */
         updateDokpoolEvents: function(scenarios) {
             this.setProperty(this.DOKPOOL_EVENT_KEY, scenarios);
+            Ext.fireEvent('localElanStorageUpdated');
         },
 
         /**
@@ -109,7 +125,17 @@ Ext.define('Koala.util.LocalStorage', {
          *                 used to check for changes later on
          */
         getDokpoolEvents: function() {
-            return this.getProperty(this.DOKPOOL_EVENT_KEY);
+            var events = this.getProperty(this.DOKPOOL_EVENT_KEY);
+            return events? events: {};
+        },
+
+        /**
+         * Return all event keys as array
+         * @return {Array} Keys as array
+         */
+        getDokpoolEventKeys: function() {
+            var events = this.getDokpoolEvents();
+            return Ext.Object.getKeys(events);
         }
     }
 });

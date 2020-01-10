@@ -20,15 +20,60 @@
  */
 Ext.define('Koala.util.DokpoolRequest', {
 
-    requires: [
-        'Koala.util.Authentication',
-        'Koala.util.AppContext'
-    ],
+    requires: [],
 
     statics: {
         elanScenarioSearch: '@search?portal_type=DPEvent',
         dpTypeActive: '&dp_type=active',
         dpTypeInactive: '&dp_type=inactive',
+
+        /**
+         * Url to elan scenario service
+         */
+        elanScenarioUrl: null,
+
+        /**
+         * App context module
+
+        Koala.util.DokpoolRequest.appContext = Koala.util.AppContext
+
+         */
+        appContext: null,
+
+        /**
+         * Authentication module
+
+        Koala.util.DokpoolRequest.authenticationModule = Koala.util.Authentication
+
+         */
+        authenticationModule: null,
+
+        /**
+         * LocalStorage module
+
+        Koala.util.DokpoolRequest.storageModule = Koala.util.LocalStorage
+
+         */
+        storageModule: null,
+
+        /**
+         * Handler called after new elan scenarios were received.
+         * Handler args:
+         *   success (Boolean): True if request was successfull
+         */
+        handleElanScenariosReceived: function(success) {
+            Ext.fireEvent('elanEventsReceived', success);
+        },
+
+        /**
+         * Handler called if elan scenarios were updated.
+         * Handler args:
+         *  objectIds: Scenario object ids
+         *  routineMode (Boolean): True if update only contains routine scenarios, else false
+         */
+        handleElanScenariosUpdated: function(scenarioIds, routineMode) {
+            Ext.fireEvent('elanEventsUpdated', scenarioIds, routineMode);
+        },
 
         getAllElanScenarios: function() {
             var me = this;
@@ -42,91 +87,82 @@ Ext.define('Koala.util.DokpoolRequest', {
 
         updateActiveElanScenarios: function() {
             var me = this,
-                auth = 'Basic ' + Koala.util.String.utf8_to_b64('admin:istrator'),
                 headers = {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': auth
+                    'Content-Type': 'application/json'//,
+                    //'Authorization': auth
                 };
             me.getActiveElanScenarios().then(function(promise) {
                 var activeElanScenarios = promise.items;
-                var localStorageScenarios = Koala.util.LocalStorage.getDokpoolEvents();
-                var ScenarioAlertBtn = Ext.ComponentQuery.query('button[name=ScenarioAlertBtn]')[0];
-                var mobilePanel = ScenarioAlertBtn.up('app-main').down('k-panel-mobilemenu');
-                var mobileEventPanel = ScenarioAlertBtn.up('app-main').down('k-panel-mobileevents');
+                var localStorageScenarios = me.storageModule.getDokpoolEvents();
 
-                //delete inactive events from localStorage
-                for (var prop in localStorageScenarios) {
-                    var check = activeElanScenarios.filter(function(scen) {
-                        return scen['@id'] === localStorageScenarios[prop]['@id'];
-                    });
-                    if (check.length === 0) {
-                        // console.log('deleted "' + localStorageScenarios[prop].id + '" from localStorage since it is no longer active!');
-                        delete localStorageScenarios[prop];
-                        Koala.util.LocalStorage.updateDokpoolEvents(localStorageScenarios);
-                    }
-                }
-                if (!(activeElanScenarios.length >= 0) || (activeElanScenarios.length === 1) && (activeElanScenarios[0].title === 'Normalfall')) {
-                    // special handling for routinemode only
-                    if (!ScenarioAlertBtn.isHidden()) {
-                        ScenarioAlertBtn.hide();
-                        if (mobileEventPanel) {
-                            mobileEventPanel.hide();
-                            mobilePanel.hide();
-                        }
-                    }
+                me.storageModule.updateDokpoolEvents(localStorageScenarios);
+                window.console.log('localStorageScenarios: ' + localStorageScenarios);
+                //Response only contains routinemode
+                if (!(activeElanScenarios.length >= 0) || (activeElanScenarios.length === 1)
+                        && (activeElanScenarios[0].title === 'Normalfall')) {
+                    me.handleElanScenariosUpdated([], true);
                 } else {
-                    // activeScenarios from ELAN available
-                    if (ScenarioAlertBtn.isHidden()) {
-                        ScenarioAlertBtn.show();
-                    }
-                    Ext.each(activeElanScenarios, function(scenario) {
-                        var url = scenario['@id'];
-                        new Ext.Promise(function(resolve, reject) {
+                    new Ext.Promise(function(resolve, reject) {
+                        var changedIds = [];
+                        var storedEvents = me.storageModule.getDokpoolEvents();
+                        var activeEvents = {};
+                        var eventCount = activeElanScenarios.length;
+                        var resolved = 0;
+                        Ext.each(activeElanScenarios, function(scenario) {
+                            var url = scenario['@id'];
                             Ext.Ajax.request({
                                 url: url,
                                 headers: headers,
                                 method: 'GET',
                                 success: function(response) {
-                                    try {
-                                        var responseObj = Ext.decode(response.responseText);
-                                        var id = responseObj.id;
-                                        var ElanScenariosUpdate = Object.create({});
-                                        var activeElanScenariosDetail = Koala.util.LocalStorage.getDokpoolEvents();
-                                        if (activeElanScenariosDetail && !Ext.Object.isEmpty(activeElanScenariosDetail)) {
-                                            ElanScenariosUpdate = activeElanScenariosDetail;
-                                            if (!activeElanScenariosDetail[id] || !(activeElanScenariosDetail[id].modified === responseObj.modified)) {
-                                                // scenario change detected
-                                                ScenarioAlertBtn.triggerEvent = responseObj.id;
-                                                ScenarioAlertBtn.removeCls('button-routine');
-                                                ScenarioAlertBtn.addCls('button-alert');
-                                                ScenarioAlertBtn.setIconCls('fas fa-exclamation-triangle');
-                                                if (Ext.isModern) {
-                                                    mobilePanel.show();
-                                                }
-                                            } else {
-                                                // checked, but NO scenario change detected
-                                            }
-                                        } else {
-                                            // no scenario available in LocalStorage yet
-                                        }
-                                        ElanScenariosUpdate[id] = responseObj;
-                                        Koala.util.LocalStorage.updateDokpoolEvents(ElanScenariosUpdate);
-                                        resolve(responseObj);
-                                    } catch (err) {
-                                        // most likely response isn't JSON
-                                        Ext.log('ERROR: ' + err);
-                                        Ext.log('SERVER-RESPONSE: ' + response);
+                                    var eventObj = Ext.decode(response.responseText);
+                                    var eventId = eventObj['id'];
+                                    var storedEvent = storedEvents[eventId];
+                                    //Store active events in seperate for later check
+                                    activeEvents[eventId] = eventObj;
+                                    //If event is new or modified
+                                    if (!storedEvent
+                                        || storedEvent.modified !== eventObj.modified) {
+                                        //Update stored events and add id to changed list
+                                        storedEvents[eventId] = eventObj;
+                                        changedIds.push(eventId);
+                                    }
+                                    resolved++;
+                                    //Check if all requests were issued
+                                    if (resolved === eventCount) {
+                                        me.removeInactiveEvents(storedEvents, activeEvents);
+                                        me.storageModule.updateDokpoolEvents(storedEvents);
+                                        resolve(changedIds);
                                     }
                                 },
-                                failure: function(response) {
-                                    var msg = 'server-side failure with status code ' +
-                                        response.status;
-                                    reject(msg);
+                                failure: function() {
+                                    reject('Request failed');
                                 }
                             });
                         });
+                    }).then(function(changedIds) {
+                        if (changedIds.length > 0) {
+                            me.handleElanScenariosUpdated(changedIds, false);
+                        }
                     });
+                }
+            });
+        },
+
+        /**
+         * Checks local events for inactive/removed events and returns
+         * an events object without them
+         * @param {Object} localEvents Object containing locally stored events
+         * @param {Object} serverEvents Object containing events received from the server
+         * @return {Object} Locally stored events without inactive ones
+         */
+        removeInactiveEvents: function(localEvents, serverEvents) {
+            var localKeys = Ext.Object.getKeys(localEvents);
+            var serverKeys = Ext.Object.getKeys(serverEvents);
+            localKeys.forEach(function(el) {
+                if (!Ext.Array.contains(serverKeys, el)) {
+                    delete localEvents[el];
                 }
             });
         },
@@ -138,25 +174,21 @@ Ext.define('Koala.util.DokpoolRequest', {
 
 
         getElanScenarios: function(dpType) {
-            var me = this;
-            var ScenarioAlertBtn = Ext.ComponentQuery.query('button[name=ScenarioAlertBtn]')[0];
-            var auth = 'Basic ' + Koala.util.String.utf8_to_b64('admin:istrator'),
-                headers = {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': auth
-                },
-                appContext = Koala.util.AppContext.getAppContext(),
-                baseUrl = Koala.util.Object.getPathStrOr(appContext,
-                    'data/merge/urls/dokpool-scenarios'),
-                url = (dpType) ? baseUrl + me.elanScenarioSearch + dpType : baseUrl + me.elanScenarioSearch;
-
-            if (Koala.util.AppContext.getAppContext().debug) {
-                baseUrl = null;
+            if (!this.elanScenarioUrl) {
+                return Ext.Promise.resolve({items: []});
             }
 
-            if (!baseUrl) {
-                return Ext.Promise.resolve({items: []});
+            var me = this,
+                headers = {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'//,
+                    //'Authorization': auth
+                },
+                url = (dpType) ? this.elanScenarioUrl + me.elanScenarioSearch + dpType :
+                    this.elanScenarioUrl + me.elanScenarioSearch;
+
+            if (this.appContext && this.appContext.getAppContext().debug) {
+                this.elanScenarioUrl = null;
             }
 
             return new Ext.Promise(function(resolve) {
@@ -167,18 +199,17 @@ Ext.define('Koala.util.DokpoolRequest', {
                     success: function(response) {
                         try {
                             var responseObj = Ext.decode(response.responseText);
-                            ScenarioAlertBtn.show();
-                            ScenarioAlertBtn.enable();
+                            me.handleElanScenariosReceived(true);
                             resolve(responseObj);
                         } catch (err) {
                             // most likely response isn't JSON
                             Ext.log('ERROR: ' + err);
                             Ext.log('SERVER-RESPONSE: ' + response);
-                            ScenarioAlertBtn.disable();
+                            me.handleElanScenariosReceived(false);
                         }
                     },
                     failure: function() {
-                        ScenarioAlertBtn.disable();
+                        me.handleElanScenariosReceived(false);
                     }
                 });
             });

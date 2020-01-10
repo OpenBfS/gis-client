@@ -184,7 +184,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
             allowRemoval: true
         });
         var urls = combo.getValue();
-        var map = BasiGX.view.component.Map.guess().map;
+        var map = BasiGX.view.component.Map.guess().getMap();
         var bbox = rec.data.bbox;
         var video = document.createElement('video');
         video.id = videoId;

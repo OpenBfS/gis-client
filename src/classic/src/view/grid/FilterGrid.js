@@ -30,7 +30,7 @@ Ext.define('Koala.view.grid.FilterGrid', {
         type: 'k-grid-filter'
     },
     scrollable: true,
-    height: 150,
+    height: 200,
     config: {
         /**
          * The layer to filter/sort.
@@ -41,7 +41,8 @@ Ext.define('Koala.view.grid.FilterGrid', {
 
     listeners: {
         filterchange: 'filterChanged',
-        sortchange: 'sortChanged'
+        sortchange: 'sortChanged',
+        boxready: 'addExtraMenuItems'
     },
 
     bbar: {
@@ -92,12 +93,8 @@ Ext.define('Koala.view.grid.FilterGrid', {
      */
     setupStore: function(columns) {
         this.setColumns(columns);
-        var features = this.getLayer().getSource().getFeatures();
-        features = features.map(function(feat) {
-            return feat.getProperties();
-        });
-        var store = Ext.create('Ext.data.Store', {
-            data: features
+        var store = Ext.create('GeoExt.data.store.Features', {
+            layer: this.getLayer()
         });
         this.setStore(store);
     }

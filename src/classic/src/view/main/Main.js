@@ -77,32 +77,34 @@ Ext.define('Koala.view.main.Main', {
     listeners: {
         beforerender: {
             fn: function() {
-                var headerTitle = Koala.util.AppContext.getMergedDataByKey('headerTitle');
-                var header = this.down('k-panel-header');
-                if (headerTitle) {
-                    if (Koala.util.AppContext.getMergedDataByKey('imis_user').uid === 'hoe-fr') {
-                        headerTitle = 'Höbler-GIS';
+                var mapComp = BasiGX.view.component.Map.guess();
+                var me = this;
+                mapComp.on('afterrender', function() {
+                    var headerTitle = Koala.util.AppContext.getMergedDataByKey('headerTitle');
+                    var header = me.down('k-panel-header');
+                    if (headerTitle) {
+                        if (Koala.util.AppContext.getMergedDataByKey('imis_user').uid === 'hoe-fr') {
+                            headerTitle = 'Höbler-GIS';
+                        }
+                        header.getViewModel().set('headerTitle', headerTitle);
+                    } else {
+                        header.down('title').setBind({text: '{headerTitle}'});
                     }
-                    header.getViewModel().set('headerTitle', headerTitle);
-                } else {
-                    header.down('title').setBind({text: '{headerTitle}'});
-                }
-                document.title = headerTitle + ' | Bundesamt für Strahlenschutz';
-            },
-            delay: 500
-        },
-        afterrender: {
-            fn: function() {
-                var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
-                if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
-                    var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                    helpWin.on('afterlayout', function() {
-                        var helpWinController = this.getController();
-                        helpWinController.setTopic('preface');
-                    }, helpWin, {single: true});
-                }
-            },
-            delay: 500
+                    document.title = headerTitle + ' | Bundesamt für Strahlenschutz';
+                    Ext.create('Koala.view.window.ElanScenarioWindow');
+
+                    me.getController().initElanScenarios();
+
+                    var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
+                    if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
+                        var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                        helpWin.on('afterlayout', function() {
+                            var helpWinController = me.getController();
+                            helpWinController.setTopic('preface');
+                        }, helpWin, {single: true});
+                    }
+                });
+            }
         }
     },
 

@@ -119,6 +119,8 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
         var me = this;
 
         var chartConfig = olLayer.get('timeSeriesChartProperties');
+        var idField = Koala.util.Object.getPathStrOr(olLayer.metadata,
+            'layerConfig/olProperties/featureIdentifyField', 'id');
 
         // first try to read out explicitly configured WFS URL
         var url = Koala.util.Object.getPathStrOr(
@@ -131,7 +133,6 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
             url = (olLayer.getSource().getUrls()[0]).replace(/\/wms/g, '/wfs');
         }
 
-        var identifyField = chartConfig.featureIdentifyField || 'id';
         var idDataType = chartConfig.featureIdentifyFieldDataType || 'string';
         var dspField = chartConfig.featureShortDspField || 'name';
 
@@ -146,7 +147,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
                 fields: [{
                     name: 'id',
                     mapping: function(dataRec) {
-                        return dataRec.properties[identifyField];
+                        return dataRec.properties[idField];
                     }
                 },{
                     name: 'dspName',
@@ -233,7 +234,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
                     var selectedStations = [];
                     var stationIds = [];
                     Ext.each(selectedStations, function(selectedStation) {
-                        var stationId = selectedStation.get(identifyField);
+                        var stationId = selectedStation.get(idField);
                         if (idDataType === 'string') {
                             stationId = '\'' + stationId + '\'';
                         }
@@ -241,7 +242,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
                     });
                     if (stationIds.length > 0) {
                         var inPart = 'IN (' + stationIds.join(',') + ')';
-                        cqlParts.push('NOT ' + identifyField + ' ' + inPart);
+                        cqlParts.push('NOT ' + idField + ' ' + inPart);
                     }
                     queryPlan.query = cqlParts.join(' AND ');
                 }

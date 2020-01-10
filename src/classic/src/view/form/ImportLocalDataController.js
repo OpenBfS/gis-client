@@ -59,7 +59,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     onBoxReady: function() {
         var viewModel = this.getViewModel();
         var fileName = viewModel.get('file.name');
-        viewModel.set('layerName', fileName);
+        if (fileName) {
+            viewModel.set('layerName', fileName);
+        }
     },
 
     /**
@@ -102,19 +104,23 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
     readFile: function(justParseCallback) {
         var me = this;
         var file = this.getViewModel().get('file');
-        var reader = new FileReader();
-        reader.addEventListener('load', me.parseFeatures.bind(this, justParseCallback));
-        reader.readAsText(file);
+        if (file instanceof File) {
+            var reader = new FileReader();
+            reader.addEventListener('load', me.parseFeatures.bind(this, justParseCallback));
+            reader.readAsText(file);
+        } else {
+            this.parseFeatures(undefined, this.getViewModel().get('features'));
+        }
     },
 
     /**
     * Copy of https://github.com/openlayers/ol3/blob/v3.18.2/src/ol/interaction/draganddrop.js#L97
     */
-    parseFeatures: function(justParseCallback, event) {
+    parseFeatures: function(justParseCallback, eventOrData) {
         var me = this;
         var map = Ext.ComponentQuery.query('k-component-map')[0].getMap();
         var viewModel = me.getViewModel();
-        var result = event.target.result;
+        var result = eventOrData.target ? eventOrData.target.result : eventOrData;
         var formatConstructors = [
             ol.format.GeoJSON,
             ol.format.KML,
@@ -199,7 +205,9 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         var layer = new ol.layer.Vector(cfg);
         layer.metadata = metadata;
         if (this.style) {
-            layer.set('SLD', this.style);
+            Koala.util.Layer.setSLDStyle(layer, this.style);
+            Koala.util.Layer.updateVectorStyle(layer, this.style);
+            layer.set('hasLegend', true);
         }
         if (this.selectedTemplateStyle) {
             layerUtil.getVectorLayerStyle(layer, true, viewModel.get('selectedTemplateStyle'));
@@ -208,6 +216,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
 
         // Finally add the layer to the map.
         layerUtil.addOlLayerToMap(layer);
+
     },
 
     /**
@@ -227,8 +236,10 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             }
             var bar = metadata.layerConfig.barChartProperties;
             var time = metadata.layerConfig.timeSeriesChartProperties;
-            if (bar && Object.keys(bar).length > 0 ||
-                time && Object.keys(time).length > 0) {
+            var ol = metadata.layerConfig.olProperties;
+            if ((ol.showCartoWindow && ol.showCartoWindow === 'true') && (bar && Object.keys(bar).length > 0 ||
+                time && Object.keys(time).length > 0 ||
+                ol && Object.keys(ol).length > 0)) {
                 Ext.create('Ext.window.Window', {
                     title: me.getViewModel().get('settingsText'),
                     items: [{
@@ -303,11 +314,12 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             allowHover: shallHover,
             allowDownload: getBool(olProps.allowDownload, false),
             allowRemoval: getBool(olProps.allowRemoval, true),
-            //allowClone: getBool(olProps.allowClone, false), //ToDo clone vector layers
+            allowClone: getBool(olProps.allowClone, false),
             allowEdit: getBool(olProps.allowEdit, false),
             allowShortInfo: getBool(olProps.allowShortInfo, false),
             allowPrint: getBool(olProps.allowPrint, true),
             allowOpacityChange: getBool(olProps.allowOpacityChange, true),
+            featureIdentifyField: olProps.featureIdentifyField || 'id',
             hoverable: shallHover,
             hoverTpl: olProps.hoverTpl,
             hoverStyle: olProps.hoverStyle,

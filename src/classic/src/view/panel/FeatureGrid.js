@@ -284,10 +284,9 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                 xtype: 'button',
                 id: 'feature-grid-toggle-sort-selected-button',
                 bind: {
-                    text: '{toggleSortSelectedText}'
+                    text: '{sortSelectedText}'
                 },
-                toggleHandler: 'toggleSortSelected',
-                enableToggle: true
+                handler: 'sortSelected'
             }, {
                 xtype: 'button',
                 hidden: (!extendedRights || !allowCreate),

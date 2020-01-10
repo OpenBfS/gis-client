@@ -1,4 +1,4 @@
-/* Copyright (c) 2019-present terrestris GmbH & Co. KG
+/* Copyright (c) 2017-present terrestris GmbH & Co. KG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.grid.FilterGridModel
+ * @class Koala.view.window.CloneWindowModel
  */
-Ext.define('Koala.view.grid.FilterGridModel', {
+Ext.define('Koala.view.window.ElanScenarioWindowModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-grid-filter',
+    alias: 'viewmodel.k-window-elanscenarios',
+
     data: {
-        filterNullValues: ''
+        windowTitle: '',
+        title: '',
+        close: '',
+        unchangedText: '',
+        changedText: '',
+        description: '',
+        EventType_title: '',
+        TimeOfEvent: '',
+        OperationMode_title: '',
+        modified: '',
+        modified_by: '',
+        true: '',
+        false: '',
+        emptyText: ''
     }
 });

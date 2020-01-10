@@ -101,7 +101,9 @@ Ext.define('Koala.view.component.D3BarChart',{
             var title = Koala.util.String.replaceTemplateStrings(titleTpl, olFeat);
             var yLabel = chartConfig.yAxisLabel || '';
             var xLabel = chartConfig.xAxisLabel || '';
-            var chartMargin = chartConfig.chartMargin ? chartConfig.chartMargin.split(',') : [];
+            var chartMargin = chartConfig.chartMargin
+                ? chartConfig.chartMargin.split(',')
+                : [5,5,5,5];
             var chartMarginObj;
 
             config = config || {};

@@ -1,4 +1,4 @@
-/* Copyright (c) 2019-present terrestris GmbH & Co. KG
+/* Copyright (c) 2017 Bundesamt fuer Strahlenschutz
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.grid.FilterGridModel
+ * @class Koala.view.button.ElanScenarioButton
  */
-Ext.define('Koala.view.grid.FilterGridModel', {
+Ext.define('Koala.view.button.ElanScenarioButtonModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-grid-filter',
+    alias: 'viewmodel.k-button-elanscenariobutton',
+
     data: {
-        filterNullValues: ''
+        elanscenarios: '',
+        helpTooltip: ''
     }
 });

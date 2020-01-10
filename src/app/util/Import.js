@@ -223,21 +223,40 @@ Ext.define('Koala.util.Import', {
                 config: config,
                 layer: layer
             };
-            return this.prepareData(layer, importMetadata)
-                .then(this.prepareImport.bind(this, importMetadata))
-                .then(this.prepareTask.bind(this, importMetadata))
-                .then(this.performImport.bind(this, importMetadata))
-                .then(this.getLayerName.bind(this, importMetadata))
-                .then(this.persistToRodosService.bind(this, importMetadata))
-                .then(Koala.util.Metadata.prepareMetadata.bind(
-                    Koala.util.Metadata,
-                    layer.metadata,
-                    role
-                ))
-                .then(this.importStyle.bind(this, layer))
-                .then(this.readdLayer.bind(this, layer))
-                .then(this.setPersistedFlag.bind(this, layer))
-                .then(this.closeFeatureGrid.bind(this));
+            if (layer.metadata.wasRodosLayer) {
+                var features = layer.getSource().getFeatures();
+                var fmt = new ol.format.GeoJSON();
+                var geojson = fmt.writeFeaturesObject(features, {
+                    dataProjection: 'EPSG:4326',
+                    featureProjection: 'EPSG:3857'
+                });
+                var appConfig = Koala.util.AppContext.getAppContext().data.merge;
+                var tablename = layer.metadata.rodosTablename;
+                return Ext.Ajax.request({
+                    url: appConfig.urls['rodos-upload-service'] + tablename,
+                    method: 'POST',
+                    jsonData: geojson,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } else {
+                return this.prepareData(layer, importMetadata)
+                    .then(this.prepareImport.bind(this, importMetadata))
+                    .then(this.prepareTask.bind(this, importMetadata))
+                    .then(this.performImport.bind(this, importMetadata))
+                    .then(this.getLayerName.bind(this, importMetadata))
+                    .then(this.persistToRodosService.bind(this, importMetadata))
+                    .then(Koala.util.Metadata.prepareMetadata.bind(
+                        Koala.util.Metadata,
+                        layer.metadata,
+                        role
+                    ))
+                    .then(this.importStyle.bind(this, layer))
+                    .then(this.readdLayer.bind(this, layer))
+                    .then(this.setPersistedFlag.bind(this, layer))
+                    .then(this.closeFeatureGrid.bind(this));
+            }
         },
 
         /**

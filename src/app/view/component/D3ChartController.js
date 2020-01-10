@@ -37,6 +37,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     data: {},
     rawData: null,
     gridFeatures: null,
+    seriesVisibility: [],
     /**
      * Contains the DateValues of the charts current zoom extent.
      * @type {Object}
@@ -149,6 +150,22 @@ Ext.define('Koala.view.component.D3ChartController', {
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
 
         this.chartRenderer.render(div);
+        if (this.isAutoUpdated) {
+            var legendEntries = div.querySelectorAll('g.legend > g');
+            Ext.each(this.seriesVisibility, function(visible, idx) {
+                var item = legendEntries[idx];
+                while (item.nodeName !== 'g') {
+                    item = item.parentNode;
+                }
+                var list = item.classList;
+                if (visible) {
+                    list.remove('k-d3-disabled');
+                } else {
+                    list.add('k-d3-disabled');
+                    series.toggleSeries(idx);
+                }
+            });
+        }
     },
 
     /**
@@ -165,11 +182,14 @@ Ext.define('Koala.view.component.D3ChartController', {
         var me = this;
         var config = me.getView().getConfig();
         var gnosConfig = config.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
+        var idField = Koala.util.Object.getPathStrOr(config.targetLayer.metadata,
+            'layerConfig/olProperties/featureIdentifyField', 'id');
+
         var Const = Koala.util.ChartConstants;
         var CSS = Const.CSS_CLASS;
         Ext.each(this.chartConfig.legendComponentConfig.items, function(legend, idx) {
             var station = Ext.Array.findBy(me.getView().getSelectedStations(), function(feature) {
-                return feature.get(gnosConfig.featureIdentifyField || 'id') === legend.seriesId;
+                return feature.get(idField) === legend.seriesId;
             });
 
             legend.onClick = function(event) {
@@ -186,8 +206,10 @@ Ext.define('Koala.view.component.D3ChartController', {
                 list = item.classList;
                 if (list.contains('k-d3-disabled')) {
                     list.remove('k-d3-disabled');
+                    me.seriesVisibility[legend.seriesIndex] = true;
                 } else {
                     list.add('k-d3-disabled');
+                    me.seriesVisibility[legend.seriesIndex] = false;
                 }
                 series.toggleSeries(legend.seriesIndex);
             };
@@ -221,7 +243,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                         .attr('text-anchor', 'start')
                         .attr('dy', '1')
                         .attr('dx', '150') // TODO Discuss, do we need this dynamically?
-                        .on('click', me.generateColorCallback(legend.seriesIndex));
+                        .on('click', me.generateColorCallback(legend.seriesIndex, idx));
                 }
                 node.append('text')
                     // ✖ from FontAwesome, see http://fontawesome.io/cheatsheet/
@@ -332,7 +354,9 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
         var config = this.getView().getConfig();
         var gnosConfig = config.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
-        var margin = gnosConfig.chartMargin.split(',');
+        var margin = gnosConfig.chartMargin
+            ? gnosConfig.chartMargin.split(',')
+            : [5,5,5,5];
         margin = Ext.Array.map(margin, function(w) {
             return parseInt(w, 10);
         });
@@ -660,15 +684,17 @@ Ext.define('Koala.view.component.D3ChartController', {
     getChartDataForStation: function(selectedStation) {
         var me = this;
         var layer = selectedStation.get('layer');
+        var idField = Koala.util.Object.getPathStrOr(layer.metadata,
+            'layerConfig/olProperties/featureIdentifyField', 'id');
+
         // layer may be undefined in mobile environment
         if (!layer) {
             var view = me.getView();
             layer = view.getTargetLayer();
         }
-        var chartProperties = layer.metadata.layerConfig.timeSeriesChartProperties;
         // The id of the selected station is also the key in the pending
         // requests object.
-        var stationId = selectedStation.get(chartProperties.featureIdentifyField || 'id');
+        var stationId = selectedStation.get(idField);
         // Store the actual request object, so we are able to abort it if we are
         // called faster than the response arrives.
         var ajaxRequest = me.getChartDataRequest(
@@ -818,10 +844,12 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (!view) {
             return;
         }
-        var chartProps = view.getTargetLayer().metadata.layerConfig.timeSeriesChartProperties;
+        var idField = Koala.util.Object.getPathStrOr(view.getTargetLayer().metadata,
+            'layerConfig/olProperties/featureIdentifyField', 'id');
+
         // The id of the selected station is also the key in the pending
         // requests object.
-        var stationId = station.get(chartProps.featureIdentifyField || 'id');
+        var stationId = station.get(idField);
         // Called for both success and failure, this will delete the
         // entry in the pending requests object.
         if (stationId in me.ajaxRequests) {
@@ -860,6 +888,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.rawData = response.responseText;
         //used for grid table in CartoWindowController
         me.gridFeatures = Ext.clone(data.features);
+        var idField = Koala.util.Object.getPathStrOr(targetLayer.metadata,
+            'layerConfig/olProperties/featureIdentifyField', 'id');
 
         var seriesData = Koala.util.ChartData.convertToTimeseriesData(
             chartConfig,
@@ -873,7 +903,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         me.chartDataAvailable = true;
         // The id of the selected station is also the key in the pending
         // requests object.
-        var stationId = station.get(chartConfig.featureIdentifyField || 'id');
+        var stationId = station.get(idField);
         me.featuresByStation[stationId] = data.features;
         me.data[stationId] = seriesData;
         me.ajaxCounter++;
@@ -913,7 +943,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      * Returns whether this chart currently contains a series for the passed
      * feature or not. In order for this method to properly work, you will need
      * to specify a valid `featureIdentifyField` in the current layers
-     * `timeSeriesChartProperties`.
+     * `olProperties`.
      *
      * @param {ol.Feature} candidate The feature to check.
      * @return {boolean} Whether the candidate is already represented inside
@@ -922,18 +952,18 @@ Ext.define('Koala.view.component.D3ChartController', {
     containsStation: function(candidate) {
         var me = this;
         var view = me.getView();
-        var chartingMetadata = view.getTargetLayer().metadata.layerConfig.timeSeriesChartProperties;
-        var identifyField = chartingMetadata.featureIdentifyField || 'id';
-        var candidateIdVal = candidate.get(identifyField);
+        var idField = Koala.util.Object.getPathStrOr(view.getTargetLayer().metadata,
+            'layerConfig/olProperties/featureIdentifyField', 'id');
+        var candidateIdVal = candidate.get(idField);
         var doesContainSeries = false;
         if (!Ext.isDefined(candidateIdVal)) {
             Ext.log.warn('Failed to determine if chart contains a series for ' +
-                'the passed feature. Does it expose a field \'' + identifyField +
+                'the passed feature. Does it expose a field \'' + idField +
                 '\' with a sane value?');
         } else {
             var currentStations = view.getSelectedStations();
             Ext.each(currentStations, function(currentStation) {
-                var currentStationIdVal = currentStation.get(identifyField);
+                var currentStationIdVal = currentStation.get(idField);
                 if (currentStationIdVal === candidateIdVal) {
                     doesContainSeries = true;
                     return false; // …stop iterating
@@ -941,33 +971,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             });
         }
         return doesContainSeries;
-    },
-
-    /**
-     * Toggles an axis scale back and forth between linear and logarithmic.
-     * @param  {String|undefined} axis if not given, the 'y' scale is toggled
-     */
-    toggleScale: function(axis) {
-        var powerOfTen = Koala.util.ChartData.powerOfTen;
-        if (!axis) {
-            axis = 'y';
-        }
-        var cfg = this.chartConfig.timeseriesComponentConfig.axes[axis];
-        var scale = cfg.scale;
-        scale = scale === 'linear' ? 'log' : 'linear';
-        cfg.scale = scale;
-        cfg.factor = scale === 'log' ? undefined : 0.8;
-        cfg.harmonize = scale === 'log';
-        cfg.epsilon = scale === 'log' ? 0.01 : undefined;
-        cfg.tickFormatter = scale === 'log' ? function(val) {
-            return !powerOfTen(val) ? ''
-                : val > 1000 || val < 0.0001
-                    ? val.toExponential()
-                    : val;
-        } : undefined;
-        this.chartOverrides[axis] = {
-            scale: scale
-        };
-        this.drawChart();
     }
+
 });

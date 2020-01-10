@@ -464,7 +464,7 @@ Ext.define('Koala.util.Filter', {
                     xtype: 'numberfield',
                     name: name,
                     spinnerType: spinnerType,
-                    value: startValue,
+                    value: enableSpinner ? startValue : 0,
                     minValue: 0,
                     maxValue: maxValue,
                     step: stepSize,
@@ -499,7 +499,7 @@ Ext.define('Koala.util.Filter', {
                     xtype: 'selectfield',
                     name: name,
                     spinnerType: spinnerType,
-                    value: startValue,
+                    value: enableSpinner ? startValue : 0,
                     disabled: !enableSpinner,
                     usePicker: true,
                     width: 60,
@@ -715,7 +715,6 @@ Ext.define('Koala.util.Filter', {
                 max = moment.utc('2100-01-01T00:00:00');
             }
 
-
             // Get clones of once passed in min and max:
             var minClone = min.clone().utc();
             var maxClone = max.clone().utc();
@@ -769,6 +768,13 @@ Ext.define('Koala.util.Filter', {
                 endName = 'timeseriesEndField';
             }
 
+            var unit = (filter.unit || '').toLowerCase();
+            var interval = parseInt((filter.interval || '1').toLowerCase(), 10);
+            if (unit === 'hours' && interval >= 24) {
+                unit = 'days';
+                interval = 1;
+            }
+
             // Query for field types generally to be compatible with classic
             // and modern. In classic the datefield, whereas in modern
             // the datepickerfield, is used.
@@ -780,6 +786,11 @@ Ext.define('Koala.util.Filter', {
 
             if (!startDate || !endDate) {
                 return true;
+            }
+
+            if (unit === 'days') {
+                startDate = startDate.startOf('day');
+                endDate = endDate.startOf('day');
             }
 
             if (startDate.isAfter(endDate)) {
@@ -815,8 +826,8 @@ Ext.define('Koala.util.Filter', {
                 return true;
             }
 
-            // moment.diff() returns the difference in milliseconds per default.
-            var withinDuration = Math.abs(startDate.diff(endDate)) <= maxDuration.asMilliseconds();
+            var notBefore = endDate.subtract(maxDuration);
+            var withinDuration = notBefore.isBefore(startDate) || notBefore.isSame(startDate);
 
             if (!withinDuration) {
                 // Invalid: Outside of allowed duration

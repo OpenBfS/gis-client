@@ -36,6 +36,14 @@ Ext.define('Koala.view.form.ChartDataForm', {
 
     items: [{
         xtype: 'fieldset',
+        name: 'ol',
+        layout: 'form',
+        bind: {
+            title: '{olTitleText}'
+        },
+        items: []
+    },{
+        xtype: 'fieldset',
         name: 'bar',
         layout: 'form',
         bind: {
@@ -66,6 +74,9 @@ Ext.define('Koala.view.form.ChartDataForm', {
     }],
 
     config: {
+        olFields: [
+            'featureIdentifyField'
+        ],
         fields: [
             'xAxisAttribute',
             'yAxisAttribute',
@@ -139,8 +150,11 @@ Ext.define('Koala.view.form.ChartDataForm', {
      */
     initComponent: function() {
         this.callParent();
-        var metadata = this.getMetadata().layerConfig.barChartProperties;
-        var fields = this.getFields();
+        var metadata = this.getMetadata().layerConfig.olProperties;
+        var fields = this.getOlFields();
+        this.initChartComponents(metadata, fields, 'ol');
+        metadata = this.getMetadata().layerConfig.barChartProperties;
+        fields = this.getFields();
         this.initChartComponents(metadata, fields, 'bar');
         metadata = this.getMetadata().layerConfig.timeSeriesChartProperties;
         fields = this.getTimeseriesFields();

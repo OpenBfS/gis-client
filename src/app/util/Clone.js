@@ -130,7 +130,7 @@ Ext.define('Koala.util.Clone', {
                     if (sourceLayer.get('SLD') && !sourceLayer.get('isDefaultStyle')) {
                         Koala.util.Layer.updateVectorStyle(targetLayer, sourceLayer.get('SLD'));
                         targetLayer.setStyle(sourceLayer.getStyle());
-                    } else {
+                    } else if (sourceLayer.metadata.layerConfig.wms) {
                         var wmsConfig = sourceLayer.metadata.layerConfig.wms;
                         // TODO think about a better way of doing this
                         // The RODOS WMS is a separate GeoServer instance
@@ -163,6 +163,9 @@ Ext.define('Koala.util.Clone', {
                                 }
                                 Koala.util.Clone.loadStyle(ms[1], styleName, targetLayer);
                             });
+                    } else if (sourceLayer.getStyle()) {
+                        var style = sourceLayer.getStyle();
+                        targetLayer.setStyle(style.clone());
                     }
                 } else {
                     Koala.util.Clone.loadStyle(geoserverBaseUrl, templateStyle, targetLayer);
@@ -219,7 +222,7 @@ Ext.define('Koala.util.Clone', {
                         result.set('isDefaultStyle', true);
                         result.set(Layer.FIELDNAME_ORIGINAL_METADATA, Ext.clone(metadata));
                         result.metadata = Ext.clone(metadata);
-                        if (layer && layer.metadata.isRodosLayer) {
+                        if (layer && layer.metadata && layer.metadata.isRodosLayer) {
                             result.metadata.wasRodosLayer = true;
                             var ms = /^tablename:(.+);$/.exec(layer.metadata.layerConfig.olProperties.param_viewparams);
                             result.metadata.rodosTablename = ms[1];

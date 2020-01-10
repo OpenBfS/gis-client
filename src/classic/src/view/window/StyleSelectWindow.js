@@ -60,35 +60,46 @@ Ext.define('Koala.view.window.StyleSelectWindow', {
             },
             items: [{
                 xtype: 'filefield',
+                width: '100%',
                 bind: {
                     fieldLabel: '{fileFieldText}'
-                }
-            }]
-        }, {
-            name: 'environmentFieldTab',
-            bind: {
-                title: '{getFromEnvironmentFieldTab}'
-            },
-            items: [{
-                xtype: 'combo',
-                bind: {
-                    fieldLabel: '{selectEnvironmentFieldFieldText}',
-                    store: '{attributes}'
                 },
                 listeners: {
-                    change: 'attributeSelected'
+                    change: function(field, path) {
+                        var ms = /[/\\]([^/\\]+)$/.exec(path);
+                        if (ms && ms[1]) {
+                            field.el.dom.querySelector('input').value = ms[1];
+                        }
+                    }
                 }
-            }, {
-                xtype: 'combo',
-                name: 'environmentFieldStyles',
-                bind: {
-                    fieldLabel: '{selectStyleText}',
-                    value: '{selectedEnvironmentFieldStyle}'
-                },
-                valueField: 'val',
-                displayField: 'dsp'
             }]
         }, {
+        //     // TODO:
+        //     // setup service
+        //     name: 'environmentFieldTab',
+        //     bind: {
+        //         title: '{getFromEnvironmentFieldTab}'
+        //     },
+        //     items: [{
+        //         xtype: 'combo',
+        //         bind: {
+        //             fieldLabel: '{selectEnvironmentFieldFieldText}',
+        //             store: '{attributes}'
+        //         },
+        //         listeners: {
+        //             change: 'attributeSelected'
+        //         }
+        //     }, {
+        //         xtype: 'combo',
+        //         name: 'environmentFieldStyles',
+        //         bind: {
+        //             fieldLabel: '{selectStyleText}',
+        //             value: '{selectedEnvironmentFieldStyle}'
+        //         },
+        //         valueField: 'val',
+        //         displayField: 'dsp'
+        //     }]
+        // }, {
             name: 'templateTab',
             bind: {
                 title: '{templateTab}'

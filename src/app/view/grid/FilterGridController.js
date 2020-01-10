@@ -21,6 +21,7 @@ Ext.define('Koala.view.grid.FilterGridController', {
     alias: 'controller.k-grid-filter',
 
     requires: [
+        'GeoExt.data.store.Features'
     ],
 
     featureStore: null,
@@ -28,37 +29,77 @@ Ext.define('Koala.view.grid.FilterGridController', {
     layer: null,
     storeData: null,
 
-    /**
-     * Initialize the controller by preparing an internal store to
-     * manage filtering.
-     */
     init: function() {
-        var me = this;
         this.callParent();
         this.layer = this.getView().getLayer();
-        this.features = this.layer.getSource().getFeatures().slice();
-        var features = this.features.map(function(feat) {
-            return feat.getProperties();
-        });
-        this.featureStore = Ext.create('Ext.data.Store', {
-            data: features
-        });
-        this.storeData = [];
-        this.featureStore.getData().each(function(item) {
-            me.storeData.push(item);
-        });
+        this.layer.originalFeatures = this.features;
     },
 
     /**
-     * Update the internal store and the layer with the new filters.
+     * Adds extra entries to the Column Menu. e.g the check null value filter
+     */
+    addExtraMenuItems: function() {
+        var me = this;
+        var view = this.getView();
+        var viewModel = this.getViewModel();
+        // Add custom entry to grid menu
+        var menu = view.headerCt.getMenu();
+        menu.add([{
+            xtype: 'menucheckitem',
+            text: viewModel.get('filterNullValues'),
+            checkHandler: function(evt) {
+                me.toggleNullValueFilter(evt);
+            }
+        }]);
+    },
+
+    /**
+     * Update the layer with the new filters manually.
      *
      * @param {Ext.data.Store} store the view's store
      * @param {Object} filters the new filters
      */
-    filterChanged: function(store, filters) {
-        this.featureStore.clearFilter();
-        this.featureStore.setFilters(filters);
-        this.updateLayer();
+    filterChanged: function(store) {
+        var featureGrid = Ext.ComponentQuery.query('k-panel-featuregrid')[0];
+        if (featureGrid) {
+            featureGrid.close();
+        }
+        var source = this.layer.getSource();
+        var newFeatures = [];
+        store.each(function(record) {
+            var feature = record.olObject;
+            newFeatures.push(feature);
+        });
+        source.clear();
+        source.addFeatures(newFeatures);
+    },
+
+    /**
+     * Toggles the null value filter
+     *
+     * @param {CheckChangeEvent} evt The checkchange event
+     */
+    toggleNullValueFilter: function(evt) {
+        var checked = evt.checked;
+        var column = evt.getQueryRoot().up('gridcolumn');
+        var store = this.getView().getStore();
+        var dataIndex = column.dataIndex;
+        var filterId = dataIndex + '_null_value_filter';
+        var nullValueFilter = store.getFilters().findBy(function(item) {
+            return item.getId() === filterId;
+        });
+        if (!nullValueFilter && checked) {
+            nullValueFilter = new Ext.util.Filter({
+                id: filterId,
+                filterFn: function(item) {
+                    var value = item.getData()[dataIndex];
+                    return !!value;
+                }
+            });
+            store.addFilter(nullValueFilter);
+        } else {
+            store.removeFilter(nullValueFilter);
+        }
     },
 
     /**
@@ -83,23 +124,6 @@ Ext.define('Koala.view.grid.FilterGridController', {
             }
             return v1 < v2 ? 1 : v1 > v2 ? -1 : 0;
         });
-    },
-
-    /**
-     * Update the layer's features in accordance with the internal store's
-     * contents.
-     */
-    updateLayer: function() {
-        var me = this;
-        var data = this.featureStore.getData();
-        var newFeatures = [];
-        data.each(function(item) {
-            newFeatures.push(me.features[me.storeData.indexOf(item)]);
-        });
-        var src = this.layer.getSource();
-        src.clear();
-        src.addFeatures(newFeatures);
-        this.layer.originalFeatures = this.features;
     }
 
 });

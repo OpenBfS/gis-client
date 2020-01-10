@@ -1,6 +1,7 @@
 {
     "data": {
         "merge": {
+            "headerTitle": "IMIS",
             "urls": {
                 "metadata-xml2json": "http://bfs-docker/geonetwork/srv/api/0.1/records/",
                 "metadata-search": "http://bfs-docker/geonetwork/srv/ger/csw?",
@@ -62,7 +63,8 @@
                 "yAxisAttribute",
                 "groupAttribute",
                 "detectionLimitAttribute",
-                "uncertaintyAttribute"
+                "uncertaintyAttribute",
+                "featureIdentifyField"
             ],
             "spatialSearchTypeName": "bfs:verwaltung_4326_geozg_sort",
             "spatialSearchFields": {
@@ -99,7 +101,8 @@
                 "drawBtn",
                 "createVectorLayerBtn",
                 "importVectorLayerBtn",
-                "detectionLimitBtn"
+                "detectionLimitBtn",
+                "ScenarioAlertBtn"
             ],
             "vectorIcons": [
                 {
@@ -187,6 +190,10 @@
             ],
             "vectorTemplates": [
                 {
+                    "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                    "label": "bar"
+                },
+                {
                     "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
                     "label": "Local Vector Data Template (drinkwater)"
                 },
@@ -210,6 +217,7 @@
                 ]
             },
             "wmsUrls": [
+                "https://ahocevar.com/geoserver/ows",
                 "http://ows.terrestris.de/osm/service",
                 "http://ows.mundialis.de/services/service"
             ],

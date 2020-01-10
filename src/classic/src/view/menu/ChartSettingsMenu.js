@@ -33,8 +33,7 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
 
     items: [{
         bind: {
-            text: '{toggleScaleText}',
-            hidden: '{!isTimeseries}'
+            text: '{toggleScaleText}'
         },
         handler: 'toggleScale',
         glyph: 'xf07d@FontAwesome'
@@ -74,6 +73,12 @@ Ext.define('Koala.view.menu.ChartSettingsMenu', {
         },
         handler: 'editTemplates',
         glyph: 'xf27a@FontAwesome'
+    }, {
+        bind: {
+            text: '{editSettings}'
+        },
+        handler: 'editSettings',
+        glyph: 'xf013@FontAwesome'
     }],
 
     config: {

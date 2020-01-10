@@ -284,17 +284,25 @@ Ext.define('Koala.view.component.D3BaseController', {
         }
         var layer = this.getView().getTargetLayer();
 
-        if (layer instanceof ol.layer.Vector) {
+        var serverBased = Koala.util.Object.getPathStrOr(layer, 'metadata/layerConfig/vector/url', false);
+        if (layer instanceof ol.layer.Vector && !serverBased) {
             var fmt = new ol.format.GeoJSON();
             var data = layer.originalFeatures || layer.getSource().getFeatures();
-            if (Ext.isFunction(cbFn)) {
-                cbFn.call(cbScope, station);
-            }
-            if (Ext.isFunction(cbSuccess)) {
-                cbSuccess.call(cbScope, {
-                    responseText: fmt.writeFeatures(data)
-                }, station);
-            }
+            data = data.slice();
+            var groupAttribute = Koala.util.Object.getPathStrOr(layer.metadata, 'layerConfig/olProperties/featureIdentifyField');
+            data = Ext.Array.filter(data, function(feat) {
+                return feat.get(groupAttribute) === station.get(groupAttribute);
+            });
+            window.setTimeout(function() {
+                if (Ext.isFunction(cbFn)) {
+                    cbFn.call(cbScope, station);
+                }
+                if (Ext.isFunction(cbSuccess)) {
+                    cbSuccess.call(cbScope, {
+                        responseText: fmt.writeFeatures(data)
+                    }, station);
+                }
+            }, 500);
             return;
         }
 
@@ -442,6 +450,7 @@ Ext.define('Koala.view.component.D3BaseController', {
         var downloadIcons = this.getView().el.dom.querySelectorAll('.k-d3-download-icon');
         var deleteIcons = this.getView().el.dom.querySelectorAll('.k-d3-delete-icon');
         var colorIcons = this.getView().el.dom.querySelectorAll('.k-d3-color-icon');
+        var disabled = this.getView().el.dom.querySelectorAll('.k-d3-disabled');
         downloadIcons.forEach(function(icon) {
             icon.style.display = 'none';
         });
@@ -450,6 +459,10 @@ Ext.define('Koala.view.component.D3BaseController', {
         });
         colorIcons.forEach(function(icon) {
             icon.style.display = 'none';
+        });
+        // should only match legend entries
+        disabled.forEach(function(el) {
+            el.style.opacity = 0.3;
         });
         return new Ext.Promise(function(resolve) {
             html2canvas(chartNode, {
@@ -464,6 +477,10 @@ Ext.define('Koala.view.component.D3BaseController', {
                     });
                     colorIcons.forEach(function(icon) {
                         icon.style.display = 'block';
+                    });
+                    disabled.forEach(function(el) {
+                        // unfortunately, `delete` and setting the opacity to undefined don't work (at least in Chrome)
+                        el.style = 'cursor: pointer';
                     });
                     resolve(canvas.toDataURL(outputFormat));
                 });
@@ -513,7 +530,7 @@ Ext.define('Koala.view.component.D3BaseController', {
      * @param  {Number} index the index of the series to change color for
      * @return {Function}       The generated callback function
      */
-    generateColorCallback: function(idx) {
+    generateColorCallback: function(idx, legendIdx) {
         var me = this;
         var viewModel = this.getViewModel();
         return function() {
@@ -549,7 +566,7 @@ Ext.define('Koala.view.component.D3BaseController', {
                         var cmp = win.down('[name=chart-color-picker]');
                         me.chartConfig.timeseriesComponentConfig
                             .series[idx].color = '#' + cmp.getValue();
-                        me.chartConfig.legendComponentConfig.items[idx]
+                        me.chartConfig.legendComponentConfig.items[legendIdx]
                             .style.stroke = '#' + cmp.getValue();
                         me.drawChart();
                         win.close();
@@ -644,6 +661,42 @@ Ext.define('Koala.view.component.D3BaseController', {
             }
         }
         this.handleResize();
+    },
+
+    /**
+     * Toggles an axis scale back and forth between linear and logarithmic.
+     * @param  {String|undefined} axis if not given, the 'y' scale is toggled
+     */
+    toggleScale: function(axis) {
+        var powerOfTen = Koala.util.ChartData.powerOfTen;
+        if (!axis) {
+            axis = 'y';
+        }
+        var cfg;
+        if (this instanceof Koala.view.component.D3ChartController) {
+            cfg = this.chartConfig.timeseriesComponentConfig.axes[axis];
+        } else {
+            cfg = this.chartConfig.barComponentConfig.axes[axis];
+        }
+        var scale = cfg.scale;
+        scale = scale === 'linear' ? 'log' : 'linear';
+        cfg.scale = scale;
+        cfg.factor = scale === 'log' ? undefined : 0.8;
+        cfg.harmonize = scale === 'log';
+        cfg.epsilon = scale === 'log' ? 0.01 : undefined;
+        cfg.tickFormatter = scale === 'log' ? function(val) {
+            return !powerOfTen(val) ? ''
+                : val > 1000 || val < 0.0001
+                    ? val.toExponential()
+                    : val;
+        } : undefined;
+        if (!this.chartOverrides) {
+            this.chartOverrides = {};
+        }
+        this.chartOverrides[axis] = {
+            scale: scale
+        };
+        this.drawChart();
     }
 
 });

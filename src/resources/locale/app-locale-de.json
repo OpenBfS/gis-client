@@ -4,6 +4,9 @@
             "timereferenceNotFound": "Zeitbezug-Button konnte nicht gefunden werden.",
             "applicationUpdateTitle": "Anwendungsupdate",
             "applicationUpdateText": "Für diese Anwendung steht ein Update zur Verfügung. Jetzt neu laden?",
+            "ssoExpiredTitle" : "Erneutes Login erforderlich!",
+            "ssoExpiredBody" : "Ihre Sitzung ist abgelaufen.<br/>Soll die Sitzung erneuert werden?",
+            "ssoExpiredFailed": "Die Sitzung konnte nicht erneuert werden.",
             "leavePageText": "Wollen Sie diese Seite verlassen/neu laden? Nicht gespeicherte lokale Änderungen gehen dadurch verloren."
         }
     },
@@ -533,7 +536,6 @@
                 "pinTooltip": "Anheften",
                 "unpinTooltip": "Lösen",
                 "closeTooltip": "Schließen",
-                "headerTitle": "GEOPORTAL",
                 "gridTabTitle": "Tabellarische Ansicht",
                 "htmlTabTitle": "Information",
                 "hoverinfoTabTitle": "Information"
@@ -552,7 +554,7 @@
                 "minMaxWindowTitle": "y-Achse ändern",
                 "okText": "Ok",
                 "editTemplates": "Templates anpassen",
-                "editSettings": "Spaltenauswahl anpassen",
+                "editSettings": "Einstellungen anpassen",
                 "title": "Legende",
                 "tooltip": "Tooltip",
                 "xAxisLabel": "xAxisLabel",
@@ -587,7 +589,7 @@
                 "multiEditTooltip": "Alle selektierten Zeilen ändern",
                 "deleteTitle": "Löschen",
                 "deleteMessage": "Wollen Sie die {0} selektierten Objekte löschen?",
-                "toggleSortSelectedText": "Selektierte nach oben",
+                "sortSelectedText": "Selektierte nach oben",
                 "addColumnTooltip": "Spalte hinzufügen",
                 "columnPrefix": "Spalte_"
             }
@@ -597,7 +599,6 @@
         "config": {
             "data": {
                 "logoTooltip": "Link zur BfS-Homepage",
-                "headerTitle": "GEOPORTAL",
                 "alertBtnText": "Ereignisse",
                 "alertBtnTooltip": "Ereignisinformation",
                 "routineMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> (unverändert)",
@@ -752,6 +753,13 @@
             }
         }
     },
+    "Koala.view.grid.FilterGrid": {
+        "config": {
+            "data": {
+                "filterNullValues": "NULL Werte filtern"
+            }
+        }
+    },
     "Koala.view.window.FilterGridWindow": {
         "config": {
             "data": {
@@ -766,7 +774,35 @@
         "config": {
             "data": {
                 "title": "Permalink",
-                "helpTooltip": "Hilfe",
+                "helpTooltip": "Hilfe"
+            }
+        }
+    },
+    "Koala.view.window.ElanScenarioWindow": {
+        "config": {
+            "data": {
+                "windowTitle": "Dokpool-Messenger",
+                "title": "Ereignisse",
+                "close": "Schließen",
+                "unchangedText": "unverändert",
+                "changedText": "geändert",
+                "key_description": "Beschreibung",
+                "key_EventType_title": "Art des Ereignisses",
+                "key_TimeOfEvent": "Ereigniszeit",
+                "key_OperationMode_title": "Betriebsart",
+                "key_modified": "geändert am",
+                "key_modified_by": "geändert von",
+                "true": "Ja",
+                "false": "Nein",
+                "emptyText": "Es liegen keine Informationen vor."
+            }
+        }
+    },
+    "Koala.view.button.ElanScenarioButton": {
+        "config": {
+            "data": {
+                "elanscenarios": "Ereignisse",
+                "helpTooltip": "Hilfe"
             }
         }
     },
@@ -1657,7 +1693,9 @@
                 "uncertaintyAttribute": "Attribut Unsicherheit",
                 "okButtonText": "Ok",
                 "cancelButtonText": "Abbrechen",
-                "timeseriesTitle": "Zeitreihe Einstellungen"
+                "timeseriesTitle": "Zeitreihe Einstellungen",
+                "olTitleText": "Layer Einstellungen",
+                "featureIdentifyField": "Feature ID"
             }
         }
     },
@@ -1802,19 +1840,20 @@
     "Koala.view.panel.MobileEvents": {
         "config": {
             "data": {
+                "title": "Dokpool-Messenger",
                 "title": "Ereignisse",
-                "routineMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> (unverändert)",
-                "alertMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> <div style='color:red; margin: 0;'> (modifiziert!)</div>",
-                "htmlMessageBody": "<div>" +
-                    "<b>geändert am:</b> [[modified]]<br>" +
-                    "<b>geändert von:</b> [[modified_by]]<br>" +
-                    "<b>Ist dies eine Übung?</b> [[Exercise]]<br>" +
-                    "<b>Ereigniszeit:</b> [[TimeOfEvent]]<br>" +
-                    "<b>ID:</b> [[id]]<br>" +
-                    "<b>Beschreibung:</b> [[description]]<br>" +
-                    "<b>Szenariophase:</b> [[ScenarioPhase.title]]<br>" +
-                    "<b>Ereignisort:</b> [[ScenarioLocation.title]]<br>" +
-                    "</div>"
+                "close": "Schließen",
+                "unchangedText": "unverändert",
+                "changedText": "geändert",
+                "key_description": "Beschreibung",
+                "key_EventType_title": "Art des Ereignisses",
+                "key_TimeOfEvent": "Ereigniszeit",
+                "key_OperationMode_title": "Betriebsart",
+                "key_modified": "geändert am",
+                "key_modified_by": "geändert von",
+                "true": "Ja",
+                "false": "Nein",
+                "emptyText": "Es liegen keine Informationen vor."
             }
         }
     },
