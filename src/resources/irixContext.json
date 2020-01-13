@@ -784,7 +784,7 @@
                         ["Bedarfsgegenstände zur Reinigung und Pflege" , "Bedarfsgegenstände zur Reinigung und Pflege"],
                         ["Kosmetische Mittel und Stoffe zu deren Herstellung" , "Kosmetische Mittel und Stoffe zu deren Herstellung"]
                     ],
-                    "defaultValue": "L12 - Gamma-Ortsdosisleistung",
+                    "defaultValue": "Gamma-Ortsdosisleistung",
                     "allowBlank": true
                 },{
                     "name": "Dom",

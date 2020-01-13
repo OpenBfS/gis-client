@@ -169,8 +169,8 @@ Ext.define('Koala.view.form.IrixFieldSet',{
             },
             name: config.name,
             viewModel: me.getViewModel(),
-            collapsible: config.collapsible,
-            collapsed: config.collapsed,
+            collapsible: config.collapsible | false,
+            collapsed: config.collapsed | false ,
             items: me.createFields(config.fields)
         });
     },
@@ -179,6 +179,7 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         var me = this;
         return Ext.create('Ext.form.field.Text', {
             name: config.name,
+            margin: '5px 0px',
             viewModel: me.getViewModel(),
             fieldLabel: config.label,
             value: config.defaultValue,
@@ -215,6 +216,7 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         var me = this;
         return Ext.create('Ext.form.field.Number', {
             name: config.name,
+            margin: '5px 0px',
             viewModel: me.getViewModel(),
             fieldLabel: config.label,
             minValue: config.minValue,
@@ -228,6 +230,7 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         var me = this;
         var combo = Ext.create('Ext.form.field.ComboBox', {
             name: config.name,
+            margin: '5px 0px',
             viewModel: me.getViewModel(),
             fieldLabel: config.label,
             store: config.values,
@@ -244,6 +247,7 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         var me = this;
         return Ext.create('Ext.form.field.Date', {
             name: config.name,
+            margin: '5px 0px',
             viewModel: me.getViewModel(),
             fieldLabel: config.label,
             value: config.defaultValue
@@ -279,6 +283,7 @@ Ext.define('Koala.view.form.IrixFieldSet',{
 
         return Ext.create('Ext.form.FieldContainer', {
             name: config.name,
+            margin: '5px 0px',
             viewModel: me.getViewModel(),
             valueField: dateField,
             layout: {
@@ -293,6 +298,7 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         var me = this;
         return Ext.create('Ext.form.field.Checkbox', {
             name: config.name,
+            margin: '5px 0px',
             viewModel: me.getViewModel(),
             fieldLabel: config.label,
             checked: config.defaultValue,
@@ -304,6 +310,7 @@ Ext.define('Koala.view.form.IrixFieldSet',{
         var me = this;
         return Ext.create('Ext.form.field.Tag', {
             name: config.name,
+            margin: '5px 0px',
             viewModel: me.getViewModel(),
             fieldLabel: config.label,
             displayField: config.displayField || config.valueField,
