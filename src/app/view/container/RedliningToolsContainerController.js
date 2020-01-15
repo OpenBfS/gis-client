@@ -165,6 +165,15 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     onRemoved: function() {
         var view = this.getView();
         view.map.un('pointermove', view.pointerMoveHandler, view);
+        if (view.measureTooltipElement) {
+            view.measureTooltipElement.remove();
+            view.measureTooltipElement = null;
+            view.createMeasureTooltip();
+        }
+        if (view.helpTooltipElement) {
+            view.helpTooltipElement.remove();
+            view.helpTooltipElement = null;
+        }
         if (this.snapInteraction) {
             this.snapInteraction.setActive(false);
         }
