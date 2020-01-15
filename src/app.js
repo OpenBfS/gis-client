@@ -9,7 +9,8 @@ Ext.application({
     extend: 'Koala.Application',
 
     requires: [
-        'Lada.override.RestProxy',
+        // //prepare for Session Timeout Handling
+        // 'Lada.override.RestProxy',
         'Koala.view.main.Main'
     ],
 

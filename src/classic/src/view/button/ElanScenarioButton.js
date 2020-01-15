@@ -59,7 +59,8 @@ Ext.define('Koala.view.button.ElanScenarioButton', {
     state: null,
 
     bind: {
-        text: '{elanscenarios}'
+        text: '{elanscenarios}',
+        tooltip: '{helpTooltip}'
     },
 
     /**

@@ -36,7 +36,7 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
      */
     displayTemplate: {
         //Used for title string
-        title: 'Ereignis:<p style=\'font-size: 2em; margin: 5px 0 10px 0;\'> $VALUE</p>',
+        title: 'Ereignis:<p style=\'font-size: 2em; margin: 5px 0 10px 0;\'><a href="$LINK" target="_blank"> $VALUE</a></p>',
         //Use for string that marks the event as changed or unchanged
         change: {
             changed: '<div style=\'color:red; margin: 0;\'>$VALUE<br></div>',
@@ -59,14 +59,23 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
     /**
      * Keys to be displayed in the event window
      */
-    displayValues: ['modified', 'modified_by',
-        'OperationMode.title', 'id', 'description', 'TimeOfEvent',
-        'ScenarioPhase.title', 'ScenarioPhase.Location'],
+    displayValues: ['description',
+        'EventType.title',
+        'TimeOfEvent',
+        'OperationMode.title',
+        'modified',
+        'modified_by'
+    ],
 
     /**
      * Key that contains the event title
      */
     titleProperty: 'title',
+
+    /**
+     * Key that contains the hyperlink to the event
+     */
+    linkProperty: '@id',
 
     /**
      * Parse elan object and create a String representation
@@ -80,13 +89,16 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
         //Add title
         var title = scenario[me.titleProperty];
         scenarioString += me.displayTemplate.title.replace('$VALUE', title);
+        //Add hyperlink to title
+        var link = scenario[me.linkProperty];
+        scenarioString = scenarioString.replace('$LINK', link);
 
         //Check if Scenario was changed
         var changeString = me.getViewModel().get('unchangedText');
         var changeTemplate = me.displayTemplate.change.unchanged;
         if (Ext.Array.contains(me.changes, scenario.id)) {
             window.console.log(me);
-            changeString = 'changedText';
+            changeString = me.getViewModel().get('changedText');
             changeTemplate = me.displayTemplate.change.changed;
         }
         scenarioString += changeTemplate.replace('$VALUE', changeString);
@@ -100,7 +112,8 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
             var value = me.getPropertyByString(scenario, key);//scenario[key];
             value = value ? value : '';
             //TODO: Insert proper string
-            var keyString = key;
+            var keyString = 'key_' + key.replace('.','_');
+            keyString = me.getViewModel().get(keyString);
             var boolTRUE = me.getViewModel().get('true');
             var boolFALSE = me.getViewModel().get('false');
             if (typeof value === 'boolean') {

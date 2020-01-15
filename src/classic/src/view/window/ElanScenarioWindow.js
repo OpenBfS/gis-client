@@ -30,7 +30,7 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
 
     closeAction: 'method-hide',
 
-    height: 550,
+    height: 475,
 
     layout: 'fit',
 

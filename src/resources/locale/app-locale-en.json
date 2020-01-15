@@ -782,7 +782,12 @@
                 "close": "Close",
                 "unchangedText": "unchanged",
                 "changedText": "changed",
-                "elanKey": "elan.",
+                "key_description": "Description",
+                "key_EventType_title": "Type of event",
+                "key_TimeOfEvent": "Time of event",
+                "key_OperationMode_title": "Operation mode",
+                "key_modified": "changed on",
+                "key_modified_by": "changed by",
                 "true": "yes",
                 "false": "no",
                 "emptyText": "No information available."
@@ -792,8 +797,8 @@
     "Koala.view.button.ElanScenarioButton": {
         "config": {
             "data": {
-                "elanscenarios": "elanscenarios",
-                "helpTooltip": "Help"
+                "elanscenarios": "Scenarios",
+                "helpTooltip": "Show scenario information"
             }
         }
     },
@@ -1816,19 +1821,20 @@
     "Koala.view.panel.MobileEvents": {
         "config": {
             "data": {
+                "title": "Dokpool-Messenger",
                 "title": "Events",
-                "routineMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> (unverändert)",
-                "alertMessageHeader": "Ereignis: <p style='font-size: 2em; margin: 5px 0 10px 0;'>[[title]]</p> <div style='color:red; margin: 0;'> (modifiziert!)</div>",
-                "htmlMessageBody": "<div>" +
-                    "<b>geändert am:</b> [[modified]]<br>" +
-                    "<b>geändert von:</b> [[modified_by]]<br>" +
-                    "<b>Ist dies eine Übung?</b> [[Exercise]]<br>" +
-                    "<b>Ereigniszeit:</b> [[TimeOfEvent]]<br>" +
-                    "<b>ID:</b> [[id]]<br>" +
-                    "<b>Beschreibung:</b> [[description]]<br>" +
-                    "<b>Szenariophase:</b> [[ScenarioPhase.title]]<br>" +
-                    "<b>Ereignisort:</b> [[ScenarioLocation.title]]<br>" +
-                    "</div>"
+                "close": "Close",
+                "unchangedText": "unchanged",
+                "changedText": "changed",
+                "key_description": "Description",
+                "key_EventType_title": "Type of event",
+                "key_TimeOfEvent": "Time of event",
+                "key_OperationMode_title": "Operation mode",
+                "key_modified": "changed on",
+                "key_modified_by": "changed by",
+                "true": "yes",
+                "false": "no",
+                "emptyText": "No information available."
             }
         }
     },

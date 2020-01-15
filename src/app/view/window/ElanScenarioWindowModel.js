@@ -26,7 +26,12 @@ Ext.define('Koala.view.window.ElanScenarioWindowModel', {
         close: '',
         unchangedText: '',
         changedText: '',
-        elanKey: '',
+        description: '',
+        EventType_title: '',
+        TimeOfEvent: '',
+        OperationMode_title: '',
+        modified: '',
+        modified_by: '',
         true: '',
         false: '',
         emptyText: ''

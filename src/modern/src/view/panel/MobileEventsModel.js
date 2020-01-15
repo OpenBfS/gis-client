@@ -3,9 +3,18 @@ Ext.define('Koala.view.panel.MobileEventsModel', {
     alias: 'viewmodel.k-panel-mobileevents',
     data: {
         title: '',
-        routineMessageHeader: '',
-        alertMessageHeader: '',
-        htmlMessageBody: ''
+        close: '',
+        unchangedText: '',
+        changedText: '',
+        description: '',
+        EventType_title: '',
+        TimeOfEvent: '',
+        OperationMode_title: '',
+        modified: '',
+        modified_by: '',
+        true: '',
+        false: '',
+        emptyText: ''
     }
 
 });

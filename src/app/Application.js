@@ -29,8 +29,10 @@ Ext.define('Koala.Application', {
     requires: [
         'BasiGX.util.Namespace',
         'Koala.util.Routing',
-        'Koala.util.AppContext',
-        'Lada.override.RestProxy'
+        'Koala.util.AppContext'
+        // //prepare for Session Timeout Handling
+        // ,
+        // 'Lada.override.RestProxy'
     ],
 
     controllers: [

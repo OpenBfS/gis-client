@@ -88,16 +88,20 @@ Ext.define('Koala.view.main.MainController', {
     },
 
     initElanScenarios: function() {
-        Koala.util.LocalStorage.setCurrentUser(this.username);
-        var dokpool = Koala.util.DokpoolRequest;
-        //Configure dokpool utility
-        dokpool.elanScenarioUrl = '../dokpool/bund/contentconfig/scen/';
-        dokpool.storageModule = Koala.util.LocalStorage;
-        dokpool.updateActiveElanScenarios();
-        window.setInterval(function() {
-            window.console.log('scenario update');
+        var appContext = Koala.util.AppContext.getAppContext(),
+            tools = appContext.data.merge.tools,
+            url = Koala.util.Object.getPathStrOr(appContext, 'data/merge/urls/dokpool-scenarios');
+        if (tools.indexOf('ScenarioAlertBtn') !== -1) {
+            Koala.util.LocalStorage.setCurrentUser(this.username);
+            var dokpool = Koala.util.DokpoolRequest;
+            dokpool.elanScenarioUrl = url;
+            dokpool.storageModule = Koala.util.LocalStorage;
             dokpool.updateActiveElanScenarios();
-        }, 60000);
+            window.setInterval(function() {
+                window.console.log('scenario update');
+                dokpool.updateActiveElanScenarios();
+            }, 60000);
+        }
     }
 
 });

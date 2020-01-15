@@ -125,16 +125,6 @@ Ext.define('Koala.view.panel.Header', {
                 window.setTimeout(function() {
                     me.updateLayout();
                 }, 1);
-            },
-            boxready: function() {
-                // var tools = Koala.util.AppContext.getAppContext().data.merge.tools;
-                // if (tools.indexOf('ScenarioAlertBtn') !== -1) {
-                //     //run once to get immediate information
-                //     Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                //     window.setInterval(function() {
-                //         Koala.util.DokpoolRequest.updateActiveElanScenarios();
-                //     }, 30000);
-                // }
             }
         }
     }]
