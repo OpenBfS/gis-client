@@ -58,6 +58,7 @@ Ext.define('Koala.view.window.AddWMSWindow', {
             beforewmsadd: function(olLayer) {
                 olLayer.set('nameWithSuffix', olLayer.get('name'));
                 olLayer.set('allowRemoval', true);
+                olLayer.set('queryable', false); // remove to reactivate external GFI
                 if (olLayer.get('queryable')) {
                     olLayer.set('allowHover', true);
                     olLayer.set('hoverTpl', 'Info');
