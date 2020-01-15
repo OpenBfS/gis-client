@@ -572,11 +572,15 @@ Ext.define('Koala.util.Filter', {
          * @param {Moment} momentDate The moment date to adjust.
          * @param {Ext.form.field.Date} dateField The field where the date comes
          *     from.
+         * @param {boolean} utc if true, will be converted to UTC
          * @return {Moment} An adjusted date, with hours and minutes set as
          *     requested from the accompanying spinners.
          */
-        setHoursAndMinutes: function(momentDate, dateField) {
+        setHoursAndMinutes: function(momentDate, dateField, utc) {
             var dateClone = momentDate.clone();
+            if (utc) {
+                dateClone = dateClone.utc();
+            }
             var container = dateField.up();
             // the selectors mean '… ending with hourspinner' / 'minutespinner'
             var hourspinner = container.down('[name$="hourspinner"]');
