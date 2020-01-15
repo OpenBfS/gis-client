@@ -48,6 +48,7 @@ Ext.define('Koala.view.panel.MobileMenu', {
     items: [{
         xtype: 'k-button-elanscenariobutton',
         name: 'ScenarioAlertBtn',
+        action: 'elanscenarios',
         cls: 'button-routine',
         iconCls: 'fa fa-check',
         iconAlign: 'center',
