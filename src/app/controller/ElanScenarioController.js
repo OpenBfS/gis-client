@@ -23,7 +23,8 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
     listen: {
         component: {
             'button[action=elanscenarios]': {
-                click: 'showElanScenarios'
+                click: 'showElanScenarios',
+                tap: 'showElanScenarios'
             }
         },
         global: {
@@ -115,7 +116,12 @@ Ext.define('Koala.view.controller.ElanScenarioController', {
                 win.show();
             }
         }
-        button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
+        if (!button) {
+            button = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
+        }
+        if (button) {
+            button.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
+        }
     }
 
 });
