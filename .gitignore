@@ -27,3 +27,4 @@ src/jsduck
 node_modules
 .project
 .idea
+.vscode
