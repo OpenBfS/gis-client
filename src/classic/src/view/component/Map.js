@@ -100,7 +100,7 @@ Ext.define('Koala.view.component.Map', {
      *
      * @param {ol.Feature[]} features the features to import
      */
-    addData: function(features) {
+    addData: function(features,projection) {
         Ext.create('Ext.window.Window', {
             title: 'Upload local data',
             autoShow: true,
@@ -109,6 +109,7 @@ Ext.define('Koala.view.component.Map', {
                 viewModel: {
                     data: {
                         features: features,
+                        projection: projection || '',
                         layerName: 'Layer'
                     }
                 }
@@ -124,7 +125,12 @@ Ext.define('Koala.view.component.Map', {
         window.setInterval(function() {
             var data = localStorage.getItem('gis-transfer-data');
             if (data) {
-                me.addData(data);
+                var proj = localStorage.getItem('gis-transfer-data-projection');
+                if (proj) {
+                    me.addData(data,proj);
+                } else {
+                    me.addData(data, 'EPSG:4326');
+                }
                 localStorage.removeItem('gis-transfer-data');
             }
         }, 2000);
