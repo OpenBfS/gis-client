@@ -125,15 +125,11 @@ Ext.define('Koala.view.component.Map', {
         window.setInterval(function() {
             var data = localStorage.getItem('gis-transfer-data');
             if (data) {
-                var proj = localStorage.getItem('gis-transfer-data-projection');
-                if (proj) {
-                    me.addData(data,proj);
-                } else {
-                    me.addData(data, 'EPSG:4326');
-                }
+                //localStorage data is always geojson format
+                //hence its projection is 'EPSG:4326'
+                me.addData(data, 'EPSG:4326');
                 localStorage.removeItem('gis-transfer-data');
                 localStorage.removeItem('gis-transfer-data-transfer-date');
-                localStorage.removeItem('gis-transfer-data-projection');
             }
         }, 2000);
     },
