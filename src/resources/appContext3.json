@@ -36,7 +36,7 @@
         ]
       }, 
       "createLegendGraphicLayer": "opendata:vg_250", 
-      "headerTitle": "GEOPORTAL", 
+      "headerTitle": "GW Geoportal", 
       "imis_user": {
         "imisroles": [
           ""
@@ -55,11 +55,15 @@
 	{
           "uuid": "odl_meta"
         },
-	{
-          "uuid": "joined_new_meta"
+        {
+          "uuid": "rain_meta",
+	  "visible":"true"
+        },
+        {
+          "uuid": "277ce471-b0d8-4282-97b4-b3e4b2e5c467"
         },
 	{
-          "uuid": "messstellle_meta"
+          "uuid": "stations"
         }
 ], 
       "metadataSearchFields": [
@@ -81,10 +85,10 @@
       }, 
       "spatialSearchTypeName": "opendata:vg_250", 
       "startCenter": [
-        1234075.4566814213, 
-        6706481.04685707
+        1000000.4566814213, 
+        6200000.04685707
       ], 
-      "startZoom": 6, 
+      "startZoom": 8, 
       "tools": [
         "addWmsBtn", 
         "measureBtn"
@@ -94,7 +98,7 @@
         "irix-servlet": "https://www.imis.bfs.de/irix/irix-client/IRIXClient", 
         "layerprofile": "classic/resources/layerprofile.json", 
         "layerset": "classic/resources/layerset.json", 
-        "metadata-search": "https://www.imis.bfs.de/ogc/catalog/srv/ger/csw?", 
+        "metadata-search": "/resources/", 
         "metadata-xml2json": "/resources/", 
         "print-servlet": "https://www.imis.bfs.de/print/gis/print/", 
         "spatial-search": "https://www.imis.bfs.de/ogc/opendata/ows"
