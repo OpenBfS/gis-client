@@ -52,6 +52,8 @@ Ext.define('Koala.view.button.ElanScenarioButton', {
      */
     oldIcon: 'x-fa fa-check',
 
+    iconAlign: 'right',
+
     /**
      * {Koala.view.button.ElanScenarioButton.states}
      * Current state

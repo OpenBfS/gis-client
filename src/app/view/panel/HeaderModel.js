@@ -21,14 +21,15 @@ Ext.define('Koala.view.panel.HeaderModel', {
     alias: 'viewmodel.k-panel-header',
     data: {
         name: '',
-        logoTooltip: '',
-        alertBtnText: '',
-        alertBtnTooltip: '',
-        routineMessageHeader: '',
-        alertMessageHeader: '',
-        event_id: '',
-        event_modified: '',
-        event_modified_by: ''
+        logoTooltip: ''
+        // ,
+        // alertBtnText: '',
+        // alertBtnTooltip: '',
+        // routineMessageHeader: '',
+        // alertMessageHeader: '',
+        // event_id: '',
+        // event_modified: '',
+        // event_modified_by: ''
     }
 
 });
