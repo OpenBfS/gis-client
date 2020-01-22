@@ -132,6 +132,8 @@ Ext.define('Koala.view.component.Map', {
                     me.addData(data, 'EPSG:4326');
                 }
                 localStorage.removeItem('gis-transfer-data');
+                localStorage.removeItem('gis-transfer-data-transfer-date');
+                localStorage.removeItem('gis-transfer-data-projection');
             }
         }, 2000);
     },
