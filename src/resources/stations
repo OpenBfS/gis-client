@@ -40,7 +40,7 @@
     "gmd:citation": {"gmd:CI_Citation":     {
       "gmd:title": {"gco:CharacterString":       {
         "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-        "#text": "stat_order"
+        "#text": "stations"
       }},
       "gmd:date": {"gmd:CI_Date":       {
         "gmd:date": {"gco:DateTime":         {
@@ -125,11 +125,11 @@
   "bfs:layerInformation": {"bfs:MD_Layer":   {
     "bfs:legendTitle": {"gco:CharacterString":     {
       "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-      "#text": "Groundwater Measurements"
+      "#text": "Value Filter"
     }},
     "bfs:printTitle": {"gco:CharacterString":     {
       "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-      "#text": "Stations"
+      "#text": "Value Filter"
     }},
     "bfs:layerType": {"bfs:MD_WMSLayerType":     {
       "bfs:URL":       {
@@ -273,7 +273,7 @@
           "#text":           [
                         {
               "val": "'Regierungspräsidium Tübingen'",
-              "dsp": "Tubingen"
+              "dsp": "Tübingen"
             },
                         {
               "val": "'Regierungspräsidium Freiburg'",
@@ -289,7 +289,7 @@
             },
                         {
               "val": "'Landesanstalt für Umwelt'",
-              "dsp": "Landesanstalt fur Umwelt"
+              "dsp": "Landesanstalt für Umwelt"
             }
           ]
         }},

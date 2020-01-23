@@ -200,7 +200,7 @@
       {"bfs:MD_TimeRangeFilter":       {
         "bfs:paramName": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "date"
+          "#text": "timestamp"
         }},
         "bfs:interval": {"gco:Integer":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
@@ -217,41 +217,41 @@
         "bfs:minDate":         {
           "bfs:TimeFormat": {"gco:CharacterString":           {
             "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-            "#text": "Y-m-dTH:i:s"
+            "#text": "Y-m-d H:i:s"
           }},
           "bfs:TimeInstant": {"gco:CharacterString":           {
             "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-            "#text": "2016-01-01T00:00:00"
+            "#text": "2016-01-01 00:00:00"
           }}
         },
         "bfs:maxDate":         {
           "bfs:TimeFormat": {"gco:CharacterString":           {
             "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-            "#text": "Y-m-dTH:i:s"
+            "#text": "Y-m-d H:i:s"
           }},
           "bfs:TimeInstant": {"gco:CharacterString":           {
             "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-            "#text": "2019-09-23T12:00:00"
+            "#text": "2019-10-23 00:00:00"
           }}
         },
         "bfs:defaultStartValue":         {
           "bfs:TimeFormat": {"gco:CharacterString":           {
             "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-            "#text": "Y-m-dTH:i:s"
+            "#text": "Y-m-d H:i:s"
           }},
           "bfs:TimeInstant": {"gco:CharacterString":           {
             "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-            "#text": "2019-09-23T12:00:00"
+            "#text": "2019-04-20 10:00:00"
           }}
         },
         "bfs:defaultEndValue":         {
           "bfs:TimeFormat": {"gco:CharacterString":           {
             "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-            "#text": "Y-m-dTH:i:s"
+            "#text": "Y-m-d H:i:s"
           }},
           "bfs:TimeInstant": {"gco:CharacterString":           {
             "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-            "#text": "2019-09-23T12:00:00"
+            "#text": "2019-09-20 00:00:00"
           }}
         }
       }},
@@ -262,11 +262,11 @@
         }},
         "bfs:paramAlias": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "Gemeinde"
+          "#text": "Community"
         }},
         "bfs:defaultValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "'Karlsruhe'"
+          "#text": "'Others'"
         }},
         "bfs:allowedValues": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
@@ -278,9 +278,10 @@
 	               {
               "val": "'Others'",
               "dsp": "Others"
-            },
+            }
           ]
         }},
+       
         "bfs:operator": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
           "#text": "="
@@ -288,31 +289,10 @@
         "bfs:allowMultipleSelect": {"gco:Boolean": null},
         "bfs:encodeInViewParams": {"gco:Boolean":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "false"
+          "#text": "true"
         }}
-      }},
-     
+      }}
     ],
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     "bfs:olProperty":     [
       {"bfs:MD_Property":       {
         "bfs:propertyName": {"gco:CharacterString":         {
@@ -321,7 +301,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "[[gemeinde]]<br>[[date]]<br>Messwert: [[messwert]]"
+          "#text": "[[gemeinde]]<br>[[timestamp]]<br>Messwert: [[messwert]]"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -441,7 +421,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "id"
+          "#text": "grundwassernummer"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -473,7 +453,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "ogr_fid:[[grundwassernummer]]"
+          "#text": "grundwassernummer:[[grundwassernummer]]"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -534,7 +514,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "[[gemeinde]]<br>Messwert: [[yAxisAttribute]]<br>"
+          "#text": "[[gemeinde]]<br>Messwert: [[messwert]]<br>"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -544,7 +524,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "kack"
+          "#text": "hellotest"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -614,7 +594,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "id_long"
+          "#text": "grundwassernummer"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -624,7 +604,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "value_constraint"
+          "#text": "gemeinde"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -644,7 +624,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "value"
+          "#text": "messwert"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -654,7 +634,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "value"
+          "#text": "messwert"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -664,7 +644,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "nuclide"
+          "#text": "gemeinde"
         }}
       }},
       {"bfs:MD_Property":       {

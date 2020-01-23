@@ -144,7 +144,7 @@
       },
       "bfs:layer": {"gco:CharacterString":       {
         "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-        "#text": "gwgisws:statsmeasures"
+        "#text": "gwgisws:statsmeasures_ot"
       }},
       "bfs:transparent": {"gco:Boolean":       {
         "@xmlns:gco": "http://www.isotc211.org/2005/gco",
@@ -182,7 +182,7 @@
         }},
         "bfs:path": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "/ogc/opendata/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gwgisws:statsmeasures"
+          "#text": "/ogc/opendata/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gwgisws:statsmeasures_ot"
         }}
       },
       "bfs:filterFieldStart":       {
@@ -236,7 +236,7 @@
         }},
         "bfs:TimeInstant": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "2020-20-01 00:00:00"
+          "#text": "2018-01-01 00:00:00"
         }}
       }
     }},
@@ -258,7 +258,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "http://localhost:8082/geoserver/gwgisws/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&layer=gwgisws:statsmeasures&width=15&height=15&format=image/png"
+          "#text": "http://localhost:8082/geoserver/gwgisws/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&layer=gwgisws:statsmeasures_ot&width=15&height=15&format=image/png"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -416,7 +416,7 @@
       {"bfs:MD_Property":       {
         "bfs:propertyName": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "end_timestamp"
+          "#text": "end_measure"
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
@@ -440,7 +440,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "P2MT"
+          "#text": "P1MT"
         }}
       }},
       {"bfs:MD_Property":       {
@@ -512,7 +512,7 @@
         }},
         "bfs:propertyValue": {"gco:CharacterString":         {
           "@xmlns:gco": "http://www.isotc211.org/2005/gco",
-          "#text": "[[community]]"
+          "#text": "[[community]]: [[id]]"
         }}
       }},
       {"bfs:MD_Property":       {
