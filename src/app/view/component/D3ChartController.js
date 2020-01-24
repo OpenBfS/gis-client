@@ -28,7 +28,6 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     scales: {},
     shapes: [],
-    attachedSeriesVisibleById: {},
     axes: {},
     gridAxes: {},
     tooltipCmp: null,
@@ -106,6 +105,15 @@ Ext.define('Koala.view.component.D3ChartController', {
             return;
         }
         var div = this.getView().el.dom;
+        var attachedConfig = this.getView().getConfig().targetLayer.metadata.layerConfig.timeSeriesChartProperties.attachedSeries;
+        if (attachedConfig) {
+            try {
+                attachedConfig = JSON.parse(attachedConfig);
+            } catch (e) {
+                // sometimes it's a string, sometimes not…
+            }
+        }
+        var numAttached = attachedConfig ? attachedConfig.length : 0;
 
         var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
         this.timeseriesComponent = series;
@@ -153,16 +161,31 @@ Ext.define('Koala.view.component.D3ChartController', {
         if (this.isAutoUpdated) {
             var legendEntries = div.querySelectorAll('g.legend > g');
             Ext.each(this.seriesVisibility, function(visible, idx) {
-                var item = legendEntries[idx];
-                while (item.nodeName !== 'g') {
+                var item;
+                if (idx % (numAttached + 1) === 0) {
+                    item = legendEntries[idx / (numAttached + 1)];
+                }
+                while (item && item.nodeName !== 'g') {
                     item = item.parentNode;
                 }
-                var list = item.classList;
+                var list = item ? item.classList : undefined;
                 if (visible) {
-                    list.remove('k-d3-disabled');
+                    if (list) {
+                        list.remove('k-d3-disabled');
+                    } else {
+                        // tricky: if list is undefined, we have an attached series, which
+                        // is initially not visible. Hence we toggle it here…
+                        series.toggleSeries(idx);
+                    }
                 } else {
-                    list.add('k-d3-disabled');
-                    series.toggleSeries(idx);
+                    if (list) {
+                        list.add('k-d3-disabled');
+                    }
+                    // tricky: if list is undefined, we have an attached series here, which
+                    // is initially not visible, hence we do NOT toggle it here…
+                    if (list && visible !== undefined) {
+                        series.toggleSeries(idx);
+                    }
                 }
             });
         }
@@ -435,6 +458,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 };
                                 var cur = timeConfig.series[attached[index + 1]].initiallyVisible;
                                 timeConfig.series[attached[index + 1]].initiallyVisible = !cur;
+                                me.seriesVisibility[attached[index + 1]] = !cur;
                                 me.drawChart();
                             }
                         }
