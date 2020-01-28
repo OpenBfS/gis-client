@@ -169,21 +169,17 @@ Ext.define('Koala.view.component.D3ChartController', {
                     item = item.parentNode;
                 }
                 var list = item ? item.classList : undefined;
-                if (visible) {
-                    if (list) {
-                        list.remove('k-d3-disabled');
-                    } else {
-                        // tricky: if list is undefined, we have an attached series, which
-                        // is initially not visible. Hence we toggle it here…
+                if (list === undefined) {
+                    // we have an attached series without legend entry, so custom logic goes here
+                    if (visible) {
                         series.toggleSeries(idx);
                     }
                 } else {
-                    if (list) {
+                    // if undefined, visibility hasn't been changed yet
+                    if (visible || visible === undefined) {
+                        list.remove('k-d3-disabled');
+                    } else {
                         list.add('k-d3-disabled');
-                    }
-                    // tricky: if list is undefined, we have an attached series here, which
-                    // is initially not visible, hence we do NOT toggle it here…
-                    if (list && visible !== undefined) {
                         series.toggleSeries(idx);
                     }
                 }
