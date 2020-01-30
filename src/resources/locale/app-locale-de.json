@@ -553,6 +553,7 @@
                 "changeMinMaxText": "Min/Max ändern",
                 "minMaxWindowTitle": "y-Achse ändern",
                 "okText": "Ok",
+                "cancelText": "Abbrechen",
                 "editTemplates": "Templates anpassen",
                 "editSettings": "Einstellungen anpassen",
                 "title": "Legende",

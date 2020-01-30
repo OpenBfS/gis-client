@@ -551,6 +551,7 @@
                 "changeMinMaxText": "Change min/max",
                 "minMaxWindowTitle": "Change y axis",
                 "okText": "Ok",
+                "cancelText": "Cancel",
                 "editTemplates": "Edit templates",
                 "editSettings": "Edit settings",
                 "title": "Legend",
