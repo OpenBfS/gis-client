@@ -36,7 +36,7 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
      */
     displayTemplate: {
         //Used for title string
-        title: 'Ereignis:<p style=\'font-size: 2em; margin: 5px 0 10px 0;\'><a href="$LINK" target="_blank"> $VALUE</a></p>',
+        title: '<p style=\'font-size: 1.5em; margin: 25px 0 5px 0;\'><a href="$LINK" target="_blank"> $VALUE</a></p>',
         //Use for string that marks the event as changed or unchanged
         change: {
             changed: '<div style=\'color:red; margin: 0;\'>$VALUE<br></div>',
