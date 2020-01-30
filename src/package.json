@@ -1,7 +1,7 @@
 {
     "private": false,
     "name": "@openbfs/imis3gis",
-    "version": "1.16.10",
+    "version": "1.16.11-SNAPSHOT",
     "description": "IMIS3 GIS",
     "scripts": {
         "pretest": "npm run lint",
