@@ -1151,10 +1151,12 @@ Ext.define('Koala.util.Layer', {
                         url = value.baseUrl;
                     }
                 });
-                // fall back to generic GeoServer URL
+                //fall back to geoserver-base-url
                 if (!url) {
-                    var ms = /(^(http[s]?:\/\/[^/]+)?[/][^/]+)/g.exec(context.urls['spatial-search']);
-                    url = ms[1] + '/';
+                    url = context.urls['geoserver-base-url'];
+                    if (url.endsWith('/')) {
+                        url = url.slice(0,-1);
+                    }
                 }
                 if (!styleName) {
                     if (layer instanceof ol.layer.Vector) {
@@ -1175,7 +1177,7 @@ Ext.define('Koala.util.Layer', {
                 }
 
                 Ext.Ajax.request({
-                    url: url + 'rest/styles/' + styleName,
+                    url: url + '/rest/styles/' + styleName,
                     method: 'GET'
                 })
                     .then(function(response) {
@@ -1203,9 +1205,9 @@ Ext.define('Koala.util.Layer', {
 
         createLegendUrlForVectorLayer: function(sld, url) {
             var context = Koala.util.AppContext.getAppContext().data.merge;
-            if (!url) {
-                var ms = /(^(http[s]?:\/\/[^/]+)?[/][^/]+)/g.exec(context.urls['spatial-search']);
-                url = ms[1] + '/';
+            if (url === context.urls['geoserver-base-url'] || url + '/' === context.urls['geoserver-base-url']) {
+                //change to publicly available workspace
+                url = context.urls['spatial-search'];
             } else if (!url.startsWith('http')) {
                 url = window.location.origin + url;
             }
@@ -1217,7 +1219,15 @@ Ext.define('Koala.util.Layer', {
                 layer: context.createLegendGraphicLayer,
                 format: 'image/png'
             };
-            return url + '/ows?' + Ext.Object.toQueryString(parms);
+            if (url.endsWith('/')) {
+                url = url.slice(0,-1);
+            }
+            if (!url.endsWith('ows')) {
+                url = url + '/ows?';
+            } else {
+                url = url + '?';
+            }
+            return url + Ext.Object.toQueryString(parms);
         },
 
         /**
