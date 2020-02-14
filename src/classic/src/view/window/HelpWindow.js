@@ -41,8 +41,6 @@ Ext.define('Koala.view.window.HelpWindow', {
     minWidth: 500,
     minHeight: 300,
 
-    zIndex: 999,
-
     resizable: true,
     collapsible: true,
     maximizable: true,
