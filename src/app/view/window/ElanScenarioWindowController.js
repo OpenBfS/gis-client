@@ -63,6 +63,8 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
         'EventType.title',
         'TimeOfEvent',
         'OperationMode.title',
+        'SectorizingNetworks',
+        'SectorizingSampleTypes',
         'modified',
         'modified_by'
     ],
@@ -110,7 +112,9 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
         //Add display values
         Ext.Array.each(this.displayValues, function(key) {
             var value = me.getPropertyByString(scenario, key);//scenario[key];
-            value = value ? value : '';
+            if (!value || value.length !== undefined && value.length === 0) {
+                return true;
+            }
             //TODO: Insert proper string
             var keyString = 'key_' + key.replace('.','_');
             keyString = me.getViewModel().get(keyString);
@@ -243,6 +247,15 @@ Ext.define('Koala.view.window.ElanScenarioWindowController', {
             var k = a[i];
             if (k in o) {
                 o = o[k];
+                if (Array.isArray(o) && o.length > 0) {
+                    if (o[0].hasOwnProperty('title')) {//currently true for all second level arrays
+                        o = o.map(function(x) {
+                            return x.title;
+                        });
+                    } else {
+                        return JSON.stringify(o);
+                    }
+                }
             } else {
                 return;
             }

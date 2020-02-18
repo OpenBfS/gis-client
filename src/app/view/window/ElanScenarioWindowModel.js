@@ -30,6 +30,8 @@ Ext.define('Koala.view.window.ElanScenarioWindowModel', {
         EventType_title: '',
         TimeOfEvent: '',
         OperationMode_title: '',
+        SectorizingNetworks: '',
+        SectorizingSampleTypes: '',
         modified: '',
         modified_by: '',
         true: '',
