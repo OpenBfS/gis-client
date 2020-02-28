@@ -703,7 +703,7 @@ Ext.define('Koala.view.component.D3ChartController', {
      */
     getChartDataForStation: function(selectedStation) {
         var me = this;
-        var layer = selectedStation.get('layer');
+        var layer = selectedStation.get('layer') || this.getView().getTargetLayer();
         var idField = Koala.util.Object.getPathStrOr(layer.metadata,
             'layerConfig/olProperties/featureIdentifyField', 'id');
 
