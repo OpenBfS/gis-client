@@ -81,6 +81,9 @@ Ext.define('Koala.view.window.LayerSetChooserWindow', {
             if (me.getHelpTxt()) {
                 lyrSetController.addHelpTxt();
             }
+            //leave helpWin on top, if open
+            var helpWin = Ext.ComponentQuery.query('k-window-help')[0];
+            me.zIndex = helpWin ? helpWin.el.getZIndex() -1 : 99999;
         }
     }
 });

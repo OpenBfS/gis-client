@@ -844,6 +844,7 @@ Ext.define('Koala.util.ChartData', {
                 // handle attached series
                 if (gnosConfig.attachedSeries) {
                     Ext.each(attachedSeries, function(serie, idx) {
+
                         if (!serie.showYAxis) {
                             return;
                         }
@@ -861,8 +862,8 @@ Ext.define('Koala.util.ChartData', {
                                     tooltipTpl = eval(tooltipTpl.substr(5)); // eslint-disable-line no-eval
                                     tooltipTpl = tooltipTpl(selectedStation);
                                 }
-
-                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, selectedStation);
+                                var html = Koala.util.String.replaceTemplateStrings(tooltipTpl, item);
+                                html = Koala.util.String.replaceTemplateStrings(html, selectedStation);
                                 tooltipCmp.setHtml(html);
                                 tooltipCmp.setTarget(target);
                                 tooltipCmp.show();
