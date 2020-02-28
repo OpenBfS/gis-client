@@ -43,7 +43,6 @@ Ext.define('Koala.view.window.LayerSetChooserWindow', {
         title: '{title}'
     },
 
-    modal: true,
     layout: 'fit',
     minWidth: 250,
     minHeight: 300,
