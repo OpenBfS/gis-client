@@ -137,7 +137,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
                             // has precision DAY:
                             // Also set UTC to true, else we'll land on 23:00:00 (UTC) or
                             // 22:00:00 (UTC) the previous day
-                            val = FilterUtil.setHoursAndMinutes(val, field, true);
+                            val = FilterUtil.setHoursAndMinutes(val, field, filter.unit === 'hours' && filter.interval === '24');
                         }
                         keyVals[key] = val;
                     }
