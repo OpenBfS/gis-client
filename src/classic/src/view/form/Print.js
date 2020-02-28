@@ -667,8 +667,6 @@ Ext.define('Koala.view.form.Print', {
             if (!containerEl || !containerEl.parentNode) {
                 return;
             }
-            var width = containerEl.offsetWidth;
-            var height = containerEl.offsetHeight;
             view.hideHiddenTabs();
             // workaround to get object tags to render properly with html2canvas
             var htmlNode = containerEl.querySelector('.html-tab > input');
@@ -682,6 +680,20 @@ Ext.define('Koala.view.form.Print', {
                     // no object tag found, go ahead with the original container
                 }
             }
+            var width = containerEl.offsetWidth;
+            var height = containerEl.offsetHeight;
+            if (containerEl.style.visibility === 'hidden') {
+                // probably a minimized carto window, just print the chart
+                containerEl = containerEl.querySelector('svg');
+                // use view box for correct width/height, offsetWidth/Height won't work for svgs
+                var dims = containerEl.viewBox.baseVal;
+                width = dims.width;
+                height = dims.height;
+                // correct for carto window minimize mode translation
+                coords = overlay.getPosition().slice();
+                coords[0] += (width / 2) * resolution;
+                coords[1] -= (height / 2) * resolution;
+            }
             document.querySelectorAll('.k-d3-hidden').forEach(function(item) {
                 item.style.display = 'none';
             });
@@ -689,7 +701,31 @@ Ext.define('Koala.view.form.Print', {
                 .forEach(function(item) {
                     item.style.display = 'none';
                 });
-            var promise = html2canvas(containerEl);
+            var promise;
+            if (containerEl.localName === 'svg') {
+                promise = new Ext.Promise(function(resolve) {
+                    width *= ratioX;
+                    height *= ratioY;
+                    var canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    var svg = containerEl.cloneNode(true);
+                    svg.style.transform = null;
+                    var data = new XMLSerializer().serializeToString(svg);
+                    var win = window.URL || window.webkitURL || window;
+                    var img = new Image();
+                    var blob = new Blob([data], { type: 'image/svg+xml' });
+                    var url = win.createObjectURL(blob);
+                    img.onload = function() {
+                        canvas.getContext('2d').drawImage(img, 0, 0);
+                        win.revokeObjectURL(url);
+                        resolve(canvas);
+                    };
+                    img.src = url;
+                });
+            } else {
+                promise = html2canvas(containerEl);
+            }
             promises.push(promise);
             promise.then(function(canvas) {
                 width *= ratioX;
