@@ -71,7 +71,6 @@ Ext.define('Koala.view.main.Main', {
     },
 
     /**
-     * open help window initially if user is neither "ruf", "imis" nor "bfs"
      * delay is necessary otherwise treelist.store is not ready for .setSelection()
      */
     listeners: {
@@ -94,15 +93,6 @@ Ext.define('Koala.view.main.Main', {
                     Ext.create('Koala.view.window.ElanScenarioWindow');
 
                     me.getController().initElanScenarios();
-
-                    var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
-                    if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
-                        var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
-                        helpWin.on('afterlayout', function() {
-                            var helpWinController = me.getController();
-                            helpWinController.setTopic('preface');
-                        }, helpWin, {single: true});
-                    }
                 });
             }
         }
@@ -147,10 +137,10 @@ Ext.define('Koala.view.main.Main', {
         },
         listeners: {
             afterrender: function() {
+                var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
                 if (!location.hash) {
                     var lyrSetWin = Ext.create('Koala.view.window.LayerSetChooserWindow');
 
-                    var hideHelpWindow = Koala.util.LocalStorage.showHelpWindowOnStartup();
                     if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
                         lyrSetWin.setHelpTxt(true);
                     }
@@ -159,6 +149,14 @@ Ext.define('Koala.view.main.Main', {
                     if (!hideWindow) {
                         lyrSetWin.show();
                     }
+                }
+                // open help window initially if user is neither "ruf", "imis" nor "bfs"
+                if (!Koala.util.AppContext.intersectsImisRoles(['ruf', 'imis', 'bfs']) && !hideHelpWindow) {
+                    var helpWin = Ext.create('Koala.view.window.HelpWindow').show();
+                    helpWin.on('afterlayout', function() {
+                        var helpWinController = helpWin.getController();
+                        helpWinController.setTopic('preface');
+                    }, helpWin, {single: true});
                 }
                 // This needs to happen in an afterrender handler, as
                 // otherwise the BasiGX texts would count…
