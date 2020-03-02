@@ -52,7 +52,7 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                 callback: function(editor) {
                     var md = editor.getMetadata();
                     olProps.hoverTpl = md.hoverTpl;
-                    layer.set('hoverTpl', md.hoverTpl);
+                    layer.set('hoverTpl', Koala.util.String.coerce(md.hoverTpl));
                 }
             }],
             listeners: {
@@ -60,7 +60,7 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                     var editor = this.down('k-form-field-templateeditor');
                     var md = editor.getMetadata();
                     olProps.hoverTpl = md.hoverTpl;
-                    layer.set('hoverTpl', md.hoverTpl);
+                    layer.set('hoverTpl', Koala.util.String.coerce(md.hoverTpl));
                 }
             }
         });

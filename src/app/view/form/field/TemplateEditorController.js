@@ -50,8 +50,15 @@ Ext.define('Koala.view.form.field.TemplateEditorController', {
         if (property === 'yAxisLabel' || property === 'seriesTitleTpl') {
             newValue = newValue.replace(/<\/?div>|<br>|&nbsp;/g, '');
         }
+        newValue = newValue.replace(/&amp;&amp;/g, '&&');
         metadata[property] = newValue;
-        this.getView().getCallback()(this.getView());
+        try {
+            this.getView().getCallback()(this.getView());
+        } catch (e) {
+            // ignore errors, these may happen in case an eval template is not (yet) valid while
+            // editing
+            Ext.log('Ignoring error when evaluating template, probably the JS syntax is not valid.');
+        }
     },
 
     /**
