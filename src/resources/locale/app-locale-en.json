@@ -557,7 +557,8 @@
                 "title": "Legend",
                 "tooltip": "Tooltip",
                 "xAxisLabel": "xAxisLabel",
-                "yAxisLabel": "yAxisLabel"
+                "yAxisLabel": "yAxisLabel",
+                "automatic": "Automatic"
             }
         }
     },
