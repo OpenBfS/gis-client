@@ -36,7 +36,8 @@ Ext.define('Koala.view.menu.ChartSettingsMenuModel', {
         title: '',
         tooltip: '',
         xAxisLabel: '',
-        yAxisLabel: ''
+        yAxisLabel: '',
+        automatic: ''
     }
 
 });

@@ -559,7 +559,8 @@
                 "title": "Legende",
                 "tooltip": "Tooltip",
                 "xAxisLabel": "xAxisLabel",
-                "yAxisLabel": "yAxisLabel"
+                "yAxisLabel": "yAxisLabel",
+                "automatic": "Automatisch"
             }
         }
     },

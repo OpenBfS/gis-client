@@ -108,6 +108,21 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                 handler: function() {
                     this.up('window').hide();
                 }
+            }, {
+                xtype: 'button',
+                text: vm.get('automatic'),
+                handler: function() {
+                    var dataMin = Number.MAX_VALUE;
+                    var dataMax = Number.MIN_VALUE;
+                    Ext.each(ctrl.chartConfig.timeseriesComponentConfig.series, function(series) {
+                        Ext.each(series.data, function(d) {
+                            dataMin = Math.min(dataMin, d[1]);
+                            dataMax = Math.max(dataMax, d[1]);
+                        });
+                    });
+                    this.up('window').down('[name=minField]').setValue(dataMin);
+                    this.up('window').down('[name=maxField]').setValue(dataMax);
+                }
             }]
         }).show();
     },
