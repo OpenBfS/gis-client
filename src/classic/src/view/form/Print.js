@@ -693,6 +693,14 @@ Ext.define('Koala.view.form.Print', {
                 coords = overlay.getPosition().slice();
                 coords[0] += (width / 2) * resolution;
                 coords[1] -= (height / 2) * resolution;
+                // 28 pixels for the header height
+                coords[1] -= 28 * resolution;
+                // 5 pixels from the translate
+                coords[1] += 5 * resolution;
+                // 33 pixels from the translate
+                coords[0] += 33 * resolution;
+                // 15 magic pixels
+                coords[0] += 15 * resolution;
             }
             document.querySelectorAll('.k-d3-hidden').forEach(function(item) {
                 item.style.display = 'none';
