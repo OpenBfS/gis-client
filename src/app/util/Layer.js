@@ -429,6 +429,11 @@ Ext.define('Koala.util.Layer', {
             }
 
             Ext.each(filters, function(f) {
+                if (f.effectivevalue && !Ext.isArray(f.effectivevalue)) {
+                    f.effectivevalue = f.effectivevalue.split(',');
+                } else if (f.effectivevalue && f.effectivevalue.length === 1) {
+                    f.effectivevalue = f.effectivevalue[0].split(',');
+                }
                 if (f.param === 'test_data') {
                     testdataFilter = f;
                 }
@@ -1061,6 +1066,9 @@ Ext.define('Koala.util.Layer', {
             if (Koala.util.Layer.isWmsLayer(layer)) {
                 var styles = params && 'STYLES' in params && params.STYLES;
                 if (styles) {
+                    if (!styles.split) {
+                        styles = styles[0];
+                    }
                     style = styles.split(',')[0];
                 }
             }
@@ -1942,15 +1950,18 @@ Ext.define('Koala.util.Layer', {
             } else {
                 // only makes sense for operator IN and NOT IN, let's adjust for
                 // common errors
-                if (op === '=' || op === '==' || op === 'EQ') {
+                if ((op === '=' || op === '==' || op === 'EQ') && filter.effectivevalue.length > 1) {
                     op = 'IN';
                     adjusted = true;
-                } else if (op === '!=' || op === '<>' || op === 'NEQ') {
+                } else if ((op === '!=' || op === '<>' || op === 'NEQ') && filter.effectivevalue.length > 1) {
                     op = 'NOT IN';
                     adjusted = true;
                 }
 
-                var valuesPart = '(' + filter.effectivevalue.join(',') + ')';
+                var valuesPart = filter.effectivevalue.join(',');
+                if (filter.effectivevalue.length > 1) {
+                    valuesPart = '(' + valuesPart + ')';
+                }
 
                 // in case of userfriendly display, we need to adjust again, now
                 // taking the current language into account, both for operation
