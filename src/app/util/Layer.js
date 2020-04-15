@@ -1971,6 +1971,10 @@ Ext.define('Koala.util.Layer', {
                         op, filter.effectivevalue, filter.allowedValues
                     );
                     op = LayerUtil.getDisplayFriendlyOperation(op);
+                    if (valuesPart.found) {
+                        valuesPart = valuesPart.value;
+                        op = '';
+                    }
                 }
 
                 stringified = filter[paramKey] + // name
@@ -2017,6 +2021,33 @@ Ext.define('Koala.util.Layer', {
             var displayFriendly;
             var LayerUtil = Koala.util.Layer;
             var dspVals = LayerUtil.valsToDisplayVals(vals, allowedVals);
+            var allowed = JSON.parse(allowedVals);
+            var foundValue;
+            Ext.each(allowed, function(value) {
+                if (foundValue) {
+                    return false;
+                }
+                var untrimmed = value.val.split(',');
+                var trimmed = [];
+                Ext.each(untrimmed, function(val) {
+                    trimmed.push(Ext.String.trim(val));
+                });
+                if (trimmed.length === vals.length) {
+                    var found = true;
+                    Ext.each(vals, function(val) {
+                        found = found && trimmed.indexOf(Ext.String.trim(val)) !== -1;
+                    });
+                    if (found) {
+                        foundValue = value.dsp;
+                    }
+                }
+            });
+            if (foundValue) {
+                return {
+                    value: foundValue,
+                    found: true
+                };
+            }
 
             switch (sanitizedOp) {
                 case 'IN':
