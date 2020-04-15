@@ -33,8 +33,11 @@ Ext.define('Koala.plugin.Hover', {
         var featuresLen = features && features.length;
         var replaceTemplateStrings = Koala.util.String.replaceTemplateStrings;
         Ext.each(layers, function(layer, layerIdx) {
-            var hoverTpl = layer.get('hoverTpl');
             Ext.each(features, function(feature, featureIdx) {
+                // Make sure to extract the hoverTpl for each feature, else
+                // in case of a function it will only be evaluated for the
+                // first feature!
+                var hoverTpl = layer.get('hoverTpl');
                 // we check for existing feature first as there maybe strange
                 // situations (e.g. when zooming while hovering)
                 // where feat is undefined and feat.get would throw an error
