@@ -988,7 +988,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var view = me.getView();
         var el = view.el.dom;
         var layer = view.getLayer();
-        var features = view.getFeatureGroup();
+        var features = view.getFeatureGroup().slice().reverse();
         var hoverPlugin = BasiGX.view.component.Map.guess().getPlugin('hoverBfS');
         var innerHTML = hoverPlugin.getToolTipHtml(layer, features);
         var timeSeriesTab = me.createTabElement({
