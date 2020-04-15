@@ -118,6 +118,7 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                 svg.style.transform = null;
                 svg.style.boxShadow = null;
             }
+            cartoWindow.getController().updateLineFeature();
         });
     }
 
