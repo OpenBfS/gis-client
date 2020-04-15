@@ -1052,6 +1052,18 @@ Ext.define('Koala.view.component.CartoWindowController', {
             }]
         });
 
+        tab.addEventListener('click', function() {
+            var chartTab = this.classList.contains('timeseries-tab') ||
+                this.classList.contains('barchart-tab');
+            if (chartTab) {
+                return;
+            }
+            var ctrl = Ext.ComponentQuery.query('k-menu-layersettings')[0].getController();
+            if (ctrl.cartoWindowsMinimized) {
+                ctrl.toggleMinimize();
+            }
+        });
+
         if (!Ext.isModern) {
             var resizer = Ext.create('Ext.resizer.Resizer', {
                 target: tab.querySelector('.content'),
