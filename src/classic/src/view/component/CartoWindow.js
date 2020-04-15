@@ -82,13 +82,18 @@ Ext.define('Koala.view.component.CartoWindow',{
                 mousedown: handleMouseDown,
                 mouseup: handleMouseUp,
                 mouseenter: disableInteractions,
-                mouseleave: enableInteractions,
+                mouseleave: function() {
+                    if (!this.hasCls('onDragging')) {
+                        enableInteractions();
+                    }
+                }.bind(this),
                 dragstart: handleDragstart,
                 dragend: handleDragend
             });
 
             // re-enable text-selection
             el.select('.x-unselectable').selectable();
+            disableInteractions();
         }
     }
 

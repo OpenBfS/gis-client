@@ -1459,7 +1459,6 @@ Ext.define('Koala.view.component.CartoWindowController', {
      * centerCoords property on the overlay.
      */
     updateLineFeature: function() {
-        this.enableMapInteractions();
         var me = this;
         var view = me.getView();
         var viewModel = me.getViewModel();
