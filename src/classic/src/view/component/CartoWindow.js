@@ -58,6 +58,7 @@ Ext.define('Koala.view.component.CartoWindow',{
         boxready: 'onInitialize',
         initialize: 'onInitialize',
         beforedestroy: 'onBeforeDestroy',
+        focus: 'disableMapInteractions',
         afterrender: function(cmp) {
             var el = cmp.getEl();
             var ctrl = this.controller;
