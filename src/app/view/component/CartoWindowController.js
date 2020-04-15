@@ -211,6 +211,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
         });
 
         var tabElm = timeSeriesTab.getElementsByTagName('div')[0];
+        var topRow = document.createElement('div');
+        topRow.style.display = 'flex';
+        tabElm.appendChild(topRow);
 
         var config = {
             startDate: timeFilter.mindatetimeinstant,
@@ -222,8 +225,19 @@ Ext.define('Koala.view.component.CartoWindowController', {
 
         var chartObj = Koala.view.component.D3Chart.create(layer, feature, config);
 
-        this.createTimeSeriesButtons(tabElm);
-        this.createCombineTimeseriesButton(tabElm);
+        this.createTimeSeriesButtons(topRow);
+        this.createCombineTimeseriesButton(topRow);
+
+        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+        langCombo.on('applanguagechanged', me.setTranslatedAutorefreshData.bind(me));
+
+        el.appendChild(timeSeriesTab);
+        this.timeserieschart = Ext.create(chartObj);
+
+        //this.createDownloadChartDataButton(tabElm, this.timeserieschart);
+        this.createIrixPrintButton(topRow, this.timeserieschart);
+        this.createExportToPngButton(topRow, this.timeserieschart);
+        this.createChartSettingsMenuButton(topRow);
 
         var autorefreshStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'title'],
@@ -234,8 +248,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             xtype: 'checkbox',
             name: 'autorefresh-checkbox',
             checked: false,
-            renderTo: tabElm,
-            style: 'display: inline;',
+            renderTo: topRow,
             padding: 3,
             bind: {
                 boxLabel: view.getViewModel().get('autorefresh')
@@ -247,27 +260,14 @@ Ext.define('Koala.view.component.CartoWindowController', {
             displayField: 'title',
             padding: 3,
             valueField: 'value',
-            style: 'display: inline;',
             store: autorefreshStore,
             queryMode: 'local',
-            renderTo: tabElm,
+            renderTo: topRow,
             bind: {
                 emptyText: view.getViewModel().get('autorefreshOptions')
             }
         });
-
         this.autorefreshCombo.bodyEl.addListener('click', this.autorefreshCombo.expand.bind(this.autorefreshCombo));
-
-        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
-        langCombo.on('applanguagechanged', me.setTranslatedAutorefreshData.bind(me));
-
-        el.appendChild(timeSeriesTab);
-        this.timeserieschart = Ext.create(chartObj);
-
-        //this.createDownloadChartDataButton(tabElm, this.timeserieschart);
-        this.createIrixPrintButton(tabElm, this.timeserieschart);
-        this.createExportToPngButton(tabElm, this.timeserieschart);
-        this.createChartSettingsMenuButton(tabElm);
 
         Koala.util.ChartAutoUpdater.autorefreshTimeseries(
             this.timeserieschart,

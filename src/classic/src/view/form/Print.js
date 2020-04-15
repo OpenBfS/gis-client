@@ -697,8 +697,8 @@ Ext.define('Koala.view.form.Print', {
                 coords[1] -= 28 * resolution;
                 // 5 pixels from the translate
                 coords[1] += 5 * resolution;
-                // 33 pixels from the translate
-                coords[0] += 33 * resolution;
+                // 34 pixels from the translate
+                coords[0] += 34 * resolution;
                 // 15 magic pixels
                 coords[0] += 15 * resolution;
             }

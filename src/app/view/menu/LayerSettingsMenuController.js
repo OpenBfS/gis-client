@@ -103,7 +103,9 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
                     yOff -= top;
                     el.querySelector('.k-barchart-container').style.transform = 'translate(-20px, ' + yOff + 'px)';
                 } else {
-                    svg.style.transform = 'translate(-5px, -33px)';
+                    // If these values are ever changed, make sure you also change the values in
+                    // Koala.view.form.Print!
+                    svg.style.transform = 'translate(-5px, -34px)';
                 }
             } else {
                 if (chart.legendToggled) {
