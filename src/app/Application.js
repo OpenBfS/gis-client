@@ -187,7 +187,7 @@ Ext.define('Koala.Application', {
                 var namespaces = JSON.parse(xhr.responseText).namespaces.namespace;
                 Ext.each(namespaces, function(namespace) {
                     Ext.Ajax.request({
-                        url: namespace.href,
+                        url: namespace.href.replace('bfs-docker', 'localhost'),
                         success: function(subXhr) {
                             var subNamespace = JSON.parse(subXhr.responseText).namespace;
                             BasiGX.util.Namespace.namespaces[subNamespace.prefix] = subNamespace.uri;
