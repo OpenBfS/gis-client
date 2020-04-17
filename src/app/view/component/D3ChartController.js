@@ -100,7 +100,7 @@ Ext.define('Koala.view.component.D3ChartController', {
     /**
      *
      */
-    drawChart: function() {
+    drawChart: function(keepVisibility) {
         if (!this.chartConfig) {
             return;
         }
@@ -158,7 +158,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
 
         this.chartRenderer.render(div);
-        if (this.isAutoUpdated) {
+        if (this.isAutoUpdated || keepVisibility) {
             var legendEntries = div.querySelectorAll('g.legend > g');
             Ext.each(this.seriesVisibility, function(visible, idx) {
                 var item;
@@ -392,7 +392,7 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
         this.chartConfig.chartRendererConfig.size = chartSize;
 
-        this.drawChart();
+        this.drawChart(true);
     },
 
     /**
