@@ -249,6 +249,9 @@ Ext.define('Koala.view.form.LayerFilter', {
                 xtype: 'textfield'
             };
         }
+        if (filter.allowMultipleSelect && Ext.isString(sharedCfg.value)) {
+            sharedCfg.value = [sharedCfg.value];
+        }
 
         field = Ext.apply(field, sharedCfg);
 
