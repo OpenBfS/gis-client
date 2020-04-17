@@ -37,6 +37,7 @@ Ext.define('Koala.util.Metadata', {
             var path = ms[2] + 'ows';
             var bfs = XML.defaultNamespaces.bfs;
             var gmd = XML.defaultNamespaces.gmd;
+            var gco = XML.defaultNamespaces.gco;
             var workspace = context.config.workspace;
             var datastore = context.config.datastore;
             var name = context.metadata.newLayerName;
@@ -66,9 +67,14 @@ Ext.define('Koala.util.Metadata', {
             xpath = 'bfs:layerType/bfs:MD_VectorLayerType/bfs:URL';
             layerNode = doc.evaluate(xpath, node, ns).iterateNext();
             if (!layerNode) {
-                layerNode = XML.addOrGet(doc, node, gmd, 'bfs:layerType');
-                layerNode = XML.addOrGet(doc, layerNode, gmd, 'bfs:MD_VectorLayerType');
-                layerNode = XML.addOrGet(doc, layerNode, gmd, 'bfs:URL');
+                layerNode = XML.addOrGet(doc, node, bfs, 'bfs:layerType');
+                layerNode = XML.addOrGet(doc, layerNode, bfs, 'bfs:MD_VectorLayerType');
+                var tmp = layerNode;
+                layerNode = XML.addOrGet(doc, layerNode, bfs, 'bfs:URL');
+                var tmp2 = XML.addOrGet(doc, tmp, bfs, 'bfs:format');
+                tmp2.setAttributeNS(gco, 'nilReason', 'missing');
+                tmp2 = XML.addOrGet(doc, tmp, bfs, 'bfs:params');
+                tmp2.setAttributeNS(gco, 'nilReason', 'missing');
             }
             XML.removeNodes(doc, 'bfs:host', layerNode);
             XML.removeNodes(doc, 'bfs:path', layerNode);
