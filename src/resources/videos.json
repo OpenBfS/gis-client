@@ -1,28 +1,28 @@
 {
     "videos": [{
         "name": "Clock",
-        "urls": ["http://bfs-docker/gis_client_configs/clock_25_10mins.mp4"],
+        "urls": ["http://localhost/gis_client_configs/clock_25_10mins.mp4"],
         "bbox": [650000,6500000,1000000,6800000],
         "timestamp": "20180405T000000Z",
         "timeFrames": [],
         "fps": 25
     }, {
         "name": "Testvideo",
-        "urls": ["http://bfs-docker/gis_client_configs/aerial.mp4"],
+        "urls": ["http://localhost/gis_client_configs/aerial.mp4"],
         "bbox": [650000,6500000,1000000,6800000],
         "timestamp": "20180405T131232Z",
         "timeFrames": [],
         "fps": 30
     }, {
         "name": "RODOS",
-        "urls": ["http://bfs-docker/gis_client_configs/rodos.mp4"],
+        "urls": ["http://localhost/gis_client_configs/rodos.mp4"],
         "bbox": [650000,6500000,1000000,6800000],
         "timestamp": "20180405T131232Z",
         "timeFrames": [3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600],
         "fps": 1
     }, {
         "name": "ODL",
-        "urls": ["http://bfs-docker/gis_client_configs/odl.webm"],
+        "urls": ["http://localhost/gis_client_configs/odl.webm"],
         "bbox": [-673868.8413621138,5076641.670588266,2596412.976790867,8576846.069823056],
         "timestamp": "20180405T131232Z",
         "timeFrames": [3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600,

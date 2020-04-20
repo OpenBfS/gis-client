@@ -17,7 +17,20 @@
 * `cd src`
 * `npm install`
 
-## Development
+## Development with docker-compose
+
+With docker-compose, you just need to run `docker-compose up` to get everything
+up and running. This will give you an nginx based reverse proxy for all required
+services (Geoserver, GNOS, print etc.) on localhost.
+
+If you need proper namespace support, alter line 190 in `Application.js` to
+
+`url: namespace.href.replace('bfs-docker', 'localhost'),`
+
+Keep in mind that you still need to run `sencha app build development` once in
+order to get the GeoStyler.
+
+## Development manual setup
 
 * `cd src`
 * `sencha app watch`

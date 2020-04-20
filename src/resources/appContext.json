@@ -3,16 +3,16 @@
         "merge": {
             "headerTitle": "IMIS",
             "urls": {
-                "metadata-xml2json": "http://bfs-docker/geonetwork/srv/api/0.1/records/",
-                "metadata-search": "http://bfs-docker/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://bfs-docker/ogc/bfs/ows",
-                "print-servlet": "http://bfs-docker.intranet.terrestris.de/bfs-printservice/print/",
-                "irix-servlet": "http://bfs-docker.intranet.terrestris.de/irix-servlet",
+                "metadata-xml2json": "http://localhost/geonetwork/srv/api/0.1/records/",
+                "metadata-search": "http://localhost/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://localhost/ogc/bfs/ows",
+                "print-servlet": "http://localhost/bfs-printservice/print/",
+                "irix-servlet": "http://localhost/irix-servlet",
                 "irix-context": "resources/irixContext.json",
                 "rodos-projects": "resources/rodos/projects.json",
                 "rodos-results": "resources/rodos/projects/",
-                "rodos-upload-service": "http://bfs-docker.intranet.terrestris.de/examples/servlets/servlet/RequestParamExample?",
-                "geoserver-base-url": "http://bfs-docker/ogc",
+                "rodos-upload-service": "http://localhost/examples/servlets/servlet/RequestParamExample?",
+                "geoserver-base-url": "http://localhost/ogc",
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
                 "videos": "resources/videos.json",
@@ -29,14 +29,14 @@
                     "workspace": "ruf-import",
                     "namespace": "www.imis.bfs.de/ruf",
                     "datastore": "ruf-import",
-                    "baseUrl": "http://bfs-docker/ogc/",
+                    "baseUrl": "http://localhost/ogc/",
                     "metadataBaseUrl": "/geonetwork/"
                 },
                 "imis": {
                     "workspace": "imis-import",
                     "namespace": "www.imis.bfs.de/imis",
                     "datastore": "imis-import",
-                    "baseUrl": "http://bfs-docker/ogc/",
+                    "baseUrl": "http://localhost/ogc/",
                     "metadataBaseUrl": "/geonetwork/"
                 }
             },
