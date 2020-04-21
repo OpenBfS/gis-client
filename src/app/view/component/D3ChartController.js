@@ -115,9 +115,19 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
         var numAttached = attachedConfig ? attachedConfig.length : 0;
 
+        if (this.useCurrentZoom) {
+            var zoom = this.timeseriesComponent.getCurrentZoom();
+            this.chartConfig.timeseriesComponentConfig.initialZoom = {
+                x: zoom.x,
+                y: zoom.y,
+                k: zoom.k
+            };
+        }
+
         var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
+        series.enableXAxisZoom(false);
+        series.enableYAxisZoom(true);
         this.timeseriesComponent = series;
-        series.enableYAxisZoom(false);
 
         if (this.keydownDestroy) {
             this.keydownDestroy.destroy();
@@ -158,6 +168,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig.chartRendererConfig);
 
         this.chartRenderer.render(div);
+        series.enableYAxisZoom(false);
+        series.enableXAxisZoom(true);
         if (this.isAutoUpdated || keepVisibility) {
             var legendEntries = div.querySelectorAll('g.legend > g');
             Ext.each(this.seriesVisibility, function(visible, idx) {
