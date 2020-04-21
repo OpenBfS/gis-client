@@ -22,6 +22,7 @@ Ext.define('Koala.view.grid.FilterGrid', {
     cls: 'k-grid-filter',
 
     requires: [
+        'Koala.util.Grid'
     ],
 
     plugins: 'gridfilters',
@@ -55,48 +56,21 @@ Ext.define('Koala.view.grid.FilterGrid', {
      */
     initComponent: function() {
         this.callParent();
-        var colDefs = this.extractSchema();
-        this.setupStore(colDefs);
+        this.setupStore();
     },
 
     /**
-     * Extract the column definitions from the layer's contents.
+     * Setup the store.
      */
-    extractSchema: function() {
-        var layer = this.getLayer();
-        var feats = layer.getSource().getFeatures();
-        var attributes = [];
-        Ext.each(feats, function(feat) {
-            Ext.iterate(feat.getProperties(), function(key) {
-                if (attributes.indexOf(key) === -1 && key !== 'geometry') {
-                    attributes.push(key);
-                }
-            });
-        });
-        var colDefs = [];
-        Ext.each(attributes, function(attribute) {
-            colDefs.push({
-                text: attribute,
-                dataIndex: attribute,
-                editor: 'textfield',
-                filter: true
-            });
-        });
-        return colDefs;
-    },
-
-    /**
-     * Setup the store with the given column definitions. Adds only the
-     * first four features to the store.
-     *
-     * @param {Object[]} columns
-     */
-    setupStore: function(columns) {
-        this.setColumns(columns);
-        var store = Ext.create('GeoExt.data.store.Features', {
-            layer: this.getLayer()
+    setupStore: function() {
+        var store = Ext.create('Ext.data.Store', {
+            autoLoad: true,
+            data: []
         });
         this.setStore(store);
+        var fmt = new ol.format.GeoJSON();
+        var collection = fmt.writeFeaturesObject(this.getLayer().getSource().getFeatures());
+        Koala.util.Grid.updateGridFeatures(this, collection.features);
     }
 
 });
