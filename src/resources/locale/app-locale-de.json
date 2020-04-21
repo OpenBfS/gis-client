@@ -570,7 +570,8 @@
                 "minimize": "Cartowindow minimieren",
                 "cloneLayer": "Layer klonen",
                 "editTemplates": "Templates anpassen",
-                "templateEditor": "Templates editieren"
+                "templateEditor": "Templates editieren",
+                "hoverInfo": "HoverInfo"
             }
         }
     },

@@ -111,6 +111,10 @@ Ext.define('Koala.plugin.Hover', {
                 var resolution = mapView.getResolution();
                 var projCode = mapView.getProjection().getCode();
                 var hoverable = layer.get(hoverableProp);
+                var hoverActive = layer.get('hoverActive');
+                if (hoverActive === false) {
+                    return;
+                }
 
                 // a layer will NOT be requested for hovering if there is a
                 // "hoverable" property set to false. If this property is not set
