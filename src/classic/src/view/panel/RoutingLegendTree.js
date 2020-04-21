@@ -312,6 +312,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 });
             }
             this.layerSettingsMenu.getViewModel().set('allowClone', btn.layerRec.getOlLayer().get('allowClone'));
+            this.layerSettingsMenu.getViewModel().set('external', btn.layerRec.getOlLayer().get('external'));
             this.layerSettingsMenu.showBy(btn);
         },
 

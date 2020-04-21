@@ -122,6 +122,14 @@ Ext.define('Koala.view.menu.LayerSettingsMenuController', {
             }
             cartoWindow.getController().updateLineFeature();
         });
+    },
+
+    /**
+     * Toggle the hoverActive flag of the layer.
+     */
+    toggleHoverInfo: function() {
+        var layer = this.getView().getLayer();
+        layer.set('hoverActive', !layer.get('hoverActive'));
     }
 
 });

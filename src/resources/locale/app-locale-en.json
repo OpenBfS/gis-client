@@ -568,7 +568,8 @@
                 "minimize": "Minimize carto windows",
                 "cloneLayer": "Clone layer",
                 "editTemplates": "Edit templates",
-                "templateEditor": "Edit templates"
+                "templateEditor": "Edit templates",
+                "hoverInfo": "HoverInfo"
             }
         }
     },
