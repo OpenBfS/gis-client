@@ -148,6 +148,11 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (this.interactionsDisabled) {
             return;
         }
+        var element = this.getView().getEl().dom;
+        if (!Koala.view.component.CartoWindowController.currentZIndex) {
+            Koala.view.component.CartoWindowController.currentZIndex = 0;
+        }
+        element.style.zIndex = '' + ++Koala.view.component.CartoWindowController.currentZIndex;
         var map = this.getView().getMap();
         var me = this;
         this.interactionActiveList = [];
