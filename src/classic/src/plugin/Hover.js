@@ -122,7 +122,6 @@ Ext.define('Koala.plugin.Hover', {
                 if (hoverable !== false) {
                     if (source instanceof ol.source.TileWMS
                             || source instanceof ol.source.ImageWMS) {
-                        // me.cleanupHoverArtifacts();
                         var url = source.getGetFeatureInfoUrl(
                             evt.coordinate,
                             resolution,

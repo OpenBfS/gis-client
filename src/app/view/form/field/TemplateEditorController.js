@@ -47,10 +47,20 @@ Ext.define('Koala.view.form.field.TemplateEditorController', {
         var tpl = viewModel.get('selectedTemplate');
         var idx = view.getTemplates().indexOf(tpl);
         var property = view.getProperties()[idx];
+
+        // It is a really bad idea to edit the templates with eval
+        // functions with the HTML editor. It randomly SGML quotes
+        // characters it doesn't like and we have to revert them back here.
+        // Also, markup is sometimes inserted if there was none yet.
         if (property === 'yAxisLabel' || property === 'seriesTitleTpl') {
+            // IIRC this happens when the template DOESN'T contain markup yet
             newValue = newValue.replace(/<\/?div>|<br>|&nbsp;/g, '');
         }
+        // corresponds to && expressions in JS code
         newValue = newValue.replace(/&amp;&amp;/g, '&&');
+        // corresponds mainly to the NWG check (checking whether the value of
+        // a field equals the character <)
+        newValue = newValue.replace(/'&lt;'/g, '\'<\'');
         metadata[property] = newValue;
         try {
             this.getView().getCallback()(this.getView());
