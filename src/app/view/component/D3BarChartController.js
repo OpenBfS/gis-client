@@ -373,6 +373,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             legendContainer.classList.add('k-barchart-legend-container');
             barContainer.classList.add('k-barchart-chart-container');
         }
+        this.chartConfig.barComponentConfig.groupedInitiallyHidden = this.hiddenGrouped || [];
+        this.chartConfig.barComponentConfig.groupsInitiallyHidden = this.hiddenGroups || [];
         var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
         var legend = this.getLegendComponent(barComponent);
         var viewSize = this.getViewSize();
@@ -418,6 +420,14 @@ Ext.define('Koala.view.component.D3BarChartController', {
             legendChartConfig.dynamicSize = true;
             this.legendChartRenderer = new D3Util.ChartRenderer(legendChartConfig);
             this.legendChartRenderer.render(legendContainer);
+            Ext.each(this.hiddenGrouped, function(value) {
+                var node = legendContainer.querySelector('[value="' + value + '"]');
+                node.classList.add('k-d3-disabled');
+            });
+            Ext.each(this.hiddenGroups, function(value) {
+                var node = legendContainer.querySelector('[value="' + value + '"]');
+                node.classList.add('k-d3-disabled');
+            });
         }
         this.updateIdentificationThresholdData();
     },
@@ -434,6 +444,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
             return;
         }
         var me = this;
+        if (!me.hiddenGrouped) {
+            me.hiddenGrouped = [];
+            me.hiddenGroups = [];
+        }
         var Const = Koala.util.ChartConstants;
         var CSS = Const.CSS_CLASS;
         this.chartConfig.legendComponentConfig.position[0] = 0;
@@ -455,10 +469,26 @@ Ext.define('Koala.view.component.D3BarChartController', {
                     list.add('k-d3-disabled');
                 }
                 if (legend.groupIndex) {
-                    barComponent.toggleGroup(legend.groupIndex);
+                    var visible = barComponent.toggleGroup(legend.groupIndex);
+                    if (visible) {
+                        var idx = me.hiddenGroups.indexOf(legend.groupIndex);
+                        if (idx > 0) {
+                            me.hiddenGroups.splice(idx, 1);
+                        }
+                    } else {
+                        me.hiddenGroups.push(legend.groupIndex);
+                    }
                 }
                 if (legend.groupedIndex) {
-                    barComponent.toggleGrouped(legend.groupedIndex);
+                    visible = barComponent.toggleGrouped(legend.groupedIndex);
+                    if (visible) {
+                        idx = me.hiddenGrouped.indexOf(legend.groupedIndex);
+                        if (idx > 0) {
+                            me.hiddenGrouped.splice(idx, 1);
+                        }
+                    } else {
+                        me.hiddenGrouped.push(legend.groupedIndex);
+                    }
                 }
             };
             legend.customRenderer = function(node) {
