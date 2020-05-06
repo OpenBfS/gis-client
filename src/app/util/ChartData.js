@@ -512,7 +512,8 @@ Ext.define('Koala.util.ChartData', {
                     groupIndex: item.value,
                     style: {
                         fill: 'black'
-                    }
+                    },
+                    value: item.value
                 });
                 Ext.iterate(group, function(idx, value) {
                     if (idx === 'key') {
@@ -526,7 +527,8 @@ Ext.define('Koala.util.ChartData', {
                                 fill: value.color
                             },
                             title: idx,
-                            groupedIndex: idx
+                            groupedIndex: idx,
+                            value: idx
                         };
                     }
                     item.values.push({
