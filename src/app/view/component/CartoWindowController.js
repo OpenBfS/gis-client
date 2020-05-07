@@ -71,6 +71,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         me.createTabs();
 
         me.createOverlay(layer);
+        me.correctPosition();
 
         me.getOrCreateLineLayer();
 
@@ -990,9 +991,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
             if (chartTab) {
                 return;
             }
-            var ctrl = Ext.ComponentQuery.query('k-menu-layersettings')[0].getController();
-            if (ctrl.cartoWindowsMinimized) {
-                ctrl.toggleMinimize();
+            var menu = Ext.ComponentQuery.query('k-menu-layersettings')[0];
+            if (menu) {
+                var ctrl = menu.getController();
+                if (ctrl.cartoWindowsMinimized) {
+                    ctrl.toggleMinimize();
+                }
             }
         });
 
@@ -1154,7 +1158,27 @@ Ext.define('Koala.view.component.CartoWindowController', {
         viewModel.set('overlay', overlay);
     },
 
-
+    /**
+     * Corrects the y position in case the top of the carto window is
+     * not visible on the map.
+     */
+    correctPosition: function() {
+        var overlay = this.getViewModel().get('overlay');
+        var position = overlay.getPosition();
+        var map = this.getView().getMap();
+        var offset = overlay.getOffset();
+        var yPosition = map.getPixelFromCoordinate(position)[1];
+        var resolution = map.getView().getResolution();
+        var upperLeft = map.getCoordinateFromPixel([0, 0]);
+        var toUpper = position[1] - upperLeft[1];
+        var toMove = toUpper / resolution;
+        if (yPosition + offset[1] < 0) {
+            offset[1] = Math.abs(toMove) / 2;
+            // 30 pixels extra for the carto window header
+            overlay.setOffset([0, 30]);
+            overlay.setPosition([position[0], upperLeft[1]]);
+        }
+    },
 
     /**
      * gets features anchorPoint
