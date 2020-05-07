@@ -693,14 +693,22 @@ Ext.define('Koala.view.form.Print', {
                 coords = overlay.getPosition().slice();
                 coords[0] += (width / 2) * resolution;
                 coords[1] -= (height / 2) * resolution;
-                // 28 pixels for the header height
-                coords[1] -= 28 * resolution;
-                // 5 pixels from the translate
-                coords[1] += 5 * resolution;
+                var carto = Ext.ComponentQuery.query('k-component-cartowindow[id=' + overlay.getElement().id + ']')[0];
+                carto = carto.getController();
+                var chart = carto.timeserieschart || carto.barChart;
+                // -30 for the header height
+                var yOff = -30;
+                var top = parseInt(chart.getChartMargin().top, 10);
+                var left = parseInt(chart.getChartMargin().left, 10);
+                // for some reason, this seems to be roughly twice the top chart margin
+                yOff -= 2 * top;
+                coords[1] += yOff * resolution;
                 // 34 pixels from the translate
                 coords[0] += 34 * resolution;
-                // 15 magic pixels
-                coords[0] += 15 * resolution;
+                // for some reason two times the left chart padding
+                coords[0] += left * resolution;
+                // magic number. TODO really figure out why there's an extra 50 pixel offset needed here
+                coords[0] += 50 * resolution;
             }
             document.querySelectorAll('.k-d3-hidden').forEach(function(item) {
                 item.style.display = 'none';
