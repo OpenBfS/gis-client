@@ -49,6 +49,8 @@ Ext.define('Koala.util.Metadata', {
             XML.addOlProperty(node, 'param_typename', datastore + ':' + name);
             XML.addOlProperty(node, 'persisted', 'true');
             XML.addOlProperty(node, 'allowEdit', 'true');
+            XML.removeNodes(doc, 'bfs:olProperty[bfs:MD_Property/bfs:propertyName/gco:CharacterString/text()=styleReference]', node);
+            XML.addOlProperty(node, 'styleReference', context.newUuid);
             xpath = 'bfs:timeSeriesChartProperty';
             XML.removeNodes(doc, xpath, node);
             xpath = 'bfs:barChartProperty';
