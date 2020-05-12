@@ -870,10 +870,17 @@ Ext.define('Koala.util.Layer', {
                     onTopLayers.push(layer);
                 }
             });
+            var tree = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+            if (tree) {
+                tree.getStore().collectionEventsSuspended = true;
+            }
             Ext.each(onTopLayers, function(layer) {
                 map.removeLayer(layer);
                 map.addLayer(layer);
             });
+            if (tree) {
+                tree.getStore().collectionEventsSuspended = false;
+            }
         },
 
         /**
