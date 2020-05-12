@@ -136,8 +136,14 @@ Ext.define('Koala.plugin.Hover', {
                             // TODO: replace evt/coords with real response geometry
                             var respFeatures = (new ol.format.GeoJSON())
                                 .readFeatures(resp.responseText);
-                            var respProjection = (new ol.format.GeoJSON())
-                                .readProjection(resp.responseText);
+                            var respProjection;
+                            try {
+                                respProjection = (new ol.format.GeoJSON())
+                                    .readProjection(resp.responseText);
+                            } catch (e) {
+                                // probably an ol.AssertionError, default to wgs84
+                                respProjection = 'EPSG:4326';
+                            }
 
                             me.showHoverFeature(
                                 layer, respFeatures, respProjection

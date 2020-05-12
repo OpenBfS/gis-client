@@ -56,7 +56,9 @@ Ext.define('Koala.view.menu.LayerSettingsMenu', {
             hidden: '{!external}'
         },
         handler: 'toggleHoverInfo',
-        glyph: 'xf129@FontAwesome'
+        glyph: 'xf129@FontAwesome',
+        xtype: 'menucheckitem',
+        checked: false
     }, {
         bind: {
             text: '{editTemplates}',
