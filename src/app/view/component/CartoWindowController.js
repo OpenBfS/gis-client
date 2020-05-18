@@ -1524,6 +1524,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         if (hasZoom) {
             zoom[minOrMax] = changedDate.valueOf();
         }
+        controller.keepColors = true;
         controller.getChartData();
         if (hasZoom) {
             var min = zoom.min;
