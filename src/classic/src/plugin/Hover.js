@@ -202,6 +202,23 @@ Ext.define('Koala.plugin.Hover', {
     },
 
     /**
+     * Shows the hover tooltip.
+     *
+     * @param {ol.MapBrowserEvent} evt The OpenLayers event, containing e.g.
+     *     the coordinate.
+     * @param {Array<ol.layer.Layer>} layers The layers that the features may
+     *     originate from.
+     * @param {Array<ol.Feature>} features The features that were hovered.
+     */
+    showHoverToolTip: function() {
+        this.callParent(arguments);
+        var popups = document.querySelectorAll('.k-feature-hover');
+        Ext.each(popups, function(popup) {
+            popup.style.zIndex = '' + ++Koala.view.component.CartoWindowController.currentZIndex;
+        });
+    },
+
+    /**
      * In case the feature grid is open, highlight hover features in the table.
      * @param  {ol.Feature[]} features the highlighted features
      */
