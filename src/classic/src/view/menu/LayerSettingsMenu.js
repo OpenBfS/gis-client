@@ -53,7 +53,7 @@ Ext.define('Koala.view.menu.LayerSettingsMenu', {
     }, {
         bind: {
             text: '{hoverInfo}',
-            hidden: '{!external}'
+            hidden: '{!external || !queryable}'
         },
         handler: 'toggleHoverInfo',
         glyph: 'xf129@FontAwesome',
