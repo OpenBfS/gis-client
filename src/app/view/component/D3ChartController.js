@@ -953,6 +953,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                 config.title.label = this.originalTitle + ' ' + Koala.util.Chart.getChartTitle(this.getView().getTargetLayer());
             }
 
+            var oldConfig = me.chartConfig;
+
             me.chartConfig = Koala.util.ChartData.getChartConfiguration(
                 config,
                 chartSize,
@@ -962,6 +964,17 @@ Ext.define('Koala.view.component.D3ChartController', {
                 stations,
                 this.chartOverrides
             );
+
+            if (me.keepColors) {
+                me.keepColors = false;
+                Ext.each(me.chartConfig.timeseriesComponentConfig.series, function(series, idx) {
+                    series.color = oldConfig.timeseriesComponentConfig.series[idx].color;
+                });
+                Ext.each(me.chartConfig.legendComponentConfig.items, function(legend, idx) {
+                    legend.style.stroke = oldConfig.legendComponentConfig.items[idx].style.stroke;
+                });
+            }
+
             if (this.oldCharts && this.oldCharts[stationId]) {
                 me.chartConfig.timeseriesComponentConfig.series = this.oldCharts[stationId].timeseriesComponentConfig.series;
                 me.chartConfig.timeseriesComponentConfig.initialZoom = this.oldCharts[stationId].initialZoom;
