@@ -38,6 +38,16 @@ Ext.define('Koala.plugin.Hover', {
                 // in case of a function it will only be evaluated for the
                 // first feature!
                 var hoverTpl = layer.get('hoverTpl');
+                var isExternal = layer.get('external');
+                if (isExternal) {
+                    var props = feature.getProperties();
+                    Ext.iterate(props, function(key, value) {
+                        if (key !== 'layer' && key !== 'geometry') {
+                            innerHtml += key + ': ' + value + '<br>';
+                        }
+                    });
+                    return;
+                }
                 // we check for existing feature first as there maybe strange
                 // situations (e.g. when zooming while hovering)
                 // where feat is undefined and feat.get would throw an error
@@ -134,8 +144,15 @@ Ext.define('Koala.plugin.Hover', {
 
                         me.requestAsynchronously(url, function(resp) {
                             // TODO: replace evt/coords with real response geometry
-                            var respFeatures = (new ol.format.GeoJSON())
-                                .readFeatures(resp.responseText);
+                            try {
+                                var respFeatures = (new ol.format.GeoJSON())
+                                    .readFeatures(resp.responseText);
+                            } catch (e) {
+                                Ext.Msg.alert(
+                                    Koala.getApplication().getMainView().getViewModel().get('error'),
+                                    Koala.getApplication().getMainView().getViewModel().get('jsonNotSupported')
+                                );
+                            }
                             var respProjection;
                             try {
                                 respProjection = (new ol.format.GeoJSON())

@@ -538,7 +538,9 @@
                 "closeTooltip": "Schließen",
                 "gridTabTitle": "Tabellarische Ansicht",
                 "htmlTabTitle": "Information",
-                "hoverinfoTabTitle": "Information"
+                "hoverinfoTabTitle": "Information",
+                "error": "Fehler",
+                "jsonNotSupported": "Der Dienst unterstützt keine Feature-Info-Ausgabe im JSON-Format."
             }
         }
     },
