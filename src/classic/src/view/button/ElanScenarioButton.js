@@ -94,6 +94,11 @@ Ext.define('Koala.view.button.ElanScenarioButton', {
         var states = Koala.view.button.ElanScenarioButton.states;
         switch (state) {
             case states.EVENTS_CHANGED:
+                // ignore initial event
+                if (this.initialEvent) {
+                    this.initialEvent = false;
+                    return;
+                }
                 window.console.log('EVENTS_CHANGED');
                 this.show();
                 this.setIconCls(this.changedIcon);
