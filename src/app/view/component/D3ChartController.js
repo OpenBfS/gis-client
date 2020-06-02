@@ -215,11 +215,16 @@ Ext.define('Koala.view.component.D3ChartController', {
         var gnosConfig = config.targetLayer.metadata.layerConfig.timeSeriesChartProperties;
         var idField = Koala.util.Object.getPathStrOr(config.targetLayer.metadata,
             'layerConfig/olProperties/featureIdentifyField', 'id');
+        var map = Ext.ComponentQuery.query('k-component-map')[0].map;
+        var hoverLayer = map.getLayers().getArray().filter(function(l) {
+            return l.get('name') === 'hoverVectorLayer';
+        })[0];
 
         var Const = Koala.util.ChartConstants;
         var CSS = Const.CSS_CLASS;
+        var stations = me.getView().getSelectedStations();
         Ext.each(this.chartConfig.legendComponentConfig.items, function(legend, idx) {
-            var station = Ext.Array.findBy(me.getView().getSelectedStations(), function(feature) {
+            var station = Ext.Array.findBy(stations, function(feature) {
                 return feature.get(idField) === legend.seriesId;
             });
 
@@ -248,6 +253,25 @@ Ext.define('Koala.view.component.D3ChartController', {
                 var titleAttribute = gnosConfig.seriesTitleTpl || '[[' + gnosConfig.groupAttribute + ']]';
                 legend.title = Koala.util.String.replaceTemplateStrings(titleAttribute, station).replace(/(\w)([-_/,.])(\w)/g, '$1 $2 $3');
                 legend.contextmenuHandler = me.getContextmenuFunction(legend.seriesIndex, series).bind(me);
+                legend.onHover = function() {
+                    var clone = station.clone();
+                    clone.set('hoverFeature', true);
+                    var previous = hoverLayer.getSource().getFeatures().filter(function(f) {
+                        return f.get('hoverFeature');
+                    })[0];
+                    if (previous) {
+                        hoverLayer.getSource().removeFeature(previous);
+                    }
+                    hoverLayer.getSource().addFeature(clone);
+                };
+                legend.onMouseOut = function() {
+                    var previous = hoverLayer.getSource().getFeatures().filter(function(f) {
+                        return f.get('hoverFeature');
+                    })[0];
+                    if (previous) {
+                        hoverLayer.getSource().removeFeature(previous);
+                    }
+                };
             }
             legend.customRenderer = function(node) {
                 var allowDownload = Koala.util.Object.getPathStrOr(
