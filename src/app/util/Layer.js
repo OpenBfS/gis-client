@@ -1086,7 +1086,7 @@ Ext.define('Koala.util.Layer', {
             if (height) {
                 legendUrl = Ext.String.urlAppend(legendUrl, 'HEIGHT=' + height);
             }
-            if (resolution) {
+            if (resolution && legendUrl.toLowerCase().indexOf('scale') === -1) {
                 legendUrl = Ext.String.urlAppend(legendUrl, 'SCALE=' + scale);
             }
             if (style) {
