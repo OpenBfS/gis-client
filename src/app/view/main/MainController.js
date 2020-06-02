@@ -90,9 +90,10 @@ Ext.define('Koala.view.main.MainController', {
     initElanScenarios: function() {
         var appContext = Koala.util.AppContext.getAppContext(),
             tools = appContext.data.merge.tools,
-            url = Koala.util.Object.getPathStrOr(appContext, 'data/merge/urls/dokpool-scenarios');
+            url = Koala.util.Object.getPathStrOr(appContext, 'data/merge/urls/dokpool-scenarios'),
+            username = appContext.data.merge.application_user.username;
         if (tools.indexOf('ScenarioAlertBtn') !== -1) {
-            Koala.util.LocalStorage.setCurrentUser(this.username);
+            Koala.util.LocalStorage.setCurrentUser(username);
             var dokpool = Koala.util.DokpoolRequest;
             dokpool.elanScenarioUrl = url;
             dokpool.storageModule = Koala.util.LocalStorage;

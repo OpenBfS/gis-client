@@ -56,7 +56,12 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
             }
         }];
         this.eventObjs = Koala.util.LocalStorage.getDokpoolEvents();
+        var btn = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         this.callParent(arguments);
+        if (btn) {
+            btn.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
+            btn.initialEvent = true;
+        }
     },
 
     initItems: function() {
