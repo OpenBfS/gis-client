@@ -23,6 +23,7 @@ Ext.define('Koala.view.window.AddWMSWindow', {
 
     requires: [
         'Koala.util.Help',
+        'Koala.util.Layer',
         'BasiGX.view.form.AddWms',
         'BasiGX.util.Application'
     ],
@@ -77,6 +78,9 @@ Ext.define('Koala.view.window.AddWMSWindow', {
                 olLayer.set('hoverActive', false);
                 olLayer.set('hoverTpl', 'Info');
                 olLayer.getSource().crossOrigin = 'anonymous';
+            },
+            wmsadd: function(layer) {
+                Koala.util.Layer.setAsActiveInLegendTree(layer);
             }
         }
     }]

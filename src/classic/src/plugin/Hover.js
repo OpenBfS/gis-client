@@ -41,10 +41,26 @@ Ext.define('Koala.plugin.Hover', {
                 var isExternal = layer.get('external');
                 if (isExternal) {
                     var props = feature.getProperties();
+                    var keyLength = Object.keys(props).length;
+                    var keyIdx = 1;
                     Ext.iterate(props, function(key, value) {
-                        if (key !== 'layer' && key !== 'geometry') {
-                            innerHtml += key + ': ' + value + '<br>';
+                        if (keyIdx === 1) {
+                            innerHtml += '<table style="max-width: 250px">' +
+                                '<colgroup>' +
+                                    '<col span="1" style="text-align: left">' +
+                                    '<col span="1" style="max-width: 100px">' +
+                                '</colgroup>';
                         }
+                        if (key !== 'layer' && key !== 'geometry') {
+                            innerHtml += '<tr><td style="width:80px; border: 1px solid black">' + key +
+                                ':</td><td style="max-width: 100px; border: 1px solid black; word-wrap: break-word">' +
+                                value + '</td></tr>';
+                        }
+                        // last key-value pair
+                        if (keyIdx === keyLength) {
+                            innerHtml += '</table>';
+                        }
+                        keyIdx += 1;
                     });
                     return;
                 }
