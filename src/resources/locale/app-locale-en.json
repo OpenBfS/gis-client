@@ -53,6 +53,13 @@
             "unknownFilter": "The permalink contains an unknown filter."
         }
     },
+    "Koala.view.button.FeatureSelectButton": {
+        "config": {
+            "data": {
+                "tooltip": "Select layer data"
+            }
+        }
+    },
     "Koala.util.SelectFeatures": {
         "statics": {
             "error": "Error",

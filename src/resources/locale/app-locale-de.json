@@ -83,6 +83,13 @@
             }
         }
     },
+    "Koala.view.button.FeatureSelectButton": {
+        "config": {
+            "data": {
+                "tooltip": "Layerdaten auswählen"
+            }
+        }
+    },
     "Koala.view.button.SelectFeatures": {
         "config": {
             "data": {
