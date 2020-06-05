@@ -552,6 +552,18 @@ Ext.define('Koala.view.component.D3BaseController', {
                         value: color,
                         listeners: {
                             change: function(field, value) {
+                                var cwin = this.up('window');
+                                if (cwin.isVisible()) {
+                                    window.setTimeout(function() {
+                                        cwin.close();
+                                        me.chartConfig.timeseriesComponentConfig
+                                            .series[idx].color = '#' + value;
+                                        me.chartConfig.legendComponentConfig.items[legendIdx]
+                                            .style.stroke = '#' + value;
+                                        me.drawChart();
+                                    }, 0);
+                                    return;
+                                }
                                 field.setFieldStyle({
                                     fontSize: 0,
                                     backgroundColor: '#' + value
