@@ -150,6 +150,13 @@ Ext.define('Koala.view.form.Print', {
                 this.addIrixCheckbox();
             }
             this.addBboxFieldset();
+            var capabilities = this.getLayoutRec();
+            var attributes = capabilities.getAssociatedData().attributes;
+            Ext.each(attributes, function(attribute) {
+                if (attribute.name === 'layerdata') {
+                    me.addLayerFieldset();
+                }
+            });
             if (this.config.chartPrint) {
                 this.down('k-form-irixfieldset').show();
                 this.down('[name=generic-fieldset]').hide();
@@ -594,6 +601,44 @@ Ext.define('Koala.view.form.Print', {
         }
     },
 
+    addLayerFieldset: function() {
+        var me = this;
+        var map = this.getMapComponent().map;
+        var layers = map.getLayers().getArray();
+        var fieldsetConfig = {
+            name: 'layer-fieldset',
+            layout: {
+                type: 'table',
+                columns: 2,
+                tableAttrs: {
+                    style: {
+                        width: '100%',
+                        height: '100%'
+                    }
+                }
+            },
+            items: []
+        };
+        Ext.each(layers, function(layer) {
+            if (layer.get('bp_displayInLayerSwitcher') === false) {
+                return;
+            }
+            fieldsetConfig.items.push({
+                xtype: 'checkboxfield',
+                boxLabel: layer.get('name'),
+                boxLabelAlign: 'after',
+                flex: 1
+            });
+            fieldsetConfig.items.push({
+                xtype: 'k-button-featureselect',
+                layer: layer,
+                transformInteraction: me.transformInteraction
+            });
+        });
+        var fieldset = Ext.create('Ext.form.FieldSet', fieldsetConfig);
+        this.down('fieldcontainer').add(fieldset);
+    },
+
     /**
      * Validate all fields on creation so they are marked as red if invalid.
      *
@@ -940,6 +985,7 @@ Ext.define('Koala.view.form.Print', {
             spec.attributes = hookedAttributes;
             spec.layout = layout;
             spec.outputFilename = layout;
+            view.insertLayerData(spec);
 
             var irixCheckBox = view.down('[name="irix-fieldset-checkbox"]');
             if (irixCheckBox && irixCheckBox.getValue()) {
@@ -990,6 +1036,36 @@ Ext.define('Koala.view.form.Print', {
                 });
             }
         });
+    },
+
+    insertLayerData: function(spec) {
+        var fieldset = this.down('[name=layer-fieldset]');
+        if (fieldset) {
+            spec.attributes.layerdata = [];
+            var fields = fieldset.query('checkboxfield');
+            Ext.each(fields, function(field) {
+                if (!field.getValue()) {
+                    return;
+                }
+                var button = field.nextSibling();
+                var layer = button.getLayer();
+                var selection = button.window.down('grid').getSelection();
+                selection = selection.map(function(item) {
+                    return item.getData();
+                });
+                Ext.each(selection, function(item) {
+                    delete item.id;
+                });
+                var data = {
+                    title: layer.get('name'),
+                    table: {
+                        columns: Object.keys(selection[0]),
+                        data: selection.map(Object.values)
+                    }
+                };
+                spec.attributes.layerdata.push(data);
+            });
+        }
     },
 
     /**
