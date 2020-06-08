@@ -192,11 +192,11 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             useBrewerColorRamps: true,
             colorSpaces: this.getColorRamps() ? [] : undefined
         });
-        var localeProvider = React.createElement(GeoStyler.LocaleProvider,
+        var configProvider = React.createElement(GeoStyler.ConfigProvider,
             { locale: GeoStyler.locale.de_DE },
             geostylerStyle
         );
-        this._GeoStyler = ReactDOM.render(localeProvider, root);
+        this._GeoStyler = ReactDOM.render(configProvider, root);
         this.renderCodeEditor(style);
     },
 
@@ -212,11 +212,11 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             onStyleChange: this.onStyleChange.bind(this),
             showSaveButton: false
         });
-        var localeProvider = React.createElement(GeoStyler.LocaleProvider,
+        var configProvider = React.createElement(GeoStyler.ConfigProvider,
             { locale: GeoStyler.locale.de_DE },
             codeEditor
         );
-        this._CodeEditor = ReactDOM.render(localeProvider, root);
+        this._CodeEditor = ReactDOM.render(configProvider, root);
     },
 
     scrollable: 'vertical',
