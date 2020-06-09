@@ -245,22 +245,35 @@ Ext.define('Koala.view.component.CartoWindowController', {
         this.createIrixPrintButton(topRow, this.timeserieschart);
         this.createExportToPngButton(topRow, this.timeserieschart);
         this.createChartSettingsMenuButton(topRow);
+        this.createAutorefreshUI(topRow);
+    },
 
+    /**
+     * Sets up the autorefresh button & related UI elements.
+     *
+     * @param {HTMLElement} topRow the button row element
+     */
+    createAutorefreshUI: function(topRow) {
+        var view = this.getView();
         var autorefreshStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'title'],
             data: this.getTranslatedAutorefreshData()
         });
-
-        var autorefreshBox = Ext.create({
-            xtype: 'checkbox',
-            name: 'autorefresh-checkbox',
-            checked: false,
-            renderTo: topRow,
-            padding: 3,
-            bind: {
-                boxLabel: view.getViewModel().get('autorefresh')
-            }
+        var window = Ext.create('Ext.window.Window', {
+            title: view.getViewModel().get('autorefresh'),
+            autoOpen: false,
+            closeAction: 'method-hide',
+            items: [{
+                xtype: 'checkbox',
+                name: 'autorefresh-checkbox',
+                checked: false,
+                padding: 3,
+                bind: {
+                    boxLabel: view.getViewModel().get('autorefresh')
+                }
+            }]
         });
+
         this.autorefreshCombo = Ext.create({
             xtype: 'combo',
             name: 'autorefresh-combo',
@@ -269,19 +282,32 @@ Ext.define('Koala.view.component.CartoWindowController', {
             valueField: 'value',
             store: autorefreshStore,
             queryMode: 'local',
-            renderTo: topRow,
             bind: {
                 emptyText: view.getViewModel().get('autorefreshOptions')
             }
         });
-        this.autorefreshCombo.bodyEl.addListener('click', this.autorefreshCombo.expand.bind(this.autorefreshCombo));
+        window.add(this.autorefreshCombo);
 
         Koala.util.ChartAutoUpdater.autorefreshTimeseries(
             this.timeserieschart,
             this.autorefreshCombo,
-            autorefreshBox,
+            window.down('[name=autorefresh-checkbox]'),
             view.getLayer()
         );
+        var button = {
+            cls: 'carto-window-chart-button',
+            xtype: 'button',
+            name: 'autorefresh-button',
+            iconCls: 'fa fa-refresh',
+            bind: {
+                tooltip: this.view.getViewModel().get('autorefresh')
+            },
+            renderTo: topRow,
+            handler: function() {
+                window.show();
+            }
+        };
+        Ext.create(button);
     },
 
     setTranslatedAutorefreshData: function() {
