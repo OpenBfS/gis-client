@@ -677,7 +677,7 @@ describe('Koala.util.Filter', function() {
                 defaultstarttimeformat: 'Y-m-d H:i:s',
                 defaultstarttimeinstant: '2012-01-01 01:00:00',
                 defaultendtimeformat: 'Y-m-d H:i:s',
-                defaultendtimeinstant: '2012-08-14 10:00:00'
+                defaultendtimeinstant: '2012-01-01 02:00:00'
             };
             it('is defined', function() {
                 expect(Koala.util.Filter.validateMaxDurationTimerange).to.not.be(undefined);

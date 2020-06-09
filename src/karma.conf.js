@@ -10,29 +10,21 @@ module.exports = function(config) {
      */
     var TOOLKIT = config.toolkit || 'classic';
     var EXTJSPREFIX = TOOLKIT === 'modern' ? '-modern' : '';
-    var proxyUrl = 'http://localhost:300' + TOOLKIT === 'classic' ? '0' : '1';
     var files = [
         'ext/build/ext' + EXTJSPREFIX + '-all-debug.js',
         'ext/packages/ux/classic/src/**/*js',
-        'ext/packages/ux/modern/**/*js',
         'ext/packages/ux/src/**/*js',
-        'test/' + TOOLKIT + '/loader.js',
+        'resources/lib/geostyler-libs/geostyler-openlayers-parser/browser/olStyleParser.js',
         'resources/lib/openlayers-v4.6.4-dist/ol.js',
         'test/raf.polyfill.js',
         'overrides/**/*js',
+        'app/**/*js',
+        config.toolkit + '/**/*js',
         'test/test-helper-functions.js',
         'test/turn-off-ext-logger.js',
-        'lib/d3-util/dist/main.js',
-        // GeoExt
-        {
-            pattern: 'lib/GeoExt/src/**/*.js',
-            included: false
-        },
-        // BasiGX
-        {
-            pattern: 'lib/BasiGX/src/**/*.js',
-            included: false
-        },
+        'resources/lib/d3-util/browser/main.js',
+        'lib/BasiGX/src/**/*js',
+        'lib/GeoExt/src/**/*js',
         {
             pattern: 'resources/appContext*.json',
             watched: true,
@@ -53,11 +45,9 @@ module.exports = function(config) {
         },
         'resources/lib/proj4js/proj4.js',
         'resources/lib/proj4js/proj4-defs.js',
-        'resources/lib/d3/d3.js',
         'resources/lib/PapaParse/4.5.0/papaparse.min.js',
         'resources/lib/momentjs/moment-with-locales.js',
-        'resources/lib/turfjs-5.1.6/turf.min.js',
-        '/koalaProxy'
+        'resources/lib/turfjs-5.1.6/turf.min.js'
     ];
 
     if (TOOLKIT === 'classic') {
@@ -71,7 +61,6 @@ module.exports = function(config) {
         basePath: '',
 
         proxies: {
-            '/koalaProxy': proxyUrl,
             '/resources': '/base/resources'
         },
 
