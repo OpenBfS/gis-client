@@ -55,13 +55,12 @@ Ext.define('Koala.view.window.ElanScenarioWindow', {
                 me.close();
             }
         }];
-        this.eventObjs = Koala.util.LocalStorage.getDokpoolEvents();
-        var btn = Ext.ComponentQuery.query('k-button-elanscenariobutton')[0];
         this.callParent(arguments);
-        if (btn) {
-            btn.setState(Koala.view.button.ElanScenarioButton.states.EVENTS_OLD);
-            btn.initialEvent = true;
-        }
+        this.getController().eventObjs = Koala.util.LocalStorage.getDokpoolEvents();
+        var languageCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+        languageCombo.on('applanguagechanged', function() {
+            me.getController().updateContent();
+        });
     },
 
     initItems: function() {
