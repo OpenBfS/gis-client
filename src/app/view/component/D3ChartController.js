@@ -255,6 +255,21 @@ Ext.define('Koala.view.component.D3ChartController', {
                 legend.contextmenuHandler = me.getContextmenuFunction(legend.seriesIndex, series).bind(me);
                 legend.onHover = function() {
                     var clone = station.clone();
+                    clone.setStyle(new ol.style.Style({
+                        fill: new ol.style.Fill({
+                            color: [0, 0, 255, 0.5]
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: [0, 0, 255, 0.5],
+                            width: 3
+                        }),
+                        image: new ol.style.Circle({
+                            radius: 7,
+                            fill: new ol.style.Fill({
+                                color: [0, 0, 255, 0.5]
+                            })
+                        })
+                    }));
                     clone.set('hoverFeature', true);
                     var previous = hoverLayer.getSource().getFeatures().filter(function(f) {
                         return f.get('hoverFeature');

@@ -258,7 +258,9 @@ Ext.define('Koala.view.window.TimeSeriesWindowController', {
     onTimeSeriesComboSelect: function(combo, rec, evt, olLayer) {
         var me = this;
         var format = new ol.format.GeoJSON();
-        var olFeat = format.readFeature(rec.data);
+        var olFeat = format.readFeature(rec.data, {
+            featureProjection: 'EPSG:3857'
+        });
         olFeat.set('layer', olLayer);
 
         me.updateTimeSeriesChart(olLayer, olFeat);
