@@ -65,6 +65,7 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                         return;
                     }
 
+                    var ctrl = chart.getController();
                     if (optionsCombo.getValue() === 'autorefresh-expand') {
                         endDate = moment();
                         chart.setConfig('useExactInterval', true);
@@ -74,16 +75,15 @@ Ext.define('Koala.util.ChartAutoUpdater', {
                             endField.setValue(endDate);
                             filterUtil.replaceHoursAndMinutes(endDate, endField);
                         }
-                        chart.getController().isAutoUpdated = true;
-                        chart.getController().useCurrentZoom = true;
-                        chart.getController().getChartData();
+                        ctrl.isAutoUpdated = true;
+                        ctrl.useCurrentZoom = true;
+                        ctrl.getChartData();
                     }
                     if (optionsCombo.getValue() === 'autorefresh-move') {
                         chart.setConfig('useExactInterval', true);
                         chart.setConfig('alwaysRenderChart', true);
                         endDate = moment();
                         var startDate = moment(endDate);
-                        var ctrl = chart.getController();
                         if (!ctrl.currentDateRange.min || !first) {
                             ctrl.currentDateRange.min = chart.getConfig('startDate');
                         }

@@ -114,7 +114,6 @@ Ext.define('Koala.view.component.D3ChartController', {
             }
         }
         var numAttached = attachedConfig ? attachedConfig.length : 0;
-
         if (this.useCurrentZoom) {
             var zoom = this.timeseriesComponent.getCurrentZoom();
             this.chartConfig.timeseriesComponentConfig.initialZoom = {
@@ -125,8 +124,8 @@ Ext.define('Koala.view.component.D3ChartController', {
         }
 
         var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
-        series.enableXAxisZoom(false);
-        series.enableYAxisZoom(true);
+        series.enableXAxisZoom(true);
+        series.enableYAxisZoom(false);
         this.timeseriesComponent = series;
 
         if (this.keydownDestroy) {

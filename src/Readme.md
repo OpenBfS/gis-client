@@ -123,3 +123,29 @@ To build the documentation please use the scripts from package json:
 
 "jsduck" requires the installation of jsduck
     $ [sudo] gem install jsduck
+
+## Generate fake timeseries data for ODL brutto 10 min
+
+INSERT INTO messdat.result (
+    select
+        'DEZ3415',
+        x,
+        x + interval '1 hour',
+        case when random() > 0.9 then '<' else null end,
+        random() / 10,
+        1,
+        10,
+        909,
+        101,
+        current_timestamp,
+        nextval('messdat.result_id_seq'),
+        2065,
+        false,
+        x
+    from
+        generate_series(
+            '2020-01-01 00:00:00' :: timestamp without time zone,
+            '2020-12-31 00:00:00' :: timestamp without time zone,
+            '10 minutes' :: interval
+        ) as a(x)
+);
