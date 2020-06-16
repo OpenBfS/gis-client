@@ -2,12 +2,12 @@
     "data": {
         "merge": {
             "urls": {
-                "metadata-xml2json": "http://10.133.7.82/geonetwork/srv/api/0.1/records/",
-                "metadata-search": "http://10.133.7.82/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://10.133.7.82/ogc/bfs/ows",
-                "geoserver-base-url": "http://10.133.7.82/ogc/bfs/ows",
-                "print-servlet": "http://10.133.7.82/bfs-printservice/print/",
-                "irix-servlet": "http://10.133.7.82/irix-servlet",
+                "metadata-xml2json": "http://10.133.7.220/geonetwork/srv/api/0.1/records/",
+                "metadata-search": "http://10.133.7.220/geonetwork/srv/ger/csw?",
+                "spatial-search": "http://10.133.7.220/ogc/bfs/ows",
+                "geoserver-base-url": "http://10.133.7.220/ogc/bfs/ows",
+                "print-servlet": "http://10.133.7.220/bfs-printservice/print/",
+                "irix-servlet": "http://10.133.7.220/irix-servlet",
                 "irix-context": "resources/irixContext.json",
                 "rodos-projects": "resources/rodos/projects.json",
                 "rodos-results": "resources/rodos/projects/",
@@ -27,15 +27,15 @@
                 "workspace": "ruf-import",
                 "namespace": "www.imis.bfs.de/ruf",
                 "datastore": "ruf-import",
-                "baseUrl": "http://10.133.7.82/ogc/",
-                "metadataBaseUrl": "http://10.133.7.82/geonetwork/"
+                "baseUrl": "http://10.133.7.220/ogc/",
+                "metadataBaseUrl": "http://10.133.7.220/geonetwork/"
               },
               "imis": {
                 "workspace": "imis-import",
                 "namespace": "www.imis.bfs.de/imis",
                 "datastore": "imis-import",
-                "baseUrl": "http://10.133.7.82/ogc/",
-                "metadataBaseUrl": "http://10.133.7.82/geonetwork/"
+                "baseUrl": "http://10.133.7.220/ogc/",
+                "metadataBaseUrl": "http://10.133.7.220/geonetwork/"
               }
             },
             "imis_user": {
