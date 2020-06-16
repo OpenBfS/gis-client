@@ -58,4 +58,4 @@ deploy:
     - npm run build:dist
     - cd ../../..
     - rsync -avzh --delete build/production/Koala/ -e ssh terrestris@10.133.7.220:/home/terrestris/koala/client/
-    - scp resources/appContextTest.json gitlab-ci@10.133.7.220:/home/terrestris/koala/client/resources/appContext.json
+    - scp resources/appContextTest.json terrestris@10.133.7.220:/home/terrestris/koala/client/resources/appContext.json
