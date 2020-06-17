@@ -50,11 +50,10 @@ Ext.define('Koala.view.window.AddWMSWindow', {
         includeSubLayer: true,
         versionsWmsAutomatically: true,
         listeners: {
-            beforerender: function() {
+            beforeadd: function() {
                 var wmsBaseUrls = BasiGX.util.Application.getAppContext().wmsUrls;
-                var defaultUrl = wmsBaseUrls[0];
                 this.wmsBaseUrls = wmsBaseUrls;
-                this.defaultUrl = defaultUrl;
+                this.defaultUrl = wmsBaseUrls[0];
             },
             beforewmsadd: function(olLayer) {
                 olLayer.set('nameWithSuffix', olLayer.get('name'));
