@@ -17,7 +17,8 @@
                 "layerset": "classic/resources/layerset.json",
                 "videos": "resources/videos.json",
                 "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif",
-                "style-service": "resources/styles.json"
+                "style-service": "resources/styles.json",
+                "dokpool-scenarios": "dokpool/bund/contentconfig/scen/"
             },
             "application_user": {
                 "username": "admin",
