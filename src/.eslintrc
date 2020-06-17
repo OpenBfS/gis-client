@@ -15,6 +15,7 @@
         "FileReader": true,
         "FormData": true,
         "GeoExt": true,
+        "GeoPackage": true,
         "GeoStyler": false,
         "GeoStylerGeoJsonParser": false,
         "GeoStylerMapboxParser": false,
