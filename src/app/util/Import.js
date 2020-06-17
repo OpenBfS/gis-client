@@ -138,7 +138,7 @@ Ext.define('Koala.util.Import', {
             var name = importMetadata.layer.get('name');
             var url = importMetadata.config.baseUrl + 'rest/imports/' + importId + '/tasks';
             var data = new FormData();
-            data.set(name + '.zip', importMetadata.bytes, name + '.zip');
+            data.set(name + '.geojson', importMetadata.bytes, name + '.geojson');
             var request = new XMLHttpRequest();
 
             request.open('POST', url);
@@ -201,12 +201,13 @@ Ext.define('Koala.util.Import', {
                 featureProjection: 'EPSG:3857'
             });
             context.geojson = geojson;
-            return shpwrite.zip(geojson, {
-                types: {
-                    polygon: layer.get('name') + '_polygons',
-                    line: layer.get('name') + '_lines',
-                    point: layer.get('name') + '_points'
-                }
+
+            Ext.each(geojson.features, function(feature) {
+                delete feature.properties.id;
+            });
+            return new Ext.Promise(function(resolve) {
+                var string = JSON.stringify(geojson);
+                resolve(new Blob([string], {type: 'application/json'}));
             });
         },
 
