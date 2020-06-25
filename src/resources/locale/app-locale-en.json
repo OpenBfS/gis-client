@@ -440,7 +440,8 @@
                 "northArrow": "North arrow",
                 "scalebar": "Scale bar",
                 "unlinkTooltip": "Remove link",
-                "templateBrokenMessage": "The template is broken and cannot be used."
+                "templateBrokenMessage": "The template is broken and cannot be used.",
+                "layerDataTitle": "Print tables"
             }
         }
     },

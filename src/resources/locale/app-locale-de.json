@@ -442,7 +442,8 @@
                 "northArrow": "Nordpfeil",
                 "scalebar": "Massstabsleiste",
                 "unlinkTooltip": "Link entfernen",
-                "templateBrokenMessage": "Das Template enthält Fehler und kann nicht verwendet werden."
+                "templateBrokenMessage": "Das Template enthält Fehler und kann nicht verwendet werden.",
+                "layerDataTitle": "Tabellen drucken"
             }
         }
     },
