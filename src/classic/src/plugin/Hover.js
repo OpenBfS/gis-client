@@ -58,7 +58,7 @@ Ext.define('Koala.plugin.Hover', {
                         }
                         // last key-value pair
                         if (keyIdx === keyLength) {
-                            innerHtml += '</table>';
+                            innerHtml += '</table><br>';
                         }
                         keyIdx += 1;
                     });
