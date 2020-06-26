@@ -259,10 +259,13 @@ Ext.define('Koala.view.component.CartoWindowController', {
             fields: ['value', 'title'],
             data: this.getTranslatedAutorefreshData()
         });
-        var window = Ext.create('Ext.window.Window', {
-            title: view.getViewModel().get('autorefresh'),
-            autoOpen: false,
+        var menu = Ext.create('Ext.menu.Menu', {
             closeAction: 'method-hide',
+            listeners: {
+                beforehide: function() {
+                    this.lastHidden = new Date().getTime();
+                }
+            },
             items: [{
                 xtype: 'checkbox',
                 name: 'autorefresh-checkbox',
@@ -286,12 +289,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
                 emptyText: view.getViewModel().get('autorefreshOptions')
             }
         });
-        window.add(this.autorefreshCombo);
+        menu.add(this.autorefreshCombo);
 
         Koala.util.ChartAutoUpdater.autorefreshTimeseries(
             this.timeserieschart,
             this.autorefreshCombo,
-            window.down('[name=autorefresh-checkbox]'),
+            menu.down('[name=autorefresh-checkbox]'),
             view.getLayer()
         );
         var button = {
@@ -304,7 +307,12 @@ Ext.define('Koala.view.component.CartoWindowController', {
             },
             renderTo: topRow,
             handler: function() {
-                window.show();
+                var timeDiff = new Date().getTime() - menu.lastHidden;
+                // make sure to keep the menu closed if it was just shown
+                // (e.g. when clicking on the button again)
+                if (timeDiff > 150 || isNaN(timeDiff)) {
+                    menu.showBy(this);
+                }
             }
         };
         Ext.create(button);
