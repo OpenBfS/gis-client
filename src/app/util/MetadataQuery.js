@@ -60,16 +60,17 @@ Ext.define('Koala.util.MetadataQuery', {
          * info to
          */
         extractLayerInfo: function(doc, node, config) {
-            var getText = Koala.util.XML.getText;
-            var xpath = 'bfs:layerInformation/bfs:MD_Layer/bfs:legendTitle/gco:CharacterString/text()';
-            config.text = getText(doc, xpath, node);
-            xpath = 'gmd:fileIdentifier/gco:CharacterString/text()';
-            config.uuid = getText(doc, xpath, node);
+            config.text = doc.querySelector('legendTitle').querySelector('CharacterString').textContent;
+            config.uuid = doc.querySelector('fileIdentifier').querySelector('CharacterString').textContent;
             config.leaf = true;
-            xpath = 'bfs:layerInformation/bfs:MD_Layer/bfs:olProperty/bfs:MD_Property' +
-                '[bfs:propertyName/gco:CharacterString/text()="workspace"]' +
-                '/bfs:propertyValue/gco:CharacterString/text()';
-            config.workspace = getText(doc, xpath, node);
+            var nodes = doc.querySelectorAll('MD_Property');
+            for (var i = 0; i < nodes.length; ++i) {
+                var item = nodes.item(i);
+                var name = item.querySelector('propertyName').querySelector('CharacterString').textContent;
+                if (name === 'workspace') {
+                    config.workspace = item.querySelector('propertyValue').querySelector('CharacterString').textContent;
+                }
+            }
         },
 
         /**
@@ -82,18 +83,17 @@ Ext.define('Koala.util.MetadataQuery', {
          */
         postProcessMetadata: function(docs) {
             var filtered = [];
-            var ns = Koala.util.XML.namespaceResolver();
             Ext.each(docs, function(doc) {
                 var node = doc;
                 doc = node.ownerDocument;
-                var xpath = 'gmd:identificationInfo/gmd:MD_DataIdentification/' +
-                    'gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/' +
-                    'gco:CharacterString[text()="importLayer"]';
-                var keywords = doc.evaluate(xpath, node, ns);
-                if (keywords.iterateNext()) {
-                    var layer = {};
-                    filtered.push(layer);
-                    Koala.util.MetadataQuery.extractLayerInfo(doc, node, layer);
+                var strings = doc.querySelectorAll('CharacterString');
+                for (var i = 0; i < strings.length; ++i) {
+                    if (strings.item(i).textContent === 'importLayer') {
+                        var layer = {};
+                        filtered.push(layer);
+                        Koala.util.MetadataQuery.extractLayerInfo(doc, node, layer);
+                        break;
+                    }
                 }
             });
             return filtered;
