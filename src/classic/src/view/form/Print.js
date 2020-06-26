@@ -301,6 +301,28 @@ Ext.define('Koala.view.form.Print', {
     },
 
     /**
+     * Returns all layers eligible to print legends and/or layerdata of.
+     */
+    getLegendAndLayerdataLayers: function() {
+        var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
+        var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
+
+        var result = [];
+
+        // The layers are initially not synchronous with the layerTree. So we
+        // reverse the Array initially.
+        layers.reverse();
+
+        Ext.each(layers, function(layer) {
+            if (layer.get('allowPrint') && layer.get('legendUrl') !== '') {
+                result.push(layer);
+            }
+        });
+
+        return result;
+    },
+
+    /**
      * Update the content of the legendsFieldset. Remove all. Get visible and
      * printable Layers from Map. Add those to the fieldset.
      */
@@ -310,20 +332,12 @@ Ext.define('Koala.view.form.Print', {
             return;
         }
 
-        var mapPanel = Ext.ComponentQuery.query('k-component-map')[0];
-        var layers = BasiGX.util.Layer.getAllLayers(mapPanel.getMap());
-
+        var layers = this.getLegendAndLayerdataLayers();
         var layerLegendContainers = [];
 
-        // The layers are initially not synchronous with the layerTree. So we
-        // reverse the Array initially.
-        layers.reverse();
-
         Ext.each(layers, function(layer) {
-            if (layer.get('allowPrint') && layer.get('legendUrl') !== '') {
-                var layerLegendContainer = me.createLegendContainer(layer);
-                layerLegendContainers.push(layerLegendContainer);
-            }
+            var layerLegendContainer = me.createLegendContainer(layer);
+            layerLegendContainers.push(layerLegendContainer);
         });
 
         var timeReferenceButton = Ext.ComponentQuery.query(
@@ -394,7 +408,7 @@ Ext.define('Koala.view.form.Print', {
         });
 
         var onLayerVisibilityChange = me.onLayerVisibilityChange.bind(
-            me, layerLegendContainer);
+            me, layerLegendContainer, layer);
         var updateLegendText = me.updateLegendText.bind(
             me, layerLegendContainer);
 
@@ -461,6 +475,20 @@ Ext.define('Koala.view.form.Print', {
         if (legendsFieldset.items.items.length > 0 && legendsFieldset.hidden === true) {
             Ext.getCmp('legendsFieldset').show();
         }
+        var layerFieldset = me.down('fieldset[name="layer-fieldset"]');
+        layerFieldset.insert(0, {
+            xtype: 'k-button-featureselect',
+            layer: layer,
+            transformInteraction: me.transformInteraction,
+            name: layer.get('name') + '_button'
+        });
+        layerFieldset.insert(0, {
+            xtype: 'checkboxfield',
+            boxLabel: layer.get('name'),
+            boxLabelAlign: 'after',
+            flex: 1,
+            name: layer.get('name') + '_checkbox'
+        });
     },
 
     /**
@@ -476,6 +504,12 @@ Ext.define('Koala.view.form.Print', {
         var componentName = layer.get('name') + '_layerLegendContainer';
         var legendContainer = legendsFieldset.down('[name='+componentName+']');
         legendsFieldset.remove(legendContainer);
+        var name = layer.get('name') + '_checkbox';
+        var item = Ext.ComponentQuery.query('[name=' + name + ']')[0];
+        item.up().remove(item);
+        name = layer.get('name') + '_button';
+        item = Ext.ComponentQuery.query('[name=' + name + ']')[0];
+        item.up().remove(item);
     },
 
     /**
@@ -484,12 +518,18 @@ Ext.define('Koala.view.form.Print', {
      * deactivated.
      * @param {Ext.container.Container} layerLegendContainer The layerLegendContainer
      *                                                       of the layer.
+     * @param {ol.layer.Layer} layer the layer
      * @param {ol.Object.Event} evt The 'change:visible' event of a layer.
      */
-    onLayerVisibilityChange: function(layerLegendContainer, evt) {
+    onLayerVisibilityChange: function(layerLegendContainer, layer, evt) {
         layerLegendContainer.setDisabled(evt.oldValue);
         var checkbox = layerLegendContainer.down('checkbox');
         checkbox.setValue(!evt.oldValue);
+        var item = Ext.ComponentQuery.query('[name=' + layer.get('name') + '_checkbox]')[0];
+        item.setDisabled(evt.oldValue);
+        item.setValue(!evt.oldValue);
+        item = Ext.ComponentQuery.query('[name=' + layer.get('name') + '_button]')[0];
+        item.setDisabled(evt.oldValue);
     },
 
     /**
@@ -603,10 +643,10 @@ Ext.define('Koala.view.form.Print', {
 
     addLayerFieldset: function() {
         var me = this;
-        var map = this.getMapComponent().map;
-        var layers = map.getLayers().getArray();
+        var layers = this.getLegendAndLayerdataLayers();
         var fieldsetConfig = {
             name: 'layer-fieldset',
+            title: this.getViewModel().get('layerDataTitle'),
             layout: {
                 type: 'table',
                 columns: 2,
@@ -620,19 +660,18 @@ Ext.define('Koala.view.form.Print', {
             items: []
         };
         Ext.each(layers, function(layer) {
-            if (layer.get('bp_displayInLayerSwitcher') === false) {
-                return;
-            }
             fieldsetConfig.items.push({
                 xtype: 'checkboxfield',
                 boxLabel: layer.get('name'),
                 boxLabelAlign: 'after',
-                flex: 1
+                flex: 1,
+                name: layer.get('name') + '_checkbox'
             });
             fieldsetConfig.items.push({
                 xtype: 'k-button-featureselect',
                 layer: layer,
-                transformInteraction: me.transformInteraction
+                transformInteraction: me.transformInteraction,
+                name: layer.get('name') + '_button'
             });
         });
         var fieldset = Ext.create('Ext.form.FieldSet', fieldsetConfig);
@@ -1053,8 +1092,20 @@ Ext.define('Koala.view.form.Print', {
                 selection = selection.map(function(item) {
                     return item.getData();
                 });
+                var columns = button.window.down('grid').getColumns();
+                var visibleColumns = [];
+                Ext.each(columns, function(column) {
+                    if (column.isVisible()) {
+                        visibleColumns.push(column.config.text);
+                    }
+                });
                 Ext.each(selection, function(item) {
                     delete item.id;
+                    Ext.iterate(item, function(key) {
+                        if (!visibleColumns.includes(key)) {
+                            delete item[key];
+                        }
+                    });
                 });
                 var data = {
                     title: layer.get('name'),
