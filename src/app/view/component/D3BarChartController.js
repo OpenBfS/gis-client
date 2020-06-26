@@ -184,13 +184,15 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var me = this;
         var chart = this.getView();
         var els = chart.el.dom.querySelectorAll('text.below-threshold');
-        els.forEach(function(el) {
+        for (var i = 0; i < els.length; ++i) {
+            var el = els.item(i);
             el.style.display = me.showIdentificationThresholdData ? 'none' : 'block';
-        });
+        }
         els = chart.el.dom.querySelectorAll('rect.below-threshold');
-        els.forEach(function(el) {
+        for (i = 0; i < els.length; ++i) {
+            el = els.item(i);
             el.style.display = me.showIdentificationThresholdData ? 'block' : 'none';
-        });
+        }
     },
 
     /**
@@ -365,11 +367,11 @@ Ext.define('Koala.view.component.D3BarChartController', {
             container.classList.add('k-barchart-container');
             container.style.width = '100%';
             container.style.height = '100%';
-            svg.append(container);
+            svg.appendChild(container);
             legendContainer = document.createElement('div');
             barContainer = document.createElement('div');
-            container.append(barContainer);
-            container.append(legendContainer);
+            container.appendChild(barContainer);
+            container.appendChild(legendContainer);
             legendContainer.classList.add('k-barchart-legend-container');
             barContainer.classList.add('k-barchart-chart-container');
         }
