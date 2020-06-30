@@ -145,7 +145,9 @@ Ext.define('Koala.view.main.Main', {
                         lyrSetWin.setHelpTxt(true);
                     }
 
-                    var hideWindow = Koala.util.LocalStorage.showLayersetChooserWindowOnStartup();
+                    ////deactivate until window can be personalized
+                    //var hideWindow = Koala.util.LocalStorage.showLayersetChooserWindowOnStartup();
+                    var hideWindow = true;
                     if (!hideWindow) {
                         lyrSetWin.show();
                     }
