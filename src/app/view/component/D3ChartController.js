@@ -145,16 +145,15 @@ Ext.define('Koala.view.component.D3ChartController', {
                 // removed stopping of event propagation for now, if there was
                 // a reason for this, we'd probably need further checks on the
                 // event target
-                series.enableXAxisZoom(event.ctrlKey);
+                series.enableXAxisZoom(false);
                 series.enableYAxisZoom(true);
             }
-
         }, this, {
             destroyable: true
         });
-        this.keyupDestroy = Ext.getBody().on('keyup', function(event) {
+        this.keyupDestroy = Ext.getBody().on('keyup', function() {
             series.enableXAxisZoom(true);
-            series.enableYAxisZoom(event.shiftKey);
+            series.enableYAxisZoom(false);
         }, this, {
             destroyable: true
         });
@@ -398,23 +397,6 @@ Ext.define('Koala.view.component.D3ChartController', {
     },
 
     /**
-     * Register keyboard handler to detect keypress
-     */
-    registerKeyboardHandler: function(me) {
-        Ext.getBody().on('keydown', function(event) {
-            if (event.shiftKey) {
-                // removed stopping of event propagation for now, if there was
-                // a reason for this, we'd probably need further checks on the
-                // event target
-                me.zoomYAxisBtnPressed = true;
-            }
-        });
-        Ext.getBody().on('keyup', function(event) {
-            me.zoomYAxisBtnPressed = event.shiftKey;
-        });
-    },
-
-    /**
      * Handle resize events to update the chart config.
      */
     handleResize: function() {
@@ -500,7 +482,8 @@ Ext.define('Koala.view.component.D3ChartController', {
                                 timeConfig.initialZoom = {
                                     x: zoom.x,
                                     y: zoom.y,
-                                    k: zoom.k
+                                    kx: zoom.kx,
+                                    ky: zoom.ky
                                 };
                                 var cur = timeConfig.series[attached[index + 1]].initiallyVisible;
                                 timeConfig.series[attached[index + 1]].initiallyVisible = !cur;
