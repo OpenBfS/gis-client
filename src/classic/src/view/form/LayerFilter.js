@@ -242,7 +242,10 @@ Ext.define('Koala.view.form.LayerFilter', {
         if (filter.allowedValues) {
             field = FilterUtil.getComboFromFilter(filter);
             if (Ext.isArray(value) && value.length > 1) {
-                sharedCfg.value = [value.join(',')];
+                var joined = value.join(',');
+                if (filter.allowedValues.includes(joined)) {
+                    sharedCfg.value = [joined];
+                }
             }
         } else {
             field = {
