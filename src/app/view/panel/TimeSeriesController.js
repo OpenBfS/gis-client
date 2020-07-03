@@ -530,6 +530,7 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
             chart.setEndDate(endDate);
 
             // update the chart to reflect the changes
+            chart.getController().keepColors = true;
             chart.getController().getChartData();
         });
     },
