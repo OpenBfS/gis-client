@@ -265,6 +265,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
                         );
                         metadata.isRodosLayer = item.get('isRodosLayer');
                         metadata.description = item.get('description');
+                        metadata.rodosProjectName = item.get('rodosProjectName');
                     }
                     Koala.util.Layer.addLayerToMap(metadata);
                 }

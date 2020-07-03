@@ -23,8 +23,9 @@ Ext.define('Koala.util.Rodos', {
          * Requests the layers of the selected project.
          *
          * @param {String} projectUid The project_uid of the selected project.
+         * @param {String} name The project name.
          */
-        requestLayersOfProject: function(projectUid) {
+        requestLayersOfProject: function(projectUid, name) {
             var me = this;
             var appContext = Koala.util.AppContext.getAppContext();
             var baseUrl = Koala.util.Object.getPathStrOr(
@@ -37,7 +38,7 @@ Ext.define('Koala.util.Rodos', {
                     success: function(response) {
                         var obj = Ext.decode(response.responseText);
                         if (obj && obj.rodos_results) {
-                            me.setRodosLayers(projectUid, obj.rodos_results);
+                            me.setRodosLayers(projectUid, obj.rodos_results, name);
                         }
                     },
                     failure: function(response) {
@@ -52,10 +53,12 @@ Ext.define('Koala.util.Rodos', {
          * Sets the layers of the "RODOS-Prognosen" folder. It replaces the current
          * layers with the given layers.
          *
+         * @param {String} projectUid the project uuid.
          * @param {Object} results the resultobject of the request to the RODOS
          *                         servlet for a specfic project.
+         * @param {String} name the project name.
          */
-        setRodosLayers: function(projectUid, results) {
+        setRodosLayers: function(projectUid, results, name) {
             var appContext = Koala.util.AppContext.getAppContext();
             var rodosFolderName = Koala.util.Object.getPathStrOr(appContext,
                 'data/merge/rodosFolderName', 'RODOS-Prognosen');
@@ -84,7 +87,8 @@ Ext.define('Koala.util.Rodos', {
                     rodosFilters: layer.filters,
                     text: layer.name,
                     uuid: layer.gnos_uid,
-                    description: results.description
+                    description: results.description,
+                    rodosProjectName: name
                 };
 
                 if (treeNodeObj.uuid && treeNodeObj.text) {

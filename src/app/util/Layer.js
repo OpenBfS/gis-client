@@ -520,6 +520,9 @@ Ext.define('Koala.util.Layer', {
          * @returns {string} A textual representation of the filters or ''.
          */
         getFiltersTextFromMetadata: function(metadata) {
+            if (metadata.isRodosLayer) {
+                return metadata.rodosProjectName;
+            }
             var staticMe = Koala.util.Layer;
             var filters;
             if (Array.isArray(metadata)) { // it's a 'filters' array
@@ -1588,7 +1591,7 @@ Ext.define('Koala.util.Layer', {
             if (staticMe.isViewParamFilter(f) &&
                 f.type === 'value' &&
                 f.param === 'test_data' &&
-                f.value === 'true') {
+                (f.value === 'true' || f.value && f.value[0] === 'true')) {
                 return true;
             }
             return false;

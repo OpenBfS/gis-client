@@ -32,11 +32,12 @@ Ext.define('Koala.view.form.RodosFilterController', {
      */
     onProjectSelected: function(combo, record) {
         var projectUid = record.get('project_uid');
+        var name = record.get('name');
         if (!projectUid) {
             Ext.Logger.warn('No project_uid found.');
             return;
         }
-        Koala.util.Rodos.requestLayersOfProject(projectUid);
+        Koala.util.Rodos.requestLayersOfProject(projectUid, name);
         this.closeRodosFilter();
     },
 
