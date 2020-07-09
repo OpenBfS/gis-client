@@ -37,6 +37,11 @@ Ext.define('Koala.view.window.MetadataInfo', {
 
     config: {
         /**
+         * @type boolean
+         */
+        constrain: true,
+
+        /**
          * @type {Ext.grid.property.Grid}
          */
         propertyGrid: null,

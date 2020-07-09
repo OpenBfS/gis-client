@@ -62,12 +62,12 @@ Ext.define('Koala.view.window.AddWMSWindow', {
                     olLayer.set('queryable', true);
                     olLayer.set('allowHover', true);
                     olLayer.set('hoverable', true);
-                    olLayer.set('showCartoWindow', true);
+                    olLayer.set('showCartoWindow', false);
                     olLayer.metadata = {
                         layerConfig: {
                             olProperties: {
                                 allowHover: 'true',
-                                showCartoWindow: 'true'
+                                showCartoWindow: 'false'
                             }
                         },
                         filters: {}
