@@ -1202,14 +1202,10 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var map = this.getView().getMap();
         var offset = overlay.getOffset();
         var yPosition = map.getPixelFromCoordinate(position)[1];
-        var resolution = map.getView().getResolution();
         var upperLeft = map.getCoordinateFromPixel([0, 0]);
-        var toUpper = position[1] - upperLeft[1];
-        var toMove = toUpper / resolution;
         if (yPosition + offset[1] < 0) {
-            offset[1] = Math.abs(toMove) / 2;
             // 30 pixels extra for the carto window header
-            overlay.setOffset([0, 30]);
+            overlay.setOffset([offset[0], 30]);
             overlay.setPosition([position[0], upperLeft[1]]);
         }
     },
