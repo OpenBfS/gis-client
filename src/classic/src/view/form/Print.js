@@ -997,6 +997,7 @@ Ext.define('Koala.view.form.Print', {
             var legendFieldset = view.down('fieldset[name="legendsFieldset"]');
             if (legendFieldset && !legendFieldset.getCollapsed()) {
                 attributes.legend = view.getLegendObject();
+                attributes.legend.classes.reverse();
 
                 // Override layer name in legend with value from legendTextField
                 Ext.each(attributes.legend.classes, function(clazz) {
@@ -1116,6 +1117,7 @@ Ext.define('Koala.view.form.Print', {
                 };
                 spec.attributes.layerdata.push(data);
             });
+            spec.attributes.layerdata.reverse();
         }
     },
 
