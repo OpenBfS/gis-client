@@ -49,6 +49,7 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
         var me = this;
         if (!Ext.isEmpty(newValue)) {
             me.requestLanguageFile(newValue);
+            me.changeLang(newValue);
         }
     },
 
@@ -69,6 +70,13 @@ Ext.define('Koala.view.form.field.LanguageComboController', {
             failure: me.onLoadAppLocaleFailure,
             scope: me
         });
+    },
+
+    /**
+     *
+     */
+    changeLang: function(locale) {
+        document.getElementsByTagName('html')[0].setAttribute('lang', locale);
     },
 
     /**
