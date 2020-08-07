@@ -545,7 +545,7 @@
     "builds": {
         "classic": {
             "toolkit": "classic",
-            "theme": "theme-neptune",
+            "theme": "theme-aria",
             "classpath": [
                 "app",
                 "${toolkit.name}/src",
