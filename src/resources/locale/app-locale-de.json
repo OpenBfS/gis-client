@@ -1528,6 +1528,9 @@
                 },
                 "sitePolicy": {
                     "title": "Nutzungsbedingungen"
+                },
+                "accessibility": {
+                    "title": "Barrierefreiheit"
                 }
             }
         }

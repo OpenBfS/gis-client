@@ -49,6 +49,10 @@ Ext.define('Koala.view.window.ImprintModel', {
                     text: '{sitePolicy.title}',
                     content: 'resources/sitepolicy.html',
                     leaf: true
+                }, {
+                    text: '{accessibility.title}',
+                    content: 'resources/accessibility.html',
+                    leaf: true
                 }]
             }
         }
