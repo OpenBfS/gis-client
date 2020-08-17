@@ -275,7 +275,7 @@ Ext.define('Koala.util.Hooks', {
                     change: function() {
                         var me = this,
                             isChecked = me.getValue(),
-                            tagfieldScenario = me.up('fieldset[name="irix"]').down('tagfield[name="Scenario"]');
+                            tagfieldScenario = me.up('fieldset[name="irix"]').down('tagfield[name="Scenarios"]');
 
                         if (tagfieldScenario) {
                             if (isChecked) {
@@ -511,7 +511,7 @@ Ext.define('Koala.util.Hooks', {
                 visibleFields = [
                     'Area',
                     'DataType',
-                    'MeasurementCategory ',
+                    'Dom',
                     'Duration',
                     'DataSource',
                     'LegalBase',
