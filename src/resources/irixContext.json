@@ -191,7 +191,8 @@
                     "type": "tagfield",
                     "valueField": "tag",
                     "displayField": "title",
-                    "createNewOnEnter": true,
+                    editable: true,
+                    createNewOnEnter: true,
                     "values": [
                         ["Standard-Info Bundesmessnetze", "Standard-Info Bundesmessnetze"],
                         ["Standard-Info Land", "Standard-Info Land"],
