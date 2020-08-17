@@ -513,7 +513,6 @@ Ext.define('Koala.util.Hooks', {
                     'DataType',
                     'Dom',
                     'Duration',
-                    'DataSource',
                     'LegalBase',
                     'MeasurementCategory',
                     'MeasuringProgram',

@@ -308,33 +308,15 @@ Ext.define('Koala.view.form.IrixFieldSet',{
 
     createTagField: function(config) {
         var me = this;
-        var store = Ext.create('Ext.data.ArrayStore', {
-            fields: [
-                config.valueField,
-                config.displayField || config.valueField
-            ],
-            idProperty: config.valueField,
-            data: config.values
-        });
-        var tagfield = Ext.create('Ext.form.field.Tag', {
+        return Ext.create('Ext.form.field.Tag', {
             name: config.name,
             margin: '5px 0px',
             viewModel: me.getViewModel(),
             fieldLabel: config.label,
-            store: store,
             displayField: config.displayField || config.valueField,
             valueField: config.valueField,
-            filterPickList: true,
-            typeAhead: true,
-            autoSelect: false,
-            createNewOnEnter: config.createNewOnEnter || false,
             queryMode: 'local'
         });
-        if (config.defaultValue) {
-            tagfield.setValue(config.defaultValue);
-        }
-
-        return tagfield;
     },
 
     /**
