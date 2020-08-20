@@ -30,6 +30,10 @@ Ext.define('Koala.view.window.ImprintWindow', {
         type: 'k-window-imprint'
     },
 
+    config: {
+        createdBy: ''
+    },
+
     bind: {
         title: '{imprintWinTitle}'
     },
@@ -89,7 +93,7 @@ Ext.define('Koala.view.window.ImprintWindow', {
                 selection = treelist.getSelection();
             if (store && !selection) {
                 var winController = me.getController();
-                winController.setTopic('imprint');
+                winController.setTopic(me.createdBy);
             }
         }
     }
