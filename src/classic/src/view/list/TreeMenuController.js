@@ -172,9 +172,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     break;
                 case 'accessibility':
                     this.showWindow('k-window-imprint', 'Koala.view.window.ImprintWindow', 'accessibility');
-                    var win = Ext.ComponentQuery
+                    var imprintWin = Ext.ComponentQuery
                         .query('k-window-imprint')[0];
-                    win.getController().setTopic('accessibility');
+                    imprintWin.getController().setTopic('accessibility');
                     break;
                 case 'privacy':
                     window.open(viewModel.get('privacyUrl'), '_blank').focus();
