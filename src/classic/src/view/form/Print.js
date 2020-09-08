@@ -476,6 +476,9 @@ Ext.define('Koala.view.form.Print', {
             Ext.getCmp('legendsFieldset').show();
         }
         var layerFieldset = me.down('fieldset[name="layer-fieldset"]');
+        if (!layerFieldset) {
+            return;
+        }
         layerFieldset.insert(0, {
             xtype: 'k-button-featureselect',
             layer: layer,
@@ -506,10 +509,14 @@ Ext.define('Koala.view.form.Print', {
         legendsFieldset.remove(legendContainer);
         var name = layer.get('name') + '_checkbox';
         var item = Ext.ComponentQuery.query('[name=' + name + ']')[0];
-        item.up().remove(item);
+        if (item) {
+            item.up().remove(item);
+        }
         name = layer.get('name') + '_button';
         item = Ext.ComponentQuery.query('[name=' + name + ']')[0];
-        item.up().remove(item);
+        if (item) {
+            item.up().remove(item);
+        }
     },
 
     /**
