@@ -46,6 +46,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         timereference: '',
         fullscreen: '',
         imprint: '',
+        accessibility: '',
         privacy: '',
         about: '',
         showAboutBtn: 'false',
@@ -177,6 +178,11 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     leaf: true,
                     key: 'imprint',
                     iconCls: 'x-fa fa-copyright'
+                }, {
+                    text: '{accessibility}',
+                    leaf: true,
+                    key: 'accessibility',
+                    iconCls: 'x-fa fa-universal-access'
                 }, {
                     text: '{privacy}',
                     leaf: true,

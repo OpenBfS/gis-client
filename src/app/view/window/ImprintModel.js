@@ -25,11 +25,14 @@ Ext.define('Koala.view.window.ImprintModel', {
             var selection = get('treelist.selection'),
                 view = this.getView(),
                 imprintController = view.getController(),
-                imprintHtmlUrl;
+                imprintHtmlUrl,
+                titleText;
 
             if (selection) {
                 imprintHtmlUrl = (selection.getData()) ? selection.getData().content : null;
                 imprintController.setHtmlInPanel(imprintHtmlUrl);
+                titleText = (selection.getData()) ? selection.getData().text : null;
+                view.setTitle(titleText);
             } else {
                 return 'No node selected';
             }
@@ -46,8 +49,14 @@ Ext.define('Koala.view.window.ImprintModel', {
                     content: 'resources/imprint.html',
                     leaf: true
                 }, {
+                    id: 'sitePolicy',
                     text: '{sitePolicy.title}',
                     content: 'resources/sitepolicy.html',
+                    leaf: true
+                }, {
+                    id: 'accessibility',
+                    text: '{accessibility.title}',
+                    content: 'resources/accessibility.html',
                     leaf: true
                 }]
             }

@@ -505,6 +505,7 @@
                 "selectfeatures": "Select objects",
                 "fullscreen": "Toggle Fullscreen",
                 "imprint": "Imprint",
+                "accessibility": "Accessibility",
                 "privacy": "Privacy",
                 "about": "Login",
                 "help": "Help",
@@ -1513,6 +1514,21 @@
         "config": {
             "data": {
                 "imprintWinTitle": "Imprint"
+            }
+        }
+    },
+    "Koala.view.window.ImprintModel": {
+        "config": {
+            "data": {
+                "imprint": {
+                    "title": "Imprint"
+                },
+                "sitePolicy": {
+                    "title": "Terms of use"
+                },
+                "accessibility": {
+                    "title": "Accessibility"
+                }
             }
         }
     },
