@@ -311,9 +311,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     layer: btn.layerRec.getOlLayer()
                 });
             }
-            this.layerSettingsMenu.getViewModel().set('allowClone', btn.layerRec.getOlLayer().get('allowClone'));
-            this.layerSettingsMenu.getViewModel().set('external', btn.layerRec.getOlLayer().get('external'));
-            this.layerSettingsMenu.getViewModel().set('queryable', btn.layerRec.getOlLayer().get('queryable'));
+            this.layerSettingsMenu.getViewModel().set('allowClone', (btn.layerRec.getOlLayer().get('allowClone') || (btn.layerRec.getOlLayer().get('allowClone')===undefined))?true:false);
+            this.layerSettingsMenu.getViewModel().set('external', (btn.layerRec.getOlLayer().get('external'))?true:false);
+            this.layerSettingsMenu.getViewModel().set('queryable', (btn.layerRec.getOlLayer().get('queryable'))?true:false);
+            this.layerSettingsMenu.getViewModel().set('hoverable', (btn.layerRec.getOlLayer().get('hoverable'))?true:false);
             this.layerSettingsMenu.showBy(btn);
         },
 

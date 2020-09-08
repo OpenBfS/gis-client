@@ -29,6 +29,8 @@ Ext.define('Koala.view.menu.LayerSettingsMenuModel', {
         allowClone: false,
         templateEditor: '',
         external: false,
+        queryable: false,
+        hoverable: false,
         hoverInfo: ''
     }
 

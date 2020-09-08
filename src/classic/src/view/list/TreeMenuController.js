@@ -165,7 +165,16 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     Koala.util.Fullscreen.toggleFullscreen();
                     break;
                 case 'imprint':
-                    this.showWindow('k-window-imprint', 'Koala.view.window.ImprintWindow');
+                    this.showWindow('k-window-imprint', 'Koala.view.window.ImprintWindow', 'imprint');
+                    var win = Ext.ComponentQuery
+                        .query('k-window-imprint')[0];
+                    win.getController().setTopic('imprint');
+                    break;
+                case 'accessibility':
+                    this.showWindow('k-window-imprint', 'Koala.view.window.ImprintWindow', 'accessibility');
+                    var imprintWin = Ext.ComponentQuery
+                        .query('k-window-imprint')[0];
+                    imprintWin.getController().setTopic('accessibility');
                     break;
                 case 'privacy':
                     window.open(viewModel.get('privacyUrl'), '_blank').focus();
@@ -192,10 +201,14 @@ Ext.define('Koala.view.list.TreeMenuController', {
         }
     },
 
-    showWindow: function(xtype, className) {
+    showWindow: function(xtype, className, calledBy) {
         var win = Ext.ComponentQuery.query(xtype)[0];
         if (!win) {
-            Ext.create(className).show();
+            if (!calledBy) {
+                Ext.create(className).show();
+            } else {
+                Ext.create(className, {createdBy: calledBy}).show();
+            }
         } else {
             BasiGX.util.Animate.shake(win);
         }
