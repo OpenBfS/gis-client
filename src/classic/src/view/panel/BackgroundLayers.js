@@ -44,4 +44,5 @@ Ext.define('Koala.view.panel.BackgroundLayers', {
         minHeight: 130,
         items: []
     }]
+
 });

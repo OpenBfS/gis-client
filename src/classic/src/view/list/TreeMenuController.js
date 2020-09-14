@@ -158,8 +158,12 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     var timereferenceButton = Ext.ComponentQuery
                         .query('k-button-timereference')[0];
                     timereferenceButton.toggle();
-                    viewModel.set('timereferenceValue', timereferenceButton.getCurrent());
-                    viewModel.set('settingsExpanded', true);
+                    // the timeout is unfortunately necessary when triggered via a synthetic click event,
+                    // else some layout update fails
+                    window.setTimeout(function() {
+                        viewModel.set('timereferenceValue', timereferenceButton.getCurrent());
+                        viewModel.set('settingsExpanded', true);
+                    }, 800);
                     break;
                 case 'fullscreen':
                     Koala.util.Fullscreen.toggleFullscreen();
@@ -168,7 +172,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     this.showWindow('k-window-imprint', 'Koala.view.window.ImprintWindow', 'imprint');
                     var win = Ext.ComponentQuery
                         .query('k-window-imprint')[0];
-                    win.getController().setTopic('imprint');
+                    if (win) {
+                        win.getController().setTopic('imprint');
+                    }
                     break;
                 case 'accessibility':
                     this.showWindow('k-window-imprint', 'Koala.view.window.ImprintWindow', 'accessibility');

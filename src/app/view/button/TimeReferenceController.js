@@ -26,10 +26,14 @@ Ext.define('Koala.view.button.TimeReferenceController', {
         var currentlyUtc = curr === staticNs.UTC;
         var bindPropText = currentlyUtc ? '{textUtc}' : '{textLocal}';
         var bindPropTooltip = currentlyUtc ? '{tooltipUtc}' : '{tooltipLocal}';
-        btn.setBind({
-            text: bindPropText,
-            tooltip: bindPropTooltip
-        });
+        // the timeout is unfortunately necessary when triggered via a synthetic click event,
+        // else some layout update fails
+        window.setTimeout(function() {
+            btn.setBind({
+                text: bindPropText,
+                tooltip: bindPropTooltip
+            });
+        }, 800);
         btn.blur();
     }
 
