@@ -27,6 +27,7 @@ Ext.define('Koala.view.list.TreeMenu', {
     },
 
     requires: [
+        'BasiGX.view.list.FocusableTreeItem',
         'Koala.util.AppContext',
         'Koala.util.LocalStorage',
         'Koala.view.list.TreeMenuModel',
@@ -35,6 +36,10 @@ Ext.define('Koala.view.list.TreeMenu', {
     ],
 
     ui: 'tree-menu',
+
+    defaults: {
+        xtype: 'focusable-tree-item'
+    },
 
     controller: 'k-list-treemenu',
     viewModel: {

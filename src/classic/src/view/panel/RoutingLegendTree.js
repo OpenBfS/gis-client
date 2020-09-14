@@ -32,7 +32,8 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         'Koala.view.window.FilterGridWindow',
         'Koala.view.window.MetadataInfo',
         'Koala.view.window.ShareWindow',
-        'Koala.view.menu.LayerSettingsMenu'
+        'Koala.view.menu.LayerSettingsMenu',
+        'Koala.tree.LegendTreeNavigationModel'
     ],
 
     controller: 'k-panel-routing-legendtree',
@@ -775,7 +776,9 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         },
         // this magic prevents jumping of the grid
         // See https://stackoverflow.com/questions/44011406/extjs6-how-to-prevent-grid-rows-from-scrolling-into-focus-when-clicking#44077381
-        navigationModel: {}
+        // This now uses a slightly modified tree navigation model in order to be able to
+        // use keyboard navigation.
+        navigationModel: 'legendtree'
     },
 
     /**
@@ -813,6 +816,11 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             return true;
         });
         this.setStore(treeStore);
+        var treeNode = treeStore.getData().getAt(0);
+        // automatically select the first layer on startup
+        if (treeNode) {
+            this.setSelection(treeNode);
+        }
     },
 
     /**

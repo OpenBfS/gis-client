@@ -27,14 +27,19 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
     ],
 
     /**
-     * checkChange function - change of checkbox triggers this function
+     * onClick function
      */
-    checkChange: function(box, checked) {
+    onClick: function() {
         var view = this.getView();
+        var checked = view.down('radio[checked=true]');
+        // can happen if one of the layers is not available
+        if (!checked) {
+            return;
+        }
         var map = BasiGX.util.Map.getMapComponent().map;
         var layerCollection = map.getLayers();
         var layers = layerCollection.getArray();
-        var layer = this.layerInMap(box.uuid);
+        var layer = this.layerInMap(checked.uuid);
         layers.forEach(function(lyr) {
             if (lyr.isBackground) {
                 map.removeLayer(lyr);
@@ -43,7 +48,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
 
         layerCollection = map.getLayers();
         if (!layer) {
-            Koala.util.Layer.getMetadataFromUuid(box.uuid).then(function(metadata) {
+            Koala.util.Layer.getMetadataFromUuid(checked.uuid).then(function(metadata) {
                 layer = Koala.util.Layer.layerFromMetadata(metadata);
                 layer.isBackground = true;
                 layerCollection.insertAt(0,layer);
@@ -82,6 +87,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         if (appContext && appContext.data && appContext.data.merge) {
             var backgroundLayers = appContext.data.merge.backgroundLayers;
             var container = this.getView().down('container[name=backgroundlayer-radio-list]');
+            var selectedItems;
             Ext.each(backgroundLayers, function(layerObj) {
                 Koala.util.Layer.getMetadataFromUuid(layerObj.uuid).then(function(metadata) {
                     if (metadata) {
@@ -110,17 +116,21 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                                 checked: layerAlreadyInMap,
                                 boxLabel: metadata.legendTitle,
                                 uuid: layerObj.uuid,
-                                listeners: {
-                                    focus: 'checkChange'
-                                },
                                 flex: 1
                             }]
                         }];
-                        container.add(ele);
+                        var items = container.add(ele);
+                        if (layerAlreadyInMap) {
+                            selectedItems = items;
+                        }
                     }
                 });
             });
+            if (selectedItems) {
+                selectedItems[1].find('input').focus();
+            }
         }
+        this.getView().el.dom.addEventListener('click', this.onClick.bind(this));
     }
 
 });
