@@ -16,8 +16,10 @@ describe('Koala.view.button.TimeReferenceController', function() {
             btn.blur = sinon.stub();
             btn.getCurrent = sinon.stub();
             ctrl.setTextBinds(btn);
-            expect(btn.setBind.calledOnce).to.be(true);
-            expect(btn.blur.calledOnce).to.be(true);
+            window.setTimeout(function() {
+                expect(btn.setBind.calledOnce).to.be(true);
+                expect(btn.blur.calledOnce).to.be(true);
+            }, 1100);
         });
     });
 });
