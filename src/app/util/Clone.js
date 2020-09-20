@@ -216,6 +216,7 @@ Ext.define('Koala.util.Clone', {
                         config.source = source;
                         config.metadata = metadata;
                         config.name = name;
+                        config.userCreated = true;
                         config.persisted = false;
                         var result = new ol.layer.Vector(config);
                         Koala.util.Layer.updateVectorStyle(result, Koala.util.Clone.defaultStyle);

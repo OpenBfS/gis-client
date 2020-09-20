@@ -195,6 +195,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
 
         cfg.name = layerName;
         cfg.metadata = metadata;
+        cfg.userCreated = true;
         cfg.routeId = 'localData_' + layerName;
 
         // Create a source for the features from the uploaded / dragged file

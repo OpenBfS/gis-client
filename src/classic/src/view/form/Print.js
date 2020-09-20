@@ -314,7 +314,7 @@ Ext.define('Koala.view.form.Print', {
         layers.reverse();
 
         Ext.each(layers, function(layer) {
-            if (layer.get('allowPrint') && layer.get('legendUrl') !== '') {
+            if (layer.get('allowPrint') && (layer.get('legendUrl') !== '' || layer.get('userCreated'))) {
                 result.push(layer);
             }
         });
