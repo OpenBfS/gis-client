@@ -18,7 +18,7 @@ ENV DEBIAN_FRONTEND noninteractive
 #
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
-    curl unzip git openjdk-7-jre && \
+    curl unzip git openjdk-11-jre && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ADD . /usr/local/apache2/htdocs/
