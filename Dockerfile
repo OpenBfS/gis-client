@@ -17,6 +17,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install dependencies
 #
 
+RUN mkdir -p /usr/share/man/man1/
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
     curl unzip git openjdk-11-jre && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
