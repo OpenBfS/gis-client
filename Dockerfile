@@ -12,15 +12,18 @@ FROM httpd:2.4
 MAINTAINER mlechner@bfs.de
 
 ENV DEBIAN_FRONTEND noninteractive
-
+ENV OPENSSL_CONF /etc/ssl
 #
 # Install dependencies
 #
 
 RUN mkdir -p /usr/share/man/man1/
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
-    curl unzip git openjdk-11-jre && \
+    curl wget unzip git openjdk-11-jre && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash && \
+    apt-get -qq -y update && \
+    apt-get -qq install -y nodejs
 
 ADD . /usr/local/apache2/htdocs/
 WORKDIR /usr/local/apache2/htdocs/
