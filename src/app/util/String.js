@@ -73,7 +73,7 @@ Ext.define('Koala.util.String', {
             // will yield an array of matches including their boundaries:
             // tpl = "Hello [[whom-to-greet]], how are you [[another_string]]";
             // matches = ["[[whom-to-greet]]", "[[another_string]]"]
-            var regex = /\[\[([a-zA-ZäöüÄÖÜß0-9\s\.\,\_\-\§\%\(\)\/])+?\]\]/gi;
+            var regex = /\[\[([a-zA-ZäöüÄÖÜß0-9\s\.\,\_\<\>\-\§\%\(\)\/])+?\]\]/gi;
             var matches = tpl.match(regex);
             var keys = [];
             Ext.each(matches, function(match) {
@@ -248,6 +248,8 @@ Ext.define('Koala.util.String', {
             value = value.replace(/Ü/g, 'Ue');
             value = value.replace(/ü/g, 'ue');
             value = value.replace(/ß/g, 'ss');
+            value = value.replace(/</g, '&lt;');
+            value = value.replace(/>/g, '&gt;');
             return value;
         },
 
