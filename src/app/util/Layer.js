@@ -520,7 +520,7 @@ Ext.define('Koala.util.Layer', {
          * @returns {string} A textual representation of the filters or ''.
          */
         getFiltersTextFromMetadata: function(metadata) {
-            if (metadata.isRodosLayer) {
+            if (metadata && metadata.isRodosLayer) {
                 return metadata.rodosProjectName;
             }
             var staticMe = Koala.util.Layer;

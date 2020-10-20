@@ -230,10 +230,11 @@ Ext.define('Koala.util.Chart', {
         getChartTitle: function(layer) {
             /* use relevant filter text to label chart */
             var filters = Ext.clone(Koala.util.Layer.getFiltersFromMetadata(layer.metadata));
+            var filtersForTimeseriesLabel = '';
             var excludedTypes = ['pointintime', 'timerange'];
             var excludedParams = ['styles','order'];
             if (filters !== null) {
-                var filtersForTimeseriesLabel = filters.filter(function(filter) {
+                filtersForTimeseriesLabel = filters.filter(function(filter) {
                     return !Ext.Array.contains(excludedTypes, (filter.type || '').toLowerCase()) &&
                         !Ext.Array.contains(excludedParams, (filter.param || '').toLowerCase());
                 });
