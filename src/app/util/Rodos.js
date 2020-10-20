@@ -72,8 +72,23 @@ Ext.define('Koala.util.Rodos', {
             // `findRecord` finds a record where the first param BEGINS with the
             // second one.
             var rodosFolder = treeStore.findRecord('text', rodosFolderName);
+            if (rodosFolder) {
+                Koala.util.Rodos.updateThemeTree(treePanel, results, rodosFolderName, treePanelViewModel, projectUid, layers, name);
+            } else {
+                if (!this.reconfiguredListenerRegistered) {
+                    treePanel.on('reconfigured', function() {
+                        Koala.util.Rodos.updateThemeTree(treePanel, results, rodosFolderName, treePanelViewModel, projectUid, layers, name);
+                    });
+                    this.reconfiguredListenerRegistered = true;
+                }
+            }
+        },
+
+        updateThemeTree: function(treePanel, results, rodosFolderName, treePanelViewModel, projectUid, layers, name) {
+            var treeStore = treePanel.getStore();
+            var rodosFolder = treeStore.findRecord('text', rodosFolderName);
             var projectName = results.name;
-            var newText = Ext.String.format('{0} ({1})',rodosFolderName, projectName);
+            var newText = Ext.String.format('{0} ({1})', rodosFolderName, projectName);
             treePanelViewModel.set('selectedRodosProject', projectUid);
             rodosFolder.set('text', newText);
 
@@ -97,5 +112,7 @@ Ext.define('Koala.util.Rodos', {
             });
             rodosFolder.expand();
         }
+
     }
+
 });

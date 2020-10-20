@@ -208,6 +208,7 @@ Ext.define('Koala.view.panel.ThemeTree', {
                                         me.reconfigure(store);
                                     });
                                 }
+                                me.fireEvent('reconfigured');
                             });
                     });
             });
