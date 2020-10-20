@@ -349,6 +349,11 @@
                 "uuid": "dc9d9ccb-fcb5-4395-88e3-1779ab427e7f",
                 "leaf": true,
                 "text": "Nuklide in pflanzlichen Indikatoren"
+            },
+            {
+                "uuid": "b0e39875-c11c-428e-a930-57be38897420",
+                "leaf": true,
+                "text": "Sonstige Umweltmedien"
             }
         ],
         "thumb": "layer_sets/ionisierende_strahlung_thumb.png",

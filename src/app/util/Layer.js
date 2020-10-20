@@ -429,7 +429,7 @@ Ext.define('Koala.util.Layer', {
             }
 
             Ext.each(filters, function(f) {
-                if (f.effectivevalue && !Ext.isArray(f.effectivevalue)) {
+                if (f.effectivevalue && !Ext.isArray(f.effectivevalue) && !Ext.isNumber(f.effectivevalue)) {
                     f.effectivevalue = f.effectivevalue.split(',');
                 } else if (f.effectivevalue && f.effectivevalue.length === 1) {
                     f.effectivevalue = f.effectivevalue[0].split(',');
