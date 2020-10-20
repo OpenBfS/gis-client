@@ -166,7 +166,8 @@ Ext.define('Koala.util.Import', {
             var url = importMetadata.config.baseUrl + 'rest/imports/' + importMetadata.importId;
             return Ext.Ajax.request({
                 url: url,
-                method: 'POST'
+                method: 'POST',
+                timeout: 120000
             });
         },
 
@@ -224,6 +225,8 @@ Ext.define('Koala.util.Import', {
                 config: config,
                 layer: layer
             };
+            var grid = Ext.ComponentQuery.query('k-panel-featuregrid')[0];
+            grid.setLoading(true);
             if (layer.metadata.wasRodosLayer) {
                 var features = layer.getSource().getFeatures();
                 var fmt = new ol.format.GeoJSON();
@@ -239,7 +242,8 @@ Ext.define('Koala.util.Import', {
                     jsonData: geojson,
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    timeout: 120000
                 });
             } else {
                 return this.prepareData(layer, importMetadata)
@@ -319,6 +323,7 @@ Ext.define('Koala.util.Import', {
             if (wins.length > 0) {
                 Ext.each(wins, function(win) {
                     win.close();
+                    win.setLoading(false);
                 });
             }
             var tree = Ext.ComponentQuery.query('k-panel-themetree')[0];
