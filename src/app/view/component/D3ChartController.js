@@ -119,7 +119,8 @@ Ext.define('Koala.view.component.D3ChartController', {
             this.chartConfig.timeseriesComponentConfig.initialZoom = {
                 x: zoom.x,
                 y: zoom.y,
-                k: zoom.k
+                kx: zoom.kx,
+                ky: zoom.ky
             };
         }
 
