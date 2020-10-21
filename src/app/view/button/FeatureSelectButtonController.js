@@ -57,6 +57,9 @@ Ext.define('Koala.view.button.FeatureSelectButtonController', {
         var view = this.getView();
         var layer = view.getLayer();
         this.targetLayer.getSource().clear();
+        if (!view.getTransformInteraction()) {
+            return;
+        }
         var boxFeature = view.getTransformInteraction().layers_[0].getSource().getFeatures()[0];
         var extent = boxFeature.getGeometry().getExtent();
 

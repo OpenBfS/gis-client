@@ -70,12 +70,15 @@ Ext.define('Koala.view.button.FeatureSelectButton', {
                 }
             }]
         });
-        this.getTransformInteraction().on('translateend', function() {
-            me.getController().updateFeatures();
-        });
-        this.getTransformInteraction().on('scaleend', function() {
-            me.getController().updateFeatures();
-        });
+        var interaction = this.getTransformInteraction();
+        if (interaction) {
+            interaction.on('translateend', function() {
+                me.getController().updateFeatures();
+            });
+            interaction.on('scaleend', function() {
+                me.getController().updateFeatures();
+            });
+        }
     }
 
 });
