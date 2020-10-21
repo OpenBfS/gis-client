@@ -77,11 +77,11 @@ Ext.define('Koala.view.panel.LayerSetChooserController', {
 
             treeStore.filterBy(function(record) {
                 var display = false;
-                if (record.get('text') === rec.get('text')) {
+                if (record.get('text').startsWith(rec.get('text'))) {
                     display = true;
                 } else {
                     record.bubble(function(node) {
-                        if (node.get('text') === rec.get('text')) {
+                        if (node.get('text').startsWith(rec.get('text'))) {
                             display = true;
                         }
                     });
