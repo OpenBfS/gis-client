@@ -100,7 +100,7 @@ Ext.define('Koala.view.component.Map', {
      *
      * @param {ol.Feature[]} features the features to import
      */
-    addData: function(features,projection) {
+    addData: function(features, projection) {
         Ext.create('Ext.window.Window', {
             title: 'Upload local data',
             autoShow: true,
