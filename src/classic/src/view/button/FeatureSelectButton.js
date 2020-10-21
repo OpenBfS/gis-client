@@ -54,6 +54,9 @@ Ext.define('Koala.view.button.FeatureSelectButton', {
     initComponent: function() {
         var me = this;
         this.callParent();
+        this.targetLayer = new ol.layer.Vector({
+            source: new ol.source.Vector()
+        });
         this.window = Ext.create('Ext.window.Window', {
             width: 400,
             height: 400,
@@ -61,13 +64,15 @@ Ext.define('Koala.view.button.FeatureSelectButton', {
             closeAction: 'method-hide',
             title: this.getViewModel().get('tooltip'),
             items: [{
-                xtype: 'grid',
+                xtype: 'k-grid-filter',
                 selModel: 'checkboxmodel',
                 scrollable: true,
+                height: 'auto',
                 store: {
                     autoLoad: true,
                     data: []
-                }
+                },
+                layer: this.targetLayer
             }]
         });
         var interaction = this.getTransformInteraction();

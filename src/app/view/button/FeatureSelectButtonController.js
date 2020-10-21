@@ -27,13 +27,10 @@ Ext.define('Koala.view.button.FeatureSelectButtonController', {
     init: function() {
         this.callParent();
         var me = this;
-        this.targetLayer = new ol.layer.Vector({
-            source: new ol.source.Vector()
-        });
         Ext.on('selectFeatures:featuresReceived', this.featureListener = function() {
             var grid = me.getView().window.down('grid');
             var fmt = new ol.format.GeoJSON();
-            var olFeatures = me.targetLayer.getSource().getFeatures();
+            var olFeatures = me.getView().targetLayer.getSource().getFeatures();
             var features = fmt.writeFeaturesObject(olFeatures).features;
             Koala.util.Grid.updateGridFeatures(grid, features);
             me.getView().setDisabled(false);
@@ -56,17 +53,17 @@ Ext.define('Koala.view.button.FeatureSelectButtonController', {
     updateFeatures: function() {
         var view = this.getView();
         var layer = view.getLayer();
-        this.targetLayer.getSource().clear();
         if (!view.getTransformInteraction()) {
             return;
         }
+        this.getView().targetLayer.getSource().clear();
         var boxFeature = view.getTransformInteraction().layers_[0].getSource().getFeatures()[0];
         var extent = boxFeature.getGeometry().getExtent();
 
         if (layer instanceof ol.layer.Vector) {
-            Koala.util.SelectFeatures.getFeaturesFromVectorLayerByBbox(layer, this.targetLayer, extent);
+            Koala.util.SelectFeatures.getFeaturesFromVectorLayerByBbox(layer, this.getView().targetLayer, extent);
         } else {
-            Koala.util.SelectFeatures.getFeaturesFromWmsLayerByBbox(layer, this.targetLayer, extent);
+            Koala.util.SelectFeatures.getFeaturesFromWmsLayerByBbox(layer, this.getView().targetLayer, extent);
         }
     }
 
