@@ -1343,6 +1343,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                     '[id=' + selector + ']')[0];
                 if (img && img.el && img.el.dom) {
                     img.setSrc(Koala.util.Layer.getCurrentLegendUrl(layer));
+                    img.el.dom.style.display = 'inherit';
                 }
             }
         });
