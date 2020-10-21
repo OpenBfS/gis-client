@@ -109,7 +109,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             reader.addEventListener('load', me.parseFeatures.bind(this, justParseCallback));
             reader.readAsText(file);
         } else {
-            this.parseFeatures(undefined, this.getViewModel().get('features'));
+            this.parseFeatures(justParseCallback, this.getViewModel().get('features'));
         }
     },
 
