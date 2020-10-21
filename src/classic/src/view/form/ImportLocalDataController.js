@@ -202,12 +202,14 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
         cfg.source = new ol.source.Vector({
             features: features
         });
+        cfg.style = Koala.util.Clone.defaultOlStyle;
 
         var layer = new ol.layer.Vector(cfg);
         layer.metadata = metadata;
-        if (this.style) {
-            Koala.util.Layer.setSLDStyle(layer, this.style);
-            Koala.util.Layer.updateVectorStyle(layer, this.style);
+        var layerStyle = this.style || Koala.util.Clone.defaultStyle;
+        if (layerStyle) {
+            Koala.util.Layer.setSLDStyle(layer, layerStyle);
+            Koala.util.Layer.updateVectorStyle(layer, layerStyle);
             layer.set('hasLegend', true);
         }
         if (this.selectedTemplateStyle) {
