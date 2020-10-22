@@ -77,6 +77,10 @@ Ext.define('Koala.view.form.LayerFilterController', {
                 chart.getController().getChartData();
             }
         });
+        var button = Ext.ComponentQuery.query('[name=' + existingLayer.get('name') + '_button]')[0];
+        if (button && button.getController) {
+            button.getController().updateFeatures();
+        }
     },
 
     /**
