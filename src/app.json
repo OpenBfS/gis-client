@@ -7,7 +7,7 @@
     /**
      * The version of the application.
      */
-    "version": "1.16.15-SNAPSHOT",
+    "version": "1.16.14.2",
 
     /**
      * The relative path to the application's markup file (html, jsp, asp, etc.).
