@@ -901,6 +901,14 @@ Ext.define('Koala.util.Filter', {
             minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
             maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
             value = Koala.util.Date.getTimeReferenceAwareMomentDate(value);
+            var unit = (filter.unit || '').toLowerCase();
+            var maxLimit = maxValue;
+            if (unit === 'hours') {
+                maxLimit = maxLimit.endOf('day');
+            }
+            if (unit === 'minutes') {
+                maxLimit = maxLimit.endOf('hour');
+            }
 
             var dateField = Ext.create('Ext.form.field.Date', {
                 bind: {
@@ -910,11 +918,11 @@ Ext.define('Koala.util.Filter', {
                 labelWidth: 70,
                 name: filter.param,
                 flex: 1,
-                // The Ext.form.field.Date is capabale of receiving a moment object,
+                // The Ext.form.field.Date is capable of receiving a moment object,
                 // see override of setValue().
                 value: value,
                 minValue: minValue,
-                maxValue: maxValue,
+                maxValue: maxLimit,
                 validator: me.makeDateValidator(
                     minValue, maxValue
                 ),
