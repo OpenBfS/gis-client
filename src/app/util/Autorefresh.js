@@ -89,6 +89,10 @@ Ext.define('Koala.util.Autorefresh', {
                         me.updateMetadataLegendTree(existingLayer, metadata);
                         me.deselectThemeTreeItems();
                         LayerUtil.repaintLayerFilterIndication();
+                        var button = Ext.ComponentQuery.query('[name=' + existingLayer.get('name') + '_button]')[0];
+                        if (button) {
+                            button.getController().updateFeatures();
+                        }
                     });
                 }
             });
