@@ -28,7 +28,14 @@ Ext.define('Koala.util.Clone', {
 
         defaultStyle: (function() {
             var point = new ol.style.Style({
-                image: new ol.style.Circle()
+                image: new ol.style.Circle({
+                    fill: new ol.style.Fill({
+                        color: 'rgba(0, 0, 255, 0.1)'
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: '#0000ff'
+                    })
+                })
             });
             var line = new ol.style.Style({
                 stroke: new ol.style.Stroke({
@@ -46,6 +53,7 @@ Ext.define('Koala.util.Clone', {
             var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
             olParser.readStyle([point, line, polygon])
                 .then(function(gsStyle) {
+                    Koala.util.Clone.defaultOlStyle = [point, line, polygon];
                     var sldParser = new GeoStylerSLDParser.SldStyleParser();
                     sldParser.writeStyle(gsStyle)
                         .then(function(sld) {
