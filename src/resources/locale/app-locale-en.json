@@ -603,7 +603,8 @@
                 "deleteMessage": "Do you want to delete the {0} selected objects?",
                 "sortSelectedText": "Selected to top",
                 "addColumnTooltip": "Add column",
-                "columnPrefix": "column_"
+                "columnPrefix": "column_",
+                "saveFailedMessage": "The layer could not be created."
             }
         }
     },
@@ -874,7 +875,8 @@
                 "layerNameLabel": "Name of the new layer",
                 "okButtonLabel": "Share",
                 "cancelButtonLabel": "Cancel",
-                "roleComboLabel": "Select role"
+                "roleComboLabel": "Select role",
+                "saveFailedMessage": "The layer could not be created."
             }
         }
     },

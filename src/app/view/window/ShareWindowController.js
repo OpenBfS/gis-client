@@ -75,6 +75,9 @@ Ext.define('Koala.view.window.ShareWindowController', {
                 view.close();
                 var map = BasiGX.view.component.Map.guess().getMap();
                 map.removeLayer(oldLayer);
+            }).catch(function() {
+                Ext.toast(view.getViewModel().get('saveFailedMessage'));
+                Ext.ComponentQuery.query('k-panel-featuregrid')[0].setLoading(false);
             });
         });
     }
