@@ -62,6 +62,7 @@ Ext.define('Koala.view.button.FeatureSelectButtonController', {
 
         if (layer instanceof ol.layer.Vector) {
             Koala.util.SelectFeatures.getFeaturesFromVectorLayerByBbox(layer, this.getView().targetLayer, extent);
+            Ext.fireEvent('selectFeatures:featuresReceived');
         } else {
             Koala.util.SelectFeatures.getFeaturesFromWmsLayerByBbox(layer, this.getView().targetLayer, extent);
         }
