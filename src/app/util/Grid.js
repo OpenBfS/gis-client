@@ -59,6 +59,7 @@ Ext.define('Koala.util.Grid', {
                         types[propName].push(type);
                     }
                 });
+                feat.properties.feature = JSON.stringify(feat);
                 data.push(feat.properties);
             });
             //field and column assignment

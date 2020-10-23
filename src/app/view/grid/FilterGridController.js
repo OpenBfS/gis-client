@@ -64,10 +64,11 @@ Ext.define('Koala.view.grid.FilterGridController', {
         if (featureGrid) {
             featureGrid.close();
         }
+        var fmt = new ol.format.GeoJSON();
         var source = this.layer.getSource();
         var newFeatures = [];
         store.each(function(record) {
-            var feature = record.olObject;
+            var feature = fmt.readFeature(record.data.feature);
             newFeatures.push(feature);
         });
         source.clear();
