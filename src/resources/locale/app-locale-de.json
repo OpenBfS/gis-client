@@ -605,7 +605,8 @@
                 "deleteMessage": "Wollen Sie die {0} selektierten Objekte löschen?",
                 "sortSelectedText": "Selektierte nach oben",
                 "addColumnTooltip": "Spalte hinzufügen",
-                "columnPrefix": "Spalte_"
+                "columnPrefix": "Spalte_",
+                "saveFailedMessage": "Der Layer konnte nicht angelegt werden."
             }
         }
     },
@@ -878,7 +879,8 @@
                 "layerNameLabel": "Name des neuen Layers",
                 "okButtonLabel": "Freigeben",
                 "cancelButtonLabel": "Abbrechen",
-                "roleComboLabel": "Rolle auswählen"
+                "roleComboLabel": "Rolle auswählen",
+                "saveFailedMessage": "Der Layer konnte nicht angelegt werden."
             }
         }
     },

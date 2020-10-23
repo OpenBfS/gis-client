@@ -34,6 +34,7 @@ Ext.define('Koala.view.panel.FeatureGridModel', {
         sortSelectedText: '',
         addColumnTooltip: '',
         columnPrefix: '',
-        pinned: true
+        pinned: true,
+        saveFailedMessage: ''
     }
 });
