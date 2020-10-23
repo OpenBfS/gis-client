@@ -279,6 +279,14 @@ Ext.define('Koala.util.Import', {
                     headers: {
                         'Content-Type': 'application/json'
                     }
+                }).then(function() {
+                    var wins = Ext.ComponentQuery.query('k-panel-featuregrid');
+                    if (wins.length > 0) {
+                        Ext.each(wins, function(win) {
+                            win.close();
+                            win.setLoading(false);
+                        });
+                    }
                 });
             }
             return Ext.Promise.resolve();
