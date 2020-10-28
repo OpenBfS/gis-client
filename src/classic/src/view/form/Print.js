@@ -69,6 +69,8 @@ Ext.define('Koala.view.form.Print', {
 
     irixFieldsetLoaded: undefined,
 
+    useJsonp: false,
+
     initComponent: function() {
         var me = this;
         var dpc;
