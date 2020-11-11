@@ -249,6 +249,11 @@ Ext.define('Koala.view.menu.ChartSettingsMenuController', {
                     Ext.each(charts, function(c) {
                         c.getController().getChartData();
                     });
+                    // ... and bar charts
+                    charts = Ext.ComponentQuery.query('d3-barchart');
+                    Ext.each(charts, function(c) {
+                        c.getController().getChartData();
+                    });
                     this.up('window').hide();
                 },
                 cancel: function() {
