@@ -236,14 +236,22 @@ Ext.define('Koala.util.Import', {
                 });
                 var appConfig = Koala.util.AppContext.getAppContext().data.merge;
                 var tablename = layer.metadata.rodosTablename;
-                return Ext.Ajax.request({
-                    url: appConfig.urls['rodos-upload-service'] + tablename,
-                    method: 'POST',
-                    jsonData: geojson,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    timeout: 120000
+                return new Ext.Promise(function(resolve, reject) {
+                    Ext.Ajax.request({
+                        url: appConfig.urls['rodos-upload-service'] + tablename,
+                        method: 'POST',
+                        jsonData: geojson,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        timeout: 120000,
+                        success: function(xhr) {
+                            resolve(xhr);
+                        },
+                        failure: function() {
+                            reject();
+                        }
+                    });
                 });
             } else {
                 return this.prepareData(layer, importMetadata)
