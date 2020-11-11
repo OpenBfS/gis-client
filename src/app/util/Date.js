@@ -68,6 +68,9 @@ Ext.define('Koala.util.Date', {
          * @return {moment} The moment object.
          */
         getUtcMoment: function(dateValue, dateFormat) {
+            if (dateValue === 'now') {
+                return moment.utc();
+            }
             var momentDate;
 
             dateFormat = dateFormat || moment.ISO_8601;
