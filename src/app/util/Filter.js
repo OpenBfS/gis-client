@@ -998,6 +998,14 @@ Ext.define('Koala.util.Filter', {
 
             var startValue = filter.effectivemindatetime || defaultMinValue;
             var endValue = filter.effectivemaxdatetime || defaultMaxValue;
+            var unit = (filter.unit || '').toLowerCase();
+            var maxLimit = maxValue;
+            if (unit === 'hours') {
+                maxLimit = maxLimit.endOf('day');
+            }
+            if (unit === 'minutes') {
+                maxLimit = maxLimit.endOf('hour');
+            }
 
             minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
             maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
@@ -1005,7 +1013,7 @@ Ext.define('Koala.util.Filter', {
             endValue = Koala.util.Date.getTimeReferenceAwareMomentDate(endValue);
 
             var minMaxValidator = me.makeDateValidator(
-                minValue, maxValue
+                minValue, maxLimit
             );
             var minMaxDurationAndOrderValidator = function() {
                 var ok = minMaxValidator.call(this);
@@ -1026,7 +1034,7 @@ Ext.define('Koala.util.Filter', {
                 flex: 1,
                 value: startValue,
                 minValue: minValue,
-                maxValue: maxValue,
+                maxValue: maxLimit,
                 format: format,
                 validator: minMaxDurationAndOrderValidator,
                 listeners: {
@@ -1058,7 +1066,7 @@ Ext.define('Koala.util.Filter', {
                 flex: 1,
                 value: endValue,
                 minValue: minValue,
-                maxValue: maxValue,
+                maxValue: maxLimit,
                 format: format,
                 validator: minMaxDurationAndOrderValidator,
                 listeners: {
