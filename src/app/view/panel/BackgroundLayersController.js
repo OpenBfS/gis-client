@@ -29,9 +29,8 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
     /**
      * onClick function
      */
-    onClick: function() {
+    onClick: function(checked) {
         var view = this.getView();
-        var checked = view.down('radio[checked=true]');
         // can happen if one of the layers is not available
         if (!checked) {
             return;
@@ -51,11 +50,11 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
             Koala.util.Layer.getMetadataFromUuid(checked.uuid).then(function(metadata) {
                 layer = Koala.util.Layer.layerFromMetadata(metadata);
                 layer.isBackground = true;
-                layerCollection.insertAt(0,layer);
-                layer.setVisible(checked);
+                layerCollection.insertAt(0, layer);
+                layer.setVisible(true);
             });
         } else {
-            layer.setVisible(checked);
+            layerCollection.insertAt(0, layer);
         }
         view.up('[name=backgroundLayers-window]').close();
         return false;
@@ -87,12 +86,10 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
         if (appContext && appContext.data && appContext.data.merge) {
             var backgroundLayers = appContext.data.merge.backgroundLayers;
             var container = this.getView().down('container[name=backgroundlayer-radio-list]');
-            var selectedItems;
             Ext.each(backgroundLayers, function(layerObj) {
                 Koala.util.Layer.getMetadataFromUuid(layerObj.uuid).then(function(metadata) {
                     if (metadata) {
                         var layer = me.layerInMap(layerObj.uuid);
-                        var layerAlreadyInMap = layer && layer.getVisible() ? true : false;
                         if (layer) {
                             layer.isBackground = true;
                         }
@@ -103,34 +100,29 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                             flex: 1,
                             height: '100%',
                             width: '100%',
-                            defaultType: 'radiofield',
                             items: [{
                                 xtype: 'image',
                                 height: 58,
                                 width: 110,
                                 src: layerThumb
                             }, {
-                                style: 'text-align: center;',
+                                xtype: 'button',
+                                style: 'margin-top: 20px;',
+                                textAlign: 'center',
                                 padding: 5,
+                                margin: '15 5 5 5',
                                 name: 'backgroundlayers',
-                                checked: layerAlreadyInMap,
-                                boxLabel: metadata.legendTitle,
+                                text: metadata.legendTitle,
                                 uuid: layerObj.uuid,
-                                flex: 1
+                                flex: 1,
+                                handler: me.onClick.bind(me)
                             }]
                         }];
-                        var items = container.add(ele);
-                        if (layerAlreadyInMap) {
-                            selectedItems = items;
-                        }
+                        container.add(ele);
                     }
                 });
             });
-            if (selectedItems) {
-                selectedItems[1].find('input').focus();
-            }
         }
-        this.getView().el.dom.addEventListener('click', this.onClick.bind(this));
     }
 
 });
