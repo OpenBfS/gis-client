@@ -122,6 +122,7 @@ Ext.define('Koala.view.component.D3ChartController', {
                 kx: zoom.kx,
                 ky: zoom.ky
             };
+            this.chartConfig.timeseriesComponentConfig.moveToRight = true;
         }
 
         var series = new D3Util.TimeseriesComponent(this.chartConfig.timeseriesComponentConfig);
