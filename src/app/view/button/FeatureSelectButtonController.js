@@ -39,6 +39,9 @@ Ext.define('Koala.view.button.FeatureSelectButtonController', {
                 me.selectionSet = true;
             }
         });
+        me.getView().getLayer().on('change', function() {
+            me.updateFeatures();
+        });
         this.updateFeatures();
     },
 
