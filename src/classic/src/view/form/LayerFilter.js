@@ -239,7 +239,7 @@ Ext.define('Koala.view.form.LayerFilter', {
             emptyText: filter.defaultValue
         };
 
-        if (filter.allowedValues) {
+        if (filter.allowedValues && filter.allowedValues !== 'null') {
             field = FilterUtil.getComboFromFilter(filter);
             if (Ext.isArray(value) && value.length > 1) {
                 var joined = value.join(',');
