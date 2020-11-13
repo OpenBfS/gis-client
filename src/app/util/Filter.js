@@ -920,10 +920,12 @@ Ext.define('Koala.util.Filter', {
             var unit = (filter.unit || '').toLowerCase();
             var maxLimit = maxValue;
             if (unit === 'hours') {
-                maxLimit = maxLimit.endOf('day');
+                maxLimit = maxLimit.startOf('hour');
+                maxLimit = maxLimit.add(1, 'hour');
             }
             if (unit === 'minutes') {
-                maxLimit = maxLimit.endOf('hour');
+                maxLimit = maxLimit.startOf('minute');
+                maxLimit = maxLimit.add(1, 'minute');
             }
 
             var dateField = Ext.create('Ext.form.field.Date', {
@@ -1024,6 +1026,7 @@ Ext.define('Koala.util.Filter', {
                 // replace "now" with current utc date
                 if (defaultMaxValue === staticMe.NOW_STRING) {
                     defaultMaxValue = Koala.util.Date.getUtcMoment(new Date());
+                    defaultMaxValue = defaultMaxValue.startOf('minute');
                 } else {
                     defaultMaxValue = Koala.util.Date.getUtcMoment(
                         defaultMaxValue
@@ -1036,10 +1039,12 @@ Ext.define('Koala.util.Filter', {
             var unit = (filter.unit || '').toLowerCase();
             var maxLimit = maxValue;
             if (unit === 'hours') {
-                maxLimit = maxLimit.endOf('day');
+                maxLimit = maxLimit.startOf('hour');
+                maxLimit = maxLimit.add(1, 'hour');
             }
             if (unit === 'minutes') {
-                maxLimit = maxLimit.endOf('hour');
+                maxLimit = maxLimit.startOf('minute');
+                maxLimit = maxLimit.add(1, 'minute');
             }
 
             minValue = Koala.util.Date.getTimeReferenceAwareMomentDate(minValue);
