@@ -305,6 +305,7 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                             role
                         ).catch(function() {
                             Ext.toast(me.getViewModel().get('saveFailedMessage'));
+                        }).finally(function() {
                             Ext.ComponentQuery.query('k-panel-featuregrid')[0].setLoading(false);
                         });
                     };
