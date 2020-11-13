@@ -1000,17 +1000,15 @@ Ext.define('Koala.util.Filter', {
 
             var maxValue;
             if (filter.maxdatetimeinstant) {
-                if (filter.maxdatetimeinstant) {
-                    // Only fill upper boundary when defined
-                    maxValue = filter.maxdatetimeinstant;
-                    // replace "now" with current utc date
-                    if (maxValue === staticMe.NOW_STRING) {
-                        maxValue = Koala.util.Date.getUtcMoment(new Date());
-                    } else {
-                        maxValue = Koala.util.Date.getUtcMoment(
-                            maxValue
-                        );
-                    }
+                // Only fill upper boundary when defined
+                maxValue = filter.maxdatetimeinstant;
+                // replace "now" with current utc date
+                if (maxValue === staticMe.NOW_STRING) {
+                    maxValue = Koala.util.Date.getUtcMoment(new Date());
+                } else {
+                    maxValue = Koala.util.Date.getUtcMoment(
+                        maxValue
+                    );
                 }
             }
 
@@ -1029,6 +1027,11 @@ Ext.define('Koala.util.Filter', {
                         defaultMaxValue
                     );
                 }
+            }
+
+            if (!filter.defaultstarttimeinstant) {
+                var duration = moment.duration(filter.maxduration);
+                defaultMinValue = defaultMaxValue.clone().subtract(duration);
             }
 
             var startValue = filter.effectivemindatetime || defaultMinValue;
