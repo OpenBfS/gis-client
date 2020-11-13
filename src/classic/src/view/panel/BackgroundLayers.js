@@ -40,7 +40,7 @@ Ext.define('Koala.view.panel.BackgroundLayers', {
         layout: 'vbox',
         height: '100%',
         width: '100%',
-        minWidth: 275,
+        minWidth: 370,
         minHeight: 130,
         items: []
     }]
