@@ -107,7 +107,7 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                                 src: layerThumb
                             }, {
                                 xtype: 'button',
-                                style: 'margin-top: 20px;',
+                                cls: 'text-button',
                                 textAlign: 'center',
                                 padding: 5,
                                 margin: '15 5 5 5',
