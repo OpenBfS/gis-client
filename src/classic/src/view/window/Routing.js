@@ -79,7 +79,7 @@ Ext.define('Koala.view.window.Routing', {
     constructor: function() {
         this.callParent(arguments);
 
-        var appContext = BasiGX.view.component.Map.guess().appContext;
+        // var appContext = BasiGX.view.component.Map.guess().appContext;
         // var urls = appContext.data.merge.urls;
         // this.add({
         //     xtype: 'k-form-print',
