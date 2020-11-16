@@ -36,6 +36,7 @@ before_script:
 
 test:
   stage: test
+  tags: ['intranet']
   only:
     - branches
   script:
@@ -50,6 +51,7 @@ test:
 
 deploy:
   stage: deploy
+  tags: ['intranet']
   only:
     - master@terrestris/bfs_koala
   script:
