@@ -58,6 +58,7 @@ in der Version >=6.2.0 unter dem Namen "ext" (als Symlink per ln -s ... oder
 als Kopie per cp -r ...) zur Verfügung zu stellen.
 
 ```
+git submodule update --init --recursive
 cd src/
 ln -s <Pfad zu ExtJS>/ext-6.2.0 ext
 sencha app install --framework=ext
