@@ -21,7 +21,13 @@ Ext.define('Koala.view.window.RoutingModel', {
     alias: 'viewmodel.k-window-routing',
 
     data: {
-        title: 'Unser Test Titel'
+        i18n: {
+            title: 'Unser Test Titel'
+        },
+        routeStyle: new ol.style.Stroke({
+            color: 'blue',
+            width: 5
+        })
     }
 
 });

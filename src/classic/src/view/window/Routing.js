@@ -21,13 +21,18 @@ Ext.define('Koala.view.window.Routing', {
     xtype: 'k-window-routing',
 
     requires: [
-        'Koala.util.Help'
+        'Koala.util.Help',
+        'BasiGX.view.component.Map'
     ],
 
     controller: 'k-window-routing',
     viewModel: {
         type: 'k-window-routing'
     },
+
+    layer: null,
+
+    map: null,
 
     bind: {
         title: '{title}'
@@ -55,7 +60,10 @@ Ext.define('Koala.view.window.Routing', {
         },
         resize: function(win) {
             win.center();
-        }
+        },
+        onRouteLoaded: 'onRouteLoaded',
+        boxReady: 'onBoxReady',
+        close: 'onWindowClose'
     },
 
     layout: 'fit',
@@ -77,9 +85,22 @@ Ext.define('Koala.view.window.Routing', {
     // },
 
     constructor: function() {
+        var me = this;
         this.callParent(arguments);
 
+        if (!me.map) {
+            me.map = BasiGX.view.component.Map.guess().getMap();
+        }
+
         // var appContext = BasiGX.view.component.Map.guess().appContext;
+        Ext.Ajax.request({
+            url: '/ors/ors.json',
+
+            success: function(response, opts) {
+                content = Ext.decode(response.responseText);
+                me.fireEvent('onRouteLoaded', content);
+            }
+        });
         // var urls = appContext.data.merge.urls;
         // this.add({
         //     xtype: 'k-form-print',
