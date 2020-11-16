@@ -30,6 +30,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         micro: false,
         timereferenceValue: 'local',
         // i18n
+        routing: '',
         menu: '',
         themes: '',
         loading: '',
@@ -72,6 +73,12 @@ Ext.define('Koala.view.list.TreeMenuModel', {
             root: {
                 expanded: true,
                 children: [{
+                    text: '{routing}',
+                    key: 'routing',
+                    leaf: true,
+                    iconCls: 'x-fa fa-bars',
+                    rowCls: 'menu-button'
+                }, {
                     text: '{menu}',
                     key: 'menu',
                     leaf: true,

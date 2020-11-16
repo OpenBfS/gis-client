@@ -493,6 +493,7 @@
                 "themes": "",
                 "loading": "Load",
                 "wmsimport": "Add external WMS",
+                "routing": "Routing",
                 "vectorimport": "Import local files",
                 "print": "Print",
                 "tools": "Tools",
