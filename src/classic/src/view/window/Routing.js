@@ -30,6 +30,8 @@ Ext.define('Koala.view.window.Routing', {
         type: 'k-window-routing'
     },
 
+    waypointLayer: null,
+
     routeLayer: null,
 
     map: null,
@@ -62,6 +64,7 @@ Ext.define('Koala.view.window.Routing', {
             win.center();
         },
         onRouteLoaded: 'onRouteLoaded',
+        onWaypointAdded: 'onWaypointAdded',
         boxReady: 'onBoxReady',
         close: 'onWindowClose'
     },
@@ -88,6 +91,8 @@ Ext.define('Koala.view.window.Routing', {
         var me = this;
         this.callParent(arguments);
 
+        var vm = me.lookupViewModel();
+
         var staticMe = Koala.util.AppContext;
         var ctx = staticMe.getAppContext();
         var routingOpts = staticMe.getMergedDataByKey('routing', ctx);
@@ -99,7 +104,21 @@ Ext.define('Koala.view.window.Routing', {
                     width: routingOpts.routeStyle.width
                 })
             });
-            me.lookupViewModel().set('routeStyle', routeStyle);
+            vm.set('routeStyle', routeStyle);
+        }
+
+        if (routingOpts.waypointStyle) {
+            var waypointStyle = new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome map-marker
+                    text: '\uf041',
+                    font: 'normal ' + routingOpts.waypointStyle.markerSize + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: routingOpts.waypointStyle.color
+                    })
+                })
+            });
+            vm.set('waypointStyle', waypointStyle);
         }
 
         if (!me.map) {
@@ -112,11 +131,12 @@ Ext.define('Koala.view.window.Routing', {
         Ext.Ajax.request({
             url: '/ors/ors.json',
 
-            success: function(response, opts) {
-                content = Ext.decode(response.responseText);
+            success: function(response) {
+                var content = Ext.decode(response.responseText);
                 me.fireEvent('onRouteLoaded', content);
             }
         });
+
         // var urls = appContext.data.merge.urls;
         // this.add({
         //     xtype: 'k-form-print',

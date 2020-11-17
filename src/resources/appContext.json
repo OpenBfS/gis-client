@@ -229,6 +229,10 @@
                 "routeStyle": {
                     "color": "#ff0000",
                     "stroke": 3
+                },
+                "waypointStyle": {
+                    "markerSize": 38,
+                    "color": "black"
                 }
             }
         }

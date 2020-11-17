@@ -24,7 +24,8 @@ Ext.define('Koala.view.window.RoutingModel', {
         i18n: {
             title: 'Unser Test Titel'
         },
-        routeStyle: undefined
+        routeStyle: undefined,
+        waypointStyle: undefined
     }
 
 });

@@ -29,7 +29,8 @@ Ext.define('Koala.view.list.TreeMenuController', {
         'Koala.view.window.PermalinkWindow',
         'Koala.view.window.ImprintWindow',
         'Koala.view.window.HelpWindow',
-        'Koala.view.window.AboutWindow'
+        'Koala.view.window.AboutWindow',
+        'Koala.view.window.Routing'
     ],
 
     alias: 'controller.k-list-treemenu',

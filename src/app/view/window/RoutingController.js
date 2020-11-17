@@ -24,9 +24,14 @@ Ext.define('Koala.view.window.RoutingController', {
      * Handler for visualising the routing results.
      * @param {Object} geojson The routing GeoJSON.
      */
-    onRouteLoaded: function (geojson) {
+    onRouteLoaded: function(geojson) {
         var me = this;
         me.addRouteToMap(geojson);
+    },
+
+    onWaypointAdded: function(feature) {
+        var me = this;
+        me.addWayPointToMap(feature);
     },
 
     /**
@@ -51,12 +56,34 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
+     * Adds a single waypoint to the waypointLayer.
+     */
+    addWayPointToMap: function(feature) {
+        var me = this;
+        var view = me.getView();
+
+        var layer = view.waypointLayer;
+        if (layer === null) {
+            return;
+        }
+
+        var source = layer.getSource();
+        source.addFeature(feature);
+    },
+
+    /**
      * Create all instances that need to be created, as soon as
      * the Routing window will be opened.
      */
     onBoxReady: function() {
         var me = this;
+
         me.createRoutingLayers();
+
+        // TODO remove this. Just used for dev
+        me.getView().fireEvent('onWaypointAdded', new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([8.63, 49.40]))
+        }));
     },
 
     /**
@@ -67,7 +94,10 @@ Ext.define('Koala.view.window.RoutingController', {
         var view = me.getView();
 
         if (view.routeLayer === null) {
-            me.createLayer('routeStyle', view.routeLayer);
+            me.createLayer('routeStyle', 'routeLayer');
+        }
+        if (view.waypointLayer === null) {
+            me.createLayer('waypointStyle', 'waypointLayer');
         }
 
     },
@@ -78,9 +108,9 @@ Ext.define('Koala.view.window.RoutingController', {
      * Gets the style from the viewModel by name.
      *
      * @param {String} styleName The name of the style object in the viewModel
-     * @param {ol.layer.Layer} viewLayer The viewLayer that should be overwritten
+     * @param {String} viewLayerName The name of the viewLayer that should be overwritten
      */
-    createLayer: function(styleName, viewLayer) {
+    createLayer: function(styleName, viewLayerName) {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
@@ -94,7 +124,7 @@ Ext.define('Koala.view.window.RoutingController', {
             map: map
         });
 
-        viewLayer = layer;
+        view[viewLayerName] = layer;
     },
 
     /**
@@ -103,10 +133,14 @@ Ext.define('Koala.view.window.RoutingController', {
     onWindowClose: function() {
         var me = this;
         var view = me.getView();
-        debugger;
+
         if (view.routeLayer !== null) {
             view.routeLayer.setMap(null);
             view.routeLayer = null;
+        }
+        if (view.waypointLayer !== null) {
+            view.waypointLayer.setMap(null);
+            view.waypointLayer = null;
         }
     }
 
