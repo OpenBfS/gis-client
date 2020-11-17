@@ -1869,6 +1869,10 @@ Ext.define('Koala.util.Layer', {
             }
             var start = filter.effectivemindatetime;
             var end = filter.effectivemaxdatetime;
+            if (!start) {
+                var duration = moment.duration(filter.maxduration);
+                start = end.subtract(duration);
+            }
             var val = start.toISOString() + '/' + end.toISOString();
             olProps[wmstKey] = val;
             metadata.layerConfig.olProperties = olProps;
