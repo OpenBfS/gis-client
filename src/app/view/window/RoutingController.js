@@ -107,8 +107,8 @@ Ext.define('Koala.view.window.RoutingController', {
      *
      * Gets the style from the viewModel by name.
      *
-     * @param {String} styleName The name of the style object in the viewModel
-     * @param {String} viewLayerName The name of the viewLayer that should be overwritten
+     * @param {String} styleName The name of the style object in the viewModel.
+     * @param {String} viewLayerName The name of the viewLayer that should be overwritten.
      */
     createLayer: function(styleName, viewLayerName) {
         var me = this;
