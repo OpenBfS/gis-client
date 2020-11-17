@@ -37,7 +37,7 @@ Ext.define('Koala.view.window.RoutingController', {
         var me = this;
         var view = me.getView();
 
-        var layer = view.layer;
+        var layer = view.routeLayer;
         if (layer === null) {
             return;
         }
@@ -65,22 +65,38 @@ Ext.define('Koala.view.window.RoutingController', {
     createRoutingLayers: function() {
         var me = this;
         var view = me.getView();
+
+        if (view.routeLayer === null) {
+            me.createLayer('routeStyle', view.routeLayer);
+        }
+
+        if (view.layer == null) {
+
+    },
+
+    /**
+     * Creates a new layer and overwrites the applied viewLayer.
+     *
+     * Gets the style from the viewModel by name.
+     *
+     * @param {String} styleName The name of the style object in the viewModel
+     * @param {ol.layer.Layer} viewLayer The viewLayer that should be overwritten
+     */
+    createLayer: function(styleName, viewLayer) {
+        var me = this;
+        var view = me.getView();
         var vm = view.lookupViewModel();
 
         var map = view.map;
 
-        if (view.layer == null) {
+        var source = new ol.source.Vector();
+        var layer = new ol.layer.Vector({
+            source: source,
+            style: vm.get(styleName),
+            map: map
+        });
 
-            var source = new ol.source.Vector();
-            var layer = new ol.layer.Vector({
-                source: source,
-                style: vm.routeStyle,
-                map: map
-            });
-
-            view.layer = layer;
-        }
-
+        viewLayer = layer;
     },
 
     /**
@@ -90,9 +106,9 @@ Ext.define('Koala.view.window.RoutingController', {
         var me = this;
         var view = me.getView();
         debugger;
-        if (view.layer !== null) {
-            view.layer.setMap(null);
-            view.layer = null;
+        if (view.routeLayer !== null) {
+            view.routeLayer.setMap(null);
+            view.routeLayer = null;
         }
     }
 

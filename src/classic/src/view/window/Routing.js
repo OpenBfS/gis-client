@@ -30,7 +30,7 @@ Ext.define('Koala.view.window.Routing', {
         type: 'k-window-routing'
     },
 
-    layer: null,
+    routeLayer: null,
 
     map: null,
 
@@ -87,6 +87,20 @@ Ext.define('Koala.view.window.Routing', {
     constructor: function() {
         var me = this;
         this.callParent(arguments);
+
+        var staticMe = Koala.util.AppContext;
+        var ctx = staticMe.getAppContext();
+        var routingOpts = staticMe.getMergedDataByKey('routing', ctx);
+
+        if (routingOpts.routeStyle) {
+            var routeStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: routingOpts.routeStyle.color,
+                    width: routingOpts.routeStyle.width
+                })
+            });
+            me.lookupViewModel().set('routeStyle', routeStyle);
+        }
 
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();

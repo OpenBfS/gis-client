@@ -224,7 +224,13 @@
             ],
             "drawLayerName": "Zeichnungen",
             "redLineLayerName": "Messungen",
-            "rodosFolderName": "RODOS-Prognosen"
+            "rodosFolderName": "RODOS-Prognosen",
+            "routing": {
+                "routeStyle": {
+                    "color": "#ff0000",
+                    "stroke": 3
+                }
+            }
         }
     },
     "success": true,
