@@ -107,6 +107,8 @@ Ext.define('Koala.view.window.Routing', {
         }
 
         // var appContext = BasiGX.view.component.Map.guess().appContext;
+
+        // TODO remove this code snippet. This exists just for dev purposes
         Ext.Ajax.request({
             url: '/ors/ors.json',
 
