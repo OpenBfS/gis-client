@@ -737,6 +737,7 @@ Ext.define('Koala.util.Filter', {
                 // Inside this validation method we handle all dates as UTC.
                 var momentDate = date.clone().utc();
                 var realDate = momentDate;
+                realDate = realDate.startOf('minute');
 
                 if (realDate.isBetween(minClone, maxClone, null, '[]')) {
                     return true;
