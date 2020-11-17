@@ -70,8 +70,6 @@ Ext.define('Koala.view.window.RoutingController', {
             me.createLayer('routeStyle', view.routeLayer);
         }
 
-        if (view.layer == null) {
-
     },
 
     /**
