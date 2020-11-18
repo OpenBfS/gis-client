@@ -32,9 +32,9 @@ Ext.define('Koala.view.window.Routing', {
         type: 'k-window-routing'
     },
 
-    waypointLayer: null,
+    waypointLayerName: 'routing-waypoint-layer',
 
-    routeLayer: null,
+    routeLayerName: 'routing-route-layer',
 
     map: null,
 
@@ -151,10 +151,12 @@ Ext.define('Koala.view.window.Routing', {
                     font: 'normal ' + routingOpts.waypointStyle.markerSize + 'px FontAwesome',
                     fill: new ol.style.Fill({
                         color: routingOpts.waypointStyle.color
-                    })
+                    }),
+                    textBaseline: 'bottom'
                 })
             });
             vm.set('waypointStyle', waypointStyle);
+            vm.set('waypointFontSize', routingOpts.waypointStyle.markerSize);
         }
 
         if (!me.map) {

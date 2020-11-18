@@ -30,6 +30,8 @@ Ext.define('Koala.view.window.RoutingModel', {
         },
         routeStyle: undefined,
         waypointStyle: undefined,
+        waypointFontSize: undefined,
+        waypointPopup: null,
         startValue: undefined,
         targetValue: undefined
     }

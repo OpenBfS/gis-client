@@ -19,6 +19,59 @@
 Ext.define('Koala.view.window.RoutingController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-routing',
+    requires: [
+        'GeoExt.component.Popup'
+    ],
+
+    /**
+     * Gets a layer by its name.
+     * @param {String} layerName The name of the layer to get.
+     * @returns {ol.layer.Layer} The layer if found. Null otherwise.
+     */
+    getLayerByName: function(layerName) {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+
+        if (!map) {
+            return;
+        }
+
+        var layers = map.getLayers().getArray();
+        return Ext.Array.findBy(layers, function(l) {
+            return l.get('name') === layerName;
+        });
+    },
+
+    /**
+     * Gets the RouteLayer.
+     * @returns {ol.layer.Vector} The RouteLayer.
+     */
+    getRouteLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.routeLayerName) {
+            return;
+        }
+
+        return me.getLayerByName(view.routeLayerName);
+    },
+
+    /**
+     * Gets the WaypointLayer.
+     * @returns {ol.layer.Vector} The WaypointLayer.
+     */
+    getWaypointLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.waypointLayerName) {
+            return;
+        }
+
+        return me.getLayerByName(view.waypointLayerName);
+    },
 
     /**
      * Handler for visualising the routing results.
@@ -42,8 +95,8 @@ Ext.define('Koala.view.window.RoutingController', {
         var me = this;
         var view = me.getView();
 
-        var layer = view.routeLayer;
-        if (layer === null) {
+        var layer = me.getRouteLayer();
+        if (!layer) {
             return;
         }
 
@@ -60,10 +113,9 @@ Ext.define('Koala.view.window.RoutingController', {
      */
     addWayPointToMap: function(feature) {
         var me = this;
-        var view = me.getView();
 
-        var layer = view.waypointLayer;
-        if (layer === null) {
+        var layer = me.getWaypointLayer();
+        if (!layer) {
             return;
         }
 
@@ -72,18 +124,113 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
+     * Handler for clicking on a waypoint.
+     */
+    onWaypointClick: function(evt) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        if (!view.map) {
+            return;
+        }
+
+        var popup = vm.get('waypointPopup');
+
+        var waypointLayerListed = false;
+        view.map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+            if (layer === null) {
+                return;
+            }
+
+            if (layer.get('name') !== view.waypointLayerName) {
+                return;
+            }
+
+            waypointLayerListed = true;
+
+            if (!popup) {
+                return;
+            }
+
+            var coordinate = feature.getGeometry().getCoordinates();
+            var content = me.getWaypointPopupContent(feature.get('description'));
+            popup.setHtml(content);
+            popup.position(coordinate);
+            popup.show();
+        });
+        if (!waypointLayerListed && popup) {
+            popup.hide();
+        }
+    },
+
+    /**
+     * Gets the content for the waypoint popup.
+     * This makes sure that the boilerplate for the popup
+     * will always be set up properly.
+     *
+     * TODO should this function be moved to the viewmodel?
+     *
+     * @param {String} content The content of the tooltip.
+     * @returns {String} The HTML String for the popup.
+     */
+    getWaypointPopupContent: function(content) {
+        var popupTooltip = '<div class="popup-tip-container">' +
+            '<div class="popup-tip"></div></div>';
+        var popupContent = '<p><strong>' + content + '</strong></p>';
+        return popupContent + popupTooltip;
+    },
+
+    /**
+     * Creates the WaypointPopup.
+     * @returns {GeoExt.component.Popup} The created waypointPopup.
+     */
+    createWaypointPopup: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var popup = Ext.create('GeoExt.component.Popup', {
+            map: view.map,
+            width: 140
+        });
+
+        var overlay = popup.getOverlay();
+        // set the overlay above the marker
+        // a negative value shifts the overlay upwards
+        var offsetY = vm.get('waypointFontSize') * (-1);
+        overlay.setOffset([0, offsetY]);
+
+        return popup;
+    },
+
+    /**
      * Create all instances that need to be created, as soon as
      * the Routing window will be opened.
      */
     onBoxReady: function() {
         var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
 
         me.createRoutingLayers();
 
+        if (vm.get('waypointPopup') === null) {
+            vm.set('waypointPopup', me.createWaypointPopup());
+        }
+
         // TODO remove this. Just used for dev
-        me.getView().fireEvent('onWaypointAdded', new ol.Feature({
+        var feature = new ol.Feature({
             geometry: new ol.geom.Point(ol.proj.fromLonLat([8.63, 49.40]))
-        }));
+        });
+        feature.set('description', 'Point 1 description with some long text');
+        me.getView().fireEvent('onWaypointAdded', feature);
+
+        var feature2 = new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([8.68, 49.41]))
+        });
+        feature2.set('description', 'Point 2');
+        me.getView().fireEvent('onWaypointAdded', feature2);
     },
 
     /**
@@ -93,11 +240,15 @@ Ext.define('Koala.view.window.RoutingController', {
         var me = this;
         var view = me.getView();
 
-        if (view.routeLayer === null) {
-            me.createLayer('routeStyle', 'routeLayer');
+        if (!me.getRouteLayer()) {
+            me.createLayer('routeStyle', view.routeLayerName);
         }
-        if (view.waypointLayer === null) {
-            me.createLayer('waypointStyle', 'waypointLayer');
+        if (!me.getWaypointLayer()) {
+            me.createLayer('waypointStyle', view.waypointLayerName);
+
+            if (view.map !== null) {
+                view.map.on('singleclick', me.onWaypointClick, me);
+            }
         }
     },
 
@@ -154,22 +305,28 @@ Ext.define('Koala.view.window.RoutingController', {
      *
      * @param {String} styleName The name of the style object in the viewModel.
      * @param {String} viewLayerName The name of the viewLayer that should be overwritten.
+     * @returns {ol.layer.Vector} The created vector layer.
      */
-    createLayer: function(styleName, viewLayerName) {
+    createLayer: function(styleName, layerName) {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
 
         var map = view.map;
+        var displayInLayerSwitcherKey =
+            BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
 
         var source = new ol.source.Vector();
         var layer = new ol.layer.Vector({
             source: source,
-            style: vm.get(styleName),
-            map: map
+            style: vm.get(styleName)
         });
+        layer.set(displayInLayerSwitcherKey, false);
+        layer.set('name', layerName);
 
-        view[viewLayerName] = layer;
+        map.addLayer(layer);
+
+        return layer;
     },
 
     /**
@@ -178,14 +335,24 @@ Ext.define('Koala.view.window.RoutingController', {
     onWindowClose: function() {
         var me = this;
         var view = me.getView();
+        var vm = view.lookupViewModel();
 
-        if (view.routeLayer !== null) {
-            view.routeLayer.setMap(null);
-            view.routeLayer = null;
+        var routeLayer = me.getRouteLayer();
+        if (routeLayer) {
+            view.map.removeLayer(routeLayer);
         }
-        if (view.waypointLayer !== null) {
-            view.waypointLayer.setMap(null);
-            view.waypointLayer = null;
+        var waypointLayer = me.getWaypointLayer();
+        if (waypointLayer) {
+            view.map.removeLayer(waypointLayer);
+        }
+        if (view.map !== null) {
+            view.map.un('singleclick', me.onWaypointClick, me);
+        }
+
+        if (vm.get('waypointPopup') !== null) {
+            var overlay = vm.waypointPopup.getOverlay();
+            view.map.removeOverlay(overlay);
+            vm.set('waypointPopup', null);
         }
     },
 
