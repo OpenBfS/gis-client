@@ -20,28 +20,9 @@ Ext.define('Koala.view.window.RoutingController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-window-routing',
     requires: [
-        'GeoExt.component.Popup'
+        'GeoExt.component.Popup',
+        'BasiGX.util.Layer'
     ],
-
-    /**
-     * Gets a layer by its name.
-     * @param {String} layerName The name of the layer to get.
-     * @returns {ol.layer.Layer} The layer if found. Null otherwise.
-     */
-    getLayerByName: function(layerName) {
-        var me = this;
-        var view = me.getView();
-        var map = view.map;
-
-        if (!map) {
-            return;
-        }
-
-        var layers = map.getLayers().getArray();
-        return Ext.Array.findBy(layers, function(l) {
-            return l.get('name') === layerName;
-        });
-    },
 
     /**
      * Gets the RouteLayer.
@@ -55,7 +36,7 @@ Ext.define('Koala.view.window.RoutingController', {
             return;
         }
 
-        return me.getLayerByName(view.routeLayerName);
+        return BasiGX.util.Layer.getLayerByName(view.routeLayerName);
     },
 
     /**
@@ -70,7 +51,7 @@ Ext.define('Koala.view.window.RoutingController', {
             return;
         }
 
-        return me.getLayerByName(view.waypointLayerName);
+        return BasiGX.util.Layer.getLayerByName(view.waypointLayerName);
     },
 
     /**
@@ -125,6 +106,7 @@ Ext.define('Koala.view.window.RoutingController', {
 
     /**
      * Handler for clicking on a waypoint.
+     * @param {ol.MapBrowserEvent} evt The clickevent on the map.
      */
     onWaypointClick: function(evt) {
         var me = this;
@@ -137,6 +119,8 @@ Ext.define('Koala.view.window.RoutingController', {
 
         var popup = vm.get('waypointPopup');
 
+        // True, if a feature of the waypointlayer was clicked.
+        // If false, we will hide the popup.
         var waypointLayerListed = false;
         view.map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
             if (layer === null) {
