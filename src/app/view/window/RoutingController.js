@@ -350,7 +350,7 @@ Ext.define('Koala.view.window.RoutingController', {
         }
 
         if (vm.get('waypointPopup') !== null) {
-            var overlay = vm.waypointPopup.getOverlay();
+            var overlay = vm.get('waypointPopup').getOverlay();
             view.map.removeOverlay(overlay);
             vm.set('waypointPopup', null);
         }
