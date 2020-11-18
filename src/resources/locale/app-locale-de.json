@@ -867,7 +867,8 @@
                     "computeRouteButtonText": "Route Berechnen",
                     "addStartPoint": "Startpunkt setzen",
                     "addViaPoint": "Wegpunkt setzen",
-                    "addEndPoint": "Zielpunkt setzen"
+                    "addEndPoint": "Zielpunkt setzen",
+                    "elevationBtnText": "Höhenprofil"
                 }
             }
         }

@@ -24,7 +24,8 @@ Ext.define('Koala.view.window.Routing', {
         'Koala.util.Help',
         'BasiGX.view.component.Map',
         'Koala.view.window.RoutingModel',
-        'Koala.view.window.RoutingController'
+        'Koala.view.window.RoutingController',
+        'Koala.view.window.ElevationProfileWindow'
     ],
 
     controller: 'k-window-routing',
@@ -78,6 +79,18 @@ Ext.define('Koala.view.window.Routing', {
                     handler: 'makeRoutingRequest'
                 }
             ]
+        }
+    ],
+
+    fbar: [
+        {
+            xtype: 'button',
+            name: 'routing-elevation-trigger',
+            handler: 'onElevationBtnClick',
+            enableToggle: true,
+            bind: {
+                text: '{i18n.elevationBtnText}'
+            }
         }
     ],
 

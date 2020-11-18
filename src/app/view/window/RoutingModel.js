@@ -36,7 +36,8 @@ Ext.define('Koala.view.window.RoutingModel', {
             addViaPoint: '',
             addEndPoint: '',
             routingProfileFieldTitle: '',
-            computeRouteButtonText: ''
+            computeRouteButtonText: '',
+            elevationBtnText: ''
         },
         routingProfile: 'foot-walking',
         routeStyle: undefined,

@@ -863,7 +863,8 @@
                     "computeRouteButtonText": "Compute route",
                     "addStartPoint": "Set start",
                     "addViaPoint": "Set waypoint",
-                    "addEndPoint": "Set destination"
+                    "addEndPoint": "Set destination",
+                    "elevationBtnText": "Elevation Profile"
                 }
             }
         }

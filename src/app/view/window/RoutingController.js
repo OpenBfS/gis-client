@@ -454,6 +454,42 @@ Ext.define('Koala.view.window.RoutingController', {
         });
     },
 
+    /*
+     * Shows the elevation graph
+     */
+    showElevationGraph: function() {
+        // TOOD add NP checks
+        var elevationWindow = Ext.ComponentQuery.query('k-window-elevationprofilewindow[name=routing-elevationprofile-window]')[0];
+        if (!elevationWindow) {
+            return;
+        }
+
+        elevationWindow.show();
+    },
+
+    /**
+     * Hides the elevation graph
+     */
+    hideElevationGraph: function() {
+        // TOOD add NP checks
+        var elevationWindow = Ext.ComponentQuery.query('k-window-elevationprofilewindow[name=routing-elevationprofile-window]')[0];
+        if (!elevationWindow) {
+            return;
+        }
+
+        elevationWindow.hide();
+    },
+
+    onElevationBtnClick: function(btn, evt) {
+        var me = this;
+
+        if (btn.pressed) {
+            me.showElevationGraph();
+        } else {
+            me.hideElevationGraph();
+        }
+    },
+
     /**
      * Handles data cleanup when the window is being closed.
      */
