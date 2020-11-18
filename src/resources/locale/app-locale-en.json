@@ -851,6 +851,19 @@
             }
         }
     },
+    "Koala.view.window.Routing": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Route Planning",
+                    "startFieldTitle": "Start",
+                    "targetFieldTitle": "End",
+                    "routingProfileFieldTitle": "Profile",
+                    "computeRouteButtonText": "Compute route"
+                }
+            }
+        }
+    },
     "Koala.view.window.StyleSelectWindow": {
         "config": {
             "data": {

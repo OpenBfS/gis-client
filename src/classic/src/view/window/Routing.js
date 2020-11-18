@@ -22,7 +22,9 @@ Ext.define('Koala.view.window.Routing', {
 
     requires: [
         'Koala.util.Help',
-        'BasiGX.view.component.Map'
+        'BasiGX.view.component.Map',
+        'Koala.view.window.RoutingModel',
+        'Koala.view.window.RoutingController'
     ],
 
     controller: 'k-window-routing',
@@ -37,13 +39,65 @@ Ext.define('Koala.view.window.Routing', {
     map: null,
 
     bind: {
-        title: '{title}'
+        title: '{i18n.title}'
     },
+
+    height: 300,
+    width: 400,
+
+    layout: 'fit',
 
     items: [
         {
-            xtype: 'panel',
-            html: 'Hallo Welt Hallo Welt Hallo Welt Hallo Welt'
+            xtype: 'form',
+            bodyPadding: 10,
+            items: [
+                {
+                    xtype: 'textfield',
+                    bind: {
+                        fieldLabel: '{i18n.startFieldTitle}',
+                        value: '{startValue}'
+                    },
+                    allowBlank: false
+                },
+                {
+                    xtype: 'textfield',
+                    bind: {
+                        fieldLabel: '{i18n.targetFieldTitle}',
+                        value: '{targetValue}'
+                    },
+                    allowBlank: false
+                },
+                // TODO: This is a temporary mockup.
+                // TODO: Replace later with store.
+                {
+                    xtype: 'combobox',
+                    bind: {
+                        fieldLabel: '{i18n.routingProfileFieldTitle}'
+                    },
+                    displayField: 'name',
+                    store: ['Auto', 'Fahrrad', 'Fußgänger']
+                }
+            ],
+            fbar: [
+                {
+                    type: 'button',
+                    text: 'Start setzen',
+                    handler: 'onStartButtonClick'
+                },
+                {
+                    type: 'button',
+                    text: 'Ziel setzen',
+                    handler: 'onTargetButtonClick'
+                },
+                {
+                    type: 'button',
+                    bind: {
+                        text: '{i18n.computeRouteButtonText}'
+                    },
+                    handler: 'makeRoutingRequest'
+                }
+            ]
         }
     ],
 
@@ -68,24 +122,6 @@ Ext.define('Koala.view.window.Routing', {
         boxReady: 'onBoxReady',
         close: 'onWindowClose'
     },
-
-    layout: 'fit',
-
-    // tools: [{
-    //     type: 'help',
-    //     bind: {
-    //         tooltip: '{helpTooltip}'
-    //     },
-    //     callback: function() {
-    //         Koala.util.Help.showHelpWindow('toolsPrint', 'tools');
-    //     }
-    // }],
-
-    // config: {
-    //     chartPrint: false,
-    //     chart: undefined,
-    //     irixPrint: false
-    // },
 
     constructor: function() {
         var me = this;
@@ -124,27 +160,5 @@ Ext.define('Koala.view.window.Routing', {
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
-
-        // var appContext = BasiGX.view.component.Map.guess().appContext;
-
-        // TODO remove this code snippet. This exists just for dev purposes
-        Ext.Ajax.request({
-            url: '/ors/ors.json',
-
-            success: function(response) {
-                var content = Ext.decode(response.responseText);
-                me.fireEvent('onRouteLoaded', content);
-            }
-        });
-
-        // var urls = appContext.data.merge.urls;
-        // this.add({
-        //     xtype: 'k-form-print',
-        //     maxHeight: Ext.getBody().getHeight() - 100,
-        //     url: urls['print-servlet'],
-        //     chartPrint: this.config.chartPrint,
-        //     chart: this.config.chart,
-        //     skipMapMode: this.config.irixPrint
-        // });
     }
 });

@@ -22,10 +22,16 @@ Ext.define('Koala.view.window.RoutingModel', {
 
     data: {
         i18n: {
-            title: 'Unser Test Titel'
+            title: '',
+            startFieldTitle: '',
+            targetFieldTitle: '',
+            routingProfileFieldTitle: '',
+            computeRouteButtonText: ''
         },
         routeStyle: undefined,
-        waypointStyle: undefined
+        waypointStyle: undefined,
+        startValue: undefined,
+        targetValue: undefined
     }
 
 });

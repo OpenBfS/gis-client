@@ -99,8 +99,53 @@ Ext.define('Koala.view.window.RoutingController', {
         if (view.waypointLayer === null) {
             me.createLayer('waypointStyle', 'waypointLayer');
         }
-
     },
+
+    /**
+     * Handler for finding the start location.
+     *
+     * TODO: Button is only temporary.
+     * TODO: Remove when not needed anymore.
+     */
+    onStartButtonClick: function() {
+        var me = this;
+        me.applyCoordianteAssignment('startValue');
+    },
+
+
+    /**
+     * Handler for finding the target location.
+     *
+     * TODO: Button is only temporary.
+     * TODO: Remove when not needed anymore.
+     */
+    onTargetButtonClick: function() {
+        var me = this;
+        me.applyCoordianteAssignment('targetValue');
+    },
+
+    /**
+     * Enables an one-time listener for a map click.
+     *
+     * Assigns the coordiantes to the property.
+     * @param {String} propName The Name of the start object in the viewModel.
+     */
+    applyCoordianteAssignment: function(propName) {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+        map.once('singleclick', function(event) {
+
+            var coordinate = event.coordinate;
+            var sourceProjection = map.getView().getProjection().getCode();
+            var targetProjection = ol.proj.get('EPSG:4326');
+            var transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
+
+            var vm = view.lookupViewModel();
+            vm.set(propName, transformed);
+        });
+    },
+
 
     /**
      * Creates a new layer and overwrites the applied viewLayer.
@@ -142,6 +187,25 @@ Ext.define('Koala.view.window.RoutingController', {
             view.waypointLayer.setMap(null);
             view.waypointLayer = null;
         }
+    },
+
+    /**
+     * Requests openrouteservice API.
+     *
+     * TODO: This is currently only a place holder.
+     * TODO: Remove later.
+     */
+    makeRoutingRequest: function() {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '/ors/ors.json',
+
+            success: function(response) {
+                var content = Ext.decode(response.responseText);
+                me.getView().fireEvent('onRouteLoaded', content);
+            }
+        });
     }
 
 });
