@@ -202,19 +202,6 @@ Ext.define('Koala.view.window.RoutingController', {
         if (vm.get('waypointPopup') === null) {
             vm.set('waypointPopup', me.createWaypointPopup());
         }
-
-        // TODO remove this. Just used for dev
-        var feature = new ol.Feature({
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([8.63, 49.40]))
-        });
-        feature.set('description', 'Point 1 description with some long text');
-        me.getView().fireEvent('onWaypointAdded', feature);
-
-        var feature2 = new ol.Feature({
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([8.68, 49.41]))
-        });
-        feature2.set('description', 'Point 2');
-        me.getView().fireEvent('onWaypointAdded', feature2);
     },
 
     /**
@@ -278,6 +265,13 @@ Ext.define('Koala.view.window.RoutingController', {
 
             var vm = view.lookupViewModel();
             vm.set(propName, transformed);
+
+            var waypoint = new ol.Feature({
+                geometry: new ol.geom.Point(coordinate)
+            });
+            // TODO set description to geolocation string
+            waypoint.set('description', 'Point 1 description with some long text');
+            view.fireEvent('onWaypointAdded', waypoint);
         });
     },
 
