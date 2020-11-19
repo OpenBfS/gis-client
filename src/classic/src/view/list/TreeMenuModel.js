@@ -73,12 +73,6 @@ Ext.define('Koala.view.list.TreeMenuModel', {
             root: {
                 expanded: true,
                 children: [{
-                    text: '{routing}',
-                    key: 'routing',
-                    leaf: true,
-                    iconCls: 'x-fa fa-bars',
-                    rowCls: 'menu-button'
-                }, {
                     text: '{menu}',
                     key: 'menu',
                     leaf: true,
@@ -141,6 +135,12 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         iconCls: 'x-fa fa-crop',
                         rowCls: '{showSelectFeaturesBtn ? "" : "hidden"}{selectFeaturesActive ? "active" : ""}'
                     }]
+                }, {
+                    text: '{routing}',
+                    key: 'routing',
+                    leaf: true,
+                    iconCls: 'x-fa fa-location-arrow',
+                    rowCls: 'menu-button'
                 }, {
                     text: '{share}',
                     iconCls: 'x-fa fa-share-alt',
