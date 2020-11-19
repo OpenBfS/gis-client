@@ -33,7 +33,8 @@ Ext.define('Koala.view.window.RoutingModel', {
         waypointFontSize: undefined,
         waypointPopup: null,
         startValue: undefined,
-        targetValue: undefined
+        targetValue: undefined,
+        routingProfile: 'foot-walking'
     }
 
 });

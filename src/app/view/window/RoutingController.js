@@ -336,21 +336,60 @@ Ext.define('Koala.view.window.RoutingController', {
 
     /**
      * Requests openrouteservice API.
-     *
-     * TODO: This is currently only a place holder.
-     * TODO: Remove later.
      */
     makeRoutingRequest: function() {
+
         var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
 
-        Ext.Ajax.request({
-            url: '/ors/ors.json',
+        var start = vm.get('startValue');
+        var end = vm.get('targetValue');
 
-            success: function(response) {
-                var content = Ext.decode(response.responseText);
-                me.getView().fireEvent('onRouteLoaded', content);
-            }
+        // TODO: replace with custom instance
+        var Directions = new Openrouteservice.Directions({
+            api_key: '5b3ce3597851110001cf624852581e9bffb2450b8472eccc933bae17'
         });
-    }
 
+        // TODO: only for dev, remove later
+        if (!start | !end) {
+            start =[8.6816, 49.4067];
+            vm.set('startValue',start);
+
+            end = [8.7296, 49.4019];
+            vm.set('targetValue',end);
+        }
+
+        // same properties as on https://maps.openrouteservice.org/
+        Directions.calculate(
+            {
+                coordinates: [start, end],
+                profile: vm.get('routingProfile'),
+                format: 'geojson',
+                instructions: true,
+                geometry: true,
+                elevation: true,
+                preference: 'recommended',
+                language: 'en-US',
+                units: 'm',
+                attributes: [
+                    'detourfactor',
+                    'percentage'
+                ],
+                instructions_format: 'html',
+                extra_info: [
+                    'steepness',
+                    'waytype',
+                    'surface'
+                ]
+            }
+        )
+            .then(function(json) {
+                me.getView().fireEvent('onRouteLoaded', json);
+            })
+            .catch(function(err) {
+                var str = 'An error occured: ' + err;
+                Ext.Logger(str);
+            });
+    }
 });
