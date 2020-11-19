@@ -231,7 +231,7 @@ Ext.define('Koala.view.window.RoutingController', {
      */
     onStartButtonClick: function() {
         var me = this;
-        me.applyCoordianteAssignment('startValue');
+        me.applyCoordinateAssignment('startValue');
     },
 
 
@@ -243,7 +243,7 @@ Ext.define('Koala.view.window.RoutingController', {
      */
     onTargetButtonClick: function() {
         var me = this;
-        me.applyCoordianteAssignment('targetValue');
+        me.applyCoordinateAssignment('targetValue');
     },
 
     /**
@@ -252,7 +252,7 @@ Ext.define('Koala.view.window.RoutingController', {
      * Assigns the coordiantes to the property.
      * @param {String} propName The Name of the start object in the viewModel.
      */
-    applyCoordianteAssignment: function(propName) {
+    applyCoordinateAssignment: function(propName) {
         var me = this;
         var view = me.getView();
         var map = view.map;
