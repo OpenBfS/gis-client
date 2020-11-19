@@ -1099,13 +1099,18 @@ Ext.define('Koala.view.form.Print', {
                 var button = field.nextSibling();
                 var layer = button.getLayer();
                 var selection = button.window.down('grid').getSelection();
+                var allColumns = false;
+                if (selection.length === 0) {
+                    selection = button.window.down('grid').getStore().getData().items;
+                    allColumns = true;
+                }
                 selection = selection.map(function(item) {
                     return item.getData();
                 });
                 var columns = button.window.down('grid').getColumns();
                 var visibleColumns = [];
                 Ext.each(columns, function(column) {
-                    if (column.isVisible()) {
+                    if (column.isVisible() || allColumns) {
                         visibleColumns.push(column.config.text);
                     }
                 });
