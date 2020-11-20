@@ -1100,6 +1100,7 @@ Ext.define('Koala.view.form.Print', {
                 var layer = button.getLayer();
                 var selection = button.window.down('grid').getSelection();
                 var allColumns = false;
+                // use all features if none are selected (happens sometimes if grid hasn't been shown)
                 if (selection.length === 0) {
                     selection = button.window.down('grid').getStore().getData().items;
                     allColumns = true;
@@ -1114,6 +1115,12 @@ Ext.define('Koala.view.form.Print', {
                         visibleColumns.push(column.config.text);
                     }
                 });
+                // use all columns if none are visible (happens sometimes if grid hasn't been shown)
+                if (visibleColumns.length === 0) {
+                    Ext.each(columns, function(column) {
+                        visibleColumns.push(column.config.text);
+                    });
+                }
                 Ext.each(selection, function(item) {
                     delete item.id;
                     Ext.iterate(item, function(key) {
