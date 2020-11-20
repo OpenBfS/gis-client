@@ -1032,10 +1032,18 @@ Ext.define('Koala.util.Filter', {
                     );
                 }
             }
+            if (defaultMaxValue.seconds() !== 0) {
+                defaultMaxValue = defaultMaxValue.startOf('minute');
+                defaultMaxValue = defaultMaxValue.add(1, 'minute');
+            }
 
             if (!filter.defaultstarttimeinstant) {
                 var duration = moment.duration(filter.maxduration);
                 defaultMinValue = defaultMaxValue.clone().subtract(duration);
+            }
+            if (defaultMinValue.seconds() !== 0) {
+                defaultMinValue = defaultMinValue.startOf('minute');
+                defaultMinValue = defaultMinValue.add(1, 'minute');
             }
 
             var startValue = filter.effectivemindatetime || defaultMinValue;
