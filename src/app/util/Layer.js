@@ -1751,20 +1751,6 @@ Ext.define('Koala.util.Layer', {
          *
          */
         applyDefaultsTimerangeFilter: function(filter) {
-            if (!moment.isMoment(filter.effectivemindatetime)) {
-                if (filter.defaultstarttimeinstant) {
-                    try {
-                        filter.effectivemindatetime = Koala.util.Date
-                            .getUtcMoment(filter.defaultstarttimeinstant);
-                    } catch (e) {
-                        Ext.log.error('Could not set default timerange filter');
-                    }
-                } else {
-                    Ext.log.warn('No defined start value for timerange filter' +
-                        ' and no configured default start value for timerange' +
-                        ' filter');
-                }
-            }
             if (!moment.isMoment(filter.effectivemaxdatetime)) {
                 if (filter.defaultendtimeinstant) {
                     try {
@@ -1777,6 +1763,19 @@ Ext.define('Koala.util.Layer', {
                     Ext.log.warn('No defined end value for timerange filter' +
                         ' and no configured default end value for timerange' +
                         ' filter');
+                }
+            }
+            if (!moment.isMoment(filter.effectivemindatetime)) {
+                if (filter.defaultstarttimeinstant) {
+                    try {
+                        filter.effectivemindatetime = Koala.util.Date
+                            .getUtcMoment(filter.defaultstarttimeinstant);
+                    } catch (e) {
+                        Ext.log.error('Could not set default timerange filter');
+                    }
+                } else {
+                    var duration = moment.duration(filter.maxduration);
+                    filter.effectivemindatetime = filter.effectivemaxdatetime.clone().subtract(duration);
                 }
             }
             return filter;
@@ -1871,7 +1870,7 @@ Ext.define('Koala.util.Layer', {
             var end = filter.effectivemaxdatetime;
             if (!start) {
                 var duration = moment.duration(filter.maxduration);
-                start = end.subtract(duration);
+                start = end.clone().subtract(duration);
             }
             var val = start.toISOString() + '/' + end.toISOString();
             olProps[wmstKey] = val;
