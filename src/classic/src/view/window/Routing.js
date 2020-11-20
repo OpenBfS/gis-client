@@ -43,7 +43,7 @@ Ext.define('Koala.view.window.Routing', {
     },
 
     height: 300,
-    width: 400,
+    width: 500,
 
     layout: 'fit',
 
@@ -55,17 +55,17 @@ Ext.define('Koala.view.window.Routing', {
                 {
                     xtype: 'textfield',
                     bind: {
-                        fieldLabel: '{i18n.startFieldTitle}',
-                        value: '{startValue}'
+                        fieldLabel: '{i18n.startFieldTitle}'
                     },
+                    name: 'startField',
                     allowBlank: false
                 },
                 {
                     xtype: 'textfield',
                     bind: {
-                        fieldLabel: '{i18n.targetFieldTitle}',
-                        value: '{targetValue}'
+                        fieldLabel: '{i18n.targetFieldTitle}'
                     },
+                    name: 'targetField',
                     allowBlank: false
                 },
                 // TODO: This is a temporary mockup.
@@ -84,6 +84,11 @@ Ext.define('Koala.view.window.Routing', {
                     type: 'button',
                     text: 'Start setzen',
                     handler: 'onStartButtonClick'
+                },
+                {
+                    type: 'button',
+                    text: 'Wegpunkt setzen',
+                    handler: 'onWaypointButtonClick'
                 },
                 {
                     type: 'button',
@@ -120,7 +125,9 @@ Ext.define('Koala.view.window.Routing', {
         onRouteLoaded: 'onRouteLoaded',
         onWaypointAdded: 'onWaypointAdded',
         boxReady: 'onBoxReady',
-        close: 'onWindowClose'
+        close: 'onWindowClose',
+        setFormEntries: 'setFormEntries',
+        makeRoutingRequest: 'makeRoutingRequest'
     },
 
     constructor: function() {
@@ -158,6 +165,25 @@ Ext.define('Koala.view.window.Routing', {
             vm.set('waypointStyle', waypointStyle);
             vm.set('waypointFontSize', routingOpts.waypointStyle.markerSize);
         }
+
+        var wayPointStore = vm.get('waypoints');
+        wayPointStore.on('datachanged',
+            function() {
+                me.fireEvent('setFormEntries');
+
+                // trigger routing
+                var count = wayPointStore.count();
+                if (count >= 2) {
+                    me.fireEvent('makeRoutingRequest');
+                }
+            }
+        );
+
+        // Placeholder for start and end point
+        // set two initial values
+        // TODO: evaluate better solution
+        wayPointStore.add({ address: '', latitude: 49.239, longitude: 5.09765 });
+        wayPointStore.add({ address: '', latitude: 48.9946, longitude: 14.98 });
 
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();

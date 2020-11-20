@@ -231,7 +231,18 @@ Ext.define('Koala.view.window.RoutingController', {
      */
     onStartButtonClick: function() {
         var me = this;
-        me.applyCoordinateAssignment('startValue');
+        me.applyCoordinateAssignment('start');
+    },
+
+    /**
+     * Handler for finding the waypoint location.
+     *
+     * TODO: Button is only temporary.
+     * TODO: Remove when not needed anymore.
+     */
+    onWaypointButtonClick: function() {
+        var me = this;
+        me.applyCoordinateAssignment('middleWayPoint');
     },
 
 
@@ -243,19 +254,23 @@ Ext.define('Koala.view.window.RoutingController', {
      */
     onTargetButtonClick: function() {
         var me = this;
-        me.applyCoordinateAssignment('targetValue');
+        me.applyCoordinateAssignment('target');
     },
 
     /**
      * Enables an one-time listener for a map click.
      *
-     * Assigns the coordiantes to the property.
-     * @param {String} propName The Name of the start object in the viewModel.
+     * Creates new waypoint record and inserts it to store.
+     * @param {String} wayPointType The type of the waypoint.
      */
-    applyCoordinateAssignment: function(propName) {
+    applyCoordinateAssignment: function(wayPointType) {
         var me = this;
         var view = me.getView();
         var map = view.map;
+        var vm = view.lookupViewModel();
+
+        var wayPointStore = vm.get('waypoints');
+
         map.once('singleclick', function(event) {
 
             var coordinate = event.coordinate;
@@ -263,15 +278,30 @@ Ext.define('Koala.view.window.RoutingController', {
             var targetProjection = ol.proj.get('EPSG:4326');
             var transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
 
-            var vm = view.lookupViewModel();
-            vm.set(propName, transformed);
+            var latitude = transformed[1];
+            var longitude = transformed[0];
 
-            var waypoint = new ol.Feature({
-                geometry: new ol.geom.Point(coordinate)
-            });
-            // TODO set description to geolocation string
-            waypoint.set('description', 'Point 1 description with some long text');
-            view.fireEvent('onWaypointAdded', waypoint);
+            // TODO: still dummy data
+            var newWayPointJson = { address: 'dummy', latitude: latitude, longitude: longitude };
+
+            if (wayPointType === 'start') {
+                // TODO handle if store is initially empty
+                wayPointStore.removeAt(0);
+                wayPointStore.insert(0, newWayPointJson);
+            }
+
+            var count = wayPointStore.count();
+
+            if (wayPointType === 'middleWayPoint') {
+                // set at the position before target
+                wayPointStore.insert(count - 1, newWayPointJson);
+            }
+
+            if (wayPointType === 'target') {
+                // TODO handle if store is initially empty
+                wayPointStore.removeAt(count - 1);
+                wayPointStore.add(newWayPointJson);
+            }
         });
     },
 
@@ -307,6 +337,82 @@ Ext.define('Koala.view.window.RoutingController', {
         return layer;
     },
 
+
+    /**
+     * Updates the values in the user interface
+     */
+    setFormEntries: function() {
+
+        // TODO: only works with start and endpoint so far
+        // TODO: needs to be extended with waypoints in the middle
+
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var wayPointStore = vm.get('waypoints');
+
+        var count = wayPointStore.count();
+
+        if (count === 0) {
+            return;
+        }
+
+        // set start value
+        var recStart = wayPointStore.getAt(0);
+        var start = [recStart.get('longitude'), recStart.get('latitude')];
+
+        var startField = view.down(('textfield[name="startField"]'));
+        startField.setValue(start);
+
+        // only useful if there are at least 2 waypoints
+        if (count > 1) {
+            var recEnd = wayPointStore.getAt(count - 1);
+            var end = [recEnd.get('longitude'), recEnd.get('latitude')];
+
+            var targetField = view.down(('textfield[name="targetField"]'));
+            targetField.setValue(end);
+        }
+
+        me.updateWayPointLayer();
+    },
+
+    /**
+     * Redraws the waypoint layer
+     */
+    updateWayPointLayer: function() {
+
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+        var map = view.map;
+        var wayPointStore = vm.get('waypoints');
+
+        // make waypoint layer empty
+        var layer = me.getWaypointLayer();
+        if (!layer){
+            return;
+        }
+        layer.getSource().clear();
+
+        // loop trought waypoints and recreate map icons
+        wayPointStore.each(function(rec) {
+            var coordinate = [rec.get('longitude'), rec.get('latitude')];
+
+            // transform to map projection
+            var sourceProjection = ol.proj.get('EPSG:4326');
+            var targetProjection = map.getView().getProjection().getCode();
+            var transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
+
+            var waypoint = new ol.Feature({
+                geometry: new ol.geom.Point(transformed),
+                description: rec.get('address')
+            });
+
+            view.fireEvent('onWaypointAdded', waypoint);
+        });
+    },
+
     /**
      * Handles data cleanup when the window is being closed.
      */
@@ -332,6 +438,11 @@ Ext.define('Koala.view.window.RoutingController', {
             view.map.removeOverlay(overlay);
             vm.set('waypointPopup', null);
         }
+
+        if (vm.get('waypoints') !== null) {
+            var wayPointStore = vm.get('waypoints');
+            wayPointStore.removeAll();
+        }
     },
 
     /**
@@ -343,27 +454,22 @@ Ext.define('Koala.view.window.RoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var start = vm.get('startValue');
-        var end = vm.get('targetValue');
-
         // TODO: replace with custom instance
         var Directions = new Openrouteservice.Directions({
             api_key: '5b3ce3597851110001cf624852581e9bffb2450b8472eccc933bae17'
         });
 
-        // TODO: only for dev, remove later
-        if (!start | !end) {
-            start =[8.6816, 49.4067];
-            vm.set('startValue',start);
-
-            end = [8.7296, 49.4019];
-            vm.set('targetValue',end);
-        }
+        // get coordinates array from store
+        var wayPointStore = vm.get('waypoints');
+        var waypoints = [];
+        wayPointStore.each(function(rec) {
+            waypoints.push([rec.get('longitude'), rec.get('latitude')]);
+        });
 
         // same properties as on https://maps.openrouteservice.org/
         Directions.calculate(
             {
-                coordinates: [start, end],
+                coordinates: waypoints,
                 profile: vm.get('routingProfile'),
                 format: 'geojson',
                 instructions: true,
@@ -388,8 +494,10 @@ Ext.define('Koala.view.window.RoutingController', {
                 me.getView().fireEvent('onRouteLoaded', json);
             })
             .catch(function(err) {
+                // TODO: proper error handling
                 var str = 'An error occured: ' + err;
                 Ext.Logger(str);
             });
     }
+
 });

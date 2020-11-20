@@ -14,30 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.RoutingModel
+ * @class Koala.store.WayPoints
  */
-Ext.define('Koala.view.window.RoutingModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-window-routing',
+Ext.define('Koala.store.WayPoints', {
+    extend: 'Ext.data.Store',
 
-    stores: {
-        waypoints: {
-            type: 'k-waypoints'
-        }
-    },
+    alias: 'store.k-waypoints',
 
-    data: {
-        i18n: {
-            title: '',
-            startFieldTitle: '',
-            targetFieldTitle: '',
-            routingProfileFieldTitle: '',
-            computeRouteButtonText: ''
-        },
-        routeStyle: undefined,
-        waypointStyle: undefined,
-        waypointFontSize: undefined,
-        waypointPopup: null,
-        routingProfile: 'foot-walking'
-    }
+    fields: [
+        {name: 'address', type: 'string'},
+        {name: 'latitude', type: 'float'},
+        {name: 'longitude', type: 'float'}
+    ]
 });
