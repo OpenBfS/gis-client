@@ -41,6 +41,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         anchor: '100%'
     },
     padding: 5,
+    autoScroll: true,
 
     ignoreFields: [
         'minutespinner',
