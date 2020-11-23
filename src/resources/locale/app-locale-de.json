@@ -861,9 +861,13 @@
                 "i18n": {
                     "title": "Routenplanung",
                     "startFieldTitle": "Start",
-                    "targetFieldTitle": "Ziel",
+                    "viaFieldTitle": "Via",
+                    "endFieldTitle": "Ziel",
                     "routingProfileFieldTitle": "Profil",
-                    "computeRouteButtonText": "Route Berechnen"
+                    "computeRouteButtonText": "Route Berechnen",
+                    "addStartPoint": "Startpunkt setzen",
+                    "addViaPoint": "Wegpunkt setzen",
+                    "addEndPoint": "Zielpunkt setzen"
                 }
             }
         }

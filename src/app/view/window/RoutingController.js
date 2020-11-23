@@ -25,6 +25,14 @@ Ext.define('Koala.view.window.RoutingController', {
     ],
 
     /**
+     * Reference to openContextMenu function
+     * with the controller's "this" in the scope.
+     * Necessary for properly removing the listener
+     * again.
+     */
+    boundOpenContextMenu: null,
+
+    /**
      * Gets the RouteLayer.
      * @returns {ol.layer.Vector} The RouteLayer.
      */
@@ -196,12 +204,119 @@ Ext.define('Koala.view.window.RoutingController', {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
+        var map = view.map;
 
         me.createRoutingLayers();
 
         if (vm.get('waypointPopup') === null) {
             vm.set('waypointPopup', me.createWaypointPopup());
         }
+
+        // context menu
+        var mapViewport = map.getViewport();
+        me.boundOpenContextMenu = me.openContextMenu.bind(me);
+        mapViewport.addEventListener('contextmenu', me.boundOpenContextMenu);
+    },
+
+    /**
+     * Opens a context menu when a right-click on the map
+     * is performed.
+     *
+     * @param {event} evt The event emitted by clicking on the map.
+     */
+    openContextMenu: function(evt) {
+
+        var me = this;
+
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+        var map = view.map;
+
+        var evtCoord = map.getEventCoordinate(evt);
+
+        // suppress default browser behaviour
+        evt.preventDefault();
+
+        // transform coordiante
+        var sourceProjection = map.getView().getProjection().getCode();
+        var targetProjection = ol.proj.get('EPSG:4326');
+        var transformed = ol.proj.transform(evtCoord, sourceProjection, targetProjection);
+
+        var latitude = transformed[1];
+        var longitude = transformed[0];
+
+        var mapContextMenu = Ext.create('Ext.menu.Menu', {
+            renderTo: Ext.getBody(),
+            items: [
+                {
+                    text: vm.get('i18n.addStartPoint'),
+                    handler: function() {
+                        me.storeRoutingPoint('start', latitude, longitude);
+                    }
+                },
+                {
+                    text: vm.get('i18n.addViaPoint'),
+                    handler: function() {
+                        me.storeRoutingPoint('via', latitude, longitude);
+                    }
+                },
+                {
+                    text: vm.get('i18n.addEndPoint'),
+                    handler: function() {
+                        me.storeRoutingPoint('end', latitude, longitude);
+                    }
+                }
+            ]
+        });
+        mapContextMenu.showAt(evt.x, evt.y);
+        vm.set('mapContextMenu', mapContextMenu);
+    },
+
+    /**
+     * Adds a new waypint to the store.
+     *
+     * @param {String} wayPointType The type of the waypoint.
+     * @param {number} latitude The latitude of the new waypoint.
+     * @param {number} longitude The longitude of the new waypoint.
+     */
+    storeRoutingPoint: function(wayPointType, latitude, longitude) {
+
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var newWayPointJson = {
+            address: '',
+            latitude: latitude,
+            longitude: longitude
+        };
+
+        var wayPointStore = vm.get('waypoints');
+
+        // TODO: convert insertions into ModelView formulas
+        if (wayPointType === 'start') {
+            // TODO handle if store is initially empty
+            wayPointStore.removeAt(0);
+            wayPointStore.insert(0, newWayPointJson);
+        }
+
+        var count = wayPointStore.count();
+
+        if (wayPointType === 'via') {
+            // set at the position before end
+            wayPointStore.insert(count - 1, newWayPointJson);
+        }
+
+        if (wayPointType === 'end') {
+            // TODO handle if store is initially empty
+            wayPointStore.removeAt(count - 1);
+            wayPointStore.add(newWayPointJson);
+        }
+
+        // destroy the menu so it can be re-created
+        // on next right click on the map
+        var mapContextMenu = vm.get('mapContextMenu');
+        mapContextMenu.destroy();
     },
 
     /**
@@ -222,89 +337,6 @@ Ext.define('Koala.view.window.RoutingController', {
             }
         }
     },
-
-    /**
-     * Handler for finding the start location.
-     *
-     * TODO: Button is only temporary.
-     * TODO: Remove when not needed anymore.
-     */
-    onStartButtonClick: function() {
-        var me = this;
-        me.applyCoordinateAssignment('start');
-    },
-
-    /**
-     * Handler for finding the waypoint location.
-     *
-     * TODO: Button is only temporary.
-     * TODO: Remove when not needed anymore.
-     */
-    onWaypointButtonClick: function() {
-        var me = this;
-        me.applyCoordinateAssignment('middleWayPoint');
-    },
-
-
-    /**
-     * Handler for finding the target location.
-     *
-     * TODO: Button is only temporary.
-     * TODO: Remove when not needed anymore.
-     */
-    onTargetButtonClick: function() {
-        var me = this;
-        me.applyCoordinateAssignment('target');
-    },
-
-    /**
-     * Enables an one-time listener for a map click.
-     *
-     * Creates new waypoint record and inserts it to store.
-     * @param {String} wayPointType The type of the waypoint.
-     */
-    applyCoordinateAssignment: function(wayPointType) {
-        var me = this;
-        var view = me.getView();
-        var map = view.map;
-        var vm = view.lookupViewModel();
-
-        var wayPointStore = vm.get('waypoints');
-
-        map.once('singleclick', function(event) {
-
-            var coordinate = event.coordinate;
-            var sourceProjection = map.getView().getProjection().getCode();
-            var targetProjection = ol.proj.get('EPSG:4326');
-            var transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
-
-            var latitude = transformed[1];
-            var longitude = transformed[0];
-
-            // TODO: still dummy data
-            var newWayPointJson = { address: 'dummy', latitude: latitude, longitude: longitude };
-
-            if (wayPointType === 'start') {
-                // TODO handle if store is initially empty
-                wayPointStore.removeAt(0);
-                wayPointStore.insert(0, newWayPointJson);
-            }
-
-            var count = wayPointStore.count();
-
-            if (wayPointType === 'middleWayPoint') {
-                // set at the position before target
-                wayPointStore.insert(count - 1, newWayPointJson);
-            }
-
-            if (wayPointType === 'target') {
-                // TODO handle if store is initially empty
-                wayPointStore.removeAt(count - 1);
-                wayPointStore.add(newWayPointJson);
-            }
-        });
-    },
-
 
     /**
      * Creates a new layer and overwrites the applied viewLayer.
@@ -337,9 +369,8 @@ Ext.define('Koala.view.window.RoutingController', {
         return layer;
     },
 
-
     /**
-     * Updates the values in the user interface
+     * Updates the values in the user interface.
      */
     setFormEntries: function() {
 
@@ -370,15 +401,15 @@ Ext.define('Koala.view.window.RoutingController', {
             var recEnd = wayPointStore.getAt(count - 1);
             var end = [recEnd.get('longitude'), recEnd.get('latitude')];
 
-            var targetField = view.down(('textfield[name="targetField"]'));
-            targetField.setValue(end);
+            var endField = view.down(('textfield[name="endField"]'));
+            endField.setValue(end);
         }
 
         me.updateWayPointLayer();
     },
 
     /**
-     * Redraws the waypoint layer
+     * Redraws the waypoint layer.
      */
     updateWayPointLayer: function() {
 
@@ -390,7 +421,7 @@ Ext.define('Koala.view.window.RoutingController', {
 
         // make waypoint layer empty
         var layer = me.getWaypointLayer();
-        if (!layer){
+        if (!layer) {
             return;
         }
         layer.getSource().clear();
@@ -442,6 +473,17 @@ Ext.define('Koala.view.window.RoutingController', {
         if (vm.get('waypoints') !== null) {
             var wayPointStore = vm.get('waypoints');
             wayPointStore.removeAll();
+        }
+
+        // remove context menu listener
+        var mapViewport = view.map.getViewport();
+        mapViewport.removeEventListener('contextmenu', me.boundOpenContextMenu);
+
+        // destroy context window
+        if (vm.get('mapContextMenu') !== null) {
+            var mapContextMenu = vm.get('mapContextMenu');
+            mapContextMenu.destroy();
+            vm.set('mapContextMenu', null);
         }
     },
 

@@ -30,14 +30,20 @@ Ext.define('Koala.view.window.RoutingModel', {
         i18n: {
             title: '',
             startFieldTitle: '',
-            targetFieldTitle: '',
+            viaFieldTitle: '',
+            endFieldTitle: '',
+            addStartPoint: '',
+            addViaPoint: '',
+            addEndPoint: '',
             routingProfileFieldTitle: '',
             computeRouteButtonText: ''
         },
+        routingProfile: 'foot-walking',
         routeStyle: undefined,
         waypointStyle: undefined,
         waypointFontSize: undefined,
-        waypointPopup: null,
-        routingProfile: 'foot-walking'
+        rightClickCoordinate: undefined,
+        mapContextMenu: null,
+        waypointPopup: null
     }
 });

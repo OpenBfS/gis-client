@@ -43,7 +43,7 @@ Ext.define('Koala.view.window.Routing', {
     },
 
     height: 300,
-    width: 500,
+    width: 300,
 
     layout: 'fit',
 
@@ -63,9 +63,9 @@ Ext.define('Koala.view.window.Routing', {
                 {
                     xtype: 'textfield',
                     bind: {
-                        fieldLabel: '{i18n.targetFieldTitle}'
+                        fieldLabel: '{i18n.endFieldTitle}'
                     },
-                    name: 'targetField',
+                    name: 'endField',
                     allowBlank: false
                 },
                 // TODO: This is a temporary mockup.
@@ -80,21 +80,6 @@ Ext.define('Koala.view.window.Routing', {
                 }
             ],
             fbar: [
-                {
-                    type: 'button',
-                    text: 'Start setzen',
-                    handler: 'onStartButtonClick'
-                },
-                {
-                    type: 'button',
-                    text: 'Wegpunkt setzen',
-                    handler: 'onWaypointButtonClick'
-                },
-                {
-                    type: 'button',
-                    text: 'Ziel setzen',
-                    handler: 'onTargetButtonClick'
-                },
                 {
                     type: 'button',
                     bind: {
@@ -188,5 +173,6 @@ Ext.define('Koala.view.window.Routing', {
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
+
     }
 });

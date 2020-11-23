@@ -857,9 +857,13 @@
                 "i18n": {
                     "title": "Route Planning",
                     "startFieldTitle": "Start",
-                    "targetFieldTitle": "End",
+                    "viaFieldTitle": "Via",
+                    "endFieldTitle": "End",
                     "routingProfileFieldTitle": "Profile",
-                    "computeRouteButtonText": "Compute route"
+                    "computeRouteButtonText": "Compute route",
+                    "addStartPoint": "Set start",
+                    "addViaPoint": "Set waypoint",
+                    "addEndPoint": "Set destination"
                 }
             }
         }
