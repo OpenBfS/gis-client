@@ -41,7 +41,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         anchor: '100%'
     },
     padding: 5,
-    autoScroll: true,
+    scrollable: 'true',
 
     ignoreFields: [
         'minutespinner',
@@ -81,6 +81,8 @@ Ext.define('Koala.view.form.LayerFilter', {
     initComponent: function() {
         var me = this;
         me.callParent();
+
+        me.maxHeight = Ext.getBody().getViewSize().height*0.9;
 
         var filters = me.getFilters();
 
