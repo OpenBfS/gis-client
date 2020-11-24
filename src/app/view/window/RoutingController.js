@@ -63,12 +63,28 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
+     * Gets the ElevationLayer.
+     * @returns {ol.layer.Vector} The WaypointLayer.
+     */
+    getElevationLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.elevationLayerName) {
+            return;
+        }
+
+        return BasiGX.util.Layer.getLayerByName(view.elevationLayerName);
+    },
+
+    /**
      * Handler for visualising the routing results.
      * @param {Object} geojson The routing GeoJSON.
      */
     onRouteLoaded: function(geojson) {
         var me = this;
         me.addRouteToMap(geojson);
+        me.updateElevationPanel();
     },
 
     onWaypointAdded: function(feature) {
@@ -334,6 +350,9 @@ Ext.define('Koala.view.window.RoutingController', {
                 view.map.on('singleclick', me.onWaypointClick, me);
             }
         }
+        if (!me.getElevationLayer()) {
+            me.createLayer('elevationStyle', view.elevationLayerName);
+        }
     },
 
     /**
@@ -457,36 +476,68 @@ Ext.define('Koala.view.window.RoutingController', {
     /*
      * Shows the elevation graph
      */
-    showElevationGraph: function() {
-        // TOOD add NP checks
-        var elevationWindow = Ext.ComponentQuery.query('k-window-elevationprofilewindow[name=routing-elevationprofile-window]')[0];
-        if (!elevationWindow) {
-            return;
+    showElevationPanel: function() {
+        var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
+        if (southContainer) {
+            southContainer.show();
         }
-
-        elevationWindow.show();
     },
 
     /**
      * Hides the elevation graph
      */
-    hideElevationGraph: function() {
-        // TOOD add NP checks
-        var elevationWindow = Ext.ComponentQuery.query('k-window-elevationprofilewindow[name=routing-elevationprofile-window]')[0];
-        if (!elevationWindow) {
-            return;
+    hideElevationPanel: function() {
+        var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
+        if (southContainer) {
+            southContainer.hide();
         }
+    },
 
-        elevationWindow.hide();
+    /**
+     * Destroys the elevation graph
+     */
+    destroyElevationPanel: function() {
+        var me = this;
+        var view = me.getView();
+
+        var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
+        if (southContainer) {
+            var elevationPanel = southContainer.down('[name=' + view.elevationProfilePanelName + ']');
+            if (elevationPanel) {
+                southContainer.remove(elevationPanel);
+                elevationPanel.destroy();
+            }
+            southContainer.hide();
+        }
     },
 
     onElevationBtnClick: function(btn, evt) {
         var me = this;
 
         if (btn.pressed) {
-            me.showElevationGraph();
+            me.showElevationPanel();
         } else {
-            me.hideElevationGraph();
+            me.hideElevationPanel();
+        }
+    },
+
+    /**
+     * Updates the elevation panel.
+     */
+    updateElevationPanel: function() {
+        var me = this;
+        var view = me.getView();
+
+        var elevationPanelName = view.elevationProfilePanelName;
+
+        var routeLayer = BasiGX.util.Layer.getLayerByName(view.routeLayerName);
+        if (!routeLayer) {
+            return;
+        }
+
+        var elevationPanel = Ext.ComponentQuery.query('[name=' + elevationPanelName + ']')[0];
+        if (elevationPanel) {
+            elevationPanel.setOlLayer(routeLayer);
         }
     },
 
@@ -531,6 +582,8 @@ Ext.define('Koala.view.window.RoutingController', {
             mapContextMenu.destroy();
             vm.set('mapContextMenu', null);
         }
+
+        me.destroyElevationPanel();
     },
 
     /**

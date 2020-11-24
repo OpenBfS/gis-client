@@ -25,7 +25,7 @@ Ext.define('Koala.view.window.Routing', {
         'BasiGX.view.component.Map',
         'Koala.view.window.RoutingModel',
         'Koala.view.window.RoutingController',
-        'Koala.view.window.ElevationProfileWindow'
+        'Koala.view.panel.ElevationProfile'
     ],
 
     controller: 'k-window-routing',
@@ -38,6 +38,12 @@ Ext.define('Koala.view.window.Routing', {
     routeLayerName: 'routing-route-layer',
 
     map: null,
+
+    /** The name of the elevationProfilePanel*/
+    elevationProfilePanelName: 'routing-elevationprofile-panel',
+
+    /** The name of the layer for elevation interaction */
+    elevationLayerName: 'routing-elevation-layer',
 
     bind: {
         title: '{i18n.title}'
@@ -72,6 +78,15 @@ Ext.define('Koala.view.window.Routing', {
             ],
             fbar: [
                 {
+                    // TODO move this button to its proper position
+                    xtype: 'button',
+                    name: 'routing-elevation-trigger',
+                    handler: 'onElevationBtnClick',
+                    enableToggle: true,
+                    bind: {
+                        text: '{i18n.elevationBtnText}'
+                    }
+                }, {
                     type: 'button',
                     bind: {
                         text: '{i18n.computeRouteButtonText}'
@@ -79,18 +94,6 @@ Ext.define('Koala.view.window.Routing', {
                     handler: 'makeRoutingRequest'
                 }
             ]
-        }
-    ],
-
-    fbar: [
-        {
-            xtype: 'button',
-            name: 'routing-elevation-trigger',
-            handler: 'onElevationBtnClick',
-            enableToggle: true,
-            bind: {
-                text: '{i18n.elevationBtnText}'
-            }
         }
     ],
 
@@ -167,8 +170,35 @@ Ext.define('Koala.view.window.Routing', {
             }
         );
 
+        if (routingOpts.elevationStyle) {
+            var elevationStyle = new ol.style.Style({
+                image: new ol.style.Circle({
+                    fill: new ol.style.Fill({
+                        color: routingOpts.elevationStyle.fill
+                    }),
+                    radius: routingOpts.elevationStyle.radius,
+                    stroke: new ol.style.Stroke({
+                        color: routingOpts.elevationStyle.stroke
+                    })
+                })
+            });
+            vm.set('elevationStyle', elevationStyle);
+        }
+
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
+        }
+
+        // TODO move this to proper part in code
+        var elevationPanel = Ext.create('Koala.view.panel.ElevationProfile', {
+            name: me.elevationProfilePanelName,
+            elevationLayerName: me.elevationLayerName
+        });
+
+        var southContainer = Ext.ComponentQuery.query('[name=south-container]')[0];
+        if (southContainer) {
+            console.log('trying to create elevationPenl');
+            southContainer.add(elevationPanel);
         }
 
     }

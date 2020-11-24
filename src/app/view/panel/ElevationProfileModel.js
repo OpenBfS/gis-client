@@ -14,12 +14,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.ElevationProfileWindowModel
+ * @class Koala.view.panel.ElevationProfileModel
  */
-Ext.define('Koala.view.window.ElevationProfileWindowModel', {
+Ext.define('Koala.view.panel.ElevationProfileModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-window-elevationprofilewindow',
+    alias: 'viewmodel.k-panel-elevationprofile',
 
     data: {
+        title: '',
+        xLabel: '',
+        yLabel: '',
+        distanceLabel: '',
+        distance: undefined,
+        elevationLabel: '',
+        elevation: undefined,
+        durationLabel: '',
+        duration: undefined,
+        showIndicatorBox: false
     }
 });

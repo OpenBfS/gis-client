@@ -718,6 +718,18 @@
             }
         }
     },
+    "Koala.view.panel.ElevationProfile": {
+        "config": {
+            "data": {
+                "title": "Höhenprofil",
+                "xLabel": "Distanz[km]",
+                "yLabel": "Höhe[m]",
+                "distanceLabel": "Distanz",
+                "elevationLabel": "Höhe",
+                "durationLabel": "Dauer"
+            }
+        }
+    },
     "Koala.view.toolbar.Header": {
         "config": {
             "data": {
