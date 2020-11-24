@@ -67,16 +67,6 @@ Ext.define('Koala.view.window.Routing', {
                     },
                     name: 'endField',
                     allowBlank: false
-                },
-                // TODO: This is a temporary mockup.
-                // TODO: Replace later with store.
-                {
-                    xtype: 'combobox',
-                    bind: {
-                        fieldLabel: '{i18n.routingProfileFieldTitle}'
-                    },
-                    displayField: 'name',
-                    store: ['Auto', 'Fahrrad', 'Fußgänger']
                 }
             ],
             fbar: [
@@ -152,23 +142,17 @@ Ext.define('Koala.view.window.Routing', {
         }
 
         var wayPointStore = vm.get('waypoints');
+
         wayPointStore.on('datachanged',
             function() {
                 me.fireEvent('setFormEntries');
 
                 // trigger routing
-                var count = wayPointStore.count();
-                if (count >= 2) {
-                    me.fireEvent('makeRoutingRequest');
-                }
+                // TODO: add a `routing_possible` event to the ViewModel
+                //       and bind it to the button or the automatic routing request
+                me.fireEvent('makeRoutingRequest');
             }
         );
-
-        // Placeholder for start and end point
-        // set two initial values
-        // TODO: evaluate better solution
-        wayPointStore.add({ address: '', latitude: 49.239, longitude: 5.09765 });
-        wayPointStore.add({ address: '', latitude: 48.9946, longitude: 14.98 });
 
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();

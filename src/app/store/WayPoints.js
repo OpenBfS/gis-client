@@ -23,7 +23,7 @@ Ext.define('Koala.store.WayPoints', {
 
     fields: [
         {name: 'address', type: 'string'},
-        {name: 'latitude', type: 'float'},
-        {name: 'longitude', type: 'float'}
+        {name: 'latitude', type: 'float', convert: null},
+        {name: 'longitude', type: 'float', convert: null}
     ]
 });
