@@ -62,12 +62,14 @@ Ext.define('Koala.view.panel.ElevationProfile', {
         olLayer: null
     },
 
-    updateOlLayer: function() {
+    updateLayer: function(newLayer) {
         var me = this;
         var controller = me.getController();
         if (!controller) {
             return;
         }
+
+        me.setOlLayer(newLayer);
 
         if (me.isVisible()) {
             controller.updateChart();

@@ -170,7 +170,7 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             components: [chartComponent],
             size: [width, height],
             zoomType: 'none',
-            eventFn: me.onMouseMove.bind(me, data, chartComponent, chart.position, limits)
+            onMouseMoveFunc: me.onMouseMove.bind(me, data, chartComponent, chart.position, limits)
         });
         chartRenderer.render(container.el.dom);
     },
@@ -272,7 +272,11 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             var minutes = Math.floor((props.duration - (hours * 60 * 60)) / 60);
             duration = hours + ':' + minutes;
         }
-        vm.set('distance', props.distance ? props.distance.toFixed(1) : undefined);
+        var distance;
+        if (props.distance) {
+            distance = (props.distance/1000).toFixed(1);
+        }
+        vm.set('distance', distance);
         vm.set('elevation', props.elevation ? props.elevation.toFixed(0) : undefined);
         vm.set('duration', duration);
         vm.set('showIndicatorBox', props.showIndicatorBox);

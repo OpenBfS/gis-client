@@ -83,6 +83,10 @@ Ext.define('Koala.view.window.RoutingController', {
      */
     onRouteLoaded: function(geojson) {
         var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        vm.set('enableElevationProfileBtn', true);
         me.addRouteToMap(geojson);
         me.updateElevationPanel();
     },
@@ -527,6 +531,7 @@ Ext.define('Koala.view.window.RoutingController', {
     updateElevationPanel: function() {
         var me = this;
         var view = me.getView();
+        var vm = view.lookupViewModel();
 
         var elevationPanelName = view.elevationProfilePanelName;
 
@@ -537,7 +542,12 @@ Ext.define('Koala.view.window.RoutingController', {
 
         var elevationPanel = Ext.ComponentQuery.query('[name=' + elevationPanelName + ']')[0];
         if (elevationPanel) {
-            elevationPanel.setOlLayer(routeLayer);
+
+            if (routeLayer.getSource().getFeatures().length === 0) {
+                me.hideElevationPanel();
+                vm.set('enableElevationProfileBtn', false);
+            }
+            elevationPanel.updateLayer(routeLayer);
         }
     },
 

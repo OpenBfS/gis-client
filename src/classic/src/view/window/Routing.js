@@ -84,7 +84,8 @@ Ext.define('Koala.view.window.Routing', {
                     handler: 'onElevationBtnClick',
                     enableToggle: true,
                     bind: {
-                        text: '{i18n.elevationBtnText}'
+                        text: '{i18n.elevationBtnText}',
+                        disabled: '{!enableElevationProfileBtn}'
                     }
                 }, {
                     type: 'button',
@@ -118,7 +119,8 @@ Ext.define('Koala.view.window.Routing', {
         boxReady: 'onBoxReady',
         close: 'onWindowClose',
         setFormEntries: 'setFormEntries',
-        makeRoutingRequest: 'makeRoutingRequest'
+        makeRoutingRequest: 'makeRoutingRequest',
+        updateElevationPanel: 'updateElevationPanel'
     },
 
     constructor: function() {
@@ -163,6 +165,7 @@ Ext.define('Koala.view.window.Routing', {
             function() {
                 me.fireEvent('setFormEntries');
 
+                me.fireEvent('updateElevationPanel');
                 // trigger routing
                 // TODO: add a `routing_possible` event to the ViewModel
                 //       and bind it to the button or the automatic routing request
