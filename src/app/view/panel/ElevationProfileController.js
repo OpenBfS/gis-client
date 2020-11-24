@@ -43,7 +43,7 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             curveType: 'curveMonotoneX',
             style: {
                 stroke: '#ff0000',
-                fill: '#ff000077',
+                fill: '#ff000077'
             },
             skipDots: true
         },
@@ -159,7 +159,6 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         var containerSize = container.getSize(true);
         var width = containerSize.width;
         var height = containerSize.height;
-        console.log('container width/height ' + width + '/' + height);
 
         var chart = staticMe.chartBase;
         chart.size = [width - 50, height - 20];
@@ -245,7 +244,8 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         D3Util.d3.select(svg).selectAll('#' + indicatorLineConfig.id).remove();
         var x = chart.originalScales.x;
         var y = chart.originalScales.y;
-        d3Svg = D3Util.d3.select(svg).select('.timeseries-chart')
+
+        D3Util.d3.select(svg).select('.timeseries-chart')
             .append('line')
             .attr('y1', y(limits.minY))
             .attr('y2', y(limits.maxY))
@@ -337,7 +337,7 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
                             {showIndicatorBox: true}
                         )
                     );
-                }
+                };
 
                 mapping.push([
                     distance,

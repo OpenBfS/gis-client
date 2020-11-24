@@ -65,7 +65,6 @@ Ext.define('Koala.view.panel.ElevationProfile', {
     updateOlLayer: function() {
         var me = this;
         var controller = me.getController();
-        console.log('updated ol layer');
         if (!controller) {
             return;
         }
@@ -87,9 +86,7 @@ Ext.define('Koala.view.panel.ElevationProfile', {
         defaults: {
             padding: '0 10 0 0'
         },
-        layout: {
-            type: 'hbox',
-        },
+        layout: 'hbox',
         bind: {
             hidden: '{!showIndicatorBox}'
         },

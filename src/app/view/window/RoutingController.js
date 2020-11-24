@@ -511,7 +511,7 @@ Ext.define('Koala.view.window.RoutingController', {
         }
     },
 
-    onElevationBtnClick: function(btn, evt) {
+    onElevationBtnClick: function(btn) {
         var me = this;
 
         if (btn.pressed) {

@@ -197,7 +197,6 @@ Ext.define('Koala.view.window.Routing', {
 
         var southContainer = Ext.ComponentQuery.query('[name=south-container]')[0];
         if (southContainer) {
-            console.log('trying to create elevationPenl');
             southContainer.add(elevationPanel);
         }
 

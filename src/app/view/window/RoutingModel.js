@@ -48,6 +48,6 @@ Ext.define('Koala.view.window.RoutingModel', {
         waypointPopup: null,
         startValue: undefined,
         targetValue: undefined,
-        elevationSTyle: undefined
+        elevationStyle: undefined
     }
 });
