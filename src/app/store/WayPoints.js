@@ -24,6 +24,99 @@ Ext.define('Koala.store.WayPoints', {
     fields: [
         {name: 'address', type: 'string'},
         {name: 'latitude', type: 'float', convert: null},
-        {name: 'longitude', type: 'float', convert: null}
-    ]
+        {name: 'longitude', type: 'float', convert: null},
+        {
+            name: 'hasLatitude',
+            type: 'bool',
+            calculate: function(data) {
+                return data.latitude !== null && data.latitude !== undefined;
+            }
+        },
+        {
+            name: 'hasLongitude',
+            type: 'bool',
+            calculate: function(data) {
+                return data.longitude !== null && data.longitude !== undefined;
+            }
+        },
+        {
+            name: 'coordinate',
+            calculate: function(data) {
+                return [data.longitude, data.latitude];
+            }
+        }
+    ],
+
+    // initial dummy data
+    data: [
+        {
+            address: '',
+            latitude: undefined,
+            longitude: null
+        }, {
+            address: '',
+            latitude: null,
+            longitude: undefined
+        }
+    ],
+
+    /**
+     * Get the coordinates of all waypoints as array.
+     *
+     * @returns {[Number, Number][]} Array of [long, lat] coordinates.
+     */
+    getCoordinatesArray: function() {
+        var me = this;
+        var coordinates = [];
+        me.each(function(rec) {
+            coordinates.push(rec.get('coordinate'));
+        });
+        return coordinates;
+    },
+
+    /**
+     * Checks if all records are valid.
+     *
+     * Records are invalid if either latitude or longitude
+     * are null or undefined.
+     */
+    isValid: function() {
+        var me = this;
+        var idx = me.findBy(function(rec) {
+            return !rec.get('hasLongitude') || !rec.get('hasLatitude');
+        });
+        return idx === -1;
+    },
+
+    /**
+     * Set the start point.
+     *
+     * @param {Object} point Waypoint.
+     */
+    setStartPoint: function(point) {
+        var me = this;
+        me.removeAt(0);
+        me.insert(0, point);
+    },
+
+    /**
+     * Add a via point.
+     *
+     * @param {Object} point Waypoint.
+     */
+    addViaPoint: function(point) {
+        var me = this;
+        me.insert(me.count() - 1, point);
+    },
+
+    /**
+     * Set the end point.
+     *
+     * @param {Object} point Waypoint.
+     */
+    setEndPoint: function(point) {
+        var me = this;
+        me.removeAt(me.count() - 1);
+        me.add(point);
+    }
 });

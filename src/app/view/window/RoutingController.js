@@ -292,7 +292,6 @@ Ext.define('Koala.view.window.RoutingController', {
         };
 
         var wayPointStore = vm.get('waypoints');
-        var count = wayPointStore.count();
 
         // TODO: handle case that store only contains 1 records
         // this should not be allowed, because the role of the
@@ -300,39 +299,16 @@ Ext.define('Koala.view.window.RoutingController', {
         // With only one record the role of the waypoint cannot
         // be identified
 
-        if (count === 0) {
-            // Populate store with dummy values
-            // necessary for picking the first point
-
-            // It is necessary to store two different records
-            // otherwise store only keeps one of them
-            wayPointStore.add({
-                address: '',
-                latitude: undefined,
-                longitude: null
-            });
-            wayPointStore.add({
-                address: '',
-                latitude: null,
-                longitude: undefined
-            });
-        }
-
-        // TODO: convert insertions into ModelView formulas
         if (wayPointType === 'start') {
-            // replace first value
-            wayPointStore.removeAt(0);
-            wayPointStore.insert(0, newWayPointJson);
+            wayPointStore.setStartPoint(newWayPointJson);
         }
 
         if (wayPointType === 'via') {
-            // set at the position before end
-            wayPointStore.insert(count - 1, newWayPointJson);
+            wayPointStore.addViaPoint(newWayPointJson);
         }
 
         if (wayPointType === 'end') {
-            wayPointStore.removeAt(count - 1);
-            wayPointStore.add(newWayPointJson);
+            wayPointStore.setEndPoint(newWayPointJson);
         }
 
         // destroy the menu so it can be re-created
@@ -419,15 +395,16 @@ Ext.define('Koala.view.window.RoutingController', {
             if (index === (count - 1)) {
                 label = vm.get('i18n.endFieldTitle');
             }
-            var coords = [rec.get('longitude'), rec.get('latitude')];
-            var fieldValue = '';
-            if ((rec.get('longitude') !== null) && (rec.get('latitude') !== null )) {
-                fieldValue = coords;
+            var coordinate = rec.get('coordinate');
+            var fieldValue = [];
+
+            if (rec.get('hasLongitude') && rec.get('hasLatitude')) {
+                fieldValue = coordinate;
             }
 
             var currentChild = formCmp.getComponent(index);
             formCmp.remove(currentChild);
-            formCmp.insert(index,{
+            formCmp.insert(index, {
                 xtype: 'textfield',
                 fieldLabel: label,
                 value: fieldValue,
@@ -459,15 +436,12 @@ Ext.define('Koala.view.window.RoutingController', {
         // loop trought waypoints and recreate map icons
         wayPointStore.each(function(rec) {
 
-            var longitude = rec.get('longitude');
-            var latitude = rec.get('latitude');
-
             // only draw valid coordinates
-            if ((longitude !== null) && (latitude !== null )) {
+            if (rec.get('hasLongitude') && rec.get('hasLatitude')) {
                 // transform to map projection
                 var sourceProjection = ol.proj.get('EPSG:4326');
                 var targetProjection = map.getView().getProjection().getCode();
-                var coordinate = [longitude, latitude];
+                var coordinate = rec.get('coordinate');
                 var transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
 
                 var waypoint = new ol.Feature({
@@ -524,6 +498,76 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
+     * Fires the http request to the OpenRouteService API.
+     *
+     * @param {String} service The service to use (e.g. 'directions', 'geocode').
+     * @param {Object} params The request params.
+     * @param {Function} onSuccess The success handler.
+     * @param {Function} onError The error handler.
+     */
+    requestORS: function(service, params, onSuccess, onError) {
+        switch(service.toLowerCase()) {
+            case 'directions':
+                // TODO: replace with custom instance
+                // TODO: add host url
+                var Directions = new Openrouteservice.Directions({
+                    api_key: '5b3ce3597851110001cf624852581e9bffb2450b8472eccc933bae17'
+                });
+                Directions.calculate(params)
+                    .then(onSuccess)
+                    .catch(onError);
+                break;
+            default:
+                break;
+        }
+    },
+
+    /**
+     * Get the OpenRouteService parameters.
+     *
+     * @param {Object} overwrites Overwrites default params with these values.
+     * @returns {Object} The OpenRouteService parameters.
+     */
+    getORSParams: function(overwrites) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        if (!overwrites) {
+            overwrites = {};
+        }
+
+        var wayPointStore = vm.get('waypoints');
+        var waypoints = wayPointStore.getCoordinatesArray();
+
+        // same properties as on https://maps.openrouteservice.org/
+        var params = {
+            coordinates: waypoints,
+            profile: vm.get('routingProfile'),
+            format: 'geojson',
+            instructions: true,
+            geometry: true,
+            elevation: true,
+            preference: 'recommended',
+            // TODO use application language here
+            language: 'en-US',
+            units: 'm',
+            attributes: [
+                'detourfactor',
+                'percentage'
+            ],
+            instructions_format: 'html',
+            extra_info: [
+                'steepness',
+                'waytype',
+                'surface'
+            ]
+        };
+
+        return Ext.Object.merge(params, overwrites);
+    },
+
+    /**
      * Requests openrouteservice API.
      */
     makeRoutingRequest: function() {
@@ -532,71 +576,25 @@ Ext.define('Koala.view.window.RoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        // TODO: replace with custom instance
-        var Directions = new Openrouteservice.Directions({
-            api_key: '5b3ce3597851110001cf624852581e9bffb2450b8472eccc933bae17'
-        });
-
-        // get coordinates array from store
         var wayPointStore = vm.get('waypoints');
-        var waypoints = [];
-
-        var routingPossible = true;
-
-        // check if at least two points are set
-        if (wayPointStore.count() < 2) {
-            routingPossible = false;
-            return false;
-        }
-
-        wayPointStore.each(function(rec) {
-            var longitude = rec.get('longitude');
-            var latitude = rec.get('latitude');
-
-            if ((latitude === null) | (longitude === null)) {
-                routingPossible = false;
-                return false;
-            }
-            waypoints.push([longitude, latitude]);
-        });
-
-        if (!routingPossible) {
+        if (!wayPointStore.isValid() || wayPointStore.count() < 2) {
             // TODO: tell user that routing does not work
             return;
         }
 
-        // same properties as on https://maps.openrouteservice.org/
-        Directions.calculate(
-            {
-                coordinates: waypoints,
-                profile: vm.get('routingProfile'),
-                format: 'geojson',
-                instructions: true,
-                geometry: true,
-                elevation: true,
-                preference: 'recommended',
-                language: 'en-US',
-                units: 'm',
-                attributes: [
-                    'detourfactor',
-                    'percentage'
-                ],
-                instructions_format: 'html',
-                extra_info: [
-                    'steepness',
-                    'waytype',
-                    'surface'
-                ]
-            }
-        )
-            .then(function(json) {
-                me.getView().fireEvent('onRouteLoaded', json);
-            })
-            .catch(function(err) {
-                // TODO: proper error handling
-                var str = 'An error occured: ' + err;
-                Ext.Logger(str);
-            });
+        var params = me.getORSParams();
+
+        var onSuccess = function(json) {
+            view.fireEvent('onRouteLoaded', json);
+        };
+
+        var onError = function(err) {
+            // TODO: proper error handling
+            var str = 'An error occured: ' + err;
+            Ext.Logger.log(str);
+        };
+
+        me.requestORS('directions', params, onSuccess, onError);
     }
 
 });
