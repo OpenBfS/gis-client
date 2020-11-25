@@ -232,6 +232,10 @@ Ext.define('Koala.view.window.RoutingController', {
             vm.set('waypointPopup', me.createWaypointPopup());
         }
 
+        // rerender elevationprofile to translate svg labels
+        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+        langCombo.on('applanguagechanged', me.updateElevationPanel.bind(me));
+
         // context menu
         var mapViewport = map.getViewport();
         me.boundOpenContextMenu = me.openContextMenu.bind(me);

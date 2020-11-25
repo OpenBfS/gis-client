@@ -714,7 +714,7 @@
             }
         }
     },
-    "Koala.view.window.ElevationProfile": {
+    "Koala.view.panel.ElevationProfile": {
         "config": {
             "data": {
                 "title": "Elevation profile",
