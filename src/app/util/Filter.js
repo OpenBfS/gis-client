@@ -1032,24 +1032,61 @@ Ext.define('Koala.util.Filter', {
                     );
                 }
             }
-            if (defaultMaxValue.seconds() !== 0) {
-                defaultMaxValue = defaultMaxValue.startOf('minute');
-                defaultMaxValue = defaultMaxValue.add(1, 'minute');
+            switch (filter.unit.toLowerCase()) {
+                case 'minutes':
+                    if (defaultMaxValue.seconds() !== 0) {
+                        defaultMaxValue = defaultMaxValue.startOf('minute');
+                        defaultMaxValue = defaultMaxValue.add(1, 'minute');
+                    }
+                    break;
+                case 'hours':
+                    if (defaultMaxValue.seconds() !== 0 || defaultMaxValue.minutes() !== 0) {
+                        defaultMaxValue = defaultMaxValue.startOf('hour');
+                        defaultMaxValue = defaultMaxValue.add(1, 'hour');
+                    }
+                    break;
+                case 'days':
+                    if (defaultMaxValue.seconds() !== 0|| defaultMaxValue.minutes() !== 0 || defaultMaxValue.hours() !== 0) {
+                        defaultMaxValue = defaultMaxValue.startOf('day');
+                        defaultMaxValue = defaultMaxValue.add(1, 'day');
+                    }
+                    break;
             }
+
 
             if (!filter.defaultstarttimeinstant) {
                 var duration = moment.duration(filter.maxduration);
                 defaultMinValue = defaultMaxValue.clone().subtract(duration);
             }
-            if (defaultMinValue.seconds() !== 0) {
-                defaultMinValue = defaultMinValue.startOf('minute');
-                defaultMinValue = defaultMinValue.add(1, 'minute');
+            switch (filter.unit.toLowerCase()) {
+                case 'minutes':
+                    if (defaultMinValue.seconds() !== 0) {
+                        defaultMinValue = defaultMinValue.startOf('minute');
+                        defaultMinValue = defaultMinValue.add(1, 'minute');
+                    }
+                    break;
+                case 'hours':
+                    if (defaultMinValue.seconds() !== 0 || defaultMinValue.minutes() !== 0) {
+                        defaultMinValue = defaultMinValue.startOf('hour');
+                        defaultMinValue = defaultMinValue.add(1, 'hour');
+                    }
+                    break;
+                case 'days':
+                    if (defaultMinValue.seconds() !== 0|| defaultMinValue.minutes() !== 0 || defaultMinValue.hours() !== 0) {
+                        defaultMinValue = defaultMinValue.startOf('day');
+                        defaultMinValue = defaultMinValue.add(1, 'day');
+                    }
+                    break;
             }
 
             var startValue = filter.effectivemindatetime || defaultMinValue;
             var endValue = filter.effectivemaxdatetime || defaultMaxValue;
             var unit = (filter.unit || '').toLowerCase();
             var maxLimit = maxValue;
+            if (unit === 'days') {
+                maxLimit = maxLimit.startOf('day');
+                maxLimit = maxLimit.add(1, 'day');
+            }
             if (unit === 'hours') {
                 maxLimit = maxLimit.startOf('hour');
                 maxLimit = maxLimit.add(1, 'hour');
@@ -1063,9 +1100,20 @@ Ext.define('Koala.util.Filter', {
             maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
             startValue = Koala.util.Date.getTimeReferenceAwareMomentDate(startValue);
             endValue = Koala.util.Date.getTimeReferenceAwareMomentDate(endValue);
+            var minLimit = minValue;
+
+            if (unit === 'days') {
+                minLimit = minLimit.startOf('day');
+            }
+            if (unit === 'hours') {
+                minLimit = minLimit.startOf('hour');
+            }
+            if (unit === 'minutes') {
+                minLimit = minLimit.startOf('minute');
+            }
 
             var minMaxValidator = me.makeDateValidator(
-                minValue, maxLimit
+                minLimit, maxLimit
             );
             var minMaxDurationAndOrderValidator = function() {
                 var ok = minMaxValidator.call(this);
@@ -1085,7 +1133,7 @@ Ext.define('Koala.util.Filter', {
                 labelWidth: 50,
                 flex: 1,
                 value: startValue,
-                minValue: minValue,
+                minValue: minLimit,
                 maxValue: maxLimit,
                 format: format,
                 validator: minMaxDurationAndOrderValidator,
