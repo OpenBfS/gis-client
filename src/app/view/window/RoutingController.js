@@ -727,7 +727,7 @@ Ext.define('Koala.view.window.RoutingController', {
             var blob;
             if (outputFormat === 'gpx') {
                 blob = new Blob([res], {
-                    type: "application/xml;charset=utf-8"
+                    type: 'application/xml;charset=utf-8'
                 });
             } else {
                 blob = new Blob([JSON.stringify(res)]);
