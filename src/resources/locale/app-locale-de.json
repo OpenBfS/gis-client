@@ -880,7 +880,8 @@
                     "addStartPoint": "Startpunkt setzen",
                     "addViaPoint": "Wegpunkt setzen",
                     "addEndPoint": "Zielpunkt setzen",
-                    "elevationBtnText": "Höhenprofil"
+                    "elevationBtnText": "Höhenprofil",
+                    "downloadButtonText": "Download"
                 }
             }
         }

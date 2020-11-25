@@ -876,7 +876,8 @@
                     "addStartPoint": "Set start",
                     "addViaPoint": "Set waypoint",
                     "addEndPoint": "Set destination",
-                    "elevationBtnText": "Elevation Profile"
+                    "elevationBtnText": "Elevation Profile",
+                    "downloadButtonText": "Download"
                 }
             }
         }

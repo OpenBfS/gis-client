@@ -37,7 +37,8 @@ Ext.define('Koala.view.window.RoutingModel', {
             addEndPoint: '',
             routingProfileFieldTitle: '',
             computeRouteButtonText: '',
-            elevationBtnText: ''
+            elevationBtnText: '',
+            downloadButtonText: ''
         },
         routingProfile: 'foot-walking',
         routeStyle: undefined,
@@ -49,6 +50,7 @@ Ext.define('Koala.view.window.RoutingModel', {
         startValue: undefined,
         targetValue: undefined,
         elevationStyle: undefined,
-        enableElevationProfileBtn: false
+        enableElevationProfileBtn: false,
+        showDownloadButton: false
     }
 });

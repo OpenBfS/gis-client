@@ -88,6 +88,29 @@ Ext.define('Koala.view.window.Routing', {
                         disabled: '{!enableElevationProfileBtn}'
                     }
                 }, {
+                    xtype: 'button',
+                    glyph: 'xf019@FontAwesome',
+                    bind: {
+                        text: '{i18n.downloadButtonText}',
+                        hidden: '{!showDownloadButton}'
+                    },
+                    arrowAlign: 'right',
+                    menu: [
+                        {
+                            downloadType: 'gpx',
+                            text: '.gpx',
+                            listeners: {
+                                click: 'onDownloadButtonClicked'
+                            }
+                        }, {
+                            downloadType: 'geojson',
+                            text: '.geojson',
+                            listeners: {
+                                click: 'onDownloadButtonClicked'
+                            }
+                        }
+                    ]
+                }, {
                     type: 'button',
                     bind: {
                         text: '{i18n.computeRouteButtonText}'
@@ -104,7 +127,6 @@ Ext.define('Koala.view.window.Routing', {
 
     listeners: {
         expand: function() {
-            this.down('k-form-print').addExtentInteractions();
             // HBD: after collapse/expand extjs thinks the user manually
             // resized the window and stops automatic window resize if
             // child component sizes are updated. We can apparently

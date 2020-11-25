@@ -87,6 +87,7 @@ Ext.define('Koala.view.window.RoutingController', {
         var vm = view.lookupViewModel();
 
         vm.set('enableElevationProfileBtn', true);
+        vm.set('showDownloadButton', true);
         me.addRouteToMap(geojson);
         me.updateElevationPanel();
     },
@@ -689,6 +690,57 @@ Ext.define('Koala.view.window.RoutingController', {
 
         var onSuccess = function(json) {
             view.fireEvent('onRouteLoaded', json);
+        };
+
+        var onError = function(err) {
+            // TODO: proper error handling
+            var str = 'An error occured: ' + err;
+            Ext.Logger.log(str);
+        };
+
+        me.requestORS('directions', params, onSuccess, onError);
+    },
+
+    /**
+     * Handles clicking on an downloadButton item.
+     *
+     * @param {Ext.menu.Item} item The clicked menu item.
+     */
+    onDownloadButtonClicked: function(item) {
+        var me = this;
+        me.makeDownloadRequest(item.downloadType);
+    },
+
+    /**
+     * Downloads a route in a given output format.
+     *
+     * @param {'geojson'|'gpx'} outputFormat The output format
+     */
+    makeDownloadRequest: function(outputFormat) {
+        var me = this;
+        var params = me.getORSParams({
+            format: outputFormat,
+            extra_info: []
+        });
+
+        var onSuccess = function(res) {
+            var blob;
+            if (outputFormat === 'gpx') {
+                blob = new Blob([res], {
+                    type: "application/xml;charset=utf-8"
+                });
+            } else {
+                blob = new Blob([JSON.stringify(res)]);
+            }
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'route.' + outputFormat;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
         };
 
         var onError = function(err) {
