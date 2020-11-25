@@ -506,7 +506,7 @@ Ext.define('Koala.view.window.RoutingController', {
      * @param {Function} onError The error handler.
      */
     requestORS: function(service, params, onSuccess, onError) {
-        switch(service.toLowerCase()) {
+        switch (service.toLowerCase()) {
             case 'directions':
                 // TODO: replace with custom instance
                 // TODO: add host url
