@@ -29,7 +29,13 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             display: true,
             orientation: 'x',
             scale: 'linear',
-            labelColor: '#000000'
+            labelColor: '#000000',
+            format: function(val) {
+                if (val === 0) {
+                    return val;
+                }
+                return (val / 1000).toFixed(1) + '';
+            }
         },
         yAxisBase: {
             display: true,
