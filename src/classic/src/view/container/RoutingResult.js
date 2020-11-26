@@ -23,7 +23,7 @@ Ext.define('Koala.view.container.RoutingResult', {
 
     requires: [
         'Koala.view.container.RoutingResultController',
-        'Koala.view.panel.ElevationProfile',
+        'Koala.view.panel.ElevationProfile'
     ],
 
     controller: 'k-container-routingresult',

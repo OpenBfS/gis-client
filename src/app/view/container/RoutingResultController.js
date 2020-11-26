@@ -190,6 +190,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
         if (routingWindow) {
             routingWindow.fireEvent('makeDownloadRequest', item.downloadType);
         }
-    },
+    }
 
 });

@@ -193,7 +193,6 @@ Ext.define('Koala.view.window.Routing', {
             routeLayerName: me.routeLayerName,
             elevationProfilePanelName: me.elevationProfilePanelName,
             elevationLayerName: me.elevationLayerName,
-            routeLayerName: me.routeLayerName,
             map: me.map
         });
     }
