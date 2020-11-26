@@ -693,6 +693,7 @@ Ext.define('Koala.view.window.RoutingController', {
         };
 
         var onError = function(err) {
+            vm.set('showDownloadButton', false);
             // TODO: proper error handling
             var str = 'An error occured: ' + err;
             Ext.Logger.log(str);
@@ -718,6 +719,7 @@ Ext.define('Koala.view.window.RoutingController', {
      */
     makeDownloadRequest: function(outputFormat) {
         var me = this;
+
         var params = me.getORSParams({
             format: outputFormat,
             extra_info: []
