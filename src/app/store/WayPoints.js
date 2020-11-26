@@ -75,7 +75,7 @@ Ext.define('Koala.store.WayPoints', {
     },
 
     /**
-     * Checks if all records are valid.
+     * Check if all records are valid.
      *
      * Records are invalid if either latitude or longitude
      * are null or undefined.
