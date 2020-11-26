@@ -22,10 +22,11 @@ Ext.define('Koala.view.window.Routing', {
 
     requires: [
         'Koala.util.Help',
+        'Koala.util.AppContext',
         'BasiGX.view.component.Map',
         'Koala.view.window.RoutingModel',
         'Koala.view.window.RoutingController',
-        'Koala.view.panel.ElevationProfile'
+        'Koala.view.container.RoutingResult'
     ],
 
     controller: 'k-window-routing',
@@ -38,6 +39,9 @@ Ext.define('Koala.view.window.Routing', {
     routeLayerName: 'routing-route-layer',
 
     map: null,
+
+    /** The name of the routingResultPanel */
+    routingResultPanelName: 'routing-result-panel',
 
     /** The name of the elevationProfilePanel*/
     elevationProfilePanelName: 'routing-elevationprofile-panel',
@@ -52,7 +56,7 @@ Ext.define('Koala.view.window.Routing', {
     height: 300,
     width: 300,
 
-    layout: 'fit',
+    layout: 'vbox',
 
     items: [
         {
@@ -78,39 +82,6 @@ Ext.define('Koala.view.window.Routing', {
             ],
             fbar: [
                 {
-                    // TODO move this button to its proper position
-                    xtype: 'button',
-                    name: 'routing-elevation-trigger',
-                    handler: 'onElevationBtnClick',
-                    enableToggle: true,
-                    bind: {
-                        text: '{i18n.elevationBtnText}',
-                        disabled: '{!enableElevationProfileBtn}'
-                    }
-                }, {
-                    xtype: 'button',
-                    glyph: 'xf019@FontAwesome',
-                    bind: {
-                        text: '{i18n.downloadButtonText}',
-                        hidden: '{!showDownloadButton}'
-                    },
-                    arrowAlign: 'right',
-                    menu: [
-                        {
-                            downloadType: 'gpx',
-                            text: '.gpx',
-                            listeners: {
-                                click: 'onDownloadButtonClicked'
-                            }
-                        }, {
-                            downloadType: 'geojson',
-                            text: '.geojson',
-                            listeners: {
-                                click: 'onDownloadButtonClicked'
-                            }
-                        }
-                    ]
-                }, {
                     type: 'button',
                     bind: {
                         text: '{i18n.computeRouteButtonText}'
@@ -142,12 +113,13 @@ Ext.define('Koala.view.window.Routing', {
         close: 'onWindowClose',
         setFormEntries: 'setFormEntries',
         makeRoutingRequest: 'makeRoutingRequest',
-        updateElevationPanel: 'updateElevationPanel'
+        makeDownloadRequest: 'makeDownloadRequest'
     },
 
-    constructor: function() {
+    initComponent: function() {
         var me = this;
-        this.callParent(arguments);
+
+        me.callParent(arguments);
 
         var vm = me.lookupViewModel();
 
@@ -183,11 +155,11 @@ Ext.define('Koala.view.window.Routing', {
 
         var wayPointStore = vm.get('waypoints');
 
+        // TODO move this method to its proper place
         wayPointStore.on('datachanged',
             function() {
                 me.fireEvent('setFormEntries');
 
-                me.fireEvent('updateElevationPanel');
                 // trigger routing
                 // TODO: add a `routing_possible` event to the ViewModel
                 //       and bind it to the button or the automatic routing request
@@ -214,16 +186,15 @@ Ext.define('Koala.view.window.Routing', {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
 
-        // TODO move this to proper part in code
-        var elevationPanel = Ext.create('Koala.view.panel.ElevationProfile', {
-            name: me.elevationProfilePanelName,
-            elevationLayerName: me.elevationLayerName
+        // TODO probably set all items of the view dynamically here
+        me.add({
+            xtype: 'k-container-routingresult',
+            name: me.routingResultPanelName,
+            routeLayerName: me.routeLayerName,
+            elevationProfilePanelName: me.elevationProfilePanelName,
+            elevationLayerName: me.elevationLayerName,
+            routeLayerName: me.routeLayerName,
+            map: me.map
         });
-
-        var southContainer = Ext.ComponentQuery.query('[name=south-container]')[0];
-        if (southContainer) {
-            southContainer.add(elevationPanel);
-        }
-
     }
 });

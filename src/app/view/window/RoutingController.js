@@ -86,36 +86,18 @@ Ext.define('Koala.view.window.RoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        vm.set('enableElevationProfileBtn', true);
-        vm.set('showDownloadButton', true);
-        me.addRouteToMap(geojson);
-        me.updateElevationPanel();
+        var resultPanel = view.down('[name=' + view.routingResultPanelName + ']');
+        if (!resultPanel) {
+            return;
+        }
+
+        resultPanel.fireEvent('resultChanged', geojson);
+        vm.set('showRoutingResults', true);
     },
 
     onWaypointAdded: function(feature) {
         var me = this;
         me.addWayPointToMap(feature);
-    },
-
-    /**
-     * Adds the Routing feature to the map.
-     * @param {Object} geojson The GeoJSON to be added.
-     */
-    addRouteToMap: function(geojson) {
-        var me = this;
-        var view = me.getView();
-
-        var layer = me.getRouteLayer();
-        if (!layer) {
-            return;
-        }
-
-        var source = new ol.source.Vector({
-            features: (new ol.format.GeoJSON({
-                featureProjection: view.map.getView().getProjection()
-            })).readFeatures(geojson)
-        });
-        layer.setSource(source);
     },
 
     /**
@@ -232,10 +214,6 @@ Ext.define('Koala.view.window.RoutingController', {
         if (vm.get('waypointPopup') === null) {
             vm.set('waypointPopup', me.createWaypointPopup());
         }
-
-        // rerender elevationprofile to translate svg labels
-        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
-        langCombo.on('applanguagechanged', me.updateElevationPanel.bind(me));
 
         // context menu
         var mapViewport = map.getViewport();
@@ -482,80 +460,6 @@ Ext.define('Koala.view.window.RoutingController', {
         });
     },
 
-    /*
-     * Shows the elevation graph
-     */
-    showElevationPanel: function() {
-        var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
-        if (southContainer) {
-            southContainer.show();
-        }
-    },
-
-    /**
-     * Hides the elevation graph
-     */
-    hideElevationPanel: function() {
-        var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
-        if (southContainer) {
-            southContainer.hide();
-        }
-    },
-
-    /**
-     * Destroys the elevation graph
-     */
-    destroyElevationPanel: function() {
-        var me = this;
-        var view = me.getView();
-
-        var southContainer = Ext.ComponentQuery.query('container[name=south-container]')[0];
-        if (southContainer) {
-            var elevationPanel = southContainer.down('[name=' + view.elevationProfilePanelName + ']');
-            if (elevationPanel) {
-                southContainer.remove(elevationPanel);
-                elevationPanel.destroy();
-            }
-            southContainer.hide();
-        }
-    },
-
-    onElevationBtnClick: function(btn) {
-        var me = this;
-
-        if (btn.pressed) {
-            me.showElevationPanel();
-        } else {
-            me.hideElevationPanel();
-        }
-    },
-
-    /**
-     * Updates the elevation panel.
-     */
-    updateElevationPanel: function() {
-        var me = this;
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-
-        var elevationPanelName = view.elevationProfilePanelName;
-
-        var routeLayer = BasiGX.util.Layer.getLayerByName(view.routeLayerName);
-        if (!routeLayer) {
-            return;
-        }
-
-        var elevationPanel = Ext.ComponentQuery.query('[name=' + elevationPanelName + ']')[0];
-        if (elevationPanel) {
-
-            if (routeLayer.getSource().getFeatures().length === 0) {
-                me.hideElevationPanel();
-                vm.set('enableElevationProfileBtn', false);
-            }
-            elevationPanel.updateLayer(routeLayer);
-        }
-    },
-
     /**
      * Handles data cleanup when the window is being closed.
      */
@@ -597,8 +501,6 @@ Ext.define('Koala.view.window.RoutingController', {
             mapContextMenu.destroy();
             vm.set('mapContextMenu', null);
         }
-
-        me.destroyElevationPanel();
     },
 
     /**
@@ -700,16 +602,6 @@ Ext.define('Koala.view.window.RoutingController', {
         };
 
         me.requestORS('directions', params, onSuccess, onError);
-    },
-
-    /**
-     * Handles clicking on an downloadButton item.
-     *
-     * @param {Ext.menu.Item} item The clicked menu item.
-     */
-    onDownloadButtonClicked: function(item) {
-        var me = this;
-        me.makeDownloadRequest(item.downloadType);
     },
 
     /**

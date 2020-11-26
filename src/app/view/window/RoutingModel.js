@@ -50,7 +50,6 @@ Ext.define('Koala.view.window.RoutingModel', {
         startValue: undefined,
         targetValue: undefined,
         elevationStyle: undefined,
-        enableElevationProfileBtn: false,
-        showDownloadButton: false
+        showRoutingResults: false
     }
 });
