@@ -48,6 +48,22 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
+     * Get the RouteSegmentLayer.
+     *
+     * @returns {ol.layer.Vector} The RouteSegmentLayer.
+     */
+    getRouteSegmentLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.routeSegmentLayerName) {
+            return;
+        }
+
+        return BasiGX.util.Layer.getLayerByName(view.routeSegmentLayerName);
+    },
+
+    /**
      * Get the WaypointLayer.
      * @returns {ol.layer.Vector} The WaypointLayer.
      */
@@ -304,6 +320,9 @@ Ext.define('Koala.view.window.RoutingController', {
         if (!me.getRouteLayer()) {
             me.createLayer('routeStyle', view.routeLayerName);
         }
+        if (!me.getRouteSegmentLayer()) {
+            me.createLayer('routeSegmentStyle', view.routeSegmentLayerName);
+        }
         if (!me.getWaypointLayer()) {
             me.createLayer('waypointStyle', view.waypointLayerName);
 
@@ -398,6 +417,10 @@ Ext.define('Koala.view.window.RoutingController', {
         if (routeLayer) {
             view.map.removeLayer(routeLayer);
         }
+        var routeSegmentLayer = me.getRouteSegmentLayer();
+        if (routeSegmentLayer) {
+            view.map.removeLayer(routeSegmentLayer);
+        }
         var waypointLayer = me.getWaypointLayer();
         if (waypointLayer) {
             view.map.removeLayer(waypointLayer);
@@ -415,6 +438,11 @@ Ext.define('Koala.view.window.RoutingController', {
         if (vm.get('waypoints') !== null) {
             var wayPointStore = vm.get('waypoints');
             wayPointStore.removeAll();
+        }
+
+        if (vm.get('routinginstructions') !== null) {
+            var instructionsStore = vm.get('routinginstructions');
+            instructionsStore.removeAll();
         }
 
         // remove context menu listener

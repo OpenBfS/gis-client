@@ -28,12 +28,124 @@ Ext.define('Koala.view.container.RoutingResult', {
 
     controller: 'k-container-routingresult',
 
-    layout: 'fit',
+    statics: {
+        /**
+         * Get the proper icon for given instruction type.
+         *
+         * Instruction types are defined by OpenRouteService on
+         * https://github.com/GIScience/openrouteservice-docs#instruction-types
+         *
+         * Since FontAwesome 4 does not provite arbitrary rotations of icons,
+         * we have to create custom rotation classes in RoutingResult.scss.
+         *
+         * @param {Number} type The instruction type.
+         * @returns {String} The html string representation of the icon.
+         */
+        getIconFromType: function(type) {
+            var iconCls = '';
+            switch (type) {
+                case 0:
+                    // left turn
+                    iconCls = 'fa-arrow-left';
+                    break;
+                case 1:
+                    // right turn
+                    iconCls = 'fa-arrow-right';
+                    break;
+                case 2:
+                    // sharp left
+                    iconCls = 'fa-arrow-up fa-rotate-225';
+                    break;
+                case 3:
+                    // sharp right
+                    iconCls = 'fa-arrow-up fa-rotate-135';
+                    break;
+                case 4:
+                    // slight left
+                    iconCls = 'fa-arrow-up fa-rotate-315';
+                    break;
+                case 5:
+                    // slight right
+                    iconCls = 'fa-arrow-up fa-rotate-45';
+                    break;
+                case 6:
+                    // straight
+                    iconCls = 'fa-arrow-up';
+                    break;
+                case 7:
+                    // enter roundabout
+                    iconCls = 'fa-rotate-left';
+                    break;
+                case 8:
+                    // exit roundabout
+                    iconCls = 'fa-rotate-left';
+                    break;
+                case 9:
+                    // u-turn
+                    iconCls = 'fa-rotate-left';
+                    break;
+                case 10:
+                    // goal
+                    iconCls = 'fa-flag';
+                    break;
+                case 11:
+                    // depart
+                    iconCls = 'fa-home';
+                    break;
+                case 12:
+                    // keep left
+                    iconCls = 'fa-arrow-up fa-rotate-315';
+                    break;
+                case 13:
+                    // keep right
+                    iconCls = 'fa-arrow-up fa-rotate-45';
+                    break;
+                default:
+                    break;
+            }
+
+            return '<i class="fa ' + iconCls + '" aria-hidden="true"></i>';
+        },
+
+        /**
+         * Format duration.
+         *
+         * Formats the duration as human readable durations (e.g. 15 minutes).
+         *
+         * @param {Number} duration The duration to format in seconds.
+         * @returns {String} The formatted duration html string.
+         */
+        getFormattedDuration: function(duration) {
+            var durationFormatted = moment.duration(duration, 'seconds').humanize();
+            return '<b>' + durationFormatted + '</b>';
+        },
+
+        /**
+         * Format distance.
+         *
+         * Rounds the distance to a proper metric unit (e.g. km).
+         *
+         * @param {Number} distance The distance to format in meters.
+         * @returns {String} The formatted distance html string.
+         */
+        getFormattedDistance: function(distance) {
+            var distanceFormatted = D3Util.d3.format('.2~s')(distance);
+            var lastChar = distanceFormatted.slice(-1);
+
+            // check if last character is a SI unit suffix
+            if (isNaN(parseInt(lastChar, 10))) {
+                return '<b>' + distanceFormatted.slice(0, -1) + '</b>' + lastChar + 'm';
+            } else {
+                return '<b>' + distanceFormatted + '</b>m';
+            }
+        }
+    },
+
+    layout: 'vbox',
 
     width: '100%',
 
     defaults: {
-        flex: 1,
         width: '100%'
     },
 
@@ -48,6 +160,9 @@ Ext.define('Koala.view.container.RoutingResult', {
 
     /** The name of the layer that contains the route */
     routeLayerName: 'routing-route-layer',
+
+    /** The name of the layer that contains the route */
+    routeSegmentLayerName: 'routing-route-segment-layer',
 
     /** The name of the layer for elevation interaction */
     elevationLayerName: 'routing-elevation-layer',
@@ -98,7 +213,61 @@ Ext.define('Koala.view.container.RoutingResult', {
                         }
                     ]
                 }
+            ]
+        }, {
+            xtype: 'grid',
+            flex: 1,
+            bind: {
+                store: '{routinginstructions}'
+            },
+            listeners: {
+                itemmouseenter: 'onGridMouseEnter',
+                itemmouseleave: 'onGridMouseLeave',
+                select: 'onGridSelect'
+            },
+            columns: [
+                {
+                    dataIndex: 'type',
+                    flex: 1,
+                    sortable: false,
+                    hideable: false,
+                    align: 'center',
+                    tdCls: 'routing-icon-cell',
+                    renderer: function(type) {
+                        var staticMe = Koala.view.container.RoutingResult;
+                        return staticMe.getIconFromType(type);
+                    }
+                }, {
+                    dataIndex: 'instruction',
+                    flex: 10,
+                    tdCls: 'routing-icon-cell',
+                    sortable: false,
+                    hideable: false,
+                    renderer: function(instruction, metaData, rec) {
+                        var staticMe = Koala.view.container.RoutingResult;
+                        var distance = rec.get('distance');
+                        var duration = rec.get('duration');
 
+                        var distanceFormatted = staticMe.getFormattedDistance(distance);
+                        var durationFormatted = staticMe.getFormattedDuration(duration);
+                        var instructionFormatted = '';
+                        var content = '<div>';
+
+                        // Do not show distance and duration on destination field.
+                        if (rec.get('type') === 10) {
+                            instructionFormatted = '<div style="padding-bottom: 10px; padding-top: 10px">' + instruction + '</div>';
+                            content += instructionFormatted;
+                        } else {
+                            instructionFormatted = '<div style="padding-bottom: 10px">' + instruction + '</div>';
+                            content += instructionFormatted;
+                            content += distanceFormatted + ' | ';
+                            content += durationFormatted;
+                        }
+                        content += '</div>';
+
+                        return content;
+                    }
+                }
             ]
         }
     ],

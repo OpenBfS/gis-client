@@ -33,6 +33,8 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var me = this;
 
         me.addRouteToMap(newResult);
+        me.zoomToRoute();
+        me.updateRoutingInstructions(newResult);
         me.updateElevationPanel();
     },
 
@@ -56,6 +58,99 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
+     * Handler for the mouseenter event on the grid.
+     *
+     * @param {Ext.grid.Panel} grid The Ext Grid.
+     * @param {Koala.store.RoutingInstructions} rec A single RoutingInstruction.
+     */
+    onGridMouseEnter: function(grid, rec) {
+        var me = this;
+
+        var routeSegmentLayer = me.getRouteSegmentLayer();
+        if (!routeSegmentLayer) {
+            return;
+        }
+        var source = routeSegmentLayer.getSource();
+        if (source) {
+            source.clear();
+        }
+        var feature = me.createLineFeature(rec.get('coordinates'));
+        source.addFeature(feature);
+    },
+
+    /**
+     * Handler for the mouseleave event on the grid.
+     */
+    onGridMouseLeave: function() {
+        var me = this;
+
+        var routeSegmentLayer = me.getRouteSegmentLayer();
+        if (!routeSegmentLayer) {
+            return;
+        }
+        var source = routeSegmentLayer.getSource();
+        if (source) {
+            source.clear();
+        }
+    },
+
+    /**
+     * Handler for the select event on the grid.
+     *
+     * @param {Ext.grid.Panel} grid The Ext Grid.
+     * @param {Koala.store.RoutingInstructions} rec A single RoutingInstruction.
+     */
+    onGridSelect: function(grid, rec) {
+        var me = this;
+        var view = me.getView();
+
+        var routeSegmentLayer = me.getRouteSegmentLayer();
+        if (!routeSegmentLayer) {
+            return;
+        }
+        var source = routeSegmentLayer.getSource();
+        if (source) {
+            source.clear();
+        }
+        var feature = me.createLineFeature(rec.get('coordinates'));
+        source.addFeature(feature);
+
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+
+        var mapView = map.getView();
+        mapView.fit(feature.getGeometry());
+    },
+
+    /**
+     * Create a line feature from a coordinate array.
+     *
+     * @param {[Number, Number, Number][]} coords Array of xyz ordinates.
+     * @returns {ol.Feature} The created LineFeature.
+     */
+    createLineFeature: function(coords) {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+
+        // transform to map projection
+        var sourceProjection = ol.proj.get('EPSG:4326');
+        var targetProjection = map.getView().getProjection().getCode();
+
+        var transformedCoords = Ext.Array.map(coords, function(coord) {
+            return ol.proj.transform(coord, sourceProjection, targetProjection);
+        });
+
+        var lineString = new ol.geom.LineString(transformedCoords);
+        return new ol.Feature(lineString);
+    },
+
+    /**
      * Gets the RouteLayer.
      * @returns {ol.layer.Vector} The RouteLayer.
      */
@@ -68,6 +163,22 @@ Ext.define('Koala.view.container.RoutingResultController', {
         }
 
         return BasiGX.util.Layer.getLayerByName(view.routeLayerName);
+    },
+
+    /**
+     * Get the RouteSegmentLayer.
+     *
+     * @returns {ol.layer.Vector} The RouteSegmentLayer.
+     */
+    getRouteSegmentLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.routeSegmentLayerName) {
+            return;
+        }
+
+        return BasiGX.util.Layer.getLayerByName(view.routeSegmentLayerName);
     },
 
     /**
@@ -104,6 +215,33 @@ Ext.define('Koala.view.container.RoutingResultController', {
             })).readFeatures(geojson)
         });
         layer.setSource(source);
+    },
+
+    /**
+     * Zoom to the extent of the route.
+     */
+    zoomToRoute: function() {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+        var mapView = map.getView();
+
+        var layer = me.getRouteLayer();
+        if (!layer) {
+            return;
+        }
+        var source = layer.getSource();
+        if (!source) {
+            return;
+        }
+
+        var feature = source.getFeatures()[0];
+        if (!feature) {
+            return;
+        }
+        var geom = feature.getGeometry();
+
+        mapView.fit(geom);
     },
 
     /**
@@ -190,6 +328,65 @@ Ext.define('Koala.view.container.RoutingResultController', {
         if (routingWindow) {
             routingWindow.fireEvent('makeDownloadRequest', item.downloadType);
         }
+    },
+
+    updateRoutingInstructions: function(result) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+        var instructionsStore = vm.get('routinginstructions');
+
+        if (!instructionsStore) {
+            return;
+        }
+
+        instructionsStore.removeAll();
+
+        var features = result.features;
+        if (!features) {
+            return;
+        }
+
+        var feature = features[0];
+
+        var resultProps = feature.properties;
+        if (!resultProps) {
+            return;
+        }
+
+        var resultGeom = feature.geometry;
+
+        if (!resultGeom) {
+            return;
+        }
+
+        var segments = resultProps.segments;
+        if (!segments) {
+            return;
+        }
+
+        Ext.Array.forEach(segments, function(segment) {
+            var steps = segment.steps || [];
+            Ext.Array.forEach(steps, function(step) {
+                var coordinates = [];
+                for (var i=step.way_points[0]; i<=step.way_points[1]; i++) {
+                    var coord = Ext.clone(resultGeom.coordinates[i]);
+                    coordinates.push(coord);
+                }
+
+                var instruction = {
+                    distance: step.distance,
+                    duration: step.duration,
+                    instruction: step.instruction,
+                    name: step.name,
+                    type: step.type,
+                    waypoints: step.way_points,
+                    coordinates: coordinates
+                };
+
+                instructionsStore.add(instruction);
+            });
+        });
     }
 
 });

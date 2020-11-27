@@ -40,6 +40,8 @@ Ext.define('Koala.view.window.Routing', {
 
     routeLayerName: 'routing-route-layer',
 
+    routeSegmentLayerName: 'routing-route-segment-layer',
+
     map: null,
 
     /** The name of the routingResultPanel */
@@ -55,7 +57,8 @@ Ext.define('Koala.view.window.Routing', {
         title: '{i18n.title}'
     },
 
-    height: 400,
+    minHeight: 100,
+    maxHeight: 600,
     width: 500,
 
     layout: 'vbox',
@@ -67,9 +70,11 @@ Ext.define('Koala.view.window.Routing', {
     ],
 
     collapsible: true,
-    resizable: false,
+    resizable: true,
     constrainHeader: true,
 
+    // TODO listen to language changes and trigger routing again
+    //      to retrieve translated instructions.
     listeners: {
         expand: function() {
             // HBD: after collapse/expand extjs thinks the user manually
@@ -77,9 +82,6 @@ Ext.define('Koala.view.window.Routing', {
             // child component sizes are updated. We can apparently
             // reset this by setting the sizes to null...
             this.setSize(null, null);
-        },
-        resize: function(win) {
-            win.center();
         },
         onRouteLoaded: 'onRouteLoaded',
         onWaypointAdded: 'onWaypointAdded',
@@ -109,6 +111,16 @@ Ext.define('Koala.view.window.Routing', {
                 })
             });
             vm.set('routeStyle', routeStyle);
+        }
+
+        if (routingOpts.routeSegmentStyle) {
+            var routeSegmentStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: routingOpts.routeSegmentStyle.color,
+                    width: routingOpts.routeSegmentStyle.width
+                })
+            });
+            vm.set('routeSegmentStyle', routeSegmentStyle);
         }
 
         if (routingOpts.waypointStyle) {
@@ -151,9 +163,11 @@ Ext.define('Koala.view.window.Routing', {
             xtype: 'k-container-routingresult',
             name: me.routingResultPanelName,
             routeLayerName: me.routeLayerName,
+            routeSegmentLayerName: me.routeSegmentLayerName,
             elevationProfilePanelName: me.elevationProfilePanelName,
             elevationLayerName: me.elevationLayerName,
-            map: me.map
+            map: me.map,
+            flex: 1
         });
     }
 });

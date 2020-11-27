@@ -23,6 +23,9 @@ Ext.define('Koala.view.window.RoutingModel', {
     stores: {
         waypoints: {
             type: 'k-waypoints'
+        },
+        routinginstructions: {
+            type: 'k-routinginstructions'
         }
     },
 
@@ -43,6 +46,7 @@ Ext.define('Koala.view.window.RoutingModel', {
         },
         routingProfile: 'foot-walking',
         routeStyle: undefined,
+        routeSegmentStyle: undefined,
         waypointStyle: undefined,
         waypointFontSize: undefined,
         rightClickCoordinate: undefined,

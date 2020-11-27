@@ -230,14 +230,18 @@
                     "color": "#ff0000",
                     "width": 5
                 },
+                "routeSegmentStyle": {
+                    "color": "#ffffff",
+                    "width": 4
+                },
                 "waypointStyle": {
                     "markerSize": 38,
                     "color": "black"
                 },
                 "elevationStyle": {
-                    "fill": "lightgray",
-                    "stroke": "gray",
-                    "radius": 2.5
+                    "fill": "#ffffff",
+                    "stroke": "#ffffff",
+                    "radius": 3
                 }
             }
         }
