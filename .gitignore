@@ -15,6 +15,7 @@ src/sass/example/bootstrap.js
 src/sass/example/bootstrap.json
 src/classic.jsonp
 src/sass/example/bootstrap.jsonp
+src/sencha-error-*.log
 
 **/.~lock*
 **/npm-debug.log
