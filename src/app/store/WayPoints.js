@@ -47,18 +47,28 @@ Ext.define('Koala.store.WayPoints', {
         }
     ],
 
-    // initial dummy data
-    data: [
-        {
-            address: '',
-            latitude: undefined,
-            longitude: null
-        }, {
-            address: '',
-            latitude: null,
-            longitude: undefined
-        }
-    ],
+    /**
+     * It is necessary to have different dummy points,
+     * because identical records are only stored once
+     * in the wayPointStore.
+     */
+    dummyStartPoint: {
+        address: '',
+        latitude: undefined,
+        longitude: null
+    },
+
+    dummyEndPoint: {
+        address: '',
+        latitude: null,
+        longitude: undefined
+    },
+
+    dummyViaPoint: {
+        address: '',
+        latitude: null,
+        longitude: null
+    },
 
     /**
      * Get the coordinates of all waypoints as array.
@@ -89,14 +99,24 @@ Ext.define('Koala.store.WayPoints', {
     },
 
     /**
+     * Replace a waypoint.
+     *
+     * @param {Object} point Waypoint.
+     */
+    replacePoint: function(index, point) {
+        var me = this;
+        me.removeAt(index);
+        me.insert(index, point);
+    },
+
+    /**
      * Set the start point.
      *
      * @param {Object} point Waypoint.
      */
     setStartPoint: function(point) {
         var me = this;
-        me.removeAt(0);
-        me.insert(0, point);
+        me.replacePoint(0, point);
     },
 
     /**
@@ -116,7 +136,6 @@ Ext.define('Koala.store.WayPoints', {
      */
     setEndPoint: function(point) {
         var me = this;
-        me.removeAt(me.count() - 1);
-        me.add(point);
+        me.replacePoint(me.count() - 1, point);
     }
 });

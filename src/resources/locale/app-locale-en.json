@@ -871,6 +871,7 @@
                     "startFieldTitle": "Start",
                     "viaFieldTitle": "Via",
                     "endFieldTitle": "End",
+                    "addEmptyPoint": "New Point",
                     "routingProfileFieldTitle": "Profile",
                     "computeRouteButtonText": "Compute route",
                     "addStartPoint": "Set start",

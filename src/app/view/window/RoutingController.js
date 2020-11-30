@@ -33,7 +33,7 @@ Ext.define('Koala.view.window.RoutingController', {
     boundOpenContextMenu: null,
 
     /**
-     * Gets the RouteLayer.
+     * Get the RouteLayer.
      * @returns {ol.layer.Vector} The RouteLayer.
      */
     getRouteLayer: function() {
@@ -48,7 +48,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Gets the WaypointLayer.
+     * Get the WaypointLayer.
      * @returns {ol.layer.Vector} The WaypointLayer.
      */
     getWaypointLayer: function() {
@@ -63,7 +63,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Gets the ElevationLayer.
+     * Get the ElevationLayer.
      * @returns {ol.layer.Vector} The WaypointLayer.
      */
     getElevationLayer: function() {
@@ -101,7 +101,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Adds a single waypoint to the waypointLayer.
+     * Add a single waypoint to the waypointLayer.
      */
     addWayPointToMap: function(feature) {
         var me = this;
@@ -160,7 +160,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Gets the content for the waypoint popup.
+     * Get the content for the waypoint popup.
      * This makes sure that the boilerplate for the popup
      * will always be set up properly.
      *
@@ -219,10 +219,18 @@ Ext.define('Koala.view.window.RoutingController', {
         var mapViewport = map.getViewport();
         me.boundOpenContextMenu = me.openContextMenu.bind(me);
         mapViewport.addEventListener('contextmenu', me.boundOpenContextMenu);
+
+        var wayPointStore = vm.get('waypoints');
+        wayPointStore.on('datachanged',
+            function() {
+                view.fireEvent('updateWayPointLayer');
+                view.fireEvent('makeRoutingRequest');
+            }
+        );
     },
 
     /**
-     * Opens a context menu when a right-click on the map
+     * Open a context menu when a right-click on the map
      * is performed.
      *
      * @param {event} evt The event emitted by clicking on the map.
@@ -248,25 +256,36 @@ Ext.define('Koala.view.window.RoutingController', {
         var latitude = transformed[1];
         var longitude = transformed[0];
 
+        var newWayPointJson = {
+            address: '',
+            latitude: latitude,
+            longitude: longitude
+        };
+
+        var wayPointStore = vm.get('waypoints');
+
         var mapContextMenu = Ext.create('Ext.menu.Menu', {
             renderTo: Ext.getBody(),
             items: [
                 {
                     text: vm.get('i18n.addStartPoint'),
                     handler: function() {
-                        me.storeRoutingPoint('start', latitude, longitude);
+                        wayPointStore.setStartPoint(newWayPointJson);
+                        mapContextMenu.destroy();
                     }
                 },
                 {
                     text: vm.get('i18n.addViaPoint'),
                     handler: function() {
-                        me.storeRoutingPoint('via', latitude, longitude);
+                        wayPointStore.addViaPoint(newWayPointJson);
+                        mapContextMenu.destroy();
                     }
                 },
                 {
                     text: vm.get('i18n.addEndPoint'),
                     handler: function() {
-                        me.storeRoutingPoint('end', latitude, longitude);
+                        wayPointStore.setEndPoint(newWayPointJson);
+                        mapContextMenu.destroy();
                     }
                 }
             ]
@@ -276,52 +295,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Adds a new waypint to the store.
-     *
-     * @param {String} wayPointType The type of the waypoint.
-     * @param {number} latitude The latitude of the new waypoint.
-     * @param {number} longitude The longitude of the new waypoint.
-     */
-    storeRoutingPoint: function(wayPointType, latitude, longitude) {
-
-        var me = this;
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-
-        var newWayPointJson = {
-            address: '',
-            latitude: latitude,
-            longitude: longitude
-        };
-
-        var wayPointStore = vm.get('waypoints');
-
-        // TODO: handle case that store only contains 1 records
-        // this should not be allowed, because the role of the
-        // waypoint is defined by its position in the store.
-        // With only one record the role of the waypoint cannot
-        // be identified
-
-        if (wayPointType === 'start') {
-            wayPointStore.setStartPoint(newWayPointJson);
-        }
-
-        if (wayPointType === 'via') {
-            wayPointStore.addViaPoint(newWayPointJson);
-        }
-
-        if (wayPointType === 'end') {
-            wayPointStore.setEndPoint(newWayPointJson);
-        }
-
-        // destroy the menu so it can be re-created
-        // on next right click on the map
-        var mapContextMenu = vm.get('mapContextMenu');
-        mapContextMenu.destroy();
-    },
-
-    /**
-     * Creates all needed layers for the routing.
+     * Create all needed layers for the routing.
      */
     createRoutingLayers: function() {
         var me = this;
@@ -343,9 +317,9 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Creates a new layer and overwrites the applied viewLayer.
+     * Create a new layer and overwrites the applied viewLayer.
      *
-     * Gets the style from the viewModel by name.
+     * Get the style from the viewModel by name.
      *
      * @param {String} styleName The name of the style object in the viewModel.
      * @param {String} viewLayerName The name of the viewLayer that should be overwritten.
@@ -374,55 +348,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Updates the values in the user interface.
-     */
-    setFormEntries: function() {
-
-        var me = this;
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-
-        var wayPointStore = vm.get('waypoints');
-
-        var count = wayPointStore.count();
-
-        var formCmp = view.down('form');
-
-        // maybe set to true
-        formCmp.removeAll();
-
-        wayPointStore.each(function(rec, index) {
-
-            var label = vm.get('i18n.viaFieldTitle');
-
-            if (index === 0) {
-                label = vm.get('i18n.startFieldTitle');
-            }
-            if (index === (count - 1)) {
-                label = vm.get('i18n.endFieldTitle');
-            }
-            var coordinate = rec.get('coordinate');
-            var fieldValue = [];
-
-            if (rec.get('hasLongitude') && rec.get('hasLatitude')) {
-                fieldValue = coordinate;
-            }
-
-            var currentChild = formCmp.getComponent(index);
-            formCmp.remove(currentChild);
-            formCmp.insert(index, {
-                xtype: 'textfield',
-                fieldLabel: label,
-                value: fieldValue,
-                allowBlank: false
-            });
-        });
-
-        me.updateWayPointLayer();
-    },
-
-    /**
-     * Redraws the waypoint layer.
+     * Redraw the waypoint layer.
      */
     updateWayPointLayer: function() {
 
@@ -461,7 +387,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Handles data cleanup when the window is being closed.
+     * Handle data cleanup when the window is being closed.
      */
     onWindowClose: function() {
         var me = this;
@@ -504,7 +430,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Fires the http request to the OpenRouteService API.
+     * Fire the http request to the OpenRouteService API.
      *
      * @param {String} service The service to use (e.g. 'directions', 'geocode').
      * @param {Object} params The request params.
@@ -515,6 +441,7 @@ Ext.define('Koala.view.window.RoutingController', {
         switch (service.toLowerCase()) {
             case 'directions':
                 // TODO: replace with custom instance
+                // https://entw-imis.lab.bfs.de/ors/v2/directions/
                 // TODO: add host url
                 var Directions = new Openrouteservice.Directions({
                     api_key: '5b3ce3597851110001cf624852581e9bffb2450b8472eccc933bae17'
@@ -574,7 +501,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Requests openrouteservice API.
+     * Request openrouteservice API.
      */
     makeRoutingRequest: function() {
 
@@ -605,7 +532,7 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Downloads a route in a given output format.
+     * Download a route in a given output format.
      *
      * @param {'geojson'|'gpx'} outputFormat The output format
      */
@@ -645,5 +572,4 @@ Ext.define('Koala.view.window.RoutingController', {
 
         me.requestORS('directions', params, onSuccess, onError);
     }
-
 });

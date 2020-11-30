@@ -32,6 +32,7 @@ Ext.define('Koala.view.window.RoutingModel', {
             startFieldTitle: '',
             viaFieldTitle: '',
             endFieldTitle: '',
+            addEmptyPoint: '',
             addStartPoint: '',
             addViaPoint: '',
             addEndPoint: '',

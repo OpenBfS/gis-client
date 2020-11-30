@@ -26,7 +26,9 @@ Ext.define('Koala.view.window.Routing', {
         'BasiGX.view.component.Map',
         'Koala.view.window.RoutingModel',
         'Koala.view.window.RoutingController',
-        'Koala.view.container.RoutingResult'
+        'Koala.view.container.RoutingResult',
+        'Koala.view.panel.ElevationProfile',
+        'Koala.view.form.RoutingSettings'
     ],
 
     controller: 'k-window-routing',
@@ -53,42 +55,14 @@ Ext.define('Koala.view.window.Routing', {
         title: '{i18n.title}'
     },
 
-    height: 300,
-    width: 300,
+    height: 400,
+    width: 500,
 
     layout: 'vbox',
 
     items: [
         {
-            xtype: 'form',
-            bodyPadding: 10,
-            items: [
-                {
-                    xtype: 'textfield',
-                    bind: {
-                        fieldLabel: '{i18n.startFieldTitle}'
-                    },
-                    name: 'startField',
-                    allowBlank: false
-                },
-                {
-                    xtype: 'textfield',
-                    bind: {
-                        fieldLabel: '{i18n.endFieldTitle}'
-                    },
-                    name: 'endField',
-                    allowBlank: false
-                }
-            ],
-            fbar: [
-                {
-                    type: 'button',
-                    bind: {
-                        text: '{i18n.computeRouteButtonText}'
-                    },
-                    handler: 'makeRoutingRequest'
-                }
-            ]
+            xtype: 'k-form-routing-settings'
         }
     ],
 
@@ -111,8 +85,8 @@ Ext.define('Koala.view.window.Routing', {
         onWaypointAdded: 'onWaypointAdded',
         boxReady: 'onBoxReady',
         close: 'onWindowClose',
-        setFormEntries: 'setFormEntries',
         makeRoutingRequest: 'makeRoutingRequest',
+        updateWayPointLayer: 'updateWayPointLayer',
         makeDownloadRequest: 'makeDownloadRequest'
     },
 
@@ -152,20 +126,6 @@ Ext.define('Koala.view.window.Routing', {
             vm.set('waypointStyle', waypointStyle);
             vm.set('waypointFontSize', routingOpts.waypointStyle.markerSize);
         }
-
-        var wayPointStore = vm.get('waypoints');
-
-        // TODO move this method to its proper place
-        wayPointStore.on('datachanged',
-            function() {
-                me.fireEvent('setFormEntries');
-
-                // trigger routing
-                // TODO: add a `routing_possible` event to the ViewModel
-                //       and bind it to the button or the automatic routing request
-                me.fireEvent('makeRoutingRequest');
-            }
-        );
 
         if (routingOpts.elevationStyle) {
             var elevationStyle = new ol.style.Style({
