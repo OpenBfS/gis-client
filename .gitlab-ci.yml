@@ -59,5 +59,6 @@ deploy:
     - npm install
     - npm run build:dist
     - cd ../../..
+    - mkdir -p build/production/Koala/gis_client_configs
     - rsync -avzh --delete build/production/Koala/ -e ssh terrestris@10.133.7.220:/home/terrestris/koala/client/
-    - scp resources/appContext.json terrestris@10.133.7.220:/home/terrestris/koala/client/resources/appContext.json
+    - scp resources/appContext.json terrestris@10.133.7.220:/home/terrestris/koala/client/gis_client_configs/appContext.json
