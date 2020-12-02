@@ -14,23 +14,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.ElevationProfileModel
+ * @class Koala.store.RoutingSummaries
  */
-Ext.define('Koala.view.panel.ElevationProfileModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-panel-elevationprofile',
+Ext.define('Koala.store.RoutingSummaries', {
+    extend: 'Ext.data.Store',
 
-    data: {
-        title: '',
-        xLabel: '',
-        yLabel: '',
-        distanceLabel: '',
-        distance: undefined,
-        elevationLabel: '',
-        elevation: undefined,
-        durationLabel: '',
-        duration: undefined,
-        showIndicatorBox: false,
-        routingSummary: undefined
-    }
+    alias: 'store.k-routingsummaries',
+
+    storeId: 'k-routingsummaries',
+
+    fields: [
+        {name: 'profile', type: 'string'},
+        {name: 'distance', type: 'float'},
+        {name: 'duration', type: 'float'},
+        {name: 'ascent', type: 'float'},
+        {name: 'descent', type: 'float'},
+        {name: 'properties', convert: null},
+        {name: 'geometry', convert: null},
+        {name: 'query', convert: null}
+    ]
 });

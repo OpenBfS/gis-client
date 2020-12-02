@@ -115,32 +115,44 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
     },
 
     /**
-     * Updates the chart.
+     * Handler for the datachanged event.
+     *
+     * @param {Ext.data.Model} routingSummary A routing summary.
      */
-    updateChart: function() {
+    onDataChanged: function(routingSummary) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        if (!view.isVisible()) {
+            return;
+        }
+
+        vm.set('routingSummary', routingSummary);
+        me.createChart();
+    },
+
+    /**
+     * Create the chart.
+     */
+    createChart: function() {
         var me = this;
         var staticMe = Koala.view.panel.ElevationProfileController;
         var view = me.getView();
         var vm = view.lookupViewModel();
-        var layer = view.getOlLayer();
 
-        if (layer === null) {
+        var routingSummary = vm.get('routingSummary');
+
+        if (!routingSummary) {
             return;
         }
-
-        var features = layer.getSource().getFeatures();
-        if (!features || features.length === 0) {
-            return;
-        }
-
-        var feature = features[0];
 
         var container = view.down('[name=' + view.elevationContainerName + ']');
         if (!container) {
             return;
         }
 
-        var data = me.mapFeatureToChart(feature);
+        var data = me.mapSummaryToChart(routingSummary);
         var limits = staticMe.getMinMax(data);
 
         var xAxis = staticMe.xAxisBase;
@@ -289,12 +301,12 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
     },
 
     /**
-     * Maps feature properties into the charting data structure.
+     * Maps routing summary properties into the charting data structure.
      *
-     * @param {ol.Feature} feature The feature to retrieve the data from.
+     * @param {Ext.data.Model} summary The routing summary.
      * @returns {Array} Array of charting data entries.
      */
-    mapFeatureToChart: function(feature) {
+    mapSummaryToChart: function(summary) {
         var me = this;
         var view = me.getView();
 
@@ -306,9 +318,11 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             elevationLayer = BasiGX.util.Layer.getLayerByName(view.elevationLayerName);
         }
 
+        var map = BasiGX.view.component.Map.guess().getMap();
+
         var mapping = [];
-        var coordinates = feature.getGeometry().getCoordinates();
-        var props = feature.getProperties();
+        var coordinates = summary.geometry.coordinates;
+        var props = summary.properties;
         var segments = props.segments;
         var distance = 0;
         var duration = 0;
@@ -324,8 +338,17 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
                 var coordinate = coordinates[wayPoint];
                 var elevation = coordinate[2];
                 var tooltipFunc = function(chart, x, limits) {
+                    var transformed = coordinate;
+
+                    if (map) {
+                        var sourceProjection = ol.proj.get('EPSG:4326');
+                        var targetProjection;
+                        targetProjection = map.getView().getProjection().getCode();
+                        transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
+                    }
+
                     var feat = new ol.Feature({
-                        geometry: new ol.geom.Point(coordinate)
+                        geometry: new ol.geom.Point(transformed)
                     });
                     feat.setProperties({
                         duration: stepDuration,

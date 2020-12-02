@@ -108,15 +108,44 @@ Ext.define('Koala.view.container.RoutingResult', {
         },
 
         /**
+         * Get the icon for given routing profile.
+         *
+         * @param {String} profile The routing profile.
+         */
+        getIconFromProfile: function(profile) {
+            var iconCls = '';
+
+            switch (profile) {
+                case 'foot-walking':
+                    iconCls = 'fa-male';
+                    break;
+                case 'cycling-regular':
+                    iconCls = 'fa-bicycle';
+                    break;
+                case 'driving-car':
+                    iconCls = 'fa-car';
+                    break;
+                default:
+                    return;
+            }
+
+            return '<i class="fa ' + iconCls + '" aria-hidden="true"></i>';
+        },
+
+        /**
          * Format duration.
          *
          * Formats the duration as human readable durations (e.g. 15 minutes).
          *
          * @param {Number} duration The duration to format in seconds.
+         * @param {Boolean} plainText If true, just returns the plain text.
          * @returns {String} The formatted duration html string.
          */
-        getFormattedDuration: function(duration) {
+        getFormattedDuration: function(duration, plainText) {
             var durationFormatted = moment.duration(duration, 'seconds').humanize();
+            if (plainText) {
+                return durationFormatted;
+            }
             return '<b>' + durationFormatted + '</b>';
         },
 
@@ -126,11 +155,16 @@ Ext.define('Koala.view.container.RoutingResult', {
          * Rounds the distance to a proper metric unit (e.g. km).
          *
          * @param {Number} distance The distance to format in meters.
+         * @param {Boolean} plainText If true, just returns the plain text.
          * @returns {String} The formatted distance html string.
          */
-        getFormattedDistance: function(distance) {
+        getFormattedDistance: function(distance, plainText) {
             var distanceFormatted = D3Util.d3.format('.2~s')(distance);
             var lastChar = distanceFormatted.slice(-1);
+
+            if (plainText) {
+                return distanceFormatted + 'm';
+            }
 
             // check if last character is a SI unit suffix
             if (isNaN(parseInt(lastChar, 10))) {
@@ -168,63 +202,140 @@ Ext.define('Koala.view.container.RoutingResult', {
     elevationLayerName: 'routing-elevation-layer',
 
     listeners: {
-        onboxready: 'onBoxReady',
+        boxready: 'onBoxReady',
         resultChanged: 'onRoutingResultChanged',
         beforedestroy: 'onDestroy'
     },
 
-    // add routing summary component
-    // add routing instructions component
     items: [
         {
-            xtype: 'container',
-            layout: 'hbox',
-            items: [
+            xtype: 'grid',
+            name: 'routing-summary-grid',
+            defaults: {
+                flex: 1
+            },
+            bind: {
+                store: '{routingsummaries}'
+            },
+            listeners: {
+                itemmouseenter: 'onSummaryMouseEnter',
+                itemmouseleave: 'onSummaryMouseLeave'
+            },
+            allowDeselect: true,
+            columns: [
                 {
-                    xtype: 'button',
-                    name: 'routing-elevation-trigger',
+                    dataIndex: 'profile',
+                    sortable: false,
+                    hideable: false,
                     flex: 1,
-                    handler: 'onElevationBtnClick',
-                    enableToggle: true,
-                    bind: {
-                        text: '{i18n.elevationBtnText}'
+                    align: 'center',
+                    tdCls: 'routing-summary-icon-cell',
+                    renderer: function(profile) {
+                        var staticMe = Koala.view.container.RoutingResult;
+                        return staticMe.getIconFromProfile(profile);
                     }
                 }, {
-                    xtype: 'button',
-                    flex: 1,
-                    glyph: 'xf019@FontAwesome',
-                    bind: {
-                        text: '{i18n.downloadButtonText}'
-                    },
-                    arrowAlign: 'right',
-                    menu: [
-                        {
-                            downloadType: 'gpx',
-                            text: '.gpx',
-                            listeners: {
-                                click: 'onDownloadButtonClicked'
+                    sortable: false,
+                    hideable: false,
+                    flex: 3,
+                    renderer: function(val, metaData, rec) {
+                        var staticMe = Koala.view.container.RoutingResult;
+                        var duration = rec.get('duration');
+                        var distance = rec.get('distance');
+                        var ascent = rec.get('ascent');
+                        var descent = rec.get('descent');
+
+                        var durationFormatted = staticMe.getFormattedDuration(duration, true);
+                        var distanceFormatted = staticMe.getFormattedDistance(distance, true);
+                        var ascentFormatted = staticMe.getFormattedDistance(ascent, true);
+                        var descentFormatted = staticMe.getFormattedDistance(descent, true);
+
+                        var content = '<div class="routing-summary-cell"><div>';
+                        content += '<span><i class="fa fa-clock-o" aria-hidden="true"></i> ' + durationFormatted + '</span>';
+                        content += '<span><i class="fa fa-arrows-h" aria-hidden="true"></i> ' + distanceFormatted + '</span>';
+                        content += '</div><div>';
+                        content += '<span><i class="fa fa-long-arrow-up" aria-hidden="true"></i> ' + ascentFormatted + '</span>';
+                        content += '<span><i class="fa fa-long-arrow-down" aria-hidden="true"></i> ' + descentFormatted + '</span>';
+                        content += '</div></div>';
+
+                        return content;
+                    }
+                }, {
+                    xtype: 'widgetcolumn',
+                    flex: 2,
+                    align: 'right',
+                    tdCls: 'routing-icon-cell',
+                    widget: {
+                        xtype: 'container',
+                        defaults: {
+                            flex: 1,
+                            margin: '0 2'
+                        },
+                        bind: {
+                            data: '{record}'
+                        },
+                        items: [
+                            {
+                                xtype: 'button',
+                                name: 'routing-elevation-trigger',
+                                glyph: 'f1fe@FontAwesome',
+                                handler: 'onElevationBtnClick',
+                                enableToggle: true,
+                                bind: {
+                                    tooltip: '{i18n.elevationBtnText}'
+                                }
+                            }, {
+                                xtype: 'button',
+                                glyph: 'xf019@FontAwesome',
+                                bind: {
+                                    tooltip: '{i18n.downloadButtonText}'
+                                },
+                                arrowAlign: false,
+                                menu: [
+                                    {
+                                        downloadType: 'gpx',
+                                        text: '.gpx',
+                                        listeners: {
+                                            // TODO update method if we want to support
+                                            // alternative routes
+                                            click: 'onDownloadButtonClicked'
+                                        }
+                                    }, {
+                                        downloadType: 'geojson',
+                                        text: '.geojson',
+                                        listeners: {
+                                            // TODO update method if we want to support
+                                            // alternative routes
+                                            click: 'onDownloadButtonClicked'
+                                        }
+                                    }
+                                ]
+                            } , {
+                                xtype: 'button',
+                                enableToggle: true,
+                                glyph: 'xf05a@FontAwesome',
+                                bind: {
+                                    tooltip: '{i18n.routingSummaryDetailsButton}'
+                                },
+                                handler: 'onDetailsButtonClicked'
                             }
-                        }, {
-                            downloadType: 'geojson',
-                            text: '.geojson',
-                            listeners: {
-                                click: 'onDownloadButtonClicked'
-                            }
-                        }
-                    ]
+                        ]
+                    }
                 }
             ]
         }, {
             xtype: 'grid',
-            flex: 1,
+            flex: 5,
             bind: {
-                store: '{routinginstructions}'
+                store: '{routinginstructions}',
+                hidden: '{!showRoutingInstructions}'
             },
             listeners: {
-                itemmouseenter: 'onGridMouseEnter',
-                itemmouseleave: 'onGridMouseLeave',
-                select: 'onGridSelect'
+                itemmouseenter: 'onInstructionMouseEnter',
+                itemmouseleave: 'onInstructionMouseLeave',
+                select: 'onInstructionSelect'
             },
+            allowDeselect: true,
             columns: [
                 {
                     dataIndex: 'type',
@@ -278,6 +389,7 @@ Ext.define('Koala.view.container.RoutingResult', {
 
         var elevationPanel = Ext.create('Koala.view.panel.ElevationProfile', {
             name: me.elevationProfilePanelName,
+            routeLayerName: me.routeLayerName,
             elevationLayerName: me.elevationLayerName
         });
 

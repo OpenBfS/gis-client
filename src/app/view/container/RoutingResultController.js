@@ -32,10 +32,21 @@ Ext.define('Koala.view.container.RoutingResultController', {
     onRoutingResultChanged: function(newResult) {
         var me = this;
 
-        me.addRouteToMap(newResult);
-        me.zoomToRoute();
-        me.updateRoutingInstructions(newResult);
-        me.updateElevationPanel();
+        if (newResult) {
+            me.addRouteToMap(newResult);
+            me.zoomToRoute();
+            me.updateRoutingSummaries(newResult);
+            me.clearRoutingInstructions();
+            me.setRoutingInstructionsVisiblity(false);
+            me.setElevationPanelVisibility(false);
+            me.resetToggleButtons();
+        } else {
+            me.clearRoutingInstructions();
+            me.clearRoutingSummaries();
+            me.resetToggleButtons();
+            me.setRoutingInstructionsVisiblity(false);
+            me.setElevationPanelVisibility(false);
+        }
     },
 
     /**
@@ -54,16 +65,29 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
         // rerender elevationprofile to translate svg labels
         var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
-        langCombo.on('applanguagechanged', me.updateElevationPanel.bind(me));
+        langCombo.on('applanguagechanged', function() {
+            me.updateElevationPanel();
+        }.bind(me));
     },
 
     /**
-     * Handler for the mouseenter event on the grid.
+     * Reset the push state of toggle buttons in the routing summary grid.
+     */
+    resetToggleButtons: function() {
+        var query = '[name=routing-summary-grid] button[pressed]';
+        var enabledButtons = Ext.ComponentQuery.query(query);
+        Ext.Array.each(enabledButtons, function(btn) {
+            btn.setPressed(false);
+        });
+    },
+
+    /**
+     * Handler for the mouseenter event on the instruction grid.
      *
      * @param {Ext.grid.Panel} grid The Ext Grid.
-     * @param {Koala.store.RoutingInstructions} rec A single RoutingInstruction.
+     * @param {Ext.data.Model} rec A single RoutingInstruction.
      */
-    onGridMouseEnter: function(grid, rec) {
+    onInstructionMouseEnter: function(grid, rec) {
         var me = this;
 
         var routeSegmentLayer = me.getRouteSegmentLayer();
@@ -79,9 +103,9 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Handler for the mouseleave event on the grid.
+     * Handler for the mouseleave event on the instruction grid.
      */
-    onGridMouseLeave: function() {
+    onInstructionMouseLeave: function() {
         var me = this;
 
         var routeSegmentLayer = me.getRouteSegmentLayer();
@@ -95,12 +119,12 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Handler for the select event on the grid.
+     * Handler for the select event on the instruction grid.
      *
      * @param {Ext.grid.Panel} grid The Ext Grid.
-     * @param {Koala.store.RoutingInstructions} rec A single RoutingInstruction.
+     * @param {Ext.data.Model} rec A single RoutingInstruction.
      */
-    onGridSelect: function(grid, rec) {
+    onInstructionSelect: function(grid, rec) {
         var me = this;
         var view = me.getView();
 
@@ -122,6 +146,59 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
         var mapView = map.getView();
         mapView.fit(feature.getGeometry());
+    },
+
+    /**
+     * Handler for the mouseenter event on the summary grid.
+     *
+     * @param {Ext.grid.Panel} grid The Ext Grid.
+     * @param {Ext.data.Model} rec A single RoutingSummary.
+     */
+    onSummaryMouseEnter: function(grid, rec) {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+
+        if (!map) {
+            return;
+        }
+
+        var routeSegmentLayer = me.getRouteSegmentLayer();
+        if (!routeSegmentLayer) {
+            return;
+        }
+        var source = routeSegmentLayer.getSource();
+        if (source) {
+            source.clear();
+        }
+
+        var geometry = rec.get('geometry');
+        var feature = {
+            type: 'Feature',
+            geometry: geometry,
+            properties: {}
+        };
+
+        var projection = map.getView().getProjection().getCode();
+        source.addFeature((new ol.format.GeoJSON()).readFeature(feature, {
+            featureProjection: projection
+        }));
+    },
+
+    /**
+     * Handler for the mouseleave event on the summary grid.
+     */
+    onSummaryMouseLeave: function() {
+        var me = this;
+
+        var routeSegmentLayer = me.getRouteSegmentLayer();
+        if (!routeSegmentLayer) {
+            return;
+        }
+        var source = routeSegmentLayer.getSource();
+        if (source) {
+            source.clear();
+        }
     },
 
     /**
@@ -245,7 +322,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Destroys the elevation graph
+     * Destroy the elevation graph
      */
     destroyElevationPanel: function() {
         var me = this;
@@ -288,13 +365,22 @@ Ext.define('Koala.view.container.RoutingResultController', {
      */
     onElevationBtnClick: function(btn) {
         var me = this;
+        var vm = btn.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+        // Ext injects the store record as 'record'.
+        var routingSummary = vm.get('record');
         me.setElevationPanelVisibility(btn.pressed);
+        if (btn.pressed) {
+            me.updateElevationPanel(routingSummary);
+        }
     },
 
     /**
      * Update the elevation panel.
      */
-    updateElevationPanel: function() {
+    updateElevationPanel: function(summary) {
         var me = this;
         var view = me.getView();
 
@@ -306,12 +392,13 @@ Ext.define('Koala.view.container.RoutingResultController', {
         }
 
         var elevationPanel = Ext.ComponentQuery.query('[name=' + elevationPanelName + ']')[0];
-        if (elevationPanel) {
-
-            if (routeLayer.getSource().getFeatures().length === 0) {
-                me.setElevationPanelVisibility(false);
+        if (summary) {
+            elevationPanel.fireEvent('dataChanged', summary.getData());
+        } else {
+            var southContainer = Ext.ComponentQuery.query('[name=south-container]')[0];
+            if (southContainer && southContainer.isVisible() && elevationPanel.isVisible()) {
+                elevationPanel.fireEvent('rerender');
             }
-            elevationPanel.updateLayer(routeLayer);
         }
     },
 
@@ -330,7 +417,48 @@ Ext.define('Koala.view.container.RoutingResultController', {
         }
     },
 
-    updateRoutingInstructions: function(result) {
+    /**
+     * Handle the click event for the routing instructions button.
+     *
+     * @param {Ext.button.Button} btn The clicked button.
+     */
+    onDetailsButtonClicked: function(btn) {
+        var me = this;
+
+        var btnVm = btn.lookupViewModel();
+        if (!btnVm) {
+            return;
+        }
+
+        if (btn.pressed) {
+            var routingSummary = btnVm.get('record');
+            me.updateRoutingInstructions(routingSummary);
+        } else {
+            me.clearRoutingInstructions();
+        }
+
+        me.setRoutingInstructionsVisiblity(btn.pressed);
+    },
+
+    /**
+     * Set the visibility of the routing instructions.
+     *
+     * @param {Boolean} visible Visibility of routing instructions.
+     */
+    setRoutingInstructionsVisiblity: function(visible) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        vm.set('showRoutingInstructions', visible);
+    },
+
+    /**
+     * Update the routing instructions.
+     *
+     * @param {Ext.data.Model} rec The routing summary record.
+     */
+    updateRoutingInstructions: function(rec) {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
@@ -342,37 +470,25 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
         instructionsStore.removeAll();
 
-        var features = result.features;
-        if (!features) {
+        var props = rec.get('properties');
+        var geometry = rec.get('geometry');
+
+        if (!props) {
             return;
         }
 
-        var feature = features[0];
-
-        var resultProps = feature.properties;
-        if (!resultProps) {
-            return;
-        }
-
-        var resultGeom = feature.geometry;
-
-        if (!resultGeom) {
-            return;
-        }
-
-        var segments = resultProps.segments;
+        var segments = props.segments;
         if (!segments) {
             return;
         }
 
         var instructions = [];
-
         Ext.Array.forEach(segments, function(segment) {
             var steps = segment.steps || [];
             Ext.Array.forEach(steps, function(step) {
                 var coordinates = [];
                 for (var i=step.way_points[0]; i<=step.way_points[1]; i++) {
-                    var coord = Ext.clone(resultGeom.coordinates[i]);
+                    var coord = Ext.clone(geometry.coordinates[i]);
                     coordinates.push(coord);
                 }
 
@@ -390,5 +506,72 @@ Ext.define('Koala.view.container.RoutingResultController', {
             });
         });
         instructionsStore.add(instructions);
+    },
+
+    /**
+     * Clear the routing instructions store.
+     */
+    clearRoutingInstructions: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var instructionsStore = vm.get('routinginstructions');
+        instructionsStore.removeAll();
+    },
+
+    /**
+     * Clear the routing summaries store.
+     */
+    clearRoutingSummaries: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var summaryStore = vm.get('routingsummaries');
+        summaryStore.removeAll();
+    },
+
+    /**
+     * Update the routing summaries.
+     *
+     * @param {GeoJson} result The routing result.
+     */
+    updateRoutingSummaries: function(result) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var summaryStore = vm.get('routingsummaries');
+
+        summaryStore.removeAll();
+
+        if (!result.features) {
+            return;
+        }
+
+        var query = result.metadata.query;
+        var profile = query.profile;
+
+        Ext.Array.each(result.features, function(feat) {
+            var props = {};
+            if (feat.properties) {
+                props = Ext.clone(feat.properties);
+            }
+
+            var distance = props.summary ? props.summary.distance : undefined;
+            var duration = props.summary ? props.summary.duration : undefined;
+
+            summaryStore.add({
+                profile: profile,
+                properties: props,
+                geometry: Ext.clone(feat.geometry),
+                ascent: props.ascent,
+                descent: props.descent,
+                distance: distance,
+                duration: duration,
+                query: query
+            });
+        });
     }
 });
