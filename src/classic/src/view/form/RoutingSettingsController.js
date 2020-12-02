@@ -86,12 +86,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
             if (index === 0) {
                 label = vm.get('i18n.startFieldTitle');
             }
-            var coordinate = rec.get('coordinate');
-            var fieldValue = [];
-
-            if (rec.get('hasLongitude') && rec.get('hasLatitude')) {
-                fieldValue = coordinate;
-            }
+            var fieldValue = rec.get('address');
 
             view.add(
                 // TODO: consider moving to own class
@@ -108,13 +103,12 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
                         value: fieldValue,
                         enableKeyEvents: true,
                         listeners: {
-                            keyup: {
-                                fn: function(textField) {
+                            specialkey: function(textField, e) {
+                                if (e.getKey() === e.ENTER) {
                                     var userInput = textField.value;
 
                                     me.processTextFieldInput(index, userInput);
-                                },
-                                buffer: 1000
+                                }
                             }
                         }
                     }, {
@@ -200,18 +194,16 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
 
     /**
      * Process the text input of the user.
-     *
      * @param {integer} index The index of the of the current item in the store.
      * @param {string} userInput The string that the user has inserted.
      */
     processTextFieldInput: function(index, userInput) {
-
-        // TODO: decide if input of coordiantes will be allowed in future
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
         var wayPointStore = vm.get('waypoints');
 
+        // check if input is coordinate or address string
         var split = userInput.split(',');
 
         var hasTwoParts = (split.length === 2);
@@ -219,16 +211,54 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
         var longitude = parseFloat(split[0]);
         var latitude = parseFloat(split[1]);
 
-        if (hasTwoParts && longitude && latitude) {
+        var isValidCoordinate = hasTwoParts && !isNaN(longitude) && !isNaN(latitude);
 
-            var newPointJson = {
-                address: '',
-                latitude: latitude,
-                longitude: longitude
-            };
+        var geocoding = Koala.util.Geocoding;
 
-            wayPointStore.replacePoint(index, newPointJson);
+        // process coordinates
+        if (isValidCoordinate) {
+
+            // find address of coordinate
+            // TODO: add language to method
+            geocoding.doReverseGeocoding(longitude, latitude)
+                .then(function(resultJson) {
+
+                    var placeName = geocoding.createPlaceString(resultJson.features[0].properties);
+
+                    var newPointJson = {
+                        address: placeName,
+                        latitude: latitude,
+                        longitude: longitude
+                    };
+                    wayPointStore.replacePoint(index, newPointJson);
+
+                })
+                .catch(function() {
+                    // TODO: add user feedback
+                });
+        // process text input
+        } else {
+            // TODO: add language to method
+            geocoding.doGeocoding(userInput)
+                .then(function(resultJson) {
+
+                    var selectedFeature = resultJson.features[0];
+                    var coords = selectedFeature.geometry.coordinates;
+                    longitude = coords[0];
+                    latitude = coords[1];
+
+                    var placeName = geocoding.createPlaceString(selectedFeature.properties);
+
+                    var newPointJson = {
+                        address: placeName,
+                        latitude: latitude,
+                        longitude: longitude
+                    };
+                    wayPointStore.replacePoint(index, newPointJson);
+                })
+                .catch(function() {
+                    // TODO: add user feedback
+                });
         }
-        // TODO: tell user that input does not work
     }
 });

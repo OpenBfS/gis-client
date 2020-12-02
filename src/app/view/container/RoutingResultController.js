@@ -365,6 +365,8 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
 
+        var instructions = [];
+
         Ext.Array.forEach(segments, function(segment) {
             var steps = segment.steps || [];
             Ext.Array.forEach(steps, function(step) {
@@ -384,9 +386,10 @@ Ext.define('Koala.view.container.RoutingResultController', {
                     coordinates: coordinates
                 };
 
-                instructionsStore.add(instruction);
+                instructions.push(instruction);
             });
         });
+        instructionsStore.add(instructions);
     }
 
 });

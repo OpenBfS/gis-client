@@ -226,6 +226,9 @@
             "redLineLayerName": "Messungen",
             "rodosFolderName": "RODOS-Prognosen",
             "routing": {
+                "openrouteserviceUrl": "https://api.openrouteservice.org",
+                "openrouteserviceApiKey": "5b3ce3597851110001cf624852581e9bffb2450b8472eccc933bae17",
+                "photonUrl": "https://photon.komoot.io",
                 "routeStyle": {
                     "color": "#ff0000",
                     "width": 5
