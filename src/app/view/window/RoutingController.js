@@ -272,42 +272,57 @@ Ext.define('Koala.view.window.RoutingController', {
         var latitude = transformed[1];
         var longitude = transformed[0];
 
-        var newWayPointJson = {
-            address: '',
-            latitude: latitude,
-            longitude: longitude
-        };
-
         var wayPointStore = vm.get('waypoints');
 
-        var mapContextMenu = Ext.create('Ext.menu.Menu', {
-            renderTo: Ext.getBody(),
-            items: [
-                {
-                    text: vm.get('i18n.addStartPoint'),
-                    handler: function() {
-                        wayPointStore.setStartPoint(newWayPointJson);
-                        mapContextMenu.destroy();
-                    }
-                },
-                {
-                    text: vm.get('i18n.addViaPoint'),
-                    handler: function() {
-                        wayPointStore.addViaPoint(newWayPointJson);
-                        mapContextMenu.destroy();
-                    }
-                },
-                {
-                    text: vm.get('i18n.addEndPoint'),
-                    handler: function() {
-                        wayPointStore.setEndPoint(newWayPointJson);
-                        mapContextMenu.destroy();
-                    }
-                }
-            ]
-        });
-        mapContextMenu.showAt(evt.x, evt.y);
-        vm.set('mapContextMenu', mapContextMenu);
+        var geocoding = Koala.util.Geocoding;
+        // TODO: add language to method
+        geocoding.doReverseGeocoding(longitude, latitude)
+            .then(function(resultJson) {
+
+                var placeName = geocoding.createPlaceString(resultJson.features[0].properties);
+
+                var newWayPointJson = {
+                    address: placeName,
+                    latitude: latitude,
+                    longitude: longitude
+                };
+
+                var mapContextMenu = Ext.create('Ext.menu.Menu', {
+                    renderTo: Ext.getBody(),
+                    items: [
+                        {
+                            text: vm.get('i18n.addStartPoint'),
+                            handler: function() {
+                                wayPointStore.setStartPoint(newWayPointJson);
+                                mapContextMenu.destroy();
+                            }
+                        },
+                        {
+                            text: vm.get('i18n.addViaPoint'),
+                            handler: function() {
+                                wayPointStore.addViaPoint(newWayPointJson);
+                                mapContextMenu.destroy();
+                            }
+                        },
+                        {
+                            text: vm.get('i18n.addEndPoint'),
+                            handler: function() {
+                                wayPointStore.setEndPoint(newWayPointJson);
+                                mapContextMenu.destroy();
+                            }
+                        }
+                    ]
+                });
+
+                mapContextMenu.showAt(evt.x, evt.y);
+                vm.set('mapContextMenu', mapContextMenu);
+
+            })
+            .catch(function() {
+                // TODO: add user feedback
+            });
+
+
     },
 
     /**
@@ -466,13 +481,19 @@ Ext.define('Koala.view.window.RoutingController', {
      * @param {Function} onError The error handler.
      */
     requestORS: function(service, params, onSuccess, onError) {
+
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
         switch (service.toLowerCase()) {
             case 'directions':
-                // TODO: replace with custom instance
-                // https://entw-imis.lab.bfs.de/ors/v2/directions/
-                // TODO: add host url
+
+                var routingOpts = vm.get('routingOpts');
+
                 var Directions = new Openrouteservice.Directions({
-                    api_key: '5b3ce3597851110001cf624852581e9bffb2450b8472eccc933bae17'
+                    host: routingOpts.openrouteserviceUrl,
+                    api_key: routingOpts.openrouteserviceApiKey
                 });
                 Directions.calculate(params)
                     .then(onSuccess)
@@ -566,7 +587,6 @@ Ext.define('Koala.view.window.RoutingController', {
      */
     makeDownloadRequest: function(outputFormat) {
         var me = this;
-
         var params = me.getORSParams({
             format: outputFormat,
             extra_info: []

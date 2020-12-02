@@ -102,40 +102,44 @@ Ext.define('Koala.store.WayPoints', {
      * Replace a waypoint.
      *
      * @param {Object} point Waypoint.
+     * @returns {Ext.data.Model} The record of the added waypoint.
      */
     replacePoint: function(index, point) {
         var me = this;
         me.removeAt(index);
-        me.insert(index, point);
+        return me.insert(index, point)[0];
     },
 
     /**
      * Set the start point.
      *
      * @param {Object} point Waypoint.
+     * @returns {Ext.data.Model} The record of the added waypoint.
      */
     setStartPoint: function(point) {
         var me = this;
-        me.replacePoint(0, point);
+        return me.replacePoint(0, point);
     },
 
     /**
      * Add a via point.
      *
      * @param {Object} point Waypoint.
+     * @returns {Ext.data.Model} The record of the added waypoint.
      */
     addViaPoint: function(point) {
         var me = this;
-        me.insert(me.count() - 1, point);
+        return me.insert(me.count() - 1, point)[0];
     },
 
     /**
      * Set the end point.
      *
      * @param {Object} point Waypoint.
+     * @returns {Ext.data.Model} The record of the added waypoint.
      */
     setEndPoint: function(point) {
         var me = this;
-        me.replacePoint(me.count() - 1, point);
+        return me.replacePoint(me.count() - 1, point);
     }
 });

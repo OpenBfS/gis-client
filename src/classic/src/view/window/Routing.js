@@ -102,6 +102,7 @@ Ext.define('Koala.view.window.Routing', {
         var staticMe = Koala.util.AppContext;
         var ctx = staticMe.getAppContext();
         var routingOpts = staticMe.getMergedDataByKey('routing', ctx);
+        vm.set('routingOpts', routingOpts);
 
         if (routingOpts.routeStyle) {
             var routeStyle = new ol.style.Style({
@@ -169,5 +170,6 @@ Ext.define('Koala.view.window.Routing', {
             map: me.map,
             flex: 1
         });
+
     }
 });
