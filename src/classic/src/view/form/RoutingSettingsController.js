@@ -86,7 +86,25 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
             if (index === 0) {
                 label = vm.get('i18n.startFieldTitle');
             }
-            var fieldValue = rec.get('address');
+            var address = rec.get('address');
+
+            // temporary store for geocoding results
+            // it is necessary to fill the current value
+            // otherwise the combobox cannot have it as default value
+            var geoCodingSuggestions = Ext.create('Ext.data.Store', {
+                fields: [
+                    {name: 'address', type: 'string'},
+                    {name: 'latitude', type: 'float'},
+                    {name: 'longitude', type: 'float'}
+                ],
+                data: [
+                    {
+                        'address': address,
+                        'latitude': rec.get('latitude'),
+                        'longitude': rec.get('longitude')
+                    }
+                ]
+            });
 
             view.add(
                 // TODO: consider moving to own class
@@ -97,18 +115,24 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
                     storeIdx: index,
                     margin: '0 0 5 0',
                     items: [{
-                        xtype: 'textfield',
+                        xtype: 'combobox',
                         fieldLabel: label,
                         flex: 1,
-                        value: fieldValue,
-                        enableKeyEvents: true,
+                        store: geoCodingSuggestions,
+                        displayField: 'address',
+                        value: address,
+                        hideTrigger: true,
                         listeners: {
-                            specialkey: function(textField, e) {
-                                if (e.getKey() === e.ENTER) {
-                                    var userInput = textField.value;
-
-                                    me.processTextFieldInput(index, userInput);
-                                }
+                            select: function(combo, record) {
+                                var newPointJson = {
+                                    address: record.get('address'),
+                                    latitude: record.get('latitude'),
+                                    longitude: record.get('longitude')
+                                };
+                                wayPointStore.replacePoint(index, newPointJson);
+                            },
+                            change: function(combo, newValue) {
+                                me.onComboChange(newValue, geoCodingSuggestions);
                             }
                         }
                     }, {
@@ -126,6 +150,90 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
                     }
                 }
             );
+        });
+    },
+
+    /**
+     * Check if input is coordinate or place description.
+     * Provide geocoding suggestions in the combobox for
+     * both cases.
+     *
+     * @param {string} The value written in the Combobox.
+     * @param {Ext.data.Store} geoCodingSuggestions The store that contains geocoding suggestions.
+     */
+    onComboChange: function(newValue, geoCodingSuggestions) {
+        var me = this;
+
+        // return if input string is to short
+        if (newValue.length < 3) {
+            return;
+        }
+
+        // check if input is coordinate or address string
+        var split = newValue.split(',');
+
+        var hasTwoParts = (split.length === 2);
+
+        var longitude = parseFloat(split[0]);
+        var latitude = parseFloat(split[1]);
+
+        var isValidCoordinate = hasTwoParts && isNaN(longitude) && isNaN(latitude);
+
+        // empty geocoding suggestions
+        geoCodingSuggestions.removeAll();
+
+        if (isValidCoordinate) {
+
+            // TODO: add language argument
+            // find address of coordinate
+            Koala.util.Geocoding.doReverseGeocoding(longitude, latitude)
+                .then(function(resultJson) {
+                    me.createGeoCodingSuggestions(resultJson, geoCodingSuggestions);
+                })
+                .catch(function() {
+                    // TODO: add user feedback
+                });
+        } else {
+
+            // return if input starts with number
+            var firstChar = newValue[0];
+            if (parseInt(firstChar, 10)) {
+                return;
+            }
+
+            // TODO: add language argument
+            Koala.util.Geocoding.doGeocoding(newValue)
+                .then(function(resultJson) {
+                    me.createGeoCodingSuggestions(resultJson, geoCodingSuggestions);
+                })
+                .catch(function() {
+                // TODO: add user feedback
+                });
+        }
+    },
+
+    /**
+     * Convert the geocoding results to records and
+     * add them to the store for the comboxbox.
+     *
+     * @param {object} resultJson The response of the Photon geocoding API.
+     * @param {Ext.data.Store} geoCodingSuggestions The store that contains geocoding suggestions.
+     */
+    createGeoCodingSuggestions: function(resultJson, geoCodingSuggestions) {
+
+        Ext.each(resultJson.features, function(feature) {
+
+            var coords = feature.geometry.coordinates;
+            var longitude = coords[0];
+            var latitude = coords[1];
+
+            var address = Koala.util.Geocoding.createPlaceString(feature.properties);
+
+            geoCodingSuggestions.add({
+                'address': address,
+                'latitude': latitude,
+                'longitude': longitude
+            });
         });
     },
 
@@ -190,76 +298,6 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
                 }
             }
         });
-    },
-
-    /**
-     * Process the text input of the user.
-     * @param {integer} index The index of the of the current item in the store.
-     * @param {string} userInput The string that the user has inserted.
-     */
-    processTextFieldInput: function(index, userInput) {
-        var me = this;
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-        var wayPointStore = vm.get('waypoints');
-
-        // check if input is coordinate or address string
-        var split = userInput.split(',');
-
-        var hasTwoParts = (split.length === 2);
-
-        var longitude = parseFloat(split[0]);
-        var latitude = parseFloat(split[1]);
-
-        var isValidCoordinate = hasTwoParts && !isNaN(longitude) && !isNaN(latitude);
-
-        var geocoding = Koala.util.Geocoding;
-
-        // process coordinates
-        if (isValidCoordinate) {
-
-            // find address of coordinate
-            // TODO: add language to method
-            geocoding.doReverseGeocoding(longitude, latitude)
-                .then(function(resultJson) {
-
-                    var placeName = geocoding.createPlaceString(resultJson.features[0].properties);
-
-                    var newPointJson = {
-                        address: placeName,
-                        latitude: latitude,
-                        longitude: longitude
-                    };
-                    wayPointStore.replacePoint(index, newPointJson);
-
-                })
-                .catch(function() {
-                    // TODO: add user feedback
-                });
-        // process text input
-        } else {
-            // TODO: add language to method
-            geocoding.doGeocoding(userInput)
-                .then(function(resultJson) {
-
-                    var selectedFeature = resultJson.features[0];
-                    var coords = selectedFeature.geometry.coordinates;
-                    longitude = coords[0];
-                    latitude = coords[1];
-
-                    var placeName = geocoding.createPlaceString(selectedFeature.properties);
-
-                    var newPointJson = {
-                        address: placeName,
-                        latitude: latitude,
-                        longitude: longitude
-                    };
-                    wayPointStore.replacePoint(index, newPointJson);
-                })
-                .catch(function() {
-                    // TODO: add user feedback
-                });
-        }
     },
 
     /**
