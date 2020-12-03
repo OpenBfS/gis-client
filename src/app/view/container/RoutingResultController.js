@@ -391,5 +391,4 @@ Ext.define('Koala.view.container.RoutingResultController', {
         });
         instructionsStore.add(instructions);
     }
-
 });

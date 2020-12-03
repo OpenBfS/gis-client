@@ -27,6 +27,39 @@ Ext.define('Koala.view.form.RoutingSettings', {
 
     width: '100%',
 
+    tbar: [
+        {
+            xtype: 'segmentedbutton',
+            defaults: {
+                handler: 'onRoutingButtonPressed',
+                scale: 'medium',
+                padding: 10
+            },
+            bind: {
+                value: '{routingProfile}'
+            },
+            items: [{
+                iconCls: 'x-fa fa-car',
+                value: 'driving-car',
+                bind: {
+                    pressed: '{routingProfile === "driving-car"}'
+                }
+            }, {
+                iconCls: 'x-fa fa-bicycle',
+                value: 'cycling-regular',
+                bind: {
+                    pressed: '{routingProfile === "cycling-regular"}'
+                }
+            }, {
+                iconCls: 'x-fa fa-male',
+                value: 'foot-walking',
+                bind: {
+                    pressed: '{routingProfile === "foot-walking"}'
+                }
+            }]
+        }
+    ],
+
     fbar: [
         {
             type: 'button',
