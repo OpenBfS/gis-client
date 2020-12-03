@@ -42,7 +42,10 @@ Ext.define('Koala.view.window.RoutingModel', {
             routingProfileFieldTitle: '',
             computeRouteButtonText: '',
             elevationBtnText: '',
-            downloadButtonText: ''
+            downloadButtonText: '',
+            error_msg_geocoding: '',
+            error_msg_routing_request: '',
+            error_msg_download: ''
         },
         routingProfile: 'foot-walking',
         routeStyle: undefined,
@@ -56,6 +59,7 @@ Ext.define('Koala.view.window.RoutingModel', {
         targetValue: undefined,
         elevationStyle: undefined,
         showRoutingResults: false,
-        routingOpts: null
+        routingOpts: null,
+        language: 'de'
     }
 });
