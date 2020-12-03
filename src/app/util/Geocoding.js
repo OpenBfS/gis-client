@@ -84,7 +84,7 @@ Ext.define('Koala.util.Geocoding', {
          * @param {Number} lon
          * @param {Number} lat
          */
-        doReverseGeocoding: function(lon, lat, lang) {
+        doReverseGeocoding: function(lon, lat, lang, limit) {
             return new Ext.Promise(function(resolve, reject) {
                 if (!Ext.isNumber(lon) || !Ext.isNumber(lat)) {
                     Ext.Logger.warn('Invalid input for reverse geocoding - skip');
@@ -96,7 +96,8 @@ Ext.define('Koala.util.Geocoding', {
                     params: {
                         lon: lon,
                         lat: lat,
-                        lang: lang || Koala.util.Geocoding.lang
+                        lang: lang || Koala.util.Geocoding.lang,
+                        limit: limit || Koala.util.Geocoding.limit
                     },
                     disableCaching: false, // avoids _dc param (breaks request)
                     success: function(response) {
