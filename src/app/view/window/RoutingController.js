@@ -33,6 +33,22 @@ Ext.define('Koala.view.window.RoutingController', {
     boundOpenContextMenu: null,
 
     /**
+     * Change the language variable in the ViewModel.
+     *
+     * @param {string} locale The code for the language used in the application.
+     */
+    changeLanguage: function(locale) {
+
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        vm.set('language', locale);
+
+        view.fireEvent('makeRoutingRequest');
+    },
+
+    /**
      * Get the RouteLayer.
      * @returns {ol.layer.Vector} The RouteLayer.
      */
@@ -243,6 +259,13 @@ Ext.define('Koala.view.window.RoutingController', {
                 view.fireEvent('makeRoutingRequest');
             }
         );
+
+        // application language
+        var languageComboBox = me.getLanguageComboBox();
+        if (languageComboBox) {
+            languageComboBox.on('applanguagechanged', me.changeLanguage.bind(me));
+            vm.set('language', languageComboBox.getValue());
+        }
     },
 
     /**
@@ -275,8 +298,8 @@ Ext.define('Koala.view.window.RoutingController', {
         var wayPointStore = vm.get('waypoints');
 
         var geocoding = Koala.util.Geocoding;
-        // TODO: add language to method
-        geocoding.doReverseGeocoding(longitude, latitude)
+        var language = vm.get('language');
+        geocoding.doReverseGeocoding(longitude, latitude, language)
             .then(function(resultJson) {
 
                 var placeName = geocoding.createPlaceString(resultJson.features[0].properties);
@@ -316,10 +339,11 @@ Ext.define('Koala.view.window.RoutingController', {
 
                 mapContextMenu.showAt(evt.x, evt.y);
                 vm.set('mapContextMenu', mapContextMenu);
-
             })
-            .catch(function() {
-                // TODO: add user feedback
+            .catch(function(err) {
+                var str = 'An error occured: ' + err;
+                Ext.Logger.log(str);
+                Ext.toast(vm.get('i18n.error_msg_geocoding'));
             });
     },
 
@@ -468,6 +492,26 @@ Ext.define('Koala.view.window.RoutingController', {
             mapContextMenu.destroy();
             vm.set('mapContextMenu', null);
         }
+
+        // application language
+        var languageComboBox = me.getLanguageComboBox();
+        if (languageComboBox) {
+            languageComboBox.un('applanguagechanged', me.changeLanguage.bind(me));
+        }
+    },
+
+    /**
+     * Find the application's language combobox.
+     *
+     * @returns {Ext.form.field.ComboBox} The combobox that contains the language choice.
+     */
+    getLanguageComboBox: function() {
+        var languageSelect = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+        if (!languageSelect && Ext.isModern) {
+            // modern
+            languageSelect = Ext.ComponentQuery.query('k-field-languageselect')[0];
+        }
+        return languageSelect;
     },
 
     /**
@@ -530,8 +574,7 @@ Ext.define('Koala.view.window.RoutingController', {
             geometry: true,
             elevation: true,
             preference: 'recommended',
-            // TODO use application language here
-            language: 'en-US',
+            language: vm.get('language'),
             units: 'm',
             attributes: [
                 'detourfactor',
@@ -559,7 +602,6 @@ Ext.define('Koala.view.window.RoutingController', {
 
         var wayPointStore = vm.get('waypoints');
         if (!wayPointStore.isValid() || wayPointStore.count() < 2) {
-            // TODO: tell user that routing does not work
             return;
         }
 
@@ -571,9 +613,15 @@ Ext.define('Koala.view.window.RoutingController', {
 
         var onError = function(err) {
             vm.set('showDownloadButton', false);
-            // TODO: proper error handling
             var str = 'An error occured: ' + err;
             Ext.Logger.log(str);
+            Ext.toast(vm.get('i18n.error_msg_routing_request'));
+
+            var resultPanel = view.down('[name=' + view.routingResultPanelName + ']');
+            if (!resultPanel) {
+                return;
+            }
+            resultPanel.fireEvent('resultChanged');
         };
 
         me.requestORS('directions', params, onSuccess, onError);
@@ -586,6 +634,9 @@ Ext.define('Koala.view.window.RoutingController', {
      */
     makeDownloadRequest: function(outputFormat) {
         var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
         var params = me.getORSParams({
             format: outputFormat,
             extra_info: []
@@ -612,9 +663,16 @@ Ext.define('Koala.view.window.RoutingController', {
         };
 
         var onError = function(err) {
-            // TODO: proper error handling
             var str = 'An error occured: ' + err;
             Ext.Logger.log(str);
+
+            Ext.toast(vm.get('i18n.error_msg_geocoding'));
+
+            var resultPanel = view.down('[name=' + view.routingResultPanelName + ']');
+            if (!resultPanel) {
+                return;
+            }
+            resultPanel.fireEvent('resultChanged');
         };
 
         me.requestORS('directions', params, onSuccess, onError);

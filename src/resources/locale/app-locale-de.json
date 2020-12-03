@@ -882,7 +882,10 @@
                     "addViaPoint": "Wegpunkt setzen",
                     "addEndPoint": "Zielpunkt setzen",
                     "elevationBtnText": "Höhenprofil",
-                    "downloadButtonText": "Download"
+                    "downloadButtonText": "Download",
+                    "error_msg_geocoding": "Standpunkt konnte nicht geladen werden. Bitte versuchen Sie es (später) erneut.",
+                    "error_msg_routing_request": "Routenplanung fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
+                    "error_msg_download": "Download fehlgeschlagen. Bitte versuchen sie es (später) erneut."
                 }
             }
         }
