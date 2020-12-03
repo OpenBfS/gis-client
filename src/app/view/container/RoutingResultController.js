@@ -58,19 +58,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Handler for the boxready event.
-     */
-    onBoxReady: function() {
-        var me = this;
-
-        // rerender elevationprofile to translate svg labels
-        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
-        langCombo.on('applanguagechanged', function() {
-            me.updateElevationPanel();
-        }.bind(me));
-    },
-
-    /**
      * Reset the push state of toggle buttons in the routing summary grid.
      */
     resetToggleButtons: function() {

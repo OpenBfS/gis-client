@@ -202,7 +202,6 @@ Ext.define('Koala.view.container.RoutingResult', {
     elevationLayerName: 'routing-elevation-layer',
 
     listeners: {
-        boxready: 'onBoxReady',
         resultChanged: 'onRoutingResultChanged',
         beforedestroy: 'onDestroy'
     },
