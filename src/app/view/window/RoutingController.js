@@ -321,8 +321,6 @@ Ext.define('Koala.view.window.RoutingController', {
             .catch(function() {
                 // TODO: add user feedback
             });
-
-
     },
 
     /**
@@ -521,6 +519,7 @@ Ext.define('Koala.view.window.RoutingController', {
 
         var wayPointStore = vm.get('waypoints');
         var waypoints = wayPointStore.getCoordinatesArray();
+
 
         // same properties as on https://maps.openrouteservice.org/
         var params = {

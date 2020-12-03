@@ -260,5 +260,19 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
                     // TODO: add user feedback
                 });
         }
+    },
+
+    /**
+     * Trigger new routing request.
+     */
+    onRoutingButtonPressed: function() {
+        var me = this;
+        var view = me.getView();
+
+        var routingWindow = view.up('k-window-routing');
+        if (routingWindow) {
+            routingWindow.fireEvent('makeRoutingRequest');
+        }
     }
+
 });
