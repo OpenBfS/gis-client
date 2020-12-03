@@ -20,12 +20,21 @@ Ext.define('Koala.view.window.RoutingModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.k-window-routing',
 
+    requires: [
+        'Koala.store.WayPoints',
+        'Koala.store.RoutingInstructions',
+        'Koala.store.RoutingSummaries'
+    ],
+
     stores: {
         waypoints: {
             type: 'k-waypoints'
         },
         routinginstructions: {
             type: 'k-routinginstructions'
+        },
+        routingsummaries: {
+            type: 'k-routingsummaries'
         }
     },
 
@@ -45,7 +54,8 @@ Ext.define('Koala.view.window.RoutingModel', {
             downloadButtonText: '',
             error_msg_geocoding: '',
             error_msg_routing_request: '',
-            error_msg_download: ''
+            error_msg_download: '',
+            routingSummaryDetailsButton: ''
         },
         routingProfile: 'foot-walking',
         routeStyle: undefined,
@@ -60,6 +70,7 @@ Ext.define('Koala.view.window.RoutingModel', {
         elevationStyle: undefined,
         showRoutingResults: false,
         routingOpts: null,
-        language: 'de'
+        language: 'de',
+        showRoutingInstructions: false
     }
 });

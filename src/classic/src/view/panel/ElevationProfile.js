@@ -37,7 +37,8 @@ Ext.define('Koala.view.panel.ElevationProfile', {
             element: 'el',
             fn: 'clearElevationProfile'
         },
-        boxready: 'updateChart'
+        rerender: 'createChart',
+        dataChanged: 'onDataChanged'
     },
 
     bind: {
@@ -53,27 +54,11 @@ Ext.define('Koala.view.panel.ElevationProfile', {
 
     elevationLayerName: null,
 
+    routeLayerName: 'routing-route-layer',
+
     defaults: {
         flex: 1,
         width: '100%'
-    },
-
-    config: {
-        olLayer: null
-    },
-
-    updateLayer: function(newLayer) {
-        var me = this;
-        var controller = me.getController();
-        if (!controller) {
-            return;
-        }
-
-        me.setOlLayer(newLayer);
-
-        if (me.isVisible()) {
-            controller.updateChart();
-        }
     },
 
     items: [{

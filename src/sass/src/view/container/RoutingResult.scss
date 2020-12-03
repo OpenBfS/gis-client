@@ -33,3 +33,18 @@
 .routing-icon-cell {
     vertical-align: middle;
 }
+
+.routing-summary-icon-cell {
+    vertical-align: middle;
+    font-size: x-large;
+}
+
+.routing-summary-cell {
+    span {
+        padding-right: 10px;
+    }
+
+    >div:first-of-type {
+        padding-bottom: 4px;
+    }
+}
