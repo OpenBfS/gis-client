@@ -31,6 +31,8 @@ Ext.define('Koala.view.container.RoutingSummary', {
         type: 'k-window-routing'
     },
 
+    layout: 'vbox',
+
     listeners: {
         resultChanged: 'onRoutingResultChanged'
     },
@@ -38,6 +40,7 @@ Ext.define('Koala.view.container.RoutingSummary', {
     items: [{
         xtype: 'grid',
         name: 'routingsummarygrid',
+        flex: 1,
         bind: {
             store: '{routingsummaries}'
         },

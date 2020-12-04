@@ -59,18 +59,6 @@ Ext.define('Koala.view.panel.MobileRoutingController', {
 
         var wayPointStore = vm.get('waypoints');
 
-        // TODO remove me
-        wayPointStore.setStartPoint({
-            address: 'start',
-            latitude: 52.0,
-            longitude: 7.0
-        });
-        wayPointStore.setEndPoint({
-            address: 'end',
-            latitude: 52.1,
-            longitude: 7.1
-        });
-
         if (!wayPointStore.isValid() || wayPointStore.count() < 2) {
             return;
         }
@@ -92,5 +80,33 @@ Ext.define('Koala.view.panel.MobileRoutingController', {
         };
 
         me.makeRoutingRequest(onSuccess);
+    },
+
+    /**
+     * Apply a suggestion to the input field.
+     *
+     * @param {Ext.grid.Grid} grid The suggestions grid.
+     * @param {Ext.data.Model} suggestion A suggestion model instance.
+     */
+    applySuggestion: function(grid, suggestion) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var waypointStore = vm.get('waypoints');
+        var suggestionStore = vm.get('geocodingsuggestions');
+        var waypointId = suggestion.get('waypointId');
+
+        var waypoint = waypointStore.getById(waypointId);
+        if (waypoint) {
+            var waypointIdx = waypointStore.indexOf(waypoint);
+            waypointStore.replacePoint(waypointIdx, {
+                address: suggestion.get('address'),
+                latitude: suggestion.get('latitude'),
+                longitude: suggestion.get('longitude')
+            });
+        }
+        suggestionStore.removeAll();
     }
+
 });

@@ -14,22 +14,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.RoutingSettings
+ * @class Koala.store.GeocodingSuggestions
  */
-Ext.define('Koala.view.form.RoutingSettings', {
-    extend: 'Ext.form.Panel',
-    xtype: 'k-form-routing-settings',
-    controller: 'k-form-modern-routing-settings',
+Ext.define('Koala.store.GeocodingSuggestions', {
 
-    requires: [
-        'Koala.view.form.ModernRoutingSettingsController'
-    ],
+    extend: 'Ext.data.Store',
 
-    width: '100%',
+    alias: 'store.k-geocodingsuggestions',
 
-    bodyPadding: 10,
-    items: [],
-    listeners: {
-        painted: 'onBoxReady'
-    }
+    fields: [
+        {name: 'address', type: 'string'},
+        {name: 'latitude', type: 'float'},
+        {name: 'longitude', type: 'float'},
+        {name: 'waypointId', convert: null}
+    ]
 });

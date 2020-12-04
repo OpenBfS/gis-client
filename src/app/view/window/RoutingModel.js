@@ -23,7 +23,8 @@ Ext.define('Koala.view.window.RoutingModel', {
     requires: [
         'Koala.store.WayPoints',
         'Koala.store.RoutingInstructions',
-        'Koala.store.RoutingSummaries'
+        'Koala.store.RoutingSummaries',
+        'Koala.store.GeocodingSuggestions'
     ],
 
     stores: {
@@ -35,6 +36,9 @@ Ext.define('Koala.view.window.RoutingModel', {
         },
         routingsummaries: {
             type: 'k-routingsummaries'
+        },
+        geocodingsuggestions: {
+            type: 'k-geocodingsuggestions'
         }
     },
 

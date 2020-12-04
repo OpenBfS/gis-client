@@ -63,13 +63,27 @@ Ext.define('Koala.view.panel.MobileRouting',{
 
     items: [{
         xtype: 'k-form-routing-settings',
-        maxHeight: '90%'
+        maxHeight: '40%'
     }, {
         xtype: 'button',
         bind: {
             text: '{i18n.addViaPoint}'
         },
         handler: 'addEmptyViaPoint'
+    },{
+        xtype: 'grid',
+        flex: 1,
+        hideHeaders: true,
+        bind: {
+            store: '{geocodingsuggestions}'
+        },
+        listeners: {
+            select: 'applySuggestion'
+        },
+        columns: [{
+            dataIndex: 'address',
+            flex: 1
+        }]
     }, {
         xtype: 'button',
         bind: {
