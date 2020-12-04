@@ -57,7 +57,7 @@ Ext.define('Koala.view.window.RoutingModel', {
             error_msg_download: '',
             routingSummaryDetailsButton: ''
         },
-        routingProfile: 'foot-walking',
+        routingProfile: 'driving-car',
         routeStyle: undefined,
         routeSegmentStyle: undefined,
         waypointStyle: undefined,
