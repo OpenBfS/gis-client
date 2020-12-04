@@ -74,15 +74,22 @@ Ext.define('Koala.view.panel.MobileRoutingController', {
             var resultPanel = Ext.ComponentQuery.query('[name=' + view.routingResultPanelName + ']')[0];
             if (resultPanel) {
                 resultPanel.show();
-                resultPanel.setViewModel(vm);
                 resultPanel.fireEvent('resultChanged', json);
             }
+        };
+
+        var onError = function(err) {
+            var str = 'An error occured: ' + err;
+            Ext.Logger.log(str);
+            view.setMasked(false);
+            view.fireEvent('resultChanged');
+            // TODO add TOAST
         };
 
         view.setMasked({
             xtype: 'loadmask'
         });
-        me.makeRoutingRequest(onSuccess);
+        me.makeRoutingRequest(onSuccess, onError);
     },
 
     /**

@@ -62,7 +62,9 @@ Ext.define('Koala.view.panel.MobileRouting',{
     closeToolAlign: 'left',
 
     listeners: {
-        painted: 'onPainted'
+        painted: 'onPainted',
+        onWaypointAdded: 'onWaypointAdded',
+        updateWayPointLayer: 'updateWayPointLayer'
     },
 
     items: [{
@@ -119,7 +121,7 @@ Ext.define('Koala.view.panel.MobileRouting',{
         xtype: 'toolbar',
         docked: 'bottom',
         items: [{
-            xtype: 'spacer',
+            xtype: 'spacer'
         }, {
             xtype: 'button',
             iconCls: 'fa fa-arrow-right',
@@ -199,6 +201,11 @@ Ext.define('Koala.view.panel.MobileRouting',{
 
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
+        }
+
+        var resultPanel = Ext.ComponentQuery.query('[name' + me.routingResultPanelName + ']')[0];
+        if (resultPanel) {
+            resultPanel.setViewModel(vm);
         }
     }
 

@@ -27,23 +27,18 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
      */
     onRoutingResultChanged: function(newResult) {
         var me = this;
-        debugger;
+        var view = me.getView();
 
         if (newResult) {
             me.addRouteToMap(newResult);
             me.zoomToRoute();
             me.updateRoutingSummaries(newResult);
             me.clearRoutingInstructions();
-            me.setRoutingInstructionsVisiblity(false);
-            me.setElevationPanelVisibility(false);
-            me.resetToggleButtons();
         } else {
             me.clearRoutingInstructions();
             me.clearRoutingSummaries();
-            me.resetToggleButtons();
-            me.setRoutingInstructionsVisiblity(false);
-            me.setElevationPanelVisibility(false);
+            view.hide();
         }
-    },
+    }
 
 });

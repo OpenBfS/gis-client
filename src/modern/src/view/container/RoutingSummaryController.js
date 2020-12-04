@@ -18,6 +18,6 @@
  */
 Ext.define('Koala.view.container.RoutingSummaryController', {
     extend: 'Koala.view.container.RoutingResultController',
-    alias: 'controller.k-container-routingsummary',
+    alias: 'controller.k-container-routingsummary'
 
 });

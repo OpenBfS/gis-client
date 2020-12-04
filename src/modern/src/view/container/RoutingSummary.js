@@ -22,7 +22,7 @@ Ext.define('Koala.view.container.RoutingSummary', {
 
     requires: [
         'Koala.view.container.RoutingResultController',
-        'Koala.view.window.RoutingModel',
+        'Koala.view.window.RoutingModel'
     ],
 
     controller: 'k-container-routingresult',
@@ -32,10 +32,6 @@ Ext.define('Koala.view.container.RoutingSummary', {
     },
 
     layout: 'vbox',
-
-    listeners: {
-        resultChanged: 'onRoutingResultChanged'
-    },
 
     items: [{
         xtype: 'grid',
@@ -49,6 +45,6 @@ Ext.define('Koala.view.container.RoutingSummary', {
         }, {
             dataIndex: 'duration'
         }]
-    }],
+    }]
 
 });
