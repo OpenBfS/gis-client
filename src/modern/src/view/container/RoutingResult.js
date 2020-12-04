@@ -218,9 +218,7 @@ Ext.define('Koala.view.container.RoutingResult', {
         bind: {
             store: '{routingsummaries}'
         },
-        height: 100,
-        minHeight: 100,
-        maxHeight: '50%',
+        flex: 1,
         columns: [{
             dataIndex: 'profile',
             cell: {
@@ -267,12 +265,76 @@ Ext.define('Koala.view.container.RoutingResult', {
         xtype: 'lockable-carousel',
         name: 'routingcarousel',
         width: '100%',
-        flex: 1,
+        flex: 5,
         items: [{
+            xtype: 'grid',
+            flex: 1,
+            hideHeaders: true,
+            bind: {
+                store: '{routinginstructions}'
+            },
+            listeners: {
+                // TODO add listeners
+            },
+            columns: [
+                {
+                    dataIndex: 'type',
+                    flex: 1,
+                    sortable: false,
+                    hideable: false,
+                    align: 'center',
+                    tdCls: 'routing-icon-cell',
+                    cell: {
+                        type: 'gridcell',
+                        encodeHtml: false,
+                        align: 'center'
+                    },
+                    renderer: function(type) {
+                        var staticMe = Koala.view.container.RoutingResult;
+                        return staticMe.getIconFromType(type);
+                    }
+                }, {
+                    dataIndex: 'instruction',
+                    flex: 10,
+                    tdCls: 'routing-icon-cell',
+                    sortable: false,
+                    hideable: false,
+                    cell: {
+                        type: 'gridcell',
+                        encodeHtml: false,
+                        align: 'left'
+                    },
+                    renderer: function(instruction, rec) {
+                        var staticMe = Koala.view.container.RoutingResult;
+                        var distance = rec.get('distance');
+                        var duration = rec.get('duration');
+
+                        var distanceFormatted = staticMe.getFormattedDistance(distance);
+                        var durationFormatted = staticMe.getFormattedDuration(duration);
+                        var instructionFormatted = '';
+                        var content = '<div>';
+
+                        // Do not show distance and duration on destination field.
+                        if (rec.get('type') === 10) {
+                            instructionFormatted = '<div style="padding-bottom: 10px; padding-top: 10px">' + instruction + '</div>';
+                            content += instructionFormatted;
+                        } else {
+                            instructionFormatted = '<div style="padding-bottom: 10px">' + instruction + '</div>';
+                            content += instructionFormatted;
+                            content += distanceFormatted + ' | ';
+                            content += durationFormatted;
+                        }
+                        content += '</div>';
+
+                        return content;
+                    }
+                }
+            ]
+        }
         //     xtype: 'k-panel-routinginstructions'
         // }, {
         //     xtype: 'k-panel-routingelevation'
-        }]
+        ]
     }],
 
     initialize: function() {
