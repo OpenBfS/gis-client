@@ -79,12 +79,7 @@ Ext.define('Koala.view.form.ModernRoutingSettingsController', {
                         handler: function() {
                             me.deleteRoutingPoint(index);
                         }
-                    }],
-                    // listeners: {
-                    //     afterrender: function(container) {
-                    //         me.enableDragDrop(container, index);
-                    //     }
-                    // }
+                    }]
                 }
             );
         });

@@ -51,7 +51,7 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.panel.TimeseriesChart',
         'Koala.view.panel.MobileEvents',
         'Koala.view.panel.MobileRouting',
-        'Koala.view.panel.RoutingResult'
+        'Koala.view.container.RoutingResult'
     ],
 
     controller: 'mobile-main',
@@ -191,27 +191,9 @@ Ext.define('Koala.view.main.Main', {
         left: 0,
         hidden: true
     }, {
-        xtype: 'container',
-        name: 'routingresultpanel',
-        width: '100%',
-        height: '50%',
-        docked: 'bottom',
-        zIndex: 9998,
-        hidden: true,
-        items: [{
-            xtype: 'lockable-carousel',
-            name: 'routingcarousel',
-            width: '100%',
-            height: '100%',
-            items: [{
-                xtype: 'k-container-routingsummary',
-                name: 'routingsummary'
-            // }, {
-            //     xtype: 'k-panel-routinginstructions'
-            // }, {
-            //     xtype: 'k-panel-routingelevation'
-            }]
-        }]
+        xtype: 'k-container-routingresult',
+        name: 'routing-result-panel',
+        hidden: true
     }, {
         xtype: 'k-panel-mobilepermalink',
         left: 0,

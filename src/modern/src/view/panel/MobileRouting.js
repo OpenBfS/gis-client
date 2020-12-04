@@ -61,7 +61,38 @@ Ext.define('Koala.view.panel.MobileRouting',{
 
     closeToolAlign: 'left',
 
+    listeners: {
+        painted: 'onPainted'
+    },
+
     items: [{
+        xtype: 'segmentedbutton',
+        defaults: {
+            flex: 1
+        },
+        bind: {
+            value: '{routingProfile}'
+        },
+        items: [{
+            iconCls: 'x-fa fa-car',
+            value: 'driving-car',
+            bind: {
+                pressed: '{routingProfile === "driving-car"}'
+            }
+        }, {
+            iconCls: 'x-fa fa-bicycle',
+            value: 'cycling-regular',
+            bind: {
+                pressed: '{routingProfile === "cycling-regular"}'
+            }
+        }, {
+            iconCls: 'x-fa fa-male',
+            value: 'foot-walking',
+            bind: {
+                pressed: '{routingProfile === "foot-walking"}'
+            }
+        }]
+    }, {
         xtype: 'k-form-routing-settings',
         maxHeight: '40%'
     }, {
@@ -85,16 +116,23 @@ Ext.define('Koala.view.panel.MobileRouting',{
             flex: 1
         }]
     }, {
-        xtype: 'button',
-        bind: {
-            text: '{i18n.computeRouteButtonText}'
-        },
-        handler: 'onComputeRouteClick'
+        xtype: 'toolbar',
+        docked: 'bottom',
+        items: [{
+            xtype: 'spacer',
+        }, {
+            xtype: 'button',
+            iconCls: 'fa fa-arrow-right',
+            iconAlign: 'right',
+            style: {
+                fontSize: 'large'
+            },
+            bind: {
+                text: '{i18n.computeRouteButtonText}'
+            },
+            handler: 'onComputeRouteClick'
+        }]
     }],
-
-    listeners: {
-        painted: 'onPainted'
-    },
 
     initialize: function() {
         var me = this;
@@ -162,18 +200,6 @@ Ext.define('Koala.view.panel.MobileRouting',{
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
-
-        // TODO probably set all items of the view dynamically here
-        // me.add({
-        //     xtype: 'k-container-routingresult',
-        //     name: me.routingResultPanelName,
-        //     routeLayerName: me.routeLayerName,
-        //     routeSegmentLayerName: me.routeSegmentLayerName,
-        //     elevationProfilePanelName: me.elevationProfilePanelName,
-        //     elevationLayerName: me.elevationLayerName,
-        //     map: me.map,
-        //     flex: 1
-        // });
     }
 
 });

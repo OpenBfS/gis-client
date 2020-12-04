@@ -20,12 +20,4 @@ Ext.define('Koala.view.container.RoutingSummaryController', {
     extend: 'Koala.view.container.RoutingResultController',
     alias: 'controller.k-container-routingsummary',
 
-    onRoutingResultChanged: function(newResult) {
-        var me = this;
-
-        // TODO only call methods required for routing summary
-        me.addRouteToMap(newResult);
-        me.zoomToRoute();
-
-    }
 });
