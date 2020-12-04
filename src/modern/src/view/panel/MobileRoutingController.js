@@ -1,0 +1,96 @@
+/* Copyright (c) 2015-present terrestris GmbH & Co. KG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/**
+ * @class Koala.view.panel.MobileRoutingController
+ */
+Ext.define('Koala.view.panel.MobileRoutingController', {
+    extend: 'Koala.view.window.RoutingController',
+    alias: 'controller.k-panel-mobilerouting',
+
+    requires: [
+        'Koala.view.panel.RoutingResult'
+    ],
+
+    onPainted: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        me.createRoutingLayers();
+
+        var wayPointStore = vm.get('waypoints');
+        wayPointStore.on('datachanged',
+            function() {
+                view.fireEvent('updateWayPointLayer');
+            }
+        );
+    },
+
+    /**
+     * Add an empty via point to the store
+     * which also will be visible in the UI.
+     */
+    addEmptyViaPoint: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+        var wayPointStore = vm.get('waypoints');
+
+        wayPointStore.addViaPoint(wayPointStore.dummyViaPoint);
+    },
+
+    onComputeRouteClick: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var wayPointStore = vm.get('waypoints');
+
+        // TODO remove me
+        wayPointStore.setStartPoint({
+            address: 'start',
+            latitude: 52.0,
+            longitude: 7.0
+        });
+        wayPointStore.setEndPoint({
+            address: 'end',
+            latitude: 52.1,
+            longitude: 7.1
+        });
+
+        if (!wayPointStore.isValid() || wayPointStore.count() < 2) {
+            return;
+        }
+
+        var onSuccess = function(json) {
+            var menu = Ext.ComponentQuery.query('k-panel-mobilemenu')[0];
+            if (menu) {
+                menu.hide();
+            }
+
+            view.hide();
+            var resultPanel = Ext.ComponentQuery.query('[name=routingresultpanel]')[0];
+            if (resultPanel) {
+                resultPanel.show();
+                resultPanel.down('[name=routingsummary]').setViewModel(vm);
+                resultPanel.down('[name=routingsummary]').fireEvent('resultChanged', json);
+                resultPanel.fireEvent('resultChanged', json);
+            }
+        };
+
+        me.makeRoutingRequest(onSuccess);
+    }
+});

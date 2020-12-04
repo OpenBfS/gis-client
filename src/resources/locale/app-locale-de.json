@@ -1877,11 +1877,32 @@
                 "settingsButtonText": "Einstellungen",
                 "moreLayersButtonText": "Auswahl",
                 "addLayerButtonText": "Externen WMS hinzufügen",
+                "routingButtonText": "Routing",
                 "permalinkButtonText": "Permalink",
                 "spatialSearchTitle": "Räumliche Suche",
                 "stationSearchTitle": "ODL Sondenstandorte",
                 "metadataSearchTitle": "Daten und Dienste des Bfs",
                 "alertBtnText": "Ereignisse"
+            }
+        }
+    },
+    "Koala.view.panel.MobileRouting": {
+        "config": {
+            "data": {
+                "i18n":{
+                    "title": "Routenplanung",
+                    "startFieldTitle": "Start",
+                    "viaFieldTitle": "Via",
+                    "endFieldTitle": "Ziel",
+                    "addEmptyPoint": "Neuer Punkt",
+                    "routingProfileFieldTitle": "Profil",
+                    "computeRouteButtonText": "Route Berechnen",
+                    "addStartPoint": "Startpunkt setzen",
+                    "addViaPoint": "Wegpunkt setzen",
+                    "addEndPoint": "Zielpunkt setzen",
+                    "elevationBtnText": "Höhenprofil",
+                    "downloadButtonText": "Download"
+                }
             }
         }
     },

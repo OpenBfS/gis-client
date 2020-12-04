@@ -27,7 +27,6 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
      * the waypoint store is changing.
      */
     onBoxReady: function() {
-
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();

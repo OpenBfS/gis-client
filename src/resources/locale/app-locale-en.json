@@ -1871,10 +1871,31 @@
                 "moreLayersButtonText": "Selection",
                 "addLayerButtonText": "Add external WMS",
                 "permalinkButtonText": "Permalink",
+                "routingButtonText": "Routing",
                 "spatialSearchTitle": "Spatial search",
                 "stationSearchTitle": "Gamma Dose Rate Stations",
                 "metadataSearchTitle": "BfS data and services",
                 "alertBtnText": "Events"
+            }
+        }
+    },
+    "Koala.view.panel.MobileRouting": {
+        "config": {
+            "data": {
+                "i18n":{
+                    "title": "Route Planning",
+                    "startFieldTitle": "Start",
+                    "viaFieldTitle": "Via",
+                    "endFieldTitle": "End",
+                    "addEmptyPoint": "New Point",
+                    "routingProfileFieldTitle": "Profile",
+                    "computeRouteButtonText": "Compute route",
+                    "addStartPoint": "Set start",
+                    "addViaPoint": "Set waypoint",
+                    "addEndPoint": "Set destination",
+                    "elevationBtnText": "Elevation Profile",
+                    "downloadButtonText": "Download"
+                }
             }
         }
     },

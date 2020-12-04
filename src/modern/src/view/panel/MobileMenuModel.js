@@ -9,6 +9,7 @@ Ext.define('Koala.view.panel.MobileMenuModel', {
         moreLayersButtonText: '',
         addLayerButtonText: '',
         permalinkButtonText: '',
+        routingButtonText: '',
         spatialSearchTitle: '',
         stationSearchTitle: '',
         metadataSearchTitle: '',
