@@ -882,7 +882,10 @@
                     "error_msg_geocoding": "Could not load location. Please try again (later).",
                     "error_msg_routing_request": "Routing request failed. Please try again (later).",
                     "error_msg_download": "Download failed. Please try again (later).",
-                    "routingSummaryDetailsButton": "Details"
+                    "routingSummaryDetailsButton": "Details",
+                    "profileCarText": "Driving",
+                    "profileBycicleText": "Cycling",
+                    "profileWalkingText": "Walking"
                 }
             }
         }

@@ -27,13 +27,12 @@ Ext.define('Koala.view.form.RoutingSettings', {
 
     width: '100%',
 
-    tbar: [
+    fbar: [
         {
             xtype: 'segmentedbutton',
             defaults: {
                 handler: 'onRoutingButtonPressed',
-                scale: 'medium',
-                padding: 10
+                padding: '3 10'
             },
             bind: {
                 value: '{routingProfile}'
@@ -42,25 +41,28 @@ Ext.define('Koala.view.form.RoutingSettings', {
                 iconCls: 'x-fa fa-car',
                 value: 'driving-car',
                 bind: {
-                    pressed: '{routingProfile === "driving-car"}'
+                    pressed: '{routingProfile === "driving-car"}',
+                    tooltip: '{i18n.profileCarText}'
                 }
             }, {
                 iconCls: 'x-fa fa-bicycle',
                 value: 'cycling-regular',
                 bind: {
-                    pressed: '{routingProfile === "cycling-regular"}'
+                    pressed: '{routingProfile === "cycling-regular"}',
+                    tooltip: '{i18n.profileBycicleText}'
                 }
             }, {
                 iconCls: 'x-fa fa-male',
                 value: 'foot-walking',
                 bind: {
-                    pressed: '{routingProfile === "foot-walking"}'
+                    pressed: '{routingProfile === "foot-walking"}',
+                    tooltip: '{i18n.profileWalkingText}'
                 }
             }]
-        }
-    ],
-
-    fbar: [
+        }, {
+            xtype: 'tbspacer',
+            flex: 1
+        },
         {
             type: 'button',
             iconCls: 'x-fa fa-plus-circle',
