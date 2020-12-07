@@ -41,6 +41,10 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
         }
     },
 
+    /**
+     * Use first routing summary for the
+     * routing instructions and elevation panel.
+     */
     useFirstRoutingSummary: function() {
         var me = this;
         var view = me.getView();
@@ -55,7 +59,11 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
 
         if (firstSummary) {
             me.updateRoutingInstructions(firstSummary);
+
+            var elevationPanel = view.down('[name=' + view.elevationProfilePanelName + ']');
+            if (elevationPanel) {
+                elevationPanel.fireEvent('dataChanged', firstSummary.getData());
+            }
         }
     }
-
 });

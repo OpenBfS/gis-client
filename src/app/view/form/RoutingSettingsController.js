@@ -311,7 +311,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
         var longitude = parseFloat(split[0]);
         var latitude = parseFloat(split[1]);
 
-        var isValidCoordinate = hasTwoParts && isNaN(longitude) && isNaN(latitude);
+        var isValidCoordinate = hasTwoParts && !isNaN(longitude) && !isNaN(latitude);
 
         if (isValidCoordinate) {
 

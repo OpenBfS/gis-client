@@ -23,7 +23,8 @@ Ext.define('Koala.view.container.RoutingResult', {
     requires: [
         'BasiGX.view.component.Map',
         'Koala.view.container.ModernRoutingResultController',
-        'Koala.view.window.RoutingModel'
+        'Koala.view.window.RoutingModel',
+        'Koala.view.container.ElevationProfile'
     ],
 
     controller: 'k-container-modernroutingresult',
@@ -207,6 +208,8 @@ Ext.define('Koala.view.container.RoutingResult', {
     /** The name of the layer for elevation interaction */
     elevationLayerName: 'routing-elevation-layer',
 
+    elevationProfilePanelName: 'routing-elevation-panel',
+
     listeners: {
         resultChanged: 'onRoutingResultChanged'
     },
@@ -270,6 +273,7 @@ Ext.define('Koala.view.container.RoutingResult', {
             xtype: 'grid',
             flex: 1,
             hideHeaders: true,
+            padding: '0 0 15 0',
             bind: {
                 store: '{routinginstructions}'
             },
@@ -330,11 +334,11 @@ Ext.define('Koala.view.container.RoutingResult', {
                     }
                 }
             ]
-        }
-        //     xtype: 'k-panel-routinginstructions'
-        // }, {
-        //     xtype: 'k-panel-routingelevation'
-        ]
+        }, {
+            xtype: 'k-container-elevationprofile',
+            name: 'routing-elevation-panel',
+            padding: '15 10'
+        }]
     }],
 
     initialize: function() {

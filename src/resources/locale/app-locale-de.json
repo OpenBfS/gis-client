@@ -2015,6 +2015,18 @@
             }
         }
     },
+    "Koala.view.container.ElevationProfile": {
+        "config": {
+            "data": {
+                "title": "Höhenprofil",
+                "xLabel": "Distanz[km]",
+                "yLabel": "Höhe[m]",
+                "distanceLabel": "Distanz",
+                "elevationLabel": "Höhe",
+                "durationLabel": "Dauer"
+            }
+        }
+    },
     "Koala.view.panel.MobileHelp": {
         "config": {
             "data": {

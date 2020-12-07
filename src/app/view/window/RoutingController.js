@@ -270,7 +270,7 @@ Ext.define('Koala.view.window.RoutingController', {
         wayPointStore.on('datachanged',
             function() {
                 view.fireEvent('updateWayPointLayer');
-                view.fireEvent('makeRoutingRequest');
+                view.fireEvent('makeRoutingRequest', undefined, undefined);
             }
         );
 

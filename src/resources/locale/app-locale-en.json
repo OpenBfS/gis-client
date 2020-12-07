@@ -2008,6 +2008,18 @@
             }
         }
     },
+    "Koala.view.container.ElevationProfile": {
+        "config": {
+            "data": {
+                "title": "Elevation profile",
+                "xLabel": "distance[km]",
+                "yLabel": "height[m]",
+                "distanceLabel": "Distance",
+                "elevationLabel": "Elevation",
+                "durationLabel": "Duration"
+            }
+        }
+    },
     "Koala.view.panel.MobileHelp": {
         "config": {
             "data": {
