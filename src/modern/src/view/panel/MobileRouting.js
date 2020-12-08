@@ -58,12 +58,17 @@ Ext.define('Koala.view.panel.MobileRouting',{
     /** The name of the layer for elevation interaction */
     elevationLayerName: 'routing-elevation-layer',
 
-    closeToolAlign: 'left',
+    tools: [{
+        type: 'left',
+        docked: 'left',
+        handler: 'onCloseToolClicked'
+    }],
 
     listeners: {
         painted: 'onPainted',
         onWaypointAdded: 'onWaypointAdded',
-        updateWayPointLayer: 'updateWayPointLayer'
+        updateWayPointLayer: 'updateWayPointLayer',
+        clearRouting: 'onCloseToolClicked'
     },
 
     items: [{
@@ -145,6 +150,7 @@ Ext.define('Koala.view.panel.MobileRouting',{
         var staticMe = Koala.util.AppContext;
         var ctx = staticMe.getAppContext();
         var routingOpts = staticMe.getMergedDataByKey('routing', ctx);
+
         vm.set('routingOpts', routingOpts);
 
         if (routingOpts.routeStyle) {

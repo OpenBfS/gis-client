@@ -197,6 +197,11 @@ Ext.define('Koala.view.container.RoutingResult', {
         direction: 'up'
     },
 
+    hideAnimation: {
+        type: 'slideOut',
+        direction: 'down'
+    },
+
     map: null,
 
     /** The name of the layer that contains the route */
@@ -211,7 +216,8 @@ Ext.define('Koala.view.container.RoutingResult', {
     elevationProfilePanelName: 'routing-elevation-panel',
 
     listeners: {
-        resultChanged: 'onRoutingResultChanged'
+        resultChanged: 'onRoutingResultChanged',
+        painted: 'onPainted'
     },
 
     items: [{

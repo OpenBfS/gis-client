@@ -78,5 +78,38 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
         if (routingSettings) {
             routingSettings.show();
         }
+    },
+
+    /**
+     * Handle the painted event of the view.
+     */
+    onPainted: function() {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+        // add map event listener
+        map.on('singleclick', me.hideViews.bind(me));
+        // remove event listener on destroy
+    },
+
+    /**
+     * Hide all views, i.e. routing setting and routing results,
+     * incl. map cleanup.
+     */
+    hideViews: function() {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+
+        map.un('singleclick', me.hideViews.bind(me));
+        view.hide();
+
+        var routingSettings = Ext.ComponentQuery.query('[name=routing-panel]')[0];
+        if (routingSettings) {
+            routingSettings.fireEvent('clearRouting');
+        }
     }
 });

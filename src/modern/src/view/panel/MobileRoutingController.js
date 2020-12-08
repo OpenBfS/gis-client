@@ -113,6 +113,17 @@ Ext.define('Koala.view.panel.MobileRoutingController', {
             });
         }
         suggestionStore.removeAll();
+    },
+
+    /**
+     * Handler for the close tool click event.
+     */
+    onCloseToolClicked: function() {
+        var me = this;
+        var view = me.getView();
+
+        me.onWindowClose();
+        view.hide();
     }
 
 });
