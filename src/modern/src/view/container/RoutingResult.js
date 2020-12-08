@@ -234,6 +234,8 @@ Ext.define('Koala.view.container.RoutingResult', {
                 return staticMe.getIconFromProfile(profile);
             }
         }, {
+            // we have to set dataIndex to a field,
+            // otherwise the column will not be rerendered.
             dataIndex: 'duration',
             flex: 1,
             cell: {
@@ -263,6 +265,15 @@ Ext.define('Koala.view.container.RoutingResult', {
 
                 return content;
             }
+        }, {
+            cell: {
+                xtype: 'widgetcell',
+                widget: {
+                    xtype: 'button',
+                    iconCls: 'fa fa-cog',
+                    handler: 'onSettingsButtonClick'
+                }
+            }
         }]
     }, {
         xtype: 'lockable-carousel',
@@ -287,7 +298,6 @@ Ext.define('Koala.view.container.RoutingResult', {
                     sortable: false,
                     hideable: false,
                     align: 'center',
-                    tdCls: 'routing-icon-cell',
                     cell: {
                         type: 'gridcell',
                         encodeHtml: false,
@@ -300,7 +310,6 @@ Ext.define('Koala.view.container.RoutingResult', {
                 }, {
                     dataIndex: 'instruction',
                     flex: 10,
-                    tdCls: 'routing-icon-cell',
                     sortable: false,
                     hideable: false,
                     cell: {

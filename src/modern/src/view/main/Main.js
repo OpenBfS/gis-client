@@ -188,6 +188,7 @@ Ext.define('Koala.view.main.Main', {
         hidden: true
     }, {
         xtype: 'k-panel-mobilerouting',
+        name: 'routing-panel',
         left: 0,
         hidden: true
     }, {

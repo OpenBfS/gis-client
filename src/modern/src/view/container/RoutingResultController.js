@@ -65,5 +65,18 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
                 elevationPanel.fireEvent('dataChanged', firstSummary.getData());
             }
         }
+    },
+
+    /**
+     * Handle the settings button click.
+     */
+    onSettingsButtonClick: function() {
+        var me = this;
+        var view = me.getView();
+        view.hide();
+        var routingSettings = Ext.ComponentQuery.query('[name=routing-panel]')[0];
+        if (routingSettings) {
+            routingSettings.show();
+        }
     }
 });

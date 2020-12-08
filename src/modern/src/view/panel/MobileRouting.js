@@ -18,7 +18,6 @@
  */
 Ext.define('Koala.view.panel.MobileRouting',{
     extend: 'Koala.view.panel.MobilePanel',
-    // extend: 'Ext.Panel',
     xtype: 'k-panel-mobilerouting',
 
     requires: [
