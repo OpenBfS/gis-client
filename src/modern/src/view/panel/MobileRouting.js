@@ -119,7 +119,10 @@ Ext.define('Koala.view.panel.MobileRouting',{
         },
         columns: [{
             dataIndex: 'address',
-            flex: 1
+            flex: 1,
+            cell: {
+                height: 50
+            }
         }]
     }, {
         xtype: 'toolbar',

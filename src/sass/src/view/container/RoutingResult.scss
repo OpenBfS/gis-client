@@ -47,4 +47,9 @@
     >div:first-of-type {
         padding-bottom: 4px;
     }
+
+    &.routing-modern {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
 }

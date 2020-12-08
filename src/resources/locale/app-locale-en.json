@@ -1891,7 +1891,7 @@
                     "routingProfileFieldTitle": "Profile",
                     "computeRouteButtonText": "Compute route",
                     "addStartPoint": "Set start",
-                    "addViaPoint": "Set waypoint",
+                    "addViaPoint": "Add waypoint",
                     "addEndPoint": "Set destination",
                     "elevationBtnText": "Elevation Profile",
                     "downloadButtonText": "Download"

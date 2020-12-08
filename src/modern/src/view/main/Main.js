@@ -141,6 +141,10 @@ Ext.define('Koala.view.main.Main', {
                 left: '20px'
             },
             handler: function(btn) {
+                var routingResults = Ext.ComponentQuery.query('[name=routing-result-panel]')[0];
+                if (routingResults) {
+                    routingResults.fireEvent('hideViews');
+                }
                 btn.up('app-main').down('k-panel-mobilemenu').show();
             }
         }, {

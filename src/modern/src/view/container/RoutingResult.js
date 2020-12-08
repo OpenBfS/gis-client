@@ -217,17 +217,18 @@ Ext.define('Koala.view.container.RoutingResult', {
 
     listeners: {
         resultChanged: 'onRoutingResultChanged',
-        painted: 'onPainted'
+        painted: 'onPainted',
+        hideViews: 'hideViews'
     },
 
     items: [{
         xtype: 'grid',
-        name: 'routing-test',
+        name: 'routing-summary-grid',
         hideHeaders: true,
         bind: {
             store: '{routingsummaries}'
         },
-        flex: 1,
+        height: 82,
         columns: [{
             dataIndex: 'profile',
             cell: {
@@ -261,7 +262,7 @@ Ext.define('Koala.view.container.RoutingResult', {
                 var ascentFormatted = staticMe.getFormattedDistance(ascent, true);
                 var descentFormatted = staticMe.getFormattedDistance(descent, true);
 
-                var content = '<div class="routing-summary-cell"><div>';
+                var content = '<div class="routing-summary-cell routing-modern"><div>';
                 content += '<span><i class="fa fa-clock-o" aria-hidden="true"></i> ' + durationFormatted + '</span>';
                 content += '<span><i class="fa fa-arrows-h" aria-hidden="true"></i> ' + distanceFormatted + '</span>';
                 content += '</div><div>';

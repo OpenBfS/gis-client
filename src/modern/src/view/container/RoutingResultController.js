@@ -64,6 +64,11 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
             if (elevationPanel) {
                 elevationPanel.fireEvent('dataChanged', firstSummary.getData());
             }
+
+            var summaryGrid = view.down('[name=routing-summary-grid]');
+            if (summaryGrid) {
+                summaryGrid.setSelection(firstSummary);
+            }
         }
     },
 
@@ -86,13 +91,15 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
     onPainted: function() {
         var me = this;
         var view = me.getView();
+        var vm = view.lookupViewModel();
+
         var map = view.map;
+
         if (!map) {
             return;
         }
-        // add map event listener
+
         map.on('singleclick', me.hideViews.bind(me));
-        // remove event listener on destroy
     },
 
     /**
