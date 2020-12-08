@@ -91,7 +91,6 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
     onPainted: function() {
         var me = this;
         var view = me.getView();
-        var vm = view.lookupViewModel();
 
         var map = view.map;
 
