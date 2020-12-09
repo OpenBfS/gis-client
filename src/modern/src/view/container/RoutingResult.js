@@ -251,11 +251,8 @@ Ext.define('Koala.view.container.RoutingResult', {
                 align: 'left'
             },
             renderer: function(val, rec) {
-                var me = this;
-                var vm = me.lookupViewModel();
                 var staticMe = Koala.view.container.RoutingResult;
 
-                var waypoints = vm.get('waypoints');
                 var duration = rec.get('duration');
                 var distance = rec.get('distance');
                 var ascent = rec.get('ascent');
@@ -267,16 +264,6 @@ Ext.define('Koala.view.container.RoutingResult', {
                 var descentFormatted = staticMe.getFormattedDistance(descent, true);
 
                 var content = '<div class="routing-summary-cell routing-modern"><div>';
-                // if (waypoints) {
-                //     var origin = waypoints.first();
-                //     var destination = waypoints.last();
-                //     debugger;
-                //     if (origin && destination) {
-                //         content += '<span>' + origin.get('address') + '</span>';
-                //         content += '<span>' + destination.get('address') + '</span>';
-                //         content += '</div><div>';
-                //     }
-                // }
                 content += '<span><i class="fa fa-clock-o" aria-hidden="true"></i> ' + durationFormatted + '</span>';
                 content += '<span><i class="fa fa-arrows-h" aria-hidden="true"></i> ' + distanceFormatted + '</span>';
                 content += '</div><div>';
