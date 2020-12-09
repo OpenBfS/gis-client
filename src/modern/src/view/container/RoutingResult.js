@@ -295,9 +295,6 @@ Ext.define('Koala.view.container.RoutingResult', {
             bind: {
                 store: '{routinginstructions}'
             },
-            listeners: {
-                // TODO add listeners
-            },
             columns: [
                 {
                     dataIndex: 'type',
