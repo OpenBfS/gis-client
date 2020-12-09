@@ -889,7 +889,16 @@
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Mit dem Auto",
                     "profileBycicleText": "Mit dem Fahrrad",
-                    "profileWalkingText": "Zu Fuß"
+                    "profileWalkingText": "Zu Fuß",
+                    "addAvoidArea": "Vermeide Gebiet",
+                    "uploadGeoJson": "Lade GeoJSON",
+                    "deleteAvoidArea": "Lösche zu vermeidendes Gebiet.",
+                    "drawAvoidArea": "Zeichne Gebiet",
+                    "errorFileUpload": "Das Hochladen der Datei ist fehlgeschlagen.",
+                    "errorUploadedGeometryType": "Das hochgeladene GeoJSON muss vom Typ Polygon sein.",
+                    "errorTooManyFeatures": "Das hochladen mehrerer Features wird nicht unterstützt. Bitte laden Sie nur ein Feature hoch." ,
+                    "errorUploadedFileExtension": "Dateityp wird nicht unterstützt. Bitte laden Sie nur eine '.json' oder '.geojson' Datei hoch.",
+                    "errorZeroFeatures": "Das hochgelandene GeoJSON enthält keine Features. Bitte laden Sie ein Feature hoch."
                 }
             }
         }

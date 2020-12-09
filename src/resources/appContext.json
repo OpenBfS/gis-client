@@ -244,6 +244,12 @@
                     "fill": "#ffffff",
                     "stroke": "#ffffff",
                     "radius": 3
+                },
+                "avoidAreaStyle": {
+                    "strokeColor": "#000000",
+                    "width": 4,
+                    "fillColor": "#ff0000",
+                    "opacity": 0.2
                 }
             }
         }

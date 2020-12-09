@@ -53,6 +53,141 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
     },
 
     /**
+     * Initiate the file handling listener.
+     *
+     * @param {Ext.form.field.File} field The file field.
+     */
+    uploadButtonAfterRender: function(field) {
+
+        var me = this;
+        field.fileInputEl.on('change', me.handleUploadedFile.bind(me) );
+    },
+
+    /**
+     * Process the uploaded GeoJSON file.
+     *
+     * @param {event} event The change event of the file selector.
+     */
+    handleUploadedFile: function(event) {
+
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var file = event.target.files[0];
+
+        if (file) {
+            // check file extension
+            var fileName = file.name.toLowerCase();
+            var correctFileExtension = (fileName.endsWith('.json') || fileName.endsWith('.geojson'));
+
+            if (!correctFileExtension) {
+                Ext.toast(vm.get('i18n.errorUploadedFileExtension'));
+                return;
+            }
+
+            file.text().then(function(text) {
+
+                var parentComponent = me.getView().up('k-window-routing');
+
+                // GeoJSON must be in EPSG:4326
+                var map = parentComponent.map;
+                var sourceProjection = map.getView().getProjection().getCode();
+
+                var avoidFeatures = new ol.format.GeoJSON().readFeatures(text,
+                    {
+                        featureProjection: sourceProjection
+                    }
+                );
+
+                if (avoidFeatures.length === 0) {
+                    Ext.toast(vm.get('i18n.errorZeroFeatures'));
+                    return;
+                }
+
+                if (avoidFeatures.length > 1) {
+                    Ext.toast(vm.get('i18n.errorTooManyFeatures'));
+                    return;
+                }
+
+                var feat = avoidFeatures[0];
+                if (!(feat.getGeometry() instanceof ol.geom.Polygon )) {
+                    Ext.toast(vm.get('i18n.errorUploadedGeometryType'));
+                    return;
+                }
+
+                var avoidAreaLayer = me.getAvoidAreaLayer();
+                if (!avoidAreaLayer) {
+                    return;
+                }
+                var source = avoidAreaLayer.getSource();
+                source.clear();
+                source.addFeatures(avoidFeatures);
+
+                // the value must be reset after chosing a file
+                var fileField = view.down('filebutton');
+                fileField.fileInputEl.dom.value = '';
+
+            }).catch(function(err) {
+                Ext.toast(vm.get('i18n.errorFileUpload'));
+                var str = 'An error occured: ' + err;
+                Ext.Logger.log(str);
+            });
+
+        }
+    },
+
+
+    /**
+     * Activate drawing of avoid area. Set listener
+     * to stop drawing once the first feature is finished.
+     */
+    drawAvoidArea: function() {
+        var me = this;
+        var view = me.getView();
+
+        // clear existing features
+        var avoidAreaLayer = me.getAvoidAreaLayer();
+        if (!avoidAreaLayer) {
+            return;
+        }
+        var source = avoidAreaLayer.getSource();
+        source.clear();
+
+        // activate draw interaction
+        var parentComponent = view.up('k-window-routing');
+        var avoidAreaDrawInteraction = parentComponent.avoidAreaDrawInteraction;
+        avoidAreaDrawInteraction.setActive(true);
+
+        // finish draw after first feature is finished
+        source.on('addfeature', function() {
+            avoidAreaDrawInteraction.setActive(false);
+        });
+    },
+
+    clearAvoidAreaSource: function() {
+        var me = this;
+        var avoidAreaLayer = me.getAvoidAreaLayer();
+        if (avoidAreaLayer) {
+            var source = avoidAreaLayer.getSource();
+            source.clear();
+        }
+    },
+
+    /**
+     * Get the avoid area Layer.
+     */
+    getAvoidAreaLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.avoidAreaLayerName) {
+            return;
+        }
+        return BasiGX.util.Layer.getLayerByName(view.avoidAreaLayerName);
+    },
+
+    /**
      * Update the values in the user interface.
      */
     setFormEntries: function() {

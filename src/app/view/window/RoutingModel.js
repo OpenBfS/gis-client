@@ -55,12 +55,23 @@ Ext.define('Koala.view.window.RoutingModel', {
             error_msg_geocoding: '',
             error_msg_routing_request: '',
             error_msg_download: '',
-            routingSummaryDetailsButton: ''
+            routingSummaryDetailsButton: '',
+            addAvoidArea: '',
+            uploadGeoJson: '',
+            deleteAvoidArea: '',
+            drawAvoidArea: '',
+            errorFileUpload: '',
+            errorUploadedGeometryType: '',
+            errorTooManyFeatures: '',
+            errorUploadedFileExtension: '',
+            errorZeroFeatures: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,
         routeSegmentStyle: undefined,
         waypointStyle: undefined,
+        avoidAreaStyle: undefined,
+        avoidAreaOpacity: 0.5,
         waypointFontSize: undefined,
         rightClickCoordinate: undefined,
         mapContextMenu: null,
@@ -71,6 +82,7 @@ Ext.define('Koala.view.window.RoutingModel', {
         showRoutingResults: false,
         routingOpts: null,
         language: 'de',
-        showRoutingInstructions: false
+        showRoutingInstructions: false,
+        deleteAvoidAreaButtonVisible: false
     }
 });
