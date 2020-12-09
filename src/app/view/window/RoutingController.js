@@ -110,6 +110,20 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
+     * Get the avoid area Layer.
+     */
+    getAvoidAreaLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.avoidAreaLayerName) {
+            return;
+        }
+
+        return BasiGX.util.Layer.getLayerByName(view.avoidAreaLayerName);
+    },
+
+    /**
      * Handler for visualising the routing results.
      * @param {Object} geojson The routing GeoJSON.
      */
@@ -381,6 +395,7 @@ Ext.define('Koala.view.window.RoutingController', {
     createRoutingLayers: function() {
         var me = this;
         var view = me.getView();
+        var vm = view.lookupViewModel();
 
         if (!me.getRouteLayer()) {
             me.createLayer('routeStyle', view.routeLayerName);
@@ -397,6 +412,31 @@ Ext.define('Koala.view.window.RoutingController', {
         }
         if (!me.getElevationLayer()) {
             me.createLayer('elevationStyle', view.elevationLayerName);
+        }
+
+        if (!me.getAvoidAreaLayer()) {
+            var avoidAreaLayer = me.createLayer('avoidAreaStyle', view.avoidAreaLayerName);
+
+            avoidAreaLayer.setOpacity(vm.get('avoidAreaOpacity'));
+
+            var source = avoidAreaLayer.getSource();
+            source.on('change', function() {
+
+                var deleteAvoidAreaButtonVisible = source.getFeatures().length > 0;
+                vm.set('deleteAvoidAreaButtonVisible', deleteAvoidAreaButtonVisible);
+                view.fireEvent('makeRoutingRequest');
+            });
+
+            // create interaction
+            if (!me.avoidAreaDrawInteraction) {
+                view.avoidAreaDrawInteraction = new ol.interaction.Draw({
+                    source: source,
+                    type: 'Polygon',
+                    stopClick: true
+                });
+                view.map.addInteraction(view.avoidAreaDrawInteraction);
+                view.avoidAreaDrawInteraction.setActive(false);
+            }
         }
     },
 
@@ -485,6 +525,14 @@ Ext.define('Koala.view.window.RoutingController', {
         var routeSegmentLayer = me.getRouteSegmentLayer();
         if (routeSegmentLayer) {
             view.map.removeLayer(routeSegmentLayer);
+        }
+        var avoidAreaLayer = me.getAvoidAreaLayer();
+        if (avoidAreaLayer) {
+            if (view.avoidAreaDrawInteraction) {
+                view.map.removeInteraction(view.avoidAreaDrawInteraction);
+            }
+            view.map.removeLayer(avoidAreaLayer);
+
         }
         var waypointLayer = me.getWaypointLayer();
         if (waypointLayer) {
@@ -589,9 +637,15 @@ Ext.define('Koala.view.window.RoutingController', {
             overwrites = {};
         }
 
+        // avoid area
+        var additionalOptions = {};
+        var avoidArea = me.getAvoidAreaGeometry();
+        if (!Ext.Object.isEmpty(avoidArea)) {
+            additionalOptions.avoid_polygons = avoidArea;
+        }
+
         var wayPointStore = vm.get('waypoints');
         var waypoints = wayPointStore.getCoordinatesArray();
-
 
         // same properties as on https://maps.openrouteservice.org/
         var params = {
@@ -613,10 +667,46 @@ Ext.define('Koala.view.window.RoutingController', {
                 'steepness',
                 'waytype',
                 'surface'
-            ]
+            ],
+            options: additionalOptions
         };
 
         return Ext.Object.merge(params, overwrites);
+    },
+
+    /**
+     * Get the geometry of the avoid area layer.
+     *
+     * @returns {Object} The geometry of the avoid area if available, an empty object otherwise.
+     */
+    getAvoidAreaGeometry: function() {
+        var me = this;
+        var view = me.getView();
+
+        var avoidAreaLayer = me.getAvoidAreaLayer();
+        if (!avoidAreaLayer) {
+            return {};
+        }
+        var source = avoidAreaLayer.getSource();
+        var features = source.getFeatures();
+        if (features.length === 0) {
+            return {};
+        }
+
+        if (features.length !== 0) {
+            var firstFeature = features[0];
+
+            var formatter = new ol.format.GeoJSON();
+            var sourceProjection = view.map.getView().getProjection().getCode();
+            var targetProjection = ol.proj.get('EPSG:4326');
+
+            var geoJson = formatter.writeFeatureObject(firstFeature, {
+                dataProjection: targetProjection,
+                featureProjection: sourceProjection
+            });
+            return geoJson.geometry;
+        }
+        return {};
     },
 
     /**

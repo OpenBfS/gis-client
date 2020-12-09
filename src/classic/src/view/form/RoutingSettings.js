@@ -27,6 +27,8 @@ Ext.define('Koala.view.form.RoutingSettings', {
 
     width: '100%',
 
+    avoidAreaLayerName: 'routing-avoid-area-layer',
+
     fbar: [
         {
             xtype: 'segmentedbutton',
@@ -62,6 +64,51 @@ Ext.define('Koala.view.form.RoutingSettings', {
         }, {
             xtype: 'tbspacer',
             flex: 1
+        },
+        {
+            type: 'button',
+            iconCls: 'x-fa fa-times',
+            bind: {
+                tooltip: '{i18n.deleteAvoidArea}',
+                visible: '{deleteAvoidAreaButtonVisible}'
+            },
+            handler: 'clearAvoidAreaSource'
+        },
+        {
+            type: 'button',
+            iconCls: 'x-fa fa-square',
+            bind: {
+                tooltip: '{i18n.addAvoidArea}'
+            },
+            menuAlign: 'bl',
+            menu: [
+                {
+                    bind: {
+                        text: '{i18n.drawAvoidArea}'
+                    },
+                    handler: 'drawAvoidArea'
+                },
+                {
+                    // intentionally hidden button
+                    // TODO: menu opens first time to top and not to bottom
+                    xtype: 'filebutton',
+                    listeners: {
+                        afterrender: 'uploadButtonAfterRender'
+                    },
+                    accept: '.geojson,.json',
+                    hidden: true
+                },
+                {
+                    // triggers the hidden button
+                    bind: {
+                        text: '{i18n.uploadGeoJson}'
+                    },
+                    handler: function(item) {
+                        var bb = item.up().down('filebutton');
+                        bb.fileInputEl.dom.click();
+                    }
+                }
+            ]
         },
         {
             type: 'button',

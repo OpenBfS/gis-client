@@ -42,7 +42,12 @@ Ext.define('Koala.view.window.Routing', {
 
     routeSegmentLayerName: 'routing-route-segment-layer',
 
+    avoidAreaLayerName: 'routing-avoid-area-layer',
+
     map: null,
+
+    /** The interaction for drawing the avoid area */
+    avoidAreaDrawInteraction: null,
 
     /** The name of the routingResultPanel */
     routingResultPanelName: 'routing-result-panel',
@@ -153,6 +158,23 @@ Ext.define('Koala.view.window.Routing', {
                 })
             });
             vm.set('elevationStyle', elevationStyle);
+        }
+
+        if (routingOpts.avoidAreaStyle) {
+            var avoidAreaStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: routingOpts.avoidAreaStyle.strokeColor,
+                    width: routingOpts.avoidAreaStyle.width
+                }),
+                fill: new ol.style.Fill({
+                    color: routingOpts.avoidAreaStyle.fillColor
+                })
+            });
+            vm.set('avoidAreaStyle', avoidAreaStyle);
+
+            if (routingOpts.avoidAreaStyle.opacity !== undefined && routingOpts.avoidAreaStyle.opacity !== null) {
+                vm.set('avoidAreaOpacity', routingOpts.avoidAreaStyle.opacity);
+            }
         }
 
         if (!me.map) {
