@@ -121,6 +121,12 @@ Ext.define('Koala.view.panel.MobileRoutingController', {
     onCloseToolClicked: function() {
         var me = this;
         var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var suggestionsStore = vm.get('geocodingsuggestions');
+        if (suggestionsStore) {
+            suggestionsStore.removeAll();
+        }
 
         me.onWindowClose();
         view.hide();

@@ -297,8 +297,25 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
      */
     onComboChange: function(newValue, geoCodingSuggestions, recId) {
         var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
 
-        // return if input string is to short
+        // In modern view the routing is triggered
+        // on button click, so we have to make sure
+        // we do not trigger a routing with an old value.
+        if (Ext.isModern && recId !== undefined) {
+            var waypoints = vm.get('waypoints');
+            var waypoint = waypoints.getById(recId);
+            if (waypoint) {
+                waypoint.set({
+                    address: newValue,
+                    latitude: null,
+                    longitude: null
+                });
+            }
+        }
+
+        // return if input string is too short
         if (newValue.length < 3) {
             return;
         }

@@ -69,6 +69,9 @@ Ext.define('Koala.view.form.ModernRoutingSettingsController', {
                         clearIcon: true,
                         listeners: {
                             change: function(combo, newValue) {
+                                if (!newValue) {
+                                    me.deleteRoutingPoint(index);
+                                }
                                 me.onComboChange(newValue, suggestionsStore, rec.getId());
                             }
                         }
