@@ -295,14 +295,64 @@ Ext.define('Koala.view.window.RoutingController', {
         var latitude = transformed[1];
         var longitude = transformed[0];
 
+        var mapContextMenu = Ext.create('Ext.menu.Menu', {
+            renderTo: Ext.getBody(),
+            items: [
+                {
+                    text: vm.get('i18n.addStartPoint'),
+                    handler: function() {
+                        me.storeMapClick(longitude, latitude, 'start');
+                        mapContextMenu.destroy();
+                    }
+                },
+                {
+                    text: vm.get('i18n.addViaPoint'),
+                    handler: function() {
+                        me.storeMapClick(longitude, latitude, 'via');
+                        mapContextMenu.destroy();
+                    }
+                },
+                {
+                    text: vm.get('i18n.addEndPoint'),
+                    handler: function() {
+                        me.storeMapClick(longitude, latitude, 'end');
+                        mapContextMenu.destroy();
+                    }
+                }
+            ]
+        });
+
+        mapContextMenu.showAt(evt.x, evt.y);
+        vm.set('mapContextMenu', mapContextMenu);
+
+    },
+
+    /**
+     * Store the clicked coordinate as routing waypoint.
+     *
+     * @param {number} longitude The longitude of the new waypoint.
+     * @param {number} latitude The latitude of the new waypoint.
+     * @param {string} wayPointType The type of the new waypoint. Allowed values: "start", "via" and "end".
+     */
+    storeMapClick: function(longitude, latitude, wayPointType) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+        var language = vm.get('language');
         var wayPointStore = vm.get('waypoints');
 
         var geocoding = Koala.util.Geocoding;
-        var language = vm.get('language');
+
         geocoding.doReverseGeocoding(longitude, latitude, language)
             .then(function(resultJson) {
 
-                var placeName = geocoding.createPlaceString(resultJson.features[0].properties);
+                var features = resultJson.features;
+                if (features.length === 0) {
+                    Ext.toast(vm.get('i18n.error_msg_geocoding'));
+                    return;
+                }
+
+                var placeName = geocoding.createPlaceString(features[0].properties);
 
                 var newWayPointJson = {
                     address: placeName,
@@ -310,35 +360,13 @@ Ext.define('Koala.view.window.RoutingController', {
                     longitude: longitude
                 };
 
-                var mapContextMenu = Ext.create('Ext.menu.Menu', {
-                    renderTo: Ext.getBody(),
-                    items: [
-                        {
-                            text: vm.get('i18n.addStartPoint'),
-                            handler: function() {
-                                wayPointStore.setStartPoint(newWayPointJson);
-                                mapContextMenu.destroy();
-                            }
-                        },
-                        {
-                            text: vm.get('i18n.addViaPoint'),
-                            handler: function() {
-                                wayPointStore.addViaPoint(newWayPointJson);
-                                mapContextMenu.destroy();
-                            }
-                        },
-                        {
-                            text: vm.get('i18n.addEndPoint'),
-                            handler: function() {
-                                wayPointStore.setEndPoint(newWayPointJson);
-                                mapContextMenu.destroy();
-                            }
-                        }
-                    ]
-                });
-
-                mapContextMenu.showAt(evt.x, evt.y);
-                vm.set('mapContextMenu', mapContextMenu);
+                if (wayPointType === 'start') {
+                    wayPointStore.setStartPoint(newWayPointJson);
+                } else if (wayPointType === 'via') {
+                    wayPointStore.addViaPoint(newWayPointJson);
+                } else if (wayPointType === 'end') {
+                    wayPointStore.setEndPoint(newWayPointJson);
+                }
             })
             .catch(function(err) {
                 var str = 'An error occured: ' + err;
