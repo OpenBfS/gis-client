@@ -174,7 +174,7 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         line.data = data;
         line.axes = ['x', 'y'];
 
-        var containerSize = container.getSize(true);
+        var containerSize = me.getContainerSize(container);
         var width = containerSize.width;
         var height = containerSize.height;
 
@@ -191,6 +191,23 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             onMouseMoveFunc: me.onMouseMove.bind(me, data, chartComponent, chart.position, limits)
         });
         chartRenderer.render(container.el.dom);
+    },
+
+    /**
+     * Get the size of a container.
+     *
+     * This methods makes sure that we get the container
+     * sizes as numeric values. The ways to achieve this,
+     * differ between modern and classic toolkit.
+     *
+     * @param {Ext.Container} container The Ext container to get the size from.
+     */
+    getContainerSize: function(container) {
+        if (!Ext.isModern) {
+            return container.getSize(true);
+        }
+
+        return container.el.getSize(true);
     },
 
     /**

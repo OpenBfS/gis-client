@@ -1877,11 +1877,32 @@
                 "settingsButtonText": "Einstellungen",
                 "moreLayersButtonText": "Auswahl",
                 "addLayerButtonText": "Externen WMS hinzufügen",
+                "routingButtonText": "Routing",
                 "permalinkButtonText": "Permalink",
                 "spatialSearchTitle": "Räumliche Suche",
                 "stationSearchTitle": "ODL Sondenstandorte",
                 "metadataSearchTitle": "Daten und Dienste des Bfs",
                 "alertBtnText": "Ereignisse"
+            }
+        }
+    },
+    "Koala.view.panel.MobileRouting": {
+        "config": {
+            "data": {
+                "i18n":{
+                    "title": "Routenplanung",
+                    "startFieldTitle": "Start",
+                    "viaFieldTitle": "Via",
+                    "endFieldTitle": "Ziel",
+                    "addEmptyPoint": "Neuer Punkt",
+                    "routingProfileFieldTitle": "Profil",
+                    "computeRouteButtonText": "Route Berechnen",
+                    "addStartPoint": "Startpunkt setzen",
+                    "addViaPoint": "Wegpunkt hinzufügen",
+                    "addEndPoint": "Zielpunkt setzen",
+                    "elevationBtnText": "Höhenprofil",
+                    "downloadButtonText": "Download"
+                }
             }
         }
     },
@@ -1991,6 +2012,18 @@
                 "warnMsgDateFormat": "d.m.Y",
                 "endBeforeStartWarnMsg": "Der Startwert muss vor dem Endwert liegen.",
                 "exceedsMaxDurationWarnMsg": "Startwert und Endwert liegen zu weit auseinander."
+            }
+        }
+    },
+    "Koala.view.container.ElevationProfile": {
+        "config": {
+            "data": {
+                "title": "Höhenprofil",
+                "xLabel": "Distanz[km]",
+                "yLabel": "Höhe[m]",
+                "distanceLabel": "Distanz",
+                "elevationLabel": "Höhe",
+                "durationLabel": "Dauer"
             }
         }
     },

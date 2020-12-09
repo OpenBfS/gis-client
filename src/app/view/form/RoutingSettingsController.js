@@ -27,7 +27,6 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
      * the waypoint store is changing.
      */
     onBoxReady: function() {
-
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
@@ -296,10 +295,10 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
      * @param {string} The value written in the Combobox.
      * @param {Ext.data.Store} geoCodingSuggestions The store that contains geocoding suggestions.
      */
-    onComboChange: function(newValue, geoCodingSuggestions) {
+    onComboChange: function(newValue, geoCodingSuggestions, recId) {
         var me = this;
 
-        // return if input string is to short
+        // return if input string is too short
         if (newValue.length < 3) {
             return;
         }
@@ -312,10 +311,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
         var longitude = parseFloat(split[0]);
         var latitude = parseFloat(split[1]);
 
-        var isValidCoordinate = hasTwoParts && isNaN(longitude) && isNaN(latitude);
-
-        // empty geocoding suggestions
-        geoCodingSuggestions.removeAll();
+        var isValidCoordinate = hasTwoParts && !isNaN(longitude) && !isNaN(latitude);
 
         if (isValidCoordinate) {
 
@@ -323,10 +319,13 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
             // find address of coordinate
             Koala.util.Geocoding.doReverseGeocoding(longitude, latitude)
                 .then(function(resultJson) {
-                    me.createGeoCodingSuggestions(resultJson, geoCodingSuggestions);
+                    // empty geocoding suggestions
+                    geoCodingSuggestions.removeAll();
+                    me.createGeoCodingSuggestions(resultJson, geoCodingSuggestions, recId);
                 })
                 .catch(function() {
                     // TODO: add user feedback
+                    geoCodingSuggestions.removeAll();
                 });
         } else {
 
@@ -339,10 +338,13 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
             // TODO: add language argument
             Koala.util.Geocoding.doGeocoding(newValue)
                 .then(function(resultJson) {
-                    me.createGeoCodingSuggestions(resultJson, geoCodingSuggestions);
+                    // empty geocoding suggestions
+                    geoCodingSuggestions.removeAll();
+                    me.createGeoCodingSuggestions(resultJson, geoCodingSuggestions, recId);
                 })
                 .catch(function() {
                 // TODO: add user feedback
+                    geoCodingSuggestions.removeAll();
                 });
         }
     },
@@ -354,7 +356,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
      * @param {object} resultJson The response of the Photon geocoding API.
      * @param {Ext.data.Store} geoCodingSuggestions The store that contains geocoding suggestions.
      */
-    createGeoCodingSuggestions: function(resultJson, geoCodingSuggestions) {
+    createGeoCodingSuggestions: function(resultJson, geoCodingSuggestions, recId) {
 
         Ext.each(resultJson.features, function(feature) {
 
@@ -364,11 +366,17 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
 
             var address = Koala.util.Geocoding.createPlaceString(feature.properties);
 
-            geoCodingSuggestions.add({
+            var suggestion = {
                 'address': address,
                 'latitude': latitude,
                 'longitude': longitude
-            });
+            };
+
+            if (recId !== undefined) {
+                suggestion.waypointId = recId;
+            }
+
+            geoCodingSuggestions.add(suggestion);
         });
     },
 
@@ -444,7 +452,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
 
         var routingWindow = view.up('k-window-routing');
         if (routingWindow) {
-            routingWindow.fireEvent('makeRoutingRequest');
+            routingWindow.fireEvent('makeRoutingRequest', undefined, undefined);
         }
     }
 

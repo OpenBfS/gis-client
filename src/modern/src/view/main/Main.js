@@ -49,7 +49,9 @@ Ext.define('Koala.view.main.Main', {
         'Koala.view.panel.MobilePermalink',
         'Koala.view.panel.Settings',
         'Koala.view.panel.TimeseriesChart',
-        'Koala.view.panel.MobileEvents'
+        'Koala.view.panel.MobileEvents',
+        'Koala.view.panel.MobileRouting',
+        'Koala.view.container.RoutingResult'
     ],
 
     controller: 'mobile-main',
@@ -139,6 +141,10 @@ Ext.define('Koala.view.main.Main', {
                 left: '20px'
             },
             handler: function(btn) {
+                var routingResults = Ext.ComponentQuery.query('[name=routing-result-panel]')[0];
+                if (routingResults) {
+                    routingResults.fireEvent('hideViews');
+                }
                 btn.up('app-main').down('k-panel-mobilemenu').show();
             }
         }, {
@@ -183,6 +189,15 @@ Ext.define('Koala.view.main.Main', {
     }, {
         xtype: 'k-panel-mobileaddlayer',
         left: 0,
+        hidden: true
+    }, {
+        xtype: 'k-panel-mobilerouting',
+        name: 'routing-panel',
+        left: 0,
+        hidden: true
+    }, {
+        xtype: 'k-container-routingresult',
+        name: 'routing-result-panel',
         hidden: true
     }, {
         xtype: 'k-panel-mobilepermalink',

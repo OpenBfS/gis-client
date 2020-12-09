@@ -45,7 +45,7 @@ Ext.define('Koala.view.window.RoutingController', {
 
         vm.set('language', locale);
 
-        view.fireEvent('makeRoutingRequest');
+        view.fireEvent('makeRoutingRequest', undefined, undefined);
     },
 
     /**
@@ -270,7 +270,7 @@ Ext.define('Koala.view.window.RoutingController', {
         wayPointStore.on('datachanged',
             function() {
                 view.fireEvent('updateWayPointLayer');
-                view.fireEvent('makeRoutingRequest');
+                view.fireEvent('makeRoutingRequest', undefined, undefined);
             }
         );
 
@@ -712,7 +712,7 @@ Ext.define('Koala.view.window.RoutingController', {
     /**
      * Request openrouteservice API.
      */
-    makeRoutingRequest: function() {
+    makeRoutingRequest: function(onSuccess, onError) {
 
         var me = this;
         var view = me.getView();
@@ -725,22 +725,20 @@ Ext.define('Koala.view.window.RoutingController', {
 
         var params = me.getORSParams();
 
-        var onSuccess = function(json) {
-            view.fireEvent('onRouteLoaded', json);
-        };
+        if (!onSuccess) {
+            onSuccess = function(json) {
+                view.fireEvent('onRouteLoaded', json);
+            };
+        }
 
-        var onError = function(err) {
-            vm.set('showDownloadButton', false);
-            var str = 'An error occured: ' + err;
-            Ext.Logger.log(str);
-            Ext.toast(vm.get('i18n.error_msg_routing_request'));
-
-            var resultPanel = view.down('[name=' + view.routingResultPanelName + ']');
-            if (!resultPanel) {
-                return;
-            }
-            resultPanel.fireEvent('resultChanged');
-        };
+        if (!onError) {
+            onError = function(err) {
+                vm.set('showDownloadButton', false);
+                // TODO: proper error handling
+                var str = 'An error occured: ' + err;
+                Ext.Logger.log(str);
+            };
+        }
 
         me.requestORS('directions', params, onSuccess, onError);
     },

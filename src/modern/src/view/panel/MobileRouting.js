@@ -14,27 +14,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.Routing
+ * @class Koala.view.panel.MobileRouting
  */
-Ext.define('Koala.view.window.Routing', {
-    extend: 'Ext.window.Window',
-    xtype: 'k-window-routing',
+Ext.define('Koala.view.panel.MobileRouting',{
+    extend: 'Koala.view.panel.MobilePanel',
+    xtype: 'k-panel-mobilerouting',
 
     requires: [
-        'Koala.util.Help',
         'Koala.util.AppContext',
         'BasiGX.view.component.Map',
+        'Koala.view.panel.MobileRoutingController',
         'Koala.view.window.RoutingModel',
-        'Koala.view.window.RoutingController',
-        'Koala.view.container.RoutingResult',
-        'Koala.view.panel.ElevationProfile',
         'Koala.view.form.RoutingSettings'
     ],
 
-    controller: 'k-window-routing',
+    controller: 'k-panel-mobilerouting',
     viewModel: {
         type: 'k-window-routing'
     },
+
+    layout: 'vbox',
+
+    bind: {
+        title: '{i18n.title}'
+    },
+
+    scrollable: 'y',
 
     waypointLayerName: 'routing-waypoint-layer',
 
@@ -42,12 +47,7 @@ Ext.define('Koala.view.window.Routing', {
 
     routeSegmentLayerName: 'routing-route-segment-layer',
 
-    avoidAreaLayerName: 'routing-avoid-area-layer',
-
     map: null,
-
-    /** The interaction for drawing the avoid area */
-    avoidAreaDrawInteraction: null,
 
     /** The name of the routingResultPanel */
     routingResultPanelName: 'routing-result-panel',
@@ -58,46 +58,92 @@ Ext.define('Koala.view.window.Routing', {
     /** The name of the layer for elevation interaction */
     elevationLayerName: 'routing-elevation-layer',
 
-    bind: {
-        title: '{i18n.title}'
-    },
+    tools: [{
+        type: 'left',
+        docked: 'left',
+        handler: 'onCloseToolClicked'
+    }],
 
-    minHeight: 100,
-    maxHeight: 600,
-    width: 500,
-
-    layout: 'vbox',
-
-    items: [
-        {
-            xtype: 'k-form-routing-settings'
-        }
-    ],
-
-    collapsible: true,
-    resizable: true,
-    constrainHeader: true,
-
-    // TODO listen to language changes and trigger routing again
-    //      to retrieve translated instructions.
     listeners: {
-        expand: function() {
-            // HBD: after collapse/expand extjs thinks the user manually
-            // resized the window and stops automatic window resize if
-            // child component sizes are updated. We can apparently
-            // reset this by setting the sizes to null...
-            this.setSize(null, null);
-        },
-        onRouteLoaded: 'onRouteLoaded',
+        painted: 'onPainted',
         onWaypointAdded: 'onWaypointAdded',
-        boxready: 'onBoxReady',
-        close: 'onWindowClose',
-        makeRoutingRequest: 'makeRoutingRequest',
         updateWayPointLayer: 'updateWayPointLayer',
-        makeDownloadRequest: 'makeDownloadRequest'
+        clearRouting: 'onCloseToolClicked'
     },
 
-    initComponent: function() {
+    items: [{
+        xtype: 'segmentedbutton',
+        defaults: {
+            flex: 1
+        },
+        bind: {
+            value: '{routingProfile}'
+        },
+        items: [{
+            iconCls: 'x-fa fa-car',
+            value: 'driving-car',
+            bind: {
+                pressed: '{routingProfile === "driving-car"}'
+            }
+        }, {
+            iconCls: 'x-fa fa-bicycle',
+            value: 'cycling-regular',
+            bind: {
+                pressed: '{routingProfile === "cycling-regular"}'
+            }
+        }, {
+            iconCls: 'x-fa fa-male',
+            value: 'foot-walking',
+            bind: {
+                pressed: '{routingProfile === "foot-walking"}'
+            }
+        }]
+    }, {
+        xtype: 'k-form-routing-settings',
+        maxHeight: '40%'
+    }, {
+        xtype: 'button',
+        bind: {
+            text: '{i18n.addViaPoint}'
+        },
+        handler: 'addEmptyViaPoint'
+    },{
+        xtype: 'grid',
+        flex: 1,
+        hideHeaders: true,
+        bind: {
+            store: '{geocodingsuggestions}'
+        },
+        listeners: {
+            select: 'applySuggestion'
+        },
+        columns: [{
+            dataIndex: 'address',
+            flex: 1,
+            cell: {
+                height: 50
+            }
+        }]
+    }, {
+        xtype: 'toolbar',
+        docked: 'bottom',
+        items: [{
+            xtype: 'spacer'
+        }, {
+            xtype: 'button',
+            iconCls: 'fa fa-arrow-right',
+            iconAlign: 'right',
+            style: {
+                fontSize: 'large'
+            },
+            bind: {
+                text: '{i18n.computeRouteButtonText}'
+            },
+            handler: 'onComputeRouteClick'
+        }]
+    }],
+
+    initialize: function() {
         var me = this;
 
         me.callParent(arguments);
@@ -107,6 +153,7 @@ Ext.define('Koala.view.window.Routing', {
         var staticMe = Koala.util.AppContext;
         var ctx = staticMe.getAppContext();
         var routingOpts = staticMe.getMergedDataByKey('routing', ctx);
+
         vm.set('routingOpts', routingOpts);
 
         if (routingOpts.routeStyle) {
@@ -160,38 +207,14 @@ Ext.define('Koala.view.window.Routing', {
             vm.set('elevationStyle', elevationStyle);
         }
 
-        if (routingOpts.avoidAreaStyle) {
-            var avoidAreaStyle = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: routingOpts.avoidAreaStyle.strokeColor,
-                    width: routingOpts.avoidAreaStyle.width
-                }),
-                fill: new ol.style.Fill({
-                    color: routingOpts.avoidAreaStyle.fillColor
-                })
-            });
-            vm.set('avoidAreaStyle', avoidAreaStyle);
-
-            if (routingOpts.avoidAreaStyle.opacity !== undefined && routingOpts.avoidAreaStyle.opacity !== null) {
-                vm.set('avoidAreaOpacity', routingOpts.avoidAreaStyle.opacity);
-            }
-        }
-
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
 
-        // TODO probably set all items of the view dynamically here
-        me.add({
-            xtype: 'k-container-routingresult',
-            name: me.routingResultPanelName,
-            routeLayerName: me.routeLayerName,
-            routeSegmentLayerName: me.routeSegmentLayerName,
-            elevationProfilePanelName: me.elevationProfilePanelName,
-            elevationLayerName: me.elevationLayerName,
-            map: me.map,
-            flex: 1
-        });
-
+        var resultPanel = Ext.ComponentQuery.query('[name' + me.routingResultPanelName + ']')[0];
+        if (resultPanel) {
+            resultPanel.setViewModel(vm);
+        }
     }
+
 });

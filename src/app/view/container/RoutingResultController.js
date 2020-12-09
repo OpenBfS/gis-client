@@ -540,6 +540,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var query = result.metadata.query;
         var profile = query.profile;
 
+        var summaries = [];
         Ext.Array.each(result.features, function(feat) {
             var props = {};
             if (feat.properties) {
@@ -549,7 +550,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
             var distance = props.summary ? props.summary.distance : undefined;
             var duration = props.summary ? props.summary.duration : undefined;
 
-            summaryStore.add({
+            summaries.push({
                 profile: profile,
                 properties: props,
                 geometry: Ext.clone(feat.geometry),
@@ -560,5 +561,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
                 query: query
             });
         });
+        summaryStore.add(summaries);
     }
 });

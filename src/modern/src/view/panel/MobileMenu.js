@@ -15,6 +15,7 @@ Ext.define('Koala.view.panel.MobileMenu', {
         'Koala.view.form.RodosFilter',
         'Koala.view.form.RodosFilterController',
         'Koala.view.button.ElanScenarioButton',
+        'Koala.view.panel.MobileRouting',
 
         'Koala.view.panel.MobileMenuController',
         'Koala.view.panel.MobileMenuModel'
@@ -167,8 +168,17 @@ Ext.define('Koala.view.panel.MobileMenu', {
         },
         listeners: {
             painted: function() {
-                Koala.util.AppContext.generateCheckToolVisibility('addWmsBtn')();
+                var fn = Koala.util.AppContext.generateCheckToolVisibility('addWmsBtn').bind(this);
+                fn();
             }
+        }
+    }, {
+        xtype: 'button',
+        bind: {
+            text: '{routingButtonText}'
+        },
+        handler: function(btn) {
+            btn.up('app-main').down('k-panel-mobilerouting').show();
         }
     }, {
         xtype: 'button',
