@@ -469,7 +469,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
 
         var routingWindow = view.up('k-window-routing');
         if (routingWindow) {
-            routingWindow.fireEvent('makeRoutingRequest');
+            routingWindow.fireEvent('makeRoutingRequest', undefined, undefined);
         }
     }
 

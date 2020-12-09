@@ -45,7 +45,7 @@ Ext.define('Koala.view.window.RoutingController', {
 
         vm.set('language', locale);
 
-        view.fireEvent('makeRoutingRequest');
+        view.fireEvent('makeRoutingRequest', undefined, undefined);
     },
 
     /**
