@@ -890,11 +890,16 @@
                     "uploadGeoJson": "Load GeoJSON",
                     "deleteAvoidArea": "Delete avoid area",
                     "drawAvoidArea": "Draw area",
+                    "selectAvoidAreaFromLayer": "Select from layer",
                     "errorFileUpload": "Could not load file. Please make sure the file is valid and try again.",
                     "errorUploadedGeometryType": "The uploaded GeoJSON must be a polygon.",
                     "errorTooManyFeatures": "The upload of multiple features is not supported. Please upload a single feature." ,
                     "errorUploadedFileExtension": "Unsupported filetype. Please load a '.json' or '.geojson' file.",
-                    "errorZeroFeatures": "The uploaded GeoJSON does not contain features. Please upload one feature."
+                    "errorZeroFeatures": "The uploaded GeoJSON does not contain features. Please upload one feature.",
+                    "errorGetFeatureInfo": "The polygon could not be read from the layer.",
+                    "errorNoLayerFound": "No valid layer found at selected location. Please try again.",
+                    "errorNoPolygonChosen": "The selected feature is not a polygon. Please select a polygon.",
+                    "errorAreaTooBig": "The selected polygon is too big. Please select a smaller one."
                 }
             }
         }

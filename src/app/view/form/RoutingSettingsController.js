@@ -52,6 +52,209 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
     },
 
     /**
+     * Activate singleclick event.
+     * On map click the first possible polygon
+     * is used as avoid area.
+     */
+    selectAvoidAreaFromLayer: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var parentComponent = me.getView().up('k-window-routing');
+        var map = parentComponent.map;
+
+        if (!map) {
+            return;
+        }
+
+        map.once('singleclick',function(evt) {
+
+            var aLayerHasBeenFound = map.forEachLayerAtPixel(
+                evt.pixel,
+                function(layer) {
+                    // returns true if an appropriate layer has been found
+                    // a true value breaks the forEach loop
+                    return me.handleEachLayer(layer, evt.coordinate);
+                },
+                me,
+                // pre-filter the layers to check
+                me.layerFilter);
+            if (!aLayerHasBeenFound) {
+                Ext.toast(vm.get('i18n.errorNoLayerFound'));
+            }
+        });
+    },
+
+    /**
+     * Check if input layer contains a valid avoid area.
+     *
+     * @param {ol.layer.Layer} layer The layer to check.
+     * @param {ol.Coordinate} coordinate The coordinate where the user clicked.
+     *
+     * @returns {boolean} If the layer contains usable features for the avoid area.
+     */
+    handleEachLayer: function(layer, coordinate) {
+
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var parentComponent = me.getView().up('k-window-routing');
+        var map = parentComponent.map;
+
+        if (!map) {
+            return;
+        }
+
+        var mapView = map.getView();
+
+        var source = layer.getSource();
+        // TODO: maybe change if/else structure with a final "return true"
+        if (layer instanceof ol.layer.Tile) {
+
+            var resolution = mapView.getResolution();
+            var mapProjection = mapView.getProjection().getCode();
+
+            if (source instanceof ol.source.TileWMS | source instanceof ol.source.ImageWMS) {
+                var url = source.getGetFeatureInfoUrl(coordinate, resolution, mapProjection,
+                    {
+                        INFO_FORMAT: 'application/json'
+                    });
+                if (url) {
+                    Ext.Ajax.request({
+                        url: url,
+                        success: function(response) {
+                            var geoJson = Ext.decode(response.responseText);
+                            var format = new ol.format.GeoJSON();
+                            var features = format.readFeatures(geoJson);
+                            me.handleNewAvoidFeatureCandidates(features);
+                        },
+                        failure: function(err) {
+                            var str = 'An error occured: ' + err;
+                            Ext.Logger.log(str);
+                            Ext.toast(vm.get('i18n.errorGetFeatureInfo'));
+                        }
+                    }
+                    );
+                }
+            }
+            return true;
+        }
+        if (layer instanceof ol.layer.Vector) {
+
+            var vectorFeatures = source.getFeaturesAtCoordinate(coordinate);
+            me.handleNewAvoidFeatureCandidates(vectorFeatures);
+            return true;
+        }
+    },
+
+    /**
+     * Check if a layer is suitable for checking if
+     * it contains candidates for avoid area features.
+     *
+     * @param {ol.layer.Layer} layer The layer to check.
+     * @returns {boolean} If layer fulfills conditions.
+     */
+    layerFilter: function (layer) {
+        var source = layer.getSource();
+
+        // the BKG Topplus basemap causes a CORS error that prevents
+        // the forEachLayerAtPixel function from execution
+        if (source instanceof ol.source.WMTS && layer.get('name') === 'Hintergrundkarte - TopPlus') {
+            return false;
+        }
+        if (layer instanceof ol.layer.Tile || layer instanceof ol.layer.Vector) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    /**
+     * Process the retrieved feature candidates from other layers.
+     * Finally use one feature as avoid area.
+     *
+     * @param {Array.<ol.Feature>} features The feature candiates of the other layer.
+     */
+    handleNewAvoidFeatureCandidates: function(features) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var parentComponent = me.getView().up('k-window-routing');
+        var map = parentComponent.map;
+
+        if (!map) {
+            return;
+        }
+
+        var avoidAreaLayer = me.getAvoidAreaLayer();
+
+        if (!avoidAreaLayer) {
+            return;
+        }
+
+        var avoidSource = avoidAreaLayer.getSource();
+        var mapView = map.getView();
+
+        if (features.length === 0) {
+            return;
+        }
+
+        var feature = features[0];
+        var geom = feature.getGeometry();
+
+        var geomCorrect = geom instanceof ol.geom.MultiPolygon || geom instanceof ol.geom.Polygon;
+
+        if (!geomCorrect) {
+            Ext.toast(vm.get('i18n.errorNoPolygonChosen'));
+            return;
+        }
+
+        if (me.isPolygonTooBig(geom)) {
+            Ext.toast(vm.get('i18n.errorAreaTooBig'));
+            return;
+        }
+
+        avoidSource.clear();
+        avoidSource.addFeature(feature);
+        mapView.fit(feature.getGeometry().getExtent());
+    },
+
+    /**
+     * Check if polygon is too big for the openrouteservice API.
+     *
+     * @param {ol.geom.Geometry} polygon The polygon or multipolygon geometry in EPSG:3857 projection.
+     * @returns {boolean} If the polygon is too big.
+     */
+    isPolygonTooBig: function(polygon) {
+        var me = this;
+
+        var parentComponent = me.getView().up('k-window-routing');
+        var map = parentComponent.map;
+        if (!map) {
+            return;
+        }
+        var mapView = map.getView();
+
+        // check area
+        var wgs84Sphere= new ol.Sphere(6378137);
+        var mapProjection = mapView.getProjection().getCode();
+        var tmpPolygon = polygon.clone().transform(mapProjection, 'EPSG:4326');
+        if (polygon instanceof ol.geom.MultiPolygon) {
+            // take the first polygon of a Multipolygon
+            tmpPolygon = tmpPolygon.getPolygon(0);
+        }
+        var coordinates = tmpPolygon.getLinearRing(0).getCoordinates();
+        var area = wgs84Sphere.geodesicArea(coordinates);
+
+        // Openrouteservice has an area requirement:
+        // "The area of a polygon to avoid must not exceed 2.0E8 square meters."
+        return area > 200000000;
+    },
+
+    /**
      * Initiate the file handling listener.
      *
      * @param {Ext.form.field.File} field The file field.

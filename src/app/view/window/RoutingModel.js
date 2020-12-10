@@ -64,11 +64,16 @@ Ext.define('Koala.view.window.RoutingModel', {
             uploadGeoJson: '',
             deleteAvoidArea: '',
             drawAvoidArea: '',
+            selectAvoidAreaFromLayer: '',
             errorFileUpload: '',
             errorUploadedGeometryType: '',
             errorTooManyFeatures: '',
             errorUploadedFileExtension: '',
-            errorZeroFeatures: ''
+            errorZeroFeatures: '',
+            errorGetFeatureInfo: '',
+            errorNoLayerFound: '',
+            errorNoPolygonChosen: '',
+            errorAreaTooBig: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,
