@@ -21,7 +21,8 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
     alias: 'controller.k-panel-elevationprofile',
 
     requires: [
-        'BasiGX.util.Layer'
+        'BasiGX.util.Layer',
+        'BasiGX.view.component.Map'
     ],
 
     statics: {

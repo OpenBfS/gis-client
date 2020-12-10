@@ -3,6 +3,7 @@ Ext.define('Koala.view.panel.MobileMenu', {
     xtype: 'k-panel-mobilemenu',
 
     requires: [
+        'Ext.Button',
         'Koala.store.MetadataSearch',
         'Koala.store.SpatialSearch',
 

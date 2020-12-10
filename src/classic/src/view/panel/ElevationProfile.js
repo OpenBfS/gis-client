@@ -22,6 +22,8 @@ Ext.define('Koala.view.panel.ElevationProfile', {
     xtype: 'k-panel-elevationprofile',
 
     requires: [
+        'Ext.Component',
+        'Ext.container.Container',
         'Koala.view.panel.ElevationProfileController',
         'Koala.view.panel.ElevationProfileModel'
     ],

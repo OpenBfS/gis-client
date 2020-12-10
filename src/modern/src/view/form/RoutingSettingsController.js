@@ -20,6 +20,11 @@ Ext.define('Koala.view.form.ModernRoutingSettingsController', {
     extend: 'Koala.view.form.RoutingSettingsController',
     alias: 'controller.k-form-modern-routing-settings',
 
+    requires: [
+        'Ext.Container',
+        'Ext.Button'
+    ],
+
     setFormEntries: function() {
         var me = this;
         var view = me.getView();

@@ -1,121 +1,227 @@
 {
     "data": {
         "merge": {
+            "headerTitle": "IMIS",
             "urls": {
                 "metadata-xml2json": "http://10.133.7.220/geonetwork/srv/api/0.1/records/",
                 "metadata-search": "http://10.133.7.220/geonetwork/srv/ger/csw?",
                 "spatial-search": "http://10.133.7.220/ogc/bfs/ows",
-                "geoserver-base-url": "http://10.133.7.220/ogc/bfs/ows",
                 "print-servlet": "http://10.133.7.220/bfs-printservice/print/",
                 "irix-servlet": "http://10.133.7.220/irix-servlet",
                 "irix-context": "resources/irixContext.json",
                 "rodos-projects": "resources/rodos/projects.json",
                 "rodos-results": "resources/rodos/projects/",
-
+                "rodos-upload-service": "http://10.133.7.220/examples/servlets/servlet/RequestParamExample?",
+                "geoserver-base-url": "http://10.133.7.220/ogc",
                 "layerprofile": "classic/resources/layerprofile.json",
                 "layerset": "classic/resources/layerset.json",
-
-                "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
+                "videos": "resources/videos.json",
+                "print-transparent-img": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif",
+                "style-service": "resources/styles.json",
+                "dokpool-scenarios": "dokpool/bund/contentconfig/scen/"
             },
             "application_user": {
                 "username": "admin",
                 "password": "admin"
             },
             "import": {
-              "allowCreateLayer": true,
-              "ruf": {
-                "workspace": "ruf-import",
-                "namespace": "www.imis.bfs.de/ruf",
-                "datastore": "ruf-import",
-                "baseUrl": "http://10.133.7.220/ogc/",
-                "metadataBaseUrl": "http://10.133.7.220/geonetwork/"
-              },
-              "imis": {
-                "workspace": "imis-import",
-                "namespace": "www.imis.bfs.de/imis",
-                "datastore": "imis-import",
-                "baseUrl": "http://10.133.7.220/ogc/",
-                "metadataBaseUrl": "http://10.133.7.220/geonetwork/"
-              }
+                "allowCreateLayer": true,
+                "ruf": {
+                    "workspace": "ruf-import",
+                    "namespace": "www.imis.bfs.de/ruf",
+                    "datastore": "ruf-import",
+                    "baseUrl": "http://10.133.7.220/ogc/",
+                    "metadataBaseUrl": "/geonetwork/"
+                },
+                "imis": {
+                    "workspace": "imis-import",
+                    "namespace": "www.imis.bfs.de/imis",
+                    "datastore": "imis-import",
+                    "baseUrl": "http://10.133.7.220/ogc/",
+                    "metadataBaseUrl": "/geonetwork/"
+                }
             },
             "imis_user": {
-              "imisroles": [
-                "ruf"
-              ],
-              "uid": "Fake Authuser",
-              "username": "Fake Authuser",
-              "userroles": [
-                "ruf",
-                "imis",
-                "bfs",
-                "public"
-              ]
+                "imisroles": [
+                    "ruf"
+                ],
+                "uid": "Fake Authuser",
+                "username": "Fake Authuser",
+                "userroles": [
+                    "ruf",
+                    "imis",
+                    "bfs",
+                    "public"
+                ]
             },
             "print-timeout": 60000,
-            "metadataSearchFields": ["title", "abstract"],
+            "metadataSearchFields": [
+                "title",
+                "abstract"
+            ],
             "paramIsAttributeName": [
+                "xAxisAttribute",
                 "yAxisAttribute",
                 "groupAttribute",
                 "detectionLimitAttribute",
-                "uncertaintyAttribute"
+                "uncertaintyAttribute",
+                "featureIdentifyField"
             ],
             "spatialSearchTypeName": "bfs:verwaltung_4326_geozg_sort",
             "spatialSearchFields": {
                 "searchColumn": "NAME",
                 "geomColumn": "BOX_GEO"
             },
-            "startCenter": [1234075.4566814213, 6706481.04685707],
-            "startZoom": 6,
-            "mapLayers": [
+            "startCenter": [
+                1234075.4566814213,
+                6706481.04685707
             ],
-            "backgroundLayers": [{
-              "uuid":  "2f30477a-ca0a-43cb-a34b-fcee53e6bce7",
-              "thumb": "layer_sets/odl_thumb.png"
-            }, {
-              "uuid": "1c964894-c960-4eb2-a4f3-dd7c120d69ee",
-              "thumb": "layer_sets/gewaesser_thumb.png"
-            }]
-            ,
+            "startZoom": 6,
+            "mapLayers": [],
+            "backgroundLayers": [
+                {
+                    "uuid": "2f30477a-ca0a-43cb-a34b-fcee53e6bce7",
+                    "thumb": "layer_sets/odl_thumb.png"
+                },
+                {
+                    "uuid": "ec649cb5-04c7-40d4-bb03-2fb4e31cc896",
+                    "thumb": "layer_sets/gewaesser_thumb.png"
+                }
+            ],
             "mapConfig": {
                 "projection": "EPSG:3857"
             },
+            "createLegendGraphicLayer": "bfs:planungsradien",
             "tools": [
                 "addWmsBtn",
                 "printBtn",
                 "cloneBtn",
-                "selectFeaturesBtn"
+                "selectFeaturesBtn",
+                "irixPrintBtn",
+                "measureBtn",
+                "drawBtn",
+                "createVectorLayerBtn",
+                "importVectorLayerBtn",
+                "detectionLimitBtn",
+                "ScenarioAlertBtn"
             ],
             "vectorIcons": [
                 {
                     "src": "resources/vectorIcons/atomicon.png",
                     "caption": "Atom"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/drop.png",
+                    "caption": "drop"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/glass.png",
+                    "caption": "glass"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/grass.png",
+                    "caption": "grass"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/lettuce.png",
+                    "caption": "lettuce"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/milk.png",
+                    "caption": "milk"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/mushroom.png",
+                    "caption": "mushroom"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant_02.png",
+                    "caption": "02"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant_03.png",
+                    "caption": "03"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant_04.png",
+                    "caption": "04"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/nuclear_power_plant.png",
+                    "caption": "plant"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/plastic-bottle.png",
+                    "caption": "bottle"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/radiation.png",
+                    "caption": "radiation"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/radioactive_waste_02.png",
+                    "caption": "02"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/radioactive_waste.png",
+                    "caption": "waste"
+                },
+                {
+                    "src": "resources/vectorIcons/flaticonIcons/sea.png",
+                    "caption": "sea"
                 }
             ],
-            "vectorProjections": [{
-                "code": "EPSG:3857",
-                "label": "EPSG:3857"
-            }, {
-                "code": "EPSG:4326",
-                "label": "EPSG:4326 (lon/lat)"
-            }, {
-                "code": "EPSG:4326-enu",
-                "label": "EPSG:4326 (lat/lon)"
-            }, {
-                "code": "EPSG:25832",
-                "label": "EPSG:25832"
-            }],
-            "vectorTemplates": [{
-                "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
-                "label": "Local Vector Data Template (drinkwater)"
-            }, {
-                "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
-                "label": "Local Vector Data Template (buildings)"
-            }, {
-                "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
-                "label": "Local Vector Data Template (bundeslaender)"
-            }],
-            "wmsUrls": ["http://ows.terrestris.de/osm/service",
-                "http://ows.mundialis.de/services/service" ],
+            "vectorProjections": [
+                {
+                    "code": "EPSG:3857",
+                    "label": "EPSG:3857"
+                },
+                {
+                    "code": "EPSG:4326",
+                    "label": "EPSG:4326 (lon/lat)"
+                },
+                {
+                    "code": "EPSG:4326-enu",
+                    "label": "EPSG:4326 (lat/lon)"
+                },
+                {
+                    "code": "EPSG:25832",
+                    "label": "EPSG:25832"
+                }
+            ],
+            "vectorTemplates": [
+                {
+                    "uuid": "b2a39797-3fa2-4ce7-801a-4e0ff789d220",
+                    "label": "bar"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (drinkwater)"
+                },
+                {
+                    "uuid": "4acc0685-9713-45ce-8d2e-0e008f601e17",
+                    "label": "Local Vector Data Template (buildings)"
+                },
+                {
+                    "uuid": "8bca3829-6f03-4d67-ab98-1c0bc3fcc0c4",
+                    "label": "Local Vector Data Template (bundeslaender)"
+                }
+            ],
+            "colorRamps": {
+                "BfS": [
+                    "#E7000E",
+                    "#F48E00",
+                    "#FFED00",
+                    "#00943D",
+                    "#272C82",
+                    "#611E82"
+                ]
+            },
+            "wmsUrls": [
+                "https://ahocevar.com/geoserver/ows",
+                "http://ows.terrestris.de/osm/service",
+                "http://ows.mundialis.de/services/service"
+            ],
             "drawLayerName": "Zeichnungen",
             "redLineLayerName": "Messungen",
             "rodosFolderName": "RODOS-Prognosen",

@@ -21,6 +21,11 @@ Ext.define('Koala.view.panel.MobileRouting',{
     xtype: 'k-panel-mobilerouting',
 
     requires: [
+        'Ext.Button',
+        'Ext.SegmentedButton',
+        'Ext.grid.Grid',
+        'Ext.Toolbar',
+        'Ext.Spacer',
         'Koala.util.AppContext',
         'BasiGX.view.component.Map',
         'Koala.view.panel.MobileRoutingController',

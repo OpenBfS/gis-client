@@ -21,8 +21,10 @@ Ext.define('Koala.view.container.RoutingResult', {
     xtype: 'k-container-routingresult',
 
     requires: [
+        'Ext.grid.Grid',
         'BasiGX.view.component.Map',
         'Koala.view.container.ModernRoutingResultController',
+        'Koala.view.container.LockableCarousel',
         'Koala.view.window.RoutingModel',
         'Koala.view.container.ElevationProfile'
     ],

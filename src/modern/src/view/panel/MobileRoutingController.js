@@ -20,6 +20,10 @@ Ext.define('Koala.view.panel.MobileRoutingController', {
     extend: 'Koala.view.window.RoutingController',
     alias: 'controller.k-panel-mobilerouting',
 
+    requires: [
+        'Ext.LoadMask'
+    ],
+
     onPainted: function() {
         var me = this;
         var view = me.getView();
