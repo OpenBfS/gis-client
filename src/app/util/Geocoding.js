@@ -20,7 +20,9 @@
  */
 Ext.define('Koala.util.Geocoding', {
 
-    requires: [],
+    requires: [
+        'Koala.util.AppContext'
+    ],
 
     statics: {
 

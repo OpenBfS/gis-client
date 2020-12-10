@@ -20,6 +20,11 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-form-routing-settings',
 
+    requires: [
+        'Ext.data.Store',
+        'Koala.util.Geocoding'
+    ],
+
     /**
      * Initialize the UI.
      *
@@ -156,7 +161,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
      * @param {ol.layer.Layer} layer The layer to check.
      * @returns {boolean} If layer fulfills conditions.
      */
-    layerFilter: function (layer) {
+    layerFilter: function(layer) {
         var source = layer.getSource();
 
         // the BKG Topplus basemap causes a CORS error that prevents

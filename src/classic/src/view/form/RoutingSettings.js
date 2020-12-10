@@ -22,6 +22,10 @@ Ext.define('Koala.view.form.RoutingSettings', {
     controller: 'k-form-routing-settings',
 
     requires: [
+        'Ext.button.Segmented',
+        'Ext.toolbar.Spacer',
+        'Ext.button.Button',
+        'Ext.form.field.FileButton',
         'Koala.view.form.RoutingSettingsController'
     ],
 

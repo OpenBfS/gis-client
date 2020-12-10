@@ -22,6 +22,9 @@ Ext.define('Koala.view.container.RoutingResult', {
     xtype: 'k-container-routingresult',
 
     requires: [
+        'Ext.grid.Panel',
+        'Ext.grid.column.Widget',
+        'Ext.button.Button',
         'Koala.view.container.RoutingResultController',
         'Koala.view.panel.ElevationProfile'
     ],
