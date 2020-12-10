@@ -80,13 +80,18 @@ Ext.define('Koala.view.form.RoutingSettings', {
             bind: {
                 tooltip: '{i18n.addAvoidArea}'
             },
-            menuAlign: 'bl',
             menu: [
                 {
                     bind: {
                         text: '{i18n.drawAvoidArea}'
                     },
                     handler: 'drawAvoidArea'
+                },
+                {
+                    bind: {
+                        text: '{i18n.selectAvoidAreaFromLayer}'
+                    },
+                    handler: 'selectAvoidAreaFromLayer'
                 },
                 {
                     // intentionally hidden button

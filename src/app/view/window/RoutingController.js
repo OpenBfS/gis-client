@@ -424,7 +424,7 @@ Ext.define('Koala.view.window.RoutingController', {
 
                 var deleteAvoidAreaButtonVisible = source.getFeatures().length > 0;
                 vm.set('deleteAvoidAreaButtonVisible', deleteAvoidAreaButtonVisible);
-                view.fireEvent('makeRoutingRequest');
+                view.fireEvent('makeRoutingRequest', undefined, undefined);
             });
 
             // create interaction
