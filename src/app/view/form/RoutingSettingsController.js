@@ -22,11 +22,6 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
 
     requires: [
         'Ext.data.Store',
-        'Ext.container.Container',
-        'Ext.form.field.ComboBox',
-        'Ext.button.Button',
-        'Ext.drag.Target',
-        'Ext.drag.Source',
         'Koala.util.Geocoding'
     ],
 

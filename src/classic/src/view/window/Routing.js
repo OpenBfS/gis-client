@@ -21,6 +21,12 @@ Ext.define('Koala.view.window.Routing', {
     xtype: 'k-window-routing',
 
     requires: [
+        'Ext.container.Container',
+        'Ext.form.field.ComboBox',
+        'Ext.button.Button',
+        'Ext.drag.Target',
+        'Ext.drag.Source',
+        'Ext.menu.Menu',
         'Koala.util.Help',
         'Koala.util.AppContext',
         'BasiGX.view.component.Map',
