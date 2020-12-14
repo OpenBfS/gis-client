@@ -6,7 +6,7 @@ Folgenden erläutert werden.
 ## appContext.json {#appcontext}
 
 In der Datei `appContext.json` werden verschiedene Werte gesetzt, die vom
-Client-Code ausgelesen werden die sich ggf veränder können. So muss z.B. der
+Client-Code ausgelesen werden die sich ggf verändern können. So muss z.B. der
 Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 ändern.
 
