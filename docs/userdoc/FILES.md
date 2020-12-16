@@ -6,7 +6,7 @@ Folgenden erläutert werden.
 ## appContext.json {#appcontext}
 
 In der Datei `appContext.json` werden verschiedene Werte gesetzt, die vom
-Client-Code ausgelesen werden die sich ggf veränder können. So muss z.B. der
+Client-Code ausgelesen werden die sich ggf verändern können. So muss z.B. der
 Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 ändern.
 
@@ -155,6 +155,90 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
   Der Name des RODOS-Ordners im Themenbaum. Dieser muss mit dem name des
   RODOS-Ordners in der layerSet.json übereinstimmen.
+
+* **routing**
+
+  Konfigurationen rund um den OpenRouteService.
+
+  * **openrouteserviceUrl** 
+
+    Die URL zur OpenRouteService Instanz.
+
+  * **photonUrl**
+
+    Die URL zum Photon Service.
+
+  * **routeStyle**
+
+    Styling Optionen des Layers, der die berechnete Route darstellt.
+
+    * **color**
+
+      Farbe der Route.
+
+    * **width**
+
+      Breite der Route.
+  
+  * **routeSegmentStyle**
+
+    Styling Optionen des Layers, der die einzelnen Routensegmente darstellt.
+
+    * **color**
+
+      Farbe des Routensegments.
+    
+    * **width**
+
+      Breite des Routensegments.
+
+  * **waypointStyle**
+
+    Styling Optionen des Layers, der die einzelnen Wegpunkte darstellt.
+
+    * **markerSize**
+
+      Größe der Wegpunkte in Pixeln.
+
+    * **color**
+
+      Farbe der Wegpunkte.
+
+  * **elevationStyle**
+
+    Styling Optionen des Layers, der die Abschnitte des Höhenprofils darstellt.
+
+    * **fill**
+
+      Füllfarbe des Punkts.
+    
+    * **stroke**
+
+      Farbe der Umrandung des Punkts.
+
+    * **radius**
+
+      Radius des Punkts in Pixeln.
+
+  * **avoidAreaStyle**
+
+    Styling Optionen des Layers, der die Avoid Areas darstellt.
+
+    * **strokeColor**
+
+      Farbe der Umrandung der Avoid Area.
+
+    * **width**
+
+      Breite der Umrandung der Avoid Area.
+
+    * **fillColor**
+
+      Füllfarbe der Avoid Area.
+    
+    * **opacity**
+
+      Deckkraft der Avoid Area.
 
 ## irixContext.json {#irixcontext}
 
