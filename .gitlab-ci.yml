@@ -54,7 +54,6 @@ deploy:
   tags: ['intranet']
   only:
     - master@bfs/bfs_koala
-    - openrouteservice@bfs/bfs_koala
   script:
     - cd resources/lib/d3-util
     - npm install
