@@ -496,6 +496,7 @@
                 "loading": "Laden",
                 "wmsimport": "WMS hinzuladen",
                 "vectorimport": "Vektordaten laden",
+                "routing": "Routing",
                 "print": "Drucken",
                 "tools": "Werkzeuge",
                 "draw": "Zeichnen",
@@ -717,6 +718,18 @@
             }
         }
     },
+    "Koala.view.panel.ElevationProfile": {
+        "config": {
+            "data": {
+                "title": "Höhenprofil",
+                "xLabel": "Distanz[km]",
+                "yLabel": "Höhe[m]",
+                "distanceLabel": "Distanz",
+                "elevationLabel": "Höhe",
+                "durationLabel": "Dauer"
+            }
+        }
+    },
     "Koala.view.toolbar.Header": {
         "config": {
             "data": {
@@ -851,6 +864,47 @@
         "config": {
             "data": {
                 "title": "Drucken"
+            }
+        }
+    },
+    "Koala.view.window.Routing": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Routenplanung",
+                    "startFieldTitle": "Start",
+                    "viaFieldTitle": "Via",
+                    "endFieldTitle": "Ziel",
+                    "addEmptyPoint": "Neuer Punkt",
+                    "routingProfileFieldTitle": "Profil",
+                    "computeRouteButtonText": "Route Berechnen",
+                    "addStartPoint": "Startpunkt setzen",
+                    "addViaPoint": "Wegpunkt setzen",
+                    "addEndPoint": "Zielpunkt setzen",
+                    "elevationBtnText": "Höhenprofil",
+                    "downloadButtonText": "Download",
+                    "error_msg_geocoding": "Standpunkt konnte nicht geladen werden. Bitte versuchen Sie es (später) erneut.",
+                    "error_msg_routing_request": "Routenplanung fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
+                    "error_msg_download": "Download fehlgeschlagen. Bitte versuchen sie es (später) erneut.",
+                    "routingSummaryDetailsButton": "Details",
+                    "profileCarText": "Mit dem Auto",
+                    "profileBycicleText": "Mit dem Fahrrad",
+                    "profileWalkingText": "Zu Fuß",
+                    "addAvoidArea": "Vermeide Gebiet",
+                    "uploadGeoJson": "Lade GeoJSON",
+                    "deleteAvoidArea": "Lösche zu vermeidendes Gebiet.",
+                    "drawAvoidArea": "Zeichne Gebiet",
+                    "selectAvoidAreaFromLayer": "Wähle von Layer",
+                    "errorFileUpload": "Das Hochladen der Datei ist fehlgeschlagen.",
+                    "errorUploadedGeometryType": "Das hochgeladene GeoJSON muss vom Typ Polygon sein.",
+                    "errorTooManyFeatures": "Das hochladen mehrerer Features wird nicht unterstützt. Bitte laden Sie nur ein Feature hoch." ,
+                    "errorUploadedFileExtension": "Dateityp wird nicht unterstützt. Bitte laden Sie nur eine '.json' oder '.geojson' Datei hoch.",
+                    "errorZeroFeatures": "Das hochgelandene GeoJSON enthält keine Features. Bitte laden Sie ein Feature hoch.",
+                    "errorGetFeatureInfo": "Das Polygon konnte aus dem Layer nicht ausgelesen werden.",
+                    "errorNoLayerFound": "An diesem Ort befindet sich kein gültiger Layer. Bitte versuchen Sie es erneut.",
+                    "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon.",
+                    "errorAreaTooBig": "Das gewählte Polygon is zu groß. Bitte wählen Sie ein kleineres Polygon."
+                }
             }
         }
     },
@@ -1828,11 +1882,32 @@
                 "settingsButtonText": "Einstellungen",
                 "moreLayersButtonText": "Auswahl",
                 "addLayerButtonText": "Externen WMS hinzufügen",
+                "routingButtonText": "Routing",
                 "permalinkButtonText": "Permalink",
                 "spatialSearchTitle": "Räumliche Suche",
                 "stationSearchTitle": "ODL Sondenstandorte",
                 "metadataSearchTitle": "Daten und Dienste des Bfs",
                 "alertBtnText": "Ereignisse"
+            }
+        }
+    },
+    "Koala.view.panel.MobileRouting": {
+        "config": {
+            "data": {
+                "i18n":{
+                    "title": "Routenplanung",
+                    "startFieldTitle": "Start",
+                    "viaFieldTitle": "Via",
+                    "endFieldTitle": "Ziel",
+                    "addEmptyPoint": "Neuer Punkt",
+                    "routingProfileFieldTitle": "Profil",
+                    "computeRouteButtonText": "Route Berechnen",
+                    "addStartPoint": "Startpunkt setzen",
+                    "addViaPoint": "Wegpunkt hinzufügen",
+                    "addEndPoint": "Zielpunkt setzen",
+                    "elevationBtnText": "Höhenprofil",
+                    "downloadButtonText": "Download"
+                }
             }
         }
     },
@@ -1942,6 +2017,18 @@
                 "warnMsgDateFormat": "d.m.Y",
                 "endBeforeStartWarnMsg": "Der Startwert muss vor dem Endwert liegen.",
                 "exceedsMaxDurationWarnMsg": "Startwert und Endwert liegen zu weit auseinander."
+            }
+        }
+    },
+    "Koala.view.container.ElevationProfile": {
+        "config": {
+            "data": {
+                "title": "Höhenprofil",
+                "xLabel": "Distanz[km]",
+                "yLabel": "Höhe[m]",
+                "distanceLabel": "Distanz",
+                "elevationLabel": "Höhe",
+                "durationLabel": "Dauer"
             }
         }
     },

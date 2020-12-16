@@ -29,7 +29,8 @@ Ext.define('Koala.view.list.TreeMenuController', {
         'Koala.view.window.PermalinkWindow',
         'Koala.view.window.ImprintWindow',
         'Koala.view.window.HelpWindow',
-        'Koala.view.window.AboutWindow'
+        'Koala.view.window.AboutWindow',
+        'Koala.view.window.Routing'
     ],
 
     alias: 'controller.k-list-treemenu',
@@ -53,6 +54,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
             sender.setOverItem(null);
             var key = node.get('key');
             switch (key) {
+                case 'routing':
+                    this.showWindow('k-window-routing', 'Koala.view.window.Routing');
+                    break;
                 case 'menu':
                     var isMicro = viewModel.get('micro');
                     viewModel.set('micro', !isMicro);

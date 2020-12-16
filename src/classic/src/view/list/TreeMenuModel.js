@@ -30,6 +30,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         micro: false,
         timereferenceValue: 'local',
         // i18n
+        routing: '',
         menu: '',
         themes: '',
         loading: '',
@@ -134,6 +135,12 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         iconCls: 'x-fa fa-crop',
                         rowCls: '{showSelectFeaturesBtn ? "" : "hidden"}{selectFeaturesActive ? "active" : ""}'
                     }]
+                }, {
+                    text: '{routing}',
+                    key: 'routing',
+                    leaf: true,
+                    iconCls: 'x-fa fa-location-arrow',
+                    rowCls: '{showRoutingBtn ? "menu-button" : "hidden"}'
                 }, {
                     text: '{share}',
                     iconCls: 'x-fa fa-share-alt',

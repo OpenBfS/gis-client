@@ -30,6 +30,7 @@
         "localStorage": true,
         "moment": true,
         "ol": true,
+        "Openrouteservice": false,
         "Papa": true,
         "React": false,
         "ReactDOM": false,

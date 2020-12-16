@@ -53,7 +53,7 @@ deploy:
   stage: deploy
   tags: ['intranet']
   only:
-    - master@terrestris/bfs_koala
+    - master@bfs/bfs_koala
   script:
     - cd resources/lib/d3-util
     - npm install
@@ -61,4 +61,4 @@ deploy:
     - cd ../../..
     - mkdir -p build/production/Koala/gis_client_configs
     - rsync -avzh --delete build/production/Koala/ -e ssh terrestris@10.133.7.220:/home/terrestris/koala/client/
-    - scp resources/appContext.json terrestris@10.133.7.220:/home/terrestris/koala/client/gis_client_configs/appContext.json
+    - scp resources/appContextTest.json terrestris@10.133.7.220:/home/terrestris/koala/client/gis_client_configs/appContext.json
