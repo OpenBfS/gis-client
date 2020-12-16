@@ -178,6 +178,12 @@ Ext.define('Koala.view.panel.MobileMenu', {
         bind: {
             text: '{routingButtonText}'
         },
+        listeners: {
+            painted: function() {
+                var fn = Koala.util.AppContext.generateCheckToolVisibility('routingBtn').bind(this);
+                fn();
+            }
+        },
         handler: function(btn) {
             btn.up('app-main').down('k-panel-mobilerouting').show();
         }
