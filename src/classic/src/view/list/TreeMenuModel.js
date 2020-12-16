@@ -140,7 +140,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                     key: 'routing',
                     leaf: true,
                     iconCls: 'x-fa fa-location-arrow',
-                    rowCls: 'menu-button'
+                    rowCls: '{showRoutingBtn ? "menu-button" : "hidden"}'
                 }, {
                     text: '{share}',
                     iconCls: 'x-fa fa-share-alt',

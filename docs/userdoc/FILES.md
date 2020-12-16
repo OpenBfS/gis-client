@@ -123,7 +123,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 * **tools**
 
   Array von Strings, die die aktivierten Werkzeuge der Anwendung steuern.
-  Mögliche Werte sind: `"printBtn"`, `"irixPrintBtn"`, `"cloneBtn"`, `"addWmsBtn"`, `"importVectorLayerBtn"`, `"createVectorLayerBtn"`, `"drawBtn"`, `"measureBtn"`, `"selectFeaturesBtn"`
+  Mögliche Werte sind: `"printBtn"`, `"irixPrintBtn"`, `"cloneBtn"`, `"addWmsBtn"`, `"importVectorLayerBtn"`, `"createVectorLayerBtn"`, `"drawBtn"`, `"measureBtn"`, `"selectFeaturesBtn"`, `"routingBtn"`
 
 * **vectorIcons**
 
@@ -158,7 +158,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
 * **routing**
 
-  Konfigurationen rund um den OpenRouteService.
+  Konfigurationen rund um den OpenRouteService. Beispiel Konfiguration weiter unten.
 
   * **openrouteserviceUrl** 
 
@@ -239,6 +239,38 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
     * **opacity**
 
       Deckkraft der Avoid Area.
+
+  ```json
+  {
+    "routing": {
+        "openrouteserviceUrl": "https://entw-imis.lab.bfs.de/ors",
+        "photonUrl": "https://entw-imis.lab.bfs.de/photon",
+        "routeStyle": {
+            "color": "#ff0000",
+            "width": 5
+        },
+        "routeSegmentStyle": {
+            "color": "#ffffff",
+            "width": 4
+        },
+        "waypointStyle": {
+            "markerSize": 38,
+            "color": "black"
+        },
+        "elevationStyle": {
+            "fill": "#ffffff",
+            "stroke": "#ffffff",
+            "radius": 3
+        },
+        "avoidAreaStyle": {
+            "strokeColor": "#000000",
+            "width": 4,
+            "fillColor": "#ff0000",
+            "opacity": 0.2
+        }
+    }
+  }
+  ```
 
 ## irixContext.json {#irixcontext}
 
