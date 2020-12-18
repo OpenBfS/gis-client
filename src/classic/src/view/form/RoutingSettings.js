@@ -80,7 +80,7 @@ Ext.define('Koala.view.form.RoutingSettings', {
         },
         {
             type: 'button',
-            iconCls: 'x-fa fa-square',
+            iconCls: 'x-fa fa-ban',
             bind: {
                 tooltip: '{i18n.addAvoidArea}'
             },
