@@ -217,10 +217,11 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
             return;
         }
 
-        if (me.isPolygonTooBig(geom)) {
-            Ext.toast(vm.get('i18n.errorAreaTooBig'));
-            return;
-        }
+        // //Limitiation when using openrouteservice.org
+        // if (me.isPolygonTooBig(geom)) {
+        //     Ext.toast(vm.get('i18n.errorAreaTooBig'));
+        //     return;
+        // }
 
         avoidSource.clear();
         avoidSource.addFeature(feature);
