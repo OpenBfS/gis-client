@@ -27,6 +27,7 @@ Ext.define('Koala.view.window.Routing', {
         'Ext.drag.Target',
         'Ext.drag.Source',
         'Ext.menu.Menu',
+        'Ext.tab.Panel',
         'Koala.util.Help',
         'Koala.util.AppContext',
         'BasiGX.view.component.Map',
@@ -75,8 +76,35 @@ Ext.define('Koala.view.window.Routing', {
     layout: 'vbox',
 
     items: [
+
         {
-            xtype: 'k-form-routing-settings'
+            xtype: 'k-form-routing-settings',
+            flex: 1
+        },
+        {
+            xtype: 'tabpanel',
+            flex: 1,
+            // TODO: fix width and heigth
+            height: '100%',
+            width: '100%',
+            items: [
+                {
+                    title: 'Results',
+                    name: 'routing-result-tab',
+                    // TODO: fix width and heigth
+                    height: '100%',
+                    width: '100%',
+                    flex: 1
+                },
+                {
+                    title: 'Optimization',
+                    name: 'routing-optimization-tab',
+                    flex: 1,
+                    items: [
+                        // new optimization components
+                    ]
+                }
+            ]
         }
     ],
 
@@ -188,7 +216,8 @@ Ext.define('Koala.view.window.Routing', {
         }
 
         // TODO probably set all items of the view dynamically here
-        me.add({
+        // TODO: add with 'down()'
+        me.down('[name=routing-result-tab]').add({
             xtype: 'k-container-routingresult',
             name: me.routingResultPanelName,
             routeLayerName: me.routeLayerName,
