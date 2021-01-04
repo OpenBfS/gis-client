@@ -260,6 +260,12 @@ Ext.define('Koala.view.form.LayerFilter', {
         }
 
         field = Ext.apply(field, sharedCfg);
+        if (field.value === 'null') {
+            field.value = '';
+        }
+        if (field.emptyText === 'null') {
+            field.emptyText = '';
+        }
 
         var fieldSet = Ext.create('Ext.form.FieldSet', {
             padding: 5,
