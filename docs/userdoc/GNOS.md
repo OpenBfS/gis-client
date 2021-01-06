@@ -1286,10 +1286,32 @@ Höhe des Charts in Pixel
 
 | Typ | gco:CharacterString  |
 |---------------------:|:----|
-| Erlaubt Wertemenge   | ganze Zahl  |
+| Erlaubte Wertemenge  | ganze Zahl  |
 | Obligatorisch        | &#10799; |
 | Default-Wert         |  |
 | Beispiel             | 250 |
+
+**chartMinWidth**
+
+Minimale Breite des Charts in Pixel
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubte Wertemenge  | ganze Zahl  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | 300 |
+| Beispiel             | 500 |
+
+**chartMinHeight**
+
+Minimale Höhe des Charts in Pixel
+
+| Typ | gco:CharacterString  |
+|---------------------:|:----|
+| Erlaubte Wertemenge  | ganze Zahl  |
+| Obligatorisch        | &#10799; |
+| Default-Wert         | 300 |
+| Beispiel             | 500 |
 
 ## Timeseries Chart Properties {#timeseries} (bfs:timeSeriesChartProperty)
 
