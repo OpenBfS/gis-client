@@ -404,6 +404,10 @@ Ext.define('Koala.view.container.RoutingResult', {
         if (southContainer) {
             southContainer.add(elevationPanel);
         }
+
+        if (!me.map) {
+            me.map = BasiGX.view.component.Map.guess().getMap();
+        }
     }
 
 });

@@ -486,6 +486,22 @@
             }
         }
     },
+    "Koala.view.grid.RoutingTimeWindow": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Time Windows",
+                    "startDayText": "Begin",
+                    "startTimeText": "Time",
+                    "endDayText": "End",
+                    "endTimeText": "Time",
+                    "addTimeWindowTooltip": "Add Time Window",
+                    "removeTimeWindowTooltip": "Remove Time Window",
+                    "emptyGridText": "No Time Windows created"
+                }
+            }
+        }
+    },
     "Koala.view.list.TreeMenu": {
         "config": {
             "data": {
@@ -904,7 +920,36 @@
                     "errorGetFeatureInfo": "The polygon could not be read from the layer.",
                     "errorNoLayerFound": "No valid layer found at selected location. Please try again.",
                     "errorNoPolygonChosen": "The selected feature is not a polygon. Please select a polygon.",
-                    "errorAreaTooBig": "The selected polygon is too big. Please select a smaller one."
+                    "errorAreaTooBig": "The selected polygon is too big. Please select a smaller one.",
+                    "optimizationLabel": "Advanced options",
+                    "enableOptimizationLabel": "Enable optimization",
+                    "jobsGridTitle": "Targets",
+                    "editJobTooltip": "Edit target",
+                    "addJobTooltip": "Add target",
+                    "removeJobTooltip": "Remove target",
+                    "emptyJobText": "No targets created",
+                    "priorityColumnText": "Priority",
+                    "addressColumnText": "Address",
+                    "descriptionColumnText": "Description"
+                }
+            }
+        }
+    },
+    "Koala.view.window.RoutingJob": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Edit target",
+                    "submitText": "Apply",
+                    "cancelText": "Cancel",
+                    "descriptionLabel": "Description",
+                    "descriptionPlaceholder": "Description of the target",
+                    "serviceLabel": "Service duration",
+                    "emptyServiceText": "Service duration",
+                    "priorityLabel": "Priority",
+                    "emptyPriorityText": "Priority",
+                    "addressLabel": "Target",
+                    "addressPlaceholder": "Enter search term or coordinate"
                 }
             }
         }

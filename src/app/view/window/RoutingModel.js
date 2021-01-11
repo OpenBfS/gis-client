@@ -75,7 +75,17 @@ Ext.define('Koala.view.window.RoutingModel', {
             errorGetFeatureInfo: '',
             errorNoLayerFound: '',
             errorNoPolygonChosen: '',
-            errorAreaTooBig: ''
+            errorAreaTooBig: '',
+            optimizationLabel: '',
+            enableOptimizationLabel: '',
+            jobsGridTitle: '',
+            editJobTooltip: '',
+            removeJobTooltip: '',
+            addJobTooltip: '',
+            emptyJobText: '',
+            priorityColumnText: '',
+            addressColumnText: '',
+            descriptionColumnText: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,

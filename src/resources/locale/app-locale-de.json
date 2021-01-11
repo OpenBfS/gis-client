@@ -488,6 +488,22 @@
             }
         }
     },
+    "Koala.view.grid.RoutingTimeWindow": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Zeitfenster",
+                    "startDayText": "Anfang",
+                    "startTimeText": "Zeit",
+                    "endDayText": "Ende",
+                    "endTimeText": "Zeit",
+                    "addTimeWindowTooltip": "Zeitfenster hinzufügen",
+                    "removeTimeWindowTooltip": "Zeitfenster entfernen",
+                    "emptyGridText": "Keine Zeitfenster angelegt"
+                }
+            }
+        }
+    },
     "Koala.view.list.TreeMenu": {
         "config": {
             "data": {
@@ -908,7 +924,36 @@
                     "errorGetFeatureInfo": "Das Polygon konnte aus dem Layer nicht ausgelesen werden.",
                     "errorNoLayerFound": "An diesem Ort befindet sich kein gültiger Layer. Bitte versuchen Sie es erneut.",
                     "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon.",
-                    "errorAreaTooBig": "Das gewählte Polygon is zu groß. Bitte wählen Sie ein kleineres Polygon."
+                    "errorAreaTooBig": "Das gewählte Polygon is zu groß. Bitte wählen Sie ein kleineres Polygon.",
+                    "optimizationLabel": "Erweiterte Einstellungen",
+                    "enableOptimizationLabel": "Optimierung aktivieren",
+                    "jobsGridTitle": "Ziele",
+                    "editJobTooltip": "Ziel bearbeiten",
+                    "removeJobTooltip": "Ziel entfernen",
+                    "addJobTooltip": "Ziel hinzufügen",
+                    "emptyJobText": "Keine Ziele angelegt",
+                    "priorityColumnText": "Priorität",
+                    "addressColumnText": "Adresse",
+                    "descriptionColumnText": "Beschreibung"
+                }
+            }
+        }
+    },
+    "Koala.view.window.RoutingJob": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Ziel bearbeiten",
+                    "submitText": "Anwenden",
+                    "cancelText": "Abbrechen",
+                    "descriptionLabel": "Beschreibung",
+                    "descriptionPlaceholder": "Beschreibung des Ziels",
+                    "serviceLabel": "Auftragsdauer",
+                    "emptyServiceText": "Auftragsdauer",
+                    "priorityLabel": "Priorität",
+                    "emptyPriorityText": "Priorität",
+                    "addressLabel": "Ziel",
+                    "addressPlaceholder": "Suchbegriff oder Koordinate eingeben"
                 }
             }
         }
