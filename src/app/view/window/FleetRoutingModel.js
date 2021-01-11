@@ -75,7 +75,9 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
             priorityColumnText: '',
             addressColumnText: '',
             descriptionColumnText: '',
-            errorFleetRouting: ''
+            errorFleetRouting: '',
+            vehiclesGridTitle: '',
+            emptyVehiclesText: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,

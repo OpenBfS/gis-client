@@ -90,6 +90,17 @@
             }
         }
     },
+    "Koala.view.button.RoutingProfile": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "profileCarText": "Driving",
+                    "profileBicycleText": "Cycling",
+                    "profileWalkingText": "Walking"
+                }
+            }
+        }
+    },
     "Koala.view.button.SelectFeaturesModel": {
         "config": {
             "data":{
@@ -958,7 +969,9 @@
                     "priorityColumnText": "Priority",
                     "addressColumnText": "Address",
                     "descriptionColumnText": "Description",
-                    "errorFleetRouting" : "The request for the fleet routing failed. Please try again later."
+                    "errorFleetRouting" : "The request for the fleet routing failed. Please try again later.",
+                    "vehiclesGridTitle": "Vehicles",
+                    "emptyVehiclesText": "No vehicles created"
                 }
             }
         }
@@ -978,6 +991,30 @@
                     "emptyPriorityText": "Priority",
                     "addressLabel": "Target",
                     "addressPlaceholder": "Enter search term or coordinate"
+                }
+            }
+        }
+    },
+    "Koala.view.window.RoutingVehicle": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Edit vehicle",
+                    "submitText": "Apply",
+                    "cancelText": "Cancel",
+                    "descriptionLabel": "Description",
+                    "descriptionPlaceholder": "Description of the vehicle",
+                    "startLabel": "Starting location",
+                    "startPlaceholder": "Starting location of the vehicle",
+                    "endLabel": "Ending location",
+                    "endPlaceholder": "Ending location of the vehicle",
+                    "timeWindowTitle": "Time window",
+                    "startDayLabel": "Starting day",
+                    "startDayPlaceholder": "Day",
+                    "startTimePlaceholder": "Time",
+                    "endDayLabel": "Ending day",
+                    "endDayPlaceholder": "Day",
+                    "endTimePlaceholder": "Time"
                 }
             }
         }

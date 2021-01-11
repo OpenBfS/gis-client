@@ -83,6 +83,17 @@
             }
         }
     },
+    "Koala.view.button.RoutingProfile": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "profileCarText": "Mit dem Auto",
+                    "profileBicycleText": "Mit dem Fahrrad",
+                    "profileWalkingText": "Zu Fuß"
+                }
+            }
+        }
+    },
     "Koala.view.button.FeatureSelectButton": {
         "config": {
             "data": {
@@ -963,7 +974,9 @@
                     "priorityColumnText": "Priorität",
                     "addressColumnText": "Adresse",
                     "descriptionColumnText": "Beschreibung",
-                    "errorFleetRouting" : "Die Anfrage für Flottenrouting ist fehlgeschlagen. Bitte versuchen Sie es (später) erneut."
+                    "errorFleetRouting" : "Die Anfrage für Flottenrouting ist fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
+                    "vehiclesGridTitle": "Fahrzeuge",
+                    "emptyVehiclesText": "Keine Fahrzeuge angelegt"
                 }
             }
         }
@@ -983,6 +996,30 @@
                     "emptyPriorityText": "Priorität",
                     "addressLabel": "Ziel",
                     "addressPlaceholder": "Suchbegriff oder Koordinate eingeben"
+                }
+            }
+        }
+    },
+    "Koala.view.window.RoutingVehicle": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Fahrzeug bearbeiten",
+                    "submitText": "Anwenden",
+                    "cancelText": "Abbrechen",
+                    "descriptionLabel": "Beschreibung",
+                    "descriptionPlaceholder": "Beschreibung des Fahrzeugs",
+                    "startLabel": "Startort",
+                    "startPlaceholder": "Startort des Fahrzeugs",
+                    "endLabel": "Zielort",
+                    "endPlaceholder": "Zielort des Fahrzeugs",
+                    "timeWindowTitle": "Zeitfenster",
+                    "startDayLabel": "Starttag",
+                    "startDayPlaceholder": "Tag",
+                    "startTimePlaceholder": "Uhrzeit",
+                    "endDayLabel": "Endtag",
+                    "endDayPlaceholder": "Tag",
+                    "endTimePlaceholder": "Uhrzeit"
                 }
             }
         }
