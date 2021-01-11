@@ -170,7 +170,7 @@ Ext.define('Koala.view.window.RoutingJob', {
                 if (serviceStore) {
                     var durations = [{duration: 0}];
                     do {
-                        prevDuration = durations[durations.length -1].duration;
+                        var prevDuration = durations[durations.length -1].duration;
                         durations.push({duration: prevDuration + (30*60)});
                     } while (
                         durations[durations.length - 1].duration < jobOpts.maxServiceDuration
@@ -194,15 +194,16 @@ Ext.define('Koala.view.window.RoutingJob', {
                 if (!field) {
                     return false;
                 }
-                switch(k) {
+                var store;
+                switch (k) {
                     case 'time_windows':
-                        var store = field.getStore();
+                        store = field.getStore();
                         if (store) {
                             store.setAllFromTimestamp(v);
                         }
                         break;
                     case 'address':
-                        var store = field.getStore();
+                        store = field.getStore();
                         if (store) {
                             field.suspendEvents();
                             store.loadRawData([v]);
@@ -216,6 +217,6 @@ Ext.define('Koala.view.window.RoutingJob', {
                 }
             });
         }
-    },
+    }
 
 });

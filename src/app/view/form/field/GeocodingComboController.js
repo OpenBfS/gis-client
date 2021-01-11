@@ -130,5 +130,5 @@ Ext.define('Koala.view.form.field.GeocodingComboController', {
 
             geoCodingSuggestions.add(suggestion);
         });
-    },
+    }
 });

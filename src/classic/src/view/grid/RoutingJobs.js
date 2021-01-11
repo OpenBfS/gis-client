@@ -48,7 +48,7 @@ Ext.define('Koala.view.grid.RoutingJobs', {
             dataIndex: 'priority'
         }, {
             bind: {
-                text: '{i18n.addressColumnText}',
+                text: '{i18n.addressColumnText}'
             },
             dataIndex: 'address',
             flex: 1,
@@ -62,8 +62,8 @@ Ext.define('Koala.view.grid.RoutingJobs', {
             dataIndex: 'description',
             flex: 1
         }, {
-            xtype:'actioncolumn',
-            width:50,
+            xtype: 'actioncolumn',
+            width: 50,
             items: [{
                 iconCls: 'x-fa fa-cog',
                 // TODO tooltips are not bindable here, so we have to find a simple

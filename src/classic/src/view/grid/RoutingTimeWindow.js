@@ -61,9 +61,9 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
             { name: 'endTime', type: 'date', dateFormat: 'time' }
         ],
 
-        getAllAsTimestamp: function () {
+        getAllAsTimestamp: function() {
             var me = this;
-            var timeWindows = Ext.Array.map(me.getData().items, function (d) {
+            var timeWindows = Ext.Array.map(me.getData().items, function(d) {
                 var startDay = moment(d.get('startDay'));
                 var endDay = moment(d.get('endDay'));
                 var startTime = moment(d.get('startTime'));
