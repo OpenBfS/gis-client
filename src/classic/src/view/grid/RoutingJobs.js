@@ -75,7 +75,6 @@ Ext.define('Koala.view.grid.RoutingJobs', {
                     var win = Ext.ComponentQuery.query('k-window-routing-job')[0];
 
                     if (!win) {
-                        debugger;
                         var job = Ext.clone(rec.getData());
                         Ext.create({
                             xtype: 'k-window-routing-job',
@@ -130,11 +129,6 @@ Ext.define('Koala.view.grid.RoutingJobs', {
 
     listeners: {
         beforedestroy: function() {
-            var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
-            if (langCombo) {
-                langCombo.un('applanguagechanged', this.setActionTooltips, me);
-            }
-
             var win = Ext.ComponentQuery.query('k-window-routing-job')[0];
             if (win) {
                 win.destroy();

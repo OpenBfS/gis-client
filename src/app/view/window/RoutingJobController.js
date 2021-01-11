@@ -37,7 +37,7 @@ Ext.define('Koala.view.window.RoutingJobController', {
         }
 
         var form = view.down('[name=job-form]');
-        var formData;
+        var formData = {};
         if (form) {
             formData = form.getForm().getFieldValues();
         }
