@@ -192,6 +192,9 @@ Ext.define('Koala.view.container.RoutingResult', {
 
     map: null,
 
+    /** Defines what type of routing should be done */
+    createdBy: '',
+
     /** The name of the elevationProfilePanel*/
     elevationProfilePanelName: 'routing-elevationprofile-panel',
 
@@ -388,6 +391,8 @@ Ext.define('Koala.view.container.RoutingResult', {
     initComponent: function() {
         var me = this;
         me.callParent(arguments);
+
+        // TODO: handle different routing types with 'me.routingType'
 
         var elevationPanel = Ext.create('Koala.view.panel.ElevationProfile', {
             name: me.elevationProfilePanelName,

@@ -14,11 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.RoutingSettingsController
+ * @class Koala.view.form.ClassicRoutingSettingsController
  */
-Ext.define('Koala.view.form.RoutingSettingsController', {
+Ext.define('Koala.view.form.ClassicRoutingSettingsController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.k-form-routing-settings',
+    alias: 'controller.k-form-classic-routing-settings',
 
     requires: [
         'Ext.data.Store',
@@ -66,7 +66,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var parentComponent = me.getView().up('k-window-routing');
+        var parentComponent = me.getView().up('k-window-classic-routing');
         var map = parentComponent.map;
 
         if (!map) {
@@ -105,7 +105,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var parentComponent = me.getView().up('k-window-routing');
+        var parentComponent = me.getView().up('k-window-classic-routing');
         var map = parentComponent.map;
 
         if (!map) {
@@ -187,7 +187,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var parentComponent = me.getView().up('k-window-routing');
+        var parentComponent = me.getView().up('k-window-classic-routing');
         var map = parentComponent.map;
 
         if (!map) {
@@ -237,7 +237,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
     isPolygonTooBig: function(polygon) {
         var me = this;
 
-        var parentComponent = me.getView().up('k-window-routing');
+        var parentComponent = me.getView().up('k-window-classic-routing');
         var map = parentComponent.map;
         if (!map) {
             return;
@@ -296,7 +296,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
 
             file.text().then(function(text) {
 
-                var parentComponent = me.getView().up('k-window-routing');
+                var parentComponent = me.getView().up('k-window-classic-routing');
 
                 // GeoJSON must be in EPSG:4326
                 var map = parentComponent.map;
@@ -363,7 +363,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
         source.clear();
 
         // activate draw interaction
-        var parentComponent = view.up('k-window-routing');
+        var parentComponent = view.up('k-window-classic-routing');
         var avoidAreaDrawInteraction = parentComponent.avoidAreaDrawInteraction;
         avoidAreaDrawInteraction.setActive(true);
 
@@ -659,7 +659,7 @@ Ext.define('Koala.view.form.RoutingSettingsController', {
         var me = this;
         var view = me.getView();
 
-        var routingWindow = view.up('k-window-routing');
+        var routingWindow = view.up('k-window-classic-routing');
         if (routingWindow) {
             routingWindow.fireEvent('makeRoutingRequest', undefined, undefined);
         }

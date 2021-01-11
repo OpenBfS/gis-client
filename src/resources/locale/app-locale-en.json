@@ -493,7 +493,9 @@
                 "themes": "",
                 "loading": "Load",
                 "wmsimport": "Add external WMS",
-                "routing": "Routing",
+                "routingTools": "Routing",
+                "classicRouting": "Routing (classic)",
+                "fleetRouting": "Fleet Routing",
                 "vectorimport": "Import local files",
                 "print": "Print",
                 "tools": "Tools",
@@ -864,17 +866,19 @@
             }
         }
     },
-    "Koala.view.window.Routing": {
+    "Koala.view.window.ClassicRouting": {
         "config": {
             "data": {
                 "i18n": {
-                    "title": "Route Planning",
+                    "classicRoutingtitle": "Route Planning",
+                    "fleetRoutingTitle": "Fleet Routing",
                     "startFieldTitle": "Start",
                     "viaFieldTitle": "Via",
                     "endFieldTitle": "End",
                     "addEmptyPoint": "New Point",
                     "routingProfileFieldTitle": "Profile",
                     "computeRouteButtonText": "Compute route",
+                    "computeFleetRoutingButtonText": "Compute routes",
                     "addStartPoint": "Set start",
                     "addViaPoint": "Set waypoint",
                     "addEndPoint": "Set destination",

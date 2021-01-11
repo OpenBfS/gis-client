@@ -398,7 +398,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var me = this;
         var view = me.getView();
 
-        var routingWindow = view.up('k-window-routing');
+        var routingWindow = view.up('k-window-classic-routing');
         if (routingWindow) {
             routingWindow.fireEvent('makeDownloadRequest', item.downloadType);
         }

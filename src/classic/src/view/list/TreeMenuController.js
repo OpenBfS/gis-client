@@ -30,7 +30,8 @@ Ext.define('Koala.view.list.TreeMenuController', {
         'Koala.view.window.ImprintWindow',
         'Koala.view.window.HelpWindow',
         'Koala.view.window.AboutWindow',
-        'Koala.view.window.Routing'
+        'Koala.view.window.ClassicRouting',
+        'Koala.view.window.FleetRouting'
     ],
 
     alias: 'controller.k-list-treemenu',
@@ -54,8 +55,11 @@ Ext.define('Koala.view.list.TreeMenuController', {
             sender.setOverItem(null);
             var key = node.get('key');
             switch (key) {
-                case 'routing':
-                    this.showWindow('k-window-routing', 'Koala.view.window.Routing');
+                case 'classicrouting':
+                    this.showWindowShake('k-window-classic-routing', 'Koala.view.window.ClassicRouting', 'k-window-fleet-routing');
+                    break;
+                case 'fleetrouting':
+                    this.showWindowShake('k-window-fleet-routing', 'Koala.view.window.FleetRouting', 'k-window-classic-routing');
                     break;
                 case 'menu':
                     var isMicro = viewModel.get('micro');
@@ -211,6 +215,11 @@ Ext.define('Koala.view.list.TreeMenuController', {
         }
     },
 
+    /**
+     * Show the window.
+     *
+     * If it already exists, the window starts shaking.
+     */
     showWindow: function(xtype, className, calledBy) {
         var win = Ext.ComponentQuery.query(xtype)[0];
         if (!win) {
@@ -222,6 +231,19 @@ Ext.define('Koala.view.list.TreeMenuController', {
         } else {
             BasiGX.util.Animate.shake(win);
         }
-    }
+    },
 
+    /**
+     * Like 'showWindow' but also checks
+     * if another window is already opened.
+     */
+    showWindowShake: function(xtype, className, otherXtype) {
+        var me = this;
+        var otherWin = Ext.ComponentQuery.query(otherXtype)[0];
+        if (otherWin) {
+            BasiGX.util.Animate.shake(otherWin);
+        } else {
+            me.showWindow(xtype, className);
+        }
+    }
 });

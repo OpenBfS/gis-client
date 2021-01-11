@@ -14,15 +14,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.RoutingSettings
+ * @class Koala.view.form.ClassicRoutingSettings
  */
-Ext.define('Koala.view.form.RoutingSettings', {
+Ext.define('Koala.view.form.ClassicRoutingSettings', {
     extend: 'Ext.form.Panel',
-    xtype: 'k-form-routing-settings',
-    controller: 'k-form-modern-routing-settings',
+    xtype: 'k-form-classic-routing-settings',
+    controller: 'k-form-modern-classic-routing-settings',
 
     requires: [
-        'Koala.view.form.ModernRoutingSettingsController'
+        'Koala.view.form.ModernClassicRoutingSettingsController'
     ],
 
     width: '100%',

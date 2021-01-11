@@ -14,11 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.Routing
+ * @class Koala.view.window.ClassicRouting
  */
-Ext.define('Koala.view.window.Routing', {
+Ext.define('Koala.view.window.ClassicRouting', {
     extend: 'Ext.window.Window',
-    xtype: 'k-window-routing',
+    xtype: 'k-window-classic-routing',
 
     requires: [
         'Ext.container.Container',
@@ -27,7 +27,6 @@ Ext.define('Koala.view.window.Routing', {
         'Ext.drag.Target',
         'Ext.drag.Source',
         'Ext.menu.Menu',
-        'Ext.tab.Panel',
         'Koala.util.Help',
         'Koala.util.AppContext',
         'BasiGX.view.component.Map',
@@ -35,7 +34,7 @@ Ext.define('Koala.view.window.Routing', {
         'Koala.view.window.RoutingController',
         'Koala.view.container.RoutingResult',
         'Koala.view.panel.ElevationProfile',
-        'Koala.view.form.RoutingSettings'
+        'Koala.view.form.ClassicRoutingSettings'
     ],
 
     controller: 'k-window-routing',
@@ -65,48 +64,15 @@ Ext.define('Koala.view.window.Routing', {
     /** The name of the layer for elevation interaction */
     elevationLayerName: 'routing-elevation-layer',
 
-    bind: {
-        title: '{i18n.title}'
-    },
-
     minHeight: 100,
     maxHeight: 600,
     width: 500,
 
     layout: 'vbox',
 
-    items: [
-
-        {
-            xtype: 'k-form-routing-settings',
-            flex: 1
-        },
-        {
-            xtype: 'tabpanel',
-            flex: 1,
-            // TODO: fix width and heigth
-            height: '100%',
-            width: '100%',
-            items: [
-                {
-                    title: 'Results',
-                    name: 'routing-result-tab',
-                    // TODO: fix width and heigth
-                    height: '100%',
-                    width: '100%',
-                    flex: 1
-                },
-                {
-                    title: 'Optimization',
-                    name: 'routing-optimization-tab',
-                    flex: 1,
-                    items: [
-                        // new optimization components
-                    ]
-                }
-            ]
-        }
-    ],
+    bind: {
+        title: '{i18n.classicRoutingtitle}'
+    },
 
     collapsible: true,
     resizable: true,
@@ -138,9 +104,9 @@ Ext.define('Koala.view.window.Routing', {
 
         var vm = me.lookupViewModel();
 
-        var staticMe = Koala.util.AppContext;
-        var ctx = staticMe.getAppContext();
-        var routingOpts = staticMe.getMergedDataByKey('routing', ctx);
+        var contextUtil = Koala.util.AppContext;
+        var ctx = contextUtil.getAppContext();
+        var routingOpts = contextUtil.getMergedDataByKey('routing', ctx);
         vm.set('routingOpts', routingOpts);
 
         if (routingOpts.routeStyle) {
@@ -215,9 +181,10 @@ Ext.define('Koala.view.window.Routing', {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
 
-        // TODO probably set all items of the view dynamically here
-        // TODO: add with 'down()'
-        me.down('[name=routing-result-tab]').add({
+        me.add({
+            xtype: 'k-form-classic-routing-settings'
+        });
+        me.add({
             xtype: 'k-container-routingresult',
             name: me.routingResultPanelName,
             routeLayerName: me.routeLayerName,
@@ -227,6 +194,5 @@ Ext.define('Koala.view.window.Routing', {
             map: me.map,
             flex: 1
         });
-
     }
 });

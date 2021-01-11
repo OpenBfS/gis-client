@@ -14,11 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.ModernRoutingSettingsController
+ * @class Koala.view.form.ModernClassicRoutingSettingsController
  */
-Ext.define('Koala.view.form.ModernRoutingSettingsController', {
-    extend: 'Koala.view.form.RoutingSettingsController',
-    alias: 'controller.k-form-modern-routing-settings',
+Ext.define('Koala.view.form.ModernClassicRoutingSettingsController', {
+    extend: 'Koala.view.form.ClassicRoutingSettingsController',
+    alias: 'controller.k-form-modern-classic-routing-settings',
 
     requires: [
         'Ext.Container',

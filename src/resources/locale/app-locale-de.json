@@ -496,7 +496,9 @@
                 "loading": "Laden",
                 "wmsimport": "WMS hinzuladen",
                 "vectorimport": "Vektordaten laden",
-                "routing": "Routing",
+                "routingTools": "Routing",
+                "classicRouting": "Routing (klassisch)",
+                "fleetRouting": "Flottenrouting",
                 "print": "Drucken",
                 "tools": "Werkzeuge",
                 "draw": "Zeichnen",
@@ -868,17 +870,19 @@
             }
         }
     },
-    "Koala.view.window.Routing": {
+    "Koala.view.window.ClassicRouting": {
         "config": {
             "data": {
                 "i18n": {
-                    "title": "Routenplanung",
+                    "classicRoutingtitle": "Routenplanung ",
+                    "fleetRoutingTitle": "Flotten Routing",
                     "startFieldTitle": "Start",
                     "viaFieldTitle": "Via",
                     "endFieldTitle": "Ziel",
                     "addEmptyPoint": "Neuer Punkt",
                     "routingProfileFieldTitle": "Profil",
                     "computeRouteButtonText": "Route Berechnen",
+                    "computeFleetRoutingButtonText": "Routen berechnen",
                     "addStartPoint": "Startpunkt setzen",
                     "addViaPoint": "Wegpunkt setzen",
                     "addEndPoint": "Zielpunkt setzen",

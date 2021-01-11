@@ -14,37 +14,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.MobileRouting
+ * @class Koala.view.window.FleetRouting
  */
-Ext.define('Koala.view.panel.MobileRouting',{
-    extend: 'Koala.view.panel.MobilePanel',
-    xtype: 'k-panel-mobilerouting',
+Ext.define('Koala.view.window.FleetRouting', {
+    extend: 'Ext.window.Window',
+    xtype: 'k-window-fleet-routing',
 
     requires: [
-        'Ext.Button',
-        'Ext.SegmentedButton',
-        'Ext.grid.Grid',
-        'Ext.Toolbar',
-        'Ext.Spacer',
+        'Ext.container.Container',
+        'Ext.form.field.ComboBox',
+        'Ext.button.Button',
+        'Ext.drag.Target',
+        'Ext.drag.Source',
+        'Ext.menu.Menu',
+        'Koala.util.Help',
         'Koala.util.AppContext',
         'BasiGX.view.component.Map',
-        'Koala.view.panel.MobileRoutingController',
         'Koala.view.window.RoutingModel',
-        'Koala.view.form.ClassicRoutingSettings'
+        'Koala.view.window.RoutingController',
+        'Koala.view.container.RoutingResult',
+        'Koala.view.panel.ElevationProfile',
+        'Koala.view.form.FleetRoutingSettings'
     ],
 
-    controller: 'k-panel-mobilerouting',
+    // TODO: inside the controller the references to its
+    //       parent view have to be adapted
+    controller: 'k-window-routing',
     viewModel: {
         type: 'k-window-routing'
     },
-
-    layout: 'vbox',
-
-    bind: {
-        title: '{i18n.title}'
-    },
-
-    scrollable: 'y',
 
     waypointLayerName: 'routing-waypoint-layer',
 
@@ -52,7 +50,12 @@ Ext.define('Koala.view.panel.MobileRouting',{
 
     routeSegmentLayerName: 'routing-route-segment-layer',
 
+    avoidAreaLayerName: 'routing-avoid-area-layer',
+
     map: null,
+
+    /** The interaction for drawing the avoid area */
+    avoidAreaDrawInteraction: null,
 
     /** The name of the routingResultPanel */
     routingResultPanelName: 'routing-result-panel',
@@ -63,102 +66,49 @@ Ext.define('Koala.view.panel.MobileRouting',{
     /** The name of the layer for elevation interaction */
     elevationLayerName: 'routing-elevation-layer',
 
-    tools: [{
-        type: 'left',
-        docked: 'left',
-        handler: 'onCloseToolClicked'
-    }],
+    minHeight: 100,
+    maxHeight: 600,
+    width: 500,
 
-    listeners: {
-        painted: 'onPainted',
-        onWaypointAdded: 'onWaypointAdded',
-        updateWayPointLayer: 'updateWayPointLayer',
-        clearRouting: 'onCloseToolClicked'
+    layout: 'vbox',
+
+    bind: {
+        title: '{i18n.fleetRoutingtitle}'
     },
 
-    items: [{
-        xtype: 'segmentedbutton',
-        defaults: {
-            flex: 1
-        },
-        bind: {
-            value: '{routingProfile}'
-        },
-        items: [{
-            iconCls: 'x-fa fa-car',
-            value: 'driving-car',
-            bind: {
-                pressed: '{routingProfile === "driving-car"}'
-            }
-        }, {
-            iconCls: 'x-fa fa-bicycle',
-            value: 'cycling-regular',
-            bind: {
-                pressed: '{routingProfile === "cycling-regular"}'
-            }
-        }, {
-            iconCls: 'x-fa fa-male',
-            value: 'foot-walking',
-            bind: {
-                pressed: '{routingProfile === "foot-walking"}'
-            }
-        }]
-    }, {
-        xtype: 'k-form-classic-routing-settings',
-        maxHeight: '40%'
-    }, {
-        xtype: 'button',
-        bind: {
-            text: '{i18n.addViaPoint}'
-        },
-        handler: 'addEmptyViaPoint'
-    },{
-        xtype: 'grid',
-        flex: 1,
-        hideHeaders: true,
-        bind: {
-            store: '{geocodingsuggestions}'
-        },
-        listeners: {
-            select: 'applySuggestion'
-        },
-        columns: [{
-            dataIndex: 'address',
-            flex: 1,
-            cell: {
-                height: 50
-            }
-        }]
-    }, {
-        xtype: 'toolbar',
-        docked: 'bottom',
-        items: [{
-            xtype: 'spacer'
-        }, {
-            xtype: 'button',
-            iconCls: 'fa fa-arrow-right',
-            iconAlign: 'right',
-            style: {
-                fontSize: 'large'
-            },
-            bind: {
-                text: '{i18n.computeRouteButtonText}'
-            },
-            handler: 'onComputeRouteClick'
-        }]
-    }],
+    collapsible: true,
+    resizable: true,
+    constrainHeader: true,
 
-    initialize: function() {
+    // TODO listen to language changes and trigger routing again
+    //      to retrieve translated instructions.
+    listeners: {
+        expand: function() {
+            // HBD: after collapse/expand extjs thinks the user manually
+            // resized the window and stops automatic window resize if
+            // child component sizes are updated. We can apparently
+            // reset this by setting the sizes to null...
+            this.setSize(null, null);
+        },
+        onRouteLoaded: 'onRouteLoaded',
+        onWaypointAdded: 'onWaypointAdded',
+        boxready: 'onBoxReady',
+        close: 'onWindowClose',
+        makeRoutingRequest: 'makeRoutingRequest',
+        updateWayPointLayer: 'updateWayPointLayer',
+        makeDownloadRequest: 'makeDownloadRequest'
+    },
+
+    initComponent: function() {
         var me = this;
 
         me.callParent(arguments);
 
         var vm = me.lookupViewModel();
 
-        var staticMe = Koala.util.AppContext;
-        var ctx = staticMe.getAppContext();
-        var routingOpts = staticMe.getMergedDataByKey('routing', ctx);
-
+        var contextUtil = Koala.util.AppContext;
+        var ctx = contextUtil.getAppContext();
+        var routingOpts = contextUtil.getMergedDataByKey('routing', ctx);
         vm.set('routingOpts', routingOpts);
 
         if (routingOpts.routeStyle) {
@@ -212,14 +162,40 @@ Ext.define('Koala.view.panel.MobileRouting',{
             vm.set('elevationStyle', elevationStyle);
         }
 
+        if (routingOpts.avoidAreaStyle) {
+            var avoidAreaStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: routingOpts.avoidAreaStyle.strokeColor,
+                    width: routingOpts.avoidAreaStyle.width
+                }),
+                fill: new ol.style.Fill({
+                    color: routingOpts.avoidAreaStyle.fillColor
+                })
+            });
+            vm.set('avoidAreaStyle', avoidAreaStyle);
+
+            if (routingOpts.avoidAreaStyle.opacity !== undefined && routingOpts.avoidAreaStyle.opacity !== null) {
+                vm.set('avoidAreaOpacity', routingOpts.avoidAreaStyle.opacity);
+            }
+        }
+
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
 
-        var resultPanel = Ext.ComponentQuery.query('[name' + me.routingResultPanelName + ']')[0];
-        if (resultPanel) {
-            resultPanel.setViewModel(vm);
-        }
+        me.add({
+            xtype: 'k-form-fleet-routing-settings'
+        });
+        me.add({
+            xtype: 'k-container-routingresult',
+            name: me.routingResultPanelName,
+            routeLayerName: me.routeLayerName,
+            routeSegmentLayerName: me.routeSegmentLayerName,
+            elevationProfilePanelName: me.elevationProfilePanelName,
+            elevationLayerName: me.elevationLayerName,
+            map: me.map,
+            flex: 1,
+            routingType: 'fleetRouting'
+        });
     }
-
 });

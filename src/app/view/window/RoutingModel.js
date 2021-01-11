@@ -44,7 +44,8 @@ Ext.define('Koala.view.window.RoutingModel', {
 
     data: {
         i18n: {
-            title: '',
+            classicRoutingtitle: '',
+            fleetRoutingTitle: '',
             startFieldTitle: '',
             viaFieldTitle: '',
             endFieldTitle: '',
@@ -54,6 +55,7 @@ Ext.define('Koala.view.window.RoutingModel', {
             addEndPoint: '',
             routingProfileFieldTitle: '',
             computeRouteButtonText: '',
+            computeFleetRoutingButtonText: '',
             elevationBtnText: '',
             downloadButtonText: '',
             error_msg_geocoding: '',
