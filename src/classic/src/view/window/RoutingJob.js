@@ -170,7 +170,7 @@ Ext.define('Koala.view.window.RoutingJob', {
                 if (serviceStore) {
                     var durations = [{duration: 0}];
                     do {
-                        var prevDuration = durations[durations.length -1].duration;
+                        var prevDuration = durations[durations.length - 1].duration;
                         durations.push({duration: prevDuration + (30 * 60)});
                     } while (
                         durations[durations.length - 1].duration < jobOpts.maxServiceDuration
