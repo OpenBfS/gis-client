@@ -611,6 +611,7 @@
         "config": {
             "data": {
                 "logoTooltip": "Link to the BfS homepage",
+                "logoSource": "resources/images/BfS_Logo_Website_en_75.png",
                 "alertBtnText": "Events",
                 "alertBtnTooltip": "Event information",
                 "routineMessageHeader": "No Changes",
@@ -926,7 +927,7 @@
         "config": {
             "data": {
                 "helpWinTitle": "Help",
-                "fallbackHtml": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
+                "fallbackHtml": "<img class='img' src='resources/images/BfS_Logo_Website_en_75.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
                         "<h2> Welcome </h2>"+
                         "<div>The "+
                         "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>Federal Office for Radiation Protection (<abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+
@@ -962,7 +963,7 @@
             "data": {
                 "preface": {
                     "title": "Welcome",
-                    "html": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
+                    "html": "<img class='img' src='resources/images/BfS_Logo_Website_en_75.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'>"+
                             "<h2> Welcome </h2>"+
                             "<div>The "+
                             "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>Federal Office for Radiation Protection (<abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+
@@ -1940,7 +1941,7 @@
         "config": {
             "data": {
                 "title": "Help",
-                "helpPrefaceTitle": "<img class='img' src='classic/resources/img/bfs-logo.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Welcome</h1>",
+                "helpPrefaceTitle": "<img class='img' src='resources/images/BfS_Logo_Website_en_75.png' title='BfS-Logo' alt='bfs-logo.png' width='100' height='39' style='float:right'><br /><h1 style='font-weight:bold; font-size:16px; color:black'>Welcome</h1>",
                 "helpPrefaceHtml":
                     "<div>The "+
                     "<a href='http://www.bfs.de/EN/home/home_node.html' target='_blank'>Federal Office for Radiation Protection (<abbr title='Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)'>BfS</abbr>)</a>"+

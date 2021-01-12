@@ -21,7 +21,8 @@ Ext.define('Koala.view.panel.HeaderModel', {
     alias: 'viewmodel.k-panel-header',
     data: {
         name: '',
-        logoTooltip: ''
+        logoTooltip: '',
+        logoSource: ''
         // ,
         // alertBtnText: '',
         // alertBtnTooltip: '',
