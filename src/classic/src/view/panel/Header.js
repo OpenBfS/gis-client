@@ -110,9 +110,9 @@ Ext.define('Koala.view.panel.Header', {
     }, {
         xtype: 'image',
         bind: {
-            title: '{logoTooltip}'
+            title: '{logoTooltip}',
+            src: '{logoSource}'
         },
-        src: 'resources/images/BfS_Logo_Website_de_75.png',
         alt: 'BfS',
         margin: '6 0 0 20',
         autoEl: {
