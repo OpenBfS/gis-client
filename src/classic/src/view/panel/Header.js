@@ -114,7 +114,7 @@ Ext.define('Koala.view.panel.Header', {
         },
         src: 'resources/images/BfS_Logo_Website_de_75.png',
         alt: 'BfS',
-        margin: '10 0 20 0',
+        margin: '6 0 0 20',
         autoEl: {
             tag: 'a',
             href: 'http://www.bfs.de/DE/home/home_node.html',
