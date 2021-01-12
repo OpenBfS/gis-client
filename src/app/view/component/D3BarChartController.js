@@ -393,6 +393,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
         var legend = this.getLegendComponent(barComponent);
         var viewSize = this.getViewSize();
+        var minWidth = gnosConfig.chartMinWidth || 300;
+        var minHeight = gnosConfig.chartMinHeight || 300;
         viewSize[0] = viewSize[0] - parseInt(margin.left, 10) - parseInt(margin.right, 10) - 15;
         viewSize[1] = viewSize[1] - parseInt(margin.top, 10) - parseInt(margin.bottom, 10);
         var width = viewSize[0];
@@ -400,7 +402,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
             width = width - parseInt(gnosConfig.legendEntryMaxLength, 10);
         }
         if (width > this.chartConfig.barComponentConfig.size[0]) {
-            this.chartConfig.barComponentConfig.size[0] = width - parseInt(margin.left, 10) - parseInt(margin.right, 10);
+            this.chartConfig.barComponentConfig.size[0] = Math.max(minWidth, width - parseInt(margin.left, 10) - parseInt(margin.right, 10));
+            this.chartConfig.barComponentConfig.size[1] = Math.max(minHeight, this.chartConfig.barComponentConfig.size[1]);
             this.chartConfig.chartRendererConfig.size[0] = width;
         }
 
@@ -620,6 +623,10 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var margin = this.getView().getChartMargin();
         chartSize[0] = chartSize[0] - parseInt(gnosConfig.legendEntryMaxLength, 10) - parseInt(margin.left, 10) - parseInt(margin.right, 10);
         chartSize[1] = chartSize[1] - parseInt(margin.top, 10) * 2 - parseInt(margin.bottom, 10);
+        var minWidth = gnosConfig.chartMinWidth || 300;
+        var minHeight = gnosConfig.chartMinHeight || 300;
+        chartSize[0] = Math.max(minWidth, chartSize[0]);
+        chartSize[1] = Math.max(minHeight, chartSize[1]);
 
         // calculate the size
         var maxCount = barConfig.data.grouped.length;

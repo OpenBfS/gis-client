@@ -240,7 +240,7 @@ Ext.define('Koala.util.Chart', {
                 });
             }
             var cqlFilterTextHTML = Koala.util.Layer.getFiltersTextFromMetadata(filtersForTimeseriesLabel);
-            //transform HTML to text, since it will be added as SVG-'text'
+            // transform HTML to text, since it will be added as SVG-'text'
             return cqlFilterTextHTML.replace(/<br \/>/g, ', ');
         }
 
