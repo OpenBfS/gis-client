@@ -35,9 +35,8 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
             i18n: {
                 title: '',
                 startDayText: '',
-                startTimeText: '',
                 endDayText: '',
-                endTimeText: '',
+                timeText: '',
                 addTimeWindowTooltip: '',
                 removeTimeWindowTooltip: '',
                 emptyGridText: ''
@@ -117,7 +116,7 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
         }, {
             dataIndex: 'startTime',
             bind: {
-                text: '{i18n.startTimeText}'
+                text: '{i18n.timeText}'
             },
             renderer: function(date) {
                 return Koala.util.Date.getFormattedDate(moment(date), 'LT', undefined, true);
@@ -147,7 +146,7 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
         }, {
             dataIndex: 'endTime',
             bind: {
-                text: '{i18n.endTimeText}'
+                text: '{i18n.timeText}'
             },
             renderer: function(date) {
                 return Koala.util.Date.getFormattedDate(moment(date), 'LT', undefined, true);

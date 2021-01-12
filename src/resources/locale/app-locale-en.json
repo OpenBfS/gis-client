@@ -492,9 +492,8 @@
                 "i18n": {
                     "title": "Time Windows",
                     "startDayText": "Begin",
-                    "startTimeText": "Time",
                     "endDayText": "End",
-                    "endTimeText": "Time",
+                    "timeText": "Time",
                     "addTimeWindowTooltip": "Add Time Window",
                     "removeTimeWindowTooltip": "Remove Time Window",
                     "emptyGridText": "No Time Windows created"

@@ -494,9 +494,8 @@
                 "i18n": {
                     "title": "Zeitfenster",
                     "startDayText": "Anfang",
-                    "startTimeText": "Zeit",
                     "endDayText": "Ende",
-                    "endTimeText": "Zeit",
+                    "timeText": "Zeit",
                     "addTimeWindowTooltip": "Zeitfenster hinzufügen",
                     "removeTimeWindowTooltip": "Zeitfenster entfernen",
                     "emptyGridText": "Keine Zeitfenster angelegt"
