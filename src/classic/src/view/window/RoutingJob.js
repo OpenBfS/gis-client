@@ -149,13 +149,13 @@ Ext.define('Koala.view.window.RoutingJob', {
         var appContext = Koala.util.AppContext;
         var ctx = appContext.getAppContext();
         var routingOpts = appContext.getMergedDataByKey('routing', ctx);
-        var optimizationOpts = {};
-        if (routingOpts) {
-            optimizationOpts = routingOpts.optimization;
+        var fleetRoutingOpts = {};
+        if (routingOpts && routingOpts.fleetRouting) {
+            fleetRoutingOpts = routingOpts.fleetRouting;
         }
         var jobOpts = {};
-        if (optimizationOpts.job) {
-            jobOpts = optimizationOpts.job;
+        if (fleetRoutingOpts.job) {
+            jobOpts = fleetRoutingOpts.job;
         }
 
         var form = me.down('[name=job-form]');
@@ -163,29 +163,35 @@ Ext.define('Koala.view.window.RoutingJob', {
             return;
         }
 
-        if (jobOpts.maxServiceDuration) {
-            var service = form.down('[name=service]');
-            if (service) {
-                var serviceStore = service.getStore();
-                if (serviceStore) {
-                    var durations = [{duration: 0}];
-                    do {
-                        var prevDuration = durations[durations.length - 1].duration;
-                        durations.push({duration: prevDuration + (30 * 60)});
-                    } while (
-                        durations[durations.length - 1].duration < jobOpts.maxServiceDuration
-                    );
+        // 24 hours
+        var maxServiceDuration = 60 * 60 * 24;
+        if (Ext.isDefined(jobOpts.maxServiceDuration)) {
+            maxServiceDuration = jobOpts.maxServiceDuration;
+        }
+        var service = form.down('[name=service]');
+        if (service) {
+            var serviceStore = service.getStore();
+            if (serviceStore) {
+                var durations = [{duration: 0}];
+                do {
+                    var prevDuration = durations[durations.length - 1].duration;
+                    durations.push({duration: prevDuration + (30 * 60)});
+                } while (
+                    durations[durations.length - 1].duration < maxServiceDuration
+                );
 
-                    serviceStore.loadRawData(durations);
-                }
+                serviceStore.loadRawData(durations);
             }
         }
 
-        if (jobOpts.maxPriority) {
-            var priorityField = form.down('[name=priority]');
-            if (priorityField) {
-                priorityField.setMaxValue(jobOpts.maxPriority);
-            }
+        var maxPriority = 10;
+        if (Ext.isDefined(jobOpts.maxPriority)) {
+            maxPriority = jobOpts.maxPriority;
+        }
+
+        var priorityField = form.down('[name=priority]');
+        if (priorityField) {
+            priorityField.setMaxValue(maxPriority);
         }
 
         if (me.job) {

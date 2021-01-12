@@ -251,6 +251,12 @@
                     "width": 4,
                     "fillColor": "#ff0000",
                     "opacity": 0.2
+                },
+                "fleetRouting": {
+                    "job": {
+                        "maxServiceDuration": 86400,
+                        "maxPriority": 10
+                    }
                 }
             }
         }

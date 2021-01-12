@@ -240,6 +240,24 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Deckkraft der Avoid Area.
 
+  * **fleetRouting**
+
+    Konfigurationen des FlottenRoutings.
+
+    * **job**
+
+      Konfigurationen der Aufträge.
+
+      * **maxServiceDuration**
+
+      Maximale Dauer in Sekunden, die ein einzelner Auftrag vor Ort dauern kann.
+      Default: 24h.
+
+      * **maxPriority**
+
+      Maximale Priorität, die einem Auftrag zugewiesen werden kann.
+      Default: 10
+
   ```json
   {
     "routing": {
@@ -267,6 +285,12 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
             "width": 4,
             "fillColor": "#ff0000",
             "opacity": 0.2
+        },
+        "fleetRouting": {
+            "job": {
+                "maxServiceDuration": 86400,
+                "maxPriority": 10
+            }
         }
     }
   }
