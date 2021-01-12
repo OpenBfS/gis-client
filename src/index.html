@@ -11,6 +11,9 @@
     <link rel="shortcut icon" sizes="192x192" href="./android-icon-192x192.png">
     <link rel="apple-touch-icon-precomposed" href="./ios-icon-152x152.png">
 
+    <!-- Required for initial loadmask -->
+    <!-- <link rel="stylesheet" type="text/css" href="resources/loadmask.css" /> -->
+
     <title>IMIS3[GIS] - BfS - Bundesamt f&uuml;r Strahlenschutz</title>
 
     <link rel="stylesheet" type="text/css" href="resources/lib/openlayers-v4.6.4-dist/ol.css" />
@@ -93,7 +96,7 @@
     </script>
     <!-- The line below must be kept intact for Sencha Cmd to build your application -->
     <script id="microloader" type="text/javascript" src="bootstrap.js"></script>
-    <style>
+    <!-- <style>
         div#loadmask {
             position: fixed;
             top: 50%;
@@ -105,9 +108,58 @@
             background-repeat: no-repeat;
             z-index: -1;
         }
+    </style> -->
+    <style>
+        div#loadmask {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 152px;
+            width: 160px;
+            /*background-image: url("resources/images/bfs-logo.png");
+            background-repeat: no-repeat; */
+            z-index: -1;
+        }
+
+        svg-loadmask {
+            width: 160px;
+            height: 100px;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .aligncenter {
+            text-align: center;
+        }
+    </style>
+
     </style>
 </head>
 <body>
-    <div id="loadmask" />
+    <!-- <div id="loadmask" /> -->
+    <div id="loadmask">
+        <p class="aligncenter">
+            <img src="resources/images/BfS_Logo_Website_de_large.png" alt="BfS Logo" />
+        </p>
+
+        <svg version="1.1" class="svg-loadmask" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+            <circle fill="#999" stroke="none" cx="5" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.1" />
+            </circle>
+            <circle fill="#999" stroke="none" cx="25" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.2" />
+            </circle>
+            <circle fill="#999" stroke="none" cx="45" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.3" />
+            </circle>
+            <circle fill="#999" stroke="none" cx="65" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.4" />
+            </circle>
+            <circle fill="#999" stroke="none" cx="85" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.5" />
+            </circle>
+        </svg>
+    </div>
 </body>
 </html>
