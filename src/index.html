@@ -96,19 +96,6 @@
     </script>
     <!-- The line below must be kept intact for Sencha Cmd to build your application -->
     <script id="microloader" type="text/javascript" src="bootstrap.js"></script>
-    <!-- <style>
-        div#loadmask {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            height: 117px;
-            width: 310px;
-            background-image: url("resources/images/animated_BfS_logo_grey.gif");
-            background-repeat: no-repeat;
-            z-index: -1;
-        }
-    </style> -->
     <style>
         div#loadmask {
             position: fixed;
@@ -117,21 +104,24 @@
             transform: translate(-50%, -50%);
             height: 152px;
             width: 160px;
-            /*background-image: url("resources/images/bfs-logo.png");
-            background-repeat: no-repeat; */
-            background-color: #ffffff;
             z-index: -1;
         }
 
-        svg-loadmask {
-            width: 160px;
-            height: 100px;
+        .svg-loadmask {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-120px, 0px);*/
+            width: 140px;
+            height: 20px; */
             margin: 5px;
             display: inline-block;
         }
 
-        .aligncenter {
-            text-align: center;
+        .svg-image {
+        height:250px;
+        object-position: 0px 0px;
+        transform: translate(-25%, -50%);
         }
     </style>
 
@@ -140,11 +130,9 @@
 <body>
     <!-- <div id="loadmask" /> -->
     <div id="loadmask">
-        <p class="aligncenter">
-            <img src="resources/images/BfS_Logo_Website_de_large.png" alt="BfS Logo" />
-        </p>
-
-        <svg version="1.1" class="svg-loadmask" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+        <object class="svg-image" data="resources/images/BfS_Logo_de_rgb.svg" type="image/svg+xml">
+        </object>
+        <svg version="1.1" class="svg-loadmask" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  xml:space="preserve">
             <circle fill="#999" stroke="none" cx="5" cy="10" r="4">
                 <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.1" />
             </circle>
