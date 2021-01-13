@@ -33,9 +33,11 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var me = this;
 
         if (newResult) {
+            me.removeAllRoutesFromMap();
             me.addRouteToMap(newResult);
             me.zoomToRoute();
-            me.updateRoutingSummaries(newResult);
+            me.clearRoutingSummaries();
+            me.addRoutingSummary(newResult);
             me.clearRoutingInstructions();
             me.setRoutingInstructionsVisiblity(false);
             me.setElevationPanelVisibility(false);
@@ -47,6 +49,37 @@ Ext.define('Koala.view.container.RoutingResultController', {
             me.setRoutingInstructionsVisiblity(false);
             me.setElevationPanelVisibility(false);
         }
+    },
+
+    /**
+     * Handler for the optimizationResultAvailable event.
+     *
+     * @param {Object} optimizationSummary The response of the VROOM API.
+     * @param {Array} orsRoutes The routes computed with OpenRouteService.
+     */
+    onOptimizationResultAvailable: function(optimizationSummary, orsRoutes) {
+
+        var me = this;
+
+        me.clearRoutingSummaries();
+        me.removeAllRoutesFromMap();
+
+        // TODO: save and display route optimization summary
+        //       e.g. the general info about if all jobs were possible
+
+        // TODO: handle unassigned jobs e.g. update waypoints (?)
+
+        // TODO: zoom to bounding box of all jobs and routes
+
+        Ext.each(orsRoutes, function(orsRoute) {
+            // TODO: - add VROOM information to ORS response
+            //       - also add it to store
+            // var correspondingVroomRoute = optimizationSummary.routes[index];
+            // 'index' is the second argument of the function
+
+            me.addRoutingSummary(orsRoute);
+            me.addRouteToMap(orsRoute);
+        });
     },
 
     /**
@@ -261,7 +294,19 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Adds the Routing feature to the map.
+     * Remove all routes from the map.
+     */
+    removeAllRoutesFromMap: function() {
+        var me = this;
+        var layer = me.getRouteLayer();
+        if (!layer) {
+            return;
+        }
+        layer.getSource().clear();
+    },
+
+    /**
+     * Add the Routing feature to the map.
      * @param {Object} geojson The GeoJSON to be added.
      */
     addRouteToMap: function(geojson) {
@@ -273,12 +318,20 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
 
-        var source = new ol.source.Vector({
-            features: (new ol.format.GeoJSON({
-                featureProjection: view.map.getView().getProjection()
-            })).readFeatures(geojson)
-        });
-        layer.setSource(source);
+        // the GeoJSON contains a FeatureCollection
+        // that's why need the "readFeatures" function
+        // which returns an array
+        // the "readFeature" function does does not work here
+        var newRouteFeatures = (new ol.format.GeoJSON({
+            featureProjection: view.map.getView().getProjection()
+        })).readFeatures(geojson);
+
+        // the GeoJSON could contain more routes
+        // however we only want the the first one
+        var newRoute = newRouteFeatures[0];
+
+        var source = layer.getSource();
+        source.addFeature(newRoute);
     },
 
     /**
@@ -397,11 +450,52 @@ Ext.define('Koala.view.container.RoutingResultController', {
     onDownloadButtonClicked: function(item) {
         var me = this;
         var view = me.getView();
+        var vm = view.lookupViewModel();
 
-        var routingWindow = view.up('k-window-classic-routing');
-        if (routingWindow) {
-            routingWindow.fireEvent('makeDownloadRequest', item.downloadType);
-        }
+        // get original query for this route
+        var query = Ext.clone(item.lookupViewModel().get('record').get('query'));
+
+        // modifiy original query
+        query['format'] = item.downloadType;
+
+        var onSuccess = function(res) {
+            var blob;
+            if (item.downloadType === 'gpx') {
+                blob = new Blob([res], {
+                    type: 'application/xml;charset=utf-8'
+                });
+            } else {
+                blob = new Blob([JSON.stringify(res)]);
+            }
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'route.' + item.downloadType;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        };
+
+        var onError = function(err) {
+            var str = 'An error occured: ' + err;
+            Ext.Logger.log(str);
+
+            Ext.toast(vm.get('i18n.errorDownloadRoute'));
+
+            var resultPanel = me.getResultPanel();
+
+            if (!resultPanel) {
+                return;
+            }
+            resultPanel.fireEvent('resultChanged');
+        };
+
+        var orsUtil = Koala.util.OpenRouteService;
+        orsUtil.requestDirectionsApi(query)
+            .then(onSuccess)
+            .catch(onError);
     },
 
     /**
@@ -520,47 +614,50 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Update the routing summaries.
+     * Add the routing summary to its store.
      *
      * @param {GeoJson} result The routing result.
      */
-    updateRoutingSummaries: function(result) {
+    addRoutingSummary: function(result) {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var summaryStore = vm.get('routingsummaries');
-
-        summaryStore.removeAll();
-
-        if (!result.features) {
+        // check if the result contains at least
+        // one feature
+        if (!result.features ||
+            !Ext.isArray(result.features) ||
+            result.features.length === 0) {
             return;
+        }
+
+        // the GeoJSON could contain many features
+        // we are only interested in the first one
+        var feat = result.features[0];
+
+        var props = {};
+        if (feat.properties) {
+            props = Ext.clone(feat.properties);
         }
 
         var query = result.metadata.query;
         var profile = query.profile;
 
-        var summaries = [];
-        Ext.Array.each(result.features, function(feat) {
-            var props = {};
-            if (feat.properties) {
-                props = Ext.clone(feat.properties);
-            }
+        var distance = props.summary ? props.summary.distance : undefined;
+        var duration = props.summary ? props.summary.duration : undefined;
 
-            var distance = props.summary ? props.summary.distance : undefined;
-            var duration = props.summary ? props.summary.duration : undefined;
+        var summary = {
+            profile: profile,
+            properties: props,
+            geometry: Ext.clone(feat.geometry),
+            ascent: props.ascent,
+            descent: props.descent,
+            distance: distance,
+            duration: duration,
+            query: query
+        };
 
-            summaries.push({
-                profile: profile,
-                properties: props,
-                geometry: Ext.clone(feat.geometry),
-                ascent: props.ascent,
-                descent: props.descent,
-                distance: distance,
-                duration: duration,
-                query: query
-            });
-        });
-        summaryStore.add(summaries);
+        var summaryStore = vm.get('routingsummaries');
+        summaryStore.add(summary);
     }
 });

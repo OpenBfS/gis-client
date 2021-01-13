@@ -217,47 +217,9 @@ Ext.define('Koala.view.form.ClassicRoutingSettingsController', {
             return;
         }
 
-        // //Limitiation when using openrouteservice.org
-        // if (me.isPolygonTooBig(geom)) {
-        //     Ext.toast(vm.get('i18n.errorAreaTooBig'));
-        //     return;
-        // }
-
         avoidSource.clear();
         avoidSource.addFeature(feature);
         mapView.fit(feature.getGeometry().getExtent());
-    },
-
-    /**
-     * Check if polygon is too big for the openrouteservice API.
-     *
-     * @param {ol.geom.Geometry} polygon The polygon or multipolygon geometry in EPSG:3857 projection.
-     * @returns {boolean} If the polygon is too big.
-     */
-    isPolygonTooBig: function(polygon) {
-        var me = this;
-
-        var parentComponent = me.getView().up('k-window-classic-routing');
-        var map = parentComponent.map;
-        if (!map) {
-            return;
-        }
-        var mapView = map.getView();
-
-        // check area
-        var wgs84Sphere= new ol.Sphere(6378137);
-        var mapProjection = mapView.getProjection().getCode();
-        var tmpPolygon = polygon.clone().transform(mapProjection, 'EPSG:4326');
-        if (polygon instanceof ol.geom.MultiPolygon) {
-            // take the first polygon of a Multipolygon
-            tmpPolygon = tmpPolygon.getPolygon(0);
-        }
-        var coordinates = tmpPolygon.getLinearRing(0).getCoordinates();
-        var area = wgs84Sphere.geodesicArea(coordinates);
-
-        // Openrouteservice has an area requirement:
-        // "The area of a polygon to avoid must not exceed 2.0E8 square meters."
-        return area > 200000000;
     },
 
     /**

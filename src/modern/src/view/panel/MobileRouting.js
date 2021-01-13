@@ -29,13 +29,13 @@ Ext.define('Koala.view.panel.MobileRouting',{
         'Koala.util.AppContext',
         'BasiGX.view.component.Map',
         'Koala.view.panel.MobileRoutingController',
-        'Koala.view.window.RoutingModel',
+        'Koala.view.window.ClassicRoutingModel',
         'Koala.view.form.ClassicRoutingSettings'
     ],
 
     controller: 'k-panel-mobilerouting',
     viewModel: {
-        type: 'k-window-routing'
+        type: 'k-window-classic-routing'
     },
 
     layout: 'vbox',

@@ -25,14 +25,14 @@ Ext.define('Koala.view.container.RoutingResult', {
         'BasiGX.view.component.Map',
         'Koala.view.container.ModernRoutingResultController',
         'Koala.view.container.LockableCarousel',
-        'Koala.view.window.RoutingModel',
+        'Koala.view.window.ClassicRoutingModel',
         'Koala.view.container.ElevationProfile'
     ],
 
     controller: 'k-container-modernroutingresult',
 
     viewModel: {
-        type: 'k-window-routing'
+        type: 'k-window-classic-routing'
     },
 
     statics: {

@@ -18,34 +18,13 @@
  */
 Ext.define('Koala.store.WayPoints', {
     extend: 'Ext.data.Store',
+    requires: [
+        'Koala.model.WayPoint'
+    ],
 
     alias: 'store.k-waypoints',
 
-    fields: [
-        {name: 'address', type: 'string'},
-        {name: 'latitude', type: 'float', convert: null},
-        {name: 'longitude', type: 'float', convert: null},
-        {
-            name: 'hasLatitude',
-            type: 'bool',
-            calculate: function(data) {
-                return data.latitude !== null && data.latitude !== undefined;
-            }
-        },
-        {
-            name: 'hasLongitude',
-            type: 'bool',
-            calculate: function(data) {
-                return data.longitude !== null && data.longitude !== undefined;
-            }
-        },
-        {
-            name: 'coordinate',
-            calculate: function(data) {
-                return [data.longitude, data.latitude];
-            }
-        }
-    ],
+    model: 'Koala.model.WayPoint',
 
     /**
      * It is necessary to have different dummy points,

@@ -14,11 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.RoutingModel
+ * @class Koala.view.window.ClassicRoutingModel
  */
-Ext.define('Koala.view.window.RoutingModel', {
+Ext.define('Koala.view.window.ClassicRoutingModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-window-routing',
+    alias: 'viewmodel.k-window-classic-routing',
 
     requires: [
         'Koala.store.WayPoints',
@@ -45,7 +45,6 @@ Ext.define('Koala.view.window.RoutingModel', {
     data: {
         i18n: {
             classicRoutingtitle: '',
-            fleetRoutingTitle: '',
             startFieldTitle: '',
             viaFieldTitle: '',
             endFieldTitle: '',
@@ -55,12 +54,11 @@ Ext.define('Koala.view.window.RoutingModel', {
             addEndPoint: '',
             routingProfileFieldTitle: '',
             computeRouteButtonText: '',
-            computeFleetRoutingButtonText: '',
             elevationBtnText: '',
             downloadButtonText: '',
-            error_msg_geocoding: '',
-            error_msg_routing_request: '',
-            error_msg_download: '',
+            errorGeoCoding: '',
+            errorRoutingRequest: '',
+            errorDownloadRoute: '',
             routingSummaryDetailsButton: '',
             addAvoidArea: '',
             uploadGeoJson: '',
@@ -74,18 +72,7 @@ Ext.define('Koala.view.window.RoutingModel', {
             errorZeroFeatures: '',
             errorGetFeatureInfo: '',
             errorNoLayerFound: '',
-            errorNoPolygonChosen: '',
-            errorAreaTooBig: '',
-            optimizationLabel: '',
-            enableOptimizationLabel: '',
-            jobsGridTitle: '',
-            editJobTooltip: '',
-            removeJobTooltip: '',
-            addJobTooltip: '',
-            emptyJobText: '',
-            priorityColumnText: '',
-            addressColumnText: '',
-            descriptionColumnText: ''
+            errorNoPolygonChosen: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,

@@ -890,22 +890,52 @@
             "data": {
                 "i18n": {
                     "classicRoutingtitle": "Routenplanung ",
-                    "fleetRoutingTitle": "Flotten Routing",
                     "startFieldTitle": "Start",
                     "viaFieldTitle": "Via",
                     "endFieldTitle": "Ziel",
                     "addEmptyPoint": "Neuer Punkt",
                     "routingProfileFieldTitle": "Profil",
                     "computeRouteButtonText": "Route Berechnen",
-                    "computeFleetRoutingButtonText": "Routen berechnen",
                     "addStartPoint": "Startpunkt setzen",
                     "addViaPoint": "Wegpunkt setzen",
                     "addEndPoint": "Zielpunkt setzen",
                     "elevationBtnText": "Höhenprofil",
                     "downloadButtonText": "Download",
-                    "error_msg_geocoding": "Standpunkt konnte nicht geladen werden. Bitte versuchen Sie es (später) erneut.",
-                    "error_msg_routing_request": "Routenplanung fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
-                    "error_msg_download": "Download fehlgeschlagen. Bitte versuchen sie es (später) erneut.",
+                    "errorGeoCoding": "Standpunkt konnte nicht geladen werden. Bitte versuchen Sie es (später) erneut.",
+                    "errorRoutingRequest": "Routenplanung fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
+                    "errorDownloadRoute": "Download fehlgeschlagen. Bitte versuchen sie es (später) erneut.",
+                    "routingSummaryDetailsButton": "Details",
+                    "profileCarText": "Mit dem Auto",
+                    "profileBycicleText": "Mit dem Fahrrad",
+                    "profileWalkingText": "Zu Fuß",
+                    "addAvoidArea": "Vermeide Gebiet",
+                    "uploadGeoJson": "Lade GeoJSON",
+                    "deleteAvoidArea": "Lösche zu vermeidendes Gebiet.",
+                    "drawAvoidArea": "Zeichne Gebiet",
+                    "selectAvoidAreaFromLayer": "Wähle von Layer",
+                    "errorFileUpload": "Das Hochladen der Datei ist fehlgeschlagen.",
+                    "errorUploadedGeometryType": "Das hochgeladene GeoJSON muss vom Typ Polygon sein.",
+                    "errorTooManyFeatures": "Das hochladen mehrerer Features wird nicht unterstützt. Bitte laden Sie nur ein Feature hoch." ,
+                    "errorUploadedFileExtension": "Dateityp wird nicht unterstützt. Bitte laden Sie nur eine '.json' oder '.geojson' Datei hoch.",
+                    "errorZeroFeatures": "Das hochgelandene GeoJSON enthält keine Features. Bitte laden Sie ein Feature hoch.",
+                    "errorGetFeatureInfo": "Das Polygon konnte aus dem Layer nicht ausgelesen werden.",
+                    "errorNoLayerFound": "An diesem Ort befindet sich kein gültiger Layer. Bitte versuchen Sie es erneut.",
+                    "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon."
+                }
+            }
+        }
+    },
+    "Koala.view.window.FleetRouting": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "fleetRoutingTitle": "Flotten Routing",
+                    "computeFleetRoutingButtonText": "Routen berechnen",
+                    "elevationBtnText": "Höhenprofil",
+                    "downloadButtonText": "Download",
+                    "errorGeoCoding": "Standpunkt konnte nicht geladen werden. Bitte versuchen Sie es (später) erneut.",
+                    "errorRoutingRequest": "Routenplanung fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
+                    "errorDownloadRoute": "Download fehlgeschlagen. Bitte versuchen sie es (später) erneut.",
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Mit dem Auto",
                     "profileBycicleText": "Mit dem Fahrrad",
@@ -923,7 +953,6 @@
                     "errorGetFeatureInfo": "Das Polygon konnte aus dem Layer nicht ausgelesen werden.",
                     "errorNoLayerFound": "An diesem Ort befindet sich kein gültiger Layer. Bitte versuchen Sie es erneut.",
                     "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon.",
-                    "errorAreaTooBig": "Das gewählte Polygon is zu groß. Bitte wählen Sie ein kleineres Polygon.",
                     "optimizationLabel": "Erweiterte Einstellungen",
                     "enableOptimizationLabel": "Optimierung aktivieren",
                     "jobsGridTitle": "Ziele",
@@ -933,7 +962,8 @@
                     "emptyJobText": "Keine Ziele angelegt",
                     "priorityColumnText": "Priorität",
                     "addressColumnText": "Adresse",
-                    "descriptionColumnText": "Beschreibung"
+                    "descriptionColumnText": "Beschreibung",
+                    "errorFleetRouting" : "Die Anfrage für Flottenrouting ist fehlgeschlagen. Bitte versuchen Sie es (später) erneut."
                 }
             }
         }

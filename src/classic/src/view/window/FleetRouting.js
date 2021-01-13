@@ -28,10 +28,9 @@ Ext.define('Koala.view.window.FleetRouting', {
         'Ext.drag.Source',
         'Ext.menu.Menu',
         'Koala.util.Help',
-        'Koala.util.AppContext',
         'BasiGX.view.component.Map',
-        'Koala.view.window.RoutingModel',
-        'Koala.view.window.RoutingController',
+        'Koala.view.window.FleetRoutingModel',
+        'Koala.view.window.FleetRoutingController',
         'Koala.view.container.RoutingResult',
         'Koala.view.panel.ElevationProfile',
         'Koala.view.form.FleetRoutingSettings'
@@ -39,9 +38,9 @@ Ext.define('Koala.view.window.FleetRouting', {
 
     // TODO: inside the controller the references to its
     //       parent view have to be adapted
-    controller: 'k-window-routing',
+    controller: 'k-window-fleet-routing',
     viewModel: {
-        type: 'k-window-routing'
+        type: 'k-window-fleet-routing'
     },
 
     waypointLayerName: 'routing-waypoint-layer',
@@ -73,7 +72,7 @@ Ext.define('Koala.view.window.FleetRouting', {
     layout: 'vbox',
 
     bind: {
-        title: '{i18n.fleetRoutingtitle}'
+        title: '{i18n.fleetRoutingTitle}'
     },
 
     collapsible: true,
@@ -90,13 +89,8 @@ Ext.define('Koala.view.window.FleetRouting', {
             // reset this by setting the sizes to null...
             this.setSize(null, null);
         },
-        onRouteLoaded: 'onRouteLoaded',
-        onWaypointAdded: 'onWaypointAdded',
         boxready: 'onBoxReady',
-        close: 'onWindowClose',
-        makeRoutingRequest: 'makeRoutingRequest',
-        updateWayPointLayer: 'updateWayPointLayer',
-        makeDownloadRequest: 'makeDownloadRequest'
+        close: 'onWindowClose'
     },
 
     initComponent: function() {
@@ -104,87 +98,20 @@ Ext.define('Koala.view.window.FleetRouting', {
 
         me.callParent(arguments);
 
-        var vm = me.lookupViewModel();
-
-        var contextUtil = Koala.util.AppContext;
-        var ctx = contextUtil.getAppContext();
-        var routingOpts = contextUtil.getMergedDataByKey('routing', ctx);
-        vm.set('routingOpts', routingOpts);
-
-        if (routingOpts.routeStyle) {
-            var routeStyle = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: routingOpts.routeStyle.color,
-                    width: routingOpts.routeStyle.width
-                })
-            });
-            vm.set('routeStyle', routeStyle);
-        }
-
-        if (routingOpts.routeSegmentStyle) {
-            var routeSegmentStyle = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: routingOpts.routeSegmentStyle.color,
-                    width: routingOpts.routeSegmentStyle.width
-                })
-            });
-            vm.set('routeSegmentStyle', routeSegmentStyle);
-        }
-
-        if (routingOpts.waypointStyle) {
-            var waypointStyle = new ol.style.Style({
-                text: new ol.style.Text({
-                    // unicode for fontawesome map-marker
-                    text: '\uf041',
-                    font: 'normal ' + routingOpts.waypointStyle.markerSize + 'px FontAwesome',
-                    fill: new ol.style.Fill({
-                        color: routingOpts.waypointStyle.color
-                    }),
-                    textBaseline: 'bottom'
-                })
-            });
-            vm.set('waypointStyle', waypointStyle);
-            vm.set('waypointFontSize', routingOpts.waypointStyle.markerSize);
-        }
-
-        if (routingOpts.elevationStyle) {
-            var elevationStyle = new ol.style.Style({
-                image: new ol.style.Circle({
-                    fill: new ol.style.Fill({
-                        color: routingOpts.elevationStyle.fill
-                    }),
-                    radius: routingOpts.elevationStyle.radius,
-                    stroke: new ol.style.Stroke({
-                        color: routingOpts.elevationStyle.stroke
-                    })
-                })
-            });
-            vm.set('elevationStyle', elevationStyle);
-        }
-
-        if (routingOpts.avoidAreaStyle) {
-            var avoidAreaStyle = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: routingOpts.avoidAreaStyle.strokeColor,
-                    width: routingOpts.avoidAreaStyle.width
-                }),
-                fill: new ol.style.Fill({
-                    color: routingOpts.avoidAreaStyle.fillColor
-                })
-            });
-            vm.set('avoidAreaStyle', avoidAreaStyle);
-
-            if (routingOpts.avoidAreaStyle.opacity !== undefined && routingOpts.avoidAreaStyle.opacity !== null) {
-                vm.set('avoidAreaOpacity', routingOpts.avoidAreaStyle.opacity);
-            }
-        }
-
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
 
         me.add({
             xtype: 'k-form-fleet-routing-settings'
+        });
+        // TODO: add padding
+        me.add({
+            xtype: 'button',
+            bind: {
+                text: '{i18n.computeFleetRoutingButtonText}'
+            },
+            handler: 'optimizeRoute'
         });
         me.add({
             xtype: 'k-container-routingresult',
@@ -194,8 +121,7 @@ Ext.define('Koala.view.window.FleetRouting', {
             elevationProfilePanelName: me.elevationProfilePanelName,
             elevationLayerName: me.elevationLayerName,
             map: me.map,
-            flex: 1,
-            routingType: 'fleetRouting'
+            flex: 1
         });
     }
 });

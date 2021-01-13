@@ -25,5 +25,41 @@ Ext.define('Koala.store.RoutingJobs', {
 
     alias: 'store.k-routingjobs',
 
-    model: 'Koala.model.RoutingJob'
+    model: 'Koala.model.RoutingJob',
+
+    /**
+     * Convert the records into an array
+     * that works with the VROOM API.
+     *
+     * See https://github.com/VROOM-Project/vroom/blob/master/docs/API.md#input
+     *
+     * @returns {Array} The jobs array.
+     */
+    getVroomArray: function() {
+        var me = this;
+        var jobs = [];
+        me.each(function(jobRecord) {
+            var job = Ext.clone(jobRecord.getData());
+
+            // coordinates are hidden inside 'address' property
+            var lat = job.address.latitude;
+            var lon = job.address.longitude;
+            job['location'] = [lon, lat];
+            // address property is not needed anymore
+            delete job.address;
+
+            // Delete empty properties, because the API
+            // cannot handle it
+            Ext.Object.each(job, function(prop) {
+                if (Ext.isEmpty(job[prop])) {
+                    delete job[prop];
+                }
+            });
+
+            // TODO: check if time_windows are valid
+
+            jobs.push(job);
+        });
+        return jobs;
+    }
 });

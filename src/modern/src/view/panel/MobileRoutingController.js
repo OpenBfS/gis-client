@@ -17,7 +17,7 @@
  * @class Koala.view.panel.MobileRoutingController
  */
 Ext.define('Koala.view.panel.MobileRoutingController', {
-    extend: 'Koala.view.window.RoutingController',
+    extend: 'Koala.view.window.ClassicRoutingController',
     alias: 'controller.k-panel-mobilerouting',
 
     requires: [

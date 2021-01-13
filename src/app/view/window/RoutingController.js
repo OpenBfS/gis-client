@@ -22,16 +22,10 @@ Ext.define('Koala.view.window.RoutingController', {
     requires: [
         'GeoExt.component.Popup',
         'BasiGX.util.Layer',
-        'Koala.util.Geocoding'
+        'Koala.util.Geocoding',
+        'Koala.util.OpenRouteService',
+        'Koala.util.AppContext'
     ],
-
-    /**
-     * Reference to openContextMenu function
-     * with the controller's "this" in the scope.
-     * Necessary for properly removing the listener
-     * again.
-     */
-    boundOpenContextMenu: null,
 
     /**
      * Change the language variable in the ViewModel.
@@ -39,14 +33,13 @@ Ext.define('Koala.view.window.RoutingController', {
      * @param {string} locale The code for the language used in the application.
      */
     changeLanguage: function(locale) {
-
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        vm.set('language', locale);
+        // TODO: does not work if the window gets open the second time
 
-        view.fireEvent('makeRoutingRequest', undefined, undefined);
+        vm.set('language', locale);
     },
 
     /**
@@ -124,33 +117,7 @@ Ext.define('Koala.view.window.RoutingController', {
         return BasiGX.util.Layer.getLayerByName(view.avoidAreaLayerName);
     },
 
-    /**
-     * Handler for visualising the routing results.
-     * @param {Object} geojson The routing GeoJSON.
-     */
-    onRouteLoaded: function(geojson) {
-        var me = this;
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-
-        var resultPanel = view.down('[name=' + view.routingResultPanelName + ']');
-        if (!resultPanel) {
-            return;
-        }
-
-        resultPanel.fireEvent('resultChanged', geojson);
-        vm.set('showRoutingResults', true);
-    },
-
     onWaypointAdded: function(feature) {
-        var me = this;
-        me.addWayPointToMap(feature);
-    },
-
-    /**
-     * Add a single waypoint to the waypointLayer.
-     */
-    addWayPointToMap: function(feature) {
         var me = this;
 
         var layer = me.getWaypointLayer();
@@ -232,6 +199,9 @@ Ext.define('Koala.view.window.RoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
+        // TODO: the styling has gone lost
+        //       probably the CSS path has to be adapted
+        //       src/sass/src/view/window/Routing.scss
         var popup = Ext.create('GeoExt.component.Popup', {
             map: view.map,
             width: 140
@@ -254,26 +224,13 @@ Ext.define('Koala.view.window.RoutingController', {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
-        var map = view.map;
 
+        me.fillViewModel();
         me.createRoutingLayers();
 
         if (vm.get('waypointPopup') === null) {
             vm.set('waypointPopup', me.createWaypointPopup());
         }
-
-        // context menu
-        var mapViewport = map.getViewport();
-        me.boundOpenContextMenu = me.openContextMenu.bind(me);
-        mapViewport.addEventListener('contextmenu', me.boundOpenContextMenu);
-
-        var wayPointStore = vm.get('waypoints');
-        wayPointStore.on('datachanged',
-            function() {
-                view.fireEvent('updateWayPointLayer');
-                view.fireEvent('makeRoutingRequest', undefined, undefined);
-            }
-        );
 
         // application language
         var languageComboBox = me.getLanguageComboBox();
@@ -284,110 +241,86 @@ Ext.define('Koala.view.window.RoutingController', {
     },
 
     /**
-     * Open a context menu when a right-click on the map
-     * is performed.
-     *
-     * @param {event} evt The event emitted by clicking on the map.
+     * Read routing configuration from AppContext
+     * and store it in ViewModel.
      */
-    openContextMenu: function(evt) {
-
-        var me = this;
-
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-        var map = view.map;
-
-        var evtCoord = map.getEventCoordinate(evt);
-
-        // suppress default browser behaviour
-        evt.preventDefault();
-
-        // transform coordiante
-        var sourceProjection = map.getView().getProjection().getCode();
-        var targetProjection = ol.proj.get('EPSG:4326');
-        var transformed = ol.proj.transform(evtCoord, sourceProjection, targetProjection);
-
-        var latitude = transformed[1];
-        var longitude = transformed[0];
-
-        var mapContextMenu = Ext.create('Ext.menu.Menu', {
-            renderTo: Ext.getBody(),
-            items: [
-                {
-                    text: vm.get('i18n.addStartPoint'),
-                    handler: function() {
-                        me.storeMapClick(longitude, latitude, 'start');
-                        mapContextMenu.destroy();
-                    }
-                },
-                {
-                    text: vm.get('i18n.addViaPoint'),
-                    handler: function() {
-                        me.storeMapClick(longitude, latitude, 'via');
-                        mapContextMenu.destroy();
-                    }
-                },
-                {
-                    text: vm.get('i18n.addEndPoint'),
-                    handler: function() {
-                        me.storeMapClick(longitude, latitude, 'end');
-                        mapContextMenu.destroy();
-                    }
-                }
-            ]
-        });
-
-        mapContextMenu.showAt(evt.x, evt.y);
-        vm.set('mapContextMenu', mapContextMenu);
-
-    },
-
-    /**
-     * Store the clicked coordinate as routing waypoint.
-     *
-     * @param {number} longitude The longitude of the new waypoint.
-     * @param {number} latitude The latitude of the new waypoint.
-     * @param {string} wayPointType The type of the new waypoint. Allowed values: "start", "via" and "end".
-     */
-    storeMapClick: function(longitude, latitude, wayPointType) {
+    fillViewModel: function() {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
-        var language = vm.get('language');
-        var wayPointStore = vm.get('waypoints');
 
-        var geocoding = Koala.util.Geocoding;
+        var contextUtil = Koala.util.AppContext;
+        var ctx = contextUtil.getAppContext();
+        var routingOpts = contextUtil.getMergedDataByKey('routing', ctx);
+        vm.set('routingOpts', routingOpts);
 
-        geocoding.doReverseGeocoding(longitude, latitude, language)
-            .then(function(resultJson) {
-
-                var features = resultJson.features;
-                if (features.length === 0) {
-                    Ext.toast(vm.get('i18n.error_msg_geocoding'));
-                    return;
-                }
-
-                var placeName = geocoding.createPlaceString(features[0].properties);
-
-                var newWayPointJson = {
-                    address: placeName,
-                    latitude: latitude,
-                    longitude: longitude
-                };
-
-                if (wayPointType === 'start') {
-                    wayPointStore.setStartPoint(newWayPointJson);
-                } else if (wayPointType === 'via') {
-                    wayPointStore.addViaPoint(newWayPointJson);
-                } else if (wayPointType === 'end') {
-                    wayPointStore.setEndPoint(newWayPointJson);
-                }
-            })
-            .catch(function(err) {
-                var str = 'An error occured: ' + err;
-                Ext.Logger.log(str);
-                Ext.toast(vm.get('i18n.error_msg_geocoding'));
+        if (routingOpts.routeStyle) {
+            var routeStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: routingOpts.routeStyle.color,
+                    width: routingOpts.routeStyle.width
+                })
             });
+            vm.set('routeStyle', routeStyle);
+        }
+
+        if (routingOpts.routeSegmentStyle) {
+            var routeSegmentStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: routingOpts.routeSegmentStyle.color,
+                    width: routingOpts.routeSegmentStyle.width
+                })
+            });
+            vm.set('routeSegmentStyle', routeSegmentStyle);
+        }
+
+        if (routingOpts.waypointStyle) {
+            var waypointStyle = new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome map-marker
+                    text: '\uf041',
+                    font: 'normal ' + routingOpts.waypointStyle.markerSize + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: routingOpts.waypointStyle.color
+                    }),
+                    textBaseline: 'bottom'
+                })
+            });
+            vm.set('waypointStyle', waypointStyle);
+            vm.set('waypointFontSize', routingOpts.waypointStyle.markerSize);
+        }
+
+        if (routingOpts.elevationStyle) {
+            var elevationStyle = new ol.style.Style({
+                image: new ol.style.Circle({
+                    fill: new ol.style.Fill({
+                        color: routingOpts.elevationStyle.fill
+                    }),
+                    radius: routingOpts.elevationStyle.radius,
+                    stroke: new ol.style.Stroke({
+                        color: routingOpts.elevationStyle.stroke
+                    })
+                })
+            });
+            vm.set('elevationStyle', elevationStyle);
+        }
+
+        if (routingOpts.avoidAreaStyle) {
+            var avoidAreaStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: routingOpts.avoidAreaStyle.strokeColor,
+                    width: routingOpts.avoidAreaStyle.width
+                }),
+                fill: new ol.style.Fill({
+                    color: routingOpts.avoidAreaStyle.fillColor
+                })
+            });
+            vm.set('avoidAreaStyle', avoidAreaStyle);
+
+            if (routingOpts.avoidAreaStyle.opacity !== undefined && routingOpts.avoidAreaStyle.opacity !== null) {
+                vm.set('avoidAreaOpacity', routingOpts.avoidAreaStyle.opacity);
+            }
+        }
     },
 
     /**
@@ -533,12 +466,12 @@ Ext.define('Koala.view.window.RoutingController', {
                 view.map.removeInteraction(view.avoidAreaDrawInteraction);
             }
             view.map.removeLayer(avoidAreaLayer);
-
         }
         var waypointLayer = me.getWaypointLayer();
         if (waypointLayer) {
             view.map.removeLayer(waypointLayer);
         }
+
         if (view.map !== null) {
             view.map.un('singleclick', me.onWaypointClick, me);
         }
@@ -557,17 +490,6 @@ Ext.define('Koala.view.window.RoutingController', {
         if (vm.get('routinginstructions') !== null) {
             var instructionsStore = vm.get('routinginstructions');
             instructionsStore.removeAll();
-        }
-
-        // remove context menu listener
-        var mapViewport = view.map.getViewport();
-        mapViewport.removeEventListener('contextmenu', me.boundOpenContextMenu);
-
-        // destroy context window
-        if (vm.get('mapContextMenu') !== null) {
-            var mapContextMenu = vm.get('mapContextMenu');
-            mapContextMenu.destroy();
-            vm.set('mapContextMenu', null);
         }
 
         // application language
@@ -589,38 +511,6 @@ Ext.define('Koala.view.window.RoutingController', {
             languageSelect = Ext.ComponentQuery.query('k-field-languageselect')[0];
         }
         return languageSelect;
-    },
-
-    /**
-     * Fire the http request to the OpenRouteService API.
-     *
-     * @param {String} service The service to use (e.g. 'directions', 'geocode').
-     * @param {Object} params The request params.
-     * @param {Function} onSuccess The success handler.
-     * @param {Function} onError The error handler.
-     */
-    requestORS: function(service, params, onSuccess, onError) {
-
-        var me = this;
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-
-        switch (service.toLowerCase()) {
-            case 'directions':
-
-                var routingOpts = vm.get('routingOpts');
-
-                var Directions = new Openrouteservice.Directions({
-                    host: routingOpts.openrouteserviceUrl,
-                    api_key: routingOpts.openrouteserviceApiKey
-                });
-                Directions.calculate(params)
-                    .then(onSuccess)
-                    .catch(onError);
-                break;
-            default:
-                break;
-        }
     },
 
     /**
@@ -648,7 +538,6 @@ Ext.define('Koala.view.window.RoutingController', {
         var wayPointStore = vm.get('waypoints');
         var waypoints = wayPointStore.getCoordinatesArray();
 
-        // same properties as on https://maps.openrouteservice.org/
         var params = {
             coordinates: waypoints,
             profile: vm.get('routingProfile'),
@@ -659,16 +548,7 @@ Ext.define('Koala.view.window.RoutingController', {
             preference: 'recommended',
             language: vm.get('language'),
             units: 'm',
-            attributes: [
-                'detourfactor',
-                'percentage'
-            ],
             instructions_format: 'html',
-            extra_info: [
-                'steepness',
-                'waytype',
-                'surface'
-            ],
             options: additionalOptions
         };
 
@@ -710,88 +590,9 @@ Ext.define('Koala.view.window.RoutingController', {
         return {};
     },
 
-    /**
-     * Request openrouteservice API.
-     */
-    makeRoutingRequest: function(onSuccess, onError) {
-
+    getResultPanel: function() {
         var me = this;
         var view = me.getView();
-        var vm = view.lookupViewModel();
-
-        var wayPointStore = vm.get('waypoints');
-        if (!wayPointStore.isValid() || wayPointStore.count() < 2) {
-            return;
-        }
-
-        var params = me.getORSParams();
-
-        if (!onSuccess) {
-            onSuccess = function(json) {
-                view.fireEvent('onRouteLoaded', json);
-            };
-        }
-
-        if (!onError) {
-            onError = function(err) {
-                vm.set('showDownloadButton', false);
-                // TODO: proper error handling
-                var str = 'An error occured: ' + err;
-                Ext.Logger.log(str);
-            };
-        }
-
-        me.requestORS('directions', params, onSuccess, onError);
-    },
-
-    /**
-     * Download a route in a given output format.
-     *
-     * @param {'geojson'|'gpx'} outputFormat The output format
-     */
-    makeDownloadRequest: function(outputFormat) {
-        var me = this;
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-
-        var params = me.getORSParams({
-            format: outputFormat,
-            extra_info: []
-        });
-
-        var onSuccess = function(res) {
-            var blob;
-            if (outputFormat === 'gpx') {
-                blob = new Blob([res], {
-                    type: 'application/xml;charset=utf-8'
-                });
-            } else {
-                blob = new Blob([JSON.stringify(res)]);
-            }
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'route.' + outputFormat;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
-        };
-
-        var onError = function(err) {
-            var str = 'An error occured: ' + err;
-            Ext.Logger.log(str);
-
-            Ext.toast(vm.get('i18n.error_msg_geocoding'));
-
-            var resultPanel = view.down('[name=' + view.routingResultPanelName + ']');
-            if (!resultPanel) {
-                return;
-            }
-            resultPanel.fireEvent('resultChanged');
-        };
-
-        me.requestORS('directions', params, onSuccess, onError);
+        return view.down('[name=' + view.routingResultPanelName + ']');
     }
 });

@@ -192,9 +192,6 @@ Ext.define('Koala.view.container.RoutingResult', {
 
     map: null,
 
-    /** Defines what type of routing should be done */
-    createdBy: '',
-
     /** The name of the elevationProfilePanel*/
     elevationProfilePanelName: 'routing-elevationprofile-panel',
 
@@ -209,7 +206,8 @@ Ext.define('Koala.view.container.RoutingResult', {
 
     listeners: {
         resultChanged: 'onRoutingResultChanged',
-        beforedestroy: 'onDestroy'
+        beforedestroy: 'onDestroy',
+        optimizationResultAvailable: 'onOptimizationResultAvailable'
     },
 
     items: [

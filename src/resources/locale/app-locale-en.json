@@ -885,23 +885,52 @@
         "config": {
             "data": {
                 "i18n": {
-                    "classicRoutingtitle": "Route Planning",
-                    "fleetRoutingTitle": "Fleet Routing",
-                    "startFieldTitle": "Start",
+                    "classicRoutingtitle": "Route Planning",                    "startFieldTitle": "Start",
                     "viaFieldTitle": "Via",
                     "endFieldTitle": "End",
                     "addEmptyPoint": "New Point",
                     "routingProfileFieldTitle": "Profile",
                     "computeRouteButtonText": "Compute route",
-                    "computeFleetRoutingButtonText": "Compute routes",
                     "addStartPoint": "Set start",
                     "addViaPoint": "Set waypoint",
                     "addEndPoint": "Set destination",
                     "elevationBtnText": "Elevation Profile",
                     "downloadButtonText": "Download",
-                    "error_msg_geocoding": "Could not load location. Please try again (later).",
-                    "error_msg_routing_request": "Routing request failed. Please try again (later).",
-                    "error_msg_download": "Download failed. Please try again (later).",
+                    "errorGeoCoding": "Could not load location. Please try again (later).",
+                    "errorRoutingRequest": "Routing request failed. Please try again (later).",
+                    "errorDownloadRoute": "Download failed. Please try again (later).",
+                    "routingSummaryDetailsButton": "Details",
+                    "profileCarText": "Driving",
+                    "profileBycicleText": "Cycling",
+                    "profileWalkingText": "Walking",
+                    "addAvoidArea": "Avoid area",
+                    "uploadGeoJson": "Load GeoJSON",
+                    "deleteAvoidArea": "Delete avoid area",
+                    "drawAvoidArea": "Draw area",
+                    "selectAvoidAreaFromLayer": "Select from layer",
+                    "errorFileUpload": "Could not load file. Please make sure the file is valid and try again.",
+                    "errorUploadedGeometryType": "The uploaded GeoJSON must be a polygon.",
+                    "errorTooManyFeatures": "The upload of multiple features is not supported. Please upload a single feature." ,
+                    "errorUploadedFileExtension": "Unsupported filetype. Please load a '.json' or '.geojson' file.",
+                    "errorZeroFeatures": "The uploaded GeoJSON does not contain features. Please upload one feature.",
+                    "errorGetFeatureInfo": "The polygon could not be read from the layer.",
+                    "errorNoLayerFound": "No valid layer found at selected location. Please try again.",
+                    "errorNoPolygonChosen": "The selected feature is not a polygon. Please select a polygon."
+                }
+            }
+        }
+    },
+    "Koala.view.window.FleetRouting": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "fleetRoutingTitle": "Fleet Routing",
+                    "computeFleetRoutingButtonText": "Compute routes",
+                    "elevationBtnText": "Elevation Profile",
+                    "downloadButtonText": "Download",
+                    "errorGeoCoding": "Could not load location. Please try again (later).",
+                    "errorRoutingRequest": "Routing request failed. Please try again (later).",
+                    "errorDownloadRoute": "Download failed. Please try again (later).",
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Driving",
                     "profileBycicleText": "Cycling",
@@ -919,7 +948,6 @@
                     "errorGetFeatureInfo": "The polygon could not be read from the layer.",
                     "errorNoLayerFound": "No valid layer found at selected location. Please try again.",
                     "errorNoPolygonChosen": "The selected feature is not a polygon. Please select a polygon.",
-                    "errorAreaTooBig": "The selected polygon is too big. Please select a smaller one.",
                     "optimizationLabel": "Advanced options",
                     "enableOptimizationLabel": "Enable optimization",
                     "jobsGridTitle": "Targets",
@@ -929,7 +957,8 @@
                     "emptyJobText": "No targets created",
                     "priorityColumnText": "Priority",
                     "addressColumnText": "Address",
-                    "descriptionColumnText": "Description"
+                    "descriptionColumnText": "Description",
+                    "errorFleetRouting" : "The request for the fleet routing failed. Please try again later."
                 }
             }
         }

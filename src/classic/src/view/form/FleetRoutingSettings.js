@@ -30,13 +30,8 @@ Ext.define('Koala.view.form.FleetRoutingSettings', {
 
     items: [{
         xtype: 'k-grid-routing-jobs'
-    },
+    }
 
     // TODO: add vehicle input table
-    {
-        xtype: 'button',
-        bind: {
-            text: '{i18n.computeFleetRoutingButtonText}'
-        }
-    }]
+    ]
 });
