@@ -76,6 +76,7 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
         routeStyle: undefined,
         routeSegmentStyle: undefined,
         waypointStyle: undefined,
+        jobMarkerStyle: undefined,
         avoidAreaStyle: undefined,
         avoidAreaOpacity: 0.5,
         waypointFontSize: undefined,

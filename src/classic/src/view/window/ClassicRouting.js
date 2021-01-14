@@ -88,7 +88,6 @@ Ext.define('Koala.view.window.ClassicRouting', {
             this.setSize(null, null);
         },
         onRouteLoaded: 'onRouteLoaded',
-        onWaypointAdded: 'onWaypointAdded',
         boxready: 'onBoxReady',
         close: 'onWindowClose',
         makeRoutingRequest: 'makeRoutingRequest',

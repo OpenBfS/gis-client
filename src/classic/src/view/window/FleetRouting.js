@@ -101,7 +101,8 @@ Ext.define('Koala.view.window.FleetRouting', {
         setContextMenuType: 'setContextMenuType',
         resetContextMenu: 'onResetContextMenu',
         boxready: 'onBoxReady',
-        close: 'onWindowClose'
+        close: 'onWindowClose',
+        updateWayPointLayer: 'updateWayPointLayer'
     },
 
     initComponent: function() {

@@ -208,6 +208,18 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Farbe der Wegpunkte.
 
+  * **jobMarkerStyle**
+
+    Styling Optionen des Layers, der die einzelnen Aufträge ("jobs") darstellt.
+
+    * **markerSize**
+
+      Größe des Markers in Pixeln.
+
+    * **color**
+
+      Farbe des Markers.
+
   * **elevationStyle**
 
     Styling Optionen des Layers, der die Abschnitte des Höhenprofils darstellt.

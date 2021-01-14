@@ -71,7 +71,6 @@ Ext.define('Koala.view.panel.MobileRouting',{
 
     listeners: {
         painted: 'onPainted',
-        onWaypointAdded: 'onWaypointAdded',
         updateWayPointLayer: 'updateWayPointLayer',
         clearRouting: 'onCloseToolClicked'
     },

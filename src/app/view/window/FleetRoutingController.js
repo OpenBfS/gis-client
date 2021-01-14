@@ -23,7 +23,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         'Ext.Array',
         'Koala.util.VroomFleetRouting',
         'Koala.util.OpenRouteService',
-        'Koala.util.Geocoding'
+        'Koala.util.Geocoding',
+        'BasiGX.util.Layer'
     ],
 
     /**
@@ -57,6 +58,157 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var mapViewport = map.getViewport();
         me.boundOpenContextMenu = me.openContextMenu.bind(me);
         mapViewport.addEventListener('contextmenu', me.boundOpenContextMenu);
+
+        // waypoint creation
+        var jobsStore = view.down('k-grid-routing-jobs').getStore();
+        if (!jobsStore) {
+            return;
+        }
+        jobsStore.on('datachanged',
+            function() {
+                view.fireEvent('updateWayPointLayer');
+            }
+        );
+        jobsStore.on('update',
+            function() {
+                view.fireEvent('updateWayPointLayer');
+            }
+        );
+
+        // waypoint creation
+        var vehicleStore = view.down('k-grid-routing-vehicles').getStore();
+        if (!vehicleStore) {
+            return;
+        }
+        vehicleStore.on('datachanged',
+            function() {
+                view.fireEvent('updateWayPointLayer');
+            }
+        );
+        vehicleStore.on('update',
+            function() {
+                view.fireEvent('updateWayPointLayer');
+            }
+        );
+    },
+
+    /**
+    * Extend the original 'fillViewModel' method by
+    * adding the jobMarkerStyle to the viewModel.
+    */
+    fillViewModel: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        me.callParent(arguments);
+
+        var routingOpts = vm.get('routingOpts');
+        if (!routingOpts) {
+            return;
+        }
+
+        // set style for job marker layer
+        if (routingOpts.jobMarkerStyle) {
+            var jobMarkerStyle = new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome map-marker
+                    text: '\uf0b1',
+                    font: 'normal ' + routingOpts.jobMarkerStyle.markerSize + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: routingOpts.jobMarkerStyle.color
+                    }),
+                    textBaseline: 'bottom'
+                })
+            });
+            vm.set('jobMarkerStyle', jobMarkerStyle);
+        }
+    },
+
+    /**
+     * Extend the original 'createRoutingLayers' method by
+     * adding the wayPointLayer for fleet routing.
+     */
+    createRoutingLayers: function() {
+        var me = this;
+        var view = me.getView();
+
+        me.callParent(arguments);
+
+        // create custom waypoint layer for fleetRouting
+        if (!me.getWaypointLayer()) {
+            var layerName = view.waypointLayerName;
+
+            var map = view.map;
+            if (!map) {
+                return;
+            }
+
+            var displayInLayerSwitcherKey =
+                BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
+
+            var source = new ol.source.Vector();
+            var layer = new ol.layer.Vector({
+                source: source,
+                style: me.getWayPointStyle.bind(me)
+            });
+            layer.set(displayInLayerSwitcherKey, false);
+            layer.set('name', layerName);
+
+            map.addLayer(layer);
+
+            // click event
+            if (view.map !== null) {
+                view.map.on('singleclick', me.onWaypointClick, me);
+            }
+        }
+    },
+
+    /**
+     * Create the content of the popup.
+     *
+     * It will display the address in any case. If available
+     * the description will be displayed as well.
+     *
+     * @param {ol.Feature} feature The popup's feature.
+     * @returns {String} The HTML content of the popup.
+     */
+    getWaypointPopupContent: function(feature) {
+        var popupTooltip = '<div class="popup-tip-container">' +
+            '<div class="popup-tip"></div></div>';
+
+        var content = '<p><strong>';
+        var description = feature.get('description');
+        if (description) {
+            content += description + '<br><br>';
+        }
+        content += feature.get('address');
+        content += '</strong></p>';
+
+        return content + popupTooltip;
+    },
+
+    /**
+     * Assign the style depending on the waypoint type.
+     *
+     * @param {ol.Feature} pointFeature The point to style.
+     * @return {ol.StyleFunction} The styling function.
+     */
+    getWayPointStyle: function(pointFeature) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var style;
+        switch (pointFeature.get('type')) {
+            case 'job':
+                style = vm.get('jobMarkerStyle');
+                break;
+            case 'vehicle':
+            default:
+                style = vm.get('waypointStyle');
+        }
+        return style;
     },
 
     onWindowClose: function() {
@@ -139,7 +291,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             var orsCoords = [];
             Ext.each(vroomRoute.steps, function(step) {
                 orsCoords.push(step.location);
-                // TODO: maybe add step information to job store
+                // TODO: maybe add step information to waypoint store
                 //      e.g. duration, type of step, arrival time
             });
 
@@ -517,5 +669,76 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     reject(err);
                 });
         });
+    },
+    /**
+     * Redraw the waypoint layer.
+     */
+    updateWayPointLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        var layer = me.getWaypointLayer();
+        if (!layer) {
+            return;
+        }
+
+        // empty waypoint layer
+        layer.getSource().clear();
+
+        // create job marker
+        var jobsStore = view.down('k-grid-routing-jobs').getStore();
+        if (!jobsStore) {
+            return;
+        }
+        jobsStore.each(function(job) {
+            me.createWaypointFeature(job, 'address', 'job');
+        });
+
+        // create vehicle marker
+        var vehicleStore = view.down('k-grid-routing-vehicles').getStore();
+        if (!vehicleStore) {
+            return;
+        }
+        vehicleStore.each(function(vehicle) {
+            me.createWaypointFeature(vehicle, 'start', 'vehicle');
+            me.createWaypointFeature(vehicle, 'end', 'vehicle');
+        });
+    },
+
+    /**
+     * Add a waypoint feature to the map.
+     *
+     * @param {Ext.data.Model} record The record containing the point feature information.
+     * @param {String} locationProperty The property that holds 'latitude', 'latitude' and 'address' information.
+     * @param {String} type The type of the waypoint e.g. 'job'.
+     */
+    createWaypointFeature: function(record, locationProperty, type) {
+        var me = this;
+
+        if (!record.get(locationProperty)) {
+            return;
+        }
+
+        var layer = me.getWaypointLayer();
+        if (!layer) {
+            return;
+        }
+        var layerSource = layer.getSource();
+
+        var wayPointProps = record.get(locationProperty);
+
+        var lat = wayPointProps.latitude;
+        var lon = wayPointProps.longitude;
+
+        var transformed = me.latLonToMapProjection([lon, lat]);
+
+        layerSource.addFeature(
+            new ol.Feature({
+                type: type,
+                geometry: new ol.geom.Point(transformed),
+                address: wayPointProps.address,
+                description: record.get('description')
+            })
+        );
     }
 });

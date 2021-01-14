@@ -79,6 +79,25 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
     },
 
     /**
+     * Extend the original 'createRoutingLayers' method by
+     * adding the wayPointLayer for classic routing.
+     */
+    createRoutingLayers: function() {
+        var me = this;
+        var view = me.getView();
+
+        me.callParent(arguments);
+
+        if (!me.getWaypointLayer()) {
+            me.createLayer('waypointStyle', view.waypointLayerName);
+
+            if (view.map !== null) {
+                view.map.on('singleclick', me.onWaypointClick, me);
+            }
+        }
+    },
+
+    /**
      * Open a context menu when a right-click on the map
      * is performed.
      *
@@ -96,7 +115,7 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
         // suppress default browser behaviour
         evt.preventDefault();
 
-        // transform coordiante
+        // transform coordinate
         var sourceProjection = map.getView().getProjection().getCode();
         var targetProjection = ol.proj.get('EPSG:4326');
         var transformed = ol.proj.transform(evtCoord, sourceProjection, targetProjection);

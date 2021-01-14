@@ -117,18 +117,6 @@ Ext.define('Koala.view.window.RoutingController', {
         return BasiGX.util.Layer.getLayerByName(view.avoidAreaLayerName);
     },
 
-    onWaypointAdded: function(feature) {
-        var me = this;
-
-        var layer = me.getWaypointLayer();
-        if (!layer) {
-            return;
-        }
-
-        var source = layer.getSource();
-        source.addFeature(feature);
-    },
-
     /**
      * Handler for clicking on a waypoint.
      * @param {ol.MapBrowserEvent} evt The clickevent on the map.
@@ -163,7 +151,7 @@ Ext.define('Koala.view.window.RoutingController', {
             }
 
             var coordinate = feature.getGeometry().getCoordinates();
-            var content = me.getWaypointPopupContent(feature.get('description'));
+            var content = me.getWaypointPopupContent(feature);
             popup.setHtml(content);
             popup.position(coordinate);
             popup.show();
@@ -180,13 +168,13 @@ Ext.define('Koala.view.window.RoutingController', {
      *
      * TODO should this function be moved to the viewmodel?
      *
-     * @param {String} content The content of the tooltip.
+     * @param {ol.Feature} feature The feature to get content from.
      * @returns {String} The HTML String for the popup.
      */
-    getWaypointPopupContent: function(content) {
+    getWaypointPopupContent: function(feature) {
         var popupTooltip = '<div class="popup-tip-container">' +
             '<div class="popup-tip"></div></div>';
-        var popupContent = '<p><strong>' + content + '</strong></p>';
+        var popupContent = '<p><strong>' + feature.get('description') + '</strong></p>';
         return popupContent + popupTooltip;
     },
 
@@ -199,9 +187,8 @@ Ext.define('Koala.view.window.RoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        // TODO: the styling has gone lost
-        //       probably the CSS path has to be adapted
-        //       src/sass/src/view/window/Routing.scss
+        // TODO: the styling SCSS is currently duplicated,
+        //       because it is used in two classes
         var popup = Ext.create('GeoExt.component.Popup', {
             map: view.map,
             width: 140
@@ -210,6 +197,7 @@ Ext.define('Koala.view.window.RoutingController', {
         var overlay = popup.getOverlay();
         // set the overlay above the marker
         // a negative value shifts the overlay upwards
+        // TODO: adapt for other Marker types
         var offsetY = vm.get('waypointFontSize') * (-1);
         overlay.setOffset([0, offsetY]);
 
@@ -337,13 +325,6 @@ Ext.define('Koala.view.window.RoutingController', {
         if (!me.getRouteSegmentLayer()) {
             me.createLayer('routeSegmentStyle', view.routeSegmentLayerName);
         }
-        if (!me.getWaypointLayer()) {
-            me.createLayer('waypointStyle', view.waypointLayerName);
-
-            if (view.map !== null) {
-                view.map.on('singleclick', me.onWaypointClick, me);
-            }
-        }
         if (!me.getElevationLayer()) {
             me.createLayer('elevationStyle', view.elevationLayerName);
         }
@@ -409,11 +390,9 @@ Ext.define('Koala.view.window.RoutingController', {
      * Redraw the waypoint layer.
      */
     updateWayPointLayer: function() {
-
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
-        var map = view.map;
         var wayPointStore = vm.get('waypoints');
 
         // make waypoint layer empty
@@ -421,27 +400,49 @@ Ext.define('Koala.view.window.RoutingController', {
         if (!layer) {
             return;
         }
-        layer.getSource().clear();
+        var layerSource = layer.getSource();
+        layerSource.clear();
 
         // loop trought waypoints and recreate map icons
         wayPointStore.each(function(rec) {
 
             // only draw valid coordinates
             if (rec.get('hasLongitude') && rec.get('hasLatitude')) {
-                // transform to map projection
-                var sourceProjection = ol.proj.get('EPSG:4326');
-                var targetProjection = map.getView().getProjection().getCode();
                 var coordinate = rec.get('coordinate');
-                var transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
+                var transformed = me.latLonToMapProjection(coordinate);
 
                 var waypoint = new ol.Feature({
                     geometry: new ol.geom.Point(transformed),
                     description: rec.get('address')
                 });
 
-                view.fireEvent('onWaypointAdded', waypoint);
+                layerSource.addFeature(waypoint);
             }
         });
+    },
+
+    /**
+     * Convert a lat/lon coordinate to the current map projection.
+     *
+     * @param {ol.Coordinate} coordinate The coordinate in 'EPSG:4326' coordinate reference system.
+     * @returns {ol.Coordinate} The coordinate in the current map projection.
+     */
+    latLonToMapProjection: function(coordinate) {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+
+        var sourceProjection = ol.proj.get('EPSG:4326');
+        var targetProjection = map.getView().getProjection().getCode();
+
+        return ol.proj.transform(
+            coordinate,
+            sourceProjection,
+            targetProjection
+        );
     },
 
     /**

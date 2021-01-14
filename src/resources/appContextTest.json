@@ -241,6 +241,10 @@
                     "markerSize": 38,
                     "color": "black"
                 },
+                "jobMarkerStyle": {
+                    "markerSize": 28,
+                    "color": "black"
+                },
                 "elevationStyle": {
                     "fill": "#ffffff",
                     "stroke": "#ffffff",
