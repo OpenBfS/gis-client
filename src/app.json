@@ -461,7 +461,7 @@
         "favicon.ico",
         "favicon-16x16.png",
         "android-icon-192x192.png",
-        "ios-icon-152x152.png"
+        "apple-touch-icon.png"
     ],
 
     /**
