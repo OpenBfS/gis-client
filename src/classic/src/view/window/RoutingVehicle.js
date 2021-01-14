@@ -26,10 +26,13 @@ Ext.define('Koala.view.window.RoutingVehicle', {
         'Ext.form.field.TextArea',
         'Ext.form.field.Date',
         'Ext.form.field.Time',
+        'Ext.form.Label',
         'Ext.container.Container',
+        'Ext.data.Store',
         'Koala.util.AppContext',
         'Koala.view.button.RoutingProfile',
         'Koala.view.form.field.GeocodingCombo',
+        'Koala.view.panel.RoutingBreaks'
     ],
 
     controller: 'k-window-routing-vehicle',
@@ -40,13 +43,13 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 title: '',
                 submitText: '',
                 cancelText: '',
+                profileLabel: '',
                 descriptionLabel: '',
                 descriptionPlaceholder: '',
                 startLabel: '',
                 startPlaceholder: '',
                 endLabel: '',
                 endPlaceholder: '',
-                timeWindowTitle: '',
                 startDayLabel: '',
                 startDayPlaceholder: '',
                 startTimePlaceholder: '',
@@ -68,13 +71,13 @@ Ext.define('Koala.view.window.RoutingVehicle', {
     collapsible: false,
     resizable: false,
     constrainHeader: true,
+    scrollable: true,
 
     layout: 'fit',
 
     vehicle: null,
 
     items: [{
-        // TODO add routing breaks
         xtype: 'form',
         name: 'vehicle-form',
         padding: 10,
@@ -82,8 +85,21 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             anchor: '100%'
         },
         items: [{
-            xtype: 'k-button-routing-profile',
-            name: 'profile'
+            // TODO properly style profile button
+            xtype: 'container',
+            layout: 'anchor',
+            defaults: {
+                anchor: '100%'
+            },
+            items: [{
+                xtype: 'label',
+                bind: {
+                    text: '{i18n.profileLabel}:'
+                }
+            }, {
+                xtype: 'k-button-routing-profile',
+                name: 'profile'
+            }]
         }, {
             xtype: 'textarea',
             name: 'description',
@@ -107,10 +123,9 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             }
         }, {
             xtype: 'panel',
-            // TODO properly style or replace with other component
             name: 'time_window',
-            bind: {
-                title: '{i18n.timeWindowTitle}'
+            defaults: {
+                margin: '0 0 5 0'
             },
             items: [{
                 xtype: 'container',
@@ -149,6 +164,14 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     }
                 }]
             }]
+        }, {
+            xtype: 'k-panel-routing-breaks',
+            name: 'breaks',
+            // TODO set the height properly
+            scrollable: 'vertical',
+            maxHeight: 250,
+            // TODO set width propery
+            width: '100%'
         }]
     }],
 
@@ -185,8 +208,6 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             return;
         }
 
-        // TODO add specific handling here
-
         if (me.vehicle) {
             Ext.Object.each(me.vehicle, function(k, v) {
                 var field = form.down('[name=' + k + ']');
@@ -194,6 +215,40 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     return false;
                 }
                 switch(k) {
+                    case 'end':
+                    case 'start':
+                        store = field.getStore();
+                        if (store) {
+                            field.suspendEvents();
+                            store.loadRawData([v]);
+                            field.setSelection(store.first());
+                            field.resumeEvents();
+                        }
+                        break;
+                    case 'time_window':
+                        if (!Ext.isArray(v) || v.length !== 2) {
+                            break;
+                        }
+                        var startDay = field.down('[name=startday]');
+                        var startTime = field.down('[name=starttime]');
+                        var endDay = field.down('[name=endday]');
+                        var endTime = field.down('[name=endtime]');
+                        if (startDay) {
+                            startDay.setValue(new Date(v[0]));
+                        }
+                        if (startTime) {
+                            startTime.setValue(new Date(v[0]));
+                        }
+                        if (endDay) {
+                            endDay.setValue(new Date(v[1]));
+                        }
+                        if (endTime) {
+                            endTime.setValue(new Date(v[1]));
+                        }
+                        break;
+                    case 'breaks':
+                        field.fireEvent('overwriteStore', v);
+                        break;
                     default:
                         field.setValue(v);
                         break;

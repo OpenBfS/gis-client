@@ -251,12 +251,21 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
       * **maxServiceDuration**
 
       Maximale Dauer in Sekunden, die ein einzelner Auftrag vor Ort dauern kann.
-      Default: 24h.
+      Default: 24h
 
       * **maxPriority**
 
       Maximale Priorität, die einem Auftrag zugewiesen werden kann.
       Default: 10
+
+    * **vehicle**
+
+      Konfigurationen der Fahrzeuge.
+
+      * **maxBreakDuration**
+
+      Maximale Dauer in Sekunden, die eine einzelne Pause dauern kann.
+      Default: 24h
 
   ```json
   {
@@ -290,6 +299,9 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
             "job": {
                 "maxServiceDuration": 86400,
                 "maxPriority": 10
+            },
+            "vehicle": {
+                "maxBreakDuration": 86400
             }
         }
     }

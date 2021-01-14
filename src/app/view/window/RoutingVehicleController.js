@@ -21,6 +21,7 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
     alias: 'controller.k-window-routing-vehicle',
     requires: [
         'Ext.Object',
+        'Ext.Array',
         'Ext.ComponentQuery',
         'Koala.util.Date'
     ],
@@ -38,13 +39,91 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
         }
 
         var form = view.down('[name=vehicle-form]');
-        // TODO set the values explicitly
-        var formData = {};
-        if (form) {
-            formData = form.getForm().getFieldValues();
+        if (!form) {
+            view.close();
+            return;
         }
 
-        // TODO add specific handling here
+        var formData = {};
+
+        var profileComp = form.down('[name=profile]');
+        if (profileComp) {
+            formData.profile = profileComp.getValue();
+        }
+
+        var descriptionComp = form.down('[name=description]');
+        if (descriptionComp) {
+            formData.description = descriptionComp.getValue();
+        }
+
+        var startComp = form.down('[name=start]');
+        if (startComp) {
+            var selection = startComp.getSelection();
+            if (selection) {
+                var start = Ext.clone(selection.getData());
+                if (!Ext.isObject(start)) {
+                    start = undefined;
+                }
+                formData.start = start;
+            }
+        }
+
+        var endComp = form.down('[name=end]');
+        if (endComp) {
+            var selection = endComp.getSelection();
+            if (selection) {
+                var end = Ext.clone(selection.getData());
+                if (!Ext.isObject(end)) {
+                    end = undefined;
+                }
+                formData.end = end;
+            }
+        }
+
+        var breaksComp = form.down('[name=breaks]');
+        if (breaksComp) {
+            var breaksStore = breaksComp.store;
+            if (breaksStore && breaksStore.count() !== 0) {
+
+                // ignore empty breaks
+                var filteredBreakRecords = Ext.Array.filter(breaksStore.getData().items, function(b){
+                    var timeWindows = b.get('timeWindowsStore');
+                    var hasItems = false;
+                    if (timeWindows) {
+                        hasItems = timeWindows.count() !== 0;
+                    }
+                    return hasItems
+                            || !Ext.isEmpty(b.get('description'))
+                            || !Ext.isEmpty(b.get('service'));
+                });
+
+                var breaks = Ext.Array.map(filteredBreakRecords, function(b) {
+                    var result = {
+                        id: b.get('id')
+                    };
+
+                    var timeWindows = b.get('timeWindowsStore');
+                    if (timeWindows && timeWindows.count() !== 0) {
+                        result.time_windows = timeWindows.getAllAsTimestamp();
+                    }
+                    if (!Ext.isEmpty(b.get('description'))) {
+                        result.description = b.get('description');
+                    }
+                    if (!Ext.isEmpty(b.get('service'))) {
+                        result.service = b.get('service');
+                    }
+
+                    return result;
+                });
+
+                if (!Ext.isEmpty(breaks)) {
+                    formData.breaks = breaks;
+                }
+            }
+        }
+
+        // TODO check why start and end are not set sometimes
+        // TODO check for required values
 
         var timeWindowComponent = form.down('[name=time_window]');
         if (timeWindowComponent) {
@@ -55,7 +134,7 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
         if (!me.isEmptyRecord(formData)) {
             var parentGrid = Ext.ComponentQuery.query('k-grid-routing-vehicles')[0];
             if (parentGrid) {
-                parentGrid.fireEvent('applyVehicle', formData, view.job);
+                parentGrid.fireEvent('applyVehicle', formData, view.vehicle);
             }
         }
 
@@ -96,7 +175,7 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
 
         if (
             !Ext.isDefined(startDay) || !Ext.isDefined(startTime) || !Ext.isDefined(endDay) || !Ext.isDefined(endTime)
-            || !Ext.isDefined(startDay.getValue()) || !Ext.isDefined(startTime.getValue()) || !Ext.isDefined(endDay.getValue()) || !Ext.isDefined(endTime.getValue())
+            || Ext.isEmpty(startDay.getValue()) || Ext.isEmpty(startTime.getValue()) || Ext.isEmpty(endDay.getValue()) || Ext.isEmpty(endTime.getValue())
             ) {
             return;
         }

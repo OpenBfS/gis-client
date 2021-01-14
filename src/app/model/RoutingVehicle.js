@@ -14,34 +14,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.FleetRoutingSettings
+ * @class Koala.model.RoutingVehicle
  */
-Ext.define('Koala.view.form.FleetRoutingSettings', {
-    extend: 'Ext.form.Panel',
-    xtype: 'k-form-fleet-routing-settings',
+Ext.define('Koala.model.RoutingVehicle', {
+    extend: 'Ext.data.Model',
 
     requires: [
-        'Koala.view.grid.RoutingJobs',
-        'Koala.view.grid.RoutingVehicles'
+        'Ext.data.identifier.Sequential',
     ],
 
-    width: '100%',
-
-    bodyPadding: 10,
-
-    defaults: {
-        padding: '0 0 10 0'
+    identifier: {
+        type: 'sequential'
     },
 
-    items: [{
-        xtype: 'k-grid-routing-jobs'
-    }, {
-        xtype: 'k-grid-routing-vehicles',
-        flex: 1
-    }, {
-        xtype: 'button',
-        bind: {
-            text: '{i18n.computeFleetRoutingButtonText}'
-        }
-    }]
+    fields: [
+        {name: 'profile', type: 'string', convert: null},
+        {name: 'description', type: 'string', convert: null},
+        {name: 'start', convert: null},
+        {name: 'end', convert: null},
+        {name: 'time_window', convert: null},
+        {name: 'breaks', convert: null}
+    ]
 });

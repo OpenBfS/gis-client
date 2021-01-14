@@ -514,6 +514,20 @@
             }
         }
     },
+    "Koala.view.grid.RoutingVehicles": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Fahrzeuge",
+                    "emptyVehiclesText": "Keine Fahrzeuge angelegt",
+                    "descriptionColumnText": "Beschreibung",
+                    "startColumnText": "Startort",
+                    "endColumnText": "Zielort",
+                    "addVehicleTooltip": "Fahrzeug hinzufügen"
+                }
+            }
+        }
+    },
     "Koala.view.list.TreeMenu": {
         "config": {
             "data": {
@@ -612,6 +626,29 @@
                 "editTemplates": "Templates anpassen",
                 "templateEditor": "Templates editieren",
                 "hoverInfo": "HoverInfo"
+            }
+        }
+    },
+    "Koala.view.panel.RoutingBreaks": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Pausen",
+                    "addBreakTooltip": "Pause hinzufügen"
+                }
+            }
+        }
+    },
+    "Koala.view.panel.RoutingBreak": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "serviceLabel": "Pausendauer",
+                    "emptyServiceText": "Pausendauer",
+                    "descriptionLabel":"Beschreibung",
+                    "descriptionPlaceholder":"Beschreibung der Pause",
+                    "removeBreakTooltip": "Pause entfernen"
+                }
             }
         }
     },
@@ -973,10 +1010,7 @@
                     "emptyJobText": "Keine Ziele angelegt",
                     "priorityColumnText": "Priorität",
                     "addressColumnText": "Adresse",
-                    "descriptionColumnText": "Beschreibung",
-                    "errorFleetRouting" : "Die Anfrage für Flottenrouting ist fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
-                    "vehiclesGridTitle": "Fahrzeuge",
-                    "emptyVehiclesText": "Keine Fahrzeuge angelegt"
+                    "descriptionColumnText": "Beschreibung"
                 }
             }
         }
@@ -1007,13 +1041,13 @@
                     "title": "Fahrzeug bearbeiten",
                     "submitText": "Anwenden",
                     "cancelText": "Abbrechen",
+                    "profileLabel": "Profil",
                     "descriptionLabel": "Beschreibung",
                     "descriptionPlaceholder": "Beschreibung des Fahrzeugs",
                     "startLabel": "Startort",
-                    "startPlaceholder": "Startort des Fahrzeugs",
+                    "startPlaceholder": "Suchbegriff oder Koordinate eingeben",
                     "endLabel": "Zielort",
-                    "endPlaceholder": "Zielort des Fahrzeugs",
-                    "timeWindowTitle": "Zeitfenster",
+                    "endPlaceholder": "Suchbegriff oder Koordinate eingeben",
                     "startDayLabel": "Starttag",
                     "startDayPlaceholder": "Tag",
                     "startTimePlaceholder": "Uhrzeit",

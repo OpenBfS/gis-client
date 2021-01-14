@@ -53,7 +53,9 @@ Ext.define('Koala.view.grid.RoutingJobs', {
             dataIndex: 'address',
             flex: 1,
             renderer: function(v) {
-                return v.address;
+                if (v) {
+                    return v.address;
+                }
             }
         }, {
             bind: {
@@ -131,7 +133,7 @@ Ext.define('Koala.view.grid.RoutingJobs', {
         beforedestroy: function() {
             var win = Ext.ComponentQuery.query('k-window-routing-job')[0];
             if (win) {
-                win.destroy();
+                win.close();
             }
         },
         applyJob: function(data, job) {

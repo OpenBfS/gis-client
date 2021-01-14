@@ -14,34 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.form.FleetRoutingSettings
+ * @class Koala.store.RoutingBreaks
  */
-Ext.define('Koala.view.form.FleetRoutingSettings', {
-    extend: 'Ext.form.Panel',
-    xtype: 'k-form-fleet-routing-settings',
+Ext.define('Koala.store.RoutingBreaks', {
+    extend: 'Ext.data.Store',
 
     requires: [
-        'Koala.view.grid.RoutingJobs',
-        'Koala.view.grid.RoutingVehicles'
+        'Koala.model.RoutingBreak'
     ],
 
-    width: '100%',
+    alias: 'store.k-routingbreaks',
 
-    bodyPadding: 10,
-
-    defaults: {
-        padding: '0 0 10 0'
-    },
-
-    items: [{
-        xtype: 'k-grid-routing-jobs'
-    }, {
-        xtype: 'k-grid-routing-vehicles',
-        flex: 1
-    }, {
-        xtype: 'button',
-        bind: {
-            text: '{i18n.computeFleetRoutingButtonText}'
-        }
-    }]
+    model: 'Koala.model.RoutingBreak'
 });

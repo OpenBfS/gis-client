@@ -27,7 +27,8 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
         'Ext.Array',
         'Ext.grid.plugin.CellEditing',
         'BasiGX.util.Animate',
-        'Koala.util.Date'
+        'Koala.util.Date',
+        'Koala.store.RoutingTimeWindows'
     ],
 
     viewModel: {
@@ -46,6 +47,7 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
 
     enableColumnHide: false,
     enableColumnMove: false,
+    margin: '0 0 5 0',
 
     bind: {
         title: '{i18n.title}',
@@ -53,48 +55,7 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
     },
 
     store: {
-        fields: [
-            { name: 'startDay', type: 'date', dateFormat: 'time' },
-            { name: 'startTime', type: 'date', dateFormat: 'time' },
-            { name: 'endDay', type: 'date', dateFormat: 'time' },
-            { name: 'endTime', type: 'date', dateFormat: 'time' }
-        ],
-
-        getAllAsTimestamp: function() {
-            var me = this;
-            var timeWindows = Ext.Array.map(me.getData().items, function(d) {
-                var startDay = moment(d.get('startDay'));
-                var endDay = moment(d.get('endDay'));
-                var startTime = moment(d.get('startTime'));
-                var endTime = moment(d.get('endTime'));
-
-                var start = startDay.clone()
-                    .hour(startTime.hour())
-                    .minute(startTime.minute());
-
-                var end = endDay.clone()
-                    .hour(endTime.hour())
-                    .minute(endTime.minute());
-
-                var startUtc = Koala.util.Date.getUtcMoment(start);
-                var endUtc = Koala.util.Date.getUtcMoment(end);
-                return [startUtc.valueOf(), endUtc.valueOf()];
-            });
-            return timeWindows;
-        },
-
-        setAllFromTimestamp: function(timestamps) {
-            var me = this;
-            var dates = Ext.Array.map(timestamps, function(t) {
-                return {
-                    startDay: t[0],
-                    startTime: t[0],
-                    endDay: t[1],
-                    endTime: t[1]
-                };
-            });
-            me.loadRawData(dates);
-        }
+        type: 'k-routingtimewindows'
     },
 
     columns: [

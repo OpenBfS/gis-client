@@ -21,25 +21,130 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
     xtype: 'k-grid-routing-vehicles',
 
     requires: [
+        'Ext.grid.column.Action',
         'BasiGX.util.Animate',
-        'Koala.view.window.RoutingVehicle'
+        'Koala.view.window.RoutingVehicle',
+        'Koala.store.RoutingVehicles'
     ],
+
+    viewModel: {
+        data: {
+            i18n: {
+                title: '',
+                emptyVehiclesText: '',
+                descriptionColumnText: '',
+                startColumnText: '',
+                endColumnText: '',
+                addVehicleTooltip: ''
+            }
+        }
+    },
 
     enableColumnHide: false,
     enableColumnMove: false,
 
     bind: {
-        title: '{i18n.vehiclesGridTitle}',
+        title: '{i18n.title}',
         emptyText: '{i18n.emptyVehiclesText}'
     },
 
-    // store: {
-    //     // TODO create store, add to requires
-    //     type: 'k-routingvehicles'
-    // },
+    store: {
+        type: 'k-routingvehicles'
+    },
 
     columns: {
-        items: []
+        items: [{
+            dataIndex: 'profile',
+            renderer: function(profile) {
+                var icon;
+                switch (profile) {
+                    case 'driving-car':
+                        icon = 'fa fa-car';
+                        break;
+                    case 'cycling-regular':
+                        icon = 'fa fa-bicycle';
+                        break;
+                    case 'foot-walking':
+                        icon = 'fa fa-male';
+                        break;
+                    default:
+                        icon = 'fa fa-question-circle';
+                        break;
+                }
+                return '<i class="' + icon + '" aria-hidden="true"></i>';
+            }
+        }, {
+            dataIndex: 'description',
+            flex: 1,
+            bind: {
+                text: '{i18n.descriptionColumnText}'
+            },
+            renderer: function(description) {
+                return '<span data-qtip="' + description + '">' + description + '</span>';
+            }
+        }, {
+            dataIndex: 'start',
+            flex: 1,
+            bind: {
+                text: '{i18n.startColumnText}'
+            },
+            renderer: function(start) {
+                if (start) {
+                    return '<span data-qtip="' + start.address + '">' + start.address + '</span>';
+                }
+            }
+        }, {
+            dataIndex: 'end',
+            flex: 1,
+            bind: {
+                text: '{i18n.endColumnText}'
+            },
+            renderer: function(end) {
+                if (end) {
+                    return '<span data-qtip="' + end.address + '">' + end.address + '</span>';
+                }
+            }
+        }, {
+            xtype: 'actioncolumn',
+            width: 50,
+            items: [{
+                iconCls: 'x-fa fa-cog',
+                // TODO tooltips are not bindable here, so we have to find a simple
+                //      way of adding them here.
+                name: 'edit-vehicle-action',
+                handler: function(grid, rowIndex) {
+                    var rec = grid.getStore().getAt(rowIndex);
+                    // make sure there is always only a single window opened
+                    var win = Ext.ComponentQuery.query('k-window-routing-vehicle')[0];
+
+                    if (!win) {
+                        var vehicle = Ext.clone(rec.getData());
+                        Ext.create({
+                            xtype: 'k-window-routing-vehicle',
+                            vehicle: vehicle
+                        }).show();
+                    } else {
+                        BasiGX.util.Animate.shake(win);
+                    }
+
+                }
+            }, {
+                iconCls: 'x-fa fa-trash-o',
+                // TODO tooltips are not bindable here, so we have to find a simple
+                //      way of adding them here.
+                name: 'remove-vehicle-action',
+                handler: function(grid, rowIndex) {
+                    var win = Ext.ComponentQuery.query('k-window-routing-vehicle')[0];
+
+                    if (!win) {
+                        grid.getStore().removeAt(rowIndex);
+                    } else {
+                        BasiGX.util.Animate.shake(win);
+                    }
+
+                }
+            }]
+        }]
     },
 
     buttons: [{
@@ -69,7 +174,7 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
         beforedestroy: function() {
             var win = Ext.ComponentQuery.query('k-window-routing-vehicle')[0];
             if (win) {
-                window.destroy();
+                win.close();
             }
         },
         applyVehicle: function(data, vehicle) {

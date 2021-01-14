@@ -512,6 +512,20 @@
             }
         }
     },
+    "Koala.view.grid.RoutingVehicles": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Vehicles",
+                    "emptyVehiclesText": "No vehicles created",
+                    "descriptionColumnText": "Description",
+                    "startColumnText": "Starting location",
+                    "endColumnText": "Ending location",
+                    "addVehicleTooltip": "Add vehicle"
+                }
+            }
+        }
+    },
     "Koala.view.list.TreeMenu": {
         "config": {
             "data": {
@@ -610,6 +624,29 @@
                 "editTemplates": "Edit templates",
                 "templateEditor": "Edit templates",
                 "hoverInfo": "HoverInfo"
+            }
+        }
+    },
+    "Koala.view.panel.RoutingBreaks": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Breaks",
+                    "addBreakTooltip": "Add break"
+                }
+            }
+        }
+    },
+    "Koala.view.panel.RoutingBreak": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "serviceLabel": "Break duration",
+                    "emptyServiceText": "Break duration",
+                    "descriptionLabel": "Description",
+                    "descriptionPlaceholder":"Description of the break",
+                    "removeBreakTooltip": "Remove break"
+                }
             }
         }
     },
@@ -1002,13 +1039,13 @@
                     "title": "Edit vehicle",
                     "submitText": "Apply",
                     "cancelText": "Cancel",
+                    "profileLabel": "Profile",
                     "descriptionLabel": "Description",
                     "descriptionPlaceholder": "Description of the vehicle",
                     "startLabel": "Starting location",
-                    "startPlaceholder": "Starting location of the vehicle",
+                    "startPlaceholder": "Enter search term or coordinate",
                     "endLabel": "Ending location",
-                    "endPlaceholder": "Ending location of the vehicle",
-                    "timeWindowTitle": "Time window",
+                    "endPlaceholder": "Enter search term or coordinate",
                     "startDayLabel": "Starting day",
                     "startDayPlaceholder": "Day",
                     "startTimePlaceholder": "Time",

@@ -27,7 +27,7 @@ Ext.define('Koala.view.button.RoutingProfile', {
         data: {
             i18n: {
                 profileCarText: '',
-                profileBycicleText: '',
+                profileBicycleText: '',
                 profileWalkingText: ''
             },
             routingProfile: undefined
@@ -50,7 +50,7 @@ Ext.define('Koala.view.button.RoutingProfile', {
         value: 'cycling-regular',
         bind: {
             pressed: '{routingProfile === "cycling-regular"}',
-            tooltip: '{i18n.profileBycicleText}'
+            tooltip: '{i18n.profileBicycleText}'
         }
     }, {
         iconCls: 'x-fa fa-male',
