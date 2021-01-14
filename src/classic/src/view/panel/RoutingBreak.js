@@ -43,7 +43,6 @@ Ext.define('Koala.view.panel.RoutingBreak', {
         }
     },
 
-    // TODO check if recId is actually needed
     recId: null,
     break: null,
 

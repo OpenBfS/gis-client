@@ -56,9 +56,11 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
             formData.description = descriptionComp.getValue();
         }
 
+        var selection;
+
         var startComp = form.down('[name=start]');
         if (startComp) {
-            var selection = startComp.getSelection();
+            selection = startComp.getSelection();
             if (selection) {
                 var start = Ext.clone(selection.getData());
                 if (!Ext.isObject(start)) {
@@ -70,7 +72,7 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
 
         var endComp = form.down('[name=end]');
         if (endComp) {
-            var selection = endComp.getSelection();
+            selection = endComp.getSelection();
             if (selection) {
                 var end = Ext.clone(selection.getData());
                 if (!Ext.isObject(end)) {
@@ -86,7 +88,7 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
             if (breaksStore && breaksStore.count() !== 0) {
 
                 // ignore empty breaks
-                var filteredBreakRecords = Ext.Array.filter(breaksStore.getData().items, function(b){
+                var filteredBreakRecords = Ext.Array.filter(breaksStore.getData().items, function(b) {
                     var timeWindows = b.get('timeWindowsStore');
                     var hasItems = false;
                     if (timeWindows) {
@@ -130,7 +132,6 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
             formData.time_window = me.getTimeWindow(timeWindowComponent);
         }
 
-        debugger;
         if (!me.isEmptyRecord(formData)) {
             var parentGrid = Ext.ComponentQuery.query('k-grid-routing-vehicles')[0];
             if (parentGrid) {
@@ -173,10 +174,11 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
         var endDay = comp.down('[name=endday]') || undefined;
         var endTime = comp.down('[name=endtime]') || undefined;
 
-        if (
-            !Ext.isDefined(startDay) || !Ext.isDefined(startTime) || !Ext.isDefined(endDay) || !Ext.isDefined(endTime)
-            || Ext.isEmpty(startDay.getValue()) || Ext.isEmpty(startTime.getValue()) || Ext.isEmpty(endDay.getValue()) || Ext.isEmpty(endTime.getValue())
-            ) {
+        var hasStartDay = Ext.isDefined(startDay) && !Ext.isEmpty(startDay.getValue());
+        var hasStartTime = Ext.isDefined(startTime) && !Ext.isEmpty(startTime.getValue());
+        var hasEndDay = Ext.isDefined(endDay) && !Ext.isEmpty(endDay.getValue());
+        var hasEndTime = Ext.isDefined(endTime) && !Ext.isEmpty(endTime.getValue());
+        if (!hasStartDay || !hasStartTime || !hasEndDay || !hasEndTime) {
             return;
         }
 

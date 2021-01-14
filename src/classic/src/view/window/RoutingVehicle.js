@@ -29,7 +29,6 @@ Ext.define('Koala.view.window.RoutingVehicle', {
         'Ext.form.Label',
         'Ext.container.Container',
         'Ext.data.Store',
-        'Koala.util.AppContext',
         'Koala.view.button.RoutingProfile',
         'Koala.view.form.field.GeocodingCombo',
         'Koala.view.panel.RoutingBreaks'
@@ -89,7 +88,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             // TODO properly style profile button
             xtype: 'container',
             layout: {
-                type:'hbox',
+                type: 'hbox',
                 align: 'stretch'
             },
             height: 24,
@@ -208,18 +207,6 @@ Ext.define('Koala.view.window.RoutingVehicle', {
         var me = this;
         me.callParent();
 
-        var appContext = Koala.util.AppContext;
-        var ctx = appContext.getAppContext();
-        var routingOpts = appContext.getMergedDataByKey('routing', ctx);
-        var optimizationOpts = {};
-        if (routingOpts && routingOpts.optimization) {
-            optimizationOpts = routingOpts.optimization;
-        }
-        var vehicleOpts = {};
-        if (optimizationOpts.vehicle) {
-            vehicleOpts = optimizationOpts.vehicle;
-        }
-
         var form = me.down('[name=vehicle-form]');
         if (!form) {
             return;
@@ -231,10 +218,10 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 if (!field) {
                     return false;
                 }
-                switch(k) {
+                switch (k) {
                     case 'end':
                     case 'start':
-                        store = field.getStore();
+                        var store = field.getStore();
                         if (store) {
                             field.suspendEvents();
                             store.loadRawData([v]);
@@ -272,6 +259,6 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 }
             });
         }
-    },
+    }
 
 });

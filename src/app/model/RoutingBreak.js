@@ -20,7 +20,7 @@ Ext.define('Koala.model.RoutingBreak', {
     extend: 'Ext.data.Model',
 
     requires: [
-        'Ext.data.identifier.Sequential',
+        'Ext.data.identifier.Sequential'
     ],
 
     identifier: {
