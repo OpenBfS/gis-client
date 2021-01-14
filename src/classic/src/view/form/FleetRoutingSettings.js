@@ -38,10 +38,5 @@ Ext.define('Koala.view.form.FleetRoutingSettings', {
     }, {
         xtype: 'k-grid-routing-vehicles',
         flex: 1
-    }, {
-        xtype: 'button',
-        bind: {
-            text: '{i18n.computeFleetRoutingButtonText}'
-        }
     }]
 });
