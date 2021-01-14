@@ -168,6 +168,12 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
         return empty;
     },
 
+    /**
+     * Get the values from the time_window input fields.
+     *
+     * @param {Ext.panel.Panel} comp The Panel that holds the time_window input fields.
+     * @returns {[Int, Int]} A tuple containing the start and the end date of the time window as UNIX timestamps.
+     */
     getTimeWindow: function(comp) {
         var startDay = comp.down('[name=startday]') || undefined;
         var startTime = comp.down('[name=starttime]') || undefined;
