@@ -55,7 +55,8 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 startTimePlaceholder: '',
                 endDayLabel: '',
                 endDayPlaceholder: '',
-                endTimePlaceholder: ''
+                endTimePlaceholder: '',
+                breaksLabel: ''
             }
         }
     },
@@ -65,7 +66,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
     },
 
     minHeight: 100,
-    maxHeight: 600,
+    maxHeight: 800,
     width: 500,
 
     collapsible: false,
@@ -87,18 +88,30 @@ Ext.define('Koala.view.window.RoutingVehicle', {
         items: [{
             // TODO properly style profile button
             xtype: 'container',
-            layout: 'anchor',
-            defaults: {
-                anchor: '100%'
+            layout: {
+                type:'hbox',
+                align: 'stretch'
             },
+            height: 24,
+            margin: '0 0 5 0',
             items: [{
                 xtype: 'label',
+                width: 100,
                 bind: {
                     text: '{i18n.profileLabel}:'
                 }
             }, {
                 xtype: 'k-button-routing-profile',
-                name: 'profile'
+                name: 'profile',
+                flex: 1,
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                },
+                defaults: {
+                    flex: 1
+                },
+                padding: '0 0 0 6'
             }]
         }, {
             xtype: 'textarea',
@@ -134,6 +147,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 items: [{
                     xtype: 'datefield',
                     name: 'startday',
+                    flex: 1,
                     bind: {
                         fieldLabel: '{i18n.startDayLabel}',
                         emptyText: '{i18n.startDayPlaceholder}'
@@ -152,6 +166,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 items: [{
                     xtype: 'datefield',
                     name: 'endday',
+                    flex: 1,
                     bind: {
                         fieldLabel: '{i18n.endDayLabel}',
                         emptyText: '{i18n.endDayPlaceholder}'
@@ -165,13 +180,15 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 }]
             }]
         }, {
+            xtype: 'label',
+            bind: {
+                text: '{i18n.breaksLabel}:'
+            }
+        }, {
             xtype: 'k-panel-routing-breaks',
+            header: false,
             name: 'breaks',
-            // TODO set the height properly
-            scrollable: 'vertical',
-            maxHeight: 250,
-            // TODO set width propery
-            width: '100%'
+            maxHeight: 400
         }]
     }],
 

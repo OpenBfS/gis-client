@@ -645,7 +645,8 @@
                     "emptyServiceText": "Break duration",
                     "descriptionLabel": "Description",
                     "descriptionPlaceholder":"Description of the break",
-                    "removeBreakTooltip": "Remove break"
+                    "removeBreakTooltip": "Remove break",
+                    "timeWindowsLabel": "Time windows"
                 }
             }
         }
@@ -1051,7 +1052,8 @@
                     "startTimePlaceholder": "Time",
                     "endDayLabel": "Ending day",
                     "endDayPlaceholder": "Day",
-                    "endTimePlaceholder": "Time"
+                    "endTimePlaceholder": "Time",
+                    "breaksLabel": "Breaks"
                 }
             }
         }

@@ -37,7 +37,8 @@ Ext.define('Koala.view.panel.RoutingBreak', {
                 emptyServiceText: '',
                 descriptionLabel: '',
                 descriptionPlaceholder: '',
-                removeBreakTooltip: ''
+                removeBreakTooltip: '',
+                timeWindowsLabel: ''
             }
         }
     },
@@ -46,12 +47,11 @@ Ext.define('Koala.view.panel.RoutingBreak', {
     recId: null,
     break: null,
 
-    layout: 'anchor',
-    border: true,
-
-    defaults: {
-        anchor: '100%'
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
     },
+    border: true,
 
     items: [{
         xtype: 'textarea',
@@ -85,8 +85,14 @@ Ext.define('Koala.view.panel.RoutingBreak', {
         displayField: 'title',
         valueField: 'duration'
     }, {
+        xtype: 'label',
+        bind: {
+            text: '{i18n.timeWindowsLabel}:'
+        }
+    }, {
         xtype: 'k-grid-routing-time-window',
         name: 'time_windows',
+        header: false,
         flex: 1
     }, {
         xtype: 'button',

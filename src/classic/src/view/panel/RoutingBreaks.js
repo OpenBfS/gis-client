@@ -39,11 +39,20 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
 
     store: null,
 
-    padding: '10 0 10 0',
+    collapsible: true,
+
+    scrollable: 'vertical',
+
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
+
+    padding: '0 0 10 0',
 
     defaults: {
         bodyPadding: 10,
-        padding: '0 0 10 0'
+        padding: '10 0 0 0'
     },
 
     bind: {
@@ -74,7 +83,7 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
             if (me.store) {
                 // we have to use remove() here so we will trigger
                 // the removal of components
-                me.store.remove(me.store.getData());
+                me.store.remove(me.store.getData().items);
                 // we have to use add() here so we will trigger
                 // the creation of components
                 me.store.add(items);
@@ -134,5 +143,9 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
         me.store.addListener('add', me.onStoreAdd, me);
         me.store.addListener('remove', me.onStoreRemove, me);
         me.store.each(me.addItem, me);
+
+        if (me.store.count() === 0) {
+            me.store.add({});
+        }
     }
 });

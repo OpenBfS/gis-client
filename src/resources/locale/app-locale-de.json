@@ -647,7 +647,8 @@
                     "emptyServiceText": "Pausendauer",
                     "descriptionLabel":"Beschreibung",
                     "descriptionPlaceholder":"Beschreibung der Pause",
-                    "removeBreakTooltip": "Pause entfernen"
+                    "removeBreakTooltip": "Pause entfernen",
+                    "timeWindowsLabel": "Zeitfenster"
                 }
             }
         }
@@ -1053,7 +1054,8 @@
                     "startTimePlaceholder": "Uhrzeit",
                     "endDayLabel": "Endtag",
                     "endDayPlaceholder": "Tag",
-                    "endTimePlaceholder": "Uhrzeit"
+                    "endTimePlaceholder": "Uhrzeit",
+                    "breaksLabel": "Pausen"
                 }
             }
         }
