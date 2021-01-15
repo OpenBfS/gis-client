@@ -20,10 +20,6 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
     extend: 'Koala.view.window.RoutingController',
     alias: 'controller.k-window-classic-routing',
 
-    requires: [
-        'Ext.menu.Menu'
-    ],
-
     /**
      * Reference to openContextMenu function
      * with the controller's "this" in the scope.

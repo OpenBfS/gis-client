@@ -21,7 +21,6 @@ Ext.define('Koala.view.window.FleetRoutingController', {
     alias: 'controller.k-window-fleet-routing',
     requires: [
         'Ext.Array',
-        'Ext.menu.Menu',
         'Koala.util.VroomFleetRouting',
         'Koala.util.OpenRouteService',
         'Koala.util.Geocoding'
