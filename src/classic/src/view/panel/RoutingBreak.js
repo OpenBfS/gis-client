@@ -160,6 +160,7 @@ Ext.define('Koala.view.panel.RoutingBreak', {
         if (service) {
             var serviceStore = service.getStore();
             if (serviceStore) {
+                // fill options for service duration
                 var durations = [{duration: 0}];
                 do {
                     var prevDuration = durations[durations.length - 1].duration;

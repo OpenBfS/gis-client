@@ -56,13 +56,11 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
             formData.description = descriptionComp.getValue();
         }
 
-        var selection;
-
         var startComp = form.down('[name=start]');
         if (startComp) {
-            selection = startComp.getSelection();
-            if (selection) {
-                var start = Ext.clone(selection.getData());
+            var startSelection = startComp.getSelection();
+            if (startSelection) {
+                var start = Ext.clone(startSelection.getData());
                 if (!Ext.isObject(start)) {
                     start = undefined;
                 }
@@ -72,9 +70,9 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
 
         var endComp = form.down('[name=end]');
         if (endComp) {
-            selection = endComp.getSelection();
-            if (selection) {
-                var end = Ext.clone(selection.getData());
+            var endSelection = endComp.getSelection();
+            if (endSelection) {
+                var end = Ext.clone(endSelection.getData());
                 if (!Ext.isObject(end)) {
                     end = undefined;
                 }

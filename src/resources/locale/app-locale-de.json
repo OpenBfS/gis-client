@@ -1050,11 +1050,9 @@
                     "endLabel": "Zielort",
                     "endPlaceholder": "Suchbegriff oder Koordinate eingeben",
                     "startDayLabel": "Starttag",
-                    "startDayPlaceholder": "Tag",
-                    "startTimePlaceholder": "Uhrzeit",
+                    "dayPlaceholder": "Tag",
+                    "timePlaceholder": "Uhrzeit",
                     "endDayLabel": "Endtag",
-                    "endDayPlaceholder": "Tag",
-                    "endTimePlaceholder": "Uhrzeit",
                     "breaksLabel": "Pausen"
                 }
             }

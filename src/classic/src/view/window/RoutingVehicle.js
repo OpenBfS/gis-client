@@ -50,11 +50,9 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 endLabel: '',
                 endPlaceholder: '',
                 startDayLabel: '',
-                startDayPlaceholder: '',
-                startTimePlaceholder: '',
+                dayPlaceholder: '',
+                timePlaceholder: '',
                 endDayLabel: '',
-                endDayPlaceholder: '',
-                endTimePlaceholder: '',
                 breaksLabel: ''
             }
         }
@@ -149,13 +147,13 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     flex: 1,
                     bind: {
                         fieldLabel: '{i18n.startDayLabel}',
-                        emptyText: '{i18n.startDayPlaceholder}'
+                        emptyText: '{i18n.dayPlaceholder}'
                     }
                 }, {
                     xtype: 'timefield',
                     name: 'starttime',
                     bind: {
-                        emptyText: '{i18n.startTimePlaceholder}'
+                        emptyText: '{i18n.timePlaceholder}'
                     }
                 }]
             }, {
@@ -168,13 +166,13 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     flex: 1,
                     bind: {
                         fieldLabel: '{i18n.endDayLabel}',
-                        emptyText: '{i18n.endDayPlaceholder}'
+                        emptyText: '{i18n.dayPlaceholder}'
                     }
                 }, {
                     xtype: 'timefield',
                     name: 'endtime',
                     bind: {
-                        emptyText: '{i18n.endTimePlaceholder}'
+                        emptyText: '{i18n.timePlaceholder}'
                     }
                 }]
             }]
@@ -212,53 +210,54 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             return;
         }
 
-        if (me.vehicle) {
-            Ext.Object.each(me.vehicle, function(k, v) {
-                var field = form.down('[name=' + k + ']');
-                if (!field) {
-                    return false;
-                }
-                switch (k) {
-                    case 'end':
-                    case 'start':
-                        var store = field.getStore();
-                        if (store) {
-                            field.suspendEvents();
-                            store.loadRawData([v]);
-                            field.setSelection(store.first());
-                            field.resumeEvents();
-                        }
-                        break;
-                    case 'time_window':
-                        if (!Ext.isArray(v) || v.length !== 2) {
-                            break;
-                        }
-                        var startDay = field.down('[name=startday]');
-                        var startTime = field.down('[name=starttime]');
-                        var endDay = field.down('[name=endday]');
-                        var endTime = field.down('[name=endtime]');
-                        if (startDay) {
-                            startDay.setValue(new Date(v[0]));
-                        }
-                        if (startTime) {
-                            startTime.setValue(new Date(v[0]));
-                        }
-                        if (endDay) {
-                            endDay.setValue(new Date(v[1]));
-                        }
-                        if (endTime) {
-                            endTime.setValue(new Date(v[1]));
-                        }
-                        break;
-                    case 'breaks':
-                        field.fireEvent('overwriteStore', v);
-                        break;
-                    default:
-                        field.setValue(v);
-                        break;
-                }
-            });
+        if (!me.vehicle) {
+            return;
         }
-    }
 
+        Ext.Object.each(me.vehicle, function(k, v) {
+            var field = form.down('[name=' + k + ']');
+            if (!field) {
+                return false;
+            }
+            switch (k) {
+                case 'end':
+                case 'start':
+                    var store = field.getStore();
+                    if (store) {
+                        field.suspendEvents();
+                        store.loadRawData([v]);
+                        field.setSelection(store.first());
+                        field.resumeEvents();
+                    }
+                    break;
+                case 'time_window':
+                    if (!Ext.isArray(v) || v.length !== 2) {
+                        break;
+                    }
+                    var startDay = field.down('[name=startday]');
+                    var startTime = field.down('[name=starttime]');
+                    var endDay = field.down('[name=endday]');
+                    var endTime = field.down('[name=endtime]');
+                    if (startDay) {
+                        startDay.setValue(new Date(v[0]));
+                    }
+                    if (startTime) {
+                        startTime.setValue(new Date(v[0]));
+                    }
+                    if (endDay) {
+                        endDay.setValue(new Date(v[1]));
+                    }
+                    if (endTime) {
+                        endTime.setValue(new Date(v[1]));
+                    }
+                    break;
+                case 'breaks':
+                    field.fireEvent('overwriteStore', v);
+                    break;
+                default:
+                    field.setValue(v);
+                    break;
+            }
+        });
+    }
 });

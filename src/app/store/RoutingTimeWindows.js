@@ -32,6 +32,16 @@ Ext.define('Koala.store.RoutingTimeWindows', {
         { name: 'endTime', type: 'date', dateFormat: 'time' }
     ],
 
+    /**
+     * Get all time windows as array of UNIX timestamp tuples.
+     * Each tuple consists of a starting and a ending timestamp.
+     *
+     * This is the format needed by vroom api.
+     * See https://github.com/VROOM-Project/vroom/blob/master/docs/API.md#time-windows
+     * We use `absolute values`.
+     *
+     * @returns {[Int, Int][]} Array of timestamp tuples.
+     */
     getAllAsTimestamp: function() {
         var me = this;
         var timeWindows = Ext.Array.map(me.getData().items, function(d) {
@@ -55,6 +65,15 @@ Ext.define('Koala.store.RoutingTimeWindows', {
         return timeWindows;
     },
 
+    /**
+     * Overwrites the store with given timestamps.
+     * This method converts the tuples of UNIX timestamps to
+     * Date objects.
+     *
+     * Existing store records will be removed by this method.
+     *
+     * @param {[Int, Int][]} timestamps Array of timestamp tuples.
+     */
     setAllFromTimestamp: function(timestamps) {
         var me = this;
         var dates = Ext.Array.map(timestamps, function(t) {
@@ -67,5 +86,4 @@ Ext.define('Koala.store.RoutingTimeWindows', {
         });
         me.loadRawData(dates);
     }
-
 });

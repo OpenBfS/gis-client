@@ -126,7 +126,6 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                     } else {
                         BasiGX.util.Animate.shake(win);
                     }
-
                 }
             }, {
                 iconCls: 'x-fa fa-trash-o',
@@ -141,7 +140,6 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                     } else {
                         BasiGX.util.Animate.shake(win);
                     }
-
                 }
             }]
         }]
@@ -190,5 +188,4 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
             }
         }
     }
-
 });
