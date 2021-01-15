@@ -514,6 +514,22 @@
             }
         }
     },
+    "Koala.view.grid.RoutingJobs": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Ziele",
+                    "editJobTooltip": "Ziel bearbeiten",
+                    "removeJobTooltip": "Ziel entfernen",
+                    "addJobTooltip": "Ziel hinzufügen",
+                    "emptyJobText": "Keine Ziele angelegt",
+                    "priorityColumnText": "Priorität",
+                    "addressColumnText": "Adresse",
+                    "descriptionColumnText": "Beschreibung"
+                }
+            }
+        }
+    },
     "Koala.view.grid.RoutingVehicles": {
         "config": {
             "data": {
@@ -1002,16 +1018,7 @@
                     "errorGetFeatureInfo": "Das Polygon konnte aus dem Layer nicht ausgelesen werden.",
                     "errorNoLayerFound": "An diesem Ort befindet sich kein gültiger Layer. Bitte versuchen Sie es erneut.",
                     "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon.",
-                    "optimizationLabel": "Erweiterte Einstellungen",
-                    "enableOptimizationLabel": "Optimierung aktivieren",
-                    "jobsGridTitle": "Ziele",
-                    "editJobTooltip": "Ziel bearbeiten",
-                    "removeJobTooltip": "Ziel entfernen",
-                    "addJobTooltip": "Ziel hinzufügen",
-                    "emptyJobText": "Keine Ziele angelegt",
-                    "priorityColumnText": "Priorität",
-                    "addressColumnText": "Adresse",
-                    "descriptionColumnText": "Beschreibung"
+                    "errorFleetRouting" : "Die Anfrage für Flottenrouting ist fehlgeschlagen. Bitte versuchen Sie es (später) erneut."
                 }
             }
         }

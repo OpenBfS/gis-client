@@ -526,6 +526,22 @@
             }
         }
     },
+    "Koala.view.grid.RoutingJobs": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Targets",
+                    "editJobTooltip": "Edit target",
+                    "addJobTooltip": "Add target",
+                    "removeJobTooltip": "Remove target",
+                    "emptyJobText": "No targets created",
+                    "priorityColumnText": "Priority",
+                    "addressColumnText": "Address",
+                    "descriptionColumnText": "Description"
+                }
+            }
+        }
+    },
     "Koala.view.list.TreeMenu": {
         "config": {
             "data": {
@@ -997,19 +1013,7 @@
                     "errorGetFeatureInfo": "The polygon could not be read from the layer.",
                     "errorNoLayerFound": "No valid layer found at selected location. Please try again.",
                     "errorNoPolygonChosen": "The selected feature is not a polygon. Please select a polygon.",
-                    "optimizationLabel": "Advanced options",
-                    "enableOptimizationLabel": "Enable optimization",
-                    "jobsGridTitle": "Targets",
-                    "editJobTooltip": "Edit target",
-                    "addJobTooltip": "Add target",
-                    "removeJobTooltip": "Remove target",
-                    "emptyJobText": "No targets created",
-                    "priorityColumnText": "Priority",
-                    "addressColumnText": "Address",
-                    "descriptionColumnText": "Description",
-                    "errorFleetRouting" : "The request for the fleet routing failed. Please try again later.",
-                    "vehiclesGridTitle": "Vehicles",
-                    "emptyVehiclesText": "No vehicles created"
+                    "errorFleetRouting" : "The request for the fleet routing failed. Please try again later."
                 }
             }
         }

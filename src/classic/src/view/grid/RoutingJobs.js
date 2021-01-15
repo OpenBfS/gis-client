@@ -28,11 +28,26 @@ Ext.define('Koala.view.grid.RoutingJobs', {
         'Koala.store.RoutingJobs'
     ],
 
+    viewModel: {
+        data: {
+            i18n: {
+                title: '',
+                emptyJobText: '',
+                priorityColumnText: '',
+                addressColumnText: '',
+                descriptionColumnText: '',
+                editJobTooltip: '',
+                addJobTooltip: '',
+                removeJobTooltip: ''
+            }
+        }
+    },
+
     enableColumnHide: false,
     enableColumnMove: false,
 
     bind: {
-        title: '{i18n.jobsGridTitle}',
+        title: '{i18n.title}',
         emptyText: '{i18n.emptyJobText}'
     },
 
@@ -42,27 +57,30 @@ Ext.define('Koala.view.grid.RoutingJobs', {
 
     columns: {
         items: [{
+            dataIndex: 'priority',
             bind: {
                 text: '{i18n.priorityColumnText}'
-            },
-            dataIndex: 'priority'
+            }
         }, {
+            dataIndex: 'address',
             bind: {
                 text: '{i18n.addressColumnText}'
             },
-            dataIndex: 'address',
             flex: 1,
-            renderer: function(v) {
-                if (v) {
-                    return v.address;
+            renderer: function(address) {
+                if (address) {
+                    return '<span data-qtip="' + address.address + '">' + address.address + '</span>';
                 }
             }
         }, {
+            dataIndex: 'description',
             bind: {
                 text: '{i18n.descriptionColumnText}'
             },
-            dataIndex: 'description',
-            flex: 1
+            flex: 1,
+            renderer: function(description) {
+                return '<span data-qtip="' + description + '">' + description + '</span>';
+            }
         }, {
             xtype: 'actioncolumn',
             width: 50,
