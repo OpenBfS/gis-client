@@ -22,7 +22,7 @@ Ext.define('Koala.view.window.HelpModel', {
 
     //TODO: get rid of the 'fallbackHtml'-solution -> missing bindings, store not ready on initial load issue
     data: {
-        fallbackHtml: '<img class=\'img\' src=\'classic/resources/img/bfs-logo.png\' title=\'BfS-Logo\' alt=\'bfs-logo.png\' width=\'100\' height=\'39\' style=\'float:right\'>'+
+        fallbackHtml: '<img class=\'img\' src=\'resources/images/BfS_Logo_Website_de_75.png\' title=\'BfS-Logo\' alt=\'bfs-logo.png\' width=\'100\' height=\'39\' style=\'float:right\'>'+
             '<h2> Willkommen </h2>'+
             '<div>Das '+
             '<a href=\'http://www.bfs.de/DE/home/home_node.html\' target=\'_blank\'>Bundesamt für Strahlenschutz (<abbr title=\'Bundesamt für Strahlenschutz (Federal Office for Radiation Protection)\'>BfS</abbr>)</a>'+
