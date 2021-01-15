@@ -28,43 +28,26 @@ Ext.define('Koala.view.window.FleetRoutingController', {
      * Perform a route optimization request.
      */
     optimizeRoute: function() {
-        // TODO: this should be read from the UI
-        var vehicles = [
-            {
-                'id': 1,
-                'profile': 'driving-car',
-                'start': [
-                    8.679800033569338,
-                    49.413876997493894
-                ]
-            },
-            {
-                'id': 2,
-                'profile': 'driving-car',
-                'start': [
-                    8.712415695190431,
-                    49.412592646577274
-                ]
-            },
-            {
-                'id': 3,
-                'profile': 'driving-car',
-                'start': [
-                    8.69173049926758,
-                    49.39209432676797
-                ]
-            }
-        ];
 
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var jobsStore = view.down('k-grid-routing-jobs').getStore();
+        var vehicleStore = view.down('k-grid-routing-vehicles').getStore();
+        var vehicles = vehicleStore.getVroomArray();
+        if (!vehicles) {
+            // TODO: deactivate "optimize" button when the
+            // minimal requirements are not fulfilled
+            // so this check becomes obsolete
+            return;
+        }
 
+        var jobsStore = view.down('k-grid-routing-jobs').getStore();
         var jobs = jobsStore.getVroomArray();
         if (!jobs) {
-            // TODO: deactivate "optimize" button when the conditions are not furfilled
+            // TODO: deactivate "optimize" button when the
+            // minimal requirements are not fulfilled
+            // so this check becomes obsolete
             return;
         }
 
@@ -73,7 +56,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         Koala.util.VroomFleetRouting.performOptimization(vehicles, jobs, avoidArea)
             .then(me.handleVroomResponse.bind(me))
             .catch(function(error) {
-                Ext.toast(vm.get('{i18n.errorFleetRouting}'));
+                Ext.toast(vm.get('i18n.errorFleetRouting'));
                 Ext.log.error(error);
             });
     },
@@ -102,7 +85,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             var orsCoords = [];
             Ext.each(vroomRoute.steps, function(step) {
                 orsCoords.push(step.location);
-                // TODO: maybe add step information to waypoint store
+                // TODO: maybe add step information to job store
                 //      e.g. duration, type of step, arrival time
             });
 
@@ -127,7 +110,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 vm.set('showRoutingResults', true);
             })
             .catch(function(error) {
-                Ext.toast(vm.get('{i18n.errorFleetRouting}'));
+                Ext.toast(vm.get('i18n.errorFleetRouting'));
                 Ext.log.error(error);
             });
     }

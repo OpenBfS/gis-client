@@ -164,6 +164,10 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
     Die URL zur OpenRouteService Instanz.
 
+  * **vroomUrl**
+
+    Die URL zum VROOM Service.
+
   * **photonUrl**
 
     Die URL zum Photon Service.

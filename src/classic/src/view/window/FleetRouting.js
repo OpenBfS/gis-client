@@ -69,6 +69,14 @@ Ext.define('Koala.view.window.FleetRouting', {
     maxHeight: 600,
     width: 500,
 
+    fbar: [{
+        xtype: 'button',
+        bind: {
+            text: '{i18n.computeFleetRoutingButtonText}'
+        },
+        handler: 'optimizeRoute'
+    }],
+
     layout: 'vbox',
 
     bind: {
@@ -104,14 +112,6 @@ Ext.define('Koala.view.window.FleetRouting', {
 
         me.add({
             xtype: 'k-form-fleet-routing-settings'
-        });
-        // TODO: add padding
-        me.add({
-            xtype: 'button',
-            bind: {
-                text: '{i18n.computeFleetRoutingButtonText}'
-            },
-            handler: 'optimizeRoute'
         });
         me.add({
             xtype: 'k-container-routingresult',

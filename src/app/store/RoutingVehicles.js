@@ -20,10 +20,63 @@ Ext.define('Koala.store.RoutingVehicles', {
     extend: 'Ext.data.Store',
 
     requires: [
+        'Ext.Object',
         'Koala.model.RoutingVehicle'
     ],
 
     alias: 'store.k-routingvehicles',
 
-    model: 'Koala.model.RoutingVehicle'
+    model: 'Koala.model.RoutingVehicle',
+
+    /**
+     * Convert the records into an array
+     * that works with the VROOM API.
+     *
+     * See https://github.com/VROOM-Project/vroom/blob/master/docs/API.md#input
+     *
+     * @returns {Array} The vehicle array.
+     */
+    getVroomArray: function() {
+        var me = this;
+        var vehicles = [];
+        me.each(function(vehicleRec) {
+            var vehicle = Ext.clone(vehicleRec.getData());
+
+            // TODO this should be moved to a prior validation
+            if (Ext.isEmpty(vehicle.start) && Ext.isEmpty(vehicle.end)) {
+                return;
+            }
+
+            if (vehicle.start) {
+                var startLat = vehicle.start.latitude;
+                var startLon = vehicle.start.longitude;
+                vehicle['start'] = [startLon, startLat];
+            }
+
+            if (vehicle.end) {
+                var endLat = vehicle.end.latitude;
+                var endLon = vehicle.end.longitude;
+                vehicle['end'] = [endLon, endLat];
+            }
+
+            // TODO: this should be removed as soon as the
+            //       `RoutingVehicle` window sets default values
+            // if profile is empty, it will be set to car
+            if (Ext.isEmpty(vehicle.profile)) {
+                vehicle.profile = 'driving-car';
+            }
+
+            // Delete empty properties, because the API
+            // cannot handle it
+            Ext.Object.each(vehicle, function(prop) {
+                if (Ext.isEmpty(vehicle[prop])) {
+                    delete vehicle[prop];
+                }
+            });
+
+            vehicles.push(vehicle);
+        });
+
+        return vehicles;
+    }
 });
