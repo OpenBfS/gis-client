@@ -154,6 +154,17 @@ Ext.define('Koala.view.grid.RoutingJobs', {
                 win.close();
             }
         },
+        addJob: function(data) {
+            var me = this;
+            var store = me.getStore();
+            if (store) {
+                if (data) {
+                    store.add(data);
+                } else {
+                    store.add({});
+                }
+            }
+        },
         applyJob: function(data, job) {
             var me = this;
             var store = me.getStore();

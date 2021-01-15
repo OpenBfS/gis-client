@@ -1013,7 +1013,11 @@
                     "errorGetFeatureInfo": "The polygon could not be read from the layer.",
                     "errorNoLayerFound": "No valid layer found at selected location. Please try again.",
                     "errorNoPolygonChosen": "The selected feature is not a polygon. Please select a polygon.",
-                    "errorFleetRouting" : "The request for the fleet routing failed. Please try again later."
+                    "addJobContextText": "Add new target",
+                    "addVehicleContextText": "Add new vehicle",
+                    "setCurrentJobContextText": "Set as current target",
+                    "setCurrentVehicleStartContextText": "Set as current starting location",
+                    "setCurrentVehicleEndContextText": "Set as current ending location"
                 }
             }
         }

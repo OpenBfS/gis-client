@@ -175,6 +175,17 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                 win.close();
             }
         },
+        addVehicle: function(data) {
+            var me = this;
+            var store = me.getStore();
+            if (store) {
+                if (data) {
+                    store.add(data);
+                } else {
+                    store.add({});
+                }
+            }
+        },
         applyVehicle: function(data, vehicle) {
             var me = this;
             var store = me.getStore();

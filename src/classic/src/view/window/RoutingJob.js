@@ -142,6 +142,34 @@ Ext.define('Koala.view.window.RoutingJob', {
         }
     }],
 
+    listeners: {
+        setAddress: function(address) {
+            var me = this;
+            if (!address) {
+                return;
+            }
+
+            var field = me.down('[name=address]');
+            if (!field) {
+                return;
+            }
+
+            var store = field.getStore();
+            if (store) {
+                field.suspendEvents();
+                store.loadRawData([address]);
+                field.setSelection(store.first());
+                field.resumeEvents();
+            }
+        },
+        beforedestroy: function() {
+            var fleetRoutingWindow = Ext.ComponentQuery.query('k-window-fleet-routing')[0];
+            if (fleetRoutingWindow) {
+                fleetRoutingWindow.fireEvent('resetContextMenu');
+            }
+        }
+    },
+
     initComponent: function() {
         var me = this;
         me.callParent();
@@ -222,6 +250,11 @@ Ext.define('Koala.view.window.RoutingJob', {
                         break;
                 }
             });
+        }
+
+        var fleetRoutingWindow = Ext.ComponentQuery.query('k-window-fleet-routing') [0];
+        if (fleetRoutingWindow) {
+            fleetRoutingWindow.fireEvent('setContextMenuType', 'job');
         }
     }
 

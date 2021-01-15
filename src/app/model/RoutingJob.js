@@ -29,16 +29,10 @@ Ext.define('Koala.model.RoutingJob', {
     },
 
     fields: [
-        {
-            name: 'wayPointId',
-            reference: {
-                type: 'WayPoint',
-                unique: true
-            }
-        },
         {name: 'description', type: 'string'},
         {name: 'priority', type: 'int', convert: null},
         {name: 'service', type: 'int', convert: null},
-        {name: 'time_windows', convert: null}
+        {name: 'time_windows', convert: null},
+        {name: 'address', convert: null}
     ]
 });

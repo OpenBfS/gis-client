@@ -39,6 +39,7 @@ Ext.define('Koala.view.window.FleetRouting', {
     // TODO: inside the controller the references to its
     //       parent view have to be adapted
     controller: 'k-window-fleet-routing',
+
     viewModel: {
         type: 'k-window-fleet-routing'
     },
@@ -97,6 +98,8 @@ Ext.define('Koala.view.window.FleetRouting', {
             // reset this by setting the sizes to null...
             this.setSize(null, null);
         },
+        setContextMenuType: 'setContextMenuType',
+        resetContextMenu: 'onResetContextMenu',
         boxready: 'onBoxReady',
         close: 'onWindowClose'
     },

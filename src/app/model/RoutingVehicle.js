@@ -29,7 +29,7 @@ Ext.define('Koala.model.RoutingVehicle', {
 
     fields: [
         {name: 'profile', type: 'string', convert: null},
-        {name: 'description', type: 'string', convert: null},
+        {name: 'description', type: 'string'},
         {name: 'start', convert: null},
         {name: 'end', convert: null},
         {name: 'time_window', convert: null},

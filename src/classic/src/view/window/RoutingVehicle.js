@@ -201,6 +201,51 @@ Ext.define('Koala.view.window.RoutingVehicle', {
         }
     }],
 
+    listeners: {
+        setStart: function(address) {
+            var me = this;
+            if (!address) {
+                return;
+            }
+
+            var field = me.down('[name=start]');
+            if (!field) {
+                return;
+            }
+            var store = field.getStore();
+            if (store) {
+                field.suspendEvents();
+                store.loadRawData([address]);
+                field.setSelection(store.first());
+                field.resumeEvents();
+            }
+        },
+        setEnd: function(address) {
+            var me = this;
+            if (!address) {
+                return;
+            }
+
+            var field = me.down('[name=end]');
+            if (!field) {
+                return;
+            }
+            var store = field.getStore();
+            if (store) {
+                field.suspendEvents();
+                store.loadRawData([address]);
+                field.setSelection(store.first());
+                field.resumeEvents();
+            }
+        },
+        beforedestroy: function() {
+            var fleetRoutingWindow = Ext.ComponentQuery.query('k-window-fleet-routing')[0];
+            if (fleetRoutingWindow) {
+                fleetRoutingWindow.fireEvent('resetContextMenu');
+            }
+        }
+    },
+
     initComponent: function() {
         var me = this;
         me.callParent();
@@ -210,54 +255,57 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             return;
         }
 
-        if (!me.vehicle) {
-            return;
+        if (me.vehicle) {
+            Ext.Object.each(me.vehicle, function(k, v) {
+                var field = form.down('[name=' + k + ']');
+                if (!field) {
+                    return false;
+                }
+                switch (k) {
+                    case 'end':
+                    case 'start':
+                        var store = field.getStore();
+                        if (store) {
+                            field.suspendEvents();
+                            store.loadRawData([v]);
+                            field.setSelection(store.first());
+                            field.resumeEvents();
+                        }
+                        break;
+                    case 'time_window':
+                        if (!Ext.isArray(v) || v.length !== 2) {
+                            break;
+                        }
+                        var startDay = field.down('[name=startday]');
+                        var startTime = field.down('[name=starttime]');
+                        var endDay = field.down('[name=endday]');
+                        var endTime = field.down('[name=endtime]');
+                        if (startDay) {
+                            startDay.setValue(new Date(v[0]));
+                        }
+                        if (startTime) {
+                            startTime.setValue(new Date(v[0]));
+                        }
+                        if (endDay) {
+                            endDay.setValue(new Date(v[1]));
+                        }
+                        if (endTime) {
+                            endTime.setValue(new Date(v[1]));
+                        }
+                        break;
+                    case 'breaks':
+                        field.fireEvent('overwriteStore', v);
+                        break;
+                    default:
+                        field.setValue(v);
+                        break;
+                }
+            });
         }
 
-        Ext.Object.each(me.vehicle, function(k, v) {
-            var field = form.down('[name=' + k + ']');
-            if (!field) {
-                return false;
-            }
-            switch (k) {
-                case 'end':
-                case 'start':
-                    var store = field.getStore();
-                    if (store) {
-                        field.suspendEvents();
-                        store.loadRawData([v]);
-                        field.setSelection(store.first());
-                        field.resumeEvents();
-                    }
-                    break;
-                case 'time_window':
-                    if (!Ext.isArray(v) || v.length !== 2) {
-                        break;
-                    }
-                    var startDay = field.down('[name=startday]');
-                    var startTime = field.down('[name=starttime]');
-                    var endDay = field.down('[name=endday]');
-                    var endTime = field.down('[name=endtime]');
-                    if (startDay) {
-                        startDay.setValue(new Date(v[0]));
-                    }
-                    if (startTime) {
-                        startTime.setValue(new Date(v[0]));
-                    }
-                    if (endDay) {
-                        endDay.setValue(new Date(v[1]));
-                    }
-                    if (endTime) {
-                        endTime.setValue(new Date(v[1]));
-                    }
-                    break;
-                case 'breaks':
-                    field.fireEvent('overwriteStore', v);
-                    break;
-                default:
-                    field.setValue(v);
-                    break;
-            }
-        });
+        var fleetRoutingWindow = Ext.ComponentQuery.query('k-window-fleet-routing') [0];
+        if (fleetRoutingWindow) {
+            fleetRoutingWindow.fireEvent('setContextMenuType', 'vehicle');
+        }
     }
 });

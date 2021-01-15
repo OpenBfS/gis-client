@@ -65,7 +65,12 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
             errorGetFeatureInfo: '',
             errorNoLayerFound: '',
             errorNoPolygonChosen: '',
-            errorFleetRouting: ''
+            errorFleetRouting: '',
+            addJobContextText: '',
+            addVehicleContextText: '',
+            setCurrentJobContextText: '',
+            setCurrentVehicleStartContextText: '',
+            setCurrentVehicleEndContextText: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,
