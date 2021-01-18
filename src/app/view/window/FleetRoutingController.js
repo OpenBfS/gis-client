@@ -442,7 +442,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         // suppress default browser behaviour
         evt.preventDefault();
 
-        // transform coordiante
+        // transform coordinate
         var sourceProjection = map.getView().getProjection().getCode();
         var targetProjection = ol.proj.get('EPSG:4326');
         var transformed = ol.proj.transform(evtCoord, sourceProjection, targetProjection);
