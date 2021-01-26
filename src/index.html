@@ -56,7 +56,11 @@
         var Koala = Koala || {};
         // must be queryable from XHR (CORS…)
         //Koala.appContextUrl = "resources/appContext.json";
-        Koala.appContextUrl = window.location.protocol + "//" + window.location.hostname + "/gis_client_configs/appContext.json";
+        var port = "";
+        if (window.location.port){
+            port = ":" + window.location.port;
+        }
+        Koala.appContextUrl = window.location.protocol + "//" + window.location.hostname + port + "/gis_client_configs/appContext.json";
     </script>
     <script type="text/javascript">
         var Ext = Ext || {}; // Ext namespace won't be defined yet...
@@ -123,8 +127,6 @@
         object-position: 0px 0px;
         transform: translate(-25%, -50%);
         }
-    </style>
-
     </style>
 </head>
 <body>
