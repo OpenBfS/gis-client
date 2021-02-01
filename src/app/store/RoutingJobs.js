@@ -41,6 +41,12 @@ Ext.define('Koala.store.RoutingJobs', {
         me.each(function(jobRecord) {
             var job = Ext.clone(jobRecord.getData());
 
+            // these properties are filled from the API response
+            // after the request and are therefore not needed
+            // for the current request
+            delete job.waiting_time;
+            delete job.arrival;
+
             // coordinates are hidden inside 'address' property
             var lat = job.address.latitude;
             var lon = job.address.longitude;
@@ -55,8 +61,6 @@ Ext.define('Koala.store.RoutingJobs', {
                     delete job[prop];
                 }
             });
-
-            // TODO: check if time_windows are valid
 
             jobs.push(job);
         });

@@ -54,7 +54,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
     /**
      * Handler for the optimizationResultAvailable event.
      *
-     * @param {Object} optimizationSummary The response of the VROOM API.
+     * @param {Object} fleetSummary The response of the VROOM API.
      * @param {Array} orsRoutes The routes computed with OpenRouteService.
      */
     onOptimizationResultAvailable: function(fleetSummary, orsRoutes) {
@@ -64,20 +64,35 @@ Ext.define('Koala.view.container.RoutingResultController', {
         me.clearRoutingSummaries();
         me.clearFleetSummary();
         me.removeAllRoutesFromMap();
-
         me.addFleetSummary(fleetSummary);
 
-        // TODO: handle unassigned jobs e.g. update waypoints (?)
-        // TODO: zoom to bounding box of all jobs and routes
-
-        Ext.each(orsRoutes, function(orsRoute) {
-            // TODO: - add VROOM information to ORS response
-            //       - also add it to store
-            // var correspondingVroomRoute = fleetSummary.routes[index];
-            // 'index' is the second argument of the function
-
-            me.addRoutingSummary(orsRoute);
+        Ext.each(orsRoutes, function(orsRoute, index) {
+            var correspondingVroomRoute = fleetSummary.routes[index];
+            me.addRoutingSummary(orsRoute, correspondingVroomRoute);
             me.addRouteToMap(orsRoute);
+
+            // TODO: add VROOM information about jobs to JobsStore
+            Ext.each(correspondingVroomRoute, function(route) {
+                var steps = route.steps;
+                Ext.each(steps, function(step) {
+
+                    var type = step.type;
+                    // TODO: add information for breaks
+                    if (type === 'job') {
+                        var jobId = step.id;
+
+                        // TODO: find corresponding record in jobs-store
+                        var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
+
+                        var jobRecord = jobStore.getById(jobId);
+
+                        jobRecord.set({
+                            waiting_time: step.waiting_time,
+                            arrival: step.arrival
+                        });
+                    }
+                });
+            });
         });
     },
 
@@ -617,31 +632,36 @@ Ext.define('Koala.view.container.RoutingResultController', {
     /**
      * Add the routing summary to its store.
      *
-     * @param {GeoJson} result The routing result.
+     * If a VROOM route is available, it properties will be merged
+     * with the ORS route.
+     *
+     * @param {GeoJson} orsRoute The ORS route.
+     * @param {Object} vroomRoute The VROOM route.
+     * TODO: fleetSummary
      */
-    addRoutingSummary: function(result) {
+    addRoutingSummary: function(orsRoute, vroomRoute) {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
 
         // check if the result contains at least
         // one feature
-        if (!result.features ||
-            !Ext.isArray(result.features) ||
-            result.features.length === 0) {
+        if (!orsRoute.features ||
+            !Ext.isArray(orsRoute.features) ||
+            orsRoute.features.length === 0) {
             return;
         }
 
         // the GeoJSON could contain many features
         // we are only interested in the first one
-        var feat = result.features[0];
+        var feat = orsRoute.features[0];
 
         var props = {};
         if (feat.properties) {
             props = Ext.clone(feat.properties);
         }
 
-        var query = result.metadata.query;
+        var query = orsRoute.metadata.query;
         var profile = query.profile;
 
         var distance = props.summary ? props.summary.distance : undefined;
@@ -657,6 +677,16 @@ Ext.define('Koala.view.container.RoutingResultController', {
             duration: duration,
             query: query
         };
+
+        if (vroomRoute) {
+            summary.cost = vroomRoute.cost;
+            summary.waiting_time = vroomRoute.waiting_time;
+            summary.arrival = vroomRoute.arrival;
+            summary.service = vroomRoute.service;
+            // we overwrite the ORS duration with the VROOM duration
+            // because it is takes breaks and waiting times into account
+            summary.duration = vroomRoute.duration;
+        }
 
         var summaryStore = vm.get('routingsummaries');
         summaryStore.add(summary);

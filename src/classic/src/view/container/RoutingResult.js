@@ -381,7 +381,8 @@ Ext.define('Koala.view.container.RoutingResult', {
                 }, {
                     sortable: false,
                     hideable: false,
-                    flex: 3,
+                    flex: 2,
+                    // TODO: auto-hide in case of classic routing
                     renderer: function(val, metaData, rec) {
                         var staticMe = Koala.view.container.RoutingResult;
                         var duration = rec.get('duration');
@@ -405,8 +406,35 @@ Ext.define('Koala.view.container.RoutingResult', {
                         return content;
                     }
                 }, {
-                    xtype: 'widgetcolumn',
+                    name: 'fleet-route-details-column',
+                    sortable: false,
+                    hidden: true,
                     flex: 2,
+                    renderer: function(val, metaData, rec) {
+                        // var staticMe = Koala.view.container.RoutingResult;
+                        var cost = rec.get('cost');
+                        var waiting_time = rec.get('waiting_time');
+                        var arrival = rec.get('arrival');
+                        var service = rec.get('service');
+
+                        // var durationFormatted = staticMe.getFormattedDuration(duration, true);
+                        // var distanceFormatted = staticMe.getFormattedDistance(distance, true);
+                        // var ascentFormatted = staticMe.getFormattedDistance(ascent, true);
+                        // var descentFormatted = staticMe.getFormattedDistance(descent, true);
+
+                        var content = '<div class="routing-summary-cell"><div>';
+                        content += '<span>' + cost + '</span>';
+                        content += '<span>' + waiting_time + '</span>';
+                        content += '</div><div>';
+                        content += '<span>' + arrival + '</span>';
+                        content += '<span>' + service + '</span>';
+                        content += '</div></div>';
+
+                        return content;
+                    }
+                },{
+                    xtype: 'widgetcolumn',
+                    flex: 1,
                     align: 'right',
                     tdCls: 'routing-icon-cell',
                     widget: {
@@ -537,6 +565,13 @@ Ext.define('Koala.view.container.RoutingResult', {
             var fleetSummaryGrid = me.down('[name=fleet-summary-grid]');
             if (fleetSummaryGrid) {
                 fleetSummaryGrid.setHidden(false);
+            }
+        }
+        // if fleet routing, show extra column with VROOM specific information
+        if (me.isFleetRouting) {
+            var column = me.down('[name=fleet-route-details-column]');
+            if (column) {
+                column.setHidden(false);
             }
         }
 

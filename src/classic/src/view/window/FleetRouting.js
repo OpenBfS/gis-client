@@ -68,7 +68,7 @@ Ext.define('Koala.view.window.FleetRouting', {
 
     minHeight: 100,
     maxHeight: 800,
-    width: 500,
+    width: 600,
 
     items: [{
         xtype: 'k-form-fleet-routing-settings',

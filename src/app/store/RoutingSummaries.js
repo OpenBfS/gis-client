@@ -24,6 +24,7 @@ Ext.define('Koala.store.RoutingSummaries', {
     storeId: 'k-routingsummaries',
 
     fields: [
+        // ORS properties
         {name: 'profile', type: 'string'},
         {name: 'distance', type: 'float'},
         {name: 'duration', type: 'float'},
@@ -31,6 +32,12 @@ Ext.define('Koala.store.RoutingSummaries', {
         {name: 'descent', type: 'float'},
         {name: 'properties', convert: null},
         {name: 'geometry', convert: null},
-        {name: 'query', convert: null}
+        {name: 'query', convert: null},
+
+        // VROOM properties
+        {name: 'cost', type: 'int'},
+        {name: 'waiting_time', type: 'int'},
+        {name: 'arrival', type: 'int'},
+        {name: 'service', type: 'int'}
     ]
 });
