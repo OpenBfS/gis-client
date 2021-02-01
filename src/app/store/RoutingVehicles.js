@@ -34,9 +34,10 @@ Ext.define('Koala.store.RoutingVehicles', {
      *
      * See https://github.com/VROOM-Project/vroom/blob/master/docs/API.md#input
      *
+     * @param {String} vehicleProfile The routing profile for the vehicles.
      * @returns {Array} The vehicle array.
      */
-    getVroomArray: function() {
+    getVroomArray: function(vehicleProfile) {
         var me = this;
         var vehicles = [];
         me.each(function(vehicleRec) {
@@ -59,9 +60,7 @@ Ext.define('Koala.store.RoutingVehicles', {
                 vehicle['end'] = [endLon, endLat];
             }
 
-            // TODO: this should be removed as soon as the
-            //       `RoutingVehicle` window sets default values
-            // if profile is empty, it will be set to car
+            vehicle.profile = vehicleProfile;
             if (Ext.isEmpty(vehicle.profile)) {
                 vehicle.profile = 'driving-car';
             }

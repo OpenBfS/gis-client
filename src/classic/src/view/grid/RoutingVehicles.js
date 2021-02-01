@@ -24,7 +24,8 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
         'Ext.grid.column.Action',
         'BasiGX.util.Animate',
         'Koala.view.window.RoutingVehicle',
-        'Koala.store.RoutingVehicles'
+        'Koala.store.RoutingVehicles',
+        'Koala.view.button.RoutingProfile'
     ],
 
     viewModel: {
@@ -54,26 +55,6 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
 
     columns: {
         items: [{
-            dataIndex: 'profile',
-            renderer: function(profile) {
-                var icon;
-                switch (profile) {
-                    case 'driving-car':
-                        icon = 'fa fa-car';
-                        break;
-                    case 'cycling-regular':
-                        icon = 'fa fa-bicycle';
-                        break;
-                    case 'foot-walking':
-                        icon = 'fa fa-male';
-                        break;
-                    default:
-                        icon = 'fa fa-question-circle';
-                        break;
-                }
-                return '<i class="' + icon + '" aria-hidden="true"></i>';
-            }
-        }, {
             dataIndex: 'description',
             flex: 1,
             bind: {
@@ -146,6 +127,8 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
     },
 
     buttons: [{
+        xtype: 'k-button-routing-profile'
+    }, '->', {
         iconCls: 'fa fa-plus',
         bind: {
             tooltip: '{i18n.addVehicleTooltip}'

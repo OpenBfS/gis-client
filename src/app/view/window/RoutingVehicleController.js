@@ -46,11 +46,6 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
 
         var formData = {};
 
-        var profileComp = form.down('[name=profile]');
-        if (profileComp) {
-            formData.profile = profileComp.getValue();
-        }
-
         var descriptionComp = form.down('[name=description]');
         if (descriptionComp) {
             formData.description = descriptionComp.getValue();

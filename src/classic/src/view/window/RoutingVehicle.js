@@ -29,7 +29,6 @@ Ext.define('Koala.view.window.RoutingVehicle', {
         'Ext.form.Label',
         'Ext.container.Container',
         'Ext.data.Store',
-        'Koala.view.button.RoutingProfile',
         'Koala.view.form.field.GeocodingCombo',
         'Koala.view.panel.RoutingBreaks'
     ],
@@ -83,34 +82,6 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             anchor: '100%'
         },
         items: [{
-            // TODO properly style profile button
-            xtype: 'container',
-            layout: {
-                type: 'hbox',
-                align: 'stretch'
-            },
-            height: 24,
-            margin: '0 0 5 0',
-            items: [{
-                xtype: 'label',
-                width: 100,
-                bind: {
-                    text: '{i18n.profileLabel}:'
-                }
-            }, {
-                xtype: 'k-button-routing-profile',
-                name: 'profile',
-                flex: 1,
-                layout: {
-                    type: 'hbox',
-                    align: 'stretch'
-                },
-                defaults: {
-                    flex: 1
-                },
-                padding: '0 0 0 6'
-            }]
-        }, {
             xtype: 'textarea',
             name: 'description',
             bind: {

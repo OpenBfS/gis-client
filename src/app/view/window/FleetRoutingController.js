@@ -239,8 +239,17 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var vehicleStore = view.down('k-grid-routing-vehicles').getStore();
-        var vehicles = vehicleStore.getVroomArray();
+        var vehiclesGrid = view.down('k-grid-routing-vehicles');
+        if (!vehiclesGrid) {
+            return;
+        }
+        var vehicleStore = vehiclesGrid.getStore();
+        var vehicleProfileBtn = vehiclesGrid.down('k-button-routing-profile');
+        var vehicleProfile = 'driving-car';
+        if (vehicleProfileBtn) {
+            vehicleProfile = vehicleProfileBtn.getValue();
+        }
+        var vehicles = vehicleStore.getVroomArray(vehicleProfile);
         if (!vehicles) {
             // TODO: deactivate "optimize" button when the
             // minimal requirements are not fulfilled
