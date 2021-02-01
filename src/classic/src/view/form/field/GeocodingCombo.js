@@ -40,6 +40,17 @@ Ext.define('Koala.view.form.field.GeocodingCombo', {
 
     hideTrigger: true,
 
+    validator: function() {
+        if (this.getSelection()) {
+            return true;
+        }
+        var vm = this.lookupViewModel();
+        if (vm) {
+            return vm.get('i18n.geocodingErrorText');
+        }
+        return this.invalidText;
+    },
+
     listeners: {
         change: 'onComboChange'
     }

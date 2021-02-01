@@ -1044,7 +1044,8 @@
                     "emptyPriorityText": "Priorität",
                     "addressLabel": "Ziel",
                     "addressPlaceholder": "Suchbegriff oder Koordinate eingeben",
-                    "windowErrorText": "Bitte alle verpflichtenden Felder ausfüllen."
+                    "windowErrorText": "Bitte alle verpflichtenden Felder ausfüllen.",
+                    "geocodingErrorText": "Bitte Vorschlag aus dem Dropdown wählen."
                 }
             }
         }
@@ -1068,7 +1069,7 @@
                     "timePlaceholder": "Uhrzeit",
                     "endDayLabel": "Endtag",
                     "breaksLabel": "Pausen",
-                    "geocodingErrorText": "Bitte Start- und/oder Zielort angeben.",
+                    "geocodingErrorText": "Bitte Vorschlag aus dem Dropdown wählen und mindestens Start- oder Zielort angeben.",
                     "timeWindowErrorText": "Unvollständige Eingabe. Bitte füllen Sie dieses Feld aus.",
                     "windowErrorText": "Bitte alle verpflichtenden Felder ausfüllen."
                 }

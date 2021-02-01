@@ -49,7 +49,8 @@ Ext.define('Koala.view.window.RoutingJob', {
                 emptyPriorityText: '',
                 addressLabel: '',
                 addressPlaceholder: '',
-                windowErrorText: ''
+                windowErrorText: '',
+                geocodingErrorText: ''
             }
         }
     },

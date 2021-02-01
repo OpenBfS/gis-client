@@ -1038,7 +1038,8 @@
                     "emptyPriorityText": "Priority",
                     "addressLabel": "Target",
                     "addressPlaceholder": "Enter search term or coordinate",
-                    "windowErrorText": "Please fill out all required fields."
+                    "windowErrorText": "Please fill out all required fields.",
+                    "geocodingErrorText": "Please select item from dropdown."
                 }
             }
         }
@@ -1064,7 +1065,7 @@
                     "endDayPlaceholder": "Day",
                     "endTimePlaceholder": "Time",
                     "breaksLabel": "Breaks",
-                    "geocodingErrorText": "Please provide starting- and/or ending location.",
+                    "geocodingErrorText": "Please select item from dropdown and provide at least starting- or ending location.",
                     "timeWindowErrorText": "Incomplete entry. Please add value, here.",
                     "windowErrorText": "Please fill out all required fields."
                 }
