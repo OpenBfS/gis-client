@@ -75,6 +75,7 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
             }
         }
 
+        var breaksValid = true;
         var breaksComp = form.down('[name=breaks]');
         if (breaksComp) {
             var breaksStore = breaksComp.store;
@@ -87,12 +88,21 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
                     if (timeWindows) {
                         hasItems = timeWindows.count() !== 0;
                     }
-                    return hasItems
+                    var notEmpty = hasItems
                             || !Ext.isEmpty(b.get('description'))
                             || !Ext.isEmpty(b.get('service'));
+
+                    if (!notEmpty) {
+                        var breakComp = breaksComp.down('k-panel-routing-break[recId=' + b.get('id') + ']');
+                        breakComp.removeCls('routing-break-error');
+                        breakComp.down('[name=break-error-field]').setHidden(true);
+                    }
+
+                    return notEmpty;
                 });
 
                 var breaks = Ext.Array.map(filteredBreakRecords, function(b) {
+                    var breakComp = breaksComp.down('k-panel-routing-break[recId=' + b.get('id') + ']');
                     var result = {
                         id: b.get('id')
                     };
@@ -100,6 +110,14 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
                     var timeWindows = b.get('timeWindowsStore');
                     if (timeWindows && timeWindows.count() !== 0) {
                         result.time_windows = timeWindows.getAllAsTimestamp();
+                        breakComp.removeCls('routing-break-error');
+                        breakComp.down('[name=break-error-field]').setHidden(true);
+                    } else {
+                        breaksValid = false;
+                        if (breakComp) {
+                            breakComp.addCls('routing-break-error');
+                            breakComp.down('[name=break-error-field]').setHidden(false);
+                        }
                     }
                     if (!Ext.isEmpty(b.get('description'))) {
                         result.description = b.get('description');
@@ -124,6 +142,12 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
         if (timeWindowComponent) {
             formData.time_window = me.getTimeWindow(timeWindowComponent);
         }
+
+        if (!form.isValid() || !breaksValid) {
+            view.down('[name=window-error-field]').setHidden(false);
+            return;
+        }
+        view.down('[name=window-error-field]').setHidden(true);
 
         if (!me.isEmptyRecord(formData)) {
             var parentGrid = Ext.ComponentQuery.query('k-grid-routing-vehicles')[0];

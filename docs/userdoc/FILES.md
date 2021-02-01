@@ -269,11 +269,6 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
       Maximale Dauer in Sekunden, die ein einzelner Auftrag vor Ort dauern kann.
       Default: 24h
 
-      * **maxPriority**
-
-      Maximale Priorität, die einem Auftrag zugewiesen werden kann.
-      Default: 10
-
     * **vehicle**
 
       Konfigurationen der Fahrzeuge.
@@ -313,8 +308,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
         },
         "fleetRouting": {
             "job": {
-                "maxServiceDuration": 86400,
-                "maxPriority": 10
+                "maxServiceDuration": 86400
             },
             "vehicle": {
                 "maxBreakDuration": 86400

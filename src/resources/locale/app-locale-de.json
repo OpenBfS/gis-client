@@ -664,7 +664,8 @@
                     "descriptionLabel":"Beschreibung",
                     "descriptionPlaceholder":"Beschreibung der Pause",
                     "removeBreakTooltip": "Pause entfernen",
-                    "timeWindowsLabel": "Zeitfenster"
+                    "timeWindowsLabel": "Zeitfenster",
+                    "breakErrorText": "Bitte mindestens ein Zeitfenster angeben."
                 }
             }
         }
@@ -1042,7 +1043,8 @@
                     "priorityLabel": "Priorität",
                     "emptyPriorityText": "Priorität",
                     "addressLabel": "Ziel",
-                    "addressPlaceholder": "Suchbegriff oder Koordinate eingeben"
+                    "addressPlaceholder": "Suchbegriff oder Koordinate eingeben",
+                    "windowErrorText": "Bitte alle verpflichtenden Felder ausfüllen."
                 }
             }
         }
@@ -1065,7 +1067,10 @@
                     "dayPlaceholder": "Tag",
                     "timePlaceholder": "Uhrzeit",
                     "endDayLabel": "Endtag",
-                    "breaksLabel": "Pausen"
+                    "breaksLabel": "Pausen",
+                    "geocodingErrorText": "Bitte Start- und/oder Zielort angeben.",
+                    "timeWindowErrorText": "Unvollständige Eingabe. Bitte füllen Sie dieses Feld aus.",
+                    "windowErrorText": "Bitte alle verpflichtenden Felder ausfüllen."
                 }
             }
         }

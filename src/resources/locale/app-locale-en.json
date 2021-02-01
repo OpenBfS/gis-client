@@ -662,7 +662,8 @@
                     "descriptionLabel": "Description",
                     "descriptionPlaceholder":"Description of the break",
                     "removeBreakTooltip": "Remove break",
-                    "timeWindowsLabel": "Time windows"
+                    "timeWindowsLabel": "Time windows",
+                    "breakErrorText": "Please provide at least one time window."
                 }
             }
         }
@@ -1036,7 +1037,8 @@
                     "priorityLabel": "Priority",
                     "emptyPriorityText": "Priority",
                     "addressLabel": "Target",
-                    "addressPlaceholder": "Enter search term or coordinate"
+                    "addressPlaceholder": "Enter search term or coordinate",
+                    "windowErrorText": "Please fill out all required fields."
                 }
             }
         }
@@ -1061,7 +1063,10 @@
                     "endDayLabel": "Ending day",
                     "endDayPlaceholder": "Day",
                     "endTimePlaceholder": "Time",
-                    "breaksLabel": "Breaks"
+                    "breaksLabel": "Breaks",
+                    "geocodingErrorText": "Please provide starting- and/or ending location.",
+                    "timeWindowErrorText": "Incomplete entry. Please add value, here.",
+                    "windowErrorText": "Please fill out all required fields."
                 }
             }
         }

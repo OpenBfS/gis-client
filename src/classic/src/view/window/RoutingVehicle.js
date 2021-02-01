@@ -26,6 +26,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
         'Ext.form.field.TextArea',
         'Ext.form.field.Date',
         'Ext.form.field.Time',
+        'Ext.form.field.Display',
         'Ext.form.Label',
         'Ext.container.Container',
         'Ext.data.Store',
@@ -52,7 +53,10 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 dayPlaceholder: '',
                 timePlaceholder: '',
                 endDayLabel: '',
-                breaksLabel: ''
+                breaksLabel: '',
+                geocodingErrorText: '',
+                timeWindowErrorText: '',
+                windowErrorText: ''
             }
         }
     },
@@ -82,18 +86,21 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             anchor: '100%'
         },
         items: [{
-            xtype: 'textarea',
-            name: 'description',
-            bind: {
-                fieldLabel: '{i18n.descriptionLabel}',
-                emptyText: '{i18n.descriptionPlaceholder}'
-            }
-        }, {
             xtype: 'k-form-field-geocodingcombo',
             name: 'start',
             bind: {
                 fieldLabel: '{i18n.startLabel}',
                 emptyText: '{i18n.startPlaceholder}'
+            },
+            labelSeparator: ': *',
+            validator: function() {
+                var window = this.up('k-window-routing-vehicle');
+                var vm = window.getViewModel();
+                var endField = this.up().down('k-form-field-geocodingcombo[name=end]');
+                if (this.getSelectedRecord() === null && endField.getSelectedRecord() === null) {
+                    return vm.get('i18n.geocodingErrorText');
+                }
+                return true;
             }
         }, {
             xtype: 'k-form-field-geocodingcombo',
@@ -101,6 +108,23 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             bind: {
                 fieldLabel: '{i18n.endLabel}',
                 emptyText: '{i18n.endPlaceholder}'
+            },
+            labelSeparator: ': *',
+            validator: function() {
+                var window = this.up('k-window-routing-vehicle');
+                var vm = window.getViewModel();
+                var startField = this.up().down('k-form-field-geocodingcombo[name=start]');
+                if (this.getSelectedRecord() === null && startField.getSelectedRecord() === null) {
+                    return vm.get('i18n.geocodingErrorText');
+                }
+                return true;
+            }
+        }, {
+            xtype: 'textarea',
+            name: 'description',
+            bind: {
+                fieldLabel: '{i18n.descriptionLabel}',
+                emptyText: '{i18n.descriptionPlaceholder}'
             }
         }, {
             xtype: 'panel',
@@ -119,12 +143,36 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     bind: {
                         fieldLabel: '{i18n.startDayLabel}',
                         emptyText: '{i18n.dayPlaceholder}'
+                    },
+                    validator: function(value) {
+                        var window = this.up('k-window-routing-vehicle');
+                        var vm = window.getViewModel();
+                        var startTime = this.up().down('[name=starttime]').getValue();
+                        var endDay = this.up('[name=time_window]').down('[name=endday]').getValue();
+                        var endTime = this.up('[name=time_window]').down('[name=endtime]').getValue();
+
+                        if (!value && (startTime || endDay || endTime)) {
+                            return vm.get('i18n.timeWindowErrorText');
+                        }
+                        return true;
                     }
                 }, {
                     xtype: 'timefield',
                     name: 'starttime',
                     bind: {
                         emptyText: '{i18n.timePlaceholder}'
+                    },
+                    validator: function(value) {
+                        var window = this.up('k-window-routing-vehicle');
+                        var vm = window.getViewModel();
+                        var startDay = this.up().down('[name=startday]').getValue();
+                        var endDay = this.up('[name=time_window]').down('[name=endday]').getValue();
+                        var endTime = this.up('[name=time_window]').down('[name=endtime]').getValue();
+
+                        if (!value && (startDay || endDay || endTime)) {
+                            return vm.get('i18n.timeWindowErrorText');
+                        }
+                        return true;
                     }
                 }]
             }, {
@@ -138,12 +186,36 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     bind: {
                         fieldLabel: '{i18n.endDayLabel}',
                         emptyText: '{i18n.dayPlaceholder}'
+                    },
+                    validator: function(value) {
+                        var window = this.up('k-window-routing-vehicle');
+                        var vm = window.getViewModel();
+                        var startDay = this.up('[name=time_window]').down('[name=startday]').getValue();
+                        var startTime = this.up('[name=time_window]').down('[name=starttime]').getValue();
+                        var endTime = this.up().down('[name=endtime]').getValue();
+
+                        if (!value && (startDay || startTime || endTime)) {
+                            return vm.get('i18n.timeWindowErrorText');
+                        }
+                        return true;
                     }
                 }, {
                     xtype: 'timefield',
                     name: 'endtime',
                     bind: {
                         emptyText: '{i18n.timePlaceholder}'
+                    },
+                    validator: function(value) {
+                        var window = this.up('k-window-routing-vehicle');
+                        var vm = window.getViewModel();
+                        var startDay = this.up('[name=time_window]').down('[name=startday]').getValue();
+                        var startTime = this.up('[name=time_window]').down('[name=starttime]').getValue();
+                        var endDay = this.up().down('[name=endday]').getValue();
+
+                        if (!value && (startDay || startTime || endDay)) {
+                            return vm.get('i18n.timeWindowErrorText');
+                        }
+                        return true;
                     }
                 }]
             }]
@@ -161,6 +233,13 @@ Ext.define('Koala.view.window.RoutingVehicle', {
     }],
 
     buttons: [{
+        xtype: 'displayfield',
+        name: 'window-error-field',
+        hidden: true,
+        bind: {
+            value: '<i class="fa fa-exclamation-circle" style="color: #cf4c35"></i> {i18n.windowErrorText}'
+        }
+    }, '->', {
         bind: {
             text: '{i18n.cancelText}',
             handler: 'onCancel'

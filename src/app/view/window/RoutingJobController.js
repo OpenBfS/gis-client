@@ -59,6 +59,13 @@ Ext.define('Koala.view.window.RoutingJobController', {
             }
         }
 
+        if (!form.isValid()) {
+            view.down('[name=window-error-field]').setHidden(false);
+            return;
+        }
+
+        view.down('[name=window-error-field]').setHidden(true);
+
         if (!me.isEmptyRecord(formData)) {
             var parentGrid = Ext.ComponentQuery.query('k-grid-routing-jobs')[0];
             if (parentGrid) {

@@ -25,6 +25,7 @@ Ext.define('Koala.view.panel.RoutingBreak', {
         'Ext.Object',
         'Ext.form.field.TextArea',
         'Ext.form.field.ComboBox',
+        'Ext.form.field.Display',
         'Ext.button.Button',
         'Koala.util.AppContext',
         'Koala.view.grid.RoutingTimeWindow'
@@ -38,7 +39,8 @@ Ext.define('Koala.view.panel.RoutingBreak', {
                 descriptionLabel: '',
                 descriptionPlaceholder: '',
                 removeBreakTooltip: '',
-                timeWindowsLabel: ''
+                timeWindowsLabel: '',
+                breakErrorText: ''
             }
         }
     },
@@ -53,6 +55,13 @@ Ext.define('Koala.view.panel.RoutingBreak', {
     border: true,
 
     items: [{
+        xtype: 'displayfield',
+        name: 'break-error-field',
+        hidden: true,
+        bind: {
+            value: '<i class="fa fa-exclamation-circle" style="color: #cf4c35"></i> {i18n.breakErrorText}'
+        }
+    }, {
         xtype: 'textarea',
         name: 'description',
         bind: {
@@ -86,7 +95,7 @@ Ext.define('Koala.view.panel.RoutingBreak', {
     }, {
         xtype: 'label',
         bind: {
-            text: '{i18n.timeWindowsLabel}:'
+            text: '{i18n.timeWindowsLabel}: *'
         }
     }, {
         xtype: 'k-grid-routing-time-window',
@@ -153,7 +162,7 @@ Ext.define('Koala.view.panel.RoutingBreak', {
         // 24 hours
         var maxBreakDuration = 60 * 60 * 24;
         if (Ext.isDefined(jobOpts.maxBreakDuration)) {
-            maxBreakDuration = jobOpts.maxServiceDuration;
+            maxBreakDuration = jobOpts.maxBreakDuration;
         }
 
         var service = me.down('[name=service]');

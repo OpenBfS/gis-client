@@ -25,6 +25,7 @@ Ext.define('Koala.view.window.RoutingJob', {
         'Ext.form.field.ComboBox',
         'Ext.form.field.TextArea',
         'Ext.form.field.Number',
+        'Ext.form.field.Display',
         'Koala.view.window.RoutingJobController',
         'Koala.util.AppContext',
         'Koala.view.grid.RoutingTimeWindow',
@@ -47,7 +48,8 @@ Ext.define('Koala.view.window.RoutingJob', {
                 priorityLabel: '',
                 emptyPriorityText: '',
                 addressLabel: '',
-                addressPlaceholder: ''
+                addressPlaceholder: '',
+                windowErrorText: ''
             }
         }
     },
@@ -78,6 +80,8 @@ Ext.define('Koala.view.window.RoutingJob', {
         items: [{
             xtype: 'k-form-field-geocodingcombo',
             name: 'address',
+            allowBlank: false,
+            labelSeparator: ': *',
             bind: {
                 fieldLabel: '{i18n.addressLabel}',
                 emptyText: '{i18n.addressPlaceholder}'
@@ -117,8 +121,8 @@ Ext.define('Koala.view.window.RoutingJob', {
             xtype: 'numberfield',
             name: 'priority',
             allowDecimals: false,
-            // we set the max value on initComponent
             minValue: 0,
+            maxValue: 100,
             bind: {
                 fieldLabel: '{i18n.priorityLabel}',
                 emptyText: '{i18n.emptyPriorityText}'
@@ -131,6 +135,13 @@ Ext.define('Koala.view.window.RoutingJob', {
     }],
 
     buttons: [{
+        xtype: 'displayfield',
+        name: 'window-error-field',
+        hidden: true,
+        bind: {
+            value: '<i class="fa fa-exclamation-circle" style="color: #cf4c35"></i> {i18n.windowErrorText}'
+        }
+    }, '->', {
         bind: {
             text: '{i18n.cancelText}',
             handler: 'onCancel'
@@ -210,16 +221,6 @@ Ext.define('Koala.view.window.RoutingJob', {
 
                 serviceStore.loadRawData(durations);
             }
-        }
-
-        var maxPriority = 10;
-        if (Ext.isDefined(jobOpts.maxPriority)) {
-            maxPriority = jobOpts.maxPriority;
-        }
-
-        var priorityField = form.down('[name=priority]');
-        if (priorityField) {
-            priorityField.setMaxValue(maxPriority);
         }
 
         if (me.job) {

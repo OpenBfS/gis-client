@@ -258,8 +258,7 @@
                 },
                 "fleetRouting": {
                     "job": {
-                        "maxServiceDuration": 86400,
-                        "maxPriority": 10
+                        "maxServiceDuration": 86400
                     }
                 }
             }
