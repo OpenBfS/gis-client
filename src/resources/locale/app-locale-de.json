@@ -973,20 +973,7 @@
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Mit dem Auto",
                     "profileBycicleText": "Mit dem Fahrrad",
-                    "profileWalkingText": "Zu Fuß",
-                    "addAvoidArea": "Vermeide Gebiet",
-                    "uploadGeoJson": "Lade GeoJSON",
-                    "deleteAvoidArea": "Lösche zu vermeidendes Gebiet.",
-                    "drawAvoidArea": "Zeichne Gebiet",
-                    "selectAvoidAreaFromLayer": "Wähle von Layer",
-                    "errorFileUpload": "Das Hochladen der Datei ist fehlgeschlagen.",
-                    "errorUploadedGeometryType": "Das hochgeladene GeoJSON muss vom Typ Polygon sein.",
-                    "errorTooManyFeatures": "Das hochladen mehrerer Features wird nicht unterstützt. Bitte laden Sie nur ein Feature hoch." ,
-                    "errorUploadedFileExtension": "Dateityp wird nicht unterstützt. Bitte laden Sie nur eine '.json' oder '.geojson' Datei hoch.",
-                    "errorZeroFeatures": "Das hochgelandene GeoJSON enthält keine Features. Bitte laden Sie ein Feature hoch.",
-                    "errorGetFeatureInfo": "Das Polygon konnte aus dem Layer nicht ausgelesen werden.",
-                    "errorNoLayerFound": "An diesem Ort befindet sich kein gültiger Layer. Bitte versuchen Sie es erneut.",
-                    "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon."
+                    "profileWalkingText": "Zu Fuß"
                 }
             }
         }
@@ -1006,9 +993,23 @@
                     "profileCarText": "Mit dem Auto",
                     "profileBycicleText": "Mit dem Fahrrad",
                     "profileWalkingText": "Zu Fuß",
+                    "errorFleetRouting" : "Die Anfrage für Flottenrouting ist fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
+                    "addJobContextText": "Neues Ziel hinzufügen",
+                    "addVehicleContextText": "Neues Fahrzeug hinzufügen",
+                    "setCurrentJobContextText": "Als aktuelles Ziel setzen",
+                    "setCurrentVehicleStartContextText": "Als aktuellen Startort setzen",
+                    "setCurrentVehicleEndContextText": "Als aktuellen Zielort setzen"
+                }
+            }
+        }
+    },
+    "Koala.view.button.AvoidArea": {
+        "config": {
+            "data": {
+                "i18n": {
                     "addAvoidArea": "Vermeide Gebiet",
                     "uploadGeoJson": "Lade GeoJSON",
-                    "deleteAvoidArea": "Lösche zu vermeidendes Gebiet.",
+                    "deleteAvoidArea": "Lösche Gebiet",
                     "drawAvoidArea": "Zeichne Gebiet",
                     "selectAvoidAreaFromLayer": "Wähle von Layer",
                     "errorFileUpload": "Das Hochladen der Datei ist fehlgeschlagen.",
@@ -1018,13 +1019,7 @@
                     "errorZeroFeatures": "Das hochgelandene GeoJSON enthält keine Features. Bitte laden Sie ein Feature hoch.",
                     "errorGetFeatureInfo": "Das Polygon konnte aus dem Layer nicht ausgelesen werden.",
                     "errorNoLayerFound": "An diesem Ort befindet sich kein gültiger Layer. Bitte versuchen Sie es erneut.",
-                    "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon.",
-                    "errorFleetRouting" : "Die Anfrage für Flottenrouting ist fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
-                    "addJobContextText": "Neues Ziel hinzufügen",
-                    "addVehicleContextText": "Neues Fahrzeug hinzufügen",
-                    "setCurrentJobContextText": "Als aktuelles Ziel setzen",
-                    "setCurrentVehicleStartContextText": "Als aktuellen Startort setzen",
-                    "setCurrentVehicleEndContextText": "Als aktuellen Zielort setzen"
+                    "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon."
                 }
             }
         }

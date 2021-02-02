@@ -71,6 +71,8 @@ Ext.define('Koala.view.window.FleetRouting', {
     width: 500,
 
     fbar: [{
+        xtype: 'k-button-avoidarea'
+    },{
         xtype: 'button',
         bind: {
             text: '{i18n.computeFleetRoutingButtonText}'

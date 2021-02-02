@@ -26,12 +26,11 @@ Ext.define('Koala.view.form.ClassicRoutingSettings', {
         'Ext.toolbar.Spacer',
         'Ext.button.Button',
         'Ext.form.field.FileButton',
-        'Koala.view.form.ClassicRoutingSettingsController'
+        'Koala.view.form.ClassicRoutingSettingsController',
+        'Koala.view.button.AvoidArea'
     ],
 
     width: '100%',
-
-    avoidAreaLayerName: 'routing-avoid-area-layer',
 
     fbar: [
         {
@@ -70,54 +69,7 @@ Ext.define('Koala.view.form.ClassicRoutingSettings', {
             flex: 1
         },
         {
-            type: 'button',
-            iconCls: 'x-fa fa-times',
-            bind: {
-                tooltip: '{i18n.deleteAvoidArea}',
-                visible: '{deleteAvoidAreaButtonVisible}'
-            },
-            handler: 'clearAvoidAreaSource'
-        },
-        {
-            type: 'button',
-            iconCls: 'x-fa fa-ban',
-            bind: {
-                tooltip: '{i18n.addAvoidArea}'
-            },
-            menu: [
-                {
-                    bind: {
-                        text: '{i18n.drawAvoidArea}'
-                    },
-                    handler: 'drawAvoidArea'
-                },
-                {
-                    bind: {
-                        text: '{i18n.selectAvoidAreaFromLayer}'
-                    },
-                    handler: 'selectAvoidAreaFromLayer'
-                },
-                {
-                    // intentionally hidden button
-                    // TODO: menu opens first time to top and not to bottom
-                    xtype: 'filebutton',
-                    listeners: {
-                        afterrender: 'uploadButtonAfterRender'
-                    },
-                    accept: '.geojson,.json',
-                    hidden: true
-                },
-                {
-                    // triggers the hidden button
-                    bind: {
-                        text: '{i18n.uploadGeoJson}'
-                    },
-                    handler: function(item) {
-                        var bb = item.up().down('filebutton');
-                        bb.fileInputEl.dom.click();
-                    }
-                }
-            ]
+            xtype: 'k-button-avoidarea'
         },
         {
             type: 'button',
