@@ -650,7 +650,8 @@
             "data": {
                 "i18n": {
                     "title": "Pausen",
-                    "addBreakTooltip": "Pause hinzufügen"
+                    "addBreakTooltip": "Pause hinzufügen",
+                    "noBreaksText": "Keine Pausen angelegt"
                 }
             }
         }

@@ -24,6 +24,7 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
     requires: [
         'Ext.Array',
         'Ext.container.Container',
+        'Ext.form.field.Display',
         'Koala.view.panel.RoutingBreak',
         'Koala.store.RoutingBreaks'
     ],
@@ -32,7 +33,8 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
         data: {
             i18n: {
                 title: '',
-                addBreakTooltip: ''
+                addBreakTooltip: '',
+                noBreaksText: ''
             }
         }
     },
@@ -60,6 +62,14 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
     },
 
     buttons: [{
+        xtype: 'displayfield',
+        name: 'no-breaks-field',
+        hidden: true,
+        cls: 'no-breaks-field',
+        bind: {
+            value: '{i18n.noBreaksText}'
+        }
+    }, '->', {
         iconCls: 'x-fa fa-plus',
         bind: {
             tooltip: '{i18n.addBreakTooltip}'
@@ -120,6 +130,9 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
                 me.remove(item);
             }
         });
+        if (store.count() === 0) {
+            me.down('[name=no-breaks-field]').setHidden(false);
+        }
     },
 
     addItem: function(rec) {
@@ -130,6 +143,7 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
             break: rec
         });
         me.add(item);
+        me.down('[name=no-breaks-field]').setHidden(true);
     },
 
     initComponent: function() {

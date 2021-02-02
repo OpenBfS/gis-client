@@ -648,7 +648,8 @@
             "data": {
                 "i18n": {
                     "title": "Breaks",
-                    "addBreakTooltip": "Add break"
+                    "addBreakTooltip": "Add break",
+                    "noBreaksText": "No breaks created"
                 }
             }
         }
