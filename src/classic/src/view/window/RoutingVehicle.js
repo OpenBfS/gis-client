@@ -377,16 +377,16 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                         var endDay = field.down('[name=endday]');
                         var endTime = field.down('[name=endtime]');
                         if (startDay) {
-                            startDay.setValue(new Date(v[0]));
+                            startDay.setValue(new Date(v[0] * 1000));
                         }
                         if (startTime) {
-                            startTime.setValue(new Date(v[0]));
+                            startTime.setValue(new Date(v[0] * 1000));
                         }
                         if (endDay) {
-                            endDay.setValue(new Date(v[1]));
+                            endDay.setValue(new Date(v[1] * 1000));
                         }
                         if (endTime) {
-                            endTime.setValue(new Date(v[1]));
+                            endTime.setValue(new Date(v[1] * 1000));
                         }
                         break;
                     case 'breaks':

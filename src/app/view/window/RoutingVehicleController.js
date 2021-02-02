@@ -226,6 +226,8 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
 
         var startUtc = Koala.util.Date.getUtcMoment(start);
         var endUtc = Koala.util.Date.getUtcMoment(end);
-        return [startUtc.valueOf(), endUtc.valueOf()];
+        var startUtcSeconds = parseInt(startUtc.valueOf() / 1000, 10);
+        var endUtcSeconds = parseInt(endUtc.valueOf() / 1000, 10);
+        return [startUtcSeconds, endUtcSeconds];
     }
 });
