@@ -91,7 +91,8 @@ Ext.define('Koala.view.panel.RoutingBreak', {
             }]
         },
         displayField: 'title',
-        valueField: 'duration'
+        valueField: 'duration',
+        editable: false
     }, {
         xtype: 'label',
         bind: {

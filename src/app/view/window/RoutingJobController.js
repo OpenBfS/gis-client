@@ -43,8 +43,13 @@ Ext.define('Koala.view.window.RoutingJobController', {
         }
 
         var timeWindowGrid = form.down('[name=time_windows]');
+        var timeWindowsValid = true;
         if (timeWindowGrid) {
-            formData.time_windows = timeWindowGrid.getStore().getAllAsTimestamp();
+            var timeWindowsStore = timeWindowGrid.getStore();
+            formData.time_windows = timeWindowsStore.getAllAsTimestamp();
+            if (!timeWindowsStore.isValid()) {
+                timeWindowsValid = false;
+            }
         }
 
         var addressCombo = form.down('[name=address]');
@@ -59,7 +64,7 @@ Ext.define('Koala.view.window.RoutingJobController', {
             }
         }
 
-        if (!form.isValid()) {
+        if (!form.isValid() || !timeWindowsValid) {
             view.down('[name=window-error-field]').setHidden(false);
             return;
         }

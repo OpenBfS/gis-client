@@ -56,7 +56,11 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                 breaksLabel: '',
                 geocodingErrorText: '',
                 timeWindowErrorText: '',
-                windowErrorText: ''
+                windowErrorText: '',
+                startDayBiggerErrorText: '',
+                startTimeBiggerErrorText: '',
+                endDayBiggerErrorText: '',
+                endTimeBiggerErrorText: ''
             }
         }
     },
@@ -144,6 +148,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                         fieldLabel: '{i18n.startDayLabel}',
                         emptyText: '{i18n.dayPlaceholder}'
                     },
+                    editable: false,
                     validator: function(value) {
                         var window = this.up('k-window-routing-vehicle');
                         var vm = window.getViewModel();
@@ -154,6 +159,12 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                         if (!value && (startTime || endDay || endTime)) {
                             return vm.get('i18n.timeWindowErrorText');
                         }
+
+                        var format = 'DD.MM.YYYY';
+                        if (endDay && moment(value, format).isAfter(moment(endDay, format))) {
+                            return vm.get('i18n.startDayBiggerErrorText');
+                        }
+
                         return true;
                     }
                 }, {
@@ -162,6 +173,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     bind: {
                         emptyText: '{i18n.timePlaceholder}'
                     },
+                    editable: false,
                     validator: function(value) {
                         var window = this.up('k-window-routing-vehicle');
                         var vm = window.getViewModel();
@@ -172,6 +184,19 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                         if (!value && (startDay || endDay || endTime)) {
                             return vm.get('i18n.timeWindowErrorText');
                         }
+
+                        if (value && startDay && endDay && endTime) {
+                            var format = 'DD.MM.YYYY';
+                            var mStartDay = moment(startDay, format);
+                            var mEndDay = moment(endDay, format);
+                            var mStartTime = moment(value, format);
+                            var mEndTime = moment(endTime, format);
+
+                            if (mStartDay.isSame(mEndDay, 'day') && mStartTime.isAfter(mEndTime)) {
+                                return vm.get('i18n.startTimeBiggerErrorText');
+                            }
+                        }
+
                         return true;
                     }
                 }]
@@ -187,6 +212,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                         fieldLabel: '{i18n.endDayLabel}',
                         emptyText: '{i18n.dayPlaceholder}'
                     },
+                    editable: false,
                     validator: function(value) {
                         var window = this.up('k-window-routing-vehicle');
                         var vm = window.getViewModel();
@@ -197,6 +223,12 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                         if (!value && (startDay || startTime || endTime)) {
                             return vm.get('i18n.timeWindowErrorText');
                         }
+
+                        var format = 'DD.MM.YYYY';
+                        if (startDay && moment(value, format).isBefore(moment(startDay, format))) {
+                            return vm.get('i18n.endDayBiggerErrorText');
+                        }
+
                         return true;
                     }
                 }, {
@@ -205,6 +237,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     bind: {
                         emptyText: '{i18n.timePlaceholder}'
                     },
+                    editable: false,
                     validator: function(value) {
                         var window = this.up('k-window-routing-vehicle');
                         var vm = window.getViewModel();
@@ -215,6 +248,19 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                         if (!value && (startDay || startTime || endDay)) {
                             return vm.get('i18n.timeWindowErrorText');
                         }
+
+                        if (value && startTime && startDay && endDay) {
+                            var format = 'DD.MM.YYYY';
+                            var mStartTime = moment(startTime, format);
+                            var mStartDay = moment(startDay, format);
+                            var mEndDay = moment(endDay, format);
+                            var mEndTime = moment(value, format);
+
+                            if (mStartDay.isSame(mEndDay, 'day') && mStartTime.isAfter(mEndTime)) {
+                                return vm.get('i18n.endTimeBiggerErrorText');
+                            }
+                        }
+
                         return true;
                     }
                 }]

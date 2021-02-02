@@ -71,6 +71,7 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
                 completeOnEnter: true,
                 field: {
                     xtype: 'datefield',
+                    editable: false,
                     allowBlank: false
                 }
             }
@@ -86,6 +87,7 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
                 completeOnEnter: true,
                 field: {
                     xtype: 'timefield',
+                    editable: false,
                     allowBlank: false
                 }
             }
@@ -101,6 +103,7 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
                 completeOnEnter: true,
                 field: {
                     xtype: 'datefield',
+                    editable: false,
                     allowBlank: false
                 }
             }
@@ -116,6 +119,7 @@ Ext.define('Koala.view.grid.RoutingTimeWindow', {
                 completeOnEnter: true,
                 field: {
                     xtype: 'timefield',
+                    editable: false,
                     allowBlank: false
                 }
             }

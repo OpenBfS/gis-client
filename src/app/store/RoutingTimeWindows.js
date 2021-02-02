@@ -66,7 +66,7 @@ Ext.define('Koala.store.RoutingTimeWindows', {
     },
 
     /**
-     * Overwrites the store with given timestamps.
+     * Overwrite the store with given timestamps.
      * This method converts the tuples of UNIX timestamps to
      * Date objects.
      *
@@ -85,5 +85,36 @@ Ext.define('Koala.store.RoutingTimeWindows', {
             };
         });
         me.loadRawData(dates);
+    },
+
+    /**
+     * Check if all entries are valid.
+     * I.e. if the starting date is not later than the
+     * ending date.
+     *
+     * @returns {Boolean} True, if all entries are valid. False otherwise.
+     */
+    isValid: function() {
+        var me = this;
+        var records = me.getData().items;
+        var hasInvalid = Ext.Array.some(records, function(d) {
+            var startDay = moment(d.get('startDay'));
+            var endDay = moment(d.get('endDay'));
+            var startTime = moment(d.get('startTime'));
+            var endTime = moment(d.get('endTime'));
+
+            if (startDay.isAfter(endDay, 'day')) {
+                return true;
+            }
+
+            if (startDay.isSame(endDay, 'day') && startTime.isAfter(endTime)) {
+                return true;
+            }
+
+            return false;
+
+        });
+
+        return !hasInvalid;
     }
 });

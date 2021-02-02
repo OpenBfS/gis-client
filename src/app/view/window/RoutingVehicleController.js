@@ -110,8 +110,14 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
                     var timeWindows = b.get('timeWindowsStore');
                     if (timeWindows && timeWindows.count() !== 0) {
                         result.time_windows = timeWindows.getAllAsTimestamp();
-                        breakComp.removeCls('routing-break-error');
-                        breakComp.down('[name=break-error-field]').setHidden(true);
+                        if (!timeWindows.isValid()) {
+                            breaksValid = false;
+                            breakComp.addCls('routing-break-error');
+                            breakComp.down('[name=break-error-field]').setHidden(false);
+                        } else {
+                            breakComp.removeCls('routing-break-error');
+                            breakComp.down('[name=break-error-field]').setHidden(true);
+                        }
                     } else {
                         breaksValid = false;
                         if (breakComp) {

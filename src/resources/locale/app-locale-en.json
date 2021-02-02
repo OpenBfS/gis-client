@@ -1062,7 +1062,11 @@
                     "breaksLabel": "Breaks",
                     "geocodingErrorText": "Please select item from dropdown and provide at least starting- or ending location.",
                     "timeWindowErrorText": "Incomplete entry. Please add value, here.",
-                    "windowErrorText": "Please fill out all required fields."
+                    "windowErrorText": "Please fill out all required fields.",
+                    "startDayBiggerErrorText": "Starting day must not be later than ending day.",
+                    "startTimeBiggerErrorText": "Starting time must not be later then ending time.",
+                    "endDayBiggerErrorText": "Ending day must not be earlier than starting day.",
+                    "endTimeBiggerErrorText": "Ending time must not be earlier then starting time."
                 }
             }
         }

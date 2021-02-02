@@ -1066,7 +1066,11 @@
                     "breaksLabel": "Pausen",
                     "geocodingErrorText": "Bitte Vorschlag aus dem Dropdown wählen und mindestens Start- oder Zielort angeben.",
                     "timeWindowErrorText": "Unvollständige Eingabe. Bitte füllen Sie dieses Feld aus.",
-                    "windowErrorText": "Bitte alle verpflichtenden Felder ausfüllen."
+                    "windowErrorText": "Bitte alle verpflichtenden Felder ausfüllen.",
+                    "startDayBiggerErrorText": "Starttag darf nicht später als Endtag sein.",
+                    "startTimeBiggerErrorText": "Startzeit darf nicht später als Endzeit sein.",
+                    "endDayBiggerErrorText": "Endtag darf nicht früher als Starttag sein.",
+                    "endTimeBiggerErrorText": "Endzeit darf nicht früher als Startzeit sein."
                 }
             }
         }

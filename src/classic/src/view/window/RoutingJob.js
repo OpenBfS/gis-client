@@ -117,7 +117,8 @@ Ext.define('Koala.view.window.RoutingJob', {
                 }]
             },
             displayField: 'title',
-            valueField: 'duration'
+            valueField: 'duration',
+            editable: false
         }, {
             xtype: 'numberfield',
             name: 'priority',
