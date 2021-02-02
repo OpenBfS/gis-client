@@ -27,16 +27,18 @@ Ext.define('Koala.view.form.FleetRoutingSettings', {
 
     width: '100%',
 
-    bodyPadding: 10,
+    bodyPadding: '10 5 0 5',
 
     defaults: {
         padding: '0 0 10 0'
     },
 
     items: [{
-        xtype: 'k-grid-routing-jobs'
+        xtype: 'k-grid-routing-jobs',
+        cls: 'routing-brighter-panel'
     }, {
         xtype: 'k-grid-routing-vehicles',
+        cls: 'routing-brighter-panel',
         flex: 1
     }]
 });

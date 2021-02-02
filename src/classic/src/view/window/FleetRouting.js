@@ -70,15 +70,29 @@ Ext.define('Koala.view.window.FleetRouting', {
     maxHeight: 600,
     width: 500,
 
-    fbar: [{
-        xtype: 'k-button-avoidarea'
-    },{
-        xtype: 'button',
-        bind: {
-            text: '{i18n.computeFleetRoutingButtonText}'
-        },
-        handler: 'optimizeRoute'
+    items: [{
+        xtype: 'k-form-fleet-routing-settings',
+        fbar: [{
+            xtype: 'k-button-avoidarea'
+        },{
+            xtype: 'button',
+            name: 'optimizeRouteButton',
+            disabled: true,
+            bind: {
+                text: '{i18n.computeFleetRoutingButtonText}'
+            },
+            handler: 'optimizeRoute'
+        }],
+    }, {
+        xtype: 'k-container-routingresult',
+        name: 'routing-result-panel',
+        routeLayerName: 'routing-route-layer',
+        routeSegmentLayerName: 'routing-route-segment-layer',
+        elevationProfilePanelName: 'routing-elevationprofile-panel',
+        elevationLayerName: 'routing-elevation-layer',
+        flex: 1
     }],
+
 
     layout: 'vbox',
 
@@ -104,7 +118,8 @@ Ext.define('Koala.view.window.FleetRouting', {
         resetContextMenu: 'onResetContextMenu',
         boxready: 'onBoxReady',
         close: 'onWindowClose',
-        updateWayPointLayer: 'updateWayPointLayer'
+        updateWayPointLayer: 'updateWayPointLayer',
+        updateOptimizeTrigger: 'onUpdateOptimizeTrigger'
     },
 
     initComponent: function() {
@@ -115,19 +130,5 @@ Ext.define('Koala.view.window.FleetRouting', {
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
-
-        me.add({
-            xtype: 'k-form-fleet-routing-settings'
-        });
-        me.add({
-            xtype: 'k-container-routingresult',
-            name: me.routingResultPanelName,
-            routeLayerName: me.routeLayerName,
-            routeSegmentLayerName: me.routeSegmentLayerName,
-            elevationProfilePanelName: me.elevationProfilePanelName,
-            elevationLayerName: me.elevationLayerName,
-            map: me.map,
-            flex: 1
-        });
     }
 });

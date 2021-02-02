@@ -67,11 +67,13 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         jobsStore.on('datachanged',
             function() {
                 view.fireEvent('updateWayPointLayer');
+                view.fireEvent('updateOptimizeTrigger');
             }
         );
         jobsStore.on('update',
             function() {
                 view.fireEvent('updateWayPointLayer');
+                view.fireEvent('updateOptimizeTrigger');
             }
         );
 
@@ -83,11 +85,13 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         vehicleStore.on('datachanged',
             function() {
                 view.fireEvent('updateWayPointLayer');
+                view.fireEvent('updateOptimizeTrigger');
             }
         );
         vehicleStore.on('update',
             function() {
                 view.fireEvent('updateWayPointLayer');
+                view.fireEvent('updateOptimizeTrigger');
             }
         );
     },
@@ -239,6 +243,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
+        view.setLoading(true);
+
         var vehiclesGrid = view.down('k-grid-routing-vehicles');
         if (!vehiclesGrid) {
             return;
@@ -271,6 +277,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         Koala.util.VroomFleetRouting.performOptimization(vehicles, jobs, avoidArea)
             .then(me.handleVroomResponse.bind(me))
             .catch(function(error) {
+                view.setLoading(false);
                 Ext.toast(vm.get('i18n.errorFleetRouting'));
                 Ext.log.error(error);
             });
@@ -322,9 +329,11 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 var resultPanel = me.getResultPanel();
                 resultPanel.fireEvent('optimizationResultAvailable', vroomResponse, orsResponses);
 
+                view.setLoading(false);
                 vm.set('showRoutingResults', true);
             })
             .catch(function(error) {
+                view.setLoading(false);
                 Ext.toast(vm.get('i18n.errorFleetRouting'));
                 Ext.log.error(error);
             });
@@ -749,5 +758,36 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 description: record.get('description')
             })
         );
+    },
+
+    /**
+     * Enable/disable the trigger button depending on
+     * if settings fullfill all requirements.
+     */
+    onUpdateOptimizeTrigger: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var triggerButton = view.down('[name=optimizeRouteButton]');
+        if (!triggerButton) {
+            return;
+        }
+
+        var jobsGrid = view.down('k-grid-routing-jobs');
+        if (!jobsGrid || !jobsGrid.getStore() || jobsGrid.getStore().count() === 0) {
+            triggerButton.setDisabled(true);
+            return;
+        }
+
+        var vehiclesGrid = view.down('k-grid-routing-vehicles');
+        if (!vehiclesGrid || !vehiclesGrid.getStore() || vehiclesGrid.getStore().count() === 0) {
+            triggerButton.setDisabled(true);
+            return;
+        }
+
+        triggerButton.setDisabled(false);
     }
 });
