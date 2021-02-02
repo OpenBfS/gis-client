@@ -229,7 +229,7 @@ Ext.define('Koala.view.window.RoutingJob', {
             Ext.Object.each(me.job, function(k, v) {
                 var field = form.down('[name=' + k + ']');
                 if (!field) {
-                    return false;
+                    return;
                 }
                 var store;
                 switch (k) {

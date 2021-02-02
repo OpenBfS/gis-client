@@ -113,7 +113,16 @@ Ext.define('Koala.store.RoutingTimeWindows', {
                 return true;
             }
 
-            if (startDay.isSame(endDay, 'day') && startTime.isAfter(endTime)) {
+
+            var comparableBase = moment();
+            var comparableStartTime = comparableBase.clone()
+                .hours(startTime.hours())
+                .minutes(startTime.minutes());
+            var comparableEndTime = comparableBase.clone()
+                .hours(endTime.hours())
+                .minutes(endTime.minutes());
+
+            if (startDay.isSame(endDay, 'day') && comparableStartTime.isAfter(comparableEndTime)) {
                 return true;
             }
 

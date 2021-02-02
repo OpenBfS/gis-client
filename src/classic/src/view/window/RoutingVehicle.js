@@ -192,7 +192,15 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                             var mStartTime = moment(value, format);
                             var mEndTime = moment(endTime, format);
 
-                            if (mStartDay.isSame(mEndDay, 'day') && mStartTime.isAfter(mEndTime)) {
+                            var comparableBase = moment();
+                            var comparableStartTime = comparableBase.clone()
+                                .hours(mStartTime.hours())
+                                .minutes(mStartTime.minutes());
+                            var comparableEndTime = comparableBase.clone()
+                                .hours(mEndTime.hours())
+                                .minutes(mEndTime.minutes());
+
+                            if (mStartDay.isSame(mEndDay, 'day') && comparableStartTime.isAfter(comparableEndTime)) {
                                 return vm.get('i18n.startTimeBiggerErrorText');
                             }
                         }
@@ -256,7 +264,15 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                             var mEndDay = moment(endDay, format);
                             var mEndTime = moment(value, format);
 
-                            if (mStartDay.isSame(mEndDay, 'day') && mStartTime.isAfter(mEndTime)) {
+                            var comparableBase = moment();
+                            var comparableStartTime = comparableBase.clone()
+                                .hours(mStartTime.hours())
+                                .minutes(mStartTime.minutes());
+                            var comparableEndTime = comparableBase.clone()
+                                .hours(mEndTime.hours())
+                                .minutes(mEndTime.minutes());
+
+                            if (mStartDay.isSame(mEndDay, 'day') && comparableStartTime.isAfter(comparableEndTime)) {
                                 return vm.get('i18n.endTimeBiggerErrorText');
                             }
                         }
@@ -355,7 +371,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             Ext.Object.each(me.vehicle, function(k, v) {
                 var field = form.down('[name=' + k + ']');
                 if (!field) {
-                    return false;
+                    return;
                 }
                 switch (k) {
                     case 'end':
