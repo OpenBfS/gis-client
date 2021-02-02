@@ -82,7 +82,7 @@ Ext.define('Koala.view.window.FleetRouting', {
                 text: '{i18n.computeFleetRoutingButtonText}'
             },
             handler: 'optimizeRoute'
-        }],
+        }]
     }, {
         xtype: 'k-container-routingresult',
         name: 'routing-result-panel',
@@ -92,7 +92,6 @@ Ext.define('Koala.view.window.FleetRouting', {
         elevationLayerName: 'routing-elevation-layer',
         flex: 1
     }],
-
 
     layout: 'vbox',
 
