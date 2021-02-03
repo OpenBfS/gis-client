@@ -974,7 +974,8 @@
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Mit dem Auto",
                     "profileBycicleText": "Mit dem Fahrrad",
-                    "profileWalkingText": "Zu Fuß"
+                    "profileWalkingText": "Zu Fuß",
+                    "routesHeading": "Routen"
                 }
             }
         }
@@ -999,7 +1000,15 @@
                     "addVehicleContextText": "Neues Fahrzeug hinzufügen",
                     "setCurrentJobContextText": "Als aktuelles Ziel setzen",
                     "setCurrentVehicleStartContextText": "Als aktuellen Startort setzen",
-                    "setCurrentVehicleEndContextText": "Als aktuellen Zielort setzen"
+                    "setCurrentVehicleEndContextText": "Als aktuellen Zielort setzen",
+                    "totalDuration": "Gesamtdauer",
+                    "totalDrivingDuration": "Fahrzeit",
+                    "totalServiceDuration": "Auftragsdauer",
+                    "totalWaitingDuration": "Wartezeit",
+                    "numberjobsMissing": "Nicht erfüllt",
+                    "jobsName": "Aufträge",
+                    "fleetRoutingSummary": "Zusammenfassung",
+                    "routesHeading": "Routen"
                 }
             }
         }

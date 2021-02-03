@@ -24,7 +24,8 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
         'Koala.store.WayPoints',
         'Koala.store.RoutingInstructions',
         'Koala.store.RoutingSummaries',
-        'Koala.store.GeocodingSuggestions'
+        'Koala.store.GeocodingSuggestions',
+        'Koala.store.FleetRoutingSummary'
     ],
 
     stores: {
@@ -39,6 +40,9 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
         },
         geocodingsuggestions: {
             type: 'k-geocodingsuggestions'
+        },
+        fleetroutingsummary: {
+            type: 'k-fleetroutingsummary'
         }
     },
 
@@ -70,7 +74,16 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
             addVehicleContextText: '',
             setCurrentJobContextText: '',
             setCurrentVehicleStartContextText: '',
-            setCurrentVehicleEndContextText: ''
+            setCurrentVehicleEndContextText: '',
+            totalDuration: '',
+            totalDrivingDuration: '',
+            totalServiceDuration: '',
+            totalWaitingDuration: '',
+            numberjobsMissing: '',
+            jobsName: '',
+            fleetRoutingSummary: '',
+            routesHeading: ''
+
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,

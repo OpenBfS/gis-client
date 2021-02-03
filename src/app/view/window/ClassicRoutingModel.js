@@ -59,7 +59,11 @@ Ext.define('Koala.view.window.ClassicRoutingModel', {
             errorGeoCoding: '',
             errorRoutingRequest: '',
             errorDownloadRoute: '',
-            routingSummaryDetailsButton: ''
+            routingSummaryDetailsButton: '',
+            profileCarText: '',
+            profileBycicleText: '',
+            profileWalkingText: '',
+            routesHeading: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,

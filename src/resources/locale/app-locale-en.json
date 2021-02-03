@@ -969,7 +969,8 @@
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Driving",
                     "profileBycicleText": "Cycling",
-                    "profileWalkingText": "Walking"
+                    "profileWalkingText": "Walking",
+                    "routesHeading": "Routes"
                 }
             }
         }
@@ -993,7 +994,15 @@
                     "addVehicleContextText": "Add new vehicle",
                     "setCurrentJobContextText": "Set as current target",
                     "setCurrentVehicleStartContextText": "Set as current starting location",
-                    "setCurrentVehicleEndContextText": "Set as current ending location"
+                    "setCurrentVehicleEndContextText": "Set as current ending location",
+                    "totalDuration": "Total Duration",
+                    "totalDrivingDuration": "Driving Duration",
+                    "totalServiceDuration": "Service Duration",
+                    "totalWaitingDuration": "Waiting Duration",
+                    "numberjobsMissing": "Failed",
+                    "jobsName": "jobs",
+                    "fleetRoutingSummary": "Summary",
+                    "routesHeading": "Routes"
                 }
             }
         }

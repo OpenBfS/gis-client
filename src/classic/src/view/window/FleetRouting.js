@@ -67,7 +67,7 @@ Ext.define('Koala.view.window.FleetRouting', {
     elevationLayerName: 'routing-elevation-layer',
 
     minHeight: 100,
-    maxHeight: 600,
+    maxHeight: 800,
     width: 500,
 
     items: [{
@@ -90,6 +90,7 @@ Ext.define('Koala.view.window.FleetRouting', {
         routeSegmentLayerName: 'routing-route-segment-layer',
         elevationProfilePanelName: 'routing-elevationprofile-panel',
         elevationLayerName: 'routing-elevation-layer',
+        isFleetRouting: true,
         flex: 1
     }],
 

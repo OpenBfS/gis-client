@@ -57,24 +57,23 @@ Ext.define('Koala.view.container.RoutingResultController', {
      * @param {Object} optimizationSummary The response of the VROOM API.
      * @param {Array} orsRoutes The routes computed with OpenRouteService.
      */
-    onOptimizationResultAvailable: function(optimizationSummary, orsRoutes) {
+    onOptimizationResultAvailable: function(fleetSummary, orsRoutes) {
 
         var me = this;
 
         me.clearRoutingSummaries();
+        me.clearFleetSummary();
         me.removeAllRoutesFromMap();
 
-        // TODO: save and display route optimization summary
-        //       e.g. the general info about if all jobs were possible
+        me.addFleetSummary(fleetSummary);
 
         // TODO: handle unassigned jobs e.g. update waypoints (?)
-
         // TODO: zoom to bounding box of all jobs and routes
 
         Ext.each(orsRoutes, function(orsRoute) {
             // TODO: - add VROOM information to ORS response
             //       - also add it to store
-            // var correspondingVroomRoute = optimizationSummary.routes[index];
+            // var correspondingVroomRoute = fleetSummary.routes[index];
             // 'index' is the second argument of the function
 
             me.addRoutingSummary(orsRoute);
@@ -610,7 +609,9 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var vm = view.lookupViewModel();
 
         var summaryStore = vm.get('routingsummaries');
-        summaryStore.removeAll();
+        if (summaryStore) {
+            summaryStore.removeAll();
+        }
     },
 
     /**
@@ -659,5 +660,36 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
         var summaryStore = vm.get('routingsummaries');
         summaryStore.add(summary);
+    },
+
+    /**
+     * Clear the fleet routing summary store.
+     */
+    clearFleetSummary: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var summaryStore = vm.get('fleetroutingsummary');
+        summaryStore.removeAll();
+    },
+
+    /**
+     * Add the fleet routing summary into its store.
+     *
+     * @param {Object} vroomResponse The whole JSON response from the VROOM API.
+     */
+    addFleetSummary: function(vroomResponse) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        if (!vroomResponse.summary) {
+            return;
+        }
+        var fleetSummaryStore = vm.get('fleetroutingsummary');
+        if (fleetSummaryStore) {
+            fleetSummaryStore.add(vroomResponse.summary);
+        }
     }
 });
