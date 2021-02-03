@@ -102,7 +102,17 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                         var vehicle = Ext.clone(rec.getData());
                         Ext.create({
                             xtype: 'k-window-routing-vehicle',
-                            vehicle: vehicle
+                            vehicle: vehicle,
+                            listeners: {
+                                updatedVehicle: {
+                                    fn: function(data, updatedVehicle) {
+                                        var me = this;
+                                        var vehiclesGrid = me.up('k-grid-routing-vehicles');
+                                        vehiclesGrid.onUpdatedVehicle(data, updatedVehicle);
+                                    },
+                                    scope: this
+                                }
+                            }
                         }).show();
                     } else {
                         BasiGX.util.Animate.shake(win);
@@ -143,7 +153,17 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
 
             if (!win) {
                 Ext.create({
-                    xtype: 'k-window-routing-vehicle'
+                    xtype: 'k-window-routing-vehicle',
+                    listeners: {
+                        updatedVehicle: {
+                            fn: function(data, updatedVehicle) {
+                                var me = this;
+                                var grid = me.up('k-grid-routing-vehicles');
+                                grid.onUpdatedVehicle(data, updatedVehicle);
+                            },
+                            scope: this
+                        }
+                    }
                 }).show();
             } else {
                 BasiGX.util.Animate.shake(win);
@@ -168,17 +188,18 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                     store.add({});
                 }
             }
-        },
-        applyVehicle: function(data, vehicle) {
-            var me = this;
-            var store = me.getStore();
-            if (store) {
-                if (vehicle) {
-                    var rec = store.getById(vehicle.id);
-                    rec.set(data);
-                } else {
-                    store.add(data);
-                }
+        }
+    },
+
+    onUpdatedVehicle: function(data, vehicle) {
+        var me = this;
+        var store = me.getStore();
+        if (store) {
+            if (vehicle) {
+                var rec = store.getById(vehicle.id);
+                rec.set(data);
+            } else {
+                store.add(data);
             }
         }
     }

@@ -150,6 +150,9 @@ Ext.define('Koala.view.panel.RoutingBreak', {
 
         var appContext = Koala.util.AppContext;
         var ctx = appContext.getAppContext();
+        if (!ctx) {
+            ctx = {};
+        }
         var routingOpts = appContext.getMergedDataByKey('routing', ctx);
         var fleetRoutingOpts = {};
         if (routingOpts && routingOpts.fleetRouting) {

@@ -98,7 +98,17 @@ Ext.define('Koala.view.grid.RoutingJobs', {
                         var job = Ext.clone(rec.getData());
                         Ext.create({
                             xtype: 'k-window-routing-job',
-                            job: job
+                            job: job,
+                            listeners: {
+                                updatedJob: {
+                                    fn: function(data, updatedJob) {
+                                        var me = this;
+                                        var jobsGrid = me.up('k-grid-routing-jobs');
+                                        jobsGrid.onUpdatedJob(data, updatedJob);
+                                    },
+                                    scope: this
+                                }
+                            }
                         }).show();
                     } else {
                         BasiGX.util.Animate.shake(win);
@@ -139,7 +149,17 @@ Ext.define('Koala.view.grid.RoutingJobs', {
 
             if (!win) {
                 Ext.create({
-                    xtype: 'k-window-routing-job'
+                    xtype: 'k-window-routing-job',
+                    listeners: {
+                        updatedJob: {
+                            fn: function(data, updatedJob) {
+                                var me = this;
+                                var grid = me.up('k-grid-routing-jobs');
+                                grid.onUpdatedJob(data, updatedJob);
+                            },
+                            scope: this
+                        }
+                    }
                 }).show();
             } else {
                 BasiGX.util.Animate.shake(win);
@@ -164,17 +184,18 @@ Ext.define('Koala.view.grid.RoutingJobs', {
                     store.add({});
                 }
             }
-        },
-        applyJob: function(data, job) {
-            var me = this;
-            var store = me.getStore();
-            if (store) {
-                if (job) {
-                    var rec = store.getById(job.id);
-                    rec.set(data);
-                } else {
-                    store.add(data);
-                }
+        }
+    },
+
+    onUpdatedJob: function(data, job) {
+        var me = this;
+        var store = me.getStore();
+        if (store) {
+            if (job) {
+                var rec = store.getById(job.id);
+                rec.set(data);
+            } else {
+                store.add(data);
             }
         }
     }

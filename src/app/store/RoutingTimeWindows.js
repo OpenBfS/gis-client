@@ -113,7 +113,6 @@ Ext.define('Koala.store.RoutingTimeWindows', {
                 return true;
             }
 
-
             var comparableBase = moment();
             var comparableStartTime = comparableBase.clone()
                 .hours(startTime.hours())

@@ -141,9 +141,6 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
             }
         }
 
-        // TODO check why start and end are not set sometimes
-        // TODO check for required values
-
         var timeWindowComponent = form.down('[name=time_window]');
         if (timeWindowComponent) {
             formData.time_window = me.getTimeWindow(timeWindowComponent);
@@ -156,10 +153,7 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
         view.down('[name=window-error-field]').setHidden(true);
 
         if (!me.isEmptyRecord(formData)) {
-            var parentGrid = Ext.ComponentQuery.query('k-grid-routing-vehicles')[0];
-            if (parentGrid) {
-                parentGrid.fireEvent('applyVehicle', formData, view.vehicle);
-            }
+            view.fireEvent('updatedVehicle', formData, view.vehicle);
         }
 
         view.close();
