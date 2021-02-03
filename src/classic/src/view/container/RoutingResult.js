@@ -192,6 +192,8 @@ Ext.define('Koala.view.container.RoutingResult', {
 
     map: null,
 
+    waypointLayerName: 'routing-waypoint-layer',
+
     /** The name of the elevationProfilePanel*/
     elevationProfilePanelName: 'routing-elevationprofile-panel',
 
@@ -232,7 +234,7 @@ Ext.define('Koala.view.container.RoutingResult', {
             },
             disableSelection: true,
             listeners: {
-                // TODO: add click to zoom to all
+                itemclick: 'zoomToWayPointLayer'
             },
             columns: [
                 {

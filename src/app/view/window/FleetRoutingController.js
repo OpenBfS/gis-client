@@ -278,6 +278,9 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             return;
         }
 
+        // TODO: remove VROOM output data from jobstore and vehicle store before firing new
+        //      otherwise there might be a change that old data will stay   in        the new request
+
         var avoidArea = me.getAvoidAreaGeometry();
 
         Koala.util.VroomFleetRouting.performOptimization(vehicles, jobs, avoidArea)

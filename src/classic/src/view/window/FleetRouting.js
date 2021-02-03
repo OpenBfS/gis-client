@@ -119,7 +119,8 @@ Ext.define('Koala.view.window.FleetRouting', {
         boxready: 'onBoxReady',
         close: 'onWindowClose',
         updateWayPointLayer: 'updateWayPointLayer',
-        updateOptimizeTrigger: 'onUpdateOptimizeTrigger'
+        updateOptimizeTrigger: 'onUpdateOptimizeTrigger',
+        zoomToWayPointLayer: 'zoomToWayPointLayer'
     },
 
     initComponent: function() {

@@ -66,13 +66,13 @@ Ext.define('Koala.view.container.RoutingResultController', {
         me.removeAllRoutesFromMap();
         me.addFleetSummary(fleetSummary);
 
+
         var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
 
         if (!jobStore) {
             return;
         }
 
-        // TODO: mark not assigned jobs
         if (fleetSummary.unassigned) {
             Ext.each(fleetSummary.unassigned, function(job) {
                 var jobRecord = jobStore.getById(job.id);
@@ -105,6 +105,8 @@ Ext.define('Koala.view.container.RoutingResultController', {
                 });
             });
         });
+
+        me.zoomToWayPointLayer();
     },
 
     /**
@@ -737,5 +739,56 @@ Ext.define('Koala.view.container.RoutingResultController', {
         if (fleetSummaryStore) {
             fleetSummaryStore.add(vroomResponse.summary);
         }
+    },
+
+    /**
+     * Get the WaypointLayer.
+     * @returns {ol.layer.Vector} The WaypointLayer.
+     */
+    getWaypointLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.waypointLayerName) {
+            return;
+        }
+
+        return BasiGX.util.Layer.getLayerByName(view.waypointLayerName);
+    },
+
+    zoomToWayPointLayer: function () {
+        var me = this;
+        var view = me.getView().up('window');
+        if (!view) {
+            return;
+        }
+
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+
+        var layer = me.getWaypointLayer();
+        if (!layer) {
+            return;
+        }
+
+        var source = layer.getSource();
+        if (!source) {
+            return;
+        }
+
+        var extent = source.getExtent();
+        if (!extent) {
+            return;
+        }
+
+        // necessary to finish drawing of layer before zooming
+        map.renderSync();
+        // zoom to extent
+        map.getView().fit(extent, {
+            duration: 2000,
+            padding: '30 30 30 30'
+        });
     }
 });
