@@ -64,7 +64,6 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
     buttons: [{
         xtype: 'displayfield',
         name: 'no-breaks-field',
-        hidden: true,
         cls: 'no-breaks-field',
         bind: {
             value: '{i18n.noBreaksText}'
@@ -157,9 +156,5 @@ Ext.define('Koala.view.panel.RoutingBreaks', {
         me.store.addListener('add', me.onStoreAdd, me);
         me.store.addListener('remove', me.onStoreRemove, me);
         me.store.each(me.addItem, me);
-
-        if (me.store.count() === 0) {
-            me.store.add({});
-        }
     }
 });

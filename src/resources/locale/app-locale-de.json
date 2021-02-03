@@ -983,7 +983,7 @@
         "config": {
             "data": {
                 "i18n": {
-                    "fleetRoutingTitle": "Flotten Routing",
+                    "fleetRoutingTitle": "Flottenrouting",
                     "computeFleetRoutingButtonText": "Routen berechnen",
                     "elevationBtnText": "Höhenprofil",
                     "downloadButtonText": "Download",
