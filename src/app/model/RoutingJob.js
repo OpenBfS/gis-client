@@ -35,7 +35,9 @@ Ext.define('Koala.model.RoutingJob', {
         {name: 'time_windows', convert: null},
         {name: 'address', convert: null},
         // data from API response
-        {name: 'waiting_time',type: 'int', convert: null},
-        {name: 'arrival',type: 'int', convert: null}
+        {name: 'waiting_time', type: 'int', convert: null},
+        {name: 'arrival', type: 'int', convert: null},
+        {name: 'vehicle_id', type: 'int', convert: null},
+        {name: 'unassigned', type: 'boolean', convert: null}
     ]
 });

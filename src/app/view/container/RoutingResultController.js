@@ -66,12 +66,27 @@ Ext.define('Koala.view.container.RoutingResultController', {
         me.removeAllRoutesFromMap();
         me.addFleetSummary(fleetSummary);
 
+        var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
+
+        if (!jobStore) {
+            return;
+        }
+
+        // TODO: mark not assigned jobs
+        if (fleetSummary.unassigned) {
+            Ext.each(fleetSummary.unassigned, function(job) {
+                var jobRecord = jobStore.getById(job.id);
+                jobRecord.set({
+                    unassigned: true
+                });
+            });
+        }
+
         Ext.each(orsRoutes, function(orsRoute, index) {
             var correspondingVroomRoute = fleetSummary.routes[index];
             me.addRoutingSummary(orsRoute, correspondingVroomRoute);
             me.addRouteToMap(orsRoute);
 
-            // TODO: add VROOM information about jobs to JobsStore
             Ext.each(correspondingVroomRoute, function(route) {
                 var steps = route.steps;
                 Ext.each(steps, function(step) {
@@ -79,16 +94,12 @@ Ext.define('Koala.view.container.RoutingResultController', {
                     var type = step.type;
                     // TODO: add information for breaks
                     if (type === 'job') {
-                        var jobId = step.id;
-
-                        // TODO: find corresponding record in jobs-store
-                        var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
-
-                        var jobRecord = jobStore.getById(jobId);
+                        var jobRecord = jobStore.getById(step.id);
 
                         jobRecord.set({
                             waiting_time: step.waiting_time,
-                            arrival: step.arrival
+                            arrival: step.arrival,
+                            vehicle_id: route.vehicle
                         });
                     }
                 });
@@ -686,6 +697,11 @@ Ext.define('Koala.view.container.RoutingResultController', {
             // we overwrite the ORS duration with the VROOM duration
             // because it is takes breaks and waiting times into account
             summary.duration = vroomRoute.duration;
+
+            // get arrival times of start and end
+            var steps = vroomRoute.steps;
+            summary.start_arrival = steps[0].arrival;
+            summary.end_arrival = steps[steps.length - 1].arrival;
         }
 
         var summaryStore = vm.get('routingsummaries');

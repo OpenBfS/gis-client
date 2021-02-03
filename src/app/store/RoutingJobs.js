@@ -46,6 +46,8 @@ Ext.define('Koala.store.RoutingJobs', {
             // for the current request
             delete job.waiting_time;
             delete job.arrival;
+            delete job.vehicle_id;
+            delete job.unassigned;
 
             // coordinates are hidden inside 'address' property
             var lat = job.address.latitude;

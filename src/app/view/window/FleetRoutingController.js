@@ -181,6 +181,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var popupTooltip = '<div class="popup-tip-container">' +
             '<div class="popup-tip"></div></div>';
 
+        // TODO: add job information
+
         var content = '<p><strong>';
         var description = feature.get('description');
         if (description) {
@@ -188,6 +190,10 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         }
         content += feature.get('address');
         content += '</strong></p>';
+
+        if (feature.get('type') === 'job' && feature.get('arrival')) {
+            content = feature.get('arrival');
+        }
 
         return content + popupTooltip;
     },
@@ -750,14 +756,33 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
         var transformed = me.latLonToMapProjection([lon, lat]);
 
-        layerSource.addFeature(
-            new ol.Feature({
-                type: type,
-                geometry: new ol.geom.Point(transformed),
-                address: wayPointProps.address,
-                description: record.get('description')
-            })
-        );
+        // TODO: add properties from job store
+
+        // TODO: add properties from vehicle
+
+        var feature = new ol.Feature({
+            type: type,
+            geometry: new ol.geom.Point(transformed),
+            address: wayPointProps.address,
+            description: record.get('description')
+        });
+
+        var setExtraJobProps = type === 'job' &&
+            Ext.isNumber(record.get('waiting_time')) &&
+            Ext.isNumber(record.get('arrival')) &&
+            Ext.isNumber(record.get('vehicle_id'));
+
+        if (setExtraJobProps) {
+            feature.set('waiting_time', record.get('waiting_time'));
+            feature.set('arrival', record.get('arrival'));
+            feature.set('vehicle_id', record.get('vehicle_id'));
+        }
+
+        if (type === 'vehicle') {
+            feature.set('vehicle_id', record.get('vehicle_id'));
+        }
+
+        layerSource.addFeature(feature);
     },
 
     /**

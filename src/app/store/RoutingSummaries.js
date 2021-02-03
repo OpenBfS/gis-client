@@ -38,6 +38,8 @@ Ext.define('Koala.store.RoutingSummaries', {
         {name: 'cost', type: 'int'},
         {name: 'waiting_time', type: 'int'},
         {name: 'arrival', type: 'int'},
-        {name: 'service', type: 'int'}
+        {name: 'service', type: 'int'},
+        {name: 'start_arrival', type: 'int'},
+        {name: 'end_arrival', type: 'int'}
     ]
 });
