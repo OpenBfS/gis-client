@@ -775,7 +775,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
             if (startAndEndAreEqual) {
                 // since 'start' and 'end' are the same
-                // the second argument of the function can 
+                // the second argument of the function can
                 // be either 'start' or 'end'
                 me.createWaypointFeature(vehicle, 'start', 'startEnd');
             } else {
