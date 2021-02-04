@@ -315,9 +315,9 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             // convert coordinates in ORS format
             var orsCoords = [];
             Ext.each(vroomRoute.steps, function(step) {
-                orsCoords.push(step.location);
-                // TODO: maybe add step information to waypoint store
-                //      e.g. duration, type of step, arrival time
+                if (step.type === 'start' || step.type === 'job' || step.type === 'end' ) {
+                    orsCoords.push(step.location);
+                }
             });
 
             // create input parameter for routing request

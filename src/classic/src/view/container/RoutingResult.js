@@ -384,7 +384,6 @@ Ext.define('Koala.view.container.RoutingResult', {
                     sortable: false,
                     hideable: false,
                     flex: 2,
-                    // TODO: auto-hide in case of classic routing
                     renderer: function(val, metaData, rec) {
                         var staticMe = Koala.view.container.RoutingResult;
 

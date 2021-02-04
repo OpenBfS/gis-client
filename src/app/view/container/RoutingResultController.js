@@ -68,11 +68,11 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
 
         var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
-
         if (!jobStore) {
             return;
         }
 
+        // mark not succesful jobs
         if (fleetSummary.unassigned) {
             Ext.each(fleetSummary.unassigned, function(job) {
                 var jobRecord = jobStore.getById(job.id);
@@ -102,6 +102,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
                             vehicle_id: route.vehicle
                         });
                     }
+
                 });
             });
         });
