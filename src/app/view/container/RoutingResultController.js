@@ -72,10 +72,18 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
 
-        // TODO: clear VROOM specific properties from jobStore
-        //       otherwise there might be a chance
-        //       that old data will stay in the new request
-
+        // clear VROOM specific properties from jobStore
+        // otherwise old might will stay in the new request
+        jobStore.each(function(rec) {
+            rec.set(
+                {
+                    waiting_time: null,
+                    arrival: null,
+                    vehicle_id: null,
+                    unassigned: false
+                }
+            );
+        });
 
         // mark not succesful jobs
         if (fleetSummary.unassigned) {
