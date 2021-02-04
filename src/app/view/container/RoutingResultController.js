@@ -72,6 +72,11 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
 
+        // TODO: clear VROOM specific properties from jobStore
+        //       otherwise there might be a chance
+        //       that old data will stay in the new request
+
+
         // mark not succesful jobs
         if (fleetSummary.unassigned) {
             Ext.each(fleetSummary.unassigned, function(job) {
@@ -86,25 +91,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
             var correspondingVroomRoute = fleetSummary.routes[index];
             me.addRoutingSummary(orsRoute, correspondingVroomRoute);
             me.addRouteToMap(orsRoute);
-
-            Ext.each(correspondingVroomRoute, function(route) {
-                var steps = route.steps;
-                Ext.each(steps, function(step) {
-
-                    var type = step.type;
-                    // TODO: add information for breaks
-                    if (type === 'job') {
-                        var jobRecord = jobStore.getById(step.id);
-
-                        jobRecord.set({
-                            waiting_time: step.waiting_time,
-                            arrival: step.arrival,
-                            vehicle_id: route.vehicle
-                        });
-                    }
-
-                });
-            });
+            me.addJobSummary(correspondingVroomRoute);
         });
     },
 
@@ -705,6 +692,38 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
         var summaryStore = vm.get('routingsummaries');
         summaryStore.add(summary);
+    },
+
+
+    /**
+     * Add VROOM specific information to job records.
+     *
+     * @param {Object} vroomRoute The VROOM route.
+     */
+    addJobSummary: function(vroomRoute) {
+        var me = this;
+        var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
+        if (!jobStore) {
+            return;
+        }
+
+        Ext.each(vroomRoute, function(route) {
+            var steps = route.steps;
+            Ext.each(steps, function(step) {
+
+                var type = step.type;
+                if (type === 'job') {
+                    var jobRecord = jobStore.getById(step.id);
+
+                    jobRecord.set({
+                        waiting_time: step.waiting_time,
+                        arrival: step.arrival,
+                        vehicle_id: route.vehicle
+                    });
+                }
+
+            });
+        });
     },
 
     /**
