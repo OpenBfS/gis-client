@@ -631,7 +631,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
     /**
      * Add the routing summary to its store.
      *
-     * If a VROOM route is available, it properties will be merged
+     * If a VROOM route is available, its properties will be merged
      * with the ORS route.
      *
      * @param {GeoJson} orsRoute The ORS route.
