@@ -182,6 +182,9 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             '<div class="popup-tip"></div></div>';
 
         // TODO: add job information
+        // if (feature.get('type') === 'job' && feature.get('arrival')) {
+        //     content = feature.get('arrival');
+        // }
 
         var content = '<p><strong>';
         var description = feature.get('description');
@@ -190,10 +193,6 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         }
         content += feature.get('address');
         content += '</strong></p>';
-
-        if (feature.get('type') === 'job' && feature.get('arrival')) {
-            content = feature.get('arrival');
-        }
 
         return content + popupTooltip;
     },
