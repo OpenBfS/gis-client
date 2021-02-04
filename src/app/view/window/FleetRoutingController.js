@@ -138,28 +138,28 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         });
         vm.set('startEndMarkerStyle', vehicleBaseStyle );
 
+        var textTemplate = new ol.style.Text({
+            font: '16px sans-serif',
+            offsetY: '20',
+            // TODO: this should work but it doesn't (?)
+            backgroundFill: new ol.style.Fill({
+                color: 'white'
+            })
+        });
+
+        var startText = textTemplate.clone();
+        startText.setText(vm.get('i18n.startName'));
+
         var startMarkerStyle = vehicleBaseStyle.clone();
-        startMarkerStyle.setText(
-            new ol.style.Text({
-                text: vm.get('i18n.startName'),
-                font: '16px sans-serif',
-                offsetY: '20',
-                backgroundFill: new ol.style.Fill({
-                    color: 'white'
-                })
-            }));
+        startMarkerStyle.setText(startText);
         vm.set('startMarkerStyle', startMarkerStyle);
 
+
+        var endText = textTemplate.clone();
+        endText.setText(vm.get('i18n.endName'));
+
         var endMarkerStyle = vehicleBaseStyle.clone();
-        endMarkerStyle.setText(
-            new ol.style.Text({
-                text: vm.get('i18n.endName'),
-                font: '16px sans-serif',
-                offsetY: '20',
-                backgroundFill: new ol.style.Fill({
-                    color: 'white'
-                })
-            }));
+        endMarkerStyle.setText(endText);
         vm.set('endMarkerStyle', endMarkerStyle);
     },
 
