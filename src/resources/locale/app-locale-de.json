@@ -1008,9 +1008,7 @@
                     "numberjobsMissing": "Nicht erfüllt",
                     "jobsName": "Aufträge",
                     "fleetRoutingSummary": "Zusammenfassung",
-                    "routesHeading": "Routen",
-                    "startName": "Start",
-                    "endName": "Ziel"
+                    "routesHeading": "Routen"
                 }
             }
         }
