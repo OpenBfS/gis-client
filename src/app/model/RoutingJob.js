@@ -38,6 +38,6 @@ Ext.define('Koala.model.RoutingJob', {
         {name: 'waiting_time', type: 'int', convert: null},
         {name: 'arrival', type: 'int', convert: null},
         {name: 'vehicle_id', type: 'int', convert: null},
-        {name: 'unassigned', type: 'boolean', convert: null}
+        {name: 'unassigned', type: 'boolean', defaultValue: false}
     ]
 });
