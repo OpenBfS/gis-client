@@ -82,7 +82,9 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
             numberjobsMissing: '',
             jobsName: '',
             fleetRoutingSummary: '',
-            routesHeading: ''
+            routesHeading: '',
+            startName: '',
+            endName: ''
 
         },
         routingProfile: 'driving-car',

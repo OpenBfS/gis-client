@@ -117,7 +117,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             var jobMarkerStyle = new ol.style.Style({
                 text: new ol.style.Text({
                     // unicode for fontawesome map-marker
-                    text: '\uf0b1',
+                    text: '\uf041',
                     font: 'normal ' + routingOpts.jobMarkerStyle.markerSize + 'px FontAwesome',
                     fill: new ol.style.Fill({
                         color: routingOpts.jobMarkerStyle.color
@@ -127,6 +127,40 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             });
             vm.set('jobMarkerStyle', jobMarkerStyle);
         }
+
+        var vehicleBaseStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 8,
+                fill: new ol.style.Fill({
+                    color: 'black'
+                })
+            })
+        });
+        vm.set('startEndMarkerStyle', vehicleBaseStyle );
+
+        var startMarkerStyle = vehicleBaseStyle.clone();
+        startMarkerStyle.setText(
+            new ol.style.Text({
+                text: vm.get('i18n.startName'),
+                font: '16px sans-serif',
+                offsetY: '20',
+                backgroundFill: new ol.style.Fill({
+                    color: 'white'
+                })
+            }));
+        vm.set('startMarkerStyle', startMarkerStyle);
+
+        var endMarkerStyle = vehicleBaseStyle.clone();
+        endMarkerStyle.setText(
+            new ol.style.Text({
+                text: vm.get('i18n.endName'),
+                font: '16px sans-serif',
+                offsetY: '20',
+                backgroundFill: new ol.style.Fill({
+                    color: 'white'
+                })
+            }));
+        vm.set('endMarkerStyle', endMarkerStyle);
     },
 
     /**
@@ -213,7 +247,15 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             case 'job':
                 style = vm.get('jobMarkerStyle');
                 break;
-            case 'vehicle':
+            case 'start':
+                style = vm.get('startMarkerStyle');
+                break;
+            case 'end':
+                style = vm.get('endMarkerStyle');
+                break;
+            case 'startEnd':
+                style = vm.get('startEndMarkerStyle');
+                break;
             default:
                 style = vm.get('waypointStyle');
         }
@@ -723,8 +765,23 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             return;
         }
         vehicleStore.each(function(vehicle) {
-            me.createWaypointFeature(vehicle, 'start', 'vehicle');
-            me.createWaypointFeature(vehicle, 'end', 'vehicle');
+
+            var start = vehicle.get('start');
+            var end = vehicle.get('end');
+
+            var startAndEndAreEqual =
+                (start.latitude === end.latitude) &&
+                (start.longitude === end.longitude);
+
+            if (startAndEndAreEqual) {
+                // since 'start' and 'end' are the same
+                // the second argument of the function can 
+                // be either 'start' or 'end'
+                me.createWaypointFeature(vehicle, 'start', 'startEnd');
+            } else {
+                me.createWaypointFeature(vehicle, 'start', 'start');
+                me.createWaypointFeature(vehicle, 'end', 'end');
+            }
         });
     },
 

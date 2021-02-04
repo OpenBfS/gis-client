@@ -1002,7 +1002,9 @@
                     "numberjobsMissing": "Failed",
                     "jobsName": "jobs",
                     "fleetRoutingSummary": "Summary",
-                    "routesHeading": "Routes"
+                    "routesHeading": "Routes",
+                    "startName": "Start",
+                    "endName": "End"
                 }
             }
         }
