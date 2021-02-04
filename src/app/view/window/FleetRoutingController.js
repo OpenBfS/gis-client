@@ -127,6 +127,19 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     })
                 })
             );
+            vm.set('jobUnassignedMarkerStyle',
+                new ol.style.Style({
+                    text: new ol.style.Text({
+                        // unicode for fontawesome map-marker
+                        text: '\uf00d',
+                        font: 'normal ' + routingOpts.jobMarkerStyle.markerSize + 'px FontAwesome',
+                        fill: new ol.style.Fill({
+                            color: routingOpts.jobMarkerStyle.color
+                        }),
+                        textBaseline: 'bottom'
+                    })
+                })
+            );
         }
         if (routingOpts.startEndMarkerStyle) {
             vm.set('startMarkerStyle',
@@ -242,6 +255,9 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         switch (pointFeature.get('type')) {
             case 'job':
                 style = vm.get('jobMarkerStyle');
+                break;
+            case 'job-unassigned':
+                style = vm.get('jobUnassignedMarkerStyle');
                 break;
             case 'start':
             case 'startEnd':
@@ -750,7 +766,11 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             return;
         }
         jobsStore.each(function(job) {
-            me.createWaypointFeature(job, 'address', 'job');
+            if (job.get('unassigned')) {
+                me.createWaypointFeature(job, 'address', 'job-unassigned');
+            } else {
+                me.createWaypointFeature(job, 'address', 'job');
+            }
         });
 
         // create vehicle marker
