@@ -114,53 +114,49 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
         // set style for job marker layer
         if (routingOpts.jobMarkerStyle) {
-            var jobMarkerStyle = new ol.style.Style({
-                text: new ol.style.Text({
-                    // unicode for fontawesome map-marker
-                    text: '\uf041',
-                    font: 'normal ' + routingOpts.jobMarkerStyle.markerSize + 'px FontAwesome',
-                    fill: new ol.style.Fill({
-                        color: routingOpts.jobMarkerStyle.color
-                    }),
-                    textBaseline: 'bottom'
+            vm.set('jobMarkerStyle',
+                new ol.style.Style({
+                    text: new ol.style.Text({
+                        // unicode for fontawesome map-marker
+                        text: '\uf041',
+                        font: 'normal ' + routingOpts.jobMarkerStyle.markerSize + 'px FontAwesome',
+                        fill: new ol.style.Fill({
+                            color: routingOpts.jobMarkerStyle.color
+                        }),
+                        textBaseline: 'bottom'
+                    })
                 })
-            });
-            vm.set('jobMarkerStyle', jobMarkerStyle);
+            );
         }
-
-        var vehicleBaseStyle = new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 8,
-                fill: new ol.style.Fill({
-                    color: 'black'
+        if (routingOpts.startEndMarkerStyle) {
+            vm.set('startMarkerStyle',
+                new ol.style.Style({
+                    text: new ol.style.Text({
+                        // unicode for fontawesome map-marker
+                        text: '\uf28e',
+                        font: 'normal ' + routingOpts.startEndMarkerStyle.markerSize + 'px FontAwesome',
+                        fill: new ol.style.Fill({
+                            color: routingOpts.startEndMarkerStyle.color
+                        }),
+                        textBaseline: 'bottom'
+                    })
                 })
-            })
-        });
-        vm.set('startEndMarkerStyle', vehicleBaseStyle );
+            );
 
-        var textTemplate = new ol.style.Text({
-            font: '16px sans-serif',
-            offsetY: '20',
-            // TODO: this should work but it doesn't (?)
-            backgroundFill: new ol.style.Fill({
-                color: 'white'
-            })
-        });
-
-        var startText = textTemplate.clone();
-        startText.setText(vm.get('i18n.startName'));
-
-        var startMarkerStyle = vehicleBaseStyle.clone();
-        startMarkerStyle.setText(startText);
-        vm.set('startMarkerStyle', startMarkerStyle);
-
-
-        var endText = textTemplate.clone();
-        endText.setText(vm.get('i18n.endName'));
-
-        var endMarkerStyle = vehicleBaseStyle.clone();
-        endMarkerStyle.setText(endText);
-        vm.set('endMarkerStyle', endMarkerStyle);
+            vm.set('endMarkerStyle',
+                new ol.style.Style({
+                    text: new ol.style.Text({
+                        // unicode for fontawesome map-marker
+                        text: '\uf28d',
+                        font: 'normal ' + routingOpts.startEndMarkerStyle.markerSize + 'px FontAwesome',
+                        fill: new ol.style.Fill({
+                            color: routingOpts.startEndMarkerStyle.color
+                        }),
+                        textBaseline: 'bottom'
+                    })
+                })
+            );
+        }
     },
 
     /**
@@ -248,13 +244,11 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 style = vm.get('jobMarkerStyle');
                 break;
             case 'start':
+            case 'startEnd':
                 style = vm.get('startMarkerStyle');
                 break;
             case 'end':
                 style = vm.get('endMarkerStyle');
-                break;
-            case 'startEnd':
-                style = vm.get('startEndMarkerStyle');
                 break;
             default:
                 style = vm.get('waypointStyle');

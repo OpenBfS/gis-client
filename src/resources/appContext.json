@@ -247,6 +247,7 @@
                     "markerSize": 28,
                     "color": "black"
                 },
+                    "markerSize": 24,
                 "elevationStyle": {
                     "fill": "#ffffff",
                     "stroke": "#ffffff",
