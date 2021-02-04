@@ -690,9 +690,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
         };
 
         if (vroomRoute) {
-            summary.cost = vroomRoute.cost;
             summary.waiting_time = vroomRoute.waiting_time;
-            summary.arrival = vroomRoute.arrival;
             summary.service = vroomRoute.service;
             // we overwrite the ORS duration with the VROOM duration
             // because it is takes breaks and waiting times into account

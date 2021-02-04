@@ -387,10 +387,18 @@ Ext.define('Koala.view.container.RoutingResult', {
                     // TODO: auto-hide in case of classic routing
                     renderer: function(val, metaData, rec) {
                         var staticMe = Koala.view.container.RoutingResult;
+
                         var duration = rec.get('duration');
                         var distance = rec.get('distance');
                         var ascent = rec.get('ascent');
                         var descent = rec.get('descent');
+
+                        var view = this.up();
+                        if (view.isFleetRouting) {
+                            // in case of fleet routing duration is the
+                            // total time the vehicle is required
+                            duration = rec.get('duration') + rec.get('service') + rec.get('waiting_time');
+                        }
 
                         var durationFormatted = staticMe.getFormattedDuration(duration, true);
                         var distanceFormatted = staticMe.getFormattedDistance(distance, true);
@@ -413,26 +421,31 @@ Ext.define('Koala.view.container.RoutingResult', {
                     hidden: true,
                     flex: 2,
                     renderer: function(val, metaData, rec) {
-                        // var staticMe = Koala.view.container.RoutingResult;
-                        var cost = rec.get('cost');
-                        var waiting_time = rec.get('waiting_time');
-                        var arrival = rec.get('arrival');
+                        var vm = this.lookupViewModel();
+
+                        var duration = rec.get('duration');
                         var service = rec.get('service');
+                        var waiting_time = rec.get('waiting_time');
 
-                        // var durationFormatted = staticMe.getFormattedDuration(duration, true);
-                        // var distanceFormatted = staticMe.getFormattedDistance(distance, true);
-                        // var ascentFormatted = staticMe.getFormattedDistance(ascent, true);
-                        // var descentFormatted = staticMe.getFormattedDistance(descent, true);
+                        var staticMe = Koala.view.container.RoutingResult;
+                        var durationFormatted = staticMe.getFormattedDuration(duration, true);
 
-                        var content = '<div class="routing-summary-cell"><div>';
-                        content += '<span>' + cost + '</span>';
-                        content += '<span>' + waiting_time + '</span>';
-                        content += '</div><div>';
-                        content += '<span>' + arrival + '</span>';
-                        content += '<span>' + service + '</span>';
-                        content += '</div></div>';
+                        var serviceFormatted = service;
+                        if (service !== 0) {
+                            serviceFormatted = staticMe.getFormattedDuration(service, true);
+                        }
 
-                        return content;
+                        var waitingFormatted = waiting_time;
+                        if (waiting_time !== 0) {
+                            waitingFormatted = staticMe.getFormattedDuration(waiting_time, true);
+                        }
+
+                        return '' +
+                        '<div class="routing-summary-cell">' +
+                        '        <div>' + vm.get('i18n.totalDrivingDuration') + ': ' + durationFormatted + '</div>' +
+                        '        <div>' + vm.get('i18n.totalServiceDuration') + ': ' + serviceFormatted + '</div>' +
+                        '        <div>' + vm.get('i18n.totalWaitingDuration') + ': ' + waitingFormatted + '</div>' +
+                        '</div>';
                     }
                 },{
                     xtype: 'widgetcolumn',
