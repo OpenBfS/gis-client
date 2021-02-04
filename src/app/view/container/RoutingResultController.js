@@ -772,7 +772,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
         return BasiGX.util.Layer.getLayerByName(view.waypointLayerName);
     },
 
-    zoomToWayPointLayer: function () {
+    zoomToWayPointLayer: function() {
         var me = this;
         var view = me.getView().up('window');
         if (!view) {

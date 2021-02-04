@@ -276,7 +276,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             // so this check becomes obsolete
             return;
         }
-        
+
         var avoidArea = me.getAvoidAreaGeometry();
 
         Koala.util.VroomFleetRouting.performOptimization(vehicles, jobs, avoidArea)
