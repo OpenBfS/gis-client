@@ -105,8 +105,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
                 });
             });
         });
-
-        me.zoomToWayPointLayer();
     },
 
     /**
@@ -783,8 +781,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
 
-        // necessary to finish drawing of layer before zooming
-        map.renderSync();
         // zoom to extent
         map.getView().fit(extent, {
             duration: 2000,
