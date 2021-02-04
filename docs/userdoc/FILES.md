@@ -220,6 +220,18 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Farbe des Markers.
 
+  * **startEndMarkerStyle**
+
+    Styling Optionen des Layers, der die einzelnen Standorte der Fahrzeuge darstellt.
+
+    * **markerSize**
+
+      Größe des Markers in Pixeln.
+
+    * **color**
+
+      Farbe des Markers.
+
   * **elevationStyle**
 
     Styling Optionen des Layers, der die Abschnitte des Höhenprofils darstellt.

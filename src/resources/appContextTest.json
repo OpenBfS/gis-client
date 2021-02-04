@@ -245,6 +245,10 @@
                     "markerSize": 28,
                     "color": "black"
                 },
+                "startEndMarkerStyle": {
+                    "markerSize": 24,
+                    "color": "black"
+                },
                 "elevationStyle": {
                     "fill": "#ffffff",
                     "stroke": "#ffffff",
