@@ -361,7 +361,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             .catch(function(error) {
                 view.setLoading(false);
                 Ext.toast(vm.get('i18n.errorFleetRouting'));
-                Ext.log.error(error);
+                Ext.Logger.error(error);
             });
     },
 

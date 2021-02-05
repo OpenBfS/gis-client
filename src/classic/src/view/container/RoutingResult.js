@@ -62,8 +62,7 @@ Ext.define('Koala.view.container.RoutingResult', {
 
     listeners: {
         resultChanged: 'onRoutingResultChanged',
-        beforedestroy: 'onDestroy',
-        optimizationResultAvailable: 'onOptimizationResultAvailable'
+        beforedestroy: 'onDestroy'
     },
 
     items: [

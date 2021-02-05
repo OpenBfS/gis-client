@@ -179,12 +179,32 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                     // TODO maybe add tooltip with vehicle description
                     dataIndex: 'vehicle',
                     width: 40,
-                    sortable: false
+                    tdCls: 'routing-center-cell',
+                    sortable: false,
+                    renderer: function(val, metdaData, rec) {
+                        if (!rec) {
+                            return;
+                        }
+                        var vehicleId = rec.get('vehicle');
+                        var vehiclesStore = this.up('k-window-fleet-routing')
+                            .down('k-grid-routing-vehicles')
+                            .getStore();
+                        var vehicle = vehiclesStore.getById(vehicleId);
+                        if (!vehicle) {
+                            return;
+                        }
+
+                        return '<span data-qtip="' + vehicle.get('description') + '">' + vehicleId + '</span>';
+                    }
                 }, {
-                    flex: 2,
+                    flex: 3,
                     sortable: false,
                     renderer: function(val, metaData, rec) {
                         var vm = this.lookupViewModel();
+
+                        if (!rec) {
+                            return;
+                        }
 
                         var jobsStore = this.up('k-window-fleet-routing')
                             .down('k-grid-routing-jobs')
@@ -195,6 +215,9 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                             .getStore();
 
                         var vehicle = vehiclesStore.getById(rec.get('vehicle'));
+                        if (!vehicle) {
+                            return;
+                        }
 
                         var steps = rec.get('steps');
                         var targets = Ext.Array.filter(steps, function(step) {
@@ -227,6 +250,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                 }, {
                     sortable: false,
                     flex: 1,
+                    tdCls: 'routing-center-cell',
                     renderer: function(val, metaData, rec) {
                         var orsUtil = Koala.util.OpenRouteService;
 
