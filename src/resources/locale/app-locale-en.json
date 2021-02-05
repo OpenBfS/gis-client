@@ -521,7 +521,8 @@
                     "descriptionColumnText": "Description",
                     "startColumnText": "Starting location",
                     "endColumnText": "Ending location",
-                    "addVehicleTooltip": "Add vehicle"
+                    "addVehicleTooltip": "Add vehicle",
+                    "idColumnText": "Vehicle"
                 }
             }
         }

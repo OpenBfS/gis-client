@@ -36,7 +36,8 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                 descriptionColumnText: '',
                 startColumnText: '',
                 endColumnText: '',
-                addVehicleTooltip: ''
+                addVehicleTooltip: '',
+                idColumnText: ''
             }
         }
     },
@@ -55,13 +56,9 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
 
     columns: {
         items: [{
-            dataIndex: 'description',
-            flex: 1,
+            dataIndex: 'id',
             bind: {
-                text: '{i18n.descriptionColumnText}'
-            },
-            renderer: function(description) {
-                return '<span data-qtip="' + description + '">' + description + '</span>';
+                text: '{i18n.idColumnText}'
             }
         }, {
             dataIndex: 'start',
@@ -84,6 +81,14 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                 if (end) {
                     return '<span data-qtip="' + end.address + '">' + end.address + '</span>';
                 }
+            }
+        }, {
+            dataIndex: 'description',
+            bind: {
+                text: '{i18n.descriptionColumnText}'
+            },
+            renderer: function(description) {
+                return '<span data-qtip="' + description + '">' + description + '</span>';
             }
         }, {
             xtype: 'actioncolumn',

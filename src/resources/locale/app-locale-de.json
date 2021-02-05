@@ -539,7 +539,8 @@
                     "descriptionColumnText": "Beschreibung",
                     "startColumnText": "Startort",
                     "endColumnText": "Zielort",
-                    "addVehicleTooltip": "Fahrzeug hinzufügen"
+                    "addVehicleTooltip": "Fahrzeug hinzufügen",
+                    "idColumnText": "Fahrzeug"
                 }
             }
         }
