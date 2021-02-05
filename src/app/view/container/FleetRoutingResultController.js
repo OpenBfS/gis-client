@@ -44,14 +44,12 @@ Ext.define('Koala.view.container.FleetRoutingResultController', {
      * @param {Array} orsRoutes The routes computed with OpenRouteService.
      */
     onOptimizationResultAvailable: function(fleetSummary, orsRoutes) {
-
         var me = this;
 
         me.clearRoutingSummaries();
         me.clearFleetSummary();
         me.removeAllRoutesFromMap();
         me.addFleetSummary(fleetSummary);
-
 
         var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
         if (!jobStore) {
