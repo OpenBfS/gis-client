@@ -112,64 +112,90 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             return;
         }
 
-        // set style for job marker layer
-        if (routingOpts.jobMarkerStyle) {
-            vm.set('jobMarkerStyle',
-                new ol.style.Style({
-                    text: new ol.style.Text({
-                        // unicode for fontawesome map-marker
-                        text: '\uf041',
-                        font: 'normal ' + routingOpts.jobMarkerStyle.markerSize + 'px FontAwesome',
-                        fill: new ol.style.Fill({
-                            color: routingOpts.jobMarkerStyle.color
-                        }),
-                        textBaseline: 'bottom'
-                    })
-                })
-            );
-            vm.set('jobUnassignedMarkerStyle',
-                new ol.style.Style({
-                    text: new ol.style.Text({
-                        // unicode for fontawesome map-marker
-                        text: '\uf00d',
-                        font: 'normal ' + routingOpts.jobMarkerStyle.markerSize + 'px FontAwesome',
-                        fill: new ol.style.Fill({
-                            color: routingOpts.jobMarkerStyle.color
-                        }),
-                        textBaseline: 'bottom'
-                    })
-                })
-            );
-        }
-        if (routingOpts.startEndMarkerStyle) {
-            vm.set('startMarkerStyle',
-                new ol.style.Style({
-                    text: new ol.style.Text({
-                        // unicode for fontawesome map-marker
-                        text: '\uf28e',
-                        font: 'normal ' + routingOpts.startEndMarkerStyle.markerSize + 'px FontAwesome',
-                        fill: new ol.style.Fill({
-                            color: routingOpts.startEndMarkerStyle.color
-                        }),
-                        textBaseline: 'bottom'
-                    })
-                })
-            );
+        // define defaults
+        var jobMarkerStyleSize = 28;
+        var jobMarkerStyleColor = 'black';
+        var jobMarkerStyleColorUnassigned = 'gray';
 
-            vm.set('endMarkerStyle',
-                new ol.style.Style({
-                    text: new ol.style.Text({
-                        // unicode for fontawesome map-marker
-                        text: '\uf28d',
-                        font: 'normal ' + routingOpts.startEndMarkerStyle.markerSize + 'px FontAwesome',
-                        fill: new ol.style.Fill({
-                            color: routingOpts.startEndMarkerStyle.color
-                        }),
-                        textBaseline: 'bottom'
-                    })
-                })
-            );
+        if (routingOpts.jobMarkerStyle) {
+            if (routingOpts.jobMarkerStyle.markerSize) {
+                jobMarkerStyleSize = routingOpts.jobMarkerStyle.markerSize;
+            }
+            if (routingOpts.jobMarkerStyle.color) {
+                jobMarkerStyleColor = routingOpts.jobMarkerStyle.color;
+            }
+            if (routingOpts.jobMarkerStyle.colorUnassigned) {
+                jobMarkerStyleColorUnassigned = routingOpts.jobMarkerStyle.colorUnassigned;
+            }
         }
+
+        // set style for job marker layer
+        vm.set('jobMarkerStyle',
+            new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome map-marker
+                    text: '\uf041',
+                    font: 'normal ' + jobMarkerStyleSize + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: jobMarkerStyleColor
+                    }),
+                    textBaseline: 'bottom'
+                })
+            })
+        );
+        vm.set('jobUnassignedMarkerStyle',
+            new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome map-marker
+                    text: '\uf041',
+                    font: 'normal ' + jobMarkerStyleSize + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: jobMarkerStyleColorUnassigned
+                    }),
+                    textBaseline: 'bottom'
+                })
+            })
+        );
+
+        // define defaults
+        var startEndMarkerSize = 24;
+        var startEndMarkerColor = 'black';
+        if (routingOpts.startEndMarkerStyle) {
+            if (routingOpts.startEndMarkerStyle.markerSize) {
+                startEndMarkerSize = routingOpts.startEndMarkerStyle.markerSize;
+            }
+            if (routingOpts.startEndMarkerStyle.color) {
+                startEndMarkerColor = routingOpts.startEndMarkerStyle.color;
+            }
+        }
+
+        vm.set('startMarkerStyle',
+            new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome map-marker
+                    text: '\uf28e',
+                    font: 'normal ' + startEndMarkerSize + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: startEndMarkerColor
+                    }),
+                    textBaseline: 'bottom'
+                })
+            })
+        );
+
+        vm.set('endMarkerStyle',
+            new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome map-marker
+                    text: '\uf28d',
+                    font: 'normal ' + startEndMarkerSize + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: startEndMarkerColor
+                    }),
+                    textBaseline: 'bottom'
+                })
+            })
+        );
     },
 
     /**
@@ -260,7 +286,6 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 style = vm.get('jobUnassignedMarkerStyle');
                 break;
             case 'start':
-            case 'startEnd':
                 style = vm.get('startMarkerStyle');
                 break;
             case 'end':
@@ -791,7 +816,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 // since 'start' and 'end' are the same
                 // the second argument of the function can
                 // be either 'start' or 'end'
-                me.createWaypointFeature(vehicle, 'start', 'startEnd');
+                me.createWaypointFeature(vehicle, 'start', 'start');
             } else {
                 me.createWaypointFeature(vehicle, 'start', 'start');
                 me.createWaypointFeature(vehicle, 'end', 'end');
