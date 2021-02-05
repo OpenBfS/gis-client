@@ -801,19 +801,24 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
             var start = vehicle.get('start');
             var end = vehicle.get('end');
-
-            var startAndEndAreEqual =
-                (start.latitude === end.latitude) &&
-                (start.longitude === end.longitude);
-
+            var startAndEndAreEqual = false;
+            if (start && end) {
+                startAndEndAreEqual =
+                    (start.latitude === end.latitude) &&
+                    (start.longitude === end.longitude);
+            }
             if (startAndEndAreEqual) {
                 // since 'start' and 'end' are the same
                 // the second argument of the function can
                 // be either 'start' or 'end'
                 me.createWaypointFeature(vehicle, 'start', 'start');
             } else {
-                me.createWaypointFeature(vehicle, 'start', 'start');
-                me.createWaypointFeature(vehicle, 'end', 'end');
+                if (start) {
+                    me.createWaypointFeature(vehicle, 'start', 'start');
+                }
+                if (end) {
+                    me.createWaypointFeature(vehicle, 'end', 'end');
+                }
             }
         });
     },
