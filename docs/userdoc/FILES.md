@@ -215,10 +215,17 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
     * **markerSize**
 
       Größe des Markers in Pixeln.
+      Default ist: 38
 
     * **color**
 
-      Farbe des Markers.
+      Farbe des Markers. 
+      Default ist: 'black'
+
+    * **colorUnassigned**
+
+      Farbe des Markers, wenn der Job nicht erfüllt werden konnte. 
+      Default ist: 'gray'
 
   * **startEndMarkerStyle**
 
@@ -227,10 +234,13 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
     * **markerSize**
 
       Größe des Markers in Pixeln.
+      Default ist: 15
 
     * **color**
 
       Farbe des Markers.
+      Default ist: 'black'
+
 
   * **elevationStyle**
 
