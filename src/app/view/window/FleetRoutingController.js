@@ -172,7 +172,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         vm.set('startMarkerStyle',
             new ol.style.Style({
                 text: new ol.style.Text({
-                    // unicode for fontawesome map-marker
+                    // unicode for fontawesome stop-circle-o
                     text: '\uf28e',
                     font: 'normal ' + startEndMarkerSize + 'px FontAwesome',
                     fill: new ol.style.Fill({
@@ -186,7 +186,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         vm.set('endMarkerStyle',
             new ol.style.Style({
                 text: new ol.style.Text({
-                    // unicode for fontawesome map-marker
+                    // unicode for fontawesome stop-circle
                     text: '\uf28d',
                     font: 'normal ' + startEndMarkerSize + 'px FontAwesome',
                     fill: new ol.style.Fill({
