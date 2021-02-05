@@ -113,7 +113,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         }
 
         // define defaults
-        var jobMarkerStyleSize = 28;
+        var jobMarkerStyleSize = 38;
         var jobMarkerStyleColor = 'black';
         var jobMarkerStyleColorUnassigned = 'gray';
 
@@ -158,7 +158,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         );
 
         // define defaults
-        var startEndMarkerSize = 24;
+        var startEndMarkerSize = 15;
         var startEndMarkerColor = 'black';
         if (routingOpts.startEndMarkerStyle) {
             if (routingOpts.startEndMarkerStyle.markerSize) {
