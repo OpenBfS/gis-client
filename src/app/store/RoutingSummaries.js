@@ -35,9 +35,9 @@ Ext.define('Koala.store.RoutingSummaries', {
         {name: 'query', convert: null},
 
         // VROOM properties
+        {name: 'vehicle', type: 'int', convert: null},
         {name: 'waiting_time', type: 'int'},
         {name: 'service', type: 'int'},
-        {name: 'start_arrival', type: 'int'},
-        {name: 'end_arrival', type: 'int'}
+        {name: 'steps', convert: null}
     ]
 });

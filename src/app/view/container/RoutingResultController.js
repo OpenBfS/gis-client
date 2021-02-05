@@ -33,7 +33,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var me = this;
 
         if (newResult) {
-            me.removeAllRoutesFromMap();
             me.addRouteToMap(newResult);
             me.zoomToRoute();
             me.clearRoutingSummaries();
@@ -49,58 +48,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
             me.setRoutingInstructionsVisiblity(false);
             me.setElevationPanelVisibility(false);
         }
-    },
-
-    /**
-     * Handler for the optimizationResultAvailable event.
-     *
-     * @param {Object} fleetSummary The response of the VROOM API.
-     * @param {Array} orsRoutes The routes computed with OpenRouteService.
-     */
-    onOptimizationResultAvailable: function(fleetSummary, orsRoutes) {
-
-        var me = this;
-
-        me.clearRoutingSummaries();
-        me.clearFleetSummary();
-        me.removeAllRoutesFromMap();
-        me.addFleetSummary(fleetSummary);
-
-
-        var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
-        if (!jobStore) {
-            return;
-        }
-
-        // clear VROOM specific properties from jobStore
-        // otherwise old might will stay in the new request
-        jobStore.each(function(rec) {
-            rec.set(
-                {
-                    waiting_time: null,
-                    arrival: null,
-                    vehicle_id: null,
-                    unassigned: false
-                }
-            );
-        });
-
-        // mark not succesful jobs
-        if (fleetSummary.unassigned) {
-            Ext.each(fleetSummary.unassigned, function(job) {
-                var jobRecord = jobStore.getById(job.id);
-                jobRecord.set({
-                    unassigned: true
-                });
-            });
-        }
-
-        Ext.each(orsRoutes, function(orsRoute, index) {
-            var correspondingVroomRoute = fleetSummary.routes[index];
-            me.addRoutingSummary(orsRoute, correspondingVroomRoute);
-            me.addRouteToMap(orsRoute);
-            me.addJobSummary(correspondingVroomRoute);
-        });
     },
 
     /**
@@ -312,18 +259,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
         }
 
         return BasiGX.util.Layer.getLayerByName(view.elevationLayerName);
-    },
-
-    /**
-     * Remove all routes from the map.
-     */
-    removeAllRoutesFromMap: function() {
-        var me = this;
-        var layer = me.getRouteLayer();
-        if (!layer) {
-            return;
-        }
-        layer.getSource().clear();
     },
 
     /**
@@ -643,10 +578,9 @@ Ext.define('Koala.view.container.RoutingResultController', {
      * with the ORS route.
      *
      * @param {GeoJson} orsRoute The ORS route.
-     * @param {Object} vroomRoute The VROOM route.
-     * TODO: fleetSummary
+     * @returns {Ext.data.Model} The added summary model instance.
      */
-    addRoutingSummary: function(orsRoute, vroomRoute) {
+    addRoutingSummary: function(orsRoute) {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
@@ -685,84 +619,8 @@ Ext.define('Koala.view.container.RoutingResultController', {
             query: query
         };
 
-        if (vroomRoute) {
-            summary.waiting_time = vroomRoute.waiting_time;
-            summary.service = vroomRoute.service;
-            // we overwrite the ORS duration with the VROOM duration
-            // because it is takes breaks and waiting times into account
-            summary.duration = vroomRoute.duration;
-
-            // get arrival times of start and end
-            var steps = vroomRoute.steps;
-            summary.start_arrival = steps[0].arrival;
-            summary.end_arrival = steps[steps.length - 1].arrival;
-        }
-
         var summaryStore = vm.get('routingsummaries');
-        summaryStore.add(summary);
-    },
-
-
-    /**
-     * Add VROOM specific information to job records.
-     *
-     * @param {Object} vroomRoute The VROOM route.
-     */
-    addJobSummary: function(vroomRoute) {
-        var me = this;
-        var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
-        if (!jobStore) {
-            return;
-        }
-
-        Ext.each(vroomRoute, function(route) {
-            var steps = route.steps;
-            Ext.each(steps, function(step) {
-
-                var type = step.type;
-                if (type === 'job') {
-                    var jobRecord = jobStore.getById(step.id);
-
-                    jobRecord.set({
-                        waiting_time: step.waiting_time,
-                        arrival: step.arrival,
-                        vehicle_id: route.vehicle
-                    });
-                }
-
-            });
-        });
-    },
-
-    /**
-     * Clear the fleet routing summary store.
-     */
-    clearFleetSummary: function() {
-        var me = this;
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-
-        var summaryStore = vm.get('fleetroutingsummary');
-        summaryStore.removeAll();
-    },
-
-    /**
-     * Add the fleet routing summary into its store.
-     *
-     * @param {Object} vroomResponse The whole JSON response from the VROOM API.
-     */
-    addFleetSummary: function(vroomResponse) {
-        var me = this;
-        var view = me.getView();
-        var vm = view.lookupViewModel();
-
-        if (!vroomResponse.summary) {
-            return;
-        }
-        var fleetSummaryStore = vm.get('fleetroutingsummary');
-        if (fleetSummaryStore) {
-            fleetSummaryStore.add(vroomResponse.summary);
-        }
+        return summaryStore.add(summary)[0];
     },
 
     /**
@@ -809,7 +667,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
         // zoom to extent
         map.getView().fit(extent, {
-            duration: 2000,
+            duration: 1000,
             padding: '30 30 30 30'
         });
     }

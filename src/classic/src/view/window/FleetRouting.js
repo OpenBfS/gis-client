@@ -31,7 +31,7 @@ Ext.define('Koala.view.window.FleetRouting', {
         'BasiGX.view.component.Map',
         'Koala.view.window.FleetRoutingModel',
         'Koala.view.window.FleetRoutingController',
-        'Koala.view.container.RoutingResult',
+        'Koala.view.container.FleetRoutingResult',
         'Koala.view.panel.ElevationProfile',
         'Koala.view.form.FleetRoutingSettings'
     ],
@@ -58,7 +58,7 @@ Ext.define('Koala.view.window.FleetRouting', {
     avoidAreaDrawInteraction: null,
 
     /** The name of the routingResultPanel */
-    routingResultPanelName: 'routing-result-panel',
+    routingResultPanelName: 'fleetrouting-result-panel',
 
     /** The name of the elevationProfilePanel*/
     elevationProfilePanelName: 'routing-elevationprofile-panel',
@@ -84,13 +84,12 @@ Ext.define('Koala.view.window.FleetRouting', {
             handler: 'optimizeRoute'
         }]
     }, {
-        xtype: 'k-container-routingresult',
-        name: 'routing-result-panel',
+        xtype: 'k-container-fleetroutingresult',
+        name: 'fleetrouting-result-panel',
         routeLayerName: 'routing-route-layer',
         routeSegmentLayerName: 'routing-route-segment-layer',
         elevationProfilePanelName: 'routing-elevationprofile-panel',
         elevationLayerName: 'routing-elevation-layer',
-        isFleetRouting: true,
         flex: 1
     }],
 

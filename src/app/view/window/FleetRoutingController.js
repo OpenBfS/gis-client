@@ -382,9 +382,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
         // loop through the computed routes
         // we collect the promises of the routing requests in an array
-        var promises = [];
-        Ext.each(vroomResponse.routes, function(vroomRoute) {
-
+        Ext.Promise.all(Ext.Array.map(vroomResponse.routes, function(vroomRoute) {
             // convert coordinates in ORS format
             var orsCoords = [];
             Ext.each(vroomRoute.steps, function(step) {
@@ -401,12 +399,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             });
 
             var orsUtil = Koala.util.OpenRouteService;
-            var routingPromise = orsUtil.requestDirectionsApi(orsParams);
-            promises.push(routingPromise);
-        });
-
-        // we handle the response once all routing requests have succeeded
-        Ext.Promise.all(promises)
+            return orsUtil.requestDirectionsApi(orsParams);
+        }))
             .then(function(orsResponses) {
                 var resultPanel = me.getResultPanel();
                 resultPanel.fireEvent('optimizationResultAvailable', vroomResponse, orsResponses);
