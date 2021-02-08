@@ -60,6 +60,8 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
                     start = undefined;
                 }
                 formData.start = start;
+            } else {
+                formData.start = undefined;
             }
         }
 
@@ -72,6 +74,8 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
                     end = undefined;
                 }
                 formData.end = end;
+            } else {
+                formData.end = undefined;
             }
         }
 

@@ -79,14 +79,33 @@ Ext.define('Koala.view.window.RoutingJob', {
             anchor: '100%'
         },
         items: [{
-            xtype: 'k-form-field-geocodingcombo',
-            name: 'address',
-            allowBlank: false,
-            labelSeparator: ': *',
-            bind: {
-                fieldLabel: '{i18n.addressLabel}',
-                emptyText: '{i18n.addressPlaceholder}'
-            }
+            xtype: 'container',
+            layout: 'hbox',
+            margin: '0 0 5 0',
+            items: [
+                {
+                    xtype: 'k-form-field-geocodingcombo',
+                    name: 'address',
+                    bind: {
+                        fieldLabel: '{i18n.addressLabel}',
+                        emptyText: '{i18n.addressPlaceholder}'
+                    },
+                    labelSeparator: ': *',
+                    flex: 1
+                },
+                {
+                    xtype: 'button',
+                    iconCls: 'x-fa fa-trash-o',
+                    margin: '0 0 0 5',
+                    handler: function(button) {
+                        var textField = button.up().down('k-form-field-geocodingcombo');
+                        if (!textField) {
+                            return;
+                        }
+                        textField.reset();
+                    }
+                }
+            ]
         }, {
             xtype: 'textarea',
             name: 'description',

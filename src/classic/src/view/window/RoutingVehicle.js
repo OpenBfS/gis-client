@@ -90,39 +90,79 @@ Ext.define('Koala.view.window.RoutingVehicle', {
             anchor: '100%'
         },
         items: [{
-            xtype: 'k-form-field-geocodingcombo',
-            name: 'start',
-            bind: {
-                fieldLabel: '{i18n.startLabel}',
-                emptyText: '{i18n.startPlaceholder}'
-            },
-            labelSeparator: ': *',
-            validator: function() {
-                var window = this.up('k-window-routing-vehicle');
-                var vm = window.getViewModel();
-                var endField = this.up().down('k-form-field-geocodingcombo[name=end]');
-                if (this.getSelectedRecord() === null && endField.getSelectedRecord() === null) {
-                    return vm.get('i18n.geocodingErrorText');
+            xtype: 'container',
+            layout: 'hbox',
+            margin: '0 0 5 0',
+            items: [
+                {
+                    xtype: 'k-form-field-geocodingcombo',
+                    name: 'start',
+                    bind: {
+                        fieldLabel: '{i18n.startLabel}',
+                        emptyText: '{i18n.startPlaceholder}'
+                    },
+                    labelSeparator: ': *',
+                    flex: 1,
+                    validator: function() {
+                        var window = this.up('k-window-routing-vehicle');
+                        var vm = window.getViewModel();
+                        var endField = window.down('k-form-field-geocodingcombo[name=end]');
+                        if (this.getSelectedRecord() === null && endField.getSelectedRecord() === null) {
+                            return vm.get('i18n.geocodingErrorText');
+                        }
+                        return true;
+                    }
+                },
+                {
+                    xtype: 'button',
+                    iconCls: 'x-fa fa-trash-o',
+                    margin: '0 0 0 5',
+                    handler: function(button) {
+                        var textField = button.up().down('k-form-field-geocodingcombo');
+                        if (!textField) {
+                            return;
+                        }
+                        textField.reset();
+                    }
                 }
-                return true;
-            }
-        }, {
-            xtype: 'k-form-field-geocodingcombo',
-            name: 'end',
-            bind: {
-                fieldLabel: '{i18n.endLabel}',
-                emptyText: '{i18n.endPlaceholder}'
-            },
-            labelSeparator: ': *',
-            validator: function() {
-                var window = this.up('k-window-routing-vehicle');
-                var vm = window.getViewModel();
-                var startField = this.up().down('k-form-field-geocodingcombo[name=start]');
-                if (this.getSelectedRecord() === null && startField.getSelectedRecord() === null) {
-                    return vm.get('i18n.geocodingErrorText');
+            ]
+        },{
+            xtype: 'container',
+            layout: 'hbox',
+            margin: '0 0 5 0',
+            items: [
+                {
+                    xtype: 'k-form-field-geocodingcombo',
+                    name: 'end',
+                    bind: {
+                        fieldLabel: '{i18n.endLabel}',
+                        emptyText: '{i18n.endPlaceholder}'
+                    },
+                    labelSeparator: ': *',
+                    flex: 1,
+                    validator: function() {
+                        var window = this.up('k-window-routing-vehicle');
+                        var vm = window.getViewModel();
+                        var startField = window.down('k-form-field-geocodingcombo[name=start]');
+                        if (this.getSelectedRecord() === null && startField.getSelectedRecord() === null) {
+                            return vm.get('i18n.geocodingErrorText');
+                        }
+                        return true;
+                    }
+                },
+                {
+                    xtype: 'button',
+                    iconCls: 'x-fa fa-trash-o',
+                    margin: '0 0 0 5',
+                    handler: function(button) {
+                        var textField = button.up().down('k-form-field-geocodingcombo');
+                        if (!textField) {
+                            return;
+                        }
+                        textField.reset();
+                    }
                 }
-                return true;
-            }
+            ]
         }, {
             xtype: 'textarea',
             name: 'description',
@@ -173,6 +213,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     bind: {
                         emptyText: '{i18n.timePlaceholder}'
                     },
+                    // TODO: set to true, should make it possible to delete date
                     editable: false,
                     validator: function(value) {
                         var window = this.up('k-window-routing-vehicle');
@@ -377,7 +418,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     case 'end':
                     case 'start':
                         var store = field.getStore();
-                        if (store) {
+                        if (store && v) {
                             field.suspendEvents();
                             store.loadRawData([v]);
                             field.setSelection(store.first());

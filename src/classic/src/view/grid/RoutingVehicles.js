@@ -201,6 +201,9 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
         var store = me.getStore();
         if (store) {
             if (vehicle) {
+                // TODO: remove undefined properties in record
+                //       - maybe inside model
+
                 var rec = store.getById(vehicle.id);
                 rec.set(data);
             } else {
