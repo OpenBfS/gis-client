@@ -31,6 +31,7 @@ Ext.define('Koala.store.FleetRoutingSummary', {
         {name: 'unassigned', type: 'int'},
         {name: 'service', type: 'int'},
         {name: 'duration', type: 'int'},
-        {name: 'waiting_time', type: 'int'}
+        {name: 'waiting_time', type: 'int'},
+        {name: 'unassingedJobs', convert: null, default: []}
     ]
 });

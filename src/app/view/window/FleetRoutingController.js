@@ -337,22 +337,11 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         if (vehicleProfileBtn) {
             vehicleProfile = vehicleProfileBtn.getValue();
         }
+        vm.set('routingProfile', vehicleProfile);
         var vehicles = vehicleStore.getVroomArray(vehicleProfile);
-        if (!vehicles) {
-            // TODO: deactivate "optimize" button when the
-            // minimal requirements are not fulfilled
-            // so this check becomes obsolete
-            return;
-        }
 
         var jobsStore = view.down('k-grid-routing-jobs').getStore();
         var jobs = jobsStore.getVroomArray();
-        if (!jobs) {
-            // TODO: deactivate "optimize" button when the
-            // minimal requirements are not fulfilled
-            // so this check becomes obsolete
-            return;
-        }
 
         var avoidArea = me.getAvoidAreaGeometry();
 
@@ -393,9 +382,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
             // create input parameter for routing request
             var orsParams = me.getORSParams({
-                coordinates: orsCoords
-                // TODO: take profile from vehicle input of the UI
-                // profile: ...,
+                coordinates: orsCoords,
+                profile: vm.get('routingProfile')
             });
 
             var orsUtil = Koala.util.OpenRouteService;

@@ -27,7 +27,8 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
         'Ext.button.Button',
         'Koala.view.container.FleetRoutingResultController',
         'Koala.view.panel.ElevationProfile',
-        'Koala.util.OpenRouteService'
+        'Koala.util.OpenRouteService',
+        'Koala.util.Date'
     ],
 
     controller: 'k-container-fleetroutingresult',
@@ -136,13 +137,26 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                     renderer: function(val, metaData, rec) {
                         var vm = this.lookupViewModel();
                         var unassigned = rec.get('unassigned');
+                        var unassignedJobIds = rec.get('unassignedJobs');
+                        var jobsStore = this.up('k-window-fleet-routing').down('k-grid-routing-jobs').getStore();
+                        var unassignedJobs = [];
+                        if (jobsStore) {
+                            unassignedJobs = Ext.Array.map(unassignedJobIds, function(jobId) {
+                                var job = jobsStore.getById(jobId);
+                                return job.get('address').address;
+                            });
+                        }
+
+                        if (unassignedJobs.length) {
+                            unassignedJobs.unshift(vm.get('i18n.numberjobsMissing') + ':');
+                        }
 
                         return ' ' +
-                        '<div class="fleet-routing-summary-cell">' +
+                        '<div class="fleet-routing-summary-cell" data-qtip="' + unassignedJobs.join('<br/>') + '">' +
                         '    <div><b>' + vm.get('i18n.numberjobsMissing') + '</b></div>' +
                         '    <div>' +
                         '        <span>' +
-                        '            ' + unassigned + ' ' + vm.get('i18n.jobsName') +
+                        '            ' + unassigned +
                         '        </span>' +
                         '    </div>' +
                         '</div>';
@@ -176,15 +190,18 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
             allowDeselect: true,
             columns: [
                 {
-                    // TODO maybe add tooltip with vehicle description
                     dataIndex: 'vehicle',
                     width: 40,
                     tdCls: 'routing-center-cell',
                     sortable: false,
                     renderer: function(val, metdaData, rec) {
+                        var me = this;
+                        var vm = me.lookupViewModel();
+
                         if (!rec) {
                             return;
                         }
+                        var orsUtil = Koala.util.OpenRouteService;
                         var vehicleId = rec.get('vehicle');
                         var vehiclesStore = this.up('k-window-fleet-routing')
                             .down('k-grid-routing-vehicles')
@@ -194,11 +211,15 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                             return;
                         }
 
-                        return '<span data-qtip="' + vehicle.get('description') + '">' + vehicleId + '</span>';
+                        return '<div class="vehicle"><span data-qtip="' + vehicle.get('description') + '">' +
+                            '<span>' + vehicleId + '</span><br/>' +
+                            orsUtil.getIconFromProfile(vm.get('routingProfile')) +
+                            '</span></div>';
                     }
                 }, {
-                    flex: 3,
+                    flex: 2,
                     sortable: false,
+                    tdCls: 'routing-center-cell',
                     renderer: function(val, metaData, rec) {
                         var vm = this.lookupViewModel();
 
@@ -252,7 +273,10 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                     flex: 1,
                     tdCls: 'routing-center-cell',
                     renderer: function(val, metaData, rec) {
+                        var vm = this.lookupViewModel();
+
                         var orsUtil = Koala.util.OpenRouteService;
+                        var dateUtil = Koala.util.Date;
 
                         var duration = rec.get('duration');
                         var distance = rec.get('distance');
@@ -261,10 +285,37 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
 
                         var durationFormatted = orsUtil.getFormattedDuration(duration, true);
                         var distanceFormatted = orsUtil.getFormattedDistance(distance, true);
+                        var startFormatted = '';
+                        var endFormatted = '';
+                        var isTimeStamp = false;
+                        try {
+                            var steps = rec.get('steps');
+                            var startTime = steps[0].arrival;
+                            // we assume that seconds with at least 10 digits are timestamps
+                            // and not relative times
+                            if (startTime.toString().length > 9) {
+                                isTimeStamp = true;
+                            }
+                            var endTime = steps[steps.length - 1].arrival;
+                            startFormatted = dateUtil.getFormattedDate(moment(startTime * 1000), 'HH:mm DD.MM.YYYY');
+                            endFormatted = dateUtil.getFormattedDate(moment(endTime * 1000), 'HH:mm DD.MM.YYYY');
+                        /* eslint-disable-next-line no-empty */
+                        } catch (err) {}
 
-                        var content = '<div class="routing-summary-cell">';
+                        var tooltip = vm.get('i18n.duration') + ': ' + durationFormatted + '<br />';
+                        tooltip += vm.get('i18n.distance') + ': ' + distanceFormatted;
+                        if (isTimeStamp) {
+                            tooltip += '<br />' + vm.get('i18n.startTime') + ': ' + startFormatted + '<br />';
+                            tooltip += vm.get('i18n.arrivalTime') + ': ' + endFormatted;
+                        }
+
+                        var content = '<div class="routing-summary-cell" data-qtip="' + tooltip + '">';
                         content += '<span><i class="fa fa-clock-o" aria-hidden="true"></i> ' + durationFormatted + '</span><br />';
-                        content += '<span><i class="fa fa-arrows-h" aria-hidden="true"></i> ' + distanceFormatted + '</span>';
+                        content += '<span><i class="fa fa-arrows-h" aria-hidden="true"></i> ' + distanceFormatted + '</span><br />';
+                        if (isTimeStamp) {
+                            content += '<span><i class="fa fa-stop-circle-o" aria-hidden="true"></i> ' + startFormatted + '</span><br />';
+                            content += '<span><i class="fa fa-stop-circle" aria-hidden="true"></i> ' + endFormatted + '</span>';
+                        }
                         content += '</div>';
 
                         return content;

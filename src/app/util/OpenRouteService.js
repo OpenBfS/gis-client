@@ -155,7 +155,7 @@ Ext.define('Koala.util.OpenRouteService', {
                     iconCls = 'fa-car';
                     break;
                 default:
-                    return;
+                    return '';
             }
 
             return '<i class="fa ' + iconCls + '" aria-hidden="true"></i>';

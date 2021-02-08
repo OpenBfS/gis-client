@@ -1000,12 +1000,15 @@
                     "totalDrivingDuration": "Driving Duration",
                     "totalServiceDuration": "Service Duration",
                     "totalWaitingDuration": "Waiting Duration",
-                    "numberjobsMissing": "Failed",
-                    "jobsName": "jobs",
+                    "numberjobsMissing": "Failed jobs",
                     "fleetRoutingSummary": "Summary",
                     "routesHeading": "Routes",
                     "startText": "From",
-                    "viaText": "To"
+                    "viaText": "To",
+                    "duration": "Duration",
+                    "distance": "Distance",
+                    "startTime": "Starting time",
+                    "arrivalTime": "Arrival time"
                 }
             }
         }

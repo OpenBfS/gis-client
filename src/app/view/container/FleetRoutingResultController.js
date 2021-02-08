@@ -187,7 +187,11 @@ Ext.define('Koala.view.container.FleetRoutingResultController', {
         }
         var fleetSummaryStore = vm.get('fleetroutingsummary');
         if (fleetSummaryStore) {
-            fleetSummaryStore.add(vroomResponse.summary);
+            var summary = Ext.clone(vroomResponse.summary);
+            summary.unassignedJobs = Ext.Array.map(vroomResponse.unassigned, function(job) {
+                return job.id;
+            });
+            fleetSummaryStore.add(summary);
         }
     }
 });

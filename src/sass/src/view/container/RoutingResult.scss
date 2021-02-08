@@ -38,6 +38,11 @@
 .routing-center-cell {
     vertical-align: middle;
     padding-left: 10px;
+
+    .vehicle {
+        text-align: center;
+        width: 15px;
+    }
 }
 
 .routing-summary-icon-cell {

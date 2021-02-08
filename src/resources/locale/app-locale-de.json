@@ -1006,12 +1006,15 @@
                     "totalDrivingDuration": "Fahrzeit",
                     "totalServiceDuration": "Auftragsdauer",
                     "totalWaitingDuration": "Wartezeit",
-                    "numberjobsMissing": "Nicht erfüllt",
-                    "jobsName": "Aufträge",
+                    "numberjobsMissing": "Ausgelassene Ziele",
                     "fleetRoutingSummary": "Zusammenfassung",
                     "routesHeading": "Routen",
                     "startText": "Von",
-                    "viaText": "Nach"
+                    "viaText": "Nach",
+                    "duration": "Dauer",
+                    "distance": "Distanz",
+                    "startTime": "Startzeit",
+                    "arrivalTime": "Ankunftszeit"
                 }
             }
         }
