@@ -188,7 +188,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                         fieldLabel: '{i18n.startDayLabel}',
                         emptyText: '{i18n.dayPlaceholder}'
                     },
-                    editable: false,
+                    editable: true,
                     validator: function(value) {
                         var window = this.up('k-window-routing-vehicle');
                         var vm = window.getViewModel();
@@ -213,8 +213,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     bind: {
                         emptyText: '{i18n.timePlaceholder}'
                     },
-                    // TODO: set to true, should make it possible to delete date
-                    editable: false,
+                    editable: true,
                     validator: function(value) {
                         var window = this.up('k-window-routing-vehicle');
                         var vm = window.getViewModel();
@@ -261,7 +260,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                         fieldLabel: '{i18n.endDayLabel}',
                         emptyText: '{i18n.dayPlaceholder}'
                     },
-                    editable: false,
+                    editable: true,
                     validator: function(value) {
                         var window = this.up('k-window-routing-vehicle');
                         var vm = window.getViewModel();
@@ -286,7 +285,7 @@ Ext.define('Koala.view.window.RoutingVehicle', {
                     bind: {
                         emptyText: '{i18n.timePlaceholder}'
                     },
-                    editable: false,
+                    editable: true,
                     validator: function(value) {
                         var window = this.up('k-window-routing-vehicle');
                         var vm = window.getViewModel();
