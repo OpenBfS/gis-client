@@ -22,6 +22,7 @@ Ext.define('Koala.view.window.RoutingController', {
     requires: [
         'GeoExt.component.Popup',
         'BasiGX.util.Layer',
+        'BasiGX.view.component.Map',
         'Koala.util.Geocoding',
         'Koala.util.OpenRouteService',
         'Koala.util.AppContext'
