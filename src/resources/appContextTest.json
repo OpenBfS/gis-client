@@ -229,6 +229,7 @@
             "routing": {
                 "openrouteserviceUrl": "https://entw-imis.lab.bfs.de/ors",
                 "photonUrl": "/geocoding-dev",
+                "vroomUrl": "https://entw-imis.lab.bfs.de/ors/optimization",
                 "routeStyle": {
                     "colorPrimary": "#ff0000",
                     "colorSecondary": "#BDBDBD",

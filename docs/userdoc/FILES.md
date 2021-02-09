@@ -178,11 +178,11 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
     * **colorPrimary**
 
-      Primäre Farbe der Wegpunkte.
+      Primäre Farbe der Route.
 
     * **colorSecondary**
 
-      Sekundäre Farbe der Wegpunkte.
+      Sekundäre Farbe der Route.
 
     * **width**
 
@@ -310,7 +310,8 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
         "openrouteserviceUrl": "https://entw-imis.lab.bfs.de/ors",
         "photonUrl": "https://entw-imis.lab.bfs.de/photon",
         "routeStyle": {
-            "color": "#ff0000",
+            "colorPrimary": "#ff0000",
+            "colorSecondary": "#BDBDBD",
             "width": 5
         },
         "routeSegmentStyle": {
