@@ -213,7 +213,19 @@ Ext.define('Koala.view.window.RoutingController', {
     onBoxReady: function() {
         var me = this;
         var view = me.getView();
+        if (!view) {
+            return;
+        }
         var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        var mapContainer = BasiGX.view.component.Map.guess();
+        if (mapContainer) {
+            view.setX(mapContainer.getX());
+            view.setY(mapContainer.getY());
+        }
 
         me.fillViewModel();
         me.createRoutingLayers();
