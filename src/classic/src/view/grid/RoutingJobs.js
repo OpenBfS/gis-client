@@ -63,6 +63,7 @@ Ext.define('Koala.view.grid.RoutingJobs', {
             }
         }, {
             dataIndex: 'address',
+            sortable: false,
             bind: {
                 text: '{i18n.addressColumnText}'
             },
@@ -74,6 +75,7 @@ Ext.define('Koala.view.grid.RoutingJobs', {
             }
         }, {
             dataIndex: 'description',
+            sortable: false,
             bind: {
                 text: '{i18n.descriptionColumnText}'
             },

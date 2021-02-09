@@ -953,7 +953,8 @@
         "config": {
             "data": {
                 "i18n": {
-                    "classicRoutingtitle": "Route Planning",                    "startFieldTitle": "Start",
+                    "classicRoutingtitle": "Route Planning",
+                    "startFieldTitle": "Start",
                     "viaFieldTitle": "Via",
                     "endFieldTitle": "End",
                     "addEmptyPoint": "New Point",
@@ -964,9 +965,9 @@
                     "addEndPoint": "Set destination",
                     "elevationBtnText": "Elevation Profile",
                     "downloadButtonText": "Download",
-                    "errorGeoCoding": "Could not load location. Please try again (later).",
-                    "errorRoutingRequest": "Routing request failed. Please try again (later).",
-                    "errorDownloadRoute": "Download failed. Please try again (later).",
+                    "errorGeoCoding": "Could not load location.",
+                    "errorRoutingRequest": "Routing request failed.",
+                    "errorDownloadRoute": "Download failed.",
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Driving",
                     "profileBycicleText": "Cycling",
@@ -984,9 +985,9 @@
                     "computeFleetRoutingButtonText": "Compute routes",
                     "elevationBtnText": "Elevation Profile",
                     "downloadButtonText": "Download",
-                    "errorGeoCoding": "Could not load location. Please try again (later).",
-                    "errorRoutingRequest": "Routing request failed. Please try again (later).",
-                    "errorDownloadRoute": "Download failed. Please try again (later).",
+                    "errorGeoCoding": "Could not load location.",
+                    "errorRoutingRequest": "Routing request failed.",
+                    "errorDownloadRoute": "Download failed.",
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Driving",
                     "profileBycicleText": "Cycling",
@@ -1003,12 +1004,14 @@
                     "numberjobsMissing": "Unassigned targets",
                     "fleetRoutingSummary": "Summary",
                     "routesHeading": "Routes",
+                    "vehicleText": "Vehicle",
                     "startText": "From",
                     "viaText": "To",
                     "duration": "Duration",
                     "distance": "Distance",
                     "startTime": "Starting time",
-                    "arrivalTime": "Arrival time"
+                    "arrivalTime": "Arrival time",
+                    "settingsTitle": "Settings"
                 }
             }
         }
@@ -1028,7 +1031,7 @@
                     "errorUploadedFileExtension": "Unsupported filetype. Please load a '.json' or '.geojson' file.",
                     "errorZeroFeatures": "The uploaded GeoJSON does not contain features. Please upload one feature.",
                     "errorGetFeatureInfo": "The polygon could not be read from the layer.",
-                    "errorNoLayerFound": "No valid layer found at selected location. Please try again.",
+                    "errorNoLayerFound": "No valid layer found at selected location.",
                     "errorNoPolygonChosen": "The selected feature is not a polygon. Please select a polygon."
                 }
             }

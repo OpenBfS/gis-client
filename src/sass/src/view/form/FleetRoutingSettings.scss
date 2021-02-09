@@ -1,6 +1,18 @@
-.routing-brighter-panel {
-    .x-panel-header {
-        background-color: #496886;
-        border-color: #496886;
+.fleet-routing-settings {
+
+    .routing-brighter-panel {
+        .x-panel-header {
+            background-color: #496886;
+            border-color: #496886;
+        }
+    }
+
+    >.x-panel-header {
+        background-color: white;
+
+        .x-title-text {
+            color: #29333E;
+            font-size: medium;
+        }
     }
 }

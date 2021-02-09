@@ -29,6 +29,8 @@ Ext.define('Koala.view.form.FleetRoutingSettings', {
 
     bodyPadding: '10 5 0 5',
 
+    cls: 'fleet-routing-settings',
+
     defaults: {
         padding: '0 0 10 0',
         flex: 1,

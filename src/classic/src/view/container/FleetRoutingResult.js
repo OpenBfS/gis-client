@@ -167,7 +167,6 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
             xtype: 'grid',
             name: 'routing-summary-grid',
             scrollable: true,
-            flex: 1,
             tbar: [
                 {
                     xtype: 'tbtext',
@@ -179,7 +178,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                     }
                 }
             ],
-            minHeight: 100,
+            maxHeight: 200,
             defaults: {
                 flex: 1
             },
@@ -214,7 +213,8 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                             return;
                         }
 
-                        return '<div class="vehicle"><span data-qtip="' + vehicle.get('description') + '">' +
+                        var tooltip = vm.get('i18n.vehicleText') + ' ' + vehicleId;
+                        return '<div class="vehicle"><span data-qtip="' + tooltip + '">' +
                             '<span>' + vehicleId + '</span><br />' +
                             orsUtil.getIconFromProfile(vm.get('routingProfile')) +
                             '</span></div>';
@@ -386,8 +386,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
         },
         {
             xtype: 'grid',
-            flex: 1,
-            minHeight: 100,
+            maxHeight: 150,
             bind: {
                 store: '{routinginstructions}',
                 hidden: '{!showRoutingInstructions}'

@@ -62,6 +62,7 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
             }
         }, {
             dataIndex: 'start',
+            sortable: false,
             flex: 1,
             bind: {
                 text: '{i18n.startColumnText}'
@@ -73,6 +74,7 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
             }
         }, {
             dataIndex: 'end',
+            sortable: false,
             flex: 1,
             bind: {
                 text: '{i18n.endColumnText}'
@@ -84,6 +86,7 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
             }
         }, {
             dataIndex: 'description',
+            sortable: false,
             bind: {
                 text: '{i18n.descriptionColumnText}'
             },
