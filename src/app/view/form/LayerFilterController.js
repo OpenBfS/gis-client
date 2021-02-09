@@ -234,24 +234,29 @@ Ext.define('Koala.view.form.LayerFilterController', {
     onFilterChanged: function(field) {
         var Objects = Koala.util.Object;
         var view = this.getView();
-        var filterName = field.config.name;
+        var filterName = field.config.fieldLabel;
 
         var metadata = view.getMetadata();
         var filters = view.getFilters();
         var currentFilters = this.updateFiltersFromForm(filters);
         var context = Objects.arrayToObject(currentFilters, 'param', 'effectivevalue');
-        var origFilters = Objects.arrayToMap(metadata.filters, 'param');
+        var origFilters = Objects.arrayToMap(metadata.filters, 'alias');
         var path = 'layerConfig/olProperties/filterDependencies';
         var depsString = Objects.getPathStrOr(metadata, path, '{}');
 
-        var deps = JSON.parse(depsString);
+        var deps = depsString;
+        if (Ext.isString(depsString)) {
+            deps = JSON.parse(depsString);
+        }
         deps = Objects.inverse(deps);
         if (deps[filterName]) {
-            var store = view.down('combobox[name=' + deps[filterName] + ']').getStore();
+            var combo = view.down('combobox[name=' + origFilters[deps[filterName]].param + ']');
+            var store = combo.getStore();
             var filter = origFilters[deps[filterName]];
             Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context)
                 .then(function(data) {
                     store.setData(JSON.parse(data));
+                    combo.clearValue();
                 });
         }
     }

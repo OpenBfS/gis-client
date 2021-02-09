@@ -436,6 +436,23 @@ Soll die Legende die Anzahl der Treffer enthalten?
 | Default-Wert         | false |
 | Beispiel             | true |
 
+**filterDependencies**
+
+Ein JSON-Objekt, welches Abhängigkeiten zwischen Filtern modelliert.
+Es werden die Aliase von Filtern auf andere gemappt. Wird dann der
+Wert des value-Filters geändert, wird der Wert der allowedValues des
+key-Filters neu ausgewertet, mit den aktuellen Werten aller Filter
+als Kontextobjekt (mit dem Filter-Parameter als key). In diesem Beispiel
+würde also eine Änderung des Stationsnamens dazu führen, dass der
+Trajektorie_id-Filter neu ausgewertet würde.
+
+| Typ | gco:CharacterString   |
+|----------------------:|:----|
+| Erlaubte Wertemenge   | Object |
+| Obligatorisch         | &#10799; |
+| Default-Wert          | {} |
+| Beispiel              | {"Trajektorie_id": "Stationsname"} |
+
 **alwaysOnTop**
 
 Layer erhält initial alwaysOnTop Verhalten.
