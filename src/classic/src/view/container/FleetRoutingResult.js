@@ -166,6 +166,8 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
         },{
             xtype: 'grid',
             name: 'routing-summary-grid',
+            scrollable: true,
+            flex: 1,
             tbar: [
                 {
                     xtype: 'tbtext',
@@ -177,6 +179,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                     }
                 }
             ],
+            minHeight: 100,
             defaults: {
                 flex: 1
             },
@@ -383,7 +386,8 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
         },
         {
             xtype: 'grid',
-            flex: 5,
+            flex: 1,
+            minHeight: 100,
             bind: {
                 store: '{routinginstructions}',
                 hidden: '{!showRoutingInstructions}'
