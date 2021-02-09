@@ -81,8 +81,14 @@ Ext.define('Koala.view.container.FleetRoutingResultController', {
 
         Ext.each(orsRoutes, function(orsRoute, index) {
             var correspondingVroomRoute = fleetSummary.routes[index];
-            me.addRoutingSummary(orsRoute, correspondingVroomRoute);
-            me.addRouteToMap(orsRoute);
+
+            var summary = me.addRoutingSummary(orsRoute, correspondingVroomRoute);
+
+            me.addRouteToMap(orsRoute, {
+                // attach record id from store to feature
+                summaryRecordId: summary.getId()
+            });
+
             me.addJobSummary(correspondingVroomRoute);
         });
     },
@@ -193,5 +199,48 @@ Ext.define('Koala.view.container.FleetRoutingResultController', {
             });
             fleetSummaryStore.add(summary);
         }
+    },
+
+    /**
+     * Zoom to selected route on the map.
+     *
+     * @param {Ext.grid.Panel} grid The Ext Grid.
+     * @param {Ext.data.Model} rec The record of the route.
+     */
+    zoomToRoute: function(grid, rec) {
+        var me = this;
+        var view = me.getView();
+        var map = view.map;
+        var mapView = map.getView();
+
+        var layer = me.getRouteLayer();
+        if (!layer) {
+            return;
+        }
+        var source = layer.getSource();
+        if (!source) {
+            return;
+        }
+
+        var geometry = rec.get('geometry');
+
+        if (!geometry) {
+            return;
+        }
+        var geoJsonFeature = {
+            type: 'Feature',
+            geometry: geometry,
+            properties: {}
+        };
+
+        var projection = view.map.getView().getProjection().getCode();
+        var feature = (new ol.format.GeoJSON()).readFeature(geoJsonFeature, {
+            featureProjection: projection
+        });
+
+        mapView.fit(feature.getGeometry(), {
+            duration: 1000,
+            padding: '30 30 30 30'
+        });
     }
 });

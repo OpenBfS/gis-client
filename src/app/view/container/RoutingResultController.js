@@ -83,9 +83,10 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
         var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
+        if (!source) {
+            return;
         }
+        source.clear();
         var feature = me.createLineFeature(rec.get('coordinates'));
         source.addFeature(feature);
     },
@@ -101,9 +102,10 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
         var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
+        if (!source) {
+            return;
         }
+        source.clear();
     },
 
     /**
@@ -121,9 +123,11 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
         var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
+        if (!source) {
+            return;
         }
+        source.clear();
+
         var feature = me.createLineFeature(rec.get('coordinates'));
         source.addFeature(feature);
 
@@ -144,33 +148,21 @@ Ext.define('Koala.view.container.RoutingResultController', {
      */
     onSummaryMouseEnter: function(grid, rec) {
         var me = this;
-        var view = me.getView();
-        var map = view.map;
 
-        if (!map) {
+        var routeLayer = me.getRouteLayer();
+        if (!routeLayer) {
             return;
         }
-
-        var routeSegmentLayer = me.getRouteSegmentLayer();
-        if (!routeSegmentLayer) {
+        var source = routeLayer.getSource();
+        if (!source) {
             return;
         }
-        var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
-        }
-
-        var geometry = rec.get('geometry');
-        var feature = {
-            type: 'Feature',
-            geometry: geometry,
-            properties: {}
-        };
-
-        var projection = map.getView().getProjection().getCode();
-        source.addFeature((new ol.format.GeoJSON()).readFeature(feature, {
-            featureProjection: projection
-        }));
+        source.forEachFeature(function(feature) {
+            var isCorrectFeature = (
+                feature.get('summaryRecordId') === rec.getId()
+            );
+            feature.set('highlighted', isCorrectFeature);
+        });
     },
 
     /**
@@ -179,14 +171,17 @@ Ext.define('Koala.view.container.RoutingResultController', {
     onSummaryMouseLeave: function() {
         var me = this;
 
-        var routeSegmentLayer = me.getRouteSegmentLayer();
-        if (!routeSegmentLayer) {
+        var routeLayer = me.getRouteLayer();
+        if (!routeLayer) {
             return;
         }
-        var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
+        var source = routeLayer.getSource();
+        if (!source) {
+            return;
         }
+        source.forEachFeature(function(feature) {
+            feature.set('highlighted', true);
+        });
     },
 
     /**
@@ -216,7 +211,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Gets the RouteLayer.
+     * Get the RouteLayer.
      * @returns {ol.layer.Vector} The RouteLayer.
      */
     getRouteLayer: function() {
@@ -232,7 +227,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
     /**
      * Get the RouteSegmentLayer.
-     *
      * @returns {ol.layer.Vector} The RouteSegmentLayer.
      */
     getRouteSegmentLayer: function() {
@@ -247,7 +241,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Gets the ElevationLayer.
+     * Get the ElevationLayer.
      * @returns {ol.layer.Vector} The WaypointLayer.
      */
     getElevationLayer: function() {
@@ -263,9 +257,11 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
     /**
      * Add the Routing feature to the map.
+     *
      * @param {Object} geojson The GeoJSON to be added.
+     * @param {Object} featureProperties Additional properties for feature.
      */
-    addRouteToMap: function(geojson) {
+    addRouteToMap: function(geojson, featureProperties) {
         var me = this;
         var view = me.getView();
 
@@ -285,6 +281,14 @@ Ext.define('Koala.view.container.RoutingResultController', {
         // the GeoJSON could contain more routes
         // however we only want the the first one
         var newRoute = newRouteFeatures[0];
+
+        // all routes are highlighted by default
+        featureProperties['highlighted'] = true;
+
+        // add additional properties to the feature
+        if (featureProperties && Ext.isObject(featureProperties)) {
+            newRoute.setProperties(featureProperties);
+        }
 
         var source = layer.getSource();
         source.addFeature(newRoute);

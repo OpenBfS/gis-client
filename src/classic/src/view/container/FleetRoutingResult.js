@@ -187,7 +187,9 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
             },
             listeners: {
                 itemmouseenter: 'onSummaryMouseEnter',
-                itemmouseleave: 'onSummaryMouseLeave'
+                itemmouseleave: 'onSummaryMouseLeave',
+                itemclick: 'zoomToRoute'
+
             },
             allowDeselect: true,
             columns: [

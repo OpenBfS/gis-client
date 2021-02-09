@@ -209,9 +209,6 @@ Ext.define('Koala.view.container.RoutingResult', {
     /** The name of the layer that contains the route */
     routeLayerName: 'routing-route-layer',
 
-    /** The name of the layer that contains the route */
-    routeSegmentLayerName: 'routing-route-segment-layer',
-
     /** The name of the layer for elevation interaction */
     elevationLayerName: 'routing-elevation-layer',
 

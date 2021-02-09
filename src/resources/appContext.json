@@ -232,7 +232,8 @@
                 "photonUrl": "/geocoding-dev",
                 "vroomUrl": "https://entw-imis.lab.bfs.de/ors/optimization",
                 "routeStyle": {
-                    "color": "#ff0000",
+                    "colorPrimary": "#ff0000",
+                    "colorSecondary": "#BDBDBD",
                     "width": 5
                 },
                 "routeSegmentStyle": {

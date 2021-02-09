@@ -50,8 +50,6 @@ Ext.define('Koala.view.panel.MobileRouting',{
 
     routeLayerName: 'routing-route-layer',
 
-    routeSegmentLayerName: 'routing-route-segment-layer',
-
     map: null,
 
     /** The name of the routingResultPanel */

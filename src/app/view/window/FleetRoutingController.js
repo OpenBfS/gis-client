@@ -314,6 +314,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         // remove context menu listener
         var mapViewport = view.map.getViewport();
         mapViewport.removeEventListener('contextmenu', me.boundOpenContextMenu);
+
     },
 
     /**
@@ -837,10 +838,6 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var lon = wayPointProps.longitude;
 
         var transformed = me.latLonToMapProjection([lon, lat]);
-
-        // TODO: add properties from job store
-
-        // TODO: add properties from vehicle
 
         var feature = new ol.Feature({
             type: type,

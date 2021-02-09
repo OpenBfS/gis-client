@@ -257,13 +257,25 @@ Ext.define('Koala.view.window.RoutingController', {
         var routingOpts = contextUtil.getMergedDataByKey('routing', ctx);
         vm.set('routingOpts', routingOpts);
 
+
+
         if (routingOpts.routeStyle) {
-            var routeStyle = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: routingOpts.routeStyle.color,
-                    width: routingOpts.routeStyle.width
-                })
-            });
+            var routeStyle = function(feature) {
+                // primary color
+                var color = routingOpts.routeStyle.colorPrimary;
+
+                // secondary color
+                if (feature.get('highlighted') === false) {
+                    color = routingOpts.routeStyle.colorSecondary;
+                }
+
+                return new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: color,
+                        width: routingOpts.routeStyle.width
+                    })
+                });
+            };
             vm.set('routeStyle', routeStyle);
         }
 
