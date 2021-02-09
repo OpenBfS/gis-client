@@ -11,6 +11,9 @@
     <link rel="shortcut icon" sizes="192x192" href="./android-icon-192x192.png">
     <link rel="apple-touch-icon-precomposed" href="./ios-icon-152x152.png">
 
+    <!-- Required for initial loadmask -->
+    <!-- <link rel="stylesheet" type="text/css" href="resources/loadmask.css" /> -->
+
     <title>IMIS3[GIS] - BfS - Bundesamt f&uuml;r Strahlenschutz</title>
 
     <link rel="stylesheet" type="text/css" href="resources/lib/openlayers-v4.6.4-dist/ol.css" />
@@ -53,7 +56,12 @@
         var Koala = Koala || {};
         // must be queryable from XHR (CORS…)
         //Koala.appContextUrl = "resources/appContext.json";
-        Koala.appContextUrl = window.location.protocol + "//" + window.location.hostname + "/gis_client_configs/appContext.json";
+        // var port = "";
+        // if (window.location.port){
+        //     port = ":" + window.location.port;
+        // }
+        // Koala.appContextUrl = window.location.protocol + "//" + window.location.hostname + port + "/gis_client_configs/appContext.json";
+        Koala.appContextUrl = window.location.origin + "/gis_client_configs/appContext.json";
     </script>
     <script type="text/javascript">
         var Ext = Ext || {}; // Ext namespace won't be defined yet...
@@ -99,15 +107,50 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            height: 117px;
-            width: 310px;
-            background-image: url("resources/images/animated_BfS_logo_grey.gif");
-            background-repeat: no-repeat;
+            height: 152px;
+            width: 160px;
             z-index: -1;
+        }
+
+        .svg-loadmask {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-120px, 0px);*/
+            width: 140px;
+            height: 20px; */
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .svg-image {
+        height:250px;
+        object-position: 0px 0px;
+        transform: translate(-25%, -50%);
         }
     </style>
 </head>
 <body>
-    <div id="loadmask" />
+    <div id="loadmask">
+        <object class="svg-image" data="resources/images/BfS_Logo_de_rgb.svg" type="image/svg+xml">
+        </object>
+        <svg version="1.1" class="svg-loadmask" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  xml:space="preserve">
+            <circle fill="#999" stroke="none" cx="5" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.1" />
+            </circle>
+            <circle fill="#999" stroke="none" cx="25" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.2" />
+            </circle>
+            <circle fill="#999" stroke="none" cx="45" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.3" />
+            </circle>
+            <circle fill="#999" stroke="none" cx="65" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.4" />
+            </circle>
+            <circle fill="#999" stroke="none" cx="85" cy="10" r="4">
+                <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.5" />
+            </circle>
+        </svg>
+    </div>
 </body>
 </html>
