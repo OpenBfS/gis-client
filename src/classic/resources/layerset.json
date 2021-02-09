@@ -17,6 +17,11 @@
         "thumb": "layer_sets/kerntechnik_thumb.png",
         "children": [
             {
+                "uuid": "ebdf6a3f-09b3-44c3-b090-67ccf8b9e33c",
+                "text": "Trajektorien",
+                "leaf": true
+            },
+            {
                 "uuid": "f7912742-9604-43b8-9b35-b625a01fbbd7",
                 "text": "WFS-T Planungsradien",
                 "leaf": true

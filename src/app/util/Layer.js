@@ -711,7 +711,11 @@ Ext.define('Koala.util.Layer', {
             } else if (typeof metadata === 'string') {
                 var ms = metadata.match(/^url:(.+)/);
                 if (ms) {
-                    var promise = staticMe.getMetadataValue(ms[1]);
+                    if (metadata.indexOf('[[') !== -1) {
+                        // skip metadata update in case we have a templated URL
+                        return Ext.Promise.resolve(metadata);
+                    }
+                    var promise = staticMe.getMetadataValue(ms[1], metadata);
                     promises.push(promise);
                     return promise;
                 }

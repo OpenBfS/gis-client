@@ -125,6 +125,21 @@ Ext.define('Koala.view.form.LayerFilter', {
         me.add(submitButton);
         me.getForm().isValid();
 
+        var metadata = this.getMetadata();
+        var path = 'layerConfig/olProperties/filterDependencies';
+        var depsString = Koala.util.Object.getPathStrOr(metadata, path, '{}');
+        var deps = depsString;
+        if (Ext.isString(depsString)) {
+            deps = JSON.parse(depsString);
+        }
+        deps = Koala.util.Object.inverse(deps);
+        Ext.each(filters, function(filter) {
+            if (!deps[filter.alias]) {
+                return;
+            }
+            var field = me.down('[name=' + filter.param + ']');
+            me.getController().onFilterChanged(field);
+        });
     },
 
     /**
