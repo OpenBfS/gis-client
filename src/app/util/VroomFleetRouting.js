@@ -34,6 +34,7 @@ Ext.define('Koala.util.VroomFleetRouting', {
             if (config.routing && config.routing.vroomUrl) {
                 return config.routing.vroomUrl;
             }
+            Ext.Logger.error('vroomUrl is not defined in appContext.json');
         },
 
         /**
@@ -44,7 +45,7 @@ Ext.define('Koala.util.VroomFleetRouting', {
          * @param {Array} vehicles An array of vehicle objects.
          * @param {Array} jobs An array of job objects.
          * @param {Object} avoidArea The geometry of the avoid area.
-         * @returns {Ext.Promise} A promise resolving on succesful completion.
+         * @returns {Ext.Promise} A promise resolving on successful completion.
          * */
         performOptimization: function(vehicles, jobs, avoidArea) {
             return new Ext.Promise(function(resolve, reject) {
@@ -52,10 +53,6 @@ Ext.define('Koala.util.VroomFleetRouting', {
                 var url = Koala.util.VroomFleetRouting.getApiEndpoint();
                 if (!url) {
                     reject('API endpoint is not defined.');
-                }
-
-                if (!Ext.isArray(vehicles) || !Ext.isArray(jobs)) {
-                    reject('Input data is invalid or undefined.');
                 }
 
                 var jsonData = {
