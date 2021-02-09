@@ -179,17 +179,14 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
     * **colorPrimary**
 
       Primäre Farbe der Wegpunkte.
-      Default ist: "#ff0000"
 
     * **colorSecondary**
 
       Sekundäre Farbe der Wegpunkte.
-      Default ist: "#BDBDBD"
 
     * **width**
 
       Breite der Route.
-      Default ist: 5
   
   * **routeSegmentStyle**
 

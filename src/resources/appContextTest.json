@@ -230,7 +230,8 @@
                 "openrouteserviceUrl": "https://entw-imis.lab.bfs.de/ors",
                 "photonUrl": "/geocoding-dev",
                 "routeStyle": {
-                    "color": "#ff0000",
+                    "colorPrimary": "#ff0000",
+                    "colorSecondary": "#BDBDBD",
                     "width": 5
                 },
                 "routeSegmentStyle": {
