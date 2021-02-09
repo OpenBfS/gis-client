@@ -176,13 +176,20 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
     Styling Optionen des Layers, der die berechnete Route darstellt.
 
-    * **color**
+    * **colorPrimary**
 
-      Farbe der Route.
+      Primäre Farbe der Wegpunkte.
+      Default ist: "#ff0000"
+
+    * **colorSecondary**
+
+      Sekundäre Farbe der Wegpunkte.
+      Default ist: "#BDBDBD"
 
     * **width**
 
       Breite der Route.
+      Default ist: 5
   
   * **routeSegmentStyle**
 
@@ -204,15 +211,9 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Größe der Wegpunkte in Pixeln.
 
-    * **colorPrimary**
+    * **color**
 
-      Primäre Farbe der Wegpunkte.
-      Default ist: "#ff0000"
-
-    * **colorSecondary**
-
-      Sekundäre Farbe der Wegpunkte.
-      Default ist: "#BDBDBD"
+      Farbe der Wegpunkte.
 
   * **jobMarkerStyle**
 
