@@ -64,11 +64,16 @@ Ext.define('Koala.view.form.field.GeocodingComboController', {
 
         var isValidCoordinate = hasTwoParts && !isNaN(longitude) && !isNaN(latitude);
 
+        var lang;
+        var langCombo = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+        if (langCombo) {
+            lang = langCombo.getValue();
+        }
+
         if (isValidCoordinate) {
 
-            // TODO: add language argument
             // find address of coordinate
-            Koala.util.Geocoding.doReverseGeocoding(longitude, latitude)
+            Koala.util.Geocoding.doReverseGeocoding(longitude, latitude, lang)
                 .then(function(resultJson) {
                     // clear geocoding suggestions
                     geoCodingSuggestions.removeAll();
@@ -86,8 +91,7 @@ Ext.define('Koala.view.form.field.GeocodingComboController', {
                 return;
             }
 
-            // TODO: add language argument
-            Koala.util.Geocoding.doGeocoding(newValue)
+            Koala.util.Geocoding.doGeocoding(newValue, lang)
                 .then(function(resultJson) {
                     // clear geocoding suggestions
                     geoCodingSuggestions.removeAll();

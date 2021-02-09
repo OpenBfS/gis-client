@@ -77,8 +77,6 @@ Ext.define('Koala.view.window.ClassicRouting', {
     resizable: true,
     constrainHeader: true,
 
-    // TODO listen to language changes and trigger routing again
-    //      to retrieve translated instructions.
     listeners: {
         expand: function() {
             // HBD: after collapse/expand extjs thinks the user manually

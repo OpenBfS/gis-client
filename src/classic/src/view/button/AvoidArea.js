@@ -52,7 +52,6 @@ Ext.define('Koala.view.button.AvoidArea', {
         },
         {
             // intentionally hidden button
-            // TODO: menu opens first time to top and not to bottom
             xtype: 'filebutton',
             listeners: {
                 afterrender: 'uploadButtonAfterRender'

@@ -43,11 +43,6 @@ Ext.define('Koala.store.RoutingVehicles', {
         me.each(function(vehicleRec) {
             var vehicle = Ext.clone(vehicleRec.getData());
 
-            // TODO this should be moved to a prior validation
-            if (Ext.isEmpty(vehicle.start) && Ext.isEmpty(vehicle.end)) {
-                return;
-            }
-
             if (vehicle.start) {
                 var startLat = vehicle.start.latitude;
                 var startLon = vehicle.start.longitude;

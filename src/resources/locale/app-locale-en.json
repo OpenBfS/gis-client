@@ -1000,7 +1000,7 @@
                     "totalDrivingDuration": "Driving Duration",
                     "totalServiceDuration": "Service Duration",
                     "totalWaitingDuration": "Waiting Duration",
-                    "numberjobsMissing": "Failed jobs",
+                    "numberjobsMissing": "Unassigned targets",
                     "fleetRoutingSummary": "Summary",
                     "routesHeading": "Routes",
                     "startText": "From",

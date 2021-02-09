@@ -166,16 +166,12 @@ Ext.define('Koala.view.container.RoutingResult', {
                                         downloadType: 'gpx',
                                         text: '.gpx',
                                         listeners: {
-                                            // TODO update method if we want to support
-                                            // alternative routes
                                             click: 'onDownloadButtonClicked'
                                         }
                                     }, {
                                         downloadType: 'geojson',
                                         text: '.geojson',
                                         listeners: {
-                                            // TODO update method if we want to support
-                                            // alternative routes
                                             click: 'onDownloadButtonClicked'
                                         }
                                     }

@@ -35,7 +35,13 @@ Ext.define('Koala.view.window.RoutingController', {
     changeLanguage: function(locale) {
         var me = this;
         var view = me.getView();
+        if (!view) {
+            return;
+        }
         var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
 
         // TODO: does not work if the window gets open the second time
 
@@ -166,8 +172,6 @@ Ext.define('Koala.view.window.RoutingController', {
      * This makes sure that the boilerplate for the popup
      * will always be set up properly.
      *
-     * TODO should this function be moved to the viewmodel?
-     *
      * @param {ol.Feature} feature The feature to get content from.
      * @returns {String} The HTML String for the popup.
      */
@@ -187,8 +191,6 @@ Ext.define('Koala.view.window.RoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        // TODO: the styling SCSS is currently duplicated,
-        //       because it is used in two classes
         var popup = Ext.create('GeoExt.component.Popup', {
             map: view.map,
             width: 140
