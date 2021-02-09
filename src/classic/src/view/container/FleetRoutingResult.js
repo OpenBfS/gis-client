@@ -147,12 +147,12 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                             });
                         }
 
-                        if (unassignedJobs.length) {
+                        if (unassignedJobs.length > 0) {
                             unassignedJobs.unshift(vm.get('i18n.numberjobsMissing') + ':');
                         }
 
                         return ' ' +
-                        '<div class="fleet-routing-summary-cell" data-qtip="' + unassignedJobs.join('<br/>') + '">' +
+                        '<div class="fleet-routing-summary-cell" data-qtip="' + unassignedJobs.join('<br />') + '">' +
                         '    <div><b>' + vm.get('i18n.numberjobsMissing') + '</b></div>' +
                         '    <div>' +
                         '        <span>' +
@@ -212,7 +212,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                         }
 
                         return '<div class="vehicle"><span data-qtip="' + vehicle.get('description') + '">' +
-                            '<span>' + vehicleId + '</span><br/>' +
+                            '<span>' + vehicleId + '</span><br />' +
                             orsUtil.getIconFromProfile(vm.get('routingProfile')) +
                             '</span></div>';
                     }
@@ -293,7 +293,8 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                             var startTime = steps[0].arrival;
                             // we assume that seconds with at least 10 digits are timestamps
                             // and not relative times
-                            if (startTime.toString().length > 9) {
+                            var minimialDigitCount = 9;
+                            if (startTime.toString().length > minimialDigitCount) {
                                 isTimeStamp = true;
                             }
                             var endTime = steps[steps.length - 1].arrival;
