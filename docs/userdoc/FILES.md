@@ -204,9 +204,15 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Größe der Wegpunkte in Pixeln.
 
-    * **color**
+    * **colorPrimary**
 
-      Farbe der Wegpunkte.
+      Primäre Farbe der Wegpunkte.
+      Default ist: "#ff0000"
+
+    * **colorSecondary**
+
+      Sekundäre Farbe der Wegpunkte.
+      Default ist: "#BDBDBD"
 
   * **jobMarkerStyle**
 
