@@ -282,11 +282,10 @@ Ext.define('Koala.view.container.RoutingResultController', {
         // however we only want the the first one
         var newRoute = newRouteFeatures[0];
 
-        // all routes are highlighted by default
-        featureProperties['highlighted'] = true;
-
         // add additional properties to the feature
         if (featureProperties && Ext.isObject(featureProperties)) {
+            // all routes are highlighted by default
+            featureProperties['highlighted'] = true;
             newRoute.setProperties(featureProperties);
         }
 
