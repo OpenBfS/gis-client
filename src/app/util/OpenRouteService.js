@@ -185,10 +185,17 @@ Ext.define('Koala.util.OpenRouteService', {
          *
          * @param {Number} distance The distance to format in meters.
          * @param {Boolean} plainText If true, just returns the plain text.
+         * @param {Number} fixedPrefix The SI unit that should be used.
          * @returns {String} The formatted distance html string.
          */
-        getFormattedDistance: function(distance, plainText) {
-            var distanceFormatted = D3Util.d3.format('.2~s')(distance);
+        getFormattedDistance: function(distance, plainText, fixedPrefix) {
+            var distanceFormatted;
+            var format = '.2~s';
+            if (fixedPrefix) {
+                distanceFormatted = D3Util.d3.formatPrefix(format, fixedPrefix)(distance);
+            } else {
+                distanceFormatted = D3Util.d3.format(format)(distance);
+            }
             var lastChar = distanceFormatted.slice(-1);
 
             if (plainText) {
