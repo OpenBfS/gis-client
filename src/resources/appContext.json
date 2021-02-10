@@ -244,15 +244,6 @@
                     "markerSize": 38,
                     "color": "black"
                 },
-                "jobMarkerStyle": {
-                    "markerSize": 38,
-                    "color": "black",
-                    "colorUnassigned": "gray"
-                },
-                "startEndMarkerStyle": {
-                    "markerSize": 15,
-                    "color": "black"
-                },
                 "elevationStyle": {
                     "fill": "#ffffff",
                     "stroke": "#ffffff",
