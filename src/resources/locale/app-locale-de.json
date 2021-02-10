@@ -812,8 +812,7 @@
                 "xLabel": "Distanz[km]",
                 "yLabel": "Höhe[m]",
                 "distanceLabel": "Distanz",
-                "elevationLabel": "Höhe",
-                "durationLabel": "Dauer"
+                "elevationLabel": "Höhe"
             }
         }
     },
@@ -2213,8 +2212,7 @@
                 "xLabel": "Distanz[km]",
                 "yLabel": "Höhe[m]",
                 "distanceLabel": "Distanz",
-                "elevationLabel": "Höhe",
-                "durationLabel": "Dauer"
+                "elevationLabel": "Höhe"
             }
         }
     },

@@ -78,11 +78,6 @@ Ext.define('Koala.view.container.ElevationProfile', {
             bind: {
                 html: '<b>{elevationLabel}:</b>{elevation}m'
             }
-        }, {
-            xtype: 'container',
-            bind: {
-                html: '<b>{durationLabel}:</b>{duration}h'
-            }
         }]
     }]
 });

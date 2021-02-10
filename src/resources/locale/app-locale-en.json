@@ -808,8 +808,7 @@
                 "xLabel": "distance[km]",
                 "yLabel": "height[m]",
                 "distanceLabel": "Distance",
-                "elevationLabel": "Elevation",
-                "durationLabel": "Duration"
+                "elevationLabel": "Elevation"
             }
         }
     },
@@ -2207,8 +2206,7 @@
                 "xLabel": "distance[km]",
                 "yLabel": "height[m]",
                 "distanceLabel": "Distance",
-                "elevationLabel": "Elevation",
-                "durationLabel": "Duration"
+                "elevationLabel": "Elevation"
             }
         }
     },
