@@ -83,7 +83,7 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
         var breaksComp = form.down('[name=breaks]');
         if (breaksComp) {
             var breaksStore = breaksComp.store;
-            if (breaksStore && breaksStore.count() !== 0) {
+            if (breaksStore) {
 
                 // ignore empty breaks
                 var filteredBreakRecords = Ext.Array.filter(breaksStore.getData().items, function(b) {
@@ -139,9 +139,7 @@ Ext.define('Koala.view.window.RoutingVehicleController', {
                     return result;
                 });
 
-                if (!Ext.isEmpty(breaks)) {
-                    formData.breaks = breaks;
-                }
+                formData.breaks = breaks;
             }
         }
 
