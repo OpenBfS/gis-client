@@ -123,7 +123,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 * **tools**
 
   Array von Strings, die die aktivierten Werkzeuge der Anwendung steuern.
-  Mögliche Werte sind: `"printBtn"`, `"irixPrintBtn"`, `"cloneBtn"`, `"addWmsBtn"`, `"importVectorLayerBtn"`, `"createVectorLayerBtn"`, `"drawBtn"`, `"measureBtn"`, `"selectFeaturesBtn"`, `"routingBtn"`
+  Mögliche Werte sind: `"printBtn"`, `"irixPrintBtn"`, `"cloneBtn"`, `"addWmsBtn"`, `"importVectorLayerBtn"`, `"createVectorLayerBtn"`, `"drawBtn"`, `"measureBtn"`, `"selectFeaturesBtn"`, `"classicRoutingBtn"`, `"fleetRoutingBtn"`
 
 * **vectorIcons**
 
@@ -164,6 +164,10 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
     Die URL zur OpenRouteService Instanz.
 
+  * **vroomUrl**
+
+    Die URL zum VROOM Service.
+
   * **photonUrl**
 
     Die URL zum Photon Service.
@@ -172,9 +176,13 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
     Styling Optionen des Layers, der die berechnete Route darstellt.
 
-    * **color**
+    * **colorPrimary**
 
-      Farbe der Route.
+      Primäre Farbe der Route.
+
+    * **colorSecondary**
+
+      Sekundäre Farbe der Route.
 
     * **width**
 
@@ -203,6 +211,40 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
     * **color**
 
       Farbe der Wegpunkte.
+
+  * **jobMarkerStyle**
+
+    Styling Optionen des Layers, der die einzelnen Aufträge ("jobs") darstellt.
+
+    * **markerSize**
+
+      Größe des Markers in Pixeln.
+      Default ist: 38
+
+    * **color**
+
+      Farbe des Markers. 
+      Default ist: 'black'
+
+    * **colorUnassigned**
+
+      Farbe des Markers, wenn der Job nicht erfüllt werden konnte. 
+      Default ist: 'gray'
+
+  * **startEndMarkerStyle**
+
+    Styling Optionen des Layers, der die einzelnen Standorte der Fahrzeuge darstellt.
+
+    * **markerSize**
+
+      Größe des Markers in Pixeln.
+      Default ist: 15
+
+    * **color**
+
+      Farbe des Markers.
+      Default ist: 'black'
+
 
   * **elevationStyle**
 
@@ -240,13 +282,36 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Deckkraft der Avoid Area.
 
+  * **fleetRouting**
+
+    Konfigurationen des FlottenRoutings.
+
+    * **job**
+
+      Konfigurationen der Aufträge.
+
+      * **maxServiceDuration**
+
+      Maximale Dauer in Sekunden, die ein einzelner Auftrag vor Ort dauern kann.
+      Default: 24h
+
+    * **vehicle**
+
+      Konfigurationen der Fahrzeuge.
+
+      * **maxBreakDuration**
+
+      Maximale Dauer in Sekunden, die eine einzelne Pause dauern kann.
+      Default: 24h
+
   ```json
   {
     "routing": {
         "openrouteserviceUrl": "https://entw-imis.lab.bfs.de/ors",
         "photonUrl": "https://entw-imis.lab.bfs.de/photon",
         "routeStyle": {
-            "color": "#ff0000",
+            "colorPrimary": "#ff0000",
+            "colorSecondary": "#BDBDBD",
             "width": 5
         },
         "routeSegmentStyle": {
@@ -267,6 +332,14 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
             "width": 4,
             "fillColor": "#ff0000",
             "opacity": 0.2
+        },
+        "fleetRouting": {
+            "job": {
+                "maxServiceDuration": 86400
+            },
+            "vehicle": {
+                "maxBreakDuration": 86400
+            }
         }
     }
   }

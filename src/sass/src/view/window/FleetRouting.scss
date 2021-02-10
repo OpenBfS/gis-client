@@ -1,0 +1,47 @@
+.gx-popup {
+
+    position: absolute;
+    background-color: transparent;
+    padding: 0 0 15px 0;
+    left: -70px;
+    bottom: -7px;
+    background-repeat: no-repeat;
+
+    .popup-tip-container {
+        width: 40px;
+        height: 20px;
+        position: absolute;
+        left: 50%;
+        margin-left: -20px;
+        overflow: hidden;
+        pointer-events: none;
+
+        .popup-tip {
+            background: #fff;
+            color: #333;
+            -webkit-box-shadow: 0 3px 14px 0 rgba(0, 0, 0, 0.6);
+            -moz-box-shadow: 0 3px 14px 0 rgba(0, 0, 0, 0.6);
+            box-shadow: 0 3px 14px 0 rgba(0, 0, 0, 0.6);
+
+            width: 17px;
+            height: 17px;
+            padding: 1px;
+            margin: -10px auto 0;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    }
+
+    p {
+        padding: 5px 5px 0 5px;
+        border-radius: 7px;
+        background-color: white;
+        border: 3px solid white;
+        margin: 0;
+        text-align: center;
+
+        -webkit-box-shadow: 0 3px 14px 0 rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: 0 3px 14px 0 rgba(0, 0, 0, 0.6);
+        box-shadow: 0 3px 14px 0 rgba(0, 0, 0, 0.6);
+    }
+}

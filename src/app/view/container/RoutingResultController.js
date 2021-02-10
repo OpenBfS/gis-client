@@ -35,7 +35,8 @@ Ext.define('Koala.view.container.RoutingResultController', {
         if (newResult) {
             me.addRouteToMap(newResult);
             me.zoomToRoute();
-            me.updateRoutingSummaries(newResult);
+            me.clearRoutingSummaries();
+            me.addRoutingSummary(newResult);
             me.clearRoutingInstructions();
             me.setRoutingInstructionsVisiblity(false);
             me.setElevationPanelVisibility(false);
@@ -82,9 +83,10 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
         var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
+        if (!source) {
+            return;
         }
+        source.clear();
         var feature = me.createLineFeature(rec.get('coordinates'));
         source.addFeature(feature);
     },
@@ -100,9 +102,10 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
         var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
+        if (!source) {
+            return;
         }
+        source.clear();
     },
 
     /**
@@ -120,9 +123,11 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
         var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
+        if (!source) {
+            return;
         }
+        source.clear();
+
         var feature = me.createLineFeature(rec.get('coordinates'));
         source.addFeature(feature);
 
@@ -143,33 +148,21 @@ Ext.define('Koala.view.container.RoutingResultController', {
      */
     onSummaryMouseEnter: function(grid, rec) {
         var me = this;
-        var view = me.getView();
-        var map = view.map;
 
-        if (!map) {
+        var routeLayer = me.getRouteLayer();
+        if (!routeLayer) {
             return;
         }
-
-        var routeSegmentLayer = me.getRouteSegmentLayer();
-        if (!routeSegmentLayer) {
+        var source = routeLayer.getSource();
+        if (!source) {
             return;
         }
-        var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
-        }
-
-        var geometry = rec.get('geometry');
-        var feature = {
-            type: 'Feature',
-            geometry: geometry,
-            properties: {}
-        };
-
-        var projection = map.getView().getProjection().getCode();
-        source.addFeature((new ol.format.GeoJSON()).readFeature(feature, {
-            featureProjection: projection
-        }));
+        source.forEachFeature(function(feature) {
+            var isCorrectFeature = (
+                feature.get('summaryRecordId') === rec.getId()
+            );
+            feature.set('highlighted', isCorrectFeature);
+        });
     },
 
     /**
@@ -178,14 +171,17 @@ Ext.define('Koala.view.container.RoutingResultController', {
     onSummaryMouseLeave: function() {
         var me = this;
 
-        var routeSegmentLayer = me.getRouteSegmentLayer();
-        if (!routeSegmentLayer) {
+        var routeLayer = me.getRouteLayer();
+        if (!routeLayer) {
             return;
         }
-        var source = routeSegmentLayer.getSource();
-        if (source) {
-            source.clear();
+        var source = routeLayer.getSource();
+        if (!source) {
+            return;
         }
+        source.forEachFeature(function(feature) {
+            feature.set('highlighted', true);
+        });
     },
 
     /**
@@ -215,7 +211,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Gets the RouteLayer.
+     * Get the RouteLayer.
      * @returns {ol.layer.Vector} The RouteLayer.
      */
     getRouteLayer: function() {
@@ -231,7 +227,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
     /**
      * Get the RouteSegmentLayer.
-     *
      * @returns {ol.layer.Vector} The RouteSegmentLayer.
      */
     getRouteSegmentLayer: function() {
@@ -246,7 +241,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Gets the ElevationLayer.
+     * Get the ElevationLayer.
      * @returns {ol.layer.Vector} The WaypointLayer.
      */
     getElevationLayer: function() {
@@ -261,10 +256,12 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
-     * Adds the Routing feature to the map.
+     * Add the Routing feature to the map.
+     *
      * @param {Object} geojson The GeoJSON to be added.
+     * @param {Object} featureProperties Additional properties for feature.
      */
-    addRouteToMap: function(geojson) {
+    addRouteToMap: function(geojson, featureProperties) {
         var me = this;
         var view = me.getView();
 
@@ -273,12 +270,27 @@ Ext.define('Koala.view.container.RoutingResultController', {
             return;
         }
 
-        var source = new ol.source.Vector({
-            features: (new ol.format.GeoJSON({
-                featureProjection: view.map.getView().getProjection()
-            })).readFeatures(geojson)
-        });
-        layer.setSource(source);
+        // the GeoJSON contains a FeatureCollection
+        // that's why need the "readFeatures" function
+        // which returns an array
+        // the "readFeature" function does does not work here
+        var newRouteFeatures = (new ol.format.GeoJSON({
+            featureProjection: view.map.getView().getProjection()
+        })).readFeatures(geojson);
+
+        // the GeoJSON could contain more routes
+        // however we only want the the first one
+        var newRoute = newRouteFeatures[0];
+
+        // add additional properties to the feature
+        if (featureProperties && Ext.isObject(featureProperties)) {
+            // all routes are highlighted by default
+            featureProperties['highlighted'] = true;
+            newRoute.setProperties(featureProperties);
+        }
+
+        var source = layer.getSource();
+        source.addFeature(newRoute);
     },
 
     /**
@@ -397,11 +409,52 @@ Ext.define('Koala.view.container.RoutingResultController', {
     onDownloadButtonClicked: function(item) {
         var me = this;
         var view = me.getView();
+        var vm = view.lookupViewModel();
 
-        var routingWindow = view.up('k-window-routing');
-        if (routingWindow) {
-            routingWindow.fireEvent('makeDownloadRequest', item.downloadType);
-        }
+        // get original query for this route
+        var query = Ext.clone(item.lookupViewModel().get('record').get('query'));
+
+        // modifiy original query
+        query['format'] = item.downloadType;
+
+        var onSuccess = function(res) {
+            var blob;
+            if (item.downloadType === 'gpx') {
+                blob = new Blob([res], {
+                    type: 'application/xml;charset=utf-8'
+                });
+            } else {
+                blob = new Blob([JSON.stringify(res)]);
+            }
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'route.' + item.downloadType;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        };
+
+        var onError = function(err) {
+            var str = 'An error occured: ' + err;
+            Ext.Logger.log(str);
+
+            Ext.toast(vm.get('i18n.errorDownloadRoute'));
+
+            var resultPanel = me.getResultPanel();
+
+            if (!resultPanel) {
+                return;
+            }
+            resultPanel.fireEvent('resultChanged');
+        };
+
+        var orsUtil = Koala.util.OpenRouteService;
+        orsUtil.requestDirectionsApi(query)
+            .then(onSuccess)
+            .catch(onError);
     },
 
     /**
@@ -516,51 +569,109 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var vm = view.lookupViewModel();
 
         var summaryStore = vm.get('routingsummaries');
-        summaryStore.removeAll();
+        if (summaryStore) {
+            summaryStore.removeAll();
+        }
     },
 
     /**
-     * Update the routing summaries.
+     * Add the routing summary to its store.
      *
-     * @param {GeoJson} result The routing result.
+     * If a VROOM route is available, its properties will be merged
+     * with the ORS route.
+     *
+     * @param {GeoJson} orsRoute The ORS route.
+     * @returns {Ext.data.Model} The added summary model instance.
      */
-    updateRoutingSummaries: function(result) {
+    addRoutingSummary: function(orsRoute) {
         var me = this;
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var summaryStore = vm.get('routingsummaries');
-
-        summaryStore.removeAll();
-
-        if (!result.features) {
+        // check if the result contains at least
+        // one feature
+        if (!orsRoute.features ||
+            !Ext.isArray(orsRoute.features) ||
+            orsRoute.features.length === 0) {
             return;
         }
 
-        var query = result.metadata.query;
+        // the GeoJSON could contain many features
+        // we are only interested in the first one
+        var feat = orsRoute.features[0];
+
+        var props = {};
+        if (feat.properties) {
+            props = Ext.clone(feat.properties);
+        }
+
+        var query = orsRoute.metadata.query;
         var profile = query.profile;
 
-        var summaries = [];
-        Ext.Array.each(result.features, function(feat) {
-            var props = {};
-            if (feat.properties) {
-                props = Ext.clone(feat.properties);
-            }
+        var distance = props.summary ? props.summary.distance : undefined;
+        var duration = props.summary ? props.summary.duration : undefined;
 
-            var distance = props.summary ? props.summary.distance : undefined;
-            var duration = props.summary ? props.summary.duration : undefined;
+        var summary = {
+            profile: profile,
+            properties: props,
+            geometry: Ext.clone(feat.geometry),
+            ascent: props.ascent,
+            descent: props.descent,
+            distance: distance,
+            duration: duration,
+            query: query
+        };
 
-            summaries.push({
-                profile: profile,
-                properties: props,
-                geometry: Ext.clone(feat.geometry),
-                ascent: props.ascent,
-                descent: props.descent,
-                distance: distance,
-                duration: duration,
-                query: query
-            });
+        var summaryStore = vm.get('routingsummaries');
+        return summaryStore.add(summary)[0];
+    },
+
+    /**
+     * Get the WaypointLayer.
+     * @returns {ol.layer.Vector} The WaypointLayer.
+     */
+    getWaypointLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.waypointLayerName) {
+            return;
+        }
+
+        return BasiGX.util.Layer.getLayerByName(view.waypointLayerName);
+    },
+
+    zoomToWayPointLayer: function() {
+        var me = this;
+        var view = me.getView().up('window');
+        if (!view) {
+            return;
+        }
+
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+
+        var layer = me.getWaypointLayer();
+        if (!layer) {
+            return;
+        }
+
+        var source = layer.getSource();
+        if (!source) {
+            return;
+        }
+
+        var extent = source.getExtent();
+        if (!extent) {
+            return;
+        }
+
+        // zoom to extent
+        map.getView().fit(extent, {
+            duration: 1000,
+            padding: '30 30 30 30'
         });
-        summaryStore.add(summaries);
     }
 });

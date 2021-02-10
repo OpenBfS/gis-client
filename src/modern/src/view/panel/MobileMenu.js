@@ -180,7 +180,7 @@ Ext.define('Koala.view.panel.MobileMenu', {
         },
         listeners: {
             painted: function() {
-                var fn = Koala.util.AppContext.generateCheckToolVisibility('routingBtn').bind(this);
+                var fn = Koala.util.AppContext.generateCheckToolVisibility('classicRoutingBtn').bind(this);
                 fn();
             }
         },

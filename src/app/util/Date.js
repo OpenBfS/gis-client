@@ -144,9 +144,10 @@ Ext.define('Koala.util.Date', {
          *     {@link https://momentjs.com/docs/#/displaying/format/|here}
          *     for a list of supported format identifiers. Default is to
          *     Koala.util.Date.DEFAULT_DATE_FORMAT.
+         * @param {Boolean} ignoreSuffix True, if the time zone suffix should be ignored.
          * @return {String} The serialized date.
          */
-        getFormattedDate: function(momentDate, dateFormat, timeReferenceAware) {
+        getFormattedDate: function(momentDate, dateFormat, timeReferenceAware, ignoreSuffix) {
             var staticMe = this;
 
             if (!moment.isMoment(momentDate)) {
@@ -173,9 +174,9 @@ Ext.define('Koala.util.Date', {
             var serializedDate = dateClone.format(dateFormat);
 
             //add time reference info
-            if (dateClone.isUtc()) {
+            if (dateClone.isUtc() && !ignoreSuffix) {
                 serializedDate += ' ' + staticMe.txtUtc;
-            } else if (dateClone.isLocal()) {
+            } else if (dateClone.isLocal() && !ignoreSuffix) {
                 serializedDate += ' ' + staticMe.txtLocal;
             }
 

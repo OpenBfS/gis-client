@@ -36,13 +36,17 @@ Ext.define('Koala.util.Geocoding', {
         baseUrl: function() {
 
             // avoid null pointer
-            var baseUrl = 'https://photon.komoot.io';
+            var baseUrl;
             var config = Koala.util.AppContext.getAppContext().data.merge;
             if (config.routing && config.routing.photonUrl) {
                 baseUrl = config.routing.photonUrl;
+            } else {
+                Ext.Logger.error('photonUrl is undefined in appContext.json.');
+                return;
             }
-
-            // TODO: add handling for trailing "/" and "?"
+            if (!baseUrl.endsWith('/')) {
+                baseUrl += '/';
+            }
 
             return baseUrl;
         },
@@ -59,7 +63,7 @@ Ext.define('Koala.util.Geocoding', {
         doGeocoding: function(queryStr, lang, limit) {
             return new Ext.Promise(function(resolve, reject) {
                 Ext.Ajax.request({
-                    url: Koala.util.Geocoding.baseUrl() + '/api',
+                    url: Koala.util.Geocoding.baseUrl() + 'api',
                     method: 'GET',
                     params: {
                         q: queryStr,
@@ -93,7 +97,7 @@ Ext.define('Koala.util.Geocoding', {
                     reject('Invalid input for reverse geocoding');
                 }
                 Ext.Ajax.request({
-                    url: Koala.util.Geocoding.baseUrl() + '/reverse',
+                    url: Koala.util.Geocoding.baseUrl() + 'reverse',
                     method: 'GET',
                     params: {
                         lon: lon,

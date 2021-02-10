@@ -32,6 +32,17 @@
 
 .routing-icon-cell {
     vertical-align: middle;
+
+}
+
+.routing-center-cell {
+    vertical-align: middle;
+    padding-left: 10px;
+
+    .vehicle {
+        text-align: center;
+        width: 15px;
+    }
 }
 
 .routing-summary-icon-cell {
@@ -51,5 +62,11 @@
     &.routing-modern {
         padding-top: 10px;
         padding-bottom: 10px;
+    }
+}
+
+.fleet-routing-summary-cell {
+    span {
+        padding-right: 10px;
     }
 }

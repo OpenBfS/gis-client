@@ -83,6 +83,17 @@
             }
         }
     },
+    "Koala.view.button.RoutingProfile": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "profileCarText": "Mit dem Auto",
+                    "profileBicycleText": "Mit dem Fahrrad",
+                    "profileWalkingText": "Zu Fuß"
+                }
+            }
+        }
+    },
     "Koala.view.button.FeatureSelectButton": {
         "config": {
             "data": {
@@ -488,6 +499,52 @@
             }
         }
     },
+    "Koala.view.grid.RoutingTimeWindow": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Zeitfenster",
+                    "startDayText": "Anfang",
+                    "endDayText": "Ende",
+                    "timeText": "Zeit",
+                    "addTimeWindowTooltip": "Zeitfenster hinzufügen",
+                    "removeTimeWindowTooltip": "Zeitfenster entfernen",
+                    "emptyGridText": "Keine Zeitfenster angelegt"
+                }
+            }
+        }
+    },
+    "Koala.view.grid.RoutingJobs": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Ziele",
+                    "editJobTooltip": "Ziel bearbeiten",
+                    "removeJobTooltip": "Ziel entfernen",
+                    "addJobTooltip": "Ziel hinzufügen",
+                    "emptyJobText": "Keine Ziele angelegt",
+                    "priorityColumnText": "Priorität",
+                    "addressColumnText": "Adresse",
+                    "descriptionColumnText": "Beschreibung"
+                }
+            }
+        }
+    },
+    "Koala.view.grid.RoutingVehicles": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Fahrzeuge",
+                    "emptyVehiclesText": "Keine Fahrzeuge angelegt",
+                    "descriptionColumnText": "Beschreibung",
+                    "startColumnText": "Startort",
+                    "endColumnText": "Zielort",
+                    "addVehicleTooltip": "Fahrzeug hinzufügen",
+                    "idColumnText": "Fahrzeug"
+                }
+            }
+        }
+    },
     "Koala.view.list.TreeMenu": {
         "config": {
             "data": {
@@ -496,7 +553,9 @@
                 "loading": "Laden",
                 "wmsimport": "WMS hinzuladen",
                 "vectorimport": "Vektordaten laden",
-                "routing": "Routing",
+                "routingTools": "Routing",
+                "classicRouting": "Routing (klassisch)",
+                "fleetRouting": "Flottenrouting",
                 "print": "Drucken",
                 "tools": "Werkzeuge",
                 "draw": "Zeichnen",
@@ -584,6 +643,32 @@
                 "editTemplates": "Templates anpassen",
                 "templateEditor": "Templates editieren",
                 "hoverInfo": "HoverInfo"
+            }
+        }
+    },
+    "Koala.view.panel.RoutingBreaks": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Pausen",
+                    "addBreakTooltip": "Pause hinzufügen",
+                    "noBreaksText": "Keine Pausen angelegt"
+                }
+            }
+        }
+    },
+    "Koala.view.panel.RoutingBreak": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "serviceLabel": "Pausendauer",
+                    "emptyServiceText": "Pausendauer",
+                    "descriptionLabel":"Beschreibung",
+                    "descriptionPlaceholder":"Beschreibung der Pause",
+                    "removeBreakTooltip": "Pause entfernen",
+                    "timeWindowsLabel": "Zeitfenster",
+                    "breakErrorText": "Bitte mindestens ein Zeitfenster angeben."
+                }
             }
         }
     },
@@ -868,11 +953,11 @@
             }
         }
     },
-    "Koala.view.window.Routing": {
+    "Koala.view.window.ClassicRouting": {
         "config": {
             "data": {
                 "i18n": {
-                    "title": "Routenplanung",
+                    "classicRoutingtitle": "Routenplanung ",
                     "startFieldTitle": "Start",
                     "viaFieldTitle": "Via",
                     "endFieldTitle": "Ziel",
@@ -884,16 +969,65 @@
                     "addEndPoint": "Zielpunkt setzen",
                     "elevationBtnText": "Höhenprofil",
                     "downloadButtonText": "Download",
-                    "error_msg_geocoding": "Standpunkt konnte nicht geladen werden. Bitte versuchen Sie es (später) erneut.",
-                    "error_msg_routing_request": "Routenplanung fehlgeschlagen. Bitte versuchen Sie es (später) erneut.",
-                    "error_msg_download": "Download fehlgeschlagen. Bitte versuchen sie es (später) erneut.",
+                    "errorGeoCoding": "Standpunkt konnte nicht geladen werden.",
+                    "errorRoutingRequest": "Routenplanung fehlgeschlagen.",
+                    "errorDownloadRoute": "Download fehlgeschlagen.",
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Mit dem Auto",
                     "profileBycicleText": "Mit dem Fahrrad",
                     "profileWalkingText": "Zu Fuß",
+                    "routesHeading": "Routen"
+                }
+            }
+        }
+    },
+    "Koala.view.window.FleetRouting": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "fleetRoutingTitle": "Flottenrouting",
+                    "computeFleetRoutingButtonText": "Routen berechnen",
+                    "elevationBtnText": "Höhenprofil",
+                    "downloadButtonText": "Download",
+                    "errorGeoCoding": "Standpunkt konnte nicht geladen werden.",
+                    "errorRoutingRequest": "Routenplanung fehlgeschlagen.",
+                    "errorDownloadRoute": "Download fehlgeschlagen.",
+                    "routingSummaryDetailsButton": "Details",
+                    "profileCarText": "Mit dem Auto",
+                    "profileBycicleText": "Mit dem Fahrrad",
+                    "profileWalkingText": "Zu Fuß",
+                    "errorFleetRouting" : "Die Routen konnten nicht geladen werden.",
+                    "addJobContextText": "Neues Ziel hinzufügen",
+                    "addVehicleContextText": "Neues Fahrzeug hinzufügen",
+                    "setCurrentJobContextText": "Als aktuelles Ziel setzen",
+                    "setCurrentVehicleStartContextText": "Als aktuellen Startort setzen",
+                    "setCurrentVehicleEndContextText": "Als aktuellen Zielort setzen",
+                    "totalDuration": "Gesamtdauer",
+                    "totalDrivingDuration": "Fahrzeit",
+                    "totalServiceDuration": "Auftragsdauer",
+                    "totalWaitingDuration": "Wartezeit",
+                    "numberjobsMissing": "Ausgelassene Ziele",
+                    "fleetRoutingSummary": "Zusammenfassung",
+                    "routesHeading": "Routen",
+                    "vehicleText": "Fahrzeug",
+                    "startText": "Von",
+                    "viaText": "Nach",
+                    "duration": "Dauer",
+                    "distance": "Distanz",
+                    "startTime": "Startzeit",
+                    "arrivalTime": "Ankunftszeit",
+                    "settingsTitle": "Einstellungen"
+                }
+            }
+        }
+    },
+    "Koala.view.button.AvoidArea": {
+        "config": {
+            "data": {
+                "i18n": {
                     "addAvoidArea": "Vermeide Gebiet",
                     "uploadGeoJson": "Lade GeoJSON",
-                    "deleteAvoidArea": "Lösche zu vermeidendes Gebiet.",
+                    "deleteAvoidArea": "Lösche Gebiet",
                     "drawAvoidArea": "Zeichne Gebiet",
                     "selectAvoidAreaFromLayer": "Wähle von Layer",
                     "errorFileUpload": "Das Hochladen der Datei ist fehlgeschlagen.",
@@ -902,9 +1036,59 @@
                     "errorUploadedFileExtension": "Dateityp wird nicht unterstützt. Bitte laden Sie nur eine '.json' oder '.geojson' Datei hoch.",
                     "errorZeroFeatures": "Das hochgelandene GeoJSON enthält keine Features. Bitte laden Sie ein Feature hoch.",
                     "errorGetFeatureInfo": "Das Polygon konnte aus dem Layer nicht ausgelesen werden.",
-                    "errorNoLayerFound": "An diesem Ort befindet sich kein gültiger Layer. Bitte versuchen Sie es erneut.",
-                    "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon.",
-                    "errorAreaTooBig": "Das gewählte Polygon is zu groß. Bitte wählen Sie ein kleineres Polygon."
+                    "errorNoLayerFound": "An diesem Ort befindet sich kein gültiger Layer.",
+                    "errorNoPolygonChosen": "Das gewählte Feature ist kein Polygon. Bitte wählen Sie ein Polygon."
+                }
+            }
+        }
+    },
+    "Koala.view.window.RoutingJob": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Ziel bearbeiten",
+                    "submitText": "Anwenden",
+                    "cancelText": "Abbrechen",
+                    "descriptionLabel": "Beschreibung",
+                    "descriptionPlaceholder": "Beschreibung des Ziels",
+                    "serviceLabel": "Auftragsdauer",
+                    "emptyServiceText": "Auftragsdauer",
+                    "priorityLabel": "Priorität",
+                    "emptyPriorityText": "Priorität",
+                    "addressLabel": "Ziel",
+                    "addressPlaceholder": "Suchbegriff oder Koordinate eingeben",
+                    "windowErrorText": "Bitte alle verpflichtenden Felder ausfüllen.",
+                    "geocodingErrorText": "Bitte Vorschlag aus dem Dropdown wählen."
+                }
+            }
+        }
+    },
+    "Koala.view.window.RoutingVehicle": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Fahrzeug bearbeiten",
+                    "submitText": "Anwenden",
+                    "cancelText": "Abbrechen",
+                    "profileLabel": "Profil",
+                    "descriptionLabel": "Beschreibung",
+                    "descriptionPlaceholder": "Beschreibung des Fahrzeugs",
+                    "startLabel": "Startort",
+                    "startPlaceholder": "Suchbegriff oder Koordinate eingeben",
+                    "endLabel": "Zielort",
+                    "endPlaceholder": "Suchbegriff oder Koordinate eingeben",
+                    "startDayLabel": "Starttag",
+                    "dayPlaceholder": "Tag",
+                    "timePlaceholder": "Uhrzeit",
+                    "endDayLabel": "Endtag",
+                    "breaksLabel": "Pausen",
+                    "geocodingErrorText": "Bitte Vorschlag aus dem Dropdown wählen und mindestens Start- oder Zielort angeben.",
+                    "timeWindowErrorText": "Unvollständige Eingabe. Bitte füllen Sie dieses Feld aus.",
+                    "windowErrorText": "Bitte alle verpflichtenden Felder ausfüllen.",
+                    "startDayBiggerErrorText": "Starttag darf nicht später als Endtag sein.",
+                    "startTimeBiggerErrorText": "Startzeit darf nicht später als Endzeit sein.",
+                    "endDayBiggerErrorText": "Endtag darf nicht früher als Starttag sein.",
+                    "endTimeBiggerErrorText": "Endzeit darf nicht früher als Startzeit sein."
                 }
             }
         }

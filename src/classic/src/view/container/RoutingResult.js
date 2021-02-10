@@ -26,157 +26,11 @@ Ext.define('Koala.view.container.RoutingResult', {
         'Ext.grid.column.Widget',
         'Ext.button.Button',
         'Koala.view.container.RoutingResultController',
-        'Koala.view.panel.ElevationProfile'
+        'Koala.view.panel.ElevationProfile',
+        'Koala.util.OpenRouteService'
     ],
 
     controller: 'k-container-routingresult',
-
-    statics: {
-        /**
-         * Get the proper icon for given instruction type.
-         *
-         * Instruction types are defined by OpenRouteService on
-         * https://github.com/GIScience/openrouteservice-docs#instruction-types
-         *
-         * Since FontAwesome 4 does not provite arbitrary rotations of icons,
-         * we have to create custom rotation classes in RoutingResult.scss.
-         *
-         * @param {Number} type The instruction type.
-         * @returns {String} The html string representation of the icon.
-         */
-        getIconFromType: function(type) {
-            var iconCls = '';
-            switch (type) {
-                case 0:
-                    // left turn
-                    iconCls = 'fa-arrow-left';
-                    break;
-                case 1:
-                    // right turn
-                    iconCls = 'fa-arrow-right';
-                    break;
-                case 2:
-                    // sharp left
-                    iconCls = 'fa-arrow-up fa-rotate-225';
-                    break;
-                case 3:
-                    // sharp right
-                    iconCls = 'fa-arrow-up fa-rotate-135';
-                    break;
-                case 4:
-                    // slight left
-                    iconCls = 'fa-arrow-up fa-rotate-315';
-                    break;
-                case 5:
-                    // slight right
-                    iconCls = 'fa-arrow-up fa-rotate-45';
-                    break;
-                case 6:
-                    // straight
-                    iconCls = 'fa-arrow-up';
-                    break;
-                case 7:
-                    // enter roundabout
-                    iconCls = 'fa-rotate-left';
-                    break;
-                case 8:
-                    // exit roundabout
-                    iconCls = 'fa-rotate-left';
-                    break;
-                case 9:
-                    // u-turn
-                    iconCls = 'fa-rotate-left';
-                    break;
-                case 10:
-                    // goal
-                    iconCls = 'fa-flag';
-                    break;
-                case 11:
-                    // depart
-                    iconCls = 'fa-home';
-                    break;
-                case 12:
-                    // keep left
-                    iconCls = 'fa-arrow-up fa-rotate-315';
-                    break;
-                case 13:
-                    // keep right
-                    iconCls = 'fa-arrow-up fa-rotate-45';
-                    break;
-                default:
-                    break;
-            }
-
-            return '<i class="fa ' + iconCls + '" aria-hidden="true"></i>';
-        },
-
-        /**
-         * Get the icon for given routing profile.
-         *
-         * @param {String} profile The routing profile.
-         */
-        getIconFromProfile: function(profile) {
-            var iconCls = '';
-
-            switch (profile) {
-                case 'foot-walking':
-                    iconCls = 'fa-male';
-                    break;
-                case 'cycling-regular':
-                    iconCls = 'fa-bicycle';
-                    break;
-                case 'driving-car':
-                    iconCls = 'fa-car';
-                    break;
-                default:
-                    return;
-            }
-
-            return '<i class="fa ' + iconCls + '" aria-hidden="true"></i>';
-        },
-
-        /**
-         * Format duration.
-         *
-         * Formats the duration as human readable durations (e.g. 15 minutes).
-         *
-         * @param {Number} duration The duration to format in seconds.
-         * @param {Boolean} plainText If true, just returns the plain text.
-         * @returns {String} The formatted duration html string.
-         */
-        getFormattedDuration: function(duration, plainText) {
-            var durationFormatted = moment.duration(duration, 'seconds').humanize();
-            if (plainText) {
-                return durationFormatted;
-            }
-            return '<b>' + durationFormatted + '</b>';
-        },
-
-        /**
-         * Format distance.
-         *
-         * Rounds the distance to a proper metric unit (e.g. km).
-         *
-         * @param {Number} distance The distance to format in meters.
-         * @param {Boolean} plainText If true, just returns the plain text.
-         * @returns {String} The formatted distance html string.
-         */
-        getFormattedDistance: function(distance, plainText) {
-            var distanceFormatted = D3Util.d3.format('.2~s')(distance);
-            var lastChar = distanceFormatted.slice(-1);
-
-            if (plainText) {
-                return distanceFormatted + 'm';
-            }
-
-            // check if last character is a SI unit suffix
-            if (isNaN(parseInt(lastChar, 10))) {
-                return '<b>' + distanceFormatted.slice(0, -1) + '</b>' + lastChar + 'm';
-            } else {
-                return '<b>' + distanceFormatted + '</b>m';
-            }
-        }
-    },
 
     layout: 'vbox',
 
@@ -191,6 +45,8 @@ Ext.define('Koala.view.container.RoutingResult', {
     },
 
     map: null,
+
+    waypointLayerName: 'routing-waypoint-layer',
 
     /** The name of the elevationProfilePanel*/
     elevationProfilePanelName: 'routing-elevationprofile-panel',
@@ -213,6 +69,17 @@ Ext.define('Koala.view.container.RoutingResult', {
         {
             xtype: 'grid',
             name: 'routing-summary-grid',
+            tbar: [
+                {
+                    xtype: 'tbtext',
+                    style: {
+                        fontSize: 'medium'
+                    },
+                    bind: {
+                        html: '<b>{i18n.routesHeading}</b>'
+                    }
+                }
+            ],
             defaults: {
                 flex: 1
             },
@@ -233,24 +100,25 @@ Ext.define('Koala.view.container.RoutingResult', {
                     align: 'center',
                     tdCls: 'routing-summary-icon-cell',
                     renderer: function(profile) {
-                        var staticMe = Koala.view.container.RoutingResult;
-                        return staticMe.getIconFromProfile(profile);
+                        var orsUtil = Koala.util.OpenRouteService;
+                        return orsUtil.getIconFromProfile(profile);
                     }
                 }, {
                     sortable: false,
                     hideable: false,
-                    flex: 3,
+                    flex: 2,
                     renderer: function(val, metaData, rec) {
-                        var staticMe = Koala.view.container.RoutingResult;
+                        var orsUtil = Koala.util.OpenRouteService;
+
                         var duration = rec.get('duration');
                         var distance = rec.get('distance');
                         var ascent = rec.get('ascent');
                         var descent = rec.get('descent');
 
-                        var durationFormatted = staticMe.getFormattedDuration(duration, true);
-                        var distanceFormatted = staticMe.getFormattedDistance(distance, true);
-                        var ascentFormatted = staticMe.getFormattedDistance(ascent, true);
-                        var descentFormatted = staticMe.getFormattedDistance(descent, true);
+                        var durationFormatted = orsUtil.getFormattedDuration(duration, true);
+                        var distanceFormatted = orsUtil.getFormattedDistance(distance, true);
+                        var ascentFormatted = orsUtil.getFormattedDistance(ascent, true);
+                        var descentFormatted = orsUtil.getFormattedDistance(descent, true);
 
                         var content = '<div class="routing-summary-cell"><div>';
                         content += '<span><i class="fa fa-clock-o" aria-hidden="true"></i> ' + durationFormatted + '</span>';
@@ -262,9 +130,9 @@ Ext.define('Koala.view.container.RoutingResult', {
 
                         return content;
                     }
-                }, {
+                },{
                     xtype: 'widgetcolumn',
-                    flex: 2,
+                    flex: 1,
                     align: 'right',
                     tdCls: 'routing-icon-cell',
                     widget: {
@@ -298,16 +166,12 @@ Ext.define('Koala.view.container.RoutingResult', {
                                         downloadType: 'gpx',
                                         text: '.gpx',
                                         listeners: {
-                                            // TODO update method if we want to support
-                                            // alternative routes
                                             click: 'onDownloadButtonClicked'
                                         }
                                     }, {
                                         downloadType: 'geojson',
                                         text: '.geojson',
                                         listeners: {
-                                            // TODO update method if we want to support
-                                            // alternative routes
                                             click: 'onDownloadButtonClicked'
                                         }
                                     }
@@ -325,7 +189,8 @@ Ext.define('Koala.view.container.RoutingResult', {
                     }
                 }
             ]
-        }, {
+        },
+        {
             xtype: 'grid',
             flex: 5,
             bind: {
@@ -347,8 +212,8 @@ Ext.define('Koala.view.container.RoutingResult', {
                     align: 'center',
                     tdCls: 'routing-icon-cell',
                     renderer: function(type) {
-                        var staticMe = Koala.view.container.RoutingResult;
-                        return staticMe.getIconFromType(type);
+                        var orsUtil = Koala.util.OpenRouteService;
+                        return orsUtil.getIconFromType(type);
                     }
                 }, {
                     dataIndex: 'instruction',
@@ -357,12 +222,12 @@ Ext.define('Koala.view.container.RoutingResult', {
                     sortable: false,
                     hideable: false,
                     renderer: function(instruction, metaData, rec) {
-                        var staticMe = Koala.view.container.RoutingResult;
+                        var orsUtil = Koala.util.OpenRouteService;
                         var distance = rec.get('distance');
                         var duration = rec.get('duration');
 
-                        var distanceFormatted = staticMe.getFormattedDistance(distance);
-                        var durationFormatted = staticMe.getFormattedDuration(duration);
+                        var distanceFormatted = orsUtil.getFormattedDistance(distance);
+                        var durationFormatted = orsUtil.getFormattedDuration(duration);
                         var instructionFormatted = '';
                         var content = '<div>';
 
@@ -398,6 +263,10 @@ Ext.define('Koala.view.container.RoutingResult', {
         var southContainer = Ext.ComponentQuery.query('[name=south-container]')[0];
         if (southContainer) {
             southContainer.add(elevationPanel);
+        }
+
+        if (!me.map) {
+            me.map = BasiGX.view.component.Map.guess().getMap();
         }
     }
 

@@ -90,6 +90,17 @@
             }
         }
     },
+    "Koala.view.button.RoutingProfile": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "profileCarText": "Driving",
+                    "profileBicycleText": "Cycling",
+                    "profileWalkingText": "Walking"
+                }
+            }
+        }
+    },
     "Koala.view.button.SelectFeaturesModel": {
         "config": {
             "data":{
@@ -486,6 +497,52 @@
             }
         }
     },
+    "Koala.view.grid.RoutingTimeWindow": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Time Windows",
+                    "startDayText": "Begin",
+                    "endDayText": "End",
+                    "timeText": "Time",
+                    "addTimeWindowTooltip": "Add Time Window",
+                    "removeTimeWindowTooltip": "Remove Time Window",
+                    "emptyGridText": "No Time Windows created"
+                }
+            }
+        }
+    },
+    "Koala.view.grid.RoutingVehicles": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Vehicles",
+                    "emptyVehiclesText": "No vehicles created",
+                    "descriptionColumnText": "Description",
+                    "startColumnText": "Starting location",
+                    "endColumnText": "Ending location",
+                    "addVehicleTooltip": "Add vehicle",
+                    "idColumnText": "Vehicle"
+                }
+            }
+        }
+    },
+    "Koala.view.grid.RoutingJobs": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Targets",
+                    "editJobTooltip": "Edit target",
+                    "addJobTooltip": "Add target",
+                    "removeJobTooltip": "Remove target",
+                    "emptyJobText": "No targets created",
+                    "priorityColumnText": "Priority",
+                    "addressColumnText": "Address",
+                    "descriptionColumnText": "Description"
+                }
+            }
+        }
+    },
     "Koala.view.list.TreeMenu": {
         "config": {
             "data": {
@@ -493,7 +550,9 @@
                 "themes": "",
                 "loading": "Load",
                 "wmsimport": "Add external WMS",
-                "routing": "Routing",
+                "routingTools": "Routing",
+                "classicRouting": "Routing (classic)",
+                "fleetRouting": "Fleet Routing",
                 "vectorimport": "Import local files",
                 "print": "Print",
                 "tools": "Tools",
@@ -582,6 +641,32 @@
                 "editTemplates": "Edit templates",
                 "templateEditor": "Edit templates",
                 "hoverInfo": "HoverInfo"
+            }
+        }
+    },
+    "Koala.view.panel.RoutingBreaks": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Breaks",
+                    "addBreakTooltip": "Add break",
+                    "noBreaksText": "No breaks created"
+                }
+            }
+        }
+    },
+    "Koala.view.panel.RoutingBreak": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "serviceLabel": "Break duration",
+                    "emptyServiceText": "Break duration",
+                    "descriptionLabel": "Description",
+                    "descriptionPlaceholder":"Description of the break",
+                    "removeBreakTooltip": "Remove break",
+                    "timeWindowsLabel": "Time windows",
+                    "breakErrorText": "Please provide at least one time window."
+                }
             }
         }
     },
@@ -864,11 +949,11 @@
             }
         }
     },
-    "Koala.view.window.Routing": {
+    "Koala.view.window.ClassicRouting": {
         "config": {
             "data": {
                 "i18n": {
-                    "title": "Route Planning",
+                    "classicRoutingtitle": "Route Planning",
                     "startFieldTitle": "Start",
                     "viaFieldTitle": "Via",
                     "endFieldTitle": "End",
@@ -880,16 +965,64 @@
                     "addEndPoint": "Set destination",
                     "elevationBtnText": "Elevation Profile",
                     "downloadButtonText": "Download",
-                    "error_msg_geocoding": "Could not load location. Please try again (later).",
-                    "error_msg_routing_request": "Routing request failed. Please try again (later).",
-                    "error_msg_download": "Download failed. Please try again (later).",
+                    "errorGeoCoding": "Could not load location.",
+                    "errorRoutingRequest": "Routing request failed.",
+                    "errorDownloadRoute": "Download failed.",
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Driving",
                     "profileBycicleText": "Cycling",
                     "profileWalkingText": "Walking",
+                    "routesHeading": "Routes"
+                }
+            }
+        }
+    },
+    "Koala.view.window.FleetRouting": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "fleetRoutingTitle": "Fleet Routing",
+                    "computeFleetRoutingButtonText": "Compute routes",
+                    "elevationBtnText": "Elevation Profile",
+                    "downloadButtonText": "Download",
+                    "errorGeoCoding": "Could not load location.",
+                    "errorRoutingRequest": "Routing request failed.",
+                    "errorDownloadRoute": "Download failed.",
+                    "routingSummaryDetailsButton": "Details",
+                    "profileCarText": "Driving",
+                    "profileBycicleText": "Cycling",
+                    "profileWalkingText": "Walking",
+                    "addJobContextText": "Add new target",
+                    "addVehicleContextText": "Add new vehicle",
+                    "setCurrentJobContextText": "Set as current target",
+                    "setCurrentVehicleStartContextText": "Set as current starting location",
+                    "setCurrentVehicleEndContextText": "Set as current ending location",
+                    "totalDuration": "Total Duration",
+                    "totalDrivingDuration": "Driving Duration",
+                    "totalServiceDuration": "Service Duration",
+                    "totalWaitingDuration": "Waiting Duration",
+                    "numberjobsMissing": "Unassigned targets",
+                    "fleetRoutingSummary": "Summary",
+                    "routesHeading": "Routes",
+                    "vehicleText": "Vehicle",
+                    "startText": "From",
+                    "viaText": "To",
+                    "duration": "Duration",
+                    "distance": "Distance",
+                    "startTime": "Starting time",
+                    "arrivalTime": "Arrival time",
+                    "settingsTitle": "Settings"
+                }
+            }
+        }
+    },
+    "Koala.view.button.AvoidArea": {
+        "config": {
+            "data": {
+                "i18n": {
                     "addAvoidArea": "Avoid area",
                     "uploadGeoJson": "Load GeoJSON",
-                    "deleteAvoidArea": "Delete avoid area",
+                    "deleteAvoidArea": "Delete area",
                     "drawAvoidArea": "Draw area",
                     "selectAvoidAreaFromLayer": "Select from layer",
                     "errorFileUpload": "Could not load file. Please make sure the file is valid and try again.",
@@ -898,9 +1031,61 @@
                     "errorUploadedFileExtension": "Unsupported filetype. Please load a '.json' or '.geojson' file.",
                     "errorZeroFeatures": "The uploaded GeoJSON does not contain features. Please upload one feature.",
                     "errorGetFeatureInfo": "The polygon could not be read from the layer.",
-                    "errorNoLayerFound": "No valid layer found at selected location. Please try again.",
-                    "errorNoPolygonChosen": "The selected feature is not a polygon. Please select a polygon.",
-                    "errorAreaTooBig": "The selected polygon is too big. Please select a smaller one."
+                    "errorNoLayerFound": "No valid layer found at selected location.",
+                    "errorNoPolygonChosen": "The selected feature is not a polygon. Please select a polygon."
+                }
+            }
+        }
+    },
+    "Koala.view.window.RoutingJob": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Edit target",
+                    "submitText": "Apply",
+                    "cancelText": "Cancel",
+                    "descriptionLabel": "Description",
+                    "descriptionPlaceholder": "Description of the target",
+                    "serviceLabel": "Service duration",
+                    "emptyServiceText": "Service duration",
+                    "priorityLabel": "Priority",
+                    "emptyPriorityText": "Priority",
+                    "addressLabel": "Target",
+                    "addressPlaceholder": "Enter search term or coordinate",
+                    "windowErrorText": "Please fill out all required fields.",
+                    "geocodingErrorText": "Please select item from dropdown."
+                }
+            }
+        }
+    },
+    "Koala.view.window.RoutingVehicle": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Edit vehicle",
+                    "submitText": "Apply",
+                    "cancelText": "Cancel",
+                    "profileLabel": "Profile",
+                    "descriptionLabel": "Description",
+                    "descriptionPlaceholder": "Description of the vehicle",
+                    "startLabel": "Starting location",
+                    "startPlaceholder": "Enter search term or coordinate",
+                    "endLabel": "Ending location",
+                    "endPlaceholder": "Enter search term or coordinate",
+                    "startDayLabel": "Starting day",
+                    "startDayPlaceholder": "Day",
+                    "startTimePlaceholder": "Time",
+                    "endDayLabel": "Ending day",
+                    "endDayPlaceholder": "Day",
+                    "endTimePlaceholder": "Time",
+                    "breaksLabel": "Breaks",
+                    "geocodingErrorText": "Please select item from dropdown and provide at least starting- or ending location.",
+                    "timeWindowErrorText": "Incomplete entry. Please add value, here.",
+                    "windowErrorText": "Please fill out all required fields.",
+                    "startDayBiggerErrorText": "Starting day must not be later than ending day.",
+                    "startTimeBiggerErrorText": "Starting time must not be later then ending time.",
+                    "endDayBiggerErrorText": "Ending day must not be earlier than starting day.",
+                    "endTimeBiggerErrorText": "Ending time must not be earlier then starting time."
                 }
             }
         }

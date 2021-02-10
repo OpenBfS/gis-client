@@ -104,7 +104,8 @@
                 "importVectorLayerBtn",
                 "detectionLimitBtn",
                 "ScenarioAlertBtn",
-                "routingBtn"
+                "classicRoutingBtn",
+                "fleetRoutingBtn"
             ],
             "vectorIcons": [
                 {
@@ -229,8 +230,10 @@
             "routing": {
                 "openrouteserviceUrl": "https://entw-imis.lab.bfs.de/ors",
                 "photonUrl": "/geocoding-dev",
+                "vroomUrl": "https://entw-imis.lab.bfs.de/ors/optimization",
                 "routeStyle": {
-                    "color": "#ff0000",
+                    "colorPrimary": "#ff0000",
+                    "colorSecondary": "#BDBDBD",
                     "width": 5
                 },
                 "routeSegmentStyle": {
@@ -239,6 +242,14 @@
                 },
                 "waypointStyle": {
                     "markerSize": 38,
+                    "color": "black"
+                },
+                "jobMarkerStyle": {
+                    "markerSize": 28,
+                    "color": "black"
+                },
+                "startEndMarkerStyle": {
+                    "markerSize": 24,
                     "color": "black"
                 },
                 "elevationStyle": {
@@ -251,6 +262,11 @@
                     "width": 4,
                     "fillColor": "#ff0000",
                     "opacity": 0.2
+                },
+                "fleetRouting": {
+                    "job": {
+                        "maxServiceDuration": 86400
+                    }
                 }
             }
         }

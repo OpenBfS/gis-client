@@ -30,7 +30,9 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         micro: false,
         timereferenceValue: 'local',
         // i18n
-        routing: '',
+        routingTools: '',
+        classicRouting: '',
+        fleetRouting: '',
         menu: '',
         themes: '',
         loading: '',
@@ -136,11 +138,24 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                         rowCls: '{showSelectFeaturesBtn ? "" : "hidden"}{selectFeaturesActive ? "active" : ""}'
                     }]
                 }, {
-                    text: '{routing}',
-                    key: 'routing',
-                    leaf: true,
+                    text: '{routingTools}',
                     iconCls: 'x-fa fa-location-arrow',
-                    rowCls: '{showRoutingBtn ? "menu-button" : "hidden"}'
+                    rowCls: '{(showClassicRoutingBtn || showFleetRoutingBtn ) ? "menu-button" : "hidden"}',
+                    children: [{
+                        leaf: true,
+                        text: '{classicRouting}',
+                        key: 'classicrouting',
+                        iconCls: 'x-fa fa-location-arrow',
+                        rowCls: '{showClassicRoutingBtn ? "menu-button" : "hidden"}'
+                    }
+                    ,{
+                        leaf: true,
+                        text: '{fleetRouting}',
+                        key: 'fleetrouting',
+                        iconCls: 'x-fa fa-random',
+                        rowCls: '{showFleetRoutingBtn ? "menu-button" : "hidden"}'
+                    }
+                    ]
                 }, {
                     text: '{share}',
                     iconCls: 'x-fa fa-share-alt',

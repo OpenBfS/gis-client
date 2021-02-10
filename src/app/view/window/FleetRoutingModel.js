@@ -16,15 +16,16 @@
 /**
  * @class Koala.view.window.RoutingModel
  */
-Ext.define('Koala.view.window.RoutingModel', {
+Ext.define('Koala.view.window.FleetRoutingModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-window-routing',
+    alias: 'viewmodel.k-window-fleet-routing',
 
     requires: [
         'Koala.store.WayPoints',
         'Koala.store.RoutingInstructions',
         'Koala.store.RoutingSummaries',
-        'Koala.store.GeocodingSuggestions'
+        'Koala.store.GeocodingSuggestions',
+        'Koala.store.FleetRoutingSummary'
     ],
 
     stores: {
@@ -39,26 +40,21 @@ Ext.define('Koala.view.window.RoutingModel', {
         },
         geocodingsuggestions: {
             type: 'k-geocodingsuggestions'
+        },
+        fleetroutingsummary: {
+            type: 'k-fleetroutingsummary'
         }
     },
 
     data: {
         i18n: {
-            title: '',
-            startFieldTitle: '',
-            viaFieldTitle: '',
-            endFieldTitle: '',
-            addEmptyPoint: '',
-            addStartPoint: '',
-            addViaPoint: '',
-            addEndPoint: '',
-            routingProfileFieldTitle: '',
-            computeRouteButtonText: '',
+            fleetRoutingTitle: '',
+            computeFleetRoutingButtonText: '',
             elevationBtnText: '',
             downloadButtonText: '',
-            error_msg_geocoding: '',
-            error_msg_routing_request: '',
-            error_msg_download: '',
+            errorGeoCoding: '',
+            errorRoutingRequest: '',
+            errorDownloadRoute: '',
             routingSummaryDetailsButton: '',
             addAvoidArea: '',
             uploadGeoJson: '',
@@ -73,12 +69,33 @@ Ext.define('Koala.view.window.RoutingModel', {
             errorGetFeatureInfo: '',
             errorNoLayerFound: '',
             errorNoPolygonChosen: '',
-            errorAreaTooBig: ''
+            errorFleetRouting: '',
+            addJobContextText: '',
+            addVehicleContextText: '',
+            setCurrentJobContextText: '',
+            setCurrentVehicleStartContextText: '',
+            setCurrentVehicleEndContextText: '',
+            totalDuration: '',
+            totalDrivingDuration: '',
+            totalServiceDuration: '',
+            totalWaitingDuration: '',
+            numberjobsMissing: '',
+            fleetRoutingSummary: '',
+            routesHeading: '',
+            vehicleText: '',
+            startText: '',
+            viaText: '',
+            duration: '',
+            distance: '',
+            startTime: '',
+            arrivalTime: '',
+            settingsTitle: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,
         routeSegmentStyle: undefined,
         waypointStyle: undefined,
+        jobMarkerStyle: undefined,
         avoidAreaStyle: undefined,
         avoidAreaOpacity: 0.5,
         waypointFontSize: undefined,

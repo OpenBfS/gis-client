@@ -29,13 +29,13 @@ Ext.define('Koala.view.panel.MobileRouting',{
         'Koala.util.AppContext',
         'BasiGX.view.component.Map',
         'Koala.view.panel.MobileRoutingController',
-        'Koala.view.window.RoutingModel',
-        'Koala.view.form.RoutingSettings'
+        'Koala.view.window.ClassicRoutingModel',
+        'Koala.view.form.ClassicRoutingSettings'
     ],
 
     controller: 'k-panel-mobilerouting',
     viewModel: {
-        type: 'k-window-routing'
+        type: 'k-window-classic-routing'
     },
 
     layout: 'vbox',
@@ -50,6 +50,7 @@ Ext.define('Koala.view.panel.MobileRouting',{
 
     routeLayerName: 'routing-route-layer',
 
+    // TODO: is this layer needed in the modern view?
     routeSegmentLayerName: 'routing-route-segment-layer',
 
     map: null,
@@ -71,7 +72,6 @@ Ext.define('Koala.view.panel.MobileRouting',{
 
     listeners: {
         painted: 'onPainted',
-        onWaypointAdded: 'onWaypointAdded',
         updateWayPointLayer: 'updateWayPointLayer',
         clearRouting: 'onCloseToolClicked'
     },
@@ -104,7 +104,7 @@ Ext.define('Koala.view.panel.MobileRouting',{
             }
         }]
     }, {
-        xtype: 'k-form-routing-settings',
+        xtype: 'k-form-classic-routing-settings',
         maxHeight: '40%'
     }, {
         xtype: 'button',
