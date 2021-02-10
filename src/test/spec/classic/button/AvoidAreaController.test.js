@@ -9,3 +9,5 @@ describe('Koala.view.button.AvoidAreaController', function() {
         });
     });
 });
+
+// TODO: test crucial methods like `handleUploadedFile`
