@@ -104,7 +104,8 @@
                 "importVectorLayerBtn",
                 "detectionLimitBtn",
                 "ScenarioAlertBtn",
-                "classicRoutingBtn"
+                "classicRoutingBtn",
+                "fleetRoutingBtn"
             ],
             "vectorIcons": [
                 {
