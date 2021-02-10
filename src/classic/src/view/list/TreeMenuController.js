@@ -23,6 +23,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
     extend: 'Ext.app.ViewController',
 
     requires: [
+        'Ext.Array',
         'Koala.view.window.AddWMSWindow',
         'Koala.view.window.ImportLocalDataWindow',
         'Koala.view.window.Print',
@@ -56,10 +57,13 @@ Ext.define('Koala.view.list.TreeMenuController', {
             var key = node.get('key');
             switch (key) {
                 case 'classicrouting':
-                    this.showWindowShake('k-window-classic-routing', 'Koala.view.window.ClassicRouting', 'k-window-fleet-routing');
+                    this.showWindowShake('k-window-classic-routing', 'Koala.view.window.ClassicRouting', ['k-window-fleet-routing', 'k-window-isochrone-routing']);
                     break;
                 case 'fleetrouting':
-                    this.showWindowShake('k-window-fleet-routing', 'Koala.view.window.FleetRouting', 'k-window-classic-routing');
+                    this.showWindowShake('k-window-fleet-routing', 'Koala.view.window.FleetRouting', ['k-window-classic-routing', 'k-window-isochrone-routing']);
+                    break;
+                case 'isochronerouting':
+                    this.showWindowShake('k-window-isochrone-routing', 'Koala.view.window.IsochroneRouting', ['k-window-classic-routing', 'k-window-fleet-routing']);
                     break;
                 case 'menu':
                     var isMicro = viewModel.get('micro');
@@ -237,9 +241,16 @@ Ext.define('Koala.view.list.TreeMenuController', {
      * Like 'showWindow' but also checks
      * if another window is already opened.
      */
-    showWindowShake: function(xtype, className, otherXtype) {
+    showWindowShake: function(xtype, className, otherXtypes) {
         var me = this;
-        var otherWin = Ext.ComponentQuery.query(otherXtype)[0];
+        var otherWin = Ext.Array.reduce(otherXtypes, function(prev, otherXtype) {
+            var win = Ext.ComponentQuery.query(otherXtype)[0];
+            if (win) {
+                return win;
+            } else {
+                return prev;
+            }
+        }, undefined);
         if (otherWin) {
             BasiGX.util.Animate.shake(otherWin);
         } else {

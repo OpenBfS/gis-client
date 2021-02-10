@@ -33,6 +33,7 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         routingTools: '',
         classicRouting: '',
         fleetRouting: '',
+        isochroneRouting: '',
         menu: '',
         themes: '',
         loading: '',
@@ -140,22 +141,26 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                 }, {
                     text: '{routingTools}',
                     iconCls: 'x-fa fa-location-arrow',
-                    rowCls: '{(showClassicRoutingBtn || showFleetRoutingBtn ) ? "menu-button" : "hidden"}',
+                    rowCls: '{(showClassicRoutingBtn || showFleetRoutingBtn || showIsochroneRoutingBtn ) ? "menu-button" : "hidden"}',
                     children: [{
                         leaf: true,
                         text: '{classicRouting}',
                         key: 'classicrouting',
                         iconCls: 'x-fa fa-location-arrow',
                         rowCls: '{showClassicRoutingBtn ? "menu-button" : "hidden"}'
-                    }
-                    ,{
+                    } ,{
                         leaf: true,
                         text: '{fleetRouting}',
                         key: 'fleetrouting',
                         iconCls: 'x-fa fa-random',
                         rowCls: '{showFleetRoutingBtn ? "menu-button" : "hidden"}'
-                    }
-                    ]
+                    }, {
+                        leaf: true,
+                        text: '{isochroneRouting}',
+                        key: 'isochronerouting',
+                        iconCls: 'x-fa fa-dot-circle-o',
+                        rowCls: '{showIsochroneRoutingBtn ? "menu-button" : "hidden"}'
+                    }]
                 }, {
                     text: '{share}',
                     iconCls: 'x-fa fa-share-alt',

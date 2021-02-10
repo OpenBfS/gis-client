@@ -553,6 +553,7 @@
                 "routingTools": "Routing",
                 "classicRouting": "Routing (classic)",
                 "fleetRouting": "Fleet Routing",
+                "isochroneRouting": "Isochrone",
                 "vectorimport": "Import local files",
                 "print": "Print",
                 "tools": "Tools",

@@ -100,7 +100,8 @@
                 "detectionLimitBtn",
                 "ScenarioAlertBtn",
                 "classicRoutingBtn",
-                "fleetRoutingBtn"
+                "fleetRoutingBtn",
+                "isochroneRoutingBtn"
             ],
             "vectorIcons": [
                 {
