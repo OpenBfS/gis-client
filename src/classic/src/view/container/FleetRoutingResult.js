@@ -289,7 +289,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                         duration = rec.get('duration') + rec.get('service') + rec.get('waiting_time');
 
                         var durationFormatted = orsUtil.getFormattedDuration(duration, true);
-                        var distanceFormatted = orsUtil.getFormattedDistance(distance, true);
+                        var distanceFormatted = orsUtil.getFormattedDistance(distance, true, 1000);
                         var startFormatted = '';
                         var endFormatted = '';
                         var isTimeStamp = false;
