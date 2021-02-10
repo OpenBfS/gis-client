@@ -36,8 +36,6 @@ Ext.define('Koala.view.window.FleetRouting', {
         'Koala.view.form.FleetRoutingSettings'
     ],
 
-    // TODO: inside the controller the references to its
-    //       parent view have to be adapted
     controller: 'k-window-fleet-routing',
 
     viewModel: {

@@ -13,7 +13,5 @@ describe('Koala.view.form.field.GeocodingCombo', function() {
             expect(cmp).to.not.be(undefined);
             expect(cmp.getController()).to.not.be(undefined);
         });
-
     });
-
 });
