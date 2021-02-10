@@ -244,14 +244,6 @@
                     "markerSize": 38,
                     "color": "black"
                 },
-                "jobMarkerStyle": {
-                    "markerSize": 28,
-                    "color": "black"
-                },
-                "startEndMarkerStyle": {
-                    "markerSize": 24,
-                    "color": "black"
-                },
                 "elevationStyle": {
                     "fill": "#ffffff",
                     "stroke": "#ffffff",
@@ -262,11 +254,6 @@
                     "width": 4,
                     "fillColor": "#ff0000",
                     "opacity": 0.2
-                },
-                "fleetRouting": {
-                    "job": {
-                        "maxServiceDuration": 86400
-                    }
                 }
             }
         }
