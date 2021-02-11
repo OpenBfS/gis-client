@@ -86,11 +86,10 @@ Ext.define('Koala.view.container.RoutingResult', {
             bind: {
                 store: '{routingsummaries}'
             },
-            listeners: {
-                itemmouseenter: 'onSummaryMouseEnter',
-                itemmouseleave: 'onSummaryMouseLeave'
-            },
             allowDeselect: true,
+            listeners: {
+                itemclick: 'zoomToRoute'
+            },
             columns: [
                 {
                     dataIndex: 'profile',
@@ -116,7 +115,7 @@ Ext.define('Koala.view.container.RoutingResult', {
                         var descent = rec.get('descent');
 
                         var durationFormatted = orsUtil.getFormattedDuration(duration, true);
-                        var distanceFormatted = orsUtil.getFormattedDistance(distance, true);
+                        var distanceFormatted = orsUtil.getFormattedDistance(distance, true, 1000);
                         var ascentFormatted = orsUtil.getFormattedDistance(ascent, true);
                         var descentFormatted = orsUtil.getFormattedDistance(descent, true);
 
