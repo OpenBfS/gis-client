@@ -86,10 +86,6 @@ Ext.define('Koala.view.container.RoutingResult', {
             bind: {
                 store: '{routingsummaries}'
             },
-            listeners: {
-                itemmouseenter: 'onSummaryMouseEnter',
-                itemmouseleave: 'onSummaryMouseLeave'
-            },
             allowDeselect: true,
             columns: [
                 {

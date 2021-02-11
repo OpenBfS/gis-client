@@ -242,5 +242,49 @@ Ext.define('Koala.view.container.FleetRoutingResultController', {
             duration: 1000,
             padding: '30 30 30 30'
         });
+    },
+
+    /**
+     * Handler for the mouseenter event on the summary grid.
+     *
+     * @param {Ext.grid.Panel} grid The Ext Grid.
+     * @param {Ext.data.Model} rec A single RoutingSummary.
+     */
+    onSummaryMouseEnter: function(grid, rec) {
+        var me = this;
+
+        var routeLayer = me.getRouteLayer();
+        if (!routeLayer) {
+            return;
+        }
+        var source = routeLayer.getSource();
+        if (!source) {
+            return;
+        }
+        source.forEachFeature(function(feature) {
+            var isCorrectFeature = (
+                feature.get('summaryRecordId') === rec.getId()
+            );
+            feature.set('highlighted', isCorrectFeature);
+        });
+    },
+
+    /**
+     * Handler for the mouseleave event on the summary grid.
+     */
+    onSummaryMouseLeave: function() {
+        var me = this;
+
+        var routeLayer = me.getRouteLayer();
+        if (!routeLayer) {
+            return;
+        }
+        var source = routeLayer.getSource();
+        if (!source) {
+            return;
+        }
+        source.forEachFeature(function(feature) {
+            feature.set('highlighted', true);
+        });
     }
 });
