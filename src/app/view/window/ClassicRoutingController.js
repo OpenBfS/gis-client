@@ -226,7 +226,7 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
         if (!onError) {
             onError = function(err) {
                 vm.set('showDownloadButton', false);
-                // TODO: proper error handling
+                Ext.toast(vm.get('i18n.errorRoutingRequest'));
                 var str = 'An error occured: ' + err;
                 Ext.Logger.log(str);
             };
