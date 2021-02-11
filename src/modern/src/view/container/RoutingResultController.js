@@ -30,6 +30,7 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
         var view = me.getView();
 
         if (newResult) {
+            me.clearRoutes();
             me.addRouteToMap(newResult);
             me.zoomToRoute();
             me.clearRoutingSummaries();

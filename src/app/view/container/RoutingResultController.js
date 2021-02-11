@@ -33,6 +33,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var me = this;
 
         if (newResult) {
+            me.clearRoutes();
             me.addRouteToMap(newResult);
             me.zoomToRoute();
             me.clearRoutingSummaries();
@@ -56,6 +57,15 @@ Ext.define('Koala.view.container.RoutingResultController', {
     onDestroy: function() {
         var me = this;
         me.destroyElevationPanel();
+    },
+
+    /**
+     * Clear the RouteLayer.
+     */
+    clearRoutes: function() {
+        var me = this;
+        var routeLayer = me.getRouteLayer();
+        routeLayer.getSource().clear();
     },
 
     /**
