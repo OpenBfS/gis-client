@@ -164,7 +164,7 @@ Ext.define('Koala.view.panel.MobileRouting',{
         if (routingOpts.routeStyle) {
             var routeStyle = new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: routingOpts.routeStyle.color,
+                    color: routingOpts.routeStyle.colorPrimary,
                     width: routingOpts.routeStyle.width
                 })
             });
