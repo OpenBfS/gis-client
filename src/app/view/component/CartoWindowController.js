@@ -1600,6 +1600,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
         Ext.each(cartos, function(carto) {
             carto.destroy();
         });
+        this.enableMapInteractions(true);
     },
 
     /**
