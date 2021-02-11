@@ -62,7 +62,9 @@ Ext.define('Koala.util.VroomFleetRouting', {
 
                 // add avoid area if available
                 if (!Ext.Object.isEmpty(avoidArea)) {
-                    jsonData.avoid_polygons = avoidArea;
+                    jsonData.avoid_areas = {
+                        avoid_polygons: avoidArea
+                    };
                 }
                 Ext.Ajax.request({
                     url: url,
