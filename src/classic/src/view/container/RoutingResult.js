@@ -87,6 +87,9 @@ Ext.define('Koala.view.container.RoutingResult', {
                 store: '{routingsummaries}'
             },
             allowDeselect: true,
+            listeners: {
+                itemclick: 'zoomToRoute'
+            },
             columns: [
                 {
                     dataIndex: 'profile',

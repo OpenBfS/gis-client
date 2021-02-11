@@ -202,6 +202,7 @@ Ext.define('Koala.view.container.FleetRoutingResultController', {
     },
 
     /**
+     * @override
      * Zoom to selected route on the map.
      *
      * @param {Ext.grid.Panel} grid The Ext Grid.
