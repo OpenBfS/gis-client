@@ -37,6 +37,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         type: 'k-form-layerfilter'
     },
     layout: 'anchor',
+    bodyCls: 'k-form-layerfilter',
     defaults: {
         anchor: '100%'
     },
@@ -82,6 +83,12 @@ Ext.define('Koala.view.form.LayerFilter', {
         var me = this;
         me.callParent();
 
+        me.add({
+            html: '<div class="timeselect-chart"></div>',
+            height: 100,
+            width: 400
+        });
+
         me.maxHeight = Ext.getBody().getViewSize().height*0.9;
 
         var filters = me.getFilters();
@@ -92,6 +99,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         }
 
         var hasTimeFilter = false;
+        var hasPointInTimeFilter = false;
 
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || '').toLowerCase();
@@ -103,6 +111,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                 case 'pointintime':
                     me.addPointInTimeFilter(filter, idx);
                     hasTimeFilter = true;
+                    hasPointInTimeFilter = true;
                     break;
                 case 'rodostime':
                 case 'value':
@@ -140,6 +149,61 @@ Ext.define('Koala.view.form.LayerFilter', {
             var field = me.down('[name=' + filter.param + ']');
             me.getController().onFilterChanged(field);
         });
+        if (hasPointInTimeFilter) {
+            window.setTimeout(this.setupTimeSelectChart.bind(this, hasPointInTimeFilter), 0);
+        }
+    },
+
+    fetchTimeSelectData: function() {
+        var metadata = this.getMetadata();
+        var context = Koala.util.AppContext.getAppContext().data.merge;
+        var url = context.urls['geoserver-base-url'] + '/ows';
+        var propertyName;
+        Ext.each(metadata.filters, function(filter) {
+            if (filter.type === 'pointintime') {
+                propertyName = filter.param;
+            }
+        });
+        var inputs = 'layerName=' + metadata.layerConfig.wms.layers;
+        inputs += ';propertyName=' + propertyName;
+        return Ext.Ajax.request({
+            url: url,
+            timeout: 120000,
+            params: {
+                request: 'Execute',
+                service: 'WPS',
+                version: '1.0.0',
+                identifier: 'gs:DistinctValues',
+                rawDataOutput: 'result',
+                dataInputs: inputs
+            }
+        });
+    },
+
+    setupTimeSelectChart: function() {
+        var metadata = this.getMetadata();
+        var duration = moment.duration(metadata.layerConfig.timeSeriesChartProperties.duration);
+        duration = duration.asMilliseconds() / 3 + duration.asMilliseconds();
+        var elm = document.querySelector('.timeselect-chart');
+        this.fetchTimeSelectData()
+            .then(function(response) {
+                var originalData = JSON.parse(response.responseText);
+                var data = [];
+                Ext.each(originalData, function(val) {
+                    data.push(moment(val.dsp).toDate().getTime());
+                });
+                var chartRenderer = new D3Util.ChartRenderer({
+                    components: [new D3Util.TimeSelectComponent({
+                        resolution: 10,
+                        data: data,
+                        color: 'red',
+                        duration: duration
+                    })],
+                    size: [400, 100],
+                    zoomType: 'none'
+                });
+                chartRenderer.render(elm);
+            });
     },
 
     /**
