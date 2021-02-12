@@ -248,10 +248,37 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
             .catch(onError);
     },
 
-    // TODO
+    /**
+     * Handler for visualising the routing results.
+     * @param {Object} geojson The routing GeoJSON.
+     */
     onRouteLoaded: function(geojson) {
-        // TODO remove this. just here so the linter does not fail
-        return geojson;
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var resultPanel = me.getResultPanel();
+
+        if (!resultPanel) {
+            return;
+        }
+
+        resultPanel.fireEvent('resultChanged', geojson);
+        vm.set('showRoutingResults', true);
+    },
+
+    /**
+     * Get the Isochrone Routing Result Panel.
+     * @returns {Ext.Component} The result panel.
+     */
+    getResultPanel: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        return view.down('[name=isochronerouting-result-panel]');
     },
 
     /**

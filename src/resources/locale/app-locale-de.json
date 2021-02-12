@@ -1034,8 +1034,12 @@
                     "submitButtonText": "Berechnen",
                     "rangeSliderText": "Reichweite",
                     "intervalSliderText": "Intervall",
-                    "addCenterContextText": "Als Zentrum setzen"
-                 }
+                    "addCenterContextText": "Als Zentrum setzen",
+                    "valueColumn": "Reichweite",
+                    "reachfactorColumn": "Erreichbarkeitsfaktor",
+                    "areaColumn": "Fläche",
+                    "populationColumn": "Einwohnerzahl"
+                }
             }
         }
     },

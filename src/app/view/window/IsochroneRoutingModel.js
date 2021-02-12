@@ -22,7 +22,8 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
 
     requires: [
         'Koala.store.WayPoints',
-        'Koala.store.GeocodingSuggestions'
+        'Koala.store.GeocodingSuggestions',
+        'Koala.store.Isochrones'
     ],
 
     stores: {
@@ -31,6 +32,9 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         },
         geocodingsuggestions: {
             type: 'k-geocodingsuggestions'
+        },
+        isochrones: {
+            type: 'k-isochrones'
         }
     },
 
@@ -44,7 +48,11 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
             distanceTooltip: '',
             submitButtonText: '',
             rangeSliderText: '',
-            intervalSliderText: ''
+            intervalSliderText: '',
+            valueColumn: '',
+            reachfactorColumn: '',
+            areaColumn: '',
+            populationColumn: ''
         },
         language: 'de',
         // TODO use this prop in UI
@@ -66,6 +74,7 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         // TODO use this prop in UI
         areaUnits: 'm',
         // TODO use this prop in UI
-        units: 'm'
+        units: 'm',
+        showRoutingResults: false
     }
 });

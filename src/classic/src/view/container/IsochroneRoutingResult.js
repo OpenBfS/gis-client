@@ -22,8 +22,13 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
     xtype: 'k-container-isochroneroutingresult',
 
     requires: [
-        'BasiGX.view.component.Map'
+        'Ext.grid.Panel',
+        'BasiGX.view.component.Map',
+        'Koala.view.container.IsochroneRoutingResultController',
+        'Koala.util.OpenRouteService'
     ],
+
+    controller: 'k-container-isochroneroutingresult',
 
     layout: 'vbox',
 
@@ -37,7 +42,70 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
 
     waypointLayerName: 'routing-waypoint-layer',
 
-    items: [],
+    items: [{
+        xtype: 'grid',
+        name: 'isochrone-result-grid',
+        bind: {
+            store: '{isochrones}'
+        },
+        columns: [{
+            dataIndex: 'value',
+            flex: 1,
+            align: 'end',
+            bind: {
+                text: '{i18n.valueColumn}'
+            },
+            renderer: function(value, metaData, rec) {
+                var orsUtil = Koala.util.OpenRouteService;
+
+                var range_type = rec.get('range_type');
+                if (range_type === 'time') {
+                    return orsUtil.getFormattedDuration(value, true);
+                } else if (range_type === 'distance') {
+                    return orsUtil.getFormattedDistance(value, true);
+                }
+
+                return;
+            }
+        }, {
+            dataIndex: 'area',
+            flex: 1,
+            align: 'end',
+            bind: {
+                text: '{i18n.areaColumn}'
+            },
+            renderer: function(area) {
+                var orsUtil = Koala.util.OpenRouteService;
+                // we have to divide by 1000 as otherwise the
+                // converion to km² is incorrect.
+                return orsUtil.getFormattedArea(area / 1000, true, 1000);
+            }
+        }, {
+            dataIndex: 'reachfactor',
+            flex: 1,
+            align: 'end',
+            bind: {
+                text: '{i18n.reachfactorColumn}'
+            },
+            renderer: function(reachfactor) {
+                if (reachfactor) {
+                    return reachfactor.toFixed(2);
+                }
+                return reachfactor;
+            }
+        }, {
+            dataIndex: 'population',
+            flex: 1,
+            align: 'end',
+            bind: {
+                text: '{i18n.populationColumn}'
+            }
+        }]
+    }],
+
+    listeners: {
+        resultChanged: 'onRoutingResultChanged'
+    },
 
     initComponent: function() {
         var me = this;

@@ -53,7 +53,10 @@ Ext.define('Koala.view.window.IsochroneRouting', {
         collapsible: true
     }, {
         xtype: 'k-container-isochroneroutingresult',
-        name: 'isochronerouting-result-panel'
+        name: 'isochronerouting-result-panel',
+        bind: {
+            hidden: '{!showRoutingResults}'
+        }
     }
     ],
 

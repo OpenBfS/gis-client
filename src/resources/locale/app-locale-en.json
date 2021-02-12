@@ -990,7 +990,11 @@
                     "submitButtonText": "Submit",
                     "rangeSliderText": "Range",
                     "intervalSliderText": "Interval",
-                    "addCenterContextText": "Set center"
+                    "addCenterContextText": "Set center",
+                    "valueColumn": "Range",
+                    "reachfactorColumn": "Reach score",
+                    "areaColumn": "Area",
+                    "populationColumn": "Population"
                  }
             }
         }
@@ -1030,15 +1034,6 @@
                     "startTime": "Starting time",
                     "arrivalTime": "Arrival time",
                     "settingsTitle": "Settings"
-                }
-            }
-        }
-    },
-    "Koala.view.window.IsochroneRouting": {
-        "config": {
-            "data": {
-                "i18n": {
-                    "isochroneRoutingTitle": "Isochrones"
                 }
             }
         }
