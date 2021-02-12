@@ -32,7 +32,8 @@ Ext.define('Koala.view.list.TreeMenuController', {
         'Koala.view.window.HelpWindow',
         'Koala.view.window.AboutWindow',
         'Koala.view.window.ClassicRouting',
-        'Koala.view.window.FleetRouting'
+        'Koala.view.window.FleetRouting',
+        'Koala.view.window.IsochroneRouting'
     ],
 
     alias: 'controller.k-list-treemenu',
