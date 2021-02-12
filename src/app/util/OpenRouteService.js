@@ -45,7 +45,7 @@ Ext.define('Koala.util.OpenRouteService', {
          * Fire the http request to the OpenRouteService directions API.
          *
          * @param {Object} params The request params.
-         * @returns {Promise} A promise resolving on succesful completion.
+         * @returns {Promise} A promise resolving on successful completion.
          */
         requestDirectionsApi: function(params) {
             var me = this;
@@ -56,6 +56,23 @@ Ext.define('Koala.util.OpenRouteService', {
             });
 
             return Directions.calculate(params);
+        },
+
+        /**
+         * Fire the http request to the OpenRouteService isochrones API.
+         *
+         * @param {Object} params The request params.
+         * @returns {Promise} A promise resolving on successful completion.
+         */
+        requestIsochronesApi: function(params) {
+            var staticMe = Koala.util.OpenRouteService;
+
+            var Isochrones = new Openrouteservice.Isochrones({
+                host: staticMe.getApiEndpoint(),
+                api_key: staticMe.getApiKey()
+            });
+
+            return Isochrones.calculate(params);
         },
 
         /**

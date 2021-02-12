@@ -77,7 +77,9 @@ Ext.define('Koala.view.window.IsochroneRouting', {
             // child component sizes are updated. We can apparently
             // reset this by setting the sizes to null...
             this.setSize(null, null);
-        }
+        },
+        makeRoutingRequest: 'makeRoutingRequest',
+        onRouteLoaded: 'onRouteLoaded'
     },
 
     initComponent: function() {

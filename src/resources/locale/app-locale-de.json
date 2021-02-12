@@ -1021,6 +1021,15 @@
             }
         }
     },
+    "Koala.view.window.IsochroneRouting": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "isochroneRoutingTitle": "Isochronen"
+                }
+            }
+        }
+    },
     "Koala.view.button.AvoidArea": {
         "config": {
             "data": {
