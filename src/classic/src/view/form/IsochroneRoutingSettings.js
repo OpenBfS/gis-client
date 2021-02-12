@@ -20,11 +20,97 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
     extend: 'Ext.form.Panel',
     xtype: 'k-form-isochrone-routing-settings',
 
-    requires: [],
+    requires: [
+        'Koala.view.form.field.GeocodingCombo',
+        'Koala.view.button.RoutingProfile',
+        'Koala.view.form.IsochroneRoutingSettingsController',
+        'Koala.view.button.AvoidArea',
+        'Ext.button.Segmented',
+        'Ext.slider.Single'
+    ],
+
+    controller: 'k-form-isochrone-routing-settings',
 
     width: '100%',
 
     bodyPadding: '10 5 0 5',
 
-    items: []
+    defaults: {
+        anchor: '100%'
+    },
+
+    fbar: [{
+        // TODO: set default value
+        xtype: 'k-button-routing-profile'
+    }, {
+        // TODO: set default value
+        xtype: 'segmentedbutton',
+        defaults: {
+            padding: '3 10'
+        },
+        items: [{
+            iconCls: 'x-fa fa-clock-o',
+            bind: {
+                tooltip: '{i18n.timeTooltip}'
+            }
+        }, {
+            iconCls: 'x-fa fa-arrows-h',
+            bind: {
+                tooltip: '{i18n.distanceTooltip}'
+            }
+        }]
+    }, {
+        xtype: 'k-button-avoidarea'
+    }, {
+        xtype: 'tbspacer',
+        flex: 1
+    },{
+        // TODO: disable if form not valid
+        xtype: 'button',
+        bind: {
+            text: '{i18n.submitButtonText}'
+        },
+        handler: 'onSubmit'
+    }],
+
+    items: [{
+        xtype: 'k-form-field-geocodingcombo',
+        name: 'center',
+        bind: {
+            fieldLabel: '{i18n.addressLabel}',
+            emptyText: '{i18n.addressPlaceholder}'
+        },
+        labelSeparator: ': *',
+        flex: 1,
+        listeners: {
+            select: 'onCenterSelect'
+        }
+    },{
+        xtype: 'slider',
+        bind: {
+            fieldLabel: '{i18n.rangeSliderText}'
+        },
+        labelWidth: 125,
+        // TODO: set proper values for properties below
+        value: 50,
+        increment: 10,
+        minValue: 0,
+        maxValue: 100
+        // TODO: add (interactive) numberfield
+        // TOOD: show min/max, show current value
+    }, {
+        xtype: 'slider',
+        bind: {
+            fieldLabel: '{i18n.intervalSliderText}'
+        },
+        labelWidth: 125,
+        // TODO: set proper values for properties below
+        value: 50,
+        increment: 10,
+        minValue: 0,
+        maxValue: 100
+        // TODO: add (interactive) numberfield
+        // TOOD: show min/max, show current value
+    }
+    ]
 });

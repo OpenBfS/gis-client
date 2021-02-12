@@ -977,6 +977,24 @@
             }
         }
     },
+    "Koala.view.window.IsochroneRouting": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "isochroneRoutingTitle": "Isochrone",
+                    "addressLabel": "Center",
+                    "addressPlaceholder": "Enter search term or coordinate",
+                    "errorGeoCoding": "Could not load location.",
+                    "timeTooltip": "Time",
+                    "distanceTooltip": "Distance",
+                    "submitButtonText": "Submit",
+                    "rangeSliderText": "Range",
+                    "intervalSliderText": "Interval",
+                    "addCenterContextText": "Set center"
+                 }
+            }
+        }
+    },
     "Koala.view.window.FleetRouting": {
         "config": {
             "data": {

@@ -36,13 +36,22 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
 
     data: {
         i18n: {
-            isochroneRoutingTitle: ''
+            isochroneRoutingTitle: '',
+            addressLabel: '',
+            addressPlaceholder: '',
+            errorGeoCoding: '',
+            timeTooltip: '',
+            distanceTooltip: '',
+            submitButtonText: '',
+            rangeSliderText: '',
+            intervalSliderText: ''
         },
         language: 'de',
         // TODO use this prop in UI
         routingProfile: 'driving-car',
         // TODO use this prop in UI
-        range: undefined,
+        //      temporary set to 10 minutes (600 seconds)
+        range: [600],
         // TODO use this prop in UI
         //      a maximum of 10 intervals is allowed, but interval is in unit
         //      so we have to check this properly.

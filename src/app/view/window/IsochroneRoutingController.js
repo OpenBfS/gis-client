@@ -22,8 +22,141 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
 
     requires: [
         'Ext.Object',
-        'Koala.util.OpenRouteService'
+        'Koala.util.OpenRouteService',
+        'Koala.util.Geocoding'
     ],
+
+
+    /**
+     * Reference to openContextMenu function
+     * with the controller's "this" in the scope.
+     * Necessary for properly removing the listener
+     * again.
+     */
+    boundOpenContextMenu: null,
+
+    /**
+     * @override
+     */
+    onBoxReady: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+        me.callParent(arguments);
+
+        var wayPointStore = vm.get('waypoints');
+        wayPointStore.on('datachanged',
+            function() {
+                view.fireEvent('updateWayPointLayer');
+            }
+        );
+
+        // context menu
+        var map = view.map;
+        var mapViewport = map.getViewport();
+        me.boundOpenContextMenu = me.openContextMenu.bind(me);
+        mapViewport.addEventListener('contextmenu', me.boundOpenContextMenu);
+    },
+
+    /**
+     * @override
+     */
+    fillViewModel: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        var contextUtil = Koala.util.AppContext;
+        var ctx = contextUtil.getAppContext();
+        var routingOpts = contextUtil.getMergedDataByKey('routing', ctx);
+        vm.set('routingOpts', routingOpts);
+
+        var wayPointMarkerSize = routingOpts.waypointStyle.markerSize;
+        var wayPointMarkerColor = routingOpts.waypointStyle.color;
+
+        if (routingOpts.waypointStyle) {
+            wayPointMarkerSize = 38;
+            wayPointMarkerColor = 'black';
+        }
+
+        var waypointStyle = new ol.style.Style({
+            text: new ol.style.Text({
+                // unicode for fontawesome map-marker
+                text: '\uf041',
+                font: 'normal ' + wayPointMarkerSize + 'px FontAwesome',
+                fill: new ol.style.Fill({
+                    color: wayPointMarkerColor
+                }),
+                textBaseline: 'bottom'
+            })
+        });
+        vm.set('waypointStyle', waypointStyle);
+        vm.set('waypointFontSize', routingOpts.waypointStyle.markerSize);
+    },
+
+    /**
+     * @override
+     */
+    createRoutingLayers: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!me.getWaypointLayer()) {
+            me.createLayer('waypointStyle', view.waypointLayerName);
+            if (view.map !== null) {
+                view.map.on('singleclick', me.onWaypointClick, me);
+            }
+        }
+    },
+
+    /**
+     * @override
+     */
+    openContextMenu: function(evt) {
+        var me = this;
+
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+        var map = view.map;
+
+        var evtCoord = map.getEventCoordinate(evt);
+
+        // suppress default browser behaviour
+        evt.preventDefault();
+
+        // transform coordinate
+        var sourceProjection = map.getView().getProjection().getCode();
+        var targetProjection = ol.proj.get('EPSG:4326');
+        var transformed = ol.proj.transform(evtCoord, sourceProjection, targetProjection);
+
+        var latitude = transformed[1];
+        var longitude = transformed[0];
+
+        var mapContextMenu = Ext.create('Ext.menu.Menu', {
+            renderTo: Ext.getBody(),
+            items: [
+                {
+                    bind: {
+                        text: vm.get('i18n.addCenterContextText')
+                    },
+                    handler: function() {
+                        me.storeMapClick(longitude, latitude);
+                        mapContextMenu.destroy();
+                    }
+                }
+            ]
+        });
+
+        mapContextMenu.showAt(evt.x, evt.y);
+        vm.set('mapContextMenu', mapContextMenu);
+    },
+
 
     /**
      * Get the OpenRouteService Isochrones API parameters.
@@ -119,6 +252,85 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
     onRouteLoaded: function(geojson) {
         // TODO remove this. just here so the linter does not fail
         return geojson;
-    }
+    },
 
+    /**
+     * @override
+     * Store the clicked coordinate as isochrone center.
+     * Update the value in the geocoding combobox.
+     *
+     * @param {number} longitude The longitude of the new center.
+     * @param {number} latitude The latitude of the new center.
+     */
+    storeMapClick: function(longitude, latitude) {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+        var language = vm.get('language');
+
+        var geocoding = Koala.util.Geocoding;
+
+        geocoding.doReverseGeocoding(longitude, latitude, language)
+            .then(function(resultJson) {
+                var features = resultJson.features;
+                if (features.length === 0) {
+                    Ext.toast(vm.get('i18n.errorGeoCoding'));
+                    return;
+                }
+                var address = geocoding.createPlaceString(features[0].properties);
+
+                // add place to store
+                var wayPointStore = vm.get('waypoints');
+                var waypoint = {
+                    address: language,
+                    latitude: latitude,
+                    longitude: longitude
+                };
+                wayPointStore.loadRawData([waypoint]);
+
+                // Update combobox with new address
+                var isochroneForm = Ext.ComponentQuery.query('k-form-isochrone-routing-settings')[0];
+                if (!isochroneForm) {
+                    return;
+                }
+                var field = isochroneForm.down('[name=center]');
+                if (!field) {
+                    return;
+                }
+                var store = field.getStore();
+                if (store) {
+                    field.suspendEvents();
+                    store.loadRawData([address]);
+                    field.setSelection(store.first());
+                    field.resumeEvents();
+                }
+            })
+            .catch(function(err) {
+                var str = 'An error occured: ' + err;
+                Ext.Logger.log(str);
+                Ext.toast(vm.get('i18n.errorGeoCoding'));
+            });
+    },
+
+    /**
+     * @override
+     */
+    onWindowClose: function() {
+        var me = this;
+        var view = me.getView();
+        var vm = view.lookupViewModel();
+
+        me.callParent(arguments);
+
+        // destroy context window
+        if (vm.get('mapContextMenu') !== null) {
+            var mapContextMenu = vm.get('mapContextMenu');
+            mapContextMenu.destroy();
+            vm.set('mapContextMenu', null);
+        }
+
+        // remove context menu listener
+        var mapViewport = view.map.getViewport();
+        mapViewport.removeEventListener('contextmenu', me.boundOpenContextMenu);
+    }
 });

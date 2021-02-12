@@ -50,10 +50,7 @@ Ext.define('Koala.view.window.IsochroneRouting', {
     items: [{
         xtype: 'k-form-isochrone-routing-settings',
         flex: 1,
-        collapsible: true,
-        fbar: [{
-            xtype: 'k-button-avoidarea'
-        }]
+        collapsible: true
     }, {
         xtype: 'k-container-isochroneroutingresult',
         name: 'isochronerouting-result-panel'
@@ -79,7 +76,10 @@ Ext.define('Koala.view.window.IsochroneRouting', {
             this.setSize(null, null);
         },
         makeRoutingRequest: 'makeRoutingRequest',
-        onRouteLoaded: 'onRouteLoaded'
+        onRouteLoaded: 'onRouteLoaded',
+        boxready: 'onBoxReady',
+        updateWayPointLayer: 'updateWayPointLayer',
+        close: 'onWindowClose'
     },
 
     initComponent: function() {

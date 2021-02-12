@@ -1025,8 +1025,17 @@
         "config": {
             "data": {
                 "i18n": {
-                    "isochroneRoutingTitle": "Isochronen"
-                }
+                    "isochroneRoutingTitle": "Isochronen",
+                    "addressLabel": "Zentrum",
+                    "addressPlaceholder": "Suchbegriff oder Koordinate eingeben",
+                    "errorGeoCoding": "Standpunkt konnte nicht geladen werden.",
+                    "timeTooltip": "Zeit",
+                    "distanceTooltip": "Strecke",
+                    "submitButtonText": "Berechnen",
+                    "rangeSliderText": "Reichweite",
+                    "intervalSliderText": "Intervall",
+                    "addCenterContextText": "Als Zentrum setzen"
+                 }
             }
         }
     },
