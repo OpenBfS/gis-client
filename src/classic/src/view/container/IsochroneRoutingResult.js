@@ -77,7 +77,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
             renderer: function(area) {
                 var orsUtil = Koala.util.OpenRouteService;
                 // we have to divide by 1000 as otherwise the
-                // converion to km² is incorrect.
+                // conversion to km² is incorrect.
                 return orsUtil.getFormattedArea(area / 1000, true, 1000);
             }
         }, {

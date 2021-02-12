@@ -35,7 +35,7 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         if (!parentView) {
             return;
         }
-        parentView.fireEvent('makeRoutingRequest');
+        parentView.fireEvent('makeRoutingRequest', null, null);
     },
 
     /**

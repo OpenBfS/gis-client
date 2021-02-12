@@ -41,7 +41,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
      * Overwrite the isochronesStore with the given isochrones.
      *
      * @param {Object} orsIsochrones Response object of the ORS Isochrones API.
-     * @returns {Ext.data.Model[]} The added isochrone models.
+     * @returns {Ext.data.Model[]} The added isochrone records.
      */
     addIsochrones: function(orsIsochrones) {
         var me = this;
