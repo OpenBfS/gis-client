@@ -94,6 +94,16 @@ Ext.define('Koala.util.MetadataParser', {
         },
 
         /**
+         * Parses a OSM layer section.
+         * @param  {Object} json to parse
+         * @return {Object} the resulting config object
+         */
+        parseOSMLayer: function(json) {
+            return {
+                url: this.getTrimmedUrl(json)
+            };
+        },
+        /**
          * Parse a WFS section.
          * @param  {Object} json to parse
          * @return {Object} resulting config object.
@@ -157,6 +167,9 @@ Ext.define('Koala.util.MetadataParser', {
             }
             if (json['bfs:layerType'] && json['bfs:layerType']['bfs:MD_WMTSLayerType']) {
                 config.wmts = this.parseWmtsLayer(json['bfs:layerType']['bfs:MD_WMTSLayerType']);
+            }
+            if (json['bfs:layerType'] && json['bfs:layerType']['bfs:MD_OSMLayerType']) {
+                config.osm = this.parseOSMLayer(json['bfs:layerType']['bfs:MD_OSMLayerType']);
             }
             if (json['bfs:wfs']) {
                 config.wfs = this.parseWfs(json['bfs:wfs']);

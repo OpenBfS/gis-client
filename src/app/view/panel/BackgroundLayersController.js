@@ -98,8 +98,9 @@ Ext.define('Koala.view.panel.BackgroundLayersController', {
                             xtype: 'container',
                             layout: 'hbox',
                             flex: 1,
-                            height: '100%',
+                            height: 58,
                             width: '100%',
+                            margin: '0 0 10 0',
                             items: [{
                                 xtype: 'image',
                                 height: 58,
