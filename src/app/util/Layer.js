@@ -1303,7 +1303,7 @@ Ext.define('Koala.util.Layer', {
             var cntWmts = Ext.Object.getSize(layerCfg['wmts']);
             var cntOsm = Ext.Object.getSize(layerCfg['osm']);
 
-            if (cntVector === 0 && cntWms === 0 && cntWmts === 0) {
+            if (cntVector === 0 && cntWms === 0 && cntWmts === 0 && cntOsm === 0) {
                 Ext.log.error('Non-deterministic layer config in metadata');
             }
 
