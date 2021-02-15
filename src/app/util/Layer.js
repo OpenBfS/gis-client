@@ -1528,7 +1528,7 @@ Ext.define('Koala.util.Layer', {
 
                 cfg = {
                     url: md.layerConfig.osm.url,
-                    crossOrigin: 'Anonymous'
+                    crossOrigin: null
                 };
             } else if (SourceClass === ol.source.WMTS) {
                 var tileGrid = Koala.util.Object.getPathStrOr(
