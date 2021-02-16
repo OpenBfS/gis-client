@@ -156,6 +156,7 @@ Ext.define('Koala.util.ChartData', {
 
             var seriesData = [];
             var features = data.features.slice();
+
             features.sort(function(a, b) {
                 var first = moment(a.properties[xAxisAttr]).unix();
                 var second = moment(b.properties[xAxisAttr]).unix();
@@ -172,7 +173,6 @@ Ext.define('Koala.util.ChartData', {
             // Iterate until startDate <= endDate
             Ext.each(features, function(feature) {
                 var newRawData = {};
-
                 // add all available properties in order
                 // to use them for timeseriesTooltip
                 // ToDo: check if this has any side effects for "download", "timeseriesChart" ...
@@ -264,9 +264,8 @@ Ext.define('Koala.util.ChartData', {
             }
 
             // Iterate until startDate <= endDate
-            while (startDate.diff(endDate) < 0) {
+            while (startDate.diff(endDate) <= 0) {
                 var newRawData = {};
-
                 compareableDate = startDate.unix() + firstDiffSeconds;
                 matchingFeature = snapObject[compareableDate];
 
