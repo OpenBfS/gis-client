@@ -173,6 +173,7 @@ Ext.define('Koala.util.ChartData', {
             // Iterate until startDate <= endDate
             Ext.each(features, function(feature) {
                 var newRawData = {};
+
                 // add all available properties in order
                 // to use them for timeseriesTooltip
                 // ToDo: check if this has any side effects for "download", "timeseriesChart" ...
