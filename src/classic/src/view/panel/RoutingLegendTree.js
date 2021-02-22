@@ -313,6 +313,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 });
             }
             this.layerSettingsMenu.getViewModel().set('allowClone', (btn.layerRec.getOlLayer().get('allowClone') || (btn.layerRec.getOlLayer().get('allowClone')===undefined))?true:false);
+            this.layerSettingsMenu.getViewModel().set('showCartoWindow', (btn.layerRec.getOlLayer().get('showCartoWindow'))?true:false);
             this.layerSettingsMenu.getViewModel().set('external', (btn.layerRec.getOlLayer().get('external'))?true:false);
             this.layerSettingsMenu.getViewModel().set('queryable', (btn.layerRec.getOlLayer().get('queryable'))?true:false);
             this.layerSettingsMenu.getViewModel().set('hoverable', (btn.layerRec.getOlLayer().get('hoverable'))?true:false);

@@ -1390,6 +1390,7 @@ Ext.define('Koala.util.Layer', {
                 allowDownload: getBool(olProps.allowDownload, true),
                 allowRemoval: getBool(olProps.allowRemoval, true),
                 allowClone: getBool(olProps.allowClone, false),
+                showCartoWindow: getBool(olProps.showCartoWindow, false),
                 allowEdit: getBool(olProps.allowEdit, false),
                 allowShortInfo: getBool(olProps.allowShortInfo, true),
                 allowPrint: getBool(olProps.allowPrint, true),
