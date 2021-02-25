@@ -344,6 +344,19 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var jobsStore = view.down('k-grid-routing-jobs').getStore();
         var jobs = jobsStore.getVroomArray();
 
+        /**
+         * workaround to force usage of all vehicles at hand
+         */
+        var jobCount = jobs.length;
+        var vehicleCount = vehicles.length;
+        var vehicleCapacity = Math.ceil(1.2 * jobCount / vehicleCount);
+        Ext.Object.each(jobs, function(job) {
+            job['delivery'] = [1];
+        });
+        for (var i = 0; i < vehicleCount; i++) {
+            vehicles[i]['capacity'] = [vehicleCapacity];
+        }
+
         var avoidArea = me.getAvoidAreaGeometry();
 
         Koala.util.VroomFleetRouting.performOptimization(vehicles, jobs, avoidArea)
