@@ -1410,7 +1410,6 @@ Ext.define('Koala.util.Layer', {
                 //"treeMenu": true, // TODO: remove / enhance due to new single item properties
                 //routeId: olProps.routeId || metadata.inspireId, // TODO: get this back in when gnos is ready
                 routeId: metadata.inspireId,
-                showCartoWindow: getBool(olProps.showCartoWindow, false),
                 tableContentProperty: olProps.tableContentProperty,
                 tableContentURL: olProps.tableContentURL,
                 htmlContentProperty: olProps.htmlContentProperty,
