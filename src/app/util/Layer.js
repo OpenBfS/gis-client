@@ -1301,23 +1301,28 @@ Ext.define('Koala.util.Layer', {
             var cntVector = Ext.Object.getSize(layerCfg['vector']);
             var cntWms = Ext.Object.getSize(layerCfg['wms']);
             var cntWmts = Ext.Object.getSize(layerCfg['wmts']);
+            var cntOsm = Ext.Object.getSize(layerCfg['osm']);
 
-            if (cntVector === 0 && cntWms === 0 && cntWmts === 0) {
+            if (cntVector === 0 && cntWms === 0 && cntWmts === 0 && cntOsm === 0) {
                 Ext.log.error('Non-deterministic layer config in metadata');
             }
 
-            if (cntVector > cntWms && cntVector > cntWmts) {
+            if (cntVector > cntWms && cntVector > cntWmts && cntVector > cntOsm) {
                 // vector biggest of all
                 LayerClazz = ol.layer.Vector;
                 hint = 'vector';
-            } else if (cntWms > cntVector && cntWms > cntWmts) {
+            } else if (cntWms > cntVector && cntWms > cntWmts && cntWms > cntOsm) {
                 // wms biggest of all
                 LayerClazz = ol.layer.Tile;
                 hint = 'wms';
-            } else if (cntWmts > cntVector && cntWmts > cntWms) {
+            } else if (cntWmts > cntVector && cntWmts > cntWms && cntWmts > cntOsm) {
                 // wmts biggest of all
                 LayerClazz = ol.layer.Tile;
                 hint = 'wmts';
+            } else if (cntOsm > cntVector && cntOsm > cntWms && cntOsm > cntWmts) {
+                // osm biggest of all
+                LayerClazz = ol.layer.Tile;
+                hint = 'osm';
             }
 
             if (!LayerClazz) {
@@ -1356,8 +1361,9 @@ Ext.define('Koala.util.Layer', {
                 SourceClazz = ol.source.ImageWMS;
             } else if (LayerClazz === ol.layer.Tile && hint === 'wmts') {
                 SourceClazz = ol.source.WMTS;
+            } else if (LayerClazz === ol.layer.Tile && hint === 'osm') {
+                SourceClazz = ol.source.OSM;
             }
-
             return SourceClazz;
         },
 
@@ -1384,6 +1390,7 @@ Ext.define('Koala.util.Layer', {
                 allowDownload: getBool(olProps.allowDownload, true),
                 allowRemoval: getBool(olProps.allowRemoval, true),
                 allowClone: getBool(olProps.allowClone, false),
+                showCartoWindow: getBool(olProps.showCartoWindow, false),
                 allowEdit: getBool(olProps.allowEdit, false),
                 allowShortInfo: getBool(olProps.allowShortInfo, true),
                 allowPrint: getBool(olProps.allowPrint, true),
@@ -1403,7 +1410,6 @@ Ext.define('Koala.util.Layer', {
                 //"treeMenu": true, // TODO: remove / enhance due to new single item properties
                 //routeId: olProps.routeId || metadata.inspireId, // TODO: get this back in when gnos is ready
                 routeId: metadata.inspireId,
-                showCartoWindow: getBool(olProps.showCartoWindow, false),
                 tableContentProperty: olProps.tableContentProperty,
                 tableContentURL: olProps.tableContentURL,
                 htmlContentProperty: olProps.htmlContentProperty,
@@ -1517,6 +1523,12 @@ Ext.define('Koala.util.Layer', {
                         TRANSPARENT: md.layerConfig.wms.transparent || false,
                         VERSION: '1.1.1'
                     }
+                };
+            } else if (SourceClass === ol.source.OSM) {
+
+                cfg = {
+                    url: md.layerConfig.osm.url,
+                    crossOrigin: null
                 };
             } else if (SourceClass === ol.source.WMTS) {
                 var tileGrid = Koala.util.Object.getPathStrOr(

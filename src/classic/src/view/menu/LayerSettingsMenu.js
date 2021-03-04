@@ -39,7 +39,8 @@ Ext.define('Koala.view.menu.LayerSettingsMenu', {
 
     items: [{
         bind: {
-            text: '{minimize}'
+            text: '{minimize}',
+            hidden: '{!showCartoWindow}'
         },
         handler: 'toggleMinimize',
         glyph: 'xf2d1@FontAwesome'

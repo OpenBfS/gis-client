@@ -318,6 +318,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
             allowDownload: getBool(olProps.allowDownload, false),
             allowRemoval: getBool(olProps.allowRemoval, true),
             allowClone: getBool(olProps.allowClone, false),
+            showCartoWindow: getBool(olProps.showCartoWindow, false),
             allowEdit: getBool(olProps.allowEdit, false),
             allowShortInfo: getBool(olProps.allowShortInfo, false),
             allowPrint: getBool(olProps.allowPrint, true),
