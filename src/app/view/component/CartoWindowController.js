@@ -169,8 +169,9 @@ Ext.define('Koala.view.component.CartoWindowController', {
      *
      **/
     enableMapInteractions: function(force) {
-        var map = this.getView().getMap();
-        var mouseDown = this.getView().mouseDown;
+        var view = this.getView();
+        var map = BasiGX.util.Map.getMapComponent().map;
+        var mouseDown = view && view.mouseDown;
         var me = this;
 
         if (mouseDown && !force) {
