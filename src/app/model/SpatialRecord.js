@@ -27,7 +27,10 @@ Ext.define('Koala.model.SpatialRecord', {
     }, {
         name: 'wkt',
         mapping: function(data) {
-            return data.properties[this.config.geomColumn];
+            var fmt = new ol.format.GeoJSON();
+            var geom = fmt.readGeometry(data.geometry);
+            fmt = new ol.format.WKT();
+            return fmt.writeGeometry(geom);
         }
     }, {
         name: 'nnid',

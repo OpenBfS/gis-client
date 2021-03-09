@@ -42,10 +42,20 @@ Ext.define('Koala.store.SpatialSearch', {
 
     listeners: {
         beforeload: function() {
+            var lang = Ext.ComponentQuery.query('k-form-field-languagecombo')[0].getValue();
+            this.proxy.extraParams.lang = lang;
+
             //TODO: this won't work if more than one map
             if (!this.map) {
                 this.map = BasiGX.view.component.Map.guess().getMap();
             }
+
+            var center = this.map.getView().getCenter();
+            var projection = this.map.getView().getProjection();
+            center = proj4(projection.getCode(), proj4.WGS84, center);
+            this.proxy.extraParams.lon = center[0];
+            this.proxy.extraParams.lat = center[1];
+
             if (!this.layer) {
                 this.layer = new ol.layer.Vector({
                     source: new ol.source.Vector()
@@ -57,33 +67,31 @@ Ext.define('Koala.store.SpatialSearch', {
             }
 
             var appContext = BasiGX.view.component.Map.guess().appContext;
-            var urls = appContext.data.merge.urls;
-            var spatialsearchtypename = appContext.data.merge['spatialSearchTypeName'];
-            this.proxy.url = urls['spatial-search'];
-            this.proxy.extraParams.typeName = spatialsearchtypename;
 
             var fields = Koala.model.SpatialRecord.getFields();
             Ext.each(fields, function(field) {
                 field.initConfig({
-                    searchColumn: appContext.data.merge.spatialSearchFields.searchColumn,
-                    geomColumn: appContext.data.merge.spatialSearchFields.geomColumn
+                    searchColumn: appContext.data.merge.spatialSearchFields.searchColumn
                 });
             });
         }
     },
 
     proxy: {
-        url: null, // set in the constructor
+        url: 'https://osm.bfs.de/ors/geocode/api',
         method: 'GET',
         type: 'ajax',
         extraParams: {
-            service: 'WFS',
-            version: '1.0.0',
-            request: 'GetFeature',
-            outputFormat: 'application/json',
-            typeName: 'BFS:verwaltung_4326_geozg_sort' // set in the constructor but left as default for compatibility reasons
+            q: '',
+            lon: '',
+            lat: '',
+            limit: '10',
+            lang: 'de'
         },
-        limitParam: 'maxFeatures',
+        limitParam: 'limit',
+        pageParam: '',
+        startParam: '',
+        noCache: false,
         reader: {
             type: 'json',
             rootProperty: 'features'

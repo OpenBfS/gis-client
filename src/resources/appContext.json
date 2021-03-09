@@ -67,10 +67,8 @@
                 "uncertaintyAttribute",
                 "featureIdentifyField"
             ],
-            "spatialSearchTypeName": "bfs:verwaltung_4326_geozg_sort",
             "spatialSearchFields": {
-                "searchColumn": "NAME",
-                "geomColumn": "BOX_GEO"
+                "searchColumn": "name"
             },
             "startCenter": [
                 1234075.4566814213,
