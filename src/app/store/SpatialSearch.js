@@ -65,20 +65,12 @@ Ext.define('Koala.store.SpatialSearch', {
                 this.layer.setZIndex(999);
                 this.map.addLayer(this.layer);
             }
-
-            var appContext = BasiGX.view.component.Map.guess().appContext;
-
-            var fields = Koala.model.SpatialRecord.getFields();
-            Ext.each(fields, function(field) {
-                field.initConfig({
-                    searchColumn: appContext.data.merge.spatialSearchFields.searchColumn
-                });
-            });
         }
     },
 
     proxy: {
-        url: 'https://osm.bfs.de/ors/geocode/api',
+        // url: 'https://osm.bfs.de/ors/geocode/api',
+        url: 'http://localhost/api',
         method: 'GET',
         type: 'ajax',
         extraParams: {

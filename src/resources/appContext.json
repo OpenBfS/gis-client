@@ -67,9 +67,6 @@
                 "uncertaintyAttribute",
                 "featureIdentifyField"
             ],
-            "spatialSearchFields": {
-                "searchColumn": "name"
-            },
             "startCenter": [
                 1234075.4566814213,
                 6706481.04685707

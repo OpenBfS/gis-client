@@ -22,7 +22,29 @@ Ext.define('Koala.model.SpatialRecord', {
     fields: [{
         name: 'name',
         mapping: function(data) {
-            return data.properties[this.config.searchColumn];
+            var html = '';
+            if (data.properties.name) {
+                html += '<b>' + data.properties.name + '</b><br>';
+            }
+            if (data.properties.street) {
+                html += data.properties.street;
+                if (data.properties.housenumber) {
+                    html += ' ' + data.properties.housenumber + '<br>';
+                }
+            }
+            if (data.properties.city) {
+                html += data.properties.city;
+                if (data.properties.district) {
+                    html += ' - ' + data.properties.district;
+                }
+                if (data.properties.city !== data.properties.state) {
+                    html += ' (' + data.properties.state + ')';
+                }
+            }
+            if (data.properties.countrycode !== 'DE') {
+                html += '<br>' + data.properties.countrycode;
+            }
+            return html;
         }
     }, {
         name: 'wkt',
