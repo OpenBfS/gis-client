@@ -226,8 +226,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var config = {
             startDate: timeFilter.mindatetimeinstant,
             endDate: timeFilter.maxdatetimeinstant,
-            width: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartWidth) || 500,
-            height: Koala.util.String.coerce(layer.metadata.layerConfig.barChartProperties.chartHeight) || 250,
+            width: Koala.util.String.coerce(layer.metadata.layerConfig.timeSeriesChartProperties.chartWidth) || 500,
+            height: Koala.util.String.coerce(layer.metadata.layerConfig.timeSeriesChartProperties.chartHeight) || 250,
             renderTo: tabElm
         };
 
