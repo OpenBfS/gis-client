@@ -393,8 +393,8 @@ Ext.define('Koala.view.component.D3BarChartController', {
         var barComponent = new D3Util.BarComponent(this.chartConfig.barComponentConfig);
         var legend = this.getLegendComponent(barComponent);
         var viewSize = this.getViewSize();
-        var minWidth = gnosConfig.chartMinWidth || 300;
-        var minHeight = gnosConfig.chartMinHeight || 300;
+        var minWidth = gnosConfig.chartMinWidth || 0;
+        var minHeight = gnosConfig.chartMinHeight || 0;
         viewSize[0] = viewSize[0] - parseInt(margin.left, 10) - parseInt(margin.right, 10) - 15;
         viewSize[1] = viewSize[1] - parseInt(margin.top, 10) - parseInt(margin.bottom, 10);
         var width = viewSize[0];
