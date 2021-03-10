@@ -69,8 +69,7 @@ Ext.define('Koala.store.SpatialSearch', {
     },
 
     proxy: {
-        // url: 'https://osm.bfs.de/ors/geocode/api',
-        url: 'http://localhost/api',
+        url: 'https://osm.bfs.de/ors/geocode/api',
         method: 'GET',
         type: 'ajax',
         extraParams: {
