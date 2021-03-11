@@ -32,6 +32,7 @@
         "ol": true,
         "Openrouteservice": false,
         "Papa": true,
+        "proj4": true,
         "React": false,
         "ReactDOM": false,
         "requestAnimationFrame": false,

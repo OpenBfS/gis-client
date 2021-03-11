@@ -83,21 +83,6 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
   Ein Array von Attribut-Feldern über die, die Metadatensuche durchgeführt soll.
 
-* **spatialSearchTypeName**
-
-  Der Name des Layers im GeoServer über den die räumliche Suche durchgeführt werden
-  soll.
-
-* **spatialSearchFields**
-
-  Enthält die Konfiguration für die verwendeten Felder der räumlichen Suche.
-  * **searchColumn**
-
-    Gibt an über welches Feld die räumliche Suche durchgeführt werden soll.
-  * **geomColumn**
-
-    Gibt an welches Feld die Geometrie der Ergebnisse der räumlichen Suche enthält.
-
 * **startCenter**
 
   Zentrums-Koordinaten der Startansicht der Applikation. Bitte verwendete Projektion
@@ -160,7 +145,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
   Konfigurationen rund um den OpenRouteService. Beispiel Konfiguration weiter unten.
 
-  * **openrouteserviceUrl** 
+  * **openrouteserviceUrl**
 
     Die URL zur OpenRouteService Instanz.
 
@@ -187,7 +172,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
     * **width**
 
       Breite der Route.
-  
+
   * **routeSegmentStyle**
 
     Styling Optionen des Layers, der die einzelnen Routensegmente darstellt.
@@ -195,7 +180,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
     * **color**
 
       Farbe des Routensegments.
-    
+
     * **width**
 
       Breite des Routensegments.
@@ -223,12 +208,12 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
     * **color**
 
-      Farbe des Markers. 
+      Farbe des Markers.
       Default ist: 'black'
 
     * **colorUnassigned**
 
-      Farbe des Markers, wenn der Job nicht erfüllt werden konnte. 
+      Farbe des Markers, wenn der Job nicht erfüllt werden konnte.
       Default ist: 'gray'
 
   * **startEndMarkerStyle**
@@ -253,7 +238,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
     * **fill**
 
       Füllfarbe des Punkts.
-    
+
     * **stroke**
 
       Farbe der Umrandung des Punkts.
@@ -277,7 +262,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
     * **fillColor**
 
       Füllfarbe der Avoid Area.
-    
+
     * **opacity**
 
       Deckkraft der Avoid Area.
