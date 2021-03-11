@@ -50,6 +50,10 @@ Ext.define('Koala.store.SpatialSearch', {
                 this.map = BasiGX.view.component.Map.guess().getMap();
             }
 
+            var appContext = BasiGX.view.component.Map.guess().appContext;
+            var urls = appContext.data.merge.urls;
+            this.proxy.url = urls['spatial-search'];
+
             var center = this.map.getView().getCenter();
             var projection = this.map.getView().getProjection();
             center = proj4(projection.getCode(), proj4.WGS84, center);

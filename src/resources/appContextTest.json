@@ -5,7 +5,7 @@
             "urls": {
                 "metadata-xml2json": "http://10.133.7.220/geonetwork/srv/api/0.1/records/",
                 "metadata-search": "http://10.133.7.220/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://10.133.7.220/ogc/bfs/ows",
+                "spatial-search": "/api",
                 "print-servlet": "http://10.133.7.220/bfs-printservice/print/",
                 "irix-servlet": "http://10.133.7.220/irix-servlet",
                 "irix-context": "resources/irixContext.json",
