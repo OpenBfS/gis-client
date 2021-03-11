@@ -5,7 +5,7 @@
             "urls": {
                 "metadata-xml2json": "http://localhost/geonetwork/srv/api/0.1/records/",
                 "metadata-search": "http://localhost/geonetwork/srv/ger/csw?",
-                "spatial-search": "http://localhost/ogc/bfs/ows",
+                "spatial-search": "/api",
                 "print-servlet": "http://localhost/bfs-printservice/print/",
                 "irix-servlet": "http://localhost/irix-servlet",
                 "irix-context": "resources/irixContext.json",
