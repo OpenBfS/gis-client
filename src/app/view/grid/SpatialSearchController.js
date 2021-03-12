@@ -57,8 +57,11 @@ Ext.define('Koala.view.grid.SpatialSearchController', {
         var view = map.getView();
         var feature = this.getFeatureFromRecord(record);
         var extent = feature.getGeometry().getExtent();
-
-        view.fit(extent, map.getSize());
+        if (feature.getGeometry().getType() === 'Point') {
+            view.setZoom(13);
+        } else {
+            view.fit(extent, map.getSize());
+        }
     },
 
     // TODO onStoreBeforeload / onStoreLoad / setupStatusLineListeners and
