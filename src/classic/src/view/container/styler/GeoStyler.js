@@ -192,9 +192,35 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             useBrewerColorRamps: true,
             colorSpaces: this.getColorRamps() ? [] : undefined
         });
+        var defaultProvider = React.createElement(GeoStyler.DefaultValueContext.Provider,
+            {
+                value: {
+                    LineEditor: {
+                        defaultOpacity: 1
+                    },
+                    IconEditor: {
+                        defaultOpacity: 1
+                    },
+                    FillEditor: {
+                        defaultOpacity: 1,
+                        defaultFillOpacity: 1,
+                        defaultOutlineOpacity: 1
+                    },
+                    TextEditor: {
+                        defaultOpacity: 1,
+                        defaultHaloColor: '#000000'
+                    },
+                    WellKnownNameEditor: {
+                        fillOpacity: 1,
+                        strokeOpacity: 1
+                    }
+                }
+            },
+            geostylerStyle
+        );
         var configProvider = React.createElement(GeoStyler.ConfigProvider,
             { locale: GeoStyler.locale.de_DE },
-            geostylerStyle
+            defaultProvider
         );
         this._GeoStyler = ReactDOM.render(configProvider, root);
         this.renderCodeEditor(style);
