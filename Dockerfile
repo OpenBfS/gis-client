@@ -8,7 +8,7 @@
 # The GIS-application will be available under http://yourdockerhost:8080
 #
 
-FROM httpd:2.4
+FROM httpd:2.4.43 #temporarily pin to 2.4.43 due to problems with 2.4
 MAINTAINER mlechner@bfs.de
 
 ENV DEBIAN_FRONTEND noninteractive
