@@ -46,12 +46,11 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var stationSearchTitle = field.up().down('[name=stationsearchtitle]');
         var metadataSearchTitle = field.up().down('[name=metadatasearchtitle]');
 
-        spatialStore.getProxy()
-            .setExtraParam('q', newVal);
+        spatialStore.getProxy().setExtraParam('q', newVal);
+        spatialStore.getProxy().setExtraParam('osm_tag', null);
         // assume PLZ-search
         if (parseInt(newVal, 10).toString() === newVal) {
-            spatialStore.getProxy()
-                .setExtraParam('osm_tag', 'boundary');
+            spatialStore.getProxy().setExtraParam('osm_tag', 'boundary');
         }
         spatialStore.load();
         spatialSearchTitle.setHidden(false);
