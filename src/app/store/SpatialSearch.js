@@ -42,7 +42,12 @@ Ext.define('Koala.store.SpatialSearch', {
 
     listeners: {
         beforeload: function() {
-            var lang = Ext.ComponentQuery.query('k-form-field-languagecombo')[0].getValue();
+            var lang = 'de';
+            if (Ext.isModern) {
+                lang = Ext.ComponentQuery.query('k-field-languageselect')[0].getValue();
+            } else {
+                lang = Ext.ComponentQuery.query('k-form-field-languagecombo')[0].getValue();
+            }
             this.proxy.extraParams.lang = lang;
 
             //TODO: this won't work if more than one map
@@ -73,7 +78,7 @@ Ext.define('Koala.store.SpatialSearch', {
     },
 
     proxy: {
-        url: 'https://osm.bfs.de/ors/geocode/api',
+        url: '',
         method: 'GET',
         type: 'ajax',
         extraParams: {
