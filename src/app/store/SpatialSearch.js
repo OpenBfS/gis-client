@@ -67,7 +67,28 @@ Ext.define('Koala.store.SpatialSearch', {
 
             if (!this.layer) {
                 this.layer = new ol.layer.Vector({
-                    source: new ol.source.Vector()
+                    source: new ol.source.Vector(),
+                    style: new ol.style.Style({
+                        image: new ol.style.Circle({
+                            radius: 8,
+                            fill: new ol.style.Fill({
+                                color: '#ff00bd',
+                                opacity: 0.2
+                            }),
+                            stroke: new ol.style.Stroke({
+                                color: '#b900ff',
+                                opacity: 0.4
+                            })
+                        }),
+                        fill: new ol.style.Fill({
+                            color: '#ff00bd',
+                            opacity: 0.2
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: '#b900ff',
+                            width: 3
+                        })
+                    })
                 });
                 var displayInLayerSwitcherKey = BasiGX.util.Layer.KEY_DISPLAY_IN_LAYERSWITCHER;
                 this.layer.set(displayInLayerSwitcherKey, false);
