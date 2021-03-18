@@ -97,7 +97,7 @@ Ext.define('Koala.view.window.RoutingController', {
 
     /**
      * Get the ElevationLayer.
-     * @returns {ol.layer.Vector} The WaypointLayer.
+     * @returns {ol.layer.Vector} The ElevationLayer.
      */
     getElevationLayer: function() {
         var me = this;

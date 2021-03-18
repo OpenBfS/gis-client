@@ -42,6 +42,8 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
 
     waypointLayerName: 'routing-waypoint-layer',
 
+    isochroneLayerName: 'routing-isochrone-layer',
+
     items: [{
         xtype: 'grid',
         name: 'isochrone-result-grid',

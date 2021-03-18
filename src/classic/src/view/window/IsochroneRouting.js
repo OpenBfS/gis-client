@@ -39,6 +39,8 @@ Ext.define('Koala.view.window.IsochroneRouting', {
 
     avoidAreaLayerName: 'routing-avoid-area-layer',
 
+    isochroneLayerName: 'routing-isochrone-layer',
+
     map: null,
 
     /** The interaction for drawing the avoid area */

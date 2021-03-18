@@ -32,9 +32,57 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
         var me = this;
 
         if (newResult) {
-            // TODO add data cleanup
+            // TODO add connection between store records and isochrone-layer features
             me.addIsochrones(newResult);
+            me.addIsochronesToMap(newResult);
+            me.zoomToIsochrones();
         }
+    },
+
+    /**
+     * Get the IsochroneLayer.
+     * @returns {ol.layer.Vector} The IsochroneLayer.
+     */
+    getIsochroneLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.isochroneLayerName) {
+            return;
+        }
+
+        return BasiGX.util.Layer.getLayerByName(view.isochroneLayerName);
+    },
+
+    /**
+     * Zoom to the extent of the isochrones.
+     */
+    zoomToIsochrones: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var map = view.map;
+        var mapView = map.getView();
+
+        var layer = me.getIsochroneLayer();
+        if (!layer) {
+            return;
+        }
+
+        var source = layer.getSource();
+        if (!source) {
+            return;
+        }
+
+        var extent = source.getExtent();
+
+        mapView.fit(extent, {
+            duration: 500,
+            padding: '30 30 30 30'
+        });
     },
 
     /**
@@ -83,6 +131,80 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
         });
 
         return isochronesStore.loadRawData(isochrones);
+    },
+
+    addIsochronesToMap: function(geojson) {
+        var me = this;
+        var view = me.getView();
+
+        var layer = me.getIsochroneLayer();
+        if (!layer) {
+            return;
+        }
+
+        // the GeoJSON contains a FeatureCollection
+        // that's why need the "readFeatures" function
+        // which returns an array
+        // the "readFeature" function does not work here
+        var isochroneFeatures = (new ol.format.GeoJSON({
+            featureProjection: view.map.getView().getProjection()
+        })).readFeatures(geojson);
+
+        // TODO use this for feature/table highlighting
+        // // add additional properties to the feature
+        // if (featureProperties && Ext.isObject(featureProperties)) {
+        //     // all routes are highlighted by default
+        //     featureProperties['highlighted'] = true;
+        //     isochrone.setProperties(featureProperties);
+        // }
+
+        // the closest isochrone is the first item in isochroneFeatures
+        me.setFeatureStyles(isochroneFeatures);
+        var source = layer.getSource();
+
+        source.clear();
+        source.addFeatures(isochroneFeatures);
+    },
+
+    setFeatureStyles: function(feats) {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        var count = feats.length;
+
+        var colorPalette = vm.get('greenToRed');
+
+        var stepSize = colorPalette.length / count;
+
+        Ext.Array.each(feats, function(feat, idx) {
+            var colorIdx = Math.floor(idx * stepSize);
+            if (colorIdx >= colorPalette.length) {
+                colorIdx = colorPalette.length - 1;
+            }
+
+            // hexcode value for 30% opacity is 4D
+            var hexAlpha = '4D';
+            var color = colorPalette[colorIdx];
+            var style = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: color,
+                    width: 2
+                }),
+                fill: new ol.style.Fill({
+                    color: color + hexAlpha
+                }),
+                zIndex: count - idx
+            });
+
+            feat.setStyle(style);
+        });
     }
 
 });

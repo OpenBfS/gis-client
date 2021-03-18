@@ -54,6 +54,7 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
             areaColumn: '',
             populationColumn: ''
         },
+        isochroneStyle: undefined,
         language: 'de',
         // TODO use this prop in UI
         routingProfile: 'driving-car',
@@ -77,6 +78,28 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         units: 'm',
         showRoutingResults: false,
         // TODO: consider moving property to avoid area button
-        deleteAvoidAreaButtonVisible: false
+        deleteAvoidAreaButtonVisible: false,
+        greenToRed: [
+            "#1a9641",
+            "#37a449",
+            "#55b252",
+            "#72c15b",
+            "#90cf63",
+            "#abdb6e",
+            "#bee381",
+            "#d0eb93",
+            "#e3f3a5",
+            "#f6fbb7",
+            "#fff7b6",
+            "#ffe6a2",
+            "#fed58e",
+            "#fec47a",
+            "#feb266",
+            "#f79756",
+            "#ef7747",
+            "#e75839",
+            "#df382a",
+            "#d7191c"
+        ]
     }
 });

@@ -36,6 +36,21 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
     boundOpenContextMenu: null,
 
     /**
+     * Get the IsochroneLayer.
+     * @returns {ol.layer.Vector} The IsochroneLayer.
+     */
+    getIsochroneLayer: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.isochroneLayerName) {
+            return;
+        }
+
+        return BasiGX.util.Layer.getLayerByName(view.isochroneLayerName);
+    },
+
+    /**
      * @override
      */
     onBoxReady: function() {
@@ -149,6 +164,9 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
+        if (!me.getIsochroneLayer()) {
+            me.createLayer('isochroneStyle', view.isochroneLayerName);
+        }
         if (!me.getWaypointLayer()) {
             me.createLayer('waypointStyle', view.waypointLayerName);
             if (view.map !== null) {
@@ -414,6 +432,11 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
         var vm = view.lookupViewModel();
 
         me.callParent(arguments);
+
+        var isochroneLayer = me.getIsochroneLayer();
+        if (isochroneLayer) {
+            view.map.removeLayer(isochroneLayer);
+        }
 
         // destroy context window
         if (vm.get('mapContextMenu') !== null) {
