@@ -1033,13 +1033,17 @@
                     "timeTooltip": "Zeit",
                     "distanceTooltip": "Strecke",
                     "submitButtonText": "Berechnen",
-                    "rangeSliderText": "Reichweite",
-                    "intervalSliderText": "Intervall",
+                    "rangeFieldText": "Reichweite",
+                    "intervalFieldText": "Intervall",
+                    "placeHolderKilometer": "Kilometer",
+                    "placeHolderMinutes": "Minuten",
                     "addCenterContextText": "Als Zentrum setzen",
                     "valueColumn": "Reichweite",
                     "reachfactorColumn": "Erreichbarkeitsfaktor",
                     "areaColumn": "Fläche",
-                    "populationColumn": "Einwohnerzahl"
+                    "populationColumn": "Einwohnerzahl",
+                    "intervalTooBigErrorText": "Intervall muss kleiner als Reichweite sein",
+                    "intervalTooSmallErrorText": "Minimale Intervallgröße ist: "
                 }
             }
         }

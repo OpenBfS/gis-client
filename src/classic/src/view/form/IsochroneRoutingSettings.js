@@ -91,18 +91,100 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             select: 'onCenterSelect'
         }
     },{
-        xtype: 'slider',
+        xtype: 'numberfield',
+        name: 'range_distance',
         bind: {
-            fieldLabel: '{i18n.rangeSliderText}'
+            hidden: '{rangeType !== "distance"}',
+            fieldLabel: '{i18n.rangeFieldText}',
+            emptyText: '{i18n.placeHolderKilometer}',
+            maxValue: '{maxIntervalKilometers}'
         },
-        labelWidth: 125,
-        // TODO: set proper values for properties below
-        value: 50,
-        increment: 10,
-        minValue: 0,
-        maxValue: 100
-        // TODO: add (interactive) numberfield
-        // TOOD: show min/max, show current value
+        allowBlank: false,
+        labelSeparator: ': *',
+        hideTrigger: true
+    },
+    {
+        xtype: 'numberfield',
+        name: 'interval_distance',
+        bind: {
+            hidden: '{rangeType !== "distance"}',
+            fieldLabel: '{i18n.intervalFieldText}',
+            emptyText: '{i18n.placeHolderKilometer}'
+        },
+        hideTrigger: true,
+        // TODO: extract function for both validations
+        validator: function(interval) {
+            var isochroneWindow = this.up('k-window-isochrone-routing');
+            var vm = isochroneWindow.getViewModel();
+
+            var rangeTimeField = this.up().down('[name="range_distance"]');
+            var rangeTime = rangeTimeField.getValue();
+
+            // empty interval is allowed
+            if (!interval) {
+                return true;
+            }
+
+            // interval must not be bigger than range
+            if (interval > rangeTime) {
+                return vm.get('i18n.intervalTooBigErrorText');
+            }
+
+            // we ensure the number of intervals is not higher than allowed
+            var smallestAllowedInterval = rangeTime / vm.get('maxNumberIntervals');
+            if (interval < smallestAllowedInterval) {
+                return vm.get('i18n.intervalTooSmallErrorText') + smallestAllowedInterval;
+            }
+
+            return true;
+        }
+    },{
+        xtype: 'numberfield',
+        name: 'range_time',
+        bind: {
+            hidden: '{rangeType !== "time"}',
+            fieldLabel: '{i18n.rangeFieldText}',
+            emptyText: '{i18n.placeHolderMinutes}',
+            maxValue: '{maxIntervalMinutes}'
+        },
+        allowBlank: false,
+        labelSeparator: ': *',
+        hideTrigger: true
+    },
+    {
+        xtype: 'numberfield',
+        name: 'interval_time',
+        bind: {
+            hidden: '{rangeType !== "time"}',
+            fieldLabel: '{i18n.intervalFieldText}',
+            emptyText: '{i18n.placeHolderMinutes}'
+        },
+        hideTrigger: true,
+        validator: function(interval) {
+            var isochroneWindow = this.up('k-window-isochrone-routing');
+            var vm = isochroneWindow.getViewModel();
+
+            var rangeTimeField = this.up().down('[name="range_time"]');
+            var rangeTime = rangeTimeField.getValue();
+
+            // empty interval is allowed
+            if (!interval) {
+                return true;
+            }
+
+            // interval must not be bigger than range
+            if (interval > rangeTime) {
+                return vm.get('i18n.intervalTooBigErrorText');
+            }
+
+            // we ensure the number of intervals is not higher than allowed
+            var smallestAllowedInterval = rangeTime / vm.get('maxNumberIntervals');
+            if (interval < smallestAllowedInterval) {
+                return vm.get('i18n.intervalTooSmallErrorText') + smallestAllowedInterval;
+            }
+
+            return true;
+        }
     }
     ]
 });

@@ -989,13 +989,17 @@
                     "timeTooltip": "Time",
                     "distanceTooltip": "Distance",
                     "submitButtonText": "Submit",
-                    "rangeSliderText": "Range",
-                    "intervalSliderText": "Interval",
+                    "rangeFieldText": "Range",
+                    "intervalFieldText": "Interval",
+                    "placeHolderKilometer": "kilometer",
+                    "placeHolderMinutes": "minutes",
                     "addCenterContextText": "Set center",
                     "valueColumn": "Range",
                     "reachfactorColumn": "Reach score",
                     "areaColumn": "Area",
-                    "populationColumn": "Population"
+                    "populationColumn": "Population",
+                    "intervalTooBigErrorText": "Interval must be smaller than reach",
+                    "intervalTooSmallErrorText": "Minimal value of interval is: "
                  }
             }
         }

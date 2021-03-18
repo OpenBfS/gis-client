@@ -47,12 +47,11 @@ Ext.define('Koala.view.window.IsochroneRouting', {
     avoidAreaDrawInteraction: null,
 
     maxHeight: 900,
-    width: 600,
+    width: 500,
 
     items: [{
         xtype: 'k-form-isochrone-routing-settings',
-        flex: 1,
-        collapsible: true
+        flex: 1
     }, {
         xtype: 'k-container-isochroneroutingresult',
         name: 'isochronerouting-result-panel',

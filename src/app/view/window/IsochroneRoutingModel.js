@@ -48,12 +48,16 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
             timeTooltip: '',
             distanceTooltip: '',
             submitButtonText: '',
-            rangeSliderText: '',
-            intervalSliderText: '',
+            rangeFieldText: '',
+            intervalFieldText: '',
+            placeHolderKilometer: '',
+            placeHolderMinutes: '',
             valueColumn: '',
             reachfactorColumn: '',
             areaColumn: '',
-            populationColumn: ''
+            populationColumn: '',
+            intervalTooBigErrorText: '',
+            intervalTooSmallErrorText: ''
         },
         // we set the style on each feature,
         // so this should stay undefined
@@ -105,6 +109,9 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
             '#e75839',
             '#df382a',
             '#d7191c'
-        ]
+        ],
+        maxIntervalMinutes: 60,
+        maxIntervalKilometers: 1000,
+        maxNumberIntervals: 10
     }
 });
