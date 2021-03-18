@@ -40,7 +40,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
     },
 
     fbar: [{
-        // TODO: set default value
         xtype: 'k-button-routing-profile'
     }, {
         // TODO: set default value

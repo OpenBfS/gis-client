@@ -30,6 +30,18 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         if (!view) {
             return;
         }
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        // routingProfile
+        var routingProfileBtn = view.down('k-button-routing-profile');
+        var routingProfile = 'driving-car';
+        if (routingProfileBtn) {
+            routingProfile = routingProfileBtn.getValue();
+        }
+        vm.set('routingProfile', routingProfile);
 
         var parentView = view.up('k-window-isochrone-routing');
         if (!parentView) {
