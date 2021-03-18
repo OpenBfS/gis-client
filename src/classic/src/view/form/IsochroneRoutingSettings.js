@@ -42,18 +42,22 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
     fbar: [{
         xtype: 'k-button-routing-profile'
     }, {
-        // TODO: set default value
         xtype: 'segmentedbutton',
+        name: 'range_type',
         defaults: {
             padding: '3 10'
         },
+        // default value
+        value: 'time',
         items: [{
             iconCls: 'x-fa fa-clock-o',
+            value: 'time',
             bind: {
                 tooltip: '{i18n.timeTooltip}'
             }
         }, {
             iconCls: 'x-fa fa-arrows-h',
+            value: 'distance',
             bind: {
                 tooltip: '{i18n.distanceTooltip}'
             }
