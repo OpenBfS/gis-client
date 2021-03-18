@@ -48,7 +48,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             padding: '3 10'
         },
         // default value
-        value: 'time',
+        bind: {
+            value: '{rangeType}'
+        },
         items: [{
             iconCls: 'x-fa fa-clock-o',
             value: 'time',
@@ -92,19 +94,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         xtype: 'slider',
         bind: {
             fieldLabel: '{i18n.rangeSliderText}'
-        },
-        labelWidth: 125,
-        // TODO: set proper values for properties below
-        value: 50,
-        increment: 10,
-        minValue: 0,
-        maxValue: 100
-        // TODO: add (interactive) numberfield
-        // TOOD: show min/max, show current value
-    }, {
-        xtype: 'slider',
-        bind: {
-            fieldLabel: '{i18n.intervalSliderText}'
         },
         labelWidth: 125,
         // TODO: set proper values for properties below

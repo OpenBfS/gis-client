@@ -43,13 +43,13 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         }
         vm.set('routingProfile', routingProfile);
 
-        // rangeType
-        var rangeTypeBtn = view.down('[name=range_type]');
-        var rangeType = 'time';
-        if (rangeTypeBtn) {
-            rangeType = rangeTypeBtn.getValue();
-        }
-        vm.set('rangeType', rangeType);
+        // // rangeType
+        // var rangeTypeBtn = view.down('[name=range_type]');
+        // var rangeType = 'time';
+        // if (rangeTypeBtn) {
+        //     rangeType = rangeTypeBtn.getValue();
+        // }
+        // vm.set('rangeType', rangeType);
 
         var parentView = view.up('k-window-isochrone-routing');
         if (!parentView) {
