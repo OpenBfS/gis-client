@@ -29,7 +29,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
     /**
      * @override
      */
-    onRoutingResultChanged: function (newResult) {
+    onRoutingResultChanged: function(newResult) {
         var me = this;
 
         me.clearIsochronesStore();
@@ -51,7 +51,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
      * Get the IsochroneLayer.
      * @returns {ol.layer.Vector} The IsochroneLayer.
      */
-    getIsochroneLayer: function () {
+    getIsochroneLayer: function() {
         var me = this;
         var view = me.getView();
 
@@ -73,7 +73,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
      * @param {Object} orsIsochrones The response object from ors isochrones api.
      * @returns {Koala.model.Isochrone[]} Array of isochrone entities.
      */
-    createIsochrones: function (orsIsochrones) {
+    createIsochrones: function(orsIsochrones) {
         var me = this;
         var view = me.getView();
         if (!view) {
@@ -94,7 +94,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
         }
         // we have to create the records one-by-one, so we can
         // add the record id as reference to the features
-        var isochrones = Ext.Array.map(features, function (feature, idx) {
+        var isochrones = Ext.Array.map(features, function(feature) {
             var props = feature.properties || {};
 
             var isochrone = Ext.create('Koala.model.Isochrone', {
@@ -117,7 +117,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
     /**
      * Remove all records from the isochrones store.
      */
-    clearIsochronesStore: function () {
+    clearIsochronesStore: function() {
         var me = this;
         var view = me.getView();
         if (!view) {
@@ -139,7 +139,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
     /**
      * Zoom to the extent of the isochrones.
      */
-    zoomToIsochrones: function () {
+    zoomToIsochrones: function() {
         var me = this;
         var view = me.getView();
         if (!view) {
@@ -172,7 +172,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
      *
      * @param {Koala.model.Isochrone[]} isochrones The array of isochrones instances.
      */
-    addIsochrones: function (isochrones) {
+    addIsochrones: function(isochrones) {
         var me = this;
         var view = me.getView();
         if (!view) {
@@ -187,7 +187,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
             return;
         }
 
-        isochronesStore.add(isochrones)
+        isochronesStore.add(isochrones);
     },
 
     /**
@@ -195,7 +195,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
      *
      * @param {Object} geojson The response object from the ors isochrones api.
      */
-    addIsochronesToMap: function (geojson) {
+    addIsochronesToMap: function(geojson) {
         var me = this;
         var view = me.getView();
 
@@ -226,7 +226,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
     /**
      * Clear the isochrone layer from its features.
      */
-    clearIsochronesLayer: function () {
+    clearIsochronesLayer: function() {
         var me = this;
         var view = me.getView();
 
@@ -251,7 +251,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
      * Set the feature styles for the given features.
      * @param {ol.Feature[]} feats List of features to style.
      */
-    setFeatureStyles: function (feats) {
+    setFeatureStyles: function(feats) {
         var me = this;
         var view = me.getView();
         if (!view) {
@@ -268,7 +268,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
 
         var stepSize = colorPalette.length / count;
 
-        Ext.Array.each(feats, function (feat, idx) {
+        Ext.Array.each(feats, function(feat, idx) {
             var colorIdx = Math.floor(idx * stepSize);
             if (colorIdx >= colorPalette.length) {
                 colorIdx = colorPalette.length - 1;
@@ -301,7 +301,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
      * @param {String} baseAlpha The alpha value for all unhighlighted features.
      * @param {String} highlightAlpha The alpha value for the highlighted feature.
      */
-    setFeaturesAlpha: function (rec, baseAlpha, highlightAlpha) {
+    setFeaturesAlpha: function(rec, baseAlpha, highlightAlpha) {
         var me = this;
         var layer = me.getIsochroneLayer();
         if (!layer) {
@@ -313,7 +313,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
             return;
         }
 
-        Ext.Array.each(source.getFeatures(), function (feature) {
+        Ext.Array.each(source.getFeatures(), function(feature) {
             var props = feature.getProperties();
 
             var featureStyle = feature.getStyle();
@@ -337,7 +337,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
      * @param {Ext.Component} view The component view.
      * @param {Ext.data.Model} rec The isochrone record.
      */
-    onItemMouseEnter: function (view, rec) {
+    onItemMouseEnter: function(view, rec) {
         var me = this;
         var vm = view.lookupViewModel();
         if (!vm) {
@@ -355,7 +355,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
      * @param {Ext.Component} view The component view.
      * @param {Ext.data.Model} rec The isochrone record.
      */
-    onItemMouseLeave: function (view, rec) {
+    onItemMouseLeave: function(view, rec) {
         var me = this;
         var vm = view.lookupViewModel();
         if (!vm) {

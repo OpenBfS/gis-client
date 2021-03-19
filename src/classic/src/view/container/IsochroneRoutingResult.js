@@ -58,7 +58,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
             dataIndex: 'value',
             width: 40,
             resizable: false,
-            renderer: function (value, metaData, rec) {
+            renderer: function(value, metaData, rec) {
                 var me = this;
                 var container = me.up('k-container-isochroneroutingresult');
                 var ctrl = container.getController();
@@ -70,8 +70,8 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
                 if (!source) {
                     return;
                 }
-                var feature = Ext.Array.findBy(source.getFeatures(), function (feature) {
-                    return feature.get('recId') === rec.getId();
+                var feature = Ext.Array.findBy(source.getFeatures(), function(feat) {
+                    return feat.get('recId') === rec.getId();
                 });
                 if (!feature) {
                     return;
@@ -92,7 +92,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
             bind: {
                 text: '{i18n.valueColumn}'
             },
-            renderer: function (value, metaData, rec) {
+            renderer: function(value, metaData, rec) {
                 var orsUtil = Koala.util.OpenRouteService;
 
                 var range_type = rec.get('range_type');
@@ -111,7 +111,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
             bind: {
                 text: '{i18n.areaColumn}'
             },
-            renderer: function (area) {
+            renderer: function(area) {
                 var orsUtil = Koala.util.OpenRouteService;
                 // we have to divide by 1000 as otherwise the
                 // conversion to km² is incorrect.
@@ -124,7 +124,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
             bind: {
                 text: '{i18n.reachfactorColumn}'
             },
-            renderer: function (reachfactor) {
+            renderer: function(reachfactor) {
                 if (reachfactor) {
                     return reachfactor.toFixed(2);
                 }
@@ -144,7 +144,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
         resultChanged: 'onRoutingResultChanged'
     },
 
-    initComponent: function () {
+    initComponent: function() {
         var me = this;
         me.callParent(arguments);
 
