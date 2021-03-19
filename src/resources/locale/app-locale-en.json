@@ -984,6 +984,7 @@
                     "isochroneRoutingTitle": "Isochrone",
                     "addressLabel": "Center",
                     "addressPlaceholder": "Enter search term or coordinate",
+                    "errorIsochrones": "Could not load isochrones.",
                     "errorGeoCoding": "Could not load location.",
                     "timeTooltip": "Time",
                     "distanceTooltip": "Distance",

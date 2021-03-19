@@ -323,6 +323,7 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
             onError = function(err) {
                 var str = 'An error occured: ' + err;
                 Ext.Logger.log(str);
+                Ext.toast(vm.get('i18n.errorIsochrones'));
             };
         }
 

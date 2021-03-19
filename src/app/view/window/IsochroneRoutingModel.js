@@ -43,6 +43,7 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
             isochroneRoutingTitle: '',
             addressLabel: '',
             addressPlaceholder: '',
+            errorIsochrones: '',
             errorGeoCoding: '',
             timeTooltip: '',
             distanceTooltip: '',
@@ -81,6 +82,8 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         showRoutingResults: false,
         // TODO: consider moving property to avoid area button
         deleteAvoidAreaButtonVisible: false,
+        // hexcode value for 30% opacity is 4D
+        isochroneAlpha: '4D',
         greenToRed: [
             '#1a9641',
             '#37a449',

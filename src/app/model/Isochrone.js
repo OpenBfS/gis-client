@@ -14,17 +14,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.store.Isochrones
+ * @class Koala.model.Isochrone
  */
-Ext.define('Koala.store.Isochrones', {
-    extend: 'Ext.data.Store',
+Ext.define('Koala.model.Isochrone', {
+    extend: 'Ext.data.Model',
 
-    requires: [
-        'Koala.model.Isochrone'
-    ],
-
-    alias: 'store.k-isochrones',
-
-    model: 'Koala.model.Isochrone'
-
+    fields: [
+        { name: 'value', type: 'int', convert: null },
+        { name: 'center', convert: null },
+        { name: 'area', type: 'number' },
+        { name: 'reachfactor', type: 'number' },
+        // TODO currently our api does not return the population
+        { name: 'population', type: 'int', convert: null },
+        { name: 'group_index', type: 'number', convert: null },
+        { name: 'geometry', convert: null },
+        // TODO value is either seconds or metres, depending on range_type
+        { name: 'range_type', type: 'string', default: 'time' }
+    ]
 });

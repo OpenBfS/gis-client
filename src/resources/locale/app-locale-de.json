@@ -1028,6 +1028,7 @@
                     "isochroneRoutingTitle": "Isochronen",
                     "addressLabel": "Zentrum",
                     "addressPlaceholder": "Suchbegriff oder Koordinate eingeben",
+                    "errorIsochrones": "Isochronen konnten nicht geladen werden.",
                     "errorGeoCoding": "Standpunkt konnte nicht geladen werden.",
                     "timeTooltip": "Zeit",
                     "distanceTooltip": "Strecke",
