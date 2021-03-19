@@ -200,6 +200,9 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
                 fill: new ol.style.Fill({
                     color: color + hexAlpha
                 }),
+                // Set the order in which the features
+                // should be rendered. Small polygons
+                // on top.
                 zIndex: count - idx
             });
 

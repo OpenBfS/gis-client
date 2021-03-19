@@ -54,6 +54,8 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
             areaColumn: '',
             populationColumn: ''
         },
+        // we set the style on each feature,
+        // so this should stay undefined
         isochroneStyle: undefined,
         language: 'de',
         // TODO use this prop in UI
