@@ -71,21 +71,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         }
 
         var centerField = view.down('[name="center"]');
+        var rangeField = view.down('[name="range"]');
+        var intervalField = view.down('[name="interval"]');
 
-        var rangeType = vm.get('rangeType');
-        var rangeField;
-        var intervalField;
-        if (rangeType === 'distance') {
-            rangeField = view.down('[name="range_distance"]');
-            intervalField = view.down('[name="interval_distance"]');
-
-        } else if (rangeType === 'time') {
-            rangeField = view.down('[name="range_time"]');
-            intervalField = view.down('[name="interval_time"]');
-        } else {
-            // this should not happen
-            return false;
-        }
         var formIsValid = centerField.isValid() &&
                          rangeField.isValid() &&
                           intervalField.isValid();

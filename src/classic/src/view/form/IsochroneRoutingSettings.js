@@ -95,14 +95,13 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             select: 'onCenterSelect',
             change: 'activateSubmitButtonIfValid'
         }
-    },{
+    },
+    {
         xtype: 'numberfield',
-        name: 'range_distance',
+        name: 'range',
         bind: {
-            hidden: '{rangeType !== "distance"}',
             fieldLabel: '{i18n.rangeFieldText}',
-            emptyText: '{i18n.placeHolderKilometer}',
-            minValue: '{minRangeKilometers}',
+            emptyText: '{rangeType === "time" ? i18n.placeHolderMinutes : i18n.placeHolderKilometer}',
             value: '{range}'
         },
         allowBlank: false,
@@ -114,65 +113,10 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
     },
     {
         xtype: 'numberfield',
-        name: 'interval_distance',
+        name: 'interval',
         bind: {
-            hidden: '{rangeType !== "distance"}',
             fieldLabel: '{i18n.intervalFieldText}',
-            emptyText: '{i18n.placeHolderKilometer}',
-            minValue: '{minRangeKilometers}',
-            value: '{interval}'
-        },
-        hideTrigger: true,
-        listeners: {
-            change: 'activateSubmitButtonIfValid'
-        },
-        validator: function(interval) {
-            var isochroneWindow = this.up('k-window-isochrone-routing');
-            var vm = isochroneWindow.getViewModel();
-
-            var rangeTime = vm.get('range');
-
-            // empty interval is allowed
-            if (!interval) {
-                return true;
-            }
-
-            // interval must not be bigger than range
-            if (interval > rangeTime) {
-                return vm.get('i18n.intervalTooBigErrorText');
-            }
-
-            // we ensure the number of intervals is not higher than allowed
-            var smallestAllowedInterval = rangeTime / vm.get('maxNumberIntervals');
-            if (interval < smallestAllowedInterval) {
-                return vm.get('i18n.intervalTooSmallErrorText') + smallestAllowedInterval;
-            }
-
-            return true;
-        }
-    },{
-        xtype: 'numberfield',
-        name: 'range_time',
-        bind: {
-            hidden: '{rangeType !== "time"}',
-            fieldLabel: '{i18n.rangeFieldText}',
-            emptyText: '{i18n.placeHolderMinutes}',
-            value: '{range}'
-        },
-        allowBlank: false,
-        labelSeparator: ': *',
-        hideTrigger: true,
-        listeners: {
-            change: 'activateSubmitButtonIfValid'
-        }
-    },
-    {
-        xtype: 'numberfield',
-        name: 'interval_time',
-        bind: {
-            hidden: '{rangeType !== "time"}',
-            fieldLabel: '{i18n.intervalFieldText}',
-            emptyText: '{i18n.placeHolderMinutes}',
+            emptyText: '{rangeType === "time" ? i18n.placeHolderMinutes : i18n.placeHolderKilometer}',
             value: '{interval}'
         },
         hideTrigger: true,
