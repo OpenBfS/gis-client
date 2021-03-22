@@ -46,11 +46,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         }
     }, {
         xtype: 'segmentedbutton',
-        name: 'range_type',
         defaults: {
             padding: '3 10'
         },
-        // default value
         bind: {
             value: '{rangeType}'
         },
@@ -132,8 +130,7 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             var isochroneWindow = this.up('k-window-isochrone-routing');
             var vm = isochroneWindow.getViewModel();
 
-            var rangeTimeField = this.up().down('[name="range_distance"]');
-            var rangeTime = rangeTimeField.getValue();
+            var rangeTime = vm.get('range');
 
             // empty interval is allowed
             if (!interval) {
@@ -186,8 +183,7 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             var isochroneWindow = this.up('k-window-isochrone-routing');
             var vm = isochroneWindow.getViewModel();
 
-            var rangeTimeField = this.up().down('[name="range_time"]');
-            var rangeTime = rangeTimeField.getValue();
+            var rangeTime = vm.get('range');
 
             // empty interval is allowed
             if (!interval) {
