@@ -117,7 +117,8 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             hidden: '{rangeType !== "distance"}',
             fieldLabel: '{i18n.intervalFieldText}',
             emptyText: '{i18n.placeHolderKilometer}',
-            minValue: '{minRangeKilometers}'
+            minValue: '{minRangeKilometers}',
+            value: '{interval}'
         },
         hideTrigger: true,
         listeners: {
@@ -169,7 +170,8 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         bind: {
             hidden: '{rangeType !== "time"}',
             fieldLabel: '{i18n.intervalFieldText}',
-            emptyText: '{i18n.placeHolderMinutes}'
+            emptyText: '{i18n.placeHolderMinutes}',
+            value: '{interval}'
         },
         hideTrigger: true,
         listeners: {

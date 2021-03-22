@@ -47,34 +47,16 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         var rangeValue;
         var range;
 
-        var intervalField;
-        var intervalValue;
-        var interval;
-
         if (rangeType === 'distance') {
             rangeField = view.down('[name="range_distance"]');
             rangeValue = rangeField.getValue(); // kilometer
             // convert to meter
             range = rangeValue * 1000;
-
-            intervalField = view.down('[name="interval_distance"]');
-            intervalValue = intervalField.getValue(); // kilometer
-            // convert to meter
-            if (intervalValue) {
-                interval = intervalValue * 1000;
-            }
         } else if (rangeType === 'time') {
             rangeField = view.down('[name="range_time"]');
             rangeValue = rangeField.getValue(); // minutes
             // convert to seconds
             range = rangeValue * 60;
-
-            intervalField = view.down('[name="interval_time"]');
-            intervalValue = intervalField.getValue(); // minutes
-            // convert to seconds
-            if (intervalValue) {
-                interval = intervalValue * 60;
-            }
         } else {
             // this should not happen
             return;
@@ -82,13 +64,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
 
         // needs to be an array
         vm.set('range', [range]);
-
-        if (interval) {
-            // round in case user provides many decimals
-            interval = Math.round(interval);
-        }
-        // also works in case of no value i.d. 'null'
-        vm.set('interval', interval);
 
         var parentView = view.up('k-window-isochrone-routing');
         if (!parentView) {

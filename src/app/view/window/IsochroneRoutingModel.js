@@ -102,5 +102,16 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         minRangeKilometers: 0.1,
         maxNumberIntervals: 10,
         disableSubmitButton: true
+    },
+    formulas: {
+        intervalInCorrectUnits: function(get) {
+            if (get('rangeType') === 'distance') {
+                // convert kilometer to meter
+                return get('interval') * 1000;
+            } else if (get('rangeType') === 'time') {
+                // convert minutes to seconds
+                return get('interval') * 60;
+            }
+        }
     }
 });
