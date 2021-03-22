@@ -27,44 +27,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
             return;
         }
 
-        var vm = view.lookupViewModel();
-        if (!vm) {
-            return;
-        }
-
-        // routingProfile
-        var routingProfileBtn = view.down('k-button-routing-profile');
-        var routingProfile = 'driving-car';
-        if (routingProfileBtn) {
-            routingProfile = routingProfileBtn.getValue();
-        }
-        vm.set('routingProfile', routingProfile);
-
-        // range
-        var rangeType = vm.get('rangeType');
-
-        var rangeField;
-        var rangeValue;
-        var range;
-
-        if (rangeType === 'distance') {
-            rangeField = view.down('[name="range_distance"]');
-            rangeValue = rangeField.getValue(); // kilometer
-            // convert to meter
-            range = rangeValue * 1000;
-        } else if (rangeType === 'time') {
-            rangeField = view.down('[name="range_time"]');
-            rangeValue = rangeField.getValue(); // minutes
-            // convert to seconds
-            range = rangeValue * 60;
-        } else {
-            // this should not happen
-            return;
-        }
-
-        // needs to be an array
-        vm.set('range', [range]);
-
         var parentView = view.up('k-window-isochrone-routing');
         if (!parentView) {
             return;

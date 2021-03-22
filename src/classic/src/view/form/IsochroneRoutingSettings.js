@@ -40,7 +40,10 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
     },
 
     fbar: [{
-        xtype: 'k-button-routing-profile'
+        xtype: 'k-button-routing-profile',
+        bind: {
+            value: '{routingProfile}'
+        }
     }, {
         xtype: 'segmentedbutton',
         name: 'range_type',
@@ -101,7 +104,8 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             hidden: '{rangeType !== "distance"}',
             fieldLabel: '{i18n.rangeFieldText}',
             emptyText: '{i18n.placeHolderKilometer}',
-            minValue: '{minRangeKilometers}'
+            minValue: '{minRangeKilometers}',
+            value: '{range}'
         },
         allowBlank: false,
         labelSeparator: ': *',
@@ -155,7 +159,8 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         bind: {
             hidden: '{rangeType !== "time"}',
             fieldLabel: '{i18n.rangeFieldText}',
-            emptyText: '{i18n.placeHolderMinutes}'
+            emptyText: '{i18n.placeHolderMinutes}',
+            value: '{range}'
         },
         allowBlank: false,
         labelSeparator: ': *',

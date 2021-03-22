@@ -64,7 +64,7 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         isochroneStyle: undefined,
         language: 'de',
         routingProfile: 'driving-car',
-        range: [600], // seconds
+        range: undefined,
         interval: undefined,
         locationType: 'start',
         rangeType: 'time',
@@ -111,6 +111,15 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
             } else if (get('rangeType') === 'time') {
                 // convert minutes to seconds
                 return get('interval') * 60;
+            }
+        },
+        rangeInCorrectUnits: function(get) {
+            if (get('rangeType') === 'distance') {
+                // convert kilometer to meter
+                return [get('range') * 1000];
+            } else if (get('rangeType') === 'time') {
+                // convert minutes to seconds
+                return [get('range') * 60];
             }
         }
     }
