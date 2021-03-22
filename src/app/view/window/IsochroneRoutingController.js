@@ -281,9 +281,9 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
          */
         var params = {
             locations: waypoints,
-            range: vm.get('rangeInCorrectUnits'),
+            range: vm.get('rangeInRequiredUnits'),
             attributes: ['area', 'reachfactor'],
-            interval: vm.get('intervalInCorrectUnits'),
+            interval: vm.get('intervalInRequiredUnits'),
             location_type: vm.get('locationType'),
             range_type: vm.get('rangeType'),
             smoothing: vm.get('smoothing'),

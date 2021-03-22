@@ -104,7 +104,11 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         disableSubmitButton: true
     },
     formulas: {
-        intervalInCorrectUnits: function(get) {
+        /**
+         * Return interval in units required
+         * by the isochrone API.
+         */
+        intervalInRequiredUnits: function(get) {
             if (get('rangeType') === 'distance') {
                 // convert kilometer to meter
                 return get('interval') * 1000;
@@ -113,7 +117,11 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
                 return get('interval') * 60;
             }
         },
-        rangeInCorrectUnits: function(get) {
+        /**
+         * Return range in units required
+         * by the isochrone API.
+         */
+        rangeInRequiredUnits: function(get) {
             if (get('rangeType') === 'distance') {
                 // convert kilometer to meter
                 return [get('range') * 1000];
