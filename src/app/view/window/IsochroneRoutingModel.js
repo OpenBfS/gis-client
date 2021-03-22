@@ -63,25 +63,13 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         // so this should stay undefined
         isochroneStyle: undefined,
         language: 'de',
-        // TODO use this prop in UI
         routingProfile: 'driving-car',
-        // TODO use this prop in UI
-        //      temporary set to 10 minutes (600 seconds)
-        range: [600],
-        // TODO use this prop in UI
-        //      a maximum of 10 intervals is allowed, but interval is in unit
-        //      so we have to check this properly.
-        //      e.g. range=200(metres) => interval must be greater than equal 2
+        range: [600], // seconds
         interval: undefined,
-        // TODO use this prop in UI
         locationType: 'start',
-        // TODO use this prop in UI
         rangeType: 'time',
-        // TODO use this prop in UI
         smoothing: 0,
-        // TODO use this prop in UI
         areaUnits: 'm',
-        // TODO use this prop in UI
         units: 'm',
         showRoutingResults: false,
         // TODO: consider moving property to avoid area button
