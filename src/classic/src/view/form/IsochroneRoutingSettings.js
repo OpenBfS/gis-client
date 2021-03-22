@@ -101,9 +101,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             hidden: '{rangeType !== "distance"}',
             fieldLabel: '{i18n.rangeFieldText}',
             emptyText: '{i18n.placeHolderKilometer}',
-            maxValue: '{maxIntervalKilometers}'
+            minValue: '{minRangeKilometers}',
+            maxValue: '{maxRangeKilometers}'
         },
-        minValue: 0,
         allowBlank: false,
         labelSeparator: ': *',
         hideTrigger: true,
@@ -118,14 +118,13 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             hidden: '{rangeType !== "distance"}',
             fieldLabel: '{i18n.intervalFieldText}',
             emptyText: '{i18n.placeHolderKilometer}',
-            maxValue: '{maxIntervalKilometers}'
+            minValue: '{minRangeKilometers}',
+            maxValue: '{maxRangeKilometers}'
         },
-        minValue: 0,
         hideTrigger: true,
         listeners: {
             change: 'activateSubmitButtonIfValid'
         },
-        // TODO: extract function for both validations
         validator: function(interval) {
             var isochroneWindow = this.up('k-window-isochrone-routing');
             var vm = isochroneWindow.getViewModel();
@@ -158,9 +157,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             hidden: '{rangeType !== "time"}',
             fieldLabel: '{i18n.rangeFieldText}',
             emptyText: '{i18n.placeHolderMinutes}',
-            maxValue: '{maxIntervalMinutes}'
+            minValue: '{minRangeMinutes}',
+            maxValue: '{maxRangeMinutes}'
         },
-        minValue: 0,
         allowBlank: false,
         labelSeparator: ': *',
         hideTrigger: true,
@@ -175,10 +174,11 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             hidden: '{rangeType !== "time"}',
             fieldLabel: '{i18n.intervalFieldText}',
             emptyText: '{i18n.placeHolderMinutes}',
-            maxValue: '{maxIntervalMinutes}'
+            minValue: '{minRangeMinutes}',
+            maxValue: '{maxRangeMinutes}'
         },
         hideTrigger: true,
-        minValue: 0,
+        minValue: 0.1,
         listeners: {
             change: 'activateSubmitButtonIfValid'
         },
