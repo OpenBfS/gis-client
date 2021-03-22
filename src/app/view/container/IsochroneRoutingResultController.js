@@ -318,6 +318,8 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
 
             var featureStyle = feature.getStyle();
             var fillColor = featureStyle.getFill().getColor();
+            // only take the first 7 digits of the hexcode, aka all color values
+            // and trim the alpha value, as we want to change this value here.
             var baseColor = fillColor.slice(0, 7);
 
             var alpha = baseAlpha;
@@ -346,6 +348,8 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
 
         var alpha = vm.get('isochroneAlpha');
 
+        // Setting alpha of non-highlighted features
+        // to '00' so their fills become invisible.
         me.setFeaturesAlpha(rec, '00', alpha);
     },
 
