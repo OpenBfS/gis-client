@@ -98,7 +98,7 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
             '#df382a',
             '#d7191c'
         ],
-        minRangeMinutes: 0.1,
+        minRangeMinutes: 1,
         minRangeKilometers: 0.1,
         maxNumberIntervals: 10,
         disableSubmitButton: true
