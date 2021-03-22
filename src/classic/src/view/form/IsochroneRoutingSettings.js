@@ -63,7 +63,10 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             bind: {
                 tooltip: '{i18n.distanceTooltip}'
             }
-        }]
+        }],
+        listeners: {
+            toggle: 'activateSubmitButtonIfValid'
+        }
     }, {
         xtype: 'k-button-avoidarea'
     }, {
@@ -73,7 +76,8 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         // TODO: disable if form not valid
         xtype: 'button',
         bind: {
-            text: '{i18n.submitButtonText}'
+            text: '{i18n.submitButtonText}',
+            disabled: '{disableSubmitButton}'
         },
         handler: 'onSubmit'
     }],
@@ -88,7 +92,8 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         labelSeparator: ': *',
         flex: 1,
         listeners: {
-            select: 'onCenterSelect'
+            select: 'onCenterSelect',
+            change: 'activateSubmitButtonIfValid'
         }
     },{
         xtype: 'numberfield',
@@ -101,7 +106,10 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         },
         allowBlank: false,
         labelSeparator: ': *',
-        hideTrigger: true
+        hideTrigger: true,
+        listeners: {
+            change: 'activateSubmitButtonIfValid'
+        }
     },
     {
         xtype: 'numberfield',
@@ -112,6 +120,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             emptyText: '{i18n.placeHolderKilometer}'
         },
         hideTrigger: true,
+        listeners: {
+            change: 'activateSubmitButtonIfValid'
+        },
         // TODO: extract function for both validations
         validator: function(interval) {
             var isochroneWindow = this.up('k-window-isochrone-routing');
@@ -149,7 +160,10 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         },
         allowBlank: false,
         labelSeparator: ': *',
-        hideTrigger: true
+        hideTrigger: true,
+        listeners: {
+            change: 'activateSubmitButtonIfValid'
+        }
     },
     {
         xtype: 'numberfield',
@@ -160,6 +174,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             emptyText: '{i18n.placeHolderMinutes}'
         },
         hideTrigger: true,
+        listeners: {
+            change: 'activateSubmitButtonIfValid'
+        },
         validator: function(interval) {
             var isochroneWindow = this.up('k-window-isochrone-routing');
             var vm = isochroneWindow.getViewModel();

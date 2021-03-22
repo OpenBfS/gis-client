@@ -30,6 +30,7 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         if (!view) {
             return;
         }
+
         var vm = view.lookupViewModel();
         if (!vm) {
             return;
@@ -43,6 +44,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         }
         vm.set('routingProfile', routingProfile);
 
+        // TODO: take interval into account
+        // TODO: maybe set units directly in API request
+
         // range
         var rangeType = vm.get('rangeType');
 
@@ -52,10 +56,12 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         if (rangeType === 'distance') {
             rangeField = view.down('[name="range_distance"]');
             rangeValue = rangeField.getValue(); //kilometer
+            // convert to meter
             range = rangeValue * 1000;
         } else if (rangeType === 'time') {
             rangeField = view.down('[name="range_time"]');
-            rangeValue = rangeField.getValue();
+            rangeValue = rangeField.getValue(); // minutes
+            // convert to seconds
             range = rangeValue * 60;
         } else {
             // this should not happen
@@ -63,8 +69,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         }
         // needs to be an array
         vm.set('range', [range]);
-        console.log(rangeValue);
-        console.log(range);
 
         // TODO: ensure that range is integer and NOT float
 
@@ -93,5 +97,38 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
             longitude: record.get('longitude')
         };
         wayPointStore.loadRawData([waypoint]);
+    },
+
+    activateSubmitButtonIfValid: function () {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        var centerField = view.down('[name="center"]');
+
+        var rangeType = vm.get('rangeType');
+        var rangeField;
+        var intervalField;
+        if (rangeType === 'distance') {
+            rangeField = view.down('[name="range_distance"]');
+            intervalField = view.down('[name="interval_distance"]');
+
+        } else if (rangeType === 'time') {
+            rangeField = view.down('[name="range_time"]');
+            intervalField = view.down('[name="interval_time"]');
+        } else {
+            // this should not happen
+            return false;
+        }
+        var formIsValid = centerField.isValid() && rangeField.isValid() && intervalField.isValid();
+        console.log(formIsValid);
+        vm.set('disableSubmitButton', !formIsValid);
     }
 });

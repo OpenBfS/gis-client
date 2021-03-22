@@ -112,6 +112,7 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         ],
         maxIntervalMinutes: 60,
         maxIntervalKilometers: 1000,
-        maxNumberIntervals: 10
+        maxNumberIntervals: 10,
+        disableSubmitButton: true
     }
 });
