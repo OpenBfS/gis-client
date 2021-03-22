@@ -130,13 +130,6 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
                 }
                 return reachfactor;
             }
-        }, {
-            dataIndex: 'population',
-            flex: 1,
-            align: 'end',
-            bind: {
-                text: '{i18n.populationColumn}'
-            }
         }]
     }],
 

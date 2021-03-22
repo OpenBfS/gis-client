@@ -267,8 +267,8 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
         }
         /**
          * locations* [[8.681495,49.41461],[8.686507,49.41943]] [[lon, lat], [lon, lat]]
-         * range* [300,200] [seconds, seconds] or [meters, meters] // TODO check what is acutally expected
-         * attributes String[] ("area", "reachfactor", "total_pop")
+         * range* [300,200] [seconds, seconds] or [meters, meters]
+         * attributes String[] ("area", "reachfactor")
          * id String
          * intersections Boolean default: false
          * interval Number seconds for time, meters for distance
@@ -282,7 +282,7 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
         var params = {
             locations: waypoints,
             range: vm.get('range'),
-            attributes: ['area', 'reachfactor', 'total_pop'],
+            attributes: ['area', 'reachfactor'],
             interval: vm.get('interval'),
             location_type: vm.get('locationType'),
             range_type: vm.get('rangeType'),
