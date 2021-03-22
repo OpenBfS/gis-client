@@ -101,8 +101,7 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             hidden: '{rangeType !== "distance"}',
             fieldLabel: '{i18n.rangeFieldText}',
             emptyText: '{i18n.placeHolderKilometer}',
-            minValue: '{minRangeKilometers}',
-            maxValue: '{maxRangeKilometers}'
+            minValue: '{minRangeKilometers}'
         },
         allowBlank: false,
         labelSeparator: ': *',
@@ -118,8 +117,7 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             hidden: '{rangeType !== "distance"}',
             fieldLabel: '{i18n.intervalFieldText}',
             emptyText: '{i18n.placeHolderKilometer}',
-            minValue: '{minRangeKilometers}',
-            maxValue: '{maxRangeKilometers}'
+            minValue: '{minRangeKilometers}'
         },
         hideTrigger: true,
         listeners: {
@@ -156,9 +154,7 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         bind: {
             hidden: '{rangeType !== "time"}',
             fieldLabel: '{i18n.rangeFieldText}',
-            emptyText: '{i18n.placeHolderMinutes}',
-            minValue: '{minRangeMinutes}',
-            maxValue: '{maxRangeMinutes}'
+            emptyText: '{i18n.placeHolderMinutes}'
         },
         allowBlank: false,
         labelSeparator: ': *',
@@ -173,12 +169,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         bind: {
             hidden: '{rangeType !== "time"}',
             fieldLabel: '{i18n.intervalFieldText}',
-            emptyText: '{i18n.placeHolderMinutes}',
-            minValue: '{minRangeMinutes}',
-            maxValue: '{maxRangeMinutes}'
+            emptyText: '{i18n.placeHolderMinutes}'
         },
         hideTrigger: true,
-        minValue: 0.1,
         listeners: {
             change: 'activateSubmitButtonIfValid'
         },
