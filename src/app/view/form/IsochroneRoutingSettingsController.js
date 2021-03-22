@@ -92,8 +92,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         // also works in case of no value i.d. 'null'
         vm.set('interval', interval);
 
-        // TODO: set window loading while request is performed
-
         var parentView = view.up('k-window-isochrone-routing');
         if (!parentView) {
             return;
@@ -121,7 +119,11 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         wayPointStore.loadRawData([waypoint]);
     },
 
-    activateSubmitButtonIfValid: function () {
+    /**
+     * Activate submit button if all required
+     * input fields are valid.
+     */
+    activateSubmitButtonIfValid: function() {
         var me = this;
         var view = me.getView();
         if (!view) {
@@ -149,7 +151,9 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
             // this should not happen
             return false;
         }
-        var formIsValid = centerField.isValid() && rangeField.isValid() && intervalField.isValid();
+        var formIsValid = centerField.isValid() &&
+                         rangeField.isValid() &&
+                          intervalField.isValid();
         vm.set('disableSubmitButton', !formIsValid);
     }
 });
