@@ -80,8 +80,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
             return;
         }
 
-        // round in case user provides many decimals
-        range = Math.round(range);
         // needs to be an array
         vm.set('range', [range]);
 
