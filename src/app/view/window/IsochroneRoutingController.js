@@ -76,13 +76,21 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
         var ctx = contextUtil.getAppContext();
         var routingOpts = contextUtil.getMergedDataByKey('routing', ctx);
         vm.set('routingOpts', routingOpts);
+        if (!routingOpts) {
+            return;
+        }
 
-        var wayPointMarkerSize = routingOpts.waypointStyle.markerSize;
-        var wayPointMarkerColor = routingOpts.waypointStyle.color;
+        // waypoints
+        var wayPointMarkerSize = 38;
+        var wayPointMarkerColor = 'black';
 
         if (routingOpts.waypointStyle) {
-            wayPointMarkerSize = 38;
-            wayPointMarkerColor = 'black';
+            if (routingOpts.waypointStyle.markerSize) {
+                wayPointMarkerSize = routingOpts.waypointStyle.markerSize;
+            }
+            if (routingOpts.waypointStyle.color) {
+                wayPointMarkerColor = routingOpts.waypointStyle.color;
+            }
         }
 
         var waypointStyle = new ol.style.Style({
@@ -97,7 +105,40 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
             })
         });
         vm.set('waypointStyle', waypointStyle);
-        vm.set('waypointFontSize', routingOpts.waypointStyle.markerSize);
+
+        // avoid area
+        var avoidAreaStrokeColor = '#000000';
+        var avoidAreaWidth = 4;
+        var avoidAreaFillColor = '#ff0000';
+        var avoidAreaOpacity = 0.2;
+
+        if (routingOpts.avoidAreaStyle) {
+            if (routingOpts.avoidAreaStyle.strokeColor) {
+                avoidAreaStrokeColor = routingOpts.avoidAreaStyle.strokeColor;
+            }
+            if (routingOpts.avoidAreaStyle.width !== undefined && routingOpts.avoidAreaStyle.width !== null) {
+                avoidAreaWidth = routingOpts.avoidAreaStyle.width;
+            }
+            if (routingOpts.avoidAreaStyle.fillColor) {
+                avoidAreaFillColor = routingOpts.avoidAreaStyle.fillColor;
+            }
+        }
+
+        var avoidAreaStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: avoidAreaStrokeColor,
+                width: avoidAreaWidth
+            }),
+            fill: new ol.style.Fill({
+                color: avoidAreaFillColor
+            })
+        });
+        vm.set('avoidAreaStyle', avoidAreaStyle);
+
+        if (routingOpts.avoidAreaStyle.opacity !== undefined && routingOpts.avoidAreaStyle.opacity !== null) {
+            avoidAreaOpacity = routingOpts.avoidAreaStyle.opacity;
+        }
+        vm.set('avoidAreaOpacity', avoidAreaOpacity);
     },
 
     /**
@@ -106,11 +147,36 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
     createRoutingLayers: function() {
         var me = this;
         var view = me.getView();
+        var vm = view.lookupViewModel();
 
         if (!me.getWaypointLayer()) {
             me.createLayer('waypointStyle', view.waypointLayerName);
             if (view.map !== null) {
                 view.map.on('singleclick', me.onWaypointClick, me);
+            }
+        }
+
+        if (!me.getAvoidAreaLayer()) {
+            var avoidAreaLayer = me.createLayer('avoidAreaStyle', view.avoidAreaLayerName);
+
+            avoidAreaLayer.setOpacity(vm.get('avoidAreaOpacity'));
+
+            var source = avoidAreaLayer.getSource();
+            source.on('change', function() {
+
+                var deleteAvoidAreaButtonVisible = source.getFeatures().length > 0;
+                vm.set('deleteAvoidAreaButtonVisible', deleteAvoidAreaButtonVisible);
+            });
+
+            // create interaction
+            if (!me.avoidAreaDrawInteraction) {
+                view.avoidAreaDrawInteraction = new ol.interaction.Draw({
+                    source: source,
+                    type: 'Polygon',
+                    stopClick: true
+                });
+                view.map.addInteraction(view.avoidAreaDrawInteraction);
+                view.avoidAreaDrawInteraction.setActive(false);
             }
         }
     },

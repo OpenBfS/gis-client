@@ -75,6 +75,8 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
         areaUnits: 'm',
         // TODO use this prop in UI
         units: 'm',
-        showRoutingResults: false
+        showRoutingResults: false,
+        // TODO: consider moving property to avoid area button
+        deleteAvoidAreaButtonVisible: false
     }
 });
