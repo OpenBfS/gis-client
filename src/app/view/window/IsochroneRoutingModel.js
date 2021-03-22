@@ -55,7 +55,6 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
             valueColumn: '',
             reachfactorColumn: '',
             areaColumn: '',
-            populationColumn: '',
             intervalTooBigErrorText: '',
             intervalTooSmallErrorText: ''
         },

@@ -1041,7 +1041,6 @@
                     "valueColumn": "Reichweite",
                     "reachfactorColumn": "Erreichbarkeitsfaktor",
                     "areaColumn": "Fläche",
-                    "populationColumn": "Einwohnerzahl",
                     "intervalTooBigErrorText": "Intervall muss kleiner als Reichweite sein",
                     "intervalTooSmallErrorText": "Minimale Intervallgröße ist: "
                 }

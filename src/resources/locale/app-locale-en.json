@@ -997,7 +997,6 @@
                     "valueColumn": "Range",
                     "reachfactorColumn": "Reach score",
                     "areaColumn": "Area",
-                    "populationColumn": "Population",
                     "intervalTooBigErrorText": "Interval must be smaller than reach",
                     "intervalTooSmallErrorText": "Minimal value of interval is: "
                  }
