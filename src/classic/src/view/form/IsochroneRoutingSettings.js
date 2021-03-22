@@ -73,7 +73,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
         xtype: 'tbspacer',
         flex: 1
     },{
-        // TODO: disable if form not valid
         xtype: 'button',
         bind: {
             text: '{i18n.submitButtonText}',
@@ -179,6 +178,7 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             maxValue: '{maxIntervalMinutes}'
         },
         hideTrigger: true,
+        minValue: 0,
         listeners: {
             change: 'activateSubmitButtonIfValid'
         },
