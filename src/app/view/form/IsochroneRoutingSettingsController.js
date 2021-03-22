@@ -20,10 +20,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.k-form-isochrone-routing-settings',
 
-    requires: [
-
-    ],
-
     onSubmit: function() {
         var me = this;
         var view = me.getView();
@@ -44,9 +40,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         }
         vm.set('routingProfile', routingProfile);
 
-        // TODO: take interval into account
-        // TODO: maybe set units directly in API request
-
         // range
         var rangeType = vm.get('rangeType');
 
@@ -57,6 +50,7 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         var intervalField;
         var intervalValue;
         var interval;
+
         if (rangeType === 'distance') {
             rangeField = view.down('[name="range_distance"]');
             rangeValue = rangeField.getValue(); // kilometer
@@ -85,18 +79,18 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
             // this should not happen
             return;
         }
+
+        // round in case user provides many decimals
+        range = Math.round(range);
         // needs to be an array
         vm.set('range', [range]);
 
-        if (intervalValue) {
-            vm.set('interval', interval);
-        } else {
-            // TODO: maybe more elegantly possible
-            //       should prevent, that the old value will be reused
-            vm.set('interval', null);
+        if (interval) {
+            // round in case user provides many decimals
+            interval = Math.round(interval);
         }
-
-        // TODO: ensure that range is integer and NOT float
+        // also works in case of no value i.d. 'null'
+        vm.set('interval', interval);
 
         // TODO: set window loading while request is performed
 
@@ -156,7 +150,6 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
             return false;
         }
         var formIsValid = centerField.isValid() && rangeField.isValid() && intervalField.isValid();
-        console.log(formIsValid);
         vm.set('disableSubmitButton', !formIsValid);
     }
 });
