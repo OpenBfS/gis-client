@@ -53,16 +53,34 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         var rangeField;
         var rangeValue;
         var range;
+
+        var intervalField;
+        var intervalValue;
+        var interval;
         if (rangeType === 'distance') {
             rangeField = view.down('[name="range_distance"]');
-            rangeValue = rangeField.getValue(); //kilometer
+            rangeValue = rangeField.getValue(); // kilometer
             // convert to meter
             range = rangeValue * 1000;
+
+            intervalField = view.down('[name="interval_distance"]');
+            intervalValue = intervalField.getValue(); // kilometer
+            // convert to meter
+            if (intervalValue) {
+                interval = intervalValue * 1000;
+            }
         } else if (rangeType === 'time') {
             rangeField = view.down('[name="range_time"]');
             rangeValue = rangeField.getValue(); // minutes
             // convert to seconds
             range = rangeValue * 60;
+
+            intervalField = view.down('[name="interval_time"]');
+            intervalValue = intervalField.getValue(); // minutes
+            // convert to seconds
+            if (intervalValue) {
+                interval = intervalValue * 60;
+            }
         } else {
             // this should not happen
             return;
@@ -70,7 +88,17 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
         // needs to be an array
         vm.set('range', [range]);
 
+        if (intervalValue) {
+            vm.set('interval', interval);
+        } else {
+            // TODO: maybe more elegantly possible
+            //       should prevent, that the old value will be reused
+            vm.set('interval', null);
+        }
+
         // TODO: ensure that range is integer and NOT float
+
+        // TODO: set window loading while request is performed
 
         var parentView = view.up('k-window-isochrone-routing');
         if (!parentView) {
