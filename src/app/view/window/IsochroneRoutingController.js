@@ -306,6 +306,8 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
+        view.setLoading(true);
+
         var wayPointStore = vm.get('waypoints');
         if (!wayPointStore.isValid()) {
             return;
@@ -315,12 +317,14 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
 
         if (!onSuccess) {
             onSuccess = function(json) {
+                view.setLoading(false);
                 view.fireEvent('onRouteLoaded', json);
             };
         }
 
         if (!onError) {
             onError = function(err) {
+                view.setLoading(false);
                 var str = 'An error occured: ' + err;
                 Ext.Logger.log(str);
                 Ext.toast(vm.get('i18n.errorIsochrones'));
