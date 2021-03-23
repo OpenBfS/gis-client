@@ -1040,6 +1040,7 @@
                     "addCenterContextText": "Als Zentrum setzen",
                     "valueColumn": "Reichweite",
                     "reachfactorColumn": "Erreichbarkeitsfaktor",
+                    "visibilityColumn": "Anzeigen",
                     "areaColumn": "Fläche",
                     "intervalTooBigErrorText": "Intervall muss kleiner als Reichweite sein",
                     "intervalTooSmallErrorText": "Minimales Intervall ist: "

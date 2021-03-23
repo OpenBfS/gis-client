@@ -36,9 +36,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
         me.clearIsochronesLayer();
 
         if (newResult) {
-            me.clearIsochronesStore();
             var isochrones = me.createIsochrones(newResult);
-            me.clearIsochronesLayer();
             me.addIsochronesToMap(newResult);
             // we have to first add the isochrones to the map
             // so the grid can successfully reference the features.
@@ -277,10 +275,6 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
             var hexAlpha = vm.get('isochroneAlpha');
             var color = colorPalette[colorIdx];
             var style = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: color,
-                    width: 2
-                }),
                 fill: new ol.style.Fill({
                     color: color + hexAlpha
                 }),
@@ -290,47 +284,56 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
                 zIndex: count - idx
             });
 
+            feat.set('visible', true);
             feat.setStyle(style);
         });
     },
 
     /**
-     * Set the alpha value for all features.
+     * Set the alpha value of a single feature.
      *
-     * @param {Ext.data.Model} rec The feature to apply the highlightAlpha to.
-     * @param {String} baseAlpha The alpha value for all unhighlighted features.
-     * @param {String} highlightAlpha The alpha value for the highlighted feature.
+     * @param {ol.Feature} feature The feature to set the alpha for.
+     * @param {String} alpha The new alpha value.
      */
-    setFeaturesAlpha: function(rec, baseAlpha, highlightAlpha) {
-        var me = this;
-        var layer = me.getIsochroneLayer();
-        if (!layer) {
-            return;
-        }
+    setFeatureAlpha: function(feature, alpha) {
+        var featureStyle = feature.getStyle();
+        var fillColor = featureStyle.getFill().getColor();
+        // only take the first 7 digits of the hexcode, aka all color values
+        // and trim the alpha value, as we want to change this value here.
+        var baseColor = fillColor.slice(0, 7);
 
-        var source = layer.getSource();
-        if (!source) {
-            return;
-        }
+        var newColor = baseColor + alpha;
 
-        Ext.Array.each(source.getFeatures(), function(feature) {
-            var props = feature.getProperties();
+        featureStyle.getFill().setColor(newColor);
+        feature.setStyle(featureStyle);
+    },
 
-            var featureStyle = feature.getStyle();
-            var fillColor = featureStyle.getFill().getColor();
-            // only take the first 7 digits of the hexcode, aka all color values
-            // and trim the alpha value, as we want to change this value here.
-            var baseColor = fillColor.slice(0, 7);
+    /**
+     * Highlight a single feature.
+     *
+     * @param {ol.Feature} feature The feature to highlight.
+     */
+    highlightFeature: function(feature) {
+        var style = feature.getStyle();
+        style.setStroke(new ol.style.Stroke({
+            // white with 50% alpha
+            color: '#FFFFFF80',
+            width: 2
+        }));
 
-            var alpha = baseAlpha;
-            if (props.recId === rec.getId()) {
-                alpha = highlightAlpha;
-            }
-            var newColor = baseColor + alpha;
+        feature.setStyle(style);
+    },
 
-            featureStyle.getFill().setColor(newColor);
-            feature.setStyle(featureStyle);
-        });
+    /**
+     * Unhighlight a single feature.
+     *
+     * @param {ol.Feature} feature The feature to unhighlight.
+     */
+    unhighlightFeature: function(feature) {
+        var style = feature.getStyle();
+        style.setStroke(undefined);
+
+        feature.setStyle(style);
     },
 
     /**
@@ -346,11 +349,22 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
             return;
         }
 
-        var alpha = vm.get('isochroneAlpha');
+        var layer = me.getIsochroneLayer();
+        if (!layer) {
+            return;
+        }
 
-        // Setting alpha of non-highlighted features
-        // to '00' so their fills become invisible.
-        me.setFeaturesAlpha(rec, '00', alpha);
+        var recId = rec.getId();
+
+        var feature = Ext.Array.findBy(layer.getSource().getFeatures(), function(feat) {
+            return feat.get('recId') === recId;
+        });
+
+        if (!feature || !feature.get('visible')) {
+            return;
+        }
+
+        me.highlightFeature(feature);
     },
 
     /**
@@ -366,8 +380,68 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
             return;
         }
 
-        var alpha = vm.get('isochroneAlpha');
-        me.setFeaturesAlpha(rec, alpha, alpha);
+        var layer = me.getIsochroneLayer();
+        if (!layer) {
+            return;
+        }
+
+        var recId = rec.getId();
+
+        var feature = Ext.Array.findBy(layer.getSource().getFeatures(), function(feat) {
+            return feat.get('recId') === recId;
+        });
+
+        if (!feature) {
+            return;
+        }
+
+        me.unhighlightFeature(feature);
+    },
+
+    /**
+     * Handle the isochrone checkbox change event.
+     *
+     * @param {Object} widget The Ext Widget.
+     * @param {Boolean} checked The checkbox state.
+     */
+    onCheckboxChange: function(widget, checked) {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        var rec = widget.getWidgetRecord();
+        var recId = rec.getId();
+
+        var layer = me.getIsochroneLayer();
+        if (!layer) {
+            return;
+        }
+
+        var feature = Ext.Array.findBy(layer.getSource().getFeatures(), function(feat) {
+            return feat.get('recId') === recId;
+        });
+
+        if (!feature) {
+            return;
+        }
+
+        feature.set('visible', checked);
+
+        var alpha;
+        if (checked) {
+            alpha = vm.get('isochroneAlpha');
+        } else {
+            alpha = '00';
+        }
+
+        me.setFeatureAlpha(feature, alpha);
     }
 
 });

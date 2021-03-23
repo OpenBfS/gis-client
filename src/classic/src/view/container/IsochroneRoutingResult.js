@@ -22,7 +22,9 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
     xtype: 'k-container-isochroneroutingresult',
 
     requires: [
+        'Ext.form.field.Checkbox',
         'Ext.grid.Panel',
+        'Ext.grid.column.Widget',
         'BasiGX.view.component.Map',
         'Koala.view.container.IsochroneRoutingResultController',
         'Koala.util.OpenRouteService'
@@ -77,13 +79,8 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
                     return;
                 }
 
-                var borderColor = feature.getStyle().getStroke().getColor();
                 var fillColor = feature.getStyle().getFill().getColor();
-                metaData.tdStyle = '' +
-                    'background-color: ' + fillColor + ';' +
-                    'border-color: ' + borderColor + ';' +
-                    'border-width: 1px;' +
-                    'border-style: solid;';
+                metaData.tdStyle = 'background-color: ' + fillColor + ';';
             }
         }, {
             dataIndex: 'value',
@@ -129,6 +126,18 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
                     return reachfactor.toFixed(2);
                 }
                 return reachfactor;
+            }
+        }, {
+            xtype: 'widgetcolumn',
+            bind: {
+                text: '{i18n.visibilityColumn}'
+            },
+            widget: {
+                xtype: 'checkbox',
+                handler: 'onCheckboxChange',
+                bind: {
+                    value: '{record.visible}'
+                }
             }
         }]
     }],

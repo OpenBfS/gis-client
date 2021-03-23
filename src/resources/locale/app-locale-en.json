@@ -996,6 +996,7 @@
                     "addCenterContextText": "Set center",
                     "valueColumn": "Range",
                     "reachfactorColumn": "Reach score",
+                    "visibilityColumn": "Visible",
                     "areaColumn": "Area",
                     "intervalTooBigErrorText": "Interval must be smaller than reach",
                     "intervalTooSmallErrorText": "Minimal interval is: "
