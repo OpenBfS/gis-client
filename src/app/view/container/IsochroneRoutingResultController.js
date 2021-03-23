@@ -103,9 +103,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
                 group_index: props.group_index,
                 reachfactor: props.reachfactor,
                 value: props.value,
-                range_type: rangeType,
-                // TODO currently the API does not provide population
-                population: props.total_pop
+                range_type: rangeType
             });
             feature.properties.recId = isochrone.getId();
             return isochrone;
