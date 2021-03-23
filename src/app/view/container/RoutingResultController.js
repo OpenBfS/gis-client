@@ -21,8 +21,13 @@ Ext.define('Koala.view.container.RoutingResultController', {
     alias: 'controller.k-container-routingresult',
 
     requires: [
-        'BasiGX.util.Layer'
+        'BasiGX.util.Layer',
+        'Koala.util.Geocoding'
     ],
+
+    modifyInteraction: undefined,
+    modifyInteractionStartCoordinate: undefined,
+    modifyInteractionFeature: undefined,
 
     /**
      * Handler for the routingResultChanged event.
@@ -35,6 +40,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
         if (newResult) {
             me.clearRoutes();
             me.addRouteToMap(newResult);
+            me.registerDragHandler();
             me.zoomToRoute();
             me.clearRoutingSummaries();
             me.addRoutingSummary(newResult);
@@ -52,11 +58,247 @@ Ext.define('Koala.view.container.RoutingResultController', {
     },
 
     /**
+     * Register the drag handler for route dragging.
+     */
+    registerDragHandler: function() {
+        var me = this;
+
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+
+        var layer = me.getRouteLayer();
+        if (!layer) {
+            return;
+        }
+
+        me.unregisterDragHandler();
+
+        me.modifyInteraction = new ol.interaction.Modify({
+            source: layer.getSource()
+        });
+
+        me.modifyInteraction.once('modifyend', me.handleRouteDrag.bind(me));
+        me.modifyInteraction.once('modifystart', function(evt) {
+            var me = this;
+            me.modifyInteractionStartCoordinate = evt.mapBrowserEvent.coordinate;
+            // all subproperties are defined here,
+            // otherwise the event could not have been triggered.
+            me.modifyInteractionFeature = evt.features.getArray()[0].clone();
+        }.bind(me));
+
+        map.addInteraction(me.modifyInteraction);
+    },
+
+    /**
+     * Unregister the drag handler.
+     */
+    unregisterDragHandler: function() {
+        var me = this;
+        var view = me.getView();
+
+        if(!view) {
+            return;
+        }
+
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+
+        if (me.modifyInteraction !== undefined) {
+            map.removeInteraction(me.modifyInteraction);
+            me.modifyInteraction = undefined;
+        }
+    },
+
+    /**
+     * Handle dragging of the route.
+     *
+     * @param {ol.interaction.Modify.Event} evt The modify event.
+     */
+    handleRouteDrag: function(evt) {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+
+        me.unregisterDragHandler();
+        me.setWindowLoading(true);
+
+        var language = vm.get('language');
+        var wayPointStore = vm.get('waypoints');
+
+        var evtCoord = evt.mapBrowserEvent.coordinate;
+
+        var geocoding = Koala.util.Geocoding;
+
+        // suppress default browser behaviour
+        evt.preventDefault();
+
+        // transform coordinate
+        var sourceProjection = map.getView().getProjection().getCode();
+        var targetProjection = ol.proj.get('EPSG:4326');
+        var transformed = ol.proj.transform(evtCoord, sourceProjection, targetProjection);
+
+        var latitude = transformed[1];
+        var longitude = transformed[0];
+
+        geocoding.doReverseGeocoding(longitude, latitude, language)
+            .then(function(resultJson) {
+
+                var features = resultJson.features;
+                if (features.length === 0) {
+                    throw new Error();
+                }
+
+                var placeName = geocoding.createPlaceString(features[0].properties);
+
+                var newWayPointJson = {
+                    address: placeName,
+                    latitude: latitude,
+                    longitude: longitude
+                };
+
+                var wayPointIndex = me.getWaypointIndex();
+                wayPointStore.insert(wayPointIndex, newWayPointJson);
+            })
+            .catch(function(err) {
+                var str = 'An error occured: ' + err;
+                Ext.Logger.log(str);
+                Ext.toast(vm.get('i18n.errorGeoCoding'));
+                me.resetDragRouteLayer();
+                me.registerDragHandler();
+                me.setWindowLoading(false);
+            });
+    },
+
+    /**
+     * Set the loading animation on the parentWindow.
+     *
+     * @param {Boolean} loading True, if loading animation should be shown. False otherwise.
+     */
+    setWindowLoading: function(loading) {
+        var me = this;
+
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var parentWindow = view.up('k-window-classic-routing');
+        if (!parentWindow) {
+            return;
+        }
+
+        parentWindow.setLoading(loading);
+    },
+
+    /**
+     * Reset the route layer to the unmodified route.
+     */
+    resetDragRouteLayer: function() {
+        var me = this;
+
+        var layer = me.getRouteLayer();
+        if (!layer) {
+            return;
+        }
+
+        var source = layer.getSource();
+        if (!source) {
+            return;
+        }
+
+        source.clear();
+        source.addFeature(me.modifyInteractionFeature);
+    },
+
+    /**
+     * Get the index of the waypoint that comes after the dragged location.
+     *
+     * We snap all waypoints to the route, to make sure, the points are all located
+     * on the route using turf.js nearestPointOnLine().
+     * Then, we snap the dragStart point to the route as well.
+     *
+     * Besides snapping, nearestPointOnLine() also gives us the distance of the starting point of
+     * a route to the snapped point. So we can compare the distances and select
+     * the first waypoint that comes after the dragStart point.
+     *
+     * @returns The index of the first waypoint that comes after the dragged location.
+     */
+    getWaypointIndex: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        var map = view.map;
+        if (!map) {
+            return;
+        }
+
+        var format = new ol.format.GeoJSON({
+            featureProjection: map.getView().getProjection().getCode()
+        });
+        var route = format.writeGeometryObject(me.modifyInteractionFeature.getGeometry());
+
+        var sourceProjection = map.getView().getProjection().getCode();
+        var targetProjection = ol.proj.get('EPSG:4326');
+        var dragStartTransformed = ol.proj.transform(me.modifyInteractionStartCoordinate, sourceProjection, targetProjection);
+
+        var dragStartPoint = turf.nearestPointOnLine(route, turf.point(dragStartTransformed));
+
+        var waypointsStore = vm.get('waypoints');
+        var snappedPoints = [];
+        waypointsStore.each(function(wp) {
+            var snappedPoint = turf.nearestPointOnLine(route, turf.point([wp.get('longitude'), wp.get('latitude')]));
+            snappedPoint.properties.recId = wp.getId();
+            snappedPoints.push(snappedPoint);
+        });
+
+        var nextWayPointId;
+        for (var i = 0; i < snappedPoints.length; i++) {
+            var point = snappedPoints[i];
+            if (dragStartPoint.properties.location < point.properties.location) {
+                nextWayPointId = point.properties.recId;
+                break;
+            }
+        }
+
+        return waypointsStore.indexOfId(nextWayPointId);
+    },
+
+    /**
      * Cleanup method when container will be destroyed.
      */
     onDestroy: function() {
         var me = this;
         me.destroyElevationPanel();
+        me.unregisterDragHandler();
     },
 
     /**
