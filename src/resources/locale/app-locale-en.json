@@ -991,14 +991,14 @@
                     "submitButtonText": "Submit",
                     "rangeFieldText": "Range",
                     "intervalFieldText": "Interval",
-                    "placeHolderKilometer": "kilometer",
+                    "placeHolderKilometer": "kilometers",
                     "placeHolderMinutes": "minutes",
                     "addCenterContextText": "Set center",
                     "valueColumn": "Range",
                     "reachfactorColumn": "Reach score",
                     "areaColumn": "Area",
                     "intervalTooBigErrorText": "Interval must be smaller than reach",
-                    "intervalTooSmallErrorText": "Minimal value of interval is: "
+                    "intervalTooSmallErrorText": "Minimal interval is: "
                  }
             }
         }
