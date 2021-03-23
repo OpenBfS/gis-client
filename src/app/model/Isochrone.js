@@ -28,6 +28,7 @@ Ext.define('Koala.model.Isochrone', {
         { name: 'geometry', convert: null },
         // value is either seconds or metres, depending on range_type
         { name: 'range_type', type: 'string', defaultValue: 'time' },
-        { name: 'visible', type: 'boolean', defaultValue: true }
+        { name: 'visible', type: 'boolean', defaultValue: true },
+        { name: 'color', type: 'string', convert: null }
     ]
 });

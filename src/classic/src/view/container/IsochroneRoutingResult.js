@@ -56,31 +56,15 @@ Ext.define('Koala.view.container.IsochroneRoutingResult', {
             itemmouseenter: 'onItemMouseEnter',
             itemmouseleave: 'onItemMouseLeave'
         },
+        viewConfig: {
+            markDirty: false
+        },
         columns: [{
-            dataIndex: 'value',
+            dataIndex: 'color',
             width: 40,
             resizable: false,
-            renderer: function(value, metaData, rec) {
-                var me = this;
-                var container = me.up('k-container-isochroneroutingresult');
-                var ctrl = container.getController();
-                var layer = ctrl.getIsochroneLayer();
-                if (!layer) {
-                    return;
-                }
-                var source = layer.getSource();
-                if (!source) {
-                    return;
-                }
-                var feature = Ext.Array.findBy(source.getFeatures(), function(feat) {
-                    return feat.get('recId') === rec.getId();
-                });
-                if (!feature) {
-                    return;
-                }
-
-                var fillColor = feature.getStyle().getFill().getColor();
-                metaData.tdStyle = 'background-color: ' + fillColor + ';';
+            renderer: function(color, metaData) {
+                metaData.tdStyle = 'background-color: ' + color + ';';
             }
         }, {
             dataIndex: 'value',

@@ -40,6 +40,7 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
             me.addIsochronesToMap(newResult);
             // we have to first add the isochrones to the map
             // so the grid can successfully reference the features.
+            me.setIsochroneModelColors(isochrones);
             me.addIsochrones(isochrones);
             me.zoomToIsochrones();
         }
@@ -243,6 +244,38 @@ Ext.define('Koala.view.container.IsochroneRoutingResultController', {
         }
 
         source.clear();
+    },
+
+    /**
+     * Set the color property for the isochrone model instances.
+     *
+     * @param {Koala.model.Isochrone[]} isochrones The isochrones to set the color for.
+     */
+    setIsochroneModelColors: function(isochrones) {
+        var me = this;
+
+        var layer = me.getIsochroneLayer();
+        if (!layer) {
+            return;
+        }
+
+        var source = layer.getSource();
+        if (!source) {
+            return;
+        }
+
+        Ext.Array.each(isochrones, function(rec) {
+            var recId = rec.getId();
+
+            var feature = Ext.Array.findBy(source.getFeatures(), function(feat) {
+                return feat.get('recId') === recId;
+            });
+
+            if (feature) {
+                var color = feature.getStyle().getFill().getColor();
+                rec.set('color', color);
+            }
+        });
     },
 
     /**
