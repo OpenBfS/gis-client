@@ -965,7 +965,7 @@
                     "routingProfileFieldTitle": "Profil",
                     "computeRouteButtonText": "Route Berechnen",
                     "addStartPoint": "Startpunkt setzen",
-                    "addViaPoint": "Wegpunkt setzen",
+                    "addViaPoint": "Zwischenziel einfügen",
                     "addEndPoint": "Zielpunkt setzen",
                     "elevationBtnText": "Höhenprofil",
                     "downloadButtonText": "Download",
