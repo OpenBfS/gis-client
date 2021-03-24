@@ -121,6 +121,7 @@ Ext.define('Koala.view.form.ClassicRoutingSettingsController', {
                     items: [{
                         xtype: 'combobox',
                         fieldLabel: label,
+                        labelClsExtra: 'routing-waypoint-form-item',
                         flex: 1,
                         store: geoCodingSuggestions,
                         displayField: 'address',
@@ -290,12 +291,15 @@ Ext.define('Koala.view.form.ClassicRoutingSettingsController', {
 
         new Ext.drag.Source({
             element: container.el,
-            // for identification
-            storeIdx: waypointIdx,
             // necessary drag to invalid area
             revert: true,
             constrain: {
                 element: true
+            },
+            handle: '.routing-waypoint-form-item',
+            describe: function(info) {
+                // for identification
+                info.setData('storeIdx', waypointIdx);
             }
         });
 
@@ -305,9 +309,11 @@ Ext.define('Koala.view.form.ClassicRoutingSettingsController', {
             storeIdx: waypointIdx,
             listeners: {
                 drop: function(target, info) {
-                    var sourceRec = wayPointStore.getAt(info.source.storeIdx);
-                    wayPointStore.removeAt(info.source.storeIdx);
-                    wayPointStore.insert(target.storeIdx, sourceRec);
+                    info.getData('storeIdx').then(function(storeIdx) {
+                        var sourceRec = wayPointStore.getAt(storeIdx);
+                        wayPointStore.removeAt(storeIdx);
+                        wayPointStore.insert(target.storeIdx, sourceRec);
+                    });
                 }
             }
         });
