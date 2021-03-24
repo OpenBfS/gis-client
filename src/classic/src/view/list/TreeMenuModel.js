@@ -61,6 +61,9 @@ Ext.define('Koala.view.list.TreeMenuModel', {
         drawToolsActive: false,
         measureToolsActive: false,
         selectFeaturesActive: false,
+        classicRoutingActive: false,
+        fleetRoutingActive: false,
+        isochroneRoutingActive: false,
         createvectorlayer: '',
         showHelp: true,
         showLayersetChooser: true,
@@ -141,25 +144,25 @@ Ext.define('Koala.view.list.TreeMenuModel', {
                 }, {
                     text: '{routingTools}',
                     iconCls: 'x-fa fa-location-arrow',
-                    rowCls: '{(showClassicRoutingBtn || showFleetRoutingBtn || showIsochroneRoutingBtn ) ? "menu-button" : "hidden"}',
+                    rowCls: '{(showClassicRoutingBtn || showFleetRoutingBtn || showIsochroneRoutingBtn ) ? "menu-button" : "hidden"} {classicRoutingActive || fleetRoutingActive || isochroneRoutingActive ? "active" : ""}',
                     children: [{
                         leaf: true,
                         text: '{classicRouting}',
                         key: 'classicrouting',
                         iconCls: 'x-fa fa-location-arrow',
-                        rowCls: '{showClassicRoutingBtn ? "menu-button" : "hidden"}'
+                        rowCls: '{showClassicRoutingBtn ? "menu-button" : "hidden"} {classicRoutingActive ? "active" : ""}'
                     } ,{
                         leaf: true,
                         text: '{fleetRouting}',
                         key: 'fleetrouting',
                         iconCls: 'x-fa fa-random',
-                        rowCls: '{showFleetRoutingBtn ? "menu-button" : "hidden"}'
+                        rowCls: '{showFleetRoutingBtn ? "menu-button" : "hidden"} {fleetRoutingActive ? "active" : ""}'
                     }, {
                         leaf: true,
                         text: '{isochroneRouting}',
                         key: 'isochronerouting',
                         iconCls: 'x-fa fa-dot-circle-o',
-                        rowCls: '{showIsochroneRoutingBtn ? "menu-button" : "hidden"}'
+                        rowCls: '{showIsochroneRoutingBtn ? "menu-button" : "hidden"} {isochroneRoutingActive ? "active" : ""}'
                     }]
                 }, {
                     text: '{share}',

@@ -314,7 +314,6 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         // remove context menu listener
         var mapViewport = view.map.getViewport();
         mapViewport.removeEventListener('contextmenu', me.boundOpenContextMenu);
-
     },
 
     /**
