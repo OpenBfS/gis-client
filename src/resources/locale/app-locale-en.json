@@ -553,6 +553,7 @@
                 "routingTools": "Routing",
                 "classicRouting": "Routing (classic)",
                 "fleetRouting": "Fleet Routing",
+                "isochroneRouting": "Isochrone",
                 "vectorimport": "Import local files",
                 "print": "Print",
                 "tools": "Tools",
@@ -807,8 +808,7 @@
                 "xLabel": "distance[km]",
                 "yLabel": "height[m]",
                 "distanceLabel": "Distance",
-                "elevationLabel": "Elevation",
-                "durationLabel": "Duration"
+                "elevationLabel": "Elevation"
             }
         }
     },
@@ -974,6 +974,33 @@
                     "profileWalkingText": "Walking",
                     "routesHeading": "Routes"
                 }
+            }
+        }
+    },
+    "Koala.view.window.IsochroneRouting": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "isochroneRoutingTitle": "Isochrone",
+                    "addressLabel": "Center",
+                    "addressPlaceholder": "Enter search term or coordinate",
+                    "errorIsochrones": "Could not load isochrones.",
+                    "errorGeoCoding": "Could not load location.",
+                    "timeTooltip": "Time",
+                    "distanceTooltip": "Distance",
+                    "submitButtonText": "Submit",
+                    "rangeFieldText": "Range",
+                    "intervalFieldText": "Interval",
+                    "placeHolderKilometer": "kilometers",
+                    "placeHolderMinutes": "minutes",
+                    "addCenterContextText": "Set center",
+                    "valueColumn": "Range",
+                    "reachfactorColumn": "Reach score",
+                    "visibilityColumn": "Visible",
+                    "areaColumn": "Area",
+                    "intervalTooBigErrorText": "Interval must be smaller than reach",
+                    "intervalTooSmallErrorText": "Minimal interval is: "
+                 }
             }
         }
     },
@@ -2206,8 +2233,7 @@
                 "xLabel": "distance[km]",
                 "yLabel": "height[m]",
                 "distanceLabel": "Distance",
-                "elevationLabel": "Elevation",
-                "durationLabel": "Duration"
+                "elevationLabel": "Elevation"
             }
         }
     },

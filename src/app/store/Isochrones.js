@@ -14,21 +14,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.ElevationProfileModel
+ * @class Koala.store.Isochrones
  */
-Ext.define('Koala.view.panel.ElevationProfileModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-panel-elevationprofile',
+Ext.define('Koala.store.Isochrones', {
+    extend: 'Ext.data.Store',
 
-    data: {
-        title: '',
-        xLabel: '',
-        yLabel: '',
-        distanceLabel: '',
-        distance: undefined,
-        elevationLabel: '',
-        elevation: undefined,
-        showIndicatorBox: false,
-        routingSummary: undefined
-    }
+    requires: [
+        'Koala.model.Isochrone'
+    ],
+
+    alias: 'store.k-isochrones',
+
+    model: 'Koala.model.Isochrone'
+
 });

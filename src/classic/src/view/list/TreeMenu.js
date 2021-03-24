@@ -81,6 +81,7 @@ Ext.define('Koala.view.list.TreeMenu', {
         viewModel.set('showAboutBtn', ctx.tools.indexOf('aboutBtn') !== -1);
         viewModel.set('showClassicRoutingBtn', ctx.tools.indexOf('classicRoutingBtn') !== -1);
         viewModel.set('showFleetRoutingBtn', ctx.tools.indexOf('fleetRoutingBtn') !== -1);
+        viewModel.set('showIsochroneRoutingBtn', ctx.tools.indexOf('isochroneRoutingBtn') !== -1);
     }
 
 });

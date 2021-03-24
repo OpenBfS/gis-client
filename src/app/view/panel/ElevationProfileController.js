@@ -302,19 +302,12 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var duration;
-        if (props.duration) {
-            var hours = Math.floor(props.duration / 60 / 60);
-            var minutes = Math.floor((props.duration - (hours * 60 * 60)) / 60);
-            duration = hours + ':' + minutes;
-        }
         var distance;
         if (props.distance) {
             distance = (props.distance/1000).toFixed(1);
         }
         vm.set('distance', distance);
         vm.set('elevation', props.elevation ? props.elevation.toFixed(0) : undefined);
-        vm.set('duration', duration);
         vm.set('showIndicatorBox', props.showIndicatorBox);
     },
 
@@ -340,66 +333,61 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
 
         var mapping = [];
         var coordinates = summary.geometry.coordinates;
-        var props = summary.properties;
-        var segments = props.segments;
         var distance = 0;
-        var duration = 0;
-        Ext.Array.forEach(segments, function(segment) {
-            Ext.Array.forEach(segment.steps, function(step) {
-                distance += step.distance;
-                var stepDistance = distance;
-                duration += step.duration;
-                var stepDuration = duration;
-                var type = step.type;
-                var wayPoints = step.way_points;
-                var wayPoint = wayPoints[0];
-                var coordinate = coordinates[wayPoint];
-                var elevation = coordinate[2];
-                var tooltipFunc = function(chart, x, limits) {
-                    var transformed = coordinate;
+        // radius is equal to the semi-major axis of the WGS84 ellipsoid
+        // see also https://openlayers.org/en/v4.6.5/apidoc/ol.Sphere.html
+        var sphere = new ol.Sphere(6378137);
+        Ext.Array.forEach(coordinates, function(coordinate, idx) {
+            var elevation = coordinate[2];
+            if (idx !== 0) {
+                // distance in meters
+                distance += sphere.haversineDistance(coordinates[idx - 1], coordinate);
+            }
+            var stepDistance = distance;
 
-                    if (map) {
-                        var sourceProjection = ol.proj.get('EPSG:4326');
-                        var targetProjection;
-                        targetProjection = map.getView().getProjection().getCode();
-                        transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
-                    }
+            var tooltipFunc = function(chart, x, limits) {
+                var transformed = coordinate;
 
-                    var feat = new ol.Feature({
-                        geometry: new ol.geom.Point(transformed)
-                    });
-                    feat.setProperties({
-                        duration: stepDuration,
-                        type: type,
-                        elevation: elevation,
-                        distance: stepDistance
-                    });
+                if (map) {
+                    var sourceProjection = ol.proj.get('EPSG:4326');
+                    var targetProjection;
+                    targetProjection = map.getView().getProjection().getCode();
+                    transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
+                }
 
-                    if (elevationLayer) {
-                        var source = elevationLayer.getSource();
-                        source.clear();
-                        source.addFeature(feat);
-                    }
+                var feat = new ol.Feature({
+                    geometry: new ol.geom.Point(transformed)
+                });
 
-                    me.setIndicatorLine(chart, x, limits);
-                    me.updateInfoBoxValues(
-                        Ext.Object.merge(
-                            feat.getProperties(),
-                            {showIndicatorBox: true}
-                        )
-                    );
-                };
+                feat.setProperties({
+                    elevation: elevation,
+                    distance: stepDistance
+                });
 
-                mapping.push([
-                    distance,
-                    elevation,
-                    tooltipFunc,
-                    {
-                        fill: '#00000000',
-                        stroke: '#00000000'
-                    }
-                ]);
-            });
+                if (elevationLayer) {
+                    var source = elevationLayer.getSource();
+                    source.clear();
+                    source.addFeature(feat);
+                }
+
+                me.setIndicatorLine(chart, x, limits);
+                me.updateInfoBoxValues(
+                    Ext.Object.merge(
+                        feat.getProperties(),
+                        {showIndicatorBox: true}
+                    )
+                );
+            };
+
+            mapping.push([
+                distance,
+                elevation,
+                tooltipFunc,
+                {
+                    fill: '#00000000',
+                    stroke: '#00000000'
+                }
+            ]);
         });
         return mapping;
     },
@@ -425,7 +413,6 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         me.updateInfoBoxValues({
             distance: undefined,
             elevation: undefined,
-            duration: undefined,
             showIndicatorBox: false
         });
 

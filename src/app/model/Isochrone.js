@@ -14,21 +14,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.panel.ElevationProfileModel
+ * @class Koala.model.Isochrone
  */
-Ext.define('Koala.view.panel.ElevationProfileModel', {
-    extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.k-panel-elevationprofile',
+Ext.define('Koala.model.Isochrone', {
+    extend: 'Ext.data.Model',
 
-    data: {
-        title: '',
-        xLabel: '',
-        yLabel: '',
-        distanceLabel: '',
-        distance: undefined,
-        elevationLabel: '',
-        elevation: undefined,
-        showIndicatorBox: false,
-        routingSummary: undefined
-    }
+    fields: [
+        { name: 'value', type: 'int', convert: null },
+        { name: 'center', convert: null },
+        { name: 'area', type: 'number' },
+        { name: 'reachfactor', type: 'number' },
+        { name: 'group_index', type: 'number', convert: null },
+        { name: 'geometry', convert: null },
+        // value is either seconds or metres, depending on range_type
+        { name: 'range_type', type: 'string', defaultValue: 'time' },
+        { name: 'visible', type: 'boolean', defaultValue: true },
+        { name: 'color', type: 'string', convert: null }
+    ]
 });

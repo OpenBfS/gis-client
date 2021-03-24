@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @class Koala.view.window.RoutingModel
+ * @class Koala.view.window.FleetRoutingModel
  */
 Ext.define('Koala.view.window.FleetRoutingModel', {
     extend: 'Ext.app.ViewModel',

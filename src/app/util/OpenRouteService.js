@@ -45,7 +45,7 @@ Ext.define('Koala.util.OpenRouteService', {
          * Fire the http request to the OpenRouteService directions API.
          *
          * @param {Object} params The request params.
-         * @returns {Promise} A promise resolving on succesful completion.
+         * @returns {Promise} A promise resolving on successful completion.
          */
         requestDirectionsApi: function(params) {
             var me = this;
@@ -56,6 +56,23 @@ Ext.define('Koala.util.OpenRouteService', {
             });
 
             return Directions.calculate(params);
+        },
+
+        /**
+         * Fire the http request to the OpenRouteService isochrones API.
+         *
+         * @param {Object} params The request params.
+         * @returns {Promise} A promise resolving on successful completion.
+         */
+        requestIsochronesApi: function(params) {
+            var staticMe = Koala.util.OpenRouteService;
+
+            var Isochrones = new Openrouteservice.Isochrones({
+                host: staticMe.getApiEndpoint(),
+                api_key: staticMe.getApiKey()
+            });
+
+            return Isochrones.calculate(params);
         },
 
         /**
@@ -207,6 +224,38 @@ Ext.define('Koala.util.OpenRouteService', {
                 return '<b>' + distanceFormatted.slice(0, -1) + '</b>' + lastChar + 'm';
             } else {
                 return '<b>' + distanceFormatted + '</b>m';
+            }
+        },
+
+        /**
+         * Format area.
+         *
+         * Rounds the area to a proper metric unit (e.g. km).
+         *
+         * @param {Number} area The area to format in square meters.
+         * @param {Boolean} plainText If true, just returns the plain text.
+         * @param {Number} fixedPrefix The SI unit that should be used.
+         * @returns {String} The formatted area html string.
+         */
+        getFormattedArea: function(area, plainText, fixedPrefix) {
+            var areaFormatted;
+            var format = '.2~s';
+            if (fixedPrefix) {
+                areaFormatted = D3Util.d3.formatPrefix(format, fixedPrefix)(area);
+            } else {
+                areaFormatted = D3Util.d3.format(format)(area);
+            }
+            var lastChar = areaFormatted.slice(-1);
+
+            if (plainText) {
+                return areaFormatted + 'm²';
+            }
+
+            // check if last character is a SI unit suffix
+            if (isNaN(parseInt(lastChar, 10))) {
+                return '<b>' + areaFormatted.slice(0, -1) + '</b>' + lastChar + 'm²';
+            } else {
+                return '<b>' + areaFormatted + '</b>m²';
             }
         }
     }
