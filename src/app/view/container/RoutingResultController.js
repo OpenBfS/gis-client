@@ -86,7 +86,6 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
         me.modifyInteraction.once('modifyend', me.handleRouteDrag.bind(me));
         me.modifyInteraction.once('modifystart', function(evt) {
-            var me = this;
             me.modifyInteractionStartCoordinate = evt.mapBrowserEvent.coordinate;
             // all subproperties are defined here,
             // otherwise the event could not have been triggered.
@@ -103,7 +102,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var me = this;
         var view = me.getView();
 
-        if(!view) {
+        if (!view) {
             return;
         }
 
