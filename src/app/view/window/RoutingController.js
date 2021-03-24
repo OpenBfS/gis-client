@@ -569,11 +569,11 @@ Ext.define('Koala.view.window.RoutingController', {
         var params = {
             coordinates: waypoints,
             profile: vm.get('routingProfile'),
+            preference: vm.get('routingPreference'),
             format: 'geojson',
             instructions: true,
             geometry: true,
             elevation: true,
-            preference: 'recommended',
             language: vm.get('language'),
             units: 'm',
             instructions_format: 'html',
