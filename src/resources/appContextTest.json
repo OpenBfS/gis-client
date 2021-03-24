@@ -5,7 +5,7 @@
             "urls": {
                 "metadata-xml2json": "http://10.133.7.220/geonetwork/srv/api/0.1/records/",
                 "metadata-search": "http://10.133.7.220/geonetwork/srv/ger/csw?",
-                "spatial-search": "/api",
+                "spatial-search": "/ors/geocode/api",
                 "print-servlet": "http://10.133.7.220/bfs-printservice/print/",
                 "irix-servlet": "http://10.133.7.220/irix-servlet",
                 "irix-context": "resources/irixContext.json",
@@ -224,9 +224,9 @@
             "redLineLayerName": "Messungen",
             "rodosFolderName": "RODOS-Prognosen",
             "routing": {
-                "openrouteserviceUrl": "https://entw-imis.lab.bfs.de/ors",
-                "photonUrl": "/geocoding-dev",
-                "vroomUrl": "https://entw-imis.lab.bfs.de/ors/optimization",
+                "openrouteserviceUrl": "/ors",
+                "photonUrl": "/ors/geocode",
+                "vroomUrl": "/ors/optimization",
                 "routeStyle": {
                     "colorPrimary": "#ff0000",
                     "colorSecondary": "#BDBDBD",
