@@ -88,7 +88,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
         me.modifyInteraction.once('modifystart', function(evt) {
             me.modifyInteractionStartCoordinate = evt.mapBrowserEvent.coordinate;
             // all subproperties are defined here,
-            // otherwise the event could not have been triggered.
+            // so we do not have to check for existance.
             me.modifyInteractionFeature = evt.features.getArray()[0].clone();
         }.bind(me));
 
@@ -241,7 +241,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
      * a route to the snapped point. So we can compare the distances and select
      * the first waypoint that comes after the dragStart point.
      *
-     * @returns The index of the first waypoint that comes after the dragged location.
+     * @returns {int} The index of the first waypoint that comes after the dragged location.
      */
     getWaypointIndex: function() {
         var me = this;
