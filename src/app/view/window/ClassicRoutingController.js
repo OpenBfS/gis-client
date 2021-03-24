@@ -175,8 +175,7 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
 
                 var features = resultJson.features;
                 if (features.length === 0) {
-                    Ext.toast(vm.get('i18n.errorGeoCoding'));
-                    return;
+                    throw new Error();
                 }
 
                 var placeName = geocoding.createPlaceString(features[0].properties);
@@ -196,9 +195,13 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
                 }
             })
             .catch(function(err) {
-                var str = 'An error occured: ' + err;
+                var str = err.message;
                 Ext.Logger.log(str);
-                Ext.toast(vm.get('i18n.errorGeoCoding'));
+                var info = vm.get('i18n.errorGeoCoding');
+                if (!Ext.isEmpty(str)) {
+                    info += ' ' + str;
+                }
+                Ext.toast(info);
             });
     },
 
@@ -229,12 +232,26 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
         if (!onError) {
             onError = function(err) {
                 vm.set('showDownloadButton', false);
-                Ext.toast(vm.get('i18n.errorRoutingRequest'));
-                var str = 'An error occured: ' + err;
-                Ext.Logger.log(str);
                 if (!Ext.isModern) {
                     view.setLoading(false);
                 }
+
+                var str;
+
+                try {
+                    str = err.response.body.error.message;
+                } catch (e) {
+                    str = '';
+                }
+
+                Ext.Logger.log(str);
+
+                var info = vm.get('i18n.errorRoutingRequest');
+                if (!Ext.isEmpty(str)) {
+                    info += '<br/><i>(' + str + ')</i>';
+                }
+
+                Ext.toast(info);
             };
         }
 

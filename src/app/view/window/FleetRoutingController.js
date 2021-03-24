@@ -363,10 +363,24 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
         Koala.util.VroomFleetRouting.performOptimization(vehicles, jobs, avoidArea)
             .then(me.handleVroomResponse.bind(me))
-            .catch(function(error) {
+            .catch(function(err) {
                 view.setLoading(false);
-                Ext.toast(vm.get('i18n.errorFleetRouting'));
-                Ext.Logger.error(error);
+                var str;
+
+                try {
+                    str = err.response.body.error.message;
+                } catch (e) {
+                    str = '';
+                }
+
+                Ext.Logger.error(str);
+
+                var info = vm.get('i18n.errorFleetRouting');
+                if (!Ext.isEmpty(str)) {
+                    info += '<br/><i>(' + str + ')</i>';
+                }
+
+                Ext.toast(info);
             });
     },
 
@@ -412,10 +426,25 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 view.setLoading(false);
                 vm.set('showRoutingResults', true);
             })
-            .catch(function(error) {
+            .catch(function(err) {
                 view.setLoading(false);
-                Ext.toast(vm.get('i18n.errorFleetRouting'));
-                Ext.log.error(error);
+
+                var str;
+
+                try {
+                    str = err.response.body.error.message;
+                } catch (e) {
+                    str = '';
+                }
+
+                Ext.log.error(str);
+
+                var info = vm.get('i18n.errorFleetRouting');
+                if (!Ext.isEmpty(str)) {
+                    info += '<br/><i>(' + str + ')</i>';
+                }
+
+                Ext.toast(info);
             });
     },
 
@@ -746,8 +775,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
                     var features = resultJson.features;
                     if (features.length === 0) {
-                        Ext.toast(vm.get('i18n.errorGeoCoding'));
-                        return;
+                        throw new Error();
                     }
 
                     var placeName = geocoding.createPlaceString(features[0].properties);
@@ -761,9 +789,13 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     resolve(address);
                 })
                 .catch(function(err) {
-                    var str = 'An error occured: ' + err;
+                    var str = err.message;
                     Ext.Logger.log(str);
-                    Ext.toast(vm.get('i18n.errorGeoCoding'));
+                    var info = vm.get('i18n.errorGeoCoding');
+                    if (!Ext.isEmpty(str)) {
+                        info += ' ' + str;
+                    }
+                    Ext.toast(info);
                     reject(err);
                 });
         });
