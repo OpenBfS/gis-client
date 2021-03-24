@@ -56,15 +56,34 @@ Ext.define('Koala.view.list.TreeMenuController', {
             // if an over item is set, so we deselect it here
             sender.setOverItem(null);
             var key = node.get('key');
+            var win;
             switch (key) {
                 case 'classicrouting':
-                    this.showWindowShake('k-window-classic-routing', 'Koala.view.window.ClassicRouting', ['k-window-fleet-routing', 'k-window-isochrone-routing']);
+                    win = this.showWindowShake('k-window-classic-routing', 'Koala.view.window.ClassicRouting', ['k-window-fleet-routing', 'k-window-isochrone-routing']);
+                    if (win) {
+                        viewModel.set('classicRoutingActive', true);
+                        win.on('destroy', function() {
+                            viewModel.set('classicRoutingActive', false);
+                        });
+                    }
                     break;
                 case 'fleetrouting':
-                    this.showWindowShake('k-window-fleet-routing', 'Koala.view.window.FleetRouting', ['k-window-classic-routing', 'k-window-isochrone-routing']);
+                    win = this.showWindowShake('k-window-fleet-routing', 'Koala.view.window.FleetRouting', ['k-window-classic-routing', 'k-window-isochrone-routing']);
+                    if (win) {
+                        viewModel.set('fleetRoutingActive', true);
+                        win.on('destroy', function() {
+                            viewModel.set('fleetRoutingActive', false);
+                        });
+                    }
                     break;
                 case 'isochronerouting':
-                    this.showWindowShake('k-window-isochrone-routing', 'Koala.view.window.IsochroneRouting', ['k-window-classic-routing', 'k-window-fleet-routing']);
+                    win = this.showWindowShake('k-window-isochrone-routing', 'Koala.view.window.IsochroneRouting', ['k-window-classic-routing', 'k-window-fleet-routing']);
+                    if (win) {
+                        viewModel.set('isochroneRoutingActive', true);
+                        win.on('destroy', function() {
+                            viewModel.set('isochroneRoutingActive', false);
+                        });
+                    }
                     break;
                 case 'menu':
                     var isMicro = viewModel.get('micro');
@@ -183,7 +202,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
                     break;
                 case 'imprint':
                     this.showWindow('k-window-imprint', 'Koala.view.window.ImprintWindow', 'imprint');
-                    var win = Ext.ComponentQuery
+                    win = Ext.ComponentQuery
                         .query('k-window-imprint')[0];
                     if (win) {
                         win.getController().setTopic('imprint');
@@ -229,9 +248,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
         var win = Ext.ComponentQuery.query(xtype)[0];
         if (!win) {
             if (!calledBy) {
-                Ext.create(className).show();
+                return Ext.create(className).show();
             } else {
-                Ext.create(className, {createdBy: calledBy}).show();
+                return Ext.create(className, {createdBy: calledBy}).show();
             }
         } else {
             BasiGX.util.Animate.shake(win);
@@ -241,6 +260,7 @@ Ext.define('Koala.view.list.TreeMenuController', {
     /**
      * Like 'showWindow' but also checks
      * if another window is already opened.
+     * @returns {Ext.Component} The created window component.
      */
     showWindowShake: function(xtype, className, otherXtypes) {
         var me = this;
@@ -254,8 +274,9 @@ Ext.define('Koala.view.list.TreeMenuController', {
         }, undefined);
         if (otherWin) {
             BasiGX.util.Animate.shake(otherWin);
+            return;
         } else {
-            me.showWindow(xtype, className);
+            return me.showWindow(xtype, className);
         }
     }
 });
