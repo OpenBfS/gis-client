@@ -109,12 +109,14 @@ Ext.define('Koala.view.window.IsochroneRoutingModel', {
          * by the isochrone API.
          */
         intervalInRequiredUnits: function(get) {
+            // default is one single interval
+            var interval = get('interval') || get('range');
             if (get('rangeType') === 'distance') {
                 // convert kilometer to meter
-                return get('interval') * 1000;
+                return interval * 1000;
             } else if (get('rangeType') === 'time') {
                 // convert minutes to seconds
-                return get('interval') * 60;
+                return interval * 60;
             }
         },
         /**
