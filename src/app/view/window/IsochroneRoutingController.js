@@ -325,9 +325,22 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
         if (!onError) {
             onError = function(err) {
                 view.setLoading(false);
-                var str = 'An error occured: ' + err;
+                var str;
+
+                try {
+                    str = err.response.body.error.message;
+                } catch (e) {
+                    str = '';
+                }
+
                 Ext.Logger.log(str);
-                Ext.toast(vm.get('i18n.errorIsochrones'));
+
+                var info = vm.get('i18n.errorIsochrones');
+                if (!Ext.isEmpty(str)) {
+                    info += '<br/><i>(' + str + ')</i>';
+                }
+
+                Ext.toast(info);
             };
         }
 
@@ -390,8 +403,7 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
             .then(function(resultJson) {
                 var features = resultJson.features;
                 if (features.length === 0) {
-                    Ext.toast(vm.get('i18n.errorGeoCoding'));
-                    return;
+                    throw new Error();
                 }
                 var address = geocoding.createPlaceString(features[0].properties);
 
@@ -422,9 +434,13 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
                 }
             })
             .catch(function(err) {
-                var str = 'An error occured: ' + err;
+                var str = err.message;
                 Ext.Logger.log(str);
-                Ext.toast(vm.get('i18n.errorGeoCoding'));
+                var info = vm.get('i18n.errorGeoCoding');
+                if (!Ext.isEmpty(str)) {
+                    info += ' ' + str;
+                }
+                Ext.toast(info);
             });
     },
 
