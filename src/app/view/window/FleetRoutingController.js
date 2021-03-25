@@ -60,7 +60,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         mapViewport.addEventListener('contextmenu', me.boundOpenContextMenu);
 
         // waypoint creation
-        var jobsStore = view.down('k-grid-routing-jobs').getStore();
+        var jobsStore = vm.get('routingjobs');
         if (!jobsStore) {
             return;
         }
@@ -340,7 +340,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         vm.set('routingProfile', vehicleProfile);
         var vehicles = vehicleStore.getVroomArray(vehicleProfile);
 
-        var jobsStore = view.down('k-grid-routing-jobs').getStore();
+        var jobsStore = vm.get('routingjobs');
         var jobs = jobsStore.getVroomArray();
 
         var routingAlgorithm = vm.get('routingAlgorithm');
@@ -815,6 +815,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
     updateWayPointLayer: function() {
         var me = this;
         var view = me.getView();
+        var vm = view.lookupViewModel();
 
         var layer = me.getWaypointLayer();
         if (!layer) {
@@ -825,7 +826,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         layer.getSource().clear();
 
         // create job marker
-        var jobsStore = view.down('k-grid-routing-jobs').getStore();
+        var jobsStore = vm.get('routingjobs');
         if (!jobsStore) {
             return;
         }
@@ -931,23 +932,145 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             return;
         }
 
-        var triggerButton = view.down('[name=optimizeRouteButton]');
-        if (!triggerButton) {
+        var vm = view.lookupViewModel();
+        if (!vm) {
             return;
         }
 
-        var jobsGrid = view.down('k-grid-routing-jobs');
-        if (!jobsGrid || !jobsGrid.getStore() || jobsGrid.getStore().count() === 0) {
-            triggerButton.setDisabled(true);
+        var routingJobs = vm.get('routingjobs');
+        if (!routingJobs || routingJobs.count() === 0) {
+            vm.set('disableOptimizeRoute', true);
             return;
         }
 
         var vehiclesGrid = view.down('k-grid-routing-vehicles');
         if (!vehiclesGrid || !vehiclesGrid.getStore() || vehiclesGrid.getStore().count() === 0) {
-            triggerButton.setDisabled(true);
+            vm.set('disableOptimizeRoute', true);
             return;
         }
 
-        triggerButton.setDisabled(false);
+        vm.set('disableOptimizeRoute', false);
+    },
+
+    afterJobUploadRender: function(field) {
+        var me = this;
+        field.fileInputEl.on('change', me.handleJobUpload.bind(me));
+    },
+
+    handleJobUpload: function(evt) {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        var geocoding = Koala.util.Geocoding;
+
+        var waypoints = vm.get('waypoints');
+        var routingJobs = vm.get('routingjobs');
+        var language = vm.get('language');
+
+        var file = evt.target.files[0];
+
+        if (file) {
+            file.text()
+                .then(function(text) {
+
+                    var json = JSON.parse(text);
+                    var jobs = json.jobs || [];
+
+                    // we only work with jobs with locations and ignore all others
+                    var jobsWithLocations = Ext.Array.filter(jobs, function(job) {
+                        return Ext.isArray(job.location) && job.location.length === 2;
+                    });
+
+                    var queue = Ext.Promise.resolve();
+
+                    Ext.Array.each(jobsWithLocations, function(job, i) {
+                        var prevJob = jobsWithLocations[i - 1];
+
+                        queue = queue
+                            .then(function(resultJson) {
+                                if (!resultJson) {
+                                    return geocoding.doReverseGeocoding(job.location[0], job.location[1], language);
+                                }
+
+                                var features = resultJson.features;
+                                if (features.length === 0) {
+                                    throw new Error();
+                                }
+
+                                var placeName = geocoding.createPlaceString(features[0].properties);
+
+                                prevJob.address = {
+                                    address: placeName,
+                                    latitude: prevJob.location[1],
+                                    longitude: prevJob.location[0]
+                                };
+
+                                return geocoding.doReverseGeocoding(job.location[0], job.location[1], language);
+
+                            })
+                            .catch(function() {
+                                if (prevJob) {
+                                    var str = 'Could not get placeName of job.';
+                                    Ext.Logger.log(str);
+
+                                    prevJob.address = {
+                                        address: prevJob.location[0] + ', ' + prevJob.location[1],
+                                        latitude: prevJob.location[1],
+                                        longitude: prevJob.location[0]
+                                    };
+                                }
+                                return geocoding.doReverseGeocoding(job.location[0], job.location[1], language);
+                            });
+                    });
+
+                    // last promise
+                    queue
+                        .then(function(resultJson) {
+                            var features = resultJson.features;
+                            if (features.length === 0) {
+                                throw new Error();
+                            }
+
+                            var placeName = geocoding.createPlaceString(features[0].properties);
+
+                            var prevJob = jobsWithLocations[jobsWithLocations.length - 1];
+                            prevJob.address = {
+                                address: placeName,
+                                latitude: prevJob.location[1],
+                                longitude: prevJob.location[0]
+                            };
+                        })
+                        .catch(function() {
+                            var str = 'Could not get placeName of job.';
+                            Ext.Logger.log(str);
+
+                            var prevJob = jobsWithLocations[jobsWithLocations.length - 1];
+                            prevJob.address = {
+                                address: prevJob.location[0] + ', ' + prevJob.location[1],
+                                latitude: prevJob.location[1],
+                                longitude: prevJob.location[0]
+                            };
+                        })
+                        .finally(function() {
+                            routingJobs.loadRawData(jobsWithLocations);
+                            waypoints.loadRawData(Ext.Array.map(routingJobs.getData().items, function(job) {
+                                return job.get('address');
+                            }));
+                        });
+
+                }).catch(function(err) {
+                    var str = vm.get('errorInvalidJobsJson');
+                    Ext.Logger.log(str + err);
+                    Ext.toast(str);
+                });
+
+        }
     }
 });

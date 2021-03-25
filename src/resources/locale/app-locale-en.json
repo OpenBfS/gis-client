@@ -549,7 +549,8 @@
                     "emptyJobText": "No targets created",
                     "priorityColumnText": "Priority",
                     "addressColumnText": "Address",
-                    "descriptionColumnText": "Description"
+                    "descriptionColumnText": "Description",
+                    "uploadTooltip": "Upload targets"
                 }
             }
         }
@@ -1026,6 +1027,8 @@
                     "errorGeoCoding": "Could not load location.",
                     "errorRoutingRequest": "Routing request failed.",
                     "errorDownloadRoute": "Download failed.",
+                    "errorFleetRouting" : "Could not load routes.",
+                    "errorInvalidJobsJson": "Could not load targets. Invalid file.",
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Driving",
                     "profileBycicleText": "Cycling",

@@ -536,7 +536,8 @@
                     "emptyJobText": "Keine Ziele angelegt",
                     "priorityColumnText": "Priorität",
                     "addressColumnText": "Adresse",
-                    "descriptionColumnText": "Beschreibung"
+                    "descriptionColumnText": "Beschreibung",
+                    "uploadTooltip": "Ziele hochladen"
                 }
             }
         }
@@ -1008,6 +1009,7 @@
                     "profileBycicleText": "Mit dem Fahrrad",
                     "profileWalkingText": "Zu Fuß",
                     "errorFleetRouting" : "Die Routen konnten nicht geladen werden.",
+                    "errorInvalidJobsJson": "Ziele konnten nicht geladen werden. Datei invalide.",
                     "addJobContextText": "Neues Ziel hinzufügen",
                     "addVehicleContextText": "Neues Fahrzeug hinzufügen",
                     "setCurrentJobContextText": "Als aktuelles Ziel setzen",
