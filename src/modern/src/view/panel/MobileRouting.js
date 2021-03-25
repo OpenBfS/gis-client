@@ -103,6 +103,36 @@ Ext.define('Koala.view.panel.MobileRouting',{
                 pressed: '{routingProfile === "foot-walking"}'
             }
         }]
+    },{
+        xtype: 'segmentedbutton',
+        defaults: {
+            flex: 1
+        },
+        bind: {
+            value: '{routingPreference}'
+        },
+        items: [{
+            iconCls: 'x-fa fa-user-plus',
+            value: 'recommended',
+            bind: {
+                pressed: '{routingPreference === "recommended"}',
+                tooltip: '{i18n.recommendedText}'
+            }
+        }, {
+            iconCls: 'x-fa fa-tachometer',
+            value: 'shortest',
+            bind: {
+                pressed: '{routingPreference === "shortest"}',
+                tooltip: '{i18n.shortestText}'
+            }
+        }, {
+            iconCls: 'x-fa fa-fast-forward',
+            value: 'fastest',
+            bind: {
+                pressed: '{routingPreference === "fastest"}',
+                tooltip: '{i18n.fastestText}'
+            }
+        }]
     }, {
         xtype: 'k-form-classic-routing-settings',
         maxHeight: '40%'

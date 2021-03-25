@@ -27,7 +27,8 @@ Ext.define('Koala.view.form.ClassicRoutingSettings', {
         'Ext.button.Button',
         'Ext.form.field.FileButton',
         'Koala.view.form.ClassicRoutingSettingsController',
-        'Koala.view.button.AvoidArea'
+        'Koala.view.button.AvoidArea',
+        'Koala.view.button.RoutingPreference'
     ],
 
     width: '100%',
@@ -64,6 +65,15 @@ Ext.define('Koala.view.form.ClassicRoutingSettings', {
                     tooltip: '{i18n.profileWalkingText}'
                 }
             }]
+        }, {
+            xtype: 'k-button-routing-preference',
+            defaults: {
+                handler: 'onRoutingButtonPressed',
+                padding: '3 10'
+            },
+            bind: {
+                value: '{routingPreference}'
+            }
         }, {
             xtype: 'tbspacer',
             flex: 1

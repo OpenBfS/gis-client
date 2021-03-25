@@ -94,6 +94,17 @@
             }
         }
     },
+    "Koala.view.button.RoutingPreference": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "fastestText": "Schnellste",
+                    "recommendedText": "Empfohlene",
+                    "shortestText": "Kürzeste"
+                }
+            }
+        }
+    },
     "Koala.view.button.FeatureSelectButton": {
         "config": {
             "data": {

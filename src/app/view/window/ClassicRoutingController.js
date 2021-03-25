@@ -220,7 +220,9 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
         if (!onSuccess) {
             onSuccess = function(json) {
                 view.fireEvent('onRouteLoaded', json);
-                view.setLoading(false);
+                if (!Ext.isModern) {
+                    view.setLoading(false);
+                }
             };
         }
 
@@ -230,11 +232,16 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
                 Ext.toast(vm.get('i18n.errorRoutingRequest'));
                 var str = 'An error occured: ' + err;
                 Ext.Logger.log(str);
-                view.setLoading(false);
+                if (!Ext.isModern) {
+                    view.setLoading(false);
+                }
             };
         }
 
-        view.setLoading(true);
+        if (!Ext.isModern) {
+            view.setLoading(true);
+        }
+
         var orsUtil = Koala.util.OpenRouteService;
         orsUtil.requestDirectionsApi(params)
             .then(onSuccess)

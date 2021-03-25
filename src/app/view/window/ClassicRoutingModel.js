@@ -66,6 +66,7 @@ Ext.define('Koala.view.window.ClassicRoutingModel', {
             routesHeading: ''
         },
         routingProfile: 'driving-car',
+        routingPreference: 'recommended',
         routeStyle: undefined,
         routeSegmentStyle: undefined,
         waypointStyle: undefined,
