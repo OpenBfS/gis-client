@@ -46,7 +46,12 @@ Ext.define('Koala.view.panel.MobileMenuController', {
         var stationSearchTitle = field.up().down('[name=stationsearchtitle]');
         var metadataSearchTitle = field.up().down('[name=metadatasearchtitle]');
 
-        spatialStore.getProxy().setExtraParam('cql_filter', 'NAME ilike \'%' + newVal + '%\'');
+        spatialStore.getProxy().setExtraParam('q', newVal);
+        spatialStore.getProxy().setExtraParam('osm_tag', null);
+        // assume PLZ-search
+        if (parseInt(newVal, 10).toString() === newVal) {
+            spatialStore.getProxy().setExtraParam('osm_tag', 'boundary');
+        }
         spatialStore.load();
         spatialSearchTitle.setHidden(false);
         spatialList.setHidden(false);
@@ -96,9 +101,14 @@ Ext.define('Koala.view.panel.MobileMenuController', {
             dataProjection: 'EPSG:4326',
             featureProjection: map.getView().getProjection()
         });
-
         var extent = feature.getGeometry().getExtent();
-        view.fit(extent, map.getSize());
+        if (feature.getGeometry().getType() === 'Point') {
+            view.setZoom(13);
+            view.setCenter(feature.getGeometry().getCoordinates());
+        } else {
+            view.fit(extent, map.getSize());
+        }
+
         var menuPanel = this.getView('k-panel-mobilemenu');
         menuPanel.hide();
     },

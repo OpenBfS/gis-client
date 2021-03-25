@@ -100,8 +100,12 @@ Ext.define('Koala.view.form.field.SearchCombo', {
 
         spatialGrid.show();
         Ext.Ajax.abort(spatialStore._lastRequest);
-        spatialStore.getProxy()
-            .setExtraParam('q', value);
+        spatialStore.getProxy().setExtraParam('q', value);
+        spatialStore.getProxy().setExtraParam('osm_tag', null);
+        // assume PLZ-search
+        if (parseInt(value,10).toString()===value) {
+            spatialStore.getProxy().setExtraParam('osm_tag', 'boundary');
+        }
         spatialStore.load();
         spatialStore._lastRequest = Ext.Ajax.getLatest();
 
