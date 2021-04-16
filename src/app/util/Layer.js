@@ -1229,7 +1229,7 @@ Ext.define('Koala.util.Layer', {
             var context = Koala.util.AppContext.getAppContext().data.merge;
             if (url === context.urls['geoserver-base-url'] || url + '/' === context.urls['geoserver-base-url']) {
                 //change to publicly available workspace
-                url = context.urls['spatial-search'];
+                url = context.urls['station-search'];
             } else if (!url.startsWith('http')) {
                 url = window.location.origin + url;
             }
