@@ -2404,7 +2404,7 @@ Ext.define('Koala.util.Layer', {
          */
         updateVectorStyle: function(layer, sld) {
             var ctx = Koala.util.AppContext.getAppContext().data.merge;
-            var url = ctx.urls['spatial-search'];
+            var url = ctx.urls['station-search'];
             if (!url.startsWith('http')) {
                 url = window.origin + url;
             }
