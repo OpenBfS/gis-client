@@ -1003,6 +1003,7 @@ Ext.define('Koala.view.form.Print', {
                 }
             }, view);
 
+            var legendPromises = [];
             var legendFieldset = view.down('fieldset[name="legendsFieldset"]');
             if (legendFieldset && !legendFieldset.getCollapsed()) {
                 attributes.legend = view.getLegendObject();
@@ -1016,7 +1017,22 @@ Ext.define('Koala.view.form.Print', {
                     var currentLegendUrl = Koala.util.Layer.getCurrentLegendUrl(layer);
 
                     if (currentLegendUrl) {
-                        clazz.icons[0] = currentLegendUrl;
+                        legendPromises.push(new Ext.Promise(function(resolve) {
+                            Ext.Ajax.request({
+                                url: currentLegendUrl,
+                                binary: true,
+                                success: function(response) {
+                                    // there really should be a builtin for this
+                                    var binstr = String.fromCharCode.apply(null, response.responseBytes);
+                                    clazz.icons[0] = 'data:;base64,' + btoa(binstr);
+                                    resolve();
+                                },
+                                failure: function() {
+                                    // in case of failure just don't add a legend
+                                    resolve();
+                                }
+                            });
+                        }));
                     }
 
                     if (legendTextField) {
@@ -1025,65 +1041,67 @@ Ext.define('Koala.view.form.Print', {
                 });
             }
 
-            var hookedAttributes = Ext.clone(attributes);
+            Ext.Promise.all(legendPromises).then(function() {
+                var hookedAttributes = Ext.clone(attributes);
 
-            Koala.util.Hooks.executeBeforePostHook(view, hookedAttributes);
+                Koala.util.Hooks.executeBeforePostHook(view, hookedAttributes);
 
-            var app = view.down('combo[name=appCombo]').getValue();
-            var url = view.getUrl() + app + '/buildreport.' + format;
-            spec.attributes = hookedAttributes;
-            spec.layout = layout;
-            spec.outputFilename = layout;
-            view.insertLayerData(spec);
+                var app = view.down('combo[name=appCombo]').getValue();
+                var url = view.getUrl() + app + '/buildreport.' + format;
+                spec.attributes = hookedAttributes;
+                spec.layout = layout;
+                spec.outputFilename = layout;
+                view.insertLayerData(spec);
 
-            var irixCheckBox = view.down('[name="irix-fieldset-checkbox"]');
-            if (irixCheckBox && irixCheckBox.getValue()) {
-                var irixJson = {};
-                var mapfishPrint = [];
+                var irixCheckBox = view.down('[name="irix-fieldset-checkbox"]');
+                if (irixCheckBox && irixCheckBox.getValue()) {
+                    var irixJson = {};
+                    var mapfishPrint = [];
 
-                if (view.isValid()) {
-                    spec.outputFormat = format;
-                    mapfishPrint[0] = spec;
-                    irixJson = view.setUpIrixJson(mapfishPrint);
+                    if (view.isValid()) {
+                        spec.outputFormat = format;
+                        mapfishPrint[0] = spec;
+                        irixJson = view.setUpIrixJson(mapfishPrint);
 
-                    var hookedIrixAttributes = Ext.clone(irixJson);
+                        var hookedIrixAttributes = Ext.clone(irixJson);
 
-                    Koala.util.Hooks.executeBeforePostHook(view, hookedIrixAttributes.irix);
+                        Koala.util.Hooks.executeBeforePostHook(view, hookedIrixAttributes.irix);
 
-                    url = view.getIrixUrl();
+                        url = view.getIrixUrl();
+                        Ext.Ajax.request({
+                            url: url,
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            jsonData: hookedIrixAttributes,
+                            scope: view,
+                            success: view.irixPostSuccessHandler,
+                            failure: view.genericPostFailureHandler,
+                            timeout: view.getTimeoutMilliseconds()
+                        });
+                    }
+                } else {
+                    var startTime = new Date().getTime();
                     Ext.Ajax.request({
-                        url: url,
+                        url: view.getUrl() + app + '/report.' + format,
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        jsonData: hookedIrixAttributes,
+                        jsonData: Ext.encode(spec),
                         scope: view,
-                        success: view.irixPostSuccessHandler,
+                        success: function(response) {
+                            var data = Ext.decode(response.responseText);
+                            view.setLoading(format + ' ' +
+                            view.getViewModel().get('downloadOngoingMiddleText'));
+                            view.downloadWhenReady(startTime, data);
+                        },
                         failure: view.genericPostFailureHandler,
                         timeout: view.getTimeoutMilliseconds()
                     });
                 }
-            } else {
-                var startTime = new Date().getTime();
-                Ext.Ajax.request({
-                    url: view.getUrl() + app + '/report.' + format,
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    jsonData: Ext.encode(spec),
-                    scope: view,
-                    success: function(response) {
-                        var data = Ext.decode(response.responseText);
-                        view.setLoading(format + ' ' +
-                            view.getViewModel().get('downloadOngoingMiddleText'));
-                        view.downloadWhenReady(startTime, data);
-                    },
-                    failure: view.genericPostFailureHandler,
-                    timeout: view.getTimeoutMilliseconds()
-                });
-            }
+            });
         });
     },
 
