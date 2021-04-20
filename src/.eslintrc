@@ -44,7 +44,8 @@
         "Uint8Array": true,
         "window": true,
         "XMLHttpRequest": true,
-        "XMLSerializer": false
+        "XMLSerializer": false,
+        "URL": true
     },
     "rules": {
         "comma-dangle": 2,
