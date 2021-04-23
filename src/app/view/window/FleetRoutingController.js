@@ -343,21 +343,24 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         var jobsStore = view.down('k-grid-routing-jobs').getStore();
         var jobs = jobsStore.getVroomArray();
 
-        // /**
-        //  * workaround to force usage of all vehicles at hand
-        //  * and evenly distribute jobs amongst vehicles
-        //  */
-        // var jobCount = jobs.length;
-        // var vehicleCount = vehicles.length;
-        // //var vehicleCapacity = Math.ceil(1.2 * jobCount / vehicleCount);
-        // var vehicleCapacity = Math.ceil(jobCount - vehicleCount);
-        // for (var i = 0; i < jobCount; i++) {
-        //     jobs[i]['delivery'] = [1];
-        // }
-        // for (var i = 0; i < vehicleCount; i++) {
-        //     vehicles[i]['capacity'] = [vehicleCapacity];
-        // }
+        var routingAlgorithm = vm.get('routingAlgorithm');
 
+        if (routingAlgorithm === 'forceAll') {
+            // Workaround to force usage of all vehicles at hand
+            // and evenly distribute jobs amongst vehicles.
+            // Inspired by https://github.com/VROOM-Project/vroom-frontend/blob/06d6f401aa30e17fc0fd65ed70cb7b44d38a744c/src/utils/solution_handler.js#L18-L26
+            // and https://github.com/VROOM-Project/vroom/issues/329.
+            var jobCount = jobs.length;
+            var vehicleCount = vehicles.length;
+            var vehicleCapacity = Math.ceil(1.2 * jobCount / vehicleCount);
+            // var vehicleCapacity = Math.ceil(jobCount - vehicleCount);
+            Ext.Array.each(jobs, function(job) {
+                job['delivery'] = [1];
+            });
+            Ext.Array.each(vehicles, function(vehicle) {
+                vehicle['capacity'] = [vehicleCapacity];
+            });
+        }
 
         var avoidArea = me.getAvoidAreaGeometry();
 

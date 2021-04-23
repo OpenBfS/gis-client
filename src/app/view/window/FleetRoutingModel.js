@@ -89,7 +89,9 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
             distance: '',
             startTime: '',
             arrivalTime: '',
-            settingsTitle: ''
+            settingsTitle: '',
+            routingAlgorithmClassicTooltip: '',
+            routingAlgorithmForceAllTooltip: ''
         },
         routingProfile: 'driving-car',
         routeStyle: undefined,
@@ -109,6 +111,7 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
         routingOpts: null,
         language: 'de',
         showRoutingInstructions: false,
-        deleteAvoidAreaButtonVisible: false
+        deleteAvoidAreaButtonVisible: false,
+        routingAlgorithm: 'classic'
     }
 });
