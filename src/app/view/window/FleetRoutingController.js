@@ -952,11 +952,20 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         vm.set('disableOptimizeRoute', false);
     },
 
+    /**
+     * Handler for the file button.
+     * @param {Ext.Component} field The file input field.
+     */
     afterJobUploadRender: function(field) {
         var me = this;
         field.fileInputEl.on('change', me.handleJobUpload.bind(me));
     },
 
+    /**
+     * Handle the job upload.
+     *
+     * @param {Ext.event.Event} evt The change event of the upload button.
+     */
     handleJobUpload: function(evt) {
         var me = this;
         var view = me.getView();
