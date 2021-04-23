@@ -1049,7 +1049,9 @@
                     "distance": "Distance",
                     "startTime": "Starting time",
                     "arrivalTime": "Arrival time",
-                    "settingsTitle": "Settings"
+                    "settingsTitle": "Settings",
+                    "routingAlgorithmClassicTooltip": "Necessary vehicles",
+                    "routingAlgorithmForceAllTooltip": "Force all vehicles"
                 }
             }
         }

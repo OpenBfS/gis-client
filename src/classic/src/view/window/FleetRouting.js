@@ -24,6 +24,7 @@ Ext.define('Koala.view.window.FleetRouting', {
         'Ext.container.Container',
         'Ext.form.field.ComboBox',
         'Ext.button.Button',
+        'Ext.button.Segmented',
         'Ext.drag.Target',
         'Ext.drag.Source',
         'Ext.menu.Menu',
@@ -75,6 +76,30 @@ Ext.define('Koala.view.window.FleetRouting', {
             title: '{i18n.settingsTitle}'
         },
         fbar: [{
+            xtype: 'segmentedbutton',
+            name: 'routingAlgorithmButton',
+            bind: {
+                value: '{routingAlgorithm}'
+            },
+            defaults: {
+                padding: '3 10'
+            },
+            items: [{
+                iconCls: 'fa fa-angle-up',
+                value: 'classic',
+                bind: {
+                    tooltip: '{i18n.routingAlgorithmClassicTooltip}',
+                    pressed: '{routingAlgorithm === "classic"}'
+                }
+            }, {
+                iconCls: 'fa fa-angle-double-up',
+                value: 'forceAll',
+                bind: {
+                    tooltip: '{i18n.routingAlgorithmForceAllTooltip}',
+                    pressed: '{routingAlgorithm === "forceAll"}'
+                }
+            }]
+        }, {
             xtype: 'k-button-avoidarea'
         },{
             xtype: 'button',
