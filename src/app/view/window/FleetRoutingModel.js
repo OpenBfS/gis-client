@@ -75,6 +75,8 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
             errorNoPolygonChosen: '',
             errorFleetRouting: '',
             errorInvalidJobsJson: '',
+            infoImportedJobs: '',
+            infoInvalidJobs: '',
             addJobContextText: '',
             addVehicleContextText: '',
             setCurrentJobContextText: '',

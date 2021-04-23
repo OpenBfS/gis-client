@@ -988,6 +988,22 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                         return Ext.isArray(job.location) && job.location.length === 2;
                     });
 
+                    var msg = Ext.String.format(
+                        vm.get('i18n.infoImportedJobs'),
+                        jobsWithLocations.length,
+                        jobs.length
+                    );
+
+                    if (jobsWithLocations.length !== jobs.length) {
+                        var invalidMsg = Ext.String.format(
+                            vm.get('i18n.infoInvalidJobs'),
+                            jobs.length - jobsWithLocations.length
+                        );
+                        msg += ' ' + invalidMsg;
+                    }
+
+                    Ext.toast(msg);
+
                     var queue = Ext.Promise.resolve();
 
                     Ext.Array.each(jobsWithLocations, function(job, i) {

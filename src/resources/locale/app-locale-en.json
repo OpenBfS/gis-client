@@ -1029,6 +1029,8 @@
                     "errorDownloadRoute": "Download failed.",
                     "errorFleetRouting" : "Could not load routes.",
                     "errorInvalidJobsJson": "Could not load targets. Invalid file.",
+                    "infoImportedJobs": "Loaded {0} of {1} targets successfully.",
+                    "infoInvalidJobs": "Found {0} invalid targets.",
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Driving",
                     "profileBycicleText": "Cycling",

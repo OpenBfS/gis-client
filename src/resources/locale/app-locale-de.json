@@ -1010,6 +1010,8 @@
                     "profileWalkingText": "Zu Fuß",
                     "errorFleetRouting" : "Die Routen konnten nicht geladen werden.",
                     "errorInvalidJobsJson": "Ziele konnten nicht geladen werden. Datei invalide.",
+                    "infoImportedJobs": "{0} von {1} Zielen erfolgreich geladen.",
+                    "infoInvalidJobs": "{0} invalide Ziele gefunden.",
                     "addJobContextText": "Neues Ziel hinzufügen",
                     "addVehicleContextText": "Neues Fahrzeug hinzufügen",
                     "setCurrentJobContextText": "Als aktuelles Ziel setzen",
