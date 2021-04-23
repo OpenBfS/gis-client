@@ -416,6 +416,12 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                 profile: vm.get('routingProfile')
             });
 
+            // Remove preference property if it is null,
+            // otherwise computing the route will fail.
+            if (orsParams.preference === null) {
+                delete orsParams.preference;
+            }
+
             var orsUtil = Koala.util.OpenRouteService;
             return orsUtil.requestDirectionsApi(orsParams);
         }))
