@@ -85,8 +85,8 @@ describe('Koala.util.Routing', function() {
             it('is a function', function() {
                 expect(Koala.util.Routing.parseCurrentHash).to.be.a('function');
             });
-            it('is returns an object representation of the location hash', function() {
-                window.location.hash = '#map/5754301/6637890/10|layers/%7B%2283cb1604-3d8c-490b-b807-5e7cb17f3b22%22%3A%7B%22isVisible%22%3A1%2C%22filters%22%3A%5B%7B%22type%22%3A%22pointintime%22%2C%22effectivedatetime%22%3A1476662400000%7D%5D%7D%7D|';
+            it('returns an object representation of the location hash', function() {
+                window.location.hash = '#map/5754301/6637890/10%7Clayers/%7B%2283cb1604-3d8c-490b-b807-5e7cb17f3b22%22%3A%7B%22isVisible%22%3A1%2C%22filters%22%3A%5B%7B%22type%22%3A%22pointintime%22%2C%22effectivedatetime%22%3A1476662400000%7D%5D%7D%7D%7C';
                 var parsedHash = Koala.util.Routing.parseCurrentHash();
                 expect(parsedHash).to.have.keys('map', 'layers');
                 expect(parsedHash.map).to.eql({0: 5754301, 1: 6637890, 2: 10});
