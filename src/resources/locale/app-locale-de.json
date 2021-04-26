@@ -1009,7 +1009,7 @@
                     "profileBycicleText": "Mit dem Fahrrad",
                     "profileWalkingText": "Zu Fuß",
                     "errorFleetRouting" : "Die Routen konnten nicht geladen werden.",
-                    "errorInvalidJobsJson": "Ziele konnten nicht geladen werden. Datei invalide.",
+                    "errorInvalidJobsJson": "Ziele konnten nicht geladen werden. Die Datei ist invalide.",
                     "infoImportedJobs": "{0} von {1} Zielen erfolgreich geladen.",
                     "infoInvalidJobs": "{0} invalide Ziele gefunden.",
                     "addJobContextText": "Neues Ziel hinzufügen",

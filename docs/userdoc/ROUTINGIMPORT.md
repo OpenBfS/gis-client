@@ -1,11 +1,11 @@
 # Routing Import {#routingimport}
 
-Das Flottenrouting stellt die Möglichkeit bereit Ziele über eine JSON-Datei zu importieren.
+Das Flottenrouting stellt die Möglichkeit bereit, Ziele über eine JSON-Datei zu importieren.
 
 ## Ziele importieren {#importjobs}
 
 Die hochzuladende JSON-Datei muss für den Import von Zielen der Struktur des unten stehenden Beispiels entsprechen.
-Hierbei entspricht die Struktur einer einzelnen Route der OpenRouteService Spezifikation.
+Hierbei entspricht die Struktur einer einzelnen Route der [VROOM Spezifikation eines Jobs](https://github.com/VROOM-Project/vroom/blob/master/docs/API.md#jobs).
 Dementsprechend muss für jedes Ziel mindestens das Attribut `location` angegeben werden.
 
 Beispiel (2 Ziele - 1. Ziel verpflichtende Attribute; 2. Ziel alle unterstützten Attribute):

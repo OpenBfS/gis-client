@@ -977,7 +977,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             return;
         }
 
-        var geocoding = Koala.util.Geocoding;
+        var GeocodingUtil = Koala.util.Geocoding;
 
         var waypoints = vm.get('waypoints');
         var routingJobs = vm.get('routingjobs');
@@ -989,7 +989,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             file.text()
                 .then(function(text) {
 
-                    var json = JSON.parse(text);
+                    var json = Ext.JSON.decode(text);
                     var jobs = json.jobs || [];
 
                     // we only work with jobs with locations and ignore all others
@@ -1021,7 +1021,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                         queue = queue
                             .then(function(resultJson) {
                                 if (!resultJson) {
-                                    return geocoding.doReverseGeocoding(job.location[0], job.location[1], language);
+                                    return GeocodingUtil.doReverseGeocoding(job.location[0], job.location[1], language);
                                 }
 
                                 var features = resultJson.features;
@@ -1029,7 +1029,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                                     throw new Error();
                                 }
 
-                                var placeName = geocoding.createPlaceString(features[0].properties);
+                                var placeName = GeocodingUtil.createPlaceString(features[0].properties);
 
                                 prevJob.address = {
                                     address: placeName,
@@ -1037,7 +1037,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                                     longitude: prevJob.location[0]
                                 };
 
-                                return geocoding.doReverseGeocoding(job.location[0], job.location[1], language);
+                                return GeocodingUtil.doReverseGeocoding(job.location[0], job.location[1], language);
 
                             })
                             .catch(function() {
@@ -1051,7 +1051,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                                         longitude: prevJob.location[0]
                                     };
                                 }
-                                return geocoding.doReverseGeocoding(job.location[0], job.location[1], language);
+                                return GeocodingUtil.doReverseGeocoding(job.location[0], job.location[1], language);
                             });
                     });
 
@@ -1063,7 +1063,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                                 throw new Error();
                             }
 
-                            var placeName = geocoding.createPlaceString(features[0].properties);
+                            var placeName = GeocodingUtil.createPlaceString(features[0].properties);
 
                             var prevJob = jobsWithLocations[jobsWithLocations.length - 1];
                             prevJob.address = {
