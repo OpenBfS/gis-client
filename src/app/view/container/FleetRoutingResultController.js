@@ -45,13 +45,23 @@ Ext.define('Koala.view.container.FleetRoutingResultController', {
      */
     onOptimizationResultAvailable: function(fleetSummary, orsRoutes) {
         var me = this;
+        var view = me.getView();
+
+        if (!view) {
+            return;
+        }
+
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
 
         me.clearRoutingSummaries();
         me.clearFleetSummary();
         me.removeAllRoutesFromMap();
         me.addFleetSummary(fleetSummary);
 
-        var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
+        var jobStore = vm.get('routingjobs');
         if (!jobStore) {
             return;
         }
@@ -142,7 +152,17 @@ Ext.define('Koala.view.container.FleetRoutingResultController', {
      */
     addJobSummary: function(vroomRoute) {
         var me = this;
-        var jobStore = me.getView().up('window').down('k-grid-routing-jobs').getStore();
+        var view = me.getView();
+        if (view) {
+            return;
+        }
+
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        var jobStore = vm.get('routingjobs');
         if (!jobStore) {
             return;
         }

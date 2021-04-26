@@ -22,6 +22,7 @@ Ext.define('Koala.view.grid.RoutingJobs', {
 
     requires: [
         'Ext.grid.column.Action',
+        'Ext.form.field.FileButton',
         'Ext.Array',
         'BasiGX.util.Animate',
         'Koala.view.window.RoutingJob',
@@ -38,7 +39,8 @@ Ext.define('Koala.view.grid.RoutingJobs', {
                 descriptionColumnText: '',
                 editJobTooltip: '',
                 addJobTooltip: '',
-                removeJobTooltip: ''
+                removeJobTooltip: '',
+                uploadTooltip: ''
             }
         }
     },
@@ -137,6 +139,15 @@ Ext.define('Koala.view.grid.RoutingJobs', {
     },
 
     buttons: [{
+        xtype: 'filebutton',
+        iconCls: 'fa fa-upload',
+        bind: {
+            tooltip: '{i18n.uploadTooltip}'
+        },
+        listeners: {
+            afterrender: 'afterJobUploadRender'
+        }
+    }, {
         iconCls: 'fa fa-plus',
         bind: {
             tooltip: '{i18n.addJobTooltip}'

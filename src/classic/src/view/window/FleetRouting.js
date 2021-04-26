@@ -104,8 +104,8 @@ Ext.define('Koala.view.window.FleetRouting', {
         },{
             xtype: 'button',
             name: 'optimizeRouteButton',
-            disabled: true,
             bind: {
+                disabled: '{disableOptimizeRoute}',
                 text: '{i18n.computeFleetRoutingButtonText}'
             },
             handler: 'optimizeRoute'

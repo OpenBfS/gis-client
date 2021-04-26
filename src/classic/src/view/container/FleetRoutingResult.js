@@ -138,7 +138,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                         var vm = this.lookupViewModel();
                         var unassigned = rec.get('unassigned');
                         var unassignedJobIds = rec.get('unassignedJobs');
-                        var jobsStore = this.up('k-window-fleet-routing').down('k-grid-routing-jobs').getStore();
+                        var jobsStore = vm.get('routingjobs');
                         var unassignedJobs = [];
                         if (jobsStore) {
                             unassignedJobs = Ext.Array.map(unassignedJobIds, function(jobId) {
@@ -232,9 +232,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                             return;
                         }
 
-                        var jobsStore = this.up('k-window-fleet-routing')
-                            .down('k-grid-routing-jobs')
-                            .getStore();
+                        var jobsStore = vm.get('routingjobs');
 
                         var vehiclesStore = this.up('k-window-fleet-routing')
                             .down('k-grid-routing-vehicles')

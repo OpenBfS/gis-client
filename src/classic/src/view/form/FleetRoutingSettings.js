@@ -39,7 +39,10 @@ Ext.define('Koala.view.form.FleetRoutingSettings', {
 
     items: [{
         xtype: 'k-grid-routing-jobs',
-        cls: 'routing-brighter-panel'
+        cls: 'routing-brighter-panel',
+        bind: {
+            store: '{routingjobs}'
+        }
     }, {
         xtype: 'k-grid-routing-vehicles',
         cls: 'routing-brighter-panel'
