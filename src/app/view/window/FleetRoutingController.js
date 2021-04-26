@@ -989,8 +989,13 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             file.text()
                 .then(function(text) {
 
-                    var json = Ext.JSON.decode(text);
-                    var jobs = json.jobs || [];
+                    var jobs = Ext.JSON.decode(text);
+
+                    if (!Ext.isArray(jobs)) {
+                        Ext.log.warn(vm.get('i18n.errorInvalidJobsJson'));
+                        Ext.toast(vm.get('i18n.errorInvalidJobsJson'));
+                        return;
+                    }
 
                     // we only work with jobs with locations and ignore all others
                     var jobsWithLocations = Ext.Array.filter(jobs, function(job) {
@@ -1091,7 +1096,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                         });
 
                 }).catch(function(err) {
-                    var str = vm.get('errorInvalidJobsJson');
+                    var str = vm.get('i18n.errorInvalidJobsJson');
                     Ext.log.warn(str + err);
                     Ext.toast(str);
                 });

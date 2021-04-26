@@ -23,6 +23,7 @@ Ext.define('Koala.view.grid.RoutingJobs', {
     requires: [
         'Ext.grid.column.Action',
         'Ext.form.field.FileButton',
+        'Ext.button.Button',
         'Ext.Array',
         'BasiGX.util.Animate',
         'Koala.view.window.RoutingJob',
@@ -40,7 +41,8 @@ Ext.define('Koala.view.grid.RoutingJobs', {
                 editJobTooltip: '',
                 addJobTooltip: '',
                 removeJobTooltip: '',
-                uploadTooltip: ''
+                uploadTooltip: '',
+                downloadTooltip: ''
             }
         }
     },
@@ -148,6 +150,27 @@ Ext.define('Koala.view.grid.RoutingJobs', {
             afterrender: 'afterJobUploadRender'
         }
     }, {
+        xtype: 'button',
+        iconCls: 'fa fa-download',
+        bind: {
+            tooltip: '{i18n.downloadTooltip}'
+        },
+        handler: function(btn) {
+            var grid = btn.up('k-grid-routing-jobs');
+            var jobsStore = grid.getStore();
+            var jobs = jobsStore.getVroomArray();
+            var blob = new Blob([JSON.stringify(jobs)]);
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'jobs.json';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        }
+    }, '->', {
         iconCls: 'fa fa-plus',
         bind: {
             tooltip: '{i18n.addJobTooltip}'

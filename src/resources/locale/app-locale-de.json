@@ -537,7 +537,8 @@
                     "priorityColumnText": "Priorität",
                     "addressColumnText": "Adresse",
                     "descriptionColumnText": "Beschreibung",
-                    "uploadTooltip": "Ziele hochladen"
+                    "uploadTooltip": "Ziele hochladen",
+                    "downloadTooltip": "Ziele herunterladen"
                 }
             }
         }
