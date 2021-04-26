@@ -56,11 +56,6 @@ Ext.define('Koala.view.form.LayerFilter', {
     listeners: {
         beforerender: 'onBeforeRenderLayerFilterForm',
         beforedestroy: 'onBeforeDestroyLayerFilterForm'
-        //enable text selection
-        // afterlayout: function() {
-        //     this.el.selectable();
-        //     this.el.select('.x-unselectable').selectable();
-        // }
     },
 
     config: {
@@ -100,6 +95,7 @@ Ext.define('Koala.view.form.LayerFilter', {
 
         var hasTimeFilter = false;
         var hasPointInTimeFilter = false;
+        var timeFilter;
 
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || '').toLowerCase();
@@ -107,11 +103,13 @@ Ext.define('Koala.view.form.LayerFilter', {
                 case 'timerange':
                     me.addTimeRangeFilter(filter, idx);
                     hasTimeFilter = true;
+                    timeFilter = filter;
                     break;
                 case 'pointintime':
                     me.addPointInTimeFilter(filter, idx);
                     hasTimeFilter = true;
                     hasPointInTimeFilter = true;
+                    timeFilter = filter;
                     break;
                 case 'rodostime':
                 case 'value':
@@ -124,6 +122,60 @@ Ext.define('Koala.view.form.LayerFilter', {
         });
 
         if (hasTimeFilter) {
+            var div;
+            var timeSelectConfig = {
+                data: [],
+                resolution: 10,
+                duration: 60 * 60 * 24 * 20 * 1000,
+                color: '#00ff00'
+            };
+            var chartConfig = {
+                components: [new D3Util.TimeSelectComponent(timeSelectConfig)],
+                size: [400, 200]
+            };
+            me.add({
+                xtype: 'button',
+                iconCls: 'x-fa fa-angle-left',
+                handler: function() {
+                    timeSelectConfig.page = Math.max(0, timeSelectConfig.page - 1);
+                    chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
+                    me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
+                    me.chartRenderer.render(div.el.dom.querySelector('.timeselect-container'));
+                }
+            });
+            me.add({
+                xtype: 'button',
+                iconCls: 'x-fa fa-angle-right',
+                handler: function() {
+                    timeSelectConfig.page = Math.min(me.timeSelectComponent.getPages(), timeSelectConfig.page + 1);
+                    chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
+                    me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
+                    me.chartRenderer.render(div.el.dom.querySelector('.timeselect-container'));
+                }
+            });
+            div = me.add({
+                html: '<div class="timeselect-container"></div>',
+                height: 200,
+                cls: 'timeselect',
+                bodyCls: 'timeselect'
+            });
+            window.setTimeout(function() {
+                div.setLoading(true);
+            }, 0);
+            this.getController().requestAvailableValues(timeFilter.param, function(xhr) {
+                var response = JSON.parse(xhr.responseText);
+                var data = [];
+                Ext.each(response, function(d) {
+                    data.push(new Date(d.val).getTime());
+                });
+                data.sort();
+                timeSelectConfig.data = data;
+                timeSelectConfig.page = 0;
+                chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
+                me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
+                me.chartRenderer.render(div.el.dom.querySelector('.timeselect-container'));
+                div.setLoading(false);
+            });
             var autorefresh = me.getAutorefreshCheckbox();
             me.add(autorefresh);
             var dropdown = me.getAutorefreshDropdown();
