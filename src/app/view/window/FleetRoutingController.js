@@ -1043,7 +1043,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                             .catch(function() {
                                 if (prevJob) {
                                     var str = 'Could not get placeName of job.';
-                                    Ext.Logger.log(str);
+                                    Ext.log.warn(str);
 
                                     prevJob.address = {
                                         address: prevJob.location[0] + ', ' + prevJob.location[1],
@@ -1074,7 +1074,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                         })
                         .catch(function() {
                             var str = 'Could not get placeName of job.';
-                            Ext.Logger.log(str);
+                            Ext.log.warn(str);
 
                             var prevJob = jobsWithLocations[jobsWithLocations.length - 1];
                             prevJob.address = {
@@ -1092,7 +1092,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
                 }).catch(function(err) {
                     var str = vm.get('errorInvalidJobsJson');
-                    Ext.Logger.log(str + err);
+                    Ext.log.warn(str + err);
                     Ext.toast(str);
                 });
 
