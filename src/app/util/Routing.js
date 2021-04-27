@@ -376,7 +376,8 @@ Ext.define('Koala.util.Routing', {
          */
         parseCurrentHash: function() {
             var hash = window.location.hash.replace('#', '');
-            var hashParts = hash.split('|');
+            // %7C represents the uri encoded character for '|'
+            var hashParts = hash.split('%7C');
             var routeObj = {};
             Ext.each(hashParts, function(part) {
                 var partParts = part.split('/');
@@ -493,10 +494,12 @@ Ext.define('Koala.util.Routing', {
                 var rodosProjectString = 'rodosproject/' + rodosProjectUuid;
             }
 
-            var hash = Ext.String.format('{0}|{1}|{2}',
+            var pipe = encodeURIComponent('|');
+            var hash = Ext.String.format('{0}{3}{1}{3}{2}',
                 mapString,
                 layersString,
-                rodosProjectString);
+                rodosProjectString,
+                pipe);
 
             return hash;
         },
