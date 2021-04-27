@@ -23,6 +23,7 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
     requires: [
         'Ext.grid.column.Action',
         'Ext.button.Button',
+        'Ext.button.Segmented',
         'BasiGX.util.Animate',
         'Koala.view.window.RoutingVehicle',
         'Koala.store.RoutingVehicles',
@@ -150,35 +151,42 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
     buttons: [{
         xtype: 'k-button-routing-profile'
     }, '->', {
-        xtype: 'filebutton',
-        iconCls: 'fa fa-upload',
-        bind: {
-            tooltip: '{i18n.uploadTooltip}'
+        xtype: 'segmentedbutton',
+        allowToggle: false,
+        defaults: {
+            padding: '3 10'
         },
-        listeners: {
-            afterrender: 'afterVehicleUploadRender'
-        }
-    }, {
-        xtype: 'button',
-        iconCls: 'fa fa-download',
-        bind: {
-            tooltip: '{i18n.downloadTooltip}'
-        },
-        handler: function(btn) {
-            var grid = btn.up('k-grid-routing-vehicles');
-            var vehiclesStore = grid.getStore();
-            var vehicles = vehiclesStore.getVroomArray();
-            var blob = new Blob([JSON.stringify(vehicles)]);
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'vehicles.json';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
-        }
+        items: [{
+            xtype: 'filebutton',
+            iconCls: 'fa fa-upload',
+            bind: {
+                tooltip: '{i18n.uploadTooltip}'
+            },
+            listeners: {
+                afterrender: 'afterVehicleUploadRender'
+            }
+        }, {
+            xtype: 'button',
+            iconCls: 'fa fa-download',
+            bind: {
+                tooltip: '{i18n.downloadTooltip}'
+            },
+            handler: function(btn) {
+                var grid = btn.up('k-grid-routing-vehicles');
+                var vehiclesStore = grid.getStore();
+                var vehicles = vehiclesStore.getVroomArray();
+                var blob = new Blob([JSON.stringify(vehicles)]);
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'vehicles.json';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            }
+        }]
     }, {
         iconCls: 'fa fa-plus',
         bind: {

@@ -554,7 +554,7 @@
                     "endColumnText": "Zielort",
                     "addVehicleTooltip": "Fahrzeug hinzufügen",
                     "idColumnText": "Fahrzeug",
-                    "downloadTooltip": "Fahrzeuge herunterladen",
+                    "downloadTooltip": "Fahrzeuge exportieren",
                     "uploadTooltip": "Fahrzeuge importieren"
                 }
             }
