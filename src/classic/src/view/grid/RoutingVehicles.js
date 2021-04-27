@@ -22,6 +22,7 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
 
     requires: [
         'Ext.grid.column.Action',
+        'Ext.button.Button',
         'BasiGX.util.Animate',
         'Koala.view.window.RoutingVehicle',
         'Koala.store.RoutingVehicles',
@@ -37,7 +38,8 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                 startColumnText: '',
                 endColumnText: '',
                 addVehicleTooltip: '',
-                idColumnText: ''
+                idColumnText: '',
+                downloadTooltip: ''
             }
         }
     },
@@ -147,6 +149,27 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
     buttons: [{
         xtype: 'k-button-routing-profile'
     }, '->', {
+        xtype: 'button',
+        iconCls: 'fa fa-download',
+        bind: {
+            tooltip: '{i18n.downloadTooltip}'
+        },
+        handler: function(btn) {
+            var grid = btn.up('k-grid-routing-vehicles');
+            var vehiclesStore = grid.getStore();
+            var vehicles = vehiclesStore.getVroomArray();
+            var blob = new Blob([JSON.stringify(vehicles)]);
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'vehicles.json';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        }
+    }, {
         iconCls: 'fa fa-plus',
         bind: {
             tooltip: '{i18n.addVehicleTooltip}'

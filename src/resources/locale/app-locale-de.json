@@ -553,7 +553,8 @@
                     "startColumnText": "Startort",
                     "endColumnText": "Zielort",
                     "addVehicleTooltip": "Fahrzeug hinzufügen",
-                    "idColumnText": "Fahrzeug"
+                    "idColumnText": "Fahrzeug",
+                    "downloadTooltip": "Fahrzeuge herunterladen"
                 }
             }
         }
