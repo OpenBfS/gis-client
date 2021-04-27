@@ -550,7 +550,8 @@
                     "priorityColumnText": "Priority",
                     "addressColumnText": "Address",
                     "descriptionColumnText": "Description",
-                    "uploadTooltip": "Upload targets"
+                    "uploadTooltip": "Upload targets",
+                    "downloadTooltip": "Download targets"
                 }
             }
         }
