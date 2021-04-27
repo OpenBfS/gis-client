@@ -533,7 +533,8 @@
                     "startColumnText": "Starting location",
                     "endColumnText": "Ending location",
                     "addVehicleTooltip": "Add vehicle",
-                    "idColumnText": "Vehicle"
+                    "idColumnText": "Vehicle",
+                    "downloadTooltip":"Download vehicles"
                 }
             }
         }
