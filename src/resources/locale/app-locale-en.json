@@ -523,22 +523,6 @@
             }
         }
     },
-    "Koala.view.grid.RoutingVehicles": {
-        "config": {
-            "data": {
-                "i18n": {
-                    "title": "Vehicles",
-                    "emptyVehiclesText": "No vehicles created",
-                    "descriptionColumnText": "Description",
-                    "startColumnText": "Starting location",
-                    "endColumnText": "Ending location",
-                    "addVehicleTooltip": "Add vehicle",
-                    "idColumnText": "Vehicle",
-                    "downloadTooltip":"Download vehicles"
-                }
-            }
-        }
-    },
     "Koala.view.grid.RoutingJobs": {
         "config": {
             "data": {
@@ -551,8 +535,25 @@
                     "priorityColumnText": "Priority",
                     "addressColumnText": "Address",
                     "descriptionColumnText": "Description",
-                    "uploadTooltip": "Upload targets",
-                    "downloadTooltip": "Download targets"
+                    "uploadTooltip": "Import targets",
+                    "downloadTooltip": "Export targets"
+                }
+            }
+        }
+    },
+    "Koala.view.grid.RoutingVehicles": {
+        "config": {
+            "data": {
+                "i18n": {
+                    "title": "Vehicles",
+                    "emptyVehiclesText": "No vehicles created",
+                    "descriptionColumnText": "Description",
+                    "startColumnText": "Starting location",
+                    "endColumnText": "Ending location",
+                    "addVehicleTooltip": "Add vehicle",
+                    "idColumnText": "Vehicle",
+                    "uploadTooltip": "Import vehicles",
+                    "downloadTooltip": "Export vehicles"
                 }
             }
         }
@@ -1031,8 +1032,11 @@
                     "errorDownloadRoute": "Download failed.",
                     "errorFleetRouting" : "Could not load routes.",
                     "errorInvalidJobsJson": "Could not load targets. Invalid file.",
-                    "infoImportedJobs": "Loaded {0} of {1} targets successfully.",
-                    "infoInvalidJobs": "Found {0} invalid targets.",
+                    "errorInvalidVehiclesJson": "Could not load vehicles. Invalid file.",
+                    "infoImportedJobs": "Loaded {0} target(s).",
+                    "infoInvalidJobs": "{0} target(s) invalid.",
+                    "infoImportedVehicles": "Loaded {0} vehicle(s).",
+                    "infoInvalidVehicles": "{0} vehicle(s) invalid.",
                     "routingSummaryDetailsButton": "Details",
                     "profileCarText": "Driving",
                     "profileBycicleText": "Cycling",

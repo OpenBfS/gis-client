@@ -39,7 +39,8 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
                 endColumnText: '',
                 addVehicleTooltip: '',
                 idColumnText: '',
-                downloadTooltip: ''
+                downloadTooltip: '',
+                uploadTooltip: ''
             }
         }
     },
@@ -149,6 +150,15 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
     buttons: [{
         xtype: 'k-button-routing-profile'
     }, '->', {
+        xtype: 'filebutton',
+        iconCls: 'fa fa-upload',
+        bind: {
+            tooltip: '{i18n.uploadTooltip}'
+        },
+        listeners: {
+            afterrender: 'afterVehicleUploadRender'
+        }
+    }, {
         xtype: 'button',
         iconCls: 'fa fa-download',
         bind: {

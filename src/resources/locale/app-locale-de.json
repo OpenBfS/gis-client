@@ -537,8 +537,8 @@
                     "priorityColumnText": "Priorität",
                     "addressColumnText": "Adresse",
                     "descriptionColumnText": "Beschreibung",
-                    "uploadTooltip": "Ziele hochladen",
-                    "downloadTooltip": "Ziele herunterladen"
+                    "uploadTooltip": "Ziele importieren",
+                    "downloadTooltip": "Ziele exportieren"
                 }
             }
         }
@@ -554,7 +554,8 @@
                     "endColumnText": "Zielort",
                     "addVehicleTooltip": "Fahrzeug hinzufügen",
                     "idColumnText": "Fahrzeug",
-                    "downloadTooltip": "Fahrzeuge herunterladen"
+                    "downloadTooltip": "Fahrzeuge herunterladen",
+                    "uploadTooltip": "Fahrzeuge importieren"
                 }
             }
         }
@@ -1012,8 +1013,11 @@
                     "profileWalkingText": "Zu Fuß",
                     "errorFleetRouting" : "Die Routen konnten nicht geladen werden.",
                     "errorInvalidJobsJson": "Ziele konnten nicht geladen werden. Die Datei ist invalide.",
-                    "infoImportedJobs": "{0} von {1} Zielen erfolgreich geladen.",
-                    "infoInvalidJobs": "{0} invalide Ziele gefunden.",
+                    "errorInvalidVehiclesJson": "Fahrzeuge konnten nicht geladen werden. Die Datei ist invalide.",
+                    "infoImportedJobs": "{0} Ziel(e) importiert.",
+                    "infoInvalidJobs": "{0} Ziel(e) invalide.",
+                    "infoImportedVehicles": "{0} Fahrzeug(e) importiert.",
+                    "infoInvalidVehicles": "{0} Fahrzeug(e) invalide.",
                     "addJobContextText": "Neues Ziel hinzufügen",
                     "addVehicleContextText": "Neues Fahrzeug hinzufügen",
                     "setCurrentJobContextText": "Als aktuelles Ziel setzen",

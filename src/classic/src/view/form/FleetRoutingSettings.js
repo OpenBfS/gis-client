@@ -45,6 +45,9 @@ Ext.define('Koala.view.form.FleetRoutingSettings', {
         }
     }, {
         xtype: 'k-grid-routing-vehicles',
-        cls: 'routing-brighter-panel'
+        cls: 'routing-brighter-panel',
+        bind: {
+            store: '{routingvehicles}'
+        }
     }]
 });
