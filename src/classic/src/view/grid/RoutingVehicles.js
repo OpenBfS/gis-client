@@ -171,21 +171,7 @@ Ext.define('Koala.view.grid.RoutingVehicles', {
             bind: {
                 tooltip: '{i18n.downloadTooltip}'
             },
-            handler: function(btn) {
-                var grid = btn.up('k-grid-routing-vehicles');
-                var vehiclesStore = grid.getStore();
-                var vehicles = vehiclesStore.getVroomArray();
-                var blob = new Blob([JSON.stringify(vehicles)]);
-                var url = window.URL.createObjectURL(blob);
-                var a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = 'vehicles.json';
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                a.remove();
-            }
+            handler: 'exportVehicles'
         }]
     }, {
         iconCls: 'fa fa-plus',

@@ -22,7 +22,8 @@ Ext.define('Koala.view.container.RoutingResultController', {
 
     requires: [
         'BasiGX.util.Layer',
-        'Koala.util.Geocoding'
+        'Koala.util.Geocoding',
+        'Koala.util.Export'
     ],
 
     modifyInteraction: undefined,
@@ -624,24 +625,15 @@ Ext.define('Koala.view.container.RoutingResultController', {
         // modifiy original query
         query['format'] = item.downloadType;
 
+        var exportFile = Koala.util.Export.exportFile;
+
         var onSuccess = function(res) {
-            var blob;
+            var filename = 'route.' + item.downloadType;
             if (item.downloadType === 'gpx') {
-                blob = new Blob([res], {
-                    type: 'application/xml;charset=utf-8'
-                });
+                exportFile(res, filename, 'application/xml;charset=utf-8');
             } else {
-                blob = new Blob([JSON.stringify(res)]);
+                exportFile(JSON.stringify(res), filename);
             }
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'route.' + item.downloadType;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
         };
 
         var onError = function(err) {

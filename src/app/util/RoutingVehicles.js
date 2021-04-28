@@ -21,6 +21,7 @@
 Ext.define('Koala.util.RoutingVehicles', {
 
     requires: [
+        'Ext.Array',
         'Ext.Promise',
         'Koala.util.Geocoding'
     ],
@@ -40,18 +41,18 @@ Ext.define('Koala.util.RoutingVehicles', {
             var hasStart = Ext.isArray(vehicle.start) && vehicle.start.length === 2;
             var hasEnd = Ext.isArray(vehicle.end) && vehicle.end.length === 2;
 
-            var GeocodingUtil = Koala.util.Geocoding;
+            var doReverseGeocoding = Koala.util.Geocoding.doReverseGeocoding;
 
             if (hasStart && hasEnd) {
                 var res = [];
-                return GeocodingUtil.doReverseGeocoding(vehicle.start[0], vehicle.start[1], lang)
+                return doReverseGeocoding(vehicle.start[0], vehicle.start[1], lang)
                     .catch(function() {
                         res[0] = null;
-                        return GeocodingUtil.doReverseGeocoding(vehicle.end[0], vehicle.end[1], lang);
+                        return doReverseGeocoding(vehicle.end[0], vehicle.end[1], lang);
                     })
                     .then(function(response) {
                         res[0] = response;
-                        return GeocodingUtil.doReverseGeocoding(vehicle.end[0], vehicle.end[1], lang);
+                        return doReverseGeocoding(vehicle.end[0], vehicle.end[1], lang);
                     })
                     .catch(function() {
                         res[1] = null;
@@ -62,12 +63,12 @@ Ext.define('Koala.util.RoutingVehicles', {
                         return Ext.Promise.resolve(res);
                     });
             } else if (hasStart) {
-                return GeocodingUtil.doReverseGeocoding(vehicle.start[0], vehicle.start[1], lang)
+                return doReverseGeocoding(vehicle.start[0], vehicle.start[1], lang)
                     .then(function(response) {
                         return Ext.Promise.resolve([response, undefined]);
                     });
             } else if (hasEnd) {
-                return GeocodingUtil.doReverseGeocoding(vehicle.end[0], vehicle.end[1], lang)
+                return doReverseGeocoding(vehicle.end[0], vehicle.end[1], lang)
                     .then(function(response) {
                         return Ext.Promise.resolve([undefined, response]);
                     });
@@ -83,7 +84,7 @@ Ext.define('Koala.util.RoutingVehicles', {
          * @param {Object[]} geocodingLocations Response objects of the geocoding request.
          */
         setStartEndFromGeocoding: function(vehicle, geocodingLocations) {
-            var GeocodingUtil = Koala.util.Geocoding;
+            var createPlaceString = Koala.util.Geocoding.createPlaceString;
 
             var startLocation = geocodingLocations[0];
             var endLocation = geocodingLocations[1];
@@ -95,7 +96,7 @@ Ext.define('Koala.util.RoutingVehicles', {
                 };
                 if (startLocation !== null) {
                     vehicle.start.address =
-                        GeocodingUtil.createPlaceString(startLocation.features[0].properties);
+                        createPlaceString(startLocation.features[0].properties);
                 }
             }
             if (Ext.isArray(vehicle.end)) {
@@ -106,9 +107,26 @@ Ext.define('Koala.util.RoutingVehicles', {
                 };
                 if (endLocation !== null) {
                     vehicle.end.address =
-                        GeocodingUtil.createPlaceString(endLocation.features[0].properties);
+                        createPlaceString(endLocation.features[0].properties);
                 }
             }
+        },
+
+        /**
+         * Filter vehicles that have a location.
+         *
+         * This filters the vehicles that either have a valid 'start'
+         * or 'end' property.
+         *
+         * @param {Object[]} vehicles Array of vehicles to filter.
+         * @returns {Object[]} The filtered vehicles.
+         */
+        filterLocations: function(vehicles) {
+            return Ext.Array.filter(vehicles, function(vehicle) {
+                var hasStart = Ext.isArray(vehicle.start) && vehicle.start.length === 2;
+                var hasEnd = Ext.isArray(vehicle.end) && vehicle.end.length === 2;
+                return hasStart || hasEnd;
+            });
         }
     }
 });

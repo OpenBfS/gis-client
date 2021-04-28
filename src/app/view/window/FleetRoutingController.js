@@ -25,6 +25,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         'Koala.util.OpenRouteService',
         'Koala.util.Geocoding',
         'Koala.util.RoutingVehicles',
+        'Koala.util.Export',
         'BasiGX.util.Layer'
     ],
 
@@ -1143,6 +1144,9 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         view.setLoading(true);
 
         var RoutingVehiclesUtil = Koala.util.RoutingVehicles;
+        var filterLocations = RoutingVehiclesUtil.filterLocations;
+        var getGeocodingLocations = RoutingVehiclesUtil.getGeocodingLocations;
+        var setStartEndFromGeocoding = RoutingVehiclesUtil.setStartEndFromGeocoding;
 
         var routingVehicles = vm.get('routingvehicles');
         var language = vm.get('language');
@@ -1168,11 +1172,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     }
 
                     // we only work with vehicles with locations and ignore all others
-                    var vehiclesWithLocations = Ext.Array.filter(vehicles, function(vehicle) {
-                        var hasStart = Ext.isArray(vehicle.start) && vehicle.start.length === 2;
-                        var hasEnd = Ext.isArray(vehicle.end) && vehicle.end.length === 2;
-                        return hasStart || hasEnd;
-                    });
+                    var vehiclesWithLocations = filterLocations(vehicles);
 
                     // we have to delete existing ids to avoid conflicts in the store
                     Ext.Array.each(vehiclesWithLocations, function(vehicle) {
@@ -1199,7 +1199,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                         queue = queue
                             .then(function(resultArray) {
                                 if (!resultArray || !Ext.isArray(resultArray)) {
-                                    return RoutingVehiclesUtil.getGeocodingLocations(vehicle, language);
+                                    return getGeocodingLocations(vehicle, language);
                                 }
                                 if (resultArray[0] === null) {
                                     Ext.log.warn('Could not get placeName of starting location.');
@@ -1208,9 +1208,9 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                                     Ext.log.warn('Could not get placeName of ending location.');
                                 }
 
-                                RoutingVehiclesUtil.setStartEndFromGeocoding(prevVehicle, resultArray);
+                                setStartEndFromGeocoding(prevVehicle, resultArray);
 
-                                return RoutingVehiclesUtil.getGeocodingLocations(vehicle, language);
+                                return getGeocodingLocations(vehicle, language);
                             });
                     });
 
@@ -1225,7 +1225,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
                             var prevVehicle = vehiclesWithLocations[vehiclesWithLocations.length - 1];
 
-                            RoutingVehiclesUtil.setStartEndFromGeocoding(prevVehicle, resultArray);
+                            setStartEndFromGeocoding(prevVehicle, resultArray);
                         })
                         .finally(function() {
                             routingVehicles.loadRawData(vehiclesWithLocations);
@@ -1240,5 +1240,46 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     view.setLoading(false);
                 });
         }
+    },
+
+    /**
+     * Export all jobs as json.
+     */
+    exportJobs: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var exportFile = Koala.util.Export.exportFile;
+
+        var vm = view.lookupViewModel();
+        var jobsStore = vm.get('routingjobs');
+        var jobs = jobsStore.getVroomArray();
+
+        var filename = 'jobs.json';
+        exportFile(JSON.stringify(jobs), filename);
+    },
+
+    /**
+     * Export all vehicles as json.
+     */
+    exportVehicles: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var exportFile = Koala.util.Export.exportFile;
+
+        var vm = view.lookupViewModel();
+        var vehiclesStore = vm.get('routingvehicles');
+        var vehicles = vehiclesStore.getVroomArray();
+
+        var filename = 'vehicles.json';
+        exportFile(JSON.stringify(vehicles), filename);
     }
+
 });
