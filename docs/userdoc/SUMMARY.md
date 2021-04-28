@@ -20,3 +20,4 @@
 
 * [Routing Import](ROUTINGIMPORT.md#routingimport)
   * [Ziele importieren](ROUTINGIMPORT.md#importjobs)
+  * [Fahrzeuge importieren](ROUTINGIMPORT.md#importvehicles)

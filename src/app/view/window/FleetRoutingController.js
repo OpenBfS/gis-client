@@ -24,6 +24,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         'Koala.util.VroomFleetRouting',
         'Koala.util.OpenRouteService',
         'Koala.util.Geocoding',
+        'Koala.util.RoutingVehicles',
+        'Koala.util.Export',
         'BasiGX.util.Layer'
     ],
 
@@ -78,7 +80,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         );
 
         // waypoint creation
-        var vehicleStore = view.down('k-grid-routing-vehicles').getStore();
+        var vehicleStore = vm.get('routingvehicles');
         if (!vehicleStore) {
             return;
         }
@@ -331,7 +333,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         if (!vehiclesGrid) {
             return;
         }
-        var vehicleStore = vehiclesGrid.getStore();
+        var vehicleStore = vm.get('routingvehicles');
         var vehicleProfileBtn = vehiclesGrid.down('k-button-routing-profile');
         var vehicleProfile = 'driving-car';
         if (vehicleProfileBtn) {
@@ -368,15 +370,14 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             .then(me.handleVroomResponse.bind(me))
             .catch(function(err) {
                 view.setLoading(false);
-                var str;
 
+                var str;
                 try {
                     str = err.response.body.error.message;
+                    Ext.log.warn(str);
                 } catch (e) {
                     str = '';
                 }
-
-                Ext.Logger.error(str);
 
                 var info = vm.get('i18n.errorFleetRouting');
                 if (!Ext.isEmpty(str)) {
@@ -839,7 +840,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
         });
 
         // create vehicle marker
-        var vehicleStore = view.down('k-grid-routing-vehicles').getStore();
+        var vehicleStore = vm.get('routingvehicles');
         if (!vehicleStore) {
             return;
         }
@@ -943,8 +944,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             return;
         }
 
-        var vehiclesGrid = view.down('k-grid-routing-vehicles');
-        if (!vehiclesGrid || !vehiclesGrid.getStore() || vehiclesGrid.getStore().count() === 0) {
+        var vehiclesStore = vm.get('routingvehicles');
+        if (!vehiclesStore || vehiclesStore.count() === 0) {
             vm.set('disableOptimizeRoute', true);
             return;
         }
@@ -977,6 +978,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
             return;
         }
 
+        view.setLoading(true);
         var GeocodingUtil = Koala.util.Geocoding;
 
         var waypoints = vm.get('waypoints');
@@ -1008,10 +1010,14 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                         return Ext.isArray(job.location) && job.location.length === 2;
                     });
 
+                    // we have to delete existing ids to avoid conflicts in the store
+                    Ext.Array.each(jobsWithLocations, function(job) {
+                        delete job.id;
+                    });
+
                     var msg = Ext.String.format(
                         vm.get('i18n.infoImportedJobs'),
-                        jobsWithLocations.length,
-                        jobs.length
+                        jobsWithLocations.length
                     );
 
                     if (jobsWithLocations.length !== jobs.length) {
@@ -1021,8 +1027,6 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                         );
                         msg += ' ' + invalidMsg;
                     }
-
-                    Ext.toast(msg);
 
                     var queue = Ext.Promise.resolve();
 
@@ -1099,14 +1103,183 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                             waypoints.loadRawData(Ext.Array.map(routingJobs.getData().items, function(job) {
                                 return job.get('address');
                             }));
+                            Ext.toast(msg);
+                            view.setLoading(false);
                         });
 
                 }).catch(function(err) {
                     var str = vm.get('i18n.errorInvalidJobsJson');
                     Ext.log.warn(str + err);
                     Ext.toast(str);
+                    view.setLoading(false);
                 });
-
         }
+    },
+
+    /**
+     * Handler for the file button.
+     * @param {Ext.Component} field The file input field.
+     */
+    afterVehicleUploadRender: function(field) {
+        var me = this;
+        field.fileInputEl.on('change', me.handleVehicleUpload.bind(me));
+    },
+
+    /**
+     * Handle the vehicle upload.
+     *
+     * @param {Ext.event.Event} evt The change event of the upload button.
+     */
+    handleVehicleUpload: function(evt) {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+        var vm = view.lookupViewModel();
+        if (!vm) {
+            return;
+        }
+
+        view.setLoading(true);
+
+        var RoutingVehiclesUtil = Koala.util.RoutingVehicles;
+        var filterLocations = RoutingVehiclesUtil.filterLocations;
+        var getGeocodingLocations = RoutingVehiclesUtil.getGeocodingLocations;
+        var setStartEndFromGeocoding = RoutingVehiclesUtil.setStartEndFromGeocoding;
+
+        var routingVehicles = vm.get('routingvehicles');
+        var language = vm.get('language');
+
+        var file = evt.target.files[0];
+
+        if (file) {
+            file.text()
+                .then(function(text) {
+
+                    try {
+                        var vehicles = Ext.JSON.decode(text);
+                    } catch (err) {
+                        Ext.log.warn(vm.get('i18n.errorInvalidVehiclesJson'));
+                        Ext.toast(vm.get('i18n.errorInvalidVehiclesJson'));
+                        return;
+                    }
+
+                    if (!Ext.isArray(vehicles)) {
+                        Ext.log.warn(vm.get('i18n.errorInvalidVehiclesJson'));
+                        Ext.toast(vm.get('i18n.errorInvalidVehiclesJson'));
+                        return;
+                    }
+
+                    // we only work with vehicles with locations and ignore all others
+                    var vehiclesWithLocations = filterLocations(vehicles);
+
+                    // we have to delete existing ids to avoid conflicts in the store
+                    Ext.Array.each(vehiclesWithLocations, function(vehicle) {
+                        delete vehicle.id;
+                    });
+
+                    var msg = Ext.String.format(
+                        vm.get('i18n.infoImportedVehicles'),
+                        vehiclesWithLocations.length
+                    );
+
+                    if (vehiclesWithLocations.length !== vehicles.length) {
+                        var invalidMsg = Ext.String.format(
+                            vm.get('i18n.infoInvalidVehicles'),
+                            vehicles.length - vehiclesWithLocations.length
+                        );
+                        msg += ' ' + invalidMsg;
+                    }
+
+                    var queue = Ext.Promise.resolve();
+
+                    Ext.Array.each(vehiclesWithLocations, function(vehicle, i) {
+                        var prevVehicle = vehiclesWithLocations[i - 1];
+                        queue = queue
+                            .then(function(resultArray) {
+                                if (!resultArray || !Ext.isArray(resultArray)) {
+                                    return getGeocodingLocations(vehicle, language);
+                                }
+                                if (resultArray[0] === null) {
+                                    Ext.log.warn('Could not get placeName of starting location.');
+                                }
+                                if (resultArray[1] === null) {
+                                    Ext.log.warn('Could not get placeName of ending location.');
+                                }
+
+                                setStartEndFromGeocoding(prevVehicle, resultArray);
+
+                                return getGeocodingLocations(vehicle, language);
+                            });
+                    });
+
+                    queue
+                        .then(function(resultArray) {
+                            if (resultArray[0] === null) {
+                                Ext.log.warn('Could not get placeName of starting location.');
+                            }
+                            if (resultArray[1] === null) {
+                                Ext.log.warn('Could not get placeName of ending location.');
+                            }
+
+                            var prevVehicle = vehiclesWithLocations[vehiclesWithLocations.length - 1];
+
+                            setStartEndFromGeocoding(prevVehicle, resultArray);
+                        })
+                        .finally(function() {
+                            routingVehicles.loadRawData(vehiclesWithLocations);
+                            me.updateWayPointLayer();
+                            Ext.toast(msg);
+                            view.setLoading(false);
+                        });
+                }).catch(function(err) {
+                    var str = vm.get('i18n.errorInvalidVehiclesJson');
+                    Ext.log.warn(str + err);
+                    Ext.toast(str);
+                    view.setLoading(false);
+                });
+        }
+    },
+
+    /**
+     * Export all jobs as json.
+     */
+    exportJobs: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var exportFile = Koala.util.Export.exportFile;
+
+        var vm = view.lookupViewModel();
+        var jobsStore = vm.get('routingjobs');
+        var jobs = jobsStore.getVroomArray();
+
+        var filename = 'jobs.json';
+        exportFile(JSON.stringify(jobs), filename);
+    },
+
+    /**
+     * Export all vehicles as json.
+     */
+    exportVehicles: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var exportFile = Koala.util.Export.exportFile;
+
+        var vm = view.lookupViewModel();
+        var vehiclesStore = vm.get('routingvehicles');
+        var vehicles = vehiclesStore.getVroomArray();
+
+        var filename = 'vehicles.json';
+        exportFile(JSON.stringify(vehicles), filename);
     }
+
 });

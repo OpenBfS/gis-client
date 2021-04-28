@@ -207,9 +207,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                         }
                         var orsUtil = Koala.util.OpenRouteService;
                         var vehicleId = rec.get('vehicle');
-                        var vehiclesStore = this.up('k-window-fleet-routing')
-                            .down('k-grid-routing-vehicles')
-                            .getStore();
+                        var vehiclesStore = vm.get('routingvehicles');
                         var vehicle = vehiclesStore.getById(vehicleId);
                         if (!vehicle) {
                             return;
@@ -233,10 +231,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
                         }
 
                         var jobsStore = vm.get('routingjobs');
-
-                        var vehiclesStore = this.up('k-window-fleet-routing')
-                            .down('k-grid-routing-vehicles')
-                            .getStore();
+                        var vehiclesStore = vm.get('routingvehicles');
 
                         var vehicle = vehiclesStore.getById(rec.get('vehicle'));
                         if (!vehicle) {

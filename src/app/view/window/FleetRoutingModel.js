@@ -26,7 +26,8 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
         'Koala.store.RoutingSummaries',
         'Koala.store.GeocodingSuggestions',
         'Koala.store.FleetRoutingSummary',
-        'Koala.store.RoutingJobs'
+        'Koala.store.RoutingJobs',
+        'Koala.store.RoutingVehicles'
     ],
 
     stores: {
@@ -47,6 +48,9 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
         },
         routingjobs: {
             type: 'k-routingjobs'
+        },
+        routingvehicles: {
+            type: 'k-routingvehicles'
         }
     },
 
@@ -75,8 +79,11 @@ Ext.define('Koala.view.window.FleetRoutingModel', {
             errorNoPolygonChosen: '',
             errorFleetRouting: '',
             errorInvalidJobsJson: '',
+            errorInvalidVehiclesJson: '',
             infoImportedJobs: '',
             infoInvalidJobs: '',
+            infoImportedVehicles: '',
+            infoInvalidVehicles: '',
             addJobContextText: '',
             addVehicleContextText: '',
             setCurrentJobContextText: '',
