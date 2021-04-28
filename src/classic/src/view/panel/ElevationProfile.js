@@ -24,6 +24,7 @@ Ext.define('Koala.view.panel.ElevationProfile', {
     requires: [
         'Ext.Component',
         'Ext.container.Container',
+        'Ext.button.Cycle',
         'Koala.view.panel.ElevationProfileController',
         'Koala.view.panel.ElevationProfileModel'
     ],
@@ -47,7 +48,7 @@ Ext.define('Koala.view.panel.ElevationProfile', {
         title: '{title}'
     },
 
-    height: 200,
+    height: 230,
     width: 900,
 
     elevationContainerName: 'elevationprofile-container',
@@ -64,6 +65,17 @@ Ext.define('Koala.view.panel.ElevationProfile', {
     },
 
     items: [{
+        xtype: 'cycle',
+        showText: true,
+        menu: {
+            items: [{
+                text: 'elevation'
+            }, {
+                text: 'distance'
+            }]
+        },
+        changeHandler: 'onAttributeChange'
+    }, {
         xtype: 'component',
         name: 'elevationprofile-container',
         height: 143
@@ -87,7 +99,7 @@ Ext.define('Koala.view.panel.ElevationProfile', {
         }, {
             xtype: 'container',
             bind: {
-                html: '<b>{elevationLabel}:</b>{elevation}m'
+                html: '<b>{displayAttribute}:</b>{displayValue}'
             }
         }]
     }]
