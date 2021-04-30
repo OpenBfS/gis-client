@@ -24,9 +24,9 @@ Ext.define('Koala.view.panel.ElevationProfile', {
     requires: [
         'Ext.Component',
         'Ext.container.Container',
-        'Ext.button.Cycle',
         'Koala.view.panel.ElevationProfileController',
-        'Koala.view.panel.ElevationProfileModel'
+        'Koala.view.panel.ElevationProfileModel',
+        'Koala.view.button.ElevationProfileSwitcher'
     ],
 
     controller: 'k-panel-elevationprofile',
@@ -41,7 +41,8 @@ Ext.define('Koala.view.panel.ElevationProfile', {
             fn: 'clearElevationProfile'
         },
         rerender: 'createChart',
-        dataChanged: 'onDataChanged'
+        dataChanged: 'onDataChanged',
+        changeGraph: 'changeGraph'
     },
 
     bind: {
@@ -65,16 +66,12 @@ Ext.define('Koala.view.panel.ElevationProfile', {
     },
 
     items: [{
-        xtype: 'cycle',
-        showText: true,
-        menu: {
-            items: [{
-                text: 'elevation'
-            }, {
-                text: 'distance'
-            }]
-        },
-        changeHandler: 'onAttributeChange'
+        xtype: 'container',
+        name: 'chartSwitcher',
+        items: [{
+            xtype: 'k-button-elevationprofileswitcher',
+            blacklist: ['id', 'zIndex', 'opacity']
+        }]
     }, {
         xtype: 'component',
         name: 'elevationprofile-container',

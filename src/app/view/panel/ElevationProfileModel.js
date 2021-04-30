@@ -23,7 +23,6 @@ Ext.define('Koala.view.panel.ElevationProfileModel', {
     data: {
         title: '',
         xLabel: '',
-        yLabel: '',
         distanceLabel: '',
         distance: undefined,
         elevationLabel: '',
@@ -31,6 +30,7 @@ Ext.define('Koala.view.panel.ElevationProfileModel', {
         showIndicatorBox: false,
         routingSummary: undefined,
         pointFeatures: undefined,
-        displayAttribute: 'elevation'
+        displayAttribute: 'elevation',
+        classifications: undefined
     }
 });
