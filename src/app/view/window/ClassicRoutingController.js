@@ -130,21 +130,18 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
                     text: vm.get('i18n.addStartPoint'),
                     handler: function() {
                         me.storeMapClick(longitude, latitude, 'start');
-                        mapContextMenu.destroy();
                     }
                 },
                 {
                     text: vm.get('i18n.addViaPoint'),
                     handler: function() {
                         me.storeMapClick(longitude, latitude, 'via');
-                        mapContextMenu.destroy();
                     }
                 },
                 {
                     text: vm.get('i18n.addEndPoint'),
                     handler: function() {
                         me.storeMapClick(longitude, latitude, 'end');
-                        mapContextMenu.destroy();
                     }
                 }
             ]
