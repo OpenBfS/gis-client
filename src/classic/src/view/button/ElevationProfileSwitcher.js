@@ -31,7 +31,7 @@ Ext.define('Koala.view.button.ElevationProfileSwitcher', {
     },
 
     bind: {
-        text: '{profileSwitcherText}',
+        text: '{profileSwitcherText}'
     },
 
     blacklist: [],
