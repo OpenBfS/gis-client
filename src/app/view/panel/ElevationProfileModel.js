@@ -26,6 +26,7 @@ Ext.define('Koala.view.panel.ElevationProfileModel', {
         distanceLabel: '',
         distance: undefined,
         elevationLabel: '',
+        profileSwitcherText: '',
         displayValue: undefined,
         showIndicatorBox: false,
         routingSummary: undefined,

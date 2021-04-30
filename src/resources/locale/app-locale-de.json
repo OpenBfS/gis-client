@@ -826,7 +826,8 @@
                 "title": "Höhenprofil",
                 "xLabel": "Distanz[km]",
                 "distanceLabel": "Distanz",
-                "elevationLabel": "Höhe"
+                "elevationLabel": "Höhe",
+                "profileSwitcherText": "Zeige..."
             }
         }
     },

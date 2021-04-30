@@ -822,7 +822,8 @@
                 "title": "Elevation profile",
                 "xLabel": "distance[km]",
                 "distanceLabel": "Distance",
-                "elevationLabel": "Elevation"
+                "elevationLabel": "Elevation",
+                "profileSwitcherText": "Display..."
             }
         }
     },

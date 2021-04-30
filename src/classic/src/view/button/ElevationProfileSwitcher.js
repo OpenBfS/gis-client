@@ -30,7 +30,9 @@ Ext.define('Koala.view.button.ElevationProfileSwitcher', {
         updateMenu: 'updateMenu'
     },
 
-    text: 'Verschneiden',
+    bind: {
+        text: '{profileSwitcherText}',
+    },
 
     blacklist: [],
 
