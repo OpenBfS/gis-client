@@ -21,6 +21,8 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
     alias: 'controller.k-panel-elevationprofile',
 
     requires: [
+        'Ext.Array',
+        'Ext.Object',
         'BasiGX.util.Layer',
         'BasiGX.view.component.Map'
     ],
@@ -112,6 +114,56 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             }
 
             return val - d0[0] > d1[0] - val ? d1 : d0;
+        },
+
+        /**
+         * Create ol point features from summary.
+         *
+         * These point features should be used for displaying
+         * on the chart. Chart data is provided in the properties
+         * of each feature.
+         *
+         * @param {Ext.data.Model} summary The routing summary.
+         * @returns {ol.Feature[]} Array of ol.Feature.
+         */
+        createPointFeatures: function(summary) {
+            var coordinates = summary.geometry.coordinates;
+
+            var distance = 0;
+            // radius is equal to the semi-major axis of the WGS84 ellipsoid
+            // see also https://openlayers.org/en/v4.6.5/apidoc/ol.Sphere.html
+            var sphere = new ol.Sphere(6378137);
+
+            var pointFeatures = [];
+            Ext.Array.each(summary.properties.segments, function(segment) {
+                Ext.Array.each(segment.steps, function(step) {
+                    var start = step.way_points[0];
+                    var end = step.way_points[1];
+
+                    for (var i=start; i<end; i++) {
+                        var coordinate = coordinates[i];
+
+                        if (i !== 0) {
+                            // distance in meters
+                            distance += sphere.haversineDistance(coordinates[i - 1], coordinate);
+                        }
+                        var stepDistance = distance;
+
+                        var properties = {
+                            distance: stepDistance,
+                            elevation: coordinate[2]
+                        };
+
+                        var feat = new ol.Feature({
+                            geometry: new ol.geom.Point(coordinate)
+                        });
+
+                        feat.setProperties(properties);
+                        pointFeatures.push(feat);
+                    }
+                });
+            });
+            return pointFeatures;
         }
     },
 
@@ -122,6 +174,7 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
      */
     onDataChanged: function(routingSummary) {
         var me = this;
+        var staticMe = Koala.view.panel.ElevationProfileController;
         var view = me.getView();
         var vm = view.lookupViewModel();
 
@@ -130,6 +183,10 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         }
 
         vm.set('routingSummary', routingSummary);
+        // Always reset to elevation when data changes
+        vm.set('displayAttribute', 'elevation');
+        var pointFeatures = staticMe.createPointFeatures(routingSummary);
+        vm.set('pointFeatures', pointFeatures);
         me.createChart();
     },
 
@@ -142,18 +199,20 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         var view = me.getView();
         var vm = view.lookupViewModel();
 
-        var routingSummary = vm.get('routingSummary');
+        var pointFeatures = vm.get('pointFeatures');
 
-        if (!routingSummary) {
+        if (!pointFeatures) {
             return;
         }
+
+        var displayAttribute = vm.get('displayAttribute');
 
         var container = view.down('[name=' + view.elevationContainerName + ']');
         if (!container) {
             return;
         }
 
-        var data = me.mapSummaryToChart(routingSummary);
+        var data = me.mapDataForAttribute(pointFeatures, displayAttribute);
         var limits = staticMe.getMinMax(data);
 
         var xAxis = staticMe.xAxisBase;
@@ -164,7 +223,7 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         var yAxis = staticMe.yAxisBase;
         yAxis.min = limits.minY;
         yAxis.max = limits.maxY;
-        yAxis.label = vm.get('yLabel');
+        yAxis.label = displayAttribute;
 
         var axes = {
             x: xAxis,
@@ -306,20 +365,53 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         if (props.distance) {
             distance = (props.distance/1000).toFixed(1);
         }
+        var displayAttribute = vm.get('displayAttribute');
+        var val = props[displayAttribute];
+
         vm.set('distance', distance);
-        vm.set('elevation', props.elevation ? props.elevation.toFixed(0) : undefined);
+        vm.set('displayValue', val ? val.toFixed(0) : undefined);
         vm.set('showIndicatorBox', props.showIndicatorBox);
     },
 
     /**
-     * Maps routing summary properties into the charting data structure.
+     * Map the data for given attribute.
      *
-     * @param {Ext.data.Model} summary The routing summary.
-     * @returns {Array} Array of charting data entries.
+     * This maps the ol point features to the structure that
+     * is required for charting. The values of each feature under
+     * the given attribute name will be displayed on the y-axis.
+     *
+     * @param {ol.Feature[]} pointFeatures The point features to visualize.
+     * @param {String} attr The name of the attribute to visualize on the y-axis.
+     * @returns {Array[]} List of charting data points.
      */
-    mapSummaryToChart: function(summary) {
+    mapDataForAttribute: function(pointFeatures, attr) {
+        var me = this;
+        return Ext.Array.map(pointFeatures, function(feat) {
+            var tooltipFunc = me.createTooltipFunc(feat);
+            return [
+                feat.get('distance'),
+                feat.get(attr),
+                tooltipFunc,
+                {
+                    fill: '#00000000',
+                    stroke: '#00000000'
+                }
+            ];
+        });
+    },
+
+    /**
+     * Create a tooltip function for an ol point feature.
+     *
+     * @param {ol.Feature} feat The ol feature.
+     * @returns {Function} The tooltip function for the given feature.
+     */
+    createTooltipFunc: function(feat) {
         var me = this;
         var view = me.getView();
+        if (!view) {
+            return;
+        }
 
         var elevationLayer;
 
@@ -331,65 +423,28 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
 
         var map = BasiGX.view.component.Map.guess().getMap();
 
-        var mapping = [];
-        var coordinates = summary.geometry.coordinates;
-        var distance = 0;
-        // radius is equal to the semi-major axis of the WGS84 ellipsoid
-        // see also https://openlayers.org/en/v4.6.5/apidoc/ol.Sphere.html
-        var sphere = new ol.Sphere(6378137);
-        Ext.Array.forEach(coordinates, function(coordinate, idx) {
-            var elevation = coordinate[2];
-            if (idx !== 0) {
-                // distance in meters
-                distance += sphere.haversineDistance(coordinates[idx - 1], coordinate);
+        return function(chart, x, limits) {
+            var featClone = feat.clone();
+            if (map) {
+                var sourceProjection = ol.proj.get('EPSG:4326');
+                var targetProjection;
+                targetProjection = map.getView().getProjection().getCode();
+                featClone.getGeometry().transform(sourceProjection, targetProjection);
             }
-            var stepDistance = distance;
+            if (elevationLayer) {
+                var source = elevationLayer.getSource();
+                source.clear();
+                source.addFeature(featClone);
+            }
 
-            var tooltipFunc = function(chart, x, limits) {
-                var transformed = coordinate;
-
-                if (map) {
-                    var sourceProjection = ol.proj.get('EPSG:4326');
-                    var targetProjection;
-                    targetProjection = map.getView().getProjection().getCode();
-                    transformed = ol.proj.transform(coordinate, sourceProjection, targetProjection);
-                }
-
-                var feat = new ol.Feature({
-                    geometry: new ol.geom.Point(transformed)
-                });
-
-                feat.setProperties({
-                    elevation: elevation,
-                    distance: stepDistance
-                });
-
-                if (elevationLayer) {
-                    var source = elevationLayer.getSource();
-                    source.clear();
-                    source.addFeature(feat);
-                }
-
-                me.setIndicatorLine(chart, x, limits);
-                me.updateInfoBoxValues(
-                    Ext.Object.merge(
-                        feat.getProperties(),
-                        {showIndicatorBox: true}
-                    )
-                );
-            };
-
-            mapping.push([
-                distance,
-                elevation,
-                tooltipFunc,
-                {
-                    fill: '#00000000',
-                    stroke: '#00000000'
-                }
-            ]);
-        });
-        return mapping;
+            me.setIndicatorLine(chart, x, limits);
+            me.updateInfoBoxValues(
+                Ext.Object.merge(
+                    featClone.getProperties(),
+                    {showIndicatorBox: true}
+                )
+            );
+        };
     },
 
     /**
@@ -417,5 +472,97 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         });
 
         me.clearElevationLayer();
+    },
+
+    /**
+     * Change the data that is displayed on the
+     * y-axis of the graph.
+     *
+     * If layerName is provided, the property with key
+     * 'propKey' will be merged on the routing layer.
+     * The merged data will be cached, so for each layer property
+     * this will only be done once.
+     *
+     * layerName can be omitted to display properties of the
+     * original route.
+     *
+     * @param {String} propKey The name of the property to display.
+     * @param {String} layerName The name of the layer.
+     */
+    changeGraph: function(propKey, layerName) {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        view.setLoading(true);
+
+        var vm = view.lookupViewModel();
+
+        var shouldMergeLayers = true;
+        var featurePropKey = propKey;
+
+        if (layerName) {
+            featurePropKey = layerName + '.' + propKey;
+        }
+
+        if (vm.get('displayAttribute') === featurePropKey) {
+            shouldMergeLayers = false;
+        }
+
+        var pointFeatures = vm.get('pointFeatures');
+        var featureProps = Ext.Object.getKeys(pointFeatures[0].getProperties());
+        if (Ext.Array.contains(featureProps, featurePropKey) || !layerName) {
+            shouldMergeLayers = false;
+        }
+
+        // Unfortunately, a zero-second timeout is needed to make sure
+        // the loading mask is rendered before the window freezes due
+        // to me.mergeLayer()
+        window.setTimeout(function() {
+            if (shouldMergeLayers) {
+                var joinedPoints = me.mergeLayer(layerName, propKey, featurePropKey, pointFeatures);
+                vm.set('pointFeatures', joinedPoints);
+            }
+
+            vm.set('displayAttribute', featurePropKey);
+            me.createChart();
+
+            view.setLoading(false);
+        }, 0);
+    },
+
+    /**
+     * Merge the layer property to the routing points.
+     *
+     * @param {String} layerName Name of the layer to get property from.
+     * @param {String} propKey Name of the property to merge.
+     * @param {String} featurePropKey Name of the property on routing points.
+     * @param {ol.Feature[]} pointFeatures Routing points.
+     * @returns {ol.Feature[]} Routing points with merged property.
+     */
+    mergeLayer: function(layerName, propKey, featurePropKey, pointFeatures) {
+        var map = BasiGX.view.component.Map.guess().getMap();
+        if (!map) {
+            return;
+        }
+
+        var mergeLayer = BasiGX.util.Layer.getLayerByName(layerName);
+        var features = mergeLayer.getSource().getFeatures();
+        var sourceProjection = map.getView().getProjection();
+
+        var format = new ol.format.GeoJSON();
+
+        var mergeLayerJson = format.writeFeaturesObject(features, {
+            featureProjection: sourceProjection
+        });
+
+        var pointFeaturesJson = format.writeFeaturesObject(pointFeatures, {
+            featureProjection: 'EPSG:4326'
+        });
+        var taggedJson = turf.tag(pointFeaturesJson, mergeLayerJson, propKey, featurePropKey);
+
+        return format.readFeatures(taggedJson);
     }
 });

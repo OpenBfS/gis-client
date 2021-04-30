@@ -825,9 +825,9 @@
             "data": {
                 "title": "Höhenprofil",
                 "xLabel": "Distanz[km]",
-                "yLabel": "Höhe[m]",
                 "distanceLabel": "Distanz",
-                "elevationLabel": "Höhe"
+                "elevationLabel": "Höhe",
+                "profileSwitcherText": "Zeige..."
             }
         }
     },
@@ -2260,7 +2260,6 @@
             "data": {
                 "title": "Höhenprofil",
                 "xLabel": "Distanz[km]",
-                "yLabel": "Höhe[m]",
                 "distanceLabel": "Distanz",
                 "elevationLabel": "Höhe"
             }

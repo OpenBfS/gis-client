@@ -821,9 +821,9 @@
             "data": {
                 "title": "Elevation profile",
                 "xLabel": "distance[km]",
-                "yLabel": "height[m]",
                 "distanceLabel": "Distance",
-                "elevationLabel": "Elevation"
+                "elevationLabel": "Elevation",
+                "profileSwitcherText": "Display..."
             }
         }
     },
@@ -2255,7 +2255,6 @@
             "data": {
                 "title": "Elevation profile",
                 "xLabel": "distance[km]",
-                "yLabel": "height[m]",
                 "distanceLabel": "Distance",
                 "elevationLabel": "Elevation"
             }

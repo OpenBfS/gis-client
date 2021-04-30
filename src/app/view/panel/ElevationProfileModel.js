@@ -23,12 +23,15 @@ Ext.define('Koala.view.panel.ElevationProfileModel', {
     data: {
         title: '',
         xLabel: '',
-        yLabel: '',
         distanceLabel: '',
         distance: undefined,
         elevationLabel: '',
-        elevation: undefined,
+        profileSwitcherText: '',
+        displayValue: undefined,
         showIndicatorBox: false,
-        routingSummary: undefined
+        routingSummary: undefined,
+        pointFeatures: undefined,
+        displayAttribute: 'elevation',
+        classifications: undefined
     }
 });
