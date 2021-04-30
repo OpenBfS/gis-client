@@ -231,7 +231,6 @@ Ext.define('Koala.view.window.IsochroneRoutingController', {
                     },
                     handler: function() {
                         me.storeMapClick(longitude, latitude);
-                        mapContextMenu.destroy();
                     }
                 }
             ]

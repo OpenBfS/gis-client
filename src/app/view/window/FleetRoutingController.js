@@ -743,12 +743,8 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
         var items = Ext.Array.map(config, function(c) {
             var item = c.item;
-            item.handler = function(i) {
+            item.handler = function() {
                 c.callback(longitude, latitude);
-                var menu = i.up('menu');
-                if (menu) {
-                    menu.destroy();
-                }
             };
 
             return item;
