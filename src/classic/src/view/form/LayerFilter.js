@@ -80,7 +80,7 @@ Ext.define('Koala.view.form.LayerFilter', {
 
         me.add({
             html: '<div class="timeselect-chart"></div>',
-            height: 100,
+            height: 200,
             width: 400
         });
 
@@ -95,7 +95,6 @@ Ext.define('Koala.view.form.LayerFilter', {
 
         var hasTimeFilter = false;
         var hasPointInTimeFilter = false;
-        var timeFilter;
 
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || '').toLowerCase();
@@ -103,13 +102,11 @@ Ext.define('Koala.view.form.LayerFilter', {
                 case 'timerange':
                     me.addTimeRangeFilter(filter, idx);
                     hasTimeFilter = true;
-                    timeFilter = filter;
                     break;
                 case 'pointintime':
                     me.addPointInTimeFilter(filter, idx);
                     hasTimeFilter = true;
                     hasPointInTimeFilter = true;
-                    timeFilter = filter;
                     break;
                 case 'rodostime':
                 case 'value':
@@ -122,60 +119,6 @@ Ext.define('Koala.view.form.LayerFilter', {
         });
 
         if (hasTimeFilter) {
-            var div;
-            var timeSelectConfig = {
-                data: [],
-                resolution: 10,
-                duration: 60 * 60 * 24 * 20 * 1000,
-                color: '#00ff00'
-            };
-            var chartConfig = {
-                components: [new D3Util.TimeSelectComponent(timeSelectConfig)],
-                size: [400, 200]
-            };
-            me.add({
-                xtype: 'button',
-                iconCls: 'x-fa fa-angle-left',
-                handler: function() {
-                    timeSelectConfig.page = Math.max(0, timeSelectConfig.page - 1);
-                    chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
-                    me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
-                    me.chartRenderer.render(div.el.dom.querySelector('.timeselect-container'));
-                }
-            });
-            me.add({
-                xtype: 'button',
-                iconCls: 'x-fa fa-angle-right',
-                handler: function() {
-                    timeSelectConfig.page = Math.min(me.timeSelectComponent.getPages(), timeSelectConfig.page + 1);
-                    chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
-                    me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
-                    me.chartRenderer.render(div.el.dom.querySelector('.timeselect-container'));
-                }
-            });
-            div = me.add({
-                html: '<div class="timeselect-container"></div>',
-                height: 200,
-                cls: 'timeselect',
-                bodyCls: 'timeselect'
-            });
-            window.setTimeout(function() {
-                div.setLoading(true);
-            }, 0);
-            this.getController().requestAvailableValues(timeFilter.param, function(xhr) {
-                var response = JSON.parse(xhr.responseText);
-                var data = [];
-                Ext.each(response, function(d) {
-                    data.push(new Date(d.val).getTime());
-                });
-                data.sort();
-                timeSelectConfig.data = data;
-                timeSelectConfig.page = 0;
-                chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
-                me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
-                me.chartRenderer.render(div.el.dom.querySelector('.timeselect-container'));
-                div.setLoading(false);
-            });
             var autorefresh = me.getAutorefreshCheckbox();
             me.add(autorefresh);
             var dropdown = me.getAutorefreshDropdown();
@@ -233,28 +176,51 @@ Ext.define('Koala.view.form.LayerFilter', {
     },
 
     setupTimeSelectChart: function() {
+        var me = this;
         var metadata = this.getMetadata();
         var duration = moment.duration(metadata.layerConfig.timeSeriesChartProperties.duration);
         duration = duration.asMilliseconds() / 3 + duration.asMilliseconds();
         var elm = document.querySelector('.timeselect-chart');
         this.fetchTimeSelectData()
             .then(function(response) {
-                var originalData = JSON.parse(response.responseText);
                 var data = [];
-                Ext.each(originalData, function(val) {
-                    data.push(moment(val.dsp).toDate().getTime());
+                Ext.each(JSON.parse(response.responseText), function(d) {
+                    data.push(new Date(d.val).getTime());
                 });
-                var chartRenderer = new D3Util.ChartRenderer({
-                    components: [new D3Util.TimeSelectComponent({
-                        resolution: 10,
-                        data: data,
-                        color: 'red',
-                        duration: duration
-                    })],
-                    size: [400, 100],
-                    zoomType: 'none'
-                });
+                data.sort();
+                var timeSelectConfig = {
+                    data: data,
+                    resolution: 10,
+                    duration: duration,
+                    color: '#00ff00',
+                    page: 0
+                };
+                var chartConfig = {
+                    components: [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)],
+                    size: [400, 200]
+                };
+                var chartRenderer = new D3Util.ChartRenderer(chartConfig);
                 chartRenderer.render(elm);
+                me.insert(0, {
+                    xtype: 'button',
+                    iconCls: 'x-fa fa-angle-left',
+                    handler: function() {
+                        timeSelectConfig.page = Math.max(0, timeSelectConfig.page - 1);
+                        chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
+                        me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
+                        me.chartRenderer.render(document.querySelector('.timeselect-chart'));
+                    }
+                });
+                me.insert(1, {
+                    xtype: 'button',
+                    iconCls: 'x-fa fa-angle-right',
+                    handler: function() {
+                        timeSelectConfig.page = Math.min(me.timeSelectComponent.getPages(), timeSelectConfig.page + 1);
+                        chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
+                        me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
+                        me.chartRenderer.render(document.querySelector('.timeselect-chart'));
+                    }
+                });
             });
     },
 
