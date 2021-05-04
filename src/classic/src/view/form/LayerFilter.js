@@ -104,6 +104,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                 case 'timerange':
                     me.addTimeRangeFilter(filter, idx);
                     hasTimeFilter = true;
+                    timeFilter = filter;
                     break;
                 case 'pointintime':
                     me.addPointInTimeFilter(filter, idx);
@@ -149,6 +150,8 @@ Ext.define('Koala.view.form.LayerFilter', {
         });
         if (hasPointInTimeFilter) {
             window.setTimeout(this.setupTimeSelectChart.bind(this, timeFilter), 0);
+        } else if (hasTimeFilter) {
+            window.setTimeout(this.setupTimeSelectChart.bind(this, false, timeFilter), 0);
         }
     },
 
@@ -158,7 +161,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var url = context.urls['geoserver-base-url'] + '/ows';
         var propertyName;
         Ext.each(metadata.filters, function(filter) {
-            if (filter.type === 'pointintime') {
+            if (filter.type === 'pointintime' || filter.type === 'timerange') {
                 propertyName = filter.param;
             }
         });
@@ -178,11 +181,18 @@ Ext.define('Koala.view.form.LayerFilter', {
         });
     },
 
-    setupTimeSelectChart: function(filter) {
+    setupTimeSelectChart: function(pointInTimeFilter, filter) {
         var me = this;
         var metadata = this.getMetadata();
-        var duration = moment.duration(metadata.layerConfig.timeSeriesChartProperties.duration);
-        duration = duration.asMilliseconds() / 3 + duration.asMilliseconds();
+        var duration;
+        if (pointInTimeFilter) {
+            duration = moment.duration(metadata.layerConfig.timeSeriesChartProperties.duration);
+            duration = duration.asMilliseconds() / 3 + duration.asMilliseconds();
+        } else {
+            duration = moment.duration(filter.maxduration);
+            duration = duration.asMilliseconds() / 3 + duration.asMilliseconds();
+        }
+        var resolution = parseInt(pointInTimeFilter ? pointInTimeFilter.interval : filter.interval, 10);
         var elm = document.querySelector('.timeselect-chart');
         me.chartContainer.setHidden(false);
         me.chartContainer.setLoading(true);
@@ -196,20 +206,24 @@ Ext.define('Koala.view.form.LayerFilter', {
                 data.sort();
                 var timeSelectConfig = {
                     data: data,
-                    resolution: parseInt(filter.interval, 10),
+                    resolution: resolution,
                     duration: duration,
                     color: 'rgb(0, 255, 0)',
                     selectedColor: 'rgb(0, 0, 255)',
                     hoverColor: 'rgb(255, 0, 0)',
                     page: 0,
                     onSelectionChange: function(time) {
-                        var component = me.down('[name=' + filter.param + ']');
-                        var value = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(time));
-                        component.setValue(value);
-                        component = component.up().down('[name=hourspinner]');
-                        component.setValue(value.hour());
-                        component = component.up().down('[name=minutespinner]');
-                        component.setValue(value.minute());
+                        if (pointInTimeFilter) {
+                            var component = me.down('[name=' + pointInTimeFilter ? pointInTimeFilter.param : filter.param + ']');
+                            var value = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(time));
+                            component.setValue(value);
+                            component = component.up().down('[name=hourspinner]');
+                            component.setValue(value.hour());
+                            component = component.up().down('[name=minutespinner]');
+                            component.setValue(value.minute());
+                        } else {
+                            // TODO
+                        }
                     }
                 };
                 if (me.timeSelectComponent) {
