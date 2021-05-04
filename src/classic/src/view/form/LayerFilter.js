@@ -95,6 +95,7 @@ Ext.define('Koala.view.form.LayerFilter', {
 
         var hasTimeFilter = false;
         var hasPointInTimeFilter = false;
+        var timeFilter;
 
         Ext.each(filters, function(filter, idx) {
             var type = (filter.type || '').toLowerCase();
@@ -107,6 +108,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                     me.addPointInTimeFilter(filter, idx);
                     hasTimeFilter = true;
                     hasPointInTimeFilter = true;
+                    timeFilter = filter;
                     break;
                 case 'rodostime':
                 case 'value':
@@ -145,7 +147,7 @@ Ext.define('Koala.view.form.LayerFilter', {
             me.getController().onFilterChanged(field);
         });
         if (hasPointInTimeFilter) {
-            window.setTimeout(this.setupTimeSelectChart.bind(this, hasPointInTimeFilter), 0);
+            window.setTimeout(this.setupTimeSelectChart.bind(this, timeFilter), 0);
         }
     },
 
@@ -175,7 +177,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         });
     },
 
-    setupTimeSelectChart: function() {
+    setupTimeSelectChart: function(filter) {
         var me = this;
         var metadata = this.getMetadata();
         var duration = moment.duration(metadata.layerConfig.timeSeriesChartProperties.duration);
@@ -197,7 +199,16 @@ Ext.define('Koala.view.form.LayerFilter', {
                     color: 'rgb(0, 255, 0)',
                     selectedColor: 'rgb(0, 0, 255)',
                     hoverColor: 'rgb(255, 0, 0)',
-                    page: 0
+                    page: 0,
+                    onSelectionChange: function(time) {
+                        var component = me.down('[name=' + filter.param + ']');
+                        var value = moment(time);
+                        component.setValue(value);
+                        component = component.up().down('[name=hourspinner]');
+                        component.setValue(value.hour());
+                        component = component.up().down('[name=minutespinner]');
+                        component.setValue(value.minute());
+                    }
                 };
                 if (me.timeSelectComponent) {
                     timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
