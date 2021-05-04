@@ -78,7 +78,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var me = this;
         me.callParent();
 
-        me.add({
+        me.chartContainer = me.add({
             html: '<div class="timeselect-chart"></div>',
             height: 200,
             width: 400
@@ -181,8 +181,10 @@ Ext.define('Koala.view.form.LayerFilter', {
         var duration = moment.duration(metadata.layerConfig.timeSeriesChartProperties.duration);
         duration = duration.asMilliseconds() / 3 + duration.asMilliseconds();
         var elm = document.querySelector('.timeselect-chart');
+        me.chartContainer.setLoading(true);
         this.fetchTimeSelectData()
             .then(function(response) {
+                me.chartContainer.setLoading(false);
                 var data = [];
                 Ext.each(JSON.parse(response.responseText), function(d) {
                     data.push(new Date(d.val).getTime());
@@ -192,9 +194,14 @@ Ext.define('Koala.view.form.LayerFilter', {
                     data: data,
                     resolution: 10,
                     duration: duration,
-                    color: '#00ff00',
+                    color: 'rgb(0, 255, 0)',
+                    selectedColor: 'rgb(0, 0, 255)',
+                    hoverColor: 'rgb(255, 0, 0)',
                     page: 0
                 };
+                if (me.timeSelectComponent) {
+                    timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
+                }
                 var chartConfig = {
                     components: [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)],
                     size: [400, 200]
@@ -205,6 +212,9 @@ Ext.define('Koala.view.form.LayerFilter', {
                     xtype: 'button',
                     iconCls: 'x-fa fa-angle-left',
                     handler: function() {
+                        if (me.timeSelectComponent) {
+                            timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
+                        }
                         timeSelectConfig.page = Math.max(0, timeSelectConfig.page - 1);
                         chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
                         me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
@@ -215,6 +225,9 @@ Ext.define('Koala.view.form.LayerFilter', {
                     xtype: 'button',
                     iconCls: 'x-fa fa-angle-right',
                     handler: function() {
+                        if (me.timeSelectComponent) {
+                            timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
+                        }
                         timeSelectConfig.page = Math.min(me.timeSelectComponent.getPages(), timeSelectConfig.page + 1);
                         chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
                         me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
