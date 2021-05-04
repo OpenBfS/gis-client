@@ -81,7 +81,8 @@ Ext.define('Koala.view.form.LayerFilter', {
         me.chartContainer = me.add({
             html: '<div class="timeselect-chart"></div>',
             height: 200,
-            width: 400
+            width: 400,
+            hidden: true
         });
 
         me.maxHeight = Ext.getBody().getViewSize().height*0.9;
@@ -183,6 +184,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var duration = moment.duration(metadata.layerConfig.timeSeriesChartProperties.duration);
         duration = duration.asMilliseconds() / 3 + duration.asMilliseconds();
         var elm = document.querySelector('.timeselect-chart');
+        me.chartContainer.setHidden(false);
         me.chartContainer.setLoading(true);
         this.fetchTimeSelectData()
             .then(function(response) {
@@ -222,6 +224,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                 me.insert(0, {
                     xtype: 'button',
                     iconCls: 'x-fa fa-angle-left',
+                    margin: '0 0 5 5',
                     handler: function() {
                         if (me.timeSelectComponent) {
                             timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
@@ -235,6 +238,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                 me.insert(1, {
                     xtype: 'button',
                     iconCls: 'x-fa fa-angle-right',
+                    margin: '0 0 5 5',
                     handler: function() {
                         if (me.timeSelectComponent) {
                             timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
