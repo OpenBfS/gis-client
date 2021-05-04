@@ -194,7 +194,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                 data.sort();
                 var timeSelectConfig = {
                     data: data,
-                    resolution: 10,
+                    resolution: parseInt(filter.interval, 10),
                     duration: duration,
                     color: 'rgb(0, 255, 0)',
                     selectedColor: 'rgb(0, 0, 255)',
