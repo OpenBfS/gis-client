@@ -202,7 +202,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                     page: 0,
                     onSelectionChange: function(time) {
                         var component = me.down('[name=' + filter.param + ']');
-                        var value = moment(time);
+                        var value = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(time));
                         component.setValue(value);
                         component = component.up().down('[name=hourspinner]');
                         component.setValue(value.hour());
