@@ -94,8 +94,8 @@ Ext.define('Koala.view.form.LayerFilter', {
             return;
         }
 
-        var hasTimeFilter = false;
-        var hasPointInTimeFilter = false;
+        me.hasTimeFilter = false;
+        me.hasPointInTimeFilter = false;
         var timeFilter;
 
         Ext.each(filters, function(filter, idx) {
@@ -103,13 +103,13 @@ Ext.define('Koala.view.form.LayerFilter', {
             switch (type) {
                 case 'timerange':
                     me.addTimeRangeFilter(filter, idx);
-                    hasTimeFilter = true;
+                    me.hasTimeFilter = true;
                     timeFilter = filter;
                     break;
                 case 'pointintime':
                     me.addPointInTimeFilter(filter, idx);
-                    hasTimeFilter = true;
-                    hasPointInTimeFilter = true;
+                    me.hasTimeFilter = true;
+                    me.hasPointInTimeFilter = true;
                     timeFilter = filter;
                     break;
                 case 'rodostime':
@@ -122,7 +122,7 @@ Ext.define('Koala.view.form.LayerFilter', {
             }
         });
 
-        if (hasTimeFilter) {
+        if (me.hasTimeFilter) {
             var autorefresh = me.getAutorefreshCheckbox();
             me.add(autorefresh);
             var dropdown = me.getAutorefreshDropdown();
@@ -148,9 +148,9 @@ Ext.define('Koala.view.form.LayerFilter', {
             var field = me.down('[name=' + filter.param + ']');
             me.getController().onFilterChanged(field);
         });
-        if (hasPointInTimeFilter) {
+        if (me.hasPointInTimeFilter) {
             window.setTimeout(this.setupTimeSelectChart.bind(this, timeFilter), 0);
-        } else if (hasTimeFilter) {
+        } else if (me.hasTimeFilter) {
             window.setTimeout(this.setupTimeSelectChart.bind(this, false, timeFilter), 0);
         }
     },
@@ -204,7 +204,7 @@ Ext.define('Koala.view.form.LayerFilter', {
                     data.push(new Date(d.val).getTime());
                 });
                 data.sort();
-                var timeSelectConfig = {
+                me.timeSelectConfig = {
                     data: data,
                     resolution: resolution,
                     duration: duration,
@@ -212,58 +212,110 @@ Ext.define('Koala.view.form.LayerFilter', {
                     selectedColor: 'rgb(0, 0, 255)',
                     hoverColor: 'rgb(255, 0, 0)',
                     page: 0,
-                    onSelectionChange: function(time) {
+                    useBrush: !pointInTimeFilter,
+                    brushExtent: [[0, 0], [400, 180]],
+                    initialBrushSelection: [400 / 3, 400],
+                    onSelectionChange: function(startDateTime, endDateTime) {
                         if (pointInTimeFilter) {
-                            var component = me.down('[name=' + pointInTimeFilter ? pointInTimeFilter.param : filter.param + ']');
-                            var value = Koala.util.Date.getTimeReferenceAwareMomentDate(moment(time));
+                            var component = me.down('[name=' + pointInTimeFilter.param + ']');
+                            var value = Koala.util.Date.getTimeReferenceAwareMomentDate(
+                                moment(startDateTime));
                             component.setValue(value);
-                            component = component.up().down('[name=hourspinner]');
-                            component.setValue(value.hour());
-                            component = component.up().down('[name=minutespinner]');
-                            component.setValue(value.minute());
+                            component.up().down('[name=hourspinner]').setValue(value.hour());
+                            component.up().down('[name=minutespinner]').setValue(value.minute());
                         } else {
-                            // TODO
+                            var minComponent = me.down('[name=mincontainer]');
+                            var maxComponent = me.down('[name=maxcontainer]');
+                            var startValue = Koala.util.Date.getTimeReferenceAwareMomentDate(
+                                moment(startDateTime));
+                            var endValue = Koala.util.Date.getTimeReferenceAwareMomentDate(
+                                moment(endDateTime));
+                            me.down('[name=mincontainer] > datefield').setValue(startValue);
+                            minComponent.up().down('[name=minhourspinner]').setValue(startValue.hour());
+                            minComponent.up().down('[name=minminutespinner]').setValue(startValue.minute());
+
+                            me.down('[name=maxcontainer] > datefield').setValue(endValue);
+                            maxComponent.down('[name=maxhourspinner]').setValue(endValue.hour());
+                            maxComponent.down('[name=maxminutespinner]').setValue(endValue.minute());
                         }
                     }
                 };
+
                 if (me.timeSelectComponent) {
-                    timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
+                    if (pointInTimeFilter) {
+                        me.timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
+                    } else {
+                        me.timeSelectConfig.selectedTimeRange = me.timeSelectComponent.getSelectedTimeRange();
+                    }
                 }
-                var chartConfig = {
-                    components: [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)],
+                me.chartConfig = {
+                    components: [me.timeSelectComponent = new D3Util.TimeSelectComponent(me.timeSelectConfig)],
                     size: [400, 200]
                 };
-                var chartRenderer = new D3Util.ChartRenderer(chartConfig);
-                chartRenderer.render(elm);
-                me.insert(0, {
-                    xtype: 'button',
-                    iconCls: 'x-fa fa-angle-left',
-                    margin: '0 0 5 5',
-                    handler: function() {
-                        if (me.timeSelectComponent) {
-                            timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
-                        }
-                        timeSelectConfig.page = Math.max(0, timeSelectConfig.page - 1);
-                        chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
-                        me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
-                        me.chartRenderer.render(document.querySelector('.timeselect-chart'));
+
+                me.chartRenderer = new D3Util.ChartRenderer(me.chartConfig);
+                me.chartRenderer.render(elm);
+                me.chartContainer.up().on('resize', function(self, newWidth, newHeight, oldWidth) {
+                    if (newWidth !== oldWidth) {
+                        me.updateTimeSelectComponent('resize', newWidth);
                     }
                 });
-                me.insert(1, {
-                    xtype: 'button',
-                    iconCls: 'x-fa fa-angle-right',
-                    margin: '0 0 5 5',
-                    handler: function() {
-                        if (me.timeSelectComponent) {
-                            timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
+
+                me.insert(0, {
+                    xtype: 'container',
+                    items: [
+                        {
+                            xtype: 'button',
+                            iconCls: 'x-fa fa-angle-left',
+                            margin: '0 0 5 5',
+                            width: 50,
+                            handler: function() {
+                                me.updateTimeSelectComponent('pageForward');
+                            }
+                        },
+                        {
+                            xtype: 'button',
+                            iconCls: 'x-fa fa-angle-right',
+                            margin: '0 0 5 5',
+                            width: 50,
+                            handler: function() {
+                                me.updateTimeSelectComponent('pageBackward');
+                            }
                         }
-                        timeSelectConfig.page = Math.min(me.timeSelectComponent.getPages(), timeSelectConfig.page + 1);
-                        chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(timeSelectConfig)];
-                        me.chartRenderer = new D3Util.ChartRenderer(chartConfig);
-                        me.chartRenderer.render(document.querySelector('.timeselect-chart'));
-                    }
+                    ]
                 });
             });
+    },
+
+    updateTimeSelectComponent: function(reason, newVal) {
+        var me = this;
+        if (reason === 'resize') {
+            me.timeSelectConfig.brushExtent = [[0, 0], [newVal, 180]];
+            me.timeSelectConfig.initialBrushSelection = [newVal / 3, newVal];
+            me.chartConfig.size = [newVal, 200];
+        } else if (reason === 'pageForward' || reason === 'pageBackward') {
+            if (me.timeSelectComponent) {
+                if (me.pointInTimeFilter) {
+                    me.timeSelectConfig.selectedTime = me.timeSelectComponent.getSelectedTime();
+                } else {
+                    me.timeSelectConfig.selectedTimeRange = me.timeSelectComponent.getSelectedTimeRange();
+                }
+            }
+            if (reason === 'pageForward') {
+                me.timeSelectConfig.page = Math.max(0, me.timeSelectConfig.page - 1);
+            } else {
+                me.timeSelectConfig.page = Math.min(me.timeSelectComponent.getPages(), me.timeSelectConfig.page + 1);
+            }
+        } else {
+            // date or time changed
+            var min = reason.up('fieldset').down('[name=mincontainer] > datefield').getValue();
+            var max = reason.up('fieldset').down('[name=maxcontainer] > datefield').getValue();
+            me.timeSelectConfig.selectedTimeRange = [min, max];
+        }
+
+        me.chartConfig.components = [me.timeSelectComponent = new D3Util.TimeSelectComponent(me.timeSelectConfig)];
+        me.chartRenderer = new D3Util.ChartRenderer(me.chartConfig);
+        me.chartRenderer.render(document.querySelector('.timeselect-chart'));
     },
 
     /**
@@ -354,6 +406,14 @@ Ext.define('Koala.view.form.LayerFilter', {
         var timeRangeFilter = FilterUtil.createTimeRangeFieldset(
             me.getFormat(), filter, idx);
         me.add(timeRangeFilter);
+
+        Ext.each(timeRangeFilter.query('datefield'), function(field) {
+            field.addListener('select', me.updateTimeSelectComponent.bind(me));
+        });
+        Ext.each(timeRangeFilter.query('numberfield'), function(field) {
+            field.addListener('spinend', me.updateTimeSelectComponent.bind(me));
+            field.addListener('specialkey', me.updateTimeSelectComponent.bind(me));
+        });
     },
 
     /**
