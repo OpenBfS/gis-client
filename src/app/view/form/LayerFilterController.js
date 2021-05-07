@@ -170,6 +170,97 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
+     * Extract the current filter values.
+     *
+     * @param {String} paramToExclude a param name to ignore when iterating through the filters
+     */
+    getFilterValues: function(paramToExclude) {
+        var me = this;
+        var viewParams = {};
+        var cqlFilter = {};
+        Ext.each(this.filters, function(other) {
+            if (other.param !== paramToExclude) {
+                var value = me.down('[name=' + other.param + ']').getValue();
+                if (value.toISOString) {
+                    value = value.toISOString();
+                }
+                if (other.encodeInViewParams) {
+                    viewParams[other.param] = value;
+                } else {
+                    cqlFilter[other.param] = value;
+                }
+            }
+        });
+        return {
+            cql: cqlFilter,
+            viewParams: viewParams
+        };
+    },
+
+    /**
+     * Encodes the CQL and view params filters to be used in a distinct WPS execute request.
+     *
+     * @param {Object} filters the filter values
+     */
+    getEncodedFilterValues: function(filters) {
+        var params = '';
+        if (Object.keys(filters.viewParams).length) {
+            var viewParamsString = '';
+            Ext.iterate(filters.viewParams, function(key, value) {
+                if (viewParamsString !== '') {
+                    viewParamsString += ';';
+                }
+                viewParamsString += key + ':' + value;
+            });
+            params += ';viewParams=' + encodeURIComponent(viewParamsString);
+        }
+        if (Object.keys(filters.cql).length) {
+            var filterString = '';
+            Ext.iterate(filters.cql, function(key, value) {
+                if (filterString !== '') {
+                    filterString += ' AND ';
+                }
+                filterString += key + ' = ' + value;
+            });
+            params += ';filter=' + encodeURIComponent(filterString);
+        }
+        return params;
+    },
+
+    /**
+     * Request the distinct values for a column via the distinct-values WPS process.
+     *
+     * @param {String} param the name of the property to request the values for
+     * @param {Function} callback the AJAX callback
+     */
+    requestAvailableValues: function(param, callback) {
+        var config = this.getView().metadata.layerConfig;
+        var name;
+        if (config.wms) {
+            name = config.wms.layers;
+        } else {
+            name = config.wfs.param_typenames;
+        }
+        var params = 'layerName=' + name + ';';
+        params += 'propertyName=' + param;
+        var filters = this.getFilterValues(param);
+        params += this.getEncodedFilterValues(filters);
+        Ext.Ajax.request({
+            url: '/ogc/ows',
+            params: {
+                request: 'Execute',
+                service: 'WPS',
+                version: '1.0.0',
+                identifier: 'gs:DistinctValues',
+                datainputs: params,
+                rawDataOutput: 'result'
+            },
+            success: callback,
+            timeout: 120000
+        });
+    },
+
+    /**
      *
      */
     updateFilterValues: function(filters, idx, keyVals) {
