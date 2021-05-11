@@ -192,7 +192,19 @@ Ext.define('Koala.view.form.LayerFilter', {
             duration = moment.duration(filter.maxduration);
             duration = duration.asMilliseconds() / 3 + duration.asMilliseconds();
         }
-        var resolution = parseInt(pointInTimeFilter ? pointInTimeFilter.interval : filter.interval, 10);
+        var resolution;
+        var unit;
+        if (pointInTimeFilter) {
+            resolution = parseInt(pointInTimeFilter.interval, 10);
+            unit = pointInTimeFilter.unit;
+        } else {
+            resolution = parseInt(filter.interval, 10);
+            unit = filter.unit;
+        }
+
+        resolution = resolution * (unit === 'minutes' ? 1 :
+            unit === 'hours' ? 60 : unit === 'days' ? 60 * 24 : 1);
+
         var elm = document.querySelector('.timeselect-chart');
         me.chartContainer.setHidden(false);
         me.chartContainer.setLoading(true);
