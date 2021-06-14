@@ -730,7 +730,7 @@ Ext.define('Koala.view.form.Print', {
         var ratioX = 1;
         var ratioY = 1;
 
-        if (this.transformInteraction) {
+        if (this.transformInteraction && this.transformInteraction.layers_[0].getSource().getFeatures()[0]) {
             var boxFeature = this.transformInteraction.layers_[0].getSource().getFeatures()[0];
             var extent = boxFeature.getGeometry().getExtent();
             var resolution = mapView.getResolution();
