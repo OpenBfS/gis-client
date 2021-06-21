@@ -602,6 +602,10 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             listeners: {
                 // We'll assign a handler to reorganize the menu once the
                 // class is defined.
+                boxready: function(row) {
+                    var panel = Ext.ComponentQuery.query('k-panel-routing-legendtree')[0];
+                    panel.checkSettingsMenuVisibility(row);
+                }
             },
             items: [{
                 xtype: 'container',
@@ -799,6 +803,25 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
 
         me.bindUpdateHandlers();
         me.bindLoadIndicationHandlers();
+    },
+
+    checkSettingsMenuVisibility: function(row) {
+        var btn = row.down('button[name=settings]');
+        if (!btn) {
+            return;
+        }
+        var allowClone = (btn.layerRec.getOlLayer().get('allowClone') ||
+            (btn.layerRec.getOlLayer().get('allowClone') === undefined)) ? true : false;
+        var showCartoWindow = (btn.layerRec.getOlLayer().get('showCartoWindow')) ? true : false;
+        var external = (btn.layerRec.getOlLayer().get('external')) ? true : false;
+        var queryable = (btn.layerRec.getOlLayer().get('queryable')) ? true : false;
+        var hoverable = (btn.layerRec.getOlLayer().get('hoverable')) ? true : false;
+
+        if (!allowClone && !showCartoWindow && !external && !queryable && !hoverable) {
+            btn.setDisabled(true);
+        } else {
+            btn.setDisabled(false);
+        }
     },
 
     setTreeStore: function() {
