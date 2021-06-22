@@ -385,7 +385,7 @@ Ext.define('Koala.view.window.RoutingController', {
         }
         if (!me.getElevationLayer()) {
             var elevationLayer = me.createLayer('elevationStyle', view.elevationLayerName);
-            elevationLayer.setZIndex(9999)
+            elevationLayer.setZIndex(9999);
         }
 
         if (!me.getAvoidAreaLayer()) {

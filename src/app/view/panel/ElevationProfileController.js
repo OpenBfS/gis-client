@@ -371,7 +371,7 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         var val = props[displayAttribute];
 
         vm.set('distance', distance);
-        vm.set('displayValue', val ? val.toFixed(0) : undefined);
+        vm.set('displayValue', val);
         vm.set('showIndicatorBox', props.showIndicatorBox);
     },
 
