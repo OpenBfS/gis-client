@@ -179,6 +179,31 @@ Ext.define('Koala.util.OpenRouteService', {
         },
 
         /**
+         * Get the unicode text for given routing profile.
+         *
+         * @param {String} profile The routing profile.
+         */
+        getUnicodeFromProfile: function(profile) {
+            var iconCode = '';
+
+            switch (profile) {
+                case 'foot-walking':
+                    iconCode = '\uf183';
+                    break;
+                case 'cycling-regular':
+                    iconCode = '\uf206';
+                    break;
+                case 'driving-car':
+                    iconCode = '\uf1b9';
+                    break;
+                default:
+                    return '';
+            }
+
+            return iconCode;
+        },
+
+        /**
          * Format duration.
          *
          * Formats the duration as human readable durations (e.g. 15 minutes).

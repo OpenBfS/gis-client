@@ -247,6 +247,14 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Radius des Punkts in Pixeln.
 
+    * **markerSize**
+
+      Größe des Markers in Pixeln.
+
+    * **color**
+
+      Farbe des Markers.
+
   * **avoidAreaStyle**
 
     Styling Optionen des Layers, der die Avoid Areas darstellt.
@@ -310,7 +318,9 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
         "elevationStyle": {
             "fill": "#ffffff",
             "stroke": "#ffffff",
-            "radius": 3
+            "radius": 3,
+            "markerSize": 38,
+            "color": "#0d63bd"
         },
         "avoidAreaStyle": {
             "strokeColor": "#000000",
