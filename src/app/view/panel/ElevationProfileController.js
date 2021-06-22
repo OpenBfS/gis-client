@@ -575,5 +575,19 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         var taggedJson = turf.tag(pointFeaturesJson, mergeLayerJson, propKey, featurePropKey);
 
         return format.readFeatures(taggedJson);
+    },
+
+    /**
+     * Redraw the chart if the container will be resized.
+     */
+    handleResize: function() {
+        var me = this;
+        var view = me.getView();
+
+        if (!view.isVisible()) {
+            return;
+        }
+
+        me.createChart();
     }
 });
