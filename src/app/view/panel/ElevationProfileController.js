@@ -46,7 +46,8 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             orientation: 'y',
             scale: 'linear',
             sanitizeLabels: true,
-            ticks: 5
+            ticks: 5,
+            labelPadding: 5
         },
         lineBase: {
             color: '#ff0000',
@@ -240,7 +241,7 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         var height = containerSize.height;
 
         var chart = staticMe.chartBase;
-        chart.size = [width - 50, height - 20];
+        chart.size = [width - 50 - yAxis.labelPadding, height - 20];
         chart.series = [line];
         chart.axes = axes;
 
