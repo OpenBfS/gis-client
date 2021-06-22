@@ -24,7 +24,8 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
         'Ext.Array',
         'Ext.Object',
         'BasiGX.util.Layer',
-        'BasiGX.view.component.Map'
+        'BasiGX.view.component.Map',
+        'Koala.util.OpenRouteService'
     ],
 
     statics: {
@@ -413,6 +414,8 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             return;
         }
 
+        var vm = view.lookupViewModel();
+
         var elevationLayer;
 
         if (view.elevationLayerName === null || !BasiGX.util.Layer.getLayerByName(view.elevationLayerName)) {
@@ -433,6 +436,13 @@ Ext.define('Koala.view.panel.ElevationProfileController', {
             }
             if (elevationLayer) {
                 var source = elevationLayer.getSource();
+                var style = elevationLayer.getStyle();
+                if (Ext.isArray(style)) {
+                    var OpenRouteService = Koala.util.OpenRouteService;
+                    var profile = vm.get('routingSummary').profile;
+                    var profileIcon = OpenRouteService.getUnicodeFromProfile(profile);
+                    style[style.length - 1].getText().setText(profileIcon);
+                }
                 source.clear();
                 source.addFeature(featClone);
             }

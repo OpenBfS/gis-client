@@ -306,7 +306,16 @@ Ext.define('Koala.view.window.RoutingController', {
         }
 
         if (routingOpts.elevationStyle) {
-            var elevationStyle = new ol.style.Style({
+            var elevationStyle = [new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome map-marker
+                    text: '\uf041',
+                    font: 'normal ' + routingOpts.elevationStyle.markerSize + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: routingOpts.elevationStyle.color
+                    }),
+                    textBaseline: 'bottom'
+                }),
                 image: new ol.style.Circle({
                     fill: new ol.style.Fill({
                         color: routingOpts.elevationStyle.fill
@@ -316,7 +325,29 @@ Ext.define('Koala.view.window.RoutingController', {
                         color: routingOpts.elevationStyle.stroke
                     })
                 })
-            });
+            }), new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome circle
+                    text: '\uf111',
+                    font: 'normal ' + routingOpts.elevationStyle.markerSize * 0.35 + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: routingOpts.elevationStyle.color
+                    }),
+                    textBaseline: 'bottom',
+                    offsetY: -17
+
+                })
+            }), new ol.style.Style({
+                text: new ol.style.Text({
+                    // unicode for fontawesome car
+                    font: 'normal ' + routingOpts.elevationStyle.markerSize * 0.35 + 'px FontAwesome',
+                    fill: new ol.style.Fill({
+                        color: routingOpts.elevationStyle.fill
+                    }),
+                    textBaseline: 'bottom',
+                    offsetY: -17
+                })
+            })];
             vm.set('elevationStyle', elevationStyle);
         }
 
