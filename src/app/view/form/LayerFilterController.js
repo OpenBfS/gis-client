@@ -228,39 +228,6 @@ Ext.define('Koala.view.form.LayerFilterController', {
     },
 
     /**
-     * Request the distinct values for a column via the distinct-values WPS process.
-     *
-     * @param {String} param the name of the property to request the values for
-     * @param {Function} callback the AJAX callback
-     */
-    requestAvailableValues: function(param, callback) {
-        var config = this.getView().metadata.layerConfig;
-        var name;
-        if (config.wms) {
-            name = config.wms.layers;
-        } else {
-            name = config.wfs.param_typenames;
-        }
-        var params = 'layerName=' + name + ';';
-        params += 'propertyName=' + param;
-        var filters = this.getFilterValues(param);
-        params += this.getEncodedFilterValues(filters);
-        Ext.Ajax.request({
-            url: '/ogc/ows',
-            params: {
-                request: 'Execute',
-                service: 'WPS',
-                version: '1.0.0',
-                identifier: 'gs:DistinctValues',
-                datainputs: params,
-                rawDataOutput: 'result'
-            },
-            success: callback,
-            timeout: 120000
-        });
-    },
-
-    /**
      *
      */
     updateFilterValues: function(filters, idx, keyVals) {
