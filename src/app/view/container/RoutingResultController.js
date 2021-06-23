@@ -23,7 +23,8 @@ Ext.define('Koala.view.container.RoutingResultController', {
     requires: [
         'BasiGX.util.Layer',
         'Koala.util.Geocoding',
-        'Koala.util.Export'
+        'Koala.util.Export',
+        'Koala.view.panel.ElevationProfile'
     ],
 
     modifyInteraction: undefined,
@@ -599,6 +600,10 @@ Ext.define('Koala.view.container.RoutingResultController', {
         }
 
         var elevationPanel = Ext.ComponentQuery.query('[name=' + elevationPanelName + ']')[0];
+        if (!elevationPanel) {
+            elevationPanel = me.addElevationPanel();
+        }
+
         if (summary) {
             elevationPanel.fireEvent('dataChanged', summary.getData());
         } else {
@@ -872,5 +877,34 @@ Ext.define('Koala.view.container.RoutingResultController', {
             duration: 1000,
             padding: '30 30 30 30'
         });
+    },
+
+    /**
+     * Add the elevation profile panel the view.
+     *
+     * This removes all existing items in the south-container
+     * prior to adding the elevation profile panel.
+     *
+     * @returns {Koala.view.panel.ElevationProfile}
+     */
+    addElevationPanel: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+
+        var elevationPanel = Ext.create('Koala.view.panel.ElevationProfile', {
+            name: view.elevationProfilePanelName,
+            routeLayerName: view.routeLayerName,
+            elevationLayerName: view.elevationLayerName
+        });
+
+        var southContainer = Ext.ComponentQuery.query('[name=south-container]')[0];
+        if (southContainer) {
+            southContainer.removeAll();
+            southContainer.add(elevationPanel);
+        }
+        return elevationPanel;
     }
 });

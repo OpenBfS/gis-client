@@ -451,6 +451,7 @@ Ext.define('Koala.view.container.FleetRoutingResult', {
 
         var southContainer = Ext.ComponentQuery.query('[name=south-container]')[0];
         if (southContainer) {
+            southContainer.removeAll();
             southContainer.add(elevationPanel);
         }
 

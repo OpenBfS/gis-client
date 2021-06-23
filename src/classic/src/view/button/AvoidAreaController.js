@@ -155,7 +155,6 @@ Ext.define('Koala.view.button.AvoidAreaController', {
             return;
         }
 
-        var avoidSource = avoidAreaLayer.getSource();
         var mapView = map.getView();
 
         if (features.length === 0) {
@@ -172,8 +171,8 @@ Ext.define('Koala.view.button.AvoidAreaController', {
             return;
         }
 
-        avoidSource.clear();
-        avoidSource.addFeature(feature);
+        var source = me.clearAvoidAreaSource();
+        source.addFeature(feature);
         mapView.fit(feature.getGeometry().getExtent());
     },
 
@@ -239,12 +238,7 @@ Ext.define('Koala.view.button.AvoidAreaController', {
                     return;
                 }
 
-                var avoidAreaLayer = me.getAvoidAreaLayer();
-                if (!avoidAreaLayer) {
-                    return;
-                }
-                var source = avoidAreaLayer.getSource();
-                source.clear();
+                var source = me.clearAvoidAreaSource();
                 source.addFeatures(avoidFeatures);
 
                 // the value must be reset after chosing a file
@@ -267,36 +261,44 @@ Ext.define('Koala.view.button.AvoidAreaController', {
     drawAvoidArea: function() {
         var me = this;
         var view = me.getView();
-
-        // clear existing features
-        var avoidAreaLayer = me.getAvoidAreaLayer();
-        if (!avoidAreaLayer) {
-            return;
-        }
-        var source = avoidAreaLayer.getSource();
-        source.clear();
-
-        var parentComponent = view.up('window');
-        if (!parentComponent || !parentComponent.avoidAreaDrawInteraction) {
+        if (!view) {
             return;
         }
 
-        var avoidAreaDrawInteraction = parentComponent.avoidAreaDrawInteraction;
-        avoidAreaDrawInteraction.setActive(true);
+        var vm = view.lookupViewModel();
 
-        // finish draw after first feature is finished
-        source.on('addfeature', function() {
-            avoidAreaDrawInteraction.setActive(false);
+        var source = me.clearAvoidAreaSource();
+
+        // create interaction
+        var map = BasiGX.view.component.Map.guess().getMap();
+        var avoidAreaDrawInteraction = new ol.interaction.Draw({
+            source: source,
+            type: 'Polygon',
+            stopClick: true
         });
+        map.addInteraction(avoidAreaDrawInteraction);
+        source.once('addfeature', function(evt) {
+            map.removeInteraction(avoidAreaDrawInteraction);
+            vm.set('deleteAvoidAreaButtonVisible', true);
+            view.fireEvent('avoidAreaDrawEnd', evt.feature);
+        });
+        avoidAreaDrawInteraction.setActive(true);
     },
 
     clearAvoidAreaSource: function() {
         var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+        var vm = view.lookupViewModel();
         var avoidAreaLayer = me.getAvoidAreaLayer();
         if (avoidAreaLayer) {
             var source = avoidAreaLayer.getSource();
             source.clear();
+            return source;
         }
+        vm.set('deleteAvoidAreaButtonVisible', false);
     },
 
     /**

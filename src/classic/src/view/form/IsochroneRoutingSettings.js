@@ -69,7 +69,10 @@ Ext.define('Koala.view.form.IsochroneRoutingSettings', {
             toggle: 'activateSubmitButtonIfValid'
         }
     }, {
-        xtype: 'k-button-avoidarea'
+        xtype: 'k-button-avoidarea',
+        listeners: {
+            avoidAreaDrawEnd: 'onAvoidAreaDrawEnd'
+        }
     }, {
         xtype: 'tbspacer',
         flex: 1

@@ -44,6 +44,7 @@ Ext.define('Koala.util.Chart', {
             }
 
             if (!timeseriesPanel.rendered) {
+                southContainer.removeAll();
                 southContainer.add(timeseriesPanel);
                 southContainer.show();
             }

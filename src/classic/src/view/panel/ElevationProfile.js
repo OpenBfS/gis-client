@@ -42,7 +42,8 @@ Ext.define('Koala.view.panel.ElevationProfile', {
         },
         rerender: 'createChart',
         dataChanged: 'onDataChanged',
-        changeGraph: 'changeGraph'
+        changeGraph: 'changeGraph',
+        resize: 'handleResize'
     },
 
     bind: {
@@ -60,8 +61,9 @@ Ext.define('Koala.view.panel.ElevationProfile', {
 
     routeLayerName: 'routing-route-layer',
 
+    layout: 'vbox',
+
     defaults: {
-        flex: 1,
         width: '100%'
     },
 
@@ -75,7 +77,7 @@ Ext.define('Koala.view.panel.ElevationProfile', {
     }, {
         xtype: 'component',
         name: 'elevationprofile-container',
-        height: 143
+        flex: 1
     }, {
         xtype: 'container',
         name: 'elevationprofile-indicator-box',
@@ -99,5 +101,14 @@ Ext.define('Koala.view.panel.ElevationProfile', {
                 html: '<b>{displayAttribute}:</b>{displayValue}'
             }
         }]
+    }, {
+        // Empty dummy container so the flexbox will
+        // initially set the right size for the
+        // elevationprofile-container.
+        xtype: 'container',
+        height: 20,
+        bind: {
+            hidden: '{showIndicatorBox}'
+        }
     }]
 });
