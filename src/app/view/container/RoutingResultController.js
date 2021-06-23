@@ -23,8 +23,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
     requires: [
         'BasiGX.util.Layer',
         'Koala.util.Geocoding',
-        'Koala.util.Export',
-        'Koala.view.panel.ElevationProfile'
+        'Koala.util.Export'
     ],
 
     modifyInteraction: undefined,
