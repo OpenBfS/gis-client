@@ -84,6 +84,7 @@ Ext.define('Koala.view.panel.TimeSeries', {
             var window = view.up('window');
             var viewModel = view.getViewModel();
             var container = Ext.ComponentQuery.query('[name=south-container]')[0];
+            container.removeAll();
             container.add(view);
             container.show();
             viewModel.set('pinned', true);

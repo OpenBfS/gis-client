@@ -479,6 +479,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
                 height: 350,
                 layer: layer
             });
+            southContainer.removeAll();
             southContainer.add(panel);
             southContainer.show();
         },

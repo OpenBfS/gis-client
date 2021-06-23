@@ -1276,6 +1276,21 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
         var filename = 'vehicles.json';
         exportFile(JSON.stringify(vehicles), filename);
+    },
+
+    /**
+     * Trigger routing request when an avoid area was drawn.
+     */
+    onAvoidAreaDrawEnd: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+        var routingWindow = view.up('k-window-fleet-routing');
+        if (routingWindow) {
+            routingWindow.fireEvent('makeRoutingRequest', undefined, undefined);
+        }
     }
 
 });

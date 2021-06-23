@@ -253,17 +253,6 @@ Ext.define('Koala.view.container.RoutingResult', {
         var me = this;
         me.callParent(arguments);
 
-        var elevationPanel = Ext.create('Koala.view.panel.ElevationProfile', {
-            name: me.elevationProfilePanelName,
-            routeLayerName: me.routeLayerName,
-            elevationLayerName: me.elevationLayerName
-        });
-
-        var southContainer = Ext.ComponentQuery.query('[name=south-container]')[0];
-        if (southContainer) {
-            southContainer.add(elevationPanel);
-        }
-
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }

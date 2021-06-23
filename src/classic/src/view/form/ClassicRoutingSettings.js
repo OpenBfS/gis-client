@@ -79,7 +79,10 @@ Ext.define('Koala.view.form.ClassicRoutingSettings', {
             flex: 1
         },
         {
-            xtype: 'k-button-avoidarea'
+            xtype: 'k-button-avoidarea',
+            listeners: {
+                avoidAreaDrawEnd: 'onAvoidAreaDrawEnd'
+            }
         },
         {
             type: 'button',

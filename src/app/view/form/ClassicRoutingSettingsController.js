@@ -330,5 +330,20 @@ Ext.define('Koala.view.form.ClassicRoutingSettingsController', {
         if (routingWindow) {
             routingWindow.fireEvent('makeRoutingRequest', undefined, undefined);
         }
+    },
+
+    /**
+     * Trigger routing request when an avoid area was drawn.
+     */
+    onAvoidAreaDrawEnd: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+        var routingWindow = view.up('k-window-classic-routing');
+        if (routingWindow) {
+            routingWindow.fireEvent('makeRoutingRequest', undefined, undefined);
+        }
     }
 });

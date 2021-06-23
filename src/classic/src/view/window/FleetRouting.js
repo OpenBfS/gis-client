@@ -100,7 +100,10 @@ Ext.define('Koala.view.window.FleetRouting', {
                 }
             }]
         }, {
-            xtype: 'k-button-avoidarea'
+            xtype: 'k-button-avoidarea',
+            listeners: {
+                avoidAreaDrawEnd: 'onAvoidAreaDrawEnd'
+            }
         },{
             xtype: 'button',
             name: 'optimizeRouteButton',

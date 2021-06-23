@@ -119,5 +119,10 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
         if (routingSettings) {
             routingSettings.fireEvent('clearRouting');
         }
+    },
+
+    addElevationPanel: function() {
+        // noop
+        Ext.emptyFn();
     }
 });

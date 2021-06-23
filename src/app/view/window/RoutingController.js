@@ -390,27 +390,7 @@ Ext.define('Koala.view.window.RoutingController', {
 
         if (!me.getAvoidAreaLayer()) {
             var avoidAreaLayer = me.createLayer('avoidAreaStyle', view.avoidAreaLayerName);
-
             avoidAreaLayer.setOpacity(vm.get('avoidAreaOpacity'));
-
-            var source = avoidAreaLayer.getSource();
-            source.on('change', function() {
-
-                var deleteAvoidAreaButtonVisible = source.getFeatures().length > 0;
-                vm.set('deleteAvoidAreaButtonVisible', deleteAvoidAreaButtonVisible);
-                view.fireEvent('makeRoutingRequest', undefined, undefined);
-            });
-
-            // create interaction
-            if (!me.avoidAreaDrawInteraction) {
-                view.avoidAreaDrawInteraction = new ol.interaction.Draw({
-                    source: source,
-                    type: 'Polygon',
-                    stopClick: true
-                });
-                view.map.addInteraction(view.avoidAreaDrawInteraction);
-                view.avoidAreaDrawInteraction.setActive(false);
-            }
         }
     },
 

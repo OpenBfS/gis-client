@@ -78,5 +78,20 @@ Ext.define('Koala.view.form.IsochroneRoutingSettingsController', {
                          rangeField.isValid() &&
                           intervalField.isValid();
         vm.set('disableSubmitButton', !formIsValid);
+    },
+
+    /**
+     * Trigger routing request when an avoid area was drawn.
+     */
+    onAvoidAreaDrawEnd: function() {
+        var me = this;
+        var view = me.getView();
+        if (!view) {
+            return;
+        }
+        var routingWindow = view.up('k-window-isochrone-routing');
+        if (routingWindow) {
+            routingWindow.fireEvent('makeRoutingRequest', undefined, undefined);
+        }
     }
 });
