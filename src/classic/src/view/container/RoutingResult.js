@@ -253,11 +253,6 @@ Ext.define('Koala.view.container.RoutingResult', {
         var me = this;
         me.callParent(arguments);
 
-        // var ctrl = me.getController();
-        // if (ctrl) {
-        //     ctrl.addElevationPanel();
-        // }
-
         if (!me.map) {
             me.map = BasiGX.view.component.Map.guess().getMap();
         }
