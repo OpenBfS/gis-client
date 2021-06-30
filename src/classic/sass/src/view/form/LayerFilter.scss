@@ -1,3 +1,7 @@
 .timeselect {
     width: 100% !important;
 }
+
+.timeselect-chart rect.selection {
+    fill: rgb(85, 127, 162);
+}
