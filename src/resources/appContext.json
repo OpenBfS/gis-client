@@ -94,6 +94,12 @@
                 "cloneBtn",
                 "selectFeaturesBtn",
                 "irixPrintBtn",
+                "measureBtn",
+                "drawBtn",
+                "createVectorLayerBtn",
+                "importVectorLayerBtn",
+                "detectionLimitBtn",
+                "ScenarioAlertBtn",
                 "classicRoutingBtn",
                 "fleetRoutingBtn",
                 "isochroneRoutingBtn"
