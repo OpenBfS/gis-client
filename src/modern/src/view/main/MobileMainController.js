@@ -124,7 +124,7 @@ Ext.define('Koala.view.main.MobileMainController', {
                 'INFO_FORMAT': 'application/json',
                 'FEATURE_COUNT': '1'
             };
-            var url = me.chartingLayer.getSource().getGetFeatureInfoUrl(
+            var url = me.chartingLayer.getSource().getFeatureInfoUrl(
                 coordinate, resolution, projCode, urlParams
             );
             me.loadMask.show();

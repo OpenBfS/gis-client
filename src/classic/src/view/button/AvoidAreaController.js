@@ -104,7 +104,7 @@ Ext.define('Koala.view.button.AvoidAreaController', {
             var mapProjection = mapView.getProjection().getCode();
 
             if (source instanceof ol.source.TileWMS | source instanceof ol.source.ImageWMS) {
-                var url = source.getGetFeatureInfoUrl(coordinate, resolution, mapProjection,
+                var url = source.getFeatureInfoUrl(coordinate, resolution, mapProjection,
                     {
                         INFO_FORMAT: 'application/json'
                     });
