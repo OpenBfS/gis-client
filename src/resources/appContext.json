@@ -91,6 +91,8 @@
             "tools": [
                 "addWmsBtn",
                 "printBtn",
+                "cloneBtn",
+                "selectFeaturesBtn",
                 "classicRoutingBtn",
                 "fleetRoutingBtn",
                 "isochroneRoutingBtn"
