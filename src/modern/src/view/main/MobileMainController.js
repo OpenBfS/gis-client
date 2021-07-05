@@ -76,15 +76,15 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var mapComponent = this.getView().down('basigx-component-map');
         var map = mapComponent.getMap();
-        map.on('singleclick', me.onMapSingleClick, me);
-        me.on('destroy', me.teardownMapClickHandler, me);
+        map.on('singleclick', me.onMapSingleClick.bind(me));
+        me.on('destroy', me.teardownMapClickHandler.bind(me));
     },
 
     teardownMapClickHandler: function() {
         var me = this;
         var mapComponent = this.getView().down('basigx-component-map');
         var map = mapComponent.getMap();
-        map.un('singleclick', me.onMapSingleClick, me);
+        map.un('singleclick', me.onMapSingleClick.bind(me));
     },
 
     /**
