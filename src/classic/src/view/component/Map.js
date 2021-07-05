@@ -80,7 +80,7 @@ Ext.define('Koala.view.component.Map', {
 
         ol.proj.proj4.register(proj4);
 
-        // TODO We should may move this to another place.
+        // TODO We should move this to another place.
         ol.proj.get('EPSG:25832').setExtent([-1878007.03, 3932282.86, 831544.53, 9437501.55]);
 
         // MousePosition Control
