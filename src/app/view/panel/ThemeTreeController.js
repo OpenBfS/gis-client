@@ -203,7 +203,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
 
         var width = bbox[2] - bbox[0];
         var height = bbox[3] - bbox[1];
-        videoLayer.on('postcompose', function(event) {
+        videoLayer.on('postrender', function(event) {
             var frameState = event.frameState;
             var resolution = frameState.viewState.resolution;
             var origin = map.getPixelFromCoordinate([bbox[0], bbox[3]]);
