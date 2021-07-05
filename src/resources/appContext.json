@@ -93,6 +93,7 @@
                 "printBtn",
                 "cloneBtn",
                 "selectFeaturesBtn",
+                "irixPrintBtn",
                 "classicRoutingBtn",
                 "fleetRoutingBtn",
                 "isochroneRoutingBtn"
