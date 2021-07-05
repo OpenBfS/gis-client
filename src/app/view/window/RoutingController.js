@@ -513,7 +513,7 @@ Ext.define('Koala.view.window.RoutingController', {
         }
 
         if (view.map !== null) {
-            view.map.un('singleclick', me.onWaypointClick, me);
+            view.map.un('singleclick', me.onWaypointClick.bind(me));
         }
 
         if (vm.get('waypointPopup') !== null) {
