@@ -226,7 +226,11 @@ Ext.define('Koala.plugin.Hover', {
                         });
                     }
                 }
-            }, this, me.hoverLayerFilter, this);
+            }.bind(this),
+            {
+                layerFilter: me.hoverLayerFilter.bind(this)
+            }
+            );
             me.highlightFeaturesInGrid(hoverFeatures);
             me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
         } else {
