@@ -89,9 +89,10 @@
             },
             "createLegendGraphicLayer": "bfs:planungsradien",
             "tools": [
+                "addWmsBtn",
                 "classicRoutingBtn",
-                "isochroneRoutingBtn",
-                "fleetRoutingBtn"
+                "fleetRoutingBtn",
+                "isochroneRoutingBtn"
             ],
             "COPY_tools": [
                 "addWmsBtn",
