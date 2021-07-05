@@ -94,7 +94,6 @@ Ext.define('Koala.view.main.Main', {
 
                     var attribution = new ol.control.Attribution({
                         collapsible: false,
-                        logo: false,
                         target: document.querySelector('#footer')
                     });
 
