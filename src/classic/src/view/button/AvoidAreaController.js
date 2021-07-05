@@ -47,10 +47,12 @@ Ext.define('Koala.view.button.AvoidAreaController', {
                     // returns true if an appropriate layer has been found
                     // a true value breaks the forEach loop
                     return me.checkIfLayerContainsAvoidArea(layer, evt.coordinate);
-                },
-                me,
+                }.bind(me),
                 // pre-filter the layers to check
-                me.checkIfLayerIsValid);
+                {
+                    layerFilter: me.checkIfLayerIsValid
+                }
+            );
             if (!aLayerHasBeenFound) {
                 Ext.toast(vm.get('i18n.errorNoLayerFound'));
             }
