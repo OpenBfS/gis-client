@@ -137,8 +137,6 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
      */
     deleteSnapInteraction: null,
 
-    wgs84Sphere: new ol.Sphere(6378137),
-
     /**
      * Listener called on the components initialization. It creates the
      * redLineLayer and adds it to the map.
@@ -642,7 +640,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
             var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
             var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
-            length += me.wgs84Sphere.haversineDistance(c1, c2);
+            length += ol.sphere.getDistance(c1, c2);
         }
         if (length > 100) {
             output = (Math.round(length / 1000 * 100) / 100) + ' ' + 'km';
@@ -663,7 +661,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var sourceProj = view.map.getView().getProjection();
         var geom = polygon.clone().transform(sourceProj, 'EPSG:4326');
         var coordinates = geom.getLinearRing(0).getCoordinates();
-        var area = Math.abs(me.wgs84Sphere.geodesicArea(coordinates));
+        var area = Math.abs(ol.sphere.getArea(coordinates));
         var output;
 
         if (area > 10000) {
