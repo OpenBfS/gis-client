@@ -113,6 +113,8 @@ Ext.define('Koala.view.form.Print', {
         }
 
         var formatCombo = me.down('combo[name=format]');
+        // TODO: JM_UPGRADE_BASELIBS
+        //       Error: "formatCombo is null"
         formatCombo.getStore().filterBy(function(rec) {
             var fmt = rec.get('field1');
             if (fmt === 'jpeg' || fmt === 'jpg' || fmt === 'bmp') {
