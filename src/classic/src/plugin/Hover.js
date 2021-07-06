@@ -221,9 +221,13 @@ Ext.define('Koala.plugin.Hover', {
                             hoverFeatures.push(featureClone);
                             me.showHoverFeature(layer, hoverFeatures);
                             me.currentHoverTarget = feat;
-                        }, me, function(vectorCand) {
-                            return vectorCand === layer;
-                        });
+                        }.bind(me),
+                        {
+                            layerFilter: function(vectorCand) {
+                                return vectorCand === layer;
+                            }
+                        }
+                        );
                     }
                 }
             }.bind(this),
