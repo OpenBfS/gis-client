@@ -167,16 +167,25 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         }
     },
 
+    /**
+     * Reference to 'view.pointerMoveHandler' function
+     * with the 'view' as scope.
+     * Necessary for properly removing the listener
+     * again.
+     */
+    boundPointerMoveHandler: null,
+
     onAdded: function() {
         var view = this.getView();
-        // TODO: Check if binding works
-        view.map.on('pointermove', view.pointerMoveHandler.bind(view));
+
+        // storing function is necessary for properly removing it later on
+        this.boundPointerMoveHandler = view.pointerMoveHandler.bind(view);
+        view.map.on('pointermove', this.boundPointerMoveHandler);
     },
 
     onRemoved: function() {
         var view = this.getView();
-        // TODO: Check if binding works
-        view.map.un('pointermove', view.pointerMoveHandler.bind(view));
+        view.map.un('pointermove', this.boundPointerMoveHandler);
         if (view.measureTooltipElement) {
             view.measureTooltipElement.remove();
             view.measureTooltipElement = null;
