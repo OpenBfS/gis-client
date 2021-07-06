@@ -484,7 +484,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                     label.set('text', text);
                 }
             });
-        }, me);
+        }.bind(me));
     },
 
     /**
