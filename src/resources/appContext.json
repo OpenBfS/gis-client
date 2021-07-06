@@ -104,22 +104,6 @@
                 "fleetRoutingBtn",
                 "isochroneRoutingBtn"
             ],
-            "COPY_tools": [
-                "addWmsBtn",
-                "printBtn",
-                "cloneBtn",
-                "selectFeaturesBtn",
-                "irixPrintBtn",
-                "measureBtn",
-                "drawBtn",
-                "createVectorLayerBtn",
-                "importVectorLayerBtn",
-                "detectionLimitBtn",
-                "ScenarioAlertBtn",
-                "classicRoutingBtn",
-                "fleetRoutingBtn",
-                "isochroneRoutingBtn"
-            ],
             "vectorIcons": [
                 {
                     "src": "resources/vectorIcons/atomicon.png",
