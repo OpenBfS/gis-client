@@ -45,7 +45,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     },
 
 
-    redlineLayerStyle: function() {
+    redlineLayerStyle: function(feature) {
         return new ol.style.Style({
             fill: new ol.style.Fill({
                 color: 'rgba(255, 255, 255, 0.2)'
@@ -61,7 +61,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                 })
             }),
             text: new ol.style.Text({
-                text: this.get('text'),
+                text: feature.get('text'),
                 offsetY: -7,
                 fill: new ol.style.Fill({
                     color: 'black'
