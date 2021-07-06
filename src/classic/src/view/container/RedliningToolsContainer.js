@@ -163,9 +163,9 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
     },
 
     /**
-    * Handle pointer move.
-    * @param {ol.MapBrowserEvent} evt
-    */
+     * Handle pointer move.
+     * @param {ol.MapBrowserEvent} evt
+     */
     pointerMoveHandler: function(evt) {
         var me = this;
         var controller = me.getController();
