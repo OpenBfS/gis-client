@@ -682,9 +682,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var me = this;
         var view = me.getView();
         var sourceProj = view.map.getView().getProjection();
-        var geom = polygon.clone().transform(sourceProj, 'EPSG:4326');
-        var coordinates = geom.getLinearRing(0).getCoordinates();
-        var area = Math.abs(ol.sphere.getArea(coordinates));
+        var area = Math.abs(ol.sphere.getArea(polygon, sourceProj));
         var output;
 
         if (area > 10000) {
