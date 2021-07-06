@@ -92,7 +92,7 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
             me.createLayer('waypointStyle', view.waypointLayerName);
 
             if (view.map !== null) {
-                view.map.on('singleclick', me.onWaypointClick.bind(me));
+                view.map.on('singleclick', me.onWaypointClick);
             }
         }
     },

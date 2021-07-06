@@ -46,7 +46,7 @@ Ext.define('Koala.view.main.MainModel', {
                     this.set('noFeaturesSelected',
                         evt.target.getFeatures().length === 0
                     );
-                }, me);
+                }.bind(me));
                 return false;
             }
             return true;

@@ -24,6 +24,16 @@ Ext.define('Koala.view.panel.FeatureGridController', {
         'Koala.util.WFST'
     ],
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.onAddFeature = this.onAddFeature.bind(this);
+        this.onChangeFeature = this.onChangeFeature.bind(this);
+        this.onRemoveFeature = this.onChangeFeature.bind(this);
+
+        this.callParent(arguments);
+    },
+
     onBeforeDestroy: function() {
         var view = this.getView();
         this.unregisterListeners();
@@ -165,15 +175,17 @@ Ext.define('Koala.view.panel.FeatureGridController', {
     registerListeners: function() {
         var me = this;
         var layer = me.getView().layer;
+
+        // TODO: Check if the the scope ('this') is properly set
         layer.getSource().on('addfeature', this.onAddFeature = function(evt) {
             me.handleFeatureChanged(evt, layer);
-        }, me);
+        }.bind(me));
         layer.getSource().on('changefeature', this.onChangeFeature = function(evt) {
             me.handleFeatureChanged(evt, layer);
-        }, me);
+        }.bind(me));
         layer.getSource().on('removefeature', this.onRemoveFeature = function(evt) {
             me.handleFeatureChanged(evt, layer);
-        }, me);
+        }.bind(me));
     },
 
     /**
@@ -182,9 +194,9 @@ Ext.define('Koala.view.panel.FeatureGridController', {
     unregisterListeners: function() {
         var me = this;
         var layer = me.getView().layer;
-        layer.getSource().un('addfeature', this.onAddFeature, me);
-        layer.getSource().un('changefeature', this.onChangeFeature, me);
-        layer.getSource().un('removefeature', this.onRemoveFeature, me);
+        layer.getSource().un('addfeature', this.onAddFeature);
+        layer.getSource().un('changefeature', this.onChangeFeature);
+        layer.getSource().un('removefeature', this.onRemoveFeature);
     },
 
     downloadLayer: function() {

@@ -234,7 +234,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
 
             // click event
             if (view.map !== null) {
-                view.map.on('singleclick', me.onWaypointClick.bind(me));
+                view.map.on('singleclick', me.onWaypointClick);
             }
         }
     },

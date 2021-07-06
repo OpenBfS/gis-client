@@ -32,6 +32,19 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     alias: 'controller.k-container-redliningtoolscontainer',
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.fireRedliningChanged = this.fireRedliningChanged.bind(this);
+        this.onDrawStart = this.onDrawStart.bind(this);
+        this.onDrawEnd = this.onDrawEnd.bind(this);
+        this.onGeometryChange = this.onGeometryChange.bind(this);
+        this.updateLabel = this.updateLabel.bind(this);
+
+        this.callParent(arguments);
+    },
+
+
     redlineLayerStyle: function() {
         return new ol.style.Style({
             fill: new ol.style.Fill({
@@ -148,8 +161,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             me.redlineFeatures = new ol.Collection();
             me.redlineFeatures.on(
                 'add',
-                me.fireRedliningChanged,
-                me
+                me.fireRedliningChanged
             );
             me.createAndAddRedliningLayerIfRemoved();
         }
@@ -157,12 +169,14 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     onAdded: function() {
         var view = this.getView();
-        view.map.on('pointermove', view.pointerMoveHandler, view);
+        // TODO: Check if binding works
+        view.map.on('pointermove', view.pointerMoveHandler.bind(view));
     },
 
     onRemoved: function() {
         var view = this.getView();
-        view.map.un('pointermove', view.pointerMoveHandler, view);
+        // TODO: Check if binding works
+        view.map.un('pointermove', view.pointerMoveHandler.bind(view));
         if (view.measureTooltipElement) {
             view.measureTooltipElement.remove();
             view.measureTooltipElement = null;
@@ -245,11 +259,11 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
         if (pressed) {
             view.helpTooltipElement.classList.remove('x-hidden');
-            me.drawPointInteraction.on('drawend', me.onDrawEnd, me);
+            me.drawPointInteraction.on('drawend', me.onDrawEnd);
             me.drawPointInteraction.setActive(true);
         } else {
             view.helpTooltipElement.classList.add('x-hidden');
-            me.drawPointInteraction.un('drawend', me.onDrawEnd, me);
+            me.drawPointInteraction.un('drawend', me.onDrawEnd);
             me.drawPointInteraction.setActive(false);
         }
         me.resetSnapInteraction();
@@ -276,8 +290,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         }
         if (pressed) {
             view.helpTooltipElement.classList.remove('x-hidden');
-            me.drawLineInteraction.on('drawstart', me.onDrawStart, me);
-            me.drawLineInteraction.on('drawend', me.onDrawEnd, me);
+            me.drawLineInteraction.on('drawstart', me.onDrawStart);
+            me.drawLineInteraction.on('drawend', me.onDrawEnd);
             me.drawLineInteraction.setActive(true);
         } else {
             if (view.measureTooltipElement) {
@@ -286,8 +300,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                 view.createMeasureTooltip();
             }
             view.helpTooltipElement.classList.add('x-hidden');
-            me.drawLineInteraction.un('drawstart', me.onDrawStart, me);
-            me.drawLineInteraction.un('drawend', me.onDrawEnd, me);
+            me.drawLineInteraction.un('drawstart', me.onDrawStart);
+            me.drawLineInteraction.un('drawend', me.onDrawEnd);
             me.drawLineInteraction.setActive(false);
         }
         me.resetSnapInteraction();
@@ -313,8 +327,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
         if (pressed) {
             view.helpTooltipElement.classList.remove('x-hidden');
-            me.drawPolygonInteraction.on('drawstart', me.onDrawStart, me);
-            me.drawPolygonInteraction.on('drawend', me.onDrawEnd, me);
+            me.drawPolygonInteraction.on('drawstart', me.onDrawStart);
+            me.drawPolygonInteraction.on('drawend', me.onDrawEnd);
             me.drawPolygonInteraction.setActive(true);
         } else {
             if (view.measureTooltipElement) {
@@ -323,8 +337,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                 view.createMeasureTooltip();
             }
             view.helpTooltipElement.classList.add('x-hidden');
-            me.drawPolygonInteraction.un('drawstart', me.onDrawStart, me);
-            me.drawPolygonInteraction.un('drawend', me.onDrawEnd, me);
+            me.drawPolygonInteraction.un('drawstart', me.onDrawStart);
+            me.drawPolygonInteraction.un('drawend', me.onDrawEnd);
             me.drawPolygonInteraction.setActive(false);
         }
         me.resetSnapInteraction();
@@ -337,7 +351,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     onDrawStart: function(evt) {
         var me = this;
         me.sketch = evt.feature;
-        me.sketch.getGeometry().on('change', me.onGeometryChange, me);
+        me.sketch.getGeometry().on('change', me.onGeometryChange);
     },
 
     /**
@@ -368,7 +382,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         });
 
         me.redliningVectorLayer.getSource().addFeature(labelFeature);
-        geom.un('change', me.onGeometryChange, me);
+        geom.un('change', me.onGeometryChange);
 
         view.measureTooltipElement.remove();
         view.measureTooltipElement = null;
@@ -437,13 +451,13 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         if (pressed) {
             me.modifyInteraction.setActive(true);
             me.modifySelectInteraction.setActive(true);
-            me.modifyInteraction.on('modifyend', me.updateLabel, me);
+            me.modifyInteraction.on('modifyend', me.updateLabel);
             // me.modifyInteraction.on('modifyend',
             //         view.fireRedliningChanged, view);
         } else {
             me.modifyInteraction.setActive(false);
             me.modifySelectInteraction.setActive(false);
-            me.modifyInteraction.un('modifyend', me.updateLabel, me);
+            me.modifyInteraction.un('modifyend', me.updateLabel);
             // me.modifyInteraction.un('modifyend',
             //         view.fireRedliningChanged, view);
         }
