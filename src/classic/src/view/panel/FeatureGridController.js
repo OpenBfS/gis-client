@@ -169,6 +169,25 @@ Ext.define('Koala.view.panel.FeatureGridController', {
         }
     },
 
+    // TODO: the three following functions are all the same, maybe unite them
+    onAddFeature: function(evt) {
+        var me = this;
+        var layer = me.getView().layer;
+        me.handleFeatureChanged(evt, layer);
+    },
+
+    onChangeFeature: function(evt) {
+        var me = this;
+        var layer = me.getView().layer;
+        me.handleFeatureChanged(evt, layer);
+    },
+
+    onRemoveFeature: function(evt) {
+        var me = this;
+        var layer = me.getView().layer;
+        me.handleFeatureChanged(evt, layer);
+    },
+
     /**
      * Register listeners for WFS-T
      */
@@ -176,16 +195,9 @@ Ext.define('Koala.view.panel.FeatureGridController', {
         var me = this;
         var layer = me.getView().layer;
 
-        // TODO: Check if the the scope ('this') is properly set
-        layer.getSource().on('addfeature', this.onAddFeature = function(evt) {
-            me.handleFeatureChanged(evt, layer);
-        }.bind(me));
-        layer.getSource().on('changefeature', this.onChangeFeature = function(evt) {
-            me.handleFeatureChanged(evt, layer);
-        }.bind(me));
-        layer.getSource().on('removefeature', this.onRemoveFeature = function(evt) {
-            me.handleFeatureChanged(evt, layer);
-        }.bind(me));
+        layer.getSource().on('addfeature', this.onAddFeature);
+        layer.getSource().on('changefeature', this.onChangeFeature);
+        layer.getSource().on('removefeature', this.onRemoveFeature);
     },
 
     /**
