@@ -129,117 +129,113 @@ Ext.define('Koala.plugin.Hover', {
             return false;
         }
 
-        if (evt.originalEvent.target.className === 'ol-unselectable') {
-            me.cleanupHoverArtifacts();
+        me.cleanupHoverArtifacts();
 
-            map.forEachLayerAtPixel(pixel, function(layer, pixelValues) {
-                var source = layer.getSource();
-                var resolution = mapView.getResolution();
-                var projCode = mapView.getProjection().getCode();
-                var hoverable = layer.get(hoverableProp);
-                var hoverActive = layer.get('hoverActive');
-                if (hoverActive === false) {
-                    return;
-                }
+        map.forEachLayerAtPixel(pixel, function(layer, pixelValues) {
+            var source = layer.getSource();
+            var resolution = mapView.getResolution();
+            var projCode = mapView.getProjection().getCode();
+            var hoverable = layer.get(hoverableProp);
+            var hoverActive = layer.get('hoverActive');
+            if (hoverActive === false) {
+                return;
+            }
 
-                // a layer will NOT be requested for hovering if there is a
-                // "hoverable" property set to false. If this property is not set
-                // or has any other value than "false", the layer will be requested
-                if (hoverable !== false) {
-                    if (source instanceof ol.source.TileWMS
-                            || source instanceof ol.source.ImageWMS) {
-                        var url = source.getFeatureInfoUrl(
-                            evt.coordinate,
-                            resolution,
-                            projCode,
-                            {
-                                'INFO_FORMAT': 'application/json',
-                                'FEATURE_COUNT': 50
-                            }
+            // a layer will NOT be requested for hovering if there is a
+            // "hoverable" property set to false. If this property is not set
+            // or has any other value than "false", the layer will be requested
+            if (hoverable !== false) {
+                if (source instanceof ol.source.TileWMS
+                        || source instanceof ol.source.ImageWMS) {
+                    var url = source.getFeatureInfoUrl(
+                        evt.coordinate,
+                        resolution,
+                        projCode,
+                        {
+                            'INFO_FORMAT': 'application/json',
+                            'FEATURE_COUNT': 50
+                        }
+                    );
+
+                    me.requestAsynchronously(url, function(resp) {
+                        // TODO: replace evt/coords with real response geometry
+                        try {
+                            var respFeatures = (new ol.format.GeoJSON())
+                                .readFeatures(resp.responseText);
+                        } catch (e) {
+                            Ext.Msg.alert(
+                                Koala.getApplication().getMainView().getViewModel().get('error'),
+                                Koala.getApplication().getMainView().getViewModel().get('jsonNotSupported')
+                            );
+                        }
+                        var respProjection;
+                        try {
+                            respProjection = (new ol.format.GeoJSON())
+                                .readProjection(resp.responseText);
+                        } catch (e) {
+                            // probably an ol.AssertionError, default to wgs84
+                            respProjection = 'EPSG:4326';
+                        }
+
+                        me.showHoverFeature(
+                            layer, respFeatures, respProjection
                         );
 
-                        me.requestAsynchronously(url, function(resp) {
-                            // TODO: replace evt/coords with real response geometry
-                            try {
-                                var respFeatures = (new ol.format.GeoJSON())
-                                    .readFeatures(resp.responseText);
-                            } catch (e) {
-                                Ext.Msg.alert(
-                                    Koala.getApplication().getMainView().getViewModel().get('error'),
-                                    Koala.getApplication().getMainView().getViewModel().get('jsonNotSupported')
-                                );
-                            }
-                            var respProjection;
-                            try {
-                                respProjection = (new ol.format.GeoJSON())
-                                    .readProjection(resp.responseText);
-                            } catch (e) {
-                                // probably an ol.AssertionError, default to wgs84
-                                respProjection = 'EPSG:4326';
-                            }
-
-                            me.showHoverFeature(
-                                layer, respFeatures, respProjection
-                            );
-
-                            Ext.each(respFeatures, function(feature) {
-                                feature.set('layer', layer);
-                                var featureStyle = me.highlightStyleFunction(
-                                    feature, resolution, pixelValues);
-                                feature.setStyle(featureStyle);
-                                hoverFeatures.push(feature);
-                            });
-
-                            hoverLayers.push(layer);
-
-                            me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
+                        Ext.each(respFeatures, function(feature) {
+                            feature.set('layer', layer);
+                            var featureStyle = me.highlightStyleFunction(
+                                feature, resolution, pixelValues);
+                            feature.setStyle(featureStyle);
+                            hoverFeatures.push(feature);
                         });
-                    } else if (source instanceof ol.source.Vector) {
-                        if (layer.get('name') === 'hoverLayer') {
+
+                        hoverLayers.push(layer);
+
+                        me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
+                    });
+                } else if (source instanceof ol.source.Vector) {
+                    if (layer.get('name') === 'hoverLayer') {
+                        return;
+                    }
+                    // VECTOR!
+                    map.forEachFeatureAtPixel(pixel, function(feat) {
+                        if (layer.get('type') === 'WFS' ||
+                                layer.get('type') === 'WFSCluster') {
+                            var hvl = me.getHoverVectorLayer();
+                            // TODO This should be dynamically generated
+                            // from the clusterStyle
+                            hvl.setStyle(me.highlightStyleFunction);
+                        }
+                        if (layer.getSource().getFeatures().indexOf(feat) === -1) {
                             return;
                         }
-                        // VECTOR!
-                        map.forEachFeatureAtPixel(pixel, function(feat) {
-                            if (layer.get('type') === 'WFS' ||
-                                    layer.get('type') === 'WFSCluster') {
-                                var hvl = me.getHoverVectorLayer();
-                                // TODO This should be dynamically generated
-                                // from the clusterStyle
-                                hvl.setStyle(me.highlightStyleFunction);
-                            }
-                            if (layer.getSource().getFeatures().indexOf(feat) === -1) {
-                                return;
-                            }
-                            var featureClone = feat.clone();
-                            if (featureClone.get('layer')) {
-                                return;
-                            }
-                            featureClone.set('layer', layer);
-                            if (!Ext.Array.contains(hoverLayers, layer)) {
-                                hoverLayers.push(layer);
-                            }
-                            hoverFeatures.push(featureClone);
-                            me.showHoverFeature(layer, hoverFeatures);
-                            me.currentHoverTarget = feat;
-                        }.bind(me),
-                        {
-                            layerFilter: function(vectorCand) {
-                                return vectorCand === layer;
-                            }
+                        var featureClone = feat.clone();
+                        if (featureClone.get('layer')) {
+                            return;
                         }
-                        );
+                        featureClone.set('layer', layer);
+                        if (!Ext.Array.contains(hoverLayers, layer)) {
+                            hoverLayers.push(layer);
+                        }
+                        hoverFeatures.push(featureClone);
+                        me.showHoverFeature(layer, hoverFeatures);
+                        me.currentHoverTarget = feat;
+                    }.bind(me),
+                    {
+                        layerFilter: function(vectorCand) {
+                            return vectorCand === layer;
+                        }
                     }
+                    );
                 }
-            }.bind(this),
-            {
-                layerFilter: me.hoverLayerFilter.bind(this)
             }
-            );
-            me.highlightFeaturesInGrid(hoverFeatures);
-            me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
-        } else {
-            return;
+        }.bind(this),
+        {
+            layerFilter: me.hoverLayerFilter.bind(this)
         }
+        );
+        me.highlightFeaturesInGrid(hoverFeatures);
+        me.showHoverToolTip(evt, hoverLayers, hoverFeatures);
     },
 
     /**
