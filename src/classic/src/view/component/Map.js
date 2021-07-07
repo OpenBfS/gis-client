@@ -83,11 +83,25 @@ Ext.define('Koala.view.component.Map', {
         // MousePosition Control
         var mousePositionControl = new ol.control.MousePosition({
             coordinateFormat: ol.coordinate.createStringXY(2),
-            //projection: map.getView().getProjection(),
             projection: ol.proj.get('EPSG:4326'),
             className: 'mouse-position-control'
         });
         map.addControl(mousePositionControl);
+
+        // Workaround: ensures the mousePosition HTML element is removed after
+        // the mouse has left the map. In OpenLayer 6 it seems not possible to
+        // set an empty string in case the mouse is outside the map. Instead a
+        // whitespace ('&nbsp;') is set. This causes the CSS to think the element is not empty and will therefore not be removed.
+        // see: https://github.com/openlayers/openlayers/issues/12482
+        // The listener below fixes this behaviour by replacing a whitespace
+        // with an empty string.
+        document.onmousemove = function() {
+            var mpDiv = Ext.dom.Query.select('.mouse-position-control')[0];
+            if (mpDiv.innerHTML === '&nbsp;') {
+                // replace whitespace with empty string
+                mpDiv.innerHTML = '';
+            }
+        };
 
         container.on('overviewmapToggle', function(overviewMap) {
             var visible = overviewMap.isVisible();
