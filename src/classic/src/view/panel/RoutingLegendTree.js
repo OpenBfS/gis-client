@@ -78,6 +78,14 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         }
     }],
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.updateLegendsWithScale = this.updateLegendsWithScale.bind(this);
+
+        this.callParent(arguments);
+    },
+
     listeners: {
         selectionchange: 'onSelectionChange',
         beforerender: 'bindUtcBtnToggleHandler',
@@ -990,7 +998,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
             Koala.util.Layer.repaintLayerFilterIndication, 50, Koala.util.Layer);
 
         // Register moveend to update legendUrls
-        map.on('moveend', me.updateLegendsWithScale.bind(me));
+        map.on('moveend', me.updateLegendsWithScale);
         // Ensure a previous selection is kept after datachange
         treeStore.on('datachanged', me.layerDataChanged, me);
 
@@ -1088,7 +1096,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         var treeStore = me.getStore();
 
         // Unregister moveend to update legendUrls
-        map.un('moveend', me.updateLegendsWithScale.bind(me));
+        map.un('moveend', me.updateLegendsWithScale);
         treeStore.un('datachanged', me.layerDataChanged, me);
         treeView.un({
             collapsebody: me.onCollapseBody,

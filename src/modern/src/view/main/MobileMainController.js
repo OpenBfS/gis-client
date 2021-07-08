@@ -32,6 +32,14 @@ Ext.define('Koala.view.main.MobileMainController', {
 
     loadMask: null,
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.onMapSingleClick = this.onMapSingleClick.bind(this);
+
+        this.callParent(arguments);
+    },
+
     onMainPanelPainted: function() {
         var me = this;
         var view = me.getView();
@@ -76,7 +84,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var mapComponent = this.getView().down('basigx-component-map');
         var map = mapComponent.getMap();
-        map.on('singleclick', me.onMapSingleClick.bind(me));
+        map.on('singleclick', me.onMapSingleClick);
         me.on('destroy', me.teardownMapClickHandler.bind(me));
     },
 
@@ -84,7 +92,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var mapComponent = this.getView().down('basigx-component-map');
         var map = mapComponent.getMap();
-        map.un('singleclick', me.onMapSingleClick.bind(me));
+        map.un('singleclick', me.onMapSingleClick);
     },
 
     /**

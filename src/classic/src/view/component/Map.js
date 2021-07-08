@@ -183,7 +183,7 @@ Ext.define('Koala.view.component.Map', {
             ]
         });
         dragAndDropInteraction.on(
-            'addfeatures', controller.onDroppedExternalVectorData, controller
+            'addfeatures', controller.onDroppedExternalVectorData.bind(controller)
         );
         me.map.addInteraction(dragAndDropInteraction);
     },

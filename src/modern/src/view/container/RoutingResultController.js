@@ -20,6 +20,14 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
     extend: 'Koala.view.container.RoutingResultController',
     alias: 'controller.k-container-modernroutingresult',
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.hideViews = this.hideViews.bind(this);
+
+        this.callParent(arguments);
+    },
+
     /**
      * Handler for the routingResultChanged event.
      *
@@ -100,7 +108,7 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
             return;
         }
 
-        map.on('singleclick', me.hideViews.bind(me));
+        map.on('singleclick', me.hideViews);
     },
 
     /**
@@ -112,7 +120,7 @@ Ext.define('Koala.view.container.ModernRoutingResultController', {
         var view = me.getView();
         var map = view.map;
 
-        map.un('singleclick', me.hideViews.bind(me));
+        map.un('singleclick', me.hideViews);
         view.hide();
 
         var routingSettings = Ext.ComponentQuery.query('[name=routing-panel]')[0];
