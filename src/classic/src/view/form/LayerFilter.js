@@ -165,7 +165,14 @@ Ext.define('Koala.view.form.LayerFilter', {
                 propertyName = filter.param;
             }
         });
-        var inputs = 'layerName=' + metadata.layerConfig.wms.layers;
+        var layerName;
+        if (metadata.layerConfig.wms) {
+            layerName = metadata.layerConfig.wms.layers;
+        } else {
+            var vectorUrl = new URL(metadata.layerConfig.vector.url);
+            layerName = vectorUrl.searchParams.get('typeName');
+        }
+        var inputs = 'layerName=' + layerName;
         inputs += ';propertyName=' + propertyName;
         inputs += ';filter=' + encodeURIComponent(propertyName + ' >= \'' + minValue.toISOString() + '\' and ' +
             propertyName + ' <= \'' + maxValue.toISOString() + '\'');
