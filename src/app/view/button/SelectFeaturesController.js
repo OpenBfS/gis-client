@@ -130,7 +130,6 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
             });
             this.mapComponent.map.addInteraction(this.dragBoxInteraction);
         }
-        // TODO: check if it works as expected
         this.mapComponent.map.on('click', this.singleSelect);
         this.dragBoxInteraction.setActive(true);
         this.dragBoxInteraction.on('boxend', this.boxEnd);
@@ -163,7 +162,6 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
         if (this.dragBoxInteraction) {
             this.dragBoxInteraction.setActive(false);
         }
-        // TODO: check if it works as expected
         this.mapComponent.map.un('click', this.singleSelect);
         if (this.selectionLayer) {
             this.selectionLayer.getSource().clear();
