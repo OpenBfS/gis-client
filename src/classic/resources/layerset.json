@@ -338,6 +338,16 @@
                 "uuid": "3c8c9d90-46fc-4e90-becf-9f2e4b9ba6ac",
                 "text": "Nuklide in Weide- und Wiesenbewuchs",
                 "leaf": true
+            },
+            {
+                "uuid": "566dd790-9d0e-4028-bdcd-891a2d7204c8",
+                "text": "Weide- und Wiesenbewuchs",
+                "leaf": true
+            },
+            {
+                "uuid": "6e7ad8db-d038-45a6-b904-e83c0e60c0e6",
+                "text": "Weide- und Wiesenbewuchs / Landkreis",
+                "leaf": true
             }
         ],
         "isLayerProfile": false,

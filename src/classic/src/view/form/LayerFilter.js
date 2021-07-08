@@ -80,7 +80,7 @@ Ext.define('Koala.view.form.LayerFilter', {
 
         me.chartContainer = me.add({
             html: '<div class="timeselect-chart"></div>',
-            height: 200,
+            height: 100,
             width: 400,
             hidden: true
         });
@@ -238,8 +238,13 @@ Ext.define('Koala.view.form.LayerFilter', {
         var me = this;
         var elm = document.querySelector('.timeselect-chart');
         this.chartContainer.setLoading(false);
+        var json = JSON.parse(response.responseText);
+        if (json.success === false) {
+            me.chartContainer.el.dom.style.display = 'none';
+            return;
+        }
         var data = [];
-        Ext.each(JSON.parse(response.responseText), function(d) {
+        Ext.each(json, function(d) {
             data.push(new Date(d.val).getTime());
         });
         data.sort();
@@ -289,7 +294,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         }
         this.chartConfig = {
             components: [this.timeSelectComponent = new D3Util.TimeSelectComponent(this.timeSelectConfig)],
-            size: [400, 200]
+            size: [400, 100]
         };
 
         this.chartRenderer = new D3Util.ChartRenderer(this.chartConfig);
