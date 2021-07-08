@@ -461,14 +461,10 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             me.modifyInteraction.setActive(true);
             me.modifySelectInteraction.setActive(true);
             me.modifyInteraction.on('modifyend', me.updateLabel);
-            // me.modifyInteraction.on('modifyend',
-            //         view.fireRedliningChanged, view);
         } else {
             me.modifyInteraction.setActive(false);
             me.modifySelectInteraction.setActive(false);
             me.modifyInteraction.un('modifyend', me.updateLabel);
-            // me.modifyInteraction.un('modifyend',
-            //         view.fireRedliningChanged, view);
         }
     },
 
