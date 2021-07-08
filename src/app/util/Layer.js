@@ -963,7 +963,7 @@ Ext.define('Koala.util.Layer', {
             var hoverPlugin = mapComp.getPlugin('hoverBfS');
 
             if (hoverPlugin) {
-                layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts, hoverPlugin);
+                layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts.bind(hoverPlugin));
                 if (layer instanceof ol.layer.Group) {
                     // additionally, if the new layer is a group layer, we need to
                     // bind ourself for all sublayers
