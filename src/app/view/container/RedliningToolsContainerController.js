@@ -559,7 +559,9 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                             me.deleteSelectInteraction.getFeatures();
                         removeFeatures(selFeatures);
                     }
-                }
+                },
+                // do not change style on hover or snap
+                style: null
             });
             view.map.addInteraction(me.deleteSelectInteraction);
 
