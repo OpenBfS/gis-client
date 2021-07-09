@@ -85,7 +85,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         var mapComponent = this.getView().down('basigx-component-map');
         var map = mapComponent.getMap();
         map.on('singleclick', me.onMapSingleClick);
-        me.on('destroy', me.teardownMapClickHandler.bind(me));
+        me.on('destroy', me.teardownMapClickHandler, me);
     },
 
     teardownMapClickHandler: function() {
