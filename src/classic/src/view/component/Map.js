@@ -91,7 +91,8 @@ Ext.define('Koala.view.component.Map', {
         // Workaround: ensures the mousePosition HTML element is removed after
         // the mouse has left the map. In OpenLayer 6 it seems not possible to
         // set an empty string in case the mouse is outside the map. Instead a
-        // whitespace ('&nbsp;') is set. This causes the CSS to think the element is not empty and will therefore not be removed.
+        // whitespace ('&nbsp;') is set. This causes the CSS to think the
+        // element is not empty and will therefore not be removed.
         // see: https://github.com/openlayers/openlayers/issues/12482
         // The listener below fixes this behaviour by replacing a whitespace
         // with an empty string.
