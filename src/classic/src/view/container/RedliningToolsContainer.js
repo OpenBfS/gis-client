@@ -210,8 +210,8 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
     },
 
     /**
-    * Creates a new help tooltip
-    */
+     * Creates a new help tooltip
+     */
     createHelpTooltip: function() {
         var me = this;
         if (me.helpTooltipElement) {
