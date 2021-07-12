@@ -94,6 +94,8 @@ Ext.define('Koala.view.component.Map', {
         // whitespace ('&nbsp;') is set. This causes the CSS to think the
         // element is not empty and will therefore not be removed.
         // see: https://github.com/openlayers/openlayers/issues/12482
+        // Once https://github.com/openlayers/openlayers/pull/12491 is released,
+        // this workaround can be removed.
         // The listener below fixes this behaviour by replacing a whitespace
         // with an empty string.
         document.onmousemove = function() {
