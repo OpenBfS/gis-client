@@ -1144,6 +1144,10 @@ Ext.define('Koala.util.Layer', {
 
             layerConfig.source = new SourceClass(sourceConfig);
 
+            // Setting 'className' is necessary for properly using 'forEachLayerAtPixel()'
+            // see https://openlayers.org/en/v6.5.0/apidoc/module-ol_Map-Map.html#forEachLayerAtPixel
+            layerConfig.className = layerConfig.name;
+
             var layer = new LayerClass(layerConfig);
             layer.metadata = metadata;
             Koala.util.Layer.getVectorLayerStyle(layer, true);
