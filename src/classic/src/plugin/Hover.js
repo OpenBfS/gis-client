@@ -229,9 +229,9 @@ Ext.define('Koala.plugin.Hover', {
                     );
                 }
             }
-        }.bind(this),
+        }.bind(me),
         {
-            layerFilter: me.hoverLayerFilter.bind(this)
+            layerFilter: me.hoverLayerFilter.bind(me)
         }
         );
         me.highlightFeaturesInGrid(hoverFeatures);
