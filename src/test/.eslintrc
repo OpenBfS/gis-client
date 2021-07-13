@@ -9,7 +9,7 @@
     "globals": {
         "document": false,
         "expect": false,
-        "sinon":false,,
+        "sinon":false,
         "TestUtil":false,
 
         "Ext": true,
