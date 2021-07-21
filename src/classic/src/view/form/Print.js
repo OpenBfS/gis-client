@@ -1548,7 +1548,7 @@ Ext.define('Koala.view.form.Print', {
             delete irixJson.irix.DokpoolBehaviour;
 
             irixJson.irix.DokpoolMeta.Elan = {};
-            irixJson.irix.DokpoolMeta.Elan.Scenarios = irixJson.irix.Scenarios;
+            irixJson.irix.DokpoolMeta.Elan.Scenario = irixJson.irix.Scenarios;
             delete irixJson.irix.Scenarios;
         }
         if (this.config.chartPrint) {
