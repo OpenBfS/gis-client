@@ -112,15 +112,6 @@ Ext.define('Koala.view.form.Print', {
             }
         }
 
-        var formatCombo = me.down('combo[name=format]');
-        formatCombo.getStore().filterBy(function(rec) {
-            var fmt = rec.get('field1');
-            if (fmt === 'jpeg' || fmt === 'jpg' || fmt === 'bmp') {
-                return false;
-            }
-            return true;
-        });
-
         var appCombo = me.down('combo[name=appCombo]');
         appCombo.setFieldLabel('Printapp');
 
