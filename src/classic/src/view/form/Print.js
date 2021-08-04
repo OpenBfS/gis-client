@@ -747,7 +747,7 @@ Ext.define('Koala.view.form.Print', {
         var ratioX = 1;
         var ratioY = 1;
 
-        if (this.transformInteraction) {
+        if (this.transformInteraction && this.transformInteraction.layers_[0].getSource().getFeatures()[0]) {
             var boxFeature = this.transformInteraction.layers_[0].getSource().getFeatures()[0];
             var extent = boxFeature.getGeometry().getExtent();
             var resolution = mapView.getResolution();
@@ -1556,7 +1556,7 @@ Ext.define('Koala.view.form.Print', {
             delete irixJson.irix.DokpoolBehaviour;
 
             irixJson.irix.DokpoolMeta.Elan = {};
-            irixJson.irix.DokpoolMeta.Elan.Scenarios = irixJson.irix.Scenarios;
+            irixJson.irix.DokpoolMeta.Elan.Scenario = irixJson.irix.Scenarios;
             delete irixJson.irix.Scenarios;
         }
         if (this.config.chartPrint) {
