@@ -59,7 +59,7 @@ Ext.define('Koala.util.MetadataQuery', {
          * @param  {Object} config the config object to write the layer tree
          * info to
          */
-        extractLayerInfo: function(doc, node, config) {
+        extractLayerInfo: function(doc, config) {
             config.text = doc.querySelector('legendTitle').querySelector('CharacterString').textContent;
             config.uuid = doc.querySelector('fileIdentifier').querySelector('CharacterString').textContent;
             config.leaf = true;
@@ -84,14 +84,12 @@ Ext.define('Koala.util.MetadataQuery', {
         postProcessMetadata: function(docs) {
             var filtered = [];
             Ext.each(docs, function(doc) {
-                var node = doc;
-                doc = node.ownerDocument;
                 var strings = doc.querySelectorAll('CharacterString');
                 for (var i = 0; i < strings.length; ++i) {
                     if (strings.item(i).textContent === 'importLayer') {
                         var layer = {};
                         filtered.push(layer);
-                        Koala.util.MetadataQuery.extractLayerInfo(doc, node, layer);
+                        Koala.util.MetadataQuery.extractLayerInfo(doc, layer);
                         break;
                     }
                 }

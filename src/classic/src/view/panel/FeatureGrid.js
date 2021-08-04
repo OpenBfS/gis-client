@@ -304,11 +304,7 @@ Ext.define('Koala.view.panel.FeatureGrid', {
                             wfstSuccessCallback,
                             wfstFailureCallback,
                             role
-                        ).catch(function() {
-                            Ext.toast(me.getViewModel().get('saveFailedMessage'));
-                        }).finally(function() {
-                            Ext.ComponentQuery.query('k-panel-featuregrid')[0].setLoading(false);
-                        });
+                        );
                     };
 
                     if (me.layer.get('persisted') ||
