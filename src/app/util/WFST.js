@@ -133,7 +133,7 @@ Ext.define('Koala.util.WFST', {
                         (result.totalInserted && result.totalInserted > 0) ||
                         (result.totalUpdated && result.totalUpdated > 0)) {
                         // TODO: layer needs to be transformed to real WFS layer
-                        layer.getSource().refresh();
+                        layer.changed();
                     }
                     wfstSuccessCallback.call(this, transactionResponse);
                 },

@@ -28,6 +28,15 @@ Ext.define('Koala.view.window.RoutingController', {
         'Koala.util.AppContext'
     ],
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.onWaypointClick = this.onWaypointClick.bind(this);
+
+        this.callParent(arguments);
+    },
+
+
     /**
      * Change the language variable in the ViewModel.
      *
@@ -513,7 +522,7 @@ Ext.define('Koala.view.window.RoutingController', {
         }
 
         if (view.map !== null) {
-            view.map.un('singleclick', me.onWaypointClick, me);
+            view.map.un('singleclick', me.onWaypointClick);
         }
 
         if (vm.get('waypointPopup') !== null) {

@@ -15,7 +15,7 @@ module.exports = function(config) {
         'ext/packages/ux/classic/src/**/*js',
         'ext/packages/ux/src/**/*js',
         'resources/lib/geostyler-libs/geostyler-openlayers-parser/browser/olStyleParser.js',
-        'resources/lib/openlayers-v4.6.4-dist/ol.js',
+        'resources/lib/openlayers-v6.5.2-dist/ol.js',
         'test/raf.polyfill.js',
         'overrides/**/*js',
         'app/**/*js',

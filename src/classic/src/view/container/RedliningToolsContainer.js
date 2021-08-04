@@ -163,9 +163,9 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
     },
 
     /**
-    * Handle pointer move.
-    * @param {ol.MapBrowserEvent} evt
-    */
+     * Handle pointer move.
+     * @param {ol.MapBrowserEvent} evt
+     */
     pointerMoveHandler: function(evt) {
         var me = this;
         var controller = me.getController();
@@ -210,8 +210,8 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
     },
 
     /**
-    * Creates a new help tooltip
-    */
+     * Creates a new help tooltip
+     */
     createHelpTooltip: function() {
         var me = this;
         if (me.helpTooltipElement) {

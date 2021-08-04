@@ -32,6 +32,14 @@ Ext.define('Koala.view.main.MobileMainController', {
 
     loadMask: null,
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.onMapSingleClick = this.onMapSingleClick.bind(this);
+
+        this.callParent(arguments);
+    },
+
     onMainPanelPainted: function() {
         var me = this;
         var view = me.getView();
@@ -76,7 +84,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var mapComponent = this.getView().down('basigx-component-map');
         var map = mapComponent.getMap();
-        map.on('singleclick', me.onMapSingleClick, me);
+        map.on('singleclick', me.onMapSingleClick);
         me.on('destroy', me.teardownMapClickHandler, me);
     },
 
@@ -84,7 +92,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         var me = this;
         var mapComponent = this.getView().down('basigx-component-map');
         var map = mapComponent.getMap();
-        map.un('singleclick', me.onMapSingleClick, me);
+        map.un('singleclick', me.onMapSingleClick);
     },
 
     /**
@@ -95,7 +103,7 @@ Ext.define('Koala.view.main.MobileMainController', {
         var coordinate = evt.coordinate;
         var mapProj = evt.map.getView().getProjection().getCode();
 
-        //show geographic coords regardless og map projection
+        // show geographic coords regardless of map projection
         var lonlat_coord = ol.proj.transform(coordinate,mapProj,'EPSG:4326');
         var lon = parseFloat(lonlat_coord[0]).toFixed(2);
         var lat = parseFloat(lonlat_coord[1]).toFixed(2);
@@ -124,7 +132,7 @@ Ext.define('Koala.view.main.MobileMainController', {
                 'INFO_FORMAT': 'application/json',
                 'FEATURE_COUNT': '1'
             };
-            var url = me.chartingLayer.getSource().getGetFeatureInfoUrl(
+            var url = me.chartingLayer.getSource().getFeatureInfoUrl(
                 coordinate, resolution, projCode, urlParams
             );
             me.loadMask.show();

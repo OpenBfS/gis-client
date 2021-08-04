@@ -73,17 +73,38 @@ Ext.define('Koala.view.component.Map', {
             hoverPlugin.highlightStyleFunction = highlightStyleFunction;
         }
 
-        // TODO We should may move this to another place.
+        // register projections defined in
+        // "src/resources/lib/proj4js/proj4-defs.js"
+        ol.proj.proj4.register(proj4);
+
+        // TODO We should move this to another place.
         ol.proj.get('EPSG:25832').setExtent([-1878007.03, 3932282.86, 831544.53, 9437501.55]);
 
         // MousePosition Control
         var mousePositionControl = new ol.control.MousePosition({
             coordinateFormat: ol.coordinate.createStringXY(2),
-            //projection: map.getView().getProjection(),
             projection: ol.proj.get('EPSG:4326'),
             className: 'mouse-position-control'
         });
         map.addControl(mousePositionControl);
+
+        // Workaround: ensures the mousePosition HTML element is removed after
+        // the mouse has left the map. In OpenLayer 6 it seems not possible to
+        // set an empty string in case the mouse is outside the map. Instead a
+        // whitespace ('&nbsp;') is set. This causes the CSS to think the
+        // element is not empty and will therefore not be removed.
+        // see: https://github.com/openlayers/openlayers/issues/12482
+        // Once https://github.com/openlayers/openlayers/pull/12491 is released,
+        // this workaround can be removed.
+        // The listener below fixes this behaviour by replacing a whitespace
+        // with an empty string.
+        document.onmousemove = function() {
+            var mpDiv = Ext.dom.Query.select('.mouse-position-control')[0];
+            if (mpDiv.innerHTML === '&nbsp;') {
+                // replace whitespace with empty string
+                mpDiv.innerHTML = '';
+            }
+        };
 
         container.on('overviewmapToggle', function(overviewMap) {
             var visible = overviewMap.isVisible();
@@ -165,7 +186,7 @@ Ext.define('Koala.view.component.Map', {
             ]
         });
         dragAndDropInteraction.on(
-            'addfeatures', controller.onDroppedExternalVectorData, controller
+            'addfeatures', controller.onDroppedExternalVectorData.bind(controller)
         );
         me.map.addInteraction(dragAndDropInteraction);
     },

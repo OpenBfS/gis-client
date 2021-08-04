@@ -37,6 +37,16 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
     shiftKeyPressed: false,
     ctrlKeyPressed: false,
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.boxEnd = this.boxEnd.bind(this);
+        this.boxStart = this.boxStart.bind(this);
+        this.singleSelect = this.singleSelect.bind(this);
+
+        this.callParent(arguments);
+    },
+
     /**
      * Handler when the select features button is toggled
      * @param {object} btn The button that has been pressed
@@ -120,11 +130,10 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
             });
             this.mapComponent.map.addInteraction(this.dragBoxInteraction);
         }
-        this.mapComponent.map.on(
-            'click', this.boundSingleSelect = this.singleSelect.bind(this));
+        this.mapComponent.map.on('click', this.singleSelect);
         this.dragBoxInteraction.setActive(true);
-        this.dragBoxInteraction.on('boxend', this.boxEnd, this);
-        this.dragBoxInteraction.on('boxstart', this.boxStart, this);
+        this.dragBoxInteraction.on('boxend', this.boxEnd);
+        this.dragBoxInteraction.on('boxstart', this.boxStart);
 
         // disable maps dragzoom control (shift + mousedrag) and double click zoom
         this.mapComponent.map.getInteractions().forEach(function(interaction) {
@@ -153,7 +162,7 @@ Ext.define('Koala.view.button.SelectFeaturesController', {
         if (this.dragBoxInteraction) {
             this.dragBoxInteraction.setActive(false);
         }
-        this.mapComponent.map.un('click', this.boundSingleSelect);
+        this.mapComponent.map.un('click', this.singleSelect);
         if (this.selectionLayer) {
             this.selectionLayer.getSource().clear();
         }

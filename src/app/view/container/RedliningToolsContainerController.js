@@ -32,7 +32,20 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
     alias: 'controller.k-container-redliningtoolscontainer',
 
-    redlineLayerStyle: function() {
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.fireRedliningChanged = this.fireRedliningChanged.bind(this);
+        this.onDrawStart = this.onDrawStart.bind(this);
+        this.onDrawEnd = this.onDrawEnd.bind(this);
+        this.onGeometryChange = this.onGeometryChange.bind(this);
+        this.updateLabel = this.updateLabel.bind(this);
+
+        this.callParent(arguments);
+    },
+
+
+    redlineLayerStyle: function(feature) {
         return new ol.style.Style({
             fill: new ol.style.Fill({
                 color: 'rgba(255, 255, 255, 0.2)'
@@ -48,7 +61,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                 })
             }),
             text: new ol.style.Text({
-                text: this.get('text'),
+                text: feature.get('text'),
                 offsetY: -7,
                 fill: new ol.style.Fill({
                     color: 'black'
@@ -137,8 +150,6 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
      */
     deleteSnapInteraction: null,
 
-    wgs84Sphere: new ol.Sphere(6378137),
-
     /**
      * Listener called on the components initialization. It creates the
      * redLineLayer and adds it to the map.
@@ -150,21 +161,31 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             me.redlineFeatures = new ol.Collection();
             me.redlineFeatures.on(
                 'add',
-                me.fireRedliningChanged,
-                me
+                me.fireRedliningChanged
             );
             me.createAndAddRedliningLayerIfRemoved();
         }
     },
 
+    /**
+     * Reference to 'view.pointerMoveHandler' function
+     * with the 'view' as scope.
+     * Necessary for properly removing the listener
+     * again.
+     */
+    boundPointerMoveHandler: null,
+
     onAdded: function() {
         var view = this.getView();
-        view.map.on('pointermove', view.pointerMoveHandler, view);
+
+        // storing function is necessary for properly removing it later on
+        this.boundPointerMoveHandler = view.pointerMoveHandler.bind(view);
+        view.map.on('pointermove', this.boundPointerMoveHandler);
     },
 
     onRemoved: function() {
         var view = this.getView();
-        view.map.un('pointermove', view.pointerMoveHandler, view);
+        view.map.un('pointermove', this.boundPointerMoveHandler);
         if (view.measureTooltipElement) {
             view.measureTooltipElement.remove();
             view.measureTooltipElement = null;
@@ -247,11 +268,11 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
         if (pressed) {
             view.helpTooltipElement.classList.remove('x-hidden');
-            me.drawPointInteraction.on('drawend', me.onDrawEnd, me);
+            me.drawPointInteraction.on('drawend', me.onDrawEnd);
             me.drawPointInteraction.setActive(true);
         } else {
             view.helpTooltipElement.classList.add('x-hidden');
-            me.drawPointInteraction.un('drawend', me.onDrawEnd, me);
+            me.drawPointInteraction.un('drawend', me.onDrawEnd);
             me.drawPointInteraction.setActive(false);
         }
         me.resetSnapInteraction();
@@ -278,8 +299,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         }
         if (pressed) {
             view.helpTooltipElement.classList.remove('x-hidden');
-            me.drawLineInteraction.on('drawstart', me.onDrawStart, me);
-            me.drawLineInteraction.on('drawend', me.onDrawEnd, me);
+            me.drawLineInteraction.on('drawstart', me.onDrawStart);
+            me.drawLineInteraction.on('drawend', me.onDrawEnd);
             me.drawLineInteraction.setActive(true);
         } else {
             if (view.measureTooltipElement) {
@@ -288,8 +309,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                 view.createMeasureTooltip();
             }
             view.helpTooltipElement.classList.add('x-hidden');
-            me.drawLineInteraction.un('drawstart', me.onDrawStart, me);
-            me.drawLineInteraction.un('drawend', me.onDrawEnd, me);
+            me.drawLineInteraction.un('drawstart', me.onDrawStart);
+            me.drawLineInteraction.un('drawend', me.onDrawEnd);
             me.drawLineInteraction.setActive(false);
         }
         me.resetSnapInteraction();
@@ -315,8 +336,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
         if (pressed) {
             view.helpTooltipElement.classList.remove('x-hidden');
-            me.drawPolygonInteraction.on('drawstart', me.onDrawStart, me);
-            me.drawPolygonInteraction.on('drawend', me.onDrawEnd, me);
+            me.drawPolygonInteraction.on('drawstart', me.onDrawStart);
+            me.drawPolygonInteraction.on('drawend', me.onDrawEnd);
             me.drawPolygonInteraction.setActive(true);
         } else {
             if (view.measureTooltipElement) {
@@ -325,8 +346,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                 view.createMeasureTooltip();
             }
             view.helpTooltipElement.classList.add('x-hidden');
-            me.drawPolygonInteraction.un('drawstart', me.onDrawStart, me);
-            me.drawPolygonInteraction.un('drawend', me.onDrawEnd, me);
+            me.drawPolygonInteraction.un('drawstart', me.onDrawStart);
+            me.drawPolygonInteraction.un('drawend', me.onDrawEnd);
             me.drawPolygonInteraction.setActive(false);
         }
         me.resetSnapInteraction();
@@ -339,7 +360,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     onDrawStart: function(evt) {
         var me = this;
         me.sketch = evt.feature;
-        me.sketch.getGeometry().on('change', me.onGeometryChange, me);
+        me.sketch.getGeometry().on('change', me.onGeometryChange);
     },
 
     /**
@@ -370,7 +391,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         });
 
         me.redliningVectorLayer.getSource().addFeature(labelFeature);
-        geom.un('change', me.onGeometryChange, me);
+        geom.un('change', me.onGeometryChange);
 
         view.measureTooltipElement.remove();
         view.measureTooltipElement = null;
@@ -439,15 +460,11 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         if (pressed) {
             me.modifyInteraction.setActive(true);
             me.modifySelectInteraction.setActive(true);
-            me.modifyInteraction.on('modifyend', me.updateLabel, me);
-            // me.modifyInteraction.on('modifyend',
-            //         view.fireRedliningChanged, view);
+            me.modifyInteraction.on('modifyend', me.updateLabel);
         } else {
             me.modifyInteraction.setActive(false);
             me.modifySelectInteraction.setActive(false);
-            me.modifyInteraction.un('modifyend', me.updateLabel, me);
-            // me.modifyInteraction.un('modifyend',
-            //         view.fireRedliningChanged, view);
+            me.modifyInteraction.un('modifyend', me.updateLabel);
         }
     },
 
@@ -486,7 +503,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                     label.set('text', text);
                 }
             });
-        }, me);
+        }.bind(me));
     },
 
     /**
@@ -542,7 +559,9 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                             me.deleteSelectInteraction.getFeatures();
                         removeFeatures(selFeatures);
                     }
-                }
+                },
+                // do not change style on hover or snap
+                style: null
             });
             view.map.addInteraction(me.deleteSelectInteraction);
 
@@ -642,7 +661,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
             var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
             var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
-            length += me.wgs84Sphere.haversineDistance(c1, c2);
+            length += ol.sphere.getDistance(c1, c2);
         }
         if (length > 100) {
             output = (Math.round(length / 1000 * 100) / 100) + ' ' + 'km';
@@ -661,9 +680,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var me = this;
         var view = me.getView();
         var sourceProj = view.map.getView().getProjection();
-        var geom = polygon.clone().transform(sourceProj, 'EPSG:4326');
-        var coordinates = geom.getLinearRing(0).getCoordinates();
-        var area = Math.abs(me.wgs84Sphere.geodesicArea(coordinates));
+        var area = Math.abs(ol.sphere.getArea(polygon, sourceProj));
         var output;
 
         if (area > 10000) {

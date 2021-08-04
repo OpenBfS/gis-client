@@ -71,6 +71,14 @@ Ext.define('Koala.view.form.Print', {
 
     useJsonp: false,
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.renderAllClientInfos = this.renderAllClientInfos.bind(this);
+
+        this.callParent(arguments);
+    },
+
     initComponent: function() {
         var me = this;
         var dpc;
@@ -622,7 +630,7 @@ Ext.define('Koala.view.form.Print', {
         switch (attributeRec.get('type')) {
             case 'MapAttributeValues':
                 attributeFields = me.getMapAttributeFields(attributeRec);
-                map.on('moveend', me.renderAllClientInfos, me);
+                map.on('moveend', me.renderAllClientInfos);
                 break;
             case 'NorthArrowAttributeValues':
                 attributeFields = me.getNorthArrowAttributeFields(attributeRec);

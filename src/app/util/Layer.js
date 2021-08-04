@@ -963,7 +963,7 @@ Ext.define('Koala.util.Layer', {
             var hoverPlugin = mapComp.getPlugin('hoverBfS');
 
             if (hoverPlugin) {
-                layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts, hoverPlugin);
+                layer.on('change:visible', hoverPlugin.cleanupHoverArtifacts.bind(hoverPlugin));
                 if (layer instanceof ol.layer.Group) {
                     // additionally, if the new layer is a group layer, we need to
                     // bind ourself for all sublayers
@@ -1143,6 +1143,10 @@ Ext.define('Koala.util.Layer', {
             sourceConfig.params = Ext.Object.merge(sourceConfig.params, mdParamConfig);
 
             layerConfig.source = new SourceClass(sourceConfig);
+
+            // Setting 'className' is necessary for properly using 'forEachLayerAtPixel()'
+            // see https://openlayers.org/en/v6.5.0/apidoc/module-ol_Map-Map.html#forEachLayerAtPixel
+            layerConfig.className = layerConfig.name;
 
             var layer = new LayerClass(layerConfig);
             layer.metadata = metadata;

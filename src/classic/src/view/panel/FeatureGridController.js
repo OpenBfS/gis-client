@@ -24,6 +24,16 @@ Ext.define('Koala.view.panel.FeatureGridController', {
         'Koala.util.WFST'
     ],
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.onAddFeature = this.onAddFeature.bind(this);
+        this.onChangeFeature = this.onChangeFeature.bind(this);
+        this.onRemoveFeature = this.onChangeFeature.bind(this);
+
+        this.callParent(arguments);
+    },
+
     onBeforeDestroy: function() {
         var view = this.getView();
         this.unregisterListeners();
@@ -159,21 +169,35 @@ Ext.define('Koala.view.panel.FeatureGridController', {
         }
     },
 
+    // TODO: the three following functions are all the same, maybe unite them
+    onAddFeature: function(evt) {
+        var me = this;
+        var layer = me.getView().layer;
+        me.handleFeatureChanged(evt, layer);
+    },
+
+    onChangeFeature: function(evt) {
+        var me = this;
+        var layer = me.getView().layer;
+        me.handleFeatureChanged(evt, layer);
+    },
+
+    onRemoveFeature: function(evt) {
+        var me = this;
+        var layer = me.getView().layer;
+        me.handleFeatureChanged(evt, layer);
+    },
+
     /**
      * Register listeners for WFS-T
      */
     registerListeners: function() {
         var me = this;
         var layer = me.getView().layer;
-        layer.getSource().on('addfeature', this.onAddFeature = function(evt) {
-            me.handleFeatureChanged(evt, layer);
-        }, me);
-        layer.getSource().on('changefeature', this.onChangeFeature = function(evt) {
-            me.handleFeatureChanged(evt, layer);
-        }, me);
-        layer.getSource().on('removefeature', this.onRemoveFeature = function(evt) {
-            me.handleFeatureChanged(evt, layer);
-        }, me);
+
+        layer.getSource().on('addfeature', this.onAddFeature);
+        layer.getSource().on('changefeature', this.onChangeFeature);
+        layer.getSource().on('removefeature', this.onRemoveFeature);
     },
 
     /**
@@ -182,9 +206,9 @@ Ext.define('Koala.view.panel.FeatureGridController', {
     unregisterListeners: function() {
         var me = this;
         var layer = me.getView().layer;
-        layer.getSource().un('addfeature', this.onAddFeature, me);
-        layer.getSource().un('changefeature', this.onChangeFeature, me);
-        layer.getSource().un('removefeature', this.onRemoveFeature, me);
+        layer.getSource().un('addfeature', this.onAddFeature);
+        layer.getSource().un('changefeature', this.onChangeFeature);
+        layer.getSource().un('removefeature', this.onRemoveFeature);
     },
 
     downloadLayer: function() {

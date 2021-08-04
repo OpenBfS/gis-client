@@ -41,6 +41,15 @@ Ext.define('Koala.view.component.CartoWindowController', {
         'Koala.view.menu.ChartSettingsMenu'
     ],
 
+    constructor: function() {
+        // store bound version of method
+        // see https://github.com/terrestris/BasiGX/wiki/Update-application-to-ol-6.5.0,-geoext-4.0.0,-BasiGX-3.0.0#removal-of-opt_this-parameters
+        this.onLayerVisibilityChange = this.onLayerVisibilityChange.bind(this);
+        this.onLayerRemove = this.onLayerRemove.bind(this);
+
+        this.callParent(arguments);
+    },
+
     /**
      * Called on initialize event. Only used in modern toolkit.
      *
@@ -855,7 +864,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
                         var gridFeatures = chartController.gridFeatures;
                         this.rawData = chartController.rawData;
                         Koala.util.Grid.updateGridFeatures(this, gridFeatures);
-                    }, this);
+                    }.bind(this));
                 }
             }
         };
@@ -1377,8 +1386,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var map = view.getMap();
         var layerCollection = map.getLayers();
 
-        layer.on('change:visible', me.onLayerVisibilityChange, me);
-        layerCollection.on('remove', me.onLayerRemove, me);
+        layer.on('change:visible', me.onLayerVisibilityChange);
+        layerCollection.on('remove', me.onLayerRemove);
     },
 
     /**
@@ -1621,8 +1630,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
         var overlay = viewModel.get('overlay');
         map.removeOverlay(overlay);
 
-        layer.un('change:visible', me.onLayerVisibilityChange, me);
-        layerCollection.un('remove', me.onLayerRemove, me);
+        layer.un('change:visible', me.onLayerVisibilityChange);
+        layerCollection.un('remove', me.onLayerRemove);
         map.un('pointermove', me.pointerMoveListener);
         window.removeEventListener(upEvent, me.onMouseUpWindow);
         lineLayer.getSource().removeFeature(lineFeature);
