@@ -247,75 +247,6 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         }
     },
 
-    updateTimeRangeDefaultFilters: function(filters) {
-        Ext.each(filters, function(filter) {
-            if (filter.type === 'timerange') {
-                var defaultMinValue = Koala.util.Date.getUtcMoment(
-                    filter.defaultstarttimeinstant
-                );
-                var defaultMaxValue = Koala.util.Date.getUtcMoment(
-                    filter.defaultendtimeinstant
-                );
-                if (filter.defaultendtimeinstant) {
-                    if (defaultMaxValue === 'now') {
-                        defaultMaxValue = Koala.util.Date.getUtcMoment(moment());
-                        defaultMaxValue = defaultMaxValue.startOf('minute');
-                    }
-                }
-                switch (filter.unit.toLowerCase()) {
-                    case 'minutes':
-                        if (defaultMaxValue.seconds() !== 0) {
-                            defaultMaxValue = defaultMaxValue.startOf('minute');
-                            defaultMaxValue = defaultMaxValue.add(1, 'minute');
-                        }
-                        break;
-                    case 'hours':
-                        if (defaultMaxValue.seconds() !== 0 || defaultMaxValue.minutes() !== 0) {
-                            defaultMaxValue = defaultMaxValue.startOf('hour');
-                            defaultMaxValue = defaultMaxValue.add(1, 'hour');
-                        }
-                        break;
-                    case 'days':
-                        if (defaultMaxValue.seconds() !== 0|| defaultMaxValue.minutes() !== 0 || defaultMaxValue.hours() !== 0) {
-                            defaultMaxValue = defaultMaxValue.startOf('day');
-                            defaultMaxValue = defaultMaxValue.add(1, 'day');
-                        }
-                        break;
-                }
-
-                if (!filter.defaultstarttimeinstant) {
-                    var duration = moment.duration(filter.maxduration);
-                    defaultMinValue = defaultMaxValue.clone().subtract(duration);
-                }
-                switch (filter.unit.toLowerCase()) {
-                    case 'minutes':
-                        if (defaultMinValue.seconds() !== 0) {
-                            defaultMinValue = defaultMinValue.startOf('minute');
-                            defaultMinValue = defaultMinValue.add(1, 'minute');
-                        }
-                        break;
-                    case 'hours':
-                        if (defaultMinValue.seconds() !== 0 || defaultMinValue.minutes() !== 0) {
-                            defaultMinValue = defaultMinValue.startOf('hour');
-                            defaultMinValue = defaultMinValue.add(1, 'hour');
-                        }
-                        break;
-                    case 'days':
-                        if (defaultMinValue.seconds() !== 0|| defaultMinValue.minutes() !== 0 || defaultMinValue.hours() !== 0) {
-                            defaultMinValue = defaultMinValue.startOf('day');
-                            defaultMinValue = defaultMinValue.add(1, 'day');
-                        }
-                        break;
-                }
-                var format = filter.defaultstarttimeformat || filter.defaultendtimeformat;
-                filter.defaultstarttimeinstant = defaultMinValue.format(format);
-                filter.defaultendtimeinstant = defaultMaxValue.format(format);
-                filter.effectivemindatetime = defaultMinValue;
-                filter.effectivemaxdatetime = defaultMaxValue;
-            }
-        });
-    },
-
     addLayerWithDefaultFilters: function(treepanel, item) {
         // TODO if we want equal behaviour for sets and profiles, the
         //      changes from https://redmine-koala.bfs.de/issues/1445
@@ -328,7 +259,7 @@ Ext.define('Koala.view.panel.ThemeTreeController', {
         if (item.isLeaf()) {
             Koala.util.Layer.getMetadataFromUuid(item.get('uuid')).then(
                 function(metadata) {
-                    me.updateTimeRangeDefaultFilters(metadata.filters);
+                    Koala.util.Filter.updateTimeRangeDefaultFilters(metadata.filters);
                     if (item.get('isRodosLayer') && item.get('rodosFilters')) {
                         metadata.filters = Ext.Array.merge(
                             metadata.filters, item.get('rodosFilters')

@@ -1001,8 +1001,7 @@ Ext.define('Koala.util.Layer', {
             var winName = 'filter-win-' + metadata.id;
 
             // only allow one filter-window to be open
-            var filterPanelExisting = Ext.ComponentQuery.query(
-                'k-form-layerfilter');
+            var filterPanelExisting = Ext.ComponentQuery.query('k-form-layerfilter');
 
             if (filterPanelExisting.length > 0) {
                 filterPanelExisting[0].up('window').close();

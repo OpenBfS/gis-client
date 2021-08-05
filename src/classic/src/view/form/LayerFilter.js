@@ -462,8 +462,7 @@ Ext.define('Koala.view.form.LayerFilter', {
     addPointInTimeFilter: function(filter, idx) {
         var me = this;
         var FilterUtil = Koala.util.Filter;
-        var pointInTimeFilter = FilterUtil.createPointInTimeFieldset(
-            me.getFormat(), filter, idx);
+        var pointInTimeFilter = FilterUtil.createPointInTimeFieldset(me.getFormat(), filter, idx);
         me.add(pointInTimeFilter);
     },
 
@@ -476,8 +475,7 @@ Ext.define('Koala.view.form.LayerFilter', {
     addTimeRangeFilter: function(filter, idx) {
         var me = this;
         var FilterUtil = Koala.util.Filter;
-        var timeRangeFilter = FilterUtil.createTimeRangeFieldset(
-            me.getFormat(), filter, idx);
+        var timeRangeFilter = FilterUtil.createTimeRangeFieldset(me.getFormat(), filter, idx);
         me.add(timeRangeFilter);
 
         Ext.each(timeRangeFilter.query('datefield'), function(field) {
@@ -499,8 +497,7 @@ Ext.define('Koala.view.form.LayerFilter', {
         var FilterUtil = Koala.util.Filter;
         var field = null;
         var value;
-        if (filter.type === 'rodostime' &&
-                moment.isMoment(filter.effectivedatetime)) {
+        if (filter.type === 'rodostime' && moment.isMoment(filter.effectivedatetime)) {
             value = filter.effectivedatetime.format();
         } else {
             value = filter.effectivevalue || filter.defaultValue;

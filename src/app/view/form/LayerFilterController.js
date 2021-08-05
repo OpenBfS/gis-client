@@ -253,6 +253,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
         }
 
         filters[idx] = filter;
+        Koala.util.Filter.updateTimeRangeDefaultFilters(filters);
         return filters;
     },
 
