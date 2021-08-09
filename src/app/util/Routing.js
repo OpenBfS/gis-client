@@ -277,18 +277,9 @@ Ext.define('Koala.util.Routing', {
             var rodosProjectUuid = routeObj.rodosproject;
 
             if (isRodosLayer && baseUrl && rodosProjectUuid) {
-                var defaultHeaders;
-                var authHeader = Koala.util.Authentication.getAuthenticationHeader();
-                if (authHeader) {
-                    defaultHeaders = {
-                        Authorization: authHeader
-                    };
-                }
-
                 return new Ext.Promise(function(resolve, reject) {
                     Ext.Ajax.request({
                         url: baseUrl + rodosProjectUuid,
-                        defaultHeaders: defaultHeaders,
                         method: 'GET',
                         success: function(response) {
                             var responseObj = Ext.decode(response.responseText);

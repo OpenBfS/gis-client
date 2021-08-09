@@ -111,13 +111,6 @@ Ext.define('Koala.util.String', {
         replaceTemplateStringsWithPromise: function(tpl, gettable, showWarnings, prefix) {
             var val = Koala.util.String.replaceTemplateStrings(tpl, gettable, showWarnings, prefix);
             if (Ext.String.startsWith(val, 'featureurl:') || Ext.String.startsWith(val, 'url:')) {
-                var defaultHeaders;
-                var authHeader = Koala.util.Authentication.getAuthenticationHeader();
-                if (authHeader) {
-                    defaultHeaders = {
-                        Authorization: authHeader
-                    };
-                }
                 var url;
                 if (Ext.String.startsWith(val, 'featureurl:')) {
                     url = val.substring('featureurl:'.length);
@@ -128,7 +121,6 @@ Ext.define('Koala.util.String', {
                 return new Ext.Promise(function(resolve, reject) {
                     Ext.Ajax.request({
                         url: url,
-                        defaultHeaders: defaultHeaders,
                         method: 'GET',
                         success: function(response) {
                             resolve(response.responseText);
