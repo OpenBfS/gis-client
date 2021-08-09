@@ -1082,7 +1082,7 @@ Ext.define('Koala.util.Filter', {
             var startValue = filter.effectivemindatetime || defaultMinValue;
             var endValue = filter.effectivemaxdatetime || defaultMaxValue;
             var unit = (filter.unit || '').toLowerCase();
-            var maxLimit = maxValue || defaultMaxValue;
+            var maxLimit = maxValue || Koala.util.Date.getTimeReferenceAwareMomentDate(moment());
             if (unit === 'days') {
                 maxLimit = maxLimit.startOf('day');
                 maxLimit = maxLimit.add(1, 'day');
@@ -1100,15 +1100,15 @@ Ext.define('Koala.util.Filter', {
             maxValue = Koala.util.Date.getTimeReferenceAwareMomentDate(maxValue);
             startValue = Koala.util.Date.getTimeReferenceAwareMomentDate(startValue);
             endValue = Koala.util.Date.getTimeReferenceAwareMomentDate(endValue);
-            var minLimit = minValue || defaultMinValue;
+            var minLimit = minValue;
 
-            if (unit === 'days') {
+            if (unit === 'days' && minLimit) {
                 minLimit = minLimit.startOf('day');
             }
-            if (unit === 'hours') {
+            if (unit === 'hours' && minLimit) {
                 minLimit = minLimit.startOf('hour');
             }
-            if (unit === 'minutes') {
+            if (unit === 'minutes' && minLimit) {
                 minLimit = minLimit.startOf('minute');
             }
 
