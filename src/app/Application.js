@@ -226,14 +226,14 @@ Ext.define('Koala.Application', {
         }
 
         // Update the global moment locale formats with the one configured above.
+        moment.updateLocale('fr', {
+            longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.fr
+        });
         moment.updateLocale('en', {
             longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.en
         });
         moment.updateLocale('de', {
             longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.de
-        });
-        moment.updateLocale('fr', {
-            longDateFormat: Koala.util.Date.DATE_FORMAT_LOCALES.fr
         });
 
         // //Set up an event handler to handle session timeouts
