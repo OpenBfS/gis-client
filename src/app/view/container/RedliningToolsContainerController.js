@@ -158,11 +158,6 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var me = this;
 
         if (!me.redliningVectorLayer) {
-            me.redlineFeatures = new ol.Collection();
-            me.redlineFeatures.on(
-                'add',
-                me.fireRedliningChanged
-            );
             me.createAndAddRedliningLayerIfRemoved();
         }
     },
@@ -229,13 +224,13 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var redLineLayer = BasiGX.util.Layer.getLayerByName(redLineLayerName);
         if (redLineLayer) {
             me.redliningVectorLayer = redLineLayer;
+            me.redlineFeatures = me.redliningVectorLayer.getSource().getFeaturesCollection();
             return;
         }
-        me.redlineFeatures.clear();
         me.redliningVectorLayer = new ol.layer.Vector({
             name: redLineLayerName,
             source: new ol.source.Vector({
-                features: me.redlineFeatures
+                features: me.redlineFeatures = new ol.Collection()
             }),
             style: me.redlineLayerStyle,
             printSpecial: true,
@@ -244,6 +239,11 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             disableStyling: true,
             allowRemoval: true
         });
+        me.redlineFeatures.on(
+            'add',
+            me.fireRedliningChanged
+        );
+
         map.addLayer(me.redliningVectorLayer);
     },
 
@@ -528,7 +528,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
 
                     // remove a corresponding label or feature if label was clicked
                     me.redlineFeatures.forEach(function(af) {
-                        if (sf.get('isLabel') && sf.get('parentFeature') === af ) {
+                        if (sf && sf.get('isLabel') && sf.get('parentFeature') === af ) {
                             me.redlineFeatures.remove(af);
                             me.deleteSelectInteraction.getFeatures().remove(af);
                             if (me.redlineFeatures.getLength() === 0) {
@@ -536,7 +536,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
                             }
                         }
 
-                        if (af.get('isLabel') && af.get('parentFeature') === sf ) {
+                        if (af && af.get('isLabel') && af.get('parentFeature') === sf ) {
                             me.redlineFeatures.remove(af);
                             me.deleteSelectInteraction.getFeatures().remove(af);
                             if (me.redlineFeatures.getLength() === 0) {
