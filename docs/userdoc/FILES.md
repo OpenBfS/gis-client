@@ -108,7 +108,7 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 * **tools**
 
   Array von Strings, die die aktivierten Werkzeuge der Anwendung steuern.
-  Mögliche Werte sind: `"printBtn"`, `"irixPrintBtn"`, `"cloneBtn"`, `"addWmsBtn"`, `"importVectorLayerBtn"`, `"createVectorLayerBtn"`, `"drawBtn"`, `"measureBtn"`, `"selectFeaturesBtn"`, `"classicRoutingBtn"`, `"fleetRoutingBtn"`, `"isochroneRoutingBtn"`
+  Mögliche Werte sind: `"printBtn"`, `"irixPrintBtn"`, `"addWmsBtn"`, `"importVectorLayerBtn"`, `"createVectorLayerBtn"`, `"drawBtn"`, `"measureBtn"`, `"selectFeaturesBtn"`, `"classicRoutingBtn"`, `"fleetRoutingBtn"`, `"isochroneRoutingBtn"`
 
 * **vectorIcons**
 

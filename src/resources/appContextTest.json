@@ -91,7 +91,6 @@
             "tools": [
                 "addWmsBtn",
                 "printBtn",
-                "cloneBtn",
                 "selectFeaturesBtn",
                 "irixPrintBtn",
                 "measureBtn",
