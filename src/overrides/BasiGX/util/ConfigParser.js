@@ -139,16 +139,15 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                                 layer.isBackground = true;
                             }
 
-                            //set ol.Attribution
                             var olProps = layer.getProperties();
-                            var attributions = olProps.attribution ? [new ol.Attribution({html: olProps.attribution})] : undefined;
-                            var source = layer.getSource();
-                            source.setAttributions(attributions);
+                            if (olProps.attribution) {
+                                var ctrl = new ol.control.Attribution({html: olProps.attribution});
+                                me.map.addControl(ctrl);
+                            }
 
                             //set visibility according to appContext
                             layer.set('visible',isVisible);
 
-                            //layer.set('treeId', 'bkg'); // Do we need this?
                             var layers = me.map.getLayers();
                             layers.insertAt(index, layer);
                         } else {
