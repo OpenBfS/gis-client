@@ -142,7 +142,11 @@ Ext.define('Koala.view.form.LayerFilter', {
         }
         deps = Koala.util.Object.inverse(deps);
         Ext.each(filters, function(filter) {
-            if (!deps[filter.alias]) {
+            var alias = filter.alias;
+            if (filter.type === 'pointintime' || filter.type === 'timerange') {
+                alias = filter.param;
+            }
+            if (!deps[alias]) {
                 return;
             }
             var field = me.down('[name=' + filter.param + ']');

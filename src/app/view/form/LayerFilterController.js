@@ -299,7 +299,22 @@ Ext.define('Koala.view.form.LayerFilterController', {
         var filters = view.getFilters();
         var currentFilters = this.updateFiltersFromForm(filters);
         var context = Objects.arrayToObject(currentFilters, 'param', 'effectivevalue');
+        Ext.each(currentFilters, function(filter) {
+            if (filter.type === 'pointintime') {
+                context.currentDate = filter.effectivedatetime.toISOString();
+            }
+            if (filter.type === 'timerange') {
+                context.minDate = filter.effectivemindatetime.toISOString();
+                context.maxDate = filter.effectivemaxdatetime.toISOString();
+            }
+        });
         var origFilters = Objects.arrayToMap(metadata.filters, 'alias');
+        delete origFilters.undefined;
+        Ext.each(metadata.filters, function(filter) {
+            if (filter.type === 'pointintime' || filter.type === 'timerange') {
+                origFilters[filter.param] = filter;
+            }
+        });
         var path = 'layerConfig/olProperties/filterDependencies';
         var depsString = Objects.getPathStrOr(metadata, path, '{}');
 
@@ -312,7 +327,7 @@ Ext.define('Koala.view.form.LayerFilterController', {
             var combo = view.down('combobox[name=' + origFilters[deps[filterName]].param + ']');
             var store = combo.getStore();
             var filter = origFilters[deps[filterName]];
-            Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context)
+            Koala.util.String.replaceTemplateStringsWithPromise(filter.allowedValues, context, undefined, undefined, true)
                 .then(function(data) {
                     store.setData(JSON.parse(data));
                     combo.clearValue();

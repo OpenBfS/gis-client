@@ -130,6 +130,9 @@ Zudem können die anzuzeigenden Charts der Layer konfiguriert werden.
 
 ### Point In Time {#filters-pointintime}
 
+Point in time-Filter stellen den Template-Parameter currentDate
+mit dem derzeitigen Wert bereit.
+
 **Parameter** (bfs:paramName)
 
   | Typ | gco:CharacterString  |
@@ -218,6 +221,9 @@ Zudem können die anzuzeigenden Charts der Layer konfiguriert werden.
   | Beispiel             | 2016-10-17 00:00:00 |
 
 ### Timerange {#filters-timerange}
+
+Timerange-Filter stellen die Template-Parameter minDate und maxDate
+mit den derzeitigen Werten bereit.
 
 **Parameter** (bfs:paramName)
 

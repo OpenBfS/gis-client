@@ -1136,6 +1136,7 @@ Ext.define('Koala.util.Filter', {
                 minValue: minLimit,
                 maxValue: maxLimit,
                 format: format,
+                fieldLabel: filter.param,
                 validator: minMaxDurationAndOrderValidator,
                 listeners: {
                     validitychange: me.revalidatePartnerField,
@@ -1168,6 +1169,7 @@ Ext.define('Koala.util.Filter', {
                 minValue: minValue,
                 maxValue: maxLimit,
                 format: format,
+                fieldLabel: filter.param,
                 validator: minMaxDurationAndOrderValidator,
                 listeners: {
                     validitychange: me.revalidatePartnerField,

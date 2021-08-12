@@ -55,8 +55,9 @@ Ext.define('Koala.util.String', {
          * @param Boolean showWarnings Flag to show warnings if the key to replace
          *  is not defined in the getable.
          * @param String prefix An optional prefix that should be stripped.
+         * @param Boolean preventDateMagic if true, no date conversion magic will happen
          */
-        replaceTemplateStrings: function(tpl, getable, showWarnings, prefix) {
+        replaceTemplateStrings: function(tpl, getable, showWarnings, prefix, preventDateMagic) {
             if (!getable) {
                 Ext.log({
                     level: 'warn',
@@ -87,11 +88,12 @@ Ext.define('Koala.util.String', {
                     if (showWarnings === true) {
                         Ext.log.warn(key + ' could not be found for replacement!');
                     }
-                } else { // check if 'replacement' represents a date
+                } else {
+                    // check if 'replacement' represents a date
                     // it is already a Moment/date
-                    if (moment.isMoment(replacement)) {
+                    if (moment.isMoment(replacement) && !preventDateMagic) {
                         replacement = Koala.util.Date.getFormattedDate(replacement);
-                    } else if (isNaN(Number(replacement)) && moment(replacement, moment.ISO_8601, true).isValid()) {
+                    } else if (isNaN(Number(replacement)) && moment(replacement, moment.ISO_8601, true).isValid() && !preventDateMagic) {
                         // keep in mind, numbers are NOT parsed to a date-object
                         // this includes unix timestamps (time in milliseconds since Jan 01 1970)
                         var momentDate = Koala.util.Date.getUtcMoment(replacement);
@@ -108,8 +110,8 @@ Ext.define('Koala.util.String', {
          * templates and returns an Ext.Promise instead of the value. Resolves
          * url values after applying #replaceTemplateStrings to the url template.
          */
-        replaceTemplateStringsWithPromise: function(tpl, gettable, showWarnings, prefix) {
-            var val = Koala.util.String.replaceTemplateStrings(tpl, gettable, showWarnings, prefix);
+        replaceTemplateStringsWithPromise: function(tpl, gettable, showWarnings, prefix, preventDateMagic) {
+            var val = Koala.util.String.replaceTemplateStrings(tpl, gettable, showWarnings, prefix, preventDateMagic);
             if (Ext.String.startsWith(val, 'featureurl:') || Ext.String.startsWith(val, 'url:')) {
                 var url;
                 if (Ext.String.startsWith(val, 'featureurl:')) {
