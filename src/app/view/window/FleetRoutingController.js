@@ -992,12 +992,14 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     } catch (err) {
                         Ext.log.warn(vm.get('i18n.errorInvalidJobsJson'));
                         Ext.toast(vm.get('i18n.errorInvalidJobsJson'));
+                        view.setLoading(false);
                         return;
                     }
 
                     if (!Ext.isArray(jobs)) {
                         Ext.log.warn(vm.get('i18n.errorInvalidJobsJson'));
                         Ext.toast(vm.get('i18n.errorInvalidJobsJson'));
+                        view.setLoading(false);
                         return;
                     }
 
@@ -1158,12 +1160,14 @@ Ext.define('Koala.view.window.FleetRoutingController', {
                     } catch (err) {
                         Ext.log.warn(vm.get('i18n.errorInvalidVehiclesJson'));
                         Ext.toast(vm.get('i18n.errorInvalidVehiclesJson'));
+                        view.setLoading(false);
                         return;
                     }
 
                     if (!Ext.isArray(vehicles)) {
                         Ext.log.warn(vm.get('i18n.errorInvalidVehiclesJson'));
                         Ext.toast(vm.get('i18n.errorInvalidVehiclesJson'));
+                        view.setLoading(false);
                         return;
                     }
 
