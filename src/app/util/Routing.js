@@ -404,22 +404,10 @@ Ext.define('Koala.util.Routing', {
             var lon = map.getView().getCenter()[0];
             var lat = map.getView().getCenter()[1];
             var allLayers = BasiGX.util.Layer.getAllLayers(map);
-            var appContext = Koala.util.AppContext.getAppContext(mapComponent);
-            var mapLayers = [];
-            if (appContext && appContext.data && appContext.data.merge) {
-                mapLayers = appContext.data.merge.mapLayers;
-            }
 
             var filteredLayers = Ext.Array.filter(allLayers, function(layer) {
                 // Skip system layers like hoverLayer etc.
                 if (!layer.metadata) {
-                    return false;
-                }
-
-                // Skip baselayers configured in appContext
-                if (Ext.Array.findBy(mapLayers, function(item) {
-                    return item.uuid === layer.metadata.id;
-                })) {
                     return false;
                 }
 

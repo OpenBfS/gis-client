@@ -66,6 +66,8 @@ Ext.define('Koala.override.basigx.ConfigParser', {
                 if (initialBackground) {
                     layerConfig.splice(0, 0, initialBackground);
                 }
+            } else {
+                return;
             }
 
             Ext.each(layerConfig, function(layer, index) {
