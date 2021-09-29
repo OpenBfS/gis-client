@@ -200,7 +200,7 @@ Ext.define('Koala.view.form.ImportLocalDataController', {
 
         // Create a source for the features from the uploaded / dragged file
         cfg.source = new ol.source.Vector({
-            features: features
+            features: new ol.Collection(features)
         });
         cfg.style = Koala.util.Clone.defaultOlStyle;
 
