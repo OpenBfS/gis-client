@@ -964,6 +964,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
      * @param {Ext.event.Event} evt The change event of the upload button.
      */
     handleJobUpload: function(evt) {
+        evt.target.title = '';
         var me = this;
         var view = me.getView();
         if (!view) {
@@ -1129,6 +1130,7 @@ Ext.define('Koala.view.window.FleetRoutingController', {
      * @param {Ext.event.Event} evt The change event of the upload button.
      */
     handleVehicleUpload: function(evt) {
+        evt.target.title = '';
         var me = this;
         var view = me.getView();
         if (!view) {
