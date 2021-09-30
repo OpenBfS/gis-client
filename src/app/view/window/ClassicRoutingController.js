@@ -192,6 +192,19 @@ Ext.define('Koala.view.window.ClassicRoutingController', {
                 }
             })
             .catch(function(err) {
+                var newWayPointJson = {
+                    address: latitude + ', ' + longitude,
+                    latitude: latitude,
+                    longitude: longitude
+                };
+
+                if (wayPointType === 'start') {
+                    wayPointStore.setStartPoint(newWayPointJson);
+                } else if (wayPointType === 'via') {
+                    wayPointStore.addViaPoint(newWayPointJson);
+                } else if (wayPointType === 'end') {
+                    wayPointStore.setEndPoint(newWayPointJson);
+                }
                 var str = err.message;
                 Ext.Logger.log(str);
                 var info = vm.get('i18n.errorGeoCoding');
