@@ -53,6 +53,8 @@ Ext.define('Koala.view.panel.ElevationProfile', {
     height: 230,
     width: 900,
 
+    closable: true,
+
     elevationContainerName: 'elevationprofile-container',
 
     indicatorBoxName: 'elevationprofile-indicator-box',
