@@ -76,13 +76,20 @@ Ext.define('Koala.view.component.CartoWindow',{
             }).bind(this);
             var handleDragend = (function() {
                 this.removeCls('onDragging');
+                if (!this.mouseOver) {
+                    enableInteractions();
+                }
             }).bind(this);
 
             el.on({
                 mousedown: handleMouseDown,
                 mouseup: handleMouseUp,
-                mouseenter: disableInteractions,
+                mouseenter: function() {
+                    this.mouseOver = true;
+                    disableInteractions();
+                },
                 mouseleave: function() {
+                    this.mouseOver = false;
                     if (!this.hasCls('onDragging')) {
                         enableInteractions();
                     }
