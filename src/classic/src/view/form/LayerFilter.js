@@ -247,6 +247,11 @@ Ext.define('Koala.view.form.LayerFilter', {
 
     updateTimeSelectComponentData: function(response) {
         var me = this;
+        var languageSelect = Ext.ComponentQuery.query('k-form-field-languagecombo')[0];
+        if (!languageSelect && Ext.isModern) {
+            // modern
+            languageSelect = Ext.ComponentQuery.query('k-field-languageselect')[0];
+        }
         var elm = document.querySelector('.timeselect-chart');
         this.chartContainer.setLoading(false);
         var json = JSON.parse(response.responseText);
@@ -270,6 +275,8 @@ Ext.define('Koala.view.form.LayerFilter', {
             useBrush: !this.pointInTimeFilter,
             brushExtent: [[0, 0], [400, 180]],
             initialBrushSelection: [400 / 3, 400],
+            showTooltip: true,
+            locale: languageSelect.getValue(),
             onSelectionChange: function(startDateTime, endDateTime) {
                 if (me.pointInTimeFilter) {
                     var component = me.down('[name=' + me.pointInTimeFilter.param + ']');
