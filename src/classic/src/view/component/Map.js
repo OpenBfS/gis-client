@@ -39,8 +39,15 @@ Ext.define('Koala.view.component.Map', {
     viewModel: 'k-component-map',
 
     listeners: {
-        afterrender: 'registerDropHandler'
+        afterrender: 'registerDropHandler',
+        registerdrophandler: 'registerDropHandler',
+        unregisterdropHandler: 'unregisterDropHandler'
     },
+
+    /** The currently registered drop handler for dropping text.
+      * We need this variable to be able to remove the event listener.
+      */
+    registeredDropHandler: undefined,
 
     initComponent: function() {
         var me = this;
@@ -161,18 +168,31 @@ Ext.define('Koala.view.component.Map', {
      */
     registerDropHandler: function() {
         var me = this;
-        this.map.getViewport().addEventListener('drop', function(event) {
-            if (event.dataTransfer.files.length === 0) {
-                var items = event.dataTransfer.items;
-                for (var i = 0; i < items.length; ++i) {
-                    if (items[i].type === 'text/plain' || items[i].type === 'application/json' || items[i].type === 'application/xml') {
-                        items[i].getAsString(function(text) {
-                            me.addData(text);
-                        });
-                    }
+        me.registeredDropHandler = me.dropHandler.bind(this);
+        this.map.getViewport().addEventListener('drop', me.registeredDropHandler);
+    },
+
+    /**
+     * Unregisters the drop handler on the ol.interaction.DragAndDrop's
+     * drop zone in order to handle string based drag'n'drop events.
+     */
+    unregisterDropHandler: function() {
+        var me = this;
+        this.map.getViewport().removeEventListener('drop', me.registeredDropHandler);
+    },
+
+    dropHandler: function(event) {
+        var me = this;
+        if (event.dataTransfer.files.length === 0) {
+            var items = event.dataTransfer.items;
+            for (var i = 0; i < items.length; ++i) {
+                if (items[i].type === 'text/plain' || items[i].type === 'application/json' || items[i].type === 'application/xml') {
+                    items[i].getAsString(function(text) {
+                        me.addData(text);
+                    });
                 }
             }
-        });
+        }
     },
 
     setupDragDropFunctionality: function() {

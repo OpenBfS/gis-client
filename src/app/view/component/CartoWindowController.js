@@ -163,7 +163,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             Koala.view.component.CartoWindowController.currentZIndex = 0;
         }
         element.style.zIndex = '' + ++Koala.view.component.CartoWindowController.currentZIndex;
-        var map = this.getView().getMap();
+        var mapComponent = BasiGX.util.Map.getMapComponent();
+        var map = mapComponent.map;
         var me = this;
         this.interactionActiveList = [];
         this.interactionsDisabled = true;
@@ -171,6 +172,7 @@ Ext.define('Koala.view.component.CartoWindowController', {
             me.interactionActiveList.push(interaction.getActive());
             interaction.setActive(false);
         });
+        mapComponent.fireEvent('unregisterdrophandler');
     },
 
     /**
@@ -179,7 +181,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
      **/
     enableMapInteractions: function(force) {
         var view = this.getView();
-        var map = BasiGX.util.Map.getMapComponent().map;
+        var mapComponent = BasiGX.util.Map.getMapComponent();
+        var map = mapComponent.map;
         var mouseDown = view && view.mouseDown;
         var me = this;
 
@@ -190,6 +193,8 @@ Ext.define('Koala.view.component.CartoWindowController', {
             var active = me.interactionActiveList ? me.interactionActiveList[idx] : true;
             interaction.setActive(active);
         });
+
+        mapComponent.fireEvent('registerdrophandler');
         this.interactionsDisabled = false;
     },
 
