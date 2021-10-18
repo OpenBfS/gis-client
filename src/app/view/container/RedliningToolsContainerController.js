@@ -642,7 +642,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var targetProjection = ol.proj.get('EPSG:4326');
         var geomClone = point.clone().transform(sourceProjection,
             targetProjection);
-        return ol.coordinate.toStringXY(geomClone.getCoordinates(), 2);
+        return ol.coordinate.toStringXY(geomClone.getCoordinates(), 5);
     },
 
     /**
@@ -664,9 +664,9 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
             length += ol.sphere.getDistance(c1, c2);
         }
         if (length > 100) {
-            output = (Math.round(length / 1000 * 100) / 100) + ' ' + 'km';
+            output = (Math.round(length / 1000 * 100000) / 100000) + ' ' + 'km';
         } else {
-            output = (Math.round(length * 100) / 100) + ' ' + 'm';
+            output = (Math.round(length * 100000) / 100000) + ' ' + 'm';
         }
         return output;
     },
@@ -684,9 +684,9 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var output;
 
         if (area > 10000) {
-            output = (Math.round(area / 1000000 * 100) / 100) + ' ' + 'km²';
+            output = (Math.round(area / 1000000 * 100000) / 100000) + ' ' + 'km²';
         } else {
-            output = (Math.round(area * 100) / 100) + ' ' + 'm²';
+            output = (Math.round(area * 100000) / 100000) + ' ' + 'm²';
         }
 
         return output;
