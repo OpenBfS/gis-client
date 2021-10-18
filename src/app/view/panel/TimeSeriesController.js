@@ -582,7 +582,12 @@ Ext.define('Koala.view.panel.TimeSeriesController', {
      */
     bindSelectChartLayerStore: function(combo) {
         var layerStore = BasiGX.view.component.Map.guess().getStore();
-        var comboStore = Ext.clone(layerStore);
+        var comboStore = new Ext.data.Store({
+            recordType: layerStore.recordType
+        });
+        layerStore.each(function(rec) {
+            comboStore.add(rec.copy());
+        });
         comboStore.filterBy(function(record) {
             return record.data.get('timeSeriesChartProperties') &&
                !Ext.Object.isEmpty(record.data.get('timeSeriesChartProperties'));
