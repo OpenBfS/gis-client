@@ -562,7 +562,7 @@
         "config": {
             "data": {
                 "menu": "Menu",
-                "themes": "",
+                "themes": "Themes",
                 "loading": "Load",
                 "wmsimport": "Add external WMS",
                 "routingTools": "Routing",
