@@ -580,7 +580,8 @@ Ext.define('Koala.view.container.RoutingResultController', {
         var routingSummary = vm.get('record');
         me.setElevationPanelVisibility(btn.pressed);
         if (btn.pressed) {
-            me.updateElevationPanel(routingSummary);
+            var elevationPanel = me.updateElevationPanel(routingSummary);
+            elevationPanel.on('destroy', me.destroyElevationPanel.bind(me));
         }
     },
 
@@ -611,6 +612,7 @@ Ext.define('Koala.view.container.RoutingResultController', {
                 elevationPanel.fireEvent('rerender');
             }
         }
+        return elevationPanel;
     },
 
     /**
