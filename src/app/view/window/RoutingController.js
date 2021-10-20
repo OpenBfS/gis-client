@@ -319,7 +319,7 @@ Ext.define('Koala.view.window.RoutingController', {
                 text: new ol.style.Text({
                     // unicode for fontawesome map-marker
                     text: '\uf041',
-                    font: 'normal ' + routingOpts.elevationStyle.markerSize + 'px FontAwesome',
+                    font: 'normal 38px FontAwesome',
                     fill: new ol.style.Fill({
                         color: routingOpts.elevationStyle.color
                     }),
@@ -338,7 +338,7 @@ Ext.define('Koala.view.window.RoutingController', {
                 text: new ol.style.Text({
                     // unicode for fontawesome circle
                     text: '\uf111',
-                    font: 'normal ' + routingOpts.elevationStyle.markerSize * 0.35 + 'px FontAwesome',
+                    font: 'normal 20px FontAwesome',
                     fill: new ol.style.Fill({
                         color: routingOpts.elevationStyle.color
                     }),
@@ -348,13 +348,12 @@ Ext.define('Koala.view.window.RoutingController', {
                 })
             }), new ol.style.Style({
                 text: new ol.style.Text({
-                    // unicode for fontawesome car
-                    font: 'normal ' + routingOpts.elevationStyle.markerSize * 0.35 + 'px FontAwesome',
+                    font: 'normal 14px FontAwesome',
                     fill: new ol.style.Fill({
                         color: routingOpts.elevationStyle.fill
                     }),
                     textBaseline: 'bottom',
-                    offsetY: -17
+                    offsetY: -20
                 })
             })];
             vm.set('elevationStyle', elevationStyle);
