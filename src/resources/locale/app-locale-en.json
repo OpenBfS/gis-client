@@ -291,6 +291,7 @@
                 "modifyObjectBtnTooltip": "Modify objects",
                 "deleteObjectBtnTooltip": "Delete objects",
                 "clearObjectsBtnTooltip": "Delete all",
+                "exportObjectsBtnTooltip": "Export objects",
                 "layerLegendName": "Measures"
             }
         }

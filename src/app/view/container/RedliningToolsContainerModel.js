@@ -28,6 +28,7 @@ Ext.define('Koala.view.container.RedliningToolsContainerModel', {
         modifyObjectBtnTooltip: '',
         deleteObjectBtnTooltip: '',
         clearObjectsBtnTooltip: '',
+        exportObjectsBtnTooltip: '',
         layerLegendName: '',
         helpMsg: 'Click to start drawing',
         continuePolygonMsg: 'Click to continue drawing the polygon',

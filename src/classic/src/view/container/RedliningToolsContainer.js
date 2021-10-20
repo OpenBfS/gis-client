@@ -35,7 +35,7 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
 
     controller: 'k-container-redliningtoolscontainer',
 
-    width: 300,
+    width: 350,
 
     map: null,
 
@@ -127,6 +127,13 @@ Ext.define('Koala.view.container.RedliningToolsContainer', {
         },
         glyph: 'f014@FontAwesome',
         handler: 'onClearObjectsBtn'
+    }, {
+        name: 'exportObjectsBtn',
+        bind: {
+            tooltip: '{exportObjectsBtnTooltip}'
+        },
+        glyph: 'f019@FontAwesome',
+        handler: 'onExportObjectsClick'
     }],
 
     /**

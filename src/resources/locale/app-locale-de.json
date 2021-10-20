@@ -293,6 +293,7 @@
                 "modifyObjectBtnTooltip": "Objekt modifzieren",
                 "deleteObjectBtnTooltip": "Objekt löschen",
                 "clearObjectsBtnTooltip": "Alle Objekte löschen",
+                "exportObjectsBtnTooltip": "Objekte exportieren",
                 "layerLegendName": "Bemaßungen"
             }
         }

@@ -27,7 +27,8 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     extend: 'Ext.app.ViewController',
 
     requires: [
-        'Koala.util.AppContext'
+        'Koala.util.AppContext',
+        'Koala.util.Export'
     ],
 
     alias: 'controller.k-container-redliningtoolscontainer',
@@ -654,21 +655,42 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var me = this;
         var view = me.getView();
         var output;
-        var length = 0;
-        var coordinates = line.getCoordinates();
         var sourceProj = view.map.getView().getProjection();
 
+        var length = me.computeLength(line, sourceProj);
+
+        if (length > 100) {
+            output = me.roundLengthToM(length) + ' ' + 'm';
+        } else {
+            output = me.roundLengthToKm(length) + ' ' + 'km';
+        }
+        return output;
+    },
+
+    roundLengthToM: function(length) {
+        return Math.round(length / 1000 * 100000) / 100000;
+    },
+
+    roundLengthToKm: function(length) {
+        return Math.round(length * 100000) / 100000;
+    },
+
+    /**
+     * Computes the length of a line.
+     * @param {ol.geom.LineString} line
+     * @param {ol.proj.Projection} sourceProj
+     * @returns
+     */
+    computeLength: function(line, sourceProj) {
+        var coordinates = line.getCoordinates();
+
+        var length = 0;
         for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
             var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
             var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
             length += ol.sphere.getDistance(c1, c2);
         }
-        if (length > 100) {
-            output = (Math.round(length / 1000 * 100000) / 100000) + ' ' + 'km';
-        } else {
-            output = (Math.round(length * 100000) / 100000) + ' ' + 'm';
-        }
-        return output;
+        return length;
     },
 
     /**
@@ -680,16 +702,28 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var me = this;
         var view = me.getView();
         var sourceProj = view.map.getView().getProjection();
-        var area = Math.abs(ol.sphere.getArea(polygon, sourceProj));
+        var area = me.computeArea(polygon, sourceProj);
         var output;
 
         if (area > 10000) {
-            output = (Math.round(area / 1000000 * 100000) / 100000) + ' ' + 'km²';
+            output = me.roundAreaToSqm(area) + ' ' + 'km²';
         } else {
-            output = (Math.round(area * 100000) / 100000) + ' ' + 'm²';
+            output = me.roundAreaToSqkm(area) + ' ' + 'm²';
         }
 
         return output;
+    },
+
+    computeArea: function(polygon, sourceProj) {
+        return Math.abs(ol.sphere.getArea(polygon, sourceProj));
+    },
+
+    roundAreaToSqm: function(area) {
+        return Math.round(area / 1000000 * 100000) / 100000;
+    },
+
+    roundAreaToSqkm: function(area) {
+        return Math.round(area * 100000) / 100000;
     },
 
     /**
@@ -711,6 +745,49 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         if (feature) {
             feature.setStyle(me.redlineLayerStyle);
         }
+    },
+
+    /**
+     * Export all drawn features to geoJSON.
+     */
+    onExportObjectsClick: function() {
+        var me = this;
+        var view = me.getView();
+        var sourceProj = view.map.getView().getProjection();
+        var drawnFeatures = Ext.Array.filter(me.redlineFeatures.getArray(), function(feature) {
+            return !feature.get('text');
+        });
+        var exportFeatures = Ext.Array.map(drawnFeatures, function(feature) {
+            var feat = feature.clone();
+            var geometry = feat.getGeometry();
+            switch (geometry.getType()) {
+                case 'LineString':
+                    var length = me.computeLength(geometry, sourceProj);
+                    length = me.roundLengthToKm(length);
+                    feat.setProperties({
+                        length: length,
+                        unit: 'km'
+                    });
+                    break;
+                case 'Polygon':
+                    var area = me.computeArea(geometry, sourceProj);
+                    area = me.roundAreaToSqkm(area);
+                    feat.setProperties({
+                        area: area,
+                        unit: 'km²'
+                    });
+                    break;
+                case 'Point':
+                default:
+                    break;
+            }
+            return feat;
+        });
+        var format = new ol.format.GeoJSON({
+            featureProjection: sourceProj
+        });
+        var geojson = format.writeFeatures(exportFeatures);
+        Koala.util.Export.exportFile(geojson, 'measurements.geojson', 'application/vnd.geo+json');
     }
 
 });
