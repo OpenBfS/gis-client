@@ -1211,7 +1211,7 @@ Ext.define('Koala.util.Layer', {
                         }
                         Koala.util.Layer.cleanSLD(response.responseText)
                             .then(function(cleanSld) {
-                                var legendUrl = Koala.util.Layer.createLegendUrlForVectorLayer(cleanSld, url);
+                                var legendUrl = Koala.util.Layer.createLegendUrlForVectorLayer(cleanSld.output, url);
                                 layer.set('legendUrl', legendUrl);
                                 // force redrawing the legend
                                 Ext.ComponentQuery.query('k-panel-routing-legendtree')[0].delayedRepaintLayerFilterIndication();
@@ -1262,7 +1262,7 @@ Ext.define('Koala.util.Layer', {
             var sldParser = new GeoStylerSLDParser.SldStyleParser();
             var style = sldParser.readStyle(sld);
             return style.then(function(parsed) {
-                return sldParser.writeStyle(parsed);
+                return sldParser.writeStyle(parsed.output);
             });
         },
 
@@ -1281,9 +1281,9 @@ Ext.define('Koala.util.Layer', {
             var sldParser = new GeoStylerSLDParser.SldStyleParser();
             var style = sldParser.readStyle(sld);
             return style.then(function(parsed) {
-                var olStyle = olParser.writeStyle(parsed);
+                var olStyle = olParser.writeStyle(parsed.output);
                 return olStyle.then(function(converted) {
-                    return layer.setStyle(converted);
+                    return layer.setStyle(converted.output);
                 });
             });
         },

@@ -54,7 +54,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var sldParser = new GeoStylerSLDParser.SldStyleParser();
         sldParser.writeStyle(style)
             .then(function(sld) {
-                Koala.util.Layer.updateVectorStyle(layer, sld);
+                Koala.util.Layer.updateVectorStyle(layer, sld.output);
             })
             .catch(function() {
                 Ext.Msg.alert(viewModel.get('saveStyle'), viewModel.get('styleNotConvertedMsg'));
@@ -62,7 +62,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
         var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
         olParser.writeStyle(style)
             .then(function(olStyle) {
-                layer.setStyle(olStyle);
+                layer.setStyle(olStyle.output);
             })
             .catch(function() {
                 Ext.Msg.alert(viewModel.get('saveStyle'), viewModel.get('styleNotConvertedMsg'));
@@ -162,7 +162,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     if (!name.endsWith('.xml')) {
                         name += '.xml';
                     }
-                    var arr = new TextEncoder().encode(sld);
+                    var arr = new TextEncoder().encode(sld.output);
                     download(arr, name, 'application/xml');
                 });
         } else if (styleFormat === 'QGIS-Style') {
@@ -176,7 +176,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     if (!name.endsWith('.qml')) {
                         name += '.qml';
                     }
-                    var arr = new TextEncoder().encode(QGISStyle);
+                    var arr = new TextEncoder().encode(QGISStyle.output);
                     download(arr, name, 'application/xml');
                 });
         } else if (styleFormat === 'MapBox-Style') {
@@ -192,7 +192,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                     if (!name.endsWith('.json')) {
                         name += '.json';
                     }
-                    var arr = new TextEncoder().encode(MapboxStyle);
+                    var arr = new TextEncoder().encode(MapboxStyle.output);
                     download(arr, name, 'application/json');
                 });
         }
@@ -274,15 +274,19 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                         var sldParser = new GeoStylerSLDParser.SldStyleParser();
                         sldParser.readStyle(result)
                             .then(function(style) {
-                                view.onStyleChange(style);
-                            }).catch(function() {});
+                                if (style.output) {
+                                    view.onStyleChange(style.output);
+                                }
+                            });
                         break;
                     case 'QGIS-Style':
                         var qgisParser = new GeoStylerQGISParser.QGISStyleParser();
                         qgisParser.readStyle(result)
                             .then(function(style) {
-                                view.onStyleChange(style);
-                            }).catch(function() {});
+                                if (style.output) {
+                                    view.onStyleChange(style.output);
+                                }
+                            });
                         break;
                     case 'MapBox-Style':
                         var mapboxParser = new GeoStylerMapboxParser.MapboxStyleParser({
@@ -290,9 +294,10 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                         });
                         mapboxParser.readStyle(result)
                             .then(function(style) {
-                                view.onStyleChange(style);
-                            })
-                            .catch(function() {});
+                                if (style.output) {
+                                    view.onStyleChange(style.output);
+                                }
+                            });
                         break;
                     default:
                         break;
@@ -372,7 +377,7 @@ Ext.define('Koala.view.container.styler.GeoStylerController', {
                 var sldParser = new GeoStylerSLDParser.SldStyleParser();
                 sldParser.readStyle(sld)
                     .then(function(geoStylerStyle) {
-                        view.onStyleChange(geoStylerStyle);
+                        view.onStyleChange(geoStylerStyle.output);
                     });
             });
     }

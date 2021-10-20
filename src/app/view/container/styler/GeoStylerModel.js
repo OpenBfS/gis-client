@@ -17,7 +17,7 @@ Ext.define('Koala.view.container.styler.GeoStylerModel', {
                     symbolizers: [
                         {
                             kind: 'Mark',
-                            wellKnownName: 'Circle'
+                            wellKnownName: 'circle'
                         }
                     ]
                 }
