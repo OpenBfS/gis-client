@@ -55,9 +55,9 @@ Ext.define('Koala.util.Clone', {
                 .then(function(gsStyle) {
                     Koala.util.Clone.defaultOlStyle = [point, line, polygon];
                     var sldParser = new GeoStylerSLDParser.SldStyleParser();
-                    sldParser.writeStyle(gsStyle)
+                    sldParser.writeStyle(gsStyle.output)
                         .then(function(sld) {
-                            Koala.util.Clone.defaultStyle = sld;
+                            Koala.util.Clone.defaultStyle = sld.output;
                         });
                 });
         }()),
@@ -101,14 +101,14 @@ Ext.define('Koala.util.Clone', {
                             // SLD/SE 1.0.0.
                             // Since GeoStyler supports reading SLD/SE in both versions and
                             // exports as SLD/SE 1.0.0 this fixes things.
-                            var reexport = sldParser.writeStyle(gsStyle);
+                            var reexport = sldParser.writeStyle(gsStyle.output);
                             reexport.then(function(reexportedStyle) {
-                                Koala.util.Layer.updateVectorStyle(targetLayer, reexportedStyle);
+                                Koala.util.Layer.updateVectorStyle(targetLayer, reexportedStyle.output);
                             });
                             var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
                             olParser.writeStyle(gsStyle)
                                 .then(function(olStyle) {
-                                    targetLayer.setStyle(olStyle);
+                                    targetLayer.setStyle(olStyle.output);
                                 });
                         });
                 });

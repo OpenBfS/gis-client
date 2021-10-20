@@ -99,10 +99,10 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             var viewModel = me.getViewModel();
             me.getDataFromLayer()
                 .then(function(data) {
-                    me.gsDataObject = data;
+                    me.gsDataObject = data.output;
                     me.getStyleFromLayer()
                         .then(function(style) {
-                            me.renderReactGeoStyler(style || viewModel.get('style'));
+                            me.renderReactGeoStyler(style.output || viewModel.get('style'));
                         });
                 });
         }
@@ -123,19 +123,23 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
                 // sldParser.forceCasting = true;
                 sldParser.readStyle(layer.get('SLD'))
                     .then(function(geostylerStyle) {
-                        resolve(geostylerStyle);
-                    })
-                    .catch(function(err) {
-                        reject(err);
+                        if (geostylerStyle.errors && geostylerStyle.errors.length > 0) {
+                            var errorMessage = geostylerStyle.errors.join('. ');
+                            reject(errorMessage);
+                        } else {
+                            resolve(geostylerStyle.output);
+                        }
                     });
             } else {
                 var olParser = new GeoStylerOpenlayersParser.OlStyleParser(ol);
                 olParser.readStyle(style)
                     .then(function(geostylerStyle) {
-                        resolve(geostylerStyle);
-                    })
-                    .catch(function(err) {
-                        reject(err);
+                        if (geostylerStyle.errors && geostylerStyle.errors.length > 0) {
+                            var errorMessage = geostylerStyle.errors.join('. ');
+                            reject(errorMessage);
+                        } else {
+                            resolve(geostylerStyle.output);
+                        }
                     });
             }
         });
