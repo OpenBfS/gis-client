@@ -247,10 +247,6 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
 
       Radius des Punkts in Pixeln.
 
-    * **markerSize**
-
-      Größe des Markers in Pixeln.
-
     * **color**
 
       Farbe des Markers.
