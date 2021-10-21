@@ -798,10 +798,18 @@ Ext.define('Koala.util.Layer', {
             var staticMe = Koala.util.Layer;
             var selector = 'k-panel-routing-legendtree';
             var treePanel = Ext.ComponentQuery.query(selector)[0];
+            if (treePanel && treePanel.getView) {
+                treePanel.getView().refresh();
+                var ctrl = treePanel.getController();
+                var store = treePanel.getStore();
+                store.each(function(rec) {
+                    ctrl.checkLayerAndLegendVisibility(rec, rec.get('checked'));
+                });
+            }
+
             if (!treePanel) {
                 return;
             }
-            var store = treePanel.getStore();
             store.each(function(treeNode) {
                 var layer = treeNode.getOlLayer();
                 var suffixId = layer.get('__suffix_id__');

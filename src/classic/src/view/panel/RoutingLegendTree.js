@@ -1335,7 +1335,20 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
      * above comment/TODO mark for more details.
      */
     layerDropped: function() {
+        // HBD: We suspend events and skip animation frames
+        // in order to avoid errors that (probably) occur
+        // due to animations still running on already removed
+        // items. Currently, this leads to selected and dragged
+        // text to still remain in the viewport.
+        Ext.GlobalEvents.suspendEvents();
+        Ext.suspendLayouts();
+        Ext.each(Ext.fx.Manager.items.items, function(item) {
+            Ext.fx.Manager.jumpToEnd(item);
+        });
+        Ext.fx.Manager.clear();
         Koala.util.Layer.repaintLayerFilterIndication();
+        Ext.resumeLayouts();
+        Ext.GlobalEvents.resumeEvents();
     },
 
     /**
