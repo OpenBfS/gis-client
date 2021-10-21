@@ -99,7 +99,7 @@ Ext.define('Koala.view.container.styler.GeoStyler', {
             var viewModel = me.getViewModel();
             me.getDataFromLayer()
                 .then(function(data) {
-                    me.gsDataObject = data.output;
+                    me.gsDataObject = data;
                     me.getStyleFromLayer()
                         .then(function(style) {
                             me.renderReactGeoStyler(style.output || viewModel.get('style'));
