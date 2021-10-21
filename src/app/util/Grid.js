@@ -31,6 +31,8 @@ Ext.define('Koala.util.Grid', {
             var store = grid.getStore();
 
             Ext.each(gridFeatures, function(feat) {
+                // keep the original feature as JSON string
+                feat.properties.feature = JSON.stringify(feat);
                 Ext.iterate(feat.properties, function(propName, prop) {
                     var type = null;
                     var tempProp;
@@ -59,7 +61,6 @@ Ext.define('Koala.util.Grid', {
                         types[propName].push(type);
                     }
                 });
-                feat.properties.feature = JSON.stringify(feat);
                 data.push(feat.properties);
             });
             //field and column assignment
@@ -76,6 +77,11 @@ Ext.define('Koala.util.Grid', {
                         type: ''
                     }
                 };
+                if (propName === 'elementId') {
+                    // Set the visible text to 'id', so users are not
+                    // surprised by the unknown column 'elementId'.
+                    column.text = 'id';
+                }
                 var uniqueTypes = Ext.Array.unique(prop);
                 if (uniqueTypes.length > 1) {
                     uniqueTypes = Ext.Array.remove(uniqueTypes, null);
