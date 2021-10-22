@@ -261,7 +261,8 @@ Ext.define('Koala.view.form.LayerFilter', {
         }
         var data = [];
         Ext.each(json, function(d) {
-            data.push(new Date(d.val).getTime());
+            var date = Koala.util.Date.getUtcMoment(d.val);
+            data.push(date.valueOf());
         });
         data.sort();
         this.timeSelectConfig = {
