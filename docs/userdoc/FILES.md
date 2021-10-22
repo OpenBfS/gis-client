@@ -315,7 +315,6 @@ Client-Code nicht neu kompiliert werden, sollte sich die url des print-servlets
             "fill": "#ffffff",
             "stroke": "#ffffff",
             "radius": 3,
-            "markerSize": 38,
             "color": "#0d63bd"
         },
         "avoidAreaStyle": {
