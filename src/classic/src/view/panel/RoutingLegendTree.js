@@ -21,6 +21,7 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
     xtype: 'k-panel-routing-legendtree',
 
     requires: [
+        'Ext.fx.Manager',
         'Koala.store.MetadataSearch',
         'Koala.util.Help',
         'Koala.util.Import',
