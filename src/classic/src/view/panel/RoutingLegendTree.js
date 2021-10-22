@@ -1346,7 +1346,6 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         Ext.each(Ext.fx.Manager.items.items, function(item) {
             Ext.fx.Manager.jumpToEnd(item);
         });
-        Ext.fx.Manager.clear();
         Koala.util.Layer.repaintLayerFilterIndication();
         Ext.resumeLayouts();
         Ext.GlobalEvents.resumeEvents();
