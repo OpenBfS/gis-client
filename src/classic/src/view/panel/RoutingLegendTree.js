@@ -1344,8 +1344,14 @@ Ext.define('Koala.view.panel.RoutingLegendTree', {
         Ext.GlobalEvents.suspendEvents();
         Ext.suspendLayouts();
         Ext.each(Ext.fx.Manager.items.items, function(item) {
-            Ext.fx.Manager.jumpToEnd(item);
+            try {
+                Ext.fx.Manager.jumpToEnd(item);
+            } catch (e) {
+                Ext.log('Error when trying to stop animations.');
+            }
         });
+        Ext.fx.Manager.items.clear();
+        Ext.fx.Manager.targets.clear();
         Koala.util.Layer.repaintLayerFilterIndication();
         Ext.resumeLayouts();
         Ext.GlobalEvents.resumeEvents();
