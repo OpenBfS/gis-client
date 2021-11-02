@@ -660,19 +660,19 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
         var length = me.computeLength(line, sourceProj);
 
         if (length > 100) {
-            output = me.roundLengthToM(length) + ' ' + 'm';
+            output = me.roundLengthToKm(length) + ' km';
         } else {
-            output = me.roundLengthToKm(length) + ' ' + 'km';
+            output = me.roundLengthToM(length) + ' m';
         }
         return output;
     },
 
     roundLengthToM: function(length) {
-        return Math.round(length / 1000 * 100000) / 100000;
+        return length.toFixed(5);
     },
 
     roundLengthToKm: function(length) {
-        return Math.round(length * 100000) / 100000;
+        return (length / 1000).toFixed(5);
     },
 
     /**
@@ -719,11 +719,11 @@ Ext.define('Koala.view.container.RedliningToolsContainerController', {
     },
 
     roundAreaToSqm: function(area) {
-        return Math.round(area / 1000000 * 100000) / 100000;
+        return (area / 1000000).toFixed(5);
     },
 
     roundAreaToSqkm: function(area) {
-        return Math.round(area * 100000) / 100000;
+        return area.toFixed(5);
     },
 
     /**
